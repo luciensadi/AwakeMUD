@@ -1,0 +1,12 @@
+#20600
+Name:	A tunnel
+Desc:$
+   Incomplete 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+BREAK
+END

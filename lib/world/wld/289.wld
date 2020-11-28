@@ -1,0 +1,65 @@
+#28910
+Name:	A stairwell hallway - 1st Floor
+Desc:$
+   This rickety old stairwell winds its way up the center of the building.
+Doors leading to various apartments line the landing. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28911
+Name:	Apartment 110
+Desc:$
+   A small one room economy apartment, containing a small bed, a kitchenette
+unit, a low class trid screen, bathroom stall and shower. 
+~
+Flags:	1101000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28961
+Name:	Living Room - Apartment 610
+Desc:$
+   A moderately spacious living room, with plush carpet and high ceilings. A
+small kitchenette rests in the corner. 
+~
+Flags:	1001000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28981
+Name:	Living Room - Apartment 810
+Desc:$
+   An expansive living room with long plush carpeting, and catherdral
+ceilings. Room enough for even the largest gathering. 
+~
+Flags:	1001000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

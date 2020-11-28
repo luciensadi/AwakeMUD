@@ -1,0 +1,743 @@
+#4100
+Name:	A Clean Bathroom
+Desc:$
+   Immediately noticeable about this bathroom is the amount of space. One
+corner is dominated by a massage-jet bathtub, raised and encased in a natural
+stone surround. The luxurious feel notes that no expense has been spared,
+ranging from the pristine porcelain sinks and toilet, all the way down to the
+small touches of glass panes that add a separation to each 'section' of the
+room. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door bathroom south
+	Desc:$
+Hallway.
+~
+	ToVnum:	4094
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4101
+Name:	The Oyabun's Bedroom
+Desc:$
+   Four posts rise from a lovingly worked mahogany bed, extending an inch
+before they actually touch the ceiling. There is little notable about the
+defence of this room, odd considering the supposed importance of the occupant.
+Expensive silk sheets are draped across the bed, accented by the dark wood bed
+stands and the squishy grandfather chair in the southern corner. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door locked
+	Desc:$
+The hallway lies behind the locked door.
+~
+	ToVnum:	4095
+	Flags:	2
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+	LockRating:	6
+[EXIT east]
+	Desc:$
+The eastern end of the bedroom.
+~
+	ToVnum:	4098
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	painting
+	Desc:$
+The painting is of an eldery Japanese man, and seems to be quite old.
+~
+BREAK
+#4102
+Name:	A Concrete Staircase
+Desc:$
+   Narrowing slightly, the walls press inward with subtle tapering, possibly
+to limit the feeling of pressure felt by anyone who traverses these stairs.
+The same seamless doors are sunk into the gun-metal grey walls that mirror the
+hallway above. 
+~
+Flags:	101001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Basement hallway.
+~
+	ToVnum:	4103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Desc:$
+Going back up the stairs leads to the main house.
+~
+	ToVnum:	4091
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4103
+Name:	A Basement Hallway
+Desc:$
+   Plain, smooth stone walls make up the decor of this simple hallway. The
+lighting is brighter, illuminating obvious doors leading off the walkway. The
+ceiling is low, with perfectly spaced sky lights closed off by black mesh. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden plain servant
+	Desc:$
+Servant's room.
+~
+	ToVnum:	4107
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+[EXIT east]
+	Desc:$
+The wallway continues to the east.
+~
+	ToVnum:	4104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The staircase which leads to the house.
+~
+	ToVnum:	4102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	wallpaper wall paper
+	Desc:$
+The wallpaper is a multi-colored pattern, which really puts your eyes out of
+focues after looking at it for a while.
+~
+BREAK
+#4104
+Name:	A Basement Hallway
+Desc:$
+   Monotone shades of grey and black mute the light cast from halogen lamps
+above. The hallway's sound is generally muffled, creating a silence broken
+only by the faint hum of electric lights. A camera system has been mounted in
+the corner of the eastern door, the blinking red light telling passers by that
+big brother is watching. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden plain servant
+	Desc:$
+Servant's room.
+~
+	ToVnum:	4108
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+[EXIT east]
+	Desc:$
+Basement hallway.
+~
+	ToVnum:	4105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden plain servant
+	Desc:$
+Servant's room.
+~
+	ToVnum:	4111
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+[EXIT west]
+	Desc:$
+Basement hallway.
+~
+	ToVnum:	4103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4105
+Name:	A Basement Hallway
+Desc:$
+   The floor in this section appears to have been bleached, the smell, though
+dull permeates the surrounding area with its disinfectant smell. Parallel
+doors lean north and south, noticeable only by the hand sized keypads near the
+almost invisible edges. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden plain servant
+	Desc:$
+Servant's room.
+~
+	ToVnum:	4109
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+[EXIT east]
+	Desc:$
+Basement hallway.
+~
+	ToVnum:	4106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden plain
+	Desc:$
+Overseer's room.
+~
+	ToVnum:	4112
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	4070
+	LockRating:	6
+[EXIT west]
+	Desc:$
+Basement hallway.
+~
+	ToVnum:	4104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4106
+Name:	A Basement Hallway
+Desc:$
+   At the end of the cement hallway there is surprisingly nothing but a blank
+wall. No marking, no paintings, nothing that might cheer this drab and dull
+space up, or even give it more light than is emitted by the halogen lamps sunk
+into the ceiling. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden plain servant bathroom
+	Desc:$
+Servant's bathroom.
+~
+	ToVnum:	4110
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+[EXIT south]
+	Keywords:	door wooden plain servant
+	Desc:$
+Servant's room.
+~
+	ToVnum:	4113
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+[EXIT west]
+	Desc:$
+Basement hallway.
+~
+	ToVnum:	4105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4107
+Name:	A Small Well-Lit Room
+Desc:$
+   An impressive display of armor and weapons, all of Japanese descent have
+been dotted around the room in pristine glass cases. The occupant has
+installed a no touch policy judging by the placements of said cases.  Along
+the back wall is a cabinet displaying a selection of firearms, and slightly to
+its left is an armor stand with a full suit of ornate samurai armor. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door wooden plain servant
+	Desc:$
+The basement hallway.
+~
+	ToVnum:	4103
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+BREAK
+#4108
+Name:	A Small Well-Lit Room
+Desc:$
+   Electronic stuff, possibly stuff from portland brought over? 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door wooden plain servant
+	Desc:$
+The basement hallway.
+~
+	ToVnum:	4104
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+BREAK
+#4109
+Name:	A Small Well-Lit Room
+Desc:$
+   Lit from hanging lanterns in the ceiling, this room's decor has been lent
+more toward the mystic and traditional healing.  Talismans and rings are
+displayed in glass cases, while small strips of paper scrolled with Japanese
+writing hang from nigh invisible string upon the red washed walls. Dark wood
+furniture and plush cushions have been set out, indicating that the occupant
+has a taste for small comforts and style. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door wooden plain servant
+	Desc:$
+The basement hallway.
+~
+	ToVnum:	4105
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+BREAK
+#4110
+Name:	A Small Bathroom
+Desc:$
+   Made up of the basic porcelain bathroom suite; a toilet, pair of sinks,
+mirror and hand towel rail, it has been intentionally kept muted for ease of
+cleaning. There is neither a bath or shower, making this for public use for
+visitors to the lower levels. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door wooden plain servant bathroom
+	Desc:$
+The basement hallway.
+~
+	ToVnum:	4106
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+BREAK
+#4111
+Name:	A Small Well-Lit Room
+Desc:$
+   decking stuff maybe? 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden plain servant
+	Desc:$
+The basement hallway.
+~
+	ToVnum:	4104
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+BREAK
+#4112
+Name:	An Extravagant Room
+Desc:$
+   Cleverly designed, this room is actually a housing for a set of highly
+polished elevator doors. A small call button is set to the left, the obsidian
+panel likewise polished to a mirror shine. The walls are an extravagant shade
+of venetian red, covered in an antique gold brocade. A lamp shade casts a warm
+yellow glow over the carpeted floor, making this room look several degrees
+warmer than it actually is. 
+~
+Flags:	1001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden plain
+	Desc:$
+Basement hallway.
+~
+	ToVnum:	4105
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	6
+BREAK
+#4113
+Name:	A Guard Room
+Desc:$
+   On the western wall is an array of monitors, every one of them the same
+size and positioned symmetrically. A single leather seat sits in front of them
+for the monitory person, providing image feeds of the lower levels in a 360
+degree. Nothing would escape the watcher, that's for sure. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden plain servant
+	Desc:$
+The basement hallway.
+~
+	ToVnum:	4106
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	1
+BREAK
+#4114
+Name:	Inside an elevator
+Desc:$
+   The inside of the elevator is polished to shine.  It descends very rapidly,
+and seems to go on for a while.  Finally, however, the elevator comes to a
+stop and the south doors open. 
+~
+Flags:	1011111100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#4115
+Name:	Intersection
+Desc:$
+   Unpainted cement hallways lead south, west and east.  The closed elevator
+doors are to the north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	elevator door doors
+	Desc:$
+Elevator.
+~
+	ToVnum:	4114
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	10
+[EXIT east]
+	ToVnum:	4117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4118
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4116
+Name:	Cement hallway
+Desc:$
+   The familiar smell of gunpowder becomes noticeable as you approach the
+west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Intersection.
+~
+	ToVnum:	4115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4119
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

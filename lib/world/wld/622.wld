@@ -1,0 +1,4047 @@
+#62200
+Name:	Bike Shop Loading Room
+Desc:$
+   This is the room bikes are loaded from to sell in the bike shop. You
+shouldn't be seeing this desc anyways. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#62201
+Name:	Inside a roadside bike shop
+Desc:$
+   Consisting of little more than several tents securely tied down to shelter
+the showcase bikes from the elements and a small warehouse set off to the side
+to store them prior to purchase, this small roadside business caters to the
+needs of both locals and visitors to the island, offering them an opportunity
+to get their hands on one of these find vehicles for a nominal fee. Bikes seem
+to be the ideal form of transportation around the mainland, as they're easier
+on the wallet and are smaller, allowing them to more easily traverse the
+fairly congested roadways that can be found around these parts. 
+~
+Flags:	100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	62206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62202
+Name:	Headed down the road
+Desc:$
+   The scenery is much the same along this stretch of the highway, all but
+abandoned and left to the wild aside from the stream of vehicles that make
+their way between the city and the smaller township beyond its outskirts. The
+occasional building peeks out from behind the barrier of foliage, most of
+which seem to be somewhat modest houses of locals that aren't interested in
+city life and would much rather enjoy a nice relatively quiet existence out
+here. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62203
+Name:	Through a tunnel of trees
+Desc:$
+   The sky itself is nearly blotted out as the trees crowd along the side of
+the road, their branches stretching out across the path and entwining with one
+another, forming a natural barrier and tunnel of sorts. The traffic certainly
+doesn't seem to mind, since as long as the pavement itself is there to drive
+on there isn't an issue or concern to be had. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	62202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62204
+Name:	Along Prospect Road
+Desc:$
+   The occasional compound wall juts out along the side of the roadway here,
+hiding the humble houses behind their walls, the paint upon which are peeling
+off in flakes from being abused by the elements and weather alike. The highway
+itself is in fairly good shape, as it seems they go to quite the lengths to
+keep it in working order so traffic can smoothly stream between the big cities
+nearby and the smaller townships inbetween them. 
+~
+Flags:	10000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62205
+Name:	At a road sign
+Desc:$
+   There isn't much choice in which direction to travel, as the roadway itself
+only heads off in two directions here, funneling traffic along at a steady
+pace between the smaller townships and the nearby cities. A large sign has had
+all of the vegetation surrounding it hacked away and clear off, though the
+foliage and forest itself seem quite intent on reclaiming whatever inch of
+civilization they can manage, and seem to be doing quite a good job at it. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	62204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62206
+Name:	Passing by a bike outlet
+Desc:$
+   One side of the highway here is dominated by a gathering of tents and a few
+small buildings, which appear to be nothing more than storage warehouses for
+the automotive outlet shop nearby, which seems to cater to the public need for
+cheap and easy transport around the island. Even from the roadway, one can
+take note of a few of the models they have on display beneath the tents, which
+serve to keep the vehicles out of the worst of the elements. The roadway
+itself heads down a small incline into what appears to be a small township
+nearby to the southwest, while off in the other direction the stretch of
+pavement is swallowed up by the forest it passes through. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	62205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62207
+Name:	Entering the township of Prospect & Union
+Desc:$
+   The forest opens up just enough to offer a glimpse of the township settled
+here, which is far enough outside the hustle and bustle of the two cities its
+located inbetween to get away from the trappings that go with city life. There
+is little in the way of tourists around here, and most of the people seen
+around are natives, though the occasional visitor who stumbles into the
+township manages to stick out like a sore thumb. Prospect Highway cuts off
+sharply and turns off towards the southeast, while a few other smaller
+roadways split off and wind their way through the small town itself. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62208
+Name:	Down along Prospect Road
+Desc:$
+   A steep incline in the roadway here causes traffic to slow its pace, if
+only for a moment, as it spans the length of the hillside and winds its way
+through the small township below. The forest opens up a bit, though from the
+looks of things it isn't by choice, as the natives have gone through quite a
+bit of trouble from keeping it from swallowing up their town all together,
+though in some places it's obvious to see they've failed, such as the
+occasional abandoned building that has been consumed by foliage. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	62209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62209
+Name:	Passing through Prospect
+Desc:$
+   The township of Prospect may not be the biggest, nor the most entertaining,
+but that's mostly due to the fact that is was never meant to be a tourist
+attraction. Instead, a majority of the area around here contain a few small
+local businesses and housing for the natives, most of which is modest at best,
+but a few of them could certainly be considered quite well off if you're from
+a major city. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	62210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62210
+Name:	A bend in Prospect Road
+Desc:$
+   The highway begins a slow curve at first before cutting back around the
+bend, following along the lay of the land, particularly the hillside that it
+travels along side of here. A grouping of small warehouses are set off to the
+side of the highway here, though what their function or business is isn't
+readily apparent, or at least not from this distance. A few signs along the
+roadside indicate the other stops along the highway as it continues its
+journey towards the southwest. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62283
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62211
+Name:	Traveling along Prospect Road
+Desc:$
+   The hillside bordering the southern edge of the highway here rises up above
+the lowland the township is built upon, most of which is covered in swathes of
+trees and native foliage with the occasional rocky outcropping peeking out
+from between them. The small township of Prospect can be seen immediately off
+to the north side of the highway, which isn't all that impressive in
+comparison to the nearby cities, which are much larger and cater to a more
+'civilized' portion of the natives that make this island their home. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62212
+Name:	Along Prospect Road
+Desc:$
+   This portion of Prospect Road travels along the southern border of the
+small township of Prospect, which also leads to the bordering town of Union a
+short ways off to the west as well. Various signs are posted along the side of
+the roadway, most of which aren't translated into English, so unless you speak
+French-Creole, you're pretty much out of luck as far as that's concerned. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62213
+Name:	Near a turnoff on Prospect Road
+Desc:$
+   This highway, Prospect Road, is a fairly familiar sight to those who have
+had any experience navigating the island, as it winds its way across a good
+portion of it and serves as a main thoroughfare for traffic trying to get
+around between the different cities and townships. A main street of sorts
+splits off from the highway and begins its journey off towards the north,
+cutting right down the middle between the townships of Prospect and Union. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62214
+Name:	At an intersection
+Desc:$
+   The main street travels along in a north and south direction, while off to
+the side another side road branches off and stretches off eastward into the
+township of Prospect, where several more shops and houses can be seen dotting
+the forest filled landscape. The main highway, Prospect Road, can be see off
+to the south from here. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62215
+Name:	Along a side road
+Desc:$
+   This un-named side road splits off from the main street west of here and
+winds its way between various businesses and houses that dot the nearby
+landscape. An antique shop of sorts lies off to the side of the street here,
+which apparently caters to mostly tourists considering the wares they peddle,
+which are reproduction pieces and other antique weapons that the Caribbean is
+notorious for, granted, most of it could be credited to older 20-century films
+and newer flashy simsense media, especially with the revival of piracy in the
+waters around the Caribbean. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	62216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62216
+Name:	Down a side street
+Desc:$
+   This side street is just off of the main highway nearby, Prospect Road,
+which cuts through the township of Prospect itself (starting to see a
+coincidence here..?). There is a mixture of buildings set against the
+background of forest, a few of which are abandoned, while others are modest
+homes of locals, and a few others are small shops and businesses, some of
+which are aimed towards attracting tourism. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62217
+Name:	Around a bend
+Desc:$
+   The highway begins its trek up along a slight incline as it winds its way
+along through the town, the various low branches that threaten to clip
+vehicles as they pass along have been trimmed and cut as best as possible
+without completely ruining the trees that line the side of the roadway here. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62218
+Name:	Along Prospect Road
+Desc:$
+   This portion of Prospect Road opens up a bit as it passes through the small
+township of Union, showcasing a short strip of buildings and businesses that
+don't seem to be houses. One of these buildings seems to be the towns clinic
+facility, as is made obvious by the sign hanging on the front of it, which is
+written in both English and French-Creole for ease of reference. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62219
+Name:	Passing by Union township
+Desc:$
+   The scenery along the northern edge of the highway consists of forested
+area cleared just enough to sneak in a few buildings here and there, which
+stick out just enough to be noticed from this distance. The township itself
+isn't all that big, and even with the close proximity of the nearby town of
+Prospect, the two combined barely have the hustle and bustle of a city block
+or two. The highway itself continues along in a northwest by east manner,
+leading the steady flow of traffic along at a fair pace. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62220
+Name:	Entering the township of Union
+Desc:$
+   This fork in the paths allows passage to three particular roadways, two of
+which are actually one in the same, the main highway, Prospect Road. Another
+narrow side road heads off into the northern end of the small township of
+Union, though the traveling may be a bit rough due to the fact the roadway is
+little more than rough dirt and gravel compacted together to form a rather
+uneven surface. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62221
+Name:	Along a narrow road
+Desc:$
+   The pavement here all but gives away entirely to a stretch of dirt roadway
+with the occasional patch of gravel packed down into it to make sure it
+doesn't just wash away whenever it rains, which also helps to keep plantlife
+from sprouting up beneath it and reclaiming the street back for itself. The
+smell of freshly cooked local food wafts through the area, probably because of
+the small roadside food vendor who has set up shop in a shabby little tent
+nearby. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62222
+Name:	At a fork in the road
+Desc:$
+   This fork in the road meets up from three different roads, one of each
+travels off into the different sections of the small townships, with Prospect
+off to the east and Union off to the west. The southern road, which is in
+better condition than the others, travels right down through the center of
+where the two townships meet, skirting along its borders and offering an easy
+flow of traffic between the two. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62223
+Name:	Down a main street
+Desc:$
+   This is a main street of sorts, but only because it cuts down the center of
+the two small townships, Propsect on the east side and Union on the western
+edge. Various businesses and houses are mixed amongst one another upon each
+side of the roadway, with no real rhyme or reason for their layout aside from
+who was there first and where the free space was available. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	62214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62280
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62224
+Name:	Wandering along a road
+Desc:$
+   This narrow township road has seen better days, and while not reduced to
+rubble, it is cracked and broken in a few places, most of which have feature a
+quick patch job to keep the road surface remotely level. Various buildings dot
+the sides of the roadway, most of which are houses of the locals, none of
+which look all too fancy, and instead are quite modest and humble. The pathway
+itself continues along towards the heart of the town of Prospect. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62225
+Name:	Along a winding road
+Desc:$
+   This road breaks off from the main highway and traverses along in a winding
+path as it attempts to navigate its way through the northern end of the small
+township of Prospect, which is just east of the just as small township of
+Union. While the road isn't quite as nice as the main highway nearby, it's
+still in good enough condition that it won't ruin the suspension on most
+vehicles, or the soles of your feet if you're hoofing it. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	62207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62226
+Name:	Near the townships of Union & Prospect
+Desc:$
+   Prospect Highway cuts inland again as it attempts to weave its way through
+the rough terrain, chocked full of rocky outcroppings and heavily forested
+areas, though it does seem to thin and even out a little as it heads into the
+township of Union and Prospect off to the east. A large roadside sign is
+posted here, letting passing traffic know what they're getting into, or out of
+for that matter. 
+~
+Flags:	10000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62227
+Name:	Along a stretch of Prospect Road
+Desc:$
+   The highway here does what it does best, continuing its journey along
+throughout the northern end of the island and shuffling traffic along at a
+fairly steady pace. A glimpse of the ocean can be seen beyond the forested
+area that lines most of the roadway, the occasional glimmer and sparkle of
+^Ysunlight^N playing across its surface cutting through the foliage and making its
+presence known. 
+~
+NightDesc:$
+   The highway here does what it does best, continuing its journey along
+throughout the northern end of the island and shuffling traffic along at a
+fairly steady pace. A glimpse of the ocean can be seen beyond the forested
+area that lines most of the roadway, the occasional glimmer and sparkle of
+^Wmoonlight^N playing across its surface cutting through the foliage and making
+its presence known. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62228
+Name:	A view of the ocean
+Desc:$
+   The view here is simply breathtaking, even if you've seen it a hundred
+times already, it still has a quality to it that never gets old. The hillside
+that drops down along the northwestern edge of the roadway gives way, the
+trees thinning just enough and giving way to offer a fantastic vantage point
+to soak in the scenery. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62229
+Name:	Heading down along the coast
+Desc:$
+   The highway heads down or up along a slight incline, depending on which
+direction of traffic you happen to be traveling along in, as Prospect Road
+continues its journey along down the coast as it links itself up between the
+smaller townships off to the northeast and one of the larger cities nearby,
+Victoria. The occasional sign attempts to block the view of the ocean here,
+but for the most part, you can still bust out your camera and get a few shots
+that are well worth the effort. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62230
+Name:	Heading towards Victoria
+Desc:$
+   There's a distinct difference in the views offered here, that's for sure.
+On one hand, the ^bdeep blue^N ocean stretches out off into the distance,
+disappearing into the horizon. Then you have the heavily forested area to your
+back, its ^glush greens^N broken up by ^yearthy browns^N as the land beneath them
+pokes out to make sure you remember it's still there. Then there's the city of
+Victoria off in the distance, a mixture of colours that range the entire
+spectrum, consisting of swathes of coloured concrete, bright lights and
+painted billboards that make for quite the comparison with the other scenery
+offered here. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62231
+Name:	On the road to Victoria
+Desc:$
+   The pavement here along this section of the coast, as it drawns nearer to
+the city of Victoria, has been repaved and is in quite good condition,
+especially in comparison to some stretches that travel through some of the
+less populated townships along its length. The city of Victoria itself can be
+seen quite easily through the occasional curtain of foliage from the large
+trees that line the side of the road, while off to the other side the ocean
+stretches out to the horizon as far as the eye can see. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62232
+Name:	Entering the city of Victoria
+Desc:$
+   This main thoroughfare leads into and out of the City of Victoria, which
+stretches out into the land beyond to the southwest, consisting of more of the
+scenery one would expect to see in a bigger city. All the hallmarks of
+citylife, or at least portions of them, can be seen from this distance,
+including but not limited to a horizon of buildings and concrete, reflective
+glass and sparkling lights. 
+~
+Flags:	10000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62233
+Name:	The city of Victoria
+Desc:$
+   The city of Victoria opens up before the flow of traffic into and out of
+the main thoroughfare that criss-crosses the island, of which Prospect Road is
+the valve that keeps the blood flowing. The main highway cuts off westward,
+while Main Street makes its journey south of here, delving deeper into the
+city and all it possesses. The honking of horns and the flashing of lights
+welcomes travelers to the area, which is quite the change from other areas
+around this island. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62234
+Name:	Prospect Road, Along the coast
+Desc:$
+   Prospect Road cuts across the northern edge of the city of Victoria, which
+leads right up against the coast itself. Saint Mark's Bay stretches out off
+into the horizon beyond, its ^bdeep blue^N waters rippling and washing up against
+the shoreline, its scenery dotted with various types of watercraft, ranging
+from vacationers on jet skis and tour boats, to larger yachts and even fishing
+trawlers trying to make a living. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62235
+Name:	Prospect Road and First Street
+Desc:$
+   Prospect Road meets up with First Street here, which heads off south into
+the hustle and bustle of the city, weaving its way through the buildings and
+traffic congested roads. A few piers can be see jutting out from the coastline
+and into the shallows, most of which are jam packed with various water going
+vessels of all shapes and sizes. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62236
+Name:	Along Prospect Road, at a pier
+Desc:$
+   A highway continues its journey along in a west by east manner, allowing
+traffic to flow smoothly along the coastline at the northern edge of Victoria.
+A large pier and dock system opens up and leads off into the aforementioned
+waters beyond the shores, heading out into the waters of Saint Mark's Bay.
+There seem to be quite a lot of watercraft packed into the marina set up
+there, many of which are currently anchored and tied down, while others are
+heading off or heading in to dock. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62237
+Name:	Prospect Road and Second Street
+Desc:$
+   The main highway, Prospect Road, meets up with another city road here,
+Second Street, which cuts off and heads south into the depths of the city
+itself. A cool breeze wafts up across the roadway and billows along its
+length, and coupled with the serene scenery of Saint Mark's Bay, along with a
+number of benches lining the coastline roadway, it's easy to see why so many
+people are content with helping themselves to a seat and staring out across
+the waters, watching the boats and ships come and go. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62238
+Name:	Prospect Road at Third Street
+Desc:$
+   The bay of Saint Mark spreads out across the waters along the coastline
+here, which is dotted with benches and other umbrella covered tables, along
+with a few roadside vendors so visitors and locals alike can sit down and take
+a load off. The occasional boat horn sounds off nearby, some of which are from
+local vessels such as fishing boats, while most of the noises come from the
+ferry that constantly chugs in and out of the bay as it carries people off to
+other portions of the island. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62239
+Name:	Along Prospect Road, near the ferry
+Desc:$
+   The dominating feature here along this portion of Prospect Road is the pier
+system that juts out into the waters of Saint Mark's Bay just north of here,
+which is home to the local ferry. The ferry boats themselves are a prominent
+piece of the scenery here, as they are constantly rolling into and out of the
+dock as they attempt to keep up with the passengers that line up and await
+their clockwork arrival and departure times. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62240
+Name:	Prospect Road and Fourth Street
+Desc:$
+   The traffic here on the main highway crawls to a literal stop, apparently
+there seems to be an accident up ahead, so the flow has slowed to even less
+than a trickle. A lot of the traffic seems to be turning off onto Fourth
+Street, which heads south into the city itself, since they've grown anxious or
+exhausted of waiting for the roadway to be cleared and get a move on. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62241
+Name:	Down along Fourth Street
+Desc:$
+   The scenery here is dominated on its eastern edge by a large parking
+garage, while off along its western edge is a large forested area that borders
+the edge of the city of Victoria. The rest of the scenery is much the same as
+any other city back on the mainland, since it has its fair share of smoke,
+dirt and grime, and that's just the people who call the city home. Like the
+rest, they all seem to be going about their business, and there seems to be a
+lot fewer residents here, since most of them appear to be out-of-towners as it
+were. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62242
+Name:	Fourth Street at Metoyer Boulevard
+Desc:$
+   Fourth Street meets up with Metoyer Boulevard here, which cuts back along
+to run east back into other portions of the city. This area seems to have
+quite a number of businesses, ranging from tourist traps to simple shops and
+other vendors for a wide range of goods and wares. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62243
+Name:	LeMaitre Medical Wares
+Desc:$
+   This clinic styled waiting room is set up for comfortable chairs and enough
+reading material to keep anyone biding their time here from completely losing
+their mind during the process. A secretary is seated behind a counter off to
+the side of the room, scheduling patients in for their procedures and calling
+them into the surgical office located nearby once the doctor is ready to see
+to them. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62332
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62244
+Name:	Along Metoyer Boulevard
+Desc:$
+   Multitudes of businesses of various cut and colour line both sides of the
+road, most of which sit in the shadow of a large parking garage that looms
+over head off on the northern side of the roadway. A talismongering shop has a
+large ^Rneon red^N sign flashing at all hours of the day or night here, obviously
+waiting to attract attention for their offices. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62245
+Name:	Tilsam's Talismongery
+Desc:$
+   The shelves here are lined with all the hallmarks of the mystic arts and
+all that comes with it, most of which pertain to the specific islander forms
+of magical practices and the common items that accompany them. Lines of
+shelves full of books and other trinkets cover most of the walls, and the
+sales counter towards the rear is covered in a fabric toss cloth embroidered
+with various archaic designs, along with a modern cash register and credstick
+reader. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62246
+Name:	Metoyer Boulevard at Third Street
+Desc:$
+   Metoyer Boulevard continues its journey in a west by east fashion,
+eventually meeting up with Third Street. Each corner of the road here is
+posted with a multitude of signs for the wide range of businesses that call
+this portion of the city home, each trying to out do the other and rake in as
+many customers as possible. Traffic seems to be running smoothly, or at least
+until someone cuts another person off and a fit of road rage occurs, along
+with an exchange of words, and occasionally violence. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62268
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62247
+Name:	Along Third Street, near a parking garage
+Desc:$
+   A large parking garage complex on the west side of the street here
+dominates most of the scenery, its facade mostly painted in a stark white
+colour which attempts to cover up the graffiti some vandals have sprayed
+across its exterior. Vehicles constantly enter and exit into the complex,
+pouring off of and into the flow of traffic like a clockwork compilation of
+steel and rubber. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62334
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62248
+Name:	Metoyer Boulevard and Second Street
+Desc:$
+   The corners of these streets are covered in various businesses of all
+shapes and sizes, catering to a wide range of clientele. Several billboards
+hang overhead as well, advertising for some of the very same lines of
+business, while others are matrix advertisements and other non-city based
+industries attempting to get to the broader population of the city. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62249
+Name:	Down Second Street
+Desc:$
+   The hustle and bustle of citylife is ever present as this street begins
+delving deeper into it, vehicle and foot traffic both picking up and becoming
+more and more squeezed together as everyone tries to get where they're going.
+The occasional siren drowns out the loud city noise from a ^BD^roc^BW^ragon^N ambulance
+as it pulls out of the small facility along the side of the street here,
+apparently heading off to handle business as usual. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62333
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62250
+Name:	Traveling down Metoyer Boulevard
+Desc:$
+   While it may not have all of the highrise skyscrapers and hulking
+arcologies that some citydwellers are used to seeing dominate the skyline,
+this city certainly has its fair share of tall buildings and corporate
+presence. The traffic here has become congested and the air is heavy with the
+constant honking of horns as they vie with one another for a moving lane,
+along with the occasional outburst of curse words accompanying those getting
+cut off. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62251
+Name:	Metoyer Boulevard and First Street
+Desc:$
+   The road here meets up with First Street, which cuts across it in a north
+by south fashion, helping to carry traffic along and keep it from getting too
+backed up. A few street side vendors can be found here, peddling their wares
+infront of the business offices and corporate holdings that seemingly dominate
+this portion of the city, most of which are heavily secured and not open to
+the public. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62252
+Name:	Along a bend on First Street
+Desc:$
+   First Street cuts down through the northern end of the city, flanked upon
+each side by tall buildings consisting of corporate holdings and privately
+owned businesses. A sign for a local security company is plastered across one
+of the sides of the buildings here, taking up quite a bit of it, which reads:
+"Victim of Burglary? Believe your phones are tapped? Wilson's Security has an
+answer for your troubles!" Apparently they offer security for both public and
+private businesses, and are going through quite a bit of effort to get the
+word out. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62253
+Name:	Along Metoyer Boulevard
+Desc:$
+   Metoyer Boulevard continues to span across and through the northern end of
+the city of Victoria, which doesn't look nearly as bad as most cities these
+days. Between the somewhat congested traffic, which is a small portion of some
+compared to larger sprawls, and the foot traffic of various shady individuals
+woven together with regular everyday schmucks, all in all it really isn't all
+that bad of scenery. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62254
+Name:	Main Street at Metoyer Boulevard
+Desc:$
+   Main Street meets up with Metoyer Boulevard, which cuts westward into the
+innards of the city of Victoria, which clatters with traffic from vehicles and
+denizens alike. The lights of the buildings and the constant flashing signs
+for various businesses is quite different of an atmosphere than some of the
+smaller townships or even cities around the island. Dens of vice also dot the
+concrete and steel landscape, since where there are people, vices are sure to
+follow. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62255
+Name:	Along Main Street
+Desc:$
+   Main Street cuts down along the eastern edge of the city of Victoria,
+skirting along near its border consisting of fairly even land, most of which
+has been consumed by forest. The striking difference as it ends and the
+expanse of concrete and steel of buildings and the swathes of pavement that
+weaves its way through it like a maze is quite a stark contrast, as most
+citygoers in other areas rarely ever get to see a single tree in their life
+unless it's planted inside a corporate arcology park. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62256
+Name:	Along Main Street
+Desc:$
+   Various billboards and every shape and sized are posted overhead, hanging
+off of the tall buildings that make up the city block here, detailing
+advertisements for a wide range of businesses and offers available. Several
+shady individuals can be seen scattered about in the foot traffic here along
+the paved walkways along each side of the street, some of which are eyeballing
+up passerbys while others seem to be waiting for something in particular. It
+seems there's crime even in an island paradise such as this, who'da thunk it?
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62257
+Name:	Main Street at Livaudais Way
+Desc:$
+   Main Street meets up with another city street here, Livaudais Way, as it
+continues its journey along in a north by south manner, skirting along the
+edge of the city. Buildings of all shapes and sizes dominate the landscape,
+helping to blot out the skyline a bit along this portion of street. While
+there isn't rampant crime going on all around you, there seems to be a vibe of
+a few of the shadier individuals skulking around in the crowds and hanging
+around outside of the businesses here. Then again, what city doesn't have
+those kind of people? 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62258
+Name:	Heading down Livaudais Way
+Desc:$
+   Livaudais Way cuts across a portion of the city that hasn't seen much in
+the way of a cleaning in what appears to be ages, both the buildings, streets,
+and even the people occupying the storefront vendor stalls and walkways. Steam
+from nearby vents in the street pour their contents up from the base of
+buildings, most of which have their own generators, since corporate holdings
+can afford those types of things. They rent out of the lower levels and
+offices to anyone with enough cash to keep up on the bills it seems, because
+there doesn't seem to be much rhyme or reason for the mixture of vendors here.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62259
+Name:	Heading down Main Street
+Desc:$
+   Main Street continues its journey along the outskirt of Victoria,
+eventually beginning to curve inward towards the city itself as it winds its
+way south. Business signs are plastered all across most of the buildings and
+road here, indicating their services and trade. A large car and truck
+dealership sign is posted right by the street itself, begging passerbys to
+stop in and take a gander at the vehicles they have for sale. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62331
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62260
+Name:	Along a bend in Main Street
+Desc:$
+   Heading down towards the southern end of the city of Victoria, Main Street
+continues to be plastered with billboards and advertisements, one of which is
+for a matrix based escort service, which is probably a nice way to imply
+matrix based prostitution. Traffic has quickened along quite a bit, since the
+outlying areas of the city aren't nearly as congested as the inner portions
+are. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62261
+Name:	Main Street at First Street
+Desc:$
+   Main Street meets up with First Street, and the two offer their vehicles
+and foot traffic to one another as part of an unsung exchange that they've
+been doing since they were first constructed. Various storefronts along the
+corners offer their services to anyone with cash in their pocket, plying them
+with promises of easy credit, booze, or a night with seductive ladies of their
+choice. Ahh, capitalism, does it still exist these days? Probably, but only if
+you have money to burn. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	62260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62262
+Name:	Traveling down Main Street
+Desc:$
+   Ahh, city life. All the smog you can breath and all the shady characters
+you can stuff into its streets. Does it get any better than this? Oh, most
+definitely, but not around these parts. Some of the graffiti that has been
+spray painted along the buildings here have seen attempts to cover them up and
+paint over them, only to have the dastardly slags come back the next day and
+spray paint them again. Some businesses have seemingly given up on attempting
+to keep up with their efforts, while others wage a silent war of rage, just
+waiting to boil over into violence. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62263
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62263
+Name:	Main Street at Second Street
+Desc:$
+   Second Street pours its traffic out onto Main Street in exchange for its
+own at this partial intersection, which is flanked on one end by a view of the
+forested inland deeper into the island, while along the other side are all the
+trappings and hallmarks of a typical city. A few high rises jut up into the
+sky and take up a portion of the horizon, helping to ensure your stay here is
+as sunless as possible, thanks in part to all the smog being produced by the
+vehicles here in the city. 
+~
+NightDesc:$
+   Second Street pours its traffic out onto Main Street in exchange for its
+own at this partial intersection, which is flanked on one end by a view of the
+forested inland deeper into the island, while along the other side are all the
+trappings and hallmarks of a typical city. A few high rises jut up into the
+sky and take up a portion of the horizon, helping to ensure your stay here is
+as moonless as possible, thanks in part to all the smog being produced by the
+vehicles here in the city. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62264
+Name:	Main Street at Third Street
+Desc:$
+   Main Street meets up with Third Street here, which heads off in a
+northernly direction into the depths of Victoria. There local police station
+seems to be situated off to the side of the road here as Main Street comes to
+an abrupt end, though that place is probably the last area in the city anyone
+would want to go to willingly, and certainly not accidentally. Unsurprisingly,
+most of the shady individuals you're prone to see wandering about other places
+in the city are strangely absent from this part of town. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62263
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62265
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62266
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62265
+Name:	An abandoned lot
+Desc:$
+   This lot was once the foundation to a building it seems, though it has been
+torn down, leaving the footprint of the foundation that has been filled in
+with concrete. All that's left now is an unevenly paved parking lot of sorts,
+which contains a few vehicles, some abandoned, some still in working order,
+probably from locals who didn't care to pay the costs of parking their rides
+on the streets. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62266
+Name:	Infront of the Victoria Police Station
+Desc:$
+   This wide paved lot features dozens of parking spaces, along with a
+sheltered and secure garage set off to the side for police vehicles. The
+police station itself houses the authority around this particular city, along
+with everything necessary for them to do their jobs. Chances are you don't
+want to be here unless you really have to, since most visits to this place are
+done in the back of a squad car, handcuffs, or in the worst situation, a
+bodybag. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62267
+Name:	Along Third Street
+Desc:$
+   This stretch of Third Street is flanked on either side by highrise
+buildings, or at least the highest rising buildings in this city, and chances
+are they're owned and operated by some of the friendly corporate players you
+know all too well as a runner in the shadows. The occasional bit of graffiti
+is sprayed across some of the buildings, with slogans such as "^GDown with the
+corps!^N", and "^RFor a good time, call..^N" references. Classy stuff, really. A
+narrow side road between the buildings leads cuts over to what appears to be
+Second Street just on the other side of these towers of concrete and steel. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62268
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62268
+Name:	Heading down Third Street
+Desc:$
+   The skyline here is dominated by the looming presence of corporate
+buildings and towers that are probably owned by the same slave driving
+bastards you know and love back in your own city. Several custodians (a polite
+way of saying they're janitors) are busy with cans of paint matching the
+buildings exterior and roll brushes, busily trying to cover up the random bits
+of graffiti scrawled across their surfaces. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62269
+Name:	Second Street, between two towers
+Desc:$
+   A large corporate tower on each side of the road practically blots out any
+chance of a sliver of ^Ysunlight^N actually making its way down to the street
+level, so if you're looking for that serene scenery promised by that island
+get-away brochure you picked up at the travel agency, you're going to have to
+pony up with some real cash around this part of the city. Second Street cuts
+between the towers, while off to the side there seems to be a narrow side road
+which allows foot and vehicle traffic to make their way over to Third Street
+nearby without the hassle of heading all the way down to the end of the road.
+~
+NightDesc:$
+   A large corporate tower on each side of the road practically blots out any
+chance of a sliver of ^Wmoonlight^N actually making its way down to the street
+level, so if you're looking for that serene scenery promised by that island
+get-away brochure you picked up at the travel agency, you're going to have to
+pony up with some real cash around this part of the city. Second Street cuts
+between the towers, while off to the side there seems to be a narrow side road
+which allows foot and vehicle traffic to make their way over to Third Street
+nearby without the hassle of heading all the way down to the end of the road.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62263
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62270
+Name:	Livaudais Way at Second Street
+Desc:$
+   A mixture of multi-story office buildings and a line of high rise corporate
+towers make up this section of the city from the looks of things, which the
+blocked out skyline is happy to point out for anyone heading down into this
+area. The traffic here is horrendous at best, and slow as molasses on its best
+of days. There seems to always be construction on the roadway here for one
+reason or another, probably the unions trying to squeeze an extra buck or two
+out of their contracts. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62271
+Name:	A trip down Second Street
+Desc:$
+   Second Street journeys its way between a few city blocks dominated by the
+high rise buildings seen in most cities around the world, though they are a
+bit of a rarity around an island like this. There are corporations everywhere
+in the world this day it seems, but that isn't necessarily a bad thing
+ofcourse, runners need someone to pay their bills, and strong arm robbery only
+foots so many bills now a days. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62272
+Name:	Around Livaudais Way
+Desc:$
+   This stretch of street seems to be mostly comprised of two or three story
+office spaces, probably bought up by local businesses or foreign corporate
+finances in an attempt to get their foot in the door down in the Caribbean.
+It's a good way to get around some of those troublesome tax laws, afterall,
+nothing says underhanded corporate business like outsourcing your offices off
+shore and paying boatloads less in taxes when dealing with governments where
+you aren't headquartered. A McHugh's Fast Food franchise has been set up here
+as well, which draws in the occasional hoodlum off the street with its promise
+of soy based foods. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62335
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62273
+Name:	Livaudais Way at First Street
+Desc:$
+   Livaudais Way meets up with First Street, the intersection here splitting
+off and heading reaching out to each end of the city of Victoria. The
+occasional go-ganger speeds through here on their bike, but for the most part
+they don't cause trouble in the city, too much, mostly because the local mob
+would have their skulls for such an insult. Word on the street is that the
+Batista's hold a lot of power in this town, and most people aren't very
+interested in testing that rumor. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62274
+Name:	First Street, passing a nightclub
+Desc:$
+   This section of road is flooded with the bright ^Rneon lights^N posted out
+front of the local nightclub located on First Street, which seems to be quite
+popular with anyone with a bit of cash burning a hole in their pocket. Rumors
+have it that the Batista's have their hands in the running of it, and even if
+that isn't true, quite a few of their members are known to frequent it. That
+alone should be enough of a reason for most wageslaves and citydwellers to
+steer clear of it, but there are plenty of razorgirls and street punks who
+could care less about trivial facts such as those. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62344
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62275
+Name:	First Street, passing a casino
+Desc:$
+   First Street continues its journey along, consisting of most of the same
+scenery one would expect from a city. Traffic, a bit of smog and a teeming
+mass of wageslaves and other shady individuals that make up most of the
+population. A small casino has been set up along the side of the road here,
+the building having been retrofitted from a few of the old office blocks and
+turned into a den of vice for the locals and tourists alike. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62356
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62276
+Name:	The Victoria Ferry
+Desc:$
+   This wide pier only juts out into the ocean a little ways beyond the shore
+itself, just far enough into the shallows to allow the ferry boat that arrives
+to carry passengers out along the coastline and further northeast up to the
+other cities upon the island. The hustle and bustle of the city is echoed,
+along with its heavy business in the tourism industry in the amount of foot
+traffic that makes its way along the small ferry pier. 
+~
+Flags:	10000000000000000100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	62239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62277
+Name:	Out along a pier
+Desc:$
+   This length section of piers have been designed for both locals and natives
+alike as a marina, allowing the fleet of ocean and island tour boats to safely
+dock and keep themselves out of harms way when the ocean gets a little rough.
+It seems to consist of both a private and public dock, since one is apt to
+notice the range of boats anchored along its length, from simple fishing and
+tour boats to much larger and extravagant ocean going vessels, most likely
+privately owned by folks with quite a bit more bankroll than you. 
+~
+Flags:	10000000000000000100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62278
+Name:	Along Prospect Road
+Desc:$
+   Civilization is all but swallowed up entirely a short distance away from
+the hustle and bustle of the city nearby, almost immediately giving way to
+heavily forested ares, which flank both sides of the highway here, as well as
+above the road as massive branches span across it and form natural tunnels of
+foliage at some points. The signs that dot the pathway are overgrown, and even
+with constant upkeep and cutting away the plant matter, they always seem to be
+consumed by it again a week later, apparently having given up the attempt for
+some of the less important ones by the looks of it. 
+~
+Flags:	10000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	0.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62165
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62279
+Name:	Inside Cournand's Antiquated Weapons
+Desc:$
+   This emporium seems to deal in antiquated weapons of years past, most of
+which were in fairly common use in the hay day of the islands sea faring days.
+Swords and other old fashioned weapons line the walls in displays and under
+glass cases, most of which seem to be show pieces, though quite a few of them
+could probably be used in a fight and hold up to the abuse. Tourism is a big
+trade here, even in this small township, and while they may not see as much as
+the larger cities nearby, they see enough to make a profit emptying their
+wallets and credsticks. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	62215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62280
+Name:	Fuselier's Fashion Faux Pas
+Desc:$
+   Gaudy. That's the first word that jumps to mind when entering into this
+shop, whose name all but sums up the business they do here. Pirate outfits and
+other sea faring costumes can be seen displayed in racks lining the show
+floor, while the walls bear much the same. A few small changing room stalls
+have been set up off to the side, allowing prospective customers the chance to
+check out how they look in their choice of clothing... Chances are, they'll
+look ridiculous. But since when has that ever stopped people before? 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62281
+Name:	A small roadside food vendor
+Desc:$
+   This quaint little food vendor has a small tent set up along the side of
+the road, which comes complete with a grand total of five chairs (if they can
+even be called that) and two small shabby looking tables. While the scenery
+may not be up to par, the smell of the food being cooked up in the small
+makeshift kitchen nearby certainly makes up for any mishaps that may occur
+when attempting to actually use the furniture here. 
+~
+Flags:	10000000010000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	62221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62282
+Name:	Inside a small clinic
+Desc:$
+   While it may not be the best equipped clinic on the island, it certainly
+does well enough to support the needs of the locals that call this small town
+home. The selection of care is almost as small as the selection of wares they
+have available, but if you can pony up the cash, they're more than willing to
+part with what they have in stock. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	62218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62283
+Name:	An open lot infront of a warehouse
+Desc:$
+   This open air lot is partially paved, though most of it consists of gravel
+and dirt in most spaces, making for a rough treatment on the suspension of any
+vehicles traveling through it. A fairly large warehouse is set off to the far
+side, with a large sliding metal door cutting off access inside of it. The
+windows are blackened out with what seems like spraypaint, so its almost
+impossible to tell what kind of business it's used for, and the fact they
+don't have any legible signs on it also adds to the mystery. 
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door sliding metal
+	Desc:$
+A large sliding metal door leads into the warehouse behind it. 
+~
+	ToVnum:	62284
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62284
+Name:	Inside of a loading dock
+Desc:$
+   This rather spacious area would be a breeze to navigate, if it were empty
+that is, which it most certainly isn't. Line and after line of stacked
+shipping crates and other boxes, ranging from simple wooden crates to large
+metal shipping containers, can be seen stretching from one end of the main
+warehouse to the other. Heavy duty cranes can be seen above in the rafters,
+which allow for the goods in here to be moved around and loaded onto trucks
+pulled into the warehouse. An old security office with most of its windows
+broken out and taped up with trash bags is set off on one side of the room,
+while the warehouse itself stretches off further to the east. 
+~
+Flags:	10000000010000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden office
+	Desc:$
+A simple wooden door with "Security" scrawled on it leads into the small
+office. 
+~
+	ToVnum:	62286
+	Flags:	1
+	Material:	wood
+	Barrier:	3
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	door sliding metal
+	Desc:$
+A sliding metal door leads out of the warehouse. 
+~
+	ToVnum:	62283
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#62285
+Name:	The other end of the warehouse
+Desc:$
+   The maze-like set up they have going on here constructed out of stacks of
+shipping crates and other boxes isn't exactly the most tidy and organized,
+since it seems someones idea of neat and tidy is way off base. Some of the
+stacks have a thick layer of dust upon their surfaces, while others are brand
+new, though since they're stacked upon one another haphazardly and sealed
+tightly, it's hard to get an idea of what's inside a majority of them. Sturdy
+cranes sway slightly over head in the rafters above, while an enclosed
+stairway off on the side of the warehouse apparently leads up to the upper
+portion of the building. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door metal flimsy stairs
+	Desc:$
+A flimsy metal door with "Stairs" written on it is here. 
+~
+	ToVnum:	62287
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62284
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62286
+Name:	Inside a messy security office
+Desc:$
+   Well, the one thing they haven't secured around here is a broom, because
+this place is pretty damn messy. The furniture in here consists of a few old
+filing cabinets parked against one of the walls, which look like they've been
+used once in the past twenty years, along with a simple aluminum desk with a
+wooden chair settled behind it. A small trideo has been bolted to the corner
+of the room, which for some reason has tin foil bunny ears on it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	4
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door wooden office
+	Desc:$
+An old wooden door leads back out into the warehouse. 
+~
+	ToVnum:	62284
+	Flags:	1
+	Material:	wood
+	Barrier:	3
+	KeyVnum:	0
+BREAK
+#62287
+Name:	Inside an enclosed staircase
+Desc:$
+   This set of metal spiral stairs are enclosed within a small tube-like
+sheathing of thin aluminum, which apparently leads up to the upper portion the
+warehouse, which appears to be a catwalk bolted into the wall of the building
+itself. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	4
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door metal flimsy stairs
+	Desc:$
+A flimsy metal door leads back into the lower warehouse floor. 
+~
+	ToVnum:	62285
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	62288
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62288
+Name:	The top of an enclosed staircase
+Desc:$
+   The top of this enclosed set of stairs leads to another flimsy metal door,
+which apparently leads out onto a catwalk on the upper portion of the
+warehouse. The walls have the occasional bit of graffiti painted onto them,
+most of which is old and faded. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	4
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door flimsy metal
+	Desc:$
+A flimsy metal door leads out onto the catwalk beyond. 
+~
+	ToVnum:	62289
+	Flags:	1
+	Material:	metal
+	Barrier:	3
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	62287
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62289
+Name:	Onto the catwalk
+Desc:$
+   This fairly sturdy catwalk is bolted to the side of the warehouses interior
+wall several meters above the floor below, which travels along its length off
+to the south. Several rafters extend across the room itself, between which are
+situated a few heavy duty cranes for lifting and maneuvering the crates and
+containers being stored below. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	3
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door flimsy metal stairs
+	Desc:$
+A flimsy metal door with "Stairs" written on it stands here. 
+~
+	ToVnum:	62288
+	Flags:	1
+	Material:	metal
+	Barrier:	3
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62291
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62290
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62290
+Name:	Along the catwalk
+Desc:$
+   The catwalk is sturdy enough, since it's bolted securely against the wall
+of the buildings interior, though in a few places the metal has rusted a
+little and almost threatens to give out when stepped upon. Fortunately, the
+fall probably won't kill you, but it seems quite promising that you'll at
+least break an ankle or leg, or both, if you take a spill off of it. Another
+metal door is set into the side of the building, which was probably originally
+the warehouse foreman's office. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	3
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door metal office
+	Desc:$
+A metal door stands here, leading into the old foreman's office. 
+~
+	ToVnum:	62293
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62289
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62292
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62291
+Name:	Along the rafters
+Desc:$
+   There is no real floor here, only a few old steel I-beams that are quite
+dirty and haven't been cleaned in god knows how long, so the footing offered
+by them isn't exactly the greatest. The warehouse floor below is stacked
+haphazardly with various crates and containers, making a slip and fall from
+this height a might ruin the day of anyone brave or stupid enough to have
+climbed out here. There are a few heavy duty cranes slowly swinging around up
+here, so they could prove hazardous as well if you get clipped by one on
+accident. 
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62289
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62292
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+The rafters hang perilously above the warehouse floor below, making for quite
+a nasty fall if you slip. 
+~
+	ToVnum:	62285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62292
+Name:	Along the rafters
+Desc:$
+   There is no real floor here, only a few old steel I-beams that are quite
+dirty and haven't been cleaned in god knows how long, so the footing offered
+by them isn't exactly the greatest. The warehouse floor below is stacked
+haphazardly with various crates and containers, making a slip and fall from
+this height a might ruin the day of anyone brave or stupid enough to have
+climbed out here. There are a few heavy duty cranes slowly swinging around up
+here, so they could prove hazardous as well if you get clipped by one on
+accident. 
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62290
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62291
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+The rafters hang perilously above the warehouse floor below, making for quite
+a nasty fall if you slip. 
+~
+	ToVnum:	62284
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62293
+Name:	Inside an old office
+Desc:$
+   The inside of this old office looks exactly like one imagine it did from
+the outside: Old and dusty. The furniture is sparse in here, consisting of
+only a few filing cabinets, a few small shipping crates and a synthwood desk
+pushed up against a nearby wall. The windows lining one of the walls are the
+only ones in here, all of which have been blackened out with a few well placed
+shots of black spray paint. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door metal office
+	Desc:$
+A metal door leads out of the office and onto the catwalk beyond it. 
+~
+	ToVnum:	62290
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62294
+Name:	Inside of Smith's Electronics Boutique
+Desc:$
+   While not extravagant by any means, this small electronics boutique
+certainly meets the needs of the local populace. They seem to carry most of
+the lower spectrum brand name goods, along with some brands you don't
+recognize, most likely bootlegged and shipped in from off nearby shores. The
+atmosphere is laid back, making for quite a change of pace from the usual
+polished clean and sterile shopping enviroments found in the big city. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

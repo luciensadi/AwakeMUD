@@ -1,0 +1,2478 @@
+#705000
+Name:	Foyer of the Seattle Opera House
+Desc:$
+   A marvelous glass facade lines the entrance to the Opera House. From
+well-dressed corporate yuppies to intimidating beneficiaries of organized
+crime, the Opera House draws in a rather large crowd of wealthy patrons. A
+rather pompous host with a charismatic presence and strong, projecting voice
+greets the clientele, offering them the choice tickets and occasionally
+gesturing in the distance to young, quiet attendants that collect coats and
+other belongings from more esteemed guests for storage during the show. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	705001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705001
+Name:	Seattle Opera House
+Desc:$
+   The marvelous glass facade before you is the Seattle Opera House. One of
+the centers for the cultural elite and just plain rich, the house puts on the
+majority of Seattle's finest orchestral and fine musical arts performances.
+The massive gilded main doors stand open inviting you in as valets motion the
+many luxury cars to an undergound parking garage. 
+~
+Flags:	100000000000010000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	50.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	30515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	705027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705002
+Name:	An Elegant Hall
+Desc:$
+   The modernist facade of the entrance starts to blend mildly with the
+classical style of the old building as marble pillars support the distant
+stairs to the balcony. The main hall divides into three main paths, the first
+into the house seating, straight to the north and then the paths to the
+northeast and the northwest, leading to balcony seating, as well as to a piano
+bar to the northwest and a cafe to the northeast.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+Two large oak doors with brass fittings 
+~
+	ToVnum:	705009
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	705004
+	LockRating:	6
+[EXIT northeast]
+	ToVnum:	705008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	705000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	705003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705003
+Name:	The Northwestern Corridor 
+Desc:$
+   Two paths emerge to the northwest: up an elaborate marble staircase
+supported by enormous pillars to the Western balcony seating or north into a
+snazzy, sophisticated piano bar, frequented by patrons with taste and class.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	705002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705004
+Name:	Western Balcony Seating
+Desc:$
+   An elegant, dimly lit marble hall extends out from the top of the
+staircase, a door to your east leads into one of the luxury balconies, and
+further down the hall you can see another. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+Velvet lined doors with brass fittings 
+~
+	ToVnum:	705007
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	705000
+	LockRating:	6
+[EXIT down]
+	ToVnum:	705003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705005
+Name:	End of Western Balcony Seating
+Desc:$
+   The elegant hallway tapers off to a dead-end, save for the door to the last
+of the Western balconies to your east.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+Velvet doors with brass fittings 
+~
+	ToVnum:	705006
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	705001
+	LockRating:	6
+[EXIT south]
+	ToVnum:	705004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705006
+Name:	West Wing: Second Balcony
+Desc:$
+   The balcony is a luxurious room open to the House Seating and aligned with
+the curvature of the house to face slightly towards the stage. A marble
+half-wall rises maybe three feet at the end of the balcony, in front of a
+handful of comfortable leather chairs and a small table upon which to keep
+drinks.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	705041
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Velvet doors with brass fittings 
+~
+	ToVnum:	705005
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	705001
+	LockRating:	6
+BREAK
+#705007
+Name:	West Wing: First Balcony
+Desc:$
+   The balcony is a luxurious room open to the House Seating and aligned with
+the curvature of the house to face slightly towards the stage. A marble
+half-wall rises maybe three feet at the end of the balcony, in front of a
+handful of comfortable leather chairs and a small table upon which to keep
+drinks.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	705040
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Velvet lined doors with brass fittings 
+~
+	ToVnum:	705004
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	705000
+	LockRating:	6
+BREAK
+#705008
+Name:	The Northeastern Corridor
+Desc:$
+   Two paths emerge to the northwest, up an elaborate marble staircase
+supported by enormous pillars to the Eastern balcony seating or into the
+backstage area, closed off to the public. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A concealed door 
+~
+	ToVnum:	705017
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+	HiddenRating:	6
+[EXIT east]
+	ToVnum:	705015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	705014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	705002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705009
+Name:	House Seating
+Desc:$
+   A beautiful marble domed-ceiling is above you, painted with a neo-classical
+depiction of the war between the angels from Miltons Paradise Lost, fading
+down into ornate marble walls, interrupted by luxurious balcony seats, made to
+serve for a handful of people, jutting slightly out. The seating is divided by
+two aisles into Western, Central, and Eastern seas of somewhat comfortable
+velvet seats.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	40
+Z:	30.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	705045
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+Two large oak doors with brass fittings 
+~
+	ToVnum:	705002
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	705004
+	LockRating:	6
+[EXIT west]
+	ToVnum:	705044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705073
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705010
+Name:	Eastern Balcony Seating
+Desc:$
+   An elegant, dimly lit marble hall extends out from the top of the
+staircase, a door to your west leads into one of the luxury balconies, and
+further down the hall you can see another.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Velvet doors with brass fittings 
+~
+	ToVnum:	705011
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	705002
+	LockRating:	6
+[EXIT down]
+	ToVnum:	705008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705011
+Name:	East Wing: First Balcony
+Desc:$
+   The balcony is a luxurious room open to the House Seating and aligned with
+the curvature of the house to face slightly towards the stage. A marble
+half-wall rises maybe three feet at the end of the balcony, in front of a
+handful of comfortable leather chairs and a small table upon which to keep
+drinks. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+Velvet doors with brass fittings 
+~
+	ToVnum:	705010
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	705002
+	LockRating:	6
+[EXIT west]
+	ToVnum:	705042
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705012
+Name:	End of Eastern Balcony Seating
+Desc:$
+   The elegant hallway tapers off to a dead-end, save for the door to the last
+of the Eastern balconies to your west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	705010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Velvet doors with brass fittings 
+~
+	ToVnum:	705013
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	705003
+	LockRating:	6
+BREAK
+#705013
+Name:	East Wing: Second Balcony
+Desc:$
+   The balcony is a luxurious room open to the House Seating and aligned with
+the curvature of the house to face slightly towards the stage. A marble
+half-wall rises maybe three feet at the end of the balcony, in front of a
+handful of comfortable leather chairs and a small table upon which to keep
+drinks.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+Velvet doors with brass fittings 
+~
+	ToVnum:	705012
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	705003
+	LockRating:	6
+[EXIT west]
+	ToVnum:	705043
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705014
+Name:	Gentlemen's Restroom
+Desc:$
+   This bathroom is absurdly clean, almost to the point of a hospital. One
+could half expect it to smell of antiseptic upon entering. A number of urinals
+line the wall, leading to a handful of stalls. All of the facets are identical
+and made out of titanium, save for one that has a small bronze plaque on it.
+Upon closer inspection of the toilet seat, the plaque reads: "This toilet seat
+donated by Ryan Aris and brought to you courtesy of Kyzrath Noshilim." The
+titanium seems to be less uniform than the others, as though it had been
+melted down from separate items and molded together haphazardly.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705015
+Name:	Ladies Restroom 
+Desc:$
+   This bathroom is elegant and clean, with a number of private stalls against
+one wall and a number of marble sinks against the other, in front of a large,
+clean glass mirror ornamented with bronze and affixed firmly to the wall.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	705008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705016
+Name:	The Muse
+Desc:$
+   A classy piano bar, like a scene right out of Casablanca, The Muse is
+complete with a content African-American man playing tunes on a piano in the
+corner, a space is cleared of tables for couples to dance, and many are. A
+ruggedly handsome, relatively stoic and carefree bartender cleans a glass
+behind the bar, apparently used to giving out advice to his clientele, after
+years of standing around listening to people drunkenly tell him their life
+stories.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	25
+Y:	25
+Z:	5.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	705003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705017
+Name:	Entrance to Backstage
+Desc:$
+   The entrance to the backstage is busy with the hustle and bustle of actors
+and stagehands maneuvering large props about, preparing the show.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	4
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A door 
+~
+	ToVnum:	705008
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	705018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705018
+Name:	Central Backstage
+Desc:$
+   A large number of props and musical supplies for various plays and operas
+are stored here, as actors, actresses, musicians, and stagehands quickly
+maneuver around to keep the show running.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A door marked "Dressing Room". 
+~
+	ToVnum:	705019
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	705017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	705020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705019
+Name:	Dressing Rooms
+Desc:$
+   During shows, a number of half naked actors and actresses fumble around
+here, trying to get dressed in time to make it onto the stage without missing
+a line. Most of them seem to work well under pressure. But when the rooms are
+empty an odd calm seems to come over the room. Mirrors line the walls, along
+with racks of clothes and make-up supplies.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	mirror
+	Desc:$
+The looking glass. 
+~
+	ToVnum:	705024
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705034
+	HiddenRating:	12
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A plain wooden door. 
+~
+	ToVnum:	705018
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705020
+Name:	Stage
+Desc:$
+   Bright lights shine from on high, as stagehands operate the lighting in the
+catwalks hidden above. The stage spans out before you, an opera pit ahead, and
+beyond that, hundreds of enraptured faces gazing from house seats. Wealthy,
+well-dressed figures eye you curiously from the balconies with trained eyes as
+pressure builds up. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	705046
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	705009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	705047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	705023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705021
+Name:	Backstage Catwalks
+Desc:$
+   You crawl above the backstage into the catwalks, looking around you a
+number of small stagehands carefully operate lighting, with exceptional
+caution to avoid falling to the ground.  
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	705022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	trapdoor concealed
+	Desc:$
+A concealed trapdoor is hidden here above head. 
+~
+	ToVnum:	705075
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	705018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705022
+Name:	Stage Catwalks
+Desc:$
+   There seem to be more stagehands present here than earlier, lights glaring
+down upon the stage and noises echoing up from the pit. You can gaze down at
+the show from here at leisure, but youd probably be best off staying off the
+catwalks to avoid a tumble.  
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	705073
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	705020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705023
+Name:	Opera Pit
+Desc:$
+   Deafening noises echo forth from the pit, making you question why you came
+down here. A number of musicians ignore you, but you catch a glaring eye from
+the conductor, who waves his arms about ridiculously, leading the musicians.
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	705020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705024
+Name:	Behind the Looking Glass
+Desc:$
+   Behind the one-sided mirror an underground tunnel emerges, leading you into
+a hidden complex beneath the Opera House. A sturdy steel ladder leads
+downwards, into the central chamber.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	4
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	mirror
+	Desc:$
+A concealed glass door 
+~
+	ToVnum:	705019
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705034
+[EXIT down]
+	ToVnum:	705025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705025
+Name:	Central Chamber
+Desc:$
+   A large somewhat circular stone cavern forms the center of the underground
+complex. A blue glow lights the walls in combination with a number of subtle
+lamps wired along the stone. To the south, you can see what appear to be
+ancient catacombs, likely from the base of the old Spanish church that had
+been there hundreds of years ago. The blue glow seems to come from the west,
+where the air seems to be more moist, and a corridor has been hollowed out to
+the north.  
+~
+Flags:	100000000010000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	15
+[EXIT north]
+	ToVnum:	705028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A heavy steel door 
+~
+	ToVnum:	705037
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705034
+[EXIT south]
+	ToVnum:	705026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	705074
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705026
+Name:	Catacombs
+Desc:$
+   An enormous expanse of small rooms, metal and stone shelves, and larger
+rooms span forth in a mazelike, but relatively open underground series of
+catacombs. A ramp leads upwards to a steel trapdoor, large enough that most
+vehicles could pass in and out.  
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A secure metal door 
+~
+	ToVnum:	705034
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705035
+[EXIT up]
+	Keywords:	ramp
+	Desc:$
+A pair of hydraulic doors 
+~
+	ToVnum:	705027
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705034
+BREAK
+#705027
+Name:	Underground Parking Garage
+Desc:$
+   An underground parking garage supported by beams with a number of lanes
+lined with easily accessible parking spots.  
+~
+Flags:	100000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	30
+Y:	30
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	705001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	ramp
+	Desc:$
+A reserved parking spot concealing heavy hydraulic doors 
+~
+	ToVnum:	705026
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705034
+	HiddenRating:	12
+BREAK
+#705028
+Name:	Stone Corridor
+Desc:$
+   A stone corridor branches out from the central cavern, the walls seem to
+have been carved out by man more so than the others, or at least appear to be
+more recently designed. Hidden doors and private chambers are scattered
+throughout the hall, likely known fully only to the denizens of this area. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	15
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A solid oak door with a Majestic King engraved on it. 
+~
+	ToVnum:	705029
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705038
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A solid oak door with an Austere Bishop engraved on it. 
+~
+	ToVnum:	705030
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705036
+[EXIT south]
+	ToVnum:	705025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A solid oak door with a White Knight inlaid with ivory. 
+~
+	ToVnum:	705031
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705037
+[EXIT northwest]
+	Keywords:	door
+	Desc:$
+A heavy oak door with a Persian War Chariot carved on it. 
+~
+	ToVnum:	705038
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705040
+BREAK
+#705029
+Name:	Davan's Room
+Desc:$
+   A cozy, home-like room has been carved into the stone cavern, a grate
+covering a fireplace that has been carved in, with a vent leading the smoke
+out to the underground river. Bookshelves cover the wall space, with tables
+spread out occasionally, arcane texts spread throughout the room. A desk
+stands in front of a comfortable chair atop the carpet, covered with illegible
+papers and scrolls and myriad ancient trinkets. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	oak
+	Desc:$
+A heavy oak door 
+~
+	ToVnum:	705053
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	705061
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A solid oak door with a Majestic King engraved on it. 
+~
+	ToVnum:	705028
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705038
+BREAK
+#705030
+Name:	A small cavern, converted into living space
+Desc:$
+   A rock cavern glitters with an iridescent turquoise light, emanating from a
+spring emerging from an iron grate near the wall. A rather large dais is to
+the north, supporting a rather large canopy bed, shrouded in white Egyptian
+cotton. This area itself seems rather bare, save for the floor, which is
+covered with a number of ancient Persian rugs and rich white shag carpet, at
+least until the edge of the spring, where it cuts off and is replaced by dark
+onyx stone tiling, covering the slick stone floor. As your eyes drift closer
+to the north, two smaller daises emerge from the ground, overlapping slightly
+before merging into the larger dais the bed rests on. To the left, a large
+armoire of antique rosewood stands. To the right, a dominating organ stands,
+tuned lowly to emit haunting notes that echo through the cavern, and even,
+occasionally, up into the Opera House. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	705051
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A solid oak door with an Austere Bishop engraved on it. 
+~
+	ToVnum:	705028
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705036
+BREAK
+#705031
+Name:	Leopold's Room
+Desc:$
+   This room is rather spartan in appearance, with neatly-organized materials
+gathered and separated on a series of shelves. The carpeting is plush and
+black, and the walls are decorated with all manner of war memorabilia. The
+king-sized bed is black as well, with soft, comfortable sheets and blankets. A
+sturdy footlocker rests at the foot of the bed, and there is a finely-made
+ebony desk in one corner as well. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT north]
+	Keywords:	dungeon
+	Desc:$
+An ominous cast iron door 
+~
+	ToVnum:	705032
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705037
+	HiddenRating:	12
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A solid oak door with a Black Knight engraved on it. 
+~
+	ToVnum:	705028
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705037
+[EXIT down]
+	Keywords:	hatch
+	Desc:$
+A smooth steel hatch in the floor covered by a rug 
+~
+	ToVnum:	705033
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705039
+	HiddenRating:	12
+BREAK
+#705032
+Name:	The Hidden Dungeon
+Desc:$
+   Hidden away behind a secret panel, this room is adorned with all manner of
+tools and toys for the pursuit of erotic pleasures. The hard stone floor is
+cold to the touch, the only light being provided by a number of electric,
+wall-mounted braziers. The room is surprisingly well-soundproofed, all the
+better to conceal its location. Several pairs of cold, iron shackles are
+mounted to the wall at varying heights, and there is a copious amount of rope
+and similar materials stacked neatly in a corner near the entrance.  
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	4.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	1
+[EXIT south]
+	Keywords:	dungeon
+	Desc:$
+An ominous cast iron door 
+~
+	ToVnum:	705031
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705037
+	HiddenRating:	12
+BREAK
+#705033
+Name:	The Safe Room 
+Desc:$
+   The walls of this room are lined with weapons and numerous trophies, the
+hard concrete floor covered with black industrial carpet. A small generator
+hums in an alcove nearby, providing electricity to power the overhead lights,
+as well as manage the air and water recirculation of the sealed room. This
+generator, together with the utilitarian bathroom and kitchenette unit, allow
+for the long-term survival of someone sheltering down here. The entry way can
+be sealed from inside, able to withstand tremendous force without fail. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	hatch
+	Desc:$
+A steel hatch 
+~
+	ToVnum:	705031
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705039
+	HiddenRating:	12
+BREAK
+#705034
+Name:	Inner Sanctum
+Desc:$
+   A hidden shrine is here, a giant Maltese cross tiled into the floor, with
+small rosewood benches angling towards an ornate stained glass crucifix set
+within an old wrought iron frame. The glass is cracked in places, showing the
+age if this aclove. 
+~
+Flags:	100000000010000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A secure metal door 
+~
+	ToVnum:	705026
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705035
+BREAK
+#705035
+Name:	"Danger" Room 
+Desc:$
+   A half-lit room lies behind the door marked ominously with a large yellow
+"Danger" sign. Metal shelves abound in the room, stacked with what appear to
+be uncountable quantities of explosives, all protected with flameproof
+materials and carefully wired into a computer that seems to handle the
+self-destruct protocol through the simultaneous use of a large number of keys.
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A solid steel door. 
+~
+	ToVnum:	705036
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	705035
+BREAK
+#705036
+Name:	Titanium Vault
+Desc:$
+   An enormous titanium vault has been built within an area carefully hollowed
+out into the rock. A hatch, above a ladder, leads into the room, powered by a
+separate backup generator that seems to have more than adequate energy
+reserved. Dim fluorescent lights glow from the ceiling of the vault, revealing
+a room full of metal shelving and a significant number of small metal cots,
+each meticulously set with white sheets and a small brown blanket. Close
+inspection of the shelving reveals them to be supplied with several essentials
+of daily life... cleaning and hygiene supplies, food and water, as well as
+significant quantities of ammunition and weaponry.  
+~
+Flags:	100000000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A solid steel door. 
+~
+	ToVnum:	705035
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	705035
+[EXIT up]
+	Keywords:	vault
+	Desc:$
+A huge vault door 
+~
+	ToVnum:	705037
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705035
+[EXIT down]
+	Keywords:	hatch
+	Desc:$
+A sturdy steel hatch that locks securely into place. 
+~
+	ToVnum:	705049
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	705035
+	HiddenRating:	50
+BREAK
+#705037
+Name:	War Room
+Desc:$
+   An enormous round marble table with a crimson Maltese cross designed over
+it forms the center of this room, hidden in shadow. A single ray of light
+somehow creeps from the ceiling, bursting upon the center of the table and
+making the shape of the Maltese cross the only completely distinguishable
+thing in the room. The seats around the table are hidden in shadow, and
+despite the ancient appearance and archaic style of the room, the drone of
+white noise generators around the room make it clear that the room has been
+outfitted with the most modern equipment to prevent electronic eavesdropping.
+The table has a small imprint at each seat, about the appropriate size to fit
+a chess piece... which one may assume is used to represent the speakers hidden
+in the shadows. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	7
+Y:	7
+Z:	4.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A heavy steel door 
+~
+	ToVnum:	705025
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705034
+[EXIT down]
+	Keywords:	vault
+	Desc:$
+A steel vault door 
+~
+	ToVnum:	705036
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705035
+	HiddenRating:	50
+BREAK
+#705038
+Name:	Rook's Room
+Desc:$
+   This room is made up of a large cavern with walls done best to be carved
+straight on three sides. The area is dimly lit with a large amount of white
+candles set up sporadically on furniture or on holders pinned against the
+walls. Against the farthest wall there is a large king-sized bed with four
+large ^yoak^n posts at each corner and ^Lblack^N silken sheets laid over it. On one
+wall is a large mural expressing both the dark and light images expressing the
+duality of man, while the other walls are dark and earthy. Against the
+adjoining wall, a gunsafe sits here along with a wide array of discarded ammo,
+weapons and armor strewn against the wall along with a bookshelf. A large soft
+Venetian rug covers most of the floor of the living area with a dark ^bblue^N
+color and dark ^wcream^N designs. The floor extends to the right smoothly sloping
+gently down to a small hot spring of dark ^bwater^N letting off steam into a vent
+in the ceiling of the cave. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	705039
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Keywords:	door
+	Desc:$
+A heavy oak door with a Persian War Chariot carved on it. 
+~
+	ToVnum:	705028
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	705040
+BREAK
+#705039
+Name:	A Small Hot Spring
+Desc:$
+   This small cavern was created by nature long ago. Its limestone walls lend
+a white glow to the emerald green waters of the pool being fed by the natural
+hot springs far below the surface. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	705038
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705040
+Name:	Off the balcony
+Desc:$
+   The fine molding might make good hand and foot holds as you climb down the
+balcony to the house seating area. 
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	0
+Z:	10.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	705007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	705044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705041
+Name:	Off the balcony
+Desc:$
+   The fine molding might make good hand and foot holds as you climb down the
+balcony to the house seating area. 
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	0
+Z:	10.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	705006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	705047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705042
+Name:	Off the balcony
+Desc:$
+   The fine molding might make good hand and foot holds as you climb down the
+balcony to the house seating area. 
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	0
+Z:	10.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	705011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	705045
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705043
+Name:	Off the balcony
+Desc:$
+   The fine molding might make good hand and foot holds as you climb down the
+balcony to the house seating area. 
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	0
+Z:	10.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	705013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	705046
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705044
+Name:	House Seating
+Desc:$
+   A beautiful marble domed-ceiling is above you, painted with a neo-classical
+depiction of the war between the angels from Miltons Paradise Lost, fading
+down into ornate marble walls, interrupted by luxurious balcony seats, made to
+serve for a handful of people, jutting slightly out. The seating is divided by
+two aisles into Western, Central, and Eastern seas of somewhat comfortable
+velvet seats.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	40
+Z:	30.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	705009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705040
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705045
+Name:	House Seating
+Desc:$
+   A beautiful marble domed-ceiling is above you, painted with a neo-classical
+depiction of the war between the angels from Miltons Paradise Lost, fading
+down into ornate marble walls, interrupted by luxurious balcony seats, made to
+serve for a handful of people, jutting slightly out. The seating is divided by
+two aisles into Western, Central, and Eastern seas of somewhat comfortable
+velvet seats.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	40
+Z:	30.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705046
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	705009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705042
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705046
+Name:	House Seating
+Desc:$
+   A beautiful marble domed-ceiling is above you, painted with a neo-classical
+depiction of the war between the angels from Miltons Paradise Lost, fading
+down into ornate marble walls, interrupted by luxurious balcony seats, made to
+serve for a handful of people, jutting slightly out. The seating is divided by
+two aisles into Western, Central, and Eastern seas of somewhat comfortable
+velvet seats.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	40
+Z:	30.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	705045
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	705020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705043
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705047
+Name:	House Seating
+Desc:$
+   A beautiful marble domed-ceiling is above you, painted with a neo-classical
+depiction of the war between the angels from Miltons Paradise Lost, fading
+down into ornate marble walls, interrupted by luxurious balcony seats, made to
+serve for a handful of people, jutting slightly out. The seating is divided by
+two aisles into Western, Central, and Eastern seas of somewhat comfortable
+velvet seats.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	40
+Z:	30.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	705020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	705044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	705041
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705048
+Name:	House Seating
+Desc:$
+   A beautiful marble domed-ceiling is above you, painted with a neo-classical
+depiction of the war between the angels from Miltons Paradise Lost, fading
+down into ornate marble walls, interrupted by luxurious balcony seats, made to
+serve for a handful of people, jutting slightly out. The seating is divided by
+two aisles into Western, Central, and Eastern seas of somewhat comfortable
+velvet seats.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	40
+Z:	30.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#705049
+Name:	A dank, dark cell
+Desc:$
+   Basically nothing more than a pit dig into the bedrock, with a small drain
+in the center of the slightly concave floor to dispose of unpleasant fluids.
+Scratches mar the walls in some places, some possibly trying to spell out some
+message, but what message that is cannot be determined. The pungent stench of
+mildew emanates from the wet dungeon walls. It's pitch black, you're likely to
+be eaten by a grue. 
+~
+Flags:	100000000001000000001000101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	2
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	hatch
+	Desc:$
+A sturdy steel hatch that locks securely into place. 
+~
+	ToVnum:	705036
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	705035
+BREAK
+#705050
+Name:	Atop a large dais
+Desc:$
+   A large dais emerges from the two shorter daises over the otherwise level
+floor. The dais seems to be a rather subtle way of self-aggrandizement, as it
+features the primary living area of the owner: his bed. The walls narrow,
+turning this room into a bubble between the entrance and a small stone
+corridor heading to the north. This room is blatantly ostentatious, and
+arrogant, in many regards. More expensive and luxuriant Persian rugs than
+before surround the bedding, reaching the stone walls which are no longer bare
+stone, but covered in large mirrors, reflecting the subtle light of the spring
+throughout the area. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	705030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705051
+Name:	A bubbling hot spring
+Desc:$
+   The hot spring water has pooled here, bubbling effervescently with the
+heat, derived from some underground thermal dynamic that remains invisible to
+the eye. The stone surrounding the spring has been refurnished with black onyx
+tile, causing the dazzling sapphire light of the water to turn to murky
+darkness at the edges, and to burst forth in a beautiful display over the
+ceiling. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705052
+Name:	A dark passage, widening into an expansive cavern
+Desc:$
+   The narrow rock pass from the bedroom expands rather quickly into a large
+room, apparently utilized for storage. A number of precious antiques, armors,
+and weapons are housed here, making it in many ways a museum of sorts. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	705050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705053
+Name:	A Crowded Library
+Desc:$
+   If anything, this room is even more crowded with arcane texts and strange
+devices than the one that came before it, despite being almost twice the size.
+Shelves are carved directly into the living stone of the walls, packed with
+all manner of books and scrolls, skulls of strange animals and jars of
+unidentifiable substances. Antique mahogany bookshelves and haphazard stacks
+of books creates a maze of narrow passages through the center of the room. A
+battered oaken table sits in one corner, littered with bottles and beakers and
+other alchemical equipment of unknown purpose. At the far end of the room a
+large area has been cleared of books and a summoning circle has been carefully
+etched on the stone floor. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	oak
+	Desc:$
+A heavy oak door 
+~
+	ToVnum:	705029
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	705061
+BREAK
+#705073
+Name:	House Catwalks
+Desc:$
+   You reach the end of the catwalks, before where the marble domed ceiling
+begins, turning around gives you an exceptional view to the stage, but the
+structure here seems to be poorly supported, and you suspect that doing such
+would be dangerous.  
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	4
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	705022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	705009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705074
+Name:	Underground Grotto 
+Desc:$
+   A sparkling turquoise pool has formed, apparently a spring from an
+underground river, glowing a beautiful light blue with nutrients soaked likely
+from the stone walls. Blue crystals have formed along the walls, catching and
+reflecting the light from the water and the scant lamps, making the grotto a
+dazzlingly beautiful place. The rock around the small pool has been smoothed,
+turning it essentially into a small Jacuzzi, as the water steams from the
+nearby underground hot spring. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	705025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#705075
+Name:	A Secret Garden
+Desc:$
+   Rising from the roof of the opera house, a delicate glass dome shields a
+beautiful garden from both the harsh elements of the north-west as well as the
+smog and pollution of the city. Winding, rock-lined paths lead through the
+collection of carefully tended and aesthetically pleasing plant-life,
+eventually making their way across a small trickling stream and to the koi
+pond positioned under the very center of the dome. Small flowering trees,
+dogwood and cherry and peony, are scattered throughout the garden, providing
+shade on the rare sunny days and filling the dome with the sweet scent of
+their blossoms. A peaceful feeling of calm serenity pervades the area. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	Keywords:	trapdoor concealed
+	Desc:$
+A concealed trapdoor sits on the floor here. 
+~
+	ToVnum:	705021
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	25
+BREAK
+END

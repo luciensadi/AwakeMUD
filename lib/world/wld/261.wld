@@ -1,0 +1,595 @@
+#26100
+Name:	Magic Hall - Urban Totems - Raven Room
+Desc:$
+   Avoiding the obvious Poe jokes, this room has a pallid, almost sinister,
+but still very clever and wise feeling to it. It is somewhat dark in this, the
+Raven Room. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	26043
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26101
+Name:	Magic Hall - Wilderness Totems - Bear Room
+Desc:$
+   You feel stronger, but somewhat lethargic, standing here. This is the room
+of the Bear shamans. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	26044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26102
+Name:	Magic Hall - Wilderness Totems - Coyote Room
+Desc:$
+   Standing here makes you want to find a moon to howl at. This is the Coyote
+room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	26044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26103
+Name:	Magic Hall - Wilderness Totems - Eagle Room
+Desc:$
+   Don't you feel majestic? It's like being the king of the sky... This is the
+Eagle Room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	26044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26104
+Name:	Magic Hall - Wilderness Totems - Gator Room
+Desc:$
+   Well dun you feel ornry, mon amie? C'est the Gator Room. Feel kinda cajun,
+don't it? 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26105
+Name:	Magic Hall - Wilderness Totems - Lion Room
+Desc:$
+   ROAR! The power... you're the king of the jungle... No, it's just the Lion
+room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	26044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26106
+Name:	Magic Hall - Wilderness Totems - Snake Room
+Desc:$
+   They're not slimey. Really they're not. They're actually quite social.
+Snake shamans, I mean. Snakes are just kinda creepy. Still, this is the Snake
+room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	26044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26107
+Name:	Magic Hall - Wilderness Totems - Wolf Room
+Desc:$
+   This is the Wolf room. It makes you feel like bringing a bunch of friends
+and running down a deer, or finding some Coyotes and making them get their own
+moon to howl at. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	26044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26108
+Name:	Magic Hall - Wilderness Totems - Shark Room
+Desc:$
+   SPLASH! Oh look, water... Ow... Oh look, Sharks... Are you scared yet? 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	26044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26140
+Name:	Firestation Lobby
+Desc:$
+   In a city like Seattle, there are dozens upon dozens of fire departments.
+In a place where the commercial value of one square meter can exceed a
+thousand nuyen, fire suppression and prevention is a vital community service.
+The tell-tale signs of modern pre-fabrication and standardization mark the
+station lobby. There are waiting tables and sofas for visitors to one side,
+and an administration office on the other. Once, twice, or three times a day,
+the calm of this gentle government space is broken by the chaotic rush of
+average, everyday joes who are just crazy enough to leap into a brightly
+coloured vehicle and speed through metropolitan traffic just so they can dive
+into unmapped infernos to save their fellow citizens. Thank-you notes,
+flowers, and memorial plaques are the only evidence that something special
+resides here. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wood office north
+	Desc:$
+A wooden door. 
+~
+	ToVnum:	26143
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32583
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26141
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26141
+Name:	Firestation Garage
+Desc:$
+   Three bright yellow fire trucks are lined up here. Each one has a full
+tank, and is ready to go at a moment's notice. Ladders, hoses, axes, masks,
+medkits, map units, radios, pumps, and all sorts of other equipment is
+available for the firefighter on the go. There are even a few second-hand
+hazmat suits in the back. Despite the abundance of gear, the entire room is
+immaculately organized. The garage door is perpetually open, and a few cameras
+help ensure that no one randomly walks in and picks up a piece of equipment
+for their favorite pawn shop. 
+~
+Flags:	10000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	26140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26142
+Name:	Firestation Breakroom
+Desc:$
+   There are two distinct kinds of fire fighters. One on hand there are
+specialized, professional, college educated, corporate funded, elite squads
+which focus on hazmat, or NBC situations. One the other there are the scarcely
+paid volunteers. This room firmly situates this department as a member of the
+latter. A rough pool table sits to one side, surrounded by arcade games and
+pinball machines. The other half of the room seems to be dedicated to meals. A
+short order kitchen with a stove, microwave, and a large fridge seems to be
+enough to provide small meals for the crew. Those with a special weakness for
+fine dining will have to settle for fold out tables, old chairs, and boxes of
+disposable plastic utensils. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	26144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26143
+Name:	Firestation Administration Office
+Desc:$
+   This is the administration office of the department. Like any government
+institution, fire departments have their fair share of paperwork, and red
+tape. This particular station is so small that the captain seems to perform
+all the secretarial duties. There are cabinets of files and reports in both
+physical and digital format. There are paintings on each wall. Some of them
+are motivational photos with a word like determination, or success, followed
+by some passage. Others are somewhat historical, like an outline of modern
+Chicago after the great fire, but before the bug disaster. Finally, there is
+another historical image of the World Trade Center towers. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door wood office south
+	Desc:$
+A wooden door. 
+~
+	ToVnum:	26140
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#26144
+Name:	Firestation Hallway
+Desc:$
+   Taking a walk down this hallway is sort of like watching an entire
+community weave a quilt one patch at a time. There are a dozen boards,
+plaques, and cabinets filled with a plethora of trophies, pictures, newspaper
+clippings, momentos, charred helmets, and more. One board is filled with
+crayon pictures drawn by a local elementary school pledging their support.
+Another has a timeline of the fire fighting profession in the Seattle area
+dating back to the founding of the city. Names of fallen volunteers rest
+beside the scarred helmets that once protected their wearer. Various newspaper
+and magazine articles show images and tell stories about some of the fires to
+which this department has responded. However the plaques carry slightly
+different contents. Much like those one would find in a courthouse, they
+contain documents like the city charter and the UCAS constitution. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	26142
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	26145
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26145
+Name:	Firestation Bunkroom
+Desc:$
+   One would have to be a sardine to comfortably appreciate the utility of
+quadruple layer bunking. Column after column of bunk beds line the room much
+like one would expect to see in military barracks. Small curtains can be drawn
+from either side to provide the weary volunteer a little privacy and some
+extra darkness. These curtains ranges from drab standard issue solid colors,
+to outragiously loud, tacky, and untasteful custom pieces. Clothes, boots,
+helmets, and other kinds of gear are carefully folded next to each bed, or
+rest within metal lockers which bridge the gap between each column of beds. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	26144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26150
+Name:	The Scrier's laboratory
+Desc:$
+   A smell wafts around this small room in a low flying black cloud which
+obscures most of the roof.  You stand in an old stone room, which is at the
+top of a tower.  The bulk of the room is taken up with four large tables,
+covered in all manner of chemistry equipment, bubbling away to some unknown
+purpose.  One table in particular is completely given over to scrying
+equipment.  Crystal balls, telescopes of far seeing, and other such wonders
+litter the table.  There are tiny pieces of crystal scattered around this
+table, surrounded by an unidentified liquid.  There is a small matress in one
+corner.  Excepting this, and a large backed leather office chair, not a great
+deal looks as if it has been given over to comfort.  Techonology has a place
+here, with a well-used cyberterminal sits in one corner, not too far from the
+chemical handler drone which sits inactive by a table.  There is a ebbing
+purple portal glowing on the floor, which appears to be the only exit.  There
+are hovering images which flicker against the walls, depicting various places
+in the world, changing their view every few seconds.
+   Lying in the center of one table is a large computer monitor, a keyboard
+sits roughly placed on top of all the clutter. Whoever put it here was
+obviously in a hurry, as numerous bits of glass and broken crystal tell of the
+tables former occupants. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	Keywords:	
+	Desc:$
+Trek to civilization 
+~
+	ToVnum:	9166
+	Flags:	0
+	Material:	wood
+	Barrier:	2
+	KeyVnum:	0
+BREAK
+#26151
+Name:	The Team initiation room.
+Desc:$
+   Blah blah blah, temporary initiatory group room. Eat it. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

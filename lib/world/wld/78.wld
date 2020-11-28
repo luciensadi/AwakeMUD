@@ -1,0 +1,618 @@
+#7800
+Name:	Start of a long Hallway
+Desc:$
+   You appear in a hallway that extends to the north. It's walls are made of
+^Lblack Obsidian^n. Candles adorn the walls, each glowing with flames of black,
+tipped with white fire. You look down the hall only to get lost in its depths.
+~
+Flags:	10000000000101100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	north~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+You appear in a hallway that extends to the north. It's walls are made of
+^Lblack Obsidian^n. Candles adorn the walls, each glowing with flames of black,
+tipped with white fire. You look down the hall only to get lost in its depths.
+~
+	ToVnum:	7801
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	7801
+	HiddenRating:	10
+[EXIT south]
+	ToVnum:	7880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	4564
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+	HiddenRating:	50
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7801
+Name:	A long hallway
+Desc:$
+   Walls and floor still made of Obsidian. Slick and cold when touched. Looks
+as if in the distance there might be a turn. 
+~
+Flags:	10000000000101100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7802
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7800
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7802
+Name:	A 'T' to the Hallway
+Desc:$
+   From here you look to the East and West. Seeing a short hall to either
+direction. Same walls made of Obsidian. The air around you cold as you get an
+uneasy feeling from this place. 
+~
+Flags:	10000000000101100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7803
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7801
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7804
+	Flags:	0
+	Material:	stone
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7803
+Name:	Foyer
+Desc:$
+   From here you look to the East with a Metal door blocking any further
+passage. To your South another room. Perhaps? Why not take a look and see for
+yourself? 
+~
+Flags:	10000000000101100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7805
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7806
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7802
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7804
+Name:	Start of Stairs
+Desc:$
+   In here you see a small room only a few steps before decending down a
+spiral set of stairs. The Stairs themselves are made of black metal, the walls
+still of Obsidian. You feel a faint breeze coming up from the bottom as the
+candles around you flicker wildly. 
+~
+Flags:	10000000000101100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7802
+	Flags:	0
+	Material:	stone
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7808
+	Flags:	0
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7805
+Name:	Masters Hall
+Desc:$
+   As you walk in you look around to see a rather large room. The walls still
+Obsidian, but the floors here have changed to wood, dark crimson in color
+though. The walls are adorned yet still with the black-flamed candles.
+Tapestries line some parts of the walls. While Artifact weapons and armor from
+all times cover other parts. You see a large table sitting towards the center
+of this room surrounded by many leather chairs. A fireplace spans the length
+of one wall burning brightly with the black flames you have grown used to
+seeing in this place.  
+~
+Flags:	110010000000000001100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[EXIT west]
+	ToVnum:	7803
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7806
+Name:	Start of stairs 
+Desc:$
+   With this room you see nothing but a flight of spiral stairs leading up,
+the railing looks as if it might be in the shape of a large serpent as it
+curves upwards. Made of blacked metal its cold to the touch. 
+~
+Flags:	10000000000101100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7803
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7807
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7807
+Name:	Master Chambers
+Desc:$
+   You step up into this room and you are in awe at its size and beauty. There
+is a very large canopy bed in the center of this room. Off the top and four
+posts hangs crimson red silk curtains. Closed at the moment you see nothing
+else. Looking around you see a balcony to the North and a door to the South. A
+large rug lays at the foot of the bed, looks like some type of fur. But it
+really can't be told until you step closer to it. Another large fireplace is
+inset inside a wall as the candles in here are like the others. Black in
+flames with white tips. It is rather warm in here. After a few minutes you
+feel a couple drops of sweat roll down your forehead. 
+~
+Flags:	10000001000001100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32100
+	Flags:	1
+	Material:	glass
+	Barrier:	2
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	0~~~~~~~~~~~~~~~~~~~~~
+	ToVnum:	1003
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+o 
+~
+	ToVnum:	21899
+	Flags:	1
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7806
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7808
+Name:	Foyer
+Desc:$
+   You step off the stairs to look around this room. Standing in the center
+its dark in here. The only light that is given off is from the other rooms
+that seem to be surrounding this one. The ground made of uneven stone. Almost
+like any dungeon would. The air cold and dank. You shiver as you stand here a
+few minutes  
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7810
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7811
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7809
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7812
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7804
+	Flags:	0
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7809
+Name:	Weapons Room
+Desc:$
+   As you step into this room you have to take a double take of the items
+within the confines of the stone walls. Like the Armory there are weapons here
+of every kind. Swords thousands of years old to the latest technology.
+Anything your heart could want is at your finger tips. 
+~
+Flags:	10000000000101100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7808
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7810
+Name:	Armory
+Desc:$
+   You walk into a dimly lit room, the same candles adorn these walls. As you
+look around you see many types of armor hanging on the walls and mounts. From
+all times down to the early 11th century to now. It's amazing to see so many
+types in excellent condition. 
+~
+Flags:	10000000000101100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7808
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7811
+Name:	I)iablos' Library
+Desc:$
+   This room is the largest of the others down here. Greater than the size of
+a football field in itself. Hundreds of candles lit this room only to show
+thousands apon thousands of books. Magical in being, Stories, Journals. A Mage
+could spend their whole life down here and never read the same book twice.
+Items, oh what items you can get your hands on. The power felt inside this
+room is almost overwhelming to one's soul. You see a large table of to one
+side. It's surface is cluttered with books, parchment's and vials containing
+strange liquids. Someone is trying to get ready for some type of casting. I
+wonder what it could be.  
+~
+Flags:	10010000000000101100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	7808
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7812
+Name:	Nocturnia's Dungeon
+Desc:$
+   You walk in here and almost gag from the smells of death. The bones and
+corpses that litter the floor. Blood strun everywhere. Torture devices of
+every kind is set within this room. You hope you never end up in this room as
+a permenant guest. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7808
+	Flags:	0
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7880
+Name:	Entryway to Angel's Dawn
+Desc:$
+   You step up to a house. As you look around you see a garage to the
+northeast and the front door to the east. The house is white with deep gray
+molding around the windows and door.  
+~
+Flags:	10010000000000010000000100
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	Keywords:	garage~~~~~~~~~~
+	ToVnum:	7884
+	Flags:	2
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	7880
+	LockRating:	10
+[EXIT east]
+	Keywords:	front~~~~~~~~~~
+	Desc:$
+front door 
+~
+	ToVnum:	7881
+	Flags:	2
+	Material:	wood
+	Barrier:	24
+	KeyVnum:	7880
+	LockRating:	10
+[EXIT west]
+	ToVnum:	30554
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7881
+Name:	Living room
+Desc:$
+   You step into a spacious living room, vaulted ceiling with fans turning for
+a shoft breeze. Track lighting serves for the lights in here. A large bay
+window along one wall next to the front door. Soft carpeting lines the floors.
+Two large couches are sitting in here. Big enough to hold anything for the
+amount of company this house see's. Against the other wall a large Trid is
+placed with every possible playtoy one could imagine for entertainment. The
+soundsystem can be heard in every room from this one. In front of the couches
+sits a large coffee table. Be careful its made of glass, dont need anyone
+putting their feet throught it. And to the side of the couches sits a Lazy
+Boy...Oh gods it looks comfy. 
+~
+Flags:	10001100000001100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door~~~~~~~~~~
+	Desc:$
+master bdroom 
+~
+	ToVnum:	7882
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door~~~~~~~~~~
+	Desc:$
+twins room 
+~
+	ToVnum:	7883
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	garage~~~~~~~~~
+	Desc:$
+Garage 
+~
+	ToVnum:	7884
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	front~~~~~~~~~~
+	ToVnum:	7880
+	Flags:	2
+	Material:	wood
+	Barrier:	24
+	KeyVnum:	7880
+	LockRating:	10
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7882
+Name:	Master Bedroom
+Desc:$
+   As you step in here you see another large room, fully decorated in dark
+colors, but not overly dark. A large bed rests against the back wall, plush
+and very comfy. Big enough to fit four on it actually. Large soft quilts lay
+over the top of it. Pillows overflow the bed. A walk in closet is to one side
+of the room. Two night stands on either side of the bed with lamps on both. A
+ceiling fan also spins quietly in here. 
+~
+Flags:	10001101000001100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	door~~~~~~~~~
+	ToVnum:	7881
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7883
+Name:	Grayce's room
+Desc:$
+   A normal bedroom for any Mage. A lab to one side, a large bed against the
+wall. You can tell a girl lives here. Even with a few pieces of clothing strun
+about. A soft carpet can be felt under the bare feet. Light colors paint the
+walls. A large bay window to one side.  
+~
+Flags:	10000100000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	door~~~~~~~~~
+	ToVnum:	7881
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#7884
+Name:	Garage
+Desc:$
+   Its simply a garage. Cluttered like any other, tools, toys and many others
+things are in your way to step. At least if you stand 10 feet from the cars
+parked in here. 
+~
+Flags:	10110000000000000000001100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door~~~~~~~~~~
+	ToVnum:	7881
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	garage~~~~~~~~~
+	ToVnum:	7880
+	Flags:	2
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	7880
+	LockRating:	10
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

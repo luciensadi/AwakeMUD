@@ -1,0 +1,820 @@
+#40200
+Name:	Entrance to the University of the Sixth World
+Desc:$
+    You stand at the entrance to Sixth World University, a school designed to
+help you become familiar with this world and mudding in general.  If you go
+north you will enter the school.  
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	40000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40201
+Name:	Staying Healthy
+Desc:$
+    The best way to stay healthy is to eat, drink, and rest.  If you notice
+messages such as, 'You are hungry' or 'You are thirsty', it is time for you to
+find food or drink to consume.  There is a shop downstairs that sells small
+supplies of both.  To eat, just simply use the 'eat' command, followed by an
+item in your inventory you want to eat.  The same logic applies to drinking,
+as you will use the 'drink' command followed by the container name.  During
+the course of your adventures, you may find that you are hurt, and the most
+inexpensive way to heal  is to rest or sleep.  You must be at least resting to
+recover from physical damage, though it's a slow process.  Hospitals or
+magical healing are two other ways you may find healing, though these tend to
+be more expensive (but faster). 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40202
+Name:	Entrance to the Combat Area
+Desc:$
+    By going down, you will enter the combat area.  There are several
+'monsters' down there, but they are all easy enough for you to kill.  To
+initiate combat use the 'hit' or 'kill' commands.  Type 'hit monster',
+substituting monster with the name of the thing you want to kill.  Remember
+you are not allowed to kill other players here.  When you have had your fill
+of killing the monsters, come back up and then go north to continue. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	40209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40203
+Name:	Preparing for Combat
+Desc:$
+   Very good!  You made it!  Now it is time for you to prepare for combat.
+Make sure you have a weapon wielded and you are wearing the armor given to
+you. To wear all your armor with a simple command, type 'wear all' and you
+will wear everything you can in its default position.  Now  type 'prompt @pP
+@mM'.  This will change your prompt to '10P 10M'.  The P stands for Physical,
+and the M stands for Mental.  These two numbers show your current condition,
+with 10 being the max for each catagory.  If you fall below  0 in your Mental
+condition, you will fall unconscious.  If you fall below 1 in your Physical
+condition, you will be incapacitated.  Once your Physical condition goes below
+-(body), you will die.  If you die (and most of us do :)) it's not permanent,
+as you will still be able to play that character.  What you must do though is
+return to the place you died and find your corpse.  Your corpse will contain
+the equipment you had and which you must retrieve (using the 'get all corpse'
+command). 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40204
+Name:	Your Inventory
+Desc:$
+    By using the 'i' command you can get a listing of what you are carrying.
+The 'eq' command lists what you are wearing and at what area of your body.  To
+wear a piece of equipment, just type 'wear' followed by the eq name.  You can
+specify where you would like to wear it, and if possible you will place it in
+that position.  If you don't type the name of the area you wish to wear an
+item, it will be put onto its default position. To wield a weapon, you use the
+(yep, you guessed it!) 'wield' command. To remove any equipment, use the
+'remove' command. Other us pick up items you see and drop items from your
+inventory. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40205
+Name:	You are what you know.
+Desc:$
+    In this world there are many skills a player can learn.  Your class
+determines which skills you can and cannot learn, though many skills are
+learnable by all.  Skills come in two varieties, general and concentrations.
+With a general skill your knowledge covers a wide area, while with a
+concentration, you focus your learning to a specific area.  Concentrations
+allow you to learn an area quicker at the sacrifice of general knowledge. When
+you first create your character, you are given several points to distribute to
+your initial skills.  You must use them all up or you won't be;able to train
+elsewhere (and they'll send you back here).  Type 'practice' in front of the
+teacher downstairs to see which skills are available to you.  Type 'help'
+followed by a skill name to get an idea of what the skill does.  When you are
+done, go south. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	40204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40206
+Name:	Your Attributes are who you are.
+Desc:$
+    Type 'sc' to list the general info about yourself.  Notice the line with
+Bod, Qui, Str, etc...  These numbers are your attributes and determine many
+things which your character can do.  They are abbreviations for Body,
+Quickness, Strength, Charisma, Intelligence, Willpower, Magic, Reaction, and
+Essence.  To find out what each attribute is used for, use the 'help' command.
+Type 'help attribute', and substitute attribute for the name of the attribute
+such as 'help strength'.  Once you have read the help files on the different
+attributes, type 'train' in front of a trainer.  As a new character you are
+given a certain number of points to distribute to your starting attributes. If
+you type 'train' (again, in front of a trainer) followed by the attribute
+abbreviation, you will raise that attribute by one point.  You need to
+distribute all of your points as you cannot use them at any other trainer but
+the one downstairs.  Go east to continue. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40207
+Name:	Getting to know yourself.
+Desc:$
+    The next thing you need to know is how to find out information about
+yourself.  There are several commands which give you information needed to
+play here.  These commands are 'score', 'inventory', 'equipment', 'skills',
+and 'spells'.  All commands on the mud may be abbreviated, therefore you can
+type 'sc' for score, 'i' for inventory, 'eq' for equipment, and so on. The
+first thing you should do is try out these commands.  Go east to continue with
+your schooling. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40208
+Name:	Looking and Moving around.
+Desc:$
+    A mud is a 'virtual' (please excuse that overused term) world.  To look
+around this world you just type 'look' or 'l' for short.  This will give you
+the description of the area you are in and show any objects, people, and/or
+monsters in the same area.  If you use the look command right now you will see
+this room description again.  You can look at objects, people, monsters, and
+even in directions (such as 'look south' or 'l s' for short).  In order to
+move around the world, you type in the name of the direction you wish to
+travel, such as north, south, east, west, up, or down.  If there is not a path
+in that direction, the mud will let you know.  To continue, go north (by
+typing 'north' or 'n'). 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40209
+Name:	The Combat Area
+Desc:$
+   The room that you are in looks vast and overlaping.  Enemies are provided
+by modern technology for your practice with fighting. Be aware, however you
+can be hurt. You have 10P (physical) and 10M (mental) points to work with, if
+your physical points go  below 0, you become mortally wounded and will soon
+die. Mental points will cause you to go unconcious after reaching 0 points. To
+help figure out how skilled your opponent is, use the consider command.
+SYNTAX:   consider <mob name>. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40210
+Name:	The Combat Area
+Desc:$
+   In 2062, some of the best advice to give is There is safety in numbers.
+Around here, magic definetly means power.  Grouping with a mage or a shaman is
+a great advantage. They can provide protection against your enemies offensive
+magic. Magic abilities offers more protection that you could ever have without
+them. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40211
+Name:	The Combat Area
+Desc:$
+   It is better to flee than die.  Just type flee to run from a fight. The
+wimpy command allows you to autoflee if you reach a certain level of wounds.
+However, if you decide to flee you randomly run into any open direction, which
+may lead into more trouble, so be careful. If you die, you must return to the
+location of death, and retrieve the loot from your corpse.
+   
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40212
+Name:	The Combat Area
+Desc:$
+   If unarmed combat, as well as stun batons or tasers are used, you will do
+mental damage to the mob.  After their mental reaches 0, and they fall
+unconcious; continuing to attack will then hurt them physically. Use the hit
+or kill command to start a battle.  Using other weapons (firearms, edged
+weapons and such) will only do physical damage. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40213
+Name:	The Combat Area
+Desc:$
+   In the Sixth World today, violence is not always the way you want to
+approach issues.  In many runs it is mandatory to use brain instead of brawn.
+Even the most talented deckers who succeed in receiving data in the matrix,
+they will be no match for security guards with their sub-machine guns.  A
+Street Samurai or Mercenary are more fit for those type of jobs. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40214
+Name:	The Combat Area
+Desc:$
+   Grouping with someone is one of the popular ways of doing a run or hit. To
+follow someone, first you must choose a leader, and use the follow command.
+SYNTAX: follow <leader>.  The leader should then use the group all command to
+confirm the group. Typing group by itself lists all the characters who are
+part of the group of runners.  The assist command allows you to help a party
+member that is being attacked. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40215
+Name:	The Combat Area
+Desc:$
+   All races stats vary.  A humans stats max out at 6, where another race
+might be able to exceed a humans capacity, but may lack in other areas of
+intelligence and  strength.  Meta-humans have allergies which differ from
+different degress., (barely to severly).  Allergies usually are caused by a
+material your character is in contact with at that time, and will drain
+physical damage each hour. To prevent this you should find items that dont
+have the allergic material.  However, if you are allergic to sunlight, your
+only option is to become a night person. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40216
+Name:	The Combat Area
+Desc:$
+   To come out on top after a fight, stats and skills take a very important
+roll in this area.  One of the most helpful of these is the body stat, which
+allows one to resist damage to a certain capacity. Your quickness will help
+you dodge  attacks all together.  Your reaction will allow you to attack more
+than once per  round.  Something overlooked often is your willpower which will
+help you resist damage from mana type spells.  Of course if your intelligence
+is low, your reaction  will be also, and if your charisma is low, more hostile
+creatures will attack you.  Cyberware and Bioware is an artificial way to
+boost your stats through surgery.   However if you are a magic user or
+physcial adept, it would be your best bet to stay  away from such things.  To
+find out more about cyberware, type help cyberware. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40217
+Name:	The Combat Area
+Desc:$
+   Jack of all trades, master of nothing..  This is very true. There are many
+skills in this MUD that you may learn.  But only the gods can master them all.
+Concentrations enable you to become skilled in a certain area much faster than
+you would in wide-ranged areas. Its better to become a marksman in one type of
+skill, than average in all. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40218
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40299
+Name:	Mavrick's Love Shack
+Desc:$
+   What an awesome room.  A rotating bed is in the far corner.  There is a
+lump under the coverss, must be Mavrick's hot girlfriend.  Bondage toys are
+scattered all over the room, along with a few empty sandwich bags, and a
+couple used condoms.  All over the walls are posters of shrooms, pot plants,
+and one large poster of Kurt Cobain on the ceiling. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

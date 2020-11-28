@@ -1,0 +1,4258 @@
+#62100
+Name:	On the old ferry boat
+Desc:$
+   This old ferry boat is used to shuttle tourists and locals alike around the
+mainland, as well to other islands nearby. It seems to be quite old, and
+although it has been taken very good care of by the crew, it is plain to see
+that it has seen its fair share of use throughout the years. It features two
+large circular paddles, which it uses instead of a standard outboard or
+waterjet engine like most modern craft do. Quite nostalgic eh? 
+~
+Flags:	10010000010000000000000000100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	6
+Cover:	2
+X:	18
+Y:	10
+Z:	0.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#62101
+Name:	Upon a small pier
+Desc:$
+   This small pier has a concrete foundation, though its face shows quite a
+bit of weathering thanks to its constant abuse from the waves lapping at it
+and slowly attempting to erode it away and wipe it from the shore all
+together. A wonderful view of the ocean is offered to the north of here, blue
+water stretching off into the horizon as far as the eye can see from this
+vantage point between Sauteurs and Irvins Bay. The smell of salt and fresh air
+is a welcoming change of pace from life in the city, that's for sure. 
+~
+Flags:	10000000010000000000000000100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	62102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62102
+Name:	Along an ocean side road
+Desc:$
+   A cool breeze wafts in from the water and across this ocean side road,
+which is dotted here and there with small houses and shops of various sizes
+and offering a range of business, from ocean tours upon glass bottom boats to
+simple road side eateries. Several piers and docks extend out from along its
+length as it travels down along the shore. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62103
+Name:	Passing by a pier
+Desc:$
+   A pier breaks off from the narrow road, jutting out into the ocean north of
+here, where quite a few tourists and the like seem to be flocking. A small bit
+of green blocks the view further inland, as a vast majority of the island is
+still overgrown with forest, which is a bit remarkable considering how most
+cities are in this day and age. The road lazily travels along near the shore,
+the ends of which curve inland and head deeper into the small city beyond. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62104
+Name:	At the Villere Ferry
+Desc:$
+   Tourists and other city dwellers upon this island can be found shuffling
+aboard and disembarking the ferry as it arrives and departs on a fairly loose
+schedule. There never seems to be a lack of passengers interested in its
+services, so it does quite well for itself, and has done so for quite a number
+of years now. It's certainly cheaper than renting a boat or purchasing one
+themselves. Besides, wouldn't you much rather sit back, relax, and enjoy the
+ride while someone else does all the work? 
+~
+Flags:	10000000010000000000000000100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	62103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62105
+Name:	A curve in the road
+Desc:$
+   The road travels along with a lazy curve off towards the inland area of the
+island here, upon each side of which are tall native trees, some bearing
+beautiful flowers, while others have some type of fruit hanging from their
+limbs. The housing here isn't exquisite, but the locals certainly don't seem
+to mind, as they have prime shore front property and a wonderful view to keep
+them busy. While not wealthy by any means, they seem to be doing well enough
+for themselves, and generally seem helpful to the tourists, since they're the
+ones bringing in the cash flow. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	62106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62106
+Name:	At a crossroads
+Desc:$
+   This crossroads links together several of the smaller streets before
+emptying its traffic out onto the main 'highway' known as Prospect Road, which
+isn't exactly the highway most city dwellers are familiar with, as it is only
+two lanes wide, but serves as the main artery for traffic for this island.
+Prospect Road can be reached by traveling south or east of here, while off to
+the west is a sign labeled: "^WAirport^N". Off on the side of the road here is a
+large shop along side of a dock that stretches out into the ocean, which
+apparently deals in the rental and sales of boats for anyone feeling
+adventurous or looking to invest in a decent fishing vessel. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62122
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62123
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62107
+Name:	Near an intersection on Prospect Road
+Desc:$
+   This short stretch of road is much like the others around here, which is to
+say it's plastered to high heaven with various signs indicating restaurants,
+cantinas, shops of all sorts and other tourist destinations, including but not
+limited to; Famous churches and other landmarks that the island is known for
+or have historic importance to the natives. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62108
+Name:	Near a turnoff on Prospect Road
+Desc:$
+   Signs, signs, signs galore, most of which are written in the islands native
+language, Grenadian Creole, though a good deal of them have other languages
+printed beneath them, including English, Spanish and a few others. More shops
+seem to be set up along the small path that splits off from the main road,
+while the highway itself continues its journey along from west to east,
+heading further inland if the masses of signs posted around are to be
+believed. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62130
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62109
+Name:	Along Prospect Road
+Desc:$
+   The traffic on the highway begins to pick up steam as it heads towards the
+intersection ahead, which allows traffic from small roads and bypasses to
+merge onto the main road that travels almost the entire length of the island.
+Various tourist traps of sorts line this portion of the highway, which
+obviously appears to be geared towards catching the eyes of those heading out
+from the airport and into the city here, a prime location to offer suggests as
+to where they can spend their cash. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62110
+Name:	Turning onto Prospect Road
+Desc:$
+   This main highway travels throughout not only Sauteurs, but almost the
+entirety of the island of Grenada itself, as the hustle and bustle of traffic
+upon it indicates. A curve in the road west of here, along with the scenery of
+native trees and incline of the land itself, makes peering down its length
+nearly impossible. A few well placed signs, however, hint towards an airport
+of sorts must be down that way some distance, as the little airplane symbols
+upon them are apt to indicate. A few piers and docks can be noted north of
+here at the edge of the island, along with a sign noting a ferry service for
+tourists, while the highway itself picks up steam as it heads off east of
+here. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62111
+Name:	An abrupt turn
+Desc:$
+   An abrupt turn in this small road cuts inland and connects to one of the
+main roads further along, allowing a smooth flow of traffic as visitors and
+locals make their way about the ocean side city. The view further inland is
+obscured by tall tropical trees, some of which are native, while others were
+brought by explorers and merchants long ago, planted in an attempt to reap
+profits from the goods they bore in this veritable island paradise. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62112
+Name:	A curve in Prospect Road
+Desc:$
+   This stretch of the main highway, better known as Prospect Road, curves
+down along a slight grade as it helps push traffic along in each direction.
+The scenery opens up a bit, and the island paradise this area is credited as
+actually starts to pan out. Between the native trees popping up along the
+sides of the road, one can catch a glimpse of the wide expanse of the ocean
+off to the north of here, which has various piers and docks jutting out into
+its depths. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62113
+Name:	The merge of Prospect Road and Airport Road
+Desc:$
+   The main thoroughfare links the Airport Road with the main highway,
+Prospect Road, which winds its length throughout most of the inland areas of
+the island. Traffic is still horrendous, as the pedestrians spill in and out
+from the park on the edge of the road here, making it an arduous task to
+navigate both on foot or in a vehicle. Taxis can be heard constantly tapping
+on their horns as they attempt to weave through the labyrinth of metal and
+meat that swarms across the roadway here. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62114
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62119
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62114
+Name:	At the northern end of a cobblestone path
+Desc:$
+   The noise from vehicle traffic becomes louder as one heads towards the
+entrance of the park, the cobblestone pathway giving out to good old fashioned
+pavement and sidewalks as it comes to an end. Another set of tastefully
+painted and decorated cement rods jut up from around the edge of the park
+itself, keeping overly ambitious drivers from attempting any shortcuts through
+the area. A few small food stands are set up along the interior edge of the
+park, attempting to lure in passerbys with the smell of 'native' cuisine, as
+well as a few who have opted instead to try their hand at foreign delights to
+better cater to their non-native market demographic. 
+~
+Flags:	10000000010000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	6
+Cover:	4
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62115
+Name:	Passing by the souvenir stands
+Desc:$
+   Various peddlers of small souvenirs can be found near the central
+roundabout at the park, having set up their stands and blankets up along the
+edge of the cobblestone pathway and around the decorative fountain itself.
+Most of them seem somewhat fluent in several languages, since they'd be
+needing these skills to be understood by visitors from around the world, which
+they aren't shy about showcasing as they attempt to haggle and finagle a sale
+to everyone who passes by. Most of them seem more than happy to sell beneath
+their 'sticker price', since they're no doubt still making a profit off of
+their goods in the process. 
+~
+Flags:	10000000010000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	5
+Cover:	3
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	62116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62114
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62116
+Name:	At the southern end of a cobblestone path
+Desc:$
+   The park itself has banned vehicle traffic since it would be quite
+hazardous to pedestrians, and have gone through the trouble of adding in
+tastefully painted cement rods with thick rope connecting them with a few left
+open for visitors to pass through, just to make sure nobody gets the smart
+idea of attempting to bypass the traffic on the main road nearby. St. Patricks
+International Airport looms off south of here, which they've gone through the
+trouble of attempt to hide behind a grove of trees, which surround the park
+itself and make for quite a bit of scenery in the process. A wide cobblestone
+pathway travels from one end of the park to the other, cutting right through
+the center of it, allowing tourists and locals alike to stroll along its
+length. 
+~
+Flags:	10000000010000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	5
+Cover:	4
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62117
+Name:	Outside of St. Patricks International Airport
+Desc:$
+   The front of the exit/entrance of St. Patricks International Airport is
+swarming with both foot traffic, taxi services and local rentals, making it a
+hassle to navigate through regardless of how wide the streets and sidewalks
+are. Almost immediately tourists are bombarded by various peddlers trying to
+sell visitors to the island souvenirs of all shapes and sizes, practically
+shoving one another out of their way to show off their goods, and while they
+are insistent and rough with one another, they're quite friendly to any
+non-locals, since they're the ones who are obviously bringing in the cash that
+keeps them in business. The main road leads out north of here, while a small
+pathway winds through a footpath east of here where vehicle traffic cannot get
+to. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62118
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62118
+Name:	The main road to St. Patricks Interational Airport
+Desc:$
+   While some of the foot traffic has lightened thanks to the parallel pathway
+in the park east of here, there is certainly still plenty of vehicle traffic
+to deal with and finagle through. There seem to be quite a number of bikes,
+some of which are even converted into passenger taxis for hire. Those used to
+the congested highways and freeways in higher populated cities on the
+mainlands are sure to notice the distinct lack of heavier vehicles, probably
+due to the fact the streets and roads around here simply aren't equipped to
+handle then, and considering the smaller population on the island, it's simply
+much easier and cheaper to rely on public transportation and smaller vehicles
+to get around. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62119
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62119
+Name:	A curve in the road
+Desc:$
+   This wide, sloping curve in the main road leading to the airport is almost
+always congested to the brim as local taxis and tourist rentals try to either
+get to or away from the airport itself. Various souvenir and small street side
+cantinas can be found lining either edge, all but blocking the view further
+inland and out towards the ocean nearby, so if you came here to sightsee,
+you'd do well to just keep on chugging along. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62118
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62120
+Name:	The entrance of St. Patricks International Airport
+Desc:$
+   Throngs of visitors both arriving and departing from the airport mill
+through the dozen or so sliding safety glass doorways that line the front of
+the main entrance, most of which are eagerly to start their stay on the
+island, while others are obviously begrudgingly returning to leave from their
+vacation stay. The large domed ceiling lets a bit of light trickle down into
+the open area, but for the most part the interior is shaded and comfortably
+air conditioned. 
+~
+Flags:	10000000010000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	8
+Cover:	6
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62121
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62121
+Name:	Passing lines of seating
+Desc:$
+   Row and row of seating is positioned as efficiently as possible to utilize
+as much of the area as possible, all of which are helpfully directed towards
+one of the large arrival and departure screens that constantly change as
+flights are delayed or canceled all together, usually with a loud pained groan
+from those getting the news. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	6
+Cover:	6
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62168
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62122
+Name:	Lacoste's Boats and Rentals Showroom
+Desc:$
+   Perhaps the term 'room' doesn't necessarily suit this place, as its an open
+air bazaar of types, which features several types of rentals and other ocean
+going vessels that can be purchased for the right amount of nuyen. Several
+tents with large tarps stretched across them shelter the boats from the
+elements, so they remain in fairly good condition for purveyors to look over
+and inspect. At the far end of the shop is a line of docks, where all of the
+rentals and sold boats are tied down for storage purposes. 
+~
+Flags:	10000000010000000000000001100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62123
+Name:	Along Prospect Road
+Desc:$
+   The edges of Prospect Road here are covered with house fronts, most of
+which are surrounded in low cement walls that are rough and weathered from the
+elements, while others are covered in lively graffiti, which hasn't been
+painted over or removed since they're not vulgar like most city dwellers
+prefer. The brightly coloured paint used to create these 'murals' act to hide
+the rather ugly cement surfaces beneath, but are also indicative of the
+Grenadian culture the paintings represents. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62124
+Name:	A curve in Prospect Road
+Desc:$
+   The bend in the highway here is lined with signs and small billboards for
+various services rendered around these parts, ranging from ocean tours to
+offering salvation from a local church. One billboard in particular seems to
+be offering residence at a nearby waterfront apartment complex, and if the
+details are to be trusted, it should be just down the road a ways south bound
+from here. Traffic has picked up its pace, as it's apt to do on one of the
+major roads through the city. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	62125
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62123
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62125
+Name:	Heading down Prospect Road
+Desc:$
+   The scenery is quite a bit nicer than most cities can offer, and between
+the ocean back drop and the native flora, it's easy to see why tourists are so
+interested in helping themselves to a lengthy vacation down in the Caribbean
+League, or at least those who can afford such a luxury. A large sign on the
+side of the road reads, "^WPelagie Waterfront Apartments^N: ^CIf you lived here,
+you'd be home already!^N" --It's a bit tacky, but hey, it's true. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62126
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62163
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62126
+Name:	Parking lot of Pelagie Waterfront Apartments
+Desc:$
+   This shaded parking lot isn't paved, and instead consists of loose gravel,
+which is lined with painted cement logs to indicate parking spaces for
+vehicles. Pelagie Waterfront is geared towards offering boathouse apartments
+on the waterfront, obviously, so it's only suitable if you don't suffer from
+sea sickness, which is actually noted on a written sign near the front
+entrance. While not as large or as accomadating as a normal apartment block,
+it offers those who are comfortable with the surroundings and the waterfront a
+change of pace from living on land. 
+~
+Flags:	100000000000000000000100
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62400
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62125
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62127
+Name:	Beneath a large billboard
+Desc:$
+   Several advertisements and signs line this narrow service road that
+connects the two ends of Prospect Road, all of which are dwarfed by the large
+billboard that stands overhead, offering a good amount of shade to the area
+below. An abandoned vehicle or two are parked off to the side, all but rusted
+out shells of their former selves, and since they've been pushed out of sight
+and aren't really seen from the highway, nobody has bothered getting them
+towed away. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62163
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62128
+Name:	Heading down Prospect Road
+Desc:$
+   The roadway widens a bit as it opens up onto Prospect Road, the main
+thoroughfare throughout the northern end of the island of Grenada, which winds
+and travels its way north and south. The coastline can be seen north of here,
+while off south the highway pushes further inland, snaking its way along the
+slopes and hills as the land itself rises above sea level. A small road off to
+the side here splits off and heads west, which apparently houses a few of the
+natives houses and small storefronts, as the signs are apt to indicate. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62129
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62129
+Name:	Along a side road
+Desc:$
+   This narrow side road runs along side of Prospect Road, which it connects
+to further up ahead upon each end. Each side of the path is settled with small
+apartment house setups and even smaller family residences built by the locals,
+and while they may not be the most glamorous or easy upon the eyes, they
+certainly do what they're designed to do well enough. An occasional shop and
+storefront also dot the scenery, some of which are the ground floors of the
+houses, which sell various things, though most of them seem geared towards
+locals, but that certainly won't stop them from peddling their wares to
+visitors at a higher price, simply because they can get away with it. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62130
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62130
+Name:	Along a tourist trap road
+Desc:$
+   This small road off the main highway is almost all but blatantly obvious
+geared towards trying to sell chump tourists stuff they really don't need, but
+are sure to still buy regardless. Some of the shops, however, have more useful
+goods to those visiting the island, such as the 'General Goods' store on the
+southern edge of the slender roadway. The road itself empties out back onto
+Prospect Road north of here, as well as east of here. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62129
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62131
+Name:	Guillaume's Goods
+Desc:$
+   The interior of this small shop is lined with shelves containing simple
+recreational diving equipment, as well as a few that aren't quite so standard,
+but certainly necessarily if you wish to defend yourself against the oceans
+wrath. Stickers and handmade signs are posted upon bins of items, while a
+counter towards the back is manned by the owner or one of the employees. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62130
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62132
+Name:	Along Prospect Road
+Desc:$
+   Prospect Road travels along the lower portion of the island as it heads
+inland, as opposed to climbing up along the hillside as the land rises above,
+which the opposite side of the highway leads to. A small service road dwarfed
+by a large billboard splits off of the road, which allows vehicles and foot
+traffic to cut across and get to the other portion of Prospect Road, as
+opposed to taking the long way around further north. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62127
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62133
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62133
+Name:	A stretch of Prospect Road
+Desc:$
+   More storefronts mingle together with ground floor and the occasional two
+story houses of the locals that call the island home, some of which have their
+names posted along their mailboxes and property lines, a majority of which are
+French Creole, even though the population contains a various range of
+ethnicities. Swathes of native trees block the view up further ahead and up
+towards the higher ground and the roads above, while Prospect Road itself cuts
+a path through the wild vegetation, since co-existence is a necessity of life
+on this island. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62134
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62134
+Name:	At a fork in the road
+Desc:$
+   The road splits off and forks around what appears to be a cemetary just
+south of here, its old, shoulder high wrought iron gates spanning along each
+edge of the pathways that stretch around its expanse. Signs for restaurants
+and local cantinas as tastefully posted away from the cemetary fence, since in
+the Caribbean it's considered quite impolite to harass the dead, as they're
+apt to come back for revenge, especially with all the hougans known to inhabit
+this part of the world. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62133
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62154
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62135
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62135
+Name:	Passing by the Viltz Motel
+Desc:$
+   The road continues along the edge of a gloomy cemetary, but even so, the
+atmosphere is still quite upbeat and care-free, as the islands in the
+Caribbean are well known for. Advertisements and business signs for the "Viltz
+Motel" offers both visitors and locals a cheap room for the night, as well as
+somewhere out of the sun to rest their weary heads, which is a good thing if
+they can't exactly spring for some of the more expensive and luxurious
+establishments around. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62136
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62134
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62137
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62136
+Name:	Inside the lobby of the Viltz Motel
+Desc:$
+   It's nice, well, nice enough at least. It has all the comforts one would
+expect from a local motel, and better yet it's kept nice and tidy by the
+owners and staff. There is a check-in desk towards one end, while another wall
+has an island map depicting local sites for tourists, and apparently the staff
+are more than willing to help offer some advice for those new to the island.
+Their first advice? Rent a room from them! Obviously. 
+~
+Flags:	10000000000000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	62135
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62137
+Name:	Passing by a parking lot
+Desc:$
+   Traveling along this un-named road leads to some of the local watering
+holes, and it appears a parking lot is tastefully across the road from the
+local cemetary here, which is mostly concealed by large collections of trees
+and plantlife, so it's hard to get a handle on how large it is from the
+roadside. Several vehicles can be seen however, so it certainly gets put to
+use. The road itself continues its journey along off towards the southwest
+further inland, while the northeastern portion winds its way towards the
+shore. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	62135
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62138
+Name:	A wide parking lot
+Desc:$
+   This parking lot consists of a wide, cleared out space filled in with
+gravel and surrounded on almost every side by native trees and plants, which
+act as a natural barrier to keep prying eyes and vandals from focusing on it
+too much. A sturdy chainlink fence also surrounds the area, which has barbwire
+wrapped around its top, so the only way in and out is the main entrance.  
+~
+NightDesc:$
+   This parking lot consists of a wide, cleared out space filled in with
+gravel and surrounded on almost every side by native trees and plants, which
+act as a natural barrier to keep prying eyes and vandals from focusing on it
+too much. A sturdy chainlink fence also surrounds the area, which has barbwire
+wrapped around its top, so the only way in and out is the main entrance. There
+isn't much in the way of lighting here during the night, aside from one or two
+old lamp posts at the corners of the lot. The sounds of wildlife and the
+occasional set of ^Ygleaming eyes^N can be seen peering out from the forest beyond
+the fence. 
+~
+Flags:	100000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	62137
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62139
+Name:	A curve around the cemetary
+Desc:$
+   Prospect Road continues its journey, winding through the trees that crowd
+closer and closer around both edges of the road, which help to cover up the
+old wrought iron gate that keeps the cemetary off to one edge of it and its
+contents contained. The western edge of the road, however, seems to descend
+into the depths of a forest, which engulfs and conceals everything beyond its
+initial boundry, tempting anyone brave or stupid enough to step inside and
+test their mettle. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62137
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62140
+Name:	Along a stretch of natural scenery
+Desc:$
+   There is little in the way of buildings along this portion of this un-named
+road, each side of the highway giving way to forested area, which is
+apparently one of many of the locals attempts to make their impact upon the
+land as non-intrusive as possible. It's an odd sight to see, that's for sure,
+especially for any citydwellers visiting the island, as the only trees they're
+apt to see are at the park, and sure as hell not in the city itself. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62141
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62141
+Name:	Traveling along an un-named road
+Desc:$
+   The roadway itself is dotted with the occasional building, moreso than upon
+some portions of it at least. The highway itself is still narrow here as it
+attempts to weave its way through the almost jungle-like atmosphere of the
+forested area it is built upon, which is reinforced by the occasional bit of
+native wildlife that darts across the pavement, as well as a few others who
+weren't quite as lucky and are little more than clumps of fur and inards that
+now make up a bit of the roads paving. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62142
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62142
+Name:	Passing through a sea of trees
+Desc:$
+   The occasional business office and warehouse are tucked into the thick sea
+of trees that border the roadway here, almost all of their signs written in
+French Creole, so unless you're capable of translating, chances are you're
+going to have to guess what they specialize in. The un-named section of road
+continues along in a northern and southern fashion, while further up ahead to
+the south there seems to be a crossroads of sorts with a larger highway
+system. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62141
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62143
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62143
+Name:	At a crossroads
+Desc:$
+   Three sections and directions of the roadway intersect here at a
+crossroads, which features signs for each direction accordingly. Portions of
+Prospect Road head off east and southwest from here, while an un-named stretch
+of road travels in a northern direction into a thicket of forested area. Even
+from this elevation, it's hard to make out anything specific, aside from the
+canopy of trees that coat the area and hillside on the surrounding terrain. A
+sign for the small townships of Prospect and Union are noted on the
+southwestern path, while the others are labeled as heading towards the city of
+Sauteurs. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62142
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62164
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62144
+Name:	A curve in Prospect Road
+Desc:$
+   The casual curve in the highway helps both lanes of traffic safely navigate
+their way up or down along the hillside northeast of here, while the landscape
+itself begins to level off as it travels further west from this position. The
+occasional bit of wildlife can be seen in the flora, doing what they do best,
+as well as being seen on the pavement of the road, doing what they do worst
+(turn into roadkill speedbumps, obviously). 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62145
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62143
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62145
+Name:	Down Prospect Road
+Desc:$
+   The glimmer of the ^Ysun^N reflecting off of the ^Bocean^N in the distance can be
+seen just above the canopy of the treeline, which stretch out across the
+landscape like a ^glush green^N sea before meeting with the shoreline beyond. The
+occasional plane can be seen coming in for a landing at the airport north of
+here as well, and all in all, this portion of the highway offers quite the
+view. The road itself climbs higher up along the hillside northeast of here,
+while the opposite end continues to travel down along to the southwest. 
+~
+NightDesc:$
+   The glimmer of the ^Wmoon^N reflecting off of the ^bocean^N in the distance can be
+seen just above the canopy of the treeline, which stretch out across the
+landscape like a ^gmurky green^N sea before meeting with the shoreline beyond. The
+occasional plane can be seen coming in for a landing at the airport north of
+here as well, and all in all, this portion of the highway offers quite the
+view. The road itself climbs higher up along the hillside northeast of here,
+while the opposite end continues to travel down along to the southwest. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62146
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62146
+Name:	Down along the hillside
+Desc:$
+   The highway begins winding its way back down along the hillside at this
+portion of the road, the pavement looking a little uneven from the shifting
+land and the constant abuse of the elements and weather upon it. A large,
+unlit ^gneon sign^N is posted on a turnoff to the northwest hints towards one of
+the local watering holes tucked away behind the treeline, which seems to read
+in bright lettering "^WCienfuegos Cantina^N". It's a bit hard to tell if it's a
+high or low brow establishment... But as long as they have booze, does it
+really matter to you? 
+~
+NightDesc:$
+   The highway begins winding its way back down along the hillside at this
+portion of the road, the pavement looking a little uneven from the shifting
+land and the constant abuse of the elements and weather upon it. A large,
+brightly lit ^Gneon sign^N is posted on a turnoff to the northwest hints towards
+one of the local watering holes tucked away behind the treeline, which seems
+to read in bright lettering "^GCienfuegos Cantina^N". It's a bit hard to tell if
+it's a high or low brow establishment... But as long as they have booze, does
+it really matter to you? 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62149
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62145
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62147
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62147
+Name:	The parking lot of Cienfuegos Cantina
+Desc:$
+   Consisting of half pavement and half gravel, the parking lot to Cienfuegos
+Cantina is about as seedy as one might expect from a bar on the side of the
+highway. It seems to be popular with the less 'popular' socialites, most of
+whom probably have a rap sheet longer than most peoples grocery lists. A dead
+^gneon green^N sign, which is currently unplugged, sits above the doorway of the
+establishment. 
+~
+NightDesc:$
+   Consisting of half pavement and half gravel, the parking lot to Cienfuegos
+Cantina is about as seedy as one might expect from a bar on the side of the
+highway. It seems to be popular with the less 'popular' socialites, most of
+whom probably have a rap sheet longer than most peoples grocery lists. A
+flickering ^Gneon green^N sign, which is currently plugged in, sits above the
+doorway of the establishment. 
+~
+Flags:	100000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62148
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62146
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62148
+Name:	Entering Cienfuegos Cantina
+Desc:$
+   This place is... Well, exactly as you had imagined it would be while
+standing out in the parking lot. The establishment isn't very tidy and neither
+are its patrons, who seem to either be washed up runners, pirates, or just
+plain criminals. The wooden floorboards are scuffed and in need of a desperate
+scrubbing, as are the walls, and basically everything other surface in here,
+even the people. 
+~
+Flags:	10000000010000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62174
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62147
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62149
+Name:	Along a ridge on Prospect Road
+Desc:$
+   The ridgeline that Prospect Road travels along once climbing up the
+hillside curves around in an eastern direction before eventually winding its
+way back down towards the shoreline north of here. The ocean itself can be
+seen above the lush treeline that covers most of the area, its blue waves
+glinting in the ^Ysunlight^N and making for quite the view. 
+~
+NightDesc:$
+   The ridgeline that Prospect Road travels along once climbing up the
+hillside curves around in an eastern direction before eventually winding its
+way back down towards the shoreline north of here. The ocean itself can be
+seen above the lush treeline that covers most of the area, its blue waves
+glinting in the ^Wmoonlight^N and making for quite the view. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62150
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62155
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62146
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62150
+Name:	A stretch of road flanked by the forest
+Desc:$
+   This lengthy stretch of highway is almost being overgrown upon each edge by
+nature, which is obviously attempting to reclaim its property, and it seems to
+be going a pretty good job at it. Freshly cut branches and brush stumps can be
+noted dotting the sides of the pavement, whose edges are ragged from roots
+busting up from beneath, so it seems the road management around here certainly
+has its work cut out for them. This narrow part of the highway crawls its way
+north and south, allowing traffic to make its way from the inland areas to the
+shore and vice versa. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62151
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62149
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62151
+Name:	Near The Montplaisir Restaurant
+Desc:$
+   The plantlife that surrounds the roadside thins just enough to allow
+passage to a road off on the eastern side, which if the sign posted outfront
+is to be believed, leads to ^W"^rThe Montplaisir Restaurant^W"^N. Prospect Road itself
+continues along in a south and north direction, one side flanked by the local
+cemetary while the other has the ever present trees that make this island
+paradise a lush and green landscape. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62154
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62152
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62150
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62152
+Name:	Outfront of Montplaisir Restaurant
+Desc:$
+   This establishment seems a bit more upscale than most around here, as noted
+by the sheltered parking spaces and actual pavement evenly leveled across the
+lot itself, which has valets hurrying across it to take care of the patrons
+vehicles when they arrive and depart. The building is constructed in a
+classical, more traditional manner, its exterior covered with masonry work to
+give it an older more and higher class feel to the place. 
+~
+Flags:	100000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62153
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62151
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62153
+Name:	Entering Montplaisir Restaurant
+Desc:$
+   This place certainly seems to like keeping up with appearances, as all of
+the furnishings and surroundings are lavish and perfectly geared towards a
+high brow clientele. An elderly maitre'd awaits those arriving and either
+seats them if they already has a reservation, or checks his registry to make
+sure they have any openings before offering his services. There is a coat room
+off to the side of the entrance way, where, obviously, patrons can have them
+stashed for the evening instead of keeping them on the backs of their chairs.
+~
+Flags:	10000000010000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	1
+X:	8
+Y:	4
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62181
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62180
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62152
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62154
+Name:	Passing by the cemetary
+Desc:$
+   The local cemetary looms along the western edge of this stretch of Prospect
+Road, its contents contained within an old wrought iron gate that has been
+overgrown with various native flora, which the road itself is almost
+threatened with being engulfed in as well. Several signs for tourist sites as
+well as local watering holes can be found dotting along the side of the paved
+road, one in particular seems to be for ^W"^rThe Montplaisir Restaurant^W"^N, which is
+just up ahead the road a little ways. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62134
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62151
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62155
+Name:	Along a ridgeline
+Desc:$
+   The ridgeline sits upon the hillside that creeps its way ever higher to the
+south and east, offering a partially obstructed view of the island below and
+the shoreline a ways off into the distance to the north. The hustle and bustle
+of citylife below is settled into a backdrop of both lush greens and browns,
+while upon the horizon looms the ocean and its waters beyond. The highway
+itself winds its way along the hillside path as traffic creeps west to east
+and vice versa. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62156
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62149
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62156
+Name:	Near a steep outcropping
+Desc:$
+   The highway travels its way along the upper ridge, its southeastern edge
+flanked by large trees and flora that have dug themselves into the rocky
+hillside, while the northwestern edge of the pathway leads to a steep
+outcropping, which looks quite treacherous to say the least. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62157
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62155
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62157
+Name:	Passing by The Church of Saint Sarasses
+Desc:$
+   An obviously old church claims a portion of the hillside that juts out and
+offers a fairly level building area, and from the appearance of its
+architecture and the weathered upon its stone facade, it's been there for
+quite some time now, easily a hundred or so years. There seems to be little in
+the way of places to park aside from on the side of the roadway itself, and
+most of those spots have already been claimed. A carved stone marker stands by
+the roadside, proclaiming the churches namesake and its patron savior. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62159
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62156
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62158
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62158
+Name:	Approaching The Church of Saint Sarasses
+Desc:$
+   This wide entrance leads up to the front double doors of the church itself,
+which is sheltered from the elements by stylized masonry with several slender
+pillars lining the pathway, stone arches suspended overhead. The pathway
+itself is crafted from cut and fitted blocks of stones, which are fairly
+level, enough to the point where one can stroll across them without fear of
+tripping on the edges. The church itself is fairly old, at least a century or
+two in age, which looms overhead in a classic steepled fashioned, with large
+stain glass windows dotting its exterior. Massive trees surround the edges of
+the building, blocking most of it from view from most of the roadway nearby. 
+~
+Flags:	10000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	8
+Z:	0.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors double wooden
+	Desc:$
+A large set of wooden double doors leads into the church. 
+~
+	ToVnum:	62186
+	Flags:	1
+	Material:	wood
+	Barrier:	12
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62157
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62159
+Name:	Along a winding path
+Desc:$
+   Prospect Road continues to climb and wind its way up along the hillside as
+it heads further inland, and while the terrain had been blasted and cleared
+years upon years ago, that seems to have been more than enough time for nature
+to further its attempts to reclaim the pathway. Both sides of the road here
+and flanked with thickets of native trees and other such plantlife, all but
+blocking the views further up the hillside, as well as down towards the
+shoreside. An occasional plane from the airport off to the northwest can be
+seen soaring overhead, but aside from the trees and the cloud cover, there
+isn't much to see. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	62157
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62160
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62160
+Name:	Enjoying the hillside scenery
+Desc:$
+   There isn't much to see here, unless you consider the thickening forest
+upon each side of the roadway worth stopping and taking a few photographs of,
+but apparently none of the tourists around here have such a thing in mind. The
+road itself ascends higher up along the hillside, and only the occasional
+break in the foliage offers a view down onto the island below to the west,
+accompanied by a few drop offs and ridges that would be best off left alone. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62161
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62159
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62161
+Name:	Up along Prospect Road
+Desc:$
+   A break in the treeline to the west allows for a picture perfect view of
+the scenery below, which includes the lights from the citylife, as well as the
+shoreline and ocean just beyond it. The mixture of colours is rather
+beautiful, and it's only occasional disrupted by the native wildlife that also
+call this island their home, as indicated by the sporadic spots of roadkill
+where they've decided to press their luck with a road crossing and drew aces
+and eights. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62162
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62160
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62162
+Name:	Heading up Prospect Road
+Desc:$
+   The roadway is blanketed upon each side with wildlife and their habitat,
+namely trees and other plantlife, along with native bushes and other shrubbery
+that helps act as a natural barrier and keep landslides from spilling down
+onto the road and block one of the major arteries that traverses the island.
+The highway itself begins its climb up along the hillside as it juts up from
+the inland portion of the island. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	62161
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	62163
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62163
+Name:	Traveling along Prospect Road
+Desc:$
+   This end of Prospect Road begins turning up along the hillside as it rises
+above sea level and away from the shoreline, traveling along as it traverses
+the terrain filled with trees and native flora, and occasionally the native
+fauna that call it home. A large billboard for Pelagie Waterfront Apartments
+can be seen above the road, while off to the side is a small service road and
+turn around just in case as a last chance effort to get to the correct portion
+of the Prospect Road highway system. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62125
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	62162
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62127
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62164
+Name:	Heading down Prospect Road
+Desc:$
+   Heading down this portion of highway is much the same as any stretch of
+pavement along Prospect Road, as it is flanked by heavily forested areas rife
+with native wildlife and the pitfalls that come with them. The occasional
+wildlife mentioned can be seen scavaging along the roadside, while others who
+weren't so lucky and decided to try and cross it met with an abrupt scenery
+change, as in, they're now permanently a part of the scenery, particularly as
+a part of the pavement itself. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62143
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62165
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62165
+Name:	Heading out of Sauteurs
+Desc:$
+   This section of Prospect Road leads into and out of the city of Sauteurs,
+while further along towards the southwest the roadway acts as the main
+thoroughfare for the townships of Union and Waltham. The traffic here begins
+to pick up as motorists try to maneuver their way between the larger city
+nearby and the small towns that border it, some of which are tourists, while
+most seem to be locals. 
+~
+Flags:	10000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62164
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62166
+Name:	At the arrival/departure platform
+Desc:$
+   The arrival and departure platform is crawling with activity, whether its
+newcomers to the city or visitors trying to get the hell out of dodge. A swarm
+of bodies moves in one direction or the other, with little give if one wishes
+to change their mind and hop the ropes to switch lines. That, and considering
+it's an airport, chances are you'll get tazed for acting like an idiot. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62167
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	8832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62167
+Name:	At the final departure platform
+Desc:$
+   A mass of other airline patrons wait patiently in line for the commercial
+plane to arrive and the loading walkway to be extended so they can start
+boarding it. There are no windows along this enclosed walkway, but the hustle
+and bustle of the airport lanes beyond its walls resonate and rumble as
+airplanes take off or come in for landings, making for quite the experience. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	62166
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62168
+Name:	Infront of the arrival and departure displays
+Desc:$
+   Massive screens stretch for as far as the eye can see, upon which are
+displays for the arrival and departure flights, along with their time and
+delays, as well as the terminal which they will be coming in from or leaving
+out of. The area is swarming with anxious and tired visitors and natives
+alike, not all of which are comfortable with the length they have to wait for
+service, but, that's the way of things at the airport, suck it up and deal
+with it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62121
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62169
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62172
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62169
+Name:	At the baggage claim area
+Desc:$
+   Large circular tracks of rollers lead baggage offloaded from incoming
+planes around and around, awaiting for their owners to come and claim them.
+Several tourists looks distraught over the fact that they can't find their
+luggage, while others breath a sigh of relief as they finally find theirs.
+This is where hopes and dreams are either granted to those lucky few, or
+dashed for the unfortunate bastards who have all of their belongings lost by
+the airline. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	62170
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62168
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62170
+Name:	Inside a customs office
+Desc:$
+   This area is quite full with tourists and visitors, along with natives, who
+are trying to get either their luggage squared away with customs, or dealing
+with all of the paperwork that is necessary for using the airlines services to
+get off of the island. Uncomfortable looking seats line every wall, while rows
+of them are placed in the center of the room. Several lines and counters line
+any portions not covered with seating, obviously in an attempt to accomodate
+all of the (meta)humans trying to handle their business here. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	2
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62169
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62171
+Name:	An airport luggage store
+Desc:$
+   What's that, lost your luggage did you? No worries! You may not be able to
+easily replace their contents, but you can certainly replace the bags to carry
+your non-existent material goods right here! Considering how well business is
+doing in this store, one may begin to wonder if the high rate of misplaced
+luggage and the sales here have anything in common.. Probably just
+coincidence, right? 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	62172
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62172
+Name:	Nearing the departure/arrival terminals
+Desc:$
+   Lines of arrival traffic pour out into the area, while others stand between
+ropes that form lines to slowly make their way to the departure and arrival
+platforms. A conveniently placed store selling luggage and carry-on bags is
+set off to the side, just in case you need a last minute purchase or a first
+arrival purchase to handle. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	62168
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	62171
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62173
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62173
+Name:	At the arrival/departure platform
+Desc:$
+   The arrival and departure platform is crawling with activity, whether its
+newcomers to the island or visitors trying to get the hell out of dodge. A
+swarm of bodies moves in one direction or the other, with little give if one
+wishes to change their mind and hop the ropes to switch lines. That, and
+considering it's an airport, chances are you'll get tazed for acting like an
+idiot. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	6
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62172
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62197
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62174
+Name:	Passing by the jukebox
+Desc:$
+   The establishment begins to open up as one travels further into its belly,
+and the first thing you're bound to stumble across is the old jukebox off to
+the side, which has seen quite a bit of abuse over the many long years it's
+been in service, but apparently it still works. While there's a portion of the
+bar open as a dance floor, it doesn't seem to get much use, as most of the
+patrons are more interested in getting their fill of swill. A pool table can
+be seen off to the northeast with a few grungy looking chums hanging around
+it, while off towards the northern wall is the bar itself. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	7
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62175
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	62177
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62148
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62175
+Name:	At the bar
+Desc:$
+   The area around the bar seems to be safe from any immediate violence, as
+most of the patrons aren't willing to rub the tender the wrong way, even the
+ones who get lippy with the troll bouncer at the door seem to shy away from
+any direct conflict with the man behind the counter here. After a glance, it's
+plain to see why, that fragger is huge! All of the patrons are busy either
+minding their own business, getting drunk, playing darts or just plain waiting
+for someone to show up. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	2
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	7
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62177
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62174
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62176
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62176
+Name:	In a private booth
+Desc:$
+   This private booth is little more than just a grimey back room that's been
+sealed off from the main portion of the establishment by a multitude of beads
+hanging down over the doorway. It features simple furnishings, which consist
+of a few almost busted chairs and an uneven table that wobbles a little
+whenever the slightest amount of weight is put onto it. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	7
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62175
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62177
+Name:	A corner with a pool table
+Desc:$
+   Tobacco smoke hangs heavily in the air here, so much so that even the small
+ceiling fan above head can hardly keep up and barely helps the situation at
+all. An old pool table has been set up here, which has been bolted to the
+floor, just in case any of these stupid bastards gets (or may have already
+had, hence the bolts) the bright idea of trying to haul it off and sell it. A
+few of the less savoury elements of society are gathered around it, drinking,
+shooting billiards and cracking up over the occasional joke. A small private
+room appears to be set up off to the side, though what little privacy is
+offered is only done so with a multitude of beads hanging down over the
+doorway. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	5
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	7
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	62178
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62174
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62175
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62178
+Name:	In a private booth
+Desc:$
+   This private booth is little more than just a grimey back room that's been
+sealed off from the main portion of the establishment by a multitude of beads
+hanging down over the doorway. It features simple furnishings, which consist
+of a few almost busted chairs and an uneven table that wobbles a little
+whenever the slightest amount of weight is put onto it. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	7
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62177
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62179
+Name:	Viltz Motel Room
+Desc:$
+   The rooms here aren't the largest, but they certainly beat a coffin, that's
+for sure. They come complete with all the basic necessities and furnishings,
+which include a nice sized bed with clean sheets and pillows, an end table
+with a shaded lamp on it, as well as a desk pushed off to the side just in
+case any business needs to be done during the visitors stay here. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	Desc:$
+A staircase leads back down to the front desk. 
+~
+	ToVnum:	62136
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62180
+Name:	A spacious front dining area
+Desc:$
+   This wide area is lined neatly with dining tables with comfortable chairs
+surrounding them, some smaller to accomodate more private one on one meals,
+while others can easily seat at least a dozen if a large gathering is
+expected. Soft music floats through the air from the instruments being played
+nearby on a small stage, as it seems there is an in-house orchestra to make
+sure everyone enjoys their dining experience. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62181
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	62182
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62153
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62181
+Name:	Near the bar
+Desc:$
+   It seems the only smoking section of the entire establishment is at the bar
+itself, so there are quite a few patrons saddled up at the comfortable stools
+for their fix, helping themselves to the drinks offered here while they're at
+it. A powerful but almost silent ventilation system pulls all of the smoke up
+and away from the bar so it doesn't drift off into the other portions of the
+restaurant and ruin the dining experience of other patrons. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62182
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62180
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62153
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62182
+Name:	A spacious rear dining area
+Desc:$
+   Much the same as the front dining area, the rear of the establishment has
+the same laid back atmosphere, and the music from the in-house band easily
+reaches back here as well to keep the customers calm and relaxed while they
+enjoy their meals. Several private booths are set up along the edges of the
+rear portion of the restaurant, which are reserved for clientele that either
+have the money to afford it, or those who are common fixtures here at the
+establishment. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+The manager/owner of the restaurant has their office behind this sturdy wooden
+door. 
+~
+	ToVnum:	62185
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door booth
+	Desc:$
+A wooden doorway painted black leads to a private dining booth near the back
+of the room. 
+~
+	ToVnum:	62184
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door booth
+	Desc:$
+A wooden doorway painted black leads to a private dining booth near the back
+of the room. 
+~
+	ToVnum:	62183
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	62180
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	62181
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62183
+Name:	Inside a private dining booth
+Desc:$
+   This private dining area is reserved for clientele who have either been
+common customers at the establishment, or simply have enough money to buy up
+accomodations and favours such as these. The scenery and furnishings are even
+more lavish than the main dining rooms offered to the other patrons, which
+include a SOTA ventilation system to handle any tobacco smoke in the air, as
+well as a wide screen trideo set into the far wall. There is also a switch for
+a concealed white noise generator, just in case those in the room wish to keep
+their conversation private. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door booth
+	Desc:$
+A wooden doorway painted black leads back to the main dining area. 
+~
+	ToVnum:	62182
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+BREAK
+#62184
+Name:	Inside a private dining booth
+Desc:$
+   This private dining area is reserved for clientele who have either been
+common customers at the establishment, or simply have enough money to buy up
+accomodations and favours such as these. The scenery and furnishings are even
+more lavish than the main dining rooms offered to the other patrons, which
+include a SOTA ventilation system to handle any tobacco smoke in the air, as
+well as a wide screen trideo set into the far wall. There is also a switch for
+a concealed white noise generator, just in case those in the room wish to keep
+their conversation private. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	1110
+IO:	-1
+Bandwidth:	-1
+Access:	2
+Trace:	2
+RTG:	1109
+JackID:	62108080
+Address:	Montplaisir Restaurant, Sauteurs
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door booth
+	Desc:$
+A wooden doorway painted black leads back to the main dining area. 
+~
+	ToVnum:	62182
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+BREAK
+#62185
+Name:	Inside the managers office
+Desc:$
+   The lavish scenery outside in the dining areas is mirrored in the managers
+office, who has obviously gone through the trouble of surrounding himself with
+the surroundings that speak of success and wealth. Between the beautiful ^Wteak^N
+desk he's sitting behind to the various gadgets and devices ranging from high
+end trideo sets to other electronic media devices that would make some
+business tycoons swoon. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door leads back out to the main dining room. 
+~
+	ToVnum:	62182
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+BREAK
+#62186
+Name:	Inside the church foyer
+Desc:$
+   Beyond the large wooden double doors is the church foyer, which opens up
+into a spacious area with vaulted ceilings, the surface of which are decorated
+with stone masonry work and various religious statues, such as angels and
+patron saints. A little further ahead the rows of synth-wood pews are lined
+one infront of the other, all facing towards the main alter at the far end of
+the church. Off to the side a small confession booth is set up, which has a
+velvet curtain drawn across it to offer any sinners a bit of privacy while
+repenting their various sins. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	16
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	62188
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	curtain velvet booth
+	Desc:$
+A velvet curtain is drawn across the entrance to the confession booth for
+privacy. 
+~
+	ToVnum:	62187
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	doors double wooden
+	Desc:$
+A large set of wooden double doors leads out of the church. 
+~
+	ToVnum:	62158
+	Flags:	1
+	Material:	wood
+	Barrier:	12
+	KeyVnum:	0
+BREAK
+#62187
+Name:	Inside of a confession booth
+Desc:$
+   This dimly lit booth has just enough room to get comfortable while seated
+on the plush seating offered, which becomes even darker as the velvet curtain
+is drawn closed from the inside. There is a lot of intricate wood carving
+along the edging of the furnishings here, and a slitted window infront of the
+seat makes it almost impossible to see through to the other side and see who
+is inside of the corresponding booth attached to it. 
+~
+NightDesc:$
+   This dimly lit booth has just enough room to get comfortable while seated
+on the plush seating offered, which becomes even darker as the velvet curtain
+is drawn closed from the inside. There is a lot of intricate wood carving
+along the edging of the furnishings here, and a slitted window infront of the
+seat makes it almost impossible to see through to the other side and see who
+is inside of the corresponding booth attached to it. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	curtain velvet booth
+	Desc:$
+A velvet curtain is drawn across the entrance to the confession booth for
+privacy. 
+~
+	ToVnum:	62186
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62188
+Name:	At the altar
+Desc:$
+   Massive vaulted ceilings loom overhead, their decoration and construction
+turning the altar towards the back of the church into an echo room, turning
+even the softest footsteps and whispering clearly into noise that can be heard
+from one end of the church to the other. The altar has been set up like one
+would expect from any house of religion, upon which are multitudes of candles
+and incense awaiting to be lit. Countless pews are lined up infront to receive
+sermon from the altar, above which is a massive stained glass window depicting
+who one can only suspect is Saint Sarasses himself, which has brilliant rays
+of the ^Ysunlight^N filtering through it, while off to the side is a small
+confession booth with a velvet curtain drawn across it for matters of privacy.
+~
+NightDesc:$
+   Massive vaulted ceilings loom overhead, their decoration and construction
+turning the altar towards the back of the church into an echo room, turning
+even the softest footsteps and whispering clearly into noise that can be heard
+from one end of the church to the other. The altar has been set up like one
+would expect from any house of religion, upon which are multitudes of
+flickering ^Rlit^N candles and smoldering incense. Countless pews are lined up
+infront to receive sermon from the altar, above which is a massive stained
+glass window depicting who one can only suspect is Saint Sarasses himself,
+which has brilliant rays of the ^Wmoonlight^N filtering through it, while off to
+the side is a small confession booth with a velvet curtain drawn across it for
+matters of privacy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	16
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	curtain velvet booth
+	Desc:$
+A velvet curtain is drawn across the entrance to the confession booth for
+privacy. 
+~
+	ToVnum:	62189
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62186
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door doorway sliding
+	Desc:$
+A sliding doorway blocks access to the organ room. 
+~
+	ToVnum:	62190
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+BREAK
+#62189
+Name:	The other end of the confession booth
+Desc:$
+   This end of the confession booth looks much the same as the other it is
+connected to, though its furnishings are a bit more lavish and comfortable,
+since the person seated in here has to stay inside of it for a longer amount
+of time than those simply confessing. The slitted grate infront of the plush,
+comfortably padded seat is nearly impossible to look through, which is the
+intention, and only the voices travel between the two ends of the booths. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	curtain velvet booth
+	Desc:$
+A velvet curtain is drawn across the entrance to the confession booth for
+privacy. 
+~
+	ToVnum:	62188
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62190
+Name:	In the organ room
+Desc:$
+   A massive organ dominates the back room here, it's pipes stretching all the
+way up to the top of the vault ceilings, helping to transfer the music it
+makes out into the main rooms of the church to the east of here. The walls
+here are decorated with various paintings of religious scripture, along with
+several statues of angels posted in each corner. The walls themselves are made
+from cut and stone from the nearby cliffs, which are fitted together almost
+perfectly. 
+~
+NightDesc:$
+   A massive organ dominates the back room here, it's pipes stretching all the
+way up to the top of the vault ceilings, helping to transfer the music it
+makes out into the main rooms of the church to the east of here. The walls
+here are decorated with various paintings of religious scripture, along with
+several statues of angels posted in each corner. The walls themselves are made
+from cut and stone from the nearby cliffs, which are fitted together almost
+perfectly, though there seems to be a little light spilling out of the cracks
+on the southern wall for some reason. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	doorway door sliding
+	Desc:$
+A sliding doorway blocks access back to the main area of the church. 
+~
+	ToVnum:	62188
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	wall stone
+	Desc:$
+The wall here has a few spaces between some of the fitted stones. 
+~
+	ToVnum:	62191
+	Flags:	1
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+	HiddenRating:	15
+BREAK
+#62191
+Name:	In a back room of the church
+Desc:$
+   This back room of the church is a bit spartan in comparison to the others,
+lacking all of the decoration and religious symbolism upon its surfaces. Aside
+from a few chests and shelves, there doesn't seem to be much of interest,
+aside from the hidden wall on the north side, which leads back out to the
+organ room. A stairwell off to the far side of the room is furnished with old
+wooden banisters, which help those attempting to climb down them to the lower
+levels beneath the building. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	wall stone
+	Desc:$
+The stone wall here seems like it can be pushed aside. 
+~
+	ToVnum:	62190
+	Flags:	1
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	62192
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62192
+Name:	Entering the mortuary
+Desc:$
+   Beneath the church there appears to be a mortuary, which was built long
+before the church overhead was constructed by the looks of things, which was
+cut into the sides of the cliff itself. There are quite a few coffins tucked
+away into the depths of the multiple shelves that line the walls, acting as
+small masoleums for those interred within these tombs. There is a thick layer
+of dust upon every surface down here, along with old cobwebs that are draped
+across the corners and shelves like natural veils. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door wooden sturdy
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	62193
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	62191
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62193
+Name:	Along the mortuary tunnel
+Desc:$
+   This tunnel is constructed into the side of the cliff the church is built
+upon, though it seems that quite a bit of trouble has been gone through to
+sure up its stability so it doesn't collapse. Roughly hewn stone blocks line
+some portions of the wall, along with thick wooden beams propped up to create
+a lattice for support. Other sections of the wall and ceiling show the natural
+rock beneath it, and the occasional bit of dirt spills down from some of the
+cracks that have formed in the surfaces over the years. There are a few
+torches stuck into the walls as the tunnel continues, allowing for a bit of
+light in an otherwise dark enviroment. A single old wooden door is set off to
+the side here, right across from the one that lead into the tunnel itself. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door old wooden
+	Desc:$
+An old wooden door blocks the path into the room beyond. 
+~
+	ToVnum:	62194
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	62195
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door sturdy wooden
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	62192
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	0
+BREAK
+#62194
+Name:	In a small chamber
+Desc:$
+   This small chamber houses various shelves and other furnishings that are
+quite old and beginning to give off that rotten musk, which is almost as bad
+as the zombies around here. There is a table and a few chairs scattered about
+it, along with a small altar off to the side, which has ceremonial offerings
+that have long since gone bad and rotten, while others consist of small
+handmade gris-gris dolls and other little trinkets. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door old wooden
+	Desc:$
+An old wooden door blocks the way back to the tunnel. 
+~
+	ToVnum:	62193
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62195
+Name:	At the end of the tunnel
+Desc:$
+   The walls are lined with more shelves, stored upon which are old wooden
+caskets that are threatening to burst apart from age, along with a few that
+are carved out of stone, which are certainly keeping up much better than their
+counterparts. Cobwebs, some of which are still inhabited by rather nasty
+looking little spiders, are draped across the ceiling and shelves, making for
+a fairly spooky scenery on its own. A few lit torches are stuck into the walls
+here and there, allowing for a bit of light in an otherwise dank and dark
+enviroment. An old, heavy wooden doorway is set off to the side here, which
+appears to be the only other path to take once reaching this end of the
+tunnel. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT north]
+	ToVnum:	62193
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door heavy old wooden
+	Desc:$
+An old, heavy wooden doorway leads into the room beyond it. 
+~
+	ToVnum:	62196
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#62196
+Name:	Inside a large chamber
+Desc:$
+   This underground chamber is much larger and spacious than the others, as it
+seems to be the home of the head honcho around these parts, the Grande Zombie,
+Saint Sarasses. Yes, the one the church itself is named after, that wasn't a
+coincidence. Braziers and sconces line the walls and corners, smoldering and
+burning brightly, casting shadows and making them dances as the smoke and
+flames flicker in tandem. A large, and very old, almost to the point of
+rotting away, wooden chair sits off on the far end of the room, which is
+practically a throne considering some of its lavish padding and ornaments. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door heavy old wooden
+	Desc:$
+An old, heavy wooden doorway leads back to the tunnel beyond. 
+~
+	ToVnum:	62195
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#62197
+Name:	At the final departure platform
+Desc:$
+   A mass of other airline patrons wait patiently in line for the commercial
+plane to arrive and the loading walkway to be extended so they can start
+boarding it. There are no windows along this enclosed walkway, but the hustle
+and bustle of the airport lanes beyond its walls resonate and rumble as
+airplanes take off or come in for landings, making for quite the experience. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	62173
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#62198
+Name:	On board a Hawker-Ridley HS-895 Skytruck
+Desc:$
+   The interior of the Hawker-Ridley HS-895 Skytruck commercial airliner isn't
+lavish by any means, but it's certainly comfortable enough scenery if you look
+past the fact that it'll be hauling ass through the skies at over several
+hundred miles per hour. The padded seating offered in rows can be adjusted and
+reclined slightly, and the flight attendants are polite enough to give you a
+tiny pillow to rest your head on upon request, just in case you'd rather sleep
+the entire flight. The occasional annoyingly crying child can be heard
+somewhere in the back.. Seriously, every single flight has one. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	20
+Y:	6
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#62199
+Name:	On the old ferry boat
+Desc:$
+   This old ferry boat is used to shuttle tourists and locals alike around the
+mainland, as well to other islands nearby. It seems to be quite old, and
+although it has been taken very good care of by the crew, it is plain to see
+that it has seen its fair share of use throughout the years. It features two
+large circular paddles, which it uses instead of a standard outboard or
+waterjet engine like most modern craft do. Quite nostalgic eh? 
+~
+Flags:	10010000010000000000000000100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	16
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

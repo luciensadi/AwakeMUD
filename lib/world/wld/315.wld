@@ -1,0 +1,144 @@
+#31500
+Name:	Buck's Alter-Ego storage.
+Desc:$
+   Here inlies all of Buck's multiple personalities, please feel free to use
+any of the generic mobs...but leave the ones with specific names alone.
+thanks. 
+~
+Flags:	1110000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT south]
+	ToVnum:	31501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31501
+Name:	Equipment Storage
+Desc:$
+   This room holrs all of the equipment, gear, and clothing used by Buck.
+please feel free to use whatever you wish, but let Buck know first. 
+~
+Flags:	10000000000010010011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	Desc:$
+a doorway lies to the north. 
+~
+	ToVnum:	31500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31549
+Name:	The Office of Exodous.
+Desc:$
+   This office is rather nicely appointed in wood and dark rich colors of
+brown and green. Wood paneled walls hung with various pictures and newspaper
+clippings dominate the surrounding area with the exception of a large picture
+window in the western wall which opens upon a view of a rather large forested
+area. Loamy brown carpet, plush and thick seems to swollow footsteps and the
+room has an aspect of privacy, even echoes seem to be non-existant. A leather
+couch off in one corner supplies comfortable seating space for guests,
+interviewees, whatever, and a large highbacked leather chair rests behind the
+dest for Ex to sit in. The only uncomfortable thing in the room is a small
+plaque on his desk in the shape of a grenade, glued to the pin of the grenade
+is a slip of plastic with the number 1 on it.  
+~
+Flags:	1000110000000000000101100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31550
+Name:	The Outlaws Mansion
+Desc:$
+   The sound of your footfalls echo as you move through the cavernous main
+hall of the outlaws mansion. massive red stone columns carved into the shape
+of mythical beasts rise up  from the obsidian marble tiled, red grouted floor
+to support the vaulted ceiling, a circular  skylight casting luminance upon a
+large crystal fountain in the center of the hall with a  large golden globe on
+top with "The World is Ours" etched into it. Portraits adorn the
+creme-colored marble walls with the names Abigor, Reidain, Cordt, and
+Dooberous  delicately inscribed upon golden plaques beneath them. A long table
+sits near the  fountain with several large, comfortable looking wooden chairs
+surrounding it. The chairs at either end of the table are slightly larger, and
+have the names "Reidain" and "Abigor" embossed upon the high backrests
+respectively. The table itself is adorned with two  candelabras, hand crafted
+into the shape of impressive stallions. farther along, a twin  staircase leads
+up to a landing before a set of dungeonesque double doors identical  to those
+at the entryway, metal studs adorning the frame.
+   
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	30547
+	Flags:	1
+	Material:	wood
+	Barrier:	16
+	KeyVnum:	31591
+	LockRating:	12
+BREAK
+END

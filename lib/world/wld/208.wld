@@ -1,0 +1,4128 @@
+#20800
+Name:	Burnside Bridge, West End
+Desc:$
+   You stand on the Burnside Bridge.  Trash clutters the area, and not far
+west you can see an intersection, and a simple staircase leads down. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Burnside 
+~
+	ToVnum:	20801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	20833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20801
+Name:	Burnside (W)
+Desc:$
+   This is one of the worst areas of Burnside.  There is a bridge to the east,
+taking you into east Portland, and west through downtown.  The area is adorned
+with burnt chips, filth, and graffiti.  Along the walls you notice a few
+Burnside Cadillacs. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Desc:$
+The Burnside Bridge 
+~
+	ToVnum:	20800
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Burnside and 3rd 
+~
+	ToVnum:	20802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	burnside cadillac~~~~~~~~~~~~~~~~~
+	Desc:$
+A shopping cart, chummer.  Main means of gear transfer for the squatters of
+this street. 
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20802
+Name:	Burnside and Third
+Desc:$
+   This intersection looks fairly seedy, with discarded fast food wrappers,
+broken beer bottles and spent BTL chips littering both the street and
+sidewalk. The boarded-over entrance to a closed club is to the southeast. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Desc:$
+Burnside 
+~
+	ToVnum:	20801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Burnside 
+~
+	ToVnum:	20803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20803
+Name:	Burnside
+Desc:$
+   From here you can see the TTBank Tower, tall and illustrious, the pinnacle
+of the 20th Century era architectural design.  In the air, coming from the
+south is the faint smell of ginger and soy. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Desc:$
+Burnside and 3rd 
+~
+	ToVnum:	20802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20804
+Name:	Burnside at Fourth Street (W)
+Desc:$
+   The eastmost street leading into Portland's Chinatown is here.  The
+lighting is bad, and the smell of asian cooking is strong, and the general
+sense of danger is strong.  It is well known that the Chinatown area is not
+too kind, especially in the days of Elven rulership, where Chinatown's human
+enclave has been relegated to ghetto status. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20805
+Name:	Burnside (W)
+Desc:$
+   A dark portion of the street, where the trees have overgrown and blocked
+much of the light coming from the skyscrapers above you on the south side of
+Burnside.  It would be a good idea to take a fast note of this area, as this
+could be a good place for a bolt hole.  A slight breeze picks up and makes a
+gentle howl as the air passes the shattered glass of the once prestigeous bar
+here on the corner. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20806
+Name:	Burnside at Fifth Street (W)
+Desc:$
+   A long series of defunct cars, and trucks is piled high here, and tears
+into the road.  Looks like the big one hit real hard.  Life here has obviously
+never went on like normal, as a matter of fact it appears to have regressed.
+You can see a group of runners sitting outside of a small nightclub, lingering
+between runs.  Perchance, chummer, this might be a good place to look for
+work. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	14751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20807
+Name:	Burnside (W)
+Desc:$
+   The mid street of Portland, dividing North and South stretches out before
+you.  To the east you can barely make out the bridge over the Willamette
+River.  Mid-block on the way to Sixth you can tell that some time ago there
+were many porn shops, closed down probably during the early years of the Lugh
+Surehand administration's attempts to cure urban blight here in the main port
+city of Tir Tairngire.  The bars that have moved into the shopfronts have left
+up a few of the signs and posters, despite government 'obscenity' crackdowns.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20808
+Name:	Burnside at Sixth Street (W)
+Desc:$
+   Along the north side of the street are a collection of broken down Tri-Met
+buses, wrecked, bent up, and piled upon each other.  They have become
+multilevel homes for squatters.  Along the windows of one of the "upper
+levels" is some graffiti, reading "^cSquare Puppiez RULE^n".  The rain has rusted
+the buses to a great extent, creating ruddy trails down from the roof of the
+Tri-Met buses to the red stripes along side the buses. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	14671
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	14743
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20809
+Name:	Burnside (W)
+Desc:$
+   Passing the myriad of Tri-Met busses, the incline of the hill begins to
+become noticible.  To the north was once a bar, with many of its windows
+shattered out and replaced by plasticrete panels.  There are bars on the door
+to prevent breakins, and it seems that there are intrusion countermeasures of
+the physical variety, sensors and such to prevent anyone on the street from
+going inside the building. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	14665
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20810
+Name:	Burnside and 8th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20811
+Name:	Burnside
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20812
+Name:	Burnside and 9th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20813
+Name:	Burnside
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20814
+Name:	Burnside and 10th
+Desc:$
+   Standing at a bustling intersection, steam rises from the sewer manhole
+vents, as the scent of a brewry pervades.  Perfect Synch with the setting sun
+lights come up and you see yourself before the mighty Powells bookstore, in
+all its glory.  With the setting sun, this full city block sized bookstore
+seems to jump to life. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20815
+Name:	Burnside
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20816
+Name:	Burnside and 11th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20817
+Name:	Burnside
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20818
+Name:	Burnside and 12th
+Desc:$
+   Shitty hood, drek everywhere.  hookers, adn Weinhards brewry n 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20819
+Name:	Burnside
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20820
+Name:	Burnside and 13th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20821
+Name:	Burnside
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20822
+Name:	Burnside and 14th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20823
+Name:	Bridge over US 405
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20824
+Name:	Bridge over US 405
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20825
+Name:	Burnside and SW 14th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	20826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20826
+Name:	SW 14th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northwest]
+	ToVnum:	20825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20827
+Name:	Unnamed Street
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	20825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	20829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20828
+Name:	SW 15th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20829
+Name:	16th and Couch
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	20827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20830
+Name:	NW 16th Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20831
+Name:	Burnside and NW 16th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+NW 16th 
+~
+	ToVnum:	20830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20832
+Name:	Burnside and SW 16th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20833
+Name:	Base of the stairs
+Desc:$
+   Standing at the base of the stairs, the river is in sight to the east, and
+Second Street moves north and south, though sees no traffic, as it is the road
+the MAX train system uses exclusively.  Across Second Street is the location
+of the Saturday Market. 
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	20834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	20800
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20834
+Name:	Under the bridge
+Desc:$
+   There is an ATM mounted to the wall, and carved below it are the words
+"^RKat's Pad^n".  This is obviously the home of a squatter.  There are places
+where bedrolls are laid out at night, and the smell here is atrocious.  Best
+move along, chummer. 
+~
+Flags:	10000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	14701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20835
+Name:	Burnside Stuffer Shack
+Desc:$
+   This small, fluorescently-lit store looks like it hasn't been cleaned since
+1997. Trash lines the walks, most of the tile floor seems to be a moldy green
+and the stench of rotting corpses fills your nostrils. To top it all off, a
+lot of the food is packaged in strange-looking wrappers. 
+~
+Flags:	11000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20836
+Name:	Entrance to the Paris Theater
+Desc:$
+   Standing on the curb, the vibrations of the darkwave and techno music
+inside can be felt from here. To the east is the portal to inter, with a
+rather large female elf in sight. She must be the bouncer. The streets in this
+section of the city fill with steam from the sewers grates and vents. 
+~
+Flags:	10000000000000000000000100
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	20802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20837
+Name:	Burnside and 17th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20838
+Name:	Burnside
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20839
+Name:	Burnside and 18th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20840
+Name:	Burnside
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20841
+Name:	Burnside and 19th
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20842
+Name:	Burnside and Trinity
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20843
+Name:	Burnside and 20th Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20844
+Name:	Burnside and 20th Place
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20845
+Name:	Burnside and 21st
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20846
+Name:	Burnside and King
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20847
+Name:	Burnside and 22nd
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20848
+Name:	Burnside and 23rd
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20857
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20849
+Name:	Vista Dr
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20850
+Name:	Vista Dr
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20851
+Name:	Vista Dr
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20852
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20852
+Name:	Vista and Park
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20853
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20853
+Name:	Park Place
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20852
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20854
+Name:	Park Place
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20853
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20855
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20855
+Name:	Park Place
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20856
+Name:	Entrance to Washington Park
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20855
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20857
+Name:	NW 23rd
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	20848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20858
+Name:	Entrance to the Paris Theater
+Desc:$
+   Standing on the corner of Third, and Burnside, you look to the grotesque
+theater before you rising above the steaming dirty street.  There is a bouncer
+sitting in a chained off area where she can allow people access to the
+theater. 
+~
+Flags:	10000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20859
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20859
+Name:	Inside the Paris Theater
+Desc:$
+   Dark, Dark is a good word for it, as the music reverberates through you,
+the neon murals reflecting the black lights on the wall.  Here you can smell
+various substances being smoked, and see gyrating bodies all over the place. 
+~
+Flags:	10000000010000000000001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	20860
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20860
+Name:	Hallway
+Desc:$
+   Here the murals are brighter and better defined, and the music is loud
+enough to vibrate through you to your very core.  As you look farther into the
+club, you see all the freaky little gothic elves dancing with the music to
+their own accord.  The air is thick with smoke and sweat. 
+~
+Flags:	10000000000000000100001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20859
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20861
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20861
+Name:	A dark corner
+Desc:$
+   The flashy murals are behind you now, and you are at the moment of truth:
+do you procede further from this reclusive corner, or procede headlong into
+the dark realms before you? Maybe a hasty retreat to the outside may be more
+fitting. Time to choose, chummer.  
+~
+Flags:	10000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20860
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20862
+Name:	Entryway
+Desc:$
+    Standing in a little alcove, with a bar to the north, and the path to the
+restrooms to the south.  This room is simple, containing a Mural shrine to
+Bela Lagossi, and a broken couch.  
+~
+Flags:	10000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20863
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20864
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20861
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20863
+Name:	The Paris Bar
+Desc:$
+   Filled with smoke, and trinkets, as well as other various bits of "art".
+Before you is a long counter, with what appears to be a human skull as the tip
+jar.  The room is lit dimly with candles.  Behind the bar, Echo, a tall, and
+slender elf stands waitin g for your order. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20864
+Name:	Small Room
+Desc:$
+   This room has a passage further south to the restrooms, or the portal east
+takes you into the heat of it, on the dancefloor, where you can see all the
+little spookie kids doing their thing, and posing oh so dramatically. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20868
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20865
+Name:	Small foyer
+Desc:$
+   You are now standing in a small foyer between the restrooms.  To the east
+you see the little boi's room, and to teh west, the little grrls. 
+~
+Flags:	10000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20864
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door~
+	ToVnum:	20866
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20867
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20866
+Name:	The little boy's room
+Desc:$
+   Pale walls, almost tan in colour. There is a constant dripping sound from
+leaky pipes as well as the distinct odor of mold and mildew. In your days
+chummer you have definitely seen better facilities. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	20865
+	Flags:	0
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20867
+Name:	The little girl's room
+Desc:$
+   Much better than the boy's room and for some reason not as many lipstick
+stains. Anyway chum, this room seems to be rather well kept. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20865
+	Flags:	0
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20868
+Name:	The back row
+Desc:$
+   This is the entrance to the dance floor.  Here is the place where the
+little doom cookies sit on plush couches, or what is left of the old theater
+seats while smoking, and making attemts to hold conversations over the pulsing
+music. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20869
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20897
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20864
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20869
+Name:	The back row
+Desc:$
+   A whole series of couches and theater seats are set up here to be used at
+the convience of the dancers, so that when they need a break, or wish to
+socialize, they may sit here to do so. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20894
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20868
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20870
+Name:	The back row
+Desc:$
+   More couches and seats for the dancers ro rest upon.  This area happens to
+have a nice plush carpet covering the floor. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20891
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20869
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	20900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20871
+Name:	The back row
+Desc:$
+   Another wntrance to the dance floor, only this time its from the bar.  As
+you look out over the club, its obvious as to why this is one of Portlands
+hotspots.  For people who love the old retro styles of darkwave, gothic,
+trance, and industrial, this place sure hits the spot. nothing better than
+some good tunes chum. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20872
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20888
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20863
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20872
+Name:	A dark corner
+Desc:$
+   A Dank corner where tall speakers reside, that help fill the room with the
+dark rhytmic beat, and the energy for these dancers to keep moving their
+bodys. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20882
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20873
+Name:	A dank corner
+Desc:$
+   This dark little corner is filled with sound equipment, and large speakers
+that reach for the ceiling of the old movie theater and playhouse, those which
+assist in creating the booming thumping music which keeps all these spookies
+on their feet gyrating to the sweet sounds.  There is a aisle to the east that
+leads around the dance floor. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20868
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20874
+Name:	Around the dance floor
+Desc:$
+   More theater seats are bolted to the floor here buy you can see the dance
+floor ver well here.  The elves really know how to move  to the beat, mmmm I
+love the way that one over there with all the rings sways her... yeah, well
+chummer better move along. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20897
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20875
+Name:	Around the dancefloor
+Desc:$
+   More toward the center of the large room, here you can really feel the
+beat, bodys wiggling swaying and gyrating.  The subtle movements and the
+healthy robust beat of the music creates quite an exotic feeling. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20898
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20876
+Name:	Around the dancefloor
+Desc:$
+   Whoa chums. Check out that elf there, she seems to have quite a gathering
+around her here on the dancefloor. As you get closer you hear her name,
+Manda... it even sounds lovely as she give you a wink and begins to do her
+moves here. Chum, it's not nice to star, chum??? Another deer caught in the
+headlights. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20899
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20877
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20877
+Name:	Corner on the stage
+Desc:$
+   Here is where the sound equipment goes from huge to gargantuan.  This area
+is full of elves being rocked by the beat, literally.  Some of these tunes are
+familiar, isnt that nilaya by that 90's trance group Astral Projection?  Ohh a
+remake of Annie Lexnox and the eurithmyc's "Here comes the rain again" as done
+by the cruxsadows. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20878
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20878
+Name:	On Stage
+Desc:$
+   Excellent chums, we're here.  This is the zeneth of the club.  These are
+the best of the best shaking their stuff here.  As you stand here on the
+vibrating stage you see what is likely to be the most beautiful elf you have
+ever seen. Through dark walnut coloured hair her peircing eyes catch yours
+just for a second, then her eyes drop again in concentration of the entrancing
+dance she is performing. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20879
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20877
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20896
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20879
+Name:	Center Stage
+Desc:$
+   Filled with wiggling writhing bodies rolling with the music.  The sweet
+musk of sweat permiates the room,  as desire rolls over the dancers, their
+movements become more prounounced, adn mroe needfull.  As teh music
+creshendo's, so does this almost primal dance. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20878
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20893
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20880
+Name:	On the stage
+Desc:$
+   On this side of the stage it looks like somehting akin to employee seating
+from the 5th age, when the place was built.  Almost like a wooden stadium
+seating kinda bench.  Doesn't look to safe but it is stuffed with little woe
+ridden elves in all their 5th age gothic glory.  They are over looking the
+stage, those who are not indulging in the lips or bodies of another that is. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20881
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20879
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20890
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20881
+Name:	Corner of the stage
+Desc:$
+   Here is where the sound equipment goes from huge to gargantuan.  This area
+is full of elves being rocked by the beat, literally.  Some of these tunes are
+familiar, isnt that "Nilaya" by that 90's trance group Astral Projection?  Ohh
+a remake of Annie Lexnox and the Eurithmyc's "Here comes the rain again" as
+done by the Cruxsadows. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	20880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20882
+Name:	On the Edge of the edge
+Desc:$
+    More theater seats are bolted to the floor here buy you can see the dance
+floor ver well here.  The elves really know how to move  to the beat, mmmm I
+love the way that one over there with all the peircings that sway with her...
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20883
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20888
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20872
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20883
+Name:	Edge of the dance floor
+Desc:$
+   Another entrance to the dance floor.  As you look out over the club, its
+obvious as to why this is one of Portlands hotspots.  For people who love the
+old retro styles of darkwave, gothic, trance, and industrial, this place sure
+hits the spot. nothing better than some good tunes chum.  Hmm is that "On the
+edge"  the old theme song from a WWF wrestler? 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20889
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20882
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20884
+Name:	Edge of the stage
+Desc:$
+   The sweet smell of passion fills this part of the room. There are many
+elves here, rested against the wall and each other. Some are sitting while
+others neck on the dilapidated couches and theater seats. Moving along
+slightly, there appears to be a small tunnel behind some of the seats. Just
+ahead is the edge of the stage. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20881
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20890
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20883
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	20885
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20885
+Name:	Small tunnel
+Desc:$
+   This is a small tunnel, hardly enough room to manuver, btu there is an odd
+light up ahead. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20886
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	20884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20886
+Name:	Small alcove
+Desc:$
+   Now in a dank cement alcove just beyond the tunnel.  It's cramped and
+spells of rot adn mildew.  to the north the light can still be seen.  The
+music is duller here, but is still very audable. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20887
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20885
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20887
+Name:	Caged alcove
+Desc:$
+   You are in a small room, at the end of it all, and you can see burnside on
+the otherside of the gate.  The music flows freely into the streets of
+Portland.  From here you can see the trash and the small store   It's becoming
+apparent that this is a one way exit. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20886
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20888
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20882
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20889
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20891
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20889
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20883
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20890
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20892
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20888
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20890
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20893
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20889
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20891
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20888
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20892
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20894
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20892
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20889
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20893
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20895
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20891
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20893
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20890
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20879
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20896
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20892
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20894
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20891
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20895
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20897
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20869
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20895
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20892
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20896
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20898
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20894
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20896
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20893
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20878
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20899
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20895
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20897
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20894
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20898
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20868
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20898
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20895
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20899
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20897
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20899
+Name:	The dancefloor
+Desc:$
+   A pulsing beat, writhing elven bodies. This is the dancefloor, filled to
+the brim with people dressed in artsy dark gothic clothes. The dancers seem to
+move in perfect sync, despite a general discord in their styles. Like a shoal
+of fish they swarm and scatter in perfect harmony. As you feel the vibration
+and music wash over you, the magical effects pull at you to join them. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	20896
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20898
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20900
+Name:	ladder
+Desc:$
+   Climbing a ladder into the DJ booth. 
+~
+Flags:	10000000000000000100001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	20901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	20870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20901
+Name:	Landing
+Desc:$
+   Arriving upon the dark landing, there is a small door to the right. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	20902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	20900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20902
+Name:	Sound Booth
+Desc:$
+   There is alot of tech here.  This is where the sound and lights are
+controled from.  Below, the dancers can be seen in their wriggling masses. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	20901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20903
+Name:	q
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20966
+Name:	^rFoxx's ^yPersonal ^WChambers^n
+Desc:$
+   The room is lit by the soft ^Yglow^n of a incandescent lamp on the far wall
+above a queen sized bed covered in ^Lblack satin sheets^n and ^Lpillows^n. The walls
+are covered with a ^rdeep red satin^n textured wall paper, and in the center of
+the ^yhardwood floor^n is a ^Wwhite fur rug^n large enough for a person to lay on
+comfortably. Built into the east wall small shelf made for holding trinkets,
+though it seems to be empty at the moment. 
+~
+Flags:	110000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20997
+Name:	Inzerakh's Chamber
+Desc:$
+   Darkness surrounds, and terror follows.  The feeling of light is fading
+from you quickly, and soon another scream cries for releaf from somewhere in
+the darkness.  Hope, there is none, pleasure, non existant.  An eeriee green
+glow kicks up and you see bodies, not dead ones but suffering live people,
+dangling from chains, and needles or rings inserted in various parts of their
+body.  Low moans accompany their obvious suffering, and woe.  Still as the
+light brightens, you see teeth marks on their flesh, and places where the whip
+has also bitten through the tender skin. In the middle of it all, there is a
+place, with blood stained feathers around it, that looks to be the resting
+place of their torturer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20998
+Name:	Helmsley's Workshop
+Desc:$
+   A workshope for Item and mob creation. 
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+a door opens north 
+~
+	ToVnum:	20999
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#20999
+Name:	Inzerakh's lair
+Desc:$
+   Scattered everywhere are frathers, some white, nearly as white as driven
+snow, others are bright red with his blood.  There are swords and spears lying
+about the room, as thogh in this hall a great battle was waged. 
+~
+Flags:	1100000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[EXIT south]
+	ToVnum:	20998
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

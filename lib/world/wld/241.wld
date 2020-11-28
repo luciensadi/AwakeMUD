@@ -1,0 +1,1222 @@
+#24100
+Name:	Interstate 5, Jantzen Beach Exit
+Desc:$
+   You are at the Jantzen Beach exit just south of the gate into and out of
+Tir Tairngire.  Jantzen Beach is known for being the hottest shopping area in
+all of Portland, and is where many of the Tir Tairngire nobles in the Portland
+area do their shopping. The highway here is six lanes thick, 3 lanes northward
+and 3 lanes south. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	17599
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24101
+Name:	Interstate 5, North Portland
+Desc:$
+   This highway is six lanes thick, three northward and three southwards.  It
+is heavily patrolled by the Tir Peace Force, who make it a habit to geek
+outsiders.  You can see occasional remnants of cars on the side of the road
+that have been shelled to oblivion. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24102
+Name:	Interstate 5, Columbia Drive Exit
+Desc:$
+   Columbia Drive, the exit to the east covers the northern end of Portland,
+continuing all the way to Portland International Airport.  Ancients graffiti
+covers the exit sign, showing the infamous international go-gang has made
+their mark here in Portland. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24103
+Name:	Interstate 5, Killingsworth Street Exit
+Desc:$
+   Interstate 5 meets with Killingsworth Street, a major thoroughfare through
+north and northeast Portland, that runs all the way to the Portland
+International Airport. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24104
+Name:	Interstate 5, North Portland
+Desc:$
+   Interstate Five goes north to south here through North Portland, towards
+downtown and towards the immense Telestrien Habitat.  A few miles southwards
+it meets with Highway 84 which goes to Gresham. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24105
+Name:	Interstate 5, North Portland
+Desc:$
+   Interstate Five goes north to south here through North Portland, towards
+downtown and towards the immense Telestrien Habitat.  A few miles southwards
+it meets with Highway 84 which goes to Gresham. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24106
+Name:	Interstate 5 and Alberta
+Desc:$
+   Interstate 5 meets with Alberta in one of the more rougher neighborhoods in
+Portland.  The highway is six lanes thick here, with 3 for northerly traffic
+and 3 for southerly traffic.  This highway is heavily patrolled by the TPF
+forces. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24107
+Name:	Interstate 5 -- Skidmore Street Exit
+Desc:$
+   Interstate 5 runs north to south here, and Skidmore Street runs east to
+west.  A shelled out Eurocar Westwind 2000 on the side of the road tells a
+tale of TPF enforcement, as the vehicle is taped up with tape that says in
+black letters "Evidence -- Do Not Tamper" in both English and Sperethiel. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24108
+Name:	Interstate 5
+Desc:$
+   Interstate Five runs north to south here, and has six lanes, three for
+northbound traffic, and three for southbound traffic.  Green Sperethiel
+graffiti on the roadsigns is a telltale sign of Ancients gang activity.  These
+roads are also patrolled heavily by the TPF. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	24109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24109
+Name:	Interstate 5
+Desc:$
+   Interstate Five runs north to south here, and has six lanes, three for
+northbound traffic, and three for southbound traffic.  Green Sperethiel
+graffiti on the roadsigns is a telltale sign of Ancients gang activity.  These
+roads are also patrolled heavily by the TPF. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	24110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	24108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24110
+Name:	Interstate 5
+Desc:$
+   Interstate Five runs north to south here, and has six lanes, three for
+northbound traffic, and three for southbound traffic.  Green Sperethiel
+graffiti on the roadsigns is a telltale sign of Ancients gang activity.  These
+roads are also patrolled heavily by the TPF. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	24111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	24109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24111
+Name:	Interstate 5 and Interstate 405
+Desc:$
+   Interstate 5 goes from north to south, towards North Portland and the
+Columbia Gate, and Interstate 405 goes over the Wllamette Bridge into Downtown
+Portland.  Interstate 5 continues southeast towards Interstate 84 which heads
+through East Portland to Gresham and eventually to the Ute Nation through the
+Tir wilderness. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	24112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	24110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24112
+Name:	Interstate 5
+Desc:$
+   Interstate 5 goes from southeast to northwest here, and meets with
+Interstate 405 northwest of here.  Southeast it heads towards Interstate 84
+and the Telestrien Habitat. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	24113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	24111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24113
+Name:	Interstate 5 and Broadway
+Desc:$
+   Interstate 5 goes northwest to southeast here, southeasterly towards the
+Telestrien Habitat and Interstate 84, and Northwesterly into North Portland
+and eventually to the Columbia Gate.  The highway is heavily patrolled by both
+the Ancients gang and the TPF police.  Broadway goes across the Steel Bridge
+east of here into Downtown Portland. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	24114
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	24112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24114
+Name:	Interstate 5 -- Rose Garden Exit
+Desc:$
+   Interstate Five goes northwest to south here, and meets with the Rose
+Garden Arena, a huge arena erected by Paul Allen of the Microsoft corporation
+way back in the 20th Century, using dollars from an ancient text mode computer
+operating system called "DOS" or something. Anyways, the elves own it now and
+its where the Portland Lords baseball team and the Portland Dragons hurling
+team play, as well as the old Portland Trailblazers basketball team.  I-5
+continues southwards towards I-84 and the Telestrien Habitat. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	14600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24115
+Name:	Interstate 5 at Interstate 84 and Grand Street
+Desc:$
+   Intertate 5 goes northward and ends to the south at a roadblock.  An exit
+to Grand Street, a major East Portland roadway runs southeast.  Grand Street
+goes south to the Telestrian Habitat, and Interstate 84 goes from here to
+Gresham and beyond through East Portland. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24114
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	24116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	24127
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24116
+Name:	Interstate 84 -- Lloyd Center Exit
+Desc:$
+   Interstate 84 goes east to west through here, and an exit to the north
+leads to the Lloyd Center, once a shining example of 20th century modern
+architecture, now an abandoned mall filled with hoodlums and gangers of all
+colors.  East of here is East Portland and Gresham. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24117
+Name:	Interstate 84
+Desc:$
+   Interstate 84 travels east to west here through an industrial district.
+Surrouding both sides of the eight lane freeway are various factories and
+warehouses and storage facilities.  The road signs are scrawled with Ancients
+graffiti in Sperethiel. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24118
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24118
+Name:	Interstate 84 -- Hollywood Exit
+Desc:$
+   Interstate 84 meets with 40th Street here into the Hollywood district of
+East Portland.  Hollywood is a mix of industrial and residential
+neighborhoods, and has a large dwarven population. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24119
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24119
+Name:	Interstate 84 -- Tir Tairngire Royal Hospital Exit
+Desc:$
+   Interstate 84 meets with 60th Street here and Tir Tairngire Royal Hospital,
+formerly known as Providence Hospital.  Interstate 84 goes east to west here
+eastwards towards Gresham, and westwards towards Downtown. The highway is
+heavily patrolled by both TPF forces and the Ancients go-gang. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	14710
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24118
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24120
+Name:	Interstate 84 and 82nd Street
+Desc:$
+   Interstate 84 meets with 82nd Street here, which is a major commercial vein
+through East Portland.  A MAX Station is here, which connects East Portland
+and Gresham with Downtown. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24121
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24119
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24121
+Name:	Interstate 84 and Interstate 205
+Desc:$
+   Interstate 205 goes north to south through the eastern area of Portland,
+and 84 goes from east to west through East Portland to Gresham east, and to
+Downtown Portland west. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	24122
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24122
+Name:	Interstate 84 -- 102nd Street Exit
+Desc:$
+   Interstate 84 meets with 102nd street here, and continues eastwards into
+Gresham and ultimately into the wilderness east of the Portland metropolitan
+area. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24123
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	24121
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24123
+Name:	Interstate 84 -- 122nd Street Exit
+Desc:$
+   Interstate 84 meets with 122nd Street which is a major commercial
+thoroughfare through the eastern side of Portland.  Continuing down Interstate
+84 eastwards will take you to Gresham, and west will take you to Downtown
+Portland and Interstate 5. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24122
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24124
+Name:	Interstate 84 -- Gresham Exit
+Desc:$
+   South of here is Cleveland Avenue, a major road through Gresham.  The sign
+denoting the exit is covered with Sperethiel graffiti.  A shelled out vehicle
+sits at the side of the road looking quite pathetic. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	24123
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24125
+Name:	A Shadow Clinic
+Desc:$
+   A bright room with bright lights, and white walls, where everything is
+sterile and tidy.  An operating table sits in the middle of the room, and on a
+table is a set of jars with various organs inside some sort of fluid in the
+jars. 
+~
+Flags:	10000000000000000000111000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	22075
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24126
+Name:	Grand Street (SE)
+Desc:$
+   Grand Street is a two lane street that goes from north to south, up to the
+exit onto Interstate Five north of here.  East is a vast parking complex, with
+the capability of holding a city's worth of automobiles.  The parking complex
+is dwarfed by the tall arcology, Telestrian's Habitat complex, which defines
+the Portland skyline. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24127
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18800
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24127
+Name:	Grand Street at Interstate 5 (SE)
+Desc:$
+   A major four lane highway, the main street of East Portland, meets with
+Interstate Five at a junction here.  The traffic is backed up at nearly all
+hours, as this is the main bottleneck to get to and from the Telestrian
+Habitat, an Arcology which holds an impressive mall. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24126
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	24115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24128
+Name:	Burnside Bridge
+Desc:$
+   Burnside Bridge spans the distance over the Willamette River, and is in
+essence the heart of the city.  Westward and south you see a long span of
+skyscrapers and corporate structures that make the main portion of the
+Portland skyline, and eastward you see the Convention Center towers, and the
+Telestrian Habitat which covers the southeastern skyline from this vantage
+point.  Below, the river flows a dark gray color, softly glistening against
+the light of the sky and the lights of the city. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24129
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20800
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	SIS squatters sobriety~~~~~
+	Desc:$
+A plaque sits in the guard rail of the bridge, with an inscription.
+^n
+Our turning point, our place of reckoning.
+Our awakening, our point of understanding.
+^n
+To Scuff and New Yorker
+A dedication.
+^n
+To drunks and junkies everywhere,
+Keep coming back, there are only 24 hours in another day.
+^n
+-Java
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24129
+Name:	Burnside Bridge, East Side
+Desc:$
+   On the east end of the Burnside Bridge, some ramshackle abandoned
+warehouses line the north side of the street, and miles of sprawl extend
+eastward, nearly twenty kilometers from this point to Gresham far east of
+here.  The next intersection east is Grand Street, which links to the freeway
+under the Burnside Bridge, Interstate 5, and the Telestrian Habitat to the
+southeast. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	24130
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24130
+Name:	Burnside at Grand Street (E)
+Desc:$
+   A major intersection, and the first major traffic bottleneck on the East
+Side coming from the Burnside Bridge to the west.  Traffic coming from
+downtown to Grand Street and the Telestrian Habitat often finds itself backed
+up quite far back, creating problems when the Burnside Bridge needs to be
+raised to allow a boat to move up river.  To the west is the corporate
+Southwest sector of Portland and the run-down Northwest "Old Town" sector.  To
+the south is the Telestrian Habitat, and to the north are the Convention
+Center towers, glass structures that continue to look post-modern, despite
+their being built in the 20th Century. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	24131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24129
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24131
+Name:	Grand Street (SE)
+Desc:$
+   The largest street in girth on the East side of Portland, running from here
+until it turns into Interstate Street to the north (not Interstate 5, though
+it does run parallel to it).  Up north is the intersection with Burnside, the
+main street that runs east to west through the length of the city of Portland,
+and to the south is the mammoth Telestrian Habitat. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	24130
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	24127
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

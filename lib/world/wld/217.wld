@@ -1,0 +1,3233 @@
+#21700
+Name:	Archangel's Snow Playground
+Desc:$
+   An old playground, constisting of a swingset and a tiny slide is frozen
+over, barely recognizable beneath the layers and layers of ice and snow.  One
+swing's seat is broken, and hangs from the iced-cover metal chains.
+Snow-coated evergreens surround you, standing almost abnormally tall, and
+blocking out the sun, making the area seem even colder. A wind blows through
+the area, sending snow from the trees swirling, and chilling you to the marrow
+in your bones. 
+~
+Flags:	10000000000000000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21702
+	Flags:	0
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	21703
+	Flags:	0
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	2000
+	Flags:	0
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21701
+Name:	Archangel's Junk Pile
+Desc:$
+   This room is filled with various things that belong to or were created by
+Savina/Archangel.  Feel free to take and use things for yourself, as long as
+you keep in mind who made it! 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	Keywords:	door
+	ToVnum:	21704
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21702
+Name:	* Savina's Kitchen *
+Desc:$
+   A fairly large, fairly normal kitchen with blue countertops and a large
+table in the middle.  The floor is made of a nice, dark wood the walls are
+papered with a baby blue color.  It seems nice and cozy, and the smells of
+food make you drool. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	Keywords:	freezer door
+	ToVnum:	22299
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21700
+	Flags:	0
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21703
+Name:	* Savina's Hallway *
+Desc:$
+   A plain hallway, with a staircase leading down, and doors into several
+rooms.  Nothing special otherwise about the wood-floored, green room. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	21704
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	21700
+	Flags:	0
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21704
+Name:	Archangel's Decker Paradise
+Desc:$
+   Shelves line the walls, filled with all sorts of programs, cyberdecks,
+cyberware and bioware - all designed by Savina\Archangel. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	21703
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	door
+	ToVnum:	21701
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT matrix]
+	ToVnum:	0
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21705
+Name:	Path through the Trees
+Desc:$
+   Surrounded by trees, you squint to see through the darkness.  It's slightly
+cold, and you rubs your arms to warm them.  Rustling of leaves around you
+gives you goosebumps, and you decide it may be best to keep moving. 
+~
+Flags:	1
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21760
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21706
+Name:	Flowered Patch
+Desc:$
+   Flowers grow in all sizes, shapes, colors and smells here, creating an
+intoxicating aroma that makes you slightly woozy.  The trees open up slightly
+above you, letting in the warm sunlight.  A sign here says "Pick us." 
+~
+Flags:	0
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	21760
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21707
+Name:	Mushrooms Galore
+Desc:$
+   The path is totally covered in shiny, glowing little mushrooms.  They sway
+slightly, and even make a little humming noise.  The ground is damp and cold,
+as is the air surrounding you. 
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21710
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21708
+Name:	Trickling Cold Stream
+Desc:$
+   The water here is quite cold, nipping at every part of your body.  Your
+clothing weighs you down in the water, and the current threatens to pull you
+underneath the surface.  Water splashes into your eyes, fogging your vision. 
+~
+Flags:	10000000000000000
+SecType:	Water (Swim)
+[POINTS]
+	SpecIdx:	0
+	Rating:	3
+[EXIT north]
+	ToVnum:	21709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21754
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21709
+Name:	Thinning Stream
+Desc:$
+   The stream seems slightly more tame here, and you can actually wade along
+pretty easily.  The sunlight shining down on you warms the water, making it
+definetely more pleasant than before. 
+~
+Flags:	0
+SecType:	Water (Swim)
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+[EXIT north]
+	ToVnum:	21714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21710
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21710
+Name:	Thick Forest
+Desc:$
+   Trees surround you here, leaving a very specific path.  A cold wind rips
+though the trees, chilling you to the bone and causing and eery whistling. 
+~
+Flags:	10000000000000000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21711
+Name:	Crossroad amongst the Trees
+Desc:$
+   Apparently an area that connects many paths, heading off in all different
+directions.  Sunlight shines bright down on you, warming you nicely.  Sounds
+of birds and the wind rustling through the trees is almost like a pleasant
+symphony.  This looks like a  nice place to set up camp. 
+~
+Flags:	10000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21719
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21722
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21712
+Name:	Open Field
+Desc:$
+   A small open field, covered in tall, yellowed grass which rustles all
+around you.  It smells like dead grass, imagine that!  You lift your feet high
+to tramp merrily through the crunchy ground coverings. 
+~
+Flags:	0
+SecType:	Field
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21713
+Name:	Giant Ant Hill
+Desc:$
+   Huge ants crawl about, the sound of the millions of legs is almost
+deafening, not to mention hideous.  The ground is soft and sandy, and you get
+pushed around by busy workers with scratchy bodies. 
+~
+Flags:	1000000000000000000000
+SecType:	Field
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+[EXIT north]
+	ToVnum:	21741
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	21714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21714
+Name:	A Tiny Pool of Water
+Desc:$
+   The stream apprubtly ends here, resulting a little pool of lukewarm water
+which your feet are definetely enjoying.  Forest all around you looks a little
+less welcoming, and you reluctantly hop out of the water. 
+~
+Flags:	0
+SecType:	Water (Swim)
+[POINTS]
+	SpecIdx:	0
+	Rating:	1
+[EXIT north]
+	ToVnum:	21715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21715
+Name:	Wilderness
+Desc:$
+   A simple path of dirt, lined with grass and flowers, surrounded in trees.
+You yawn, the peaceful enviroment making you almost sleepy.  You close your
+eyes and listen to birds, the wind through the trees and your own soft steps
+-- OW!  Open your eyes when  you walk, doofus!  You can't walk through trees,
+ya know.  
+~
+Flags:	10000000000010000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21741
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21716
+Name:	Flowery Trees
+Desc:$
+   An odd thing here, the flowers have melted in with the tree, and grow up
+the trunk and up into the branches.  The plus side, it creates a wonderful
+aroma which amplifies when a warm wind brushes through the trees. 
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21710
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21717
+Name:	Wilderness
+Desc:$
+   Trees surround you, creating a noticable path, obviously well-worn.  Your
+footsteps echo behind you, or at least you hope it's an echo as you pick up
+your pace. 
+~
+Flags:	10000000000000100
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21718
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21719
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21718
+Name:	Forested Path
+Desc:$
+   Just a plain, simple little path through the trees.  Light is dim because
+of the thick branches above you.  
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21719
+Name:	Treed-in Path
+Desc:$
+   Just a plain, simple little path through the trees.  Light is dim because
+of the thick branches above you.  
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	21720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21720
+Name:	Forested Path
+Desc:$
+   Just a plain, simple little path through the trees.  Light is dim because
+of the thick branches above you.  
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21724
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21719
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21721
+Name:	Forested Path
+Desc:$
+   Just a plain, simple little path through the trees.  Light is dim because
+of the thick branches above you. 
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21723
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21722
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21722
+Name:	A Large Oak
+Desc:$
+   A large oak tree fills the whole area, inflicting a feeling of awe as you
+stare at it's ageless beauty.  The area at the base is surrounding in lush
+grass and beautiful flowers.  You feel like you could stay here all day,
+sleeping in it's comforting prese nce and rolling around in the soft, lucious
+grass. 
+~
+Flags:	10000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21723
+Name:	Edge of the Open Woods
+Desc:$
+   From here, you can go into a big, thick maze *evil grin*, or into the
+fluffy forest.  Birds chirp around you, irritating you severely.  The smell of
+fresh flowers is sweet as you stick your nose in the air and take a nice, big
+whiff. 
+~
+Flags:	0
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	21898
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21724
+Name:	Forested Path
+Desc:$
+   Just a plain, simple little path through the trees.  Light is dim because
+of the thick branches above you.  
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	21720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21725
+Name:	Oddly-Shaped Stump
+Desc:$
+   An oddly-shaped tree stump is here, and you happen to be standing ontop of
+it.  The tree was obviously extremely old, and to count all the rings would be
+virtually impossible.  You almost feel bad for the long-gone masterpiece of
+nature. 
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21726
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21724
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21718
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21726
+Name:	Forested Path
+Desc:$
+   Just a plain, simple little path through the trees.  Light is dim because
+of the thick branches above you. The smell of coffee wafts through the air. 
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	22204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21727
+Name:	Waterfall
+Desc:$
+   You reach a huge waterfall, the source of your current misery.  The cold
+water really affecting you now, numbing your limbs, making it difficult to
+swim.  The smell of fresh water it the only nice sensation in this dark, damp,
+cold area. 
+~
+Flags:	1000010000000000000000
+SecType:	Water (Swim)
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+[EXIT northwest]
+	ToVnum:	21756
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	21728
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21728
+Name:	Top of Waterfall
+Desc:$
+   You climb the freezing falls and nearly collapse from exaustion, the water
+still beating down on you, trying to push you back down.  You can finally get
+out of the icy water to the west. 
+~
+Flags:	1000000000000000000000
+SecType:	Water (Swim)
+[POINTS]
+	SpecIdx:	0
+	Rating:	9
+[EXIT west]
+	ToVnum:	21729
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	21727
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21729
+Name:	Rocky Cliff
+Desc:$
+   You stand on a rocky, cold cliff.  Harsh winds threathen to blow you over
+the edge.  As you peer down, you suddenly realize you are well above the
+trees.  To the east, the roaring waterfall, to the north, an intriguing
+looking cave. 
+~
+Flags:	100
+SecType:	Mountains
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21730
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21731
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	21728
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21730
+Name:	Dragon's Den
+Desc:$
+    You step into a an incredibly large cavern, filled to the brim with
+hoarded gold and shiny treasures.  A wave of heat from a sleeping dragon fills
+you with inevitable dread, but the feeling of greed overcomes your fear. 
+~
+Flags:	1001
+SecType:	Mountains
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	21729
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21742
+	Flags:	0
+	Material:	stone
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	25
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21731
+Name:	Icy Lake
+Desc:$
+   The source of the stream that thoroughly froze you from head to toe, this
+enormous lake is just as cold as the rest of the water.  The refreshing, moist
+scent fills your nostrils, almost nice enough to override the unpleasantness
+of your violently shiveri ng limbs. 
+~
+Flags:	0
+SecType:	Mountains
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	21729
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21732
+Name:	Checkpoint
+Desc:$
+   A large room with four exits, this is a safe place to sleep without getting
+killed.  It's inbetween lots of things, and in about the center of the den.
+Rest up, chummer, there's alot more to come. 
+~
+Flags:	11001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21785
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21787
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21786
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21784
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21733
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21795
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21734
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21734
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	21735
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21735
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	21736
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21734
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21736
+Name:	A Fork in the Tunnels
+Desc:$
+    An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21735
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	21740
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21737
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21737
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21736
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21738
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21738
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	21739
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21737
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21739
+Name:	A Four-Way Tunnel
+Desc:$
+   You come to a fork in the tunnel, but it's still an extremely small space.
+The smell of blood is incredibly stronger than it has been anywhere else in
+the entire den.  A small bat swoops down and flies out. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21738
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21745
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21744
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21743
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21740
+Name:	A Steep Climb
+Desc:$
+   A wall of dirt and rock infront of you had deep claw marks into it until
+about 6 feet up, as if the wolves were trying to get up it, but were not
+skilled enough of climbers.  You look up and see an oddly flat, stone wall. 
+~
+Flags:	1000000000000000001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	5
+[EXIT west]
+	ToVnum:	21736
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	15
+[EXIT up]
+	Keywords:	wall stone
+	ToVnum:	21742
+	Flags:	1
+	Material:	stone
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	20
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21741
+Name:	Grassy Field
+Desc:$
+   Soft, lucious grass coats the ground like a welcoming blanket.  It looks
+well-kept; odd for an untamed forest.  You smell coffee -- COFFEE?  A glance
+around shows nothing, maybe of in the distance somewhere? 
+~
+Flags:	0
+SecType:	Field
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21748
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21742
+Name:	Backdoor to the Dragon Den
+Desc:$
+   The air here is noticeably warmer than below, tainted heavily by the scent
+of rusted metal.  Thin fingers of steam weave around your ankles and a low
+rumbling sound comes from ahead. You can barely make out a small tunnel to
+crawl through, even though by the scream from beyond the tunnel, you begin to
+question your motives. 
+~
+Flags:	1000000000000000001101
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+[EXIT northeast]
+	ToVnum:	21730
+	Flags:	0
+	Material:	stone
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	wall stone
+	ToVnum:	21740
+	Flags:	1
+	Material:	stone
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21743
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21739
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21746
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21744
+Name:	Alpha Gathering Room
+Desc:$
+   This is where the Alpha wolves come together for whatever reason.  The
+toughest and definetely the most formidable opponents in the den... or so you
+hope as the male attacks, fresh blood from his mouth dripping all over your
+pretty armor. 
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21739
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21747
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21746
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21745
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	21747
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21739
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21746
+Name:	A Fork in the Tunnels
+Desc:$
+    An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21743
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21744
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21747
+Name:	A Fork in the Tunnels
+Desc:$
+    An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21745
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21749
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21744
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21748
+Name:	Outside Starbuck's
+Desc:$
+   The source of the wonderful coffee aroma, you find yourself at a
+Starbuck's, nestled deep into the forest.  The building is faily large and
+looks well-maintained. 
+~
+Flags:	0
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	21741
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	22201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21749
+Name:	Ancient's Den
+Desc:$
+   Old bones piled in the corner let of a rancid smell, making your eyes
+water.  The room is lined with bones in a stable, syme, something only a
+humanoid or an incredibly intelligent animal would have been able to do. 
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northwest]
+	ToVnum:	21747
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21750
+Name:	A Dirt Path
+Desc:$
+   A small dirt path leads away from the highway, into very dense trees, which
+become nearly impenetrable further north. The roar of vehicles is absorbed by
+the forest, giving your ears a much-needed rest. The only other noises are the
+sounds of rushing water nearby in the west, and you think you may have heard a
+howl, perhaps coyotes, wolves, even? 
+~
+Flags:	10000000000000000000100
+SecType:	Field
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17553
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21751
+Name:	A Dirt Path
+Desc:$
+   The dirt path underneath you is full of bike and car tracks, causing some
+semi-deep rivets, and making the ground fairly uneven.  Up ahead, you can see
+a fairly large forest, and off to the north-west a little, there's a high
+cliff, and you can just slightly make out a large waterfall. 
+~
+Flags:	10000000000000000000100
+SecType:	Field
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21752
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21750
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21752
+Name:	Entering the Forest
+Desc:$
+   Still on the dirt path, the trees are beginning to thicken around you and
+close out some of the light above.  To the south, the dirt path exits the
+forest, and to the north, who knows what lies in waiting? 
+~
+Flags:	10000000000000100
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21753
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21753
+Name:	Thick Forest
+Desc:$
+    The friendly dirt path under your feet still, you have gotten deep into
+the woods now, trees close in around you, making you feel slightly
+claustrophibic.  Looking up, you note that you can no longer see the sky
+throught the thick trees. 
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21757
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21752
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21754
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21754
+Name:	Cold Stream
+Desc:$
+   You find yourself almost tripping into a freezing, fast stream.  The water
+roars as it hits rocks and the sound is almost deafening.  You feel a cold
+updraft from the splashes of water as they rush southwest. 
+~
+Flags:	10000000000000000
+SecType:	Water (Swim)
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT north]
+	ToVnum:	21708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21753
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21755
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21755
+Name:	Cold Stream
+Desc:$
+   You swim down the icy cold stream, beginning to lose feeling in your
+fingers and toes.  The area around you is all dark, damp forest, very
+unwelcoming in a way.  The crashing of the water hurts your ears. 
+~
+Flags:	10000000000000000
+SecType:	Water (Swim)
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT northeast]
+	ToVnum:	21754
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21756
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21756
+Name:	Cold Stream
+Desc:$
+   The ice cold water nips your body, threatening frostbite.  Water splashes
+over your face, handicapping your vision.  The only thing you can really think
+of right now is how much you'd like to be out of this water and in warm, dry
+clothes. 
+~
+Flags:	10000000000000000
+SecType:	Water (Swim)
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT east]
+	ToVnum:	21755
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21727
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21757
+Name:	Fairy Ring
+Desc:$
+   You stumble upon a small, moist area; the ground covered in wildflowers and
+some soft, green grass.  But the most peculiar thing is the circles of
+mushrooms, also known as 'Fairy Rings'.  Small, glowing fairies flit around
+your feet, and around your head, checking you over.  An oddly sweet scent
+overwhelms you as you attempt to move on without squishing any fairies. 
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21759
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21753
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21758
+Name:	Dead End
+Desc:$
+   You come to a dead end in the caverns.  Just a small, claw-dug room, with
+no obvious purpose.  You take a deep breath and prepare to head back out. 
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21798
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21759
+Name:	An Open Field
+Desc:$
+   For once, you actually have warm sunlight pouring over you as you step into
+the grassy field.  The smell of grain and flowers are welcoming to you, and
+you feel slightly less claustrophobic out in the pleasant open area.  But to
+any side of you, past the  field, is thick, cold, dark forest.  Have fun! 
+~
+Flags:	0
+SecType:	Field
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21760
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21762
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21757
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21761
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21760
+Name:	Wilderness
+Desc:$
+   Trees close in on you, making it dark.  The small path you are on is only
+really patted-down grass, implying that few people have been through here.
+The smell of flowers is the only welcoming thing to you here. 
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21706
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21759
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21761
+Name:	Tree Dancing Grounds
+Desc:$
+   You stop and stare as you soak in the bizarre sight in your view.  All
+kinds of trees, even ones that don't belong in the deciduous forest.
+Evergreens, Cherry trees, Willow trees and even Palm trees dance here in an
+odd, jerky manner than can only be  described as -- unique.  You don't think
+you've ever seen anyone dance like that, then again, you don't think you've
+ever seen a *tree* dance either 
+~
+Flags:	10000000000000000
+SecType:	Forest
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	21759
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21762
+Name:	Boneyard
+Desc:$
+   Bones scatter the ground here, the smell of rotting flesh wrenching your
+stomach.  Millions of paw prints disturb the soil.  As you peer closely, they
+appear to be large canine prints, and by the depth, some look to belong to
+extremely large, extremely *heavy* animals.  Your senses heighten as you
+listen for any sound of movement around you. 
+~
+Flags:	0
+SecType:	Mountains
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21759
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	21763
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21763
+Name:	Entrance to the Wolf Den
+Desc:$
+    Soft yips and growls emerge from a large burrow set deep in the ground,
+accompanied by the stench of animal waste.  Roots dangle from the inside of
+the cavern entrance, tufts of grey hair cling to their veiny structures.  
+~
+Flags:	10000000000000000
+SecType:	Mountains
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	21764
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	21762
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21764
+Name:	Into the Den
+Desc:$
+   You start hearing muffled movement around you, making you nervous in the
+dark space with only so little room to run.  The smell of feces is stronger
+now, making you gag.  A sudden, loud yip to the southwest jerks your innards.
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21763
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21765
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21765
+Name:	Guard Chamber
+Desc:$
+   As you work your way down to this room, you begin to hear growls and
+movement from all around you, and you realize maybe this isn't such a great
+idea.  The large room smells of blood and rotting flesh.  From the ribcage you
+just crushed under your foot, your eyes rise slowly to your surroundings.
+Your stomach lurches as a blur of grey and brown leaps on you! 
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21764
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21777
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21766
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21766
+Name:	Dark Tunnel
+Desc:$
+   You can barely see anything in the dark tunnel, but the growls and scuffles
+all around you raise the hairs on the back of your neck.  You put your foot
+down *SMUSH* ew... that wolf poop sure is warm... and smelly. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21765
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21768
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21767
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21767
+Name:	Omega Den
+Desc:$
+   This is where the Omega (lowest ranking) wolves make their den.  Not very
+hidden, because they apparently aren't that important.  The thin, grey wolves
+here look fragile and weak.  You almost pity them until one attacks you! 
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	21766
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21768
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21768
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21767
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21766
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21769
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21769
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes.  
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21768
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21770
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21770
+Name:	Gathering Room
+Desc:$
+   Wolfs of many kinds gather here.  The smell of feces and blood jerks your
+inards, and makes your eyes water.  The room is large, but is filled with
+wolves, all eyeing *you*. 
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21771
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21773
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21772
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21769
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21771
+Name:	Dead End
+Desc:$
+   You come to a dead end in the caverns.  Just a small, claw-dug room, with
+no obvious purpose.  You take a deep breath and prepare to head back out. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	21770
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21772
+Name:	A Tight Squeeze
+Desc:$
+    This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21770
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21774
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21773
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes.  
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	21775
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21770
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21774
+Name:	A tight squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes.  
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21772
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21776
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21775
+Name:	Subordinate Den
+Desc:$
+   The guardians of the wolf cubs gather here.  The room is fairly small and
+has little to no excess food strewn about, and smells of decaying flesh, like
+the rest of this dark, underground maze. 
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21773
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21776
+Name:	Cubling Den
+Desc:$
+   Small cublings sleep here, curled up with one another.  Their grey and
+brown fur blends together, creating the illusion of one massive furball.  One
+cub rolls over onto your foot and you almost consider not killing it as you
+reach down to pet it -- *SNAP* Ow!  It bit you!  It's gotta die now, eh
+chummer? 
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northwest]
+	ToVnum:	21774
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21777
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes.  
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21778
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21765
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21778
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes.  
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	21779
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21777
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21779
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes.  
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21778
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	21780
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21780
+Name:	A Fork in the Tunnels
+Desc:$
+   An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21783
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21781
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21779
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21781
+Name:	Tunnel
+Desc:$
+   A fairly large tunnel. Nothing special about it.  It goes forward and back
+the way you back.  Hoorah. 
+~
+Flags:	1000000000000000001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+[EXIT northeast]
+	ToVnum:	21780
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	21782
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21782
+Name:	Resting Den
+Desc:$
+   A nice room, inaccessable to the wolves below and very peaceful.  It has a
+small hole above, letting a tiny stream of light in... a welcoming site.  Not
+big enough for you to get through, but letting you see the sky and weather. 
+~
+Flags:	1000010000000000010000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT down]
+	ToVnum:	21781
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21783
+Name:	A Fork in the Tunnels
+Desc:$
+    An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	21785
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21784
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21780
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21784
+Name:	A Fork in the Tunnels
+Desc:$
+   An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21783
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21732
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21786
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21785
+Name:	A Fork in the Tunnels
+Desc:$
+   An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	21787
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21732
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21783
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21786
+Name:	A Four-Way Tunnel
+Desc:$
+   You come to a fork in the tunnel, but it's still an extremely small space.
+The smell of blood is incredibly stronger than it has been anywhere else in
+the entire den.  A small bat swoops down and flies out. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21784
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	21732
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21788
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21789
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21787
+Name:	A Four-Way Tunnel
+Desc:$
+   You come to a fork in the tunnel, but it's still an extremely small space.
+The smell of blood is incredibly stronger than it has been anywhere else in
+the entire den.  A small bat swoops down and flies out. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21785
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21797
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21788
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21732
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21788
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21787
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21786
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21789
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes.  
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21786
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21790
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21790
+Name:	Smelly Tunnel
+Desc:$
+   The area here stinks to high ...uh... heaven with feces.  You cover your
+face with your shirt and try not to breathe, making you feel slightly
+lightheaded.  Exits lead three ways, including where you just entered. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	21789
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	21791
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21792
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21791
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	21790
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21793
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21792
+Name:	Dead End
+Desc:$
+   You come to a dead end in the caverns.  Just a small, claw-dug room, with
+no obvious purpose.  You take a deep breath and prepare to head back out. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	21790
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21793
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21791
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	21794
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21794
+Name:	A Fork in the Tunnels
+Desc:$
+    An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	21796
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21795
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21793
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21795
+Name:	A Fork in the Tunnels
+Desc:$
+    An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21794
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	21796
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	21733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21796
+Name:	A Fork in the Tunnels
+Desc:$
+    An open room compared to the tunnels you've just banged up your skull
+trying to push though.  You have the choice of three exits, including the
+direction you just came.  You hear noises from all directions, not really
+helping with the decision of the direction for the progression of your travel.
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	21795
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21794
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21797
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	21798
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	21787
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21798
+Name:	A Tight Squeeze
+Desc:$
+   This extremely tight tunnel forces you to bend in half in order to walk,
+and through the darkness, you can't even make out low ceilings; a problem
+causing you quite a headache.  Growls emit from all around you, keeping you on
+your toes. 
+~
+Flags:	100001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	21797
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	21799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	21758
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#21799
+Name:	A Dead End
+Desc:$
+   You come to a dead end in the caverns.  Just a small, claw-dug room, with
+no obvious purpose.  You take a deep breath and prepare to head back out.  
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northwest]
+	ToVnum:	21798
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

@@ -1,0 +1,2315 @@
+#65200
+Name:	A Vacant Parking Lot
+Desc:$
+   The wind whips across the gravel graveyard, kicking dust and litter against
+old, rusted-out car shells. The few still-operable vehicles here probably
+belong to the occupants of the old, one-level brick warehouse to the north.
+While most of the structure seems deserted, its windows boarded over and its
+walls graffiti-filled, the center portion sports a sturdy metal door,
+surrounded by lit windows with fresh panes of glass in them. A tilted neon
+sign above the door identifies this establishment as The Gentleman Loser. 
+~
+Flags:	110000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door sliding steel
+	Desc:$
+A thick, heavy steel sliding door marks the entrance to The Gentleman Loser. 
+~
+	ToVnum:	65201
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65200
+[EXIT northeast]
+	Keywords:	garage sturdy door
+	Desc:$
+The garage door seems to be made of a combonation of polymer plastics combined
+with ceramic meshing.  You'd most likely need a few rockets in a heavy
+launcher to blow it open, but there is a small electronic card swiper next to
+the door. 
+~
+	ToVnum:	65210
+	Flags:	2
+	Material:	ceramic
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	50
+	HiddenRating:	50
+[EXIT northwest]
+	ToVnum:	32712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65201
+Name:	The Gentleman Loser
+Desc:$
+   Recessed ceiling lights cast a hazy golden glow over this large room. The
+synthwood walls and genuine hardwood floor are worn smooth with age. A few
+synthwood tables and chairs occupy the center of the room and a worn pool
+table and a rack of cues sit in the northwest corner, near a fancy looking
+wooden door. A spotless synthwood bar occupies most of the eastern wall, with
+the usual mirrored shelves and ceiling-mounted trideo unit behind it, as well
+as a small ^Wpicture^N frame hanging on the wall. A small raised platform in the
+southeast corner acts as a stage for the occasional live musician. The mingled
+smells of tobacco and beer hang in the air, despite the best efforts of the
+air filtration vents overhead. A short hallway is to the north, and the exit
+to the parking lot is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door sliding steel
+	Desc:$
+A thick, heavy steel sliding door seals off the entrance to the south here. 
+~
+	ToVnum:	65200
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65200
+[EXIT west]
+	Keywords:	door heavy wood
+	Desc:$
+This heavy synthwood door is set firmly into the wall and has a little keycard
+slot just above the door knob. 
+~
+	ToVnum:	65205
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	5
+[EXTRADESC 0]
+	Keywords:	picture
+	Desc:$
+Its hard to tell where exactly this picture was taken, since most of the
+background consists of old, weathered industrial cement walls with subtle
+cracks lining them. Three night-ones are shown, a male and two females. The
+males fur is ^Lmidnight black^N with articulate swirls of ^csteel^N-^cblue^N, and hes
+sporting an old ^Lblack leather^N eyepatch over his left eye. He has an arm draped
+loosely about the shoulders of two smaller, very good looking female
+night-ones, both sporting dark ^bmid^Bn^bight blu^Be^N hues to their fur, and look as if
+they could be sisters, or at the least, related. The female on his right has
+distinct japanese features, her graceful figure molded closely up against the
+male. The female to his left has a little lighter shade to her fur, and her
+figure has a little more distinct muscle tone to it. They're all wearing the
+same sly grin as they pose for the camera. 
+~
+BREAK
+#65202
+Name:	A Short Hallway
+Desc:$
+   The wall of this short, dimly-lit hallway are plastered with faded posters
+for long-past concerts and sporting events. You even manage to catch sight of
+an old ^Y2600^n meeting poster. The air seems clearer here, and the sounds from
+the bar are fairly muffled. A sign indicates the ladies' room is to the west,
+the men's room to the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door solid wooden
+	Desc:$
+A solid door which seems to be made of synthwood with a little keycard slot in
+it near the handle. 
+~
+	ToVnum:	65206
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	50
+	HiddenRating:	50
+[EXIT east]
+	Keywords:	door men's east
+	Desc:$
+A small sign on the door reads, "Men." 
+~
+	ToVnum:	65203
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door ladies' west
+	Desc:$
+A small sign on the door reads, "Women." 
+~
+	ToVnum:	65204
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	2600 meeting poster~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+According to this 2600 meeting poster, there's supposed to be a meeting at the
+food court in the Espanoza Way Complex at sometime.  You can't exactly tell
+what's written after that because it's been faded out and is nothing more than
+a blur on the paper. 
+~
+BREAK
+#65203
+Name:	Men's Bathroom
+Desc:$
+   A naked fluorescent bulb dangles from the ceiling, casting harsh light on
+the white tiles and porcelain fixtures of this small, brightly-lit bathroom.
+A single, old-fashioned toilet sits in one corner with a small sink and mirror
+crowded together in another.  The room smells faintly of lemon-scented air
+freshener. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65202
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65204
+Name:	Women's Bathroom
+Desc:$
+   A naked fluorescent bulb dangles from the ceiling, casting harsh light on
+the white tiles and porcelain fixtures of this small, brightly-lit bathroom.
+A single, old-fashioned toilet sits in one corner with a small sink and mirror
+crowded together in another.  The room smells faintly of lemon-scented air
+freshener. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65202
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65205
+Name:	A Private Room
+Desc:$
+   A fluorescent office light glares down from the ceiling of this bright,
+windowless room. The center area is occupied by a circular synthwood poker
+table covered in ^ggreen^n felt, which is surrounded by several metal folding
+chairs. A small shelf runs the length of the south wall, a few ashtrays and
+empty glasses occupying its surface. The majority of the north wall is taken
+up by a large whiteboard. The small switch next to it presumably activates the
+white noise generator mounted in plain sight directly over the poker table. A
+small dataport glimmers in the northwest corner of the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	1100
+IO:	300
+Bandwidth:	20
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	82060000
+Address:	Allan Associates, Boren and Eighth Street, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door heavy wood
+	Desc:$
+This heavy synthwood door is set firmly into the wall and has a little keycard
+slot just above the door knob. 
+~
+	ToVnum:	65201
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	5
+BREAK
+#65206
+Name:	At the Top of the Stairs
+Desc:$
+   A single recessed ceiling light casts a dim glow over this cramped room,
+which is much less lavish than the bar area proper. The wooden walls have been
+stripped away, revealing bare bricks, and the door to your south is actually
+made of metal, not the synthwood it appears to be from the other side.  A set
+of freshly-laid concrete stairs lead down into near-darkness.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door metal steel
+	Desc:$
+While from the otherside this door looks perfectly fine, from this side you
+can see that it's clearly made of steel that you judge is at least two inches
+thick.  There's a small keycard slot near the heavy industrial handle on the
+door. 
+~
+	ToVnum:	65202
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	50
+[EXIT down]
+	ToVnum:	65207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65207
+Name:	At the Bottom of the Stairs
+Desc:$
+   The foot of the stairs is masked in shadows, a small amount of light
+filtering in from above. Your nose is assaulted by the smells of fresh soil in
+the brick covered hallway, indicating your location as somewhere underground.
+To your south you can make out small amounts of light coming from open door
+ways and the sounds of business being done.   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	65208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65208
+Name:	A Hallway Made of Heavy Bricks
+Desc:$
+   Rough-hewn bricks dominate the walls of the corridor, lit by a single
+overhead light mounted in the ceiling.  Door ways have been hewn through out
+the hallway into various rooms, and a stair way can be seen close by to the
+north, while the hallway extends further to the south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65209
+Name:	The Underground Parking Garage
+Desc:$
+   Small halogen lights are set into the ceiling at one-meter intervals,
+keeping this underground parking garage fairly well lit. Tire marks and oil
+stains mark the concrete floor around the twisting maze of pillars that
+support the building above it. A large metal ramp, presumably for vehicle
+repairs, stands in the northwest corner.  The concrete floor slopes upward to
+the southeast, and a small doorway to the west leads inside the building. 
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	65210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65210
+Name:	A Sloping Ramp
+Desc:$
+   You find yourself on a downward slanting ramp leading to what seems to be
+an underground parking lot.  The ramp itself is barely lit with dingy
+fluorescent tubing that lines the roof and is covered in oil stains and tire
+marks. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	Keywords:	garage sturdy door
+	Desc:$
+The garage door seems to be made of a combonation of polymer plastics combined
+with ceramic meshing.  You'd most likely need a few rockets in a heavy
+launcher to blow it open, but there is a small electronic card swiper next to
+the door. 
+~
+	ToVnum:	65200
+	Flags:	2
+	Material:	ceramic
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	50
+[EXIT northwest]
+	ToVnum:	65209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65211
+Name:	The Shop
+Desc:$
+   A large bartop stretches across the west side of this room. Its taps and
+sink have been ripped out, and a screen of wire and reflective bulletproof
+glass has been stretched across it. A small slot cut into this protective
+window allows transactions to take place, and a small metal door with a
+high-tech security lock on it allows entry to and exit from the protected
+area. An open doorway to the north leads to a very-different looking room, and
+the corridor is to the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door security
+	Desc:$
+A heavy duty security door made of complex mess grating and bulletproof glass.
+~
+	ToVnum:	65212
+	Flags:	2
+	Material:	ceramic
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+BREAK
+#65212
+Name:	The Backroom
+Desc:$
+   You stand now beyond the armored front of the shop, amongst crates and
+boxes over flowing with ammo.  Lockers against the wall have had the doors
+removed and their insides display weapons and armor marked with the logos of
+various corporations.  A pile of crates with their tops pulled off sit in the
+northwest corner, revealing their contents: mini-rockets, grenades, shurikens.
+This place is a gun nut's dream, and only the most loyal of folk get access to
+it.  From this side of the security barrier you can also see that a laser
+system has been implemented just beyond of the bulletproof glass, and it's
+currently off.  There's a switch near the hole in the security wall that you
+assume activates it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door security
+	Desc:$
+A heavy duty security door made of complex mess grating and bulletproof glass.
+~
+	ToVnum:	65211
+	Flags:	2
+	Material:	ceramic
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+BREAK
+#65213
+Name:	A Hallway Made of Heavy Bricks
+Desc:$
+   This is the south end of a brick-walled hallway. The smell of soil
+infiltrates your nose ever so slightly, and a small light shines down on you
+from above. A large, well-lit room is to the south. Two doorways lead east and
+west, and the hallway itself stretches to the north, ending at a stairway. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65215
+	Flags:	0
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65214
+Name:	A Narrow Hallway
+Desc:$
+   This narrow hallway is a new addition, its floor covered in a dull blue
+carpet that ends to the east at the concrete of another hall. The walls are
+synth-wood and dull halogen tubes run the length of the ceiling, providing a
+fair amount of light. The hallway is lined with various doors, all unmarked. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A heavy wooden door with an old fashioned lock. 
+~
+	ToVnum:	65222
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65215
+	LockRating:	50
+[EXIT east]
+	ToVnum:	65213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A heavy wooden door with an electronic lock. 
+~
+	ToVnum:	65220
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+[EXIT west]
+	ToVnum:	65227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65215
+Name:	A Library
+Desc:$
+   A domed light in the middle of the ceiling casts a warm glow over this
+large room. The walls are lined with synthwood shelves that stretch from floor
+to ceiling, all of them crammed with a wide selection of books, manuscripts,
+parchments and datadisks. An elaborate, symbol-filled circle has been drawn in
+the floor of the northwest corner, near a small cabinet marked "Ritual
+Supplies: Keep Out." A comfortable-looking armchair and sidetable occupy the
+southwest corner, while the southeast is taken up by a small terminal on a
+synthwood desk. The computer seems to be attached to a small black box with
+two blinking lights - probably some sort of Matrix device, as it in turn is
+plugged into a dataport. 
+~
+Flags:	10000000000000011000
+SecType:	Inside
+MatrixExit:	1100
+IO:	-1
+Bandwidth:	-1
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	82060001
+Address:	Allan Associates, Boren and Eighth Street, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	8
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	bookcase
+	Desc:$
+A bookcase is there. 
+~
+	ToVnum:	65240
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65237
+	HiddenRating:	50
+[EXIT west]
+	Keywords:	bookcase
+	Desc:$
+A bookcase stands there. 
+~
+	ToVnum:	65213
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+	HiddenRating:	50
+BREAK
+#65216
+Name:	A Large Meeting Room
+Desc:$
+   This walls of this room are hung with photographs of some of the shadows'
+greatest moments, including the plane crash at BioHyde, the bombing of the
+Titty Twister and the Renraku shutdown. The picture frames seem to be made of
+the same synthwood pine that covers the walls and the floor. In the four
+corners, small light tubes stretch from floor to ceiling, keeping the room
+well-lit. A large projector is mounted in the ceiling's center. A switch near
+the door controls the light and another, marked "Noise," probably controls a
+white noise generator. In the middle of the room, below the projector, is a
+round table with ten chairs around it. A lavish-looking door is set in the
+west wall; an elaborate-looking electronic lock is set into the wall next to
+it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door heavy wood
+	Desc:$
+A lavish wooden door that, when knocked on, sounds nothing like wood. 
+~
+	ToVnum:	65217
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+BREAK
+#65217
+Name:	A Small Office
+Desc:$
+   Small angled lights set in the ceiling's four corners provide bright but
+not harsh illumination for this large, well-appointed office. A light beige
+carpet covers the floor, and the walls are covered in synth-pine panelling. A
+bank of monitors stands are set into most of the east wall, and show various
+locations throughout both the bar above and the area below. A large oak desk
+sits in the center of the room, its surface covered with papers, optical disks
+and tools. Behind it is a large, leather office chair; two smaller but equally
+comfortable-looking chairs sit in front of it. A potted plant partially
+conceals a large black box in the southwest corner; a large trunk of cable
+runs from the box to underneath the desk. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	1100
+IO:	-1
+Bandwidth:	-1
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	82060002
+Address:	Allan Associates, Boren and Eighth Street, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door wood heavy
+	Desc:$
+A lavish wooden door that, when knocked on, sounds nothing like wood. 
+~
+	ToVnum:	65216
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+BREAK
+#65218
+Name:	A Fairly Large Bathroom
+Desc:$
+   Large black and white tiles cover the floor and ceiling, and halogen lights
+in the four corners provide bright but not glaring light. A large bathtub with
+a privacy curtain and detachable shower head occupies a raised platform in the
+southwest corner, while the southeast corner houses a standup shower with
+mirrored glass doors and a well-stocked towel rack. A pristine-looking
+autoflushing toilet with a soft, white seat occupies the northeast corner; a
+large vanity unit with a marble sink sits in the northwest corner. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	65220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65219
+Name:	The Dojo
+Desc:$
+   This room is decorated in oriental style, with the brick walls of the place
+covered with traditional paper made screens. The floor is a warm synthwood
+that seems to bend to conform to your feet and a large rug has been placed in
+the center of the room, a yin-yang symbol taking up most of its center.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	65211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65220
+Name:	A Large Living Room
+Desc:$
+   A dome light mounted in the center of the white stucco ceiling casts a
+bright glow over this large room. The synth-pine walls are painted a dull
+beige, and the floor is covered in a soft blue carpet. A comfortable-looking
+sofa and two easy chairs sit in the middle of the room, surrounding a large
+wooden coffee table. The east wall is mostly taken up by a state-of-the-art
+entertainment center, which includes a huge trideo unit and an elaborate sound
+system. A door to the north leads to the main part of the building; a bedroom
+is to the west, a bathroom is to the southwest, and an office is to the south.
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A heavy wooden door with an electronic lock. 
+~
+	ToVnum:	65214
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+[EXIT south]
+	ToVnum:	65217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	65218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65221
+Name:	A Tidy Bedroom
+Desc:$
+   This immaculate, medium-sized bedroom is decorated in much the same style
+as the living room: a large dome light in the center of a white stucco
+ceiling, beige-painted synthpine walls and soft blue carpeting on the floor. A
+large, comfortable-looking bed sits in the middle of the west wall. The rest
+of this private home is to the east. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	65220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	wall
+	Desc:$
+A small, barely-visible keycard reader has been mounted on this plain-looking
+wall. 
+~
+	ToVnum:	65226
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+	HiddenRating:	50
+[EXIT down]
+	Keywords:	trapdoor down
+	Desc:$
+A barely-visible trapdoor under the carpet leads down. 
+~
+	ToVnum:	65248
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65206
+	HiddenRating:	50
+BREAK
+#65222
+Name:	A Living Room
+Desc:$
+   Recessed ceiling lights cast a bright but not invasive glow over this
+small, cozy room. Reproductions of various 19th- and 20th-century
+Impressionist paintings hang from the cream-colored walls, and light-colored
+throw rugs have been scattered across the hardwood floors. A large couch and
+two matching arm chairs, upholstered in tan linen, sit in the room's center,
+surrounding a small glass coffee table. A large shelving unit against the
+south wall holds a variety of books and disks, as well as a small
+entertainment center. A small cherrywood desk and matching chair sit against
+the north wall, next to an unobtrusive wooden door; another door leads west. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	65223
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A heavy wooden door with an old fashioned lock. 
+~
+	ToVnum:	65214
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65215
+	LockRating:	50
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	65225
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65223
+Name:	A Bedroom
+Desc:$
+   This small, square room is sparsely but expensively furnished. A faded
+Persian carpet covers most of what seems to be a real hardwood floor, and the
+plaster walls have been painted a soothing cream color. The north wall is
+dominated by a brass four-poster bed; an oak nightstand next to it holds a
+Tiffany lamp and a single lily in a slim crystal vase. A wooden door is set
+into the west wall, between an exquisite blue-and-white ceramic vase perched
+on a plaster column and a reproduction of Picasso's "Mallorquine"; another
+door leads south. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	65222
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	65224
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65224
+Name:	A Dressing Room
+Desc:$
+   Halogen ceiling fixtures cast a bright light over this small dressing room.
+Closets, clothing racks and shoe shelves line the north wall, while a large,
+many-drawered vanity table and full-length mirror take up the west wall. The
+plaster walls have been painted a soothing cream color, and thick, soft beige
+carpeting covers the floor. Two doors lead east and south. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	65223
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	65225
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	trapdoor down
+	Desc:$
+A trapdoor under the carpet leads down. 
+~
+	ToVnum:	65247
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65215
+	HiddenRating:	50
+BREAK
+#65225
+Name:	A Bathroom
+Desc:$
+   A gigantic claw-footed bathtub with a shower attachment dominates this
+cramped but immaculate bathroom. A small toilet-bidet has been squeezed next
+to it, and a large porcelain sink stands next to the northern door. A bright
+pink bathrug covers most of the tiled floor, and the plaster walls have been
+painted a soothing cream color. Another door leads east. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	65224
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	65222
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65226
+Name:	A Secret Room
+Desc:$
+   This small, square closet is barely large enough for a human being to stand
+in. Most of the available space is taken up by a large hanging unit that looks
+like it's meant to accommodate some sort of suit. Small, oddly-shaped storage
+shelves line the base of the wall. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+From this side of the wall, you find that the hidden doorway is actually made
+of a titanium sheet. 
+~
+	ToVnum:	65221
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+BREAK
+#65227
+Name:	A Narrow Hallway
+Desc:$
+   The hall stretches off to your east and west, walls covered in a fine
+synth-wood and dull halogen tubes running the ceiling give the blue-carpeted
+area a seedy look and feel. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A heavy wooden door with an old fashioned lock. 
+~
+	ToVnum:	65228
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65220
+	LockRating:	50
+[EXIT east]
+	ToVnum:	65214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden south
+	Desc:$
+A wooden door is there. 
+~
+	ToVnum:	65233
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65227
+	LockRating:	32
+BREAK
+#65228
+Name:	Front Room
+Desc:$
+   Upon entering this apartment, you just know that this isnt the cleanest
+person in the world. The room isnt decrepit but it is messy, with clothes and
+other items laying all over the place in disarray. Hell theres a beautiful
+violin on the couch, just waiting to be sat on. There is a trid in the corner
+with what appears to be a black muscle shirt thrown over it. And there are
+various other pieces of furniture in the room, covered by a various amount of
+drek and weaponry. On the floor near the front door, you see a wicked looking
+knife and while looking around you see various blades, guns, chains and other
+weapons laying around. Also all over the walls of this front room are posters
+of Maria Mercurial, the Ares Predators, the Boston Massacre, Speed Coma,
+Ancient Boyz and other metal bands, rap groups, music stars and Urban Brawl
+teams. They are all well taken care of and appear new, but the  cleanest and
+most immaculate is a framed copy of an Ares Predators poster with the
+signatures of all the team members signed on, including Ricochet Rita. This is
+the central room to the house you can see passageways leading off into the
+other rooms, weapons, chin-up bars and cameras hanging above them. To the
+north though is a central door, closed off and made out of sometime of
+hardened plastic. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A heavy wooden door with an old fashioned lock. 
+~
+	ToVnum:	65231
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65220
+	LockRating:	20
+[EXIT east]
+	ToVnum:	65230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A heavy wooden door with an old fashioned lock. 
+~
+	ToVnum:	65227
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65220
+	LockRating:	50
+[EXIT west]
+	ToVnum:	65229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65229
+Name:	West Room
+Desc:$
+   This is a fragging armory, and thats the first thought that come out of
+your mind when you walk into this room. Guns hang on the sidewalls, next to
+their ammunition. Next them are a variety of sharp, no-nonsense swords and
+knives. On the back wall, suits of armor hang, including one suit of milspec
+and one suit of ruthenium armor alongside a bunch of other pieces of armor in
+varying  sizes. In the center of the room is a table with an open upped
+electronics kit, maybe several of them and various pieces of electronics such
+as pocket secretaries and credsticks on it. Also running along the edges of
+the room are backpacks and chests. One opened chest reveals their contents,
+costumes and clothing. On closer inspection, the clothing is of ganger design
+and make, Halloweener jackets and Ancients bandannas, next to Lone Star vests.
+There doesnt seem to be much more than that in this stark and Spartan armory.
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	65228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65230
+Name:	East Room
+Desc:$
+   This seems to be a mini-bar cum stereo room. The whole back wall is taken
+up by a gigantic stereo system with huge sub-woofers. The system seems to be
+fully set up, having almost every bell and whistle that you have ever heard
+of. On one side of the room is a refrigerator with a SuperNuke microwave next
+to it on a table. On the floor around these two items are a bunch of wrappings
+from the on the go food that Spikes seems to prefer. On the other side of the
+room is one big fragging mini bar. Liquor lines the wall, and the bottles and
+even a keg rest on the bar. The seats are the nice plush kind with silver legs
+and the bar seems to be real mahogany wood. Two trids rest on either side of
+the bar and their huge speakers rest underneath. This looks like one hell of a
+party room, and there is enough room in the center for a few people to dance,
+and the plush seats on the kitchen side of the room look extremely inviting. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	65228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65231
+Name:	North Room
+Desc:$
+   This is just a simple crash room, a bed, some chairs, a few weapons laying
+around and one big ornate looking door in the back of the room, and thats all
+you see at first sight of this darkened room. This room is sparse and the bed
+is no exception to that rule. Its just a plain white bed with plain white
+pillows, it looks soft but not fancy or anything. Theres a few chairs and an
+armoire and a few chests but nothing much more than that. Handguns and SMGs
+are spaced evenly throughout the room, and a sword rests next to the bed. The
+only thing not so stark about this room other than the door are the walls,
+which take on a life of their own as the lights turn on. The walls are painted
+with various Eastern and Western designs, including a few red Oriental
+dragons, idealistic  pictures of Vietnam, Hong Kong and Seattle as well as
+depictions of the great Asian folk heroes like Wong Fei Hung, Fong Sai Yuk and
+the great Nguyen family. Also on the walls are artistic and idealized
+renderings of the members of Backstage. Enka is drawn in a library, surrounded
+by books and casting spells at a huge Western Dragon.  Hammer is rendered in
+full combat gear except for a helmet, blasting away with dual Walthers at a
+group of shadowy thugs. Roaring ahead full speed is an idealized portrait of
+Talice,  looking beautiful with her hair flying in the wind. Among a stylized
+Matrix of lightning bolts and glowing Seattle buildings, Orb blasts away with
+his twin USP at a rendering of a dragon, drawn out of blue lightning. Phase
+stands off to the side, baton over his shoulder, looking like the perfect cop
+as he does. Though most of the walls are taken, and some of the roof and
+floor, there seems to be room for more, and some sketches are already being
+drawn into the blank spaces. A bunch of paints lies near the bed, next to a
+beautiful, antique violin. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A heavy wooden door with an old fashioned lock. 
+~
+	ToVnum:	65232
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65220
+	LockRating:	20
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A heavy wooden door with an old fashioned lock. 
+~
+	ToVnum:	65228
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65220
+	LockRating:	20
+BREAK
+#65232
+Name:	North-north Room
+Desc:$
+   As you open the ornately carved door, you see a beautiful wooden dojo. The
+floor is made out of real wood, polished brightly and babys butt smooth.
+Weapons of great beauty hang from the walls, obviously theyre all antiques and
+worth oodles of yen. A bunch of beat to hell punching bags of various sizes
+and types hangs along the sides of the room, and free weights and weight
+machines hang in a back corner. The walls are all painted a stark white except
+for pieces of art painted onto the wall. Chinese symbols are painted on the
+walls, spaced evenly from each other and they seem to be beautiful examples of
+calligraphy. Along the edges of the roof are drawn Sperethiel Runes, saying
+such things as Path of Warriors, Soldiers of the Militia and tenets of martial
+arts and words such as Loyalty and Strength. Lining the door wall are various
+training weapons, next to some real weapons. A large jade Oriental dragon
+lines the back wall of this room, its eyes of ruby and lines of orichalcum
+enlaid on the dragon. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A heavy wooden door with an old fashioned lock. 
+~
+	ToVnum:	65231
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65220
+	LockRating:	20
+BREAK
+#65233
+Name:	All-in-one Living Room
+Desc:$
+   Sometimes people have a way of cramming their entire life into a single
+black hole, otherwise known as a dorm room. This place is a perfect example of
+that phenomenon. A clean, well-kept bed is lofted to one side and a sofa lies
+underneath its shadow. An armoire stands against an adjacent wall with just
+enough footholds for even a groggy climber to safely return to earthly
+firmament. A trid unit and a small music system occupy part of the last
+remaining wall, which includes a sealed door. ^WPosters^N, ^Wpaintings^N, and
+^Wphotographs^N line the walls. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden north
+	Desc:$
+A wooden door is there. 
+~
+	ToVnum:	65227
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65227
+[EXIT west]
+	Keywords:	door sealed west
+	Desc:$
+A sealed door is there. 
+~
+	ToVnum:	65234
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65227
+[EXTRADESC 0]
+	Keywords:	posters~~~~~~~~~~~~
+	Desc:$
+A number of posters decorate the walls. One poster shows the latest statistics
+for the Ares Roadmaster series. Another has a timeline of famous detectives,
+both fact and fiction. Yet another appears to be a custom made collection of
+pithy quotes including:
+^W===========================================================================^N
+"The Feynman Problem-Solving Algorithm: (1) write down the problem; (2) think
+very hard; (3) write down the answer."
+^W===========================================================================^N
+"Whatever you do will be insignificant, but it is very important that you do
+it. -- Gandhi"
+^W===========================================================================^N
+"Every gun that is made, every warship launched, every rocket fired signifies
+in the final sense, a theft from those who hunger and are not fed, those who
+are cold and are not clothed. This world in arms is not spending  money alone.
+It is spending the sweat of its laborers, the genius of its scientists, the
+hopes of its children. This is not a way of life at all in any true sense.
+Under the clouds  of war, it is humanity hanging on a cross of iron. -- Dwight
+Eisenhower"
+^W===========================================================================^N
+"Most of us have had moments in childhood when we touched the divine presence.
+We did not think it  extraordinary because it wasn't; it was just a beautiful
+moment filled with love. In  those simple moments our hearts were alive, and
+we saw the poignant beauty of life  vividly with wonder and appreciation --
+David and Bruce McArthur." 
+~
+[EXTRADESC 1]
+	Keywords:	Paintings~~~~~~~~~~~~
+	Desc:$
+There are three paintings, and one rests on each wall. On the east wall there
+is a painting of bright blue, and orange. It looks like the sun is rising up
+from the eternal ocean in order to bring dawn to a remote, beautiful beach. On
+the south wall there is a painting filled with milder blues, little orange,
+but great wide strokes of green and gray. It looks like a cliff side village
+looking over the sea, and there are tiny scenes of everyday, domestic life.
+Finally the western painting is a mixture of dark blues, black, and swathes of
+bright gray. Two young lovers are holding hands on the very same beach with a
+halo of moonlight arcing over their shoulders. 
+~
+[EXTRADESC 2]
+	Keywords:	Photographs~~~~~~~~~~~~
+	Desc:$
+Two photographs rest just above the bunk bed, somewhat hidden from the rest of
+the room. One is closer to the foot of the bed, and it is dominated by the
+bulk of a beastly Ares Roadmaster. It looks like it has been outfitted for
+off-road racing. A team of mechanics, and two drivers surround it with
+sparkling, mud-free grins of shared  glory.  The lead driver is obscured by a
+fire safety hood which is normally worn under a helmet. Nonetheless it cannot
+hide a few strands of bright red hair, and the spark of victory beaming from
+two light blue eyes. The other photograph reveals the front an old, rustic
+church.  A young boy with red hair and green eyes is standing  with a pleasant
+looking, blue-eyed couple. 
+~
+BREAK
+#65234
+Name:	A Small Laboratory
+Desc:$
+   Cleanliness and Order reign over this workspace with twin cold, clinical,
+anti-bacterial fists. Various electronic devices are strategically placed
+around the room. A casual inspection will reveal that most of the equipment is
+related to surveillance, security, and forensics. A desktop computer quietly
+hums in synch with a small fridge marked, "Samples and Evidence Only." One
+footlocker on the opposite wall contains a tiny cache of weapons and
+ammunition. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door sealed east
+	Desc:$
+A sealed door is there. 
+~
+	ToVnum:	65233
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65227
+BREAK
+#65240
+Name:	A Stairwell
+Desc:$
+   This square space is barely large enough to fit two regular-sized humans.
+Blue glowstrips along the concrete stairs and metal banister provide just
+enough illumination to navigate by. A surveillance camera has been mounted in
+the northeast ceiling corner, above a small black box with a blinking green
+light. The staircase leads down, and the back of the bookshelf is to the west.
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door metal west
+	Desc:$
+A metal door sits there, behind one of the library's bookcases. 
+~
+	ToVnum:	65215
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65237
+[EXIT down]
+	ToVnum:	65241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65241
+Name:	A Stairwell
+Desc:$
+   This small, square stairwell is barely large enough to fit two
+regular-sized humans. Blue glowstrips along the concrete stairs and metal
+banister provide just enough illumination to navigate by. The staircase leads
+up, and the stairwell opens into a cinderblock-walled corridor to the west. 
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	65242
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65242
+Name:	A Corridor
+Desc:$
+   This narrow concrete corridor is dimly lit by three glowstrips - one each
+on the north and south walls, and one running down the center of the floor.
+The staircase is back to the east, and unmarked metal doors lead in the other
+three cardinal directions. The air smells simultaneously sharp and stale -
+probably the result of a filtration and recycling system. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door steel north
+	Desc:$
+A steel door is there. 
+~
+	ToVnum:	65243
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	east
+	Desc:$
+The stairwell is there. 
+~
+	ToVnum:	65241
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door steel south
+	Desc:$
+A steel door is there. 
+~
+	ToVnum:	65244
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door steel west
+	Desc:$
+A steel door is there. 
+~
+	ToVnum:	65246
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65243
+Name:	A Storage Room
+Desc:$
+   This bare concrete room seems to be a storage area of sorts. A
+floor-to-ceiling shelving unit takes up the entire north wall, and smaller
+individual shelves run the lengths of the other three walls. They seem to be
+filled with a variety of neatly-arranged supplies and equipment, ranging from
+power cells to electronic components to tools. A halogen dome light sits in
+the center of the ceiling, and a security camera has been bolted to the
+northwest corner of the ceiling. 
+~
+Flags:	100000000001000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door metal south
+	Desc:$
+A metal door is there. 
+~
+	ToVnum:	65242
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+BREAK
+#65244
+Name:	A Barracks
+Desc:$
+   Some work has gone into making this large, spartan bunkroom somewhat
+comfortable. A dark blue industrial carpet covers the floor, and the usual
+central ceiling light has been abandoned in favor of small, individual lights
+next to the fold-out beds that occupy the west wall alongside a row of black
+steel lockers. The southern portion of the room is taken up by a small but
+fully-furnished kitchen alcove. A folding card table and several collapsible
+chairs sit in the northwest corner. 
+~
+Flags:	100000000001000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door steel north
+	Desc:$
+A steel door is there. 
+~
+	ToVnum:	65242
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door synthwood east
+	Desc:$
+A synthwood door is there. 
+~
+	ToVnum:	65245
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	kitchen alcove~~~~~
+	Desc:$
+This small area is dominated by a large refrigerator and deep freeze in the
+corner, next to a tiny counter and even tinier all-in-one (sink, water
+storage, garbage disposal, two-burner stove and microwave) unit. A small
+pantry to the side provides storage space for dry goods. 
+~
+BREAK
+#65245
+Name:	A Small Bathroom
+Desc:$
+   This functional bathroom is barely large enough to hold a stand-up shower,
+self-cleaning toilet and matching sink. A small blue bathmat in front of the
+shower stall's door is the only splash of color in this white-tiled,
+chrome-fixtured room. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door synthwood west
+	Desc:$
+A synthwood door is there. 
+~
+	ToVnum:	65244
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65246
+Name:	A Large Room
+Desc:$
+   All stainless-steel and spotless white, this spacious room is furnished
+with a sleek, expensive-looking array of state-of-the-art technology. A large
+rack takes up the entire north wall; cables snake out from behind it, through
+two blinking boxes nearby, then back through the floor. Two small
+workstations, one with a cyberterminal and one built for a deck, sit against
+the east wall, next to the door. A panel of monitors takes up the entirety of
+the south wall, and a decking recliner sits next to a gleaming datajack in the
+west wall. The center of the room is taken up by a circular conference table,
+which is surrounded by six black mesh office chairs. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	1100
+IO:	-1
+Bandwidth:	-1
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	82060003
+Address:	Allan Associates, Boren and Eighth Street, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door sliding narrow ne 2
+	Desc:$
+A narrow sliding door marked "2" is there. 
+~
+	ToVnum:	65249
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door steel east
+	Desc:$
+A steel door is there. 
+~
+	ToVnum:	65242
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	door narrow sliding sw 2
+	Desc:$
+A narrow sliding door marked "3" is there. 
+~
+	ToVnum:	65248
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door narrow sliding nw
+	Desc:$
+A narrow sliding door marked "1" is there. 
+~
+	ToVnum:	65247
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65247
+Name:	An Alcove
+Desc:$
+   Recessed halogen corner lights cast a dim, soothing glow over this small
+alcove, which is barely large enough to hold a decking recliner and a small
+metal sidetable. A chrome dataport glints softly in the east wall. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	1100
+IO:	-1
+Bandwidth:	-1
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	82060005
+Address:	Allan Associates, Boren and Eighth Street, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door sliding narrow se
+	Desc:$
+A narrow sliding door is there. 
+~
+	ToVnum:	65246
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	trapdoor up
+	Desc:$
+An almost-invisible trapdoor is set in the ceiling, above the table. 
+~
+	ToVnum:	65224
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65215
+	HiddenRating:	50
+BREAK
+#65248
+Name:	An Alcove
+Desc:$
+   Recessed halogen corner lights cast a dim, soothing glow over this small
+alcove, which is barely large enough to hold a decking recliner and a small
+metal sidetable. A chrome dataport glints softly in the east wall. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	1100
+IO:	-1
+Bandwidth:	-1
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	82060006
+Address:	Allan Associates, Boren and Eighth Street, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door narrow sliding ne
+	Desc:$
+A narrow sliding door is there. 
+~
+	ToVnum:	65246
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	trapdoor
+	Desc:$
+A barely-visible trapdoor is set in the ceiling, above the table. 
+~
+	ToVnum:	65221
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65206
+	HiddenRating:	50
+BREAK
+#65249
+Name:	An Alcove
+Desc:$
+   Recessed halogen corner lights cast a dim, soothing glow over this small
+alcove, which is barely large enough to hold a decking recliner and a small
+metal sidetable. A chrome dataport glints softly in the east wall. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	1100
+IO:	-1
+Bandwidth:	-1
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	82060004
+Address:	Allan Associates, Boren and Eighth Street, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	Keywords:	door narrow sliding sw
+	Desc:$
+A narrow sliding door is there. 
+~
+	ToVnum:	65246
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65254
+Name:	An Unfinished Room
+Desc:$
+   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#65255
+Name:	An Unfinished Room
+Desc:$
+   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

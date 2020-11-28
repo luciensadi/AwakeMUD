@@ -1,0 +1,74 @@
+#29900
+Name:	Kenji's Workshop
+Desc:$
+   The first thing you feel when you step in here is hot.  The flames from a
+swordsmith's oven against the back wall give the room a dull red glow.  The
+walls are made of gray brick, and the floor is bare concrete.  A dirty looking
+glass counter is in front of the anvil, displaying dozens of weapons.  
+~
+Flags:	10000001100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	2463
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#29901
+Name:	Shiawese Matrix Systems, Seattle
+Desc:$
+   A large, open office, the walls are a light gray, and the carpet much
+darker.  Potted palm trees placed strategically against the wall do little to
+brighten things up.  Help desks line one side of the area, with the managers
+office in the far corner.  Opposite the entrance is a reception desk, with a
+set of double doors behind it. 
+~
+Flags:	100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northwest]
+	ToVnum:	29902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	6
+	Y:	5
+	Z:	3
+BREAK
+#29902
+Name:	Manager's Office
+Desc:$
+   This office is almost as bland as the rest of the building.  The same drab
+colour scheme, with a few certificates framed on the wall behind a tidy, black
+synthwood desk, with multiple matrix access points embedded into it.  A bonsai
+tree sits on top of an expensive looking silver filing cabinet in one corner.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	29901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

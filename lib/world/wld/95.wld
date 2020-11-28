@@ -1,0 +1,1557 @@
+#9500
+Name:	The Parking Lot
+Desc:$
+   This is the parking lot for the main offices of Shintaru Technology, a
+medium sized corp that produces everyday, common electronics. More of the
+parking is to the east and west, and if you go north, passing through shiny
+glass doors will gain you entry into the offices. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	9502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9501
+Name:	The Parking Lot
+Desc:$
+   This is a parking lot. Extremely exciting, if you're into shiny cars and
+dull asphalt. A few trees have been placed in random spots, a poor attempt to
+brighten things up.  The parking lot wanders off to the east, which just
+happens to be the only visible exit. 
+~
+Flags:	100000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9502
+Name:	The Parking Lot
+Desc:$
+   This is a parking lot. Extremely exciting, if you're into shiny cars and
+dull asphalt. A few trees have been placed in random spots, a poor attempt to
+brighten things up.  The parking lot wanders off to the west, which just
+happens to be the only visible exit. 
+~
+Flags:	100000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	9500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9503
+Name:	The Entrance of Shintaru Technology
+Desc:$
+   This is the entrance to Shintaru Technology. The decor is common office
+building items, plastic, clean, and darkly colored. People in crisp business
+suits wander around, trying to look important. Off to the east, there are
+benches and tables, probably a waiting area, to the west, a bored looking
+receptionist sits behind a huge desk, and just to the north, there are some
+stairs and an elevator. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	9508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9504
+Name:	Shintaru Technology
+Desc:$
+   You are standing around in the lobby of Shintaru Technology, along with
+several other people who look like they have no clue. In front of you, an
+elevator is set into the wall, and two sets of stairs are on either side of
+the elevator. A sign beside the doors to the elevator lists the floors in the
+office and what occupies them.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	9512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9505
+Name:	Shintaru Technology
+Desc:$
+   This area of the lobby is occupied by a huge desk covered with papers,
+phones, and all sorts of other junk. A reception sits in front of a vid-phone,
+talking to someone. She glances up at you as you approach, but quickly resumes
+her conversation with the vid-phone, completely ignoring you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	9503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9506
+Name:	Shintaru Technology
+Desc:$
+   This is a pretty barren section of the lobby. A painting has been placed on
+a wall, and a tree sits miserably in the corner, but that's all that's here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9507
+Name:	Shintaru Technology
+Desc:$
+   Benches and chairs line the walls in this part of the lobby, most occupied
+by bored looking business types. Large tables are spaced around, and although
+there's nothing on them, they sure do look nice. Abstract paintings are placed
+at intervals on the walls, an attempt at interesting decoration. There are
+more chairs and benches to the south, and the bathrooms are north.  To the
+west, there are a couple of set of stairs and an elevator. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9508
+Name:	Shintaru Technology
+Desc:$
+   Benches and chairs line the walls in this part of the lobby, most occupied
+by bored-looking business types. Large tables are spaced around, and although
+theres nothing on them, they sure do look nice. Abstract paintings are placed
+at intervals on the walls, an attempt at interesting decoration. There are
+more chairs and benches to the north, and the door to the building is off to
+the west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9509
+Name:	By The Restrooms
+Desc:$
+   A big painting has been placed against the wall here, a beautiful landscape
+portraying a waterfall, cascading down a mountain,  ending in a river that
+flows gently into the distance. On either side of the painting, signs sit,
+pointing out that the Men's Restroom is to the west, while the Women's
+Restroom is to the east. South should, in theory, take you back to the lobby.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9510
+Name:	A Restroom
+Desc:$
+   This is the Men's Restroom. It consists of a few sinks against one wall,
+mirrors above the sinks, shiny white tiling on the floor, and some stalls
+placed along another wall. A door to the east will take you out of here. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9511
+Name:	A Restroom
+Desc:$
+   This is the Women's Restroom. It consists of a few sinks against one wall,
+mirrors above the sinks, shiny white tiling on the floor, and some stalls
+placed along another wall. A door to the west will take you out of here. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	9509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9512
+Name:	The 2nd Floor
+Desc:$
+   The stairs come to a landing here, with a hallway leading south onto the
+second floor, and more stairs spiraling on up to the 3rd floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	9514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	9513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	9504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9513
+Name:	The Third Floor
+Desc:$
+   The stairs come to an end here at the third floor. This is where the higher
+ranking executives have their offices. The  hallway leading south is spotless,
+and lined with expensive paintings and other decorations. There are doors
+branching off on either side of the hallway, and you can see a larger door all
+the way at the southern end. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	9515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	9512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9514
+Name:	2nd Floor Hallway
+Desc:$
+   This is the second floor hallway. Bright lights beam down at you from the
+ceiling, making the tiling on the floor shine to an almost painful level. The
+walls are barren, and colored a dull white, making the whole hallway amazingly
+uninteresting. Doors are on either side of this part of the hall, and at the
+south end, you can see another door. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	9531
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9525
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9527
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9515
+Name:	3rd Floor Hallway
+Desc:$
+   Thick, dark red carpeting paves the hallway as it wanders along through the
+3rd floor. The bright, sterile lights on the ceiling beam brightly at you,
+trying to make you feel welcome, while the security camera in a corner glares
+at you, wondering if you're going to try anything. Two open doorways sit on
+either side of the hallway, and the hall continues to the north and south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	9522
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9516
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9521
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9516
+Name:	3rd Floor Hallway
+Desc:$
+   Thick, dark red carpeting paves the hallway as it wanders along through the
+3rd floor. The bright, sterile lights on the ceiling beam brightly at you,
+trying to make you feel welcome, while the security camera in a corner glares
+at you, wondering if you're going to try anything. Two open doorways sit on
+either side of the hallway, and the hall continues to the north and south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9517
+Name:	3rd Floor Hallway
+Desc:$
+   Thick, dark red carpeting paves the hallway as it wanders along through the
+3rd floor. The bright, sterile lights on the ceiling beam brightly at you,
+trying to make you feel welcome, while the security camera in a corner glares
+at you, wondering if you're going to try anything. Two open doorways sit on
+either side of the hallway, and the hall continues to the north and south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9516
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	9524
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9518
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9523
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9518
+Name:	End of the 3rd Floor Hall
+Desc:$
+   This is the end of the 3rd floor hall. A sturdy looking door stands before
+you to the south, with the words 'Jason Kingston' imprinted on it in bold
+black letters. Other than the door, theres really not much to see except for a
+couple of paintings on the east and west walls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door~
+	ToVnum:	9519
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	24
+	KeyVnum:	9504
+	LockRating:	12
+BREAK
+#9519
+Name:	Jason Kingston's Office
+Desc:$
+   This is the office of Jason Kingston, the current CEO of Shintaru
+Technology. It is a large, open room with plenty of decorations placed on the
+walls and tables, and several comfortable looking couches and chairs are
+spaced around the room. An arch to the east leads to what appears to be a
+conference room, and the door north takes you back into the 3rd floor hallway.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door~
+	ToVnum:	9518
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	24
+	KeyVnum:	9504
+	LockRating:	12
+[EXIT east]
+	ToVnum:	9520
+	Flags:	0
+	Material:	brick
+	Barrier:	2
+	KeyVnum:	0
+BREAK
+#9520
+Name:	A Conference Room
+Desc:$
+   This is a large conference room, dominated by a huge table with vid-phones
+and terminals set into its jet black surface. A large window takes up most of
+the southern wall, and several large paintings hang on the other 3 walls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	9519
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9521
+Name:	An Office
+Desc:$
+   This is the office of one of the higher level execs at  Shintaru Tech. It
+is fairly large, with a desk and a couple chairs placed around. A bookcase
+sits on one wall, and other walls are filled with various decorations. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9522
+Name:	An Office
+Desc:$
+   This is the office of one of the higher level execs at Shintaru Tech. It is
+fairly large, with a desk and a couple chairs placed around. A bookcase sits
+on one wall, and other walls are filled with various decorations. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	9515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9523
+Name:	An Office
+Desc:$
+   This is the office of one of the higher level execs at Shintaru Tech. It is
+fairly large, with a desk and a couple chairs placed around. A bookcase sits
+on one wall, and other walls are filled with various decorations. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9524
+Name:	An Office
+Desc:$
+   This is the office of one of the higher level execs at Shintaru Tech. It is
+fairly large, with a desk and a couple chairs placed around. A bookcase sits
+on one wall, and other walls are filled with various decorations. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	9517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9525
+Name:	2nd Floor Hallway
+Desc:$
+   This is the second floor hallway. Bright lights beam down at you from the
+ceiling, making the tiling on the floor shine to an almost painful level. The
+walls are barren, and colored a dull white, making the whole hallway amazingly
+uninteresting. The hall continues on to the south, where a door can be seen. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9526
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9526
+Name:	2nd Floor Hallway
+Desc:$
+   This is the second floor hallway. Bright lights beam down at you from the
+ceiling, making the tiling on the floor shine to an almost painful level. The
+walls are barren, and colored a dull white, making the whole hallway amazingly
+uninteresting. A door leads into a room to the east, and the hallway wanders
+back to the north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9525
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	9529
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9527
+Name:	Research Department
+Desc:$
+   This is the Research Department of Shintaru Technology. It consists of
+quite a few desks, tables, and computers, most in use by employees trying to
+find better ways to make their products.   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9528
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9528
+Name:	Research Department
+Desc:$
+   This is the Research Department of Shintaru Technology. It consists of
+quite a few desks, tables, and computers, most in use by employees trying to
+find better ways to make their products.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9527
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9529
+Name:	The Employee Lounge
+Desc:$
+   This is the southern end of the employee lounge. Several circular tables
+are spaced around, but none are in use. To the north, more tables and a
+vidscreen can be seen. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9530
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9526
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9530
+Name:	The Employee Lounge
+Desc:$
+   This is the northern end of the emplyee lounge. A couple tables are placed
+in the center of the room, and a large  vidscreen sits on the northern wall,
+flickering out vaguely interesting shows. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	9529
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9531
+Name:	Technical Support
+Desc:$
+   This is a small office that houses the few employees assigned to help out
+troubled customers. A few desks and chairs are placed around, the only
+furnishing in the room. The dull red carpet shows quite a few stains and scuff
+marks. The door west leads somewhere else, hopefully to someplace more
+interesting. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	9514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9532
+Name:	A Cave Entrance
+Desc:$
+   You are standing before the entrance to a large cave. Blue veins tear
+through the rock, flashing brilliantly as they transfer data. The entrance to
+the cave looms before you to the north, awaiting your entry. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9533
+Name:	A Large Chamber
+Desc:$
+   This is a large chamber inside the cave. The blue veins are more numerous
+here, and brighter. They wander through the rock of the cave walls, sending
+data blazing on its merry way. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9534
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9532
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9534
+Name:	A Large Chamber
+Desc:$
+   The black walls of the cave loom around you, shining faintly with energy,
+traced by the pulsing blue veins that wander throughout the whole cave.  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9535
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	9533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9535
+Name:	A Large Chamber
+Desc:$
+   This is a large chamber inside the cave. The blue veins are more numerous
+here, and brighter. They wander through the rock of the cave walls, sending
+data blazing on its merry way. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9538
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	9536
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9534
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9536
+Name:	A Smaller Chamber
+Desc:$
+   This chamber is smaller than most of the other in the cave, and is made of
+the same black rock, traced with the blue veins that flash around. The walls
+and floor are covered with runes and symbols, and small pieces of paper
+flutter around. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9537
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9535
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9537
+Name:	A Smaller Chamber
+Desc:$
+   This chamber is smaller than most of the other in the cave, and is made of
+the same black rock, traced with the blue veins that flash around. The walls
+and floor are covered with runes and symbols, and small pieces of paper
+flutter around. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	9536
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9538
+Name:	A Large Chamber
+Desc:$
+   The black walls of the cave loom around you, shining faintly with energy,
+traced by the pulsing blue veins that wander throughout the whole cave.  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	9535
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9539
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9539
+Name:	A Huge Chamber
+Desc:$
+   This is a huge chamber, easily dwarfing the other rooms you have come
+across so far. The jet black walls form the shape of an octagon, and the blue
+veins are almost blinding. Runes are carved into the rock all over the walls,
+and floor as well. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	9541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	9538
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	9540
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9540
+Name:	A Smaller Chamber
+Desc:$
+   This is one of the smaller chambers in the cave. The rock walls are traced
+with the blue veins, pusling slightly. Ornate runes are carved into the walls,
+floor, and ceiling. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	3
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	9539
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9541
+Name:	A Smaller Chamber
+Desc:$
+   This is one of the smaller chambers in the cave. The rock walls are traced
+with the blue veins, pusling slightly. Ornate runes are carved into the walls,
+floor, and ceiling. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	3
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	9539
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

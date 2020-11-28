@@ -1,0 +1,98 @@
+#29200
+Name:	Lost on the Ocean
+Desc:$
+   The deep blue of the ocean spans for miles around you, both air and sea
+devoid of life.  The wind of the Atlantic is vicious, and whips about you with
+no mercy.  To your distant North you can see the silouette of a high peak, a
+mountain. 
+~
+Flags:	0
+SecType:	Water (No Swim)
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#29201
+Name:	???
+Desc:$
+   Everythings black... but yet.. you can see. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	29202
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	29202
+	LockRating:	10
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#29202
+Name:	???
+Desc:$
+   A long white hallway, lacking mirrors or any other function viewing
+facility.  At each end of the hallway is a doorway. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	29203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	29201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#29203
+Name:	???
+Desc:$
+   You come to find yourself in a white room, with a table in the center.  To
+your right is a glowing pad building into the wall, another is to your left
+but it is behind glass. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	29202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

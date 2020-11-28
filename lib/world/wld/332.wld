@@ -1,0 +1,188 @@
+#33200
+Name:	FREE ROOM
+Desc:$
+   A thin corridor leading towards a t-junction. The white paint on the walls
+is sickly and crackling with age. Water stains mar the skirting boards and the
+faint scuttling of rats can be heard from above. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	2
+Z:	4.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	33201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#33201
+Name:	A carpark
+Desc:$
+   This massive expanse of bitumen looks to be quite old. Faded white lines
+mark spaces for cars and a few thinner spaces for motorbikes. A bright blue
+neon sign hangs on a building leading to this carpark that reads 'Pilgrims'. 
+~
+Flags:	100000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	33202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	33200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#33202
+Name:	The entrance to Pilgrims
+Desc:$
+   The soft wood finish of the double swinging doors makes you feel as if you
+should be wearing a six-gun somewhere on you, and if you are your hand should
+be hovering over it and ready to draw.  Inside you can hear erratic piano
+music, accompanied by a slow strumming guitar.  
+~
+Flags:	10000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	4
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	33203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	33201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#33203
+Name:	The inside of Pilgrims
+Desc:$
+   Soft country music plays from one side of the room where a small stage is.
+An old Ork strums his guitar gently and croons out a song about how his lover
+ran away with his best friend, his dog died and how broken his heart is. He's
+accompanied by an Elf slumped at a piano, tapping away without much enthusiasm
+and a Dwarf sawing at a violin. Two 8-ball tables sit in wait for someone to
+use them. The felt is worn is some places, but not enough to see through. And
+the paint is worn away so much that the lines have been re-drawn with chalk. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	33204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	33202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	picture
+	Desc:$
+Here on the wall is a golden-framed picture of Sam Elliot. His large bushy
+moustache hangs over his mouth like he's plotting something mischievous. A
+large ten-gallon cowboy hat rests on his head proudly. 
+~
+BREAK
+#33204
+Name:	The bar
+Desc:$
+   A long wooden bar stands here with a single man behind it. Lines of dusty
+bottles of various whiskeys and a few bottles of wine are stacked neatly on
+shelves above the bar. The place seems very old fashioned, and the chairs
+creak when people sit on them. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	33205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	33203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

@@ -1,0 +1,1064 @@
+#4700
+Name:	Entrance to the Reaper
+Desc:$
+   You are standing before a large bar. Loud music and flashing lights can be
+seen and heard through the open doorway. All types of people push past you,
+ranging from squatters to corporate types. You can enter the bar to the north.
+~
+Flags:	100
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4701
+Name:	Entrance to the Reaper
+Desc:$
+   You are standing just inside the door to the Reaper, one of the many bars
+in Seattle that cater to Shadowrunners. Music and flashing lights crash
+throughout the room, mingling with body heat and the strong smell of alcohol.
+Off to the west, you can see a stage and a mosh pit through the crowd. To your
+north is a long bar. The exit is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4700
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4702
+Name:	The Bar
+Desc:$
+   You are standing by the bar. The bar is highly polished and is made from
+what appears to be wood. Rows of bottles line a mirrored wall behind the  bar,
+and you notice a sign proudly displaying an advertisement of the local
+specialty. The bar is mostly barren, most of the people prefer to stand or sit
+at tables. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4703
+Name:	By a Table
+Desc:$
+   You stand by a table in the bar. A group of orks sitting at the table looks
+at you curiously, then shrugs and begins drinking again. The air is hot and
+stuffy from all the body heat and lighting. To your west, a number of people
+fling themselves into what seems to be a large pit full of moving bodies. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4704
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4704
+Name:	By The Pit
+Desc:$
+   You are standing just west of the mosh pit. People rush by you, flinging
+themselves into the mosh pit at high rates of speed. Others sit at tables or
+stand, drinking themselves into unconsciousness. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	4705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4705
+Name:	The Mosh Pit
+Desc:$
+   You stand in a mosh pit full of violently thrashing people, some of them
+actively beating each other up. The stage is to the west. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4706
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	4704
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4706
+Name:	The Mosh Pit
+Desc:$
+   You are standing in the mosh pit, risking severe bodily harm. Bodies mill
+and thrash around you, beating each others face in. Occasionally, someone goes
+down, and doesnt get back up. The security guard standing by the stage takes
+note of the casualties, then laughs. You should probably be careful in here,
+as you may not even be safe from your own friends, if the music gets to them.
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	4707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4707
+Name:	By The Stage
+Desc:$
+   You are standing on a small area, in between the stage and the mosh pit. A
+fence set with a gate blocks your way west, and a huge security guard blocks
+the way to the gate. The music is deafening here, standing beside the huge
+speakers. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	gate~
+	ToVnum:	4708
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	4701
+	LockRating:	4
+[EXIT down]
+	ToVnum:	4706
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4708
+Name:	The Stage
+Desc:$
+   You are standing on the stage, greatly annoying the band members. Sound
+blasts from the huge speakers, nearly deafening you. Smoke drifts lazily
+around, and sparks fly at you from various special effects. A tall fence
+surrounds the stage, the only visible exit being through a gate in the  fence.
+You notice a large scorch mark on the floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	gate~
+	ToVnum:	4707
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	4701
+	LockRating:	4
+[EXIT west]
+	Keywords:	door~
+	ToVnum:	4719
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4709
+Name:	Along The Bar
+Desc:$
+    You are standing at the northern end of the bar, beside a steel door. Like
+the rest of the bar, the air is hot and stuffy. Occasionally you notice people
+glance at you carefully and enter the door, shutting it behind them. Drunks
+swarm around you, asking for beer and pledging their everlasting  loyalty, if
+only you buy them a beer.. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	steel door~
+	ToVnum:	4710
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	5
+[EXIT south]
+	ToVnum:	4702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4710
+Name:	A Back Room
+Desc:$
+   You are standing in a back room of the Reaper. The room is bare and devoid
+of any decoration, except for a large circular table sitting in the middle of
+the room, and a skylight. This room is probably used to hold meetings between
+runners and their contacts. Perhaps you should leave before someone decides to
+shoot you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	steel door~
+	ToVnum:	4709
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	5
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4711
+Name:	Among Some Tables
+Desc:$
+   Most of the tables in this portion of the bar are occupied; the ones that
+aren't are covered with trash and the occasional unconscious patron. A long
+bar is to your east, and a large booth is to your north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4718
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4712
+Name:	By Some Tables
+Desc:$
+   You are standing among a group of tables. All of them are occupied, mostly
+by orks and trolls. They glare at you as you pass and mumble to each other. A
+small booth is north of you, and you see some people dancing to your west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4704
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4713
+Name:	The Dance Floor
+Desc:$
+   You are standing in a cleared out area of the bar, just north of the mosh
+pit. A few people are dancing here, but most are just sitting around drinking,
+trying to get as close to the stage as they can. Small lights and a strobe
+light in the ceiling bathe the area in a flashing, multicolored glow. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4714
+Name:	The Dance Floor
+Desc:$
+   You are standing in a cleared out area of the bar. Small lights are placed
+in the floor, bathing the area in a multicolored glow. A strobe light in the
+ceiling adds to the effect. Most people in the area arent dancing, the
+majority seems to be here just to get closer to the stage. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4715
+Name:	The Corner Of The Bar
+Desc:$
+   You are standing in the back corner of the bar. A lone table is  placed
+here, occupied by a group of people who glance at you sharply as you approach.
+Other than the table and the people, there not much back here of interest,
+except for a large painting on the northern wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4716
+Name:	The Back Wall of The Bar
+Desc:$
+   You are standing at the back of the bar, beside a small booth. A lone
+table is set up here, with four people seated at it, playing cards and craps.
+Others sit around idly, waiting for an opening at the table. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4717
+Name:	A Booth
+Desc:$
+   You have entered a small, private booth. Its rather dull and uninteresting.
+However, you sense that here it would be hard for someone to disturb you. A
+light hangs from the ceiling, draping the table and benches in a soft  yellow
+light. 
+~
+Flags:	1000101100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4718
+Name:	A Booth
+Desc:$
+   You have entered a large booth. A light from the ceiling illuminates a
+table and benches. The noise from the band and crowd seems to have lessened
+considerably somehow. It is actually kind of relaxing in this small section of
+peace in the bar. 
+~
+Flags:	101100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4719
+Name:	Backstage
+Desc:$
+   This is a large room behind the stage, where the band members meet before
+they go out on stage. Spare and broken microphones, guitars, speakers,  and
+numerous other musical devices crowd the room. A small door leads back east
+onto the stage. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door~
+	ToVnum:	4708
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4720
+Name:	A Stairwell
+Desc:$
+   You are standing in a stairwell. A spiral stairway leads upwards onto the
+second floor of the Reaper, which houses a mysterious person known as The
+Frog. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	door black~
+	ToVnum:	4710
+	Flags:	1
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	0
+	LockRating:	12
+[EXIT up]
+	ToVnum:	4721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4721
+Name:	A Hallway
+Desc:$
+   You are standing at the top of the stairwell, in a small hallway. Thick
+black carpeting covers the floor, and pictures and tapestries are placed on
+the walls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	4722
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	4720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4722
+Name:	A Hallway
+Desc:$
+   You are standing in the upper floor of the Reaper, in a hallway. Thick
+black carpeting covers the floor, and tapestries are placed along the walls.
+The hallway leads northeast and south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	4721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4723
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4723
+Name:	A Hallway
+Desc:$
+   You are standing in a hallway on the upper floor of the Reaper. Thick black
+carpeting covers the floor, and ornate tapestries are placed on the wall. A
+set of large double doors lead south, and the hallway continues to the north.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4722
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	double door~
+	ToVnum:	4724
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	4707
+	LockRating:	15
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4724
+Name:	Mac MacLaury's Office
+Desc:$
+   This is Mac MacLaury's office.  Plush black carpeting covers the floor, and
+ornate pictures and tapestries cover the walls. Couches and chairs are placed
+around the room, and a huge marble desk sits by the southern  wall. Behind the
+desk, along the wall, are screens, showing pictures of the bar downstairs, and
+some other places you dont recognize. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door double~
+	ToVnum:	4723
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	4707
+	LockRating:	15
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4725
+Name:	An unfinished room
+Desc:$
+   You are in an unfinished room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4726
+Name:	An unfinished room
+Desc:$
+   You are in an unfinished room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4723
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4727
+Name:	An unfinished room
+Desc:$
+   You are in an unfinished room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4723
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

@@ -1,0 +1,747 @@
+#5900
+Name:	Parking Lot
+Desc:$
+   This mid-sized asphalt field contains about 30 parking spaces, ech one
+delineated in bright yellow paint and headed up by a parking block shared
+between Buck's Pizza and the Top Shelf Bookstore. A small, brightly-decorated
+building is to the north, Ridgeway Street is to the south, and a small doorway
+west leads to a smoke-filled, hazy room. 
+~
+Flags:	110000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door double wooden
+	Desc:$
+wooden double doors 
+~
+	ToVnum:	5901
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	
+	ToVnum:	32667
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	doorway
+	ToVnum:	60701
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	brick passage door secret
+	ToVnum:	60703
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	60700
+	LockRating:	10
+	HiddenRating:	12
+BREAK
+#5901
+Name:	Entrance to Buck's Pizza
+Desc:$
+   This Wild West-themed building seems a bit out of place in downtown
+Seattle. A life-sized wooden Indian, complete with peace pipe, stands next to
+the door. Cowboy hats, cattle horns, genuine leather saddles and all sorts of
+pictures from old two-dimensional Western movies adorn the walls and shelves,
+and horseshoes have been painted all over the tile floor. The smells of pizza
+and beer drift in from the north, and the parking lot is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	wooden double door
+	Desc:$
+Wooden Double doors 
+~
+	ToVnum:	5900
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#5902
+Name:	Main Counter
+Desc:$
+   A long synthwood counter divides the kitchen from the rest of the
+restaurant. Behind the counter hangs a large menu, surrounded by shotguns,
+branding irons, horseshoes and other Wild West-type items. The bathrooms are
+to the northeast and northwest, the seating area is to the east, the arcade is
+to the west, and the entrance is to the south. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door kitchen
+	Desc:$
+A door leads to the kitchen. 
+~
+	ToVnum:	5905
+	Flags:	1
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	5900
+	LockRating:	5
+[EXIT northeast]
+	Keywords:	door northeast
+	Desc:$
+A door leads to the men's room. 
+~
+	ToVnum:	5903
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+seating 
+~
+	ToVnum:	5906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Arcade 
+~
+	ToVnum:	5907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door northwest nw
+	Desc:$
+A door leads to the ladies' room. 
+~
+	ToVnum:	5904
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5903
+Name:	Men's Room
+Desc:$
+   This clean, bright rooms smells faintly of bleach. The toilet stall and two
+urinals that stand against the north wall are immaculately clean, as are the
+sinks that line the south wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	Keywords:	door
+	Desc:$
+A door leads back to the restaurant. 
+~
+	ToVnum:	5902
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5904
+Name:	Womens restroom
+Desc:$
+   This clean, brightly-lit restroom smells faintly of strawberry-scented air
+freshener. The toilets in the three stalls that line the north wall are
+pristine, as is the row of porcelain sinks against the south wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door
+	Desc:$
+A door leads back to the restaurant. 
+~
+	ToVnum:	5902
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5905
+Name:	Kitchen
+Desc:$
+   A typical large restaurant kitchen. Several steel pizza ovens line the
+north wall, and an array of refrigerators and pantries line the east wall. The
+middle of the room is taken up by an enormous counter, divided into stations
+where workers roll dough, add toppings, then slice finished pizzas as they
+come out of the oven. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	kitchen door south
+	Desc:$
+A door leads back to the restaurant. 
+~
+	ToVnum:	5902
+	Flags:	1
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	5900
+	LockRating:	5
+BREAK
+#5906
+Name:	Seating
+Desc:$
+   Here is more of the same decor, Wooden tables and chairs litter the middle
+of the floor, while several leather cushioned booths line the outer walls.
+Lots of woodwork and rope designs and pictures and cowboy stuff. People wander
+around here talking and jabbering and genuinely having a good time. Over in
+the corner a tri-d set is alive with images of some western movie or perhaps
+the game. Occasionally some indistinct noise catches your ear from a back
+booth, probably a kid or somethin. All in all, it's a very relaxing
+atmosphere. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Desc:$
+Main counter 
+~
+	ToVnum:	5902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5907
+Name:	Arcade
+Desc:$
+   This arcade's filled with classic, two-dimensional standup games ranging
+from pinball machines to Pac-Man, all of them modified to accept nuyen coins.
+The age of the games doesn't seem to faze the children and adults alike who've
+gathered in this bright, noisy room though - everyone seems to be having a
+great time. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+main counter 
+~
+	ToVnum:	5902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5910
+Name:	Parking Lot of Denny's
+Desc:$
+   Whoopie, another parking lot...several cars are parked in random positions
+about the field of assphault. Streetlights stand tall and silvery, the
+pavement is black with white demarcation lines, and to the west is a building
+with a huge assed Denny's sign. 
+~
+Flags:	110000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	Front door
+	Desc:$
+Dennys 
+~
+	ToVnum:	5911
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5911
+Name:	Vashon Island Boutique
+Desc:$
+   This brightly lit clothing boutique is popular with both executives and the
+up and coming alike. The high prices of Vashon Island  clothing is more than
+offset by both the fashion statement you'll make and the bullets you will
+reflect. The white marble floor is spotless and the marble runs partly up the
+wall, changing to slick wallpaper. Racks of clothing are interspersed in such
+a way that  movement through the shop is difficult. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	6
+X:	40
+Y:	20
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	32667
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5912
+Name:	a Zoe Boutique Store
+Desc:$
+   Nestled in the main commercial district of Downtown is this Zoe Boutique
+store. Low tables run up the center of the store, a variety of shirts and
+sweaters neatly folded upon them. Along each side of the wall is the larger
+clothes, slacks, skirts and dresses. The east side is dominated by male
+clothing while the west is all female. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	6
+X:	30
+Y:	15
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	32659
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5913
+Name:	Lobby of The Marksman Indoor Firing Range
+Desc:$
+   The Marksman Indoor Firing Range is a Firing Range and school that caters
+more towards the average wage slave than a seasoned 'Runner. It offers both a
+fully featured firing range, with both stationary and moving targets, and
+guided lessons, so Mr. Joe Average can learn to fire his Walther Palm Pistol a
+little straighter. Weapons are available for rent for those who don't actually
+own a firearm but you wish to relieve some stress after a hard day at the
+office. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	2
+X:	5
+Y:	8
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5914
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	32682
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5914
+Name:	The Marksman Indoor Firing Range
+Desc:$
+   Gunfire echoes loudly through this open area, drowning out most other
+sounds. The firing range stretches almost 100m to the west numerous paper
+targets can be seen at the end. 10 Small booths for stationary targets are
+closest to the door while 3 larger booths for moving targets are at the far
+end. A notice board on the opposite wall announces numerous events, classes
+and contests, along with a white board to assist with teaching. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	0
+X:	20
+Y:	100
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	5913
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5950
+Name:	Sub-machinegun counter
+Desc:$
+   This is the place to come for all your submachinegun needs. A counter,
+covered in inch thick bullet proof plexi-glass sits here with all sorts of
+weapons displayed with price tags. standing behind the counter is a nice
+looking young man, fiddling with a small automatic weapon. Behind him are
+several more racks with yet more of the same. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5951
+Name:	Rifles counter
+Desc:$
+   The rifles counter. Everything an aspiring sniper needs is here displayed
+in a bulletproof shelf, on racks, or laying against the wall behind the
+counter. Standing here is a well dressed looking man, in his hands is a
+Walther 2100, the bolt thrown open, he is examining the rifle. Hanging on a
+hook behind him is the famed Krieg 900 warrior...dontcha wish you could afford
+one? 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5952
+Name:	Shotgun counter
+Desc:$
+   Shotguns Shotguns Shotguns. Double barrel, single barrel, assault, defense,
+riot. All sorts of man- and troll-stopping power sits here just waiting for
+idle hands and loose credsticks. Everything from the famed Franchi SPAZ 400 to
+some piddly little two shot jobbers with no factory name. Prices are listed
+next to each item and a salesman stands behind the counter to offer both
+advice and to handle your purchases. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5953
+Name:	Pistol counter
+Desc:$
+   Pistols galore. What more can be said? We got Adders, Rugers, even cheapie
+streetline specials. All the wares are ranged in a rack inside a plexi-glass
+encased display shelf with prices listed next to the item. Behind the
+wandering arround near the shelf is a salesman, just waiting for you to say
+something so he can start his chant about shat is better for less nuyen. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5954
+Name:	Assault rifles counter
+Desc:$
+   Assault rifles everywhere. Need to take down an entire mob of people? Got a
+Swat team in your neighborhood that you dont think belongs there? Or are you
+just one of those guys that likes to hunt deer, and doesn't care how much meat
+you waste? Well this is the department for you. Everything your heart could
+desire is displayed in a rack behind the counter. Guarded by the salesman and
+locked down tight with Price tags sitting next to each item. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5955
+Name:	Ammunition
+Desc:$
+   Ok. so you've found yourself a weapon to your liking, perhaps an accessory
+to go with it...but you want to fire it right? Well that takes
+ammunition...and we have it all. Clips and loose rounds of every shape, size,
+calibre, and composition are available here arranged within yet another sturdy
+plexi-glass shelf warder by the prefunctory salesman. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5956
+Name:	accessories
+Desc:$
+   Heh. Never thought you'd see so many miscelaneous gun parts in your life
+did ya? Smartgun links, Laser aming modules, scopes, silencers, even holsters
+are arranged here before your very eyes. Prices are listed on a menu like
+screen behind the salesman who seems to be interested in a new piece he's just
+received...could that be a smartun link 2? 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5957
+Name:	Bladed weapons
+Desc:$
+   As you approach this counter your eyes are dazzled by all the different
+swords, knives, and other random objects designed to cut, slash, and stab.
+Everything is here from your basic survival knife, to monofillament katnas, to
+polearms that look like they belong in the middle ages. All the items are
+arranged on a rack and locked down to prevent theft. Wandering near the
+counter is yet another salesman waiting for you to make a selection. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

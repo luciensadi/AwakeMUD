@@ -1,0 +1,325 @@
+#10200
+Name:	Senator's Holding Pen
+Desc:$
+   This is the Initiation Quest Zone by Stealth. Here are the instructions
+(proposed, do what you want really but this kinda follows the real game
+mechanics): You will need to medit the various mobs. You need to edit their
+stats to match the stats of the player's astral reflection or to a level equal
+to the level of initiation+1 (ex: level 1 initiations use mobs with stats of
+6, level 2 initiations use stats of 7, etc). They are already set to be
+sentinels, so they will not wander once loaded. Load the Dweller to room
+10202, 'You' to room 10203 (or to the holding pen at room 10200 (here), if you
+want the mob to make an appearance). The 4 elemental mobs should be loaded to
+room 10205 and then can be switched into and moved to there respective rooms
+as needed.
+   The rules are pretty simple. Teleport the player's astral reflection to
+10201. Once he gets to the dweller, ask if he is ready (using zecho, or by
+standing there invisible). If so, teleport him to 10203 and have him fight his
+double (the 'You' mob). Once done there, teleport him to 10204 and ask him to
+choose a plane to start his quest. Teleport him to the plane and then bring in
+the appropriate mob. Once he defeats that mob, ask and teleport him to his
+next choice. When all 4 planes are conquered, teleport him to 10210 and
+'INITIATE' to the correct level.
+   Astral players on the Metaplanes can be wounded and die. Monitor the
+player's astral form and 'set' his player to the appropriate damage levels. If
+his persona gets KO'd, force it to return and set the player Ment to 0. If the
+persona is killed, kill the player as well. He will be able to start another
+quest after 1 MUD hour.
+   If the player returns voluntarily (ie attempting to cheat death), allow him
+to but he will be penalized by not being allowed to initiate for 28 MUD days
+(post a notice  with the date after which he can initiate again to the quest
+board).
+   That's about it, hope this is helpful. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	10203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10201
+Name:	Speeding along the Ether
+Desc:$
+   You are used to the astral plane and its metaphors and symbolism, where you
+move as fast as thought. But now, you travel as if at speeds unimagined
+through the ether. Other worlds fly by as you accelerate from your home plane.
+Worlds unrecognizable, with being new to your mind. They are there but for a
+moment's time and then gone as you continue to rush towards your destination.
+You know you are traveling to a place outside time and space, above thought
+and desire, beyond comprehension... 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+A Brilliant Light 
+~
+	ToVnum:	10202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10202
+Name:	The Threshold
+Desc:$
+   Just as your feeble intellect begins to attempt to understand all that you
+have seen, you come to an abrupt halt. You hang in a void. You are momentarily
+disoriented and thoughless as you hover in the nothing of it. Then you notice
+small stars in the distance. You see your own tiny silvery thread of life
+stretched back to one of these stars. Suddenly you realize these are not
+stars, but planes of existance. Each another reality to be explored and
+experienced. But as soon as this realization comes to you, you note a dark
+entity coalesce before you. 
+~
+Flags:	10010000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10203
+Name:	A Hugh Mirror Hangs in the Void
+Desc:$
+   You materialize, hanging once again in a void. This time, no stars or
+constellations mark you position. This is emptiness made real. You feel as
+insignificant as a bacilli. Momentarily, the shape of space begins to fold in
+on itself and coagulate. A form begins to manifest. Before you is a gigantic
+mirror. Like the Dweller before, it seems to fill your view, until you
+eventually realize, it does not just exist before you but all around you. You
+are encapsulated within a reflective sphere. You peer into it and around it
+but only your own countenance stares back at you. You feel an eerie sense of
+malevolent intelligent in these images, as though they stare back at you, know
+you, plotting your demise, dissecting your very soul! 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10204
+Name:	A Barren Plane
+Desc:$
+   The mirrored sphere shatters into a million reflective shards, each
+spinning off into the distance carrying an image of you. You shield your eyes
+from the needles of glass. Lowering your hand, you stand upon a flat
+featureless plain, stretching unremarkably to the limits of your perception.
+The ground beneath your feet feels strange and spongy. Examining it, you
+realize it is more like flesh than earth, yielding and warm to your touch. You
+notice movement in the sky above you. Spinning chaotically in contention with
+one another are four spheres. A searing ball of flame, a hugh metallic meteor,
+an undulating glob of liquid and a amorpheous mass of clouds. They fly and
+dodge about one another, each seeking some dominant position, constantly in
+motion. A voice whispers to you, as if from afar, "^rThis is the plane of the
+Material, for whence all comes. Above you war the four elemental planes of
+your existance: Fire, Earth, Water and Air. You must prove your worth by
+conquering the challenges of each. A true mage controls these forces and to
+pass your quest, you must do so. This is the place of Choosing, from here you
+shall never return once you once you have chosen your path. Name the first
+step on your journey and look not back!^N" 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10205
+Name:	Elemental Holding Pen
+Desc:$
+   This room is used by the Quest senator to load and hold the mobs used for
+the 4 different elemental planes. Load the mob to this room, making sure they
+are 'sentinel' so they do not move into a zone unless under your control.
+There are four exits, each leading to a different elemental plane, so you can
+bring the mob into the appropriate room with the Initiate when you are ready.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	10206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10206
+Name:	A Swirling Conflagration
+Desc:$
+   ^rSearing heat blasts you from every direction! You hang in the midest of a
+chaotic, everchanging world of flame. Your very lungs scream as you attempt to
+breath the noxious burning fumes that seem to be the very substance of this
+place. There is no solid mass to call earth here, just an all consuming
+conflagration, as if you hung in the middle of the Sun. You do notice what
+seems to be movement within this sea of fire. You begin to see balls of flame
+and small lizard-like animals wreathed in glowing plasma, darting about. Some
+have turned there attention to you.^N 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10207
+Name:	A Deep Green Sea
+Desc:$
+   ^GYou float within a deep green mass of water, reminding of you of the times
+you went diving in the Seattle Bay. Strangely, your lungs fill with the fuild
+around you yet do not cry out of air. You feel as comfortable as if you were
+back in the womb before your birth. You notice an abundance of life swimming
+here, some you recognize, others are strange yet still beautiful. As you
+remain mesmerized by the teeming world before you, you are abruptly brought
+back to the reality of where you are. You float, suddenly aghast, as you watch
+larger predatory creature ruthlessly devour their smaller cousins. You also
+begin notice strange eddies in the calm waters, moving purposely. These eddies
+begin to take vaguely humaniod shape, still fluid and changing, yet
+coagulating into gigantic entities filled will malevolent intellect. Some turn
+their attention to you.^N 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10208
+Name:	A Clear Blue Sky
+Desc:$
+   ^CYou hover within a clear blue sky. Looking, to what you believe would be
+down, you see nothing. There is no land upon which to descend and rest. This
+is a place of ether, of atmosphere alone. You begin to notice that the sky is
+not as empty and clear as you first thought. Lazy clouds of purest white float
+within it. Though you note that they seem to move not at random, but almost
+with a purpose and a defined destination. Suddenly, a wind whips you, chilling
+you to your very soul. ^cThe air becomes rough and seems to almost flay the skin
+from your bones. The once welcoming clouds begin to take on a darker shade and
+winds howl in your ears. Soon, you are in the midest of a swirling mass of
+air, the likes of which, you have never known! You notice shapes, horrifying
+shades of destruction, within the dark, lightning shot clouds. ^LYou hang now,
+suspended, within the very eye of a huricane. The shapes begins to dart out of
+the tight moving circle, turning their attention to you!^N 
+~
+Flags:	10000000000000000000000000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10209
+Name:	A Metallic Meteor
+Desc:$
+   ^LYou find yourself standing on a rough plain of igneous rock, huge shining
+metal crystals jut up through the stone, towering above you. The ground shakes
+and rumbles as geysers of molten rock erupt around you, showering the area
+with ash and searing stone fragments. The very ground convulses and
+convolutes, as if engaged in some titanic struggle with itself. The earth
+directly before you suddenly cracks and splits, dropping off into nothingness,
+leaving a gaping chasm just inches from your feet. Within this new gulf you
+see movement. A gigantic being of stone and rock climbs up from this abyss,
+towards you.^N 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#10210
+Name:	A Barren Plane
+Desc:$
+   You stand upon a flat featureless plain, stretching unremarkably to the
+limits of your perception. The ground beneath your feet feels strange and
+spongy. Examining it, you realize it is more like flesh than earth, yielding
+and warm to your touch. You notice movement in the sky above you. Orbiting one
+another in an orderly fashion are four spheres. A searing ball of flame, a
+hugh metallic meteor, an undulating glob of liquid and a amorpheous mass of
+clouds. These four elements rotate in perfect harmony with one another,
+encircling you, as if you are their Sun, their center. A voice whispers to
+you, as if from afar, "This is the plane of the Material, for whence all
+comes. Above you orbit the four elemental planes of your existance: Fire,
+Earth, Water and Air. You have tamed these planes and made their power yours.
+You control them to do your bidding and fulfill your desires. You have
+accomplished your quest and may now enter the Citadel to claim your prize." 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

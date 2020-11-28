@@ -1,0 +1,2586 @@
+#2900
+Name:	A Shady Corner
+Desc:$
+   You stand at the corner of the back alley, just before a squat brick
+building that looks as if it has not been acknowledged in decades. Cracked
+pavement cruches under your feet, and a neon sign attempts to blink out a
+phrase, but seems to be unable to muster the strength.  A filthy set of stairs
+leads to a peeling oak door just north of you. 
+~
+Flags:	10000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	oak door
+	Desc:$
+The paint has peeled away, revealing slowly decaying oak wood beneath.
+~
+	ToVnum:	2901
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign neon~~
+	Desc:$
+The sign simply doesn't work correctly anymore, but you can just make out
+the following letters:
+                MED C L  PR CT CE
+~
+BREAK
+#2901
+Name:	Front Foyer
+Desc:$
+   As you step inside the brick menace, you find yourself at the head of a
+narrow hallway, stretching back out of view into the gloom.  Where you stand,
+the corridor opens up into something of a foyer, with odd images on the walls
+and layers of dust at your feet.  The Hallway extends off to the west of you,
+and the door out is behind you to the south. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	oak door
+	Desc:$
+The safety of the outside is past the oak door to the south.
+~
+	ToVnum:	2900
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The hallway goes off into darkness to the west.
+~
+	ToVnum:	2902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	wall walls images~~
+	Desc:$
+The images are the "flash prints" of posters or paintings that once hung
+on these walls, where the paint behind them is left brighter than the
+surroundings.  They tell you nothing of what was there, though...
+~
+BREAK
+#2902
+Name:	A Dusty Corridor
+Desc:$
+   The corridor extends east to west, with dust gathered at the floorboards
+thick enough to cover your feet.  What was once a glass-panelled door, now
+simply a piece of plywood nailed to a door frame, is set in to the north wall.
+Sounds of scurrying rodents can be heard in the walls, ceiling and floor. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+This excuse for a door looks as if it can be moved, given the effort.
+~
+	ToVnum:	2903
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+The corridor ends at the foyer to the east.
+~
+	ToVnum:	2901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+As the light gets dimmer, you can see the corridor go on further west.
+~
+	ToVnum:	2904
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2903
+Name:	A Ransacked Office
+Desc:$
+   This simple box-like room was apparently an office used for addressing any
+incoming persons who had business with the other departments.  The remains of
+a desk are in the center, seemingly used as a good spot for a campfire, as
+only a few scraps of wood and charcoal remain.  A slightly blackened notice
+hangs on the wall over the broken radiator. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+The corridor is directly south of this office.
+~
+	ToVnum:	2902
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	notice wall~~
+	Desc:$
+The notice reads, in faded print:
+    Please announce any and all business with the
+    receptionist, and sign in all patients before
+    proceeding to the waiting room.
+                              Thank You.
+~
+BREAK
+#2904
+Name:	Dusty Corridor
+Desc:$
+   The hallway continues, the natural light source getting dimmer as you move
+along.  The wallpaper hangs from the walls in long strips, and bare wiring
+dangles out of broken outlets at random intervals.  Another patched-up door is
+found on the north wall, this one looking somewhat more sturdy. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+Unlike the last door, this one looks to have a working knob.
+~
+	ToVnum:	2905
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2901
+	LockRating:	7
+[EXIT east]
+	Desc:$
+The light grows as you near the end of the hallway to the east.
+~
+	ToVnum:	2902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+To the west, the light is nearly gone, and the hall is lost in darkness.
+~
+	ToVnum:	2906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2905
+Name:	Security Offices
+Desc:$
+   In order to keep the right clientelle safe, as well as keeping the wrong
+type out of the facility, this room serves as the operational base for the
+clinic's guards.  Banks of monitors and access panels line the walls, each
+showing a different view of a different area of the building.  A printer in
+the far corner continually spools out data about the current occupants,
+including a little information about yourself.  Another room of similar
+dimensions to this one follows to the north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Simple furnishings can be seen in the room to the north.
+~
+	ToVnum:	2909
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+The dusty corridor lies back to the south.
+~
+	ToVnum:	2904
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2901
+	LockRating:	7
+BREAK
+#2906
+Name:	Turn in the Corridor
+Desc:$
+   As the last of the light fades, the corridor takes a sharp turn north.  You
+find yourself having to duck slightly as you pass under a bare light socket
+that has been torn from the ceiling. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+It is too dark to distinguish what lays to the north.
+~
+	ToVnum:	2907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+The light grows again to the east.
+~
+	ToVnum:	2904
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	light socket ceiling~~
+	Desc:$
+Pulled from its mount in the ceiling, the lowly piece of wiring has not
+actually had a bulb in it for easily ten years.
+~
+BREAK
+#2907
+Name:	End of the Corridor
+Desc:$
+   After enough dust and soot to make your eyes water and lungs burn, you
+reach what appears to be the end of the hallway.  A defunct elevator has been
+covered over with brick, but a small stairwell can be found through the
+doorway to the west.  A small shaft of light peers down from a crack in the
+north wall, apparently direct from the outside. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+The bend in the corridor is back southwards.
+~
+	ToVnum:	2906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The doorway to the stairwell is intact, but it appears as if the door itself
+has been removed by the hinges.
+~
+	ToVnum:	2908
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	crack north wall light~~
+	Desc:$
+The north wall looks as if it is fighting battles with time and gravity,
+and losing.
+~
+BREAK
+#2908
+Name:	Base of the Stairwell
+Desc:$
+   You stand at the landing of a simple set of concrete stairs, extending
+upwards to the second floor of this building.  A torn poster on the wall hangs
+askew, and the banister that once accompanied the steps has since been
+stripped and probably broken up to use as clubs.  A thin, grayish light beams
+down from the doorway on the second floor. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The hallway on the first floor is beyond the open doorway to the east.
+~
+	ToVnum:	2907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Desc:$
+The stairs turn halfway up, and end at the second floor landing.
+~
+	ToVnum:	2910
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2909
+Name:	Security Backroom
+Desc:$
+   You have stepped into the personal quarters of the strongarms who watch
+over this establishment.  The spartan surroundings leave nothing to the
+imagination - an unmade bed in the corner, a gun-rack mounted over the
+headboard, a nightstand with a few Ares catalogues scattered across them.
+Obviously personal time is not much of a festival with these brutes. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+The rows of monitors cast a greenish glow from the south.
+~
+	ToVnum:	2905
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2910
+Name:	Top of the Stairs
+Desc:$
+   You reach the landing on the second floor, and for some inexplicable
+reason, this level of the building seems considerably cleaner.  The dust piles
+are gone from the floor, there are fewer cracks in the walls, and the posters
+on the wall could almost pass for new.  A lone doorway opens into a short hall
+to the east. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+A grey light fills the hallway to the east.
+~
+	ToVnum:	2911
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+The stairs descend to the first floor of the building.
+~
+	ToVnum:	2908
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2911
+Name:	Gray Hallway
+Desc:$
+   You are at the head of a short hallway which leads east and west.  The
+remains of an industrial carpet are under your feet, somewhat ratty but
+seemingly cleaned as much as possible.  Light fills the hall from a dim radium
+bulb set into the ceiling, and the area actually feels a bit warmer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The hallway ends just east of here.
+~
+	ToVnum:	2912
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The stairwell is back to the west.
+~
+	ToVnum:	2910
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2912
+Name:	The Hallway's End
+Desc:$
+   The gray hallway ends here, stopping at a windowed door.  The glass is
+frosted, but it is obvious that a light is on behind it, and letters have been
+painted on its surface.  A sign hangs to the left of the door jamb, and a
+broken doorbell to the right. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+The glass door leading to the facility is on the east wall.
+~
+	ToVnum:	2918
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The hallway extends to the west, towards the stairs.
+~
+	ToVnum:	2911
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign~~
+	Desc:$
+The sign reads:
+-----------------------------------
+Please enter and see receptionist's
+ desk to sign in for assistance.
+-----------------------------------
+~
+[EXTRADESC 1]
+	Keywords:	door letters~~
+	Desc:$
+The black bold letters on the door's glass read:
+           [ Medical Clinic ]
+~
+BREAK
+#2913
+Name:	The Waiting Room
+Desc:$
+   There are a few chairs placed in neat rows along the wall, along with a
+rack intended for various medical tracts.  Cameras mounted in the top corners
+of the room follow your movement, never allowing you to lose the feeling that
+you are being scrutinized as you proceed. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The Waiting Area continues north, as well as access to the examination
+rooms and Pharmacy.
+~
+	ToVnum:	2916
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+The clinic receptionist sits at the desk to the east.
+~
+	ToVnum:	2919
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+More chairs extend as the Waiting Area goes on further west.
+~
+	ToVnum:	2914
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Desc:$
+The opposite corner of the Waiting Area is northwest of here.
+~
+	ToVnum:	2915
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2914
+Name:	The Waiting Room
+Desc:$
+   The room continues, offering more places to sit and more bad magazines to
+read.  You notice that whichever direction you look, there is either a camera
+trained on you, or a mirror on the wall that looks a little too out of place.
+The clicking of a keyboard can be heard from the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The room goes on northwards as well.
+~
+	ToVnum:	2915
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	Desc:$
+The room ends at a stern door to the northeast.
+~
+	ToVnum:	2916
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+The corner of the waiting room nearest the desk is just east.
+~
+	ToVnum:	2913
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2915
+Name:	The Waiting Room
+Desc:$
+   More of the same decor, and the same paranoia from the security measures
+that the clinic employs.  Off to the east, however, you spot a door that
+various sounds are coming from. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The door to the east looks important.  Go see.
+~
+	ToVnum:	2916
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Desc:$
+The clinic exit is just past the southeast corner of the waiting area.
+~
+	ToVnum:	2913
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Another boring section of the waiting area is over to the south.
+~
+	ToVnum:	2914
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2916
+Name:	The Waiting Room
+Desc:$
+   You stand at the southeast corner of the waiting area, looking directly at
+a large blue door.  A simple sign has been posted on its surface. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door blue
+	Desc:$
+The examination rooms are behind the door to the east.
+~
+	ToVnum:	2917
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The waiting area continues south, towards the exit.
+~
+	ToVnum:	2913
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Desc:$
+Another corner of the waiting area can be found to the southwest.
+~
+	ToVnum:	2914
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The back corner of the waiting area is to the west.
+~
+	ToVnum:	2915
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	door sign~~
+	Desc:$
+The sign is actually a rough directory of the room beyond the door.
+  You    Exam. Room #1    Exam. Room #3    Exam. Room #5
+Are Here      ||               ||              ||
+ -->X<-- ================================================ Pharmacy
+              ||               ||              ||
+         Exam. Room #2    Exam. Room #4    Exam. Room #6
+~
+BREAK
+#2917
+Name:	A Corridor Within the Clinic
+Desc:$
+   You step lightly down the hallway amongst the examination rooms, cautious
+of the echoes your footsteps create on the tiles beneath your feet.  A door
+stands both to the north and south of you, with a small shelf beside each for
+the patient's file to be placed in.  The corridor goes on to the east, while
+the waiting area is beyond the west door. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north n
+	Desc:$
+The door to the north is marked "Examination Room One".
+~
+	ToVnum:	2921
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+The corridor stretches further east.
+~
+	ToVnum:	2924
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south s
+	Desc:$
+The door to the south is marked "Examination Room Two".
+~
+	ToVnum:	2922
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west w
+	Desc:$
+You can re-enter the waiting room through the west door.
+~
+	ToVnum:	2916
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2918
+Name:	Inside the Clinic
+Desc:$
+   You now find yourself in a simple, uncluttered foyer, devoid of any
+nonessential furnishings or debris.  The sounds of a keyboard can be heard
+from directly north, and in the distance, the faint beep of a cardiac monitor.
+A notice has been posted on the wall. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The receptionist's desk is just north.
+~
+	ToVnum:	2919
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+The exit to the hallway is to the west.
+~
+	ToVnum:	2912
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	notice~~
+	Desc:$
+  ____________________________
+ /  Notice to all Visitors:   \
+(  Security measures are taken )
+ \   to deter all violence.   /
+  \__________________________/
+~
+BREAK
+#2919
+Name:	Clinic Reception
+Desc:$
+   You stand before a small cedar desk, cluttered by scribbled notes and data
+disks.  The desk is set in front of a row of file cabinets, each one bearing a
+lock on it the size of a brick.  The Waiting Room lies to the west, and the
+exit out of the clinic to the south.  A crucial sign has been attached to the
+desk, demanding attention. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+The clinic foyer and exit are just south.
+~
+	ToVnum:	2918
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The Waiting Room is west of here, quiet and serious.
+~
+	ToVnum:	2913
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	desk~~
+	Desc:$
+The desk is what one may call an organized shambles, for while it looks
+like nothing could be found if needed, the receptionist knows the precise
+location of every object on it.  The notice is stapled to the front.
+~
+[EXTRADESC 1]
+	Keywords:	notice front~~
+	Desc:$
+Stapled to the front of the desk is the following:
+   If you require medical attention, the staff
+   are in the examination rooms located in the
+   northeast corner of the Waiting Area.  If
+   you require prescriptions or other supplies,
+   the Pharmacy is at the end of the hall past
+    the aforementioned exam rooms.
+~
+BREAK
+#2920
+Name:	Gateway to the Clinic Matrix Node
+Desc:$
+   You find yourself affixed to a small grid on the Global Matrix intended for
+the use of the clinic's file and account storage.  Though the facility does
+not see large sums of money in a year's time, they have been able to afford at
+least minimum security precautions for their data.  Looking to the east you
+see the complex core of the central processing unit.  All around you seem to
+be small cubical and crystalline shapes, seemingly virtual representations of
+the information being stored here.  While nothing of  use to you is in this
+paticular sector, perhaps further towards the memory storage area you may find
+something. 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The mass of color and light that is the CPU lies to the east.
+~
+	ToVnum:	2935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	shapes information~~
+	Desc:$
+The shapes floating about contain countless bytes of data, and each has
+a small locational address on its surface in hexadecimal.
+~
+BREAK
+#2921
+Name:	Examination Room One
+Desc:$
+   You stand in a silent room, surrounded by gleaming stainless steel and
+assaulted by the smell of iodine and isopropyl alcohol.  A table stands in the
+center for the patient, with a small counter to the right upon which the
+doctor can lay his various implements.  An intercom is mounted on the wall
+just below yet another security camera.  The thought of having whatever
+procedure you have come here for on screen is distressing. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+The corridor is beyond the south door.
+~
+	ToVnum:	2917
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2922
+Name:	Examination Room Two
+Desc:$
+   You stand in a silent practitioner's room, too small in dimensions to allow
+any curious snooping.  The patient's table seems clean, as does the floor, and
+you begin to realize that for an establishment that has to remain
+inconspicuous and low-key, they do not sacrifice proper procedure.  The only
+exit is to the north. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+The corridor lies to the north.
+~
+	ToVnum:	2917
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2923
+Name:	Examination Room Three
+Desc:$
+   You are in another of the clinic's exam rooms, this one slightly different
+from the others that you have seen in that the table for the patient has
+leather straps on it, seemingly for restraint.  Again the camera in the
+corner trains on you, and the hollow echo of the room is beginning to make the
+uneasy feeling you have even worse. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+The main corridor is beyond the door to the south.
+~
+	ToVnum:	2924
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2924
+Name:	The Clinic Corridor
+Desc:$
+   The hallway between the exam rooms continues, leading past another set of
+doors north and south of you.  The north door has a small plaque attached to
+it, apparently explaining a specialized use for that room. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north n
+	Desc:$
+The examination room lays just beyond the north door.
+~
+	ToVnum:	2923
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+The corridor ends to the east, and rattling sounds can be faintly heard.
+~
+	ToVnum:	2927
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south s
+	Desc:$
+Another exam room is behind the southern door.
+~
+	ToVnum:	2925
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The corridor ends at the waiting room door to the west.
+~
+	ToVnum:	2917
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	plaque door~~
+	Desc:$
+The plaque indicates that this room is also used for trauma cases.
+~
+BREAK
+#2925
+Name:	Examination Room Four
+Desc:$
+   The radium bulb overhead hums quietly as you stand in the center of another
+exam room.  The room appears to be recently used, as the basket in the  corner
+has some trash in it.  You notice that on the wall opposite you can be seen a
+chart of some anatomical information, obviously of no meaning to you, but a
+reference point for the staff. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+The door to the north leads back to the corridor.
+~
+	ToVnum:	2924
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	wall chart~~
+	Desc:$
+The chart displays the anatomy of three legs, one human, one elven, and
+one trollish.  The major structures seem the same, but in closer detail,
+it is hard to see how one could possibly have evolved from the other.
+~
+[EXTRADESC 1]
+	Keywords:	basket trash~~
+	Desc:$
+The basket in the corner is labaled "Hazardous Medical Waste", and appears
+to have some debris in it of an unknown nature.  You would poke around in
+it, but law states that these bins must have superb locks on them for
+safety purposes.
+~
+BREAK
+#2926
+Name:	Examination Room Five
+Desc:$
+   Yet again you find yourself in one of the clinic's exam rooms, much like
+the others you have seen.  The difference in this one, however, is that there
+is a door on the north wall, heavy and solid, with no markings explaining as
+to where it may lead.  Placing your ear to the door to see if you can come
+across any clues, all you can hear is the sound of a ball point pen being
+clicked, over and over. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north n
+	Desc:$
+The door's appearance tells you nothing of where it leads.
+~
+	ToVnum:	2932
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2904
+	LockRating:	12
+[EXIT south]
+	Keywords:	door south s
+	Desc:$
+The corridor lies to the south.
+~
+	ToVnum:	2927
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2927
+Name:	Corridor's End
+Desc:$
+   The corridor ends at three doors, each easily understandable as to where it
+leads.  The rattling sound is somewhat louder from the east, yet you still
+cannot place exactly where you have heard such a thing before.  Other than
+that sound, the area is exceptionally quiet. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north n
+	Desc:$
+The north door leads to the fifth exam room.
+~
+	ToVnum:	2926
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door east e
+	Desc:$
+The door's sign clearly states that the Pharmacy lies behind it.
+~
+	ToVnum:	2929
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south s
+	Desc:$
+The south door leads into Examination Room Six.
+~
+	ToVnum:	2928
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The corridor heads back to the west.
+~
+	ToVnum:	2924
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2928
+Name:	Examination Room Six
+Desc:$
+   Surrounded once again by stainless steel and the yellow glow of the lights,
+you find yourself in the sixth and final examination room that the clinic
+provides.  A tray used for the doctor's equpiment has been rolled against the
+far wall, and a picture has been hung on the ceiling for patients to gaze at
+while lying down on the table. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+The clinic corridor lies just beyond the door to the north.
+~
+	ToVnum:	2927
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	picture ceiling~~
+	Desc:$
+The picture is of a lovely park at dusk, with the rose colored sky
+accenting the greens of the treetops and the blues of the passing
+brook.  Very peaceful, especially for someone undergoing the setting
+of a broken bone.
+~
+BREAK
+#2929
+Name:	The Clinic Pharmacy
+Desc:$
+   You step into a sizable room and find yourself in front of a long counter,
+behind which can be seen bays of shelves carrying innumerable jars, bottles
+and boxes.  The counter itself is a clutter of trays, papers, computer
+terminals and the ever-present mortar and pestle that are the symbol of the
+pharmaceutical profession.  A sign on the counter is provided for anyone
+seeking assistance. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	gate
+	Desc:$
+A sturdy gate behind the counter leads to a supply room.
+~
+	ToVnum:	2930
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2903
+	LockRating:	10
+[EXIT west]
+	Keywords:	door
+	Desc:$
+The clinic corridor leads back out to the west.
+~
+	ToVnum:	2927
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign~~
+	Desc:$
+The sign reads:
+      Rx ------ Clinic Pharmacy ------ Rx
+      A list of available over-the-counter
+      pharmaceuticals can be provided on
+      request.  Any controlled substances
+        can only be obtained by written
+         script from the medical staff.
+      Rx ----------------------------- Rx
+~
+[EXTRADESC 1]
+	Keywords:	counter~~
+	Desc:$
+The counter's formica top can barely be seen under all the items
+scattered across it.  A counting tray for pills sits in mid-use, a
+terminal scrolls by prescription information on various clients, and
+a stack of papers with illegible handwriting (presumably that of the
+doctors) sits off to one side.
+~
+BREAK
+#2930
+Name:	Pharmacy Stock Room
+Desc:$
+   By means we will not discuss, you have gained access to the storage area
+for the pharmacy's back stock.  You probably assumed that by getting in, you
+would have at your disposal a plethera of supplies, but as you look around
+more closely at the towering shelves, you notice that a good number of them
+are empty.  Apparently the shipments of orders intended to arrive are often
+robbed before reaching the inner city, and the pharmacy is forced to make do
+with what they can get hold of. Another doorway on the north wall leads to the
+break area for the pharmacists themselves. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The open doorway leads to a simple room for quick rests.
+~
+	ToVnum:	2931
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	door
+	Desc:$
+The main pharmacy lies to the southwest, through the storeroom door.
+~
+	ToVnum:	2929
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2903
+	LockRating:	10
+[EXTRADESC 0]
+	Keywords:	shelf shelves~~
+	Desc:$
+Empty boxes of stimpacks, slap patches and a few scattered hypo's are
+the only items to be found on the numerous shelves.  Times are tough
+for all aspects of the medical profession, it seems.
+~
+BREAK
+#2931
+Name:	Pharmacist's Back Room
+Desc:$
+   This is the intended area for the (far and few) breaks the clinic's
+pharmacists receive.  A simple molded plastic table, accompanied by two or
+three matching chairs is the limit of the furnishings.  On the table are
+various flyers concerning new drugs being released on the market, as well as a
+few spent matches that have burned small divots in the table top.  On the wall
+can be found a schedule calendar and a notice for the interns. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+The stock room is directly south of here.
+~
+	ToVnum:	2930
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	notice~~
+	Desc:$
+The notice is intended for the pharmacy interns, and reads:
+   Any individuals found responsible for the loss of supplies will
+   be held accountable to the full extent of the law, including
+      arrest and incarceration by the Tacoma Police Force.
+~
+[EXTRADESC 1]
+	Keywords:	calendar schedule~~
+	Desc:$
+The calendar is a mash of red X's over nearly every date on the page.
+Apparently these folks don't get much in the line of time off.
+~
+BREAK
+#2932
+Name:	The Doctor's Lounge
+Desc:$
+   You find yourself in the lounge for the medical staff of the clinic, where
+the doctors, nurses and interns can either rest for a moment, do any needed
+paperwork, or simply hide from the endless demands of the patients.  An easy
+chair is placed along the wall, looking heavily worn from use.  The room
+extends to the north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The lounge continues northwards.
+~
+	ToVnum:	2933
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+Behind the south door is the access to Examination Room Five.
+~
+	ToVnum:	2926
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2904
+	LockRating:	12
+BREAK
+#2933
+Name:	Back of the Doctor's Lounge
+Desc:$
+   The lounge ends here, with much of the same decor, except for the addition
+of a small video set for entertainment purposes.  A door to the east is
+covered with notes, nearly obstructing the plaque mounted on it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+The plaque on the door explains the room's contents.
+~
+	ToVnum:	2934
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The lounge extends to the south.
+~
+	ToVnum:	2932
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	note notes~~
+	Desc:$
+The notes are scrawled messages from the other staff members, various
+gripes, observations or requests for time off.
+~
+[EXTRADESC 1]
+	Keywords:	plaque door~~
+	Desc:$
+  [Head Resident's Office]
+~
+BREAK
+#2934
+Name:	Head Resident's Office
+Desc:$
+   Upon stepping into the office of the clinic's proprietor, you immediately
+take in all the signs of a type-A overachiever:  compulsive cleanliness, an
+organization of files, materials and text so precise that it nearly hurts to
+look at it, and a framed lithograph on the wall of Flynn, most probably the
+greatest workaholic known in 2050.  A terminal is off to the side of the desk
+for access to the clinic's database, thus eliminating the need for an actual
+file cabinet in the room.  The only available exit is back into the lounge to
+the west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+The lounge is found back through the west doorway.
+~
+	ToVnum:	2933
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2935
+Name:	Clinic System C.P.U.
+Desc:$
+   You are surrounded by pulsating cords of light and color, rapidly shifting
+direction and leading to points too far outside your field of vision.  This is
+the brain of the system that services the clinic - sorting, compiling and
+linking countless pieces of information to be called upon at a later time.
+The mass of "strands" meet at what looks like the head of some giant
+mannequin, apparently the core of the mainframe.  The memory storage areas
+extend off the the east and northeast. 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Desc:$
+Countless shapes hover about in the storage area to the northeast.
+~
+	ToVnum:	2936
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Countless shapes hover about in the storage area to the east.
+~
+	ToVnum:	2937
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The gateway that you accessed the node from is back to the west.
+~
+	ToVnum:	2920
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	head mainframe core~~
+	Desc:$
+It appears to be a virtual image of a human head, somewhat disfigured, with
+thousands of thin wires attached to its surface.  Its eyes are closed as if
+it were in the process of deep concentration.
+~
+BREAK
+#2936
+Name:	Memory Storage Sector
+Desc:$
+   You stand in the center of a wide open grid, surrounded by hovering shapes
+much like the ones you saw as you first entered at the gateway.  They are
+neatly arranged by their repsective addresses, and float serenely in place
+until called upon by either the CPU or a courier to be used or transferred.
+The grid extends to the south, while the brilliant light of the CPU is
+southwest of you. 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+Further expanses of the memory storage go on to the south.
+~
+	ToVnum:	2937
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Desc:$
+The core of the clinic's mainframe resides to the southwest.
+~
+	ToVnum:	2935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2937
+Name:	Memory Storage Area
+Desc:$
+   Rows upon rows of the symmetrical shapes float about in this vast grid
+intended for the storage of the clinic's mainframe data.  There is an acute
+hum resonating all around you, reminding you that what you may see as tangible
+is actually no more than pure energy, ebbing and flowing throughout everything
+in sight. 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The wide grid of the memory allocation spreads off to the north.
+~
+	ToVnum:	2936
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The intense power surges from the CPU can be seen to the west.
+~
+	ToVnum:	2935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2938
+Name:	Gateway to the Pharmacy Matrix Node
+Desc:$
+   All pharmaceutical facilities from retail to research are compliant under
+the overseeing eye of PharmaCom, the leading corporation in drug development
+and sales.  The clinic pharmacy is no exception - all orders, stock counts and
+transactions must be made known to PharmaCom, and the Matrix is the means by
+which the data is transferred.  The node you find yourself in is of a high
+quality, as is anything that PharmaCom involves itself with. The CPU toils
+away to the south, compliling and outputting data to the corporation mainframe
+elsewhere. 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+The glow and din of the CPU is directly south.
+~
+	ToVnum:	2939
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2939
+Name:	Clinic Pharmacy CPU
+Desc:$
+   You stand before the image of a massive globe, spinning slowly on its axis.
+This appears to be the Central Processing Unit for the pharmacy, its sole
+purpose to gather and relay information concerning drug quantities, orders and
+accounts to the satellite nodes that PharmaCom utilizes at locations
+worldwide.  Each time the Unit executes a task, a point on the globe glows
+briefly, indicating the destination of the transaction. 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The gateway access from the pharmacy terminal is north of here.
+~
+	ToVnum:	2938
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2950
+Name:	Entrance to The Aladdin
+Desc:$
+   In front of you a line of people wait, at a pair of glass doors with
+mirroring so as to not let you see inside.  Overhead a sign hangs, with a neon
+construct of a Genie, grinning with cyberspurs extended.  This is Tacoma's
+latest and greatest nightclub, maybe.  A sign says "wannabes, neophytes, and
+weak willed runners not allowed." on the door.  Behind the one open door on
+the right, is a huge troll wearing an Armani suit. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	2566
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2951
+Name:	Entrance to the underground garages
+Desc:$
+   The ramp into the underground garages dips sharply and curves around under
+the apartment complex. It is barely wide enough for one vehicle and is very
+small, disallowing entrance to anything large than a station wagon. Even an
+SUV would have problems fitting in here. More than half of the overhead lights
+are out, meaning travelling through here safely requires you to switch on your
+headlights. 
+~
+Flags:	10000010000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	3
+X:	30
+Y:	3
+Z:	1.80
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2952
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	2953
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2952
+Name:	Garage offices
+Desc:$
+   This small office is normally occupied by a security guard, monitoring
+everyone entering and leaving the garages and making sure the resident's
+vehicles are safe. A bank of monitors sits up on one wall with a desk in the
+middle of the room and a rack with maglock cards hanging from it. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	4
+X:	5
+Y:	4
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	2951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2953
+Name:	In the underground garage
+Desc:$
+   The light down in the garage is not much better than in the ramp. Huge
+rollerdoors are on each side of the garage, wide enough to fit atleast 2 cars
+in. A maglock card swipe is at each side of each door. An elevator is to the
+south. 
+~
+Flags:	10000010000000010000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	8
+Y:	30
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2954
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	garage door 1
+	Desc:$
+The garage door has the number 1 printed on it. 
+~
+	ToVnum:	2957
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2957
+[EXIT southwest]
+	ToVnum:	2951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	garage door 2
+	Desc:$
+The garage door has the number 2 printed on it. 
+~
+	ToVnum:	2958
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2958
+BREAK
+#2954
+Name:	In the underground garage
+Desc:$
+   The garage continues here to both the north and the south. Identical doors
+are at each side, wide enough for atleast 2 cars. It seems no one replaces the
+flourescent lighting overhead when they stop working, one of them flickers
+incessently. 
+~
+Flags:	10000010000000010000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	8
+Y:	30
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2955
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	garage door 3
+	Desc:$
+The garage door has the number 3 on it. 
+~
+	ToVnum:	2959
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2959
+[EXIT south]
+	ToVnum:	2953
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	garage door 4
+	Desc:$
+The garage door has the number 4 on it. 
+~
+	ToVnum:	2960
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2960
+BREAK
+#2955
+Name:	In the underground garage
+Desc:$
+   The flourescent lighting overhead flickers on and off, a testament to how
+cheap the manager here is. Huge rollerdoors are on each wall here. 
+~
+Flags:	10000010000000010000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	8
+Y:	30
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2956
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	garage door 5
+	Desc:$
+The garage door has the number 5 on it. 
+~
+	ToVnum:	2961
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2961
+[EXIT south]
+	ToVnum:	2954
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	garage door 6
+	Desc:$
+The garage door has the number 6 on it. 
+~
+	ToVnum:	2962
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2962
+BREAK
+#2956
+Name:	End of the underground garage
+Desc:$
+   The garage ends here with a solid concrete wall to the north. It has been
+tagged with Graffiti showing this is indeed the "WEST SIDE ROVERZ" territory.
+Garages are on both the east and west walls. 
+~
+Flags:	10000010000000010000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	8
+Y:	30
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	garage door 7
+	Desc:$
+The garage door has the number 7 on it. 
+~
+	ToVnum:	2963
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2963
+[EXIT south]
+	ToVnum:	2955
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	garage door 8
+	Desc:$
+The garage door has the number 8 on it. 
+~
+	ToVnum:	2964
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2964
+BREAK
+#2957
+Name:	A Sparse Garage
+Desc:$
+   Concrete walls and floor, this garage is very sparse. Nothing has been
+provided for any sort of comforts for the residents. A large patch of oil
+stains the floor, probably from the last person to park their beat up '44
+Westwind in here. 
+~
+Flags:	10000100000000000100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	garage door
+	ToVnum:	2953
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2957
+BREAK
+#2958
+Name:	A Sparse Garage
+Desc:$
+This old garage shows signs of renovation. There are a few basic furnishing
+here and there. A large hermetic circle stands out from the otherwise mundane
+things. Japanese charms have been placed across the room, giving it an eerie
+feeling. A large bookshelf with old tomes decorates the right corner, with a
+comfortable chair near it. 
+~
+Flags:	10000100000000000100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	garage door
+	ToVnum:	2953
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2958
+BREAK
+#2959
+Name:	A Sparse Garage
+Desc:$
+   Concrete walls and floor, this garage is very sparse. Nothing has been
+provided for any sort of comforts for the residents. A large patch of oil
+stains the floor, probably from the last person to park their beat up '44
+Westwind in here. 
+~
+Flags:	10000100000000000100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	garage door
+	ToVnum:	2954
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2959
+BREAK
+#2960
+Name:	A Sparse Garage
+Desc:$
+   Concrete walls and floor, this garage is very sparse. Nothing has been
+provided for any sort of comforts for the residents. A large patch of oil
+stains the floor, probably from the last person to park their beat up '44
+Westwind in here. 
+~
+Flags:	10000100000000000100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	garage door
+	ToVnum:	2954
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2960
+BREAK
+#2961
+Name:	A Sparse Garage
+Desc:$
+This sparsely furnished garage is outfitted with a strange mix of precision
+tools and magical symbols and fetishes. A large Dog totem dominates one corner
+of the room with a small altar in front of it. A ramshackle shamanic lodge is
+constructed near the totem. 
+~
+Flags:	10000100000000000100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	garage door
+	ToVnum:	2955
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2961
+BREAK
+#2962
+Name:	A Sparse Garage
+Desc:$
+This garage is an absolute mess. Grime that might be a mixture of oil and
+blood is caked on all over the floor. Overturned furniture is everywhere, and
+the entire room is strangely... smoky? 
+~
+Flags:	10000100000000000100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	garage door
+	ToVnum:	2955
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2962
+BREAK
+#2963
+Name:	A Sparse Garage
+Desc:$
+   Concrete walls and floor, this garage is very sparse. Nothing has been
+provided for any sort of comforts for the residents. A large patch of oil
+stains the floor, probably from the last person to park their beat up '44
+Westwind in here. 
+~
+Flags:	10000100000000000100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	garage door
+	ToVnum:	2956
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2963
+BREAK
+#2964
+Name:	A Sparse Garage
+Desc:$
+   Concrete walls and floor, this garage is very sparse. Nothing has been
+provided for any sort of comforts for the residents. A large patch of oil
+stains the floor, probably from the last person to park their beat up '44
+Westwind in here. 
+~
+Flags:	10000100000000000100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	garage door
+	ToVnum:	2956
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	2964
+BREAK
+END

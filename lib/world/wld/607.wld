@@ -1,0 +1,1310 @@
+#60700
+Name:	The Top Shelf Bookstore
+Desc:$
+   Tinted lights cast a dim blue glow over this shop, accentuating the deeper
+blue of the walls. The bookshelves themselves are brightly lit with built-in
+lights, though, and are well-stocked with a wide variety of books and trideo
+chips. A stand of magazines in the corner brazenly displays its glossy wares,
+and soft jazz wafts in from the smoke-filled bar to the east. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	bookcase bookshelf book
+	Desc:$
+A large metal bookcase sits against the wall. 
+~
+	ToVnum:	60702
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	60700
+	LockRating:	12
+	HiddenRating:	12
+[EXIT east]
+	ToVnum:	60701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32651
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60701
+Name:	The Top Shelf Jazzclub
+Desc:$
+   An endless haze of smoke drifts around this large, dim room. Patrons read
+books at their tables by candlelight, smoking various substances between sips
+of coffee. The candles flicker in and out; the only other light comes from the
+dim, haze-clouded ceiling lights and the low spotlight projecting onto the
+performers in the northeast corner. The band rolls through another mellow
+number, then moves on to the next without skipping a beat. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	doorway
+	ToVnum:	5900
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60700
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60702
+Name:	A Well-Lit Stairway
+Desc:$
+   Soft jazz tunes waft into the stairwell, mixing with metallic clangs and
+the occasional curse from the room to the east. The metal staircase opens up
+onto the second floor, where it ends. Natural light filters down from a
+skylight directly above the staircase, giving the stairwell a feeling of
+openness. Lights are embedded within the wall two feet above the staircase,
+but are not required until nightfall. The entrance to the bookshop sits to the
+south, and opens up behind one of the bookshelves. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A sturdy door blocks the way north. 
+~
+	ToVnum:	60720
+	Flags:	1
+	Material:	wood
+	Barrier:	12
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door book shelf wall
+	Desc:$
+Bookshelf 
+~
+	ToVnum:	60700
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	60700
+	LockRating:	12
+	HiddenRating:	12
+[EXIT up]
+	Keywords:	door
+	Desc:$
+A sturdy door blocks the way up from here. 
+~
+	ToVnum:	60704
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	60731
+BREAK
+#60703
+Name:	A Large, Open Room Filled with Car Parts
+Desc:$
+    Tables are arrayed against the wall here, containing all manner of tools.
+Oil and grease stains the ground in several places, most notably near the
+large hydraulic car lift. Various car parts are strewn on the ground, in
+stages of decay. An engine sits on a bench, mostly disassembled, the component
+parts strewn around it in some indecipherable pattern. A set of large metal
+wheeled doors allow direct access to the street. A shining metal pole extends
+through a hole in the roof in one corner of the room, the only thing in the
+room not stained by grease and oil.  A brick passage leads to the southeast
+into the main parking lot. 
+~
+Flags:	110000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	revolving
+	Desc:$
+A hidden revolving doorway leads to the northeast. 
+~
+	ToVnum:	60719
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	60700
+	HiddenRating:	32
+[EXIT southeast]
+	Keywords:	brick passage door secret
+	ToVnum:	5900
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	60700
+	LockRating:	10
+	HiddenRating:	12
+[EXIT west]
+	ToVnum:	60702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	trapdoor door trap down
+	ToVnum:	9930
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	60700
+	LockRating:	50
+BREAK
+#60704
+Name:	An Open Room with a Wall-Sized Window
+Desc:$
+   The ceiling of this room is very high, giving it an open feeling, which is
+enhanced by the full-length window on the southern wall.  The huge window
+shows a beautiful view of the Seattle skyline. The only problem is that this
+view should be blocked by the building across the street. Closer inspection
+shows a small Renraku logo in the bottom corner of the window, which is
+actually a well-disguised live trideo feed of the view of Seattle from the
+twenty-third floor of the Renraku Arcology. Two large skylights and an array
+of lights embedded into the walls provide more than adequate lighting. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Jolrab's room.  Frag off if you're not me. 
+~
+	ToVnum:	60705
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	screen trid panel
+	ToVnum:	60710
+	Flags:	1
+	Material:	electronics
+	Barrier:	12
+	KeyVnum:	0
+	HiddenRating:	12
+[EXIT down]
+	Keywords:	door
+	Desc:$
+A sturdy door blocks the way down from here. 
+~
+	ToVnum:	60702
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	60731
+BREAK
+#60705
+Name:	A Cluttered Bedroom
+Desc:$
+   A troll-sized double bed is the main feature of this small room, flanked on
+either side by wireframe cabinets.  At one end of the room sits an black metal
+entertainment unit, holding various datachips, a busted cyberterminal, an
+aging chess set, an audio setup, and a small trideo unit.  A polished steel
+gun cabinet rests next to the entertainment unit, towering over it.  The floor
+itself is strewn with discarded clothing, old paper books, randomly-colored
+bedsheets, and small arms.  A grinding wheel pokes out from under a
+troll-sized shirt. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+Jolrab's room.  Frag off if you're not me. 
+~
+	ToVnum:	60704
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60706
+Name:	A Messy Bedroom.
+Desc:$
+   Entropy is the key word for the state of this bedroom. The floor is covered
+with a myriad of random objects, from mechanical parts to rigger equipment to
+guitar tab books. Scatter clothes, assault cannon rounds, and empty bottles
+litter the hardwood floor. A messy, but comfortable looking bed is off to the
+side, bured underneath a pile of books. A rusty ceiling fan keeps the
+temperature pleasantly warm, and a mini-fridge to the side keeps a few drinks
+handy. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+Lans' Room. 
+~
+	ToVnum:	60708
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60707
+Name:	A Comfortable Living Room
+Desc:$
+   This room is tastefully, if simply, furnished. Japanese silk prints adorn
+the beige walls, along with reproductions of Monet's water lily paintings. An
+aquarium full of bright, colorful fish lies on the west side of the room, as
+well as a large, hardwood grandfather clock that ticks away the time, pendulum
+swinging steadily. The grey carpeting is thick and soft, and on the ceiling, a
+rotating fan keeps the room cool. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	oak door
+	Desc:$
+A sturdy oak door with a plaque reading: Tyrion's Study 
+~
+	ToVnum:	60709
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	gclock
+	Desc:$
+The grandfather clock opens up a secret panel here. 
+~
+	ToVnum:	60718
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	60700
+	HiddenRating:	32
+BREAK
+#60708
+Name:	A Dark Workroom
+Desc:$
+   This room is littered with every variety of tool one could imagine, most of
+which are to be found on the floor. The numerous sharp objects, and cutting
+saw scattered on the floor make this room a hazard to even walk in. Work
+benches with several drawers, most of which aren't shut, sit placed along
+random areas against the wall. Papers and schematics cover each one, all
+placed in no particular order, if any at all. Tool boxes of every variety sit
+up against one side of the room, though most of their contents have been
+spilled out onto the floor. Thankfully, the fireman's pole in the northeastern
+corner of the room seems to be more user friendly than the floor of this
+place. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	1100
+IO:	500
+Bandwidth:	50
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+Address:	An undisclosed location
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Lans' Room. 
+~
+	ToVnum:	60706
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60704
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60709
+Name:	The Scholar's Study
+Desc:$
+   Every single portion of the walls in this spacious room are lined with
+bookshelves packed with novels, journals, research records, and just about any
+type of print imaginable. The dusty carpet and furniture give the two-story
+library a bit of a musky smell. Soft, leather couches provide comfortable
+seating for the avid reader. Sliding ladders lead up to the second floor of
+the spacious library, where those out-of-reach books lie in wait for someone
+to read them. 
+~
+Flags:	100000000010000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	Desc:$
+A door is there. 
+~
+	ToVnum:	60707
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60710
+Name:	A Dusty, Dimly Lit Armoury
+Desc:$
+   The dusty, dank room is packed to the brim with just about every type of
+firearm imaginable. Racks of submachine guns, pistols, assault rifles, combat
+shotguns, tasers, disposable rocket tubes, grenades.. just about any type of
+munition in existance can be found here, thanks to the smuggling ring of one
+of the Peanut members. In the center of the room, a large display case houses
+melee weapons of all kinds, from swords to spears, ranging from antiques to
+ultra-modern cutlery. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	screen panel trid
+	ToVnum:	60704
+	Flags:	1
+	Material:	electronics
+	Barrier:	12
+	KeyVnum:	0
+	HiddenRating:	12
+[EXIT east]
+	ToVnum:	60727
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60711
+Name:	A Steamy Indoor Spa
+Desc:$
+   A gust of warm, steamy air hits your when you enter the room. The hot,
+humid atmosphere emanating from the central spa eases sore muscles and
+rejuvenates tired bodies. A rack to the side of the room stores bath and body
+supplies, and a row of private showers allows for quicker, more water
+efficient cleaning. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60712
+Name:	A Hallway
+Desc:$
+   The wood-panelled floors of this hallway creak slightly as you walk by, the
+sound slightly muffled by a simply patterned carpet. The walls are clean and
+painted off-white, with framed paintings of different landscapes, including
+the Seattle and Denver skylines. A small table holding a vase of flowers,
+which on closer inspection are artificial, lies against a wall. To the north
+is another bedroom. Above, a sturdy rope is attached to a set of pull-down
+stairs leading to the roof. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden
+	Desc:$
+A sturdy wooden door leads to the room north of here. 
+~
+	ToVnum:	60713
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	60700
+[EXIT west]
+	ToVnum:	60708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60713
+Name:	A Bedroom
+Desc:$
+   This sparsely furnished room is dimly lit for human eyes, making it necessary 
+to adjust a moment. Immediately noticeable is that the north, south, and east 
+walls are almost completely covered with maps and photos, most scribbled with 
+notes and markings. A cot is tucked into the southeast corner of the room: next 
+to it is a large oblong dog bed and scattered chew toys...including both a 
+Lone Star and Knight Errant helmet. A comfortably worn throw rug, its colors 
+too faded to be distinguishable, lies beneath the window at the east wall. 
+To the northeast is a dresser covered with small, relatively useless things: 
+unusual or interesting rocks, ribbons, metallic odds and ends (some rusting), 
+feathers, small bones, wires, stuffed dolls of various sizes, etc.
+   In the southwest corner is a small utilitarian desk covered toiletry items 
+and accessories of all sorts, and a small lamp. Coming towards the west side, 
+however, the mess sharply ends a little les than halfway through the room. 
+Here there is only a small pile of pipes and rope, and nearly the entirety 
+of the west wall is covered by a large, LARGE mirror.
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	window
+	Desc:$
+A double-pane glass window sits on the eastern side of the room. 
+~
+	ToVnum:	60717
+	Flags:	2
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	60700
+	HiddenRating:	4
+[EXIT south]
+	Keywords:	door wooden
+	Desc:$
+A sturdy wooden door leads out into the hallway to the south. 
+~
+	ToVnum:	60712
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	60700
+BREAK
+#60714
+Name:	Center of the Roof
+Desc:$
+   Coming up the stairs brings you outside to the center of the asphalt
+covered roof, which continues to the east and west. A lawn chair, complete
+with an outdoor table and umbrella, rests here, and beneath a tarp is a
+wire-mesh cage filled with food pellets and a water bowl. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60715
+Name:	West Side of the Roof
+Desc:$
+   More black asphalt, now with several vents rising from the flat rooftop
+surface. A dirty, ratty looking ragdoll lies beneath one of the many antennas
+scattered around the rooftop, abandoned who knows how long ago. The faint
+smell of pizza rises up from nearby Buck's, making your mouth water. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60716
+Name:	East Portion of Rooftop
+Desc:$
+   Walking along the rooftop, you note the waist-high wall along the edge of
+the building that gives you some protection against falling. Peering down the
+east side of the building, you see a sturdy drainpipe leading down to a nearby
+parking lot. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	60714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60717
+Name:	Hanging on a drainpipe
+Desc:$
+   Stepping out of the window, you've manged grip the drainpipe that runs
+along the side of the building - lucky you! There aren't many footholds along
+the wall, meaning your only hope is that the sleek pipe you're currently
+clinging on doesn't break and your grip doesn't slip. Good luck! 
+~
+Flags:	100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	window
+	Desc:$
+A double-pane window sits here on the east side of the building. 
+~
+	ToVnum:	60713
+	Flags:	2
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	60700
+	HiddenRating:	4
+[EXIT up]
+	ToVnum:	60716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+The drainpipe leads down into the parking lot below. 
+~
+	ToVnum:	5900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60718
+Name:	At the Top of a Hidden Staircase Behind the Clock
+Desc:$
+   A long stone staircase winds and descends from here, leading down into
+darkness below. A few dim lights are placed into the walls along the side of
+the stairs, offering only enough light to see a few meters ahead. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	panel
+	Desc:$
+A secret hidden panel leads to a room here. 
+~
+	ToVnum:	60707
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	60700
+	HiddenRating:	32
+[EXIT down]
+	ToVnum:	60719
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60719
+Name:	A Dark Garage
+Desc:$
+   A few bulbs around the area offers a small amount of light, only enough to
+see the ground and a few of the walls. A workstation sits on the west side, a
+few tools placed on the tabletop. Other power tools for fixing up or upgrading
+cars are scattered about the garage. A hidden exit opens to the southwest,
+entering into the regular underground parking of the building. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	Keywords:	revolving
+	Desc:$
+A large revolving doorway leads out to the southwest. 
+~
+	ToVnum:	60703
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	60700
+	HiddenRating:	32
+[EXIT up]
+	ToVnum:	60718
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60720
+Name:	The Training Area
+Desc:$
+   Upon entering, it is obvious that this section of the building has been
+built in a much different manner than the rest. This room is set low with
+visitors proceeding down a small ramp to get onto the actual dirt floor of the
+huge dome-shaped training room. Easily ninety meters in diameter, and tall
+enough even for most Giants to walk about without trouble, the room has been
+carefully designed to promote a peaceful feeling as synthgrass sprouts here
+and there, even trees curl their way from the earth to stand up, appearing as
+real as any other. The massive training area is sectioned off, with different
+areas obviously meant for different types of martial arts training. The
+northwest quadrant holds what appear to be huge pieces of rock in all
+different shapes and sizes, ranging from some things weighing just a few dozen
+kilos to things that must weigh nearly a tonne. 
+~
+Flags:	100000000000000000001000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60722
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A sturdy door blocks the way back south. 
+~
+	ToVnum:	60702
+	Flags:	1
+	Material:	wood
+	Barrier:	12
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door
+	Desc:$
+A sturdy door blocks the way northwest. 
+~
+	ToVnum:	60724
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	60730
+	HiddenRating:	32
+BREAK
+#60721
+Name:	A Simple Bedroom
+Desc:$
+   This room is rather spartan compared to the great care that went into the
+creation of the training area on the other side of the simple plasteel door.
+High enough for the average-sized Giant to make their way in without a great
+deal of difficulty as long as they were vigilant of the overhead bulb that
+sways to and fro, this rectangular living space has been divided into two
+obvious sections, one of which is scaled up for something much heavier than
+the other space. The usual living amenities can be found here in both sizes,
+from sinks to private bathrooms and even two miniature kitchen areas which
+seem to only make use of the microwave and refrigerator functions. Trid units
+can be seen along the wall opposite the door by each of the beds to allow for
+the viewers to be as comfortable as possible while watching their stories, and
+close to the larger bed is a strange metal vending machine placed against the
+wall and secured with thick metal cord hammered into the wall. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	20
+Y:	20
+Z:	3.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60722
+Name:	A hot hallway
+Desc:$
+   Walking through the open doorway toward the north from the training area is
+like hitting a brick wall. The heat from whatever lies beyond is billowing out
+toward ventilation shafts installed throughout the length of the rather plain
+hall. Free of doors or anything that might be used to hide precious valuables
+or secret entrances to other more interesting places, all there is to do here
+is move forward or retreat. Which will you choose? 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	10
+Z:	3.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60723
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60723
+Name:	The Smithy
+Desc:$
+   Aside from the training area itself, this place seems to have been given
+the most care in its construction. The hallway opens up to a vaulted roof with
+various ventilation systems hooking into it to make sure that any smoke that
+needs to get out of the way will be safely moved into the atmosphere where it
+can't possibly do any damage. This place looks to be completely stocked for
+all manner of weapon and armor crafting, with a smelting furnace, forging
+furnace, and other less recognizable devices used for annealing metal and, of
+course, the epitome of the blacksmith: An anvil, well multiple anvils of
+different sizes, though they all seem to be directed toward one massive cousin
+positioned in one of the more neutral areas of the room where the heat
+relents. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60722
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60724
+Name:	The Ammo Cage
+Desc:$
+   As the fluorescent bulb on the ceiling flashes to life, your eyes adjust to
+the changing light on the surroundings. Boxes upon boxes of various types of
+ammo are stacked against the northern wall, seemingly organized among pistol,
+rifle, and other weapon types. Stretching off past the boxes is the other end
+of the armory, most likely containing other goodies of mass destruction and
+protection. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door
+	Desc:$
+A sturdy door blocks the way back southeast. 
+~
+	ToVnum:	60720
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	60730
+	HiddenRating:	32
+[EXIT southwest]
+	ToVnum:	60726
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60725
+Name:	The Weapons Storage Area
+Desc:$
+   Several rows of shelves line the floor and hang from the ceiling here, with
+weapons of various sizes and types locked behind a hardened metallic screen to
+keep them away from prying hands. Lights above flicker and illuminate, lending
+sight and guidance to those within the confines between the shelves, wandering
+for instruments of pain and mayhem. The room continues on to the south, with
+several glass-covered lockers bolted to the south wall. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60724
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60726
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60726
+Name:	The Back of the Armory
+Desc:$
+   As you walk into this section of the armory, lights flicker from within the
+lockers, illuminating the armor stored here from behind, obviously done
+automatically from some sensors placed in the floor. As this is the end of the
+rooms, the only exit is back from where you came. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	60724
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60727
+Name:	A Small Room Off From the Armory
+Desc:$
+   Deeper into the armory, you find crates. Lots and lots of crates, piled
+high throughout the room like miniature skyscrapers of a badly planned city.
+The "roads" of space between twist and turn, leading more often than not to
+dead ends. If you actually manage to find your way to the back, however, you
+still dont find a wall - instead, row after row of shelves, crammed with
+holsters, belts, and clip lie behind a tidy desk, the sole oasis of order in
+the whole room. Off to the side of the desk, several keys hang on a rack,
+shining dully from the recessed halogen lamp attached to the ceiling. 
+~
+NightDesc:$
+   Deeper into the armory, you find crates. Lots and lots of crates, piled
+high throughout the room like miniature skyscrapers of a badly planned city.
+The "roads" of space between twist and turn, leading more often than not to
+dead ends, with the darkness not helping matters for sense of direction. If
+you actually manage to find your way to the back, however, you still dont find
+a wall - instead, row after row of shelves, crammed with holsters, belts, and
+clip lie behind a tidy desk, the sole oasis of order in the whole room. Off to
+the side of the desk, several keys hang on a rack, glinting slightly from
+ambient light coming from the other room, the recessed halogen lamp above shut
+off for the night. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.15
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	60710
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

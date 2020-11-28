@@ -1,0 +1,1916 @@
+#31100
+Name:	Vasa's workroom
+Desc:$
+   This room has the stench of magic in the air and various symbols drawn on
+walls. There are books scattered around on various arcane subjects. 
+~
+Flags:	110000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#31101
+Name:	Little Chiba
+Desc:$
+   Steam rises from vents and open manholes, giving this street an
+otherworldly feel. The buildings here are shorter and squatter; the signs and
+advertisements hanging from them, a mixture of English and Japanese. A similar
+shift's occured in pedestrian demographics: more Asians, more runner-types,
+less corps...and no cops. The air's filled with the smells of food, gear,
+nuyen -- and that indefinable, adrenaline-laced tang of danger. Little Chiba
+continues to the south, and Fifth Street lies to the east. A small furniture
+shop stands to the northwest.  
+~
+Flags:	10000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	32686
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31173
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31102
+Name:	Little Chiba 
+Desc:$
+   Little Chiba is known to have a lot of cyber-docs working in the area.
+Also, it is one of the Yakuza's favorite hangouts. As you are walking down the
+street, you realize that the Yaks must make sure no trouble wanders into this
+area. You see several gangers but do not recognize the gang. They give you the
+eye as you pass. Several people pass you walking with a dazed look on their
+face and that "I just had surgery" walk that you recognize. A guy wearing a
+familiar symbol on his jacket walks past you with a nod. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31103
+Name:	Killjoy's Clinic
+Desc:$
+   This room is dimly lit and you see several of what could pass for operating
+tables, but they look very unclean. You see a rat in the corner gnawing on
+what looks like to be an eyeball. The tools of the trade look sort of rusty
+and you are starting to have second thoughts about coming to this place to get
+some cyber. You see a stack of body bags in the corner and realize that they
+are not empty. You wonder if you are next. 
+~
+Flags:	10000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT west]
+	Keywords:	door
+	ToVnum:	31118
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31104
+Name:	Side alley
+Desc:$
+   This side alley is empty and a little grimy. There is an old man in the
+corner clutching a bottle of sake to himself and mumbling something. There are
+some designs on the wall, looks a tag artist had some real fun with this wall
+and was really talented. 
+~
+Flags:	10000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	31102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31105
+Name:	Sniper's Row
+Desc:$
+   This street is pretty clear of vendors. Everyone walking through this
+street is walking very fast, several people are jogging through this street..
+You feel as though you are being watched and for a brief second you see a red
+dot on the guys back in front of you it vanishes and you suddenly feel very
+very uncomfortable. You start walking very fast with a quick understanding of
+what is going on with this street. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	31107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31137
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	50
+[EXIT northwest]
+	ToVnum:	31102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31106
+Name:	Taka's Takeout
+Desc:$
+   This is a small Japanese takeout place that looks pretty good. The smell of
+fresh food causes your mouth to water and you see several patrons throwing
+down on some fried prawns and rice. There is a poster on the wall and the
+decor is black and white. There is no place to sit to wait for an order, but
+they are handling customers very fast.   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31107
+Name:	Dragon's Walk
+Desc:$
+   This part of the street is called Dragon's walk. Legend has it that when
+there was a gang war and Little Chiba was being invaded by a Troll gang, a
+young Eastern Dragon appeared and toasted a lot of the trogs. He then walked
+up and down this street healing each of the fallen defenders and left. This
+area has been a peaceful haven ever since. There is even a meet going down
+with several Yaks and what looks like a mafia thug. The smell of sushi and
+other Japanese food wafts in from the west, and you see a small electronics
+shop to the east. A small alley leads off to the southeast. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31108
+Name:	Shiba's Stables
+Desc:$
+   This small electronics shop is packed with all sorts of the latest tech
+gear. Some of it looks like it was custom made. There are cyber decks,
+programs, kits, all sort of wiz gadgets and toys here. The owner is an old
+Japanese man who has that ex-corp look to him. When asked he says he used to
+do R&D, but left Japan when his daughter goblinized and was sent to Yomi. He
+sighs and says, "The past is the past. How can I help your with your future?"
+~
+Flags:	10000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	31107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31109
+Name:	Lantern street
+Desc:$
+   This place seems like a maze of small streets somewhat interconnected. This
+street is typical of the area, cleaner than most of the shadowy streets. There
+are paper lanterns hanging up and down this street, most of them with Japanese
+symbols and pictograms. The babble of voices from people float down this
+street, somewhat muted by the distances. To the south you see a Street Doc's
+biz and another street to the southeast. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	31107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31110
+Name:	Devil's alley
+Desc:$
+   This small alley is very dirty and unlike the rest of the area. It smells a
+bit and there is a bunch of trash here. Something is moving in the trash and
+you realize that you stumbled on a nest of devil rats. 
+~
+Flags:	1
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	trash
+	Desc:$
+A bunch of trash blocks your way. 
+~
+	ToVnum:	31138
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	40
+[EXIT northwest]
+	ToVnum:	31107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31111
+Name:	Wang's Worx
+Desc:$
+   This small office is...well, dark pink, from the walls, to the floor, to
+the furnishings. A large, not-pink stainless steel operating table  sits
+against the south wall, underneath a circular operating light. Several
+liquid-filled jars, most of them filled with surgical instruments, stand on a
+small table next to it. Sturdy steel-and-glass cabinets hold various bits of
+cyberware. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	31109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31112
+Name:	Daidoji Ave
+Desc:$
+   As you keep walking throughout Little Chiba you are again struck by how
+there is no security as of yet. No Star or Knight Errants at all.  This area
+seems to have been hit by a blast of some sort. You overhear some people
+talking about how the street got it's name. It seems a runner tried to toss a
+grenade, and the stupid fragger threw the pin instead. Well he was carrying
+enough explosives on him to scorch this entire street. It totally destroyed
+the street sign, so the locals call this "The Big Mistake". In Japanese it is
+Daidoji. There is even a crater over to the side where the chummer blew up.  
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	31113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31113
+Name:	Sidestep Ave
+Desc:$
+   This street is fairly empty, with people just passing through every once in
+a while. It looks like this road actually continues on to the east instead of
+twisting and turning like all of the other ones you have been on. Bad thing is
+that this looks like a gang's turf from the gang tags on the surroundings. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	31112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31114
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31114
+Name:	Sidestep Ave..The tollbooth
+Desc:$
+   It seems like a gang has set up a tollbooth here to charge people for
+passing through. The booth is currently empty and riddled with bullet holes.
+There is a smattering of blood here and there, but no bodies. Seems like they
+had a bad idea. You catch a reflection off a scope and decide it is best to
+leave this area. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31115
+Name:	Corner of Sidestep Ave & Slash Street.
+Desc:$
+   The smells of Little Chiba are becoming familiar to you and you are
+starting to like this place. It almost seems as if they took a piece of Japan
+and popped it down in Seattle. There seem to be a lot of Crash cart employees
+coming from the southwest.  
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	31116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31114
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31116
+Name:	Slash Street
+Desc:$
+   It looks like they are about to build a Crash Cart office over to the North
+of here. It is still under construction and looks like they have some guards
+around it. Considering the hatred Docwagon has for them, they better be ready
+for fight. It looks like they will be putting a up a two story office with the
+lower rooms being for medical purposes and the upper part becoming offices. It
+even looks like they will have a heli-pad out back. Useful info chummer, ya
+never know. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31117
+Name:	Corner of Slash & Cyber strip
+Desc:$
+   A number of yaks are here mingling with the rest of the crowd that are
+either sight seeing or shopping. The "Cherry Blossom Inn" is not far from here
+and is supposedly a great place to stay and to stop and get some food at. A
+small shop off to the east marks the beginning of the strip which stretches
+off to the south lined on either side with all kinds of shops dealing
+different items. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	31116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31118
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31118
+Name:	Kang's Pawn Shop
+Desc:$
+   This is a pawnshop and it looks like they buy any and everything. The
+owner, Kang, looks like a very old chummer, part Asian, an ex-military you
+think. The place is reasonably clean and you can detect several not so well
+hidden sentry weapon gun ports pointing out towards the interior of the store.
+Hmm pretty hefty security for a pawnshop if ya ask me. He looks at you with
+clear brown eyes and says 'So desu what can I do for you youngsters today?' 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT east]
+	Keywords:	door~~
+	Desc:$
+A well concealed door 
+~
+	ToVnum:	31103
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	6
+	HiddenRating:	10
+[EXIT west]
+	ToVnum:	31117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31119
+Name:	Cherry Blossom Inn Hibachi
+Desc:$
+   This is a Hibachi grill and bar for the Cherry Blossom inn. The cooks are
+working hard to fix all of the orders and a pretty geisha is in the corner
+softly strumming a Japanese lute. Several of the men here look like gangsters,
+but they look very relaxed here, and you don't see any weapons on them. The
+walls are covered with scenes of cherry trees in full bloom, that are hand
+painted in a traditional manner. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31120
+Name:	Cyber Strip
+Desc:$
+   This street continues on to the north and south. The soft strains of a
+Japanese lute being played flow from the Japanese style inn to the west, along
+with the smells of good food. To the South you can make out flashing signs of
+various businesses. You see dry cleaners over to the east and a sign that says
+"Fu Leng's Laundry". 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	31117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31143
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31134
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31121
+Name:	Heimdall's Haven
+Desc:$
+   This shop is small but looks very clean. It is named after the Norse god
+Heimdall, who was noted for his keen vision. On the wall are different photos
+of various cyber eye designs from the Zeiss golden eye to the completely
+natural looking replacements. They also sell eye packages, so you can get a
+set of cyber eyes with some enhancements already in them, it does look like it
+would cost a pretty penny, but hey it looks worth it. There is a sign on the
+wall that reads: LL = Low light vision, TH = Thermographic vision, EM =
+Electronic magnification, OM = Optical Magnification, FC = Flare Compensation.
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT east]
+	ToVnum:	31122
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31122
+Name:	Cyber Strip
+Desc:$
+   The Strip is alive with action. You see the first of the multitude of Cyber
+shops to the east and west. You  have heard that the Cyber strip of Little
+Chiba has some of the best ware this side of the ocean. The sounds of
+different languages around you tells you how far some the people have traveled
+to visit here. There are a few yakuza mixed in with the crowd. There is a
+small shop to the west and a somewhat larger shop to the east.  
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	31134
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31123
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31125
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31121
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31123
+Name:	White Oak Clinic
+Desc:$
+   This chop shop is has a few customers in it whether waiting to be served,
+or resting up from some slight surgery. There are several posters on the walls
+and several customers have their shirts off and you can see the yakuza tattoos
+on their exposed skin. The doc and his aides are all Asian, Japanese if you
+had to name a flavor. In the corner a sumo match , that is being broadcast
+from Japan, is on the trid and several of the customers are watching it
+intently, as if they had big money riding on the outcome. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT west]
+	ToVnum:	31122
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31124
+Name:	Billy Bob's Body Shop
+Desc:$
+   The doors to this place sized for a medium sized human, if you were an ork
+or troll you would have squeeze yourself in.  As you walk into this place a
+silence falls upon the place. You think, no you know everyone is looking at
+you. There are several patrons looking at you like you were scum. The sound of
+a country western song is the only thing breaking the silence in this place.
+The doc is wearing a cowboy hat and speaks with a southern drawl. There are a
+couple of sets of horns on the wall. A small karaoke machine is off to one
+side and there is also a couple of posters as well. It looks like this place
+is regular hangout for people from the CAS, never mind it being a street doc's
+place. I'd suggest getting my biz done fast and getting the drek outta here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT east]
+	ToVnum:	31125
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31125
+Name:	Cyber Strip
+Desc:$
+   The strip continues to the north and south. Off to the west you can barely
+hear a country western song playing and some bad singing. To the east this is
+a very large cyber shop. The crowd looks a bit thinner in this area, and the
+yakuza presence is not as big here on this portion of this strip. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	31122
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31126
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31126
+Name:	Black Ocean Body Enhancements.
+Desc:$
+   This place is busy as drek. You see some samurai dressed in street gear
+while others wear suits worth thousands of nuyen. This places reeks of
+money. The chairs for people to wait in are real oak, and the carpet is white
+and red and looks stain-proof. There are several paintings on the walls and
+there is Japanese flute music playing in the background. There is a very
+pretty Asian woman in what looks like a real silk kimono serving refreshments
+to all of the customers. Most weapons are checked at door, except for the men
+in black suits who come and go freely. There is a large poster on the wall.
+The more expensively dressed samurai are being handled by the owner himself
+while the rest of the customers are approached by one of the apprentices.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT west]
+	ToVnum:	31125
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31127
+Name:	Soriyama's Studios 
+Desc:$
+   Holy Drek, this is one of Soriyama's places. Soriyama is the best in the
+biz when it comes to any type of cyber or bioware. He is the one that works on
+the Elite Japanese bodyguards for the Emperor and his fees are very high. He
+has a lot of children and it looks like this place is run by one of them. This
+place is medium sized and has an upstairs and downstairs to it. The walls are
+white and the feeling of professional just reeks from this place. The
+receptionist, a pretty Hispanic lady, informs you that the Cyber ware
+enhancements are done on the second floor by Dr. Shi-Jan Soriyama.(Ahh
+Soriyama's 4th son), and his wife Dr. Keisha Soriyama does bioware
+enhancements on the lower level (so she means the basements duh). 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT east]
+	ToVnum:	31128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	steel door~~
+	Desc:$
+A steel door leading up with a sign saying "CYBERWARE" on it. 
+~
+	ToVnum:	31145
+	Flags:	1
+	Material:	metal
+	Barrier:	16
+	KeyVnum:	31100
+	LockRating:	1
+[EXIT down]
+	Keywords:	black door~~
+	Desc:$
+A black door leading down with a sign saying "BIOWARE" on it" 
+~
+	ToVnum:	31146
+	Flags:	2
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	31100
+BREAK
+#31128
+Name:	Cyber Strip
+Desc:$
+   This part of the strip has an ATM machine and a long line waiting for it.
+You spot a chummer in the line near the front and he gives you the finger  for
+wanting to cut. Oh well, some chummer. Over to the east you see the Chrome
+Dragon cyber shop and to the West Soriyama Studios. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	31125
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31129
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31135
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31127
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31129
+Name:	The Chrome Dragon
+Desc:$
+      In this place everything is made of chromed and very bright, the chairs,
+tables. Even the freaking floor is chromed. The receptionist has platinum hair
+and her entire body is chromed with a high quality finish. Then she sees the
+look on your face she tells you it is a body paint job, and last for a couple
+of months. It is permeable so her skin can breath, and yes she has it all
+over, and gives you a wink. There are a couple of gangers hanging in here,
+looks like they are security for the place.  The street doc and owner of this
+place is here relaxing with friends.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT southeast]
+	Keywords:	door~~
+	Desc:$
+A well hidden door 
+~
+	ToVnum:	31147
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	10
+[EXIT west]
+	ToVnum:	31128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31130
+Name:	Acme Hardware
+Desc:$
+   This store looks like has been here for ages, with old shelves, a broken
+down fan over the cashier, and an old dog laying on a rug in the far corner,
+next to a sleeping old man. The air in here smells a little stale as if from a
+by-gone era.. The shelves maybe old, but they are holding the latest in
+weaponry. Bet it costs a drekload chummer. 
+~
+Flags:	10001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT east]
+	ToVnum:	31131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31131
+Name:	Cyber Strip
+Desc:$
+   This part of the strip seems a bit older than the rest. There are still a
+lot of people around, but they seem more like locals and not the people
+passing through looking for cheap thrills.  The Yakuza presence has dwindled
+to nothing in this area, but you see more Steel dragon gangers around. To the
+west is Acme Hardware store, while to the east is a branch of Universal
+Omitech.                                        
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	31135
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31133
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31130
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31132
+Name:	Universal Omnitech
+Desc:$
+   These branches are all over the city and range in size from very small to
+huge. This particular shop is medium-sized and contains some of the latest
+innovations in biotech. It also looks they have been checking out the other
+shops in the area, seeing what they are not offering and filling in the gaps,
+so to speak. The rooms are painted in a soft baby blue and sounds of the ocean
+waves lapping on the shores are being played as background music. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT west]
+	ToVnum:	31131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31133
+Name:	End of Cyber Strip
+Desc:$
+   This is the end of the Cyber strip. It looks like they might be adding on
+in the future, but so far this is it. This part of the strip is empty and sort
+of scary. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	31131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31134
+Name:	Cyber Strip
+Desc:$
+   The crowds are not as heavy here, but you still see a lot of people
+checking out the area. A couple of the people looking around are very nervous,
+and keep at least one of their hands in their jacket pocket. Some of the
+Yakuza glance in their direction but act like they did not see them. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	31120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31122
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31135
+Name:	Cyber Strip
+Desc:$
+   This part of strip seems like a hangout for the Steel Dragons and a few
+hookers. Several of the Dragons give you the eye as you walk by, and the
+Hookers decide you are not a tourist, thus not a mark. The strips continues
+north and south. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	31128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31137
+Name:	Sniper's roost
+Desc:$
+   This little space is an almost perfect sniper's roost. You can see for a
+long way and you are very well hidden. There must be some magic protecting
+this place also for you not to notice it. 
+~
+Flags:	1000000000010100000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	31105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31138
+Name:	Rikki's lair
+Desc:$
+   This is the squat of that little jerk Rikki ratboy. it is dirty with trash
+and junk all over the place. He has a few shamanic things here and there, but
+they look like they are in bad condition, but the other things he has look in
+much better shape. Those are the things probably for sale. A huge rat runs
+across your foot and is gone before you can react. Man this place is a dump
+and reeks, Whew! 
+~
+Flags:	10000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	trash
+	Desc:$
+A mound of trash blocks your way. 
+~
+	ToVnum:	31110
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	40
+BREAK
+#31139
+Name:	Cherry Blossom Inn
+Desc:$
+   This inn is done in a very traditional Japanese style. There are very low
+tables for eating and drinking, and very pretty geishas laughing and making
+sure that the guests are having a good time. From somewhere the soft strains
+of music floats thoroughout the inn spreading peace in its wake.  To the west
+is a public eating place and bar. The private rooms are to the north and
+usually used for business meetings. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31119
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31140
+Name:	Cherry Meeting areas
+Desc:$
+   This hall leads to several different private areas. There is a private room
+to the southeast and another to the southwest. The walls of this hallway are
+decorated with ancient battle scenes and sayings of old great generals.
+Privacy is assured in the meeting rooms you are told. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door~~
+	ToVnum:	31141
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	door~~
+	Desc:$
+a door 
+~
+	ToVnum:	31142
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31141
+Name:	The Water Meeting room
+Desc:$
+   This room is done in different shades of blue and the japanese characters
+for water and ocean are on the walls. There is a painting on the wall that is
+somewhat hard to make out. There is a circular table here and unlike the rest
+of the inn there are actual chairs for it. The table has a small but very
+powerful white noise generator in the middle. 
+~
+Flags:	1101100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	Keywords:	door~~
+	ToVnum:	31140
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31142
+Name:	The Fire Meeting room
+Desc:$
+   This room is done in all different shades of red. The japanese characters
+for fire and flame are written in the walls and several modern paintings of
+eastern dragons are on the wall. There is a circular table in the middle of
+the room surrounded by chairs. In the middle of the table is a small but very
+powerful white noise generator.  
+~
+Flags:	1101100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	31140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31143
+Name:	Fu Leng's laundry
+Desc:$
+   The smell of starch and freshly pressed clothes hits your nostrils like a
+hammer.  Clouds of steam billow up from the back as the workers press and dry
+clean clothes. Most of the workers are actually black and not Asian, like you
+were expecting. It also seems a lot of people come here to buy nice clothes
+that people have not picked up for ages, sometimes the owner will also buy
+clothing. You can barely make out a poster on the wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	31120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31144
+Name:	Construction Site for a Crash Cart Office
+Desc:$
+   This is the construction site for the Crash Cart office. They have yet to
+lay the foundation, but you can see where things are going to go. You can tell
+where the heli-pad will be located, and that may prove to be some useful info.
+Hmmm, this might be a good place to dump some bodies while you're at it. There
+are a few guards around but they are not paying too much attention to you, but
+they may start when they have an actual building before they will be more
+alert for sabotage. 
+~
+Flags:	10000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	31116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31145
+Name:	Cyberware portion of S. Studios
+Desc:$
+   This room is very neat and clean. It is all white except for the steel
+operating table, and next to it is a tray with allergy free operating tools on
+it.. There are computer displays on the walls, and seem keyed to the Doc's
+voice. You are sure you made the right choice in coming here.
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT down]
+	Keywords:	steel door~~~~
+	ToVnum:	31127
+	Flags:	1
+	Material:	metal
+	Barrier:	16
+	KeyVnum:	31100
+BREAK
+#31146
+Name:	Biotech lab for S. Studios
+Desc:$
+   This room is painted black and has computer display screens on the walls.
+There is a large steel grey operating table with laser operating tools next to
+it. The air smells crisp and fresh almost as if you were outside on a good day
+on the mountains. The floor is tiled in black and grey patterns. Something is
+odd but you just can't put your finger on it.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT up]
+	ToVnum:	31127
+	Flags:	0
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	0
+BREAK
+#31147
+Name:	Backroom of the Chrome Dragon
+Desc:$
+   This is the HQ for the Steel Dragon gang. If you are not a dragon and walk
+back here you are asking for trouble. They are all human and mostly Asian. The
+older members are pretty cybered and some of them look to leave the gang to
+join the Yakuza. There are beds here and a couple of tables for eating and
+planning. The entire back wall is covered by a mural of a Great Eastern Dragon
+with gleaming metallic skin on top of a hill overlooking a Japanese castle
+with the sun in back of the castle highlighting it. The room is otherwise
+painted a dark grey. 
+~
+Flags:	10010100000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT northwest]
+	ToVnum:	31129
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31172
+Name:	The Fire meeting room
+Desc:$
+   This room is done in shades of red with the characters for fire and flame
+on the walls. Also there are paintings of dragons breathing fire hanging here
+as well. There is a circular table in the center of the room and unlike the
+rest of the inn there are chairs to go with it. Also in the middle of the
+table, actually part of it is a small but powerful white noise generator. 
+~
+Flags:	1100000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	31140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31173
+Name:	Saotome's Furniture
+Desc:$
+   This small, bright shop features a small but exquisite selection of
+Japanese furniture. A row of futons and frames occupies one wall; rolled up
+tatami mats in various sizes lean against another. Tables, closets and wall
+hangings are also on display. There's even an antique wooden tub tucked away
+in one corner. (^mOOC^n: The clothing chest can't be picked up once it's dropped,
+so make sure you put it down in the right place.) 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	31101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

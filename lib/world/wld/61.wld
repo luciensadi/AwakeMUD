@@ -1,0 +1,19 @@
+#6100
+Name:	NA/UCAS-SEA-4206-555-6583
+Desc:$
+   The iconography for this system is heartbreakingly standard from the start.
+System access is represented by a crackling gateway opened in the vast void of
+the matrix. The gateway moves to face you from whatever vantage point you move
+to. Peering inside, the host looks to provide more of the same bland drek. 
+~
+Flags:	0
+SecType:	Green Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END
