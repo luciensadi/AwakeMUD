@@ -75,7 +75,7 @@ DefaultPos:	Standing
 	rifles:	10
 	assault rifles:	10
 	stealth:	12
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #23302
 Keywords:	wuxing wu xing sentinel turret
@@ -112,7 +112,7 @@ AttackType:	Rifle
 	Impact:	8
 	Karma:	20
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	rifles:	8
 BREAK
 #23303
@@ -153,7 +153,7 @@ DefaultPos:	Standing
 	Cash:	750
 	Bank:	750
 [SKILLS]
-	unarmed combat:	14
+	brawling:	14
 	sorcery:	14
 BREAK
 #23304
@@ -233,7 +233,7 @@ AttackType:	Crush
 	Cash:	150
 	Bank:	300
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	pole arms:	12
 	edged weapons:	12
 	sorcery:	8
@@ -274,7 +274,7 @@ AttackType:	Crush
 	Cash:	150
 	Bank:	250
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	machine guns:	12
 BREAK
 #23307
@@ -488,7 +488,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	125
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #23313
 Keywords:	Division W Representative
@@ -588,7 +588,7 @@ DefaultPos:	Standing
 	Height:	150
 	Weight:	45
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #23316
 Keywords:	hyperprocess hyperprocessing hyper process representative man
@@ -766,7 +766,7 @@ DefaultPos:	Standing
 	Cash:	500
 	Bank:	500
 [SKILLS]
-	unarmed combat:	14
+	brawling:	14
 BREAK
 #23321
 Keywords:	Dong Zhou wuxing executive fat obese man
@@ -805,7 +805,7 @@ DefaultPos:	Standing
 	Cash:	500
 	Bank:	500
 [SKILLS]
-	unarmed combat:	14
+	brawling:	14
 BREAK
 #23322
 Keywords:	wall guard Wall Guard sniper
@@ -843,7 +843,7 @@ DefaultPos:	Standing
 	Bank:	300
 [SKILLS]
 	rifles:	10
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #23323
 Keywords:	arrives from
@@ -882,7 +882,7 @@ DefaultPos:	Standing
 	Cash:	150
 	Bank:	250
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	10
 BREAK
 #23324
@@ -926,7 +926,7 @@ DefaultPos:	Standing
 [SKILLS]
 	assault cannons:	15
 	sorcery:	15
-	unarmed combat:	14
+	brawling:	14
 BREAK
 #23325
 Keywords:	black guard private rank low
@@ -1046,7 +1046,7 @@ DefaultPos:	Standing
 [SKILLS]
 	edged weapons:	12
 	machine guns:	12
-	unarmed combat:	12
+	brawling:	12
 	stealth:	12
 BREAK
 #23328
@@ -1086,7 +1086,7 @@ DefaultPos:	Standing
 	Cash:	300
 	Bank:	500
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #23329
 Keywords:	scientist wuxing researcher
@@ -1125,7 +1125,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	100
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #23330
 Keywords:	magician wuxing mage wizard reseacher scientist
@@ -1162,7 +1162,7 @@ DefaultPos:	Standing
 	Impact:	12
 	Cash:	150
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	12
 BREAK
 #23331
@@ -1203,7 +1203,7 @@ DefaultPos:	Standing
 	Cash:	750
 	Bank:	500
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	12
 	conjuring:	6
 BREAK
@@ -1270,7 +1270,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	87
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #23334
 Keywords:	dancer raver glowing glowstick
@@ -1307,7 +1307,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	150
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #23335
 Keywords:	bartender Xiang Ling
@@ -1341,7 +1341,7 @@ DefaultPos:	Standing
 	Height:	230
 	Weight:	110
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #23336
 Keywords:	Zhang Ran man suit
@@ -1482,7 +1482,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #23340
 Keywords:	Rex Ruther trog slitch fragger snitch troll
@@ -1519,7 +1519,7 @@ DefaultPos:	Standing
 	Cash:	250
 	Bank:	250
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	10
 BREAK
 #23341
@@ -1555,7 +1555,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	1000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #23342
 Keywords:	Sima Zhi asian dark haired nervous
@@ -1590,7 +1590,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	1000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #23343
 Keywords:	ares decker infiltrator
@@ -1627,7 +1627,7 @@ DefaultPos:	Standing
 [SKILLS]
 	computers:	12
 	sub-machine guns:	12
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #23344
 Keywords:	ares combat mage magician
@@ -1664,7 +1664,7 @@ DefaultPos:	Standing
 	Cash:	1000
 [SKILLS]
 	sorcery:	12
-	unarmed combat:	12
+	brawling:	12
 	edged weapons:	12
 BREAK
 #23345
@@ -1701,7 +1701,7 @@ DefaultPos:	Standing
 	Cash:	1000
 [SKILLS]
 	sub-machine guns:	12
-	unarmed combat:	12
+	brawling:	12
 	edged weapons:	12
 BREAK
 #23346
@@ -1737,7 +1737,7 @@ AttackType:	Crush
 	Ballistic:	100
 	Impact:	10
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	12
 BREAK
 #23347
@@ -1775,7 +1775,7 @@ DefaultPos:	Standing
 	Impact:	11
 	Cash:	250
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	assault rifles:	12
 BREAK
 #23348
@@ -1813,7 +1813,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	1500
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	clubs:	10
 BREAK
 #23349
@@ -1850,7 +1850,7 @@ DefaultPos:	Standing
 	Impact:	14
 [SKILLS]
 	edged weapons:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #23350
 Keywords:	boy small little chinese
@@ -1886,7 +1886,7 @@ DefaultPos:	Standing
 	Impact:	1
 	Cash:	50
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #23391
 Keywords:	human guard inner circle
@@ -1920,7 +1920,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #23392
 Keywords:	outer circle guard human
@@ -1954,7 +1954,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #23393
 Keywords:	guard far circle human
@@ -1988,7 +1988,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #23394
 Keywords:	three circles circle guard burly human
@@ -2023,7 +2023,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 BREAK
 #23395
 Keywords:	three circles circle guard burly human
@@ -2058,7 +2058,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 BREAK
 #23396
 Keywords:	mob unfinished
@@ -2093,7 +2093,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 BREAK
 #23399
 Keywords:	Doctor Jay Johnson Dr Dr.
@@ -2131,7 +2131,7 @@ DefaultPos:	Standing
 	Bank:	1500
 	Karma:	20
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	English:	12
 	Chinese:	12
 	aura reading:	12

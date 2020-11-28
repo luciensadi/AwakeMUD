@@ -34,7 +34,7 @@ AttackType:	Stab
 	Cash:	500
 [SKILLS]
 	machine guns:	7
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #10001
 Keywords:	charly man cop
@@ -589,7 +589,7 @@ AttackType:	Bite
 	Cash:	10
 	Bank:	20
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #10018
 Keywords:	chiphead filthy man
@@ -626,7 +626,7 @@ AttackType:	Claw
 	Cash:	20
 	Bank:	50
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #10019
 Keywords:	dog mangy stray
@@ -692,7 +692,7 @@ AttackType:	Bite
 	Height:	0
 	Weight:	20
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #10021
 Keywords:	mercenary dark man
@@ -763,7 +763,7 @@ DefaultPos:	Standing
 	Ballistic:	20
 	Impact:	15
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	firearms:	10
 	armed combat:	10
 	:	3

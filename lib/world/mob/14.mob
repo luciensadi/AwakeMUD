@@ -487,7 +487,7 @@ AttackType:	Crush
 	Weight:	0
 	Impact:	5
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #1414
 Keywords:	nsane Ork Insane Mother Fucker Fucking Bastard Asshole
@@ -597,7 +597,7 @@ DefaultPos:	Standing
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #1417
 Keywords:	Suit Chinese Triad 
@@ -847,7 +847,7 @@ DefaultPos:	Standing
 	Ballistic:	3
 	Impact:	3
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #1425
 Keywords:	goat baby
@@ -955,7 +955,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Cash:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #1444
 Keywords:	Asamundo Soldier

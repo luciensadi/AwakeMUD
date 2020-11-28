@@ -35,7 +35,7 @@ DefaultPos:	Standing
 	Weight:	60
 [SKILLS]
 	athletics:	2
-	unarmed combat:	6
+	brawling:	6
 	sub-machine guns:	7
 	pistols:	7
 BREAK
@@ -72,7 +72,7 @@ DefaultPos:	Standing
 	Weight:	55
 [SKILLS]
 	athletics:	2
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #70002
 Keywords:	Dawn Edwards woman young
@@ -111,7 +111,7 @@ DefaultPos:	Standing
 	athletics:	2
 	shotguns:	5
 	pistols:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #70003
 Keywords:	frail old keymaster

@@ -572,7 +572,7 @@ DefaultPos:	Standing
 	Weight:	77
 [SKILLS]
 	edged weapons:	3
-	unarmed combat:	3
+	brawling:	3
 	leadership:	3
 	biotech:	3
 BREAK
@@ -611,7 +611,7 @@ DefaultPos:	Standing
 	Weight:	80
 [SKILLS]
 	edged weapons:	4
-	unarmed combat:	3
+	brawling:	3
 	leadership:	6
 	biotech:	4
 BREAK

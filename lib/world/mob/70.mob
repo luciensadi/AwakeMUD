@@ -112,7 +112,7 @@ DefaultPos:	Standing
 [SKILLS]
 	stealth:	9
 	armed combat:	9
-	unarmed combat:	9
+	brawling:	9
 	edged weapons:	9
 	projectiles:	9
 BREAK
@@ -256,7 +256,7 @@ AttackType:	Bite
 [SKILLS]
 	stealth:	9
 	athletics:	9
-	unarmed combat:	9
+	brawling:	9
 	armed combat:	9
 	edged weapons:	9
 BREAK
@@ -332,7 +332,7 @@ AttackType:	Claw
 	armed combat:	9
 	sorcery:	9
 	:	9
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #7009
 Keywords:	rave
@@ -403,7 +403,7 @@ DefaultPos:	Standing
 	Impact:	60
 [SKILLS]
 	armed combat:	9
-	unarmed combat:	9
+	brawling:	9
 	edged weapons:	9
 	stealth:	9
 	athletics:	9

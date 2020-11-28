@@ -32,6 +32,6 @@ AttackType:	Pound
 	Bank:	5000
 	Karma:	1
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 END

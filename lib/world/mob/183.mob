@@ -230,7 +230,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #18307
 Keywords:	man
@@ -303,7 +303,7 @@ AttackType:	Punch
 	Cash:	50
 [SKILLS]
 	sorcery:	7
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #18309
 Keywords:	guardian spirit
@@ -338,7 +338,7 @@ AttackType:	Pound
 	Height:	170
 	Weight:	0
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #18310
 Keywords:	shadow spirit

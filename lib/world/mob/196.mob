@@ -102,7 +102,7 @@ AttackType:	Cannon
 	Karma:	34
 [SKILLS]
 	armed combat:	10
-	unarmed combat:	10
+	brawling:	10
 	assault cannons:	10
 BREAK
 #19603
@@ -218,7 +218,7 @@ AttackType:	Punch
 	Bank:	900
 [SKILLS]
 	armed combat:	5
-	unarmed combat:	5
+	brawling:	5
 	:	2
 	:	3
 BREAK
@@ -254,7 +254,7 @@ DefaultPos:	Standing
 	Ballistic:	4
 	Impact:	3
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	5
 	firearms:	5
 BREAK
@@ -327,7 +327,7 @@ DefaultPos:	Standing
 	Bank:	20000
 	Karma:	10
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	armed combat:	6
 	firearms:	6
 	gunnery:	6
@@ -363,7 +363,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	160
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #19610
 Keywords:	MP checkpoint guard
@@ -401,7 +401,7 @@ AttackType:	Pound
 [SKILLS]
 	firearms:	8
 	gunnery:	8
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #19611
 Keywords:	target
@@ -472,7 +472,7 @@ AttackType:	Pound
 	Bank:	2000
 [SKILLS]
 	firearms:	11
-	unarmed combat:	8
+	brawling:	8
 	armed combat:	10
 BREAK
 #19613
@@ -505,7 +505,7 @@ DefaultPos:	Standing
 	Height:	168
 	Weight:	95
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #19614
 Keywords:	doc doctor
@@ -646,7 +646,7 @@ AttackType:	Bludgeon
 [SKILLS]
 	firearms:	10
 	gunnery:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #19618
 Keywords:	troll cyberzombie zombie
@@ -684,7 +684,7 @@ DefaultPos:	Standing
 	Cash:	3000
 	Bank:	5000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	armed combat:	10
 	:	11
 BREAK
@@ -718,7 +718,7 @@ AttackType:	Machine Gun
 	Height:	100
 	Weight:	70
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	machine guns:	7
 BREAK
 #19621
@@ -752,6 +752,6 @@ DefaultPos:	Standing
 	Weight:	0
 [SKILLS]
 	sorcery:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 END

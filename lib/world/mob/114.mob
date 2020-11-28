@@ -38,7 +38,7 @@ AttackType:	Bite
 	Height:	140
 	Weight:	120
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #11401
 Keywords:	attendant bowling alley
@@ -114,7 +114,7 @@ AttackType:	Claw
 	Height:	280
 	Weight:	200
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #11414
 Keywords:	towel boy 

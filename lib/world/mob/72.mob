@@ -571,7 +571,7 @@ DefaultPos:	Standing
 	Cash:	20
 [SKILLS]
 	sub-machine guns:	7
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #7220
 Keywords:	ganger triad elite
@@ -610,7 +610,7 @@ AttackType:	Punch
 	Cash:	100
 [SKILLS]
 	assault rifles:	6
-	unarmed combat:	3
+	brawling:	3
 	rifles:	9
 	:	2
 BREAK
@@ -647,7 +647,7 @@ AttackType:	Punch
 	Impact:	6
 [SKILLS]
 	assault rifles:	6
-	unarmed combat:	3
+	brawling:	3
 	rifles:	9
 	:	2
 BREAK
@@ -684,7 +684,7 @@ AttackType:	Punch
 	Weight:	75
 [SKILLS]
 	edged weapons:	15
-	unarmed combat:	15
+	brawling:	15
 	sorcery:	15
 	sub-machine guns:	12
 BREAK
@@ -723,7 +723,7 @@ AttackType:	Punch
 	Impact:	4
 	Cash:	120
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #7224
 Keywords:	student pracitising
@@ -755,7 +755,7 @@ DefaultPos:	Standing
 	Height:	164
 	Weight:	68
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #7226
 Keywords:	mistress asian woman
@@ -831,7 +831,7 @@ AttackType:	Machine Gun
 	Bank:	40000
 [SKILLS]
 	sub-machine guns:	12
-	unarmed combat:	12
+	brawling:	12
 	edged weapons:	12
 	pistols:	10
 BREAK
@@ -868,7 +868,7 @@ DefaultPos:	Standing
 	Height:	160
 	Weight:	60
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #7252
 Keywords:	oni heavily scarred
@@ -1023,6 +1023,6 @@ DefaultPos:	Standing
 	Impact:	15
 	Cash:	300
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 END

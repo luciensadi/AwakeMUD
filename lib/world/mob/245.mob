@@ -35,7 +35,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	80
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	negotiation:	6
 BREAK
 #24501
@@ -76,7 +76,7 @@ DefaultPos:	Standing
 	Height:	130
 	Weight:	70
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #24502
 Keywords:	Henry Feed burly man
@@ -114,7 +114,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	90
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #24503
 Keywords:	triad bodyguard slick
@@ -153,7 +153,7 @@ AttackType:	Slash
 	Cash:	200
 	Bank:	250
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	edged weapons:	8
 BREAK
 #24504
@@ -194,7 +194,7 @@ AttackType:	Punch
 	Cash:	425
 	Bank:	200
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #24505
 Keywords:	Fong Serpent Triad
@@ -235,7 +235,7 @@ DefaultPos:	Standing
 	Cash:	525
 	Bank:	350
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	10
 BREAK
 #24506
@@ -273,7 +273,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	235
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #24507
 Keywords:	bodyguard triad slick
@@ -310,7 +310,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	255
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #24508
 Keywords:	Yohei Shi Min
@@ -350,7 +350,7 @@ DefaultPos:	Standing
 	Cash:	345
 	Bank:	255
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	edged weapons:	9
 BREAK
 END

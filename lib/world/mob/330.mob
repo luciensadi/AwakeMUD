@@ -104,7 +104,7 @@ DefaultPos:	Standing
 	Impact:	5
 	Cash:	450
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #33003
 Keywords:	clerk elven beautiful Lordstrums Department store
@@ -285,7 +285,7 @@ DefaultPos:	Standing
 	Height:	175
 	Weight:	72
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #33013
 Keywords:	wageslave elven
@@ -323,7 +323,7 @@ DefaultPos:	Standing
 	Cash:	150
 	Bank:	150
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #33014
 Keywords:	human gentleman old
@@ -360,7 +360,7 @@ DefaultPos:	Standing
 	Cash:	180
 	Bank:	215
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #33015
 Keywords:	Seoulpa ganger rugged smoking
@@ -398,7 +398,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	125
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #33016
 Keywords:	ancient ganger member beaten bruised
@@ -435,7 +435,7 @@ DefaultPos:	Standing
 	Ballistic:	1
 	Impact:	1
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #33020
 Keywords:	Burton Blackwell elven man fire-scarred
@@ -472,6 +472,6 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 END

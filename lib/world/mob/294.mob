@@ -31,7 +31,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #29401
 Keywords:	Jim groundskeeper groundkeeper caretaker corps corpse cadaver undead zombie
@@ -72,7 +72,7 @@ DefaultPos:	Standing
 	Weight:	60
 [SKILLS]
 	pole arms:	5
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #29402
 Keywords:	orb sphere blue-tinged light will-o-wisp corpselight
@@ -110,7 +110,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Level:	5
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #29403
 Keywords:	shambles in from
@@ -149,7 +149,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #29404
 Keywords:	ghoul wretched
@@ -188,7 +188,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #29405
 Keywords:	bogie rottweiler over-sized dog
@@ -224,7 +224,7 @@ AttackType:	Bite
 	Height:	125
 	Weight:	60
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #29406
 Keywords:	gargoyle squat grey skinned winged
@@ -265,7 +265,7 @@ AttackType:	Claw
 	Ballistic:	7
 	Impact:	7
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #29407
 Keywords:	loup-garou werewolf beast humanoid ravenous
@@ -304,7 +304,7 @@ AttackType:	Claw
 	Height:	200
 	Weight:	100
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #29408
 Keywords:	goblin dwarf sickly little
@@ -382,7 +382,7 @@ AttackType:	Bite
 	Ballistic:	1
 	Impact:	1
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	athletics:	6
 BREAK
 #29410
@@ -421,7 +421,7 @@ AttackType:	Claw
 	Weight:	70
 	Level:	9
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	8
 BREAK
 #29411
@@ -461,7 +461,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #29412
 Keywords:	ghoul wretched
@@ -500,7 +500,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #29413
 Keywords:	worm rockworm two-meter nasty
@@ -540,7 +540,7 @@ AttackType:	Bite
 	Ballistic:	1
 	Impact:	1
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	athletics:	6
 BREAK
 #29414
@@ -580,7 +580,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	athletics:	6
 BREAK
 #29415
@@ -619,7 +619,7 @@ DefaultPos:	Standing
 	Ballistic:	4
 	Cash:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	edged weapons:	7
 BREAK
 #29416
@@ -659,7 +659,7 @@ DefaultPos:	Standing
 	Ballistic:	4
 	Cash:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	assault rifles:	7
 	clubs:	6
 BREAK
@@ -699,7 +699,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Cash:	850
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	10
 	edged weapons:	7
 BREAK
@@ -739,6 +739,6 @@ DefaultPos:	Standing
 	Impact:	5
 	Cash:	425
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 END

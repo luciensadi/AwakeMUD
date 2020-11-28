@@ -420,7 +420,7 @@ DefaultPos:	Standing
 	Weight:	0
 [SKILLS]
 	firearms:	20
-	unarmed combat:	20
+	brawling:	20
 	armed combat:	20
 BREAK
 #11113
@@ -457,7 +457,7 @@ DefaultPos:	Standing
 	Ballistic:	3
 	Impact:	2
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #11114
 Keywords:	secretary woman
@@ -492,7 +492,7 @@ AttackType:	Bite
 	Ballistic:	2
 	Impact:	2
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #11115
 Keywords:	employee aztechnology man
@@ -530,7 +530,7 @@ AttackType:	Pound
 	Impact:	4
 	Cash:	49
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #11116
 Keywords:	mage man tall 
@@ -567,7 +567,7 @@ AttackType:	Pound
 	Impact:	7
 	Bank:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	7
 BREAK
 #11117
@@ -606,7 +606,7 @@ AttackType:	Pound
 	Bank:	200
 	Karma:	67
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	7
 BREAK
 #11118
@@ -647,7 +647,7 @@ AttackType:	Pound
 	Cash:	10
 	Bank:	50
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	6
 BREAK
 #11119
@@ -839,7 +839,7 @@ AttackType:	Claw
 	Bank:	400
 	Karma:	88
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #11124
 Keywords:	emilio pascua greasy man
@@ -878,7 +878,7 @@ AttackType:	Pound
 	Impact:	12
 	Bank:	200
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #11125
 Keywords:	unfinished mob
@@ -954,7 +954,7 @@ AttackType:	Pound
 	Impact:	18
 	Bank:	200
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #11127
 Keywords:	martinez reynaldo tall man aztechnology
@@ -1057,6 +1057,6 @@ DefaultPos:	Standing
 	Weight:	90
 [SKILLS]
 	sorcery:	8
-	unarmed combat:	8
+	brawling:	8
 BREAK
 END

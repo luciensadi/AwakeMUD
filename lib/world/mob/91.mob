@@ -33,7 +33,7 @@ AttackType:	Punch
 	Cash:	100
 	Bank:	400
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #9101
 Keywords:	Dancer
@@ -67,7 +67,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	300
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9102
 Keywords:	hooker prostitute slut
@@ -100,7 +100,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	200
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	street etiquette:	3
 	athletics:	4
 BREAK
@@ -138,7 +138,7 @@ DefaultPos:	Standing
 	Cash:	400
 	Bank:	1000
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	street etiquette:	3
 BREAK
 #9104
@@ -176,7 +176,7 @@ AttackType:	Pound
 	Impact:	5
 	Bank:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	street etiquette:	3
 	corporate etiquette:	4
 	firearms:	3
@@ -217,7 +217,7 @@ DefaultPos:	Standing
 [SKILLS]
 	sorcery:	5
 	:	3
-	unarmed combat:	2
+	brawling:	2
 	:	3
 BREAK
 #9106
@@ -287,7 +287,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	40
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #9108
 Keywords:	Dominara
@@ -356,7 +356,7 @@ AttackType:	Thrash
 	Weight:	0
 	Karma:	573
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	armed combat:	50
 	sorcery:	50
 	firearms:	50
@@ -510,7 +510,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Bank:	1200
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9114
 Keywords:	Jake Albright
@@ -547,7 +547,7 @@ AttackType:	Maul
 	Impact:	15
 	Karma:	50
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	12
 BREAK
 #9115
@@ -684,7 +684,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	400
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	armed combat:	2
 BREAK
 #9119
@@ -756,7 +756,7 @@ AttackType:	Pistol
 [SKILLS]
 	firearms:	4
 	armed combat:	2
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9121
 Keywords:	fisherman old
@@ -829,7 +829,7 @@ AttackType:	Shotgun
 	Cash:	35
 [SKILLS]
 	sub-machine guns:	6
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #9123
 Keywords:	clerk desk
@@ -898,7 +898,7 @@ DefaultPos:	Standing
 	Ballistic:	20
 	Impact:	20
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #9125
 Keywords:	cleaner street sweeper
@@ -971,7 +971,7 @@ AttackType:	Claw
 	Bank:	100
 [SKILLS]
 	armed combat:	4
-	unarmed combat:	4
+	brawling:	4
 	firearms:	4
 BREAK
 #9127
@@ -1005,7 +1005,7 @@ AttackType:	Bite
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #9128
 Keywords:	bat cave
@@ -1037,7 +1037,7 @@ AttackType:	Bite
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9129
 Keywords:	Cimas nosferatu vampire
@@ -1073,7 +1073,7 @@ AttackType:	Claw
 	Ballistic:	15
 	Impact:	13
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	armed combat:	4
 	sorcery:	12
 BREAK
@@ -1175,7 +1175,7 @@ AttackType:	Claw
 	Ballistic:	10
 	Impact:	12
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	7
 	armed combat:	4
 BREAK
@@ -1210,7 +1210,7 @@ AttackType:	Bite
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #9202
 Keywords:	Alex Dr. Scriptshaw
@@ -1251,7 +1251,7 @@ AttackType:	Bite
 	Cash:	2000
 	Bank:	5000
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	8
 	firearms:	6
 BREAK
@@ -1286,7 +1286,7 @@ AttackType:	Bite
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9204
 Keywords:	smuggler sleeping
@@ -1389,7 +1389,7 @@ AttackType:	Bite
 	Weight:	0
 [SKILLS]
 	sorcery:	2
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9207
 Keywords:	maniac crazed
@@ -1464,7 +1464,7 @@ AttackType:	Claw
 	Impact:	11
 	Karma:	1
 [SKILLS]
-	unarmed combat:	11
+	brawling:	11
 	sorcery:	9
 BREAK
 #9250
@@ -1504,7 +1504,7 @@ AttackType:	Claw
 	Ballistic:	6
 	Impact:	10
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #9300
 Keywords:	kid annoying
@@ -1571,7 +1571,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	700
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	armed combat:	4
 BREAK
 #9302
@@ -1613,7 +1613,7 @@ AttackType:	Pistol
 [SKILLS]
 	firearms:	5
 	sorcery:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #9303
 Keywords:	Office worker
@@ -1649,7 +1649,7 @@ DefaultPos:	Standing
 	Cash:	10
 [SKILLS]
 	corporate etiquette:	3
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9304
 Keywords:	autocannon
@@ -1685,7 +1685,7 @@ AttackType:	Cannon
 	Impact:	8
 	Karma:	20
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	firearms:	6
 	gunnery:	6
 BREAK
@@ -1719,7 +1719,7 @@ AttackType:	Bite
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #9306
 Keywords:	guard security
@@ -1757,7 +1757,7 @@ AttackType:	Slash
 [SKILLS]
 	firearms:	4
 	armed combat:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #9307
 Keywords:	Moses chief
@@ -1795,7 +1795,7 @@ DefaultPos:	Sitting
 	Impact:	12
 [SKILLS]
 	sorcery:	8
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #9308
 Keywords:	doctor trauma
@@ -1899,7 +1899,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	3
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	biotech:	6
 BREAK
 #9311
@@ -1939,7 +1939,7 @@ AttackType:	Pound
 	Bank:	100
 [SKILLS]
 	sorcery:	9
-	unarmed combat:	3
+	brawling:	3
 	biotech:	10
 BREAK
 #9312
@@ -1981,7 +1981,7 @@ AttackType:	Thrash
 	Ballistic:	15
 	Impact:	12
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	:	1
 BREAK
 #9313
@@ -2016,7 +2016,7 @@ AttackType:	Claw
 	Ballistic:	1
 	Impact:	3
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9400
 Keywords:	scanner white ic id
@@ -2284,7 +2284,7 @@ AttackType:	Pound
 	Bank:	20
 [SKILLS]
 	firearms:	5
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #9408
 Keywords:	Nobles Sergeant Sgt. Clara cop officer C.I.P.D.
@@ -2322,7 +2322,7 @@ AttackType:	Pound
 	Impact:	12
 	Cash:	40
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	firearms:	6
 BREAK
 #9409
@@ -2362,7 +2362,7 @@ DefaultPos:	Standing
 	Bank:	10000
 [SKILLS]
 	:	10
-	unarmed combat:	4
+	brawling:	4
 	:	6
 BREAK
 #9410
@@ -2404,7 +2404,7 @@ AttackType:	Bludgeon
 	Cash:	50
 [SKILLS]
 	firearms:	6
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #9411
 Keywords:	Drake Yeldnif chief fat man huge human immense blob
@@ -2440,7 +2440,7 @@ AttackType:	Pound
 	Ballistic:	15
 	Impact:	12
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	armed combat:	3
 	firearms:	5
 BREAK

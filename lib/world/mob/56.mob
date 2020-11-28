@@ -33,7 +33,7 @@ AttackType:	Stab
 	Impact:	9
 	Cash:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	machine guns:	7
 BREAK
 #5601
@@ -119,7 +119,7 @@ AttackType:	Pierce
 	Karma:	1
 [SKILLS]
 	pole arms:	6
-	unarmed combat:	5
+	brawling:	5
 	computers:	7
 	corporate etiquette:	7
 	:	7

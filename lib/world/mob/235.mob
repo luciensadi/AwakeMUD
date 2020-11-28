@@ -36,7 +36,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	95
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	pistols:	5
 	sub-machine guns:	5
 	clubs:	5
@@ -79,7 +79,7 @@ DefaultPos:	Standing
 	Cash:	45
 [SKILLS]
 	clubs:	5
-	unarmed combat:	5
+	brawling:	5
 	sub-machine guns:	5
 BREAK
 END

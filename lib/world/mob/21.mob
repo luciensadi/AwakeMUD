@@ -103,7 +103,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #2103
 Keywords:	dancer Dee
@@ -399,7 +399,7 @@ DefaultPos:	Sitting
 	Ballistic:	6
 	Impact:	5
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	firearms:	8
 	stealth:	4
 	media etiquette:	4
@@ -440,7 +440,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Bank:	625
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #2113
 Keywords:	mage bouncer
@@ -584,7 +584,7 @@ AttackType:	Punch
 	Bank:	100000
 	Karma:	20
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	firearms:	8
 	sorcery:	4
 	elf etiquette:	9
@@ -626,7 +626,7 @@ DefaultPos:	Standing
 	firearms:	50
 	rifles:	50
 	:	4
-	unarmed combat:	50
+	brawling:	50
 	sorcery:	50
 BREAK
 #2118
@@ -664,7 +664,7 @@ AttackType:	Punch
 	Impact:	5
 [SKILLS]
 	pistols:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2119
 Keywords:	terleis tuvrien morningstar executive
@@ -700,7 +700,7 @@ DefaultPos:	Standing
 	Impact:	12
 	Bank:	100
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	sorcery:	19
 BREAK
 #2120

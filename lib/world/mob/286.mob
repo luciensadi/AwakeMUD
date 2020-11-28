@@ -33,7 +33,7 @@ AttackType:	Punch
 	Cash:	12
 	Bank:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #28601
 Keywords:	lone star guard
@@ -140,7 +140,7 @@ DefaultPos:	Standing
 	Cash:	999999
 	Bank:	999999
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #28604
 Keywords:	ugly troll
@@ -178,7 +178,7 @@ DefaultPos:	Standing
 	Cash:	20000
 	Bank:	50000
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #28605
 Keywords:	Lone star officer
@@ -217,7 +217,7 @@ DefaultPos:	Standing
 	Bank:	40
 [SKILLS]
 	:	9
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #28606
 Keywords:	armor salesman man
@@ -254,7 +254,7 @@ DefaultPos:	Standing
 	Bank:	999999
 [SKILLS]
 	:	4
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #28607
 Keywords:	man
@@ -326,7 +326,7 @@ DefaultPos:	Sleeping
 	Cash:	5
 	Bank:	9
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	:	9
 BREAK
 #28609
@@ -363,7 +363,7 @@ DefaultPos:	Sitting
 	Cash:	50
 	Bank:	50
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #28610
 Keywords:	lone star officer
@@ -438,7 +438,7 @@ DefaultPos:	Standing
 	Cash:	20
 	Bank:	20
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	:	9
 BREAK
 #28612
@@ -513,7 +513,7 @@ AttackType:	Claw
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	:	9
 BREAK
 #28614

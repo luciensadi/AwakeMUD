@@ -35,7 +35,7 @@ DefaultPos:	Standing
 	Bank:	50000
 [SKILLS]
 	rifles:	12
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #32201
 Keywords:	vinicius man wearing glasses
@@ -251,7 +251,7 @@ DefaultPos:	Standing
 	Weight:	90
 	Cash:	50
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #32207
 Keywords:	mob unfinished

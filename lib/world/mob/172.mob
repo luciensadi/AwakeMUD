@@ -259,7 +259,7 @@ AttackType:	Pound
 	Cash:	100
 	Bank:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	pistols:	6
 	street etiquette:	4
 BREAK
@@ -296,7 +296,7 @@ AttackType:	Punch
 	Ballistic:	6
 	Impact:	6
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 	:	10
 	:	4
 	:	3
@@ -335,7 +335,7 @@ DefaultPos:	Sitting
 	Impact:	1
 	Bank:	100
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	corporate etiquette:	6
 	:	4
 BREAK
@@ -535,7 +535,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Cash:	10
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	athletics:	4
 	armed combat:	3
 BREAK
@@ -572,7 +572,7 @@ DefaultPos:	Sitting
 	Impact:	2
 [SKILLS]
 	athletics:	3
-	unarmed combat:	4
+	brawling:	4
 	:	2
 BREAK
 #17217
@@ -607,7 +607,7 @@ DefaultPos:	Standing
 	Impact:	3
 [SKILLS]
 	athletics:	5
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	6
 	edged weapons:	7
 BREAK
@@ -643,7 +643,7 @@ DefaultPos:	Standing
 	Impact:	5
 [SKILLS]
 	athletics:	7
-	unarmed combat:	6
+	brawling:	6
 	armed combat:	7
 	edged weapons:	8
 BREAK
@@ -678,7 +678,7 @@ DefaultPos:	Standing
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #17220
 Keywords:	Male Customer Human
@@ -713,7 +713,7 @@ DefaultPos:	Standing
 	Bank:	100
 [SKILLS]
 	athletics:	6
-	unarmed combat:	6
+	brawling:	6
 	:	5
 	stealth:	4
 BREAK
@@ -751,7 +751,7 @@ AttackType:	Thrash
 [SKILLS]
 	:	8
 	electronics:	8
-	unarmed combat:	8
+	brawling:	8
 	computers:	8
 BREAK
 #17222
@@ -786,7 +786,7 @@ AttackType:	Bite
 	Level:	14
 [SKILLS]
 	:	12
-	unarmed combat:	12
+	brawling:	12
 	computers:	12
 	electronics:	12
 	athletics:	12
@@ -824,7 +824,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	1000
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	computers:	5
 	:	4
 BREAK

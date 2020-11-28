@@ -686,7 +686,7 @@ DefaultPos:	Standing
 	Weight:	90
 [SKILLS]
 	cyber implants:	20
-	unarmed combat:	20
+	brawling:	20
 	interrogation:	6
 	athletics:	10
 BREAK
@@ -727,7 +727,7 @@ DefaultPos:	Standing
 	Ballistic:	9
 	Impact:	9
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	pistols:	20
 	interrogation:	20
 	street etiquette:	20

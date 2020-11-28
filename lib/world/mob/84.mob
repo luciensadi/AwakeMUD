@@ -76,7 +76,7 @@ AttackType:	Punch
 	Bank:	100
 [SKILLS]
 	assault rifles:	9
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #8402
 Keywords:	lieutenant red samurai man renraku
@@ -153,7 +153,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Bank:	200
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #8404
 Keywords:	keratsu jonathan director handsome young man
@@ -199,7 +199,7 @@ AttackType:	Punch
 	Impact:	8
 	Bank:	200
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #8405
 Keywords:	powicke etsu director man intelligent
@@ -238,7 +238,7 @@ AttackType:	Pound
 	Ballistic:	6
 	Impact:	7
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #8406
 Keywords:	snurlson george chief executive man angry
@@ -279,7 +279,7 @@ AttackType:	Pound
 	Impact:	7
 	Cash:	200
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #8407
 Keywords:	barstow joan raven chief executive woman
@@ -320,7 +320,7 @@ AttackType:	Bite
 	Impact:	7
 	Bank:	20
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #8408
 Keywords:	carnet reynard charismatic director man
@@ -361,7 +361,7 @@ DefaultPos:	Standing
 	Impact:	7
 	Bank:	200
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #8409
 Keywords:	tangier lucinda snobby fragile executive woman
@@ -403,7 +403,7 @@ AttackType:	Bite
 	Impact:	7
 	Bank:	100
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #8410
 Keywords:	lucifer corben twitching uncomfortable young man executive
@@ -445,7 +445,7 @@ AttackType:	Punch
 	Impact:	7
 	Bank:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #8411
 Keywords:	dumont michael decorated stern red samurai captain man
@@ -527,7 +527,7 @@ AttackType:	Bite
 	Weight:	74
 	Impact:	1
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #8413
 Keywords:	shopper busy
@@ -562,7 +562,7 @@ AttackType:	Claw
 	Impact:	1
 	Bank:	200
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #8414
 Keywords:	employee renraku man
@@ -597,7 +597,7 @@ AttackType:	Pound
 	Weight:	98
 	Cash:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #8415
 Keywords:	executive renraku man
@@ -635,7 +635,7 @@ AttackType:	Punch
 	Ballistic:	2
 	Bank:	400
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #8416
 Keywords:	scientist renraku whitecloaked
@@ -674,7 +674,7 @@ AttackType:	Pound
 	Ballistic:	2
 	Impact:	1
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #8417
 Keywords:	chemist renraku short man
@@ -712,7 +712,7 @@ AttackType:	Bite
 	Impact:	2
 	Cash:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #8418
 Keywords:	engineer renraku man
@@ -748,7 +748,7 @@ AttackType:	Punch
 	Impact:	1
 	Bank:	20
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #8419
 Keywords:	harley sales executive maple
@@ -1097,7 +1097,7 @@ AttackType:	Sting
 	Weight:	48
 	Impact:	1
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #8430
 Keywords:	technician renraku man dirty
@@ -1132,7 +1132,7 @@ DefaultPos:	Standing
 	Ballistic:	1
 	Impact:	2
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #8431
 Keywords:	decker renraku man
@@ -1172,7 +1172,7 @@ AttackType:	Punch
 	Ballistic:	2
 	Impact:	2
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	computers:	7
 	electronics:	8
 BREAK
@@ -1211,7 +1211,7 @@ AttackType:	Bite
 	Weight:	56
 	Cash:	85
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 	street etiquette:	1
 BREAK
 #8433
@@ -1249,7 +1249,7 @@ AttackType:	Claw
 	Impact:	1
 	Cash:	90
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 	street etiquette:	1
 BREAK
 #8434
@@ -1289,7 +1289,7 @@ AttackType:	Bite
 	Impact:	1
 	Cash:	142
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #8435
 Keywords:	silent ninja shimmering form
@@ -1328,7 +1328,7 @@ AttackType:	Slash
 	Impact:	6
 [SKILLS]
 	edged weapons:	10
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #8436
 Keywords:	spider drone mechanical
@@ -1398,7 +1398,7 @@ AttackType:	Crush
 	Impact:	7
 [SKILLS]
 	:	3
-	unarmed combat:	4
+	brawling:	4
 	firearms:	4
 BREAK
 #8438
@@ -1435,7 +1435,7 @@ AttackType:	Machine Gun
 	Ballistic:	6
 	Impact:	6
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	firearms:	5
 	:	3
 BREAK
@@ -1471,7 +1471,7 @@ AttackType:	Thrash
 	Height:	300
 	Weight:	0
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	:	1
 BREAK
 #8440
@@ -1508,7 +1508,7 @@ AttackType:	Punch
 	Cash:	150
 [SKILLS]
 	firearms:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #8441
 Keywords:	swirl ic ice
@@ -1540,7 +1540,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Level:	6
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #8442
 Keywords:	man lunatic 
@@ -1687,7 +1687,7 @@ AttackType:	Bite
 	firearms:	5
 	armed combat:	4
 	:	1
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #8446
 Keywords:	boy lanky tall guy
@@ -1760,7 +1760,7 @@ AttackType:	Punch
 	Impact:	5
 	Bank:	10
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sub-machine guns:	6
 BREAK
 #8448
@@ -1865,7 +1865,7 @@ AttackType:	Rifle
 	Impact:	12
 [SKILLS]
 	assault rifles:	12
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #8701
 Keywords:	Samurai Red Security Officer High
@@ -1906,7 +1906,7 @@ AttackType:	Rifle
 	Impact:	16
 [SKILLS]
 	assault rifles:	30
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #8702
 Keywords:	security guard pudgy
@@ -1946,7 +1946,7 @@ AttackType:	Pistol
 	pistols:	12
 	corporate etiquette:	12
 	police procedures:	12
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #8703
 Keywords:	security guard pudgy
@@ -1986,6 +1986,6 @@ AttackType:	Pistol
 	pistols:	12
 	corporate etiquette:	12
 	police procedures:	12
-	unarmed combat:	12
+	brawling:	12
 BREAK
 END

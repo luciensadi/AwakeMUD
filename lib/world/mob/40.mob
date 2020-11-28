@@ -35,7 +35,7 @@ AttackType:	Bite
 	Impact:	6
 [SKILLS]
 	stealth:	2
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #4001
 Keywords:	lone star officer cop
@@ -71,7 +71,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	3
 	armed combat:	2
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #4002
 Keywords:	jogger man
@@ -105,7 +105,7 @@ DefaultPos:	Standing
 	Weight:	85
 	Cash:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	athletics:	3
 BREAK
 #4003
@@ -141,7 +141,7 @@ DefaultPos:	Standing
 	Impact:	1
 	Bank:	150
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	firearms:	4
 BREAK
 #4004
@@ -178,7 +178,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Bank:	186
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #4005
 Keywords:	bob
@@ -215,7 +215,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	200
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #4006
 Keywords:	jill
@@ -252,7 +252,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	23
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	whips & flails:	2
 BREAK
 #4007
@@ -291,7 +291,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	325
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #4008
 Keywords:	maintenance man
@@ -327,7 +327,7 @@ DefaultPos:	Standing
 	Cash:	15
 [SKILLS]
 	armed combat:	4
-	unarmed combat:	2
+	brawling:	2
 	firearms:	2
 BREAK
 #4009
@@ -404,7 +404,7 @@ DefaultPos:	Sitting
 	Cash:	125
 	Bank:	710
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	firearms:	1
 BREAK
 #4011
@@ -440,7 +440,7 @@ AttackType:	Claw
 	Ballistic:	6
 	Impact:	4
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #4012
 Keywords:	squirrel
@@ -474,7 +474,7 @@ AttackType:	Claw
 	Ballistic:	4
 	Impact:	3
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #4013
 Keywords:	orc sick
@@ -509,7 +509,7 @@ DefaultPos:	Standing
 	Bank:	142
 [SKILLS]
 	firearms:	4
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #4014
 Keywords:	troll guard
@@ -546,7 +546,7 @@ DefaultPos:	Standing
 	Karma:	20
 [SKILLS]
 	firearms:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4015
 Keywords:	oriental chef
@@ -580,7 +580,7 @@ DefaultPos:	Standing
 	Cash:	152
 [SKILLS]
 	armed combat:	5
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #4016
 Keywords:	adept bodyguard guard physical
@@ -618,7 +618,7 @@ DefaultPos:	Standing
 	Karma:	15
 [SKILLS]
 	:	2
-	unarmed combat:	6
+	brawling:	6
 	:	3
 	:	3
 	:	4
@@ -659,7 +659,7 @@ DefaultPos:	Standing
 	Bank:	432
 [SKILLS]
 	armed combat:	5
-	unarmed combat:	6
+	brawling:	6
 	firearms:	5
 	demolitions:	1
 BREAK
@@ -698,7 +698,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	5
 	armed combat:	4
-	unarmed combat:	6
+	brawling:	6
 	electronics:	4
 BREAK
 #4019
@@ -737,7 +737,7 @@ AttackType:	Slash
 	Impact:	12
 [SKILLS]
 	armed combat:	7
-	unarmed combat:	6
+	brawling:	6
 	firearms:	6
 	:	1
 	:	2
@@ -777,7 +777,7 @@ DefaultPos:	Standing
 	Bank:	50
 [SKILLS]
 	firearms:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4022
 Keywords:	guard man sentry
@@ -813,7 +813,7 @@ DefaultPos:	Standing
 	Bank:	4960
 [SKILLS]
 	firearms:	7
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #4023
 Keywords:	sentry guard ork
@@ -847,7 +847,7 @@ DefaultPos:	Standing
 	Impact:	7
 [SKILLS]
 	firearms:	6
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #4024
 Keywords:	sentry guard elf mage
@@ -883,7 +883,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	sorcery:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4025
 Keywords:	troll bodyguard protector
@@ -917,7 +917,7 @@ DefaultPos:	Standing
 	Impact:	8
 [SKILLS]
 	firearms:	7
-	unarmed combat:	8
+	brawling:	8
 	armed combat:	4
 BREAK
 #4026
@@ -950,7 +950,7 @@ DefaultPos:	Standing
 	Weight:	65
 [SKILLS]
 	firearms:	9
-	unarmed combat:	6
+	brawling:	6
 	street etiquette:	9
 	negotiation:	8
 	corporate etiquette:	2
@@ -988,7 +988,7 @@ DefaultPos:	Sitting
 	Impact:	7
 [SKILLS]
 	firearms:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4028
 Keywords:	ork sentinel guard
@@ -1024,7 +1024,7 @@ DefaultPos:	Sitting
 	Bank:	387
 [SKILLS]
 	firearms:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4029
 Keywords:	servant man
@@ -1060,7 +1060,7 @@ AttackType:	Crush
 	Impact:	8
 	Cash:	700
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #4030
 Keywords:	overseer over seer man
@@ -1094,7 +1094,7 @@ DefaultPos:	Standing
 	Impact:	8
 [SKILLS]
 	firearms:	6
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #4050
 Keywords:	syinlueth dragon great western
@@ -1135,7 +1135,7 @@ AttackType:	Claw
 	Bank:	82930
 	Karma:	161
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	:	6
 	:	10
 	armed combat:	6

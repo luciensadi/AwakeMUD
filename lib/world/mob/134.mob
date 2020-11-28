@@ -34,7 +34,7 @@ AttackType:	Punch
 	Bank:	150
 [SKILLS]
 	athletics:	2
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #13403
 Keywords:	Tina Hostess
@@ -75,7 +75,7 @@ AttackType:	Whip
 	armed combat:	5
 	whips & flails:	5
 	athletics:	4
-	unarmed combat:	3
+	brawling:	3
 	elf etiquette:	6
 BREAK
 #13405
@@ -116,7 +116,7 @@ AttackType:	Pistol
 	athletics:	4
 	firearms:	5
 	pistols:	5
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #13406
 Keywords:	Bob Mage
@@ -155,7 +155,7 @@ AttackType:	Sting
 [SKILLS]
 	stealth:	10
 	athletics:	3
-	unarmed combat:	3
+	brawling:	3
 	armed combat:	7
 	sorcery:	8
 BREAK
@@ -198,7 +198,7 @@ AttackType:	Blast
 [SKILLS]
 	athletics:	4
 	firearms:	8
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 	negotiation:	8
 BREAK
@@ -237,7 +237,7 @@ AttackType:	Sting
 	Cash:	100
 [SKILLS]
 	athletics:	3
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #13411
 Keywords:	Ali Alli Ally Allison Elmo Girlfriend
@@ -275,7 +275,7 @@ AttackType:	Thrash
 	Cash:	1000
 	Karma:	1
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	athletics:	7
 	:	3
 	:	3
@@ -316,7 +316,7 @@ AttackType:	Pound
 	Impact:	4
 [SKILLS]
 	athletics:	6
-	unarmed combat:	9
+	brawling:	9
 	:	4
 BREAK
 #13415
@@ -355,7 +355,7 @@ AttackType:	Bite
 [SKILLS]
 	athletics:	4
 	:	7
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #13421
 Keywords:	Cook Apprentice
@@ -393,7 +393,7 @@ AttackType:	Punch
 	Cash:	100
 	Bank:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	6
 	athletics:	3
 BREAK
@@ -470,7 +470,7 @@ AttackType:	Maul
 	Cash:	500
 [SKILLS]
 	athletics:	4
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #13424
 Keywords:	Master Chef
@@ -507,7 +507,7 @@ AttackType:	Pound
 	Bank:	800
 [SKILLS]
 	athletics:	5
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #13425
 Keywords:	Seth Owner
@@ -542,7 +542,7 @@ AttackType:	Blast
 	Impact:	6
 [SKILLS]
 	athletics:	8
-	unarmed combat:	10
+	brawling:	10
 	:	4
 	:	3
 	:	4
@@ -581,7 +581,7 @@ AttackType:	Whip
 	Cash:	500
 	Bank:	500
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	athletics:	4
 BREAK
 #13431
@@ -618,7 +618,7 @@ AttackType:	Punch
 	Impact:	4
 	Cash:	50
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	athletics:	4
 BREAK
 #13432
@@ -654,7 +654,7 @@ DefaultPos:	Standing
 	Impact:	4
 [SKILLS]
 	athletics:	5
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #13434
 Keywords:	Big Troll Guard
@@ -689,7 +689,7 @@ AttackType:	Pound
 	Impact:	3
 	Cash:	200
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 	athletics:	13
 	firearms:	16
 	assault rifles:	17
@@ -730,7 +730,7 @@ AttackType:	Thrash
 	Bank:	500000
 [SKILLS]
 	:	3
-	unarmed combat:	50
+	brawling:	50
 	:	4
 	:	3
 	:	10
@@ -769,7 +769,7 @@ AttackType:	Crush
 	Impact:	13
 [SKILLS]
 	athletics:	7
-	unarmed combat:	15
+	brawling:	15
 	:	3
 	:	3
 	cyber implants:	4

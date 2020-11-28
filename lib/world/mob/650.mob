@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Cash:	50000
 	Bank:	10000
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	pistols:	12
 	computers:	10
 	assault cannons:	10
@@ -71,7 +71,7 @@ AttackType:	Punch
 	Weight:	0
 [SKILLS]
 	athletics:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #65006
 Keywords:	player raver asian
@@ -109,7 +109,7 @@ DefaultPos:	Standing
 	Bank:	300
 [SKILLS]
 	athletics:	10
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #65050
 Keywords:	sean Sean massive curly haired ork blue orange
@@ -494,7 +494,7 @@ AttackType:	Crush
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #65099
 Keywords:	small lizard
@@ -527,6 +527,6 @@ AttackType:	Bite
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 END

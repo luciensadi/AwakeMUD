@@ -36,7 +36,7 @@ DefaultPos:	Standing
 	Impact:	2
 [SKILLS]
 	sub-machine guns:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2701
 Keywords:	toh li tall young asian elf adept trainer
@@ -78,7 +78,7 @@ DefaultPos:	Standing
 	:	4
 	:	3
 	:	3
-	unarmed combat:	50
+	brawling:	50
 	:	1
 BREAK
 #2702
@@ -115,7 +115,7 @@ DefaultPos:	Standing
 	Weight:	60
 [SKILLS]
 	athletics:	8
-	unarmed combat:	8
+	brawling:	8
 	computers:	9
 	:	2
 	:	2

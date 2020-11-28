@@ -298,7 +298,7 @@ DefaultPos:	Standing
 	Cash:	5000
 	Bank:	2500
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #29196
 Keywords:	killer man smile disturbing
@@ -336,7 +336,7 @@ AttackType:	Bite
 	Impact:	4
 	Cash:	3000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	:	2
 BREAK
 #29197
@@ -376,7 +376,7 @@ AttackType:	Pistol
 	Bank:	1000
 [SKILLS]
 	pistols:	4
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #29198
 Keywords:	ugly little demon tunnel crawler
@@ -416,7 +416,7 @@ AttackType:	Bite
 	Impact:	6
 	Cash:	120
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #29199
 Keywords:	big humongous troll
@@ -451,7 +451,7 @@ DefaultPos:	Standing
 	Ballistic:	14
 	Impact:	12
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	:	3
 	stealth:	9
 BREAK

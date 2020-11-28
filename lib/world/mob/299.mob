@@ -28,7 +28,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	:	4
 BREAK
 #29901
@@ -96,7 +96,7 @@ DefaultPos:	Standing
 	Weight:	50
 	Level:	6
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	corporate etiquette:	4
 BREAK
 END

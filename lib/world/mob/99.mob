@@ -35,7 +35,7 @@ DefaultPos:	Standing
 	Bank:	300
 	Karma:	5
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	firearms:	6
 BREAK
 #9902
@@ -71,7 +71,7 @@ AttackType:	Pierce
 	Ballistic:	3
 	Impact:	2
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #9903
 Keywords:	ork squatter orkish
@@ -104,7 +104,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9904
 Keywords:	doc dodie ork doctor
@@ -142,7 +142,7 @@ DefaultPos:	Standing
 	Bank:	10000
 [SKILLS]
 	:	10
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9905
 Keywords:	Iceberg Slam
@@ -185,7 +185,7 @@ AttackType:	Bludgeon
 	Karma:	25
 [SKILLS]
 	firearms:	7
-	unarmed combat:	5
+	brawling:	5
 	street etiquette:	5
 BREAK
 #9906
@@ -220,7 +220,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Bank:	5
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #9907
 Keywords:	groog ork salesman
@@ -290,7 +290,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Karma:	5
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	firearms:	9
 	sorcery:	20
 BREAK
@@ -359,7 +359,7 @@ DefaultPos:	Standing
 	Cash:	10000
 	Bank:	100000
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	computers:	7
 BREAK
 #9911
@@ -394,7 +394,7 @@ AttackType:	Bite
 	Weight:	0
 [SKILLS]
 	stealth:	2
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #9912
 Keywords:	harmless spider
@@ -428,7 +428,7 @@ AttackType:	Bite
 	Ballistic:	6
 	Impact:	5
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	armed combat:	8
 BREAK
 #9913
@@ -470,7 +470,7 @@ DefaultPos:	Standing
 	:	4
 	:	3
 	:	3
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #9914
 Keywords:	rumble ork arms dealer
@@ -544,7 +544,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	8
 	sorcery:	8
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #9916
 Keywords:	troll patch leather biker
@@ -579,7 +579,7 @@ DefaultPos:	Standing
 	Impact:	7
 [SKILLS]
 	clubs:	9
-	unarmed combat:	8
+	brawling:	8
 	firearms:	6
 BREAK
 #9917
@@ -619,7 +619,7 @@ DefaultPos:	Standing
 	Bank:	300
 	Karma:	5
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	firearms:	6
 BREAK
 #9918
@@ -654,7 +654,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	250
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #9919
 Keywords:	ork patron
@@ -689,7 +689,7 @@ DefaultPos:	Standing
 	Cash:	65
 	Bank:	20
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #9920
 Keywords:	louis troll bartender
@@ -756,7 +756,7 @@ DefaultPos:	Standing
 	Cash:	20
 [SKILLS]
 	firearms:	7
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #9927
 Keywords:	skanky skank prostitute hooker whore ork
@@ -819,7 +819,7 @@ DefaultPos:	Standing
 	Height:	189
 	Weight:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #9929
 Keywords:	ork stripper
@@ -853,7 +853,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	3
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #9930
 Keywords:	ork pervert
@@ -962,7 +962,7 @@ AttackType:	Pound
 	Height:	212
 	Weight:	185
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	shotguns:	10
 BREAK
 #9933
@@ -1001,6 +1001,6 @@ DefaultPos:	Standing
 	Cash:	20
 [SKILLS]
 	firearms:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 END

@@ -37,7 +37,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	1000
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	computers:	10
 	:	11
 	corporate etiquette:	5
@@ -120,7 +120,7 @@ AttackType:	Pound
 	Impact:	13
 	Cash:	100000
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	assault cannons:	11
 	missile launchers:	10
 	:	9

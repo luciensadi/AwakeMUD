@@ -199,7 +199,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	60
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #70506
 Keywords:	Julius A quiet black man dressed in a tuxedo and sunglasses sits patiently here
@@ -233,6 +233,6 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	75
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 END

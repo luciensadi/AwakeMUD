@@ -624,7 +624,7 @@ AttackType:	Rifle
 	Impact:	7
 [SKILLS]
 	rifles:	10
-	unarmed combat:	10
+	brawling:	10
 	assault rifles:	10
 BREAK
 #4918
@@ -662,7 +662,7 @@ AttackType:	Pound
 	Impact:	8
 [SKILLS]
 	whips & flails:	14
-	unarmed combat:	14
+	brawling:	14
 	elf etiquette:	9
 BREAK
 #4919
@@ -834,7 +834,7 @@ AttackType:	Punch
 	Impact:	9
 	Cash:	20
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	shotguns:	8
 BREAK
 #4951
@@ -871,7 +871,7 @@ AttackType:	Punch
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	18
+	brawling:	18
 	edged weapons:	18
 	elf etiquette:	8
 	sorcery:	9
@@ -908,7 +908,7 @@ DefaultPos:	Standing
 	Ballistic:	4
 	Impact:	2
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #4976
 Keywords:	persona scientist

@@ -32,7 +32,7 @@ AttackType:	Punch
 	Impact:	9
 	Cash:	100
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	rifles:	9
 BREAK
 END

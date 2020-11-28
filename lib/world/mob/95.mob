@@ -32,7 +32,7 @@ AttackType:	Punch
 	Cash:	35
 	Bank:	155
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	corporate etiquette:	6
 BREAK
 #9501
@@ -144,7 +144,7 @@ AttackType:	Punch
 	Bank:	500
 [SKILLS]
 	corporate etiquette:	6
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #9504
 Keywords:	support guy tech
@@ -178,7 +178,7 @@ AttackType:	Punch
 	Cash:	25
 	Bank:	75
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	electronics:	3
 	corporate etiquette:	2
 BREAK
@@ -216,7 +216,7 @@ AttackType:	Punch
 	Cash:	85
 	Bank:	125
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	corporate etiquette:	3
 BREAK
 #9506
@@ -255,7 +255,7 @@ AttackType:	Punch
 	Cash:	50
 	Bank:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	corporate etiquette:	2
 BREAK
 #9507

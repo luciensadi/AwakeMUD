@@ -106,7 +106,7 @@ DefaultPos:	Standing
 	Weight:	79
 	Cash:	3
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	athletics:	2
 BREAK
 #12503
@@ -294,7 +294,7 @@ AttackType:	Punch
 	Cash:	58
 	Bank:	500
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	:	2
 BREAK
 #12508
@@ -330,7 +330,7 @@ DefaultPos:	Standing
 	Cash:	300
 	Bank:	1250
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	pistols:	3
 	:	2
 BREAK

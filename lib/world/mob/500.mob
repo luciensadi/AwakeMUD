@@ -35,7 +35,7 @@ AttackType:	Punch
 	Impact:	2
 [SKILLS]
 	assault rifles:	8
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #50001
 Keywords:	native american soldier salish sidhe border patrol
@@ -70,7 +70,7 @@ AttackType:	Punch
 	Height:	175
 	Weight:	70
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	assault rifles:	7
 BREAK
 END

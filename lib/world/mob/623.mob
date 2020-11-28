@@ -68,7 +68,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Cash:	80
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 	pistols:	5
 BREAK
@@ -109,7 +109,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	25
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	clubs:	5
 	pistols:	6
 BREAK
@@ -149,7 +149,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	45
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 BREAK
 #62304
@@ -190,7 +190,7 @@ DefaultPos:	Standing
 	Cash:	15
 	Bank:	85
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62305
 Keywords:	officer dispatch
@@ -228,7 +228,7 @@ DefaultPos:	Standing
 	Cash:	35
 	Bank:	35
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62306
 Keywords:	police Victoria Commander Watch
@@ -264,7 +264,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	65
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #62307
 Keywords:	assistant
@@ -301,7 +301,7 @@ DefaultPos:	Standing
 	Cash:	35
 	Bank:	35
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62308
 Keywords:	officer management property
@@ -340,7 +340,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	85
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #62309
 Keywords:	guard holding police cell
@@ -378,7 +378,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	45
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 BREAK
 #62310
@@ -416,7 +416,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #62311
 Keywords:	Bubbles Mr Mister troll
@@ -453,7 +453,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #62312
 Keywords:	crook small time
@@ -487,7 +487,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62313
 Keywords:	Dee Cryption
@@ -521,7 +521,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	60
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62314
 Keywords:	detective Victoria police
@@ -559,7 +559,7 @@ DefaultPos:	Standing
 	Cash:	95
 	Bank:	95
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	pistols:	7
 BREAK
@@ -601,7 +601,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	150
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	clubs:	8
 	pistols:	8
 BREAK
@@ -642,7 +642,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	85
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62317
 Keywords:	suspect nervous
@@ -677,7 +677,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #62318
 Keywords:	woman old talismonger
@@ -816,7 +816,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Bank:	80
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	5
 	pistols:	5
 BREAK
@@ -852,7 +852,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #62323
 Keywords:	manager head McHugh's
@@ -887,7 +887,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	clubs:	3
 	pistols:	3
 BREAK
@@ -926,7 +926,7 @@ DefaultPos:	Standing
 	Cash:	35
 	Bank:	40
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	clubs:	3
 BREAK
 #62325
@@ -965,7 +965,7 @@ DefaultPos:	Standing
 	Cash:	95
 	Bank:	55
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 BREAK
 #62326
@@ -1001,7 +1001,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #62327
 Keywords:	woman elven young
@@ -1037,7 +1037,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	120
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #62328
 Keywords:	Derrick Ray Surgeon Duke
@@ -1077,7 +1077,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	sub-machine guns:	7
 BREAK
@@ -1116,7 +1116,7 @@ DefaultPos:	Standing
 	Ballistic:	6
 	Impact:	6
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #62330
 Keywords:	gentleman guard quiet zombie
@@ -1153,7 +1153,7 @@ DefaultPos:	Standing
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	assault rifles:	6
 BREAK
@@ -1194,7 +1194,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	150
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	edged weapons:	8
 	sorcery:	12
 BREAK
@@ -1233,7 +1233,7 @@ DefaultPos:	Standing
 	Cash:	80
 	Bank:	50
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	pole arms:	5
 	pistols:	5
 BREAK
@@ -1272,7 +1272,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	65
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	pistols:	6
 BREAK
@@ -1309,7 +1309,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	clubs:	5
 	pistols:	5
 BREAK
@@ -1348,7 +1348,7 @@ DefaultPos:	Standing
 	Cash:	145
 	Bank:	45
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #62336
 Keywords:	manager floor casino Grandmaion
@@ -1383,7 +1383,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	65
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62337
 Keywords:	bartender classy
@@ -1417,7 +1417,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	0
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #62338
 Keywords:	guard security heavily armed
@@ -1453,7 +1453,7 @@ DefaultPos:	Standing
 	Weight:	90
 	Cash:	80
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sub-machine guns:	6
 	clubs:	6
 BREAK
@@ -1491,7 +1491,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Cash:	85
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	clubs:	7
 	assault rifles:	7
 BREAK
@@ -1530,7 +1530,7 @@ DefaultPos:	Standing
 	Cash:	95
 	Bank:	85
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	clubs:	7
 	assault rifles:	7
 	machine guns:	7
@@ -1568,7 +1568,7 @@ DefaultPos:	Standing
 	Cash:	95
 	Bank:	95
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	clubs:	7
 	sorcery:	9
 BREAK
@@ -1607,7 +1607,7 @@ DefaultPos:	Standing
 	Cash:	150
 	Bank:	85
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	clubs:	6
 	pistols:	6
 BREAK
@@ -1647,7 +1647,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	65
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62344
 Keywords:	dealer casino
@@ -1680,6 +1680,6 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 END

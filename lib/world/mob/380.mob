@@ -332,7 +332,7 @@ AttackType:	Punch
 	Weight:	90
 	Cash:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	6
 BREAK
 #38010
@@ -499,7 +499,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Bank:	40
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #38015
 Keywords:	golem stone monster rock
@@ -571,7 +571,7 @@ AttackType:	Punch
 	Cash:	10000
 	Bank:	20000
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #38017
 Keywords:	drug dealer dope fiend
@@ -605,7 +605,7 @@ AttackType:	Pound
 	Weight:	60
 	Cash:	50
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	stealth:	8
 BREAK
 #38018
@@ -943,7 +943,7 @@ DefaultPos:	Standing
 	Height:	450
 	Weight:	300
 [SKILLS]
-	unarmed combat:	14
+	brawling:	14
 BREAK
 #38028
 Keywords:	jimmy smith johnson
@@ -1042,7 +1042,7 @@ DefaultPos:	Standing
 	Ballistic:	12
 	Impact:	10
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #38031
 Keywords:	van ucas transport security
@@ -1202,7 +1202,7 @@ DefaultPos:	Standing
 	Height:	210
 	Weight:	90
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #38048
 Keywords:	female decker pilot elf elven
@@ -1235,7 +1235,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Bank:	500
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	computers:	10
 BREAK
 #38049
@@ -1270,7 +1270,7 @@ AttackType:	Thrash
 	Weight:	100
 	Cash:	75
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #38050
 Keywords:	Joseph Charleston Mafia
@@ -1310,7 +1310,7 @@ DefaultPos:	Standing
 	Cash:	5000
 	Bank:	10000
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	street etiquette:	10
 	corporate etiquette:	10
 BREAK
@@ -1353,7 +1353,7 @@ DefaultPos:	Standing
 	Cash:	5000
 	Bank:	10000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	street etiquette:	12
 	corporate etiquette:	13
 	armed combat:	12
@@ -1396,7 +1396,7 @@ DefaultPos:	Standing
 	Cash:	10000
 	Bank:	20000
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	10
 	corporate etiquette:	20
 	street etiquette:	20
@@ -1476,7 +1476,7 @@ DefaultPos:	Standing
 	street etiquette:	10
 	corporate etiquette:	8
 	pistols:	12
-	unarmed combat:	9
+	brawling:	9
 	interrogation:	8
 BREAK
 #38055
@@ -1514,7 +1514,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	10
 	athletics:	10
-	unarmed combat:	13
+	brawling:	13
 	street etiquette:	8
 	driving/Car:	10
 BREAK
@@ -1550,7 +1550,7 @@ DefaultPos:	Standing
 	Bank:	500
 [SKILLS]
 	pistols:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #38057
 Keywords:	clerk sales salesman psg inc sales

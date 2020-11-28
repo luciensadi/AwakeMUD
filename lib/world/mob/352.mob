@@ -67,7 +67,7 @@ AttackType:	Thrash
 	Cash:	30
 [SKILLS]
 	athletics:	10
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #35206
 Keywords:	dwarf
@@ -168,7 +168,7 @@ AttackType:	Thrash
 	Cash:	2500
 	Bank:	6000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	athletics:	7
 	sorcery:	7
 BREAK

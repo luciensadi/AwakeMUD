@@ -38,7 +38,7 @@ AttackType:	Machine Gun
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	assault rifles:	10
 BREAK
 #7901
@@ -81,7 +81,7 @@ AttackType:	Machine Gun
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	assault rifles:	10
 BREAK
 #7902
@@ -124,7 +124,7 @@ AttackType:	Machine Gun
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	assault rifles:	10
 BREAK
 #7903
@@ -169,7 +169,7 @@ AttackType:	Machine Gun
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	assault rifles:	8
 BREAK
 #7904
@@ -209,7 +209,7 @@ DefaultPos:	Standing
 	Height:	100
 	Weight:	8
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	10
 BREAK
 #7905
@@ -252,7 +252,7 @@ AttackType:	Bite
 	Height:	105
 	Weight:	3
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #7906
 Keywords:	elderly old gentleman Aflred
@@ -294,7 +294,7 @@ AttackType:	Punch
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #7907
 Keywords:	maid elven female slender young
@@ -329,7 +329,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	60
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #7908
 Keywords:	keymaster elven rail-thin librarian robes
@@ -366,7 +366,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	60
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #7909
 Keywords:	watcher spirit
@@ -398,7 +398,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #7910
 Keywords:	horse mare ghazu stark-white Gumption

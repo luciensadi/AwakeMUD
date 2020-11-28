@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Karma:	5
 [SKILLS]
 	shotguns:	6
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	6
 BREAK
 #14301
@@ -69,7 +69,7 @@ DefaultPos:	Standing
 	Impact:	5
 [SKILLS]
 	pistols:	5
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #14302
 Keywords:	paulie halloweener weapons dealer shop shopkeeper
@@ -107,7 +107,7 @@ DefaultPos:	Standing
 	Cash:	4000
 	Bank:	4000
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	shotguns:	7
 	negotiation:	4
 BREAK
@@ -146,7 +146,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Karma:	25
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	shotguns:	6
 	sorcery:	8
 BREAK
@@ -289,7 +289,7 @@ AttackType:	Maul
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	sorcery:	20
 BREAK
 #14308
@@ -327,7 +327,7 @@ DefaultPos:	Standing
 	Cash:	150
 [SKILLS]
 	edged weapons:	9
-	unarmed combat:	9
+	brawling:	9
 	firearms:	9
 BREAK
 #14309
@@ -367,7 +367,7 @@ AttackType:	Pound
 	Impact:	11
 	Cash:	105
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	:	4
 BREAK
 #14310
@@ -445,7 +445,7 @@ AttackType:	Slash
 	Impact:	8
 [SKILLS]
 	armed combat:	9
-	unarmed combat:	9
+	brawling:	9
 	sorcery:	9
 	:	3
 BREAK
@@ -485,7 +485,7 @@ DefaultPos:	Standing
 	Cash:	20
 	Bank:	200
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14313
 Keywords:	doctor white
@@ -558,7 +558,7 @@ AttackType:	Claw
 	Ballistic:	9
 	Impact:	7
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	armed combat:	8
 BREAK
 END

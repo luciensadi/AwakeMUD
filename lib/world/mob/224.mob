@@ -190,7 +190,7 @@ DefaultPos:	Standing
 	Ballistic:	18
 	Impact:	18
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	killing hands:	4
 BREAK
 #22494
@@ -222,7 +222,7 @@ AttackType:	Blast
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	firearms:	50
 BREAK
 #22495
@@ -258,7 +258,7 @@ DefaultPos:	Standing
 	Impact:	40
 [SKILLS]
 	shotguns:	14
-	unarmed combat:	14
+	brawling:	14
 BREAK
 #22496
 Keywords:	ork mercenary weathered gauss
@@ -291,7 +291,7 @@ AttackType:	Shotgun
 	Height:	200
 	Weight:	110
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	firearms:	12
 BREAK
 #22497
@@ -359,7 +359,7 @@ AttackType:	Punch
 	Height:	200
 	Weight:	90
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	combat sense:	3
 	clubs:	6
 BREAK

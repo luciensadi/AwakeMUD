@@ -33,7 +33,7 @@ AttackType:	Punch
 	Cash:	200
 [SKILLS]
 	sub-machine guns:	8
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #22001
 Keywords:	mob unnamed
@@ -65,7 +65,7 @@ AttackType:	Bite
 	Ballistic:	14
 	Impact:	14
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #22003
 Keywords:	vinnie man
@@ -163,7 +163,7 @@ DefaultPos:	Standing
 [SKILLS]
 	rifles:	3
 	shotguns:	10
-	unarmed combat:	6
+	brawling:	6
 	assault cannons:	4
 BREAK
 #22006
@@ -200,7 +200,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	8
 	rifles:	16
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #22007
 Keywords:	spider tank
@@ -237,7 +237,7 @@ AttackType:	Blast
 	Impact:	25
 	Karma:	150
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	10
 BREAK
 #22008
@@ -270,7 +270,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Cash:	20000
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #22009
 Keywords:	tpf soldier instructor
@@ -304,7 +304,7 @@ DefaultPos:	Standing
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #22010
 Keywords:	dr doctor john armidale distinguished scientist
@@ -372,7 +372,7 @@ AttackType:	Pound
 	Ballistic:	30
 	Impact:	30
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	firearms:	20
 	:	10
 BREAK
@@ -408,7 +408,7 @@ AttackType:	Punch
 	Weight:	90
 	Cash:	400
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	firearms:	7
 BREAK
 #22013
@@ -477,7 +477,7 @@ AttackType:	Slash
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	9
 BREAK
 #22015
@@ -515,7 +515,7 @@ DefaultPos:	Standing
 	Cash:	2
 	Bank:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	clubs:	14
 BREAK
 #22016
@@ -554,7 +554,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Karma:	111
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	armed combat:	10
 	:	9
 	:	3
@@ -594,7 +594,7 @@ DefaultPos:	Standing
 	Impact:	30
 [SKILLS]
 	firearms:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #22096
 Keywords:	elven elf guard eldrae
@@ -627,7 +627,7 @@ AttackType:	Blast
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	firearms:	8
 BREAK
 #22097
@@ -659,7 +659,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	firearms:	12
 BREAK
 #22098
@@ -696,7 +696,7 @@ DefaultPos:	Standing
 [SKILLS]
 	armed combat:	14
 	clubs:	14
-	unarmed combat:	14
+	brawling:	14
 BREAK
 #22099
 Keywords:	budgie budgerigar olaf
@@ -734,7 +734,7 @@ AttackType:	Bite
 	Bank:	25000
 	Karma:	7500
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	:	4
 	:	3
 	:	10

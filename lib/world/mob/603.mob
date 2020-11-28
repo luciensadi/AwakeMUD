@@ -33,7 +33,7 @@ AttackType:	Punch
 	Bank:	150
 [SKILLS]
 	pistols:	6
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 BREAK
 #60301
@@ -71,7 +71,7 @@ AttackType:	Punch
 	Bank:	150
 [SKILLS]
 	sub-machine guns:	8
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #60302
 Keywords:	novatech sentry environmental guard security
@@ -107,7 +107,7 @@ AttackType:	Punch
 	Bank:	300
 [SKILLS]
 	assault rifles:	9
-	unarmed combat:	8
+	brawling:	8
 	clubs:	8
 BREAK
 #60303
@@ -144,7 +144,7 @@ AttackType:	Punch
 	Bank:	200
 [SKILLS]
 	assault rifles:	10
-	unarmed combat:	9
+	brawling:	9
 	clubs:	12
 BREAK
 #60304
@@ -184,7 +184,7 @@ AttackType:	Slash
 	Bank:	85
 [SKILLS]
 	edged weapons:	11
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	8
 	athletics:	4
 BREAK
@@ -219,7 +219,7 @@ AttackType:	Blast
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	10
 BREAK
 #60306
@@ -321,7 +321,7 @@ AttackType:	Pound
 	Cash:	85
 	Bank:	85
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #60309
 Keywords:	nightclubber scantily clad
@@ -722,7 +722,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	75
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	edged weapons:	6
 BREAK
 #60321
@@ -933,7 +933,7 @@ AttackType:	Pistol
 	Impact:	4
 	Cash:	1200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 BREAK
 #60327
@@ -1007,7 +1007,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	100
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #60329
 Keywords:	novatech dealer cyberdeck

@@ -31,7 +31,7 @@ DefaultPos:	Standing
 	Impact:	6
 [SKILLS]
 	assault rifles:	9
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #32001
 Keywords:	mage UCAS hermetic
@@ -67,7 +67,7 @@ DefaultPos:	Standing
 	Ballistic:	8
 	Impact:	6
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	9
 BREAK
 #32002
@@ -103,7 +103,7 @@ AttackType:	Rifle
 	Ballistic:	6
 	Impact:	4
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	rifles:	6
 	assault rifles:	6
 BREAK
@@ -287,7 +287,7 @@ AttackType:	Slash
 	Impact:	6
 [SKILLS]
 	edged weapons:	8
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #32008
 Keywords:	shaman UCAS
@@ -325,7 +325,7 @@ AttackType:	Blast
 	Impact:	7
 [SKILLS]
 	sorcery:	10
-	unarmed combat:	8
+	brawling:	8
 	conjuring:	8
 BREAK
 #32009
@@ -363,7 +363,7 @@ AttackType:	Slash
 	Ballistic:	10
 	Impact:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	edged weapons:	8
 BREAK
 #32010
@@ -402,7 +402,7 @@ AttackType:	Slash
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	edged weapons:	10
 BREAK
 #32011
@@ -440,7 +440,7 @@ AttackType:	Slash
 	Impact:	5
 [SKILLS]
 	sorcery:	7
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #32012
 Keywords:	UCAS Shaman
@@ -476,7 +476,7 @@ AttackType:	Blast
 	Ballistic:	7
 	Impact:	5
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	8
 	conjuring:	6
 BREAK
@@ -516,7 +516,7 @@ AttackType:	Rifle
 [SKILLS]
 	rifles:	8
 	sorcery:	8
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #32014
 Keywords:	Jarek Physical Phys Adept UCAS
@@ -592,7 +592,7 @@ DefaultPos:	Standing
 	Impact:	12
 	Bank:	100
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	12
 	conjuring:	12
 	clubs:	9
@@ -632,7 +632,7 @@ AttackType:	Blast
 	Ballistic:	18
 	Impact:	18
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	sorcery:	20
 	negotiation:	4
 BREAK
@@ -670,7 +670,7 @@ AttackType:	Crush
 	Ballistic:	30
 	Impact:	20
 [SKILLS]
-	unarmed combat:	16
+	brawling:	16
 	sorcery:	20
 	stealth:	8
 BREAK
@@ -711,7 +711,7 @@ AttackType:	Punch
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	media etiquette:	12
 	athletics:	12
 	assault cannons:	20
@@ -753,7 +753,7 @@ AttackType:	Rifle
 	Bank:	100
 [SKILLS]
 	assault rifles:	14
-	unarmed combat:	14
+	brawling:	14
 BREAK
 #32020
 Keywords:	bodyguard elf elven burly
@@ -789,7 +789,7 @@ AttackType:	Crush
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	stealth:	10
 BREAK
 #32021
@@ -828,7 +828,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	500
 [SKILLS]
-	unarmed combat:	14
+	brawling:	14
 	sorcery:	8
 	conjuring:	8
 BREAK
@@ -866,7 +866,7 @@ AttackType:	Shotgun
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	shotguns:	8
 	athletics:	8
 	stealth:	6
@@ -910,7 +910,7 @@ AttackType:	Cannon
 	Ballistic:	30
 	Impact:	30
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 	assault cannons:	15
 	edged weapons:	15
 	artillery:	15
@@ -949,7 +949,7 @@ AttackType:	Punch
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	assault rifles:	13
 	firearms:	12
 	:	4

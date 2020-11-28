@@ -36,7 +36,7 @@ AttackType:	Rifle
 	Bank:	20000
 	Karma:	1
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	rifles:	20
 BREAK
 #31501
@@ -115,7 +115,7 @@ DefaultPos:	Standing
 	Karma:	1
 [SKILLS]
 	firearms:	20
-	unarmed combat:	10
+	brawling:	10
 	sub-machine guns:	20
 BREAK
 #31503
@@ -158,7 +158,7 @@ AttackType:	Claw
 	sorcery:	15
 	:	15
 	pole arms:	20
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #31504
 Keywords:	mitsuhama security guard company man
@@ -195,7 +195,7 @@ DefaultPos:	Standing
 [SKILLS]
 	sub-machine guns:	8
 	corporate etiquette:	4
-	unarmed combat:	4
+	brawling:	4
 	:	3
 BREAK
 #31505
@@ -236,7 +236,7 @@ DefaultPos:	Standing
 	electronics:	12
 	computers:	12
 	:	12
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #31506
 Keywords:	dealer poker suit man
@@ -274,7 +274,7 @@ AttackType:	Pound
 	Cash:	200
 [SKILLS]
 	negotiation:	10
-	unarmed combat:	20
+	brawling:	20
 	street etiquette:	10
 	stealth:	10
 BREAK

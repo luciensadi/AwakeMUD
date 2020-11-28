@@ -31,7 +31,7 @@ AttackType:	Blast
 	Level:	6
 [SKILLS]
 	sorcery:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #45001
 Keywords:	toxic wind spirit dust devil dustdevil
@@ -65,7 +65,7 @@ AttackType:	Blast
 	Weight:	0
 [SKILLS]
 	sorcery:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #45002
 Keywords:	disgusting mess toxic waste bubbling earth spirit
@@ -98,7 +98,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	sorcery:	5
 	:	2
 	:	1
@@ -136,7 +136,7 @@ DefaultPos:	Standing
 	Weight:	75
 	Cash:	15
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #45175
 Keywords:	invae insect guard guardian flesh-form bug scarab squat
@@ -180,7 +180,7 @@ AttackType:	Claw
 	Ballistic:	1
 	Impact:	2
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	edged weapons:	9
 	pole arms:	9
 	assault rifles:	9
@@ -227,7 +227,7 @@ AttackType:	Claw
 	Ballistic:	1
 	Impact:	2
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	edged weapons:	9
 	pole arms:	9
 	assault rifles:	9
@@ -271,7 +271,7 @@ AttackType:	Bite
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	athletics:	10
 	biotech:	8
 BREAK
@@ -314,7 +314,7 @@ AttackType:	Bite
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	athletics:	10
 	biotech:	8
 BREAK
@@ -358,7 +358,7 @@ AttackType:	Claw
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	athletics:	10
 	stealth:	10
 	edged weapons:	10
@@ -405,7 +405,7 @@ AttackType:	Claw
 	Ballistic:	1
 	Impact:	2
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	edged weapons:	9
 	pole arms:	9
 	assault rifles:	9
@@ -456,7 +456,7 @@ AttackType:	Sting
 	Ballistic:	14
 	Impact:	14
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	4
 	:	3
 BREAK
@@ -499,7 +499,7 @@ AttackType:	Bite
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	athletics:	10
 	biotech:	8
 BREAK
@@ -543,7 +543,7 @@ AttackType:	Claw
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	athletics:	10
 	stealth:	10
 	edged weapons:	10
@@ -588,7 +588,7 @@ DefaultPos:	Standing
 	Weight:	117
 	Cash:	1250
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	12
 	conjuring:	12
 	aura reading:	12
@@ -633,7 +633,7 @@ DefaultPos:	Standing
 	Cash:	225
 	Bank:	60
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	pistols:	12
 	leadership:	10
 	assault rifles:	8
@@ -673,7 +673,7 @@ DefaultPos:	Standing
 	Cash:	95
 	Bank:	65
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	assault rifles:	8
 	clubs:	8
 BREAK
@@ -716,7 +716,7 @@ DefaultPos:	Standing
 	Cash:	75
 	Bank:	45
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	assault rifles:	7
 	clubs:	7
 BREAK
@@ -755,7 +755,7 @@ AttackType:	Punch
 	Bank:	55
 [SKILLS]
 	assault rifles:	6
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 BREAK
 END

@@ -29,7 +29,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	65
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #70301
 Keywords:	barkeep man pete
@@ -63,7 +63,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #70302
 Keywords:	dispensing machine

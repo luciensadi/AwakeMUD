@@ -70,7 +70,7 @@ AttackType:	Sting
 	Ballistic:	10
 	Impact:	20
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #3703
 Keywords:	guard lone star man parking
@@ -180,7 +180,7 @@ AttackType:	Pound
 	Cash:	45
 	Bank:	120
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	biotech:	4
 BREAK
 #3706
@@ -218,7 +218,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	125
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	firearms:	4
 BREAK
 #3707
@@ -253,7 +253,7 @@ DefaultPos:	Fighting
 	Ballistic:	6
 	Impact:	5
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	street etiquette:	8
 BREAK
 #3708
@@ -293,7 +293,7 @@ AttackType:	Pistol
 	Bank:	100
 [SKILLS]
 	pistols:	7
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3709
 Keywords:	Lieutenant Delaney
@@ -331,7 +331,7 @@ AttackType:	Pistol
 	Bank:	100
 [SKILLS]
 	pistols:	7
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3710
 Keywords:	instructor teacher
@@ -369,7 +369,7 @@ AttackType:	Pistol
 	Cash:	65
 	Bank:	145
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	athletics:	6
 	firearms:	7
 	biotech:	6
@@ -408,7 +408,7 @@ AttackType:	Pistol
 	Ballistic:	4
 	Impact:	2
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	armed combat:	5
 	firearms:	3
 BREAK
@@ -446,7 +446,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	70
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3713
 Keywords:	officer man dispatch lone star
@@ -483,7 +483,7 @@ AttackType:	Pistol
 	Impact:	4
 	Bank:	20
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	shotguns:	5
 BREAK
 #3714
@@ -520,7 +520,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	3
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	:	7
 BREAK
 #3715
@@ -561,7 +561,7 @@ AttackType:	Pistol
 	Cash:	150
 	Bank:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	pistols:	5
 BREAK
 #3716
@@ -601,7 +601,7 @@ AttackType:	Pistol
 	Cash:	55
 	Bank:	155
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	pistols:	5
 BREAK
 #3717
@@ -674,7 +674,7 @@ DefaultPos:	Standing
 	Impact:	6
 [SKILLS]
 	shotguns:	7
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3719
 Keywords:	murderer man evil shady shackled
@@ -710,7 +710,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3720
 Keywords:	officer man lone star
@@ -746,7 +746,7 @@ DefaultPos:	Standing
 	Impact:	5
 [SKILLS]
 	pistols:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3721
 Keywords:	oronado man spanish chef lone tubby
@@ -818,7 +818,7 @@ AttackType:	Pistol
 	Cash:	50
 	Bank:	150
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	athletics:	6
 	firearms:	7
 	biotech:	6

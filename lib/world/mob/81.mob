@@ -35,7 +35,7 @@ AttackType:	Punch
 	Impact:	2
 [SKILLS]
 	assault rifles:	8
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #8101
 Keywords:	turret automated machinegun machine gun
@@ -72,7 +72,7 @@ AttackType:	Machine Gun
 	Impact:	30
 [SKILLS]
 	machine guns:	20
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #8102
 Keywords:	ucas border patrol soldier mage
@@ -110,7 +110,7 @@ AttackType:	Punch
 	Ballistic:	3
 	Impact:	2
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	assault rifles:	8
 	sorcery:	9
 BREAK
@@ -147,7 +147,7 @@ AttackType:	Punch
 	Height:	175
 	Weight:	70
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	assault rifles:	7
 BREAK
 #8104
@@ -185,7 +185,7 @@ AttackType:	Machine Gun
 	Impact:	20
 [SKILLS]
 	machine guns:	20
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #8105
 Keywords:	native american soldier salish sidhe border patrol shaman
@@ -220,7 +220,7 @@ AttackType:	Punch
 	Height:	175
 	Weight:	70
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	assault rifles:	7
 	sorcery:	8
 BREAK
@@ -259,7 +259,7 @@ AttackType:	Machine Gun
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #8107
 Keywords:	eye fiver ganger go-ganger goganger blue white yamaha rapier go eye-fiver eyefiver
@@ -296,7 +296,7 @@ AttackType:	Punch
 [SKILLS]
 	edged weapons:	5
 	shotguns:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #8108
 Keywords:	military thunderbird tbird salish sidhe
@@ -402,7 +402,7 @@ AttackType:	Punch
 	Impact:	3
 [SKILLS]
 	sub-machine guns:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #8111
 Keywords:	patrol vehicle salish sidhe sinsearach
@@ -475,7 +475,7 @@ DefaultPos:	Standing
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	rifles:	9
 	sorcery:	7
 BREAK

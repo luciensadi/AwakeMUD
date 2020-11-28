@@ -442,7 +442,7 @@ AttackType:	Blast
 	:	15
 	sorcery:	15
 	conjuring:	15
-	unarmed combat:	27
+	brawling:	27
 BREAK
 #35012
 Keywords:	mage elf aquilor security battlemage high threat
@@ -528,7 +528,7 @@ AttackType:	Rifle
 	Impact:	13
 [SKILLS]
 	assault rifles:	30
-	unarmed combat:	30
+	brawling:	30
 BREAK
 #35014
 Keywords:	captain commander daethan answyr elf officer aquilor
@@ -907,7 +907,7 @@ AttackType:	Punch
 	Ballistic:	10
 	Impact:	12
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	pistols:	9
 	assault cannons:	9
 BREAK

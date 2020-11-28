@@ -31,7 +31,7 @@ AttackType:	Punch
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	2
 	:	2
 	:	2
@@ -141,7 +141,7 @@ AttackType:	Punch
 	Weight:	60
 	Cash:	100
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	whips & flails:	8
 	athletics:	8
 BREAK
@@ -176,7 +176,7 @@ AttackType:	Punch
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #60205
 Keywords:	saori woman hakama
@@ -214,7 +214,7 @@ AttackType:	Punch
 	Ballistic:	4
 	Impact:	3
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	:	3
 	:	2
 BREAK
@@ -251,7 +251,7 @@ AttackType:	Punch
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	:	2
 	:	2
 BREAK
@@ -291,7 +291,7 @@ AttackType:	Punch
 	Ballistic:	5
 	Impact:	4
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #60208
 Keywords:	old man koshira misuro tien hsueh
@@ -331,7 +331,7 @@ AttackType:	Thrash
 	Ballistic:	5
 	Impact:	4
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	4
 BREAK
 #60209
@@ -368,7 +368,7 @@ AttackType:	Punch
 	Ballistic:	5
 	Impact:	4
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	athletics:	7
 	:	2
 	:	2
@@ -406,7 +406,7 @@ AttackType:	Pound
 	Ballistic:	5
 	Impact:	4
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	:	3
 BREAK
 #60211
@@ -447,7 +447,7 @@ AttackType:	Punch
 	Ballistic:	3
 	Impact:	2
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	:	2
 BREAK
 #60212
@@ -687,7 +687,7 @@ AttackType:	Punch
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	11
+	brawling:	11
 	:	3
 	:	3
 	:	3
@@ -727,7 +727,7 @@ DefaultPos:	Standing
 	Weight:	60
 	Cash:	45
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	athletics:	5
 BREAK
 #60231
@@ -769,7 +769,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Cash:	42
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	athletics:	5
 BREAK
 #60232
@@ -807,7 +807,7 @@ DefaultPos:	Standing
 	Height:	240
 	Weight:	90
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #60233
 Keywords:	woman native american good looking bartender
@@ -846,7 +846,7 @@ DefaultPos:	Standing
 	Height:	160
 	Weight:	60
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #60234
 Keywords:	band tribal various race ethnicities
@@ -885,7 +885,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	60
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #60235
 Keywords:	Speaks-with-Many Native American Indian old man
@@ -927,7 +927,7 @@ DefaultPos:	Standing
 	Cash:	65
 	Bank:	25
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	conjuring:	8
 BREAK
 #60236
@@ -964,7 +964,7 @@ AttackType:	Bite
 	Height:	40
 	Weight:	30
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	8
 BREAK
 #60237
@@ -1002,7 +1002,7 @@ DefaultPos:	Standing
 	Weight:	300
 	Ballistic:	1
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #60238
 Keywords:	leopard tawny furred spotted black
@@ -1040,7 +1040,7 @@ AttackType:	Claw
 	Height:	140
 	Weight:	120
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	stealth:	8
 BREAK
 #60239
@@ -1120,7 +1120,7 @@ DefaultPos:	Standing
 	Cash:	80
 [SKILLS]
 	clubs:	6
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #60250
 Keywords:	Mugsy Phillipe Vizzini short slick suit cigar mafiaso mobster
@@ -1160,7 +1160,7 @@ DefaultPos:	Standing
 	Height:	120
 	Weight:	40
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #60251
 Keywords:	Rocky goon lackey massive
@@ -1198,7 +1198,7 @@ DefaultPos:	Standing
 	Height:	290
 	Weight:	230
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #60252
 Keywords:	Shakey the Toad squat little man beat-up suit
@@ -1275,7 +1275,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	55
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	pistols:	8
 	clubs:	8
 BREAK
@@ -1316,7 +1316,7 @@ DefaultPos:	Standing
 	Cash:	75
 	Bank:	25
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #60255
 Keywords:	bartender tender bar attractive female
@@ -1495,7 +1495,7 @@ DefaultPos:	Standing
 	Cash:	35
 	Bank:	25
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #60260
 Keywords:	female clubber wasted flailing
@@ -1534,7 +1534,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	20
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #60261
 Keywords:	male clubber club patron
@@ -1572,7 +1572,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	30
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #60262
 Keywords:	wing-man wing man lost
@@ -1610,7 +1610,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	25
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #60263
 Keywords:	man business busy
@@ -1647,7 +1647,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Cash:	55
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #60264
 Keywords:	pudgy business man
@@ -1686,7 +1686,7 @@ DefaultPos:	Standing
 	Cash:	80
 	Bank:	20
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #60265
 Keywords:	female skanky employee dancer seductive
@@ -1723,7 +1723,7 @@ DefaultPos:	Standing
 	Weight:	60
 	Cash:	45
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #60266
 Keywords:	hooker ork skeezy missing teeth prostitute
@@ -1761,7 +1761,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	90
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #60267
 Keywords:	man paranoid trenchcoat impatiently
@@ -1796,7 +1796,7 @@ DefaultPos:	Standing
 	Height:	178
 	Weight:	70
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #60268
 Keywords:	fat italian mafia man
@@ -1835,7 +1835,7 @@ DefaultPos:	Standing
 	Impact:	5
 	Cash:	350
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #60269
 Keywords:	bodyguard guard suit mafia
@@ -1873,7 +1873,7 @@ DefaultPos:	Standing
 	Impact:	7
 	Cash:	125
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sub-machine guns:	7
 	shotguns:	7
 	clubs:	7
@@ -1914,7 +1914,7 @@ DefaultPos:	Standing
 	Impact:	7
 	Cash:	125
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sub-machine guns:	7
 	shotguns:	7
 	clubs:	7

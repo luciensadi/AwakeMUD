@@ -32,7 +32,7 @@ AttackType:	Maul
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #25001
 Keywords:	spirit free test battle
@@ -75,7 +75,7 @@ AttackType:	Thrash
 	sorcery:	5
 	:	5
 	conjuring:	5
-	unarmed combat:	6
+	brawling:	6
 	:	4
 BREAK
 #25002
@@ -116,7 +116,7 @@ AttackType:	Pound
 	Impact:	7
 	Karma:	73
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	8
 	conjuring:	8
 	:	8

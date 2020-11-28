@@ -26,7 +26,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	firearms:	10
 BREAK
 #24396
@@ -59,7 +59,7 @@ AttackType:	Punch
 	Weight:	90
 	Cash:	999999
 [SKILLS]
-	unarmed combat:	16
+	brawling:	16
 	firearms:	16
 BREAK
 #24397
@@ -93,7 +93,7 @@ AttackType:	Maul
 	Cash:	999999
 	Bank:	999999
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	:	3
 	:	3
 	:	4
@@ -132,7 +132,7 @@ AttackType:	Cannon
 	Ballistic:	30
 	Impact:	30
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 	assault cannons:	15
 	:	3
 	:	4
@@ -171,7 +171,7 @@ AttackType:	Punch
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	assault rifles:	13
 	firearms:	12
 	:	4

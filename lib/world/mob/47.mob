@@ -34,7 +34,7 @@ AttackType:	Pound
 	Bank:	500
 [SKILLS]
 	firearms:	4
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	4
 	street etiquette:	6
 BREAK
@@ -72,7 +72,7 @@ AttackType:	Maul
 	Bank:	400
 [SKILLS]
 	armed combat:	4
-	unarmed combat:	4
+	brawling:	4
 	edged weapons:	3
 	firearms:	5
 	leadership:	2
@@ -113,7 +113,7 @@ AttackType:	Stab
 [SKILLS]
 	edged weapons:	5
 	armed combat:	3
-	unarmed combat:	3
+	brawling:	3
 	firearms:	1
 BREAK
 #4703
@@ -153,7 +153,7 @@ AttackType:	Stab
 [SKILLS]
 	firearms:	7
 	armed combat:	6
-	unarmed combat:	8
+	brawling:	8
 	street etiquette:	5
 BREAK
 #4704
@@ -190,7 +190,7 @@ AttackType:	Stab
 	Impact:	3
 [SKILLS]
 	armed combat:	4
-	unarmed combat:	6
+	brawling:	6
 	media etiquette:	6
 BREAK
 #4705
@@ -227,7 +227,7 @@ AttackType:	Stab
 	Ballistic:	3
 	Impact:	3
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	armed combat:	4
 	media etiquette:	6
 BREAK
@@ -263,7 +263,7 @@ DefaultPos:	Standing
 	Ballistic:	3
 	Impact:	3
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	4
 	firearms:	4
 	media etiquette:	6
@@ -302,7 +302,7 @@ DefaultPos:	Standing
 	Ballistic:	3
 	Impact:	3
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	4
 	media etiquette:	4
 BREAK
@@ -340,7 +340,7 @@ AttackType:	Stab
 	Impact:	1
 	Bank:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #4709
 Keywords:	troll mosher
@@ -375,7 +375,7 @@ AttackType:	Stab
 	Ballistic:	3
 	Impact:	3
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	street etiquette:	4
 BREAK
 #4710
@@ -412,7 +412,7 @@ AttackType:	Thrash
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	street etiquette:	6
 BREAK
 #4711
@@ -448,7 +448,7 @@ AttackType:	Pound
 	Ballistic:	1
 	Impact:	1
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	firearms:	5
 	street etiquette:	6
 BREAK
@@ -486,7 +486,7 @@ AttackType:	Bludgeon
 	Impact:	6
 	Cash:	10
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	firearms:	8
 	street etiquette:	5
 BREAK
@@ -530,7 +530,7 @@ AttackType:	Stab
 	media etiquette:	6
 	street etiquette:	5
 	corporate etiquette:	8
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #4714
 Keywords:	bouncer troll
@@ -567,7 +567,7 @@ AttackType:	Maul
 	Impact:	4
 	Bank:	300
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	armed combat:	5
 	firearms:	4
 	street etiquette:	5
@@ -605,6 +605,6 @@ AttackType:	Claw
 	Ballistic:	1
 	Bank:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 END

@@ -39,7 +39,7 @@ AttackType:	Punch
 [SKILLS]
 	athletics:	5
 	negotiation:	6
-	unarmed combat:	6
+	brawling:	6
 	leadership:	6
 	corporate etiquette:	6
 BREAK
@@ -116,7 +116,7 @@ AttackType:	Slash
 [SKILLS]
 	edged weapons:	12
 	athletics:	9
-	unarmed combat:	10
+	brawling:	10
 	sub-machine guns:	10
 	assault rifles:	10
 BREAK

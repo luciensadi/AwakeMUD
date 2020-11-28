@@ -30,7 +30,7 @@ AttackType:	Bludgeon
 	Weight:	60
 	Impact:	1
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #17901
 Keywords:	Black Ram ridden Dwarf
@@ -68,7 +68,7 @@ AttackType:	Crush
 	Cash:	200
 	Bank:	300
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #17902
 Keywords:	Black Lamb Wooly
@@ -139,7 +139,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Cash:	200
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	assault rifles:	10
 BREAK
 #17904
@@ -183,7 +183,7 @@ DefaultPos:	Standing
 	:	15
 	conjuring:	15
 	shotguns:	8
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #17905
 Keywords:	The Butcher Blood-stained 
@@ -222,7 +222,7 @@ DefaultPos:	Standing
 	Cash:	800
 [SKILLS]
 	edged weapons:	20
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #17906
 Keywords:	Ogre Shearer
@@ -374,7 +374,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	3000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	assault cannons:	10
 BREAK
 END

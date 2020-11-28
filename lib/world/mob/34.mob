@@ -31,7 +31,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	35
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3401
 Keywords:	girl overly cheerful Stuffer Shack
@@ -67,7 +67,7 @@ DefaultPos:	Standing
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3402
 Keywords:	server ork orkish cafeteria
@@ -103,7 +103,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #3403
 Keywords:	adele pretty girl woman receptionist
@@ -140,7 +140,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	35
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	edged weapons:	3
 BREAK
 #3404
@@ -176,7 +176,7 @@ DefaultPos:	Standing
 	Cash:	15
 	Bank:	80
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3405
 Keywords:	guard security lightly-armed JNL
@@ -214,7 +214,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	3
 	pistols:	5
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3406
 Keywords:	guard security lightly-armed JNL
@@ -252,7 +252,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	5
 	clubs:	3
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3407
 Keywords:	guard security JNL heavy stocky
@@ -290,7 +290,7 @@ DefaultPos:	Standing
 [SKILLS]
 	machine guns:	8
 	clubs:	6
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #3408
 Keywords:	guard security elite JNL
@@ -327,7 +327,7 @@ DefaultPos:	Standing
 	Cash:	235
 	Bank:	165
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	edged weapons:	8
 BREAK
 #3410
@@ -366,7 +366,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	3
 	pistols:	5
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3411
 Keywords:	guard security lightly-armed JNL
@@ -404,7 +404,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	5
 	clubs:	3
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3412
 Keywords:	woman troll girth mankind resources
@@ -440,7 +440,7 @@ DefaultPos:	Standing
 	Cash:	35
 	Bank:	145
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3413
 Keywords:	accountant overworked
@@ -478,7 +478,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	55
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3414
 Keywords:	woman large Bertha Big
@@ -517,7 +517,7 @@ DefaultPos:	Standing
 	Cash:	85
 [SKILLS]
 	clubs:	6
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3415
 Keywords:	employee JNL wageslave
@@ -555,7 +555,7 @@ DefaultPos:	Standing
 	Bank:	35
 [SKILLS]
 	edged weapons:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3416
 Keywords:	janitor JNL lanky
@@ -591,7 +591,7 @@ DefaultPos:	Standing
 	Cash:	35
 [SKILLS]
 	pole arms:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3417
 Keywords:	medical technician educated JNL
@@ -847,7 +847,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	6
 	clubs:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3425
 Keywords:	Erik Vin JNL Executive
@@ -886,7 +886,7 @@ DefaultPos:	Standing
 	Cash:	215
 	Bank:	185
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	clubs:	5
 	pistols:	6
 BREAK
@@ -928,7 +928,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	7
 	clubs:	6
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3427
 Keywords:	wageslave working hard hardworking
@@ -964,7 +964,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	85
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3428
 Keywords:	guard security lightly-armed JNL
@@ -1002,7 +1002,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	3
 	pistols:	5
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3429
 Keywords:	scientist cold
@@ -1040,7 +1040,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	225
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3450
 Keywords:	angel dark

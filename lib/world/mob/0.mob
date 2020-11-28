@@ -324,7 +324,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Level:	9
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	pistols:	50
 	edged weapons:	50
 	sorcery:	50

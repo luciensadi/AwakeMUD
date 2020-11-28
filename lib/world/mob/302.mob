@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Ballistic:	9
 	Impact:	9
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	:	4
 	stealth:	10
 	sorcery:	50
@@ -75,7 +75,7 @@ DefaultPos:	Standing
 	firearms:	50
 	rifles:	50
 	:	4
-	unarmed combat:	50
+	brawling:	50
 	sorcery:	50
 BREAK
 #30202
@@ -117,7 +117,7 @@ AttackType:	Crush
 	Ballistic:	9
 	Impact:	9
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	:	4
 	stealth:	10
 	sorcery:	50
@@ -157,7 +157,7 @@ AttackType:	Blast
 	Ballistic:	9
 	Impact:	9
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	sorcery:	20
 BREAK
 #30205
@@ -194,7 +194,7 @@ DefaultPos:	Standing
 	Impact:	16
 [SKILLS]
 	sorcery:	10
-	unarmed combat:	30
+	brawling:	30
 BREAK
 #30250
 Keywords:	waiter waitress servant

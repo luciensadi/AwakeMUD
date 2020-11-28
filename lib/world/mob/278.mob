@@ -262,7 +262,7 @@ DefaultPos:	Standing
 	Cash:	500000
 	Bank:	500000
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	throwing weapons:	50
 BREAK
 #27807
@@ -298,7 +298,7 @@ DefaultPos:	Standing
 	Impact:	10
 [SKILLS]
 	:	4
-	unarmed combat:	50
+	brawling:	50
 	:	50
 	firearms:	50
 	edged weapons:	50
@@ -338,7 +338,7 @@ DefaultPos:	Standing
 	Bank:	200
 [SKILLS]
 	:	9
-	unarmed combat:	2
+	brawling:	2
 	corporate etiquette:	12
 BREAK
 #27809
@@ -378,7 +378,7 @@ DefaultPos:	Standing
 	Ballistic:	30
 	Impact:	30
 [SKILLS]
-	unarmed combat:	30
+	brawling:	30
 	rifles:	30
 	pistols:	30
 	corporate etiquette:	30

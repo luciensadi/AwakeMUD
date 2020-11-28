@@ -342,7 +342,7 @@ AttackType:	Claw
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #15810
 Keywords:	The Bookkeeper
@@ -623,7 +623,7 @@ DefaultPos:	Standing
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #15825
 Keywords:	Marlow Sanders denim cowboy mustache

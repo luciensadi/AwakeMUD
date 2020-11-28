@@ -33,7 +33,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	80
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #71001
 Keywords:	Maria Delfino young hispanic woman teen
@@ -67,7 +67,7 @@ DefaultPos:	Standing
 	Height:	160
 	Weight:	60
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #71002
 Keywords:	Carlos Nunyas ork male fatiques
@@ -100,7 +100,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	90
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #71003
 Keywords:	Benny mouse scarred human male

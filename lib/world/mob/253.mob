@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	65
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25301
 Keywords:	Lone Star mobile patrol unit
@@ -70,7 +70,7 @@ DefaultPos:	Standing
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25302
 Keywords:	officer Lone Star foot patrol
@@ -106,7 +106,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	95
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	pistols:	4
 BREAK
 #25303
@@ -144,7 +144,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Cash:	125
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	pistols:	5
 	clubs:	5
 BREAK
@@ -186,7 +186,7 @@ DefaultPos:	Standing
 	Cash:	115
 	Bank:	45
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	pistols:	4
 	clubs:	4
 BREAK

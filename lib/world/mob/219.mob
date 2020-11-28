@@ -33,7 +33,7 @@ AttackType:	Bludgeon
 	Impact:	12
 [SKILLS]
 	edged weapons:	40
-	unarmed combat:	30
+	brawling:	30
 	gunnery:	30
 BREAK
 #21901
@@ -105,7 +105,7 @@ DefaultPos:	Standing
 [SKILLS]
 	rifles:	50
 	gunnery:	30
-	unarmed combat:	50
+	brawling:	50
 BREAK
 #21903
 Keywords:	Ghost of nexus the insane
@@ -144,7 +144,7 @@ DefaultPos:	Standing
 	rifles:	35
 	firearms:	20
 	armed combat:	25
-	unarmed combat:	40
+	brawling:	40
 BREAK
 #21904
 Keywords:	loki lok1
@@ -176,7 +176,7 @@ DefaultPos:	Standing
 	Height:	290
 	Weight:	280
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	firearms:	50
 BREAK
 #21905
@@ -258,7 +258,7 @@ AttackType:	Punch
 	Karma:	2
 [SKILLS]
 	stealth:	9
-	unarmed combat:	10
+	brawling:	10
 	firearms:	12
 BREAK
 #21907
@@ -301,7 +301,7 @@ AttackType:	Pound
 	edged weapons:	4
 	athletics:	6
 	armed combat:	4
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #21910
 Keywords:	raff
@@ -332,7 +332,7 @@ DefaultPos:	Standing
 	Height:	156
 	Weight:	50
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 BREAK
 #21921
 Keywords:	troll guard timewarp
@@ -369,7 +369,7 @@ AttackType:	Pound
 	Karma:	20
 [SKILLS]
 	edged weapons:	10
-	unarmed combat:	10
+	brawling:	10
 	armed combat:	10
 BREAK
 #21924
@@ -450,7 +450,7 @@ AttackType:	Bludgeon
 	:	10
 	conjuring:	25
 	:	13
-	unarmed combat:	17
+	brawling:	17
 BREAK
 #21930
 Keywords:	dragon azron guard guardian
@@ -491,7 +491,7 @@ AttackType:	Bite
 	Karma:	100
 [SKILLS]
 	edged weapons:	35
-	unarmed combat:	50
+	brawling:	50
 	:	10
 BREAK
 #21970
@@ -530,7 +530,7 @@ DefaultPos:	Standing
 	Karma:	17
 [SKILLS]
 	stealth:	9
-	unarmed combat:	10
+	brawling:	10
 	armed combat:	10
 	clubs:	10
 	edged weapons:	10
@@ -614,7 +614,7 @@ AttackType:	Pistol
 	Karma:	1
 [SKILLS]
 	pistols:	20
-	unarmed combat:	15
+	brawling:	15
 BREAK
 #21990
 Keywords:	elf guard mean
@@ -653,7 +653,7 @@ DefaultPos:	Standing
 [SKILLS]
 	edged weapons:	10
 	armed combat:	10
-	unarmed combat:	15
+	brawling:	15
 	shotguns:	20
 	firearms:	19
 BREAK

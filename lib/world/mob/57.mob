@@ -127,7 +127,7 @@ DefaultPos:	Standing
 	Weight:	75
 [SKILLS]
 	sorcery:	10
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #5704
 Keywords:	Kie'deieron Ly'trelli kiedeieron lytrelli eldrae boss sharply dressed elf
@@ -199,7 +199,7 @@ AttackType:	Pistol
 	Weight:	95
 [SKILLS]
 	pistols:	12
-	unarmed combat:	12
+	brawling:	12
 	:	2
 BREAK
 #5711
@@ -243,7 +243,7 @@ DefaultPos:	Standing
 [SKILLS]
 	leadership:	10
 	sorcery:	10
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #5712
 Keywords:	hitman black
@@ -279,7 +279,7 @@ AttackType:	Rifle
 	Impact:	3
 	Cash:	100
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	rifles:	5
 BREAK
 #5713
@@ -320,7 +320,7 @@ AttackType:	Pistol
 	Ballistic:	6
 	Impact:	4
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	pistols:	5
 BREAK
 #5714
@@ -358,7 +358,7 @@ AttackType:	Bite
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	11
+	brawling:	11
 	sorcery:	11
 BREAK
 #5715
@@ -394,7 +394,7 @@ AttackType:	Slash
 	Ballistic:	9
 	Impact:	5
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	edged weapons:	8
 BREAK
 #5716
@@ -432,7 +432,7 @@ AttackType:	Claw
 	Weight:	0
 	Level:	24
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	16
 BREAK
 #5717
@@ -469,7 +469,7 @@ DefaultPos:	Standing
 	Impact:	15
 [SKILLS]
 	sorcery:	15
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #5718
 Keywords:	juhi izawakaya mitsuhama executive japanese tall
@@ -503,7 +503,7 @@ AttackType:	Pistol
 	Height:	168
 	Weight:	90
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 BREAK
 #5719
@@ -573,7 +573,7 @@ AttackType:	Shotgun
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	shotguns:	7
 BREAK
 #5721
@@ -647,7 +647,7 @@ DefaultPos:	Standing
 	leadership:	15
 	corporate etiquette:	10
 	elf etiquette:	12
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #5723
 Keywords:	kani rhiatis elven woman
@@ -743,7 +743,7 @@ DefaultPos:	Standing
 	Ballistic:	4
 	Impact:	3
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	:	2
 BREAK
 #5726
@@ -849,7 +849,7 @@ DefaultPos:	Standing
 [SKILLS]
 	sorcery:	8
 	:	2
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #5729
 Keywords:	vampire
@@ -883,7 +883,7 @@ AttackType:	Bite
 	Ballistic:	100
 	Impact:	2
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	sorcery:	5
 BREAK
 #5730
@@ -920,7 +920,7 @@ AttackType:	Bite
 	Ballistic:	100
 	Impact:	3
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	5
 BREAK
 #5795
@@ -962,7 +962,7 @@ DefaultPos:	Standing
 [SKILLS]
 	:	4
 	:	3
-	unarmed combat:	10
+	brawling:	10
 	pistols:	12
 BREAK
 #5796
@@ -996,7 +996,7 @@ DefaultPos:	Standing
 	Height:	169
 	Weight:	70
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	8
 BREAK
 #5797

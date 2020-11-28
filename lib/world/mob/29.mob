@@ -32,7 +32,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2901
 Keywords:	doctor farrell
@@ -68,7 +68,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2902
 Keywords:	doctor blum
@@ -107,7 +107,7 @@ AttackType:	Stab
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2903
 Keywords:	doctor creedence
@@ -143,7 +143,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2904
 Keywords:	doctor edwards
@@ -181,7 +181,7 @@ AttackType:	Stab
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2905
 Keywords:	doctor fong
@@ -219,7 +219,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2906
 Keywords:	doctor tired
@@ -257,7 +257,7 @@ AttackType:	Stab
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2907
 Keywords:	patient waiting
@@ -294,7 +294,7 @@ DefaultPos:	Sitting
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2908
 Keywords:	patient nervous
@@ -330,7 +330,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2909
 Keywords:	receptionist sandra
@@ -367,7 +367,7 @@ DefaultPos:	Sitting
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2910
 Keywords:	pharmacist
@@ -406,7 +406,7 @@ AttackType:	Stab
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2911
 Keywords:	intern pharmacy
@@ -442,7 +442,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2912
 Keywords:	tech technician busy
@@ -478,7 +478,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2913
 Keywords:	patient elven
@@ -514,7 +514,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2914
 Keywords:	guard troll security
@@ -553,7 +553,7 @@ AttackType:	Stab
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2915
 Keywords:	guard security 
@@ -588,7 +588,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2916
 Keywords:	gorman security head guard
@@ -627,7 +627,7 @@ AttackType:	Stab
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2917
 Keywords:	doctor greene resident head
@@ -664,7 +664,7 @@ DefaultPos:	Sitting
 [SKILLS]
 	firearms:	4
 	media etiquette:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #2950
 Keywords:	mack truck troll bouncer

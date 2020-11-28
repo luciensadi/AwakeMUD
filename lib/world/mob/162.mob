@@ -60,7 +60,7 @@ DefaultPos:	Standing
 	Weight:	90
 	Bank:	400
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	pistols:	4
 BREAK
 #16202
@@ -260,7 +260,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #16208
 Keywords:	greg
@@ -295,7 +295,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	300
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #16209
 Keywords:	dan
@@ -330,7 +330,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Bank:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #16210
 Keywords:	man obese
@@ -433,7 +433,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Bank:	300
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #16213
 Keywords:	fool disco dancin'
@@ -534,7 +534,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Cash:	300
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	firearms:	6
 BREAK
 #16216
@@ -642,7 +642,7 @@ AttackType:	Punch
 	Impact:	4
 	Bank:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	firearms:	8
 BREAK
 #16219
@@ -680,7 +680,7 @@ AttackType:	Punch
 	Cash:	10000
 [SKILLS]
 	:	3
-	unarmed combat:	8
+	brawling:	8
 	:	2
 BREAK
 #16220

@@ -29,7 +29,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	10
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2302
 Keywords:	guard
@@ -63,7 +63,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	100
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2303
 Keywords:	doctor aberration
@@ -96,7 +96,7 @@ DefaultPos:	Standing
 	Weight:	90
 	Cash:	10000
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	cybersurgery:	6
 BREAK
 #2304
@@ -133,7 +133,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	60
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2305
 Keywords:	jeff gang member
@@ -168,7 +168,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	78
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2306
 Keywords:	pike troll
@@ -239,7 +239,7 @@ DefaultPos:	Sitting
 	Weight:	0
 	Cash:	10
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2308
 Keywords:	kyrie elf
@@ -275,7 +275,7 @@ DefaultPos:	Sitting
 	Impact:	4
 	Cash:	10
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2309
 Keywords:	auntie entity
@@ -310,7 +310,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	250
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2310
 Keywords:	guard ahmet
@@ -345,7 +345,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Bank:	60
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2311
 Keywords:	policlub member
@@ -378,7 +378,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	10
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2312
 Keywords:	policlub leader
@@ -411,7 +411,7 @@ DefaultPos:	Standing
 	Ballistic:	2
 	Cash:	10
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2313
 Keywords:	gang member blackrains
@@ -444,7 +444,7 @@ DefaultPos:	Standing
 	Ballistic:	2
 	Cash:	10
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2314
 Keywords:	soldier mercenary
@@ -479,7 +479,7 @@ DefaultPos:	Standing
 	Cash:	10
 	Bank:	200
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2315
 Keywords:	gang member reality hackers sociopath young
@@ -512,7 +512,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	10
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2316
 Keywords:	petrowski
@@ -550,7 +550,7 @@ DefaultPos:	Standing
 	Bank:	500
 	Karma:	34
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2317
 Keywords:	mercenary head chief
@@ -585,7 +585,7 @@ DefaultPos:	Standing
 	Cash:	2000
 	Bank:	4151
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	shotguns:	4
 BREAK
 #2318
@@ -619,7 +619,7 @@ DefaultPos:	Standing
 	Cash:	10
 	Bank:	200
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2319
 Keywords:	boulette soldier
@@ -654,7 +654,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	300
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2320
 Keywords:	renfield scavenger
@@ -687,7 +687,7 @@ AttackType:	Bite
 	Height:	170
 	Weight:	68
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #2321
 Keywords:	stocky well built muscular dwarf gnarl

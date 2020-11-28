@@ -212,7 +212,7 @@ DefaultPos:	Sitting
 	Ballistic:	25
 	Impact:	25
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	biotech:	9
 	medical:	9
 	cybersurgery:	7
@@ -322,7 +322,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	79
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	pistols:	4
 BREAK
 #2510

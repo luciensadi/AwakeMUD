@@ -33,7 +33,7 @@ AttackType:	Crush
 	Ballistic:	30
 	Impact:	30
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #40701
 Keywords:	alex gunter man male manager
@@ -148,7 +148,7 @@ DefaultPos:	Standing
 	Cash:	2000
 	Bank:	1000
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #40704
 Keywords:	mafia man wiseguy
@@ -291,7 +291,7 @@ DefaultPos:	Standing
 	Bank:	50
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #40708
 Keywords:	man mechanic
@@ -561,6 +561,6 @@ AttackType:	Bite
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 END

@@ -70,7 +70,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	50
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25402
 Keywords:	
@@ -108,7 +108,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	50
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25403
 Keywords:	patron crusher
@@ -146,7 +146,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	50
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25404
 Keywords:	troll drunken
@@ -186,7 +186,7 @@ AttackType:	Punch
 	Impact:	8
 	Cash:	150
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #25405
 Keywords:	elven go-ganger ganger
@@ -226,7 +226,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	50
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	edged weapons:	5
 BREAK
 #25406
@@ -268,7 +268,7 @@ DefaultPos:	Standing
 	Cash:	140
 	Bank:	85
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	5
 BREAK
 #25407
@@ -311,7 +311,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Bank:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25408
 Keywords:	Melvin Graybald ork janitor
@@ -348,7 +348,7 @@ DefaultPos:	Standing
 	Height:	220
 	Weight:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	negotiation:	5
 BREAK
 #25409
@@ -390,7 +390,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	185
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	clubs:	8
 BREAK
 #25410
@@ -430,7 +430,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	80
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25411
 Keywords:	mosher lunatic raving
@@ -470,7 +470,7 @@ AttackType:	Punch
 	Impact:	2
 	Cash:	40
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25412
 Keywords:	spirit funk sickly cloud toxic air elemental
@@ -507,7 +507,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Level:	8
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25413
 Keywords:	DJ G-G-G-G-Ghost! Ghost!
@@ -549,7 +549,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 BREAK
 #25414
@@ -590,7 +590,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	120
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25415
 Keywords:	tweaker twitching
@@ -630,7 +630,7 @@ DefaultPos:	Lying
 	Impact:	2
 	Cash:	20
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25416
 Keywords:	Mullder Halloweener ganger stocky
@@ -672,7 +672,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	85
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	clubs:	7
 	edged weapons:	7
 BREAK
@@ -712,7 +712,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	70
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #25418
 Keywords:	Macho ganger Halloweener lieutenant
@@ -753,7 +753,7 @@ DefaultPos:	Standing
 	Cash:	150
 	Bank:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	whips & flails:	6
 BREAK
 #25419
@@ -796,7 +796,7 @@ DefaultPos:	Standing
 	Cash:	185
 	Bank:	50
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	edged weapons:	7
 BREAK
 #25420
@@ -835,7 +835,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	65
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 BREAK
 #25421
@@ -875,7 +875,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Cash:	145
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	edged weapons:	6
 BREAK
 #25422
@@ -915,7 +915,7 @@ DefaultPos:	Standing
 	Cash:	65
 	Bank:	55
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 BREAK
 #25423
@@ -952,7 +952,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	85
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25424
 Keywords:	ork bouncer dark-skinned heavyset
@@ -992,7 +992,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	80
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 	pistols:	4
 BREAK
@@ -1028,7 +1028,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	85
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25426
 Keywords:	Johann Mister patron
@@ -1064,7 +1064,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25427
 Keywords:	wageslave tipsy
@@ -1101,7 +1101,7 @@ DefaultPos:	Standing
 	Cash:	40
 	Bank:	50
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25428
 Keywords:	Maricela Nova alluring nova-hot tender bartender
@@ -1137,7 +1137,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	70
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25429
 Keywords:	Lazaro Kline gentleman nano-tattoos tender bartender
@@ -1174,7 +1174,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25430
 Keywords:	bouncer dwarven rotund
@@ -1214,7 +1214,7 @@ DefaultPos:	Standing
 	Cash:	175
 	Bank:	125
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	5
 BREAK
 #25431
@@ -1260,7 +1260,7 @@ DefaultPos:	Standing
 	Cash:	250
 	Bank:	250
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	clubs:	7
 	whips & flails:	7
 BREAK
@@ -1301,7 +1301,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	200
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25433
 Keywords:	clubber flailing frantically
@@ -1338,7 +1338,7 @@ DefaultPos:	Standing
 	Cash:	150
 	Bank:	75
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25434
 Keywords:	clubber flailing frantically
@@ -1375,7 +1375,7 @@ DefaultPos:	Standing
 	Cash:	175
 	Bank:	85
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25435
 Keywords:	clubber lonesome robot
@@ -1414,7 +1414,7 @@ DefaultPos:	Standing
 	Cash:	255
 	Bank:	255
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25436
 Keywords:	bouncer slender
@@ -1451,7 +1451,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	85
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25437
 Keywords:	patron drunk
@@ -1490,7 +1490,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	85
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25438
 Keywords:	habituate buzzed
@@ -1529,7 +1529,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	125
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25439
 Keywords:	out of towner out-of-towner
@@ -1567,7 +1567,7 @@ DefaultPos:	Standing
 	Cash:	150
 	Bank:	150
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25440
 Keywords:	paranoid club goer
@@ -1603,7 +1603,7 @@ DefaultPos:	Standing
 	Cash:	75
 	Bank:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25441
 Keywords:	local rough tumble
@@ -1643,7 +1643,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	145
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	edged weapons:	4
 BREAK
 #25442
@@ -1685,7 +1685,7 @@ DefaultPos:	Standing
 	Cash:	135
 	Bank:	135
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 BREAK
 #25443
@@ -1723,7 +1723,7 @@ DefaultPos:	Standing
 	Height:	230
 	Weight:	120
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25444
 Keywords:	Paul Cheerful Stalker creepy guy
@@ -1798,7 +1798,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25446
 Keywords:	Dirty Pierce
@@ -1913,7 +1913,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25449
 Keywords:	groupie drunken
@@ -1947,7 +1947,7 @@ DefaultPos:	Standing
 	Weight:	65
 	Cash:	95
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25450
 Keywords:	clubber passed out
@@ -1984,7 +1984,7 @@ DefaultPos:	Sleeping
 	Cash:	80
 	Bank:	65
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25451
 Keywords:	clubber sick
@@ -2023,7 +2023,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	85
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25452
 Keywords:	club regular
@@ -2059,7 +2059,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25453
 Keywords:	bartender downfall
@@ -2094,7 +2094,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25454
 Keywords:	Ramsey Lost plenitudinous dwarf
@@ -2133,7 +2133,7 @@ DefaultPos:	Standing
 	Cash:	235
 	Bank:	85
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	sub-machine guns:	5
 BREAK
 #25455
@@ -2174,7 +2174,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	155
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25456
 Keywords:	Loco Mullins elf crazy eyes
@@ -2214,7 +2214,7 @@ DefaultPos:	Standing
 	Cash:	225
 	Bank:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	6
 BREAK
 #25457
@@ -2254,7 +2254,7 @@ DefaultPos:	Standing
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #25458
 Keywords:	magician creepy
@@ -2294,7 +2294,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Bank:	100
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	clubs:	6
 	sorcery:	6
 BREAK
@@ -2332,7 +2332,7 @@ DefaultPos:	Standing
 	Height:	140
 	Weight:	90
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #25460
 Keywords:	guy pharmacist
@@ -2367,7 +2367,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25461
 Keywords:	Chas Moreno man
@@ -2403,7 +2403,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25462
 Keywords:	Doctor Dr Kip Garland
@@ -2439,7 +2439,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25463
 Keywords:	Ahmed Doc Pollard
@@ -2476,7 +2476,7 @@ DefaultPos:	Standing
 	Height:	210
 	Weight:	90
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25464
 Keywords:	Dr Bob Doctor
@@ -2514,7 +2514,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #25465
 Keywords:	hostess Korean
@@ -2549,7 +2549,7 @@ DefaultPos:	Standing
 	Weight:	60
 	Cash:	125
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25466
 Keywords:	shopkeeper invisible
@@ -2683,7 +2683,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #25470
 Keywords:	rat demon massive absolutely
@@ -2723,7 +2723,7 @@ AttackType:	Bite
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25471
 Keywords:	rat devil sickly
@@ -2760,7 +2760,7 @@ AttackType:	Bite
 	Ballistic:	2
 	Impact:	2
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25472
 Keywords:	Elroy Loon disheveled elf elven
@@ -2799,7 +2799,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	80
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #25473
 Keywords:	clerk warehouse
@@ -2834,7 +2834,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25474
 Keywords:	Cabbie dispatcher orkish
@@ -2871,7 +2871,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	100
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25475
 Keywords:	old dwarven woman
@@ -2905,7 +2905,7 @@ DefaultPos:	Standing
 	Height:	140
 	Weight:	80
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25476
 Keywords:	vendor casually
@@ -2938,7 +2938,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25477
 Keywords:	fat guy ork
@@ -2973,7 +2973,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	150
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25478
 Keywords:	human sketchy
@@ -3008,7 +3008,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	70
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25479
 Keywords:	lady buxom southern old
@@ -3043,7 +3043,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	80
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25480
 Keywords:	Gerald Pickett grizzled man eighties
@@ -3079,7 +3079,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25481
 Keywords:	ork grumpy lopsided tusks
@@ -3114,7 +3114,7 @@ DefaultPos:	Standing
 	Height:	210
 	Weight:	100
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25482
 Keywords:	dude martial arts muscle
@@ -3152,7 +3152,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25483
 Keywords:	Gustav Marillo man twelve o'clock shadow
@@ -3188,7 +3188,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	80
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25484
 Keywords:	employee wisebrand wholesale
@@ -3223,7 +3223,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25485
 Keywords:	employee Wisebrand wholesale
@@ -3258,7 +3258,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25486
 Keywords:	Sihn Doc
@@ -3294,7 +3294,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	80
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25487
 Keywords:	Broderick Doctor
@@ -3330,7 +3330,7 @@ DefaultPos:	Standing
 	Height:	195
 	Weight:	85
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25488
 Keywords:	Reverend Clayton Mackelman
@@ -3367,7 +3367,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	350
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25489
 Keywords:	Carlton Clemente Hand Five lieutenant
@@ -3407,7 +3407,7 @@ AttackType:	Punch
 	Impact:	10
 	Cash:	666
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25490
 Keywords:	tourist human shaved
@@ -3446,7 +3446,7 @@ DefaultPos:	Standing
 	Impact:	5
 	Cash:	125
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25491
 Keywords:	Shankmire Grand Wizard
@@ -3487,7 +3487,7 @@ DefaultPos:	Standing
 	Impact:	12
 	Cash:	900
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	10
 BREAK
 #25492
@@ -3528,7 +3528,7 @@ AttackType:	Slash
 	Impact:	12
 	Cash:	450
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25493
 Keywords:	Watts Mad Bull minotaur scarred
@@ -3569,7 +3569,7 @@ AttackType:	Maul
 	Impact:	10
 	Cash:	350
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #25494
 Keywords:	Chiggers ork sickly red
@@ -3609,7 +3609,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	550
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sub-machine guns:	7
 BREAK
 #25495
@@ -3650,7 +3650,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	4
 	shotguns:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25496
 Keywords:	Camille Turner
@@ -3684,7 +3684,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	60
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25497
 Keywords:	Abraham Garcia scruffy
@@ -3719,7 +3719,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25498
 Keywords:	Felton Reed ork husky
@@ -3753,7 +3753,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	120
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25499
 Keywords:	Nanette Rutledge woman bloody
@@ -3788,7 +3788,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25500
 Keywords:	Etsuo AKinobu
@@ -3821,7 +3821,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25501
 Keywords:	Aurelia Gaines beautiful elven woman
@@ -3858,7 +3858,7 @@ DefaultPos:	Standing
 	Height:	90
 	Weight:	60
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #25502
 Keywords:	hitman black
@@ -3894,7 +3894,7 @@ AttackType:	Pistol
 	Weight:	80
 	Cash:	400
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	pistols:	5
 BREAK
 #25503
@@ -3935,7 +3935,7 @@ AttackType:	Bite
 	Ballistic:	6
 	Impact:	6
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25504
 Keywords:	buwaya crocodile fat little
@@ -3975,7 +3975,7 @@ AttackType:	Bite
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25505
 Keywords:	Dzoo-Noo-Qua troll huge ugly
@@ -4014,7 +4014,7 @@ AttackType:	Thrash
 	Ballistic:	6
 	Impact:	6
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25506
 Keywords:	minotaur wild
@@ -4054,7 +4054,7 @@ AttackType:	Maul
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25507
 Keywords:	leech sea massive black shadow
@@ -4094,7 +4094,7 @@ AttackType:	Bite
 	Ballistic:	7
 	Impact:	7
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #25508
 Keywords:	Bittermaw goblin ugly
@@ -4137,7 +4137,7 @@ AttackType:	Claw
 	Impact:	10
 [SKILLS]
 	sorcery:	9
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #25509
 Keywords:	goblin scrawny little
@@ -4175,7 +4175,7 @@ AttackType:	Claw
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25510
 Keywords:	naga Primrose pale pink
@@ -4215,7 +4215,7 @@ AttackType:	Bite
 	Impact:	10
 [SKILLS]
 	sorcery:	10
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #25511
 Keywords:	naga Lily pale yellow
@@ -4255,7 +4255,7 @@ AttackType:	Bite
 	Impact:	11
 [SKILLS]
 	sorcery:	9
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #25512
 Keywords:	naga Lantana dark magenta
@@ -4295,7 +4295,7 @@ AttackType:	Bite
 	Impact:	9
 [SKILLS]
 	sorcery:	8
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #25513
 Keywords:	guard security old
@@ -4334,7 +4334,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	125
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #25514
 Keywords:	Cleveland Deleon
@@ -4372,7 +4372,7 @@ DefaultPos:	Standing
 	Impact:	5
 	Cash:	525
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25515
 Keywords:	bodyguard guard cybernetically enhanced
@@ -4411,7 +4411,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	450
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	shotguns:	6
 BREAK
@@ -4452,7 +4452,7 @@ DefaultPos:	Standing
 	Cash:	350
 [SKILLS]
 	sorcery:	8
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25517
 Keywords:	hell hound hellhound particularly large
@@ -4490,7 +4490,7 @@ AttackType:	Bite
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #25518
 Keywords:	sentinel guard Novatech armed
@@ -4530,7 +4530,7 @@ DefaultPos:	Standing
 [SKILLS]
 	assault rifles:	7
 	clubs:	6
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25519
 Keywords:	Shen Dahzong conservatively Chinese man
@@ -4572,7 +4572,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	850
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	pistols:	7
 	clubs:	7
 BREAK
@@ -4615,7 +4615,7 @@ DefaultPos:	Standing
 	Cash:	550
 [SKILLS]
 	sorcery:	9
-	unarmed combat:	7
+	brawling:	7
 	edged weapons:	7
 BREAK
 #25521
@@ -4657,7 +4657,7 @@ AttackType:	Punch
 	Impact:	14
 	Cash:	385
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #25522
 Keywords:	Kwang Ho stout Seoulpa man
@@ -4692,7 +4692,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	90
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25523
 Keywords:	Hibiki Kaimu slick Japanese man Yakuza tattoos
@@ -4731,7 +4731,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	275
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25524
 Keywords:	Triad knee breaker
@@ -4769,7 +4769,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Cash:	350
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #25525
 Keywords:	agent delivery Knight-Errant
@@ -4807,7 +4807,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	350
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25526
 Keywords:	guard supply Knight-Errant Knight Errant
@@ -4848,7 +4848,7 @@ DefaultPos:	Standing
 [SKILLS]
 	sub-machine guns:	7
 	clubs:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25527
 Keywords:	journalist Seattle Voice
@@ -4886,7 +4886,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #25528
 Keywords:	hitman slick
@@ -4924,7 +4924,7 @@ DefaultPos:	Standing
 	Impact:	7
 	Cash:	315
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	5
 BREAK
 #25529
@@ -4964,7 +4964,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	850
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #25530
 Keywords:	bodyguard Novatech elite
@@ -5006,7 +5006,7 @@ DefaultPos:	Standing
 	sub-machine guns:	7
 	assault rifles:	7
 	clubs:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #25531
 Keywords:	Karen King
@@ -5044,6 +5044,6 @@ DefaultPos:	Standing
 	Impact:	6
 	Cash:	650
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 END

@@ -35,7 +35,7 @@ AttackType:	Crush
 	Impact:	7
 	Cash:	800
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	armed combat:	5
 BREAK
 #3601
@@ -75,7 +75,7 @@ AttackType:	Pound
 	Cash:	600
 [SKILLS]
 	cyber implants:	8
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3602
 Keywords:	Johnny boy orc Iron Legion ganger
@@ -113,7 +113,7 @@ DefaultPos:	Standing
 	Bank:	1000
 [SKILLS]
 	firearms:	4
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3603
 Keywords:	Sigmund Red Dragon trainer teacher
@@ -156,7 +156,7 @@ AttackType:	Bite
 	Impact:	15
 	Karma:	104
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #3604
 Keywords:	Ivil Krushya Red Dragon
@@ -196,7 +196,7 @@ AttackType:	Punch
 	Karma:	20
 [SKILLS]
 	firearms:	6
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3605
 Keywords:	doberman dog pinscher
@@ -229,7 +229,7 @@ AttackType:	Bite
 	Weight:	0
 	Impact:	2
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3606
 Keywords:	ganger red dragon
@@ -264,7 +264,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	300
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	firearms:	5
 BREAK
 END

@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	100
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #22801
 Keywords:	man hefty fat
@@ -69,7 +69,7 @@ DefaultPos:	Standing
 	Cash:	65
 	Bank:	50
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #22802
 Keywords:	wageslave hungry
@@ -106,7 +106,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	25
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #22803
 Keywords:	chubby man cheap suit Johnson Mister
@@ -142,7 +142,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	100
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #22804
 Keywords:	troll butcher chef surly
@@ -254,7 +254,7 @@ DefaultPos:	Standing
 	Weight:	100
 	Cash:	185
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #22807
 Keywords:	man Italian thoroughly soused drunk
@@ -289,7 +289,7 @@ DefaultPos:	Standing
 	Weight:	80
 	Cash:	225
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #22808
 Keywords:	man suit roughed Italian
@@ -325,7 +325,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	175
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #22809
 Keywords:	Alfieri Ciarniello burly Italian man Mafia
@@ -366,7 +366,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	6
 	clubs:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #22820
 Keywords:	Ebey Pratt Lanky cybereyes bartender
@@ -407,7 +407,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #22821
 Keywords:	Maxwell Jensen well-kept smoking Johnson
@@ -443,7 +443,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	negotiation:	5
 BREAK
 #22822
@@ -485,7 +485,7 @@ DefaultPos:	Standing
 	Impact:	7
 	Cash:	250
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	pistols:	7
 	clubs:	6
 BREAK
@@ -596,7 +596,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	115
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #22826
 Keywords:	Eliza The Lighter Bic petite woman flame red hair redhead
@@ -633,7 +633,7 @@ DefaultPos:	Standing
 	Impact:	5
 	Cash:	180
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	sorcery:	7
 BREAK
 #22827
@@ -672,7 +672,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	200
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	clubs:	8
 BREAK
 #22828
@@ -709,7 +709,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	155
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #22830
 Keywords:	employee dadson vision
@@ -885,7 +885,7 @@ DefaultPos:	Standing
 	Cash:	15
 	Bank:	85
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #22835
 Keywords:	shopper run mill
@@ -921,7 +921,7 @@ DefaultPos:	Standing
 	Cash:	15
 	Bank:	85
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #22836
 Keywords:	guard security dadson vision
@@ -959,7 +959,7 @@ DefaultPos:	Standing
 	Bank:	55
 [SKILLS]
 	clubs:	3
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #22850
 Keywords:	SentryGun(TM) Sentry Gun turret concealed
@@ -1036,7 +1036,7 @@ DefaultPos:	Standing
 	Cash:	35
 	Bank:	200
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #22852
 Keywords:	guard security pudgy
@@ -1074,7 +1074,7 @@ DefaultPos:	Standing
 	Impact:	5
 	Cash:	125
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	clubs:	5
 BREAK
 #22853
@@ -1114,7 +1114,7 @@ DefaultPos:	Standing
 	Bank:	100
 [SKILLS]
 	clubs:	6
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #22854
 Keywords:	doctor proper looking
@@ -1218,7 +1218,7 @@ DefaultPos:	Standing
 	Weight:	150
 	Cash:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #22857
 Keywords:	guard security
@@ -1257,7 +1257,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	225
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	pistols:	6
 BREAK
@@ -1299,7 +1299,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Bank:	125
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	7
 	sub-machine guns:	7
 BREAK
@@ -1340,7 +1340,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	150
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #22860
 Keywords:	guard security sleeping
@@ -1376,7 +1376,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	150
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #22861
 Keywords:	SentryGun(TM) Sentry Gun turret concealed
@@ -1457,7 +1457,7 @@ DefaultPos:	Standing
 [SKILLS]
 	shotguns:	7
 	clubs:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #22863
 Keywords:	man sporting hazmat cleaner worker
@@ -1566,7 +1566,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #22866
 Keywords:	guard security troll
@@ -1645,7 +1645,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	7
 	rifles:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #22868
 Keywords:	SentryGun(TM) Sentry Gun turret concealed
@@ -1721,7 +1721,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #22870
 Keywords:	Stanley Yaha surly dwarven

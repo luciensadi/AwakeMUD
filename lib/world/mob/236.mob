@@ -69,7 +69,7 @@ AttackType:	Maul
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	3
 	stealth:	8
 	:	8
@@ -145,7 +145,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 	firearms:	15
 	leadership:	15
 	driving/Car:	15

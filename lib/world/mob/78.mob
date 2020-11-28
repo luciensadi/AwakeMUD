@@ -37,7 +37,7 @@ DefaultPos:	Standing
 	Karma:	1
 [SKILLS]
 	edged weapons:	12
-	unarmed combat:	12
+	brawling:	12
 	athletics:	12
 	stealth:	12
 	sorcery:	12
@@ -102,7 +102,7 @@ AttackType:	Blast
 	rifles:	20
 	pistols:	9
 	cyber implants:	6
-	unarmed combat:	9
+	brawling:	9
 	edged weapons:	12
 BREAK
 END

@@ -101,7 +101,7 @@ AttackType:	Punch
 	Impact:	10
 [SKILLS]
 	edged weapons:	9
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #26903
 Keywords:	hellhound red
@@ -173,7 +173,7 @@ AttackType:	Punch
 	Impact:	16
 [SKILLS]
 	edged weapons:	9
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #26905
 Keywords:	earth spirit
@@ -275,7 +275,7 @@ AttackType:	Punch
 	Impact:	23
 [SKILLS]
 	shotguns:	18
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #26908
 Keywords:	banshee

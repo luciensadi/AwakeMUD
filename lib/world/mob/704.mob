@@ -30,7 +30,7 @@ DefaultPos:	Standing
 	Height:	198
 	Weight:	90
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #70401
 Keywords:	Sam Spade man old
@@ -100,7 +100,7 @@ DefaultPos:	Standing
 	Height:	183
 	Weight:	54
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #70403
 Keywords:	Keymaster

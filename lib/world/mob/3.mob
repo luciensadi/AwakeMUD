@@ -39,7 +39,7 @@ AttackType:	Rifle
 [SKILLS]
 	athletics:	20
 	assault rifles:	20
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #451
 Keywords:	cheif holding a meat cleaver is standing here  Carel Monrow
@@ -79,7 +79,7 @@ DefaultPos:	Sitting
 	Cash:	5000
 	Bank:	5000
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #452
 Keywords:	A Death Dealer with a large afro is standing here selling his goods Nunka
@@ -120,7 +120,7 @@ DefaultPos:	Sitting
 	Cash:	999999
 	Bank:	999999
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #453
 Keywords:	mob unfinished
@@ -160,6 +160,6 @@ DefaultPos:	Sitting
 	Cash:	50000
 	Bank:	50000
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 END

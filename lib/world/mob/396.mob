@@ -247,7 +247,7 @@ AttackType:	Pound
 	Cash:	70
 [SKILLS]
 	athletics:	4
-	unarmed combat:	6
+	brawling:	6
 	clubs:	4
 BREAK
 #39607
@@ -321,7 +321,7 @@ AttackType:	Crush
 	Weight:	200
 [SKILLS]
 	English:	10
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #39609
 Keywords:	mafia enforcer
@@ -359,7 +359,7 @@ AttackType:	Crush
 	Bank:	400
 [SKILLS]
 	English:	10
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #39610
 Keywords:	bartender Harold Wo
@@ -1135,7 +1135,7 @@ AttackType:	Machine Gun
 	Ballistic:	2
 	Impact:	2
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #39633
 Keywords:	drone guard 
@@ -1207,7 +1207,7 @@ DefaultPos:	Standing
 	Bank:	300
 [SKILLS]
 	pistols:	6
-	unarmed combat:	10
+	brawling:	10
 	machine guns:	6
 	assault rifles:	7
 	English:	10
@@ -1289,7 +1289,7 @@ AttackType:	Rifle
 [SKILLS]
 	assault rifles:	15
 	corporate etiquette:	9
-	unarmed combat:	15
+	brawling:	15
 	pole arms:	12
 	clubs:	12
 BREAK
@@ -1365,7 +1365,7 @@ AttackType:	Punch
 	Cash:	500
 	Bank:	2000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	shotguns:	10
 	English:	10
 BREAK
@@ -1652,7 +1652,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	275
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39647
 Keywords:	receptionist administrative
@@ -1688,7 +1688,7 @@ DefaultPos:	Standing
 	Cash:	80
 	Bank:	185
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39648
 Keywords:	operator phone
@@ -1725,7 +1725,7 @@ DefaultPos:	Standing
 	Cash:	115
 	Bank:	195
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39649
 Keywords:	Security Control Officer guard
@@ -1762,7 +1762,7 @@ DefaultPos:	Standing
 	Cash:	145
 	Bank:	165
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	pistols:	5
 	clubs:	4
 BREAK
@@ -1800,7 +1800,7 @@ DefaultPos:	Standing
 	Cash:	210
 	Bank:	205
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39651
 Keywords:	logistics coordinator
@@ -1837,7 +1837,7 @@ DefaultPos:	Standing
 	Cash:	185
 	Bank:	215
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39652
 Keywords:	Xavier Biafore chunky man
@@ -1873,7 +1873,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	120
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39653
 Keywords:	ground controller
@@ -1910,7 +1910,7 @@ DefaultPos:	Standing
 	Cash:	128
 	Bank:	222
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39654
 Keywords:	air controller

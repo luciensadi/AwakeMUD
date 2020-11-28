@@ -33,7 +33,7 @@ AttackType:	Pound
 	Height:	239
 	Weight:	205
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	clubs:	9
 BREAK
 #26201
@@ -71,7 +71,7 @@ AttackType:	Punch
 	Height:	101
 	Weight:	45
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	assault rifles:	7
 	artillery:	9
 BREAK
@@ -110,7 +110,7 @@ AttackType:	Punch
 	Weight:	50
 [SKILLS]
 	athletics:	4
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #26203
 Keywords:	battered woman elf
@@ -143,7 +143,7 @@ DefaultPos:	Standing
 	Height:	203
 	Weight:	59
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #26204
 Keywords:	human woman child
@@ -212,7 +212,7 @@ DefaultPos:	Standing
 	Height:	183
 	Weight:	103
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	firearms:	4
 BREAK
 END

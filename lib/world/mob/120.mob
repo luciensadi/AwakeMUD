@@ -31,7 +31,7 @@ AttackType:	Pound
 	Weight:	317
 	Cash:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #12001
 Keywords:	dwarven farm resident
@@ -101,7 +101,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	12
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #12003
 Keywords:	human dirty young boy
@@ -133,7 +133,7 @@ DefaultPos:	Standing
 	Height:	103
 	Weight:	20
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #12004
 Keywords:	boy ol' good
@@ -171,7 +171,7 @@ DefaultPos:	Standing
 	edged weapons:	5
 	clubs:	5
 	shotguns:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #12005
 Keywords:	behemoth crocodile massive slime-covered
@@ -212,7 +212,7 @@ AttackType:	Bite
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #12006
 Keywords:	guardian alpha dome guard patrol
@@ -250,7 +250,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	105
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	rifles:	6
 	assault rifles:	6
@@ -290,7 +290,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	35
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	assault rifles:	6
 BREAK
@@ -326,7 +326,7 @@ DefaultPos:	Standing
 	Height:	140
 	Weight:	70
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	7
 BREAK
 #12009
@@ -362,7 +362,7 @@ AttackType:	Bite
 	Weight:	30
 	Level:	6
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #12010
 Keywords:	guard troll smarmy trog
@@ -402,7 +402,7 @@ DefaultPos:	Standing
 	Cash:	105
 [SKILLS]
 	pole arms:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #12061
 Keywords:	cook kiss troll huge

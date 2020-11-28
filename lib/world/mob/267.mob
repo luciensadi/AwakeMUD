@@ -85,7 +85,7 @@ AttackType:	Bite
 	Weight:	25
 	Level:	1
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	stealth:	4
 	grapple:	5
 	athletics:	7
@@ -126,7 +126,7 @@ AttackType:	Bite
 	Level:	1
 [SKILLS]
 	athletics:	5
-	unarmed combat:	6
+	brawling:	6
 	stealth:	4
 	:	3
 	leadership:	2
@@ -176,7 +176,7 @@ AttackType:	Stab
 	Bank:	4000
 	Karma:	121
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	edged weapons:	6
 	grapple:	6
 	:	5
@@ -217,7 +217,7 @@ AttackType:	Bite
 	Weight:	23
 	Level:	1
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	athletics:	7
 	leadership:	2
 	:	3
@@ -310,7 +310,7 @@ AttackType:	Whip
 	Bank:	2000
 [SKILLS]
 	leadership:	7
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	6
 	clubs:	7
 	media etiquette:	7
@@ -352,7 +352,7 @@ AttackType:	Rifle
 	Bank:	1500
 [SKILLS]
 	armed combat:	7
-	unarmed combat:	5
+	brawling:	5
 	rifles:	9
 	corporate etiquette:	8
 	computers:	7
@@ -397,7 +397,7 @@ AttackType:	Bludgeon
 	Bank:	5
 [SKILLS]
 	clubs:	6
-	unarmed combat:	3
+	brawling:	3
 	street etiquette:	2
 	grapple:	3
 	athletics:	3
@@ -607,7 +607,7 @@ AttackType:	Bifurcate
 	Impact:	500
 [SKILLS]
 	armed combat:	25
-	unarmed combat:	25
+	brawling:	25
 	:	3
 	street etiquette:	25
 	:	10

@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Impact:	5
 [SKILLS]
 	firearms:	5
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #24101
 Keywords:	manic ancients ganger
@@ -67,7 +67,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	50
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	edged weapons:	7
 	firearms:	10
 	shotguns:	10
@@ -109,7 +109,7 @@ DefaultPos:	Standing
 	Cash:	150
 [SKILLS]
 	rifles:	15
-	unarmed combat:	18
+	brawling:	18
 BREAK
 #24103
 Keywords:	tpf patrol vehicle car police cop
@@ -250,7 +250,7 @@ AttackType:	Blast
 	Impact:	25
 	Karma:	150
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	10
 BREAK
 END

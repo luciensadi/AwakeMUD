@@ -31,7 +31,7 @@ AttackType:	Pound
 	Ballistic:	3
 	Impact:	2
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14501
 Keywords:	worker dock man
@@ -68,7 +68,7 @@ AttackType:	Pound
 	Impact:	2
 	Cash:	10
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #14502
 Keywords:	rat grey fat
@@ -102,7 +102,7 @@ AttackType:	Bite
 	Weight:	3
 	Ballistic:	1
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14503
 Keywords:	sailor old wrinkly
@@ -170,7 +170,7 @@ AttackType:	Bite
 	Impact:	9
 	Karma:	90
 [SKILLS]
-	unarmed combat:	11
+	brawling:	11
 BREAK
 #14505
 Keywords:	ork mercenary roughed
@@ -279,7 +279,7 @@ AttackType:	Pound
 	Impact:	6
 [SKILLS]
 	sorcery:	5
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #14508
 Keywords:	sniper elven elf assassin
@@ -349,7 +349,7 @@ AttackType:	Bite
 	Ballistic:	5
 	Impact:	6
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14510
 Keywords:	naga snake gigantic huge
@@ -384,7 +384,7 @@ AttackType:	Bite
 	Ballistic:	3
 	Impact:	1
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14511
 Keywords:	spirit toxic
@@ -421,7 +421,7 @@ AttackType:	Crush
 	Impact:	5
 [SKILLS]
 	sorcery:	6
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #14512
 Keywords:	spirit clown mischevious puppet
@@ -459,7 +459,7 @@ AttackType:	Claw
 	Impact:	6
 [SKILLS]
 	sorcery:	7
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #14513
 Keywords:	shaman insect suspicious man
@@ -496,7 +496,7 @@ DefaultPos:	Standing
 	Ballistic:	6
 	Impact:	7
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	8
 BREAK
 #14514
@@ -539,7 +539,7 @@ AttackType:	Thrash
 	Weight:	0
 	Level:	20
 [SKILLS]
-	unarmed combat:	17
+	brawling:	17
 	sorcery:	8
 BREAK
 #14515

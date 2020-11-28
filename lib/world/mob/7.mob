@@ -63,7 +63,7 @@ DefaultPos:	Standing
 	Ballistic:	40
 	Impact:	40
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	electronics:	10
 	computers:	12
 BREAK
@@ -97,7 +97,7 @@ DefaultPos:	Standing
 	Weight:	93
 [SKILLS]
 	firearms:	6
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #703
 Keywords:	dog cyberdog
@@ -134,7 +134,7 @@ AttackType:	Bite
 	Impact:	3
 	Karma:	20
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #704
 Keywords:	cyberdog dog
@@ -170,7 +170,7 @@ AttackType:	Bite
 	Impact:	5
 	Karma:	20
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #705
 Keywords:	snowhawk elf mage metamage
@@ -256,7 +256,7 @@ AttackType:	Thrash
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	armed combat:	50
 	firearms:	50
 	gunnery:	50
@@ -330,7 +330,7 @@ AttackType:	Maul
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	3
 	stealth:	8
 	:	8
@@ -371,7 +371,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #710
 Keywords:	Fire Elemental Floats Bored Hell
@@ -409,7 +409,7 @@ AttackType:	Blast
 	Level:	5
 [SKILLS]
 	sorcery:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #750
 Keywords:	dick clarke headless body
@@ -444,7 +444,7 @@ AttackType:	Punch
 	Impact:	20
 	Cash:	10000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #777
 Keywords:	timothy shin small black man

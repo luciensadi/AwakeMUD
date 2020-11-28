@@ -35,7 +35,7 @@ AttackType:	Rifle
 	Impact:	11
 	Bank:	130
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	athletics:	4
 	biotech:	7
 	electronics:	6
@@ -178,7 +178,7 @@ AttackType:	Stab
 	Impact:	5
 	Bank:	4
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #3809
 Keywords:	bill bartender
@@ -284,7 +284,7 @@ AttackType:	Sting
 	Impact:	1
 	Bank:	12
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3812
 Keywords:	receptionist tim timbot robot
@@ -360,7 +360,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	400
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	negotiation:	6
 	corporate etiquette:	5
 BREAK
@@ -396,7 +396,7 @@ AttackType:	Bludgeon
 	Impact:	3
 	Bank:	412
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	corporate etiquette:	4
 BREAK
 #3815
@@ -428,7 +428,7 @@ AttackType:	Claw
 	Impact:	3
 	Bank:	212
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	corporate etiquette:	5
 	negotiation:	3
 BREAK
@@ -466,7 +466,7 @@ AttackType:	Maul
 	Impact:	5
 	Bank:	944
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	corporate etiquette:	6
 	negotiation:	4
 BREAK
@@ -507,7 +507,7 @@ AttackType:	Bludgeon
 	Impact:	4
 	Bank:	12
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	:	5
 	sorcery:	5
 	conjuring:	5
@@ -551,7 +551,7 @@ AttackType:	Thrash
 	Impact:	4
 	Bank:	2010
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	negotiation:	7
 	demolitions:	1
 BREAK
@@ -590,7 +590,7 @@ AttackType:	Shuriken
 	Weight:	10
 	Bank:	471
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	shotguns:	4
 	sorcery:	4
 	:	2
@@ -631,7 +631,7 @@ AttackType:	Bludgeon
 	Impact:	7
 	Bank:	14
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	stealth:	5
 	interrogation:	2
 BREAK
@@ -669,7 +669,7 @@ AttackType:	Bludgeon
 	Impact:	10
 	Bank:	57982
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	6
 	:	7
 	stealth:	6
@@ -712,7 +712,7 @@ DefaultPos:	Standing
 	Impact:	5
 	Bank:	123
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	biotech:	6
 	computers:	5
 	electronics:	6
@@ -752,7 +752,7 @@ AttackType:	Pound
 	Impact:	5
 	Bank:	700
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	corporate etiquette:	5
 	stealth:	5
 BREAK
@@ -790,7 +790,7 @@ AttackType:	Pierce
 	Impact:	4
 	Bank:	223
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	5
 	edged weapons:	4
 BREAK
@@ -828,7 +828,7 @@ AttackType:	Claw
 	Impact:	7
 	Bank:	177
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3828
 Keywords:	scientist neural cryoco diminutive
@@ -864,7 +864,7 @@ DefaultPos:	Standing
 	Impact:	12
 	Bank:	366
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	athletics:	4
 BREAK
 #3829
@@ -902,7 +902,7 @@ AttackType:	Stab
 	Impact:	6
 	Bank:	520
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	conjuring:	4
 	sorcery:	4
 BREAK
@@ -941,7 +941,7 @@ AttackType:	Bite
 	Impact:	6
 	Bank:	633
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3831
 Keywords:	strident overseer cryoco
@@ -978,7 +978,7 @@ AttackType:	Crush
 	Impact:	6
 	Bank:	912
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3832
 Keywords:	cryoco computer scientist
@@ -1014,7 +1014,7 @@ AttackType:	Bite
 	Impact:	7
 	Bank:	444
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3833
 Keywords:	exec executive officer
@@ -1088,7 +1088,7 @@ AttackType:	Pierce
 	Impact:	7
 	Bank:	199
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	6
 	firearms:	6
 BREAK

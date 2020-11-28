@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #8801
 Keywords:	smuggler firearms
@@ -66,7 +66,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #8802
 Keywords:	smuggler firearms
@@ -100,7 +100,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #8803
 Keywords:	smuggler firearms
@@ -134,7 +134,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #8804
 Keywords:	smuggler firearms
@@ -168,7 +168,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #8805
 Keywords:	hydra wyrm massive
@@ -209,7 +209,7 @@ DefaultPos:	Standing
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	10
 BREAK
 #8806
@@ -251,7 +251,7 @@ AttackType:	Bite
 	Impact:	12
 [SKILLS]
 	sorcery:	10
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #8807
 Keywords:	an enormous hydra wyrm head
@@ -291,7 +291,7 @@ AttackType:	Bite
 	Ballistic:	13
 	Impact:	12
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #8808
 Keywords:	hydra enormous wyrm head
@@ -331,7 +331,7 @@ AttackType:	Bite
 	Ballistic:	14
 	Impact:	14
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #8809
 Keywords:	enormous hydra wyrm head
@@ -370,7 +370,7 @@ DefaultPos:	Standing
 	Ballistic:	13
 	Impact:	13
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	9
 BREAK
 #8810
@@ -410,7 +410,7 @@ DefaultPos:	Standing
 	Ballistic:	13
 	Impact:	13
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #8811
 Keywords:	enormous hydra wyrm head
@@ -449,7 +449,7 @@ DefaultPos:	Standing
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	9
 BREAK
 #8812
@@ -489,7 +489,7 @@ DefaultPos:	Standing
 	Ballistic:	13
 	Impact:	13
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	9
 BREAK
 #8813
@@ -530,7 +530,7 @@ AttackType:	Bite
 	Ballistic:	13
 	Impact:	14
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #8814
 Keywords:	enormous hydra wyrm head
@@ -569,7 +569,7 @@ DefaultPos:	Standing
 	Ballistic:	14
 	Impact:	12
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #8820
 Keywords:	officer airport customs
@@ -604,7 +604,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	100
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #8821
 Keywords:	porter airport
@@ -640,7 +640,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	25
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #8822
 Keywords:	guard security airport
@@ -677,7 +677,7 @@ DefaultPos:	Standing
 	Cash:	20
 	Bank:	50
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 BREAK
 END

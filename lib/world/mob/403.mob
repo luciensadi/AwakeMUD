@@ -35,7 +35,7 @@ AttackType:	Shotgun
 [SKILLS]
 	stealth:	50
 	increased reflexes:	3
-	unarmed combat:	50
+	brawling:	50
 	shotguns:	50
 	killing hands:	4
 BREAK

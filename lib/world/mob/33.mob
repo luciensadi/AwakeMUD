@@ -32,7 +32,7 @@ AttackType:	Thrash
 	Height:	300
 	Weight:	600
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #3302
 Keywords:	bandit
@@ -69,7 +69,7 @@ AttackType:	Bite
 	Height:	40
 	Weight:	30
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3304
 Keywords:	uncle al
@@ -102,7 +102,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3305
 Keywords:	secretary
@@ -138,7 +138,7 @@ AttackType:	Claw
 	Cash:	25
 	Bank:	125
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3306
 Keywords:	curator zoo
@@ -174,7 +174,7 @@ AttackType:	Punch
 	Cash:	125
 	Bank:	125
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3307
 Keywords:	century ferret
@@ -210,7 +210,7 @@ AttackType:	Bite
 	Height:	30
 	Weight:	20
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3308
 Keywords:	firedrake
@@ -248,7 +248,7 @@ AttackType:	Bite
 	Weight:	300
 	Impact:	1
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3309
 Keywords:	saber-tooth cat saber tooth
@@ -283,7 +283,7 @@ AttackType:	Bite
 	Height:	160
 	Weight:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3310
 Keywords:	shadowhound
@@ -319,7 +319,7 @@ AttackType:	Bite
 	Height:	120
 	Weight:	60
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3311
 Keywords:	black annis
@@ -355,7 +355,7 @@ AttackType:	Claw
 	Height:	170
 	Weight:	80
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #3312
 Keywords:	bombardier
@@ -391,7 +391,7 @@ AttackType:	Bite
 	Height:	20
 	Weight:	5
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #3313
 Keywords:	Duane scrawny blonde ork
@@ -425,7 +425,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	90
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3314
 Keywords:	piasma massive
@@ -461,7 +461,7 @@ AttackType:	Maul
 	Weight:	600
 	Impact:	2
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3315
 Keywords:	icedrake
@@ -498,7 +498,7 @@ AttackType:	Bite
 	Height:	150
 	Weight:	300
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3316
 Keywords:	scorpyrine scorpion
@@ -536,7 +536,7 @@ AttackType:	Sting
 	Weight:	40
 	Impact:	1
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3317
 Keywords:	juggernaut armadillo garantuan
@@ -575,7 +575,7 @@ AttackType:	Crush
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3318
 Keywords:	small child
@@ -608,7 +608,7 @@ DefaultPos:	Standing
 	Weight:	30
 	Cash:	10
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #3319
 Keywords:	janitor
@@ -642,7 +642,7 @@ DefaultPos:	Standing
 	Cash:	30
 	Bank:	50
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	clubs:	3
 BREAK
 #3320
@@ -683,7 +683,7 @@ DefaultPos:	Standing
 	Bank:	65
 [SKILLS]
 	clubs:	4
-	unarmed combat:	3
+	brawling:	3
 	pistols:	4
 BREAK
 #3321
@@ -755,7 +755,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	50
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3323
 Keywords:	baby goat
@@ -825,7 +825,7 @@ AttackType:	Maul
 	Height:	180
 	Weight:	250
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #3325
 Keywords:	chimpanzee chimp primate
@@ -861,7 +861,7 @@ AttackType:	Pound
 	Height:	120
 	Weight:	70
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #3326
 Keywords:	bear grizzly
@@ -898,7 +898,7 @@ AttackType:	Maul
 	Height:	300
 	Weight:	500
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3327
 Keywords:	zoo employee
@@ -969,7 +969,7 @@ AttackType:	Bite
 	Height:	40
 	Weight:	20
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #3329
 Keywords:	horse miniature over-the-hill old
@@ -1042,7 +1042,7 @@ DefaultPos:	Standing
 	Cash:	80
 	Bank:	85
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3331
 Keywords:	child small crying bawling
@@ -1112,7 +1112,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	50
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	clubs:	5
 	pistols:	5
 BREAK

@@ -36,7 +36,7 @@ AttackType:	Pistol
 	Impact:	4
 [SKILLS]
 	pistols:	8
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #39801
 Keywords:	danielle flower girl woman elf florist beautiful lithe elven
@@ -937,7 +937,7 @@ AttackType:	Punch
 	Cash:	2000
 	Bank:	3000
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #39827
 Keywords:	female spa patron elf towel
@@ -1402,7 +1402,7 @@ AttackType:	Bite
 	Cash:	430
 	Bank:	400
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #39841
 Keywords:	Jude Jones johnson suit bald man
@@ -1531,7 +1531,7 @@ AttackType:	Claw
 	Ballistic:	20
 	Impact:	20
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	:	4
 BREAK
 #39999

@@ -68,7 +68,7 @@ DefaultPos:	Standing
 	Ballistic:	2
 	Impact:	2
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #13002
 Keywords:	worker construction man
@@ -105,7 +105,7 @@ DefaultPos:	Standing
 	Cash:	650
 	Bank:	320
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #13003
 Keywords:	officer security smartly
@@ -178,7 +178,7 @@ AttackType:	Pistol
 	Impact:	5
 	Bank:	300
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	pistols:	5
 BREAK
 #13005
@@ -216,7 +216,7 @@ AttackType:	Pound
 	Impact:	8
 	Bank:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sub-machine guns:	7
 BREAK
 #13006
@@ -254,7 +254,7 @@ AttackType:	Pound
 	Impact:	7
 	Bank:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 BREAK
 #13007
@@ -292,7 +292,7 @@ AttackType:	Pound
 	Impact:	5
 	Bank:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	pistols:	5
 BREAK
 #13008
@@ -334,6 +334,6 @@ AttackType:	Punch
 	Impact:	11
 	Bank:	200
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 END

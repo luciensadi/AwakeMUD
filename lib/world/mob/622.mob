@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	35
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #62201
 Keywords:	mobster beefy Gambione
@@ -72,7 +72,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	85
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 	sub-machine guns:	4
 BREAK
@@ -109,7 +109,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	25
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	driving/Car:	2
 BREAK
 #62203
@@ -145,7 +145,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	45
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	driving/Car:	2
 BREAK
 #62204
@@ -182,7 +182,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #62205
 Keywords:	Adele Fuselier proprietor shopkeeper
@@ -218,7 +218,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	60
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	negotiation:	3
 BREAK
 #62206
@@ -323,7 +323,7 @@ DefaultPos:	Standing
 	Cash:	75
 	Bank:	100
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 	sub-machine guns:	4
 BREAK
@@ -365,7 +365,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	5
 	sub-machine guns:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #62210
 Keywords:	soldier foot Gambione
@@ -403,7 +403,7 @@ DefaultPos:	Standing
 	Cash:	90
 	Bank:	90
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	assault rifles:	6
 	shotguns:	6
@@ -443,7 +443,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	50
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #62212
 Keywords:	Barthelemy Gambione lieutenant
@@ -483,7 +483,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	7
 	shotguns:	7
-	unarmed combat:	7
+	brawling:	7
 	assault rifles:	7
 BREAK
 #62213
@@ -520,7 +520,7 @@ DefaultPos:	Standing
 	Cash:	30
 	Bank:	25
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #62214
 Keywords:	dweller city
@@ -556,7 +556,7 @@ DefaultPos:	Standing
 	Cash:	40
 	Bank:	40
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #62215
 Keywords:	surly street muscle
@@ -595,7 +595,7 @@ DefaultPos:	Standing
 	Cash:	80
 	Bank:	35
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 	shotguns:	4
 BREAK
@@ -635,7 +635,7 @@ DefaultPos:	Standing
 	Cash:	95
 	Bank:	65
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 	assault rifles:	6
 BREAK
@@ -674,7 +674,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	50
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 BREAK
 #62218
@@ -713,7 +713,7 @@ DefaultPos:	Standing
 	Cash:	65
 	Bank:	25
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	clubs:	5
 	pistols:	5
 BREAK
@@ -754,7 +754,7 @@ DefaultPos:	Standing
 	Cash:	55
 	Bank:	55
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	driving/Car:	4
 BREAK
 #62220

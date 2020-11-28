@@ -32,7 +32,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	8
 	clubs:	8
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #1501
 Keywords:	professional businessman suit
@@ -71,7 +71,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Bank:	500
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	corporate etiquette:	6
 	driving/Car:	2
 BREAK
@@ -177,7 +177,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Bank:	50
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sub-machine guns:	6
 BREAK
 #1505
@@ -284,7 +284,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Bank:	500
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	corporate etiquette:	6
 	driving/Car:	2
 BREAK
@@ -552,6 +552,6 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 END

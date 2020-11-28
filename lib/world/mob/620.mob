@@ -27,7 +27,7 @@ DefaultPos:	Standing
 	Height:	130
 	Weight:	60
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #62001
 Keywords:	fag man naked
@@ -61,6 +61,6 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	90
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 END

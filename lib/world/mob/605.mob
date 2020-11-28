@@ -196,7 +196,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	armed combat:	10
 	stealth:	10
 	leadership:	10
@@ -236,7 +236,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	firearms:	10
 	leadership:	10
 	armed combat:	10
@@ -274,7 +274,7 @@ DefaultPos:	Standing
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	leadership:	10
 	stealth:	10
 	athletics:	10
@@ -318,7 +318,7 @@ DefaultPos:	Standing
 [SKILLS]
 	sorcery:	10
 	:	10
-	unarmed combat:	10
+	brawling:	10
 	conjuring:	10
 	stealth:	10
 BREAK
@@ -360,7 +360,7 @@ DefaultPos:	Standing
 	:	10
 	sorcery:	10
 	conjuring:	10
-	unarmed combat:	10
+	brawling:	10
 	throwing weapons:	10
 BREAK
 #60510
@@ -1321,7 +1321,7 @@ AttackType:	Bite
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #60540
 Keywords:	gunsmith gary ork

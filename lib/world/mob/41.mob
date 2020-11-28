@@ -71,7 +71,7 @@ AttackType:	Pistol
 [SKILLS]
 	firearms:	10
 	armed combat:	8
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #4102
 Keywords:	duuness teacher master guildmaster
@@ -108,7 +108,7 @@ AttackType:	Slash
 	Impact:	15
 [SKILLS]
 	armed combat:	10
-	unarmed combat:	8
+	brawling:	8
 	firearms:	6
 BREAK
 #4103
@@ -147,7 +147,7 @@ AttackType:	Rifle
 	Bank:	18329
 [SKILLS]
 	firearms:	10
-	unarmed combat:	8
+	brawling:	8
 	stealth:	6
 BREAK
 #4104
@@ -185,7 +185,7 @@ AttackType:	Slash
 	Bank:	32282
 [SKILLS]
 	armed combat:	11
-	unarmed combat:	8
+	brawling:	8
 	firearms:	8
 BREAK
 #4107

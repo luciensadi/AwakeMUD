@@ -149,7 +149,7 @@ AttackType:	Cannon
 [SKILLS]
 	assault cannons:	8
 	edged weapons:	8
-	unarmed combat:	10
+	brawling:	10
 	gunnery:	8
 	stealth:	10
 BREAK
@@ -227,7 +227,7 @@ AttackType:	Pistol
 	Cash:	10000
 [SKILLS]
 	pistols:	13
-	unarmed combat:	9
+	brawling:	9
 	corporate etiquette:	9
 	negotiation:	8
 	leadership:	7
@@ -345,7 +345,7 @@ DefaultPos:	Standing
 	Ballistic:	7
 	Impact:	7
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #26897
 Keywords:	badass bodyguard
@@ -388,7 +388,7 @@ AttackType:	Pistol
 	stealth:	8
 	athletics:	7
 	pistols:	11
-	unarmed combat:	9
+	brawling:	9
 	demolitions:	7
 BREAK
 #26899

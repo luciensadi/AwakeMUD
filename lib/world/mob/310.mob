@@ -33,7 +33,7 @@ DefaultPos:	Standing
 	Impact:	13
 [SKILLS]
 	sorcery:	10
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #31001
 Keywords:	fly beelzebub
@@ -69,7 +69,7 @@ AttackType:	Sting
 	Ballistic:	13
 	Impact:	12
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #31002
 Keywords:	girl young ash
@@ -105,7 +105,7 @@ AttackType:	Pound
 	Ballistic:	10
 	Impact:	9
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	17
 BREAK
 #31003
@@ -142,7 +142,7 @@ AttackType:	Bite
 	Ballistic:	12
 	Impact:	10
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	15
 	:	12
 BREAK
@@ -182,7 +182,7 @@ AttackType:	Bludgeon
 	Ballistic:	14
 	Impact:	12
 [SKILLS]
-	unarmed combat:	16
+	brawling:	16
 	sorcery:	15
 	:	15
 BREAK
@@ -218,7 +218,7 @@ DefaultPos:	Standing
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #31006
 Keywords:	ghoul creature hideous
@@ -254,7 +254,7 @@ AttackType:	Punch
 	Ballistic:	13
 	Impact:	10
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #31007
 Keywords:	shadow furfur
@@ -290,7 +290,7 @@ AttackType:	Bite
 	Ballistic:	13
 	Impact:	15
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	6
 	:	3
 BREAK
@@ -331,7 +331,7 @@ AttackType:	Bite
 	Ballistic:	13
 	Impact:	15
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #31050
 Keywords:	dirty druggie drug man trashed
@@ -408,7 +408,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	3
 	assault rifles:	4
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #31052
 Keywords:	troll guard nasty
@@ -446,7 +446,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	5
 	shotguns:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #31053
 Keywords:	Snahl drug dealer
@@ -486,7 +486,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	4
 	sub-machine guns:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #31054
 Keywords:	Vurgel dealer
@@ -525,7 +525,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	4
 	assault rifles:	6
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #31055
 Keywords:	ork bodyguard guard ugly
@@ -563,7 +563,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	6
 	machine guns:	6
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #31056
 Keywords:	wraith cloudy swirl dark
@@ -597,7 +597,7 @@ DefaultPos:	Standing
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #31057
 Keywords:	watchman guard strung-out
@@ -636,7 +636,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	4
 	shotguns:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #31058
 Keywords:	cutter drug
@@ -709,7 +709,7 @@ AttackType:	Thrash
 	Weight:	100
 	Cash:	355
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	shotguns:	9
 	clubs:	9
 BREAK

@@ -35,7 +35,7 @@ DefaultPos:	Standing
 	Bank:	150000
 [SKILLS]
 	sorcery:	8
-	unarmed combat:	5
+	brawling:	5
 	:	10
 	tribal etiquette:	8
 BREAK
@@ -76,7 +76,7 @@ AttackType:	Pistol
 	Bank:	200
 [SKILLS]
 	sorcery:	6
-	unarmed combat:	10
+	brawling:	10
 	pistols:	8
 BREAK
 #24802
@@ -116,7 +116,7 @@ DefaultPos:	Standing
 	Cash:	200000
 	Bank:	200000
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	sorcery:	8
 	conjuring:	5
 	:	8
@@ -157,7 +157,7 @@ DefaultPos:	Standing
 	Cash:	200000
 	Bank:	200000
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	elf etiquette:	6
 	tribal etiquette:	7
 	:	8
@@ -198,7 +198,7 @@ AttackType:	Bludgeon
 	Ballistic:	20
 	Impact:	20
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 	sorcery:	20
 	:	4
 BREAK
@@ -237,7 +237,7 @@ AttackType:	Pound
 	Ballistic:	20
 	Impact:	20
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	10
 BREAK
 #24806
@@ -494,7 +494,7 @@ DefaultPos:	Standing
 	Impact:	12
 [SKILLS]
 	throwing weapons:	20
-	unarmed combat:	20
+	brawling:	20
 	firearms:	20
 	demolitions:	10
 	gunnery:	20
@@ -535,6 +535,6 @@ AttackType:	Punch
 [SKILLS]
 	firearms:	8
 	sorcery:	20
-	unarmed combat:	10
+	brawling:	10
 BREAK
 END

@@ -30,7 +30,7 @@ AttackType:	Bite
 	Height:	7
 	Weight:	1
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #18401
 Keywords:	Peanut dwarf
@@ -133,7 +133,7 @@ DefaultPos:	Standing
 	Cash:	5
 [SKILLS]
 	athletics:	10
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #18404
 Keywords:	A Dwarf down luck
@@ -265,7 +265,7 @@ DefaultPos:	Standing
 	Karma:	1
 [SKILLS]
 	athletics:	20
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #18408
 Keywords:	troll bodyguard
@@ -302,7 +302,7 @@ DefaultPos:	Standing
 	Bank:	5000
 [SKILLS]
 	athletics:	20
-	unarmed combat:	15
+	brawling:	15
 	assault cannons:	12
 BREAK
 #18409
@@ -441,7 +441,7 @@ AttackType:	Bite
 	Karma:	1
 [SKILLS]
 	athletics:	15
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #18413
 Keywords:	tired old hag

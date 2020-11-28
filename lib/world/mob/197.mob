@@ -32,7 +32,7 @@ AttackType:	Punch
 	Weight:	60
 	Cash:	10
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #19701
 Keywords:	ork male light security guard
@@ -69,7 +69,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	7
 	clubs:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19702
 Keywords:	man worker work guy
@@ -104,7 +104,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	60
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #19703
 Keywords:	troll huge guard
@@ -144,7 +144,7 @@ AttackType:	Crush
 	Cash:	300
 [SKILLS]
 	shotguns:	5
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #19704
 Keywords:	sub director subdirector man
@@ -329,7 +329,7 @@ AttackType:	Crush
 [SKILLS]
 	rifles:	7
 	clubs:	7
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #19709
 Keywords:	worker btl builder
@@ -399,7 +399,7 @@ DefaultPos:	Sleeping
 	Cash:	25
 	Bank:	15
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #19711
 Keywords:	btl guard card
@@ -502,7 +502,7 @@ DefaultPos:	Standing
 	Height:	12
 	Weight:	2
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #19714
 Keywords:	troll drunk huge
@@ -687,7 +687,7 @@ DefaultPos:	Standing
 	Bank:	25
 [SKILLS]
 	sub-machine guns:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #19719
 Keywords:	worker long smoke btl
@@ -789,7 +789,7 @@ DefaultPos:	Standing
 	Cash:	125
 [SKILLS]
 	edged weapons:	6
-	unarmed combat:	4
+	brawling:	4
 	pole arms:	5
 BREAK
 #19722
@@ -933,7 +933,7 @@ AttackType:	Crush
 [SKILLS]
 	shotguns:	6
 	clubs:	5
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #19726
 Keywords:	ork guard weapons
@@ -970,7 +970,7 @@ DefaultPos:	Standing
 [SKILLS]
 	assault rifles:	6
 	clubs:	5
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #19727
 Keywords:	turret sentry cannon auto
@@ -1007,7 +1007,7 @@ AttackType:	Cannon
 	Ballistic:	3
 	Impact:	3
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	assault cannons:	6
 BREAK
 #19728
@@ -1044,7 +1044,7 @@ DefaultPos:	Standing
 [SKILLS]
 	clubs:	6
 	edged weapons:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #19729
 Keywords:	guard elite btl elf
@@ -1080,7 +1080,7 @@ DefaultPos:	Standing
 	Cash:	80
 [SKILLS]
 	whips & flails:	7
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #19730
 Keywords:	mack
@@ -1146,7 +1146,7 @@ AttackType:	Claw
 	Weight:	10
 	Level:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	8
 BREAK
 #19732
@@ -1188,7 +1188,7 @@ DefaultPos:	Standing
 [SKILLS]
 	shotguns:	7
 	clubs:	6
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #19733
 Keywords:	play thing plaything
@@ -1221,7 +1221,7 @@ DefaultPos:	Standing
 	Weight:	60
 	Cash:	35
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #19734
 Keywords:	troll btl guard
@@ -1260,7 +1260,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pole arms:	7
 	edged weapons:	6
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19735
 Keywords:	ninja guard blink elf assassin
@@ -1301,7 +1301,7 @@ DefaultPos:	Standing
 	Karma:	35
 [SKILLS]
 	edged weapons:	9
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #19736
 Keywords:	bob radar guy
@@ -1335,7 +1335,7 @@ DefaultPos:	Standing
 	Cash:	60
 	Bank:	35
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #19737
 Keywords:	hell hound hellhound Hellhound personal
@@ -1370,7 +1370,7 @@ AttackType:	Bite
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	athletics:	6
 	stealth:	6
 	edged weapons:	6
@@ -1410,7 +1410,7 @@ AttackType:	Crush
 [SKILLS]
 	shotguns:	7
 	clubs:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19739
 Keywords:	pilot
@@ -1446,7 +1446,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	8
 	clubs:	6
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #19740
 Keywords:	director lord
@@ -1488,7 +1488,7 @@ DefaultPos:	Standing
 	assault rifles:	10
 	clubs:	8
 	athletics:	8
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #19741
 Keywords:	btl super visor george supervisor
@@ -1524,7 +1524,7 @@ DefaultPos:	Standing
 	Cash:	15
 	Bank:	35
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #19742
 Keywords:	lucy Lucy bird hum humming charm charming hummingbird charmingbird
@@ -1562,7 +1562,7 @@ AttackType:	Claw
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #19743
 Keywords:	drone guard btl black sleek
@@ -1600,7 +1600,7 @@ AttackType:	Machine Gun
 	Ballistic:	2
 	Impact:	2
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #19744
 Keywords:	man worker work guy
@@ -1634,7 +1634,7 @@ DefaultPos:	Standing
 	Weight:	75
 	Cash:	45
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #19745
 Keywords:	ork male light security guard

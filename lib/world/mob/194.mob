@@ -33,7 +33,7 @@ AttackType:	Crush
 	Impact:	5
 [SKILLS]
 	athletics:	7
-	unarmed combat:	10
+	brawling:	10
 	:	10
 	conjuring:	5
 BREAK
@@ -71,7 +71,7 @@ AttackType:	Maul
 	Impact:	10
 [SKILLS]
 	:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19402
 Keywords:	Snaping plant
@@ -107,7 +107,7 @@ AttackType:	Thrash
 	Impact:	10
 [SKILLS]
 	:	4
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #19403
 Keywords:	buddha
@@ -217,7 +217,7 @@ AttackType:	Thrash
 	tribal etiquette:	7
 	corporate etiquette:	1
 	leadership:	7
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #19406
 Keywords:	Porter
@@ -251,7 +251,7 @@ DefaultPos:	Standing
 	Ballistic:	2
 	Impact:	2
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	street etiquette:	8
 BREAK
 #19407
@@ -291,7 +291,7 @@ DefaultPos:	Standing
 	corporate etiquette:	10
 	:	3
 	interrogation:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #19408
 Keywords:	Blue Samurai
@@ -492,7 +492,7 @@ DefaultPos:	Standing
 	Ballistic:	20
 	Impact:	20
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #19414
 Keywords:	Legend attendant
@@ -528,7 +528,7 @@ DefaultPos:	Standing
 [SKILLS]
 	media etiquette:	5
 	corporate etiquette:	5
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #19415
 Keywords:	Cybernetic Bartender
@@ -602,7 +602,7 @@ AttackType:	Slash
 	Impact:	20
 	Karma:	10
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	firearms:	12
 	gunnery:	12
 	assault rifles:	12
@@ -642,7 +642,7 @@ AttackType:	Maul
 	Impact:	10
 [SKILLS]
 	:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19418
 Keywords:	Spirit of Propriety
@@ -678,7 +678,7 @@ AttackType:	Maul
 	Impact:	10
 [SKILLS]
 	:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19419
 Keywords:	Spirit of Propriety
@@ -713,7 +713,7 @@ AttackType:	Maul
 	Impact:	10
 [SKILLS]
 	:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19420
 Keywords:	Wild Dancer 
@@ -749,7 +749,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Bank:	500
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #19421
 Keywords:	customer officer troll
@@ -788,7 +788,7 @@ AttackType:	Pistol
 	Karma:	1
 [SKILLS]
 	pistols:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19422
 Keywords:	famerican attendant
@@ -854,7 +854,7 @@ DefaultPos:	Standing
 	corporate etiquette:	12
 	elf etiquette:	12
 	tribal etiquette:	12
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #19424
 Keywords:	United Skyways Attendant
@@ -955,7 +955,7 @@ AttackType:	Pistol
 	Karma:	1
 [SKILLS]
 	pistols:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19427
 Keywords:	Northdeath attendant
@@ -1020,7 +1020,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19429
 Keywords:	Man in a fly suit
@@ -1091,7 +1091,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19431
 Keywords:	crowd of people
@@ -1123,7 +1123,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19432
 Keywords:	crowd of people
@@ -1155,7 +1155,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19433
 Keywords:	crowd of people
@@ -1187,7 +1187,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19434
 Keywords:	crowd of people
@@ -1219,7 +1219,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19435
 Keywords:	crowd of people
@@ -1251,7 +1251,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19436
 Keywords:	crowd of people
@@ -1283,7 +1283,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19437
 Keywords:	crowd of people
@@ -1315,7 +1315,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19438
 Keywords:	crowd of people
@@ -1347,7 +1347,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19439
 Keywords:	crowd of people
@@ -1379,7 +1379,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19440
 Keywords:	crowd of people
@@ -1411,7 +1411,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19441
 Keywords:	crowd of people
@@ -1443,7 +1443,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19442
 Keywords:	crowd of people
@@ -1475,7 +1475,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19443
 Keywords:	crowd of people
@@ -1507,7 +1507,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19444
 Keywords:	Rich tourist
@@ -1538,7 +1538,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	80
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #19445
 Keywords:	Rich Japanese tourist
@@ -1572,7 +1572,7 @@ DefaultPos:	Standing
 	Impact:	5
 [SKILLS]
 	corporate etiquette:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #19446
 Keywords:	Tourist
@@ -1608,7 +1608,7 @@ DefaultPos:	Standing
 	Cash:	100
 [SKILLS]
 	:	1
-	unarmed combat:	4
+	brawling:	4
 	:	1
 BREAK
 #19447
@@ -1646,7 +1646,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Karma:	5
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	:	2
 	:	2
 	:	7
@@ -1794,7 +1794,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Karma:	1
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #19452
 Keywords:	Waiter
@@ -1954,7 +1954,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19457
 Keywords:	crowd of people
@@ -1986,7 +1986,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19458
 Keywords:	crowd of people
@@ -2018,7 +2018,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19459
 Keywords:	crowd of people
@@ -2050,7 +2050,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19460
 Keywords:	crowd of people
@@ -2082,7 +2082,7 @@ AttackType:	Maul
 	Height:	150
 	Weight:	1000
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #19461
 Keywords:	orc attendant
@@ -2153,7 +2153,7 @@ AttackType:	Crush
 	conjuring:	10
 	:	3
 	armed combat:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #19463
 Keywords:	middle manager

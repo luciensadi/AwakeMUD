@@ -240,7 +240,7 @@ AttackType:	Pistol
 [SKILLS]
 	firearms:	6
 	armed combat:	4
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #18807
 Keywords:	cleaner
@@ -490,7 +490,7 @@ AttackType:	Punch
 [SKILLS]
 	sub-machine guns:	15
 	sorcery:	15
-	unarmed combat:	15
+	brawling:	15
 BREAK
 #18814
 Keywords:	air elemental spirit patrolling
@@ -523,7 +523,7 @@ AttackType:	Thrash
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	stealth:	10
 	athletics:	10
 	sorcery:	10
@@ -558,7 +558,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	60
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #18900
 Keywords:	Elister smiling elf dealer elven arms
@@ -622,7 +622,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	70
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #18902
 Keywords:	bum human smelly
@@ -659,7 +659,7 @@ DefaultPos:	Standing
 	Ballistic:	3
 	Impact:	3
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #18903
 Keywords:	vendor elf woman lianna
@@ -958,7 +958,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Bank:	100
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	assault rifles:	5
 BREAK
 #18912
@@ -995,7 +995,7 @@ DefaultPos:	Standing
 	Weight:	85
 	Bank:	400
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	assault rifles:	12
 	sorcery:	12
 BREAK
@@ -1068,7 +1068,7 @@ DefaultPos:	Standing
 	Height:	179
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	6
 	sub-machine guns:	5
 BREAK
@@ -1103,7 +1103,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 	sorcery:	15
 BREAK
 #18916

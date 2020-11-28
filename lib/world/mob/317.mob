@@ -63,7 +63,7 @@ DefaultPos:	Standing
 	Height:	172
 	Weight:	75
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #31702
 Keywords:	bartender human man male friendly Al
@@ -137,7 +137,7 @@ AttackType:	Blast
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #31704
 Keywords:	troll bouncer large

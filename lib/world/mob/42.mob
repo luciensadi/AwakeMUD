@@ -33,7 +33,7 @@ AttackType:	Pistol
 	Bank:	500
 [SKILLS]
 	machine guns:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4201
 Keywords:	piasma rabid
@@ -104,7 +104,7 @@ DefaultPos:	Sitting
 	Cash:	50
 [SKILLS]
 	corporate etiquette:	4
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #4203
 Keywords:	worker man biohyde thin
@@ -139,7 +139,7 @@ DefaultPos:	Standing
 	Cash:	75
 [SKILLS]
 	corporate etiquette:	3
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #4204
 Keywords:	man chemist biohyde white
@@ -174,7 +174,7 @@ DefaultPos:	Standing
 	Bank:	325
 [SKILLS]
 	biotech:	6
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #4205
 Keywords:	scientist
@@ -208,7 +208,7 @@ DefaultPos:	Standing
 	Impact:	1
 	Bank:	125
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	biotech:	4
 BREAK
 #4206
@@ -247,7 +247,7 @@ DefaultPos:	Standing
 	Cash:	200
 [SKILLS]
 	corporate etiquette:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4207
 Keywords:	man officer quarantine silver
@@ -279,7 +279,7 @@ DefaultPos:	Standing
 	Ballistic:	7
 	Bank:	125
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #4208
 Keywords:	expreen executive clever man
@@ -315,7 +315,7 @@ AttackType:	Pound
 	Impact:	4
 	Bank:	100
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	corporate etiquette:	5
 BREAK
 #4209
@@ -354,7 +354,7 @@ AttackType:	Stab
 	Impact:	5
 	Bank:	550
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	corporate etiquette:	6
 BREAK
 #4210
@@ -392,7 +392,7 @@ AttackType:	Crush
 	Impact:	3
 	Cash:	175
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #4211
 Keywords:	technician old bearded man white
@@ -427,7 +427,7 @@ AttackType:	Pound
 	Ballistic:	4
 	Impact:	1
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	electronics:	4
 BREAK
 #4212
@@ -464,7 +464,7 @@ AttackType:	Thrash
 	Impact:	1
 	Cash:	350
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	armed combat:	5
 BREAK
 #4213
@@ -502,7 +502,7 @@ AttackType:	Pound
 	Impact:	7
 	Cash:	180
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	corporate etiquette:	6
 BREAK
 #4214
@@ -540,7 +540,7 @@ AttackType:	Thrash
 	Impact:	6
 	Cash:	300
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #4215
 Keywords:	man biohyde geneticist
@@ -613,7 +613,7 @@ AttackType:	Slash
 	Ballistic:	8
 	Impact:	5
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #4217
 Keywords:	rowan
@@ -710,7 +710,7 @@ AttackType:	Pound
 	Bank:	15000
 	Karma:	104
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	5
 	firearms:	1
 BREAK
@@ -753,7 +753,7 @@ AttackType:	Pound
 	Karma:	41
 [SKILLS]
 	machine guns:	7
-	unarmed combat:	4
+	brawling:	4
 	assault rifles:	8
 	rifles:	6
 BREAK
@@ -794,7 +794,7 @@ AttackType:	Bite
 [SKILLS]
 	missile launchers:	3
 	corporate etiquette:	2
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #4222
 Keywords:	dwarf old bent haggard man
@@ -829,7 +829,7 @@ AttackType:	Bite
 	Ballistic:	1
 	Impact:	1
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	assault cannons:	2
 BREAK
 #4223
@@ -872,7 +872,7 @@ AttackType:	Slash
 	Cash:	200
 	Karma:	15
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	edged weapons:	5
 BREAK
 #4224
@@ -911,7 +911,7 @@ AttackType:	Pistol
 	Bank:	350
 [SKILLS]
 	shotguns:	7
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4225
 Keywords:	guard gate nazi man
@@ -951,7 +951,7 @@ AttackType:	Slash
 	Karma:	10
 [SKILLS]
 	armed combat:	6
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #4226
 Keywords:	executive man aztech aztechnology young
@@ -1021,7 +1021,7 @@ DefaultPos:	Standing
 	Ballistic:	7
 	Impact:	5
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4228
 Keywords:	general tarmile man chubby nazi evil
@@ -1059,7 +1059,7 @@ AttackType:	Crush
 	Impact:	6
 	Bank:	200
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #4229
 Keywords:	guard troll huge aztech secure
@@ -1099,7 +1099,7 @@ AttackType:	Blast
 	Bank:	100
 [SKILLS]
 	assault cannons:	5
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #4230
 Keywords:	strange humanoid spirit shadow shade
@@ -1135,7 +1135,7 @@ DefaultPos:	Standing
 	Ballistic:	18
 	Impact:	13
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	whips & flails:	7
 	sorcery:	7
 BREAK
@@ -1211,7 +1211,7 @@ AttackType:	Crush
 	Ballistic:	16
 	Impact:	10
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	7
 BREAK
 #4233
@@ -1253,7 +1253,7 @@ AttackType:	Rifle
 	Impact:	20
 [SKILLS]
 	sorcery:	12
-	unarmed combat:	6
+	brawling:	6
 	edged weapons:	9
 BREAK
 #4234
@@ -1292,7 +1292,7 @@ AttackType:	Pound
 	Impact:	4
 	Cash:	20
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	sorcery:	5
 BREAK
 #4235
@@ -1336,7 +1336,7 @@ AttackType:	Pierce
 	Ballistic:	12
 	Impact:	16
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 	edged weapons:	15
 BREAK
 #4236
@@ -1378,7 +1378,7 @@ AttackType:	Thrash
 	Cash:	750
 [SKILLS]
 	pole arms:	8
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #4237
 Keywords:	apprentice bumbling man aztech
@@ -1415,7 +1415,7 @@ DefaultPos:	Standing
 	Bank:	10
 [SKILLS]
 	sorcery:	5
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #4238
 Keywords:	teacher man scruffy aztech shaman
@@ -1454,7 +1454,7 @@ AttackType:	Bite
 	Impact:	7
 	Cash:	40
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	7
 BREAK
 #4239
@@ -1492,7 +1492,7 @@ AttackType:	Thrash
 	Impact:	7
 	Bank:	50
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	6
 BREAK
 #4240
@@ -1531,7 +1531,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Bank:	20
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4241
 Keywords:	shaman man raccoon aztech
@@ -1567,7 +1567,7 @@ AttackType:	Bite
 	Ballistic:	9
 	Impact:	9
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	7
 BREAK
 #4242
@@ -1606,7 +1606,7 @@ AttackType:	Bite
 	Impact:	9
 [SKILLS]
 	sorcery:	7
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4243
 Keywords:	shaman man bear hulking aztech
@@ -1646,7 +1646,7 @@ AttackType:	Crush
 	Impact:	8
 [SKILLS]
 	sorcery:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #4244
 Keywords:	shaman man shark vicious aztech
@@ -1721,7 +1721,7 @@ AttackType:	Crush
 	Ballistic:	9
 	Impact:	8
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	7
 BREAK
 #4246
@@ -1761,7 +1761,7 @@ AttackType:	Claw
 	Ballistic:	9
 	Impact:	9
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	7
 BREAK
 #4247
@@ -1797,7 +1797,7 @@ AttackType:	Pound
 	Impact:	9
 [SKILLS]
 	sorcery:	7
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #4248
 Keywords:	guard secure aztech aztechnology
@@ -1836,7 +1836,7 @@ AttackType:	Pistol
 	Bank:	50
 [SKILLS]
 	shotguns:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4249
 Keywords:	guard shark man
@@ -1874,7 +1874,7 @@ AttackType:	Pistol
 	Impact:	5
 [SKILLS]
 	shotguns:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4250
 Keywords:	master teacher mage initiate dark man
@@ -1978,7 +1978,7 @@ AttackType:	Pound
 	Impact:	5
 [SKILLS]
 	shotguns:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4253
 Keywords:	shaman initiate man
@@ -2015,7 +2015,7 @@ AttackType:	Pound
 	Impact:	5
 [SKILLS]
 	shotguns:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #4254
 Keywords:	guard leopard man
@@ -2122,7 +2122,7 @@ AttackType:	Pound
 [SKILLS]
 	shotguns:	7
 	armed combat:	7
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #4257
 Keywords:	nazi towering

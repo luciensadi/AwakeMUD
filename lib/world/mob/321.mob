@@ -37,7 +37,7 @@ DefaultPos:	Standing
 	electronics:	10
 	demolitions:	10
 	pistols:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #32101
 Keywords:	pink koala edward large corpse
@@ -77,7 +77,7 @@ AttackType:	Crush
 	Impact:	12
 	Karma:	1
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	media etiquette:	10
 BREAK
 #32102
@@ -111,7 +111,7 @@ DefaultPos:	Standing
 	Height:	100
 	Weight:	30
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #32103
 Keywords:	enedor man lector psychopath
@@ -152,7 +152,7 @@ AttackType:	Slash
 	Impact:	15
 [SKILLS]
 	edged weapons:	10
-	unarmed combat:	10
+	brawling:	10
 	biotech:	10
 BREAK
 #32104
@@ -189,7 +189,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #32105
 Keywords:	priest
@@ -223,7 +223,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #32106
 Keywords:	man mr. johnson
@@ -295,7 +295,7 @@ DefaultPos:	Standing
 [SKILLS]
 	street etiquette:	7
 	corporate etiquette:	8
-	unarmed combat:	5
+	brawling:	5
 	:	4
 BREAK
 #32108
@@ -331,7 +331,7 @@ DefaultPos:	Standing
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #32109
 Keywords:	walking elf corpse shedim
@@ -365,7 +365,7 @@ DefaultPos:	Standing
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #32110
 Keywords:	walking dead corpse shedim ork
@@ -399,7 +399,7 @@ DefaultPos:	Standing
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #32111
 Keywords:	NItler walking dead
@@ -433,7 +433,7 @@ DefaultPos:	Standing
 	Ballistic:	20
 	Impact:	20
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #32112
 Keywords:	Peacekeeper
@@ -467,7 +467,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Cash:	250
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	edged weapons:	12
 BREAK
 #32115
@@ -506,7 +506,7 @@ AttackType:	Blast
 	Impact:	25
 	Karma:	150
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	10
 BREAK
 END

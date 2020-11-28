@@ -31,6 +31,6 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 END

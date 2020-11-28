@@ -33,7 +33,7 @@ AttackType:	Slash
 	Cash:	100000
 	Bank:	50000
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	stealth:	20
 	edged weapons:	20
 BREAK
@@ -73,7 +73,7 @@ AttackType:	Cannon
 	Karma:	96
 [SKILLS]
 	assault cannons:	12
-	unarmed combat:	12
+	brawling:	12
 	corporate etiquette:	3
 	assault rifles:	10
 BREAK
@@ -111,7 +111,7 @@ DefaultPos:	Standing
 	Weight:	0
 [SKILLS]
 	firearms:	20
-	unarmed combat:	20
+	brawling:	20
 	armed combat:	20
 BREAK
 #31603
@@ -189,7 +189,7 @@ AttackType:	Punch
 	Bank:	1000
 [SKILLS]
 	rifles:	10
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #31605
 Keywords:	elite novatech security mage
@@ -228,7 +228,7 @@ AttackType:	Slash
 	Bank:	10000
 [SKILLS]
 	edged weapons:	11
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	8
 	:	1
 BREAK
@@ -267,7 +267,7 @@ AttackType:	Machine Gun
 	stealth:	10
 	athletics:	10
 	firearms:	11
-	unarmed combat:	10
+	brawling:	10
 	driving/Car:	12
 BREAK
 #31607
@@ -304,7 +304,7 @@ AttackType:	Shotgun
 [SKILLS]
 	stealth:	10
 	shotguns:	12
-	unarmed combat:	9
+	brawling:	9
 	athletics:	10
 	biotech:	12
 BREAK
@@ -342,7 +342,7 @@ AttackType:	Rifle
 [SKILLS]
 	stealth:	10
 	rifles:	12
-	unarmed combat:	9
+	brawling:	9
 	athletics:	10
 	tasers:	12
 BREAK
@@ -380,7 +380,7 @@ AttackType:	Shotgun
 [SKILLS]
 	stealth:	10
 	shotguns:	12
-	unarmed combat:	9
+	brawling:	9
 	athletics:	10
 	tasers:	12
 BREAK

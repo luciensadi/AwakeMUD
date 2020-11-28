@@ -255,7 +255,7 @@ AttackType:	Claw
 	Bank:	50
 	Karma:	1
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	:	1
 BREAK
 #17607
@@ -296,7 +296,7 @@ AttackType:	Crush
 	Cash:	5
 	Karma:	4
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	stealth:	4
 BREAK
 #17608
@@ -370,7 +370,7 @@ DefaultPos:	Standing
 	Bank:	25
 	Karma:	2
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #17610
 Keywords:	janet mousy woman j m w
@@ -404,7 +404,7 @@ DefaultPos:	Standing
 	Bank:	25
 	Karma:	2
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	sorcery:	4
 	:	3
 	:	3
@@ -487,7 +487,7 @@ AttackType:	Crush
 	Bank:	45
 	Karma:	2
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	grapple:	7
 BREAK
 #17613

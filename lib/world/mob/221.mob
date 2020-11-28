@@ -36,7 +36,7 @@ AttackType:	Stab
 [SKILLS]
 	armed combat:	34
 	edged weapons:	10
-	unarmed combat:	27
+	brawling:	27
 BREAK
 #22101
 Keywords:	maze guard beastie
@@ -72,7 +72,7 @@ AttackType:	Maul
 	Impact:	4
 	Cash:	65
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #22102
 Keywords:	fly
@@ -139,7 +139,7 @@ AttackType:	Pound
 	Weight:	50
 	Cash:	25
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	street etiquette:	12
 	tribal etiquette:	12
 	corporate etiquette:	12
@@ -180,7 +180,7 @@ AttackType:	Bite
 	Cash:	300
 	Karma:	4
 [SKILLS]
-	unarmed combat:	24
+	brawling:	24
 BREAK
 #22105
 Keywords:	a squatter
@@ -279,6 +279,6 @@ AttackType:	Claw
 	Height:	189
 	Weight:	189
 [SKILLS]
-	unarmed combat:	30
+	brawling:	30
 BREAK
 END

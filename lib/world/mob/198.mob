@@ -66,7 +66,7 @@ AttackType:	Punch
 	Cash:	2500
 	Bank:	10000
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	corporate etiquette:	50
 	leadership:	50
 	electronics:	50
@@ -163,7 +163,7 @@ AttackType:	Maul
 	Bank:	350
 	Karma:	1
 [SKILLS]
-	unarmed combat:	18
+	brawling:	18
 	sorcery:	16
 	edged weapons:	15
 	gunnery:	18
@@ -249,7 +249,7 @@ AttackType:	Rifle
 [SKILLS]
 	assault rifles:	15
 	corporate etiquette:	9
-	unarmed combat:	15
+	brawling:	15
 	pole arms:	12
 	clubs:	12
 BREAK
@@ -565,7 +565,7 @@ DefaultPos:	Standing
 	Impact:	50
 [SKILLS]
 	artillery:	50
-	unarmed combat:	50
+	brawling:	50
 BREAK
 #19818
 Keywords:	Mech security guard
@@ -603,7 +603,7 @@ AttackType:	Rifle
 	Impact:	20
 [SKILLS]
 	assault rifles:	20
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #19819
 Keywords:	Mech security guard
@@ -641,7 +641,7 @@ AttackType:	Rifle
 	Impact:	20
 [SKILLS]
 	assault rifles:	20
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #19820
 Keywords:	cute man puppy cute fuzzy employee
@@ -1789,7 +1789,7 @@ DefaultPos:	Standing
 	machine guns:	16
 	sorcery:	16
 	clubs:	16
-	unarmed combat:	16
+	brawling:	16
 	assault rifles:	16
 BREAK
 #19883
@@ -1836,7 +1836,7 @@ DefaultPos:	Standing
 	pole arms:	15
 	clubs:	15
 	edged weapons:	15
-	unarmed combat:	15
+	brawling:	15
 	assault rifles:	15
 BREAK
 #19884
@@ -1878,7 +1878,7 @@ AttackType:	Punch
 	Cash:	80
 	Bank:	125
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #19885
 Keywords:	Damien Knight Ares Imposter
@@ -1918,7 +1918,7 @@ AttackType:	Punch
 	Cash:	500
 	Bank:	600
 [SKILLS]
-	unarmed combat:	18
+	brawling:	18
 	sorcery:	18
 	pole arms:	18
 	electronics:	50
@@ -1957,7 +1957,7 @@ DefaultPos:	Standing
 	Height:	185
 	Weight:	80
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #19887
 Keywords:	old gentleman fairly security guard
@@ -1999,7 +1999,7 @@ AttackType:	Punch
 	Bank:	150
 [SKILLS]
 	sorcery:	15
-	unarmed combat:	15
+	brawling:	15
 BREAK
 #19888
 Keywords:	ork burly large bad attitude
@@ -2037,7 +2037,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	120
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #19889
 Keywords:	gentleman older spectacles tinker
@@ -2114,7 +2114,7 @@ AttackType:	Punch
 	Bank:	100
 [SKILLS]
 	sorcery:	10
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #19891
 Keywords:	woman lithe elven female knight guard mage
@@ -2156,7 +2156,7 @@ AttackType:	Punch
 	Cash:	225
 	Bank:	200
 [SKILLS]
-	unarmed combat:	16
+	brawling:	16
 	sorcery:	16
 BREAK
 #19892
@@ -2233,7 +2233,7 @@ DefaultPos:	Standing
 	pole arms:	15
 	clubs:	15
 	edged weapons:	15
-	unarmed combat:	15
+	brawling:	15
 	assault rifles:	15
 BREAK
 #19900
@@ -2270,7 +2270,7 @@ DefaultPos:	Standing
 	Cash:	35
 	Bank:	55
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #19901
 Keywords:	errant guard knight security official
@@ -2311,7 +2311,7 @@ AttackType:	Pistol
 	Bank:	80
 [SKILLS]
 	pistols:	10
-	unarmed combat:	10
+	brawling:	10
 	corporate etiquette:	8
 	English:	20
 	clubs:	10
@@ -2391,7 +2391,7 @@ AttackType:	Rifle
 	Bank:	125
 	Karma:	5
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sub-machine guns:	14
 	corporate etiquette:	8
 	English:	20
@@ -2435,7 +2435,7 @@ AttackType:	Rifle
 	Bank:	125
 [SKILLS]
 	pistols:	16
-	unarmed combat:	8
+	brawling:	8
 	corporate etiquette:	8
 	English:	20
 BREAK
@@ -2478,7 +2478,7 @@ AttackType:	Rifle
 	Bank:	125
 	Karma:	5
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sub-machine guns:	9
 	corporate etiquette:	8
 	English:	20
@@ -2522,7 +2522,7 @@ AttackType:	Machine Gun
 	Bank:	125
 [SKILLS]
 	machine guns:	16
-	unarmed combat:	10
+	brawling:	10
 	corporate etiquette:	8
 	English:	20
 BREAK
@@ -2564,7 +2564,7 @@ AttackType:	Machine Gun
 	Bank:	125
 [SKILLS]
 	machine guns:	16
-	unarmed combat:	10
+	brawling:	10
 	clubs:	12
 	pole arms:	12
 BREAK
@@ -2602,7 +2602,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	English:	20
 	corporate etiquette:	8
 BREAK
@@ -2640,7 +2640,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	English:	20
 	corporate etiquette:	8
 BREAK
@@ -2676,7 +2676,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	50
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #19911
 Keywords:	shopper busy
@@ -2712,7 +2712,7 @@ AttackType:	Claw
 	Cash:	25
 	Bank:	80
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #20000
 Keywords:	dragon abomination nanite infected black science mythos
@@ -2755,7 +2755,7 @@ AttackType:	Claw
 [SKILLS]
 	pole arms:	12
 	sorcery:	16
-	unarmed combat:	10
+	brawling:	10
 	edged weapons:	12
 BREAK
 #20001
@@ -2827,7 +2827,7 @@ DefaultPos:	Standing
 	Ballistic:	2
 	Impact:	4
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #20003
 Keywords:	piasma bear ferocious foaming
@@ -2984,7 +2984,7 @@ AttackType:	Slash
 	Impact:	15
 [SKILLS]
 	edged weapons:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #20007
 Keywords:	earth elemental golem-like large
@@ -3020,7 +3020,7 @@ DefaultPos:	Standing
 	Weight:	60
 	Level:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	sorcery:	8
 BREAK
 #20008
@@ -3060,7 +3060,7 @@ AttackType:	Punch
 [SKILLS]
 	shotguns:	10
 	clubs:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #20009
 Keywords:	dog-like creature angry
@@ -3100,7 +3100,7 @@ AttackType:	Bite
 	Ballistic:	8
 	Impact:	10
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #20020
 Keywords:	orb magma molten floating elemental spirit earth
@@ -3136,7 +3136,7 @@ DefaultPos:	Standing
 	Weight:	20
 	Level:	12
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 	sorcery:	15
 BREAK
 #20021
@@ -3179,7 +3179,7 @@ AttackType:	Claw
 	Impact:	14
 [SKILLS]
 	pole arms:	10
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	14
 	edged weapons:	12
 BREAK

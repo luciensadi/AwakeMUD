@@ -30,7 +30,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #62101
 Keywords:	vendor local souvenir
@@ -64,7 +64,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #62102
 Keywords:	citizen local
@@ -101,7 +101,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	50
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	driving/Bike:	3
 BREAK
 #62103
@@ -139,7 +139,7 @@ DefaultPos:	Standing
 	Cash:	95
 	Bank:	125
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	driving/Bike:	2
 BREAK
 #62104
@@ -182,7 +182,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	45
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 	shotguns:	4
 	assault rifles:	4
@@ -222,7 +222,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	10
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62106
 Keywords:	Heloise Guillaume older local man
@@ -292,7 +292,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	50
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	driving/Bike:	2
 BREAK
 #62108
@@ -328,7 +328,7 @@ DefaultPos:	Standing
 	Cash:	35
 	Bank:	55
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	driving/Truck:	3
 	driving/Bike:	2
 	driving/Car:	2
@@ -367,7 +367,7 @@ AttackType:	Bite
 	Height:	50
 	Weight:	20
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #62110
 Keywords:	officer airport customs
@@ -404,7 +404,7 @@ DefaultPos:	Standing
 	Height:	150
 	Weight:	80
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #62111
 Keywords:	tourists group disgruntled
@@ -442,7 +442,7 @@ DefaultPos:	Standing
 	Cash:	80
 	Bank:	180
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #62112
 Keywords:	Krishna Hare group
@@ -478,7 +478,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	150
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #62113
 Keywords:	ork baggage handler
@@ -515,7 +515,7 @@ DefaultPos:	Standing
 	Cash:	90
 	Bank:	25
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #62114
 Keywords:	salesman airport
@@ -551,7 +551,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	60
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62115
 Keywords:	clerk check-in Viltz Motel
@@ -586,7 +586,7 @@ DefaultPos:	Standing
 	Height:	150
 	Weight:	90
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #62116
 Keywords:	bouncer troll gruff
@@ -627,7 +627,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	155
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	edged weapons:	7
 BREAK
 #62117
@@ -666,7 +666,7 @@ DefaultPos:	Standing
 	Impact:	7
 	Cash:	150
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 BREAK
 #62118
@@ -705,7 +705,7 @@ DefaultPos:	Standing
 	Impact:	7
 	Cash:	155
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	clubs:	7
 BREAK
 #62119
@@ -745,7 +745,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	125
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #62120
 Keywords:	Philomene muttonchops mutton chopper grey-haired man
@@ -785,7 +785,7 @@ DefaultPos:	Standing
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #62121
 Keywords:	Campanel barkeep
@@ -824,7 +824,7 @@ DefaultPos:	Standing
 	Height:	210
 	Weight:	100
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #62122
 Keywords:	maitre'd elderly man
@@ -865,7 +865,7 @@ DefaultPos:	Standing
 	Cash:	150
 	Bank:	75
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #62123
 Keywords:	waitress classy elven
@@ -900,7 +900,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	60
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #62124
 Keywords:	Vistoire Montplaisir manager
@@ -942,7 +942,7 @@ DefaultPos:	Standing
 	Cash:	125
 	Bank:	225
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	7
 	pistols:	7
 BREAK
@@ -984,7 +984,7 @@ DefaultPos:	Standing
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #62126
 Keywords:	bartender traditionally
@@ -1019,7 +1019,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #62127
 Keywords:	priest voodounista
@@ -1057,7 +1057,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Cash:	125
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	whips & flails:	6
 	clubs:	6
 BREAK
@@ -1095,7 +1095,7 @@ DefaultPos:	Standing
 	Ballistic:	6
 	Impact:	6
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	edged weapons:	6
 BREAK
 #62129
@@ -1133,7 +1133,7 @@ DefaultPos:	Standing
 	Ballistic:	8
 	Impact:	6
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	edged weapons:	8
 BREAK
 #62130
@@ -1172,7 +1172,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Cash:	165
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	edged weapons:	7
 BREAK
 #62131
@@ -1211,7 +1211,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	175
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	pole arms:	7
 BREAK
 #62132
@@ -1250,7 +1250,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Cash:	200
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	edged weapons:	7
 	sorcery:	9
 BREAK
@@ -1289,7 +1289,7 @@ DefaultPos:	Standing
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #62134
 Keywords:	Sarasses Saint Grande Zombie
@@ -1331,7 +1331,7 @@ DefaultPos:	Standing
 	Cash:	850
 	Bank:	550
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	pole arms:	8
 	sorcery:	14
 BREAK
@@ -1367,6 +1367,6 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 END

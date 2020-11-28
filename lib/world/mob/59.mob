@@ -65,7 +65,7 @@ DefaultPos:	Standing
 	Bank:	200
 	Karma:	1
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #5911
 Keywords:	mary young female clerk
@@ -430,7 +430,7 @@ AttackType:	Punch
 	Cash:	50000
 	Bank:	100000
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	armed combat:	20
 BREAK
 #5961
@@ -465,7 +465,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	4
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	6
 BREAK
 #5962
@@ -503,7 +503,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	20
 	cyber implants:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #5963
 Keywords:	gang ganger member tiger human
@@ -615,7 +615,7 @@ AttackType:	Pound
 	Bank:	20000
 [SKILLS]
 	armed combat:	12
-	unarmed combat:	12
+	brawling:	12
 	firearms:	12
 	street etiquette:	10
 	interrogation:	10

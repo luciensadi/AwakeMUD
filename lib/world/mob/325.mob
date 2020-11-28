@@ -30,7 +30,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	3
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	pistols:	5
 	police procedures:	4
 BREAK
@@ -70,7 +70,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	35
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	clubs:	4
 	pistols:	4
 BREAK
@@ -111,7 +111,7 @@ DefaultPos:	Standing
 [SKILLS]
 	sub-machine guns:	5
 	sorcery:	6
-	unarmed combat:	5
+	brawling:	5
 	clubs:	4
 BREAK
 #32598
@@ -150,7 +150,7 @@ DefaultPos:	Standing
 [SKILLS]
 	negotiation:	12
 	corporate etiquette:	12
-	unarmed combat:	15
+	brawling:	15
 BREAK
 #32599
 Keywords:	damien knight ceo ares macrotechnology tall well built man black hair goatee proud
@@ -191,7 +191,7 @@ AttackType:	Punch
 [SKILLS]
 	pistols:	20
 	sorcery:	20
-	unarmed combat:	20
+	brawling:	20
 	edged weapons:	20
 BREAK
 #32600
@@ -226,7 +226,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	6
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	rifles:	10
 	clubs:	12
 BREAK
@@ -267,7 +267,7 @@ DefaultPos:	Standing
 	Bank:	100
 [SKILLS]
 	sub-machine guns:	8
-	unarmed combat:	6
+	brawling:	6
 	clubs:	8
 BREAK
 #32700
@@ -307,7 +307,7 @@ AttackType:	Pistol
 [SKILLS]
 	athletics:	6
 	armed combat:	12
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #32701
 Keywords:	woman young blonde suit short

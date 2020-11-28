@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Bank:	200
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	edged weapons:	7
 	athletics:	4
 	pistols:	5
@@ -75,7 +75,7 @@ DefaultPos:	Standing
 	Karma:	10
 [SKILLS]
 	street etiquette:	2
-	unarmed combat:	7
+	brawling:	7
 	firearms:	6
 	:	3
 	edged weapons:	4
@@ -119,7 +119,7 @@ DefaultPos:	Standing
 	biotech:	8
 	:	8
 	:	5
-	unarmed combat:	10
+	brawling:	10
 	electronics:	6
 BREAK
 #31103
@@ -158,7 +158,7 @@ DefaultPos:	Standing
 [SKILLS]
 	negotiation:	3
 	street etiquette:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #31104
 Keywords:	shiba wizard old man
@@ -275,7 +275,7 @@ DefaultPos:	Standing
 	Cash:	400000
 	Bank:	500000
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	rifles:	5
 	negotiation:	8
 	street etiquette:	6
@@ -317,7 +317,7 @@ AttackType:	Slash
 	Cash:	200000
 	Bank:	20000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	10
 	negotiation:	9
 	leadership:	10
@@ -483,7 +483,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	1000
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	:	6
 	biotech:	6
 	rifles:	4
@@ -568,7 +568,7 @@ DefaultPos:	Standing
 	Cash:	200000
 	Bank:	200000
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	4
 	:	6
 	biotech:	6
@@ -779,7 +779,7 @@ DefaultPos:	Standing
 	Cash:	200
 	Bank:	300
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	edged weapons:	7
 	:	1
 	whips & flails:	7
@@ -819,7 +819,7 @@ DefaultPos:	Standing
 	Cash:	300
 	Bank:	100
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	edged weapons:	3
 	pistols:	4
 	shotguns:	3
@@ -860,7 +860,7 @@ DefaultPos:	Standing
 	Bank:	100
 [SKILLS]
 	:	2
-	unarmed combat:	6
+	brawling:	6
 	:	2
 	pistols:	7
 	edged weapons:	7
@@ -901,7 +901,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	6
 	computers:	4
-	unarmed combat:	7
+	brawling:	7
 	:	1
 BREAK
 #31122
@@ -937,7 +937,7 @@ DefaultPos:	Standing
 	Impact:	4
 [SKILLS]
 	rifles:	7
-	unarmed combat:	5
+	brawling:	5
 	stealth:	6
 	street etiquette:	5
 BREAK
@@ -977,7 +977,7 @@ DefaultPos:	Standing
 [SKILLS]
 	sub-machine guns:	7
 	edged weapons:	7
-	unarmed combat:	7
+	brawling:	7
 	:	3
 	:	3
 BREAK
@@ -1018,7 +1018,7 @@ DefaultPos:	Standing
 	:	4
 	:	3
 	:	3
-	unarmed combat:	8
+	brawling:	8
 	firearms:	8
 BREAK
 #31125
@@ -1057,7 +1057,7 @@ DefaultPos:	Standing
 [SKILLS]
 	:	1
 	edged weapons:	6
-	unarmed combat:	7
+	brawling:	7
 	pistols:	9
 	sub-machine guns:	7
 BREAK
@@ -1097,7 +1097,7 @@ AttackType:	Punch
 	Impact:	7
 	Cash:	100
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	rifles:	12
 	edged weapons:	7
 	armed combat:	10
@@ -1139,7 +1139,7 @@ DefaultPos:	Standing
 	Cash:	40
 [SKILLS]
 	sub-machine guns:	5
-	unarmed combat:	6
+	brawling:	6
 	street etiquette:	4
 	edged weapons:	5
 	:	2
@@ -1179,7 +1179,7 @@ DefaultPos:	Standing
 	Cash:	200
 [SKILLS]
 	edged weapons:	6
-	unarmed combat:	4
+	brawling:	4
 	pole arms:	5
 	:	1
 	street etiquette:	3
@@ -1262,7 +1262,7 @@ DefaultPos:	Standing
 	pole arms:	7
 	:	1
 	firearms:	6
-	unarmed combat:	6
+	brawling:	6
 	:	2
 BREAK
 #31131

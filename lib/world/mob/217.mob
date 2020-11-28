@@ -75,7 +75,7 @@ AttackType:	Claw
 	Cash:	17089
 	Karma:	3
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	:	9
 	:	3
 	:	4
@@ -118,7 +118,7 @@ AttackType:	Bite
 	Bank:	200
 	Karma:	6
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	leadership:	9
 	stealth:	7
 	:	3
@@ -196,7 +196,7 @@ AttackType:	Bite
 	Cash:	27
 	Karma:	3
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #21705
 Keywords:	Alpha female wolf
@@ -235,7 +235,7 @@ AttackType:	Bite
 	Impact:	4
 	Cash:	3819
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #21706
 Keywords:	alpha male
@@ -273,7 +273,7 @@ AttackType:	Bite
 	Cash:	396
 	Karma:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	stealth:	6
 	:	3
 	leadership:	4
@@ -317,7 +317,7 @@ AttackType:	Bite
 	Karma:	2
 [SKILLS]
 	stealth:	4
-	unarmed combat:	3
+	brawling:	3
 	:	1
 	:	1
 	:	2
@@ -620,7 +620,7 @@ AttackType:	Thrash
 [SKILLS]
 	stealth:	9
 	:	3
-	unarmed combat:	9
+	brawling:	9
 	:	9
 	:	3
 BREAK

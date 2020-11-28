@@ -32,7 +32,7 @@ DefaultPos:	Standing
 [SKILLS]
 	pistols:	3
 	sub-machine guns:	3
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14801
 Keywords:	Eddie Wong host
@@ -70,7 +70,7 @@ AttackType:	Punch
 	Cash:	50
 	Bank:	500
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #14802
 Keywords:	Mai Ling
@@ -103,7 +103,7 @@ DefaultPos:	Standing
 	Weight:	45
 	Cash:	200
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14803
 Keywords:	uncle chu
@@ -139,7 +139,7 @@ AttackType:	Punch
 	Cash:	100
 	Bank:	200
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14804
 Keywords:	Waiter
@@ -173,7 +173,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	15
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #14805
 Keywords:	chef
@@ -208,7 +208,7 @@ DefaultPos:	Standing
 	Impact:	1
 	Cash:	10
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	edged weapons:	3
 BREAK
 #14806
@@ -243,7 +243,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	50
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #14807
 Keywords:	woman young prostitute
@@ -279,7 +279,7 @@ AttackType:	Punch
 	Cash:	50
 	Bank:	100
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #14808
 Keywords:	sleazy businessman man
@@ -311,7 +311,7 @@ DefaultPos:	Standing
 	Weight:	75
 	Cash:	100
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #14809
 Keywords:	bodyguard
@@ -347,7 +347,7 @@ AttackType:	Punch
 	Cash:	1000
 	Bank:	1000
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	shotguns:	8
 	pistols:	6
 BREAK
@@ -384,7 +384,7 @@ DefaultPos:	Standing
 	Cash:	500
 	Bank:	1500
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #14811
 Keywords:	woman dominatrix
@@ -420,7 +420,7 @@ AttackType:	Punch
 	Cash:	300
 	Bank:	300
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	whips & flails:	9
 BREAK
 #14812
@@ -455,7 +455,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	3
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #14813
 Keywords:	liu leader ganger punk tough
@@ -490,7 +490,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Cash:	200
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	whips & flails:	7
 BREAK
 #14814
@@ -526,7 +526,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Cash:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14815
 Keywords:	egg shen wizened old man
@@ -564,7 +564,7 @@ DefaultPos:	Standing
 	Bank:	1000
 [SKILLS]
 	sorcery:	6
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14816
 Keywords:	jerry chow
@@ -632,7 +632,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Cash:	15
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #14818
 Keywords:	horrible guardian beast
@@ -670,7 +670,7 @@ AttackType:	Maul
 	Impact:	8
 	Cash:	10000
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	7
 BREAK
 #14819
@@ -709,7 +709,7 @@ DefaultPos:	Standing
 	Bank:	300
 [SKILLS]
 	pistols:	4
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14820
 Keywords:	obie honest
@@ -819,7 +819,7 @@ AttackType:	Machine Gun
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	machine guns:	8
 BREAK
 #14823
@@ -956,7 +956,7 @@ DefaultPos:	Standing
 	Bank:	500
 [SKILLS]
 	sub-machine guns:	5
-	unarmed combat:	5
+	brawling:	5
 	pistols:	5
 	shotguns:	5
 BREAK
@@ -994,7 +994,7 @@ AttackType:	Bite
 	Ballistic:	6
 	Impact:	6
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #14828
 Keywords:	man spooky david dave lo pan
@@ -1032,7 +1032,7 @@ AttackType:	Claw
 	Impact:	8
 	Karma:	105
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	7
 BREAK
 #14829
@@ -1072,7 +1072,7 @@ AttackType:	Pound
 	Karma:	12
 [SKILLS]
 	edged weapons:	5
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #14830
 Keywords:	man tall asian wind
@@ -1110,7 +1110,7 @@ DefaultPos:	Standing
 	Karma:	10
 [SKILLS]
 	edged weapons:	7
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14831
 Keywords:	man asian lightning
@@ -1148,7 +1148,7 @@ AttackType:	Taser
 	Bank:	1000
 	Karma:	101
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	tasers:	12
 BREAK
 #14832
@@ -1188,7 +1188,7 @@ AttackType:	Punch
 	Bank:	500
 [SKILLS]
 	edged weapons:	5
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14833
 Keywords:	man upsidedown sinner
@@ -1262,7 +1262,7 @@ AttackType:	Punch
 	Cash:	200
 	Bank:	4000
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	edged weapons:	7
 BREAK
 #14835
@@ -1300,7 +1300,7 @@ AttackType:	Bite
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14836
 Keywords:	man asian wang wiry
@@ -1338,7 +1338,7 @@ AttackType:	Punch
 	Impact:	8
 	Bank:	500
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14837
 Keywords:	girl chinese mao yin
@@ -1370,7 +1370,7 @@ DefaultPos:	Standing
 	Height:	120
 	Weight:	40
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14838
 Keywords:	woman cute gracie law
@@ -1403,7 +1403,7 @@ DefaultPos:	Standing
 	Height:	140
 	Weight:	50
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14839
 Keywords:	man old shing
@@ -1440,7 +1440,7 @@ AttackType:	Punch
 	Impact:	4
 	Cash:	120
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	sorcery:	6
 BREAK
 #14840
@@ -1478,7 +1478,7 @@ AttackType:	Punch
 	Impact:	3
 	Cash:	50
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14841
 Keywords:	woman young student
@@ -1514,7 +1514,7 @@ AttackType:	Punch
 	Impact:	3
 	Cash:	60
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14842
 Keywords:	target troll
@@ -1620,7 +1620,7 @@ AttackType:	Punch
 	Bank:	2000
 [SKILLS]
 	edged weapons:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #14845
 Keywords:	decker chinese
@@ -1657,7 +1657,7 @@ AttackType:	Punch
 	Impact:	3
 	Cash:	200
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	computers:	4
 BREAK
 #14846
@@ -1694,7 +1694,7 @@ AttackType:	Punch
 	Impact:	3
 	Cash:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #14847
 Keywords:	woman older
@@ -1727,7 +1727,7 @@ AttackType:	Punch
 	Height:	165
 	Weight:	50
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #14848
 Keywords:	crone old
@@ -1766,7 +1766,7 @@ AttackType:	Punch
 	Cash:	1000
 [SKILLS]
 	sorcery:	9
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #14849
 Keywords:	stone mass earth elemental
@@ -1802,7 +1802,7 @@ AttackType:	Pound
 	Ballistic:	12
 	Impact:	12
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #14850
 Keywords:	ganger triad elite
@@ -1840,7 +1840,7 @@ AttackType:	Punch
 	Bank:	400
 [SKILLS]
 	assault rifles:	6
-	unarmed combat:	3
+	brawling:	3
 	sub-machine guns:	3
 	increased reflexes:	2
 BREAK
@@ -1881,7 +1881,7 @@ AttackType:	Punch
 	Cash:	3000
 	Bank:	4000
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	sorcery:	5
 	increased reflexes:	3
 BREAK
@@ -1920,7 +1920,7 @@ AttackType:	Machine Gun
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #14853
 Keywords:	Old Ben
@@ -1953,7 +1953,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	80
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #14854
 Keywords:	man ned 
@@ -1988,7 +1988,7 @@ DefaultPos:	Sitting
 	Cash:	800000
 	Bank:	500000
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #14855
 Keywords:	triad ganger

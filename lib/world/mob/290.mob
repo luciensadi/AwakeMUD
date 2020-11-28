@@ -34,7 +34,7 @@ DefaultPos:	Standing
 	Cash:	20
 [SKILLS]
 	sorcery:	15
-	unarmed combat:	15
+	brawling:	15
 BREAK
 #29001
 Keywords:	decker test cmt man
@@ -72,7 +72,7 @@ DefaultPos:	Sitting
 	Ballistic:	7
 	Impact:	7
 [SKILLS]
-	unarmed combat:	11
+	brawling:	11
 	computers:	12
 BREAK
 #29002
@@ -147,7 +147,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	20
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #29004
 Keywords:	guard heavy security catco
@@ -263,7 +263,7 @@ DefaultPos:	Standing
 	Impact:	10
 [SKILLS]
 	sorcery:	15
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #29008
 Keywords:	lilith teenage girl
@@ -300,7 +300,7 @@ DefaultPos:	Standing
 	Impact:	23
 [SKILLS]
 	sorcery:	17
-	unarmed combat:	12
+	brawling:	12
 	:	11
 BREAK
 #29009
@@ -338,7 +338,7 @@ DefaultPos:	Standing
 	Impact:	7
 	Bank:	100
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #29010
 Keywords:	ganger brain eater troll
@@ -409,7 +409,7 @@ DefaultPos:	Standing
 	Impact:	13
 [SKILLS]
 	sorcery:	17
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #29012
 Keywords:	motorcycle lone star unit
@@ -518,7 +518,7 @@ DefaultPos:	Standing
 	Bank:	85
 [SKILLS]
 	pistols:	14
-	unarmed combat:	12
+	brawling:	12
 BREAK
 #29015
 Keywords:	man special op
@@ -553,7 +553,7 @@ AttackType:	Rifle
 	Impact:	23
 [SKILLS]
 	sub-machine guns:	14
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #29016
 Keywords:	gabe vogel lanky man suit
@@ -589,7 +589,7 @@ DefaultPos:	Standing
 	Cash:	300
 	Bank:	300
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #29017
 Keywords:	arnold spencer man fat chief
@@ -627,7 +627,7 @@ AttackType:	Bludgeon
 	Cash:	80
 	Bank:	100
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #29018
 Keywords:	man george
@@ -757,7 +757,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	65
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #29022
 Keywords:	kid child
@@ -827,7 +827,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	85
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #29024
 Keywords:	woman hen chi asian

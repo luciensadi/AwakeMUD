@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Impact:	10
 	Cash:	5
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	edged weapons:	7
 	armed combat:	9
 BREAK
@@ -74,7 +74,7 @@ AttackType:	Punch
 [SKILLS]
 	:	3
 	:	10
-	unarmed combat:	6
+	brawling:	6
 	:	3
 	:	3
 BREAK
@@ -298,7 +298,7 @@ DefaultPos:	Standing
 	Bank:	7254
 	Karma:	10
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	:	3
 	:	50
 BREAK
@@ -375,7 +375,7 @@ AttackType:	Claw
 	Impact:	11
 	Karma:	10
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	:	10
 BREAK
 #20810
@@ -552,7 +552,7 @@ DefaultPos:	Standing
 	Bank:	100
 	Karma:	3
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	pistols:	12
 	sorcery:	8
 BREAK
@@ -592,6 +592,6 @@ AttackType:	Rifle
 [SKILLS]
 	firearms:	10
 	rifles:	15
-	unarmed combat:	50
+	brawling:	50
 BREAK
 END

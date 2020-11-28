@@ -31,7 +31,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #62501
 Keywords:	shark small fin
@@ -69,7 +69,7 @@ AttackType:	Bite
 	Ballistic:	1
 	Impact:	1
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	athletics:	8
 BREAK
 #62502
@@ -109,7 +109,7 @@ AttackType:	Bite
 	Ballistic:	2
 	Impact:	2
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #62503
 Keywords:	dolphin
@@ -144,7 +144,7 @@ AttackType:	Bludgeon
 	Height:	120
 	Weight:	60
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	athletics:	8
 BREAK
 #62504
@@ -184,7 +184,7 @@ AttackType:	Bite
 	Ballistic:	2
 	Impact:	2
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	athletics:	8
 BREAK
 #62505
@@ -218,7 +218,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	80
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	driving/Car:	5
 BREAK
 #62506
@@ -255,7 +255,7 @@ DefaultPos:	Standing
 	Cash:	250
 	Bank:	200
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	athletics:	4
 	driving/Car:	6
 BREAK
@@ -331,7 +331,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 	athletics:	5
 BREAK
 #62509

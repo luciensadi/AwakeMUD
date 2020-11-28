@@ -34,7 +34,7 @@ DefaultPos:	Standing
 	Bank:	700
 	Karma:	10
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	3
 	street etiquette:	5
 	elf etiquette:	4
@@ -76,7 +76,7 @@ DefaultPos:	Standing
 	Bank:	500
 	Karma:	10
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	street etiquette:	6
 	media etiquette:	5
 BREAK
@@ -117,7 +117,7 @@ DefaultPos:	Standing
 	Karma:	10
 [SKILLS]
 	armed combat:	6
-	unarmed combat:	7
+	brawling:	7
 	firearms:	6
 	throwing weapons:	4
 	:	3
@@ -159,7 +159,7 @@ AttackType:	Punch
 	Impact:	4
 	Karma:	59
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 	rifles:	6
 BREAK
@@ -200,7 +200,7 @@ AttackType:	Punch
 	Impact:	4
 	Karma:	59
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 	rifles:	6
 BREAK
@@ -241,7 +241,7 @@ AttackType:	Punch
 	Impact:	4
 	Karma:	59
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 	rifles:	6
 BREAK
@@ -284,7 +284,7 @@ AttackType:	Punch
 	Bank:	2000
 	Karma:	63
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 	rifles:	6
 BREAK
@@ -327,7 +327,7 @@ AttackType:	Punch
 	Bank:	2000
 	Karma:	59
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 	rifles:	6
 BREAK
@@ -370,7 +370,7 @@ AttackType:	Punch
 	Bank:	2000
 	Karma:	59
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 	rifles:	6
 BREAK
@@ -413,7 +413,7 @@ AttackType:	Punch
 	Bank:	2000
 	Karma:	60
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	pistols:	8
 	rifles:	6
 BREAK

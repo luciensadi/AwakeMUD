@@ -37,7 +37,7 @@ AttackType:	Pound
 	Impact:	7
 	Bank:	489
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	street etiquette:	4
 BREAK
 #5001
@@ -75,7 +75,7 @@ AttackType:	Claw
 	Bank:	1
 [SKILLS]
 	sorcery:	3
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #5002
 Keywords:	male ganger
@@ -149,7 +149,7 @@ AttackType:	Pound
 [SKILLS]
 	sorcery:	5
 	:	4
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #5004
 Keywords:	husky bartender
@@ -221,7 +221,7 @@ AttackType:	Pierce
 	Karma:	10
 [SKILLS]
 	sorcery:	7
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #5006
 Keywords:	elemental air
@@ -259,7 +259,7 @@ AttackType:	Slash
 [SKILLS]
 	sorcery:	15
 	edged weapons:	15
-	unarmed combat:	15
+	brawling:	15
 BREAK
 #5007
 Keywords:	moshers mosher
@@ -295,7 +295,7 @@ AttackType:	Crush
 	Impact:	2
 	Bank:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #5008
 Keywords:	flying mosher
@@ -330,7 +330,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Cash:	3
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #5009
 Keywords:	janis reenes young lady jumpsuit
@@ -371,7 +371,7 @@ DefaultPos:	Resting
 	Impact:	3
 	Bank:	300
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #5010
 Keywords:	ameriindian heavily tattooed
@@ -412,7 +412,7 @@ DefaultPos:	Resting
 	Impact:	9
 	Bank:	400
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	electronics:	6
 BREAK
 #5011
@@ -448,7 +448,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Bank:	100
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #5012
 Keywords:	waitress
@@ -485,7 +485,7 @@ DefaultPos:	Standing
 	Cash:	100
 	Bank:	250
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #5013
 Keywords:	thicket thorns ic
@@ -542,7 +542,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Level:	8
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #5015
 Keywords:	wall ic
@@ -574,7 +574,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #5016
 Keywords:	dire wolf ic
@@ -606,7 +606,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #5017
 Keywords:	forest breeze ic
@@ -707,7 +707,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	200
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #5020
 Keywords:	fixer Rocko
@@ -778,7 +778,7 @@ AttackType:	Machine Gun
 	Cash:	10
 	Karma:	50
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 	sub-machine guns:	5
 BREAK
 #5022
@@ -814,7 +814,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Bank:	751
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #5023
 Keywords:	elf encients ancient lt lieutenant
@@ -848,7 +848,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	4
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	sorcery:	6
 BREAK
 #5024
@@ -886,7 +886,7 @@ AttackType:	Bludgeon
 	Bank:	500
 	Karma:	10
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #5025
 Keywords:	Trix troll guard
@@ -923,7 +923,7 @@ AttackType:	Bludgeon
 	Impact:	20
 	Bank:	800
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #5026
 Keywords:	shadowrunner female
@@ -957,7 +957,7 @@ DefaultPos:	Standing
 	Impact:	6
 	Cash:	50
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #5027
 Keywords:	male shadowrunner
@@ -992,7 +992,7 @@ DefaultPos:	Standing
 	Impact:	4
 	Bank:	109
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #5028
 Keywords:	dancer
@@ -1026,7 +1026,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	150
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	sorcery:	1
 BREAK
 #5029
@@ -1134,7 +1134,7 @@ DefaultPos:	Standing
 	Impact:	4
 [SKILLS]
 	athletics:	3
-	unarmed combat:	5
+	brawling:	5
 	interrogation:	3
 BREAK
 #5032
@@ -1310,7 +1310,7 @@ AttackType:	Bite
 	Ballistic:	40
 	Impact:	40
 [SKILLS]
-	unarmed combat:	30
+	brawling:	30
 	sorcery:	40
 BREAK
 END

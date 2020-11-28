@@ -30,7 +30,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	34
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #22601
 Keywords:	plump rat
@@ -94,7 +94,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #22603
 Keywords:	man young
@@ -195,7 +195,7 @@ AttackType:	Claw
 	Ballistic:	20
 	Impact:	20
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #22607
 Keywords:	man awe young crouch
@@ -329,7 +329,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	30
+	brawling:	30
 BREAK
 #22611
 Keywords:	man pedestrian vampire
@@ -362,7 +362,7 @@ AttackType:	Claw
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 #22612
 Keywords:	woman amy tan asian innocent
@@ -500,7 +500,7 @@ DefaultPos:	Standing
 	Impact:	1
 [SKILLS]
 	sorcery:	8
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #22616
 Keywords:	man second audience
@@ -535,7 +535,7 @@ DefaultPos:	Sitting
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #22617
 Keywords:	dazed junkie dealer
@@ -1010,6 +1010,6 @@ DefaultPos:	Standing
 	Impact:	50
 [SKILLS]
 	sorcery:	50
-	unarmed combat:	50
+	brawling:	50
 BREAK
 END

@@ -65,7 +65,7 @@ DefaultPos:	Standing
 	Weight:	85
 	Bank:	50
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #3002
 Keywords:	traveler busy
@@ -99,7 +99,7 @@ DefaultPos:	Standing
 	Weight:	60
 	Bank:	15
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #3003
 Keywords:	hamlin grocer
@@ -349,7 +349,7 @@ DefaultPos:	Sitting
 [SKILLS]
 	negotiation:	5
 	media etiquette:	4
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #3010
 Keywords:	ork guard bodyguard
@@ -388,7 +388,7 @@ AttackType:	Stab
 [SKILLS]
 	firearms:	4
 	sub-machine guns:	4
-	unarmed combat:	3
+	brawling:	3
 	armed combat:	5
 BREAK
 #3011
@@ -492,7 +492,7 @@ DefaultPos:	Sleeping
 	Weight:	180
 	Bank:	20
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #3015
 Keywords:	security chief 
@@ -527,7 +527,7 @@ DefaultPos:	Standing
 	Bank:	400
 [SKILLS]
 	firearms:	5
-	unarmed combat:	3
+	brawling:	3
 	armed combat:	2
 	leadership:	5
 BREAK
@@ -677,7 +677,7 @@ DefaultPos:	Standing
 	firearms:	5
 	armed combat:	4
 	gunnery:	3
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #3020
 Keywords:	samurai scarred kiyama yoshi
@@ -713,7 +713,7 @@ AttackType:	Stab
 	Weight:	78
 	Bank:	150
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	armed combat:	3
 	media etiquette:	3
 BREAK
@@ -812,7 +812,7 @@ DefaultPos:	Standing
 	Impact:	23
 	Cash:	30
 [SKILLS]
-	unarmed combat:	18
+	brawling:	18
 	athletics:	10
 BREAK
 #3088
@@ -849,7 +849,7 @@ AttackType:	Bludgeon
 	Ballistic:	19
 	Impact:	19
 [SKILLS]
-	unarmed combat:	17
+	brawling:	17
 	clubs:	16
 	assault cannons:	19
 BREAK
@@ -888,7 +888,7 @@ AttackType:	Punch
 	Ballistic:	21
 	Impact:	22
 [SKILLS]
-	unarmed combat:	18
+	brawling:	18
 	edged weapons:	20
 	interrogation:	18
 BREAK
@@ -926,7 +926,7 @@ AttackType:	Thrash
 	Ballistic:	28
 	Impact:	32
 [SKILLS]
-	unarmed combat:	22
+	brawling:	22
 BREAK
 #3091
 Keywords:	Sergeant lonestar lone star
@@ -964,6 +964,6 @@ DefaultPos:	Standing
 	Bank:	140
 [SKILLS]
 	pistols:	7
-	unarmed combat:	6
+	brawling:	6
 BREAK
 END

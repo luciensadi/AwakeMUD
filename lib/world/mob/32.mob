@@ -303,7 +303,7 @@ DefaultPos:	Standing
 	Bank:	300
 [SKILLS]
 	firearms:	3
-	unarmed combat:	3
+	brawling:	3
 	armed combat:	4
 BREAK
 #3210
@@ -337,7 +337,7 @@ DefaultPos:	Standing
 	Weight:	68
 	Bank:	400
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #3211
 Keywords:	tourist

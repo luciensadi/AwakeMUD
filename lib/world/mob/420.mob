@@ -68,7 +68,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	3
 	sub-machine guns:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #42002
 Keywords:	man chef sushi
@@ -106,7 +106,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	3
 	sub-machine guns:	5
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #42003
 Keywords:	man washroom attendant restroom bathroom

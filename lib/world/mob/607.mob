@@ -132,7 +132,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	90
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	pistols:	10
 BREAK
 #60704
@@ -215,7 +215,7 @@ AttackType:	Crush
 	Height:	300
 	Weight:	450
 [SKILLS]
-	unarmed combat:	15
+	brawling:	15
 BREAK
 #60706
 Keywords:	Demona Hayes woman human female

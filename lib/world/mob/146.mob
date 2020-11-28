@@ -340,7 +340,7 @@ AttackType:	Bite
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #14610
 Keywords:	blue dawg ancients lieutenant ganger rose city
@@ -377,7 +377,7 @@ DefaultPos:	Standing
 	Impact:	8
 	Cash:	500
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	edged weapons:	20
 BREAK
 #14611
@@ -416,7 +416,7 @@ DefaultPos:	Standing
 	assault rifles:	7
 	edged weapons:	3
 	shotguns:	4
-	unarmed combat:	4
+	brawling:	4
 	pistols:	5
 BREAK
 #14612
@@ -453,7 +453,7 @@ DefaultPos:	Standing
 	Impact:	7
 	Cash:	300
 [SKILLS]
-	unarmed combat:	12
+	brawling:	12
 	shotguns:	9
 BREAK
 #14613
@@ -525,7 +525,7 @@ AttackType:	Punch
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	negotiation:	5
 BREAK
 #14615
@@ -564,7 +564,7 @@ AttackType:	Punch
 	Impact:	9
 	Cash:	500
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	rifles:	20
 BREAK
 #14616
@@ -801,7 +801,7 @@ DefaultPos:	Standing
 	Bank:	400
 [SKILLS]
 	assault rifles:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #14623
 Keywords:	larry maclaury human man pinstripe
@@ -838,7 +838,7 @@ AttackType:	Stab
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 	pistols:	4
 	media etiquette:	6
 	corporate etiquette:	8
@@ -1175,7 +1175,7 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	115
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	:	3
 	:	3
 BREAK

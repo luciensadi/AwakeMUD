@@ -35,7 +35,7 @@ DefaultPos:	Standing
 	Impact:	6
 [SKILLS]
 	assault rifles:	8
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #61501
 Keywords:	biker halloweener
@@ -108,7 +108,7 @@ DefaultPos:	Standing
 	Weight:	200
 	Cash:	225
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	cyber implants:	8
 BREAK
 #61503
@@ -143,7 +143,7 @@ DefaultPos:	Standing
 	Weight:	140
 	Cash:	225
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	edged weapons:	7
 BREAK
 #61504
@@ -413,7 +413,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	45
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #61512
 Keywords:	brain eater troll
@@ -483,7 +483,7 @@ AttackType:	Bite
 	Height:	180
 	Weight:	400
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #61514
 Keywords:	rusted stiletto ganger

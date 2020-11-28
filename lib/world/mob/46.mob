@@ -181,6 +181,6 @@ DefaultPos:	Standing
 	Ballistic:	4000
 	Impact:	4000
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 BREAK
 END

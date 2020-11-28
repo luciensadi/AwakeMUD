@@ -33,7 +33,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	20
 	cyber implants:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #17501
 Keywords:	military thunderbird tbird salish sidhe
@@ -139,7 +139,7 @@ DefaultPos:	Standing
 	Impact:	1
 	Cash:	10
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #17504
 Keywords:	clan sun go ganger elf
@@ -176,7 +176,7 @@ AttackType:	Shotgun
 	Cash:	100
 [SKILLS]
 	shotguns:	8
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #17505
 Keywords:	clan red moon go ganger
@@ -214,7 +214,7 @@ AttackType:	Shotgun
 	Cash:	200
 [SKILLS]
 	shotguns:	10
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #17506
 Keywords:	elf clan ganger red moon shaman
@@ -251,7 +251,7 @@ AttackType:	Arrow/bolt
 	Cash:	250
 [SKILLS]
 	projectiles:	10
-	unarmed combat:	10
+	brawling:	10
 	sorcery:	10
 	conjuring:	20
 BREAK
@@ -396,7 +396,7 @@ DefaultPos:	Standing
 	Weight:	90
 [SKILLS]
 	assault rifles:	12
-	unarmed combat:	9
+	brawling:	9
 	machine guns:	12
 BREAK
 #17511
@@ -436,7 +436,7 @@ AttackType:	Machine Gun
 	Karma:	100
 [SKILLS]
 	machine guns:	10
-	unarmed combat:	9
+	brawling:	9
 	rifles:	10
 BREAK
 #17512
@@ -469,7 +469,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Karma:	133
 [SKILLS]
-	unarmed combat:	20
+	brawling:	20
 	sorcery:	20
 BREAK
 #17569
@@ -633,6 +633,6 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	8
 	rifles:	9
-	unarmed combat:	6
+	brawling:	6
 BREAK
 END

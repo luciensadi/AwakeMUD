@@ -73,7 +73,7 @@ AttackType:	Cannon
 	Ballistic:	30
 	Impact:	30
 [SKILLS]
-	unarmed combat:	30
+	brawling:	30
 	firearms:	30
 	gunnery:	30
 BREAK

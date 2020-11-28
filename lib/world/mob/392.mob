@@ -32,7 +32,7 @@ DefaultPos:	Standing
 	Cash:	20
 	Bank:	35
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39201
 Keywords:	cop Lone Star beat
@@ -178,7 +178,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	45
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39205
 Keywords:	bicyclist ten-speed
@@ -213,7 +213,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	30
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39206
 Keywords:	ucas metroplex guard citymaster ares patrol vehicle
@@ -250,7 +250,7 @@ AttackType:	Machine Gun
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 BREAK
 #39207
 Keywords:	pedestrian
@@ -287,7 +287,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	65
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39208
 Keywords:	employee Stuffer Shack
@@ -387,7 +387,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39211
 Keywords:	tourist
@@ -422,7 +422,7 @@ DefaultPos:	Standing
 	Cash:	45
 	Bank:	45
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39212
 Keywords:	fisherman old dwarven
@@ -558,7 +558,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	60
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39222
 Keywords:	drunkard old man
@@ -593,7 +593,7 @@ DefaultPos:	Standing
 	Weight:	90
 	Cash:	125
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39223
 Keywords:	dockworker ragged
@@ -629,7 +629,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	50
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #39224
 Keywords:	businesswoman woman low-level
@@ -665,7 +665,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	55
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39225
 Keywords:	Rex Jackson slick businessman suit johnson
@@ -733,7 +733,7 @@ DefaultPos:	Standing
 	Height:	200
 	Weight:	80
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 BREAK
 #39230
 Keywords:	Concierge snooty well-dressed
@@ -837,7 +837,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	85
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39233
 Keywords:	waitress finely dressed
@@ -870,7 +870,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39234
 Keywords:	Weston Lynn elven man suit
@@ -944,7 +944,7 @@ DefaultPos:	Standing
 	Impact:	5
 	Cash:	125
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	clubs:	6
 BREAK
 #39241
@@ -1016,7 +1016,7 @@ DefaultPos:	Standing
 	Ballistic:	3
 	Impact:	3
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #39243
 Keywords:	habituate nightclub
@@ -1052,7 +1052,7 @@ DefaultPos:	Standing
 	Cash:	65
 	Bank:	45
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39244
 Keywords:	wannabe clubber
@@ -1089,7 +1089,7 @@ DefaultPos:	Standing
 	Cash:	35
 	Bank:	40
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39245
 Keywords:	woman japanese business
@@ -1126,7 +1126,7 @@ AttackType:	Claw
 	Cash:	55
 	Bank:	35
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39246
 Keywords:	chubby yakuza low-life man fat
@@ -1166,7 +1166,7 @@ DefaultPos:	Standing
 	Cash:	85
 	Bank:	95
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #39247
 Keywords:	bodyguard yakuza obviously cybered
@@ -1206,7 +1206,7 @@ DefaultPos:	Standing
 	Cash:	185
 [SKILLS]
 	sub-machine guns:	7
-	unarmed combat:	6
+	brawling:	6
 	clubs:	5
 BREAK
 #39248
@@ -1246,7 +1246,7 @@ DefaultPos:	Standing
 	Cash:	115
 [SKILLS]
 	edged weapons:	7
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #39249
 Keywords:	Hirafuku Yoshito yakuza kobun
@@ -1284,7 +1284,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Cash:	225
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 	edged weapons:	6
 BREAK
 #39250
@@ -1323,7 +1323,7 @@ DefaultPos:	Standing
 	Cash:	85
 [SKILLS]
 	edged weapons:	7
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #39251
 Keywords:	asian businessman
@@ -1358,7 +1358,7 @@ DefaultPos:	Standing
 	Cash:	50
 	Bank:	50
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39252
 Keywords:	Mister Zaibatsu old Japanese businessman
@@ -1393,7 +1393,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	70
 [SKILLS]
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39253
 Keywords:	Mister Keiretsu businessman young suit Johnson
@@ -1428,7 +1428,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	70
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #39293
 Keywords:	woman frightened abused young
@@ -1498,7 +1498,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #39295
 Keywords:	alfredo fist mafia mafioso
@@ -1538,7 +1538,7 @@ AttackType:	Punch
 	Impact:	14
 	Cash:	300
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	clubs:	10
 BREAK
 #39296
@@ -1575,7 +1575,7 @@ DefaultPos:	Standing
 	Impact:	12
 	Cash:	250
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	clubs:	8
 	sub-machine guns:	8
 	shotguns:	8
@@ -1614,7 +1614,7 @@ DefaultPos:	Standing
 	Impact:	12
 	Cash:	250
 [SKILLS]
-	unarmed combat:	8
+	brawling:	8
 	clubs:	8
 	sub-machine guns:	8
 	shotguns:	8
@@ -1656,7 +1656,7 @@ AttackType:	Punch
 	Cash:	250
 	Bank:	200
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 BREAK
 #39299
 Keywords:	wyvern large barbed tail
@@ -1694,7 +1694,7 @@ AttackType:	Sting
 	Ballistic:	10
 	Impact:	10
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #39300
 Keywords:	salesclerk pied pipers
@@ -1732,7 +1732,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39301
 Keywords:	clerk street urchin chic retail
@@ -1767,7 +1767,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39302
 Keywords:	Employee Delicatessen Downtown
@@ -1803,7 +1803,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39303
 Keywords:	attendant Delicious Desserts
@@ -1839,7 +1839,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39304
 Keywords:	Salesman eager fanciful furniture
@@ -1874,7 +1874,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39305
 Keywords:	Wang owner store sporting goods
@@ -1911,7 +1911,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39306
 Keywords:	employee activesoft central
@@ -1948,7 +1948,7 @@ DefaultPos:	Standing
 	Weight:	50
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39307
 Keywords:	employee overweight linguasoft employee
@@ -1986,7 +1986,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39308
 Keywords:	salesman microdeck outlet
@@ -2022,7 +2022,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39309
 Keywords:	employee survival store
@@ -2058,7 +2058,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39310
 Keywords:	attending eye spy cybereyes
@@ -2093,7 +2093,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39311
 Keywords:	Simon cyberware odds ends
@@ -2129,7 +2129,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 	negotiation:	4
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #39312
 Keywords:	goer mall noisy
@@ -2166,7 +2166,7 @@ DefaultPos:	Standing
 	Cash:	55
 	Bank:	60
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39313
 Keywords:	goer mall noisy
@@ -2203,7 +2203,7 @@ DefaultPos:	Standing
 	Cash:	55
 	Bank:	60
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 BREAK
 #39314
 Keywords:	guard security lightly armed mall
@@ -2240,7 +2240,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	65
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	clubs:	4
 BREAK
 #39315
@@ -2278,7 +2278,7 @@ DefaultPos:	Standing
 	Cash:	25
 	Bank:	65
 [SKILLS]
-	unarmed combat:	3
+	brawling:	3
 	clubs:	4
 BREAK
 #39316
@@ -2314,7 +2314,7 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	80
 [SKILLS]
-	unarmed combat:	6
+	brawling:	6
 BREAK
 #39320
 Keywords:	decker anemic hacker
@@ -2352,6 +2352,6 @@ DefaultPos:	Sitting
 	Impact:	4
 	Cash:	250
 [SKILLS]
-	unarmed combat:	5
+	brawling:	5
 BREAK
 END
