@@ -9,9 +9,19 @@ giant Aztec step pyramid, built in this modern time.
 Flags:	10000000000000000000100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7401
 	Flags:	0
@@ -49,9 +59,19 @@ entrance archway.
 Flags:	100000000000000000000100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7402
 	Flags:	0
@@ -78,9 +98,19 @@ reception desk, and an elevator ahead of the fountain.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7403
 	Flags:	0
@@ -111,9 +141,19 @@ still a ways to the fountain and the elevator.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7404
 	Flags:	0
@@ -153,9 +193,19 @@ just to make sure that the corporate order is well maintained.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7405
 	Flags:	0
@@ -187,9 +237,19 @@ reception lobby is a fountain, decorated with Mayan hieroglyphics.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7406
 	Flags:	0
@@ -226,9 +286,19 @@ etched white marble with Aztec gods and heroes.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7407
 	Flags:	0
@@ -265,9 +335,19 @@ monstrous ceiling etched in marble with Aztec legends.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7408
 	Flags:	0
@@ -307,9 +387,19 @@ east there are two rows of stores.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7409
 	Flags:	0
@@ -341,9 +431,19 @@ Aztec hieroglyphics.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT south]
 	ToVnum:	7410
 	Flags:	0
@@ -368,9 +468,19 @@ ornate, etched in marble with the heroes and gods of Aztec myth.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7409
 	Flags:	0
@@ -402,9 +512,19 @@ espresso and soykaf cart, and the exit.  North of you are the elevators.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7410
 	Flags:	0
@@ -434,9 +554,19 @@ genetically enhanced to handle the seattle moisture.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7411
 	Flags:	0
@@ -473,9 +603,19 @@ of Aztechnology employees.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7412
 	Flags:	0
@@ -506,9 +646,19 @@ legend of Quetzecoatl.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7413
 	Flags:	0
@@ -538,9 +688,19 @@ large Saguaro cactus in a huge planter.  Hmm, genetic engineering maybe?
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7414
 	Flags:	0
@@ -566,9 +726,19 @@ time, etc.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7417
 	Flags:	0
@@ -594,9 +764,19 @@ and soykaf.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7418
 	Flags:	0
@@ -632,9 +812,19 @@ appointments, homes, etc. on time.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7419
 	Flags:	0
@@ -665,9 +855,19 @@ slaying a scaly beast.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7420
 	Flags:	0
@@ -698,9 +898,19 @@ and an espresso cart; the reception desk lies even further south.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7408
 	Flags:	0
@@ -724,9 +934,19 @@ get to where they need to go on time.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	7422
 	Flags:	0
@@ -758,9 +978,19 @@ a waste paper basket.
 Flags:	1100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7448
 	Flags:	0
@@ -790,9 +1020,19 @@ wing of the mall.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7449
 	Flags:	0
@@ -822,9 +1062,19 @@ sun lights directly above you.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7450
 	Flags:	0
@@ -853,9 +1103,19 @@ court.  The hallway widens a bit, giving you more elbow room.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT south]
 	ToVnum:	7426
 	Flags:	0
@@ -879,9 +1139,19 @@ the classic "Hot Dog on a Stick" to "Nukit Burgers" and "Nacho Mama."
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7425
 	Flags:	0
@@ -916,9 +1186,19 @@ separates this part from the northeast wing of the mall.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7426
 	Flags:	0
@@ -942,9 +1222,19 @@ by, looking at the car, drooling.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7427
 	Flags:	0
@@ -969,9 +1259,19 @@ south.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7428
 	Flags:	0
@@ -996,9 +1296,19 @@ throughout Seattle.
 Flags:	1100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7429
 	Flags:	0
@@ -1022,9 +1332,19 @@ surrounding them.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT up]
 	ToVnum:	7432
 	Flags:	0
@@ -1048,9 +1368,19 @@ and an old man sipping on a soda by a planter.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7435
 	Flags:	0
@@ -1081,9 +1411,19 @@ ancient Aztec battle dress.
 Flags:	1100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7417
 	Flags:	0
@@ -1113,9 +1453,19 @@ hieroglyphics.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7426
 	Flags:	0
@@ -1140,9 +1490,19 @@ Chinese, and an old lady reading a book by the edge railing.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT west]
 	ToVnum:	7432
 	Flags:	0
@@ -1166,9 +1526,19 @@ here.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT up]
 	ToVnum:	7435
 	Flags:	0
@@ -1192,9 +1562,19 @@ plants.  To your north is a line of stores.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	7433
 	Flags:	0
@@ -1220,9 +1600,19 @@ the fountain taking pictures.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7459
 	Flags:	0
@@ -1259,9 +1649,19 @@ shoppers and tourists, making this a very active place.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7438
 	Flags:	0
@@ -1285,9 +1685,19 @@ west is a trid theater.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7439
 	Flags:	0
@@ -1313,9 +1723,19 @@ theater, with a long line of people waiting to see the latest trid film,
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7440
 	Flags:	0
@@ -1351,9 +1771,19 @@ railing on each side is a polished golden brass.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT up]
 	ToVnum:	7443
 	Flags:	0
@@ -1377,9 +1807,19 @@ walkway.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7461
 	Flags:	0
@@ -1403,9 +1843,19 @@ mezzanine.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7441
 	Flags:	0
@@ -1429,9 +1879,19 @@ east-west.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7446
 	Flags:	0
@@ -1460,9 +1920,19 @@ a fountain directly to your north.  To your south are a line of stores.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7451
 	Flags:	0
@@ -1491,9 +1961,19 @@ holographic signs.  Directly to your south is a computer store.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	7433
 	Flags:	0
@@ -1523,9 +2003,19 @@ every kind of sporting equipment one can think of, as well as the aisles.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7457
 	Flags:	0
@@ -1549,9 +2039,19 @@ part of the store is a large aquarium filled with all sorts of fish.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT south]
 	ToVnum:	7423
 	Flags:	0
@@ -1570,9 +2070,19 @@ media you can think of.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT south]
 	ToVnum:	7424
 	Flags:	0
@@ -1591,9 +2101,19 @@ the benches that surround the fountain.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7438
 	Flags:	0
@@ -1618,9 +2138,19 @@ other fun but relatively useless items.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7447
 	Flags:	0
@@ -1641,9 +2171,19 @@ Mercurial.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7441
 	Flags:	0
@@ -1666,9 +2206,19 @@ of the coming attractions posters, and the row of lights near the floor.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7453
 	Flags:	0
@@ -1698,9 +2248,19 @@ theaters you have seen throughout the city, this one is actually clean.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT down]
 	ToVnum:	7454
 	Flags:	0
@@ -1720,9 +2280,19 @@ the top money makers this year.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7454
 	Flags:	0
@@ -1740,9 +2310,19 @@ hunting rifles, uniforms, hats, and any other thing you can think of.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT south]
 	ToVnum:	7448
 	Flags:	0
@@ -1761,9 +2341,19 @@ better have a decent roll of nuyen if you want to shop here.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7445
 	Flags:	0
@@ -1781,9 +2371,19 @@ waiting for their appointments sit and wait.
 Flags:	11100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7460
 	Flags:	0
@@ -1808,9 +2408,19 @@ professional.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT south]
 	ToVnum:	7459
 	Flags:	0
@@ -1829,9 +2439,19 @@ heroes from ancient ages long past.  You see a small shop to the east a ways.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7462
 	Flags:	0
@@ -1857,9 +2477,19 @@ the Store!"
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7463
 	Flags:	0
@@ -1896,9 +2526,19 @@ mostly with skillsofts and para-legal cyberdeck utilities.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT south]
 	ToVnum:	7462
 	Flags:	0
@@ -1917,9 +2557,19 @@ words  "Coffee People" leaps at you.
 Flags:	11000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	7462
 	Flags:	0
@@ -1937,9 +2587,19 @@ soon.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7466
 	Flags:	0
@@ -1956,16 +2616,26 @@ BREAK
 #7466
 Name:	Mezzanine
 Desc:$
-   You are on the second level mezzanine of the entrance lobby of the
-Aztechnology Pyramid.  You see in intracate detail the great dome, over the
+   ou are on the second level mezzanine of the entrance lobby of the
+Aztechnology Pyramid.  You see in intricate detail the great dome, over the
 lobby, showing a mighty battle between Aztec gods. 
 ~
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	7467
 	Flags:	0
@@ -1989,9 +2659,19 @@ to, and hoardes of tourists checking out the Aztec artwork.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7468
 	Flags:	0
@@ -2016,9 +2696,19 @@ war between Aztec gods and heroes.
 Flags:	100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7469
 	Flags:	0
@@ -2040,9 +2730,19 @@ Desc:$
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	7432
 	Flags:	0
@@ -2066,9 +2766,19 @@ There is a smell of burnt flesh and potato chips in the air.
 Flags:	10000000000000001000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 BREAK
 #7471
 Name:	System Access Node
@@ -2079,9 +2789,19 @@ node should look like.  A rectangular white portal.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	4
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7472
 	Flags:	0
@@ -2098,9 +2818,19 @@ a subprocessing unit.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	4
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7473
 	Flags:	0
@@ -2122,9 +2852,19 @@ Desc:$
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	4
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7475
 	Flags:	0
@@ -2152,9 +2892,19 @@ Desc:$
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	4
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT east]
 	ToVnum:	7473
 	Flags:	0
@@ -2172,9 +2922,19 @@ walls are a variation on the UMS.  You might want to proceed with caution.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	4
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7476
 	Flags:	0
@@ -2198,9 +2958,19 @@ are just trying to say that its not a safe place to be?
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	7
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	7477
 	Flags:	0
@@ -2223,9 +2993,19 @@ host's main Central Processing Unit.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	8
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT south]
 	ToVnum:	7476
 	Flags:	0
@@ -2242,9 +3022,19 @@ mana flowing, a few books and formulas here and there, etc, etc...
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 BREAK
 #7699
 Name:	A teleportation chamber
@@ -2255,9 +3045,19 @@ nexus of reality.  From here you could go almost anywhere.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 [EXIT north]
 	ToVnum:	14
 	Flags:	0

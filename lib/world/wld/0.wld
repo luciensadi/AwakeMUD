@@ -4,7 +4,7 @@ Desc:$
    What... oh no.... you're not dead are you? Better take one last grab at
 life while you still can.  
 ~
-Flags:	1000000000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -20,9 +20,8 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT up]
-	ToVnum:	35500
+	ToVnum:	16295
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -52,7 +51,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #2
 Name:	Che's Den of Iniquity
@@ -87,7 +85,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	5
 	BackgroundType:	13
-	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 ~
@@ -126,7 +123,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door
 	Desc:$
@@ -192,7 +188,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	5
 	Flags:	0
@@ -281,7 +276,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4
 	Flags:	0
@@ -316,7 +310,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 A dock lies to the north.
@@ -363,7 +356,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	portal
 	Desc:$
@@ -418,7 +410,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 The end of the boat dock lies north.
@@ -462,7 +453,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 Stepping off the dock, you can climb into the main cabin of the sailboat.
@@ -508,7 +498,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 The Deck
@@ -567,7 +556,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT up]
 	Desc:$
 The companionway leads back up towards the cockpit.
@@ -604,7 +592,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	Desc:$
 The Cockpit
@@ -636,7 +623,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #14
 Name:	Loki's Room
@@ -659,7 +645,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	1000
 	Flags:	0
@@ -688,7 +673,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #16
 Name:	A plassteel elevator
@@ -713,7 +697,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #17
 Name:	Phrodo's Lair
@@ -740,7 +723,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door oak double~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	ToVnum:	18
@@ -773,7 +755,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door oak double~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Desc:$
@@ -813,7 +794,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #20
 Name:	A Barn
@@ -836,7 +816,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #21
 Name:	The Hall of Nyarlathotep
@@ -882,7 +861,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #22
 Name:	Rifkin's Diningroom
@@ -917,7 +895,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	28600
 	Flags:	0
@@ -961,7 +938,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22903
 	Flags:	0
@@ -1045,7 +1021,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	14
 	Flags:	0
@@ -1080,7 +1055,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	2000
 	Flags:	0
@@ -1167,7 +1141,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	21899
 	Flags:	0
@@ -1201,7 +1174,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #28
 Name:	Coax's hideout
@@ -1226,7 +1198,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #29
 Name:	Deep in the Andes Mountains
@@ -1253,7 +1224,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #30
 Name:	Gene's room of self worship
@@ -1279,7 +1249,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	0
 	Flags:	0
@@ -1326,7 +1295,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	15
-	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	Bookshelf shelf door
 	Desc:$
@@ -1368,59 +1336,12 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	15
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#36
-Name:	Lucien's Test Chamber
-Desc:$
-   A simple laboratory, perfect for testing the latest world-breaking changes.
-~
-Flags:	100000000000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	50
-Y:	50
-Z:	50.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
-BREAK
-#37
-Name:	Finster's Laboratory
-Desc:$
-   Just what you would expect. An evil genius's lab, filled with stuff. 
-~
-Flags:	100000000000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #40
 Name:	Hualpa's Cavern
@@ -1445,7 +1366,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT down]
 	Desc:$
 A portal leading to Tacoma 
@@ -1477,7 +1397,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #69
 Name:	A Hollowed-Out Redwood Tree
@@ -1507,7 +1426,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #70
 Name:	whore
@@ -1530,7 +1448,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door sliding bedroom~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	ToVnum:	71
@@ -1561,7 +1478,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door sliding bedroom~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	ToVnum:	70
@@ -1596,7 +1512,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	2000
 	Flags:	0
@@ -1638,7 +1553,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	2000
 	Flags:	0
@@ -1682,7 +1596,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	2000
 	Flags:	0
@@ -1775,7 +1688,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #98
 Name:	Lofwyr's Room
@@ -1798,7 +1710,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	2000
 	Flags:	0
@@ -1817,7 +1728,7 @@ carrots, peas, onions, garlic, and herbs are all very neatly in their
 sections.  A simple faucet with a simple garden hose with a spray nozzle sits
 at the edge of the garden, for the use of watering the garden. 
 ~
-Flags:	100000000000000110000
+Flags:	10000100000000000000110000
 SecType:	Field
 MatrixExit:	0
 Crowd:	0
@@ -1833,7 +1744,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
 BREAK
 #100
 Name:	The Nexus of Creation
@@ -1858,12 +1768,5 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-	StaffLockLevel:	0
-[EXIT north]
-	ToVnum:	35500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
 BREAK
 END
