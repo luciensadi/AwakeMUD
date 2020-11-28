@@ -1,0 +1,40 @@
+#32300
+Name:	Black Guard APC
+ShortDesc:	a Black Guard APC
+RoomDesc:	A Black Guard APC idles here menacingly
+LongDesc:$
+This beast is an Armored Personnel Carrier for the Black Guard. It's black and
+crimson armor plating appears to be quite thick, and it's assortment of
+mounted weapons makes the armor seem like it wasn't all too necessary in the
+first place. 
+~
+Inside:$
+The front of the APC is mainly designed for a set of two or three people.
+Several gauges and displays line the dash board, aswell as a jack for a rigger
+to maintain control of the vehicle. The interior is all black leather with
+crimson colored decals and back lights. 
+~
+InsideRear:$
+The rear of the vehicle is essentially two benches and several storage
+compartments for weapons and armor. This is where a mass of militants can lay
+in wait for the rear hatch to open. 
+~
+Leaving:	rolls out to
+Arriving:	looms in from the
+Handling:	4
+Speed:	75
+Accel:	3
+Body:	2
+Armour:	0
+Pilot:	6
+Sig:	2
+Autonav:	1
+Seating:	3
+SeatingBack:	6
+Load:	200
+Cost:	50000
+Type:	2
+Flags:	100
+Engine:	2
+BREAK
+END

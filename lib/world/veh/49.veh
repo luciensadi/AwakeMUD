@@ -1,0 +1,101 @@
+#4900
+Name:	spider tank
+ShortDesc:	A spider tank
+RoomDesc:	A spider tank sits here, immobile
+LongDesc:$
+A bright red tank with eight mechanical legs, and a machine gun on either side
+of the front. A single, large, yellow eye bulges out from its head tracking
+your every movement. This is it, don't get scared now! 
+~
+Inside:$
+FILLER 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	crawls
+Arriving:	crawls in from
+Handling:	2
+Speed:	500
+Accel:	20
+Body:	20
+Armour:	20
+Pilot:	12
+Sig:	15
+Autonav:	12
+Seating:	0
+SeatingBack:	0
+Load:	0
+Cost:	0
+Type:	0
+Flags:	0
+Engine:	0
+BREAK
+#4901
+Name:	lone star patrol surveillance drone
+ShortDesc:	A Lone Star surveillance drone
+RoomDesc:	A patrol drone with Lone Star markings on it sits here
+LongDesc:$
+A cylindrical shaped roto drone, about the size of a fire hydrant, with a
+rotor blade above it and a gyroscopic system to keep it moving levelly.  It is
+covered in blue and gold paint and has "POLICE" and a star/badge insignia
+reading "LONE STAR SECURITY" above it. 
+~
+Inside:$
+FILLER 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	buzzes
+Arriving:	buzzes in from
+Handling:	2
+Speed:	150
+Accel:	50
+Body:	2
+Armour:	0
+Pilot:	2
+Sig:	2
+Autonav:	1
+Seating:	0
+SeatingBack:	0
+Load:	0
+Cost:	0
+Type:	0
+Flags:	0
+Engine:	0
+BREAK
+#4902
+Name:	f-22 fighter tiger shark inverted wing
+ShortDesc:	An F-22 Tiger Shark
+RoomDesc:	A fighter jet with inverted wings has landed here
+LongDesc:$
+The F-22 Tiger Shark was designed in the 20th century for use by the United
+States Air Force, but due to some political disagreement long forgotten it was
+rejected, despite its superiority to the F-14 and F-16 fighters.  The Israeli
+Air Force adopted this model, and used it to become the strongest air power in
+the Middle East. 
+~
+Inside:$
+At the cockpit of the F-22 Tiger Shark, you see many dials and gauges
+measuring the many aspects of the jet.  The horizon is ahead of you. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	soars
+Arriving:	soars in from
+Handling:	2
+Speed:	500
+Accel:	50
+Body:	8
+Armour:	6
+Pilot:	4
+Sig:	12
+Autonav:	1
+Seating:	2
+SeatingBack:	0
+Load:	60
+Cost:	1000000000
+Type:	4
+Flags:	0
+Engine:	0
+BREAK
+END

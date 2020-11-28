@@ -1,0 +1,333 @@
+#1500
+Name:	lone star police cruiser
+ShortDesc:	a Lone Star police cruiser
+RoomDesc:	A Lone Star police cruiser is parked here
+LongDesc:$
+Built on the chassis of the Ford Americar, this boxy police cruiser had a
+light bar on top, and is painted white and blue with the word "^WPOLICE^N"
+emblazoned on the side. 
+~
+Inside:$
+The inside of this police car is plush and comfortable, if you are lucky
+enough to be sitting in the front seat.  Separating the front from the back
+seats is a cage, with a warding to protect the driver from magically imbued
+offenders.  The back seat is plastic with a restraining bar set to effectively
+pin the offenders to the back seat. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	speeds off
+Arriving:	cruises in from
+Handling:	4
+Speed:	220
+Accel:	10
+Body:	4
+Armour:	2
+Pilot:	1
+Sig:	1
+Autonav:	4
+Seating:	5
+SeatingBack:	0
+Load:	20
+Cost:	0
+Type:	2
+Flags:	0
+Engine:	0
+BREAK
+#1501
+Name:	beat up old jackrabbit E chrysler nissan rabbit
+ShortDesc:	a beat-up old Jackrabbit-E
+RoomDesc:	A beat-up old 2050's model Jackrabbit-E is parked here
+LongDesc:$
+A cheap car, very efficient on electricity, designed for two passengers only.
+This one is scratched, and there is a dent in the left front fender. 
+~
+Inside:$
+Inside, this old Rabbit is a haphazard mess.  The passenger seat is impossible
+to sit in due to beer bottles and fast food boxes and bags. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	putters off
+Arriving:	putters in from
+Handling:	3
+Speed:	50
+Accel:	4
+Body:	1
+Armour:	0
+Pilot:	0
+Sig:	4
+Autonav:	1
+Seating:	2
+SeatingBack:	0
+Load:	12
+Cost:	0
+Type:	2
+Flags:	0
+Engine:	0
+BREAK
+#1502
+Name:	black toyota car luxury full sized full-sized elite
+ShortDesc:	a black Toyota Elite luxury car
+RoomDesc:	A full-sized luxury car is parked at the meter
+LongDesc:$
+The Elite is a full-sized luxury car with a relatively average price for a
+power-sedan.  You get a lot more bang for the buck with this car.
+Surprisingly nimble for a car of its size, the Elite's vast amount of headroom
+makes it popular with orks and trolls.  This one is painted jet black, with
+tinted windows. 
+~
+Inside:$
+The inside is spacious and roomy, and the seating is covered in a polymer
+fiber, made comfortable, soft to the touch.  The dashboard is full of today's
+state-of-the-art, such as GridGuide(tm) linked GPS systems, and computers that
+monitor every aspect of the car's health.  A moderately powerful stereo system
+capable of taking disks or chips is also available. 
+~
+InsideRear:$
+Even the rear seats of this sedan are roomy, even for a troll. You get more
+than enough leg room to stretch out and the comfort of knowing the car can
+handle it. 
+~
+Leaving:	cruises off
+Arriving:	cruises in from
+Handling:	4
+Speed:	120
+Accel:	12
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	4
+Seating:	6
+SeatingBack:	0
+Load:	100
+Cost:	66500
+Type:	2
+Flags:	0
+Engine:	0
+BREAK
+#1503
+Name:	ford americar
+ShortDesc:	a Ford Americar
+RoomDesc:	A Ford Americar is parked at a meter
+LongDesc:$
+Its a boxy economy sedan, made to get you from here to there.  It has plenty
+of power, built like a commuter tank.  Its ugly as the heart of Tzeentch but
+it runs, and it can take a hammering. 
+~
+Inside:$
+The Ford is not well known for lavish interiors, in fact this is more like a
+toned downed pickup truck.  But for its redneck charm, its still tolerable.
+With  a quiet, cool, efficient and powerful engine, it does the job well. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	drives off
+Arriving:	drives in
+Handling:	4
+Speed:	105
+Accel:	8
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	4
+SeatingBack:	0
+Load:	110
+Cost:	20000
+Type:	2
+Flags:	0
+Engine:	0
+BREAK
+#1504
+Name:	bulldog transport van
+ShortDesc:	A GMC Bulldog Transport van
+RoomDesc:	A Bulldog cargo van is parked here
+LongDesc:$
+This is the standard version of the commonly used GMC Bulldog. It your regular
+delivery van, with a large cargo capicity. It's common knowledge the Bulldog
+has concealed armor, so it can take a thrashing and keep on going without too
+much trouble. 
+~
+Inside:$
+The interior of the Bulldog is nice and roomy, perfect to store all the
+invoices for your delivery work. I mean why else would you be driving one
+right? 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	chugs along
+Arriving:	rolls in
+Handling:	4
+Speed:	85
+Accel:	4
+Body:	4
+Armour:	2
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	2
+SeatingBack:	0
+Load:	1200
+Cost:	32600
+Type:	3
+Flags:	0
+Engine:	0
+BREAK
+#1505
+Name:	rhiati kender scooter stylish compact moped scooter
+ShortDesc:	A Rhiati Kender scooter
+RoomDesc:	A stylish, yet compact moped scooter is parked here
+LongDesc:$
+Made in Tir Tairngire, the Rhiati Kender has been recently made available in
+Seattle, the first of their products to be shipped north of Columbia gate.  It
+is a scooter with a sleek design, elegant, yet compact, like a surgeon's
+scalpel. 
+~
+Inside:$
+This isn't a bad ride for its class, in fact the road feels smooth as the
+scooter glides down the street.  There is only room for one person, however. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	zips off
+Arriving:	glides in
+Handling:	3
+Speed:	62
+Accel:	4
+Body:	1
+Armour:	0
+Pilot:	0
+Sig:	6
+Autonav:	0
+Seating:	1
+SeatingBack:	0
+Load:	12
+Cost:	3200
+Type:	1
+Flags:	0
+Engine:	0
+BREAK
+#1506
+Name:	dodge scoot
+ShortDesc:	a Dodge Scoot
+RoomDesc:	A Dodge Scoot is parked here
+LongDesc:$
+While not exactly a bike, and definately not an extreme roadhog even the most
+lax of definitions, it's still a fairly decent little city scooter that will
+get you from a to b in a decent amount of time. 
+~
+Inside:$
+It's not big, it's not clever. It just feels a little bit good between your
+legs, and can get you places quicker than normal human methods will. 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	zips off
+Arriving:	zips in
+Handling:	3
+Speed:	60
+Accel:	3
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	0
+Seating:	1
+SeatingBack:	0
+Load:	15
+Cost:	2000
+Type:	1
+Flags:	0
+Engine:	0
+BREAK
+#1507
+Name:	eurocar westwind 2000 sports car turbo riced
+ShortDesc:	a riced-up Eurocar Westwind 2000 turbo
+RoomDesc:	A riced-up Eurocar Westwind 2000 is parked here
+LongDesc:$
+This little baby is a sleek, low-slung machine. What more needs to be said?
+The fact that it's a fast little beauty?  Well, not only is this a fast speed
+demon on the road, but its got chrome hubcaps, whitewall racing tires, blue
+racing stripes along the side, and a large spoiler on the back. 
+~
+Inside:$
+You feel the power of this speed machine when you enter.  The doors lock to
+create an air-tight environmentally controlled system that keeps the insides
+of the car at an even 19.6 degrees Celsius, no matter what the temperature
+outside is.  The interior is lined with comfortable lambskin, and the dash is
+a plasticoated titanium.  In the dash is a large array of computer equipment,
+monitoring every aspect of the automobile from battery charges to fuel
+efficiency and mileage, to the speed at which you are zooming down the road.
+The Eurocar has a HEAT automatic transmission which includes a variable gear
+system for efficiency and power on the road.  There is a very expensive sound
+system in the dashboard with eight Vibe-Depth(tm) automotive speakers with a
+max power of 10 kilowatts. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	screams down the road
+Arriving:	roars in
+Handling:	3
+Speed:	250
+Accel:	10
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	1
+Autonav:	3
+Seating:	3
+SeatingBack:	0
+Load:	45
+Cost:	120000
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+#1508
+Name:	harley scorpion motorcycle hog bike cycle
+ShortDesc:	a Harley Scorpion motorcycle
+RoomDesc:	A Harley Scorpion motorcycle is parked by a curb
+LongDesc:$
+There's just a rumbling in you that wants to get out, and that rumbling is
+"Hooooooh, yeahhhhh!". Ok this is the sorta bike that that annoying orkish
+woman drives through Tacoma on, but don't hold that against it. It's really a
+heavy, powerful bike, that if you can get your hands on it, it's a lovely
+little motor. 
+~
+Inside:$
+Ooooohhh, yeah! It feels good, trapped between your legs. There's just this
+urge to gun the engine, making it go as hard and fast as you can. Come on!
+It's a Harley! You know you want to! 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	roars off
+Arriving:	roars in
+Handling:	4
+Speed:	120
+Accel:	6
+Body:	2
+Armour:	1
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	2
+SeatingBack:	0
+Load:	60
+Cost:	14300
+Type:	1
+Flags:	0
+Engine:	0
+BREAK
+END

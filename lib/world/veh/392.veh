@@ -1,0 +1,469 @@
+#39200
+Name:	Suzuki Dune sand buggy
+ShortDesc:	A Suzuki Dune sand buggy
+RoomDesc:	A Suzuki Dune sand buggy is parked here
+LongDesc:$
+This rugged little dune buggy is crafted from lightweight aircraft materials,
+and its titanium alloy tubing makes for a sturdy and dependable construction
+while keeping its weight down by over half a vehicle its size. The buggy
+chassis features a four person seating arrangement, and functions best in
+off-road enviroments, where its design can really shine, making it a great
+choice for security agencies and pleasure cruisers alike. 
+~
+Inside:$
+A spartan interior is free of the usual options that are common place in most
+modern vehicles, which has all been stripped away to save on weight. The seats
+themselves are the only furnishing, aside from a rubbergrip steering wheel and
+rubber coated pedals for those operations in less than pleasant weather. 
+~
+InsideRear:$
+The rear seating is just as bland as the forward section, consisting of little
+more than a cage of titanium alloy tubing surrounding passengers. Sturdy
+alumnium floorboards and a slightly elevated roof in the rear allows for
+passengers in the back to stand up to some degree. 
+~
+Leaving:	zips off
+Arriving:	weaves its way in
+Handling:	4
+Speed:	90
+Accel:	8
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	3
+Autonav:	0
+Seating:	2
+SeatingBack:	2
+Load:	45
+Cost:	12300
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+#39201
+Name:	car sedan Chrysler-Nissan Patrol-1 P-1
+ShortDesc:	A Chrysler-Nissan Patrol-1
+RoomDesc:	A Chrysler-Nissan Patrol-1 is parked here
+LongDesc:$
+The P-1 is a very common sight for patrol cars in urban areas, and for good
+reason too. Based on the Chrysler-Nissan Skyline GTR, it is one of the
+quickest sedans on the road thanks to its powerful engine, while other options
+such as concealed armour and enough space in the back to deal with even the
+largest of criminals. 
+~
+Inside:$
+Various electronics light up the dashboard and the interior of the P-1, which
+is decorated every which way with radio dials, laptop computer mounts, basic
+communication arrays and even a nifty place for a shotgun inbetween the driver
+and passenger seat. A clear reinforced plastic partition cutting off the front
+from the back is framed by a rollcage. 
+~
+InsideRear:$
+Very hard, tough molded plastic seats are bolted down in the back, complete
+with seatbelts and recesses in back of the seats for handcuffed individuals
+being transported. The back seats are literally encased within a cage of
+rollbars and a sturdy plastic partition, and ofcourse, there aren't any
+handles or locks on the inside. 
+~
+Leaving:	prowls off
+Arriving:	prowls in
+Handling:	4
+Speed:	180
+Accel:	12
+Body:	3
+Armour:	2
+Pilot:	0
+Sig:	1
+Autonav:	3
+Seating:	2
+SeatingBack:	2
+Load:	40
+Cost:	43700
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+#39202
+Name:	Americar Ford Lone Star LS modified car
+ShortDesc:	A Lone Star modified Ford Americar
+RoomDesc:	A Lone Star modified Ford Americar is parked here
+LongDesc:$
+This Ford Americar has been modified for Lone Star needs, which features
+additional armour without hindering its ability to handle, nor does it affect
+its top speed or acceleration. Ford and Lone Star have a great relationship as
+a result of winning the contract with the security agency, which fills its
+needs accordingly with affordable, sturdy and reliable vehicles for its
+patrols. 
+~
+Inside:$
+Various electronics light up the dashboard and the interior of this modified
+Americar, which is decorated every which way with radio dials, laptop computer
+mounts, basic communication arrays and even a nifty place for a shotgun
+inbetween the driver and passenger seat. 
+~
+InsideRear:$
+A rather spartan backseat makes for easy clean-up with dealing with criminals
+who may need some 'persuading' with extendable batons and boots. Restraints
+and other straps are the only real furnishings, since the seat itself is
+little more than a hunk of uncomfortable plastic. 
+~
+Leaving:	creeps off
+Arriving:	creeps in
+Handling:	4
+Speed:	105
+Accel:	8
+Body:	3
+Armour:	3
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	2
+SeatingBack:	2
+Load:	65
+Cost:	38500
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+#39203
+Name:	GMC MPUV SUV large armoured
+ShortDesc:	A GMC MPUV
+RoomDesc:	A large, armoured GMC MPUV is parked here
+LongDesc:$
+The multi-purpose utility vehicle (MPUV) is a common sight amongst both
+civilian and security forces due to its reliability and versatility, not to
+mention its low price tag for a vehicle of its class. Clad in armour plates,
+this light-combat SUV makes no attempt to hide its durable nature, while still
+retaining its maneuverability, making it perfect for hauling precious goods,
+or skipping the toll on a go-ganger roadblock. 
+~
+Inside:$
+The interior is rather plain at best, although it does contain a small array
+of various electronic ports and standard radio connections. The front two
+seats are comfortable bucket seats, offering plenty of space to maneuver
+around for both driver and passenger alike. 
+~
+InsideRear:$
+The rear of this vehicle is even more sparsely equipped than the front cabin,
+having been stripped of everything unnecessary to save on weight, which also
+allows it to perform perfectly for as both a transport for hauling goods as
+well as people. 
+~
+Leaving:	muscles its way off
+Arriving:	muscles its way in
+Handling:	4
+Speed:	120
+Accel:	8
+Body:	4
+Armour:	6
+Pilot:	0
+Sig:	2
+Autonav:	0
+Seating:	2
+SeatingBack:	3
+Load:	750
+Cost:	70000
+Type:	3
+Flags:	1000
+Engine:	5
+BREAK
+#39204
+Name:	Renault-Fiat Eurovan van pickup
+ShortDesc:	A Renault-Fiat Eurovan
+RoomDesc:	A Renault-Fiat Eurovan is parked here
+LongDesc:$
+Renault-Fiat introduces a revolutionary concept to its line of vehicles with
+this design. The frame and chassis remain the same between models, as its
+configuration is based on simple body alteration. It allows Renault-Fiat to
+use a single basic design to produce several different vehicle types. This
+particular configuration is a pickup model, made for transporting cargo moreso
+than passengers. 
+~
+Inside:$
+A smooth interior with all the standard accessories strewn across its surfaces
+in a neat and tidy manner awaits passengers, coupled with comfortable seats
+and a relatively smooth ride, it makes for a suitable vehicle on trips of any
+length. 
+~
+InsideRear:$
+The rear compartment consists of a dedicated pickup bed and standard seating
+taking up what space is left, making it more of a transport for cargo than for
+people. 
+~
+Leaving:	putters off
+Arriving:	putters its way in
+Handling:	4
+Speed:	105
+Accel:	6
+Body:	4
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	2
+SeatingBack:	1
+Load:	1500
+Cost:	38000
+Type:	3
+Flags:	1000
+Engine:	3
+BREAK
+#39205
+Name:	Volkswagen Superkombi III RV
+ShortDesc:	A Volkswagen Superkombi III RV
+RoomDesc:	A Volkswagen Superkombi III RV is parked here
+LongDesc:$
+Volkswagen took a cue from the Eurovan and now offers their Superkombi in
+several different variants, all of which are based on the same frame and
+120-liter gasoline engine. Due to its ability to be modified and equipped with
+an array of options and styles, customers are sure to receive exactly the kind
+of vehicle they want, which is making the Superkombi models more popular with
+each year that passes. 
+~
+Inside:$
+A spacious interior allows this vehicle to stand out amongst others, its body
+having been modified to that of a sturdy RV. More head room and easier
+accessability, along with a smooth ride and assortment of accessories, make
+this a popular make for (meta)humans who desire a bitch of room to stretch
+their legs. 
+~
+InsideRear:$
+Living arrangements for multiple passengers is available, but can quickly be
+converted to offer more space for storage and transport of things other than
+people. All of the standard ameneties one would expect from a mobile home, one
+can find in this behemoth. 
+~
+Leaving:	rolls off
+Arriving:	rolls its way in
+Handling:	4
+Speed:	105
+Accel:	7
+Body:	4
+Armour:	1
+Pilot:	0
+Sig:	2
+Autonav:	3
+Seating:	4
+SeatingBack:	6
+Load:	800
+Cost:	50300
+Type:	3
+Flags:	1000
+Engine:	3
+BREAK
+#39206
+Name:	Mitsubishi Nightsky limousine
+ShortDesc:	A Mitsubishi Nightsky limousine
+RoomDesc:	A Mitsubishi Nightsky limousine is parked here
+LongDesc:$
+The Nightsky is the favoured limousine of corporate ladder climbers and
+celebrities alike due to its plush interior and collection of communication
+and entertainment gadgets that make riding in style even more comfortable.
+Customization is a very common sight, as any owner of a stock Nightsky is sure
+to scream "rental" in social circles. 
+~
+Inside:$
+Even the drivers and passenger seats scream style and comfort in this stylish
+limousine, and its interior is lined with a cornucopia of communication and
+entertainment electronics. Anyone caught in this is sure to let everyone know
+they're moving up in the world, even if you're the one driving it. 
+~
+InsideRear:$
+The passenger section in the back is spacious and plush, lined with
+all-natural materials that most people couldn't afford in their wildest
+dreams. Comfort and style is the name of the game, and thanks to the varied
+assortment of entertainment and electronics offered, it is sure to give its
+passengers one of the smoothest and most pampered rides of their life. 
+~
+Leaving:	pulls off smoothly and rolls
+Arriving:	pulls in smoothly
+Handling:	4
+Speed:	120
+Accel:	8
+Body:	4
+Armour:	2
+Pilot:	0
+Sig:	2
+Autonav:	4
+Seating:	2
+SeatingBack:	6
+Load:	60
+Cost:	171200
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+#39207
+Name:	Rolls-Royce Phaeton limousine
+ShortDesc:	A Rolls-Royce Phaeton limousine
+RoomDesc:	A Rolls-Royce Phaeton limousine is parked here
+LongDesc:$
+The folks at Rolls-Royce bring a limousine to the market that is easily the
+most spectacularly decadent, secure and high-tech vehicle on the roads today.
+Featuring everything a corporate higher-up could possibly need or want, it has
+also made its way into circles of government officials as well as other top
+corporate executives, and for very good reason too. The most blatent of
+reasons why it screams luxury and success, is the simple fact that most people
+could never afford to even rent one, let alone own. 
+~
+Inside:$
+Featuring a plush interior that practically screams comfort is a sure fire way
+to make a good impression, and that is exactly what this limousine does. An
+assortment of electronics and data ports line the high-tech interior, along
+with tridscreen consoles and standard satellite feed. Riding in style is the
+mark of a confident and accomplished person, which is reflected perfectly in
+this immaculately designed and equipped vehicle. 
+~
+InsideRear:$
+A fully stocked wetbar is surrounded by a various assortment of electronics,
+tridscreen consoles and data ports for both recreational and work use. Plush
+seating, enough for a small army, is available to lounge upon while taking it
+easy and soaking up the luxury offered by this limousine filled with more
+options than most peoples homes. Satellite uplinks and a sound system whose
+quality borders on perfect come standard on this piece of art. 
+~
+Leaving:	rolls smoothly off
+Arriving:	rolls smoothly in
+Handling:	4
+Speed:	140
+Accel:	8
+Body:	4
+Armour:	4
+Pilot:	0
+Sig:	2
+Autonav:	4
+Seating:	2
+SeatingBack:	8
+Load:	30
+Cost:	218800
+Type:	2
+Flags:	0
+Engine:	5
+BREAK
+#39300
+Name:	Westwind 2000 Eurocar car
+ShortDesc:	a Eurocar Westwind 2000
+RoomDesc:	A sleek, stylish Eurocar Westwind 2000 is parked here
+LongDesc:$
+This little baby is a sleek, low-slung machine. What more needs to be said?
+The fact that it's a fast little beauty? The fact that, thanks to the Advanced
+Passenger Protection System, you might actually have a chance of walking again
+if you crash it? You know you want it. 
+~
+Inside:$
+You feel the power of this speed machine when you enter.  The doors lock to
+create an air-tight environmentally controlled system that keeps the insides
+of the car at an even 19.6 degrees Celsius, no matter what the temperature
+outside is.  The interior is lined with comfortable lambskin, and the dash is
+a plasticoated titanium.  In the dash is a large array of computer equipment,
+monitoring every aspect of the automobile from battery charges to fuel
+efficiency and mileage, to the speed at which you are zooming down the road.
+The Eurocar has a HEAT automatic transmission which includes a variable gear
+system for efficiency and power on the road.  There is a very expensive sound
+system in the dashboard with eight Vibe-Depth(tm) automotive speakers with a
+max power of 10 kilowatts. 
+~
+InsideRear:$
+The back of this machine is as comfortable as the front. Leather upholstery,
+trimmed with lambskin and woodgrain is provided for your relaxation needs. Two
+screens have been placed in the back of the front seats, allowing the people
+in the back to watch any 2D broadcast they want. 
+~
+Leaving:	zips out
+Arriving:	roars in
+Handling:	3
+Speed:	210
+Accel:	10
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	3
+Seating:	2
+SeatingBack:	3
+Load:	45
+Cost:	0
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+#39301
+Name:	Honda-GM 3220 sports car
+ShortDesc:	A Honda-GM 3220 sports car
+RoomDesc:	A Honda-GM 3220 sports car is parked here
+LongDesc:$
+The engineers at Honda-GM has almost cornered the market on low-priced sports
+cars with this design, which has risen to popularity all across the UCAS,
+amassing die hard fans and car clubs where ever its popped up. While it may
+lack some of the accomodations that the upper echelon of sports cars, it does
+feature a SOTA sound system, comfortable synthleather seats, and a few safety
+features that make it a worthwhile purchase for any wage slave or
+up-and-coming corporate lackey. 
+~
+Inside:$
+The interior of this sports car may not be the most spacious, but it does have
+all of the creature comforts. Its adjustable synthleather seats can be altered
+to allow most metahumans to ride in comfort as well as style. The SOTA sound
+system comes complete with a cellular uplink and various safety features that
+don't always come standard on most vehicles in its price bracket. 
+~
+InsideRear:$
+The adjustable synthleather seats in the back can be altered to allow most
+metahumans to ride in comfort as well as style, and comes complete with
+everything you would expect from the back seats of a sports car, which isn't
+much. Small speakers built into the inside paneling pump a steady flow of
+music from the SOTA sound system, allowing passengers to ride in style and
+relax. 
+~
+Leaving:	roars off
+Arriving:	roars in
+Handling:	4
+Speed:	160
+Accel:	10
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	1
+Seating:	2
+SeatingBack:	2
+Load:	40
+Cost:	0
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+#39302
+Name:	Scoot Dodge scooter bike
+ShortDesc:	A Dodge Scoot
+RoomDesc:	A Dodge Scoot is parked here
+LongDesc:$
+While not exactly a bike, and definately not an extreme roadhog by even the
+most lax of definitions, it's still a fairly decent little city scooter that
+will get you from A to B in a decent amount of time. 
+~
+Inside:$
+It's not big, it's not clever. It just feels a little bit good between your
+legs, and can get you places quicker than normal human methods will. 
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	scoots off
+Arriving:	scoots in from
+Handling:	3
+Speed:	60
+Accel:	3
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	0
+Seating:	1
+SeatingBack:	0
+Load:	10
+Cost:	0
+Type:	1
+Flags:	0
+Engine:	1
+BREAK
+END

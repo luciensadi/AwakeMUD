@@ -1,0 +1,33 @@
+#18400
+Name:	Machine equipment TBM Tunnel Boring Rig
+ShortDesc:	A TBM
+RoomDesc:	A TBM has been abandoned here
+LongDesc:$
+Composed of a large metal cylinder that almost touches every portion of the
+tunnel.  It rests on several large teeth that run the length of the cylinder
+in rows that spiral around the piece of equipment.  The front of it has
+several rows of large teeth used for digging. 
+~
+Inside:$
+·™who's Magire?~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	leaves
+Arriving:	arrives
+Handling:	0
+Speed:	0
+Accel:	0
+Body:	0
+Armour:	0
+Pilot:	0
+Sig:	0
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	0
+Cost:	0
+Type:	0
+Flags:	0
+Engine:	0
+BREAK
+END

@@ -1,0 +1,171 @@
+#19800
+Name:	Ares Space Shuttle
+ShortDesc:	The Ares Outer Orbit Space Shuttle
+RoomDesc:	A towering space shuttle awaits here for the countdown
+LongDesc:$
+An impressive pieve of machinery the space shuttle is not only simple but
+sleek and elegent at the same time. A two tone color scheme or Blue and Steel
+adorn the shuttle and on each wing in large red letters "Ares" is etched. The
+shuttle is a store house of power and it's 5 large rocket engines could easily
+take it to the farthest reaches of the galaxy. 
+~
+Inside:$
+It's a rather comfy crew cab. Two sets of bunk beds line the rear wall and 6
+large cushy seats are mounted to the floor facing a large Trid which shows
+what's infront and to the left and right of the shuttle. A large sign on the
+airlock door says "We hope you enjoy your stay and think of Ares for all you
+space travel needs" 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	leaves
+Arriving:	arrives
+Handling:	0
+Speed:	1500
+Accel:	50
+Body:	50
+Armour:	50
+Pilot:	50
+Sig:	0
+Autonav:	5
+Seating:	6
+SeatingBack:	0
+Load:	60
+Cost:	1000000000
+Type:	6
+Flags:	10
+Engine:	0
+BREAK
+#19823
+Name:	A F-16 Fighter Jet
+ShortDesc:	A F-16 Fighter Jet
+RoomDesc:	A F-16 rests here waiting to soar in the clouds
+LongDesc:$
+Good Lord you can't believe your eyes. Before you sits one of the most deadly
+fighter jet's in the world. It's smooth sleek lines, dual jet engines and wing
+design make it look fast standing still. You can't wait to get inside of this
+thing and try it out. 
+~
+Inside:$
+The complex array of instruments before you makes the untrained eye quiver in
+confusion and frustration. The space is small and sorta cramped but who cares?
+Your in a F-16 open this baby up and go! 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	A F-16 tears out to the
+Arriving:	A F-16 roars in from the
+Handling:	0
+Speed:	1000
+Accel:	50
+Body:	10
+Armour:	50
+Pilot:	1
+Sig:	10
+Autonav:	8
+Seating:	2
+SeatingBack:	0
+Load:	5
+Cost:	1000000000
+Type:	4
+Flags:	10
+Engine:	0
+BREAK
+#19824
+Name:	black tank
+ShortDesc:	^LA flat black tank with a ^Ygold^L and ^Rred^L star on the side^n
+RoomDesc:	A large tank idles just itching to blow something up
+LongDesc:$
+Reminisent of the old WWII days this tank is of the T-72 MBT variety used by
+the russians. The main turret sports a bore size of 125mm, a single 7.62mm
+coaxial machine gun, and a 12.7mm AA machine gun. The tank supports a crew of
+3 as well as 45 rounds for the main cannon, 2,000 rounds for the coaxial and
+300 rounds for the Anti-Aircraft gun. The color scheme though does not
+represent any military being done up in flat black pain with a single 5
+pointed star on either side. THe star is ^rred^n outlined with ^Ygold^n. With a
+maximum speed of 60Kh/hr this tank is very versitle on the field and the think
+armor plating with stop APDS rounds in their tracks. Extra armor has been
+added to the rear to protect against Vig shells aswell as suprise grenade
+attacks. 
+~
+Inside:$
+An incredible technological feet the entire interior workings of the dank have
+been switched from analog to digital giving this tank a 22nd century feel.
+There are two seats here, one for the driver and another for the navigator.
+There is a long slit directly infron of you that the driver looks out to
+steer. It's about a foot and a half long and 3 inches tall. Aside from the
+basic vehical status gages, such as fuel level, speed, and oil temperature.
+There are several more ranging from hull temp to ammo status. In front of the
+navigator seat is a small fold down desk top as well as racks full of maps.
+Befind the desk top that folds down is a GPS screen that gives the tanks
+latitude and longitude. In the navigator's area is also the tanks main radio.
+~
+InsideRear:$
+The rear section of the tank is dedicated to the operation and control of the
+main cannon. There is a single seat here for the gunner to sit in while he
+aims and fires the cannon. With a submarine like parascope for target and
+range findind mounted just above the seat that is fully adjustable for the
+comfort of the gunner. The reloading mechanism for the cannon is also housed
+in this section of the tank directly next to the gunners seat. The cannon is
+reloaded automatically after every single shot in about 1.5 seconds by this
+machine and it's the gunners job to make sure it works properly. Also infron
+of the gunner are several screens that display the heat signatures around the
+tank as well as a satelite uplink photo of the area around the tank. 
+~
+Leaving:	rumbles out
+Arriving:	rumbles in
+Handling:	5
+Speed:	175
+Accel:	30
+Body:	20
+Armour:	20
+Pilot:	9
+Sig:	5
+Autonav:	5
+Seating:	2
+SeatingBack:	1
+Load:	300
+Cost:	1000000000
+Type:	3
+Flags:	0
+Engine:	5
+BREAK
+#19825
+Name:	UCAS Military HUMVEE Camo
+ShortDesc:	A UCAS Camouflage HUMVEE
+RoomDesc:	An imposing military vehical waits here to dispense some justice
+LongDesc:$
+Solid steal construction makes this car look beefy. 
+~
+Inside:$
+Only the bare minimum essentials are here. The guage cluster is simple and
+very plain with the entire interior being done in desert brown. The only
+sophisticated piece of machinery is the GridGuide system installed in the
+senter of the dash. This car has a manual transmission system allowing for
+better control and a variable tire pressure. Freshly installed under the dash
+is a new radio unit from BattleTech allowing for squad based communications. 
+~
+InsideRear:$
+The rear of the car is even less interesting than the front. Nothing more than
+a simple beanch seat with three seat belts and very limited leg room, this car
+was made for humans after all. 
+~
+Leaving:	leaves
+Arriving:	
+Handling:	3
+Speed:	175
+Accel:	5
+Body:	5
+Armour:	6
+Pilot:	0
+Sig:	3
+Autonav:	2
+Seating:	2
+SeatingBack:	3
+Load:	2000
+Cost:	700000
+Type:	2
+Flags:	100
+Engine:	0
+BREAK
+END

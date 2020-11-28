@@ -1,0 +1,28 @@
+#39602
+Name:	unfinished object
+ShortDesc:	an unfinished object
+RoomDesc:	An unfinished object is lying here.
+LongDesc:$
+It looks pretty much like an unfinished object~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	leaves
+Arriving:	arrives
+Handling:	0
+Speed:	0
+Accel:	0
+Body:	0
+Armour:	0
+Pilot:	0
+Sig:	0
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	0
+Cost:	0
+Type:	0
+Flags:	0
+BREAK
+END
