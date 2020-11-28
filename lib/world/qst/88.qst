@@ -1,0 +1,45 @@
+#8800
+8800 0 1000 10000 0 0 8800 0 1 0 0 0
+8805 4000 250 1 2 8808 0 0
+I 'ave an adventure fer ye.~
+Tha' be a shame m'boy, a real shame.~
+A useless bastard ya be. Off wit ya!~
+Me gratitude m'boy.~
+Argh matey... The sea be a cruel mistress.. From 'er depths come the oddest of
+beasts, wit' scales an claws an mouths filled wit' teeth tha' could turn even
+the 'ardest of men yella wit' fear. Further along the shore is a beast, who
+'as made 'er nest in the path of my barge. Many of our men 'ave tried and
+failed to slay it, an at las', we must ask of ye to try yer hand wit' the
+beast. Find yer way to the shores near the old lighthouse, an do battle wit'
+this beast. Return to me when ya 'ave slain it, and I shall reward ye. 
+~
+-1~
+(null)~
+Argh matey.. That be all I have fer ya.~
+#8801
+8800 0 1500 10000 0 0 8801 0 9 0 0 0
+8806 1000 64 1 2 8824 0 0
+8807 1000 64 1 2 8824 0 0
+8808 1000 64 1 2 8824 0 0
+8809 1000 64 1 2 8824 0 0
+8810 1000 64 1 2 8824 0 0
+8811 1000 64 1 2 8824 15 1196773888
+8812 1000 64 1 2 8824 0 0
+8813 1000 64 1 2 8824 0 0
+8814 1000 64 1 2 8824 0 0
+I've got an 'ell of a huntin' trip fer ya.~
+Well.. Thas' simply a shame my boy.~
+Git lost, ya slippery scallywag.~
+I'll drink a pint of grog to ya.~
+We weren' prepared fer wha' we laid eyes upon, since it would seem tha' other
+wyrm we 'ad been dealin' wit' all 'long is nothin' more than a wee pup! Aye..
+We lost several good men when we stumbled upon tha' ravenous beast of the sea
+we found beyond the lighthouse. I wan' fer ya to go do battle wit' this
+monster, and put it into an eternal slumber fer all shes done. Search near its
+youngins' nest, you'll be sure to find the path to its lair. Return when
+you've slain this creature of the deep, and we shall drink a pint to yer name!
+~
+-1~
+(null)~
+Got no monsters to slay fer ya.~
+$~
