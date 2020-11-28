@@ -1,0 +1,522 @@
+#7000
+Keywords:	dagger key small
+Name:	A small dagger shaped key
+RoomDesc:$
+A small dagger in the shape of a key lies here.~
+LookDesc:$
+A key, yet a dagger. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000000100
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7001
+Keywords:	sword deadly blade ice
+Name:	^LDark Blade ^Nof ^BIce^N
+RoomDesc:$
+A cold shadowy blade lies here.~
+LookDesc:$
+Said to have been used my the Legendary Samurai Black Ice. The blade is
+composed of a combination of Orichalcum, Melted Shaow, and Liquid Nitrogen,
+the handle is made of emerald, and covered in dragon scales. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	5.00
+	Barrier:	32
+	Cost:	100000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	5
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	5
+BREAK
+#7002
+Keywords:	belt dark ice
+Name:	^LDark Belt ^Nof ^BIce^N
+RoomDesc:$
+An evil looking belt sits here~
+LookDesc:$
+A belt, made of ice 
+~
+Type:	Climbing gear
+WearFlags:	100000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	5
+BREAK
+#7003
+Keywords:	gloves
+Name:	^LDark Gloves ^Nof ^BIce^N
+RoomDesc:$
+An evil pair of gloves rest here~
+LookDesc:$
+Sweeet! 
+~
+Type:	DocWagon
+WearFlags:	10000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	5
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	5
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	5
+BREAK
+#7004
+Keywords:	bag pack dark evil ice
+Name:	^LDark Bag^N of ^BIce^N
+RoomDesc:$
+An evil looking bag rests here~
+LookDesc:$
+Wicked! 
+~
+Type:	Container
+WearFlags:	1000000000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	15.00
+	Barrier:	32
+	Cost:	6000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	1
+	Val2:	-1
+BREAK
+#7005
+Keywords:	credstick evil
+Name:	^LDark Credstick ^Nof ^BIce^N
+RoomDesc:$
+An evil looking credstick lies here.~
+LookDesc:$
+A shadowy looking credstick. 
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.21
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25000
+	Val1:	1
+	Val2:	3
+BREAK
+#7006
+Keywords:	dark blue hoodie ice
+Name:	^LDark Hoodie^N of^B Ice^N
+RoomDesc:$
+An evil looking hoodie lies here.~
+LookDesc:$
+A think black hoodie, made of fibers composed of melted shadow and dragon
+scales. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	3.00
+	Barrier:	32
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	15
+	Val6:	15
+[AFFECT 0]
+	Location:	Body
+	Modifier:	5
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	5
+BREAK
+#7007
+Keywords:	dark armor ice
+Name:	^LDark Armor^N of^B Ice^N
+RoomDesc:$
+An evil looking suit of armor lies here~
+LookDesc:$
+Dark and Evil, composed of the usual materials, melted shadow, orichalcum,
+dragon scales and liquid nitrogen.  
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	21.00
+	Barrier:	16
+	Cost:	210000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	6
+	Val2:	4
+	Val4:	4
+	Val5:	14
+	Val6:	9
+	Val7:	10
+BREAK
+#7008
+Keywords:	dark helmet ice
+Name:	^LDark Helmet ^Nof ^BIce^N
+RoomDesc:$
+An evil looking helmet lies here.~
+LookDesc:$
+This evil looking helmet meant to be used withe the dark armor of Ice.
+Composed of the same materials, it contains a deluxe suite of electronics,
+including a built in radio, low light vision, thermographic vision, a mag
+sight, and the option of plugging into a BattleTac network. 
+~
+Type:	Radio
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	1000000010001000000000
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	20550
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	6
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	5
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	5
+[AFFECT 2]
+	Location:	Init Dice
+	Modifier:	5
+BREAK
+#7009
+Keywords:	evil dark pants ice
+Name:	^LDark Pants ^Nof ^BIce^N
+RoomDesc:$
+An evil looking pair of pants lies here.~
+LookDesc:$
+Armored pants composed of Ice's usual materials. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	4.00
+	Barrier:	32
+	Cost:	900
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+BREAK
+#7010
+Keywords:	boots dark evil ice
+Name:	^LDark Boots ^Nof ^BIce^N
+RoomDesc:$
+An evil looking pair of boots lie here.~
+LookDesc:$
+A pair of boots composed of Ice's usual materials. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	5.00
+	Barrier:	32
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val6:	1
+BREAK
+#7011
+Keywords:	bracer
+Name:	^LDark Bracer^N of ^BIce^N
+RoomDesc:$
+An evil looking armband lies here~
+LookDesc:$
+You cant see anything 
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	10000000000000000
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	55000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	2
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	10
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	10
+[AFFECT 2]
+	Location:	Body
+	Modifier:	5
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	10
+BREAK
+#7012
+Keywords:	pill purple
+Name:	^MA Purple Pill^n
+RoomDesc:$
+^MA strange looking pill lies here^N~
+LookDesc:$
+^MYep, its a purple pill^N 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val3:	9
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	-2
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	-5
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	-5
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	-10
+[AFFECT 4]
+	Location:	Max Mental
+	Modifier:	-5
+BREAK
+#7013
+Keywords:	glow stix stick
+Name:	^WA ^YGLOW ^Wstick^n
+RoomDesc:$
+^WA ^Yglowing ^Wstick lies here^N~
+LookDesc:$
+^YIts a stick that glows, wow.^N 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+BREAK
+#7014
+Keywords:	water bottle
+Name:	^CA bottle of ^Bwater^N
+RoomDesc:$
+^CA small ^Bbottle ^Csits here^N~
+LookDesc:$
+^CIts a bottle and its filled with ^Bwater^N 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+BREAK
+#7038
+Keywords:	cigarettes pack marlboro reds
+Name:	A pack of ^wMarlboro ^RReds
+RoomDesc:$
+A ^Rred^n cigarette pack marked ^w'Marlboro'^n has been left here.~
+LookDesc:$
+A pack of cigarettes. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	5
+	Val2:	-1
+BREAK
+#7039
+Keywords:	cigarettes pack camels
+Name:	a pack of Camel Filters
+RoomDesc:$
+A tan cigarette pack with a camel on the cover sits here.~
+LookDesc:$
+It is said if you look real close at the camel on a pack of Camels you can see
+some very interesting, even possibly perverted subliminals in the artwork. But
+they're good smokes, so who gives a frag? 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	19
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	5
+	Val2:	-1
+BREAK
+END

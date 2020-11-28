@@ -1,0 +1,1868 @@
+#33200
+Keywords:	compartment body
+Name:	a body compartment
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	13
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	1
+	Val3:	4194304
+	Val4:	20
+BREAK
+#33201
+Keywords:	safe
+Name:	A test safe
+RoomDesc:$
+A bulky test safe sits here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	100.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5000
+	Val1:	1
+	Val2:	-1
+BREAK
+#33202
+Keywords:	knowsoft link
+Name:	a knowsoft link -beta
+RoomDesc:$
+A knowsoft link system sits here.~
+LookDesc:$
+A knowsoft link cyberware system, apparently in -beta. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	4000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val2:	2
+	Val4:	5
+BREAK
+#33203
+Keywords:	image link
+Name:	an image link -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	6400
+	AvailTN:	9
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val2:	2
+	Val3:	16
+	Val4:	11
+BREAK
+#33204
+Keywords:	skillwires VI
+Name:	a skillwires VI
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	768000
+	AvailTN:	6
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	6
+	Val3:	256
+	Val4:	120
+BREAK
+#33205
+Keywords:	skillwires VIII
+Name:	a skillwires VIII -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2848000
+	AvailTN:	8
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	8
+	Val2:	1
+	Val3:	356
+	Val4:	128
+BREAK
+#33206
+Keywords:	smartlink-2
+Name:	a smartlink-2 system -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	14000
+	AvailTN:	11
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	2
+	Val2:	2
+	Val4:	29
+BREAK
+#33207
+Keywords:	cybertorso obvious torso
+Name:	an obvious cybertorso -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	180000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	39
+	Val2:	1
+	Val4:	120
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#33208
+Keywords:	cybertorso obvious torso
+Name:	an obvious cybertorso -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	360000
+	AvailTN:	11
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	39
+	Val2:	2
+	Val4:	89
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#33209
+Keywords:	cybertorso synthetic torso
+Name:	a synthetic cybertorso -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	240000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	39
+	Val2:	1
+	Val3:	1
+	Val4:	120
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#33210
+Keywords:	cybertorso synthetic torso
+Name:	a synthetic cybertorso -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	480000
+	AvailTN:	11
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	39
+	Val2:	2
+	Val3:	1
+	Val4:	89
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#33211
+Keywords:	cyberskull obvious skull
+Name:	an obvious cyberskull -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	70000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	38
+	Val2:	1
+	Val4:	60
+BREAK
+#33212
+Keywords:	cyberskull obvious skull
+Name:	an obvious cyberskull -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	140000
+	AvailTN:	11
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	38
+	Val2:	2
+	Val4:	44
+BREAK
+#33213
+Keywords:	cyberskull synthetic skull
+Name:	a synthetic cyberskull -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	110000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	38
+	Val2:	1
+	Val3:	1
+	Val4:	60
+BREAK
+#33214
+Keywords:	cyberskull synthetic skull
+Name:	a synthetic cyberskull -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	220000
+	AvailTN:	11
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	38
+	Val2:	2
+	Val3:	1
+	Val4:	44
+BREAK
+#33215
+Keywords:	boosted reflexes III
+Name:	a boosted reflexes III -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	180000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val2:	1
+	Val4:	224
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	2
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	2
+BREAK
+#33216
+Keywords:	hydraulic jacks III
+Name:	hydraulic jacks III -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	30000
+	AvailTN:	5
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	42
+	Val1:	3
+	Val2:	1
+	Val4:	120
+BREAK
+#33217
+Keywords:	hydraulic jacks III
+Name:	hydraulic jacks III -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	10
+	AvailDay:	9.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	42
+	Val1:	3
+	Val2:	2
+	Val4:	89
+BREAK
+#33218
+Keywords:	chipjack single-slot
+Name:	a single-slot chipjack -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	8
+	AvailDay:	4.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	2
+	Val3:	1
+	Val4:	11
+BREAK
+#33219
+Keywords:	chipjack dual-slot
+Name:	a dual-slot chipjack -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	8000
+	AvailTN:	8
+	AvailDay:	4.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	2
+	Val3:	2
+	Val4:	14
+BREAK
+#33220
+Keywords:	compactor data IV
+Name:	a data compactor IV -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	76000
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	31
+	Val1:	4
+	Val2:	1
+	Val4:	20
+BREAK
+#33221
+Keywords:	compactor data IV
+Name:	a data compactor IV -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	152000
+	AvailTN:	11
+	AvailDay:	3.75
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	31
+	Val1:	4
+	Val2:	2
+	Val4:	14
+BREAK
+#33222
+Keywords:	skillwires VI
+Name:	a skillwires VI -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1680000
+	AvailTN:	6
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	6
+	Val2:	1
+	Val3:	280
+	Val4:	96
+BREAK
+#33223
+Keywords:	camera eye
+Name:	an eye camera -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	11
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val2:	2
+	Val3:	1
+	Val4:	23
+BREAK
+#33224
+Keywords:	activesoft chip pistols 6
+Name:	a Pistols 6 ActiveSoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Pistols - Rating Six". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	10800
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	6
+	Val2:	108
+BREAK
+#33225
+Keywords:	activesoft chip pistols 8
+Name:	a Pistols 8 ActiveSoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Pistols - Rating Eight".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	19200
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	8
+	Val2:	192
+BREAK
+#33226
+Keywords:	activesoft chip Computers 6
+Name:	A Computers 6 ActiveSoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Computers - Rating Six".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	10800
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	6
+	Val2:	108
+BREAK
+#33227
+Keywords:	activesoft computers 8 chip
+Name:	A Computers 8 ActiveSoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Computers - Rating
+Eight". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	19200
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	8
+	Val2:	192
+BREAK
+#33228
+Keywords:	Activesoft computer b/r chip 6
+Name:	A Computer B/R 6 ActiveSoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Computer B/R - Rating
+Six". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	10800
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	6
+	Val2:	108
+BREAK
+#33229
+Keywords:	Activesoft computer b/r chip 8
+Name:	A Computer B/R 8 ActiveSoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Computer B/R - Rating
+Eight". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	19200
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	8
+	Val2:	192
+BREAK
+#33230
+Keywords:	activesoft chip corporate etiquette 6
+Name:	A Corporate Etiquette 6 ActiveSoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Corporate Etiquette -
+Rating Six". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	10800
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	44
+	Val1:	6
+	Val2:	108
+BREAK
+#33231
+Keywords:	activesoft chip corporate etiquette 8
+Name:	A Corporate Etiquette 8 ActiveSoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Corporate Etiquette -
+Rating Eight". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	19200
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	44
+	Val1:	8
+	Val2:	192
+BREAK
+#33232
+Keywords:	linguasoft chip japanese 6
+Name:	a Japanese 6 Linguasoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Japanese - Rating Six".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	5400
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	6
+	Val2:	108
+BREAK
+#33233
+Keywords:	linguasoft chip japanese 8
+Name:	a Japanese 8 Linguasoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Japanese - Rating
+Eight". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	9600
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	8
+	Val2:	192
+BREAK
+#33234
+Keywords:	linguasoft chip chinese 6
+Name:	a Chinese 6 Linguasoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Chinese - Rating Six". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	5400
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	6
+	Val2:	108
+BREAK
+#33235
+Keywords:	linguasoft chip Chinese 8
+Name:	a Chinese 8 Linguasoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Chinese - Rating Eight".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	9600
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	8
+	Val2:	192
+BREAK
+#33236
+Keywords:	linguasoft chip russian 6
+Name:	a Russian 6 Linguasoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Russian - Rating Six". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	5400
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	6
+	Val2:	108
+BREAK
+#33237
+Keywords:	linguasoft chip russian 8
+Name:	a Russian 8 Linguasoft
+RoomDesc:$
+A little chip sits unused here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Russian - Rating Eight".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	9600
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	8
+	Val2:	192
+BREAK
+#33238
+Keywords:	cybereye package 01 betaware
+Name:	cybereye package 001 betaware
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	32000
+	AvailTN:	10
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val2:	2
+	Val3:	552
+	Val4:	29
+BREAK
+#33239
+Keywords:	cybereye package 002 betaware
+Name:	cybereye package 002 betaware
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	34200
+	AvailTN:	11
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val2:	2
+	Val3:	213
+	Val4:	47
+BREAK
+#33240
+Keywords:	cybereye package 003 betaware
+Name:	cybereye package 003 betaware
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	52000
+	AvailTN:	13
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val2:	2
+	Val3:	32776
+	Val4:	11
+BREAK
+#33241
+Keywords:	cybereye package 004 betaware
+Name:	cybereye package 004 betaware
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	32000
+	AvailTN:	10
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val2:	2
+	Val3:	4104
+	Val4:	17
+BREAK
+#33242
+Keywords:	cybereyes golden
+Name:	a pair of bright golden cybereyes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	4194304
+BREAK
+#33243
+Keywords:	cybereyes blue dark
+Name:	a set of dark blue cybereyes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	4194304
+BREAK
+#33244
+Keywords:	cybereyes red blazing
+Name:	a pair of blazing red cybereyes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	4194304
+BREAK
+#33245
+Keywords:	cybereyes green glowing
+Name:	a set of glowing green cybereyes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	4194304
+BREAK
+#33246
+Keywords:	cybereyes blue sky vibrant
+Name:	a pair of vibrant sky blue cybereyes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	4194304
+BREAK
+#33247
+Keywords:	handblade hand blade retractable
+Name:	a retractable handblade -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	11
+	AvailDay:	7.50
+	LegalNum:	3
+	LegalCode:	15
+	LegalPermit:	1
+[VALUES]
+	Val0:	11
+	Val2:	2
+	Val3:	1
+	Val4:	14
+BREAK
+#33248
+Keywords:	phone headware
+Name:	a headware phone -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	7400
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val2:	1
+	Val4:	40
+BREAK
+#33249
+Keywords:	radio headware
+Name:	a headware radio -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	16000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	4
+	Val2:	1
+	Val3:	2
+	Val4:	60
+BREAK
+#33250
+Keywords:	adrenal pump II
+Name:	an adrenal pump II
+RoomDesc:$
+An adrenal pump should not be sitting here...~
+LookDesc:$
+It looks like an adrenal pump II. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	100000
+	AvailTN:	10
+	AvailDay:	16.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	250
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	2
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	4
+BREAK
+#33251
+Keywords:	adrenal pump II -cultured
+Name:	an adrenal pump II -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It's an adrenal pump II -cultured. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	400000
+	AvailTN:	12
+	AvailDay:	80.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val4:	187
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	2
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	4
+BREAK
+#33252
+Keywords:	symbiotes II -cultured
+Name:	symbiotes II -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It seems to be symbiotes II -cultured. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	140000
+	AvailTN:	7
+	AvailDay:	50.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	2
+	Val2:	1
+	Val4:	52
+BREAK
+#33253
+Keywords:	symbiotes III -cultured
+Name:	symbiotes III -cultured
+RoomDesc:$
+An unfinished object sits here.~
+LookDesc:$
+It seems to be symbiotes III -cultured. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	240000
+	AvailTN:	7
+	AvailDay:	50.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val2:	1
+	Val4:	75
+BREAK
+#33254
+Keywords:	cats eyes pair cultured
+Name:	a pair of cats eyes -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	1
+	Val4:	15
+BREAK
+#33255
+Keywords:	orthoskin II -cultured
+Name:	an orthoskin II -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	240000
+	AvailTN:	10
+	AvailDay:	40.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val2:	1
+	Val4:	75
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#33256
+Keywords:	orthoskin III -cultured
+Name:	an orthoskin III -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	400000
+	AvailTN:	10
+	AvailDay:	40.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val2:	1
+	Val4:	112
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#33257
+Keywords:	damage compensator II
+Name:	a damage compensator II
+RoomDesc:$
+A damage compensator has been left here...~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	50000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	2
+	Val4:	40
+BREAK
+#33258
+Keywords:	damage compensator III
+Name:	a damage compensator III
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks to be a a damage compensator III. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	150000
+	AvailTN:	10
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	3
+	Val4:	60
+BREAK
+#33259
+Keywords:	damage compensator IV
+Name:	a damage compensator IV
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	200000
+	AvailTN:	10
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	4
+	Val4:	80
+BREAK
+#33260
+Keywords:	muscle toner III -cultured
+Name:	muscle toner III -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	300000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val2:	1
+	Val4:	90
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	3
+BREAK
+#33261
+Keywords:	muscle toner IV -cultured
+Name:	muscle toner IV -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	400000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	4
+	Val2:	1
+	Val4:	120
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	4
+BREAK
+#33262
+Keywords:	thermosense organ
+Name:	a thermosense organ
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	25000
+	AvailTN:	10
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	1
+	Val4:	50
+BREAK
+#33263
+Keywords:	metabolic arrestor -cultured
+Name:	a metabolic arrestor -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	80000
+	AvailTN:	8
+	AvailDay:	40.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	1
+	Val2:	1
+	Val4:	45
+BREAK
+#33264
+Keywords:	tooth compartment
+Name:	a standard tooth compartment
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#33265
+Keywords:	foot anchor
+Name:	a foot anchor
+RoomDesc:$
+You shouldn't be seeing this desc.~
+LookDesc:$
+You shouldn't be seeing this desc. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	14000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	41
+BREAK
+#33266
+Keywords:	foot anchor alpha
+Name:	a foot anchor -alpha
+RoomDesc:$
+You should not be seeing this desc.~
+LookDesc:$
+You should not be seeing this desc. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	28000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	41
+	Val2:	1
+BREAK
+END

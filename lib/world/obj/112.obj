@@ -1,0 +1,264 @@
+#11201
+Keywords:	Large glass case
+Name:	A large glass case
+RoomDesc:$
+A large glass case sits here~
+LookDesc:$
+A flawlessly clean glass case.  Enclosed inside is an odd looking piece of
+glass cut at various angles allowing light to reflect in all directions.  You
+wonder if it's worth any money 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1000.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#11202
+Keywords:	DechTech alpha
+Name:	DechTech Alpha
+RoomDesc:$
+A thin white cyberdeck is lying here~
+LookDesc:$
+Looks like an ordinary cyberdeck chum.  Nothing special or extraordinary about
+it.  On the backside stamped into the plastic casing is DechTech Corp. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	15999
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val2:	500
+	Val3:	500
+	Val4:	500
+	Val6:	1
+BREAK
+#11203
+Keywords:	A ^ygold^n hoop earring
+Name:	A ^ygold^n hoop earring
+RoomDesc:$
+A small gold earring is lying here~
+LookDesc:$
+A plain gold earring. Nothing more, nothing less. 
+~
+Type:	UNDEFINED
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#11204
+Keywords:	Coffe Machine
+Name:	A coffee maker
+RoomDesc:$
+A coffee maker sits on the countertop~
+LookDesc:$
+It looks like a coffee maker. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	700.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#11205
+Keywords:	Plaque 
+Name:	Plaque
+RoomDesc:$
+A metal plaque set into the wall~
+LookDesc:$
+This area is considered TOP SECRET. Unless you have authorization credentials,
+DO NOT PROCEED.  
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4000.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#11206
+Keywords:	DechTech Nine
+Name:	DechTech Nine
+RoomDesc:$
+A black metallic smg is lying here~
+LookDesc:$
+Designed as the most efficient weapon for DechTech Security guards to use
+inside the complex.  The only people who should wield one of these, should be
+DechTech security guards 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#11207
+Keywords:	DechTech bod program
+Name:	A DechTech Bod program
+RoomDesc:$
+A program has been discarded here~
+LookDesc:$
+Stamped with the DechTech seal of approval.  The contents of this disk is a
+bod prog, with a rating of 10 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	300000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	10
+	Val2:	300
+BREAK
+#11208
+Keywords:	A DechTech Sensor Program
+Name:	A DechTech Sensor Program
+RoomDesc:$
+A discarded program lies here~
+LookDesc:$
+Stamped with the DechTech seal of approval.  The contents of this disk is a
+sensor prog, with a rating of 10 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	10
+	Val2:	200
+BREAK
+#11209
+Keywords:	A DechTech Masking program
+Name:	A DechTech Masking program
+RoomDesc:$
+A discarded program lies here~
+LookDesc:$
+Stamped with the DechTech seal of approval.  The contents of this disk is a
+masking prog, with a rating of 10 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	10
+	Val2:	200
+BREAK
+#11210
+Keywords:	A DechTech Evasion program
+Name:	A DechTech Evasion program
+RoomDesc:$
+A discarded program is lying here~
+LookDesc:$
+Stamped with the DechTech seal of approval.  The contents of this disk is a
+sensor prog, with a rating of 10 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	300000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	10
+	Val2:	300
+BREAK
+END

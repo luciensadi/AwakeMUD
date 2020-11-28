@@ -1,0 +1,285 @@
+#24380
+Keywords:	camp fire campfire
+Name:	a campfire
+RoomDesc:$
+A roaring campfire crackles here.~
+LookDesc:$
+ 
+~
+Type:	Worn
+WearFlags:	10000000000
+ExtraFlags:	0
+AffFlags:	1000000100001000001000
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	22000
+	Val6:	22000
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	127
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	127
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	127
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	127
+[AFFECT 4]
+	Location:	Combat Pool
+	Modifier:	127
+[AFFECT 5]
+	Location:	Combat Pool
+	Modifier:	127
+BREAK
+#24381
+Keywords:	beretta 92fs pistol
+Name:	a Beretta Model 92FS
+RoomDesc:$
+A silenced pistol is here.~
+LookDesc:$
+The specially designed sound and flash supressors of the Beretta 92FS minimize
+weight and length while maintaining accuracy. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	4800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val6:	12
+	Val8:	-1
+BREAK
+#24391
+Keywords:	hooded trenchcoat
+Name:	a hooded trenchcoat
+RoomDesc:$
+A black trenchcoat lies here.~
+LookDesc:$
+~
+Type:	Container
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9999999
+	Val1:	1
+	Val2:	-1
+BREAK
+#24392
+Keywords:	assault cannon ares gc1 gc-1 autocannon
+Name:	an Ares GC-1 autocannon
+RoomDesc:$
+An assault cannon the size of a bus has been left here.~
+LookDesc:$
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1101000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	4
+	Val3:	18
+	Val4:	21
+	Val5:	-1
+	Val6:	-1
+BREAK
+#24393
+Keywords:	launcher ares arg3 grenade
+Name:	an Ares ARG3 grenade launcher
+RoomDesc:$
+A grenade launcher is lying here.~
+LookDesc:$
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	20.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	4
+	Val3:	20
+	Val4:	16
+	Val5:	6
+	Val6:	6
+BREAK
+#24394
+Keywords:	ares incinerator flamethrower
+Name:	an Ares Incinerator flamethrower
+RoomDesc:$
+A flamethrower is sitting on the ground.~
+LookDesc:$
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	7000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	3
+	Val3:	20
+	Val4:	16
+	Val5:	-1
+	Val6:	-1
+	Val8:	-1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	-3
+BREAK
+#24395
+Keywords:	riot mask
+Name:	a riot mask
+RoomDesc:$
+A riot mask is sitting on the ground.~
+LookDesc:$
+~
+Type:	Worn
+WearFlags:	100000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#24397
+Keywords:	blue suit body riot armor
+Name:	a suit of riot armor
+RoomDesc:$
+A bright blue suit of armor is lying here.~
+LookDesc:$
+Made of advanced plastics, this armor is styled to both protect and
+intimidate. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	8000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	8
+	Val6:	8
+	Val7:	-2
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	-1
+BREAK
+#24399
+Keywords:	hk h&k heckler koch g13 g-13 assault rifle
+Name:	a H&K G-13 assault rifle
+RoomDesc:$
+A H&K assault rifle lies here.~
+LookDesc:$
+Packing a 32-round magazine of caseless 7.62mm bullets, the H&K G-13 is an
+integral part of all Lone Star's mobile operations. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	8
+	Cost:	12000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	32
+	Val6:	32
+	Val10:	16
+BREAK
+END

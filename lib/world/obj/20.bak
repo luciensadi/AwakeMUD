@@ -1,0 +1,1698 @@
+#2000
+Keywords:	bank key
+Name:	a bank key
+RoomDesc:$
+A bank key for Velzaquez Securities rests here.~
+LookDesc:$
+You see a silver card.~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	1
+[VALUES]
+	Val0:	1
+BREAK
+#2001
+Keywords:	office key
+Name:	an office key
+RoomDesc:$
+An office key sits here.~
+LookDesc:$
+This key is a grey card.~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	1
+[VALUES]
+	Val0:	1
+BREAK
+#2002
+Keywords:	vault key
+Name:	a vault key
+RoomDesc:$
+A vault key is here.~
+LookDesc:$
+This key is a black card.~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	1
+[VALUES]
+	Val0:	1
+BREAK
+#2003
+Keywords:	water bottle
+Name:	a water bottle
+RoomDesc:$
+A bottle of water sits here.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	5
+[VALUES]
+	Val0:	10
+	Val1:	10
+BREAK
+#2004
+Keywords:	water jug
+Name:	a water jug
+RoomDesc:$
+A one-gallon jug of water sits here.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	10
+[VALUES]
+	Val0:	20
+	Val1:	20
+BREAK
+#2005
+Keywords:	milk pint
+Name:	a milk pint
+RoomDesc:$
+A pint of milk sits here.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	2
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	10
+BREAK
+#2006
+Keywords:	soykaf bar
+Name:	a soykaf bar
+RoomDesc:$
+A generic bar of soykaf rests here.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	5
+[VALUES]
+	Val0:	8
+	Val4:	19
+BREAK
+#2007
+Keywords:	freeze-dried stew
+Name:	a package of freeze-dried stew
+RoomDesc:$
+A package of freeze-dried stew sits here.~
+LookDesc:$
+The package is meant to be nuked and served.~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	7
+[VALUES]
+	Val0:	9
+BREAK
+#2008
+Keywords:	krillbar
+Name:	a krillbar
+RoomDesc:$
+A krillbar rests here.~
+LookDesc:$
+You see a yummy bar of chemically treated krill.~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	3
+[VALUES]
+	Val0:	4
+BREAK
+#2009
+Keywords:	decker store key
+Name:	a metal key
+RoomDesc:$
+A metal key sits here unmolested.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	1
+[VALUES]
+	Val0:	1
+BREAK
+#2010
+Keywords:	key ares armor
+Name:	an Ares Armor Store key
+RoomDesc:$
+An Ares Armor Store key sits here.~
+LookDesc:$
+You see a key.~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	1
+[VALUES]
+	Val0:	1
+BREAK
+#2011
+Keywords:	key ares weapons
+Name:	an Ares Weapons Store key
+RoomDesc:$
+An Ares Weapons Store key sits here.~
+LookDesc:$
+You see a key.~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	1
+[VALUES]
+	Val0:	1
+BREAK
+#2013
+Keywords:	hideaway key
+Name:	Vincent's Hideaway key
+RoomDesc:$
+Vincent's Hideaway key sits here.~
+LookDesc:$
+You see a truly remarkable key.~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	1
+[VALUES]
+	Val0:	2
+BREAK
+#2014
+Keywords:	soybeer bottle
+Name:	a bottle of soybeer
+RoomDesc:$
+A bottle of soybeer rests here.~
+LookDesc:$
+You see a bottle of dark, murky liquid.~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	2
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	1
+BREAK
+#2015
+Keywords:	bottle ale
+Name:	a bottle of ale
+RoomDesc:$
+A bottle of genuine ale sits here.~
+LookDesc:$
+It is pure ale, free from soy or hazardous chemicals.~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	8
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	3
+BREAK
+#2016
+Keywords:	armor vest
+Name:	an armor vest
+RoomDesc:$
+An armor vest rests here.~
+LookDesc:$
+It is a light flak jacket stylishly painted brown.~
+Type:	Armor
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	500
+[VALUES]
+	Val0:	2
+	Val1:	1
+BREAK
+#2017
+Keywords:	armor shirt
+Name:	an armor shirt
+RoomDesc:$
+An armor shirt sits here.~
+LookDesc:$
+You see a functional armored shirt.~
+Type:	Armor
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+Allergy:	plastic
+[POINTS]
+	Weight:	2
+	Barrier:	3
+	Cost:	250
+[VALUES]
+	Val0:	3
+BREAK
+#2018
+Keywords:	armor pants
+Name:	a set of armor pants
+RoomDesc:$
+A set of armor pants sits here.~
+LookDesc:$
+You see a functional set of armored pants.~
+Type:	Armor
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	150
+[VALUES]
+	Val0:	1
+BREAK
+#2019
+Keywords:	armor jacket
+Name:	an armor jacket
+RoomDesc:$
+An armor jacket is lying here.~
+LookDesc:$
+You see a sturdy flak jacket.~
+Type:	Armor
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	2
+	Barrier:	3
+	Cost:	900
+[VALUES]
+	Val0:	2
+	Val1:	2
+BREAK
+#2020
+Keywords:	plated vest
+Name:	a plated vest
+RoomDesc:$
+A plated vest sits here.~
+LookDesc:$
+You see a vest that has been reinforced through the use of kevlar plates.~
+Type:	Armor
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+Allergy:	plastic
+[POINTS]
+	Weight:	2
+	Barrier:	3
+	Cost:	600
+[VALUES]
+	Val0:	3
+	Val1:	2
+BREAK
+#2021
+Keywords:	2-bullet gun clip
+Name:	a 2-bullet gun clip
+RoomDesc:$
+A 2-bullet gun clip sits here.~
+LookDesc:$
+You see a clip.~
+Type:	Gun Clip
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	4
+[VALUES]
+	Val0:	2
+	Val1:	24
+BREAK
+#2022
+Keywords:	6-bullet gun clip
+Name:	a 6-bullet gun clip
+RoomDesc:$
+A 6-bullet gun clip sits here.~
+LookDesc:$
+You see a clip.~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	12
+[VALUES]
+	Val0:	6
+	Val1:	21
+BREAK
+#2023
+Keywords:	5-shell clip
+Name:	a 5-shell clip
+RoomDesc:$
+A 5-shell clip sits here.~
+LookDesc:$
+You see 5 shells in a narrow tube which is inserted into the shotgun.~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	2
+	Barrier:	3
+	Cost:	10
+[VALUES]
+	Val0:	5
+	Val1:	24
+BREAK
+#2024
+Keywords:	11-bullet gun clip
+Name:	an 11-bullet gun clip
+RoomDesc:$
+An 11-bullet gun clip rests here.~
+LookDesc:$
+You see a clip capable of holding 11 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	18
+[VALUES]
+	Val0:	11
+	Val1:	21
+BREAK
+#2025
+Keywords:	clip gun 10-bullet
+Name:	a 10-bullet gun clip
+RoomDesc:$
+A 10-bullet gun clip sits here.~
+LookDesc:$
+You see a clip.~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	20
+[VALUES]
+	Val0:	10
+	Val1:	24
+BREAK
+#2026
+Keywords:	25-bullet clip
+Name:	a 25-bullet gun clip
+RoomDesc:$
+A 25-bullet gun clip sits here.~
+LookDesc:$
+You see a clip.~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	44
+[VALUES]
+	Val0:	25
+	Val1:	25
+BREAK
+#2027
+Keywords:	30-bullet gun clip
+Name:	a 30-bullet gun clip
+RoomDesc:$
+A 30-bullet gun clip sits here.~
+LookDesc:$
+You see a clip.~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	60
+[VALUES]
+	Val0:	30
+	Val1:	25
+BREAK
+#2028
+Keywords:	ares predator pistol
+Name:	an Ares Predator
+RoomDesc:$
+An Ares Predator rests here.~
+LookDesc:$
+You see what many consider the premier heavy pistol.  It uses a clip and
+looks deadly.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+Allergy:	iron
+[POINTS]
+	Weight:	2
+	Barrier:	3
+	Cost:	450
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	321
+	Val4:	111
+	Val5:	15
+	Val6:	15
+	Val8:	-1
+BREAK
+#2029
+Keywords:	browning ultra-power pistol
+Name:	a Browning Ultra-Power
+RoomDesc:$
+A Browning Ultra-Power sits here.~
+LookDesc:$
+You see a heavy pistol with a targeting sight on top of it.~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	2
+	Barrier:	3
+	Cost:	525
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	321
+	Val4:	111
+	Val5:	10
+	Val6:	10
+	Val8:	-1
+BREAK
+#2030
+Keywords:	knife switch
+Name:	a switch-knife
+RoomDesc:$
+A switch-knife sits here.~
+LookDesc:$
+You see a roughly hewn and well-traveled blade.~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	20
+[VALUES]
+	Val1:	1
+	Val3:	311
+	Val4:	103
+	Val5:	-1
+BREAK
+#2031
+Keywords:	pistol streetline special
+Name:	a Streetline Special
+RoomDesc:$
+A Streetline Special lies here.~
+LookDesc:$
+This pistol is made of composite materials and is almost small enough to fit
+in your hand.  It's extremely concealable and weighs next to nothing.~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	100
+[VALUES]
+	Val0:	4
+	Val1:	1
+	Val3:	321
+	Val4:	111
+	Val5:	6
+	Val6:	6
+	Val8:	-1
+BREAK
+#2032
+Keywords:	walther palm pistol tiny
+Name:	a Walther Palm Pistol
+RoomDesc:$
+A very tiny pistol lies here.~
+LookDesc:$
+This tiny gun fits in the palm of your hand and has 2 barrels, each capable
+of holding one bullet.~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	200
+[VALUES]
+	Val0:	4
+	Val1:	1
+	Val3:	321
+	Val4:	111
+	Val5:	2
+	Val6:	2
+	Val8:	-1
+BREAK
+#2033
+Keywords:	colt america l36 pistol light
+Name:	a Colt America L36
+RoomDesc:$
+A light pistol lies here.~
+LookDesc:$
+This is a stylish, yet concealable pistol capable of holding an 11-bullet
+clip.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	350
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	321
+	Val4:	111
+	Val5:	11
+	Val6:	11
+	Val8:	-1
+BREAK
+#2034
+Keywords:	beretta 101t light pistol
+Name:	a Beretta Model 101T
+RoomDesc:$
+A light corporate-type pistol lies here.~
+LookDesc:$
+This is a slim pistol used frequently by the corporate types.~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	350
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	321
+	Val4:	111
+	Val5:	12
+	Val6:	12
+	Val8:	-1
+BREAK
+#2035
+Keywords:	fichetti security 500 light pistol
+Name:	a Fichetti Security 500
+RoomDesc:$
+A light security type pistol lies here.~
+LookDesc:$
+This pistol is designed for light security work and has a 25 round clip.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	3
+	Cost:	400
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	321
+	Val4:	111
+	Val5:	12
+	Val6:	12
+	Val8:	-1
+BREAK
+#2036
+Keywords:	ares light fire pistol
+Name:	an Ares Light Fire 70
+RoomDesc:$
+A light pistol lies here.~
+LookDesc:$
+This light pistol carries a 16-bullet clip.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	2
+	Barrier:	3
+	Cost:	475
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	321
+	Val4:	111
+	Val5:	16
+	Val6:	16
+	Val8:	-1
+BREAK
+#2037
+Keywords:	shotgun enfield as-7
+Name:	an Enfield AS-7
+RoomDesc:$
+An Enfield shotgun is lying here.~
+LookDesc:$
+This is a popular clip-loading shotgun capable of holding 10 shells.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	3
+	Barrier:	3
+	Cost:	1150
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	324
+	Val4:	113
+	Val5:	10
+	Val6:	10
+	Val9:	-1
+BREAK
+#2038
+Keywords:	remington roomsweeper shotgun
+Name:	a Remington Roomsweeper
+RoomDesc:$
+A sawed-off shotgun lies here gathering dust.~
+LookDesc:$
+This is a sawed-off shotgun, slightly larger than a pistol.~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	2
+	Barrier:	3
+	Cost:	500
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	324
+	Val4:	113
+	Val5:	8
+	Val6:	8
+	Val9:	-1
+BREAK
+#2039
+Keywords:	ruger super warhawk large revolver
+Name:	a Ruger Super Warhawk
+RoomDesc:$
+A large revolver lies here.~
+LookDesc:$
+Examining it closely reveals that it is a Ruger Super Warhawk, one of the
+large pistols available.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+Allergy:	iron
+[POINTS]
+	Weight:	3
+	Barrier:	3
+	Cost:	300
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	321
+	Val4:	111
+	Val5:	6
+	Val6:	6
+	Val8:	-1
+BREAK
+#2040
+Keywords:	35 bullet clip
+Name:	a 35-bullet clip
+RoomDesc:$
+A 35-bullet clip is here.~
+LookDesc:$
+It looks like a clip.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+Allergy:	iron
+[POINTS]
+	Weight:	1
+	Barrier:	2
+	Cost:	25
+[VALUES]
+	Val0:	35
+	Val1:	21
+BREAK
+#2041
+Keywords:	seattle map
+Name:	a map of Seattle
+RoomDesc:$
+A map of Seattle is folded up and lying here.~
+LookDesc:$
+Type "read northwest" to view the Northwest Sector
+ Type "read southwest" to view the Southwest Sector
+ Type "read northeast" to
+view the Northeast Sector
+ Type "read southeast" to view the Southeast Sector
+
+ 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0
+	Barrier:	1
+	Cost:	1
+[EXTRADESC]
+	Keywords:	northwest
+	Desc:$
+                                        A                  B  
+                         8     9    10  | 11    12    13   |  
+               6.        o-----o-----o-----o-----o-----o----->
+                         |     |     |     |     |     |     
+                   C     |     |     |     |     |     |    
+                   |     |     |     |     |     |     |   
+               5.  o-----o-----o-----o-----o-----o-----o  
+                   |     |     |     |     |     |       
+                   |     |     |     |     |     |      
+                   |     |     |     |     |     |     
+               4.  o-----o-----o-----o-----o-----o    
+                 _/      |     |     |     |         
+               _/  ^     |     |   D-|     |        
+              /    7.    |     |     |     |       
+             o       3.  o-----o-----o-----o      
+           _/                              |     
+         _/                                |    
+        /                                  |   
+   1. <-                                2. o--X-->
+                                                   
+
+Street Index:
+	1. Denny Way			7.  Northwest First 
+	2. Harrison Street		8.  Northwest Second
+	3. Aurora Avenue		9.  Northwest Third 
+	4. Denny Way (continued)	10. Northwest Fourth
+	5. Valley Road			11. Northwest Fifth
+	6. Highland Drive		12. Northwest Sixth
+					13. Northwest Seventh
+
+Locations:
+	A. La'Charne Restaurant		B. Groetza Camp
+	C. Lone Star 17th Precinct	D. Seattle Library
+~
+[EXTRADESC]
+	Keywords:	northeast
+	Desc:$
+ //
+       //
+      //
+     // 		 <-
+    //			   \
+   //   	1     E	   3|     4
+  //       <-X--o-----o-----o-----o 7
+ //             |     |     |     |
+//              |  2->|     |     |
+Intercity       |     |     |     |
+   Five         o-----o-----o-----o 8 
+                |     |     |     |
+		|     |     |     |        A
+		|     |     |     |	5  |  6
+		o-----o-----o-----o-----o--+--o 9
+		|     |     |     |     |  |  |      
+	     C--|     |     |     |     |  B  |
+		|     |     |     |     |     |
+	   <-X--o-----o-----o-----o-----o-----o 10
+		|     |     |     |     |     |
+		o     |     |     |  D  |     |
+\		 \    |     |     |  |  |     |
+\\                \   o-----o-----o-----o-----O 11
+ \\                \ /      |     |     |     |
+  \\                o       |     |     |     |
+   \\              /        |     |     |     |
+    \\  	 <-         o-----o-----o-----o 12
+     \\					|
+      \\				|
+       \\			       \|/
+        \\___________________________________ Intercity
+         \___________________________________     90
+
+
+Key:  o - intersection
+      X - onramp link
+      A - Aztechnology Pyramid
+      B - Aztechnology Magic Academy
+      C - Mitsuhama Tower
+      D - UCASBank
+      E - Herbie's Herbals (Talismonger)
+
+Street Index:
+1. Fifth Street			7.  Harrison Boulevard
+2. Sixth Street			8.  Park Avenue
+3. Seventh Street		9.  Gray Street
+4. Eighth Street		10. Broadway
+5. Ninth Street			11. Espanoza Way
+6. Tenth Street			12. Ridgeway Street
+~
+[EXTRADESC]
+	Keywords:	southwest
+	Desc:$
+ To Residential
+			 12
+			/
+		       /
+		      o
+		    _/|                              
+		  _/  |                             
+		 /    |                            
+	11	o-----o-----o-----o               
+		|     |     |     |\_            
+	        |  C  |     |     |  \_   A     
+		|  |  |     |     |    \ /     
+ 	10	o-----o-----o-----o-----o     
+		|     |     |     |     |    
+		|     |     |     |     |   
+		|     |     |     |     |       //
+	9	o-----o-----o-----o-----o--X-> //
+		|     |     |     |           //
+		|     |     |     |          //
+		|     |     |     |         //
+	8	o-----o-----o-----o---->   ||
+		|     |     |     |        ||
+		|     |     |     |        ||
+		|     |     |     |        ||
+	7	o-----o-----o-----o--X->   ||
+		|     |     |     |        ||
+		|     |     |     |        ||
+		|     |     |     |        ||
+	6     B-o-----o-----o-----o---->   ||
+	        1     |     |     |        ||
+	              |     |     o        ||
+	              |     |    /         ||
+	5             o-----o---o--->      ||
+	              2     3   4          ||
+
+					Intercity
+					  Five
+
+Key:  o = interchange
+      X = onramp link to freeway
+      A = Seattle State Park
+      B = Seattle Docks
+      C = Biohyde
+
+Street Index:
+1 = Harbour Avenue	7 = Espanoza Way
+2 = Roy Street		8 = Whitman Road
+3 = Market Street	9 = Broadway
+4 = Main Street		10 = Gray Street
+5 = Spring Street	11 = Park Avenue
+6 = Ridgeway Street	12 = Denny Way
+	
+
+~
+[EXTRADESC]
+	Keywords:	southeast
+	Desc:$
+     //                                 \\
+    //	     <-o-----o---X--> 7          \\
+   //	       |     |                    \\
+  //	       |-M   |                     \\
+ //	       |     |                      \\
+||     <-o-----o-----o-----o 6               \\___ Intercity
+||	 |     |     |     |        ^	      \___     90
+||	 |--F  |  D  |  H  |-K     /                  
+||	 |     |  |  |  |  |      /
+||     <-o-----o-----o-----o-----o 5
+||	 |     |     |     |  |  |
+||	 |  E--|     |-L   |--A--|
+||	 |     |     |     |  |  |
+||     <-o-----o-----o-----o-----o 4                     ^
+||       |     |     |     |  |  |                       |
+||     N-|     |     |     |  G  |  B           J        X
+||       |     |     |     |     |  |           |        |
+||     <-o-----o-----o-----o-----o-----o-----o-----o-----o 3
+||       |     |\    |     |     |     |     |     |     |
+||	 |     | C   |     |     |     |     |     |     |
+||       |     |     |     |     |     |     |     |     |
+|| X-----o-----o-----o-----o-----o-----o-----o-----o-----o 2
+||       8     9     10    11    |     |     |     |     16
+||	                         |     |     |     |     
+||	                         |     |     |     |  
+||                               o-----o-----o-----o 1
+                                12    13    14    15
+Intercity
+  Five
+
+Downtown Seattle/Southeast Commercial Sector
+
+Key:	A. Seattle Center/Space Needle/Monorail Complex
+	B. Renraku Arcology
+	C. Big Rhino
+	D. Easy Diver Coffin Motel
+	E. Figg's Gym
+	F. Pook's Place
+	G. Neophytic Guild
+	H. Crazy Lenny's Driving Deals
+	J. Stuffer Shack
+(I omitted to avoid confusing with a path)
+	K. Zalensky's Electronics
+	L. Action Computers and Electronics
+	M. Krishna's
+	N. Club Penumbra
+
+Street Index:
+1. Boren Avenue			9. Second Street
+2. Seneca Street		10. Third Street
+3. Spring Street		11. Fouth Street
+4. Ridgeway Street		12. Fifth Street
+5. Espanoza Way			13. Sixth Street
+6. Whitman Road			14. Seventh Street
+7. Broadway			15. Eighth Street
+8. First Street			16. Ninth Street
+
+~
+BREAK
+#2042
+Keywords:	streetlight light
+Name:	a streetlight
+RoomDesc:$
+A streetlight stands on the curb.~
+LookDesc:$
+Well, there's not much to say.  It's a metal pole, with a light on the top. 
+~
+Type:	Light
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	55
+	Barrier:	12
+	Cost:	0
+[VALUES]
+	Val2:	-1
+BREAK
+#2050
+Keywords:	red disk file
+Name:	a red disk file
+RoomDesc:$
+A red disk file has been abandoned here.~
+LookDesc:$
+This is a simple red colored disk file labeled: 'Mitsuhama business.
+TOP-SECRET' 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1
+	Barrier:	1
+	Cost:	0
+BREAK
+#2051
+Keywords:	small red packet
+Name:	a small red packet
+RoomDesc:$
+A small red packet has been abandoned here.~
+LookDesc:$
+This is a small, red packet that has a bright yellow label on it, reading:
+'Mitsuhama business TOP-SECRET' 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2
+	Barrier:	1
+	Cost:	0
+BREAK
+#2052
+Keywords:	cigarette djarum clove 
+Name:	a Djarum clove cigarette
+RoomDesc:$
+A clove cigarette sits here.~
+LookDesc:$
+Aromatic, and known to crystallize lungs and cause cancer far quicker than
+tobacco cigarettes, this clove cigarette is considered the hippest by the more
+bohemian community. 
+~
+Type:	Light
+WearFlags:	10100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0
+	Barrier:	1
+	Cost:	1
+[VALUES]
+	Val2:	-1
+BREAK
+#2053
+Keywords:	cigarettes pack marlboro reds
+Name:	a pack of Marlboro Reds
+RoomDesc:$
+A red cigarette packed marked "Marlboro" lies here.~
+LookDesc:$
+A pack of cigarettes. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2
+	Barrier:	1
+	Cost:	5
+[VALUES]
+	Val0:	10
+	Val1:	5
+	Val2:	-1
+BREAK
+#2054
+Keywords:	cigarettes pack camels
+Name:	a pack of Camel Filters
+RoomDesc:$
+A tan cigarette pack with a camel on the cover sits here.~
+LookDesc:$
+It is said if you look real close at the camel on a pack of Camels you can see
+some very interesting, even possibly perverted subliminals in the artwork. But
+they're good smokes, so who gives a frag? 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2
+	Barrier:	1
+	Cost:	5
+[VALUES]
+	Val0:	10
+	Val1:	5
+	Val2:	-1
+BREAK
+#2055
+Keywords:	camel filter cigarette
+Name:	a Camel filtered cigarette
+RoomDesc:$
+A cigarette sits here unsmoked.~
+LookDesc:$
+A fresh cigarette, with a small tan camel imprinted near the filter. 
+~
+Type:	Light
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1
+	Barrier:	1
+	Cost:	1
+[VALUES]
+	Val2:	1
+BREAK
+#2056
+Keywords:	marlboro red cigarette
+Name:	a Marlboro Red
+RoomDesc:$
+A cigarette sits here unsmoked.~
+LookDesc:$
+A fresh cigarette, with the word "Marlboro" printed near the filter. 
+~
+Type:	Light
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1
+	Barrier:	1
+	Cost:	1
+[VALUES]
+	Val2:	1
+BREAK
+#2057
+Keywords:	jamaican cigar blunt joint sativari
+Name:	a Sativari Marijuana Cigar
+RoomDesc:$
+A cigar full of a green leafy material lies here.~
+LookDesc:$
+A fine cigar, filled with a potent and aromatic variety of marijuana.  There
+is a golden band with the label "Sativari Jamaica" on it. 
+~
+Type:	Light
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1
+	Barrier:	1
+	Cost:	200
+[VALUES]
+	Val2:	1
+BREAK
+#2075
+Keywords:	spoon dunkelzahn's spoon of death despair and destruction
+Name:	Dunkelzahn's Spoon of Death, Despair, Destruction, and Doom
+RoomDesc:$
+A cheap plastic spoon lies here.~
+LookDesc:$
+Looks like a cheap plastic spoon like you find in a school cafeteria. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1
+	Barrier:	32
+	Cost:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	310
+	Val4:	106
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#2079
+Keywords:	note for coax
+Name:	note coax
+RoomDesc:$
+Note for coax~
+LookDesc:$
+dude! chill, i was only picking on you :\ dont take shit so seriously, i dont
+think you're a homo. and you just took it to heart. its not like im out to get
+you or be an asshole you just have to accept my sense of humor when its
+approriate, but yeah, you keep using yours at the wrong times, when im deaing
+with serious shit is not the time for you to try and joke around with me. so,
+heh its not that i dont have a sense of humor, you just choose the wrong times
+to joke with me so it may seem like that. anyways, sorry if i hurt your
+feelings, just dont take shit so personally, i was just being comical. 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0
+	Barrier:	1
+	Cost:	0
+BREAK
+#2081
+Keywords:	blind sign
+Name:	a sign reading "Tip me, im blind"
+RoomDesc:$
+a sign.~
+LookDesc:$
+stuff 5 
+~
+Type:	Worn
+WearFlags:	100
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2
+	Barrier:	1
+	Cost:	500000
+BREAK
+#2082
+Keywords:	cane
+Name:	cane
+RoomDesc:$
+cane~
+LookDesc:$
+its a blind mans cane. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0
+	Barrier:	1
+	Cost:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val3:	310
+	Val4:	104
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#2083
+Keywords:	armani suit
+Name:	an Armani Suit
+RoomDesc:$
+A snazzy suit lies here.~
+LookDesc:$
+Made by the best tailors in Italy, this suit sure draws attention. 
+~
+Type:	Armor
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2
+	Barrier:	4
+	Cost:	5000
+[VALUES]
+	Val0:	9
+	Val1:	9
+BREAK
+#2084
+Keywords:	lacing adamantium endoskeleton
+Name:	an adamantium endoskeleton
+RoomDesc:$
+A pool of liquid metal is lying here.~
+LookDesc:$
+The pool looks like some form of liquid metal, obviously created for
+Cyberware purposes.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	10
+	Barrier:	1
+	Cost:	750000
+[VALUES]
+	Val0:	4
+	Val1:	10
+	Val2:	29
+BREAK
+#2085
+Keywords:	neuro-package
+Name:	metorite
+RoomDesc:$
+a small red-hot metorite is in a crater here.~
+LookDesc:$
+A Metorite 
+~
+Type:	Light
+WearFlags:	0
+ExtraFlags:	1000000000
+AffFlags:	1000001010001000111000
+Material:	paper
+[POINTS]
+	Weight:	0
+	Barrier:	1
+	Cost:	0
+BREAK
+#2089
+Keywords:	cyberarm
+Name:	an armored cyberarm, vIII
+RoomDesc:$
+A cyberarm lies here.~
+LookDesc:$
+It's a cyberarm. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3
+	Barrier:	6
+	Cost:	250000
+[VALUES]
+	Val0:	2
+	Val1:	100
+	Val2:	27
+BREAK
+#2090
+Keywords:	laval lamp
+Name:	lava lamp
+RoomDesc:$
+A trippy lava lamp, with green water, and orange lava emits its funkiness here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0
+	Barrier:	1
+	Cost:	0
+BREAK
+#2091
+Keywords:	spell
+Name:	spell
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0
+	Barrier:	1
+	Cost:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	12
+	Val3:	2
+	Val4:	13
+	Val6:	12
+BREAK
+#2092
+Keywords:	A ^Wwhite^N vest^N with ^Lsilver^N runes
+Name:	a ^Wwhite^N vest^N with ^Lsilver^N runes
+RoomDesc:$
+A ^Wwhite^N vest^N with ^Lsilver^N runes~
+LookDesc:$
+A ^Wwhite^N vest^N with ^Lsilver^N runes 
+~
+Type:	Armor
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	6
+	Barrier:	16
+	Cost:	15000
+[VALUES]
+	Val0:	6
+	Val1:	4
+BREAK
+#2094
+Keywords:	a nike visor
+Name:	a nike visor
+RoomDesc:$
+A nike visor has been left here.~
+LookDesc:$
+This is an armored helmet meant to be used with a suit of military armor.  It
+contains a deluxe suite of electronics, including a built in radio, low light
+vision, thermographic vision, a mag sight, and the option of plugging into a
+BattleTac network. 
+~
+Type:	Radio
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	1000000010001000000000
+Material:	metal
+[POINTS]
+	Weight:	3
+	Barrier:	12
+	Cost:	20550
+[VALUES]
+	Val1:	2
+	Val2:	6
+BREAK
+#2095
+Keywords:	condom
+Name:	a condom
+RoomDesc:$
+A condom~
+LookDesc:$
+its a condom. 
+~
+Type:	Food
+WearFlags:	100100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0
+	Barrier:	1
+	Cost:	0
+[VALUES]
+	Val0:	20
+BREAK
+#2096
+Keywords:	a note
+Name:	a note
+RoomDesc:$
+A note lays here for khepri.~
+LookDesc:$
+Meep! hi :P um sorry about earlier :P -Root :) 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	1001001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2
+	Barrier:	32
+	Cost:	250000
+[VALUES]
+	Val1:	3
+	Val2:	4
+	Val3:	303
+	Val4:	103
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#2097
+Keywords:	kevlar trenchcoat
+Name:	a kevlar trenchcoat
+RoomDesc:$
+An armoured trenchcoat lies here.~
+LookDesc:$
+The Mitsuhama colors and logo adorn this armor jacket, which offers high
+performance ballistic and armor protection. 
+~
+Type:	Armor
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3
+	Barrier:	24
+	Cost:	2000
+[VALUES]
+	Val0:	3
+	Val1:	2
+BREAK
+#2098
+Keywords:	cortex bomb
+Name:	Renraku issue cortex bomb
+RoomDesc:$
+A cortex bomb.. ewww.~
+LookDesc:$
+A small container, filled with cells. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0
+	Barrier:	1
+	Cost:	0
+[VALUES]
+	Val0:	4
+	Val1:	10
+	Val2:	11
+BREAK
+#2099
+Keywords:	ring
+Name:	a silver ring
+RoomDesc:$
+A silver ring is here.~
+LookDesc:$
+~
+Type:	UNDEFINED
+WearFlags:	11
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	0
+	Barrier:	32
+	Cost:	0
+BREAK
+END

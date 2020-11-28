@@ -1,0 +1,507 @@
+#25001
+Keywords:	grimoire tome book magical text
+Name:	Astral Grimoire
+RoomDesc:$
+^nAn ^wan^ccie^wnt tome^n rests on a ^ypedestal^n.~
+LookDesc:$
+This ancient looking manuscript appears to have been written here. A small,
+silver chain attached to the leather binding, prevents anyone from taking it.
+The pages are dried, cracked, and yellow with age. The words, or runes, seem
+to pulse with mystic energy.  The knowledge they impart, is often sought after
+by magical scholars. The book is open to the Index and there are many pages to
+be read. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1001101001100
+AffFlags:	10000
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	chap10 page10 10
+	Desc:$
+A final note: Traveling into the metaplanes is an arduous endeavor.  Many
+highly skilled magicians have perished before completing their quest. Caution,
+patience and perserverance are traits common of those who have successfully
+walked the astral realm.
+ <Information for this work was obtained from the Grimoire(tm) and Magic in
+the Shadows(tm)> 
+~
+[EXTRADESC 1]
+	Keywords:	chap9 page9 9
+	Desc:$
+Each metaplane has many Places known to humanity, which correspond to human
+experiences. A Place can be an abstract "landscape" of magical energy or seem
+as real and solid as the material world.  It can be populated by creatures out
+of nightmares, empty of all life, or filled with beings going about their own
+concerns.  It may appear as any scene from history, fantasy, or myth.
+ A traveler may find their appearence altered as they move from place to
+place. There are some Places that even the most knowledgable of travelers
+cannot comprehend. Once a magician enters the metaplanes, they are unable to
+leave until they have completed a specific task or quest. 
+~
+[EXTRADESC 2]
+	Keywords:	chap8 page8 8
+	Desc:$
+An aura is an energy field within the etheric body.  The aura's of living and
+non-living beings and objects vary. Living beings are classified as having
+active aura's, while, non-living objects have passive aura's.  A trained
+magician can assense the difference with amazing accuracy.
+ Assensing an aura can give a magician quite a bit of information on the
+subject. One can determine the relative level of essence on the subject.
+Whether the subject is magically active, or enchanted.  Whether or not, the
+subject is the under a spell, or possessed by a spirit. The true form of the
+subject.  Etheric forms cannot be altered or disguised by transformation
+spells. Magicians are also able to determine why background residue is
+present. 
+~
+[EXTRADESC 3]
+	Keywords:	chap7 page7 7
+	Desc:$
+Information on the etheric plane is a matter of moods, emotions, textures, and
+tones. In the material realm, only data is present, emotional tone must be
+deduced from the content.  In the etheric plane, the words would appear as
+random, illegible marks on paper. In the etheric plane, the reader is able to
+assense anger, hurt, or the emotional feelings of the writer.
+ Background energy refers to the presence of powerful influences that can
+distort the etheric medium.  Certain influences have been known to be
+beneficial to travelers. More times than not, background energy can be
+hazardous.  The longer one remains in these areas, the worse the hazard
+becomes.  Some instances have been recorded, where the hazards were permanent.
+ Background energy is not constant, magical impulses flow and ebb in
+irregular rhythms. Theorists have classified background residue into five
+levels, the fifth level being the most deadly. 
+~
+[EXTRADESC 4]
+	Keywords:	chap6 page6 6
+	Desc:$
+Man-made objects are visible on the etheric plane, but not solid. An astral
+traveler cannot see through them, but may pass, or reach, through them, unless
+tied to the physical world, as with dual natured beings.
+ An object's etheric form is usually a duplicate of its physical form. Magical
+enchantments or influences can be detected on its etheric form.  Similarly,
+places that have been the site of extremely powerful magic or events with
+powerful emotional charges will retain traces of that information in their
+etheric form.
+ The traces of a minor spell, or a single act of violence, love, or worship,
+last only a few hours.  The more potent the event, the longer and more durable
+the trace left is.
+ Acts involving extreme violence or emotion may leave a background residue
+which, can overwhelm astral senses. 
+~
+[EXTRADESC 5]
+	Keywords:	chap5 page5 5
+	Desc:$
+Various paraspecies have a "dual nature".  Dual beings are always active on
+both the astral and physical planes, like a magician using perception. Dual
+beings exist naturally on both planes at once. Their presence is generally
+limited to the etheric plane, however, some dual natured beings have been
+known to travel the metaplanes.
+ Special powers of certain dual beings, such as the deadly gaze of a basilisk,
+or the flaming breath of dragons, are created by the interaction of their twin
+natures. Astral energy is brought into the physical realm through their
+bodies.  These powers do not work in astral space. Although, a dragon's astral
+teeth will still shred someone like fettuccine in one bite. 
+~
+[EXTRADESC 6]
+	Keywords:	chap4 page4 4
+	Desc:$
+As far as anyone knows, astral beings are all spirits of some kind. They may
+sometimes manifest on the physical plane, they are native to astral space.
+ Most spirits have an affinity to, at least one, metaplane, or their native
+plane. For example, a fire elemental is native to the hermetic metaplane of
+fire, a city spirit to the shamanic metaplane of man.  Spirits can travel, at
+will, to their native plane.
+ Nature Spirits and elementals can appear in one of three forms: astral form,
+manifest form, and great form. Only through careful plannig should a magician
+call for a great form spirit. 
+~
+[EXTRADESC 7]
+	Keywords:	chap3 page3 3
+	Desc:$
+Just what is an astral body?
+ Everything has one, to some extent.  Some entities, such as people, can
+seperate their physical and astral bodies.  Others, like spirits, have nothing
+but an astral body, though they are able to, at times, manifest temporarily in
+to a physical form. Most things, living or non, have at least an etheric body,
+or astral presence in the etheric plane.  The more alive a body is, the more
+solid its etheric body will be.
+ Astral bodies cannot affect the physical realm, or in any way influence the
+physical world. 
+~
+[EXTRADESC 8]
+	Keywords:	chap2 page2 2
+	Desc:$
+Magicians have always believed that astral space is divided into many
+different planes The basic description of astral space refers to the etheric
+plane.  This basic level of astral space corresponds to the physical universe,
+and serves as the medium for magical energy that affects the physical world.
+The etheric is not the only plane in astral space.
+ Each of the hermetic elements has its own plane, as does each shamanic power.
+Each plane exists in a different "dimension" in the astral universe.
+ Access to these planes cannot be attained by any magician.  One must be able
+to astrally project to these planes. Only the few, who have undergone some
+sort of initiation, may attempt travel into the metaplanes.
+ Everything that exists in the material, or physical realm, is visible in the
+etheric plane.  Even items that are not tangible.  Simply put, everything has
+some sort of astral body. 
+~
+[EXTRADESC 9]
+	Keywords:	index page1
+	Desc:$
+Tome of Knowledge
+ Chapter 1: Astral Space
+ Chapter 2: Astral Bodies
+ Chapter 3: Astral Beings
+ Chapter 4: Dual Beings
+ Chapter 5: Objects
+ Chapter 6: Etheric Terrain
+ Chapter 7: Background Energy
+ Chapter 8: Aura's
+ Chapter 9: MetaPlaces
+ Chapter 10: Conclusion
+ < read
+chap1, chap2, etc. > 
+~
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+[AFFECT 1]
+	Location:	Astral Pool
+	Modifier:	2
+[AFFECT 2]
+	Location:	Magic Pool
+	Modifier:	2
+BREAK
+#25002
+Keywords:	wig white magistrate
+Name:	^na ^Wwhite^n magistrate's ^Wwig^n 
+RoomDesc:$
+Someone left their wig on the ground.~
+LookDesc:$
+This wig looks similiar to the wig's worn in the 18th century. It is made of a
+course wool, dyed white, and rests upon a head like a hat. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	1000001000
+AffFlags:	1
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	1
+BREAK
+#25003
+Keywords:	gown black judge
+Name:	^na ^bblack^n judge's ^bgown^n
+RoomDesc:$
+A black gown lies in a clump on the floor.~
+LookDesc:$
+A long, flowing black gown, typically worn by 20th century judges, lies here.
+A small zipper is set in the back of the gown.  A large collar, also black,
+adds a bit of esthetic style to this garment. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000001000
+AffFlags:	1
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	1
+BREAK
+#25004
+Keywords:	gavel hammer wooden judge
+Name:	^na ^ywooden gavel^n
+RoomDesc:$
+A wooden hammer lies in the dirt.~
+LookDesc:$
+This small, wooden hammer, resembling a judge's gavel. Tiny nicks and
+scratches suggest it was used often to calm courtroom outbursts. It appears to
+be made of oak. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000
+AffFlags:	1
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#25005
+Keywords:	suit grey business tres chic
+Name:	^na ^Lgrey^n, Tres Chic, business ^Lsuit^n
+RoomDesc:$
+A fancy grey suit lies in a wrinkled mess, on the floor.~
+LookDesc:$
+Top of the line in fashion sense, this Tres Chic suit is form fitting.  Made
+of silverish grey fabric, it is the color of choice in Seattle's upper crust.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#25006
+Keywords:	wire rimmed glasses
+Name:	^na pair of ^wwire^n-^wrimmed ^Lgl^wass^Les^n
+RoomDesc:$
+Someone left their glasses on the floor.~
+LookDesc:$
+These glasses appear more functional, rather than stylish.  The wire rims are
+made of a fine steel alloy.  They look durable and seem comfortable to wear. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	1000001000
+AffFlags:	110001000000000
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+[AFFECT 1]
+	Location:	Charisma
+	Modifier:	-2
+[AFFECT 2]
+	Location:	Age
+	Modifier:	10
+BREAK
+#25007
+Keywords:	pad note notepad steno yellow paper
+Name:	^na ^Yyellow note^ypad^n
+RoomDesc:$
+A notepad of yellow paper lies on the ground.~
+LookDesc:$
+Popular among business types, in the early 20th century, this Steno pad was
+used to record information. Containing 50 sheets of yellow paper, it seems
+well used. A single word is written on the top-most sheet. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1001001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	word top sheet page1
+	Desc:$
+GUILTY 
+~
+BREAK
+#25008
+Keywords:	suit bargain wrinkled fabric
+Name:	^na wrinkled suit
+RoomDesc:$
+^nA pile of poorly made fabric lies crumpled in a ball.~
+LookDesc:$
+This suit is made from bargain materials.  It looks like a suit made in the
+early 20th century. It fits loosely, with wrinkles and threads nearly covering
+it. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	-1
+[AFFECT 1]
+	Location:	Astral Pool
+	Modifier:	1
+BREAK
+#25009
+Keywords:	crystal orb ball
+Name:	^wo^Wr^wb ^nof ^CDestiny^n
+RoomDesc:$
+^nA large ^Wc^wr^Wyst^wa^Wl^n orb floats in mid-air.~
+LookDesc:$
+This crystal orb eminates, tremendous amounts, of mystical energy. An Artifact
+of Time, this orb pulses with life. It is warm to the touch, and hums softly.
+ Looking inside the orb, a smokey haze shifts and moves, forming images of the
+past, present, and future.
+ This is Magic!  Perhaps the very source! 
+ View the images to see more.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	100101000011
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	images view
+	Desc:$
+As you look upon the orb of Destiny, the haze shifts to form images of what
+was, what is, and what will be.
+ Look upon the ^cpast^n, the ^cpresent^n, and the ^cfuture^n.  Look upon your
+^cdestiny^n.  See why you were born.  Understand your existance.  Know why you are
+here, and what it is....You must do!  
+~
+[EXTRADESC 1]
+	Keywords:	past
+	Desc:$
+Images twist and form, showing you the history of the world.  Mother Earth
+quakes in the visions.  Her body bleeds molten lava, her face cries with ice,
+snow, and rain, her limbs extend to the heavens.
+ Large reptilian creatures roam across her.  They feed on her gifts, they
+fight, eat, and breed with each other.
+ Man appears and hunts the beasts.  Man appears and changes the face of Earth.
+Man appears and breaks the planet.
+ Violent images of war stream past.  Millions of souls cry out, as their last
+breath leaves them. The earth shakes with the turmoil.  Huge explosions rack
+the face of the earth.  Large storms try to repair the damage.
+ Finally, the images settle.  The haze moves and shifts into a reflective
+surface.  The final image is of you. 
+~
+[EXTRADESC 2]
+	Keywords:	present
+	Desc:$
+The haze swirls and twists to form images of the present. Riots plague the
+cities. Huge metal buildings rise skyward.  Armed men roam the streets.  War
+continues across the earth. Resources dwindled.  Men in business flaunted
+power with force. A viral plague sends images of hundreds of thousands dying
+horribly.
+ Strange mutations cause children to be born "different". The Awakening
+brought mythical beasts across the planet.  Dragons and serpents appeared. The
+first signs of magic, the Great Ghost Dance cause Mother Earth to weep again.
+With her tears come eruptions, killing millions. Millions more metamorph into
+hideous humanoids.
+ Another world is formed.  Electrical pulses fuse and bind to form a realm of
+technology and electronics.  Virtual existance through electricity.
+ Violence rages on still.  Wars are smaller, but no less devastating.  Small
+groups of men strike fear into larger groups.  Terrorism reigns. Magical power
+becomes abused.  Spikes of emotion, violence, and magic leave permanent
+impression of the Earth's face.
+ Finally, the images settle.  The haze moves and shifts into a reflective
+surface.  The final image is of you.  
+~
+[EXTRADESC 3]
+	Keywords:	future
+	Desc:$
+Once again, the haze shifts and forms.  Images of the Mother Earth.  She
+shivers as the parasite called man, takes from her.  She shudders as was hers,
+becomes no more.
+ Violence continues to reign.  Magical wounds from misuse spread across the
+planet. Bridges of energy bring horribly, nightmarish, creatures from the
+heavens. The beasts consume everything.  Feeding off the vital lifeforce, they
+leave ruins in their wake.
+ Mother Earth fights to maintain.  She unleashes her last remaining power in
+huge eruptions and violent storms.  Her effort is futile.  The hordes of
+creatures from the nether regions consume her.  
+ Nothing......
+ Finally, the images settle.  The haze moves and shifts into a reflective
+surface.  The final image is of you. 
+~
+[EXTRADESC 4]
+	Keywords:	destiny
+	Desc:$
+The haze shits and swirls violently. Dark images of hideous creatures begin to
+form. An image of yourself stands before them.
+ A booming voice speaks........
+ "You have gazed upon the Enemy.  It comes in
+many forms, corruption,  destruction, mindless cosumption, deceit, obsession,
+and violence."
+ "How does this pertain to you?"
+ "You are the final hope.  The savior of Mother Earth.  Many have come before
+you.  Many more will come after you.  It is through your example they learn.
+It is through your abilities they survive or perish. Learn, young one.  Learn
+all you can.  Only knowledge can defeat the Enemy.  Only knowledge can prevent
+the End.  The future is dependent on the "now", and you are it.
+ There is silence......
+ Finally, the images settle.  The haze moves and
+shifts into a reflective surface.  The final image is of you.  
+~
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	100
+BREAK
+END

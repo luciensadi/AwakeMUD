@@ -1,0 +1,1049 @@
+#61500
+Keywords:	steel combat chain razors
+Name:	A ^Wsteel^N combat chain laced with razors
+RoomDesc:$
+A viciously sharp combat chain is on the floor in a crumpled heap.~
+LookDesc:$
+A standard steel chain, but the whipping end has been modified and outfitted
+with dozens of sharp, rusty razors. This looks like it would sting quite a bit
+if used to whip people in the face. 
+~
+Type:	Weapon
+WearFlags:	10100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#61501
+Keywords:	burst fire hydrant
+Name:	A burst fire hydrant
+RoomDesc:$
+A burst fire hydrant sprays a fountain of water into the air.~
+LookDesc:$
+The fire hydrant is spraying water five feet into the air, and the entire
+intersection is covered with water. The water looks fairly clean, however. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10000
+	Val1:	10000
+	Val3:	10
+BREAK
+#61502
+Keywords:	telephone pole destroyed
+Name:	A destroyed telephone pole
+RoomDesc:$
+A telephone pole is lying on its side, blocking the middle of the road.~
+LookDesc:$
+The telephone pole's wires are loose and all over the road, but without the
+power plant supplying electricity, it's hardly a danger. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61503
+Keywords:	rope ladders
+Name:	A series of rope ladders
+RoomDesc:$
+A series of rope ladders drop down from above, allowing you to climb up.~
+LookDesc:$
+A few rope ladders, fashioned out of, surprise surprise, rope. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61504
+Keywords:	lion fountain old
+Name:	An old lion-adorned fountain
+RoomDesc:$
+An old fountain is in the center of the courtyard, decorated with a lion figurine.~
+LookDesc:$
+A ferocious looking statue of a lion is in the center of the courtyard,
+spraying water from it's mighty mouth into the fountain that surrounds it. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10000
+	Val1:	10000
+	Val3:	10
+BREAK
+#61505
+Keywords:	pair desecrated bodies
+Name:	A pair of desecrated bodies
+RoomDesc:$
+A pair of desecrated bodies of two gangers lie next to the ladder.~
+LookDesc:$
+The bodies, upon closer inspection, appear to have been gnawed on by some sort
+of animal. Disgestive juices remain on the bodies, and have eaten through the
+flesh to expose the bone. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61506
+Keywords:	vicious serrated chainsaw
+Name:	A vicious, serrated ^Wsteel^N chainsaw
+RoomDesc:$
+A chainsaw is lying on the floor, ready to do some damage.~
+LookDesc:$
+Jesus Christ. Getting hit with this thing would not be pleasant at all. The
+blades look like they could tear through just about anything that opposes you.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	2
+	Val3:	2
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#61507
+Keywords:	plastic explosive c-4 c4 charge
+Name:	a small C-4 charge
+RoomDesc:$
+A block of moldable plastic explosive is set up on the floor.~
+LookDesc:$
+The small brick of plastic explosive has been set up with an adjustable timer
+for demolition purposes. In a pinch, one could also pull the pin on the
+detenator and use it as a makeshift grenade. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61508
+Keywords:	mersch mx 23 stunlance lance prong
+Name:	A ^LMersch^N MX-23 Stunlance
+RoomDesc:$
+A long lance with two prongs for a tip is lying on the floor.~
+LookDesc:$
+This two meter long steel rod doesn't look much different from a metal
+quartstaff, but the tip of the Mersch Stunlance is outfitted with an electrode
+capable of dispensing volts of electricity into the victim's body, rendering
+them helpless. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000010
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	4500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#61509
+Keywords:	kendachi mononaginata naginata spear
+Name:	A steel ^rKendachi^N Mononaginata Spear
+RoomDesc:$
+A spear with a mono tip is propped against a wall.~
+LookDesc:$
+Kendachi specializes in high quality Japanese weaponry, and their top of the
+line Naginata spear has been treated with a mono edge, allowing more damage to
+be done. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	5500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#61510
+Keywords:	sledge hammer sledgehammer wicked evil
+Name:	A wicked, evil-looking ^CSuper^N Sledgehammer
+RoomDesc:$
+A nasty, dangerous looking sledge hammer is ready to do some damage.~
+LookDesc:$
+Manufactured by Brotherhood of Steel Enterprises, is typically used to
+destroyed building supports at construction sites. The design includes a
+kinetic energy device to store power and release against its target, creating
+a devestating, earth-shaking blow. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000010
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	12
+	Cost:	12000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	6
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#61511
+Keywords:	rings brass knuckles pair
+Name:	A pair of ^ybrass^N knuckles
+RoomDesc:$
+A couple rings of brass are on the floor.~
+LookDesc:$
+They're a few rings of brass connected together to fit onto a fist perfectly.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.20
+	Barrier:	6
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	4
+	Val4:	7
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#61512
+Keywords:	pair shock gloves taser
+Name:	a pair of ^Bshock^n gloves
+RoomDesc:$
+A pair of gloves is on the floor, laced with electrodes in the fingers.~
+LookDesc:$
+The palms and fingertips of these gloves are primed to dispense a large
+voltage into an opponent, rendering them helpless from electric stun. 
+~
+Type:	Weapon
+WearFlags:	10000010000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	950
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val3:	9
+	Val4:	7
+	Val5:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#61513
+Keywords:	heckler koch oicw heavy assault rifle
+Name:	A Heckler and Koch OICW Heavy Assault Rifle
+RoomDesc:$
+A huge assembled assault rifle is ready to be fired against some hapless target.~
+LookDesc:$
+With the Objective Individual Combat Weapon, Heckler and Koch succeeded in
+creating an all purpose assault rifle, equipped to handle almost any military
+situation. With a weapon system mounted above the actual rifle, the OICW is
+equipped with a "cannon" that is capable of firing specially programmed
+munitions, allowing its user to detonate explosvie charges over walls to rain
+cannon shrapnel over a hiding opponent, among other uses. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	100000000000000000
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	12
+	Cost:	13450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val6:	30
+	Val7:	60553
+	Val8:	650
+	Val10:	28
+BREAK
+#61514
+Keywords:	pearl handled colt amt model 2000 revolver ivory
+Name:	A ^Wpearl-handled^N Colt AMT Model 2000 revolver
+RoomDesc:$
+A revolver with an ivory handle is sitting on a nearby table.~
+LookDesc:$
+A sleek, silvery single action revolver with an ivory handle. The chamber
+holds eight rounds, more than enough to kill even the most vicious of animals.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	5500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	8
+	Val6:	8
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#61515
+Keywords:	arasaka rapid assault shotgun
+Name:	An ^WA^yrasaka^N Rapid Assault Shotgun
+RoomDesc:$
+A heavy assault shotgun is ready to dispense fury retribution against the denizens of Seattle.~
+LookDesc:$
+A huge assault shotgun capable of burst fire, this baby fires solid shotgun
+slugs in three round bursts, making anyone who's on the receiving end wish
+they were never born. A strap allows the user to wear it over their shoulder
+to proudly display it to anyone who's thinking of crossing them. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	12
+	Cost:	32500
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	10
+	Val6:	10
+	Val10:	12
+BREAK
+#61517
+Keywords:	vashon island blue dress grand dame
+Name:	A ^WV^Lashon ^WI^Lsland^N "Grand Dame" ^Bblue^N dress
+RoomDesc:$
+A Vashon Island blue dress is on the floor, lying in a crumpled heap of silk.~
+LookDesc:$
+The Vashon Island "Grand Dame" dresses come in a variety of colors, and are
+even threaded with strong kevlar fibers along with the smooth silk to provide
+miniscule amounts of protection. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val5:	1
+	Val6:	1
+	Val7:	9
+BREAK
+#61518
+Keywords:	suit heavy combat biker armor
+Name:	A suit of ^LHeavy Combat Biker^N armor
+RoomDesc:$
+A suit of biker armor is on the floor.~
+LookDesc:$
+The full body suit covers all vital portions of the body with layers of
+leather, reinforced padding, and absorbent gel packs to prevent both ballistic
+and impact damage.  
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	16.00
+	Barrier:	16
+	Cost:	9000
+	AvailTN:	14
+	AvailDay:	10.00
+	LegalNum:	3
+	LegalCode:	11
+	LegalPermit:	1
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val3:	4
+	Val4:	4
+	Val5:	6
+	Val6:	5
+	Val7:	8
+BREAK
+#61519
+Keywords:	sturdy helmet urban brawl padded
+Name:	A padded urban brawl helmet
+RoomDesc:$
+A sturdy football helmet-like object is on the floor.~
+LookDesc:$
+Padded and designed to absorb impact, this metal helmet looks very effective
+in protecting someone from blows to the head. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	250
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#61520
+Keywords:	set urban brawl armor heavy
+Name:	A set of ^rHeavy Urban Brawl^N armor
+RoomDesc:$
+A set of heavy urban brawl armor is on the floor.~
+LookDesc:$
+A suit constructed of interlocking impact plates, this suit offers fine
+protection in the dangerous sport of urban brawl. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	14.00
+	Barrier:	8
+	Cost:	7500
+	AvailTN:	12
+	AvailDay:	10.00
+	LegalNum:	4
+	LegalCode:	11
+	LegalPermit:	1
+[VALUES]
+	Val1:	2
+	Val4:	2
+	Val5:	6
+	Val6:	4
+	Val7:	-6
+BREAK
+#61521
+Keywords:	set urban brawl armor medium
+Name:	A set of ^RMedium Urban Brawl^N armor
+RoomDesc:$
+A set of medium urban brawl armor is on the floor.~
+LookDesc:$
+A suit constructed of interlocking impact plates, this suit offers fine
+protection in the dangerous sport of urban brawl. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	850
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val4:	1
+	Val5:	4
+	Val6:	3
+	Val7:	-2
+BREAK
+#61522
+Keywords:	wrist holster black nylon
+Name:	A ^Lblack nylon^N single strap-on wrist holster
+RoomDesc:$
+A wrist holster is here, looking very effective at concealing weapons.~
+LookDesc:$
+This black nylon and leather holster can be strapped around someone's wrists
+and enveloped around their hand. A quick release button in the palm will cause
+the holster to eject the pistol, allowing one to immediately draw their weapon
+from their sleeve. 
+~
+Type:	Holster
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61523
+Keywords:	bottle biotech nymph perfume
+Name:	A ^Ccrystal^N bottle of Biotech(TM) ^GN^Rymp^Gh^N perfume
+RoomDesc:$
+A small crystal bottle of perfume is here, smelling quite fragrant.~
+LookDesc:$
+Biotech Inc, after years of studying the effects of pheromones, has finally
+concocted a perfume that tantalizes the primal senses of (meta)humans. The
+result is this bottle of Nymph perfume: a single spray will likely sway any
+charismatic-based encounters with the opposite sex in your favor. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61524
+Keywords:	wavetech mobile radio transmitter tv 3v
+Name:	A ^YWaveTech^N Mobile TV/3V Radio Transmitter
+RoomDesc:$
+A large radio transmitting device is set up in the corner of the room.~
+LookDesc:$
+The TV/3V Radio Transmitter is the choice mobile transmitter for radio
+pirates. While a bit bulky, the high crypt and broadcast range makes it very
+effective at transmitting illegal signals without fear of retribution from law
+enforcement. 
+~
+Type:	Radio
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	15.00
+	Barrier:	8
+	Cost:	17500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	8
+BREAK
+#61525
+Keywords:	portable cryogenic case
+Name:	A portable cryogenic case
+RoomDesc:$
+A portable cryogenic case is here, ready to store delicate materials.~
+LookDesc:$
+The metal case is environmentally sealed and fixed with packs of liquid
+nitrogen, creating a personal deep freeze environment perfect for storing
+organs, cyberwear, or other delicate items. 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	8
+	Cost:	7500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	5
+	Val2:	-1
+	Val3:	2
+BREAK
+#61526
+Keywords:	restraints plasteel pair
+Name:	a pair of plasteel restraints
+RoomDesc:$
+A pair of plasteel restraints are here.~
+LookDesc:$
+Made of reinforced plasteel, these restraints are used to bind arms together
+at the wrists, and look incredibly tough, if not impossible, to break through.
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	16
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61527
+Keywords:	package sealed MRE meal ready to eat meal-ready-to-eat
+Name:	A sealed Meal-Ready-To-Eat (MRE) package
+RoomDesc:$
+A tasty looking sealed package is here.~
+LookDesc:$
+Military rations composed of various staples and starches, designed to feed a
+hard working soldier after a tough day of soldiering. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#61528
+Keywords:	mescaline tablet
+Name:	A mescaline tablet
+RoomDesc:$
+A mescaline tablet has been carelessly left behind.~
+LookDesc:$
+Mescaline's a drug. Drugs are baaaaaaad. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61529
+Keywords:	canister jet breather
+Name:	A canister of ^RJ^WE^RT^N
+RoomDesc:$
+A small asthma breather is here, filled with a murky red/white liquid.~
+LookDesc:$
+It's JET, baby, JET! Derived from the methamphetamine rich brahmin feces, Jet
+will give just about any junkie the "ultimate high". 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61530
+Keywords:	case elemental conjuring materials
+Name:	A ^Lblack^N case of elemental conjuring materials
+RoomDesc:$
+A black case is on the floor, with a magical rune inscribed on the lid.~
+LookDesc:$
+Filled to the brim with all the materials you would need to conjure up a
+fire/earth/water/air elemental. 
+~
+Type:	Magic Tool
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	8
+	Cost:	12000
+	AvailTN:	5
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#61531
+Keywords:	mirrored ultrasound shades midnight blue
+Name:	A ^Wmirrored^N pair of ^bmidnight blue^N ultrasound shades
+RoomDesc:$
+A pair of ultrasound shades is on the table.~
+LookDesc:$
+Two buttons on the right rim of the shades allow the user to toggle both
+ultrasound and thermographic vision. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	1000001000
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	32500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	14
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	1
+BREAK
+#61532
+Keywords:	crown steel barbed wire
+Name:	A ^Lsteel^N crown fashioned out of junk and barbed wire
+RoomDesc:$
+A steel crown laced with barbed wire is on the floor.~
+LookDesc:$
+It's a crown of junk. Anyone who would wear this gauche piece of crap has
+serious head problems. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61533
+Keywords:	vault computer terminal
+Name:	The Vault computer terminal
+RoomDesc:$
+The Vault computer terminal blinks quietly in the corner of the room.~
+LookDesc:$
+It's the Vault control panel. It's missing a water chip. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#61534
+Keywords:	looted weapons lockers
+Name:	A few Vault 12 Weapons Lockers
+RoomDesc:$
+A row of looted weapons lockers are lined up against the wall.~
+LookDesc:$
+These lockers have been looted for quite some time now, but there may be
+something left for you to find. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	200.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	-1
+BREAK
+#61535
+Keywords:	assault shotgun pancor jackhammer autoshotgun
+Name:	A ^WPancor Jackhammer^N Assault Shotgun
+RoomDesc:$
+A silvery autoshotgun sits on the floor.~
+LookDesc:$
+The Jackhammer shotgun has a unique, popular design that places the magazine
+behind the trigger of the weapon, making it easier to balance and control. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	10
+	Val6:	10
+	Val10:	12
+BREAK
+#61536
+Keywords:	can spray paint
+Name:	a can of spray paint
+RoomDesc:$
+Someone has left a can of spraypaint here.~
+LookDesc:$
+It is your average aerosol bottle, the cap is stained with paint. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

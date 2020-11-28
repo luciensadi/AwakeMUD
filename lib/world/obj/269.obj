@@ -1,0 +1,414 @@
+#26900
+Keywords:	leather vest orange symbols
+Name:	a leather vest with orange symbols
+RoomDesc:$
+A leather vest with orange symbols drawn on it lays here.~
+LookDesc:$
+This vest is small, made for fitting a childs body. Many orange magical
+symbols adorn it. The vest covers the chest and arms, ending in hard leather
+rings.  
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	10010000000000000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	3.00
+	Barrier:	2
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	1
+	Val5:	4
+	Val6:	2
+	Val7:	1
+BREAK
+#26902
+Keywords:	runic sword
+Name:	a runic sword
+RoomDesc:$
+A badly worn runic sword lies here.~
+LookDesc:$
+This sword is incrested with many magical runes and symbols. It is badly worn
+and old. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.00
+	Barrier:	4
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#26903
+Keywords:	ares demoman as
+Name:	an Ares Demoman AS
+RoomDesc:$
+A heavy double-barreled shotgun lies here.~
+LookDesc:$
+The double barrels and incredible power of this marvelous weapon make it a
+nice pick for a mercenary. As cost for power, its big shells require more
+space, which allows only four shells to be stored on it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.25
+	Barrier:	8
+	Cost:	800
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	4
+	Val6:	4
+	Val9:	-1
+	Val10:	2
+BREAK
+#26905
+Keywords:	bone necklace
+Name:	a bone necklace
+RoomDesc:$
+A necklace made of bone lies here.~
+LookDesc:$
+This necklace is made of many bone pieces tied together by a cord. 
+~
+Type:	Focus
+WearFlags:	101
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.40
+	Barrier:	3
+	Cost:	45000
+	AvailTN:	2
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	3
+BREAK
+#26907
+Keywords:	two handed sword
+Name:	a two-handed sword
+RoomDesc:$
+A big sword lies here.~
+LookDesc:$
+This sword is made of iron and needs both hands to be wield due to its size. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000010
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	11.00
+	Barrier:	6
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#26908
+Keywords:	first aid
+Name:	a first aid kit
+RoomDesc:$
+A kit full of healing herbs and cloth stripes lays here.~
+LookDesc:$
+This is a small white briefcase, with a red cross on it. Inside, it has many
+healing herbs, bandages, scissors and cotton. 
+~
+Type:	Kit
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#26909
+Keywords:	bright cyan bandage
+Name:	a bright cyan bandage
+RoomDesc:$
+A bright cyan bandage lies here.~
+LookDesc:$
+This bandage has 'Stimulation Patch' written on it. 
+~
+Type:	Patch
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	6
+BREAK
+#26910
+Keywords:	dull red bandage
+Name:	a dull red bandage
+RoomDesc:$
+A dull red bandage lays on the ground.~
+LookDesc:$
+This bandage has 'Tranquilizer Patch' written on it. 
+~
+Type:	Patch
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	7
+BREAK
+#26911
+Keywords:	power ball spell formula
+Name:	a power ball spell formula
+RoomDesc:$
+A spell formula lies here.~
+LookDesc:$
+It is a sheet of paper with many strange magical symbols. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	5
+BREAK
+#26912
+Keywords:	power bolt spell formula
+Name:	a power bolt spell formula
+RoomDesc:$
+A spell formula lies here.~
+LookDesc:$
+This is a sheet of paper with strange runes on it. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	4
+BREAK
+#26913
+Keywords:	invisibility spell formula
+Name:	an invisibility spell formula
+RoomDesc:$
+A spell formula lies here.~
+LookDesc:$
+This is a sheet of paper with many strange magical symbols on it. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	37
+BREAK
+#26914
+Keywords:	improved invisibility book
+Name:	a book with 'Improved Invisibility'
+RoomDesc:$
+A book with 'Improved Invisibility' written on it.~
+LookDesc:$
+It is a leather book with a lot of pages. On it's front page there is
+'Improved Invisibility' written in red letters. Just right below it, a number:
+'3' 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	38
+BREAK
+#26915
+Keywords:	treat spell formula
+Name:	a treat spell formula
+RoomDesc:$
+A spell formula lies here.~
+LookDesc:$
+This is a sheet of paper with many magical symbols on it. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	22
+BREAK
+#26916
+Keywords:	orichalcum shield
+Name:	an orichalcum shield
+RoomDesc:$
+A shield made of orichalcum lies here.~
+LookDesc:$
+This large shield is made of orichalcum, a magic material. It has many runes
+engraved on it, and emanates a strange glow. 
+~
+Type:	Focus
+WearFlags:	1000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	315000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	3
+BREAK
+#26999
+Keywords:	omg
+Name:	^C{^GOMG^C}^w
+RoomDesc:$
+A cyan and green tattoo lies here.~
+LookDesc:$
+Orb Magic Group 
+~
+Type:	Worn
+WearFlags:	100000100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

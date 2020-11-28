@@ -1,0 +1,410 @@
+#13000
+Keywords:	desk large green
+Name:	a large desk
+RoomDesc:$
+A large desk stands here.~
+LookDesc:$
+The desk spans half of the room, giving the guard enough space to really
+stretch out. It's painted a strange hue of green, hardly the nicest colour
+to shove on a desk in a reception, but that's corporations for you.
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	30.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13001
+Keywords:	cabinet filing
+Name:	a filing cabinet
+RoomDesc:$
+A three-story filing cabinet stands against the wall.~
+LookDesc:$
+This filing cabinet has three drawers, each one supplied with a steel handle.
+It looks incredibly heavy, and is firmly attached to the wall behind it. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	999.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	13
+	Val2:	13008
+	Val3:	7
+BREAK
+#13002
+Keywords:	folder purple thick
+Name:	a purple folder
+RoomDesc:$
+A thick purple folder is lying here.~
+LookDesc:$
+This unlabelled folder is made out of thick card paper. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val2:	-1
+BREAK
+#13003
+Keywords:	document paper sheet
+Name:	a document
+RoomDesc:$
+A sheet of paper is lying here.~
+LookDesc:$
+<//12-04-23\\>
+ 
+ 
+  **Individually too heavy for large amount carry.
+  **Overheating in long-term use, safety ^RHAZARD^n.
+ 
+CONCLUSION :
+ 
+ 
+<<L. Golding>>
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13004
+Keywords:	document sheet paper
+Name:	a document
+RoomDesc:$
+A sheet of paper is lying here.~
+LookDesc:$
+<//23-8-23\\>
+ 
+ 
+ 
+ **Message:
+ 
+ **It appears that our operative involved with SpecOp 423(^BPRODIGY^n) has
+ **been neutralized, by counter operations under the believed call of
+ **Ramirez. Any retaliations attempted could result in unneeded attention
+ **from the other clan formations.
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13005
+Keywords:	disk small
+Name:	a computer disk
+RoomDesc:$
+A small disk is lying here.~
+LookDesc:$
+The disk is unlabeled, and made out of thick blue plastic.
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13006
+Keywords:	desktop computer
+Name:	a desktop computer
+RoomDesc:$
+A large desktop computer sits on a table here.~
+LookDesc:$
+The table is set up as a small portable workstation, with this bulky desktop
+computer attached on top. The computer has an MD and LD slot, and on the side,
+a thinner, more conspicuous, disk drive. Below the computer, a mini laser
+printer hums quietly.
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13007
+Keywords:	printout paper piece
+Name:	a printout
+RoomDesc:$
+A piece of paper lies in the printer tray.~
+LookDesc:$
+<//15-4-22\\>
+ 
+        M. Laner 
+        R. Kearney
+        L. Golding
+      
+      
+   **Message:
+    
+   **With approval from all involved sectors, security will be upgraded to
+   **allow construction of a database. Said bank will contain files on all
+   **visitors, associates, employees, and workers for the company, accessed
+   **through the identification booths.
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13008
+Keywords:	key metal small
+Name:	a small metal key
+RoomDesc:$
+A small metal key is lying on the ground.~
+LookDesc:$
+It looks like a filing cabinet key.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13009
+Keywords:	document paper
+Name:	a document
+RoomDesc:$
+A document is lying on the floor.~
+LookDesc:$
+<//22-5-22\\>
+ 
+ 
+ 
+   **Message :
+   
+   **It appears that our prescribed operation with the weaponry at the
+   **Academy has been taken on well. Ramirez would like to further test
+   **it out, and claims of a possibility of upgrading BioHyde and CryoCo
+   **with our newer, more efficient weaponry. 
+   
+   **Shintaru has already made a play on the operation with several key
+   **operatives, who were, naturally, caught and neutralised. Whether
+   **or not they decide to chance another assault on the facility or
+   **on Production Site D is at the moment unknown. This action will also
+   **depend on whether Renraku is willing to cause more rifts in the
+   **current treaty.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13010
+Keywords:	pistol rp-930 machine slim black
+Name:	RP-930
+RoomDesc:$
+A slim, black machine pistol is lying here.~
+LookDesc:$
+The RP-930 is one of Parell's most prized and coveted creations, and is
+available only to their most prized customers. A genuine piece of gunsmithing
+art, this pistol is light and small enough to pass for a normal pop-gun, but
+can drill through almost any usual armour with the ease of a specialized
+Ingram. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	7
+	Val4:	11
+	Val5:	30
+	Val6:	30
+	Val9:	-1
+	Val10:	12
+BREAK
+#13011
+Keywords:	cabinet filing
+Name:	a filing cabinet
+RoomDesc:$
+A three story filing cabinet stands against the wall.~
+LookDesc:$
+The filing cabinet has three drawers, each one supplied with a steel handle.
+It looks incredibly heavy, and is firmly attached to wall behind.
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	999.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	13
+	Val2:	13012
+	Val3:	7
+BREAK
+#13012
+Keywords:	key brass small
+Name:	a small brass key
+RoomDesc:$
+A small brass key is lying on the ground.~
+LookDesc:$
+It looks like a filing cabinet key.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13013
+Keywords:	ring obsidian black
+Name:	an obsidian ring
+RoomDesc:$
+A black obsidian ring is lying here.~
+LookDesc:$
+The ring has been carved from pure obsidian, a stone extremely rare in this
+day and age. Whoever created this artifact not only knew the art of carving to
+perfection, but also endowed the ring with a mystical power. 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	2
+[AFFECT 1]
+	Location:	Max Mental
+	Modifier:	-1
+BREAK
+END

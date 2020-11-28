@@ -1,0 +1,1755 @@
+#19703
+Keywords:	sign
+Name:	a directional sign
+RoomDesc:$
+A sign is posted on the wall here.~
+LookDesc:$
+Northeast: Changing Lockers - Please store all non-authorized belongings
+before proceeding.\n South: Packaging and Shipping Departments\n East:
+Sublevel Access Elevator ^R(Authorized Personnel ONLY)^n\n West: The ^LDirector's^n
+Wing ^R(Authorized Personnel ONLY)^n\n Northwest: Office of the Subdirector\n
+Inquire with Subdirector's office for sublevel access. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	4.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19704
+Keywords:	light oddstar security armor
+Name:	a suit of ^WO^Yddstar^n light security armour
+RoomDesc:$
+A suit of light security armor has been left here.~
+LookDesc:$
+This suit of light armor provides protection at most places throughout the
+body and has the ^WO^Yddstar^N logo emblazed across the chest of it. It seems to
+have been slightly modified, with some of the armor plattings replaced with a
+lighter polymer to reduce its over all weight but offering a bit less
+protection. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	11
+	LegalPermit:	1
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val4:	4
+	Val5:	5
+	Val6:	3
+	Val7:	10
+BREAK
+#19705
+Keywords:	crate
+Name:	a huge packing crate
+RoomDesc:$
+A huge packing crate is lying here open, with BTLs strewn about.~
+LookDesc:$
+A huge crate, made for safely transporting BTLs to distributers. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	400.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	1
+	Val2:	-1
+BREAK
+#19706
+Keywords:	locker lockers
+Name:	a set of lockers
+RoomDesc:$
+A set of lockers is lying against the wall here.~
+LookDesc:$
+Its a set of lockers for storing clothes and such. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	200.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10000
+	Val1:	5
+	Val2:	-1
+BREAK
+#19707
+Keywords:	shoes boots shoe boot
+Name:	a pair of hiking boots
+RoomDesc:$
+A pair of boots are lying in the dirt here.~
+LookDesc:$
+A pair of rugged hiking boots, these should survive any condition you can
+throw at them. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19708
+Keywords:	shotgun riot benelli m10
+Name:	Benelli M10 Super Riot
+RoomDesc:$
+A large clip-fed shotgun is lying here.~
+LookDesc:$
+Benelli has long been known as the grand master of combat shotguns, and their
+latest model only secures the claim. The M10 Super Riot has served in every
+combat zone on earth, and never has it found a climate it couldn't handle. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	8.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	12
+	Val6:	12
+	Val7:	5105
+	Val8:	651
+	Val9:	692
+	Val10:	12
+BREAK
+#19710
+Keywords:	table large
+Name:	a large table
+RoomDesc:$
+A large table is here, with BTLs stacked on it.~
+LookDesc:$
+This is one of many tables in this area, all with BTLs ready to be packaged
+lying on them. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19711
+Keywords:	btl chip
+Name:	a BTL chip
+RoomDesc:$
+A funny looking chip is on the floor here.~
+LookDesc:$
+A BTL chip from the OddStarr Facility, this BTL is top-of-the-line and
+certified to zonk your ass out. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19712
+Keywords:	suit pinstripe black
+Name:	a dark pinstripe suit
+RoomDesc:$
+A pinstriped suit lies here.~
+LookDesc:$
+Tailored to resemble similar suits from the 1990s, with slight shoulderpads,
+clean lines and straight-legged pants, this black pinstriped suit is quite
+stylish. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	5
+BREAK
+#19713
+Keywords:	sword huge big broad broadsword orichalcum
+Name:	a huge orichalcum broadsword
+RoomDesc:$
+A hulking sword is lying on the ground here.~
+LookDesc:$
+This gigantic broadsword is of obviously great quality, although you can't
+find any features that might give away the creator. The fact that its made of
+orichalcum instantly means thats it's magical, and hold great power. It also
+means its rather fragile, however... 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	13.00
+	Barrier:	4
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#19714
+Keywords:	sleek trench coat trenchcoat
+Name:	a sleek black trench coat
+RoomDesc:$
+A long trenchcoat is lying on the ground here.~
+LookDesc:$
+A long, heavy trenchcoat, very stylish in design. Its sleek and black with
+multiple pockets lining both its outside and interior. The fabric seems to be
+weaved with kevlar and has small protective plating in key locations. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	5
+	Val2:	2
+	Val4:	2
+	Val5:	2
+	Val6:	2
+	Val7:	5
+BREAK
+#19715
+Keywords:	blue key keycard card
+Name:	a Blue keycard
+RoomDesc:$
+A blue card is lying on the ground here.~
+LookDesc:$
+A keycard from the OddStarr BTL factory, this should provide access to the
+lower levels. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19716
+Keywords:	rifle assault argentine arms fa-61
+Name:	Argentine Arms FA-61
+RoomDesc:$
+An FA-61 assault rifle is lying here.~
+LookDesc:$
+Long known for the mercenary exports, Argentina is begining to create a
+reputation for quality military hardware as well. The FA-61 is the latest
+assualt rifle to come out of the new Argentine Arms factory, and it promises
+to be a trendsetter. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	2850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	40
+	Val6:	40
+	Val7:	5105
+	Val8:	653
+	Val9:	692
+	Val10:	28
+BREAK
+#19718
+Keywords:	helmet kevlar heavy
+Name:	a heavy kevlar helmet
+RoomDesc:$
+A helmet is lying here.~
+LookDesc:$
+Its a large combat helmet, with layers of kevlar inlaid inside of it. It looks
+like it could take quite a beating, and the scuffs here and there on its shell
+make it seem like it might already have. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#19719
+Keywords:	sniper rifle tiger
+Name:	Pacific Fire LTD. SR-2 Tiger
+RoomDesc:$
+A large rifle is lying here.~
+LookDesc:$
+Capitalizing on the trend for larger, more powerful sniper weapons, the Tiger
+is chambered for the high-power .50 caliber Browning machine gun round. One
+hit from this and its all over. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000001000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	9.00
+	Barrier:	6
+	Cost:	2600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val3:	12
+	Val4:	12
+	Val5:	10
+	Val10:	4
+BREAK
+#19721
+Keywords:	armor heavy suit
+Name:	a suit of heavy combat armor
+RoomDesc:$
+A set of combat armor is lying here.~
+LookDesc:$
+A suit of heavy combat armor, composed of kevlar plates connected to a padded
+and ribbed undersuit. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	12.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	3
+	LegalCode:	11
+	LegalPermit:	1
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	4
+	Val5:	6
+	Val6:	5
+	Val7:	8
+BREAK
+#19722
+Keywords:	Thorvald light pistol gun
+Name:	Thorvald LTD. Streetrat
+RoomDesc:$
+A small pistol is lying here.~
+LookDesc:$
+THE ultimate in light pistol weaponry! This small pistol is easily
+concealable, and packs more of a punch than any other light pistol. Comes with
+an integral laser-sight. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	6
+	Val4:	11
+	Val5:	12
+	Val6:	12
+	Val8:	626
+	Val9:	-1
+	Val10:	4
+BREAK
+#19724
+Keywords:	pistol heavy D-45 tomahawk
+Name:	D-14 Tomahawk heavy pistol
+RoomDesc:$
+A large heavy pistol is on the ground here.~
+LookDesc:$
+Top of the line pistol from drakemore labs, straight to your holster. The
+fastest single shot heavy pistol on the market. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	16
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val6:	12
+	Val7:	5105
+	Val8:	18981
+	Val9:	-1
+	Val10:	4
+BREAK
+#19725
+Keywords:	rifle assault kc aug 10a2
+Name:	Krizig KC AUG-10a2 
+RoomDesc:$
+An assault rifle is lying in the dirt here.~
+LookDesc:$
+A reliable russian made assault rifle, it is virtually impossible to break or
+jam this weapon. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	32
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	40
+	Val6:	40
+	Val7:	5105
+	Val8:	653
+	Val9:	692
+	Val10:	28
+BREAK
+#19727
+Keywords:	armscorp lmg ss-77 machinegun
+Name:	An Armscorp SS-77 LMG
+RoomDesc:$
+An SS-77 LMG is lying here, going to waste.~
+LookDesc:$
+Built to survive the harsh African climates, the SS-77 is standard SAW (Squad
+Automatic Weapon) for several merc companies around the world. Light enough to
+tote all day long, and with its collapsable stock its small enough to paradrop
+with, making the SS-77 the perfect answer to your fire support needs.
+Unfortuantely, due to the design of its clip, it cannot mount any underbarrel
+accessories. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.00
+	Barrier:	16
+	Cost:	2800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	15
+	Val4:	19
+	Val5:	100
+	Val6:	100
+	Val8:	653
+	Val10:	16
+BREAK
+#19729
+Keywords:	beer keg massive
+Name:	a massive beer keg
+RoomDesc:$
+A massive keg of beer is sitting here.~
+LookDesc:$
+A MASSIVE keg of beer, this thing would probably require two trolls to carry.
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	80
+	Val2:	10
+BREAK
+#19730
+Keywords:	bar self serve self-serve
+Name:	the Self-Serve bar
+RoomDesc:$
+The bar is here, help yourself.~
+LookDesc:$
+Your basic self-serve bar, go in and get a drink already. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	5
+	Val2:	-1
+BREAK
+#19731
+Keywords:	can beer 
+Name:	a can of beer
+RoomDesc:$
+A can of beer is on the ground here.~
+LookDesc:$
+A can of soy-beer. yummy. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.02
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	6
+	Val2:	10
+BREAK
+#19732
+Keywords:	orichalcum necklace 
+Name:	an orichalcum necklace
+RoomDesc:$
+A necklace is lying on the ground here.~
+LookDesc:$
+A beautiful orichalcum necklace, it obviously holds much magical power. Being
+built from orichalcum, it also means it is rather fragile. 
+~
+Type:	Focus
+WearFlags:	101
+ExtraFlags:	1001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	105000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	1
+BREAK
+#19733
+Keywords:	colt pistol light m2011a1
+Name:	a Colt M2011a1
+RoomDesc:$
+A Colt pistol is lying here, gathering dust.~
+LookDesc:$
+Sick of all the choices in the handgun market? Tired of trying to interpret
+ballistics tests and comparing price and performance ratios? Don't want to
+have cybernetic implants just to change a magazine? The Colt M2011a1, an
+upgraded version of the world-famous and most copied firearm in all existence,
+the M1911a1 .45 ACP pistol, is the answer. Battle proven from Afghanistan to
+Zaire, the classic Colt mechanism will function in any environment. It comes
+stock with an integral laser sight. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	11
+	Val6:	11
+	Val8:	626
+	Val10:	4
+BREAK
+#19735
+Keywords:	suit combat polymer black tight
+Name:	a tight black combat suit
+RoomDesc:$
+A polymer combat suit has been left here.~
+LookDesc:$
+This combat suit shrink-fits to the user's body, allowing them to move more
+effectively than traditional combat suits do. It's also made out of advanced
+polymers, allowing it to protect the user against high amounts of impact
+damage. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	2225
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	3
+	LegalCode:	11
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	4
+	Val6:	5
+	Val7:	6
+BREAK
+#19738
+Keywords:	cigarette smoke cig
+Name:	a cigarette
+RoomDesc:$
+A lit cigarette is here.~
+LookDesc:$
+A basic cigarette, still lit. Take a puff. 
+~
+Type:	Light
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+BREAK
+#19739
+Keywords:	norinco rifle assault a-10 
+Name:	Norinco A-10 Assault Rifle
+RoomDesc:$
+A cheap assault rifle is lying here.~
+LookDesc:$
+  Sure, being on the cutting edge is nice--but it costs. And why pay  for
+unneeded features when all you need is a reliable weapon?  Norinco, the
+national firearms manufacturer of China, has the  low-cost solution for you!
+No frills, but able to be upgraded with  all standard accessories.  
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	3
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	40
+	Val6:	40
+	Val10:	28
+BREAK
+#19741
+Keywords:	teddy skimpy
+Name:	a skimpy teddy
+RoomDesc:$
+A small teddy is lying here.~
+LookDesc:$
+Very sheer, very see-thru. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	3
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19742
+Keywords:	station bench work workstation btl
+Name:	a BTL workstation
+RoomDesc:$
+A BTL packaging station is set up here.~
+LookDesc:$
+This station holds many rolls of bubble-wrap, boxes, and... BTLs! loot em all,
+you little chiphead. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1200.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	-1
+BREAK
+#19743
+Keywords:	key
+Name:	Key to the ^LDirectors Wing^N
+RoomDesc:$
+A ^Lblack^N key is lying here.~
+LookDesc:$
+A black key from the BTL factory. Leads to the Director's Wing. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19746
+Keywords:	wrench monkey steel
+Name:	a monkey wrench
+RoomDesc:$
+A large monkey wrench is lying here.~
+LookDesc:$
+A basic monkey wrench, quite heavy, its probably good for fixing stuff, or
+cracking heads wide open with. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	4
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#19747
+Keywords:	over alls overalls
+Name:	A pair of grease stained overalls
+RoomDesc:$
+Some overalls are lying in a heap here.~
+LookDesc:$
+Just some dirty overalls, with grease stains and rips galore all over them.
+Enjoy. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	6
+BREAK
+#19748
+Keywords:	H&K caws shotgun heckler koch
+Name:	An H&K CAWS automatic shotgun
+RoomDesc:$
+A powerful looking shotgun is lying here.~
+LookDesc:$
+The Heckler & Koch CAWS (Close Assault Weapon System) is an automatic shotgun
+design that was originally intended to be for the US Navy program of the same
+name. The intention was to provide a more adequate solution for close quarter
+engagements. The design is bullpup in layout, with the magazine behind the
+trigger and has a ceramic frame to reduce its weight. The CAWS fires standard
+12 gauge (19.5 x 76B) shells, allowing high commonality with other shotguns. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	2275
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	12
+	Val6:	12
+	Val7:	5105
+	Val8:	651
+	Val9:	692
+	Val10:	12
+BREAK
+#19750
+Keywords:	weapons locker foot
+Name:	a weapons footlocker
+RoomDesc:$
+A large weapon footlocker in on the ground here.~
+LookDesc:$
+A large plassteel footlocker, made to hold weaponry. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3000.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	-1
+BREAK
+#19751
+Keywords:	ammo crate
+Name:	an ammo crate
+RoomDesc:$
+A crate of ammo is lying here.~
+LookDesc:$
+A wooden crate, made for safely holding/transporting ammunition. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	4000.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	-1
+BREAK
+#19752
+Keywords:	chains chain manriki guasari manriki-gusari
+Name:	a manriki-gusari
+RoomDesc:$
+A long set of chains are lying here in a pile.~
+LookDesc:$
+This weapon is a two meter long chain with small weights at either end of it.
+It is a melee weapon that is used by swinging the chain about one's body, and
+using the weights to strike your opponent.  
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	150
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	5
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#19753
+Keywords:	map make makers maps bench
+Name:	a map makers bench
+RoomDesc:$
+A map makers bench is sitting against a wall here.~
+LookDesc:$
+A basic map makers bench, used to (DUH) make maps. Looks like theres a draft
+of seattle on it now, but its FAR from finished... 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2000.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19754
+Keywords:	map redmond
+Name:	a map of Redmond
+RoomDesc:$
+A map is lying here, getting dirty.~
+LookDesc:$
+A map showing various road routes in redmond and parts of seattle. No real use
+to you. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19755
+Keywords:	sword troll size sized
+Name:	a troll-sized monosword
+RoomDesc:$
+An incredibly long monosword is lying here.~
+LookDesc:$
+From the looks of it, this massive sword is custom made. Its troll-sized, and
+very hefty. Probably noone under a troll could wield it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	101000001001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	32
+	Cost:	3450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	3
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#19756
+Keywords:	key director's director room
+Name:	the key to the ^LDirector's^N room
+RoomDesc:$
+A long black key is lying here.~
+LookDesc:$
+A long, black, iron key. Seems pretty heavy. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19757
+Keywords:	toy blink blinks hush puppy hushpuppy
+Name:	Blink's hushpuppy
+RoomDesc:$
+A small toy is lying here.~
+LookDesc:$
+A bean-bag, in the form of a puppy dog. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19758
+Keywords:	leg metal robot
+Name:	the leg of a sentry robot
+RoomDesc:$
+A long metal leg is lying here.~
+LookDesc:$
+A metal leg ripped off a sentry robot. It could probably be used as a weapon
+if yer in a jam. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.00
+	Barrier:	8
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#19759
+Keywords:	heli copter chopper helicopter hunter Mi 74 Mi-74
+Name:	an Mi-74 'Hunter' attack chopper
+RoomDesc:$
+^yAn Mi-74 'Hunter' attack helicopter has landed here.~
+LookDesc:$
+A light, fast attack chopper normally used by the military to combat
+smugglers. The Mi-74 can double as a troop transport, as it has 8 bucket seats
+in addition too the twin bucket seats for the pilot and co-pilot.
+ Armament - Not fitted as standard, but has one AA capable mini remote turret
+with a medium ammo capacity.(Read: 1CF) One right-side mounted hardpoint, with
+a medium amount of space(Read: 1CF)  Six rocket missile mounts reinforced to
+accept up to 450 kg of weaponry per mount, plus capability to use drop tanks.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100000.00
+	Barrier:	32
+	Cost:	13986000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19760
+Keywords:	pistol heavy usp mod 0 v
+Name:	a Heckler & Koch USP-V Mod 0 pistol
+RoomDesc:$
+A large pistol is lying here.~
+LookDesc:$
+Replacing both the USP IV and the Pz M136, the USP-V Mod 0 is a highly
+advanced pistol for the active combat sections. Building on the old Mark 23
+"SOCOM" pistol, the USP V Mod 0 follows in the same tradition, only
+differently. When it became apparent that the Pz M136 was incapable of meeting
+the needs of the SSG, Heckler & Koch engineers went back to the drawing
+boards. What they came up with may be the most advanced heavy pistol in the
+world. The weapon is blowback operated, as standard in all HK pistols. The
+slide locks back when the weapon has been emptied, allowing simply for the
+firer to slam another magazine and pull slightly, and the slide will chamber
+the first round. Engineers have modified the slide system to also self-clean
+the action, preventing dirt from fouling up the weapon, and making it highly
+reliable in almost all enviroments. A polymer outer frame is colored in olive
+drab, and is designed to break up the outline of the weapon. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	8
+	Cost:	2250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	18
+	Val6:	18
+	Val9:	-1
+	Val10:	4
+BREAK
+#19761
+Keywords:	forklift
+Name:	forklift
+RoomDesc:$
+^yA heavily laden forklift rumbles by here..^n~
+LookDesc:$
+A forklift drives by here, it's tongs are heavily laden with a skid packed
+high with BTL chips.  They're remotely operated by riggers elsewhere
+apparently as no one seems to be driving them! 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19762
+Keywords:	flight suit military
+Name:	a military flightsuit
+RoomDesc:$
+A military flightsuit is lying in a heap here.~
+LookDesc:$
+A standard military flight suit, designed for field pilots with padding to
+take g-force during air combat. Pouches line the pockets chest, with space for
+field equipment, and a holster is under the suits right arm. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	11010000001000001000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	5
+	Val4:	4
+	Val5:	2
+	Val6:	2
+	Val7:	2
+BREAK
+#19763
+Keywords:	rigger rigging control deck helmet flight
+Name:	a military flight helmet
+RoomDesc:$
+An olive green helmet is lying here.~
+LookDesc:$
+A large olive green flight helmet, complete with all the emenities you'd
+expect from a piece of military hardware. The fold down face plate is
+completely black, covering the rigging equipment on the other side as well as
+the thermographics. 
+~
+Type:	Rigger Control Deck
+WearFlags:	10001
+ExtraFlags:	10010000001000001000
+AffFlags:	1000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	30000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#19764
+Keywords:	black table coffee
+Name:	a ^LBlack^n Coffee Table
+RoomDesc:$
+^LA Black Coffee Table is in the middle of the lounge here.^n~
+LookDesc:$
+A glass coffee table, with a ^LBlack^n circle inlaid into it. Odd name are written
+into the table. Zaer, Oloth, Blink, Hwang, Morphious and Korisaru.  Who are
+these people? 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19765
+Keywords:	leather black jacket
+Name:	^LOragnin's black leather jacket^n
+RoomDesc:$
+^LA black leather jacket^n is crumpled here.~
+LookDesc:$
+Oragnin's leather jacket. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	50
+	Val6:	50
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	100
+BREAK
+#19766
+Keywords:	ring circle black
+Name:	^LOragnin's Obsidian Ring^n
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+^LOragnin's Obsidian Ring^n is sitting here. 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	100000000001
+AffFlags:	11000001000000000
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Body
+	Modifier:	30
+[AFFECT 1]
+	Location:	Max Physical
+	Modifier:	100
+[AFFECT 2]
+	Location:	Max Mental
+	Modifier:	100
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	100
+[AFFECT 4]
+	Location:	Init Dice
+	Modifier:	5
+[AFFECT 5]
+	Location:	Quickness
+	Modifier:	30
+BREAK
+#19767
+Keywords:	pants pant
+Name:	^LOragnin's leather pants^n
+RoomDesc:$
+^LOragnin's leather pants^n are lying here.~
+LookDesc:$
+^LOragnin's leather pants^n 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	30
+[AFFECT 1]
+	Location:	Intelligence
+	Modifier:	30
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	44
+[AFFECT 3]
+	Location:	Willpower
+	Modifier:	30
+[AFFECT 4]
+	Location:	Init Dice
+	Modifier:	30
+[AFFECT 5]
+	Location:	Ballistic
+	Modifier:	50
+BREAK
+#19768
+Keywords:	cue stick
+Name:	^LOragnin's Cue Stick^n
+RoomDesc:$
+^LOragnin's Cue Stick^n is lying here.~
+LookDesc:$
+^LOragnin's Cue Stick^n 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000001
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-50
+[AFFECT 1]
+	Location:	Charisma
+	Modifier:	30
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	44
+BREAK
+#19769
+Keywords:	paper pad
+Name:	a pad of paper
+RoomDesc:$
+A small pad of paper is on the ground here.~
+LookDesc:$
+Its a small pad of paper, with writing about some larger facility in Chicago
+somewhere... 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19770
+Keywords:	paper formula odd looking piece paper toilet
+Name:	an odd-looking piece of paper
+RoomDesc:$
+An odd-looking piece of paper is lying here.~
+LookDesc:$
+A lengthy piece of toilet paper with odd arcane symbols scribbled on it. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	6
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	23
+BREAK
+#19771
+Keywords:	bird cage birdcage
+Name:	Lucy's birdcage
+RoomDesc:$
+Lucy's birdcage is hanging in a corner here, door wide open.~
+LookDesc:$
+Its a large birdcage, secured tightly to a corner of the hummer. The door is
+open. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19772
+Keywords:	book brown holy bible
+Name:	the Holy Bible
+RoomDesc:$
+A brown book is lying on the ground here.~
+LookDesc:$
+You are holding a Holy Bible in your hands. It's pages are tattered and old,
+but still very readable. You almost feel empowered just by reading it. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19773
+Keywords:	orkslayer thorvald ltd. pistol large heavy
+Name:	a Thorvald Ltd. Orkslayer
+RoomDesc:$
+A large heavy pistol has been left here.~
+LookDesc:$
+The Thorvald Ltd. Orkslayer, a very famous pistol in its own right. It only
+chambers nine rounds and therefore is very hard to find proper clips for, but
+it makes up for it in stopping power. The only drawback is that its design
+doesn't allow for attachments. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	9
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	4
+BREAK
+END

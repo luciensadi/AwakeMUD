@@ -1,0 +1,899 @@
+#3800
+Keywords:	Walrus
+Name:	a hairy walrus
+RoomDesc:$
+A hairy walrus is basking here, smelling of dead fish.~
+LookDesc:$
+It's hairy. It's smelly. It's a walrus.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000011101
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	10
+[AFFECT 1]
+	Location:	Body
+	Modifier:	12
+[AFFECT 2]
+	Location:	Magic
+	Modifier:	10
+BREAK
+#3801
+Keywords:	Carboncoat
+Name:	a carbon-fiber coat
+RoomDesc:$
+A coat, black as night~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000011101
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Body
+	Modifier:	10
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	88
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	88
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	8
+[AFFECT 4]
+	Location:	Charisma
+	Modifier:	11
+BREAK
+#3802
+Keywords:	hand
+Name:	the HAND OF GOD
+RoomDesc:$
+The HAND OF GOD is here, hovering disdainfully above the ground.~
+LookDesc:$
+You are immediately blinded by its power and luminescence.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000011111
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+BREAK
+#3807
+Keywords:	silk silken ghi
+Name:	a silken ghi
+RoomDesc:$
+A silken ghi is lying here, collecting dust.~
+LookDesc:$
+It has been exquistely tailored from the finest oriental silk to
+be found in the world. Small designs of flaming dragons and bamboo
+buildings have been impeccably embroidered on the front. It has a
+strange sheen to it, as though it could blend in with the shadows.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000000001
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic
+	Modifier:	20
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	10
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	2
+[AFFECT 3]
+	Location:	Astral Pool
+	Modifier:	10
+BREAK
+#3808
+Keywords:	pool pooltable table
+Name:	a worn-down pool table
+RoomDesc:$
+A worn-down pool table is standing here, the source of countless hours of fun
+and fights.~
+LookDesc:$
+those
+old fashioned pool tables, made from some sort of hardwood. Unfortunately
+the table has begun to show its age, and the rickety legs sway under the 
+weight of the zealous players.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3300.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3809
+Keywords:	magnus ek
+Name:	Magnus Ek
+RoomDesc:$
+Magnus Ek is lying here, playing music and being a rather cool bloke.~
+LookDesc:$
+Hmmm...seems to be Swedish.
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	100000010000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	88
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	88
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	15
+[AFFECT 3]
+	Location:	Body
+	Modifier:	15
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	-10
+BREAK
+#3810
+Keywords:	mindfuck ethereal
+Name:	the ethereal mindfuck
+RoomDesc:$
+Off to the~
+LookDesc:$
+When you catch sight of this weapon, you tremble so violently with
+fear that you nearly break your own back. Anyone who wields it, wields
+the hidden power of the gods, and holds the key to the universe....
+its destruction. You recognize this glass weapon as the end of all life
+on earth, and, perhaps, elsewhwere.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000011011
+AffFlags:	1011000000101000
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	4
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+[AFFECT 0]
+	Location:	Body
+	Modifier:	15
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	15
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	15
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	15
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	-15
+[AFFECT 5]
+	Location:	Quickness
+	Modifier:	15
+BREAK
+#3811
+Keywords:	gimpo
+Name:	a flaming gimpo
+RoomDesc:$
+A flaming gimpo lies here, looking lonely.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	100000011011
+AffFlags:	10100
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	100
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	100
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	100
+[AFFECT 3]
+	Location:	Ballistic
+	Modifier:	100
+[AFFECT 4]
+	Location:	Ballistic
+	Modifier:	100
+[AFFECT 5]
+	Location:	Impact
+	Modifier:	100
+BREAK
+#3812
+Keywords:	cyber thing junk
+Name:	a junky cyber-thing
+RoomDesc:$
+A junky cyber-thing sits heavily on the ground.~
+LookDesc:$
+ITs pretty screwed up
+~
+Type:	Cyberware
+WearFlags:	100000000001
+ExtraFlags:	100000011011
+AffFlags:	1000000
+Material:	ceramic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	15
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	15
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	15
+[AFFECT 2]
+	Location:	Quickness
+	Modifier:	15
+[AFFECT 3]
+	Location:	Impact
+	Modifier:	100
+[AFFECT 4]
+	Location:	Impact
+	Modifier:	100
+BREAK
+#3813
+Keywords:	plastic water cooler
+Name:	a plastic water cooler
+RoomDesc:$
+A plastic water cooler is here, humming a symphony of refrigeration.~
+LookDesc:$
+The philosophy behind life here at CryoCo. is to keep to provide
+a sanctuary for the employees--a world away from the terror of
+the streets. A water cooler fits into that idea nicely.
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	10
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10000
+	Val1:	10000
+	Val2:	13
+BREAK
+#3814
+Keywords:	ashtray glass heavy
+Name:	a heavy glass ashtray
+RoomDesc:$
+A glass ashtray lies here heavily upon the ground, several lipstick-stained
+butts still smoldering within.~
+LookDesc:$
+tinctured yellow from the noxious
+emissions of hundreds of cigarettes that have at one point or another rested
+in it.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3815
+Keywords:	key card keycard blue
+Name:	a blueish keycard
+RoomDesc:$
+A blueish keycard is sitting here, collecting dust.~
+LookDesc:$
+It appears to be blue anodized, with some circuitry still exposed. It has a
+Japanese character enruned upon it in red, perhaps a warning, perhaps just a
+logo.
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3816
+Keywords:	Foo's Ram Touch spell formula
+Name:	a cyan scroll
+RoomDesc:$
+A shining green scroll sits here, waiting to find its purpose.~
+LookDesc:$
+It scintillates in the sunshine, and is surrounded by a deadly aura.
+~
+Type:	Spell Formula
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	54
+BREAK
+#3817
+Keywords:	metal eye scan
+Name:	a scan-eye
+RoomDesc:$
+A metallic sphere lies here, bearing a slight resemblance to an eyeball~
+LookDesc:$
+Looking closely, you find that the sphere has a definite retinal pattern,
+giving you some idea as to the function of the eye. Perhaps it will work
+at a retinal scanner...
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3818
+Keywords:	eye retinal scanner
+Name:	a retinal scanner
+RoomDesc:$
+A retinal scanner, smudged with eye crud, is implanted in the security lock.~
+LookDesc:$
+Presumably, the only way to gain access to CryoCo.'s main research and
+development labs is to pass a retinal scan test, which is programmed to
+recognize the occular characteristics of all CryoCo. workers with clearance.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3819
+Keywords:	surgical cot bed
+Name:	a surgical cot
+RoomDesc:$
+An uncomfortable looking surgical cot stands here.~
+LookDesc:$
+Bleached white and hard on the back, this cot undoubtedly serves as an
+improptu operating table. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	24.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3820
+Keywords:	pamphlet cryco slim
+Name:	a CryoCo. pamphlet
+RoomDesc:$
+A slim pamphlet, bearing the single word "CryoCo", sits on a coffee table.~
+LookDesc:$
+You might consider reading the pamphlet...
+~
+Type:	Radio
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	read pamphlet
+	Desc:$
+Hello, dear executive officers of CryoCo.! The staff here at the R&D skin
+labs complex wishes you a very happy visit. Please feel free to wander the
+premises, and don't hesitate just to ask one of the workers here if you
+need help.
+CryoCo. is comitted to creating the most innovative and usefull technology,
+making a better life for us all through genetic engineering and old
+fashion medical techniques. The Skinlabs were established nearly 4 years ago
+to provide CryoCo. with the edge in the competetive Bioware market. Since
+then, the labs have surpassed in the development of genetically farmed tissue
+any of the wildest dreams of its founders. Already, it is projected that we
+will have a fully operational biomechanoid in at most two months, and excite-
+ment is simply ubiquitous. Using the superconducting synaptic bridge tech-
+nology developed in our Japan branch, we have perfected the neural net path-
+working necessary for the completion of our task. It is our sincere hope that
+the first on-line biomechanoid will ba far superior to human beings, but be
+almost identical to them. Already several prototypes have been tested, and
+although several casualties resulted from their activation, we cleaned the
+ entrails from our walls and started over again. We are confident that the
+next attempt will result in a much more stable being.
+Our marketing analysts have also suggested that our biomechanoids will sell
+like flapjacks once implemented, serving as soldiers and mercenaries. Also,
+the technology we have developed here has many practical applications to the
+surge in popularity of modern bioware, which splices biologically enhanced
+tissues with carefully engineered micromachinery. 
+All of us here at the Skinlabs wish you a happy visit!
+~
+BREAK
+#3821
+Keywords:	hyperalloy cranium skull hyper alloy
+Name:	a hyperalloy cranium
+RoomDesc:$
+A sturdy looking skull lies here, glinting metallically.~
+LookDesc:$
+A sharp glare catches your eyes as look at the crest of this spherical
+cerebral casing. You can see some finely detailed circuitry, but the
+main purpose of this object seems to br protection.
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	1
+AffFlags:	1000010000000000000
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	-2
+[AFFECT 1]
+	Location:	Willpower
+	Modifier:	-1
+BREAK
+#3822
+Keywords:	lab coat white labcoat
+Name:	a white lab coat
+RoomDesc:$
+A pile of bleachy cloth lies here in a crumpled heap.~
+LookDesc:$
+It seems to be just an ordinary lab coat, furrowed and starchy, but its 
+immaculately bleached fabric reflects a neurotically orderly mind...
+Concern for CryoCo. employee safety has prompted someone to reinforce this
+garment with partially bullet proff fiber.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3823
+Keywords:	fax facsimile machine
+Name:	a facsimile machine
+RoomDesc:$
+A facsimile macine sits here on a table, waiting to receive data.~
+LookDesc:$
+Black, slim and bearing the name "CryoCo.", it whirs periodically with an
+incoming transmission.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3824
+Keywords:	sportscoat armani jacket pinstripe silky
+Name:	a silky Armani sportscoat
+RoomDesc:$
+A luxuriant piece of clothing is lying here in the dust.~
+LookDesc:$
+Pinstriped and and fabricate from the finest Oriental silk, not the fake cheap
+stuff, this jacket is part of Armani's new line of clothing and accessories.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3825
+Keywords:	crocodile skin shoes grey
+Name:	a pair of grey, crocodile skin shoes
+RoomDesc:$
+A fine, tough-looking pair of shoes sits here.~
+LookDesc:$
+The shoes, obviously crafted from some poor reptilian's hide, are rough and
+leathery, looking as though they may never wear out.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	100000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3826
+Keywords:	scalpel silver plated
+Name:	a silver plated scalpel
+RoomDesc:$
+A small glinting weapon lies here.~
+LookDesc:$
+Incredibly sharp, and very light, this would make the perfect companion for 
+any surgeon.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+BREAK
+#3827
+Keywords:	sleeves pair immaculately honed titanium hyper silk
+Name:	a pair of titanium threaded hyper-silk sleeves
+RoomDesc:$
+Some bizzar-o and somewhat feminine looking article of clothing lies here,
+glimmering slightly. On second thought, nak nak.~
+LookDesc:$
+mercenary spec sleeves, but perhaps a shade more
+advanced than what the average Joe-psychotic mother killer-Bloggs could
+afford.
+~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3828
+Keywords:	yttrium barium copper oxide bracer super superconductor
+Name:	a yttrium barium copper oxide bracer
+RoomDesc:$
+A frosty hunk of metal bearing the engraved initials 'Y2Ba2Cu(III)3O2' is
+lying here.~
+LookDesc:$
+metal, 
+twisted in such a way as to fit perfectly around a large wrist. Strangely,
+when your skin comes in contact with this object, an energy of unidentifiable
+origin courses through your veins, making your spine tingle and hair stand
+on end.
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	100001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3829
+Keywords:	laser argon welding
+Name:	an argon welding laser
+RoomDesc:$
+A nondescript-looking gray tube is lying here.~
+LookDesc:$
+Upon close inspection, you can see a faded sticker on the tube. Its a 
+warning of some type, the words reading, "WARNING: Laser light emmitted
+from this apperture".
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	2
+	Val3:	9
+	Val4:	17
+	Val5:	-1
+BREAK
+#3897
+Keywords:	skull slick wet red michelle deathless equinolich
+Name:	the slick, wet, red skull of Michelle, the deathless equinolich
+RoomDesc:$
+A ghastly skull is lying here, seeping crimson blood.~
+LookDesc:$
+Hello, blah blah blah
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3898
+Keywords:	christmas tree evergreen flickering
+Name:	a decorated Christmas tree
+RoomDesc:$
+A huge decorated Christmas tree stands here, weighed down with decorations.~
+LookDesc:$
+Of all the evergreen trees you've ever seen, this one reigns supreme.
+Flashing lights, juiced by a small energy converting machine composed
+of some running gerbils and a small AAA battery, flicker periodically
+and the tree's boughs are arching under the weight of various ornaments.
+Under the tree plenty of space has been left for gifts and on a small
+table four or five cookies have been laid out along with some milk.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3899
+Keywords:	quantum phase beam inducer laser
+Name:	a quantum phase beam inducer
+RoomDesc:$
+A strange metallic object lies here, collecting dust.~
+LookDesc:$
+Looks similar to a laser, but oh so different.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	100000000011
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	100
+	Val2:	100
+	Val3:	36
+BREAK
+END

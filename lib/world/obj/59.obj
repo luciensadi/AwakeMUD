@@ -1,0 +1,721 @@
+#5900
+Keywords:	key aluminum smallish
+Name:	a smallish aluminum key
+RoomDesc:$
+A smallish aluminum key glints here.~
+LookDesc:$
+A small, shiny key, made out of aluminum. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5901
+Keywords:	pizza cheese slice
+Name:	a slice of cheese pizza
+RoomDesc:$
+A slice of cheese pizza is here.~
+LookDesc:$
+It's a slice of cheese pizza. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#5902
+Keywords:	pizza pepperoni slice
+Name:	a slice of pepperoni pizza
+RoomDesc:$
+A slice of pepperoni pizza is here.~
+LookDesc:$
+Your standard large slice of pizza, topped with pepperoni. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#5903
+Keywords:	pizza veggie
+Name:	a slice of veggie pizza
+RoomDesc:$
+A slice of vegetable-topped pizza is here.~
+LookDesc:$
+A slice of pizza, topped with broccoli, olives, mushrooms, peppers and
+assorted other vegetables. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#5904
+Keywords:	pizza meat
+Name:	a slice of meat pizza
+RoomDesc:$
+A slice of meat-lover's style pizza sits on a plate all greasy and delicious looking.~
+LookDesc:$
+It's a slice of pizza, topped with all different kinds of meat. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#5905
+Keywords:	pizza hawaiian slice
+Name:	a slice of Hawaiian-style pizza
+RoomDesc:$
+A slice of pizza sits here.~
+LookDesc:$
+A slice of pizza topped with ham slices and pineapple chunks. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#5906
+Keywords:	sandwich ham cheese sub
+Name:	a ham and cheese sub
+RoomDesc:$
+A good-sized submarine sandwich sits here.~
+LookDesc:$
+This well-stuffed sub roll has slices of ham and cheese poking out from its
+sides. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#5907
+Keywords:	sandwich turkey cheese sub
+Name:	a turkey and cheese sub
+RoomDesc:$
+A cheese and meat sandwich sits here.~
+LookDesc:$
+A submarine roll, crammed with cheese and fresh turkey. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#5908
+Keywords:	sandwich poorboy
+Name:	a poorboy sandwich
+RoomDesc:$
+An overstuffed sandwich sits here.~
+LookDesc:$
+Scraps of assorted meats and cheeses spill out of a huge submarine roll. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	22
+BREAK
+#5909
+Keywords:	cup large sprite
+Name:	a large cup of sprite
+RoomDesc:$
+A large plastic cup sits here.~
+LookDesc:$
+A large cup, the type that typically holds softdrinks. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	1
+BREAK
+#5910
+Keywords:	cup coke large
+Name:	a large cup of coke
+RoomDesc:$
+A large plastic cup is here.~
+LookDesc:$
+Just a large plastic cup - the type that usually holds softdrinks. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	1
+BREAK
+#5911
+Keywords:	glass large lemonade
+Name:	a large lemonade
+RoomDesc:$
+A large glass of lemonade sits here waiting to be thrown away.~
+LookDesc:$
+A large glass that holds or may once have held lemonade. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	4
+BREAK
+#5912
+Keywords:	tea glass iced large
+Name:	a large glass of iced tea
+RoomDesc:$
+A large glass is here.~
+LookDesc:$
+Just a large plastic cup - the type that usually holds soda or iced tea. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	5
+BREAK
+#5913
+Keywords:	mug beer frosty
+Name:	a frosty mug of beer
+RoomDesc:$
+A frosty mug of beer is here.~
+LookDesc:$
+A tall, frosty mug of cold beer. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.50
+	Barrier:	2
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	10
+BREAK
+#5914
+Keywords:	pitcher beer
+Name:	a pitcher of beer
+RoomDesc:$
+A pitcher of beer sits here.~
+LookDesc:$
+A tall plastic pitcher full of beer. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	10
+BREAK
+#5950
+Keywords:	grenade stun
+Name:	a stun grenade
+RoomDesc:$
+A grenade with the word "knockout" written on its side sits here.~
+LookDesc:$
+a small grenade with the word 'knockout' written on the side. Just pull the
+pin and throw. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	24
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	318
+	Val4:	27
+	Val5:	-1
+	Val6:	-1
+BREAK
+#5951
+Keywords:	jersey seahawks
+Name:	A seattle seahawks jersey
+RoomDesc:$
+a jersy with the seahawks logo is hanging from a hook~
+LookDesc:$
+A green and blue jersey with the Seattle Seahawks mascot on the front. On the
+back is the number 36 and the name Jameson. the quarterback that snuck for a
+total of 45 years to score a touchdown on that famous play back in the '61
+superbowl. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	8
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5952
+Keywords:	white noise generator
+Name:	a white noise generator
+RoomDesc:$
+a small cube with a speaker in the side is resting here looking useless~
+LookDesc:$
+A small black cube with a small speaker in the side of it. This personal white
+noise generator has a range of up to 40 feet controlled by a small dial on the
+side. When turned on it emits a subliminal hum on a frequency designed to
+dissable almost any electronic sound recording or transmitting equipment
+within it's range. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	8
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5953
+Keywords:	paper shredder portable
+Name:	a portable paper shredder
+RoomDesc:$
+a portable paper shredder is resting on a nearby waste basket~
+LookDesc:$
+a thin rectangle of plastic with a switch on the side and a big slot in the
+top and bottom. The switch is flipped into the on position and paper is pased
+through the slit in the top to shred it into unreadable sections before it is
+thrown away. Thereby making those un-necessary documents safer to throw away.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5954
+Keywords:	mini disk mini-disk recorder transmitter
+Name:	A mini-disk Recorder/transmitter
+RoomDesc:$
+A mini-disk Recorder/transmitter lays here, perhaps recording everything you say~
+LookDesc:$
+A small mini-disk recorder with a microphone built into the side. Several
+buttons including record, play, rewind, fast-forward, and transmit/play adorn
+one side, while the disk-slot decorates the other. This little piece is even
+better because it can also broadcast on the CB frequency levels as well as
+shortband, under crypt level 5. If used right it could even be used as a short
+range CB. 
+~
+Type:	Radio
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	5
+BREAK
+#5955
+Keywords:	purse
+Name:	a black leather purse
+RoomDesc:$
+a black leather purse is sitting here open~
+LookDesc:$
+a stylish black leather purse. Perfect for toting those makeup kits,
+cellphones, walets, and walther palm pistols. This one comes complete with a
+shoulder strap for ease of carrying. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	5
+	Val2:	-1
+BREAK
+#5956
+Keywords:	penlight
+Name:	a penlight
+RoomDesc:$
+a tiny penlight is laying here almost unnoticed~
+LookDesc:$
+This flashlight is tiny, very tiny. Approximately the size of a disposable ink
+pen. But it has a very powerfull, tightly focused beam. perfect for those
+situations where you might need a light, but dont want to be obvious about
+being prepared. This one comes charged with 200 hours of battery power. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	200
+BREAK
+#5957
+Keywords:	formula fireball
+Name:	A spell formula for 'fireball'
+RoomDesc:$
+A spell formula for 'fireball'~
+LookDesc:$
+A piece of partchment, with runes and other hermetic devices printed on it. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	6
+	Val6:	2
+BREAK
+#5958
+Keywords:	stun staff wood
+Name:	A stun staff
+RoomDesc:$
+A staff of ornately carved oak, crowned with an 'opal' lies here discarded~
+LookDesc:$
+A shaft of wood, about 5 feet long and carved with intricate runes. At the
+crown of the staff is the preserved, skeletal hand of a piasma, complete with
+claws, encompasing a baseball sized 'opal'. This 'opal' is in actuality a
+large current, solar-recharged electrical battery. at the tips of two of the
+claws, if you look carefully, are small exposed metal tabs, designed to
+deliver a powerfull electrical shock. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	10001000000000011
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	16
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	4
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#5959
+Keywords:	Mitsuhama prototype laser cannon
+Name:	A prototype Laser cannon
+RoomDesc:$
+A huge laser cannon with the Mitsuhama logo on the side~
+LookDesc:$
+Around 1.5 meters long, this incredibly heavy cannon is equipped with a
+shoulder strap. There is a compartment in the side for battery packs. This
+version is slightly lighter and more accurate than the Ares MP-9 version. It
+also sports the Mitsuhama logo etched into the side of the rather large barell
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000010
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	25.00
+	Barrier:	8
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	4
+	Val3:	11
+	Val4:	12
+	Val5:	16
+	Val6:	16
+	Val8:	-1
+BREAK
+#5960
+Keywords:	assault rifle ar-15
+Name:	an ar-15 assault rifle
+RoomDesc:$
+An old school military issue assault rifle leans in a corner here~
+LookDesc:$
+This is the evern popular AR-15 assault rifle. Commonly used by military men,
+law enforcement, and american based terrorists back in the 20'th century it
+still hasn't lost it's appeal among the masses. Black Resin stock, with a
+polished metal body an integral level 3 vent system built into the barrel and
+a shoulder strap. this is a nice little hoop kicking weapon for someone that
+needs to take down entire crowds.  
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	10000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	32
+	Val6:	32
+	Val8:	653
+	Val10:	28
+BREAK
+END

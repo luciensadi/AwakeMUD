@@ -1,0 +1,856 @@
+#2900
+Keywords:	rusted scalpel
+Name:	a rusted scalpel
+RoomDesc:$
+An old scalpel, now terribly rusted and dulled, has been discarded here.~
+LookDesc:$
+No longer of any use to anyone of the medical profession, this thing is
+more oxidation than metal at this point.  It could probably give you some
+serious tetanus as well.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	3
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val4:	3
+	Val5:	-1
+BREAK
+#2901
+Keywords:	keycard key chrome
+Name:	a chrome keycard
+RoomDesc:$
+A shining chrome keycard has been left unnoticed on the floor.~
+LookDesc:$
+No demarcations on its surface, the card has no clues as to where it
+offers access.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2902
+Keywords:	pistol sigsaur handgun
+Name:	a SigSaur 225
+RoomDesc:$
+A wide-barreled handgun rests here, ominously well-polished.~
+LookDesc:$
+The reputation behind this "pistol" (hand-cannon would be more accurate)
+is almost as large as the hole that it often leaves in stationary objects.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	4.00
+	Barrier:	3
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	10
+	Val6:	10
+	Val9:	-1
+	Val10:	4
+BREAK
+#2903
+Keywords:	keycard brass key card
+Name:	a brass keycard
+RoomDesc:$
+A slightly tarnished brass keycard lays on the floor.~
+LookDesc:$
+Wiping a bit of the black smudge from the surface, you can see the 
+characters "Rx" etched into it.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2904
+Keywords:	key simple silver
+Name:	a simple silver key
+RoomDesc:$
+A relitavely unremarkable key has been left here.~
+LookDesc:$
+Made of silver, no distinguishing marks or labels.  It is, however, the
+same weight as most door keys.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2905
+Keywords:	refrigerator small
+Name:	a small refrigerator
+RoomDesc:$
+A small refrigerator hums quietly to itself.~
+LookDesc:$
+Not intended for anything of too great a size, this appliance allows the
+staff to keep their foodstuffs cold while they put in a day's work.
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	10
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	2000.00
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	5
+	Val2:	-1
+BREAK
+#2906
+Keywords:	stethoscope
+Name:	a stethoscope
+RoomDesc:$
+A practitioner's stethoscope has been tossed aside here.~
+LookDesc:$
+Made of stainless steel and a rubber polymer, this implement is used by 
+those of the medical profession to monitor sounds in the body imperceptible
+to the unassisted ear.
+~
+Type:	Worn
+WearFlags:	100000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	140
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2907
+Keywords:	coat labcoat white
+Name:	a clean white labcoat
+RoomDesc:$
+A well-pressed, clean white labcoat has been hung on a nearby peg.~
+LookDesc:$
+Starched to a crisp, and devoid of any damage to the cloth, it carries a bit
+of respect about it.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	3.00
+	Barrier:	3
+	Cost:	230
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2908
+Keywords:	tract booklet health
+Name:	a health tract
+RoomDesc:$
+A small booklet of health information has been left behind.~
+LookDesc:$
+The tract is a notice about the rising threat of NAS, Nerve Attenuation
+Syndrome.  A disease that is relatively unknown due to its recent
+discovery, the symptoms are massive seizures, known in common slang as
+the "Black Shakes".  While the popular belief is that this new super-
+virus is a result of a world dependant upon technology, no concluding
+evidence has been found to support that theory.  In turn, no treatment
+of any kind is yet available.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2909
+Keywords:	pencil sharpened
+Name:	a well-sharpened pencil
+RoomDesc:$
+A yellow pencil has been discarded here.~
+LookDesc:$
+Bearing only the number 2 on its surface, the point of this pencil is
+remarkably sharp.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	7
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val4:	3
+	Val5:	-1
+BREAK
+#2910
+Keywords:	skirt
+Name:	an attractive skirt
+RoomDesc:$
+A colorful item of cotton is lying on the ground.~
+LookDesc:$
+A deep shade of blue, and made of pure cotton, the skirt is tailored to
+accent the shape of the thigh.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2911
+Keywords:	blouse sleeveless
+Name:	a sleeveless blouse
+RoomDesc:$
+A smart-looking blouse has been dropped here.~
+LookDesc:$
+Not exactly white in color, this rayon blouse is a perfect fit for a lady
+in good physical condition.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2912
+Keywords:	jacket flak kevlar
+Name:	a Kevlar flak jacket
+RoomDesc:$
+A Kevlar-reinforced jacket lays in a heap on the floor.~
+LookDesc:$
+Plated with Kevlar to deter projectiles of moderate velocity, this jacket
+is used by security forces as standard issue.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	600
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	3
+	Val7:	-2
+BREAK
+#2913
+Keywords:	desk mahogany
+Name:	a mahogany desk
+RoomDesc:$
+A highly organized mahogany desk stands here.~
+LookDesc:$
+The top of this piece of furniture is immaculately clean.  Devoid of any
+clutter, save a terminal for matrix access and an ink blotter, the wood
+grain catches all available light and shines brilliantly.  There is only
+one drawer above the kneehole to store pens, paper, and other office
+items of everyday use.
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	200.00
+	Barrier:	3
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	12
+	Val2:	2914
+	Val3:	6
+[EXTRADESC 0]
+	Keywords:	drawer
+	Desc:$
+The drawer is approximately four by twenty centimeters, and has a small
+keyhole in the center.
+~
+BREAK
+#2914
+Keywords:	key tiny
+Name:	a tiny key
+RoomDesc:$
+A tiny key fastened to a bit of string has been dropped here.~
+LookDesc:$
+So small it is almost weightless, this key has a small bit of string
+looped through the hole, just about long enough to be worn about the
+neck.
+~
+Type:	Key
+WearFlags:	101
+ExtraFlags:	1100
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2915
+Keywords:	can tea
+Name:	a can of iced tea
+RoomDesc:$
+A cool can of ice tea has been set here, calling to your tastebuds.~
+LookDesc:$
+Twelve ounces of refreshment in an aluminum can, this brewed beverage
+is the product of the Tabuku Bottling Company.
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	5
+BREAK
+#2916
+Keywords:	salad tofu bowl
+Name:	a bowl of tofu salad
+RoomDesc:$
+A barely appealing bowl of tofu salad is sitting here.~
+LookDesc:$
+With less actual greens in the dish than the lumpy, nondescript bean curd,
+it is no wonder that some people choose such foods in order to keep from
+eating at all.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	1000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#2917
+Keywords:	credstick emerald
+Name:	an emerald credstick
+RoomDesc:$
+An emerald credstick of considerable value has been dropped here!~
+LookDesc:$
+A perfect cylinder of the deepest green, this credstick must have a pretty
+high value attached to it!  Take it and run!
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.25
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2000
+	Val1:	1
+	Val2:	3
+BREAK
+#2918
+Keywords:	shotgun winchester
+Name:	a Winchester 12-gauge
+RoomDesc:$
+A menacing pump-action shotgun has been carelessly left on the ground.~
+LookDesc:$
+A work of art in the world of high-powered weaponry, the Winchester has
+been revered for its brute capability for over a century.
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	5.00
+	Barrier:	3
+	Cost:	900
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	8
+	Val6:	8
+	Val9:	-1
+	Val10:	4
+BREAK
+#2920
+Keywords:	rod shock
+Name:	a shock rod
+RoomDesc:$
+A weapon used to incapacitate victims is laying here.~
+LookDesc:$
+A black cylinder of about thirty centimeters in length, this rod has a 
+thumb-trigger at one end, and a pair of metal contact points at the other.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	3.00
+	Barrier:	3
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	2
+	Val3:	9
+	Val4:	17
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#2921
+Keywords:	belt clip
+Name:	a leather clip belt
+RoomDesc:$
+A belt usable for carrying ammunition clips has been set on the ground.~
+LookDesc:$
+With an adjustable size and small loop-like pockets all around it, this
+belt has the capacity to carry up to eight clips of any size.
+~
+Type:	Container
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	130
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val2:	-1
+BREAK
+#2922
+Keywords:	crate storage
+Name:	a plasteal storage crate
+RoomDesc:$
+A plasteal storage crate of moderate size stands on the floor.~
+LookDesc:$
+About the size of a trash bin, the crate is labeled "PharmaCom".  It
+apparently is the shipping crate that the pharmacy receives its scarce
+orders in.
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	150.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	3
+	Val2:	-1
+BREAK
+#2923
+Keywords:	foam wad packing
+Name:	a wad of packing foam
+RoomDesc:$
+A wad of packing foam has been discarded onto the floor.~
+LookDesc:$
+Simply useless fluff.  No more, no less.  Though it does serve fairly
+well as a means to keep breakables intact while in transit.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2950
+Keywords:	pendant cypher
+Name:	Cyph's Anti-Weakness Pendant
+RoomDesc:$
+The item Cypher uses because of his apparent physical weakness is here.~
+LookDesc:$
+It's almost a talisman, since worn about the neck, but resembles nothing
+you can precisely describe.  It offers the bearer the ability to overcome
+physical handicaps like Cypher's, when he vainly tries to lug around heavy
+objects like corpses and appliances and such.
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	8
+[AFFECT 1]
+	Location:	Magic
+	Modifier:	8
+[AFFECT 2]
+	Location:	Intelligence
+	Modifier:	4
+BREAK
+#2957
+Keywords:	keycard
+Name:	the keycard to garage 1
+RoomDesc:$
+Someone has left a maglock keycard here.~
+LookDesc:$
+It's a plain red card with a black magnetic stripe on the back. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2958
+Keywords:	keycard
+Name:	the keycard to garage 2
+RoomDesc:$
+Someone has left a maglock keycard here.~
+LookDesc:$
+It's a plain red card with a black magnetic stripe on the back. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2959
+Keywords:	keycard
+Name:	the keycard to garage 3
+RoomDesc:$
+Someone has left a maglock keycard here.~
+LookDesc:$
+It's a plain red card with a black magnetic stripe on the back. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2960
+Keywords:	keycard
+Name:	the keycard to garage 4
+RoomDesc:$
+Someone has left a maglock keycard here.~
+LookDesc:$
+It's a plain red card with a black magnetic stripe on the back. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2961
+Keywords:	keycard
+Name:	the keycard to garage 5
+RoomDesc:$
+Someone has left a maglock keycard here.~
+LookDesc:$
+It's a plain red card with a black magnetic stripe on the back. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2962
+Keywords:	keycard
+Name:	the keycard to garage 6
+RoomDesc:$
+Someone has left a maglock keycard here.~
+LookDesc:$
+It's a plain red card with a black magnetic stripe on the back. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2963
+Keywords:	keycard
+Name:	the keycard to garage 7
+RoomDesc:$
+Someone has left a maglock keycard here.~
+LookDesc:$
+It's a plain red card with a black magnetic stripe on the back. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2964
+Keywords:	keycard
+Name:	the keycard to garage 8
+RoomDesc:$
+Someone has left a maglock keycard here.~
+LookDesc:$
+It's a plain red card with a black magnetic stripe on the back. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

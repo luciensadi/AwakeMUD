@@ -1,0 +1,50 @@
+#50000
+Keywords:	border gate passkey ucas electronic
+Name:	a UCAS border gate passkey
+RoomDesc:$
+An electronic passkey with a UCAS flag sticker on it lies here.~
+LookDesc:$
+A plain gray passkey, with a UCAS flag sticker on it.  Looking closely you can
+see the words "Border Patrol" on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#50001
+Keywords:	salish sidhe border patrol passkey salish-sidhe electronic
+Name:	A Salish-Sidhe Border Patrol passkey
+RoomDesc:$
+An electronic passkey with the Salish-Sidhe Council insignia on it lies here.~
+LookDesc:$
+An electronic key, with a Salish-Sidhe flag labelled on it, made out of plain
+gray plastic, with a small part where the edge of an optical chip protrudes.
+The words "Border Patrol" are silkscreened on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

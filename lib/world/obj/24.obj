@@ -1,0 +1,485 @@
+#2400
+Keywords:	drink screwdriver
+Name:	a screwdriver
+RoomDesc:$
+A dazzling blue cocktail lies waiting for a drinker.~
+LookDesc:$
+God only knows what sort of ingredients go into this, but just from the whiff
+you can tell its got a respectable hit of industrial strength Tequila in it.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	16
+BREAK
+#2401
+Keywords:	burger meat hamburger greasy
+Name:	a very greasy burger
+RoomDesc:$
+A burger dripping with pestilent grease lies in its packet here.~
+LookDesc:$
+You can't actually make out any meat in the damn thing, because the grease
+has shaped the burger itself. If there is any meat in there anyway, don't
+count on it being your prime Texan cow either.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.60
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#2402
+Keywords:	mug small soybeer brew
+Name:	a mug of soybeer
+RoomDesc:$
+A small mug of beer sits here.~
+LookDesc:$
+Bubbling with a nice sizeable layer of froth at the top, the beer actually
+doesn't look as bad as you immediately believe. Well, not until you taste it.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	10
+BREAK
+#2403
+Keywords:	steak meat
+Name:	a chunky steak
+RoomDesc:$
+A sizeable hunk of sizzling meat lies on the floor.~
+LookDesc:$
+Sizzling and smelling delicious, the steak really does catch your attention
+immediately. It may not be the best beef on earth, but they've thrown in
+enough artificial junk to let you forget about that little matter.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+BREAK
+#2404
+Keywords:	crate large pack lite steel
+Name:	a large steel crate
+RoomDesc:$
+A large Pack-Lite crate stands here.~
+LookDesc:$
+Large and heavy, the Pack-Lite crate is the best you can buy for a long term
+storage. With it's own security lock and passkey as well as local alarm, you
+can't go wrong.
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	14
+	Val2:	2405
+	Val3:	30
+BREAK
+#2405
+Keywords:	digital passkey small pack lite key
+Name:	a Pack-Lite passkey
+RoomDesc:$
+A small digital passkey lies on the ground.~
+LookDesc:$
+It looks like a normal Maglock passkey, but with the silver Pack-Lite insignia
+printed on the digital encoding at the top.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2406
+Keywords:	key silver
+Name:	a silver key
+RoomDesc:$
+A shining silver key is lying here.~
+LookDesc:$
+It's a small silver key, made to fit into one of those really old fashioned
+locks that went out when Maglock came into business.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2407
+Keywords:	map paper puyallup brown
+Name:	A map of Puyallup
+RoomDesc:$
+A crumpled sheet of brown paper is lying here.~
+LookDesc:$
+Central Puyallup
+----------------       
+                              |  Route 161
+                              |
+            - - - - - - - - - + - - - - - - - -  - S
+          R |                 |                  | e                  
+          e |                 |                  | o
+          n |                 |                  | u
+          t |          - - - - - - - -           | l
+          o |         |               |          | p          > To the
+          n |         |               |          | a          / Coal Plains
+      - - - + - - - - + - - - - - - - + - - - - -+ - - - - - - 
+            |(1)      |R             T|    (3)   | Prosult
+            |         |e             i|          |
+            |         |d             l|          |
+            |         |f(2)          l|          |
+            |         |e             i|          |
+            |         |r             c|          |
+            |         |n             u|          |
+            |         |              m|          |
+            |         |               |          | Cascade
+      - - - + - - - - + - - - - - - - + - - - - -+ - - - - - 
+     |      |   (4)   |               |          |          |
+     |      |         |               |          |          |
+     |      |         | (5)           |          |(6)       |
+     |      |         |               |          |          |
+     |   (8)|         |               |    (7)   | Cizae    |
+     |- - - + - - - - + - - - - - - - + - - - - -+ - - - - -| 
+     |      |         |           (13)|          |          |
+     |      |         |               |          |          |
+     |   (9)|         |               |          |     (12) |
+     |      |         |               |          |          |
+     |      |   (10)  |               |   (11)   | Carter   |
+      - - - + - - - - + - - - - - - - + - - - - -+ - - - - -
+            
+-----
+-KEY- 
+-----
+(1)  -- Atomix Voodoo Cafe
+(2)  -- Greenway Stock Warehouse 
+(3)  -- The Epicenter
+(4)  -- Megamother Blaze Bar and Grill
+(5)  -- The Motero Inn
+(6)  -- A Burnt-out Tenement
+(7)  -- Beth's Diner
+(8)  -- A Burnt-out Tenement
+(9)  -- The Neon Parrot
+(10) -- Stuffer Shack
+(11) -- Li Chiu's Chinese Speedy
+(12) -- A Charred Office Building
+(13) -- People's Drug
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2408
+Keywords:	chicken plate chow mein steaming noodles
+Name:	chicken chow mein
+RoomDesc:$
+A plate of chicken and noodles is here.~
+LookDesc:$
+Stir-fried Chinese noodles have been covered in boneless chunks of tender
+chicken and smothered in a smooth stock sauce. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	231
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#2409
+Keywords:	sweet sour pork plate red
+Name:	Sweet and Sour Pork
+RoomDesc:$
+A plate of red pork is lying on the ground.~
+LookDesc:$
+Covered in the original sweet and sour sauce first developed by the Chinese
+with spices from many centuries ago.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#2410
+Keywords:	launcher rac rocket long black MkIIq
+Name:	a RAC MkII Rocket Launcher
+RoomDesc:$
+A long black rocket launcher is lying on the ground.~
+LookDesc:$
+The RAC MkII Rocket Launcher is one of the best and most trusted high power
+weapons in the Sprawl today. With it's sleek design and incredible
+lightweight compactible structure, it works in almost all possible situations.
+Nonetheless, its power and incredible range should not be underestimated, or
+you could end up on the meat wagon next to your victim.
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	650000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	4
+	Val3:	21
+	Val4:	20
+	Val5:	2
+	Val6:	2
+BREAK
+#2414
+Keywords:	radio
+Name:	A radio
+RoomDesc:$
+A small compact radio is lying on the ground.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Radio
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	625
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2415
+Keywords:	keycard card key
+Name:	a grey keycard
+RoomDesc:$
+A small grey keycard is lying on the ground.~
+LookDesc:$
+It's a keycard.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2418
+Keywords:	piping lead large
+Name:	lead piping
+RoomDesc:$
+A large piece of lead piping is lying here.~
+LookDesc:$
+Painful. Say ow.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#2419
+Keywords:	bone lacing aluminum cyberware
+Name:	an aluminium bone lacing -alpha
+RoomDesc:$
+A shining pool of liquid metal is lying here.~
+LookDesc:$
+The liquid looks like some sort of metal film for limbs.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	5
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val2:	1
+	Val3:	1
+	Val4:	92
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#2499
+Keywords:	portfolio
+Name:	A Portfolio titled "Timeslip Technologies"
+RoomDesc:$
+A portfolio marked "Timeslip Technologies" lies here.~
+LookDesc:$
+This portfolio is filled with all sorts of bizarre and arcane mathematical
+formulas, apparantly extrapolations of Alfred Einstein's E=mc^2 equation.
+What it concludes is unclear. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

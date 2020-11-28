@@ -1,0 +1,140 @@
+#70600
+Keywords:	key gold big
+Name:	A Big Gold Key
+RoomDesc:$
+There is a large sized gold key carelessly left here.~
+LookDesc:$
+This key is basically an oversized house key. It is basically built a little
+stronger with many more teeth. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70601
+Keywords:	key mavrick white card
+Name:	Mavrick's Room Key
+RoomDesc:$
+A white card lays here carelessly.~
+LookDesc:$
+Basically a white swipe card with the word "Mavrick" on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70602
+Keywords:	key Loagan white card
+Name:	Loagan's Room Key
+RoomDesc:$
+A white card lays here carelessly.~
+LookDesc:$
+Basically a white swipe card with the word "Loagan" on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70603
+Keywords:	key Priest white card
+Name:	Priest's Room Key
+RoomDesc:$
+A white card lays here carelessly.~
+LookDesc:$
+Basically a white swipe card with the word "Priest" on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70604
+Keywords:	keycard maika room key
+Name:	Maika's Room Key
+RoomDesc:$
+A white keycard has been left here.~
+LookDesc:$
+Basically a white swipe card with the word "Maika" on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70605
+Keywords:	key room Minerva's
+Name:	Minerva's Room Key
+RoomDesc:$
+A key has been left here.~
+LookDesc:$
+Basically a white swipe card with the word "Minerva" on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

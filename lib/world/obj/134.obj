@@ -1,0 +1,1110 @@
+#13400
+Keywords:	Sign
+Name:	a sign
+RoomDesc:$
+A sign is posted in the ground here.~
+LookDesc:$
+The sign reads: Welcome to the La' Charne Restraunt....No Grunts Allowed! 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	10.00
+	Barrier:	6
+	Cost:	4000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13401
+Keywords:	Dried Roses
+Name:	a couple of Dried roses
+RoomDesc:$
+Some Dried Roses bound together with string are lying here.~
+LookDesc:$
+A Red and a White rose have been tied to gether and dried. 
+~
+Type:	Focus
+WearFlags:	100000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	6
+BREAK
+#13402
+Keywords:	fur coat
+Name:	a Chic fur coat
+RoomDesc:$
+A Chick fur coat is lying here.~
+LookDesc:$
+The fur from an Actual Mink!  Wow must be worth a fortune.... 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13403
+Keywords:	Black Dominatrix Whip
+Name:	a Black leather Dominatrix Whip
+RoomDesc:$
+A Black Leather Whip is lying here.~
+LookDesc:$
+This fairly long, black leather whip has seen much use as far as you can
+tell... 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#13409
+Keywords:	Black oil canvas trenchcoat
+Name:	a black oil canvas trenchcoat
+RoomDesc:$
+A black oil canvas trenchcoat is lying here.~
+LookDesc:$
+It is a long black trenchcoat that smells heavily of ciggerets and other
+stenchs as well as heavy oil. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	4
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	4
+	Val5:	4
+	Val6:	3
+	Val7:	3
+BREAK
+#13410
+Keywords:	Pencil
+Name:	a glowing Pencil
+RoomDesc:$
+A glowing Pencil is here.~
+LookDesc:$
+Its a Pencil people draw with...and it glows...oooo.... 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#13411
+Keywords:	Brians Customized Deck
+Name:	Brian's Customized Deck
+RoomDesc:$
+Brian's Customized Deck is lying here.~
+LookDesc:$
+A sleek black box made by Brian himself....it looks as though there is
+duct-tape on the seams...hmm... 
+~
+Type:	Cyberdeck
+WearFlags:	1000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	4
+	Val2:	350
+	Val3:	1000
+	Val4:	60
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	2
+BREAK
+#13412
+Keywords:	waiters white apron
+Name:	a waiters white apron.
+RoomDesc:$
+A waiters white apron was neatly folded an put here.~
+LookDesc:$
+Just a long white apron with a few pockets for money. 
+~
+Type:	Container
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val2:	-1
+BREAK
+#13413
+Keywords:	tray
+Name:	a Waitresses tray with deserts on it
+RoomDesc:$
+A Waitresses tray with deserts on it is lying here.~
+LookDesc:$
+A flat circular tray with multiple deserts on it...the edges look
+sharp..hmm... 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	310
+	Val4:	28
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#13415
+Keywords:	steak prime medium-rare plate vegetables
+Name:	a plate of medium-rare prime steak
+RoomDesc:$
+A plate of steak and vegetables sits here.~
+LookDesc:$
+A cut of medium-rare prime steak sits in the center of the plate, surrounded
+by fresh corn, fried onions, fried mushrooms and some mashed potatoes. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#13421
+Keywords:	salad cutting knife
+Name:	a salad cutting knife.
+RoomDesc:$
+A salad cutting knife is here.~
+LookDesc:$
+A medium length, serated knife. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#13422
+Keywords:	Steak Knife
+Name:	a Steak Knife
+RoomDesc:$
+A Steak Knife is lying here.~
+LookDesc:$
+A Knife with a long, sharp blade used for cutting steaks. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#13423
+Keywords:	Chef Hat
+Name:	a Chefs Hat
+RoomDesc:$
+A Chefs Hat is lying here~
+LookDesc:$
+A tall, frilly, white Chefs hat.... 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13424
+Keywords:	Gold Chef Hat
+Name:	a Gold Chefs Hat
+RoomDesc:$
+A Gold Chefs Hat is lying here.~
+LookDesc:$
+Its like the other chefs hat.....but its GOLD!!! 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	1
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13425
+Keywords:	Remote Control Red Button
+Name:	a Remote Control with a Big Red Button
+RoomDesc:$
+A remote control with a Red button is lying here.~
+LookDesc:$
+Looks kinda like some form of electronic key or something. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	3
+	Val3:	322
+	Val4:	22
+	Val5:	40
+	Val6:	40
+	Val8:	-1
+BREAK
+#13426
+Keywords:	Remote Blue Button
+Name:	a Remote Control with a Big Blue Button
+RoomDesc:$
+A Remote Control with a Big Blue Button is lying here.~
+LookDesc:$
+It looks like it could be a key. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13429
+Keywords:	Torch
+Name:	a torch
+RoomDesc:$
+A torch is here attached to the wall.~
+LookDesc:$
+It looks like a long stick with some kind of cloth set afire for light. 
+~
+Type:	Light
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+BREAK
+#13434
+Keywords:	Maglock Key
+Name:	a Maglock key
+RoomDesc:$
+A Maglock key is lying here.~
+LookDesc:$
+Just a plain ol' level 6 or so Maglock key... 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13440
+Keywords:	garage key shinney
+Name:	a shinney looking key.
+RoomDesc:$
+A shinney looking key is lying here.~
+LookDesc:$
+A shinney looking key with a small button on it....hmm..... 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13469
+Keywords:	A Soft Blanket
+Name:	a Soft Blanket
+RoomDesc:$
+A Soft Blanket is lying on the ground.~
+LookDesc:$
+Soft, and overly large, it looks rather comfy to sit on. 
+~
+Type:	Other
+WearFlags:	10000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13480
+Keywords:	portable fountain
+Name:	a portable fountain
+RoomDesc:$
+A Portable Fountain is here!~
+LookDesc:$
+A Portable Fountain is here! 
+~
+Type:	Fountain
+WearFlags:	1
+ExtraFlags:	101000000000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	300.00
+	Barrier:	32
+	Cost:	999999
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2147483647
+	Val1:	2147483647
+BREAK
+#13481
+Keywords:	wad of nuyen
+Name:	a wad of nuyen
+RoomDesc:$
+A wad of nuyen is lying here.~
+LookDesc:$
+A wad of nuyen is here 
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25000
+BREAK
+#13486
+Keywords:	Shadowen's Black Silk Dress Shirt
+Name:	a Black Silk Dress Shirt
+RoomDesc:$
+A Black Dress Shirt is here.~
+LookDesc:$
+Made of the finest Silks. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val4:	4
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	100
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	100
+[AFFECT 2]
+	Location:	Magic Pool
+	Modifier:	100
+[AFFECT 3]
+	Location:	Magic Pool
+	Modifier:	100
+[AFFECT 4]
+	Location:	Magic Pool
+	Modifier:	100
+[AFFECT 5]
+	Location:	Magic Pool
+	Modifier:	100
+BREAK
+#13488
+Keywords:	Shadowen's Black Hole
+Name:	a Black Hole
+RoomDesc:$
+ ¡~
+LookDesc:$
+A Black Hole 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	101101000011
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2147483647
+	Val1:	3
+	Val2:	-1
+	Val3:	100
+BREAK
+#13489
+Keywords:	Shadowen's Black Leather Soap Shoes
+Name:	a Pair of Black Leather Soap Shoes
+RoomDesc:$
+Black Leather Soap Shoes~
+LookDesc:$
+A pair of Black Leather Soap Shoes 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	100000000000
+AffFlags:	1000001000000
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	5
+	Val6:	5
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	120
+[AFFECT 1]
+	Location:	Hacking Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	120
+BREAK
+#13490
+Keywords:	Shadowen's Pentacle Silver Purple Amethyst
+Name:	a Pentacle with a Purple Amethyst in the Center
+RoomDesc:$
+A Wiccan's Necklace lays here.~
+LookDesc:$
+A Beautiful Pentacle with a stunning Purple Amethyst embedded into the center.
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	100000000000
+AffFlags:	1000000001000000011100
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	120
+[AFFECT 3]
+	Location:	Impact
+	Modifier:	120
+[AFFECT 4]
+	Location:	Astral Pool
+	Modifier:	120
+[AFFECT 5]
+	Location:	Astral Pool
+	Modifier:	120
+BREAK
+#13491
+Keywords:	Shadowen's Athame Polished
+Name:	a Polished Athame
+RoomDesc:$
+A Polished Athame lays here.~
+LookDesc:$
+A Polished Athame 
+~
+Type:	Worn
+WearFlags:	100000000000001
+ExtraFlags:	100000000000
+AffFlags:	111110
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Magic Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Magic Pool
+	Modifier:	120
+[AFFECT 4]
+	Location:	Magic Pool
+	Modifier:	120
+[AFFECT 5]
+	Location:	Magic Pool
+	Modifier:	120
+BREAK
+#13492
+Keywords:	Trenchcoat Shadowen's Flowing Black
+Name:	a Flowing Black Trenchcoat
+RoomDesc:$
+A Flowing Black Trenchcoat is floating here.~
+LookDesc:$
+A Flowing Black Trenchcoat made of the finest materials. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	122
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	122
+[AFFECT 2]
+	Location:	Magic Pool
+	Modifier:	122
+[AFFECT 3]
+	Location:	Magic Pool
+	Modifier:	122
+[AFFECT 4]
+	Location:	Combat Pool
+	Modifier:	122
+[AFFECT 5]
+	Location:	Combat Pool
+	Modifier:	122
+BREAK
+#13493
+Keywords:	Shadowen's Deep Black Cah
+Name:	a Deep Black Cape
+RoomDesc:$
+¸-€x@'s Deep Black Cape is floating here.~
+LookDesc:$
+Shadowen's Deep Black Cape 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	100101000011
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	122
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	122
+[AFFECT 2]
+	Location:	Magic Pool
+	Modifier:	122
+[AFFECT 3]
+	Location:	Magic Pool
+	Modifier:	122
+[AFFECT 4]
+	Location:	Magic Pool
+	Modifier:	122
+[AFFECT 5]
+	Location:	Magic Pool
+	Modifier:	122
+BREAK
+#13494
+Keywords:	Shadowen's Silver Celtic Ring
+Name:	a Silver Celtic Ring
+RoomDesc:$
+A Ring with a Celtic knot in it lays here.~
+LookDesc:$
+A Ring with a Celtic knot.  Made with the finest Silver. 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	100000000000
+AffFlags:	1000001000100000
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 4]
+	Location:	Init Dice
+	Modifier:	120
+[AFFECT 5]
+	Location:	Init Dice
+	Modifier:	120
+BREAK
+#13495
+Keywords:	Shadowen's Titanium Oakleys T-Wire 2.0
+Name:	a Pair of T-Wire 2.0 Oakleys
+RoomDesc:$
+A Pair of Titanium Glasses lay here.~
+LookDesc:$
+A Pair of Oakleys made of Titanium. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	100000000000
+AffFlags:	1000011111001000101010
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-128
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-128
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-128
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-128
+[AFFECT 4]
+	Location:	Astral Pool
+	Modifier:	120
+[AFFECT 5]
+	Location:	Hacking Pool
+	Modifier:	120
+BREAK
+#13496
+Keywords:	Shadowen's Citizen Diver Watch
+Name:	a Citizen's Divers Watch
+RoomDesc:$
+A Very Well Made Watch lays here.~
+LookDesc:$
+Made by Citizen.  This Divers watch rivals that of Rolex. 
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 4]
+	Location:	Init Dice
+	Modifier:	120
+[AFFECT 5]
+	Location:	Init Dice
+	Modifier:	120
+BREAK
+#13497
+Keywords:	Shadowen's Palm Vx Spell Book
+Name:	a Palm Pilot Vx with Wrist Strap
+RoomDesc:$
+A Silver Palm Pilot lays here.~
+LookDesc:$
+This shiney, metal, Palm Pilot Vx holds all of Shadowen's Spells and other
+usefull info. 
+~
+Type:	Worn
+WearFlags:	101000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	120
+[AFFECT 2]
+	Location:	Magic Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Magic Pool
+	Modifier:	120
+[AFFECT 4]
+	Location:	Magic Pool
+	Modifier:	120
+[AFFECT 5]
+	Location:	Magic Pool
+	Modifier:	120
+BREAK
+#13498
+Keywords:	heal spell
+Name:	Spell
+RoomDesc:$
+€ ƒ`@is lying here.~
+LookDesc:$
+Tattard paper with a spell... 
+è~
+Type:	Spell Formula
+WearFlags:	10000000000001
+ExtraFlags:	100100000011
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	5000
+	AvailTN:	5
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	21
+BREAK
+#13499
+Keywords:	Shadowen's Black Titanium Katana Ivory Grip
+Name:	a Black Titanium Katana with Ivory Grip
+RoomDesc:$
+A Black Titanium Katana Floats here.~
+LookDesc:$
+A Black Titanium Katana.  Its edge never seems to dull... 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1100000000000
+AffFlags:	1000011111001001111100
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Max Physical
+	Modifier:	90
+[AFFECT 1]
+	Location:	Max Mental
+	Modifier:	90
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	120
+[AFFECT 4]
+	Location:	Ballistic
+	Modifier:	50
+[AFFECT 5]
+	Location:	Impact
+	Modifier:	50
+BREAK
+END

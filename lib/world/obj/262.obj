@@ -1,0 +1,240 @@
+#26200
+Keywords:	key optical chip .girl
+Name:	a pale ^Cblue^N optical chip on a ^Wsilver^N chain
+RoomDesc:$
+A pale ^Cblue^g optical chip rests here on top of a delicate ^Wsilver^g chain.~
+LookDesc:$
+This piece of neo-technologist jewelry looks like nothing more than an optical
+chip on a chain. Careful examination of the edges reveals a tiny inscription
+with colored plastic imbedded in it, "^C<^M.girl^C>^N". 
+~
+Type:	Key
+WearFlags:	101000000000101
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.01
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#26201
+Keywords:	large lemonade
+Name:	a large lemonade
+RoomDesc:$
+A large glass of lemonade sits here waiting to be thrown away.~
+LookDesc:$
+It's a large glass full of lemonade. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val2:	4
+BREAK
+#26202
+Keywords:	mug warm coffee
+Name:	a warm mug of coffee
+RoomDesc:$
+A warm mug of java sits here, cooling.~
+LookDesc:$
+It seems as though it already has just the right amount of
+cream and sucrose to match your tastes....how odd.
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	7
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	7
+	Val2:	2
+BREAK
+#26203
+Keywords:	sandwich turkey ham cheese
+Name:	a turkey, ham and cheese sandwich
+RoomDesc:$
+An untouched sandwich has fallen out of someone's pocket.~
+LookDesc:$
+Bread + turkey + ham + cheese = this sandwich.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	2
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#26204
+Keywords:	spaghetti marinara food
+Name:	a plate of spaghetti marinara
+RoomDesc:$
+A plate of spaghetti in marinara sauce has been set down here.~
+LookDesc:$
+The spaghetti is very slightly al dente, providing a perfect compliment to the
+carefully simmered sauce. Basil, rosemary, and who knows what else has been
+added to this delightful dish. It tastes fantastic. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#26205
+Keywords:	pancakes plate homemade
+Name:	a plate of homemade pancakes
+RoomDesc:$
+A plate of pancakes was left on a nearby table.~
+LookDesc:$
+Warm, fluffy pancakes drenched with syrup and topped with fresh strawberies. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+BREAK
+#26209
+Keywords:	earring optical chip silver stud
+Name:	a pale ^Cblue^N optical chip dangling from a ^Wsilver^N stud
+RoomDesc:$
+A pale ^Cblue^g optical chip lies on the ground here.~
+LookDesc:$
+This piece of neo-technologist jewelry looks like a short length of silver
+chain strung between an optical chip and a matching silver stud. 
+~
+Type:	Worn
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.01
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#26210
+Keywords:	A troll sized folding chair
+Name:	A troll sized folding chair
+RoomDesc:$
+A troll sized folding chair is set up here.~
+LookDesc:$
+This folding chair is beyond sturdy, beyond commercial, beyond industrial.
+This folding chair is certified "Troll Resistant". 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	40.00
+	Barrier:	32
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#26211
+Keywords:	A Student ID
+Name:	A student ID card
+RoomDesc:$
+An ID card is lying here.~
+LookDesc:$
+This looks like an average ID card any student would get from a university. On
+the back it states: Student ID# 981233. 
+~
+Type:	Key
+WearFlags:	1000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

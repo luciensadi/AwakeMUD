@@ -1,0 +1,787 @@
+#20800
+Keywords:	Rogue Staff
+Name:	Rogue Staff
+RoomDesc:$
+A carved staff of red and gold is resting on the floor.~
+LookDesc:$
+Intricatly carved with egyption glyphs, with gold inlay, adn red patterning in
+the paint, this staff catches your attention with its striking beauty. 
+~
+Type:	Other
+WearFlags:	10000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.00
+	Barrier:	32
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val3:	12
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	1
+[AFFECT 1]
+	Location:	Age
+	Modifier:	10
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	-1
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	2
+BREAK
+#20801
+Keywords:	torn jeans
+Name:	torn jeans
+RoomDesc:$
+A sleightly bloody pair pf torn blue jeans~
+LookDesc:$
+bloody blue jeans 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	15
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	10
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-10
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	15
+[AFFECT 4]
+	Location:	Ballistic
+	Modifier:	40
+[AFFECT 5]
+	Location:	Impact
+	Modifier:	40
+BREAK
+#20802
+Keywords:	NERV belt
+Name:	A leather belt with a NERV logo.
+RoomDesc:$
+Dressy leather belt with a NERV logo.~
+LookDesc:$
+A nice dressy leather belt with NERV and their emblem engraved in the silver
+buckle. 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	15
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	15
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	100
+[AFFECT 3]
+	Location:	Impact
+	Modifier:	100
+BREAK
+#20803
+Keywords:	Commander's Coat
+Name:	Commander's coat
+RoomDesc:$
+Commander Ikari's suit coat is neatly hung here.~
+LookDesc:$
+Commander Ikari's NERV coat. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	15
+[AFFECT 1]
+	Location:	Intelligence
+	Modifier:	15
+BREAK
+#20804
+Keywords:	commander gloves ikari
+Name:	The commander's gloves
+RoomDesc:$
+Commaner Ikari's gloves have been left here.~
+LookDesc:$
+White gloves of a soft material. 
+~
+Type:	Cyberdeck
+WearFlags:	10000001
+ExtraFlags:	100000000001
+AffFlags:	1000000100000000000000
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	1000000
+	Val2:	1000000
+	Val3:	2147483647
+	Val4:	2147483647
+BREAK
+#20805
+Keywords:	A wall of lockers
+Name:	A wall of lockers
+RoomDesc:$
+A wall of lockers~
+LookDesc:$
+A rusty bloodstained set of iron lockers.  This macabre metal trap seems to
+have rotting human flesh, as well as various bits of bondage gear placed in
+it, seperatly of course.  These lockers are dented from his fists, his
+sledgehammer, or from teh games  he and hius mistress play.  Either way, it
+may be best not to look inside. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	10
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5000
+	Val1:	7
+	Val2:	-1
+	Val3:	99
+BREAK
+#20806
+Keywords:	Commander's ring
+Name:	Commander's ring
+RoomDesc:$
+The Commanders ring lies here.~
+LookDesc:$
+A gold thin wedding band. 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	1
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#20807
+Keywords:	Commander's tags
+Name:	Commander's tags
+RoomDesc:$
+The Commander's dogtags lay here on the table.~
+LookDesc:$
+Commander Ikari's dogtags. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	1
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#20808
+Keywords:	Commander's Watch
+Name:	Commander's Watch
+RoomDesc:$
+Commander Ikari's watch is sitting here.~
+LookDesc:$
+A titanium watch with a NERV logo. 
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#20809
+Keywords:	NERV ID bracelet
+Name:	NERV ID bracelet
+RoomDesc:$
+A strange Bracelet has been dropped here.~
+LookDesc:$
+Made of some forgein metal, its design is simple, but elegant. 
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#20810
+Keywords:	Violet Glasses
+Name:	Violet Glasses
+RoomDesc:$
+Neatly folded glasses were set on the table.~
+LookDesc:$
+Ikari's Glasses. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#20811
+Keywords:	NERV patch
+Name:	NERV patch
+RoomDesc:$
+A NERV patch is laying here.~
+LookDesc:$
+A patch with the wors NERV is here, teh logo of a maple leaf can be seen. 
+~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#20812
+Keywords:	Ikari's Katana
+Name:	Ikari's Katana
+RoomDesc:$
+Ikari's katana floats here~
+LookDesc:$
+A very ornate hi grade metal katana, with a lovely ornimental sheath. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-24
+[AFFECT 1]
+	Location:	Essence
+	Modifier:	6
+BREAK
+#20813
+Keywords:	Commander's Shoes
+Name:	Commander's Shoes
+RoomDesc:$
+A pair of shiny shoes are set here.~
+LookDesc:$
+Shiny, military looking shoes. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#20814
+Keywords:	a sledgehammer
+Name:	a sledgehammer
+RoomDesc:$
+A sledgehammer covered in blood is set here.~
+LookDesc:$
+as you look at it, you otice its is spackled in blood with lil grey stuff
+stuck to it 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	50
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-10
+[AFFECT 2]
+	Location:	Init Dice
+	Modifier:	100
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	60
+[AFFECT 4]
+	Location:	Impact
+	Modifier:	100
+[AFFECT 5]
+	Location:	Quickness
+	Modifier:	50
+BREAK
+#20815
+Keywords:	Helmsley's Bag
+Name:	Helmsley's Bag
+RoomDesc:$
+Helmsley's bag is hanging here.~
+LookDesc:$
+its a canvasduffle bag that has been blood stained red 
+~
+Type:	Container
+WearFlags:	1001
+ExtraFlags:	10000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500000
+	Val1:	1
+	Val2:	-1
+	Val3:	10
+BREAK
+#20816
+Keywords:	Black Leather Pants
+Name:	Black leatehr pants with a ^RD^re^Ra^rd ^RM^ra^Rn ^RI^rn^Rc^r. ^Wpatch
+RoomDesc:$
+Dead Man Inc.'s Personalized pants are crumpled in a heap.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 1]
+	Location:	Intelligence
+	Modifier:	1
+BREAK
+#20817
+Keywords:	LMS Arms Sniper Rifle
+Name:	LMS Sniper Rifle
+RoomDesc:$
+LMS Arms Sniper Rifle~
+LookDesc:$
+Sporting a sleek high carbon/tunston alloy barrel, and a simple cobolt stock,
+this sniper rifle proves to be both beautiful, and effective as its a .55
+caliber bolt action sniper rifle.  It is also easily fitable with the latest
+items to assist in better  aim, and reduced recoil. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000001000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	16
+	Cost:	750000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	4
+	Val3:	12
+	Val4:	12
+	Val5:	7
+	Val6:	7
+	Val10:	2
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	-2
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	-1
+BREAK
+#20819
+Keywords:	heal spell
+Name:	heal spell
+RoomDesc:$
+Heal spell~
+LookDesc:$
+a heal formula 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	21
+BREAK
+#20820
+Keywords:	A bottle of Molsen
+Name:	A Bottle of Molsen
+RoomDesc:$
+A bottle of Molsen~
+LookDesc:$
+A greenisg bottle filled with the yummy canadian beer, Molsen. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	10.00
+	Barrier:	2
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	13
+BREAK
+#20821
+Keywords:	a bottle of Baileys
+Name:	a bottle of baileys
+RoomDesc:$
+A bottle of baileys~
+LookDesc:$
+a bottle of baileys 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	1000000000000000000
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	31
+BREAK
+#20995
+Keywords:	Kane's mask
+Name:	^RK^La^Rn^Le^R's ^RM^La^Rs^Lk
+RoomDesc:$
+^RK^La^Rn^Le^R'^Ls ^RM^La^Rs^Lk is laying here.~
+LookDesc:$
+Wooden slats bound with hard leather, and polished to look like vinyl covers
+the whole face.  No opening for a mouth, and the eye holes seem to absorb all
+light going in. This mask is striped red and black. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	concrete
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Height
+	Modifier:	2
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#20996
+Keywords:	eva
+Name:	eva
+RoomDesc:$
+Eva~
+LookDesc:$
+Kats Evasion 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	121500
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	9
+	Val2:	243
+	Val3:	300
+BREAK
+#20997
+Keywords:	sens
+Name:	sens
+RoomDesc:$
+Sens~
+LookDesc:$
+Kats sensor 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	81000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	9
+	Val2:	162
+	Val3:	300
+BREAK
+#20998
+Keywords:	bod
+Name:	bod
+RoomDesc:$
+Bod~
+LookDesc:$
+Kats bod prog 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	121500
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	9
+	Val2:	243
+	Val3:	300
+BREAK
+#20999
+Keywords:	Kats deck
+Name:	Kats deck
+RoomDesc:$
+Kats Deck~
+LookDesc:$
+A silver streamlined box, small and compact. 
+~
+Type:	Cyberdeck
+WearFlags:	100000000000001
+ExtraFlags:	100000000000
+AffFlags:	100000000000000
+Material:	computers
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	100000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	10000
+	Val2:	999999999
+	Val3:	999999999
+	Val4:	2147483647
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	20
+BREAK
+END

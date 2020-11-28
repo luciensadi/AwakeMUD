@@ -1,0 +1,608 @@
+#45000
+Keywords:	large metal sign
+Name:	a large metal sign
+RoomDesc:$
+A large metal sign has been bolted into the molten tire roadblock.~
+LookDesc:$
+^LProperty Beyond This Gate Belongs to ^CMICROSOFT^L Imperium.
+^RTrespassers coming to look for non-existent Bargain Basement
+^RShop, turn back now and return from whence you came.
+^L
+^LTrespassers beyond Ruford's Gate will be killed, and eaten
+^LBy my pets.
+^G                       - Ruford Gates
+^G                       - The True Heir of William the Great^n              ^n
+^n
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#45001
+Keywords:	ruford's crown rusted iron windows symbol
+Name:	a rusted crown with the ^RWi^Gnd^Bow^Ws(R)^n symbol on it
+RoomDesc:$
+A piece of rusted iron, bent into a crown shape lies here.~
+LookDesc:$
+This is Ruford's crown, the symbol of his delusional rule over the Microsoft
+nation, which died long ago.  The toxic shaman considers this his power item,
+a sign of his inherited empire from his grandfather, Bill Gates. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	1010001001
+AffFlags:	100000000
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	-4
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	-4
+BREAK
+#45002
+Keywords:	human skin gloves
+Name:	a pair of human skin gloves
+RoomDesc:$
+A pair of gloves, made with human skin lie here.~
+LookDesc:$
+These gloves are made to be tight on human hands, and they are made of human
+skin.  They were carefully stitched and cured, so are quite durable.  There
+are magical sigils inscribed in the skin of the gloves, of such a dark nature,
+that even the most jaded, yet still sane magically sensitive individuals would
+have their eyes sting to look at. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	1010000000000000001
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	-4
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	3
+[AFFECT 1]
+	Location:	Body
+	Modifier:	-4
+BREAK
+#45184
+Keywords:	tank water baptismal fountain glass
+Name:	A large glass baptismal ^Cwater^N tank
+RoomDesc:$
+^gA large glass baptismal ^Cwater^g tank stands here.^N~
+LookDesc:$
+This tank is constructed out of thick plexiglass and has only a few small
+ornamentations upon it, most of which are lined along its edges. It looks
+large enough to accomodate atleast two very large humans, and is used for
+baptismal services given by the Reverend, which are in high demand given the
+following hes accumulated. The water smells heavily of bleach, and it stings
+ones eyes just leaning over to look into it. Something tells you it probably
+wouldn't taste all that great either.. and as to why one would want to
+actually drink something various people have had their bodies in (Eww..),
+thats an even greater mystery than why people would want to be baptised by a
+bigot priest. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	99999
+	Val1:	99998
+BREAK
+#45185
+Keywords:	cap uniform dress black SS insignia
+Name:	a black dress uniform cap, with an SS insignia
+RoomDesc:$
+A black dress uniform cap, with an SS insignia rests here.~
+LookDesc:$
+A black dress uniform cap, one of those wedge shaped caps you see in most
+military movies. This on bears a silver German SS insignia, the nazi
+skull-and-crossbones, while on each side is embedded a small silver five-point
+star. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.05
+	Barrier:	6
+	Cost:	225
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#45186
+Keywords:	rack stainless steel
+Name:	a leaflet rack
+RoomDesc:$
+A stainless steel rack stands here in the middle of the courtyard.~
+LookDesc:$
+This leaflet rack seems to be riddled with propaganda given out publically by
+the Humanis organization that has taken up residency here. Go ahead, take a
+leaflet. Theres even a small sign on it that says just that, "^RTake a leaflet^N."
+It may not take a rocket scientist to know what they're all about, and unless
+you've lived under a rock your entire life, you should already know full well
+what they stand for. Can't hurt to take a gander though... Right? 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	8
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	350
+	Val2:	-1
+BREAK
+#45187
+Keywords:	leaflet flyer
+Name:	a leaflet
+RoomDesc:$
+A propaganda leaflet has been discarded on the ground.~
+LookDesc:$
+^WHumanis^N: ^BFor a Better Future^N. The condition of goblinization, or
+^WUnexplained Genetic Expression^N first appeared in 2011. Victims with the
+latent genes underwent painful and disgusting physical changes as a result.
+It is a ^rsexually transmitted disease^N that is always passed on to the
+offspring of an afflicted parent. The associated physical mutations range
+from an abundance or lack of body mass, malformed ears and teeth, subdermal
+and transdermal growths, and a number of other horrifying side-effects. This
+disease has run rampant, infecting millions world-wide. ^RNo precautions are
+being taken to check the spread of this horrible disease^N. The afflicted need
+to be quarantined in order to prevent further spread of this plague. It is for
+the purpose of funding research into a cure for this socially debilitating
+disease that the ^WHumanis^N exists. The other primary function of our group
+is to lobby governments and corporations for interim measures to contain the
+spread of the problem until such a cure can be found. Our organization ^rdoes not
+sanction violence^N, nor will any of members use violence except in self-defense.
+Anything to the contrary is slander spread by misguided, far-left political groups
+who have been seduced by the power and intimidation their disease brings them.
+Your donations will gladly be accepted by the collection plate or via the Matrix.
+^BJoin us in making the future better for all^N.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#45188
+Keywords:	gloves pair pristine white leather dress
+Name:	a pair of pristine ^Wwhite leather^N dress gloves
+RoomDesc:$
+^gA pair of ^Wpristine white^g gloves lay atop one another here.^N~
+LookDesc:$
+These gloves are made to be tight on human hands, and they are made of some
+form of leather. They were carefully stitched and cured, so are quite durable,
+and have been bleached to a pristine white. There are magical sigils inscribed
+in the palms and seams of the gloves, of such a dark nature, that even the
+most jaded, yet still sane magically sensitive individuals would have their
+eyes sting to look upon them. 
+~
+Type:	Focus
+WearFlags:	10000001
+ExtraFlags:	11010000001000001001
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.05
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+BREAK
+#45189
+Keywords:	assault rifle colt m22a2
+Name:	a Colt M22A2 Assault Rifle
+RoomDesc:$
+An assault rifle has been carelessly dropped here.~
+LookDesc:$
+The Colt M22A2 is a current contender in the UCAS Squad Rifle Trials. This
+particular model features a gas vent system and a top mounted smartlink-2
+system. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	1250
+	AvailTN:	4
+	AvailDay:	3.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	40
+	Val6:	40
+	Val7:	64988
+	Val8:	654
+	Val9:	692
+	Val10:	28
+BREAK
+#45190
+Keywords:	assault rifle colt m22a2
+Name:	a Colt M22A2 Assault Rifle
+RoomDesc:$
+An assault rifle has been carelessly dropped here.~
+LookDesc:$
+The Colt M22A2 is a current contender in the UCAS Squad Rifle Trials. This
+particular model features a gas vent system and a top mounted laser sight. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	1150
+	AvailTN:	4
+	AvailDay:	3.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	40
+	Val6:	40
+	Val7:	5105
+	Val8:	654
+	Val9:	692
+	Val10:	28
+BREAK
+#45191
+Keywords:	walther customized psk 770 psk-770 heavy pistol
+Name:	a customized Walther PSK-770 heavy pistol
+RoomDesc:$
+A heavy pistol is lying on the ground with a chrome handle.~
+LookDesc:$
+A sleekly designed German pistol, designed to have the elegance derived from
+the PPK series of the last series, with the power of a high grade modern heavy
+pistol. It carries rounds of the same calibre of an Ares Predator, with the
+same number of shots, so their clips are interchangable, and easy to find. The
+chrome plating on the handle is etched with Walther's insignia on one side,
+while a swastika is emblazoned upon the other, as well as a larger one which
+is stamped onto the slide. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	11010000001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	16
+	Cost:	3250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	15
+	Val6:	15
+	Val7:	64988
+	Val8:	18981
+	Val9:	-1
+	Val10:	4
+BREAK
+#45192
+Keywords:	walther psk 770 heavy pistol
+Name:	a Walther PSK-770 heavy pistol
+RoomDesc:$
+A heavy pistol is lying on the ground with a chrome handle.~
+LookDesc:$
+A sleekly designed German pistol, designed to have the elegance derived from
+the PPK series of the last series, with the power of a high grade modern heavy
+pistol.  It carries rounds of the same calibre of an Ares Predator, with the
+same number of shots, so their clips are interchangable, and easy to find.
+The chrome plating on the handle is etched with Walther's insignia. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10000000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	16
+	Cost:	33510
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	15
+	Val6:	15
+	Val7:	9154
+	Val8:	18981
+	Val9:	-1
+	Val10:	4
+BREAK
+#45193
+Keywords:	black humanis uniform
+Name:	a black Humanis officers dress uniform
+RoomDesc:$
+A uniform with Humanis insignia on it lies here.~
+LookDesc:$
+A uniform designed to look much like a Nazi era German dress uniform.  It is
+covered with medals and Humanis pins as well as rank markings.  The uniform is
+pressed very well.  A "Division Thirteen" swastika pin is on the lapels of the
+left pocket. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	11010000000000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	1
+	Val4:	4
+	Val5:	3
+	Val6:	3
+BREAK
+#45194
+Keywords:	red white black armor jacket
+Name:	a ^Rred^n, ^Wwhite^n, and ^Lblack^n armor jacket
+RoomDesc:$
+An armor jacket in Humanis red, white and black lies here.~
+LookDesc:$
+This armor jacket is covered with Humanis patches and is in the colors of the
+infamous policlub. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	11010000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	16
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	4
+	Val6:	3
+BREAK
+#45195
+Keywords:	black metal key
+Name:	A black metal key
+RoomDesc:$
+A black metal key is lying here.~
+LookDesc:$
+A plain black metal key, which has no real distinguishing features, aside from
+looking old and outdated. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#45196
+Keywords:	pants black ben davis
+Name:	a pair of ^Lblack^n Ben Davis pants
+RoomDesc:$
+A pair of black pants with the Ben Davis tag on the back lie here.~
+LookDesc:$
+These sturdy, full-cut work pants are made of 50% cotton and 50% polyester.
+They feature double-stitched seams, a snap front with a metal zipper and
+quarter front pockets with snap closures. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	11010000000000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val4:	4
+	Val5:	2
+	Val6:	1
+	Val7:	-10
+BREAK
+#45197
+Keywords:	boots doc martens 20-eye twenty eye red laces
+Name:	a pair of 20-eye Doc Martens boots with ^Rred laces^n
+RoomDesc:$
+A pair of tall 20-eye Doc Martens with red laces stand here, upright.~
+LookDesc:$
+Very well shined boots that go up to just below the knees on most humans. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	11010000000000000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.05
+	Barrier:	16
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#45198
+Keywords:	red suspenders
+Name:	a pair of ^Rred suspenders^n
+RoomDesc:$
+A pair of red suspenders are lying here.~
+LookDesc:$
+A pair of plain weave red suspenders. 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	11010000000000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#45199
+Keywords:	black shirt humanis patches
+Name:	A black shirt covered in Humanis patches
+RoomDesc:$
+A black shirt covered in Humanis patches lies here.~
+LookDesc:$
+A black shirt, with a couple breast pockets, very plain and sturdy, with a Ben
+Davis tag on the back.  On the arms and left breast pocket are Humanis
+insignia, with another patch saying "Division XIII". 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	11010000000000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val4:	2
+	Val7:	-10
+BREAK
+END

@@ -1,0 +1,1407 @@
+#62200
+Keywords:	sign road large metallic
+Name:	a large metallic ^ggreen^N road sign
+RoomDesc:$
+^gA large metallic green road sign is posted along the side of the highway here.^N~
+LookDesc:$
+While it was at one point bright and reflective, its colour has been dulled
+and its sheen stolen by the elements it's had to endure over the years. Some
+of its lettering is threatening to peel off, but for the most part it still
+serves its function just fine.
+ > - City of Sauteurs
+ < - Townships of Prospect & Union
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62201
+Keywords:	sign road metallic green
+Name:	a large metallic ^ggreen^N road sign
+RoomDesc:$
+^gA large metallic green road sign is posted along the side of the highway here.^N~
+LookDesc:$
+While it was at one point bright and reflective, its colour has been dulled
+and its sheen stolen by the elements it's had to endure over the years. Some
+of its lettering is threatening to peel off, but for the most part it still
+serves its function just fine.
+ > - Townships of Prospect & Union
+ < - City of Victoria
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62202
+Keywords:	Ingram MAC-20 SMG submachinegun M20
+Name:	an Ingram MAC-20
+RoomDesc:$
+An SMG has been tossed aside here, probably hot goods?~
+LookDesc:$
+The MAC-20 (Military Armament Corporation Model 20), also known simply as the
+M20, is a highly compact, blowback operated submachinegun developed on the
+original design created by Gordon B. Ingram. Like its predecessor the MAC-20
+fires from an open bolt, the light weight of which results in a rapid rate of
+fire, and its barrel is threaded to accept a suppressor. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	1200
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	20
+	Val7:	626
+	Val8:	651
+	Val9:	692
+	Val10:	20
+BREAK
+#62203
+Keywords:	marlinspike spike bone whalebone
+Name:	a slender ^Wwhalebone^N marlinspike
+RoomDesc:$
+^gA slender spike made of ^Wbone^N has been tossed here.^N~
+LookDesc:$
+This marlinspike is made of a carved sliver of ^Wwhalebone^N, although most were
+either crafted from metal or hard durable wood. It measure about twelve inches
+in length and features a blunt end and a sharpened tip upon the other. While
+it was an invaluable tool for maintaining and handling the rigging of ships,
+as it can be used to seperate the strands of heavy rope lines and mending
+sails, it also serves as an impromptu dagger, making it just as useful in the
+hands of a mutineer. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62204
+Keywords:	pin heavy wooden belaying club-like club
+Name:	a heavy ^ywooden^N belaying pin
+RoomDesc:$
+^gA heavy ^ywooden^g club-like pin has been left here.^N~
+LookDesc:$
+While originally used to secure lines and rigging on ships, they were
+eventually replaced by metal cleats to serve the same purpose. This pin is
+made of solid wood and features a cylindrical shaft, and unlike a cleat, it
+serves a dual purpose as a makeshift club due to their shape and weight,
+making it a formidable weapon in the right hands. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62205
+Keywords:	axe heavy boarding
+Name:	a heavy boarding axe
+RoomDesc:$
+A heavy looking axe sits here, looking menancing.~
+LookDesc:$
+Featuring a three foot wooden shaft and a dual purpose head, which has a sharp
+pointed blade on one end and a blunt hammer side upon the other. Originally
+designed to bring down masts and rigging, as well as tearing through anything
+that stood in their way, sometimes people and at other times anything that
+stood between them and loot, such as locks, hatches and doors. This baby has
+countless uses upon the high seas, and on land as well. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62206
+Keywords:	main-gauche knife decorated
+Name:	a heavily decorated main-gauche
+RoomDesc:$
+A heavily decorated knife has been left here.~
+LookDesc:$
+The main-gauche, which in French means "left hand" is used mainly to assist in
+parrying incoming thrusts from weapons with the off-hand, while the dominant
+hand wields a sword, most often a rapier or other type of fencing blade. Its
+sturdy hand guard is heavily decorated and the blade itself is polished, and
+while its edge not extremely sharp since it would be ruined when fending off
+blows from a sword, the tip of the blade is honed to a fine point. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62207
+Keywords:	sword colichemarde sturdy
+Name:	a sturdy colichemarde sword
+RoomDesc:$
+A sturdy looking sword has been discarded here.~
+LookDesc:$
+The colichemarde sword evolved from the rapier due to the demand for a lighter
+sword better suited to parrying, its design consisting of a wide forte with
+several fullers, which tapers drastically toward a point after the fullers
+end. Its lighter weight and superior balance compared to the rapier allowed
+faster and more accurate movement of the blade, allowing a fencer to place
+more precise thrusts upon their adversary. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62208
+Keywords:	cutlass sword stainless steel sharp
+Name:	a sharp, stainless ^Wsteel^N cutlass
+RoomDesc:$
+^gA sharp, stainless ^Wsteel^g cutlass has been tossed here.^N~
+LookDesc:$
+A favourite weapon of pirates, the cutlass is robust enough to hack through
+heavy ropes, canvas, and wood. It is also short enough to use in relatively
+close quarters, such as during boarding raids, in the rigging, or below decks.
+It's sturdy stainless steel blade has been honed to a fine razor edge. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62209
+Keywords:	sword mameluke elegant
+Name:	an elegant mameluke sword
+RoomDesc:$
+An elegant looking sword has been left here for some reason.~
+LookDesc:$
+This mameluke sword is a cross-hilted, curved, scimitar-like sword
+historically derived from sabres used by Mamluk warriors of Mamluk Egypt from
+whom the sword is named after. The mameluke sword is most often recognized  as
+the ceremonial side arm for some western military units, which remains in
+practice even in this day and age. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62210
+Keywords:	estoc sword heavily polished sharp
+Name:	a heavily polished estoc
+RoomDesc:$
+A sharp, heavily polished sword has been discarded here.~
+LookDesc:$
+The French estoc (or English "tuck") is a variation of the longsword focused
+intensely on fighting against mail or plate armour. It is long, straight and
+stiff blade, with a triangular cross-section, its blade featuring almost no
+cutting edge to speak of, just a point. It is most often used with a single
+hand, though due to the lack of an edge, the second hand could be used to
+grasp the blade for more powerful thrusts, much like a spear. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62211
+Keywords:	hat tricorn Buccaneer leather canvas Vashon Island
+Name:	a Vashon Island Buccaneer leather and canvas tricorn hat
+RoomDesc:$
+A tricon styled leather hat been discarded here.~
+LookDesc:$
+This tricorn style pirate hat is made out of cotton canvas trimmed with
+leather and embellished with ostrich and pheasant feathers, which are ivory,
+black and shades of brown. The hat is fully lined and the feathers are
+removable and adjustable, allowing for several different looks. The sides of
+this hat are folded and secured with pewter coloured grommets with leather
+cross ties. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62212
+Keywords:	coat long captain's woolen Vashon Island Buccaneer
+Name:	a Vashon Island Buccaneer captain's long coat
+RoomDesc:$
+A heavy woolen long coat lays haphazardly here on the floor.~
+LookDesc:$
+This heavy woolen coat is has a long period cut , large bell cuffs and richly
+antiqued buttons, all adding up to make this long coat one stunning piece of
+pirate garb. This garb also has a concealed composite weave beneath its layers
+of fabric, which give the wearer a bit of protect against the same hazards
+those wearing it would have faced hundreds of years prior. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	2500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	6
+	Val2:	2
+	Val3:	4
+	Val4:	4
+	Val5:	350
+	Val6:	350
+	Val7:	8
+	Val8:	10
+BREAK
+#62213
+Keywords:	vest Vashon Island Buccaneer double-button vest
+Name:	a Vashon Island Buccaneer double-button vest
+RoomDesc:$
+A fancy double-button vest sits here getting wrinkled.~
+LookDesc:$
+This stylish double-button vest from the Buccaneer collection sports
+decorative features as well as a sturdy construction, not to mention the
+concealed layers of kevlar, making this not only easy on the eyes but nice and
+durable as well. The lining is made of silk, making it quite comfortable and
+luxurious to wear as well. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	1800
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val5:	150
+	Val6:	150
+	Val7:	4
+	Val8:	10
+BREAK
+#62214
+Keywords:	shirt ruffled Vashon Island Buccaneer
+Name:	a Vashon Island Buccaneer ruffled shirt
+RoomDesc:$
+A stylish ruffled shirt has been discarded here by some pompous ass.~
+LookDesc:$
+This garb from the Buccaneer line features flattering ruffles that trim the
+placket and has a standing collar reminiscent of a tuxedo inspired article.
+The ruffled shirt is as versatile as it gets, and thanks to its crisp stretch
+cotton construction with a concealed kevlar weave, it protects the wearer as
+well as it looks good on them. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	1750
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	150
+	Val6:	150
+	Val7:	4
+	Val8:	10
+BREAK
+#62215
+Keywords:	gloves Vashon Island Buccaneer
+Name:	a pair of Vashon Island Buccaneer gloves
+RoomDesc:$
+A pair of stylish gloves have been discarded here.~
+LookDesc:$
+These sturdy gloves from the Buccaneer collection are made of durable leather
+with double stitched seams, giving them a sturdy construction and able to
+handle quite a bit of abuse. Weighted and molded dentiplast plates have been
+sewn into the lining along the knuckles and fingers, allowing them to be used
+as knuckle dusters if the need should arise. Whoever gets slapped with these
+for a duel challenge is certainly going to be feeling it. 
+~
+Type:	Weapon
+WearFlags:	10000010000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	4
+	Val4:	7
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62216
+Keywords:	pants Buccaneer Vashon Island stylish
+Name:	a pair of Vashon Island Buccaneer pants
+RoomDesc:$
+A stylish pair of pants have been left here.~
+LookDesc:$
+These swordsman styled pants from the Buccaneer line are made of high quality
+viscose fabric with concealed elastics at ankles as well as right above the
+knees, giving a puffy look to the pants and making them perfect for the wearer
+to display their courage with the sharpness of a sword. A layer of flexible
+kevlar also gives them the ability to absorb quite a bit of abuse, making them
+perfect for any swordsman who wants to look good while swashbuckling about
+town. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	1500
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	150
+	Val6:	150
+	Val7:	2
+	Val8:	10
+BREAK
+#62217
+Keywords:	boots Buccaneer Vashon Island bell-cuff
+Name:	a set of Vashon Island Buccaneer boots
+RoomDesc:$
+A stylish pair of bell-cuff leather boots sit here.~
+LookDesc:$
+These period leather boots from the Buccaneer collection are bell cuff
+renaissance styled boots with fold over tops. Concealed lacing accents along
+the rear provide a convenient way to achieve the perfect fit, regardless of
+the wearer. Dentiplast heel and toe insets provide the wearers feet with quite
+a bit of protection, on par with even the toughest of steel-toe boots. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	1200
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val5:	100
+	Val6:	100
+	Val7:	2
+	Val8:	10
+BREAK
+#62218
+Keywords:	buckler shield decorative layered wood metal
+Name:	a decorative layered wood and metal buckler
+RoomDesc:$
+A decorative wood and metal buckler sits here.~
+LookDesc:$
+The term buckler derives its name from the French word "bouclier", meaning
+shield, which in turn comes from an older French word "boucle". These small
+shields are usually anywhere between 8 to 15 inches in diameter and are
+gripped with the fist, generally put to use in the off-hand with a weapon in
+the other. This particular buckler is made of laminated wood set over top of a
+metal frame, making for quite the sturdy little defensive tool. 
+~
+Type:	Worn
+WearFlags:	1000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	1650
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	100
+	Val6:	100
+	Val7:	2
+	Val8:	10
+BREAK
+#62219
+Keywords:	pie aloo
+Name:	an aloo pie
+RoomDesc:$
+An aloo pie waits to be stepped on here.~
+LookDesc:$
+The aloo pie is a soft, fried pastry made from flour and water filled with
+boiled, spiced and mashed potatoes (aloo being a romanization of the Hindi
+word for "potato") and other vegetables such as green peas and chana dal
+(split chickpeas). 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#62220
+Keywords:	doubles delicious sandwich
+Name:	a delicious looking doubles
+RoomDesc:$
+A sandwich has been left to rot here.~
+LookDesc:$
+A doubles is a sandwich made with two flat fried "breads", filled with curried
+chick peas and garbanzo beans, commonly called channa (from Hindi/Bhojpuri
+"chanaa"). It is topped with a variety of spicy chutneys, ranging from mango,
+cucumber, coconut, tamarind and extra pepper sauce. This delicacy is one of
+the most popular fast food treats in the Caribbean. It is usually eaten for
+breakfast and sometimes lunch, but serves as a late night snack just as well.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#62221
+Keywords:	puri dal serving
+Name:	a serving of dal puri
+RoomDesc:$
+A serving of dal puri has been left here.~
+LookDesc:$
+This round, hard, puffy puri shell is broken on top and partially filled with
+the main stuffing of mashed potatoes and chickpeas. A small amount of chilli
+powder has added for taste, as well as a pinch of salt. Sweet tamarind chutney
+and spicy green chutney have been poured into the shell, on top of the
+stuffing itself. Finally, sweetened beaten yoghurt is generously poured over
+the shell, and the finished product is garnished with sprinklings of crushed
+sev, moong dal and finely chopped coriander leaves. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#62222
+Keywords:	goat curried Grenadian-style plate
+Name:	a plate of Grenadian-style curried goat
+RoomDesc:$
+A plate of curried goat sits here, steaming.~
+LookDesc:$
+The goat meat has been drizzled with lime juice and ginger, salted and then
+allowed to marinate for a few hours before being cooked to a nice brown
+colour. Curry powder, chilli peppers, garlic and onions have been simmered
+along with the meat in carmelized oil and sugar until it has all soaked up
+every last drop of flavour and is very tender before being served. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#62223
+Keywords:	kura spicey bowl
+Name:	a bowl of spicey kurma
+RoomDesc:$
+A bowl of spicey kurma has been left here to get cold.~
+LookDesc:$
+This type of curry is made with yoghurt, cream, and coconut milk, which
+contains a mixture of spices such as coriander and cumin. This particular
+kurma is made with spicey local poultry, making for quite the fiery dish
+thanks to the chilli peppers added to it. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#62224
+Keywords:	herring smoked skewer
+Name:	a smoked herring on a skewer
+RoomDesc:$
+A smoked herring on a wooden skewer sits here.~
+LookDesc:$
+After being cleaned and gutted, a paste of salt, pepper, cloves, onions, brown
+sugar, garlic, and bay leaves is prepared and coated onto herring, then cured
+for seven days in cold storage. After seven days it is rinsed off and hung out
+to dry thoroughly before a lengthy cold smoke over fire. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#62225
+Keywords:	hook hand prosthetic
+Name:	a prosthetic hook hand
+RoomDesc:$
+A prosthetic hook hand is sitting here.~
+LookDesc:$
+It's a hook hand, obviously. Damn pirates! 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	5.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val4:	10
+BREAK
+#62226
+Keywords:	crates stacked haphazardly maze
+Name:	a maze of haphazardly stacked crates
+RoomDesc:$
+A maze of haphazardly stacked crates and containers dominate the area here.~
+LookDesc:$
+This haphazard stack of crantes and other containers come in all shapes and
+sizes, as well as types of materials used in their constructed. Some have had
+their labels peeled off or spray painted over to keep prying eyes from
+figuring out what their contents are. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62227
+Keywords:	crane duty heavy
+Name:	a heavy duty crane
+RoomDesc:$
+^gA heavy duty ^Ysafety yellow^g crane is suspended from the ceiling here.^N~
+LookDesc:$
+This heavy duty crane is suspended above the warehouse and runs along a track
+of I-beams amongst the rafters. It is used to lift and load the crates and
+shipping crates stacked beneath it onto trucks and other vehicles so they can
+be hauled off. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62228
+Keywords:	dice bone carved
+Name:	a pair of carved ^Wbone^N dice
+RoomDesc:$
+^gA pair of dice carved from ^Wbone^g are sitting here.^N~
+LookDesc:$
+This simple pair of dice is like any other, aside from the fact that they're
+carved from ^Wbone^N, most likely from some native animal from around the island.
+They are fairly well made, and most of the cut marks have been polished clean,
+though they aren't perfectly weighted. The single dot for the one side has
+been painted ^Rred^N, while the others are done in standard ^Lblack^N ink. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62229
+Keywords:	SMG Ares Thompson submachinegun Tommy gun
+Name:	an Ares Thompson SMG
+RoomDesc:$
+An old fashioned Tommy Gun has been left here, looking badass.~
+LookDesc:$
+Based on the original Thompson design, this updated version brought to the
+market by Ares comes with a lot of firepower and a touch of nostalgia. Its
+drum-fed design offers it plenty of lead to spray around at anyone stupid
+enough to get infront of it. Since it has proven to be quite a challenge to
+keep on target the barrel has been fitted with an improved gas vent IV system,
+and due to its design it cannot mount underbarrel accessories. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.25
+	Barrier:	6
+	Cost:	3500
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	50
+	Val7:	630
+	Val8:	691
+	Val9:	-1
+	Val10:	28
+BREAK
+#62230
+Keywords:	shotgun M1014 Benelli
+Name:	a Benelli M1014 shotgun
+RoomDesc:$
+A sleek shotgun has been left behind here.~
+LookDesc:$
+The Benelli M1014 semi-automatic shotgun is based on the proprietary Benelli
+system, which utilizes the gun recoil and inertia of the moving parts to
+operate the action. This simple and reliable operation allows it to perform
+well in almost any type of situation or combat zone on Earth, and its sleek
+and sturdy construction makes it easy to handle to boot. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	1250
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	8
+	Val7:	626
+	Val8:	651
+	Val9:	-1
+	Val10:	4
+BREAK
+#62231
+Keywords:	HK-G38 Heckler Koch assault rifle modular
+Name:	an HK-G38 assault rifle
+RoomDesc:$
+A modular assault rifle has been left sitting here.~
+LookDesc:$
+The HK-G38 was designed by the famous German arms manufacturer, Heckler and
+Koch. This particular model is a modular weapons system, also known as the
+HK-G38 modular carbine, and is based on the outdated G3 rifle. It is primarily
+used for close quarters shooting and close protection detail, but depending on
+its configuration, it can be used for much more than that. It comes standard
+with a top-mounted laser sight, an improved gas vent II and an underbarrel
+foregrip. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	4000
+	AvailTN:	12
+	AvailDay:	7.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val7:	5105
+	Val8:	650
+	Val9:	28618
+	Val10:	28
+BREAK
+#62232
+Keywords:	sign road
+Name:	a large road sign
+RoomDesc:$
+A large road sign hands overhead, suspended upon metal poles.~
+LookDesc:$
+This large metal sign hangs suspended between two thick metal poles planted
+into the side of the road, spreading across its entire length, its metallic
+lettering highlighted by dimly lit lights pointed up at it.
+ Township of Prospect & Union - 1.5 Km
+ City of Victoria
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62233
+Keywords:	meter parking
+Name:	a parking meter
+RoomDesc:$
+A parking meter is posted along the roadside here.~
+LookDesc:$
+It's your run of the mill parking meter, which consists of a clear plastic
+meter to show how much time is left on it, along with a credstick reader to
+register credits charged to it. It has a rather sturdy construction, mostly
+steel, just to make sure nobody screws with it. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62234
+Keywords:	bench wooden
+Name:	a long ^ywooden^N bench
+RoomDesc:$
+^gA long ^ywooden^g bench is bolted to the sidewalk here.^N~
+LookDesc:$
+This sturdy ^ywooden^N bench is quite long, more than plenty of space to seat at
+least a half dozen (meta)humans if necessary. It seems to be situated to point
+out towards the ocean and is bolted to the pavement, just in case anyone tries
+to steal it for whatever reason. It features a bit of damage from people
+carving their names into its surface. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62235
+Keywords:	revolver auto-revolver Mateba Model-6 Unica
+Name:	a Mateba Model-6 Unica auto-revolver
+RoomDesc:$
+An unusual looking revolver has been left here.~
+LookDesc:$
+Mateba Model 6 Unica is one of the more unusual modern weapons, which combines
+advantages and disadvantages of two different types of handguns,
+semi-automatic pistols and traditional revolvers. The Mateba Model-6 Unica has
+the advantage of significantly reduced felt recoil. However, there are some
+serious drawbacks for that, as it is also somewhat heavier than traditional
+revolvers of similar caliber and barrel length. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val7:	626
+	Val8:	-1
+	Val9:	692
+	Val10:	4
+BREAK
+#62236
+Keywords:	vest protective police issued
+Name:	a police issued protective vest
+RoomDesc:$
+A police issued protective vest has been left here.~
+LookDesc:$
+This police issued protective vest features both ballistic and impact
+resistant qualities, making it viable against both bullets and other more
+mundane weapons that police officers would run across in the line of duty. It
+features a stitched in tag noting that it was issued by the Victoria city
+precinct. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	800
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	2
+	Val4:	2
+	Val5:	4
+	Val6:	3
+	Val7:	10
+BREAK
+#62237
+Keywords:	rifle assault Sig-Sauer 716 modern
+Name:	a SIG-Sauer 716 assault rifle
+RoomDesc:$
+A modern looking assault rifle has been left here.~
+LookDesc:$
+The SIG 716 Tactical rifles are closely patterned after the AR-15/M16 family
+of rifles, but are somewhat larger and more robust due to the bigger and more
+powerful caliber. It features a chrome lined barrel to cut down on the need
+for constant cleaning in most terrains, which features an improved gas vent
+III system built into its design. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	3000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	35
+	Val7:	630
+	Val8:	653
+	Val9:	692
+	Val10:	28
+BREAK
+#62238
+Keywords:	shotgun neostead
+Name:	a Neostead shotgun
+RoomDesc:$
+A sturdy looking shotgun has been left here.~
+LookDesc:$
+The Neostead is a manually operated, pump action shotgun with some rare (if
+not unique) characteristics. The Neostead is built using a fixed breech face
+and movable barrel, and to reload the gun one must pull the slide forward, and
+then backward. It features a standard laser sight and underbarrel weight to
+help reduce felt recoil. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	2850
+	AvailTN:	5
+	AvailDay:	3.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	8
+	Val7:	626
+	Val8:	-1
+	Val9:	692
+	Val10:	4
+BREAK
+#62239
+Keywords:	bat baseball aluminum
+Name:	an aluminum baseball bat
+RoomDesc:$
+An aluminum baseball bat with a few dents in it rests here.~
+LookDesc:$
+This sturdy baseball bat is crafted out of aluminum, which allows it to stand
+up to quite a bit of abuse, though it seems to have accumulated a few dents
+along the line of taking care of business. The handle is wrapped with
+electrical tape and its brand name label has long since worn off from use. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#62240
+Keywords:	patrol vehicles victoria police
+Name:	a line of Victoria police patrol vehicles
+RoomDesc:$
+^yA line of Victoria police patrol vehicles are parked here, locked up tightly.^N~
+LookDesc:$
+A long line of patrol vehicles are parked along the side of the lot here,
+within easy reach of any officers that need to bound of the precinct and hop
+into them and haul ass out to an emergency call. They are securely locked, so
+breaking into them or vandalizing them, especially right infront of the
+largest police precinct in the city, might not be such a bright idea. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2000.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#62241
+Keywords:	radio plastic cheap
+Name:	a cheap plastic radio
+RoomDesc:$
+Someone has dropped a cheap looking radio made out of plastic here.~
+LookDesc:$
+While it may not look pretty, it certainly appears to be fully functional, as
+long as you don't plan on doing anything too troublesome with it, since it may
+very well fall apart if you sneeze on it or a gentle breeze comes wafting
+through. 
+~
+Type:	Radio
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+BREAK
+#62242
+Keywords:	phone cellular older
+Name:	an older model cellular phone
+RoomDesc:$
+An older model cellular phone is here, having been stolen from a museum.~
+LookDesc:$
+Whoa, when was this baby made? It certainly isn't a top flight model. In fact,
+you're pretty sure you haven't seen one of these things since you were a kid,
+that's how old and outdated this particular model and brand is. You can't even
+find these things in stock at any store that remotely prides itself on keeping
+up with the changing times. 
+~
+Type:	Phone
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

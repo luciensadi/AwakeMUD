@@ -1,0 +1,384 @@
+#31000
+Keywords:	couch lounge beaten ripped-up
+Name:	A beaten and ripped-up couch
+RoomDesc:$
+A beaten and ripped-up couch lounges here.~
+LookDesc:$
+Its a ragged looking couch, which has been stabbed, shot, ripped and sliced
+up, and even set on fire in some spots. As to why anyone would treat a
+furnishing so badly, its anyones guess. Maybe it had it coming? 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	50.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31001
+Keywords:	trideo set bullet-riddled system
+Name:	A bullet-riddled trideo set
+RoomDesc:$
+A bullet-riddled trideo system is set up here.~
+LookDesc:$
+This trideo set has seen better days, certainly. It doesn't seem to be
+functional anymore, considering its riddled with bullets, its screen has been
+smashed out, and the power cord has been yanked out of its base, leaving
+behind frizzled copper wires. The set jingles with shattered glass every time
+its moved, which occasionally spills out the front. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	20.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#31002
+Keywords:	table wooden sticky newspapers
+Name:	A sticky wooden table
+RoomDesc:$
+A sticky wooden table is here, covered with old newspaper.~
+LookDesc:$
+Its a standard wooden table, covered in a sticky residue, most likely from
+cooking up drugs and other chemicals that have spilled onto its surface. Old
+newspapers have been spread out across its length in an attempt to keep the
+surface managable, but all it really ends up doing is making the newspaper
+just as messy, which rips and tears off every time something is set down and
+picked up. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	50.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31003
+Keywords:	crates stack lop-sided
+Name:	A lop-sided stack of crates
+RoomDesc:$
+A lop-sided stack of crates is stuffed under the table here.~
+LookDesc:$
+Its an old wooden crate that has been damaged over years and years of use and
+abuse. Its lid sits lop-sidedly ontop of it, threatening to snap off if its
+opened too fast. It has a simple latch that keeps it closed. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	5
+	Val2:	-1
+BREAK
+#31004
+Keywords:	shotgun PJSS LNB/13-K Schinderhannes double-barreled western-styled
+Name:	a PJSS LNB/13-K "Schinderhannes" double-barreled shotgun
+RoomDesc:$
+An old western-styled double-barreled shotgun has been left here.~
+LookDesc:$
+The PJSS manufactures this special variant, which is produced and delivered
+only on an individual order. The LNB/13-K characterized by two adjacent
+barrels, and from the breach loading mechanism, which are also in line with
+the traditional hunting weapons that have made Sohler famous. This version can
+fire both barrels simultaneously, making it a very dangerous weapon at close
+ranges. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	3550
+	AvailTN:	4
+	AvailDay:	10.00
+	LegalNum:	6
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	2
+	Val7:	23302
+	Val8:	651
+	Val9:	692
+	Val10:	10
+BREAK
+#31005
+Keywords:	rack weapon flimsy metal
+Name:	a weapon rack
+RoomDesc:$
+A flimsy metal weapon rack is bolted to the eastern wall here.~
+LookDesc:$
+This rack has various slot, holes, slings and hooks for holding an assortment
+of weaponry. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	5
+	Val2:	-1
+BREAK
+#31006
+Keywords:	desk lengthy wooden
+Name:	A lengthy wooden desk
+RoomDesc:$
+A lengthy wooden desk is pressed up against the wall here.~
+LookDesc:$
+This lengthy wooden desk takes up most of the wall here, and is covered with
+chemical residues, along with various beakers and vials used for cooking up
+and producing all sorts of drugs. Powders and liquids from past mixtures are
+smeared across its surface, staining the wood heavily in some places. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	10.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	5
+	Val2:	-1
+BREAK
+#31007
+Keywords:	facemask white cloth disposable
+Name:	a disposable facemask
+RoomDesc:$
+A cloth facemask lies here.~
+LookDesc:$
+This white cloth facemask is similar to those worn by doctors while they
+operate. It consists of a piece of cloth that covers the nose and mouth, and
+two straps to fasten it behind one's head. 
+~
+Type:	Worn
+WearFlags:	100000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31008
+Keywords:	apron white stained
+Name:	a stained apron
+RoomDesc:$
+An apron is lying here.~
+LookDesc:$
+The apron is stained with blood, dyes, and other strange liquids. It is not
+exactly the nicest of clothes, but this is all that some people wear, so be
+happy. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31009
+Keywords:	razor blade disposable slender
+Name:	a slender, disposable razor blade
+RoomDesc:$
+a slender, disposable razor blade has been disposed of here.~
+LookDesc:$
+Its an industrial razor blade, long and slender, razor sharp. It is normally
+used in conjunction with a box cutter, but has been removed for finer handling
+purposes. It remains, however, a very dangerous weapon in the right hands.
+There also seems to be a bit of residue left on it, some kind of white powder
+from the looks of it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	10
+	LegalCode:	1
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#31046
+Keywords:	sweater grey ribbed crewneck
+Name:	A ribbed grey crewneck sweater
+RoomDesc:$
+An expensive grey sweater is lying here.~
+LookDesc:$
+This expensive sweater is made of a blend of lambswool and cashmere fibers,
+with a threadcount so high that it feels like the skin of an elven maiden to
+your touch. It is cut to flatter most body types. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31063
+Keywords:	warhammer hammer flaming
+Name:	A flaming Warhammer
+RoomDesc:$
+a hammer lies here shrouded in flames.~
+LookDesc:$
+You now hold a very strange and rare item. It is a warhammer of the old days
+that looks like it has been touched up over time and had many spells cast over
+it, for now it is constantly covered in a dull flame. As you hold it a strange
+surge of power flows into you, letting you know the power it wields 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	32
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#31064
+Keywords:	standard key
+Name:	A standard looking key
+RoomDesc:$
+A small key has been dropped here~
+LookDesc:$
+its a key... 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

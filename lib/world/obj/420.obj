@@ -1,0 +1,519 @@
+#42000
+Keywords:	neon lotus cocktail drink
+Name:	a Neon Lotus
+RoomDesc:$
+A cocktail glass with the Neon Lotus ensignia is here.~
+LookDesc:$
+This cocktail concoction is both expensive and exquisite, just like its
+namesake. Small organisms with properties similar to fireflies populate the
+drink, frequently changing color and glowing brighter with any movement. They
+have a lifespan of less than 10 minutes after exposure to the cocktail,
+dissolving and bubbling up like carbonation thereafter. While the organisms
+are totally non-toxic the same cannot be said for the drink itself, rumor is
+each neon lotus contains trace amounts of kamikaze, ecstasy, and other
+designer drugs. This combination of chic organisms, designer drugs, and
+alchohol make for quite an enjoyable (and addictive) time.
+ ^cContains:^N 30ml Dry Vodka, 30ml Blueberry schnapps, Splash of cranberry juice,
+Maraschino cherry 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	138
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	18
+BREAK
+#42001
+Keywords:	tokyo sunrise drink cocktail
+Name:	Tokyo Sunrise
+RoomDesc:$
+A cocktail glass has been left here.~
+LookDesc:$
+A tasty and refreshing drink for those who like something strong but fruity,
+or just don't like to taste the liquor. The light purple color of this drink
+makes it stand out from the usual cocktails, and often leads to a "hey I want
+one of /those/ bartender!" when eyed by a fellow patron.
+ ^cContains:^n 60ml vodka, 30ml light rum, chambord, splash of cranberry juice.
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	72
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	16
+BREAK
+#42002
+Keywords:	shogun shooter drink cocktail
+Name:	Shogun Shooter
+RoomDesc:$
+A pony stacked shot glass with the Neon Lotus ensignia has been left here.~
+LookDesc:$
+The name says it all, one of these pony stacked concoctions and your ready to
+wage war.
+ ^cContains:^n 30ml Midori, 90ml Vodka 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	60
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	16
+BREAK
+#42003
+Keywords:	yoshios yoshio's dream cocktail drink
+Name:	Yoshio's Dream
+RoomDesc:$
+A Neon Lotus cocktail glass is here.~
+LookDesc:$
+Named after Yoshio Kodama, the man who brought together the warring gangs of
+1950's Japan to form the Yakuza. Dubbed "the kingmaker", Kodama was to Japan's
+yakuza what Al Capone was to America's mafia. By now he's been all but
+forgotten by the new breed of yak, but his memory lives on worldwide with this
+cocktail.
+ ^cContains:^n 45ml vodka, 30ml triple sec, 15ml dry vermouth, lime juice, sour
+mix. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	115
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	16
+BREAK
+#42004
+Keywords:	tokkuri sake hot
+Name:	Hot Sake Tokkuri
+RoomDesc:$
+A ceramic flask has been left here.~
+LookDesc:$
+This is a large ceramic flask, used to pour sake. Sake is a clear drink made
+from rice and water, boasting nearly the same alcohol content as wine. When
+drinking sake with others its polite to pour for each other. You should always
+keep an eye on the cups of those around you to make sure nobody is
+inconvenienced to ask for more. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	60
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	27
+BREAK
+#42005
+Keywords:	tokkuri sake cold
+Name:	Cold Sake Tokkuri
+RoomDesc:$
+A ceramic flask has been left here.~
+LookDesc:$
+This is a large ceramic flask, used to pour sake. Sake is a clear drink made
+from rice and water, boasting nearly the same alcohol content as wine. When
+drinking sake with others its polite to pour for each other. You should always
+keep an eye on the cups of those around you to make sure nobody is
+inconvenienced to ask for more. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	60
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	27
+BREAK
+#42006
+Keywords:	ochoko cup sake
+Name:	Ochoko (sake cup)
+RoomDesc:$
+A small ceramic cup has been left here.~
+LookDesc:$
+This is the traditional cup from which to drink sake. When drinking sake with
+others, you should never pour your own cup, or hold your cup up for a refill.
+When someone with the tokkuri wants to pour you more sake, it is polite to
+hold your ochoko cup up. Remember to say kampai (cheers!) before your first
+drink. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	27
+BREAK
+#42007
+Keywords:	yamada ale pale beer drink
+Name:	Yamada(tm) Pale Ale
+RoomDesc:$
+A half-liter glass has been left here.~
+LookDesc:$
+A half-liter glass full of Yamada(tm) premium pale ale. Yamada is a japanese
+brewery based out of seattle, specializing in crisp microfiltered brew. Most
+of their product gets shipped right to Japan, appeasing the appetite there for
+traditional beer but utilizing superior northwest hops. The Neon Lotus has an
+'understanding' with Yamada, and remains the only place in the metroplex
+you'll find it. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	6
+	Val2:	11
+BREAK
+#42008
+Keywords:	yamada maple stout beer drink
+Name:	Yamada(tm) Maple Stout
+RoomDesc:$
+A half-liter glass has been left here.~
+LookDesc:$
+A half-liter glass full of Yamada(tm) premium maple stout. Yamada is a
+japanese brewery based out of seattle, specializing in crisp microfiltered
+brew. Most of their product gets shipped right to Japan, appeasing the
+appetite there for traditional beer but utilizing superior northwest hops. The
+Neon Lotus has an 'understanding' with Yamada, and remains the only place in
+the metroplex you'll find it. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	6
+	Val2:	10
+BREAK
+#42009
+Keywords:	yamada lager beer drink
+Name:	Yamada(tm) Lager
+RoomDesc:$
+A half-liter glass has been left here.~
+LookDesc:$
+A half-liter glass full of Yamada(tm) premium lager. Yamada is a japanese
+brewery based out of seattle, specializing in crisp microfiltered brew. Most
+of their product gets shipped right to Japan, appeasing the appetite there for
+traditional beer but utilizing superior northwest hops. The Neon Lotus has an
+'understanding' with Yamada, and remains the only place in the metroplex
+you'll find it. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	6
+	Val2:	12
+BREAK
+#42010
+Keywords:	fugu blowfish sushi
+Name:	Fugu (blowfish)
+RoomDesc:$
+A deadly delicacy waits to be eaten.~
+LookDesc:$
+Eating fugu is an inexplicable and slightly perverse attraction. Tetrodoxin,
+the deadly poison in each fugu fish, is over one thousand times deadlier than
+cyanide. The amount of tetrodoxin in one fugu fish is enough to kill fifty
+people, and even touching the skin inproperly can be fatal. With that being
+said, it is renowned as the most delectable seafood on earth by the japanese.
+While most popular in sushi, connessuirs will tell you mixing fugu testes and
+hot sake is a high no chip can give you. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1230
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#42011
+Keywords:	ramen miso soup vegetable
+Name:	Vegetable Miso Ramen
+RoomDesc:$
+A bowl of mouth watering noodles is here.~
+LookDesc:$
+This large bowl is filled with a mouth watering broth made from a blend of
+miso and special seasonings. Chinese style ramen noodles populate the
+delicious brown broth, and green onions, bamboo shoots, sliced cabbage, bean
+sprouts, and mushrooms are garnished generously above. Seattle's cold windy
+nights make this soup a year round favorite. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	77
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#42012
+Keywords:	tempura domburi bowl food
+Name:	Tempura Domburi
+RoomDesc:$
+A bowl of rice and battered seafood is here.~
+LookDesc:$
+This popular lunch time dish is beautiful in its simplicity. A large bowl,
+filled only with rice, and topped with tempura. Tempura consists of battered
+seafood and vegetables, but the actual ingredients change with each season.
+Prawns, squid, and shrimp are staples of the seafood usually used in tempura,
+while eggplant, sweet potato, and squash often account for the vegetable
+portion. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	38
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#42030
+Keywords:	jacket double breasted suit
+Name:	a double breasted ^L{^CN^YL^L}^n suit jacket
+RoomDesc:$
+A suit jacket with the Neon Lotus ensignia lies here crumpled.~
+LookDesc:$
+This black suit jacket boasts the ensignia of the nicest resturant in Seattle,
+the Neon Lotus. It is constructed of high quality fabric, and coated with
+teflon to prevent common stains and wrinkles. The exterior features six gold
+buttons which fasten the suit, and two large flap pockets directly under them.
+The interior has a large pocket by the left breast, and thin kevlar lining
+over the abdomen area. 
+~
+Type:	Container
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	3
+	Cost:	620
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val2:	-1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	3
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#42031
+Keywords:	gloves lycra
+Name:	a pair of lycra gloves
+RoomDesc:$
+A pair of lycra gloves lie on the floor.~
+LookDesc:$
+These no-name gloves are made of highly stretchable lycra. Nothing spectacular
+but enough to keep your hands warm and your fingerprints where they belong. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#42032
+Keywords:	slacks pants neon lotus tapered
+Name:	a pair of ^L{^CN^YL^L}^n tapered slacks
+RoomDesc:$
+A pair of black slacks have been dropped here.~
+LookDesc:$
+Company issued black slacks. These pants are coated with anti-stain material,
+and seem impossible to wrinkle. The only thing that stands out about them is
+the Neon Lotus ensignia just above the hip pockets. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	90
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#42040
+Keywords:	menu interactive
+Name:	interactive menu
+RoomDesc:$
+An interactive menu is mounted on the wall.~
+LookDesc:$
+This will need to be C&P'd to the obj file. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	9.00
+	Barrier:	12
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

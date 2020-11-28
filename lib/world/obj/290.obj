@@ -1,0 +1,991 @@
+#29000
+Keywords:	sign welcome
+Name:	a welcoming sign
+RoomDesc:$
+A welcoming sign is nailed to the wall.~
+LookDesc:$
+Welcome to Cross Applied Technologies(CATCo). All employees punch in
+downstairs immediatley after arrival. If you are not an employee please do not
+leave the lobby without an appointment. For an appointment talk to the
+secretary in the lobby. Thank you and enjoy your stay. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29002
+Keywords:	ares lightweight smg submachinegun machine gun
+Name:	an Ares lightweight SMG
+RoomDesc:$
+A sub-machinegun lies here.~
+LookDesc:$
+Yet another Ares value deal. Cheap, but effective. If you're a wage slave on a
+budget and want to throw some lead around, this baby is just what the doctor
+ordered. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	1200
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	30
+	Val6:	30
+	Val8:	650
+	Val10:	28
+BREAK
+#29003
+Keywords:	card keycard key keypad digital
+Name:	a digital keypad card
+RoomDesc:$
+A keycard is lying here gathering dust.~
+LookDesc:$
+It's a standard keypad keycard used for unlocking doors. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29004
+Keywords:	shotgun ares mct light
+Name:	an Ares MCT light Shotgun
+RoomDesc:$
+A shotgun lies here.~
+LookDesc:$
+The Ares MCT light Shotgun is built for easy carrage and easy handling. It
+doesn't hold back on the power though. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	12
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	8
+	Val6:	8
+	Val9:	-1
+	Val10:	4
+BREAK
+#29005
+Keywords:	deck cyberdeck avatar cmt
+Name:	a CMT Avatar cyberdeck
+RoomDesc:$
+A CMT cyberdeck is lying here.~
+LookDesc:$
+The cream of the crop of cyberdecks.. The CMT Avatar.. this baby has it all..
+~
+Type:	Cyberdeck
+WearFlags:	1000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	250000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	4
+	Val2:	700
+	Val3:	1400
+	Val4:	300
+BREAK
+#29007
+Keywords:	suit silk jade
+Name:	a jade silk suit
+RoomDesc:$
+A green suit lies here.~
+LookDesc:$
+This suit is custom-tailored to provide both corporate-level elegance and
+military-level personal protection. At first glance, it appears to be an
+expensive silk business suit; upon closer examination, the outfit is actually
+lined with kevlar, and features other types of ballistic and impact
+protection. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1010000001000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	32
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	2
+	Val5:	6
+	Val6:	6
+	Val7:	2
+BREAK
+#29008
+Keywords:	red plaid skirt short
+Name:	a short red plaid skirt
+RoomDesc:$
+A red plaid skirt is lying here.~
+LookDesc:$
+A cool red plaid skirt 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	1
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	1
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	-2
+BREAK
+#29009
+Keywords:	torn fishnet stockings
+Name:	torn fishnet stockings
+RoomDesc:$
+Some stockings lie here.~
+LookDesc:$
+Worn-out stockings. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29010
+Keywords:	boots combat black
+Name:	a pair of black combat boots
+RoomDesc:$
+Some boots rest here.~
+LookDesc:$
+Boots made of the finest leather with a steel tip for battle conditions. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29011
+Keywords:	cigarette clove
+Name:	a clove cigarette
+RoomDesc:$
+A cigarette lies here.~
+LookDesc:$
+The finest of cigarettes. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	1
+BREAK
+#29012
+Keywords:	t-shirt shirt skull black
+Name:	a black t-shirt with a human skull
+RoomDesc:$
+A black t-shirt is gathering dust here.~
+LookDesc:$
+Your standard polyester t-shirt, with a picture of a human skull on it. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	1
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	-2
+BREAK
+#29013
+Keywords:	key
+Name:	a key
+RoomDesc:$
+A key lies here.~
+LookDesc:$
+Woohoo. A key. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29014
+Keywords:	armani suit
+Name:	an Armani Suit
+RoomDesc:$
+A snazzy suit lies here.~
+LookDesc:$
+Made by the best tailors in Italy, this suit sure draws attention. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	1
+BREAK
+#29015
+Keywords:	ares predator pistol customized heavily
+Name:	a heavily customized Ares Predator II
+RoomDesc:$
+A customized Ares Predator II is lying here.~
+LookDesc:$
+A basic Ares Predator II made into a trolls dream weapon, customized to death.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	15
+	Val6:	15
+	Val9:	-1
+	Val10:	4
+BREAK
+#29017
+Keywords:	nuyen roll money
+Name:	a roll of nuyen
+RoomDesc:$
+A roll of nuyen lies here.~
+LookDesc:$
+It's money. 
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3000
+BREAK
+#29018
+Keywords:	coat trenchcoat leather black
+Name:	a long black leather trenchcoat
+RoomDesc:$
+A leather trenchcoat lies here.~
+LookDesc:$
+A huge trenchcoat that'd only fit a troll. It's spraypainted with the Brain
+Eater's gang logo. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	111100000000000000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	8
+	Val6:	2
+	Val7:	3
+BREAK
+#29019
+Keywords:	uniform full body lone star
+Name:	a full body Lone Star uniform
+RoomDesc:$
+A strange Lone Star uniform lies here.~
+LookDesc:$
+A white and blue uniform lined with bulletproof plates for ballistic
+protection. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	1
+	Val3:	6
+	Val4:	4
+	Val5:	7
+	Val6:	6
+BREAK
+#29020
+Keywords:	thermoptic trench coat trenchcoat white
+Name:	a white thermoptic hooded trenchcoat
+RoomDesc:$
+A weird trenchcoat lies here.~
+LookDesc:$
+It's a long, baggy trenchcoat, with a hood that covers most of your face. It's
+the newest thermoptics technology, and renders you virtually invisible to the
+naked eye. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	10000000000000000000000000
+Material:	computers
+[POINTS]
+	Weight:	7.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	4
+	Val7:	4
+BREAK
+#29021
+Keywords:	MP-5 SD SMG submachine gun Heckler Koch H&K
+Name:	a customized MP-5 SD submachine gun
+RoomDesc:$
+An SMG of some kind is lying here.~
+LookDesc:$
+The Heckler und Koch MP-5 submachine gun is one of the most famous and
+wide-spread firearms of its class, having been developed since the Second
+World War. Its development began circa 1964 under the company designation HK
+MP-54, or simply HK 54. Multiple improvements have been made over the time
+since its development, including concerns over reliability with its magazines,
+as well as having their trigger units upgraded. The MP-5, basically, is no
+more than the scaled-down version of the H&K G3 battle rifle. It shares the
+same basic design with a stamped steel receiver and the same roller-delayed
+blowback action, derived from the post-war CETME rifles. This particular model
+has been customized, and features an integral barrel silencer and
+magnification scope. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	30
+	Val6:	30
+	Val7:	60553
+	Val8:	28614
+	Val10:	28
+BREAK
+#29022
+Keywords:	suit snazzy silk
+Name:	a snazzy silk suit
+RoomDesc:$
+A smooth looking suit is lying here.~
+LookDesc:$
+Made by the best tailors in Italy, this suit is only for the extremely rich or
+the connected. The suit feels great on your body and it can take quite a bit
+of action before ripping apart too. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29024
+Keywords:	MP-5 SMG SD submachine gun Heckler Koch H&K
+Name:	an MP-5 SD submachine gun
+RoomDesc:$
+A shiny SMG lies here.~
+LookDesc:$
+The Heckler und Koch MP-5 submachine gun is one of the most famous and
+wide-spread firearms of its class, having been developed since the Second
+World War. Its development began circa 1964 under the company designation HK
+MP-54, or simply HK 54. Multiple improvements have been made over the time
+since its development, including concerns over reliability with its magazines,
+as well as having their trigger units upgraded. The MP-5, basically, is no
+more than the scaled-down version of the H&K G3 battle rifle. It shares the
+same basic design with a stamped steel receiver and the same roller-delayed
+blowback action, derived from the post-war CETME rifles. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	8
+	Cost:	8000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	30
+	Val6:	30
+	Val10:	28
+BREAK
+#29027
+Keywords:	encephalon enhancement
+Name:	Encephalon enhancement
+RoomDesc:$
+You shouldn't be seeing this.~
+LookDesc:$
+Nor this. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	110000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	80
+	Val2:	6
+	Val4:	3200
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+BREAK
+#29028
+Keywords:	orthoskin delta
+Name:	Orthoskin 3 Delta
+RoomDesc:$
+Orthoskin lies here.~
+LookDesc:$
+orthoskin enhances your skin. duh. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	400000
+	AvailTN:	10
+	AvailDay:	40.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	90
+	Val2:	2
+	Val4:	3375
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#29029
+Keywords:	suprathyroid gland 
+Name:	a suprathyroid gland
+RoomDesc:$
+Suprathyroid gland ~
+LookDesc:$
+suprathyroid gland  
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	50000
+	AvailTN:	8
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	1
+	Val4:	140
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	1
+[AFFECT 2]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 3]
+	Location:	Strength
+	Modifier:	1
+BREAK
+#29030
+Keywords:	platelet factory
+Name:	a platelet factory
+RoomDesc:$
+Platelet~
+LookDesc:$
+factory 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	30000
+	AvailTN:	5
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	1
+	Val4:	40
+BREAK
+#29031
+Keywords:	car wreck wrecked
+Name:	a wrecked car
+RoomDesc:$
+A totally wrecked car is lying here.~
+LookDesc:$
+The front of the car has a deep hole, as if it drove right into a light post.
+The sides are also completely cushed and the metal looks like curled up paper.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29032
+Keywords:	jeans pants
+Name:	Some jeans
+RoomDesc:$
+Some ragged jeans lie here.~
+LookDesc:$
+Kid sized blue levi jeans with grass stains on the knees and tore up leg ends.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29033
+Keywords:	hotdog dog cheese grilled
+Name:	A grilled cheese hotdog
+RoomDesc:$
+A mighty delicious looking hotdog is lying here.~
+LookDesc:$
+A hotdog in bread, with cheese, onions, mustard and ketchup. Yum. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+BREAK
+#29034
+Keywords:	coke can ice-cold
+Name:	A can of coke
+RoomDesc:$
+A can of ice-cold coke sits here.~
+LookDesc:$
+A regular can of coke with a red logo. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	1
+BREAK
+#29035
+Keywords:	cigarette clove bima
+Name:	A Bima clove cigarette
+RoomDesc:$
+A cigarette is lying here.~
+LookDesc:$
+This cigarette is made with black paper, and it smells of a delightful clove
+aroma. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29036
+Keywords:	pencil office renraku arcology
+Name:	A Renraku Arcology office pencil
+RoomDesc:$
+A pencil is lying here.~
+LookDesc:$
+It looks like a pencil from the old Renraku Arcology building. It's red with a
+Renraku logo on it. 
+~
+Type:	Focus
+WearFlags:	10100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	9000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#29040
+Keywords:	fries greasy plate french potatoes
+Name:	a plate of french fries
+RoomDesc:$
+A plate of greasy French fries sits here.~
+LookDesc:$
+The French fries shine with grease. Even picking one up might be enough to
+induce a heart attack.  
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#29097
+Keywords:	documents
+Name:	some documents
+RoomDesc:$
+Some documents lie here.~
+LookDesc:$
+It's a document with a top secret logo on it. 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29098
+Keywords:	golden scroll
+Name:	a golden scroll
+RoomDesc:$
+A golden scroll lies here.~
+LookDesc:$
+You'ed feel rich just holding this scroll, even if you already are. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	10
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	23
+BREAK
+#29099
+Keywords:	tub jello
+Name:	a tub full of jello
+RoomDesc:$
+A tub filled to the brim with red jello is here.~
+LookDesc:$
+mmm 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

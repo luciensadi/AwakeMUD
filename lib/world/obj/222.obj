@@ -1,0 +1,341 @@
+#22200
+Keywords:	Black hoodie
+Name:	a hoodie covered in safety pins
+RoomDesc:$
+A black hoodie lined with safety pins is folded here.~
+LookDesc:$
+A plain black, zip-up hoodie, lined with safety-pins. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22201
+Keywords:	latte
+Name:	a vanilla latte
+RoomDesc:$
+A Starbuck's cup litters the ground.~
+LookDesc:$
+A latte, filled maybe about one-third of the way, the coffee has grounds in
+it, and what looks like a fake fingernail. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	4
+	Val2:	12
+BREAK
+#22202
+Keywords:	key card keycard
+Name:	a keycard
+RoomDesc:$
+A card with a shiny metal strip lays here.~
+LookDesc:$
+A card covered in some odd text, with a shiny metal strip across the back. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22203
+Keywords:	sign
+Name:	the sign
+RoomDesc:$
+A sign is mounted to the door.~
+LookDesc:$
+^R4BSec9  
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22204
+Keywords:	rifle
+Name:	a simple rifle
+RoomDesc:$
+A simple rifle has been left here.~
+LookDesc:$
+It's a rifle, just like any other rifle.  Load, fire, DIE. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	2050
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+	Val3:	11
+	Val4:	12
+	Val5:	20
+	Val6:	20
+BREAK
+#22206
+Keywords:	scalpel
+Name:	a dirty scalpel
+RoomDesc:$
+A dirty scalpel has been discarded here.~
+LookDesc:$
+A dirty scalpel with a dull blade, covered in random and smelly subtances. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	740
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	1
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#22208
+Keywords:	gloves bloodied pair
+Name:	A pair of bloodied rubber gloves
+RoomDesc:$
+A pair of bloodied rubber gloves lies here.~
+LookDesc:$
+A pair of thick rubber gloves covered in blood. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22209
+Keywords:	fork
+Name:	a fork
+RoomDesc:$
+A fork lies here.~
+LookDesc:$
+It's a plain, simple fork. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#22210
+Keywords:	brown leather briefcase
+Name:	a brown, leather briefcase
+RoomDesc:$
+A leather briefcase lies here.~
+LookDesc:$
+A handsome, brown leather briefcase. It looks quite professional. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val2:	-1
+BREAK
+#22211
+Keywords:	Double-shot expresso
+Name:	a double-shot of expresso
+RoomDesc:$
+A Starbuck's cup lies here.~
+LookDesc:$
+A double shot of expresso.  That's sure caffiene for ya! 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val2:	9
+BREAK
+#22299
+Keywords:	yellow folder
+Name:	a yellow folder
+RoomDesc:$
+A yellow folder, full of papers lies here.~
+LookDesc:$
+A blank, yellow folder, filled with files.  To have this, you must have
+recieved it from Bernie, for a quest.  If not, please discard of it NOW.
+ There are three separate parts to this.  ^cMILITARY^n, ^cDRAGON^n, and
+^cEGG^n. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	EGG
+	Desc:$
+The Egg itself. Your main goal.  It is said to be hidden deep within the
+wolves' extensive underground burrow.  This wolf pack is one of the largest
+known, and is extremely hostile. Again, hidden within the forest, but not
+difficult to reach, if you know where to go, which unfortunately, we can give
+no hints on, as we are not entirely sure ourselves. It is said that the way
+the wolves acquired the egg is via a hidden passage to the dragon's den from
+deep within their home. For you to acquire this egg, be prepare to squeeze
+through dark, cramped corridors. It will be impossible to stay together
+without communication. The eldest of wolves is said to guard this egg.  He is
+also said to be incredibly brutal, with unimaginable strength.  Be wary,
+shadowrunners.  This is no game. 
+~
+[EXTRADESC 1]
+	Keywords:	DRAGON
+	Desc:$
+The dragon's lair is hidden well within the rough terrain, and without
+sufficiant skills, you may die attempting to reach him. This particular dragon
+is very much hostile to humanoid beings, due to things in his past, and the
+fact that he is constantly hassled by their kind. It is a very obvious reason
+why he wants the Egg: it is his kin. Not particular on asking for help, the
+only reason he hasn't retrieved the egg himself, is because of the location
+where it is being held; it would be impossible for a dragon to retreive it.
+Dragons are not keen on sharing their loot, and he may in fact, kill you, even
+if you have delivered the egg safely into his care. If this Egg does hatch
+into a dragon in his care, it is almost certain they together will wreak havoc
+upon humankind.  But, it is up to you, shadowrunner. If you do choose this
+path, I highly suggest swimming experience, or climbing experience,
+preferabbly very much of both. 
+~
+[EXTRADESC 2]
+	Keywords:	MILITARY
+	Desc:$
+The military is located within the wilderness, and will fairly difficult to
+reach.  Once inside, depending on the information you have received, and
+decisions you have made, they may or may not be hostile.  Chances are, they
+will. It is a very well-kept secret that they capture all different races of
+creatures, and dissect them, only to reassemble them to create Super Soldiers.
+They may or may not want the Dragon Egg for that purpose. Within the walls,
+they also do genetic research, and cloning.  That is another possibility.  It
+is left up to you, shadowrunner. The military obviously would have more funds
+than a dragon, and would be alot more likely to give you some, IF you give
+them what they want in return. If you do choose this path, you will need to
+locate a man named Gelinske. 
+~
+BREAK
+END

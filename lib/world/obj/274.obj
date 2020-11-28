@@ -1,0 +1,682 @@
+#27400
+Keywords:	mattress squalid
+Name:	a squalid, blood-stained mattress
+RoomDesc:$
+A squalid, blood-stained mattress lies here.~
+LookDesc:$
+ You find it hard to believe anything sleeps on this. The mattress is grimy,
+soot-stained, and has several large puddles of blood soaking into the fabric.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27401
+Keywords:	spectral cane
+Name:	a ghostly, flickering cane
+RoomDesc:$
+A ghostly, flickering cane seems to be lying here~
+LookDesc:$
+A fairly normal wooden walking cane, of the kind used by older people. The
+only difference is, it doesn't really exist on this plane. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#27402
+Keywords:	vest urban
+Name:	^wan ^Wu^wr^Wb^wa^Wn c^wa^Wm^wo^Wf^wl^Wa^wu^Wg^we ^wvest
+RoomDesc:$
+A crumpled up vest in an urban camoflauge pattern lies here.~
+LookDesc:$
+ A stylish paramilitary vest in grey, white, and black, with two breast
+pockets and epaulets. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+	Val7:	2
+BREAK
+#27403
+Keywords:	coat trench opera black tattered
+Name:	a tattered black opera coat
+RoomDesc:$
+A black opera coat has seen better days.~
+LookDesc:$
+At one time, this full-length black coat would have been elegant and stylish.
+Now, however, it is little more than rags. Despite its dark color, you can see
+blood near the frayed edges and many small holes. It looks like whoever last
+owned this coat wore it to a gunfight-- his last. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	2
+	Val6:	1
+	Val7:	1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#27404
+Keywords:	jeans worn faded
+Name:	a pair of worn and faded jeans
+RoomDesc:$
+Some faded black jeans are sitting here.~
+LookDesc:$
+ Casual-cut black jeans, now faded to dark grey and a little worn in the
+knees. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.30
+	Barrier:	16
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27405
+Keywords:	boots scuffed black combat
+Name:	black scuffed combat boots
+RoomDesc:$
+A pair of scuffed-up black boots sits upright here.~
+LookDesc:$
+ Good paramilitary boots in decent shape. All they need is a little polishing.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27406
+Keywords:	wires jackpoint mess fraying
+Name:	a twisted mess of wires with a jackpoint sticking out of it
+RoomDesc:$
+A jumble of sparking, hissing wires lies here, with a jackpoint jutting out awkwardly to the side.~
+LookDesc:$
+ The fraying mess seems to move of its own volition, as the wires spark and
+jump back and forth. The jackpoint is shiny, though, and almost too tempting
+to pass up. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27407
+Keywords:	glittering dikote katana black
+Name:	a dikoted, hand-forged black katana
+RoomDesc:$
+A glittering black katana lies here.~
+LookDesc:$
+ The long, black blade is tinged with a dull coppery color, and it glitters
+from a thin layer of dikote. Strange magical energies seem to  resonate from
+within, warming your hand as you hold it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	4.00
+	Barrier:	16
+	Cost:	200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	6
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-6
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	127
+[AFFECT 3]
+	Location:	Impact
+	Modifier:	127
+[AFFECT 4]
+	Location:	Init Dice
+	Modifier:	127
+[AFFECT 5]
+	Location:	Strength
+	Modifier:	15
+BREAK
+#27408
+Keywords:	corpse twitching street samurai
+Name:	^rthe corpse of a street sam^n
+RoomDesc:$
+^rThe still-twitching corpse of a street samurai lies sprawled on the floor.^n~
+LookDesc:$
+This former human is lying sprawled on the elevator floor, with many vicious
+wounds on what little of his body is flesh. There are some bite marks, but
+most of the body is intact. Apparently, ghouls, like other predators, prefer
+flesh to chrome. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	115.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27409
+Keywords:	sink faucet
+Name:	a white porcelain sink
+RoomDesc:$
+There is a dust-covered white sink here.~
+LookDesc:$
+Though there's a little dust, the sink appears to be in good condition, and
+the faucet works, even if there's no hot water. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27410
+Keywords:	leg ghoul
+Name:	^rthe severed lower leg of a ghoul^n
+RoomDesc:$
+Part of a ghoul's leg is lying here in the rubble.~
+LookDesc:$
+ A piece of pale, rotting flesh, severed just below the knee. Severed by
+something incredibly sharp, by the looks of it. It has pretty good heft-- you
+bet you could hurt somebody with this thing, if you swung it good and hard. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	8.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	-1
+BREAK
+#27411
+Keywords:	bed
+Name:	a stripped bed
+RoomDesc:$
+A stripped bed lies here, missing a mattress.~
+LookDesc:$
+ This pice of synthwood furniture has been horribly abused. There are long,
+deep gashes in it's aritificially-textured surface, and someone has taken the
+mattress off of it. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27412
+Keywords:	bed
+Name:	a stained and broken bed
+RoomDesc:$
+A bed lies here, bloodstained, broken, and foul-smelling.~
+LookDesc:$
+ The supports on this bed are broken, leaving it slanted at an awkward angle
+towards the floor. The sheets are bloodstained and ragged, and there are
+several human teeth imbedded in the headboard. At least it has a mattress on
+it. Too bad it's not a dry mattress. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27413
+Keywords:	cigarette
+Name:	a cigarette
+RoomDesc:$
+A cigarette lies on the ground here.~
+LookDesc:$
+It's a cigarette-- a small paper tube, filled with dead plant life, typically
+tobacco. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27414
+Keywords:	towel
+Name:	a durable, clean towel
+RoomDesc:$
+A clean, fresh towel sits neatly on a shelf here.~
+LookDesc:$
+ A clean, white, fresh-smelling towel. You can use it to dry yourself, protect
+yourself from scratchy plant-life, kill insects, harass people in locker
+rooms, blindfold yourself , handle hot objects, shield yourself from the sun,
+or even, folded, as a pillow. You should always know where your towel is. 
+~
+Type:	Worn
+WearFlags:	10100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	-1
+BREAK
+#27415
+Keywords:	door broken
+Name:	the broken door to a hotel room
+RoomDesc:$
+The door to the hotel room.~
+LookDesc:$
+This door lies here with silver letters proclaiming this to be '^wRoom 2B^n'.
+Whatever did this made up it's lack of finesse with a LOT of extra brute
+strength. The door is splintered and broken. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27416
+Keywords:	btl chip personafix carrot top
+Name:	a personafix BTL chip labelled 'Carrot Top'
+RoomDesc:$
+A BTL chip lies here, labelled 'Carrot Top'.~
+LookDesc:$
+This is a simsense chip with the legally standard emotive feedback limits
+removed, and the brainwave patterns of a real human being imprinted on it. In
+this case, the persona is a late twentieth century comedian named 'Carrot
+Top'. You shiver briefly, but you aren't sure why. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27417
+Keywords:	liver bioware transplant organ
+Name:	a liver of questionable origin
+RoomDesc:$
+Someon's liver lies here, missing pieces and slightly bluish.~
+LookDesc:$
+ What in the hell? It's a liver, alright, but they're not supposed to be this
+shade of blue... or have bite marks all over them. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	400000
+	AvailTN:	12
+	AvailDay:	80.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	125
+	Val2:	4
+	Val4:	11718
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	-1
+[AFFECT 2]
+	Location:	Charisma
+	Modifier:	-1
+BREAK
+#27418
+Keywords:	augmentation muscle
+Name:	muscle augmenation II
+RoomDesc:$
+Unimplanted muscles cover the floor.~
+LookDesc:$
+Muscle augmentation, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val4:	80
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	2
+BREAK
+#27419
+Keywords:	spurs spur hand retractable carbon steel used
+Name:	used carbon-steel hand spurs
+RoomDesc:$
+Uninstalled hand spurs lie here.~
+LookDesc:$
+They look painful..
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	21
+	Val4:	20
+BREAK
+#27420
+Keywords:	gland suprathyroid
+Name:	a nibbled-on suprathyroid
+RoomDesc:$
+A throbbing gland sits here.~
+LookDesc:$
+Suprathyroid gland.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	10
+	AvailDay:	60.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	140
+	Val2:	5
+	Val4:	105
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	1
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	1
+BREAK
+#27421
+Keywords:	cybereyes eyes Zeiss
+Name:	used Zeiss cybereyes
+RoomDesc:$
+A pair of chrome and blue cybereyes roll around on the floor here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	100000000001000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	451000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	30
+	Val2:	10
+	Val4:	20
+BREAK
+#27422
+Keywords:	bed warm fluffy
+Name:	a warm, fluffy-looking hotel bed
+RoomDesc:$
+There's a large, warm bed with fluffy pillows lying here.~
+LookDesc:$
+ Luxurious, soft, and warm, this bed belongs in one of the nicer four-star
+hotels in town. It's almost shockingly clean, compared to the filth and horror
+of this place. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

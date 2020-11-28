@@ -1,0 +1,473 @@
+#27300
+rock rocks~
+a sharp rock~
+A decent sized rock sits here.~
+It's a rock, with a few spots of blood on it. 
+~
+5 0 8193 14 1 0
+0 3 0 316 127 -1 0 -1 -1 -1
+2 0 0
+#27301
+pitchfork~
+a pitchfork~
+A pitchfork is stuck into the ground here.~
+It's a farmer's pitchfork, simple enough. 
+~
+5 0 8193 1 1 0
+0 1 2 313 104 -1 0 -1 -1 -1
+3 15 0
+#27302
+pirate hook~
+a pirate's hook~
+A pirate's hook lies here.~
+A hook that covers the hand of the wielder, can be worn as an accessory, or
+wielded as a weapon.  Made of silver. 
+~
+5 0 8321 8 1 0
+0 1 1 308 103 -1 0 -1 -1 -1
+1 59 3
+#27303
+ringmaster's whip~
+the Ringmaster's whip~
+A colorful whip lies here.~
+It's the Ringmaster's whip, decorated in bright colors to match the decor of
+the circus. 
+~
+5 4096 8193 4 1 0
+0 3 3 302 105 -1 0 -1 -1 -1
+2 200 0
+#27304
+chair~
+a chair~
+A chair lies here on it's side.~
+Used in the circus with animal shows by the lion tamer. 
+~
+5 4096 8193 1 1 0
+0 1 2 307 106 -1 0 -1 -1 -1
+3 50 0
+#27305
+Scooby Doo doll~
+Scooby Doo doll~
+A stuffed dog lies here.~
+It's a Scooby Doo doll, but some parts of it, like the head for instance, are
+really hard, making it a decent weapon. 
+~
+5 0 8193 3 1 0
+0 2 3 305 106 -1 0 -1 -1 -1
+1 50 0
+#27306
+bone knife~
+a bone knife~
+A knife made of bone is lying here.~
+It's a knife, chipped from bone.  Quite sharp, too. Seems almost like a ritual
+knife for a shaman. 
+~
+5 0 8193 13 1 0
+0 2 2 313 103 -1 0 -1 -1 -1
+1 100 0
+A
+8 1
+#27307
+trout fish~
+a trout~
+A trout wiggles here on the ground.~
+It's a live trout! Um, okay. 
+~
+5 4096 8193 13 1 0
+0 1 1 307 106 -1 0 -1 -1 -1
+3 0 0
+#27308
+flimsy switchblade~
+a flimsy switchblade~
+A flimsy switchblade lies here.~
+A little, stupid switchblade.  It's quite flimsy too.  It has the logo of 666
+Flags on it. 
+~
+5 0 8193 8 1 0
+0 1 1 303 103 -1 0 0 0 0
+1 5 3
+#27310
+pretzel giant salty~
+a giant, salty pretzel~
+An over-salted pretzel has been left here.~
+One of those nice, big, soft pretzels.  Looks like they put way too much salt
+on it, though, but oh well. A pretzel's a pretzel. 
+~
+19 0 1 13 1 0
+5 0 0 0 0 0 0 0 0 0
+1 15 0
+#27311
+pink tinted sunglasses glasses~
+pink-tinted sunglasses~
+A pair of pink-lenses glasses lies here.~
+Pink-tinted lenses make these glasses unique.  They have little butterflies on
+the corners of them, and are also made of plastic, showing they're meant for
+children, or sad women.  
+~
+11 0 32769 7 1 0
+0 0 0 0 0 0 0 0 0 0
+0 37 1
+#27312
+lollipop sucker~
+a big, colorful lollipop~
+A lollipop lies on the ground, what a waste!~
+A big, tasty looking lollipop.  Swirls of colors.  Tastes delicious! 
+~
+19 136 16385 13 1 0
+2 0 0 4 0 0 0 0 0 0
+0 0 0
+A
+8 2
+#27313
+snakeskin skin boots~
+a pair of white snakeskin boots~
+A pair of fancy snakeskin boots lies here.~
+Boots made from real, albino snakeskin. Cowboy style, with cute buckles across
+the ankle, just for looks. 
+~
+9 0 65 4 1 0
+0 1 0 0 0 0 0 0 0 0
+3 200 0
+#27314
+blouse shirt crimson~
+A crimson blouse~
+A nice, crimson shirt lies here, crumpled up.~
+A very nice crimson blouse, low cut, with a little bit of frill along the edge
+of the neckline, and the sleeves, which are billowed. 
+~
+11 0 9 3 1 0
+0 0 0 0 0 0 0 0 0 0
+0 86 0
+#27315
+khaki shorts~
+a pair of khaki shorts~
+A pair of khaki shorts have been thrown away here.~
+Nice khaki shorts, with a little "hammer" loop (soley for sytle), and lots of
+nice little pockets. 
+~
+15 0 33 3 1 0
+15 0 -1 0 0 0 0 0 0 0
+0 50 0
+#27316
+designer hat~
+a designer hat~
+A nice hat lies on the ground.~
+Some fancy, over-priced designer hat.  Looks just like any other hat, except
+it has a tiny logo on it.  That little logo probably ups the price of the
+pathetic hat by around 100 nuyen.  How funny. 
+~
+11 0 17 3 1 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0
+#27317
+red tennis shoes~
+red tennis shoes~
+A pair of tennis shoes lies here.~
+Red tennis shoes, with white soles and laces. 
+~
+11 0 65 3 6 0
+0 0 0 0 0 0 0 0 0 0
+2 0 0
+#27318
+Avalance jersey~
+an Avalanche jersey~
+A sports jersey lies here, discarded.~
+A jersey, sporting the "Avalance" logo.  Looks pretty old, and pretty worn,
+but comfy. 
+~
+11 0 9 3 1 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0
+#27319
+sweatpants pants~
+a pair of grey sweatpants~
+A pair of grey sweatpants lies here.~
+Grey sweatpants. Ugh. 
+~
+11 0 33 3 4 0
+0 0 0 0 0 0 0 0 0 0
+1 0 0
+#27320
+old baseball rockies hat~
+an old Rockies hat~
+An old baseball hat lies in the dirt.~
+An old baseball hat, with the Rockies team logo. 
+~
+11 0 17 3 3 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0
+#27321
+paper cup coors beer~
+a paper "Coors Light" cup~
+A paper cup lies here, crumpled.~
+A paper cup with "Coors Light" on the side, it smells of beer. 
+~
+17 0 1 0 1 0
+3 3 1 0 0 0 0 0 0 0
+0 20 0
+#27322
+giant leg turkey~
+a giant leg of turkey~
+A cooked leg from some poor turkey lies here.~
+A giant, grilled leg of some poor, dead turkey. Smells good, though. 
+~
+19 0 1 13 1 0
+1 0 0 0 0 0 0 0 0 0
+0 45 0
+#27323
+nice dress shoes~
+a pair of nice dress shoes~
+A pair of dress shoes lies here.~
+Very nice, proffesional looking dress shoes.  Polished black, with not a
+single scuff on them. 
+~
+11 0 65 4 1 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0
+#27324
+key ring keyring~
+a shiny keyring~
+A ring with several keys attached to it glints in the light.~
+A silver ring, with all sorts of different keys attached to it.  How could
+anyone ever remember what key goes with what door? 
+~
+18 4 1 8 12 0
+0 0 0 0 0 0 0 0 0 0
+0 0 3
+#27325
+earbud phone~
+an earbud phone~
+A little earbud telephone lies here.~
+A tiny little telephone, with the earpiece made to sit in your ear, and a very
+little cord goes down to a clip for your collar. 
+~
+21 0 65537 7 1 0
+0 0 0 0 0 0 0 0 0 0
+0 250 0
+#27326
+plastic spider ring~
+a plastic spider ring~
+A little plastic ring lies here in the dirt.~
+Some little, flimsy pink plastic ring, made to look like a little spider.  It
+feels odd, though... almost magical? Nah, couldn't be. It's some child's toy.
+~
+31 0 3 6 1 0
+0 4 23 0 0 0 0 0 0 0
+0 0 1
+#27327
+peanuts bag~
+a bag of peanuts~
+A tiny bag of peanuts is lying here.~
+Tiny bag of peanuts.  Barely a mouthful. 
+~
+19 0 1 13 1 0
+15 0 0 0 0 0 0 0 0 0
+0 0 0
+#27328
+walla balla earring~
+the ^yW^Ya^yl^Yl^ya ^YB^ya^Yl^yl^Ya^n earring~
+An ugly earring lies here.~
+WALLA BALLA! Everyone's favorite Wallaby! Well, this is his earring.  It looks
+similar to a brown ball of mold, with glitter. Gross. 
+~
+31 0 65537 12 1 0
+0 2 40 0 0 0 0 0 0 0
+0 0 0
+#27329
+clown shoes giant red~
+giant ^Rred^n clown shoes~
+A pair of clown shoes lies here.~
+Giant red clown shoes, how weird.  Not quite fasionable, seeing as they're
+made of rubber, and in places it's wore away, and the holes are filled with
+rubber cement. 
+~
+11 0 65 12 3 0
+0 0 0 0 0 0 0 0 0 0
+3 0 0
+#27330
+hat cowboy~
+a cowboy hat~
+A silly-looking cowboy hat has been discarded.~
+A cowboy hat, how stupid.  Made of that stiff fabric, whatever the hell it is.
+~
+11 0 17 3 3 0
+0 0 0 0 0 0 0 0 0 0
+2 0 0
+#27331
+boots cowboy~
+a pair of cowboy boots~
+A pair of cowboy boots has been abandoned here.~
+Brown leather cowboy boots, with the whole little heel, pointed toe... ugh. 
+~
+11 0 65 4 6 0
+0 0 0 0 0 0 0 0 0 0
+1 0 0
+#27332
+rainbow propeller hat~
+a ^rr^Ra^Yi^Gn^Bb^bo^Mw^n propeller hat~
+A colorful hat lies here.~
+A rainbow colored beanie with a propeller ontop. Heh. 
+~
+11 0 17 3 3 0
+0 0 0 0 0 0 0 0 0 0
+3 0 0
+#27333
+ringmaster's ringmaster master tophat hat~
+the Ringmaster's tophat~
+A tophat lies here, collecting dust.~
+A very tall, black tophat, with a small red band around it, with the words
+"Ringmaster" written in gold. 
+~
+11 0 17 3 4 0
+0 0 0 0 0 0 0 0 0 0
+4 0 0
+#27334
+sake cup~
+a small sake cup~
+A tiny ceremaic cup lies here.~
+A little sake cup. 
+~
+17 0 1 5 4 0
+2 2 3 0 0 0 0 0 0 0
+0 0 0
+#27336
+gin flask~
+a gin flask~
+A flask lies here.~
+A metal flask, filled with gin (or, was, at least). 
+~
+17 0 1 8 1 0
+7 5 8 0 0 0 0 0 0 0
+0 75 2
+#27337
+bone necklace~
+A necklace of bones~
+A small, odd looking necklace lies here.~
+It looks like some bones have been strung together with wire and cord to make
+a necklace.  The bones are tiny, and long, perhaps finger bones? 
+~
+31 0 1 13 6 0
+2 4 17 0 0 0 0 0 0 0
+0 0 0
+#27338
+stuffed monkey~
+a stuffed monkey~
+A stuffed monkey lies here on the ground.~
+It's a stuffed monkey toy!  On a little tag it says: "Thanks for playing at
+^rC^Lr^ri^Lm^rs^Lo^rn^L M^ro^Lo^rn^L C^ra^Lr^rn^Li^rv^La^rl^n!" It looks pretty worn already. What a cheap prize...
+look at the back seam! It looks to be falling apart! ...or is that a
+compartment? 
+~
+15 0 1 3 3 0
+5 0 -1 0 0 0 0 0 0 0
+0 0 0
+#27339
+hawaiian shirt~
+a colorful ^RH^Ca^Yw^Ga^Mi^Bi^Ca^Yn^n shirt~
+A colorful shirt lies here.~
+A very brightly colored Hawaiian shirt, complete with little palm trees, a
+sunset... it's almost sickening. 
+~
+11 0 9 3 4 0
+0 0 0 0 0 0 0 0 0 0
+1 0 0
+#27340
+hot pants~
+a pair of hotpants~
+A pair of very, very, very short shorts lie here.~
+These shorts might as well be underwear, they're so tight and short. 
+~
+11 0 2081 3 3 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0
+#27341
+stilleto boots~
+20-eye stilleto boots~
+A tall pair of boots lies here.~
+A fancy pair of black leather boots, with 20-eyes, making them go mid-calf.
+Lots of funky little buckles and sharp heels make them look really fraggin'
+cool. 
+~
+11 0 65 4 8 0
+0 0 0 0 0 0 0 0 0 0
+5 0 0
+#27342
+crimson moon carnival park ticket~
+A ^rCrimson ^LMoon ^wcarnival ticket~
+A carnival ticket lays here.~
+A ticket to the ^rCrimson ^LMoon ^wcarnival! Consider yourself lucky, you're in for
+a treat. 
+~
+13 0 1 0 1 0
+0 0 0 0 0 0 0 0 0 0
+0 30 0
+#27343
+eyepatch~
+an eyepatch~
+An eyepatch lies in the dirt.~
+It looks like a pirate's eyepatch.  Made of black leather.  Huh. 
+~
+11 0 32769 4 1 0
+0 0 0 0 0 0 0 0 0 0
+0 80 0
+#27344
+bracelet glittery snap~
+a glittery snap-bracelet~
+A glittery bracelet lies on the ground.~
+A snap bracelet! Wow.  It's glittery, and quite cute. 
+~
+11 0 4097 6 3 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0
+#27345
+black leather bondage belt~
+a ^Lblack^n leather bondage belt~
+A black belt with hoops on it lies here.~
+A black leather bondage belt, with plenty of sturdy-looking rings.  Mmm. Fun.
+~
+11 0 2049 4 6 0
+0 0 0 0 0 0 0 0 0 0
+2 0 0
+#27346
+black leather miniskirt~
+a ^Lblack^n leather miniskirt~
+A very tiny skirt lies here.~
+A nice black leather miniskirt, with a small silver buckle on both sides for
+added style. 
+~
+11 0 2081 4 3 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0
+#27347
+fishnet black tights~
+fishnet tights~
+A pair of black tights lies here.~
+Black fishnet tights.  Pretty stretched out. 
+~
+11 0 33 3 3 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0
+#27348
+sign~
+a sign~
+A sign, written in ^Rbright red^g sits near the edge of the hole.~
+*****^RWARNING!^n*****
+ The one, the only, ^CBottomless Pit!^n
+ Throw in some spare change for good luck, just don't throw yourself in, because by
+reading this sign, you have agreed not to hold ^rC^Lr^ri^Lm^rs^Lo^rn ^LM^ro^Lo^rn ^LC^ra^Lr^rn^Li^rv^La^rl^n
+or any of its associates responsible for your untimely death. 
+~
+12 0 0 1 12 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0
+#27349
+zippo lighter~
+a Zippo lighter~
+A Zippo lighter lies here.~
+A Zippo, printed with "^rC^Lr^ri^Lm^rs^Lo^rn ^LM^ro^Lo^rn ^LC^ra^Lr^rn^Li^rv^La^rl^n."  Obviously a prize, or perhaps
+bought in a gift shop. 
+~
+1 0 16385 8 1 0
+0 0 69 0 0 0 0 0 0 0
+0 35 3
+$~

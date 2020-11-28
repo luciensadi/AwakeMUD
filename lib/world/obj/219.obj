@@ -1,0 +1,1345 @@
+#21900
+Keywords:	black war shield
+Name:	^LBlack^N war shield
+RoomDesc:$
+A large shield is resting here~
+LookDesc:$
+Its a rather large shield, covered in scratches and cracks. On one side it has
+a giant burn mark as if it has been hit with a powerful fireball spell, good
+thing you've got it to protect you@ 
+~
+Type:	Worn
+WearFlags:	1000000001
+ExtraFlags:	100000000001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	10000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	35
+	Val6:	19
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	10
+[AFFECT 1]
+	Location:	Max Physical
+	Modifier:	10
+[AFFECT 2]
+	Location:	Body
+	Modifier:	5
+BREAK
+#21901
+Keywords:	dogtags
+Name:	^RSparking^N Dogtags
+RoomDesc:$
+Sparking dogtags are resting here~
+LookDesc:$
+These Dogtags are only give to the bravest, the most loyal and the most heroic
+military soldiers, you should be priverlaged to be holding them 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	100000000001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	2000000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	20
+	Val6:	20
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	10
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	20
+[AFFECT 2]
+	Location:	Max Physical
+	Modifier:	10
+BREAK
+#21902
+Keywords:	flash suit 
+Name:	Flash looking suit.
+RoomDesc:$
+A neat suit lies here~
+LookDesc:$
+this suit is made entirly out of silk it feel so good against your skin. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	100100000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	35.00
+	Barrier:	32
+	Cost:	500000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1000
+	Val6:	1000
+BREAK
+#21903
+Keywords:	helm sdm
+Name:	a ^L[^L^C{^C^cSDM^c^C}^C^L]^L^C ^rHelm^N
+RoomDesc:$
+A helm is here~
+LookDesc:$
+This Helm Belongs to any ^C{^C^cSDM^c^C}^C^N member who becomes imortalised . This great
+helm contains mystical powers only learnt by the ^C{^C^cSDM^c^C}^C^N members. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	100100000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1000
+	Val6:	1000
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 5]
+	Location:	Target Numbers
+	Modifier:	-120
+BREAK
+#21904
+Keywords:	dark sword jagered
+Name:	dark jagered sword
+RoomDesc:$
+A very long sword is here ~
+LookDesc:$
+It is one of the biggest swords you have ever seen. it is so dark you cant
+even see your own reflection in it. the sides of this monster sword are all
+jagered and twisted. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000011
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	15.00
+	Barrier:	32
+	Cost:	1000000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 5]
+	Location:	Target Numbers
+	Modifier:	-120
+BREAK
+#21905
+Keywords:	grenade napalm mini
+Name:	a mini napalm grenade
+RoomDesc:$
+A small grenade lies here.~
+LookDesc:$
+An utterly ridiculous item that I'm planning to delete soon. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000010
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	32
+	Cost:	500000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	4
+	Val3:	318
+	Val4:	27
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#21907
+Keywords:	skate board skateboard
+Name:	a Skateboard
+RoomDesc:$
+Some one has left their skaeboard here~
+LookDesc:$
+It a Skateboard. It Doesn't have a brand on it, it seems to have scratches all
+over it. Must of been used alot. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	13.00
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+BREAK
+#21908
+Keywords:	jummper sweat shirt
+Name:	a grey sweatshirt
+RoomDesc:$
+A crumpled sweatshirt is here~
+LookDesc:$
+It's a sweatshirt.. Seriously, do you not know what a sweatshirt looks like? 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	8
+BREAK
+#21909
+Keywords:	walk man walkman
+Name:	a small walkman
+RoomDesc:$
+Someone has lost their walkman here~
+LookDesc:$
+its a walkman, you know small thing that makes noise 
+~
+Type:	Worn
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	7.00
+	Barrier:	3
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#21910
+Keywords:	gun yellow shotgun
+Name:	Yellow shotgun of El'nirge
+RoomDesc:$
+A big shotgun is here with strange symbols on it~
+LookDesc:$
+This is the weapon that the Yellow El'nirge gangers are issued with when they
+leave training. It isnt the strongest weapon around but if they know how to
+use it they can cause alot of damage. It looks like a regular shotgun but this
+one has the El'nirge symbol on it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val3:	14
+	Val4:	13
+	Val5:	12
+	Val6:	12
+	Val9:	-1
+BREAK
+#21911
+Keywords:	mod necklace membership
+Name:	^L<^r-^bMOD^r-^L>^N Necklace
+RoomDesc:$
+A dark necklace lies here.~
+LookDesc:$
+This is the item give to the members or darkness. It is a heavy necklace made
+of what seems to be hardend magma. There is streaks of glistening red diamons
+running through the chain. You feel a dark energy flowing into your body as
+you hold this. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	100000001
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	30.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 1]
+	Location:	Body
+	Modifier:	1
+[AFFECT 2]
+	Location:	Intelligence
+	Modifier:	1
+BREAK
+#21915
+Keywords:	jeans blue billabong pants
+Name:	^bBlue ^BBillabong Jeans
+RoomDesc:$
+Some jeans have been droped here~
+LookDesc:$
+It's some fuckin jeans what more do you need to know? 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Max Mental
+	Modifier:	120
+[AFFECT 1]
+	Location:	Max Physical
+	Modifier:	120
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-125
+BREAK
+#21916
+Keywords:	chesty bond singlet
+Name:	^WChesty Bond Singlet
+RoomDesc:$
+Someone droped a singlet here~
+LookDesc:$
+its a singlet made of cotton. its australian....UNF 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	125
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	125
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-125
+BREAK
+#21917
+Keywords:	jumper red nofriends sweat
+Name:	^RNo Friends Jumper
+RoomDesc:$
+A jumper has been left here~
+LookDesc:$
+its a nofriends brand jumper. you should feel special, these are high quality.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	125
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	125
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-125
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	125
+BREAK
+#21918
+Keywords:	dagger mystical mizard of oz sword
+Name:	^LMysical Wizard of Oz Dagger^N
+RoomDesc:$
+A very elite looking dagger has been left here~
+LookDesc:$
+Its a dagger made of storm clouds. only the storm clouds formed buy the
+wizards of Oz can be used to create elite weapons like this. You bes be very
+hardcore 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000010
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	125
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	125
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	125
+[AFFECT 3]
+	Location:	Impact
+	Modifier:	125
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 5]
+	Location:	Target Numbers
+	Modifier:	-125
+BREAK
+#21921
+Keywords:	black steel broad sword dark
+Name:	Black Steel Broad Sword
+RoomDesc:$
+A Dark sword has been left here~
+LookDesc:$
+It's a very big old Black Broad Sword. The craftmanship on this sword is
+truely brilliant, its got Red diamonds encrusted in the tip and down the
+blade, this sword is one of the best you have ever seen. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	30.00
+	Barrier:	8
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-1
+BREAK
+#21922
+Keywords:	Heavy Hunting Armor
+Name:	Heavy Hunting Armor
+RoomDesc:$
+A suit of hunting armor lies here~
+LookDesc:$
+This is the kind of armor you see the elite armor forces use when they are
+going through jungles and swamps. Its made of very sturdy kevlar. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	100000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	60.00
+	Barrier:	32
+	Cost:	800000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	2
+	Val5:	10
+	Val6:	9
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	-1
+BREAK
+#21929
+Keywords:	Staff rage burning
+Name:	Burning Staff of Rage
+RoomDesc:$
+A staff is Here glowing Evily~
+LookDesc:$
+Here is the Fierce Buring Staff of Rage. This staff belongs to the Evil
+Archmage Renagade, How you have it is beyond me. As you hold this staff you
+feel a very stong magical force running through your body. At the top of the
+staff there is a large Crystal Ball which is glowing a very bright golden
+color and its being held inplace by 3 small Black dragon claws. This is on of
+th most powerful items ever to be created. 
+~
+Type:	Other
+WearFlags:	10000000000001
+ExtraFlags:	1001101000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	125
+	Val2:	125
+	Val3:	20
+BREAK
+#21930
+Keywords:	gold cloak golden 
+Name:	Golden Cloak Of Renagade.
+RoomDesc:$
+A dark Gold cloak is lieing here~
+LookDesc:$
+A long flowing cloak of the Powerful Renagade feels soft in your hands, it
+also seems to float. A dark Magical Force flows Through it sending chills all
+down your spine. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000001
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	13.00
+	Barrier:	32
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	2
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	1
+BREAK
+#21931
+Keywords:	Large Dragon Claw Black
+Name:	Large Dragon Claw
+RoomDesc:$
+There is a large claw here half buried~
+LookDesc:$
+They Are big and black They are the claws of Dragrathzail, it is said that who
+ever hold these has incredible power and speed It looks like there are small
+Diamond Tip blades on each end of the claws. These Claws are very deadly, be
+grateful you have them  
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	50.00
+	Barrier:	32
+	Cost:	9000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	4
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	5
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	2
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	5
+BREAK
+#21950
+Keywords:	nuyen money 
+Name:	money money money
+RoomDesc:$
+A pile of money is lhere~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25000
+BREAK
+#21951
+Keywords:	salad sub foot ft long
+Name:	a foot long salad sub.
+RoomDesc:$
+A forgotten about sub has been carlessly dropped here.~
+LookDesc:$
+Its a foot long sub....do you really need a explanation, just eat it. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#21962
+Keywords:	Blade black katana
+Name:	Black Bladed Katana
+RoomDesc:$
+9~
+LookDesc:$
+This is a very rare katana its blade is blacker than night. its power is
+emense you can just feel it seeping from the blade 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	2
+BREAK
+#21964
+Keywords:	a sdm insginia armband
+Name:	an ^C{^cSDM^C}^N Insignia
+RoomDesc:$
+A armband lies here~
+LookDesc:$
+An armband with the letters, ^C{^cSDM^C}^N emblazoned on it. 
+~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	1
+[AFFECT 1]
+	Location:	Intelligence
+	Modifier:	1
+BREAK
+#21965
+Keywords:	heavy combat armor
+Name:	Suit of Heavy Combat Armor
+RoomDesc:$
+A suit of armor lies here~
+LookDesc:$
+This is a suit of heavy combat armor. its very durable and shouldnt be used by
+weak people. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	80.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	10
+	Val6:	10
+	Val7:	-3
+BREAK
+#21970
+Keywords:	staff pole sholin ninja
+Name:	Sholin Ninja Staff
+RoomDesc:$
+A long Staff is here covered in dirt~
+LookDesc:$
+This is one of the many weapons the Sholin Ninjas use. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-1
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	-1
+BREAK
+#21971
+Keywords:	robes ninja sholin
+Name:	Ancient Sholin Robe
+RoomDesc:$
+A old robe is here crumpled on the ground~
+LookDesc:$
+These are the robes that the mystical Sholin Ninjas wear in combat. The hold
+great knowlage. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	6
+	Val6:	6
+BREAK
+#21975
+Keywords:	blade sword diamond crystal katana
+Name:	Crystal Encrusted Diamond Katana
+RoomDesc:$
+The Mystical Blade of Raeroyn is here sticking out of the ground glowing brightly.~
+LookDesc:$
+You are holding the Mystical Sword of the legondry Raeroyn. It is Made of
+Diamonds with crystals encrusted into the blade. The power comeing from this
+mystical katana is overwhelming. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001100000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	1
+BREAK
+#21979
+Keywords:	sword sholin ninja 
+Name:	Sholin Sword of the Ninja
+RoomDesc:$
+A shimmering sword is here, resting on the ground~
+LookDesc:$
+This sword belongs to the most trained ninjas of the sholin way. It looks like
+a perfectly crafted samurai sword, but with sholin symbols carved into the
+blade. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	32
+	Cost:	150000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	1
+BREAK
+#21985
+Keywords:	suit old time fashion
+Name:	Old fashionable suit.
+RoomDesc:$
+A old suit lies here in a heap.~
+LookDesc:$
+This suit looks like it was made of 50 decades ago, but it still looks like it
+has just come out of the factory where it was made. It is a Dark blue suit,
+made of colored cotton. looks quite comfortable. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	20.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-1
+BREAK
+#21986
+Keywords:	black tophat hat
+Name:	Black Tophat.
+RoomDesc:$
+A slick looking tophat has been left here~
+LookDesc:$
+It's a black tophat. It seems rather fashionable if you were alive back in the
+1930's but not anymore. It has a white stripe running right across the middle
+of it looks pretty slick . 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	40.00
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#21987
+Keywords:	gun magnum silver hand
+Name:	Ancient Silver Magnum.
+RoomDesc:$
+A large silver Magnum lies here coverd in dust.~
+LookDesc:$
+his magnum has been made entirly out of Silver. It's a pretty big gun..looks
+like it could shoot through 3 or 4 cars. The Chamber can hold 6
+bullets...silver bullets of course. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	16
+	Cost:	90000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val6:	6
+	Val8:	-1
+BREAK
+#21990
+Keywords:	gold long sword
+Name:	Gold Long Sword
+RoomDesc:$
+A Gold sword is floating in mid air here.~
+LookDesc:$
+This is a mysterious weapon forged by some dwarves in a distant land. Its
+power is only exceeded by its mystery 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	24
+	Cost:	20000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	2
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#21991
+Keywords:	huge big red blade of tempered iron
+Name:	Huge Blade of tempered iron
+RoomDesc:$
+A large sword is lying on the ground here, glowing with a dull red light.~
+LookDesc:$
+This is a huge Sword made of solid iron. It seems to have been tempered so
+many times that now it emits a dull red glow. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	120.00
+	Barrier:	32
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#21992
+Keywords:	rusty key
+Name:	Rusty key
+RoomDesc:$
+A key is here rusting away.~
+LookDesc:$
+why the hell do you want to know what a key looks like? 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	2
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#21995
+Keywords:	doll rub me loki
+Name:	^rRub^N-^rMe^N-^rLoki^r^N Doll
+RoomDesc:$
+A life size doll of Loki is here.~
+LookDesc:$
+Its a Life Size doll of the crazed Immortal loki. It seems someone can fit
+into it. It has the words ^rRub^r^N-^N^rMe^r^N-^N^rLoki^r^N  printed across it in bid bold letters.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	20.00
+	Barrier:	12
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	10
+	Val6:	10
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-5
+[AFFECT 1]
+	Location:	Body
+	Modifier:	10
+BREAK
+#21996
+Keywords:	bong keg
+Name:	Keg Sized Bong
+RoomDesc:$
+Its a Keg sized bong....yeeeeeeee~
+LookDesc:$
+big keg bong.......BONGHOLIO! 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	50.00
+	Barrier:	1
+	Cost:	50000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	900000
+	Val1:	1
+	Val2:	-1
+	Val3:	-1
+BREAK
+#21997
+Keywords:	key stone wall
+Name:	Heavy Rock Key
+RoomDesc:$
+A large rock shaped as a key is here~
+LookDesc:$
+Its a big ass rock key 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#21998
+Keywords:	Big Bag Coat Trench 
+Name:	Dark Trench Coat
+RoomDesc:$
+A dark coat lies here in a heap~
+LookDesc:$
+This is a Long Dark Trench coat it is made in the same style as the 16th
+centuary whiches used 
+~
+Type:	Container
+WearFlags:	10000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	12000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	300
+	Val2:	-1
+	Val3:	-1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#21999
+Keywords:	Twised ring of the soul
+Name:	Twisted Ring of the Soul
+RoomDesc:$
+A shimmering ring is hanging from the roof on a piece of string~
+LookDesc:$
+This ring is made from the essence of all those who died in vain. All the
+souls of the victoms that Nexus has kill end up in this ring making him even
+stronger. 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	100100000011
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	12.00
+	Barrier:	32
+	Cost:	50000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Max Physical
+	Modifier:	105
+[AFFECT 1]
+	Location:	Max Mental
+	Modifier:	105
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	100
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 4]
+	Location:	Init Dice
+	Modifier:	120
+[AFFECT 5]
+	Location:	Combat Pool
+	Modifier:	120
+BREAK
+END

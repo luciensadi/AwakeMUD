@@ -1,0 +1,1153 @@
+#29300
+Keywords:	mop synthwood
+Name:	a mop
+RoomDesc:$
+A mop with a synthwood handles lies here.~
+LookDesc:$
+Just your standard mop, with a sturdy synthwood handle and a thick set of
+absorbent cloth strips at one end. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#29301
+Keywords:	bucket plastic
+Name:	a plastic bucket
+RoomDesc:$
+A plastic bucket sits here.~
+LookDesc:$
+A large plastic bucket with a plastic handle, big enough to dip mops and other
+cleaning implements in. It's got the black-and-white "Maid to Order" logo
+printed on its side. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+BREAK
+#29302
+Keywords:	dustpan plastic
+Name:	a dustpan
+RoomDesc:$
+A plastic dustpan sits here.~
+LookDesc:$
+A standard plastic dustpan with a flip-up lid and a small handle. It also has
+a small clamp allowing it to be attached to the end of a broom. 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	9
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	-1
+	Val3:	-1
+BREAK
+#29303
+Keywords:	vacuum cleaner shiny cylinder vac-ula 2062
+Name:	a vacuum cleaner
+RoomDesc:$
+A shiny vacuum cleaner sits here.~
+LookDesc:$
+This isn't just /any/ vacuum cleaner: this sleek, shiny rectangular cylinder
+is the Vac-ula 2062, which is to cleaning supplies what the Barrett 121 is to
+sniper rifles. A triumph of modern cleaning technology, it features superior
+sucking power, 12 different attachments, SmartSearch capability to track down
+dirt, cobwebs and stains, as well as a nozzle that allows it to squirt soap
+and stain remover as required. 
+~
+Type:	Other
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29304
+Keywords:	sponge small handheld
+Name:	a sponge
+RoomDesc:$
+A sponge lies here.~
+LookDesc:$
+Just your standard cleaning sponge, large enough to fit in a normal-sized
+human's hand. It has a strap attached to one side of it for ease of use. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29305
+Keywords:	cloth cleaning dustcloth soft absorbent
+Name:	a cleaning cloth
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+This square piece of cloth is soft and absorbent, making it ideal for dusting
+delicate surfaces or mopping up spills. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29306
+Keywords:	facemask white cloth disposable
+Name:	a disposable facemask
+RoomDesc:$
+A cloth facemask lies here.~
+LookDesc:$
+This white cloth facemask is similar to those worn by doctors while they
+operate. It consists of a piece of cloth that covers the nose and mouth, and
+two straps to fasten it behind one's head. 
+~
+Type:	Worn
+WearFlags:	100000000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29307
+Keywords:	coveralls cleaner's pair black white
+Name:	a pair of cleaner's coveralls
+RoomDesc:$
+A pair of coveralls lies here.~
+LookDesc:$
+A black pair of sturdy cleaner's coveralls with long sleeves, buttons down the
+front and the black-and-white "Maid to Order" logo emblazoned on their back.
+They look both tough and hard to get dirty. 
+~
+Type:	Worn
+WearFlags:	100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29308
+Keywords:	dumbbell plastic 10-pound
+Name:	a 10-pound dumbbell
+RoomDesc:$
+A dumbbell lies here.~
+LookDesc:$
+Just a plain plastic dumbbell. The words "10 lbs." have been stencilled onto
+rounded portions of each side. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	4.55
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#29309
+Keywords:	dumbbell 20-pound plastic
+Name:	a 20-pound dumbbell
+RoomDesc:$
+A plastic dumbbell lies here.~
+LookDesc:$
+Just your standard plastic dumbbell, with "20 lbs." stencilled on both rounded
+ends. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	9.09
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#29310
+Keywords:	bar barbell metal long
+Name:	a barbell bar
+RoomDesc:$
+A long barbell bar lies here.~
+LookDesc:$
+This long, sturdy metal bar is about two meters long and two inches in
+diameter. It has a rough, grip-friendly center area and screw-locks on either
+end to allow for easy addition and removal of weights. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	11.36
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#29311
+Keywords:	weight 50-pound metal disk thick
+Name:	a 50-pound weight
+RoomDesc:$
+A thick metal disk marked "50 lbs." sits here.~
+LookDesc:$
+This thick metal disk measures about a foot-and-a-half in diameter and a
+couple of inches thick. It has a hole in the center, and is meant to be
+attached to a barbell bar. This particular one has "50 lbs." stencilled on
+both sides. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	22.73
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29312
+Keywords:	weight 100-pound thick metal disk
+Name:	a 100-pound weight
+RoomDesc:$
+A thick metal disk lies here.~
+LookDesc:$
+This thick metal disk measures about a foot-and-a-half in diameter and a
+couple of inches thick. It has a hole in the center, and is meant to be
+attached to a barbell bar. This particular one has "100 lbs." stencilled on
+both sides. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	45.45
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29313
+Keywords:	bike bicycle exercise sleek
+Name:	an exercise bike
+RoomDesc:$
+An exercise bike sits here.~
+LookDesc:$
+This state-of-the-art exercise bike consists of thick handles with a control
+panel and viewscreen between them and an adjustable seat with pedals set into
+a sleek, wheel-less base. The control panel allows the user to check vital
+signs, program various speeds and courses, listen to music, watch trid shows
+and even access the Matrix via a small screen built into it. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	30.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29314
+Keywords:	gym home nautilus delix 2062 complicated-looking lever pulley machine
+Name:	a Nautilus Deluxe Home Gym 2062
+RoomDesc:$
+A complicated-looking lever- and pulley-filled machine stands here.~
+LookDesc:$
+This black-and-white piece of machinery looks more complicated than a space
+shuttle. A chair-type object occupies its center, and is surrounded by a
+dizzying array of padded, pushable and pullable parts, as well as levers,
+pulleys, weights, and bars. A small display panel and electrode set also allow
+for the monitoring of vital signs, and a touchscreen mounted next to it
+displays a selection of curls, pushdowns, extensions and other exercises. 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	100.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29315
+Keywords:	bench weight black metal synthleather
+Name:	a weight bench
+RoomDesc:$
+A metal-and-synthleather weight bench sits here.~
+LookDesc:$
+Your standard weight bench - a flat metal bench with a thinly-padded
+synthleather surface and two sturdy, forked metal bars in which to settle a
+barbell. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29316
+Keywords:	belt weight six-inch synthleather heavy
+Name:	a weight belt
+RoomDesc:$
+A thick synthleather belt lies here.~
+LookDesc:$
+This thick, padded belt has a six-inch middle portion, and is built to provide
+protection and support for the back and abdominal muscles during
+weightlifting. 
+~
+Type:	Worn
+WearFlags:	100100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29317
+Keywords:	jockstrap strap cup
+Name:	a jockstrap
+RoomDesc:$
+A jockstrap lies here.~
+LookDesc:$
+Your standard jockstrap, with an elastic waistband and padded support cup. 
+~
+Type:	Worn
+WearFlags:	100000100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29318
+Keywords:	tape athletic roll
+Name:	some athletic tape
+RoomDesc:$
+Some tape lies here.~
+LookDesc:$
+Standard athletic tape for arms and legs. It also comes with a roll of
+underwrap. 
+~
+Type:	Worn
+WearFlags:	10010001001000000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29319
+Keywords:	book new encyclopedia modern bodybuilding
+Name:	"The New Encyclopedia of Modern Bodybuilding"
+RoomDesc:$
+A thick hardcover book lies here.~
+LookDesc:$
+This seems to be a genuine, autographed copy of the 1999 edition of the weight
+training classic by action movie hero and governor Arnold Schwarzenegger. The
+grey-and-silver cover of the book features the author's name and title, as
+well as a black-and-white photo of a muscular chest and arms. 
+~
+Type:	UNDEFINED
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29320
+Keywords:	bag canvas shopping
+Name:	a canvas shopping bag
+RoomDesc:$
+A canvas bag lies here.~
+LookDesc:$
+Your standard canvas shopping bag with slightly padded shoulder straps and a
+zipper. The yellow "U-Stor" logo is emblazoned across its side. 
+~
+Type:	Container
+WearFlags:	10001000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	1
+	Val2:	-1
+	Val3:	-1
+BREAK
+#29321
+Keywords:	envelope standard white
+Name:	a standard envelope
+RoomDesc:$
+An envelope lies here.~
+LookDesc:$
+Just your standard paper mailing envelope, measuring about nine inches long
+and four inches high, with a sealable flap. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	2
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	-1
+BREAK
+#29322
+Keywords:	envelope manila large brown paper
+Name:	a manila envelope
+RoomDesc:$
+A large brown envelope lies here.~
+LookDesc:$
+Your standard brown envelope, large enough to hold a thick sheaf of
+eight-and-a-half by eleven-inch paper. 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	-1
+BREAK
+#29323
+Keywords:	a folder
+Name:	a folder
+RoomDesc:$
+A paper folder lies here.~
+LookDesc:$
+A standard thick paper folder, capable of holding a sheaf of standard A4
+paper. 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.02
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	-1
+	Val3:	-1
+BREAK
+#29324
+Keywords:	box small plastiboard
+Name:	a small plastiboard box
+RoomDesc:$
+A small box sits here.~
+LookDesc:$
+Just a small but sturdy plastiboard box, about a foot-and-a-half long on each
+side, with flaps to close it on top. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val2:	-1
+	Val3:	-1
+BREAK
+#29325
+Keywords:	box medium-sized plastiboard
+Name:	a medium-sized plastiboard box
+RoomDesc:$
+A medium-sized box sits here.~
+LookDesc:$
+A standard, sturdy-looking plastiboard box, measuring about two-and-a-half
+feet on each side, with closeable flaps. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val1:	1
+	Val2:	-1
+	Val3:	-1
+BREAK
+#29326
+Keywords:	box large plastiboard
+Name:	a large plastiboard box
+RoomDesc:$
+A large box sits here.~
+LookDesc:$
+A standard, sturdy-looking box, measuring about four feet on all sides, with
+closeable flaps on its top. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	60
+	Val1:	1
+	Val2:	-1
+	Val3:	-1
+BREAK
+#29327
+Keywords:	tape duct grey shiny strips
+Name:	some duct tape
+RoomDesc:$
+Strips of grey tape lie here.~
+LookDesc:$
+Duct tape - the same classic, thick, sturdy, silvery-grey adhesive material
+that some say keeps the world together. 
+~
+Type:	Worn
+WearFlags:	100111101101000101100011
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29328
+Keywords:	rope nylon length
+Name:	some nylon rope
+RoomDesc:$
+A length of nylon rope lies here.~
+LookDesc:$
+Typical, fairly sturdy-looking nylon rope, about a half-an-inch in diameter,
+and useful for a wide variety of things. 
+~
+Type:	Worn
+WearFlags:	10011000101110111111111
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29390
+Keywords:	radio
+Name:	a radio
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Radio
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	6
+BREAK
+#29391
+Keywords:	Expers XS Deck
+Name:	Expers XS Deck
+RoomDesc:$
+A deck is lying here.~
+LookDesc:$
+Ooo 
+~
+Type:	Cyberdeck
+WearFlags:	100000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	999999999
+	Val2:	2147483647
+	Val3:	2147483647
+	Val4:	2147483647
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Hacking Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Hacking Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Hacking Pool
+	Modifier:	120
+[AFFECT 4]
+	Location:	Hacking Pool
+	Modifier:	120
+[AFFECT 5]
+	Location:	Hacking Pool
+	Modifier:	120
+BREAK
+#29392
+Keywords:	monocle golden
+Name:	a golden monocle
+RoomDesc:$
+Monocle~
+LookDesc:$
+monocle. golden 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	5000
+	Val6:	5000
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 4]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 5]
+	Location:	Combat Pool
+	Modifier:	120
+BREAK
+#29393
+Keywords:	pouch souls
+Name:	pouch of souls
+RoomDesc:$
+Belt~
+LookDesc:$
+belt 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 4]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 5]
+	Location:	Combat Pool
+	Modifier:	120
+BREAK
+#29394
+Keywords:	rose red beautiful
+Name:	a beautiful red rose
+RoomDesc:$
+A beautiful red rose is lying here.~
+LookDesc:$
+This rose looks fresh, it has a strong deep red color and some small water
+droplets sit on the thorns. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29396
+Keywords:	glowing red lightsaber
+Name:	A glowing red lightsaber
+RoomDesc:$
+SMG~
+LookDesc:$
+SMG 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	1000001101000001111100
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 5]
+	Location:	Target Numbers
+	Modifier:	-120
+BREAK
+#29397
+Keywords:	ring
+Name:	a ring
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 4]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 5]
+	Location:	Target Numbers
+	Modifier:	-120
+BREAK
+#29398
+Keywords:	pinstripe hat
+Name:	a pinstripe hat
+RoomDesc:$
+A hat~
+LookDesc:$
+hat 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	5000
+	Val6:	5000
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	-120
+[AFFECT 5]
+	Location:	Combat Pool
+	Modifier:	120
+BREAK
+#29399
+Keywords:	a Death By Stereo hoody
+Name:	a Death By Stereo hoody
+RoomDesc:$
+A Death By Stereo hoody~
+LookDesc:$
+OoOoO the birds..  
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	5000
+	Val6:	5000
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-110
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-110
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 4]
+	Location:	Combat Pool
+	Modifier:	120
+[AFFECT 5]
+	Location:	Combat Pool
+	Modifier:	120
+BREAK
+END

@@ -643,6 +643,447 @@ Material:	computers
 	Val1:	5000
 	Val2:	67500
 BREAK
+#1127
+Keywords:	Analyze program Fuchi Scrutiny
+Name:	a Fuchi 'Scrutiny' Analyze Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip looks rather bland, and aside from the Fuchi Industrial
+Electronics logo, it features only a short line of text reading: Analyze -
+Rating 3. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	2700
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	3
+	Val2:	27
+BREAK
+#1128
+Keywords:	Attack program fuchi corkscrew
+Name:	a Fuchi 'Corkscrew' Attack Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip looks rather bland, and aside from the Fuchi Industrial
+Electronics logo, it features only a short line of text reading: Attack -
+Rating 3. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	1800
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	3
+	Val2:	27
+	Val3:	2
+BREAK
+#1129
+Keywords:	Armour program fuchi leatherback
+Name:	a Fuchi 'Leatherback' Armour Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip looks rather bland, and aside from the Fuchi Industrial
+Electronics logo, it features only a short line of text reading: Armour -
+Rating 3. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	2700
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	3
+	Val2:	27
+BREAK
+#1130
+Keywords:	Fuchi Surveyor Browse Program
+Name:	a Fuchi 'Surveyor' Browse Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip looks rather bland, and aside from the Fuchi Industrial
+Electronics logo, it features only a short line of text reading: Browse -
+Rating 3. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	900
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	3
+	Val2:	9
+BREAK
+#1131
+Keywords:	Fuchi Hokum Deception Program
+Name:	a Fuchi 'Hokum' Deception Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip looks rather bland, and aside from the Fuchi Industrial
+Electronics logo, it features only a short line of text reading: Deception -
+Rating 3. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	1800
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	3
+	Val2:	18
+BREAK
+#1132
+Keywords:	Fuchi Nightschool Read/Write Program
+Name:	a Fuchi 'Nightschool' Read/Write Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip looks rather bland, and aside from the Fuchi Industrial
+Electronics logo, it features only a short line of text reading: Read/Write -
+Rating 3. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	1800
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	3
+	Val2:	18
+BREAK
+#1133
+Keywords:	Fuchi Chicanery Sleaze Program
+Name:	a Fuchi 'Chicanery' Sleaze Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip looks rather bland, and aside from the Fuchi Industrial
+Electronics logo, it features only a short line of text reading: Sleaze -
+Rating 3. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	2700
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val2:	27
+BREAK
+#1134
+Keywords:	Mangadyne 'Spyglass' Analyze Program
+Name:	a Mangadyne 'Spyglass' Analyze Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip was produced by the Mangadyne Corporation, as if you couldn't
+already tell, considering their brand name and logo is plastered all over it.
+It appears to be labeled: Analyze - Rating 4. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	9600
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	4
+	Val2:	48
+BREAK
+#1135
+Keywords:	Mangadyne Iron Lung Armour Program
+Name:	a Mangadyne 'Iron Lung' Armour Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip was produced by the Mangadyne Corporation, as if you couldn't
+already tell, considering their brand name and logo is plastered all over it.
+It appears to be labeled: Armour - Rating 4. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	9600
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	4
+	Val2:	48
+BREAK
+#1136
+Keywords:	Mangadyne Peeping Tom Browse Program
+Name:	a Mangadyne 'Peeping Tom' Browse Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip was produced by the Mangadyne Corporation, as if you couldn't
+already tell, considering their brand name and logo is plastered all over it.
+It appears to be labeled: Browse - Rating 4. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	3200
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	4
+	Val2:	16
+BREAK
+#1137
+Keywords:	Mangadyne Pencil Read/Write Program
+Name:	a Mangadyne 'Pencil' Read/Write Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+This datachip was produced by the Mangadyne Corporation, as if you couldn't
+already tell, considering their brand name and logo is plastered all over it.
+It appears to be labeled: Read/Write - Rating 4. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	6400
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	4
+	Val2:	32
+BREAK
+#1138
+Keywords:	Transys Sucker Punch Attack Program
+Name:	a Transys 'Sucker Punch' Attack Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+Brought to you by the good folks over at Transys Neuronet, this SOTA program
+is the cream of the crop (or at least that's what they tell you). It features
+a snazzy looking Transys Neuronet logo, with a label that reads: Attack -
+Rating 6. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	28800
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	6
+	Val2:	144
+	Val3:	3
+BREAK
+#1139
+Keywords:	Transys Electro-Vest Armour Program
+Name:	a Transys 'Electro-Vest' Armour Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+Brought to you by the good folks over at Transys Neuronet, this SOTA program
+is the cream of the crop (or at least that's what they tell you). It features
+a snazzy looking Transys Neuronet logo, with a label that reads: Armour -
+Rating 6. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	21600
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	6
+	Val2:	108
+BREAK
+#1140
+Keywords:	Transys Riffle Browse Program
+Name:	a Transys 'Riffle' Browse Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+Brought to you by the good folks over at Transys Neuronet, this SOTA program
+is the cream of the crop (or at least that's what they tell you). It features
+a snazzy looking Transys Neuronet logo, with a label that reads: Browse -
+Rating 6. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	7200
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	6
+	Val2:	36
+BREAK
+#1141
+Keywords:	Transys Scribe Read/Write Program
+Name:	a Transys 'Scribe' Read/Write Program
+RoomDesc:$
+A datachip has been tossed on the floor here.~
+LookDesc:$
+Brought to you by the good folks over at Transys Neuronet, this SOTA program
+is the cream of the crop (or at least that's what they tell you). It features
+a snazzy looking Transys Neuronet logo, with a label that reads: Read/Write -
+Rating 6. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	14400
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	6
+	Val2:	72
+BREAK
 #1150
 Keywords:	microdeck optical chip browse peeker program
 Name:	a Microdeck 'Peeker' Browse Program
@@ -729,7 +1170,7 @@ Material:	adv. plastics
 BREAK
 #1153
 Keywords:	optical chip microdeck sleaze program nightlife
-Name:	A Microdeck 'Nightlife' Sleaze Program
+Name:	a Microdeck 'Nightlife' Sleaze Program
 RoomDesc:$
 A small optical chip has been discarded here.~
 LookDesc:$

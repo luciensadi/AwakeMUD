@@ -1,0 +1,1269 @@
+#28600
+Keywords:	jean pants
+Name:	a pair of jean pants
+RoomDesc:$
+Some jean pants are here.~
+LookDesc:$
+They look like they would fit a tall person with a larger, but not fat, waist.
+They are blue and have polished brass rivets. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28601
+Keywords:	Glock 21
+Name:	a Glock
+RoomDesc:$
+A  nice pistol lays here, collecting dust.~
+LookDesc:$
+It's grip is made out of ABS high impact polymer resin, while the rest is made
+out of metal. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	32
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val6:	12
+	Val8:	28640
+	Val9:	-1
+	Val10:	4
+BREAK
+#28603
+Keywords:	Colt X-9 Sniper Rifle
+Name:	a Colt X-9
+RoomDesc:$
+A large rifle with mounted scope is here.~
+LookDesc:$
+It is large with a resin stock and a large scope.  The entire thing is black
+and that safety is in "Off" position. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000001001000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	4800
+	AvailTN:	14
+	AvailDay:	30.00
+	LegalNum:	2
+	LegalCode:	9
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val3:	12
+	Val4:	12
+	Val5:	10
+	Val6:	10
+	Val10:	4
+BREAK
+#28605
+Keywords:	sign
+Name:	a sign
+RoomDesc:$
+A sign is here.~
+LookDesc:$
+NORTH -- ^RIllegal Armor, Security series.^n 
+ SOUTH -- ^CBody Armor, Military versions.^n
+ WEST -- ^YBody Armor, Civilian.^n
+ ^BALL ARMOR SOLD HERE IS SOLD UNDER THE AGREEMENT THAT IF YOU GET CAUGHT, YOU
+DID NOT PURCHASE THIS HERE. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28609
+Keywords:	ares swamp fox .357 cal revolver heavy
+Name:	an Ares .357 Swamp Fox heavy revolver
+RoomDesc:$
+A heavy revolver is lying here.~
+LookDesc:$
+This is the famed Ares 'Swamp Fox' .357 Magnum single-action revolver.  When
+used, it has been known to shoot through thick wooden doors and lesser metal
+ones, often destroying their targets on the other side. Very little upkeep is
+needed for this firearm to function properly, its inner mechanisms nearly
+immune to all climate and enviromental abuse. This pistol can only take
+special Ares .357 magnum rounds due its casing size, and although it is an
+outdated single-action revolver type design, it has an almost cult-like
+following because of its reliability in the field, not to mention its as
+intimidating as it is deadly. Many a Knight-Errant subsidiary sings the high
+praise that is the Swamp Fox, its even rumored that Lone Star is practically
+begging to outfit their beat cops with them, but fortunately for shadowrunners
+it hasn't proven cost effective. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	12000
+	AvailTN:	8
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	8
+	Val6:	8
+	Val7:	5105
+	Val8:	-1
+	Val9:	692
+	Val10:	2
+BREAK
+#28611
+Keywords:	baseball bat 
+Name:	a baseball bat
+RoomDesc:$
+A baseball bat is discarded here.~
+LookDesc:$
+It is a large ash bat made for hitting baseballs, or heads. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#28612
+Keywords:	ares drake F30 SMG submachine gun sub machine gun
+Name:	an Ares Drake F30 SMG
+RoomDesc:$
+A compact SMG is here.~
+LookDesc:$
+This SMG is compact for concealment, yet still packs the needed punch. Its
+checkered grip is made of epoxy powdered resin making it look kind of cheap.
+It has a folding stock and decent open sights with a dove tail scope mount.
+Its barrel is threaded for a silencer and the trigger seemed to have been
+filed down giving it a super hair trigger. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	5
+	AvailDay:	3.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	32
+	Val6:	32
+	Val7:	5105
+	Val10:	28
+BREAK
+#28614
+Keywords:	sound supressor
+Name:	a sound supressor
+RoomDesc:$
+A sound supressor is here.~
+LookDesc:$
+This is a Wilson SMG supressor.  It screws on to barrels, lessening sounds,
+creating better stealth.  
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	750
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	6
+	Val2:	-2
+BREAK
+#28615
+Keywords:	shotgun tmi lt vertigo
+Name:	a Vertigo TMI LT
+RoomDesc:$
+A medium shotgun lies here.~
+LookDesc:$
+Vertigo, a newer and smaller runner arms maker, created a street battle
+shotgun in '48 called the TMI.  This is the TMI LT.  The LT is lighter and
+better in combat. The LT is a semi-automatic shotgun while the TMI is a pump
+action, creating the ability to fire faster.   
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	77023
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	10
+	Val6:	10
+	Val9:	-1
+	Val10:	4
+BREAK
+#28616
+Keywords:	x-blade blade katana
+Name:	an X-bladed katana
+RoomDesc:$
+A dangerous katana is lying here.~
+LookDesc:$
+Its handle is made of highly polished wood, capped with a gold emblem at the
+end.  The hand guard is constructed of gold wings extending from base of the
+blade and top of the handle. The blade is an odd thing though.  It was
+constructed in a fashion which will make the most pain possible.  The blade,
+when viewed from the top, looks like an X.  Four razor sharp blades to bring
+ultimate cutting. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#28617
+Keywords:	knife
+Name:	a gleaming knife
+RoomDesc:$
+A stout, yet sharp, gleaming knife is here.~
+LookDesc:$
+It has a red hardened resin handle with a shiny blade.  The silver blade has
+gone through the dikote process creating an ultimate blade.  
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#28618
+Keywords:	foregrip
+Name:	a foregrip
+RoomDesc:$
+A weapon foregrip lies here.~
+LookDesc:$
+This is a resin foregrip made compatible for any type of weapon that will
+accept an under-barrel attachment. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	100
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	-1
+BREAK
+#28620
+Keywords:	katana aluminium titanium aluminium-titanium
+Name:	an Aluminium-Titanium alloy katana
+RoomDesc:$
+A light-weight, razor sharp katana is here.~
+LookDesc:$
+This shiny, katana boasts light weight, yet immense power with a blade so
+tough and strong that most cannot understand the powers of it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	247197
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#28623
+Keywords:	paper smg permit
+Name:	a SMG permit
+RoomDesc:$
+A peice of paper lies here.~
+LookDesc:$
+The owner of this permit is granted the priviledge to own and keep any and all
+sub-machine guns. If caught by Lone Star using a SMG unlawfully, this permit
+shall be revoked. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28624
+Keywords:	folder security numbers
+Name:	a thin folder of security clearance numbers
+RoomDesc:$
+A peice of paper lies here.~
+LookDesc:$
+This folder contains security access codes for all sorts of locks and computer
+systems. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28625
+Keywords:	jail key
+Name:	a jail key
+RoomDesc:$
+A jail key is lying here.~
+LookDesc:$
+This key fits to the cell doors in the basement of the Redmond Lone Star
+facilities. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28626
+Keywords:	heavy kevlar vest
+Name:	a heavy kevlar vest
+RoomDesc:$
+Some military armor is here.~
+LookDesc:$
+Kevlar, thickly weaved with plasteel, and coupled with ceramic plating, create
+a high performance vest, not easily preforated. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	24
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	7
+	Val6:	6
+	Val7:	1
+BREAK
+#28627
+Keywords:	type x kevlar vest
+Name:	A Type X Kevlar/Titanium vest
+RoomDesc:$
+Some military armor is here.~
+LookDesc:$
+This is high tech advanced plastics meshed and weaved with titanium to create
+the ultimate military body armor.  The insignia of the USCAS.  
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	9.00
+	Barrier:	24
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	5
+	Val6:	5
+BREAK
+#28628
+Keywords:	kevlar body armor
+Name:	kevlar body armor
+RoomDesc:$
+Some body armor i lying here on the floor.~
+LookDesc:$
+Kevlar material backed by thick industrial plastic worn on the chest, with
+velcro straps. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	3
+	Val6:	3
+BREAK
+#28629
+Keywords:	hardened kevlar body armor
+Name:	hardened kevlar armor
+RoomDesc:$
+Some body armor is here.~
+LookDesc:$
+This is kevlar armor backed with plastics weaved with plas-steel and made heat
+retardant. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	4
+BREAK
+#28630
+Keywords:	IMI Desert Eagle .50 50 AE pistol
+Name:	IMI Desert Eagle .50 AE
+RoomDesc:$
+A high powered pistol lies here.~
+LookDesc:$
+This is a high powered fifty calibre pistol capable of destroying and hard or
+soft target with ease. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	8
+	Val4:	11
+	Val5:	10000
+	Val6:	10000
+	Val8:	-1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	16
+[AFFECT 1]
+	Location:	Max Physical
+	Modifier:	16
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-16
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	64
+[AFFECT 4]
+	Location:	Impact
+	Modifier:	16
+[AFFECT 5]
+	Location:	Control Pool
+	Modifier:	16
+BREAK
+#28634
+Keywords:	verizon wire-less wireless ear phone ear-phone
+Name:	Verizon wire-less ear phone
+RoomDesc:$
+A phone is here.~
+LookDesc:$
+This is a wireless phone that dials by voice activation and fits inside your
+ear. 
+~
+Type:	Phone
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28635
+Keywords:	lone star walki-talki talki
+Name:	Lone Star walki-talki
+RoomDesc:$
+A walki-talki is here.~
+LookDesc:$
+This is a broadband non-civilian radio made for encryption and unecryption
+measures.   
+~
+Type:	Radio
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	300000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	6
+BREAK
+#28636
+Keywords:	scrap paper security license
+Name:	a security license
+RoomDesc:$
+A scrap of paper is here.~
+LookDesc:$
+This document enables the owner to keep and use security armor and security
+weapons.  If these items are used in illegal activities, this document is void
+and the permit holder is to be subjected to punishment.  
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28637
+Keywords:	scrap paper sin photo id
+Name:	a fake SIN photo ID
+RoomDesc:$
+A scrap of paper is here.~
+LookDesc:$
+This has the owners SIN and a photo of him/her. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28638
+Keywords:	military permit paper
+Name:	a military permit
+RoomDesc:$
+A peice of paper is here.~
+LookDesc:$
+This permit allows the owner to keep and use military weapons and armor.  If
+found using the military item(s) illegally, this permit is void and the owner
+is subject to prosecution.  
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	200000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28639
+Keywords:	leather myrmidon fist emblem jacket folded
+Name:	a Leather ^L{^rMyrmidon^L}^n Jacket
+RoomDesc:$
+A leather jacket with a blazing fist emblem lies here, folded carefully.~
+LookDesc:$
+The jacket is thick and heavy sporting the ^L{^rMyrmidon^L}^n emblem. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28640
+Keywords:	sound suppressor superessor
+Name:	a sound suppressor
+RoomDesc:$
+A short length of metal tube with a threaded end is lying here~
+LookDesc:$
+A short length of metal tubing. It is threaded at one end and hollow. It looks
+as though it might screw into something. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	6
+BREAK
+#28641
+Keywords:	lightweight heavy duty assault rifle
+Name:	a lightweight, heavy duty assault rifle
+RoomDesc:$
+A black, icy assault rifle lies here.~
+LookDesc:$
+Lightweight by design, this a military ops weapon, that being easily discerned
+from the scope, supressor, and flashlight.  It resembles the old fashioned
+M4A1s, but it is more like the M16A2 in its burst fire nature.  Short and
+packing a punch in its 28 round clip, this is a beautiful, high powered
+killing weapon.  
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	16.00
+	Barrier:	12
+	Cost:	26825
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	28
+	Val6:	28
+	Val7:	27812
+	Val8:	28703
+	Val10:	28
+BREAK
+#28645
+Keywords:	ares x80 hmg machine gun heavy
+Name:	An Ares X80 HMG
+RoomDesc:$
+A mean looking HMG has been abandoned here.~
+LookDesc:$
+Wickedly powerful, and capable of using both APDS and Explosive rounds, this
+is a top notch weapon.  Able to tear through corporate security, this mean
+machine gun has abilities beyond belief. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	12.50
+	Barrier:	12
+	Cost:	5200
+	AvailTN:	18
+	AvailDay:	18.00
+	LegalNum:	2
+	LegalCode:	8
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	17
+	Val4:	19
+	Val5:	75
+	Val6:	75
+	Val7:	60552
+	Val8:	-1
+	Val9:	-1
+	Val10:	16
+BREAK
+#28647
+Keywords:	large black autoload shotgun
+Name:	a large black autoloading shotgun
+RoomDesc:$
+A large black shotgun is here.~
+LookDesc:$
+This autoloading shotgun is as big as hell, mean as hell, and packs one nasty
+punch.  It has a mini-barrel full of ammo, 25 rounds to be exact.  It has an
+automatic cyclic rate of 750 rounds a second, but is not usually used as full
+auto. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	12
+	Cost:	30822
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	25
+	Val6:	25
+	Val7:	-1
+	Val8:	653
+	Val9:	-1
+	Val10:	12
+BREAK
+#28649
+Keywords:	full body cyber zombie replacement
+Name:	full body cyber zombie replacement
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+Preserving, and protecting the basic nervous system, this ware boosts
+everything, because it is a part of everything.  In the end you look normal,
+think normal, feel normal, with your skin on over some muscles, but mostly you
+are machine. This is a lone star super cyber zombie combat soldier ware, and
+it comes complete with the cortex bomb. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val2:	20
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	4
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	4
+[AFFECT 2]
+	Location:	Body
+	Modifier:	4
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	2
+[AFFECT 4]
+	Location:	Impact
+	Modifier:	3
+[AFFECT 5]
+	Location:	Target Numbers
+	Modifier:	-2
+BREAK
+#28650
+Keywords:	dikote assault helmet
+Name:	a dikote assault helmet
+RoomDesc:$
+A shiny combat helmet lies here.~
+LookDesc:$
+This is a titanium combat helmet, that went through the dikote process, adding
+extreme bullet protection. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	16
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	3
+	Val6:	2
+	Val7:	-3
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#28651
+Keywords:	titanium chestplate
+Name:	a Dikote Titanium chestplate
+RoomDesc:$
+A chestplate composed of titanium is here.~
+LookDesc:$
+An extremely protective titanium chestplate was brought through the Dikote
+process, making a massively protective peice of armor. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	24
+	Cost:	120000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	8
+	Val6:	7
+	Val7:	-3
+BREAK
+#28653
+Keywords:	black military combat boots
+Name:	black military issue combat boots
+RoomDesc:$
+A pair of black combat boots lies ehre discarded.~
+LookDesc:$
+These are military issue combat boots. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val6:	1
+	Val7:	1
+BREAK
+#28654
+Keywords:	plated combat sleeves
+Name:	Plated Combat Sleeves
+RoomDesc:$
+Some armored sleeves lie here discarded.~
+LookDesc:$
+Standard military issue arm protection.  Very useful. 
+~
+Type:	Worn
+WearFlags:	10000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val6:	1
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#28655
+Keywords:	com unit
+Name:	a military com unit
+RoomDesc:$
+A wrist worn radio lies on the ground.~
+LookDesc:$
+This is a com unit designed for the wrist, much like a video phone.  Except
+this peice of equipment is about the size of a watch. 
+~
+Type:	Radio
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	6
+BREAK
+#28656
+Keywords:	armed lined pack
+Name:	an Armor lined pack
+RoomDesc:$
+A thick pack lies here, unused.~
+LookDesc:$
+This is a thickly padded, well armored, full adjustable pack, designed for
+combat use.  It can contain many, many items, and protects them via armor
+plating.  it also provides you with a little extra protection. 
+~
+Type:	Container
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	16
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	63
+	Val2:	-1
+BREAK
+#28657
+Keywords:	armored black trenchcoat
+Name:	an armored black trenchcoat
+RoomDesc:$
+A black leather trenchcoat lies here.~
+LookDesc:$
+It drapes down, clsoe to the ground, and is sort of bulky near the chest area,
+but damn, it sure is worth it.  The mere fact that this aids in bullet
+penetration prevention makes it worth owning. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	3
+	Val6:	2
+	Val7:	6
+BREAK
+#28658
+Keywords:	armored combat gloves
+Name:	a nice pair of armored combat gloves
+RoomDesc:$
+Some combat gloves lie abandoned here.~
+LookDesc:$
+Standard military issue, they protect and don't leave those pesky prints.  How
+nice. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28659
+Keywords:	bandolier military
+Name:	a military bandolier
+RoomDesc:$
+A large bandolier is lying here.~
+LookDesc:$
+A large bandolier, issued by military warehouses to carry ammo clips. 
+~
+Type:	Worn
+WearFlags:	1000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	10
+	Val2:	2
+	Val4:	2
+BREAK
+#28660
+Keywords:	black utility combat belt
+Name:	a black utility combat belt
+RoomDesc:$
+A utility belt made for combat purposes is here.~
+LookDesc:$
+A black built, it has a built in holster, built in place for ammo, and a built
+in place to house other various small objects. 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	2
+	Val4:	3
+BREAK
+END

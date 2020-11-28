@@ -1,0 +1,118 @@
+#6000
+Keywords:	Revolver
+Name:	A Smith and Wesson 8-inch M629 .44 Revolver
+RoomDesc:$
+A big fuckin' revolver.~
+LookDesc:$
+A bigass gun. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val6:	6
+	Val8:	-1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	100
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	100
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	20
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-20
+[AFFECT 4]
+	Location:	Reaction
+	Modifier:	20
+BREAK
+#6004
+Keywords:	A Sten Mk VII
+Name:	A Sten Mk. VII
+RoomDesc:$
+A nice-looking, antique SMG.~
+LookDesc:$
+A Sten! Ooh, a tube with a trigger! 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	10
+	Val4:	15
+	Val5:	500
+	Val6:	500
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	50
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-20
+[AFFECT 2]
+	Location:	Max Physical
+	Modifier:	20
+BREAK
+#6005
+Keywords:	machine vending
+Name:	A large vending machine
+RoomDesc:$
+A large vending machine sits against the wall.~
+LookDesc:$
+This vending machine has a spot for dispensing beverages on the right, and
+snacks on the left. It appears to in good order, and is kept well stocked. In
+the center is the slot to accept nuyen, and the keypad for making your
+selection just below it. A sturdy steel fence is mounted over the glass
+display, to prevent the more milacious from breaking it open. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	10
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	200
+	Val1:	8
+	Val2:	-1
+	Val3:	20
+BREAK
+END
