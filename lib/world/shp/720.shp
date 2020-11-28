@@ -1,0 +1,67 @@
+#72011
+Keeper:	72002
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	das shop
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	10132
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	10119
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	10118
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	10117
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	10116
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	10115
+		Type:	Always
+		Stock:	0
+BREAK
+#72099
+Keeper:	-1
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	0
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+BREAK
+END

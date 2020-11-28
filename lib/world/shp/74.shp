@@ -12,7 +12,6 @@ NoNuyen:	It costs more than ya got, chummer.
 DoesntBuy:	I only sell coffee.
 Buy:	That'll be %d.
 Sell:	Here ya go, %d nuyen.
-Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	0
@@ -49,7 +48,6 @@ NoNuyen:	You don't have enough creds!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d creds.
 Sell:	Here's your %d creds.
-Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	0
@@ -106,7 +104,6 @@ NoNuyen:	You don't have enough creds!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d creds.
 Sell:	Here's your %d creds.
-Name:	Bits and Bytes
 Flags:	100
 Races:	0
 Buytypes:	0
@@ -147,7 +144,6 @@ NoNuyen:	Hrmph!  Obviously you seem to think this is one of those low class stor
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d creds.
 Sell:	Here's your %d creds.
-Name:	Mortimer of London
 Flags:	100
 Races:	0
 Buytypes:	0
@@ -196,7 +192,6 @@ NoNuyen:	You don't have enough creds!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d creds.
 Sell:	Here's your %d creds.
-Name:	Universal Omnitech (Aztech)
 Flags:	10
 Races:	0
 Buytypes:	0
@@ -285,7 +280,6 @@ NoNuyen:	Not enough nuyen for that one.
 DoesntBuy:	We don't buy anything here.
 Buy:	%d nuyen for that one.
 Sell:	Sorry, we're closed.
-Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	1

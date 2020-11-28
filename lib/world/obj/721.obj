@@ -1,0 +1,156 @@
+#72100
+Keywords:	apple organic
+Name:	an ^gorganic ^rapple^n
+RoomDesc:$
+A very nice-looking ^rapple^c has been left here.~
+LookDesc:$
+Free from blemishes and certified organic, this apple looks to be a tasty
+treat. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#72101
+Keywords:	pint blueberries organic bloobs
+Name:	a pint of ^gorganic^B blueberries^n
+RoomDesc:$
+A pint of ^Bblueberries^c has been left here.~
+LookDesc:$
+These ^gorganic^B blueberries^n look very plump and juicy. A healthy, delicious
+snack indeed! 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#72102
+Keywords:	sesame snack organic
+Name:	a bag of ^gorganic^c ^ysesame^c snacks
+RoomDesc:$
+A small bag of organic snacks is here.~
+LookDesc:$
+A bag of Genesis Organic ^ySesame^c Snacks! For what you paid for this you
+could've bought two large bags of chips and probably enjoyed your snack much
+more :/ 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#72103
+Keywords:	lentils organic package beans
+Name:	a package of ^gorganic^c lentils
+RoomDesc:$
+A package of some kind of beans is lying here.~
+LookDesc:$
+A package of lentils from Genesis Consortium. Certified organic for a
+healthier life. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+BREAK
+#72104
+Keywords:	quinoa organic grain
+Name:	a bag of ^gorganic^y quinoa^n
+RoomDesc:$
+A bag of some kind of grain is lying here.~
+LookDesc:$
+This is a small bag of ^yquinoa^n, labeled as organic. The brand is Genesis, a
+popular brand amongst the organic and all-natural crowd. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#72105
+Keywords:	fedora hat
+Name:	a fedora
+RoomDesc:$
+A very fancy hat is here.~
+LookDesc:$
+This hat is pretty fancy, at least that's what you think. You'll likely be the
+coolest guy or gal you know as long as you're wearing this bad boy. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

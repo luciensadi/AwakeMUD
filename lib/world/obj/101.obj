@@ -48,7 +48,7 @@ Material:	paper
 [VALUES]
 	Val0:	50
 	Val1:	4
-	Val3:	15
+	Val3:	325
 	Val4:	19
 	Val5:	-1
 	Val6:	-1
@@ -118,9 +118,9 @@ Material:	metal
 	LegalCode:	10
 	LegalPermit:	0
 [VALUES]
-	Val0:	8
+	Val0:	18
 	Val1:	4
-	Val3:	18
+	Val3:	326
 	Val4:	21
 	Val5:	6
 	Val6:	6
@@ -180,7 +180,7 @@ Material:	paper
 [VALUES]
 	Val0:	50
 	Val1:	4
-	Val3:	18
+	Val3:	314
 	Val4:	21
 	Val5:	-1
 	Val6:	-1
@@ -470,12 +470,12 @@ Material:	paper
 	Val0:	5
 BREAK
 #10118
-Keywords:	Doritos Chips Cooler Ranch Bag
-Name:	a bag of Cooler Ranch Doritos
+Keywords:	Dorritos Chips Cooler Ranch Bag
+Name:	a bag of Cooler Ranch Dorritos
 RoomDesc:$
-A plastic bag of Cooler Ranch Doritos has been left here.~
+A plastic bag of Cooler Ranch Dorritos has been left here.~
 LookDesc:$
-A bag about 1.5 times the size of the typical 'grab bag' of Doritos, made in
+A bag about 1.5 times the size of the typical 'grab bag' of Dorritos, made in
 an effort to lure larger metatypes to the product. This particular variety is
 the "Cooler Ranch" flavor. 
 ~
@@ -497,14 +497,14 @@ Material:	paper
 	Val0:	5
 BREAK
 #10119
-Keywords:	Doritos Nacho Cheesier Cheese Bag Chips
-Name:	a bag of Nacho Cheesier Doritos
+Keywords:	Dorritos Nacho Cheesier Cheese Bag Chips
+Name:	a bag of Nacho Cheesier Dorritos
 RoomDesc:$
-A plastic bag of Nacho Cheesier Doritos has been left here.~
+A plastic bag of Nacho Cheesier Dorritos has been left here.~
 LookDesc:$
-A bag about 1.5 times the size of the typical 'grab bag' of Doritos, made in
+A bag about 1.5 times the size of the typical 'grab bag' of Dorritos, made in
 an effort to lure larger metatypes to the product. This particular variety is
-the "Nacho Cheesier" flavor. 
+the "Nacho Cheesier" flavor.  
 ~
 Type:	Food
 WearFlags:	1
@@ -946,7 +946,7 @@ Material:	wood
 	LegalPermit:	0
 [VALUES]
 	Val1:	2
-	Val3:	1
+	Val3:	307
 	Val4:	6
 	Val5:	-1
 	Val6:	1

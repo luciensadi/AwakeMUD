@@ -515,7 +515,7 @@ void assign_mobiles(void)
   for (i = 0; teachers[i].vnum != 0; i++)
     ASSIGNMOB(teachers[i].vnum, teacher);
   
-  ASSIGNMOB(60541, nerp_skills_teacher);
+  ASSIGNMOB(60645, nerp_skills_teacher);
 
   /* metamagic trainers */
   for (i = 0; metamagict[i].vnum != 0; i++)

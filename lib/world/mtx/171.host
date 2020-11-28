@@ -241,9 +241,9 @@ Description:$
 The smell of freshly cooked soup and the sound of chopping fills the air as
 you walk into the kitchen at the dojo. Twenty odd cooks, dressed in
 traditional japanese outfits and wearing aprons, constantly prepare
-ingredients and drop them into a cooking pot. A large recipe book sits on a
+ingrediants and drop them into a cooking pot. A large recipe book sits on a
 heavy wooden table in the middle of the room, the cooks often leafing through
-it before continuing their preparation. 
+it before continuing their preperation. 
 ~
 ShutdownStart:	A deep echoing voice announces a host shutdown.
 ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.

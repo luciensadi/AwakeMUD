@@ -1,11 +1,35 @@
-#0
-Name:	An unfinished IC
-LongDesc:	An unfinished IC guards the node.
+#1
+Name:	a beeping rhombus
+LongDesc:	A beeping rhombus sweeps the node.
 Description:$
-It looks like an unfinished IC.
+A rhombus, floating about and emitting occasional beeps. 
 ~
-Rating:	0
-Type:	^WCrippler^n
+Rating:	4
+Type:	Trace
 Subtype:	0
+Flags:	10000000
+Trap:	2
+BREAK
+#2
+Name:	a red glowing sphere
+LongDesc:	A red, glowing sphere buzzes around aggressively here.
+Description:$
+A red sphere, emitting sparks. 
+~
+Rating:	4
+Type:	^WKiller^n
+Subtype:	0
+Flags:	0
+BREAK
+#3
+Name:	a pulsating black sphere
+LongDesc:	A pulsating black sphere hovers here.
+Description:$
+A pulsating black sphere. It pulsates with shadow. 
+~
+Rating:	4
+Type:	^LLethal Black^n
+Subtype:	0
+Flags:	0
 BREAK
 END

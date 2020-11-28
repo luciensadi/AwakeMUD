@@ -1,20 +1,20 @@
 #70000
-Keywords:	key 1A
-Name:	A key to 1A
+Keywords:	t-shirt tshirt shirt white
+Name:	a white t-shirt
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A white t-shirt lies crumpled on the ground.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 1A'. 
+A basic white t-shirt made from 100% cotton. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	100000000000001001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	0.20
+	Barrier:	1
+	Cost:	10
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -22,22 +22,22 @@ Material:	adv. plastics
 	LegalPermit:	0
 BREAK
 #70001
-Keywords:	key 2A
-Name:	A key to 2A (Defunct)
+Keywords:	t-shirt tshirt shirt black
+Name:	a black t-shirt
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A black t-shirt lies crumpled on the ground.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 2A'. 
+A basic black t-shirt made from 100% cotton. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	100000000000001001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	0.20
+	Barrier:	1
+	Cost:	10
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -45,22 +45,24 @@ Material:	adv. plastics
 	LegalPermit:	0
 BREAK
 #70002
-Keywords:	key 3A
-Name:	A key to 3A (Defunct)
+Keywords:	blue polo shirt
+Name:	a blue polo shirt
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A blue polo shirt is lying here.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 3A'. 
+A timeless classic. The logo of a small crocodile inside a yellow laurel
+wreath is embroidered on the left side chest. Don't even think about wearing
+the collar up! 
 ~
-Type:	Key
-WearFlags:	1
+Type:	UNDEFINED
+WearFlags:	100000000000001001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	0.30
+	Barrier:	1
+	Cost:	30
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -68,22 +70,23 @@ Material:	adv. plastics
 	LegalPermit:	0
 BREAK
 #70003
-Keywords:	key 4A
-Name:	A key to 4A
+Keywords:	hawaiian shirt
+Name:	a Hawaiian shirt
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A gaudy multicolored Hawaiian shirt has been left on the floor.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 4A'. 
+This shirt just screams 'Aloha!'. The coloring is perfect camo against someone
+on an acid trip. Mahalo for wearing! 
 ~
-Type:	Key
-WearFlags:	1
+Type:	UNDEFINED
+WearFlags:	100000000000001001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	0.30
+	Barrier:	1
+	Cost:	25
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -91,22 +94,23 @@ Material:	adv. plastics
 	LegalPermit:	0
 BREAK
 #70004
-Keywords:	key 5A
-Name:	A key to 5A
+Keywords:	lumberjack shirt
+Name:	a lumberjack shirt
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A red and black checkered lumberjack shirt is lying here.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 5A'. 
+Made from heavy flanel this red and black checkered shirt will do all it can
+to make you look like a nineties grunge kid. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	100000000000001001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	0.50
+	Barrier:	1
+	Cost:	20
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -114,137 +118,160 @@ Material:	adv. plastics
 	LegalPermit:	0
 BREAK
 #70005
-Keywords:	key 6A
-Name:	A key to 6A (Defunct)
+Keywords:	jeans boot-cut
+Name:	a pair of boot-cut jeans
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of boot-cut jeans is waiting to be picked up.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 6A'. 
+This classic design has been the choice of boot-wearing people for decades.
+The slightly flared style allows boots to be worn without the risk of the
+fabric folding ridiculously around your ankles. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	100001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	2
 BREAK
 #70006
-Keywords:	key 7A
-Name:	A key to 7A
+Keywords:	baggy jeans
+Name:	a pair of baggy jeans
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of baggy jeans is lying on the floor.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 7A'. 
+Baggy, comfy, and with lots of space to store miscellaneous stuff or even the
+odd magazine or other. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	100001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	0.00
+	Barrier:	1
+	Cost:	65
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	2
+	Val4:	4
 BREAK
 #70007
-Keywords:	key 8A
-Name:	A key to 8A
+Keywords:	cargo khaki shorts
+Name:	a pair of khaki cargo shorts
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of khaki cargo shorts has been left here.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 8A'. 
+Not quite what the British used to build an Empire but close. Looking
+comfortable enough this garment is not something you would want to wear on a
+formal occasion. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	100001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	0.75
+	Barrier:	1
+	Cost:	35
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	2
 BREAK
 #70008
-Keywords:	key 9A
-Name:	A key to 9A (Defunct)
+Keywords:	leather pants
+Name:	a pair of leather pants
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of leather pants has been left here.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 9A'. 
+Durable. That's what comes to mind. Perfect for riding your bike and looking
+way cool while at it. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	100001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	leather
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	2.00
+	Barrier:	1
+	Cost:	120
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	2
 BREAK
 #70009
-Keywords:	key 10A
-Name:	A key to 10A (Defunct)
+Keywords:	chinos
+Name:	a pair of chinos
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of beige chinos is lying crumpled on the floor.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 10A'. 
+Something for Casual Friday at the office. This timeless desgin has survived
+through the ages. Made form 100% cotton. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	100001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	1.00
+	Barrier:	1
+	Cost:	60
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	2
 BREAK
 #70010
-Keywords:	key 1B
-Name:	A key to 1B (Defunct)
+Keywords:	sneakers
+Name:	a pair of sneakers
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of sneakers sits here.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 1B'. 
+Casual footwear for the fashion-aware. Nothing special. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	1000001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -252,22 +279,23 @@ Material:	adv. plastics
 	LegalPermit:	0
 BREAK
 #70011
-Keywords:	key 2B
-Name:	A key to 2B
+Keywords:	biker boots
+Name:	a pair of biker boots
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of biker boots has been left here.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 2B'. 
+Sturdy and kick-ass. These leather boots feature a small heel and various
+straps. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	1000001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	leather
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	1.50
+	Barrier:	1
+	Cost:	90
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -275,22 +303,23 @@ Material:	adv. plastics
 	LegalPermit:	0
 BREAK
 #70012
-Keywords:	key 3B
-Name:	A key to 3B
+Keywords:	flip-flops flip flop
+Name:	a pair of flip-flops
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of flip-flops sits here.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 3B'. 
+Definitely not something for the boardroom. In fact, nobody should be wearing
+these. Ever. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	1000001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	plastic
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	0.25
+	Barrier:	1
+	Cost:	20
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -298,22 +327,24 @@ Material:	adv. plastics
 	LegalPermit:	0
 BREAK
 #70013
-Keywords:	key 4B
-Name:	A key to 4B
+Keywords:	hiking boots
+Name:	a pair of hiking boots
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of hiking boots is sitting on the floor.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 4B'. 
+Made from synthetic fabrics that allow your feet to breathe and featuring
+air-cushioned soles these boots are made for long hikes in the wilderness,
+natural or man-made. 
 ~
-Type:	Key
-WearFlags:	1
+Type:	Worn
+WearFlags:	1000001
 ExtraFlags:	0
 AffFlags:	0
-Material:	adv. plastics
+Material:	fabric
 [POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Weight:	2.00
+	Barrier:	1
+	Cost:	130
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -321,1956 +352,23 @@ Material:	adv. plastics
 	LegalPermit:	0
 BREAK
 #70014
-Keywords:	key 5B
-Name:	A key to 5B
+Keywords:	black leather shoes
+Name:	a pair of black leather shoes
 RoomDesc:$
-A flimsy keycard lies on the ground here.~
+A pair of black leather shoes sits here.~
 LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 5B'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70015
-Keywords:	golden master key
-Name:	A ^YGolden^n Master key
-RoomDesc:$
-A ^Ygolden^N key lies here on the floor.~
-LookDesc:$
-This master key is adorned in highly polished gold, giving a regal shine. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70016
-Keywords:	key golden sunburst
-Name:	A key with a ^YGolden Sunburst^N (Defunct)
-RoomDesc:$
-A key with a ^Ygolden sunburst^N lies on the floor here.~
-LookDesc:$
-This keycard has a ^YGolden Sunburst^N stamped onto its surface. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70017
-Keywords:	blue key DE
-Name:	A ^Bblue^n key with the letters ^YDE^N
-RoomDesc:$
-A ^Bblue^N keycard lies on the floor here.~
-LookDesc:$
-This blue colored keycard has the letters ^YDE^N stamped onto it. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70018
-Keywords:	red key DE
-Name:	A ^Rred^n key with the letters ^YDE^N
-RoomDesc:$
-A ^Rred^N keycard lies on the floor here.~
-LookDesc:$
-This red colored keycard has the letters ^YDE^N stamped onto it. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70019
-Keywords:	green key DE
-Name:	A ^Ggreen^n key with the letters ^YDE^N
-RoomDesc:$
-A ^Ggreen^N keycard lies on the floor here.~
-LookDesc:$
-This green colored keycard has the letters ^YDE^N stamped onto it. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70020
-Keywords:	black key DE
-Name:	A ^Lblack^N key with the letters ^YDE^N
-RoomDesc:$
-A ^Lblack^N keycard lies on the floor here.~
-LookDesc:$
-This black colored keycard has the letters ^YDE^N stamped onto it. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70021
-Keywords:	gold key DE
-Name:	A ^Ygold^N key with the letters ^YDE^N
-RoomDesc:$
-A ^Ygold^N keycard lies on the floor here.~
-LookDesc:$
-This gold colored keycard has the letters ^YDE^N stamped onto it. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70022
-Keywords:	haven apartments key
-Name:	A Haven Apartments key (Defunct)
-RoomDesc:$
-A flimsy looking keycard lies on the floor here.~
-LookDesc:$
-This keycard is stamped with the words 'Haven Apartments'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70023
-Keywords:	stein german beer
-Name:	a stein of dark German beer
-RoomDesc:$
-A stein of beer sits here.~
-LookDesc:$
-Now this is a beer. Made the way a beer should be made. It's dark and German
-and served at room temperature. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.25
-	Barrier:	3
-	Cost:	100
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	18
-	Val1:	18
-	Val2:	13
-BREAK
-#70024
-Keywords:	flagon mead
-Name:	a flagon of mead
-RoomDesc:$
-A large flagon of mead sits here.~
-LookDesc:$
-This is a drink for all you with an inner Viking in you. Strong and stout,
-this is the drink of the Gods. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.25
-	Barrier:	3
-	Cost:	80
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	20
-	Val1:	20
-	Val2:	11
-BREAK
-#70025
-Keywords:	cup coffee
-Name:	a cup of black coffee
-RoomDesc:$
-A steaming cup of coffee sits here.~
-LookDesc:$
-Dark and black, this is the coffee for those who don't like fancy coffee
-drinks. Coffee flavored coffee. Just like the cowboys used to drink. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	paper
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	25
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	16
-	Val1:	16
-	Val2:	2
-BREAK
-#70026
-Keywords:	cup french vanilla coffee
-Name:	a cup of French Vanilla coffee
-RoomDesc:$
-A steaming cup of vanilla smelling coffee sits here.~
-LookDesc:$
-A cup of coffee with a taste of vanilla to it. Nice and tasty. For those who
-want something a little different than a regular cup of Joe. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	paper
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	35
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	18
-	Val1:	18
-	Val2:	2
-BREAK
-#70027
-Keywords:	cup decaf coffee
-Name:	a cup of decaf coffee
-RoomDesc:$
-A cup of coffee sits here.~
-LookDesc:$
-For those of you who don't want to be up all day, this is the coffee for you.
-Same taste as a regular cup of Joe, without the caffeine. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	paper
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	25
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	18
-	Val1:	18
-	Val2:	2
-BREAK
-#70028
-Keywords:	cup irish creme coffee
-Name:	a cup of Irish Creme coffee
-RoomDesc:$
-A cup of coffee with a smell of Irish creme sits here.~
-LookDesc:$
-For those who want a little extra kick to the coffee, this is the one for you.
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	paper
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	35
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	18
-	Val1:	18
-	Val2:	2
-BREAK
-#70029
-Keywords:	cup amaretto coffee
-Name:	a cup of Amaretto coffee
-RoomDesc:$
-An alcoholic smelling cup of coffee sits here.~
-LookDesc:$
-Now if you want a little extra punch to your mornings, this will do the trick.
-A bit of Amaretto has been added to give it a smooth taste. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	paper
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	50
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	18
-	Val1:	18
-	Val2:	18
-BREAK
-#70030
-Keywords:	coffee chicory reddish pungent strong cup mug
-Name:	a cup of chicory coffee
-RoomDesc:$
-A ceramic mug sits here.~
-LookDesc:$
-Made from two-thirds fresh-roasted coffee beans and one-third roasted chicory
-root, this New Orleans favorite has a strong, pungent, bittersweet taste and a
-faint reddish tinge to it. It's served with a small jug of heavy cream on the
-side. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	ceramic
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	25
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	16
-	Val1:	16
-	Val2:	2
-BREAK
-#70031
-Keywords:	chocolate banana milkshake
-Name:	a ^ychocolate banana^N milkshake
-RoomDesc:$
-A dark milkshake sits here.~
-LookDesc:$
-For something different, this chocolate milkshake has little chunks of bananas
-in it making for something not the norm. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	25
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	20
-	Val1:	20
-	Val2:	7
-BREAK
-#70032
-Keywords:	milkshake rich vanilla
-Name:	a rich ^Wvanilla^N milkshake
-RoomDesc:$
-A rich vanilla milkshake sits here.~
-LookDesc:$
-This thick milkshake is made entirely from a rich, complex all natural
-^Wvanilla^N. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	25
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	20
-	Val1:	20
-	Val2:	7
-BREAK
-#70033
-Keywords:	pineapple milkshake
-Name:	a ^Ypineapple^N milkshake
-RoomDesc:$
-A milkshake with a slice of pineapple on the top sits here.~
-LookDesc:$
-This one is not as ordered as many of the other milkshakes, but it is a good
-one. A vanilla milkshake with bits of pineapple in it. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	25
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	20
-	Val1:	20
-	Val2:	7
-BREAK
-#70034
-Keywords:	real hamburger
-Name:	a real hamburger
-RoomDesc:$
-A large, greasy hanburger sits here on a plate.~
-LookDesc:$
-Now this is what a hamburger is supposed to be. Made with real beef and set on
-a bun and adorned with katsup, mustard, pickles and onion. You can feel your
-arteries harden as you eat it. 
-~
-Type:	Food
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	organic
-[POINTS]
-	Weight:	0.25
-	Barrier:	3
-	Cost:	80
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	16
-BREAK
-#70035
-Keywords:	BLT sammich
-Name:	a BLT sammich
-RoomDesc:$
-A BLT sammich sits here on a plate.~
-LookDesc:$
-A homemade classic. This sammich starts with white bread, several strips of
-real bacon, two large slices of tomato and some fresh lettuce, this is a great
-thing to have for lunch. 
-~
-Type:	Food
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	organic
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	50
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	12
-BREAK
-#70036
-Keywords:	hot ham cheese sammich
-Name:	a hot ham and cheese sammich
-RoomDesc:$
-A ham and cheese sammich sits here, cheese oozing down the sides.~
-LookDesc:$
-Simple yet elegant, this sammich is made of white bread, a very large amount
-of ham and three slices of swiss cheese. 
-~
-Type:	Food
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	organic
-[POINTS]
-	Weight:	0.25
-	Barrier:	3
-	Cost:	75
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	16
-BREAK
-#70037
-Keywords:	glass cognac
-Name:	a glass of cognac
-RoomDesc:$
-A glass of dark liquid sits here.~
-LookDesc:$
-Made from grapes only found in Cognac, France, this is a drink that dates back
-a few hundred years. This particular brand of cognac has been aged for over
-twenty-five years as the darkness of the liquid shows. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	100
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	16
-	Val1:	16
-	Val2:	21
-BREAK
-#70038
-Keywords:	glass brandy
-Name:	a glass of brandy
-RoomDesc:$
-A glass of dark brown liquid sits here.~
-LookDesc:$
-More of an after dinner drink, this is a smooth beverage made from grape wine
-with caramel coloring to give it an aged look. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	85
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	16
-	Val1:	16
-	Val2:	21
-BREAK
-#70039
-Keywords:	glass vermouth
-Name:	a glass of vermouth
-RoomDesc:$
-A glass of a red liquid sits here.~
-LookDesc:$
-Made from wine and used to make some martinis, this red vermouth is a little
-sweet this goes well with a dinner or for drinks after dinner. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	80
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	16
-	Val1:	16
-	Val2:	26
-BREAK
-#70040
-Keywords:	glass cold ice water
-Name:	a glass of cold ice water
-RoomDesc:$
-A glass of ice water with droplets of water running down the sides sits here.~
-LookDesc:$
-Oh yeah. Cool, clear, ice water. Nothing is better on a hot summer day or when
-doing a strenuous workout. Like running the shadows. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	20
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	15
-	Val1:	15
-BREAK
-#70041
-Keywords:	pimp juice
-Name:	Pimp Juice
-RoomDesc:$
-A glass with a swirl of colors sits here.~
-LookDesc:$
-Made from a citrus soda, amaretto, and grenadine, this is a drink better known
-in the clubs and by pimps all around the world. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	50
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	15
-	Val1:	15
-	Val2:	16
-BREAK
-#70042
-Keywords:	ice cold beer
-Name:	an ice cold beer
-RoomDesc:$
-A glass of cold beer sits here.~
-LookDesc:$
-Now what can be better after a long night in the shadows than a cold, cold
-beer? To some, there is nothing better. 
-~
-Type:	Liq Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	glass
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	40
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	15
-	Val1:	15
-	Val2:	10
-BREAK
-#70043
-Keywords:	jersey seahawks
-Name:	A seattle seahawks jersey
-RoomDesc:$
-a jersy with the seahawks logo is hanging from a hook~
-LookDesc:$
-A green and blue jersey with the Seattle Seahawks mascot on the front. On the
-back is the number 36 and the name Jameson. the quarterback that snuck for a
-total of 45 years to score a touchdown on that famous play back in the '61
-superbowl. 
+Black, three eyelts, slightly pointed tip and a minor heel. Quite the idea of
+the concept 'shoes'. 
 ~
 Type:	Worn
-WearFlags:	1001
-ExtraFlags:	0
-AffFlags:	0
-Material:	fabric
-[POINTS]
-	Weight:	1.00
-	Barrier:	8
-	Cost:	350
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70044
-Keywords:	Seattle Seahawks jacket
-Name:	a Seattle Seahawks jacket
-RoomDesc:$
-A leather jacket with the Seattle Seahawks logo lays here on the floor.~
-LookDesc:$
-This jacket sports the Seattle Seahawks logo on the back with the team colors
-of blue and silver comprising its known look. 
-~
-Type:	Worn
-WearFlags:	10000000001
+WearFlags:	1000001
 ExtraFlags:	0
 AffFlags:	0
 Material:	leather
 [POINTS]
 	Weight:	1.50
-	Barrier:	6
-	Cost:	450
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	1
-	Val1:	4
-	Val2:	1
-	Val4:	2
-BREAK
-#70045
-Keywords:	large metal gunsafe
-Name:	a large ^Lmetal^N gunsafe
-RoomDesc:$
-A large, black gunsafe sits here, keeping your weapons safe.~
-LookDesc:$
-Made of durable steel and two different locks to keep intruders out of it,
-this gunsafe is a must have for every gun toting, sword weilding runner out
-there. 
-~
-Type:	Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	100.00
-	Barrier:	12
-	Cost:	5000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	150
-	Val1:	1
-	Val2:	-1
-	Val3:	6
-BREAK
-#70046
-Keywords:	massive black rotweiler
-Name:	a massive, black rotweiler
-RoomDesc:$
-A menacing black dog sits here, waiting to pounce on any intruder.~
-LookDesc:$
-Big, black and mean looking, this dog is known as a menace by many people. For
-those who go through the proper training and care, they can be a very loyal
-guard dog. And for some, it can be a cash cow in dog fights. 
-~
-Type:	UNDEFINED
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	organic
-[POINTS]
-	Weight:	50.00
-	Barrier:	6
-	Cost:	3500
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70047
-Keywords:	muscular pitbull
-Name:	a muscular pitbull
-RoomDesc:$
-A very large pitbull sits here, just looking for a reason to eat someone.~
-LookDesc:$
-Rough and tough and it looks like it's itching to fight, this thing is over
-one hundred pounds of muscle and it has vice like jaws that just ask to eat
-whatever you tell it to. 
-~
-Type:	UNDEFINED
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	organic
-[POINTS]
-	Weight:	45.00
-	Barrier:	6
-	Cost:	3500
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70048
-Keywords:	black cloak
-Name:	a ^Lblack^N cloak
-RoomDesc:$
-A black cloak with a hood lays here, crumpled in a heap.~
-LookDesc:$
-This cloak is matte black and it has a hood to go with it. It can work well
-for those nights when you need to be a little less inconspicuous that walking
-around in a full suit of combat armor. 
-~
-Type:	Worn
-WearFlags:	10000000001
-ExtraFlags:	0
-AffFlags:	0
-Material:	fabric
-[POINTS]
-	Weight:	1.00
-	Barrier:	4
-	Cost:	150
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val7:	12
-BREAK
-#70049
-Keywords:	black hoodie
-Name:	a ^Lblack^N hoodie
-RoomDesc:$
-A black hoodie lays here in a pile.~
-LookDesc:$
-This is nothing more than a sweatshirt with a hood to it. Right in the center
-of it is a large dragon in flight over a mountain setting. 
-~
-Type:	Worn
-WearFlags:	10000001001
-ExtraFlags:	0
-AffFlags:	0
-Material:	fabric
-[POINTS]
-	Weight:	1.00
-	Barrier:	4
-	Cost:	100
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	2
-	Val1:	4
-	Val2:	2
-	Val4:	2
-	Val7:	4
-BREAK
-#70050
-Keywords:	albino snake-skin dress shoes
-Name:	a pair of ^Walbino^n snake-skin dress shoes
-RoomDesc:$
-A pair of white dress shoes lay here next to each other.~
-LookDesc:$
-These shoes are a little on the extravagant side. Made from albino snake
-skins, these shoes are quite nice and look to be very, very expensive. 
-~
-Type:	Worn
-WearFlags:	1000001
-ExtraFlags:	0
-AffFlags:	0
-Material:	leather
-[POINTS]
-	Weight:	0.50
-	Barrier:	6
-	Cost:	1250
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70051
-Keywords:	pair cowboy boots
-Name:	a pair of ^Lblack^n cowboy boots
-RoomDesc:$
-A pair of cowboy boots lays here.~
-LookDesc:$
-Now these are just the same kind of boots that you see all the stars in the
-old westerns and old rodeos wear. They are rough and durable and would make
-for good shoes to wear on a run, if they had any traction that is. One false
-move on a non-grip floor, and away you go, more than likely landing on your
-rump. 
-~
-Type:	Worn
-WearFlags:	1000001
-ExtraFlags:	0
-AffFlags:	0
-Material:	fabric
-[POINTS]
-	Weight:	0.50
-	Barrier:	6
-	Cost:	500
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70052
-Keywords:	Stetson cowboy hat
-Name:	a ^Lblack^n Stetson cowboy hat
-RoomDesc:$
-A black cowboy hat lays here.~
-LookDesc:$
-They say bad guys always wear black, well this authentic couwboy hat makes you
-look like one of the bad guys. It's made of a durable material for those times
-when a woman wants to wear it on places that it wasn't made to wear, or when
-you get mad at something or someone and you throw it down and stomp on it. 
-~
-Type:	Worn
-WearFlags:	10001
-ExtraFlags:	0
-AffFlags:	0
-Material:	fabric
-[POINTS]
-	Weight:	0.25
-	Barrier:	6
-	Cost:	250
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70053
-Keywords:	jet black motorcycle helmet
-Name:	a ^Ljet black^n motorcycle helmet
-RoomDesc:$
-A sleek motorcycle helmet lays here on its side.~
-LookDesc:$
-Jet black to look stylish yet made of a durable plastic to keep you from
-splitting your head open when you run into the car in front of you because he
-is letting the gridguide do all his driving and it stopped because there was a
-small stick in the road. 
-~
-Type:	Worn
-WearFlags:	10001
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.20
-	Barrier:	8
-	Cost:	850
-	AvailTN:	5
-	AvailDay:	1.50
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val7:	2
-[AFFECT 0]
-	Location:	Ballistic
-	Modifier:	1
-[AFFECT 1]
-	Location:	Impact
-	Modifier:	1
-BREAK
-#70054
-Keywords:	long flowing black cape
-Name:	a floor length ^Lblack^n cape
-RoomDesc:$
-A long, flowing cape lays here in a large pile.~
-LookDesc:$
-With a little makeup and set of fangs, you too can look just like Dracula with
-this cloak! 
-~
-Type:	Worn
-WearFlags:	10000000001
-ExtraFlags:	0
-AffFlags:	0
-Material:	fabric
-[POINTS]
-	Weight:	1.00
-	Barrier:	4
-	Cost:	125
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70055
-Keywords:	can skoal chewing tobacco
-Name:	a can of Skoal(TM)
-RoomDesc:$
-A small plastic can with a metal lid lays here.~
-LookDesc:$
-Skoal is the premiere chewing tobacco in the world. Now it may look gross to
-most people but to those who do it, it's better than smoking a cigarrette and
-blowing the smoke all in people's faces. 
-~
-Type:	Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	plastic
-[POINTS]
-	Weight:	0.50
-	Barrier:	3
-	Cost:	100
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	1
-	Val1:	1
-	Val2:	-1
-BREAK
-#70056
-Keywords:	can Copenhagen chewing tobacco
-Name:	a can of Copenhagen(TM)
-RoomDesc:$
-A small can with a metal lid lays here.~
-LookDesc:$
-Called "Chokin' Gaggin'" by some, this is probably the second most
-recognizable snuff in the world. 
-~
-Type:	Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	plastic
-[POINTS]
-	Weight:	0.50
-	Barrier:	3
-	Cost:	100
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	1
-	Val1:	1
-	Val2:	-1
-BREAK
-#70057
-Keywords:	crucifix gold chain
-Name:	a small crucifix hanging on a ^Ygold^n chain
-RoomDesc:$
-A small chain with a cross lays here on the floor.~
-LookDesc:$
-This is a simple gold chain with a small crucifix hanging from it. 
-~
-Type:	Worn
-WearFlags:	1000000000101
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.10
-	Barrier:	4
-	Cost:	125
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70058
-Keywords:	leather wallet
-Name:	a ^Lblack^n leather wallet
-RoomDesc:$
-A leather wallet lays here witing for someone to pick it up.~
-LookDesc:$
-A nicely made black leather wallet. It can hold all your credsticks and pics
-of the wife and kids, or even the girlfriends and all the booze from last
-night's party. 
-~
-Type:	Container
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	leather
-[POINTS]
-	Weight:	0.50
-	Barrier:	6
-	Cost:	500
-	AvailTN:	2
-	AvailDay:	1.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	1
-	Val1:	1
-	Val2:	-1
-BREAK
-#70059
-Keywords:	blue beach towel
-Name:	a ^Bblue^n beach towel
-RoomDesc:$
-A large blue towel is folded up here.~
-LookDesc:$
-This is a towel large enough for a troll and is as soft as a fuzzy blanket.
-Take it to the beach or to the pool, it's sure to keep you dry when you need
-it. 
-~
-Type:	Worn
-WearFlags:	100000010101
-ExtraFlags:	0
-AffFlags:	0
-Material:	fabric
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	50
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70060
-Keywords:	bottle sunscreen lotion
-Name:	a bottle of sunscreen
-RoomDesc:$
-A small bottle of lotion lays here.~
-LookDesc:$
-This is a bottle of SPF 50 suscreen. It never hurts to keep the rays at bay
-now a days. Don't want to get skin cancer after all. 
-~
-Type:	UNDEFINED
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	plastic
-[POINTS]
-	Weight:	0.20
-	Barrier:	3
-	Cost:	45
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70061
-Keywords:	rows comfortable sauna benches
-Name:	A few rows of comfortable sauna benches
-RoomDesc:$
-A few rows of comfortable sauna benches sit here.~
-LookDesc:$
-These benches are made from a smooth, sanded white stone, which are easily
-cleaned, and very comfortable despite the material used in their construction.
-~
-Type:	UNDEFINED
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	stone
-[POINTS]
-	Weight:	250.00
-	Barrier:	16
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70062
-Keywords:	oversized hot tub hot-tub
-Name:	An oversized hot-tub
-RoomDesc:$
-An oversized hot-tub bubbles away quietly here.~
-LookDesc:$
-This big hot-tub can easily fit 7-8 people comfortably. It has a full control
-panel allowing the operator to decide exactly how much water and pressure
-flows through the jets. It also has controls for the built in telecom,
-vidscreen and volume controls for the speakers located around the rooftop. 
-~
-Type:	Liq Container
-WearFlags:	0
-ExtraFlags:	10
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	500.00
-	Barrier:	6
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	500
-	Val1:	500
-BREAK
-#70063
-Keywords:	temperature controlled pool
-Name:	A large temperature controlled pool
-RoomDesc:$
-A large temperature controlled pool is embedded into the floor here.~
-LookDesc:$
-This large pool is completely temperature controlled, allowing the occupants
-to set a specific level of heating for those cold winter days, and also switch
-it to a much colder setting for those hot, sweaty summer days. Its fairly
-large and embedded into the floor, crafted with smooth, clean white tiles. It
-could hold a large amount of people, just in case someone wanted to throw a
-pool party. 
-~
-Type:	Fountain
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	stone
-[POINTS]
-	Weight:	800.00
-	Barrier:	16
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	10000
-	Val1:	10000
-BREAK
-#70064
-Keywords:	reinforced steel gunsafe safe
-Name:	A large reinforced steel gunsafe
-RoomDesc:$
-A large reinforced steel gunsafe is bolted down here.~
-LookDesc:$
-Needless to say, this baby wasn't going anywhere anytime soon, since it was
-bolted down and literally welded to the floors load bearing beams. Its
-reinforced steel construction could probably survive a hit from most modern
-bombs, and its large spinning lock-latch and maglock system made sure nobody
-got in within a god awful amount of trouble. 
-~
-Type:	Container
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	500.00
-	Barrier:	24
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	600
-	Val1:	1
-	Val2:	-1
-BREAK
-#70065
-Keywords:	row blast-resistant ammo crates
-Name:	A row of blast-resistant ammo crates
-RoomDesc:$
-A row of blast-resistant ammo crates stands here.~
-LookDesc:$
-These large, reinforced steel crates were designed for the storage of
-ammunition and other possibly explosive materials. They were designed to
-handle any internal combustions, wether intentional or accidental, capable of
-containing tons of pressure within themselves to keep fires from spreading
-into the areas around them. 
-~
-Type:	Container
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	500.00
-	Barrier:	16
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	600
-	Val1:	1
-	Val2:	-1
-BREAK
-#70066
-Keywords:	key 2A flimsy
-Name:	A key to 2A (Defunct)
-RoomDesc:$
-A flimsy keycard lies on the ground here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 2A'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70067
-Keywords:	key 3A flimsy
-Name:	A key to 3A
-RoomDesc:$
-A flimsy keycard lies on the ground here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 3A'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70068
-Keywords:	key 1B flimsy
-Name:	A key to 1B
-RoomDesc:$
-A flimsy keycard lies on the ground here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 1B'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70069
-Keywords:	key 1C
-Name:	A key to 1C
-RoomDesc:$
-A key to 1C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 1C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70070
-Keywords:	key 2C
-Name:	A key to 2C
-RoomDesc:$
-A key to 2C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 2C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70071
-Keywords:	key 3C
-Name:	A key to 3C
-RoomDesc:$
-A key to 3C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 3C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70072
-Keywords:	key 4C
-Name:	A key to 4C
-RoomDesc:$
-A key to 4C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 4C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70073
-Keywords:	key 5C
-Name:	A key to 5C
-RoomDesc:$
-A key to 5C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 5C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70074
-Keywords:	key 6C
-Name:	A key to 6C
-RoomDesc:$
-A key to 6C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 6C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70075
-Keywords:	key 7C
-Name:	A key to 7C
-RoomDesc:$
-A key to 7C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 7C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70076
-Keywords:	key 8C
-Name:	A key to 8C
-RoomDesc:$
-A key to 8C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 8C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70077
-Keywords:	key 9C
-Name:	A key to 9C
-RoomDesc:$
-A key to 9C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 9C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70078
-Keywords:	key 10C
-Name:	A key to 10C
-RoomDesc:$
-A key to 10C lies here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 10C'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70079
-Keywords:	key 2A flimsy
-Name:	A key to 2A
-RoomDesc:$
-A flimsy keycard lies on the ground here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 2A'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	2
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70080
-Keywords:	key 6A
-Name:	A key to 6A
-RoomDesc:$
-A flimsy keycard lies on the ground here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 6A'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70081
-Keywords:	key 9A
-Name:	A key to 9A
-RoomDesc:$
-A flimsy keycard lies on the ground here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 9A'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70082
-Keywords:	key 10A
-Name:	A key to 10A
-RoomDesc:$
-A flimsy keycard lies on the ground here.~
-LookDesc:$
-Its a generic keycard, labeled 'Haven apartments: 10A'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70083
-Keywords:	desk balsa sturdy wood
-Name:	a sturdy ^ybalsa wood^N desk
-RoomDesc:$
-A sturdy ^ybalsa wood^N desk sits here.~
-LookDesc:$
-This is a long, rectangular synthwood desk with drawers down one side. It is
-equipped with an advanced telephone system, computer terminal and a litter of
-small items--business cards, papers, holopics and empty coffee cups among
-them. 
-~
-Type:	Container
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	wood
-[POINTS]
-	Weight:	100.00
-	Barrier:	4
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	50
-	Val1:	15
-	Val2:	70084
-	Val3:	12
-BREAK
-#70084
-Keywords:	keycard managers office electronic
-Name:	an electronic 'Managers Office' keycard (Defunct)
-RoomDesc:$
-A labeled keycard sits on the ground here.~
-LookDesc:$
-Its a sturdy little plastic keycard with a few bits of electronic striping,
-along with a label that reads, "Managers Office." 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	4
-	Cost:	10
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70085
-Keywords:	key master golden
-Name:	a dull ^ygolden^N master key (Defunct)
-RoomDesc:$
-^gA dull ^ygolden^g master key has been left here.^N~
-LookDesc:$
-Its a dull ^ygolden^N master key labeled "Haven". 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	8
-	Cost:	100
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70086
-Keywords:	keycard managers office electronic
-Name:	an electronic 'Managers Office' keycard
-RoomDesc:$
-A labeled keycard sits on the ground here.~
-LookDesc:$
-Its a sturdy little plastic keycard with a few bits of electronic striping,
-along with a label that reads, "Managers Office." 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	4
-	Cost:	10
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70087
-Keywords:	haven apartments key
-Name:	A Haven Apartments key
-RoomDesc:$
-A flimsy looking keycard lies on the floor here.~
-LookDesc:$
-This keycard is stamped with the words 'Haven Apartments'. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70088
-Keywords:	key master golden
-Name:	A dull ^ygolden^N master key
-RoomDesc:$
-^gA dull ^ygolden^g master key has been left here.^N~
-LookDesc:$
-Its a dull ^ygolden^N master key labeled "Haven". 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.01
-	Barrier:	8
-	Cost:	100
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#70089
-Keywords:	key golden sunburst
-Name:	A key with a ^YGolden Sunburst^N
-RoomDesc:$
-A key with a ^Ygolden sunburst^N lies on the floor here.~
-LookDesc:$
-This keycard has a ^YGolden Sunburst^N stamped onto its surface. 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	3
-	Cost:	1
+	Barrier:	1
+	Cost:	85
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0

@@ -786,7 +786,7 @@ Name:	Cavernous Booth
 Desc:$
    A small cavern in the black obsidian walls of the club, etched out with
 stalagmites and red fire orbs for lighting.  The booth has two very
-comfortable red upholstered seats with some gothic-spire decorations.  On  the
+comfortable red upholstry seats with some gothic-spire decorations.  On  the
 table is a red glowing orb, resembling a small ball of magma. 
 ~
 Flags:	10011100
@@ -4740,7 +4740,7 @@ goes on here.  Considering that this is a corporate and organized crime
 meeting place, a lot of money goes into keeping this place secure and free of
 law enforcement eyes. 
 ~
-Flags:	10011100
+Flags:	10011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4759,14 +4759,13 @@ RoomType:	0
 [EXIT north]
 	Keywords:	false wall
 	Desc:$
-A false wall fools most who pass by here. 
+a false wall 
 ~
 	ToVnum:	9354
-	Flags:	1
+	Flags:	2
 	Material:	brick
-	Barrier:	32
+	Barrier:	4
 	KeyVnum:	0
-	LockRating:	12
 	HiddenRating:	8
 [EXIT south]
 	Keywords:	door private

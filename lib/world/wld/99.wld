@@ -595,11 +595,9 @@ BREAK
 Name:	Hearl Street
 Desc:$
    The smell of Seattle's sewage is what is most prominent here, as leaks from
-the city's sewers above you spill raw sewage onto the street below you. There
-is a large iron grate built into the wall here, which probably compounds the
-issue as far as the stench is concerned. The rougher element of the Ork
-Underground hangs out here on "Hurl Street". BTL sales are rampant, as the OU
-seems to be a hub of illegal trafficking. 
+the city's sewers above you spill raw sewage onto the street below you. The
+more rougher element to the Ork Underground hangs out here on "Hurl Street".
+BTL sales are rampant, as the OU seems to be a hub of illegal trafficking.  
 ~
 Flags:	1010000000000001000
 SecType:	Inside
@@ -2727,6 +2725,17 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT up]
+	Keywords:	hatch
+	Desc:$
+A sturdy steel hatch that locks securely into place. 
+~
+	ToVnum:	70549
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70535
+	HiddenRating:	50
 BREAK
 #9969
 Name:	A bend in the tunnel

@@ -1,0 +1,228 @@
+#72000
+Keywords:	desk heavy oak
+Name:	A heavy oak desk
+RoomDesc:$
+A heavy oaken desk is here, tucked in the corner by the entrance to the warehouse floor.~
+LookDesc:$
+This is a heavy-looking, stoutly-made oak desk. On it are all the tools a
+receptionist would need: a terminal, phone, and guestbook. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	13
+	Val2:	-1
+	Val3:	2
+BREAK
+#72001
+Keywords:	pallet stuff
+Name:	A pallet
+RoomDesc:$
+A pallet loaded with stuff is here.~
+LookDesc:$
+It's a wooden pallet with a bunch of stuff on it, shrink-wrapped and ready for
+delivery. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72002
+Keywords:	crate wooden
+Name:	A large wooden crate
+RoomDesc:$
+A large wooden crate is here, nailed shut.~
+LookDesc:$
+It's a large, heavy, wooden crate. You can't move it, so it's probably full of
+goods waiting to be shipped. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72003
+Keywords:	tables chairs
+Name:	A bunch of tables and chairs
+RoomDesc:$
+Some plastic tables and chairs are here.~
+LookDesc:$
+Pretty standard break room fare, these tables and chairs are mostly clean,
+having been wiped down somewhat recently. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72004
+Keywords:	fridge refrigerator minifridge
+Name:	A minifridge
+RoomDesc:$
+A small refrigerator is here.~
+LookDesc:$
+This is a minifridge. It's like a regular refrigerator, but small. It even has
+a tiny freezer area at the top that never gets cold enough to actually freeze
+anything. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	10
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	30.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	5
+	Val2:	-1
+BREAK
+#72005
+Keywords:	messy desk dirty
+Name:	A messy desk
+RoomDesc:$
+A messy desk is here.~
+LookDesc:$
+This desk is cluttered and has some old takeout containers and more than a few
+dirty dishes on it. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72006
+Keywords:	bed cot
+Name:	A naval cot
+RoomDesc:$
+A naval-style cot is here, fixed to the wall.~
+LookDesc:$
+This cot doesn't look comfortable, but it's maybe slightly better than the
+couch at home after a long day's work and a long night's out drinking with the
+boys. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72007
+Keywords:	kitchen kitchenette area
+Name:	A kitchenette
+RoomDesc:$
+A small kitchen area is on one side of the room.~
+LookDesc:$
+Just your basic kitchenette: a small countertop, a sink built in, and a small
+stove built-in under the counter. Above the countertop a microwave and some
+cabinets. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72008
+Keywords:	small key brass
+Name:	A small brass key
+RoomDesc:$
+A small, shiny key glints here.~
+LookDesc:$
+Just your basic key for opening your basic door. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

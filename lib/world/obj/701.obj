@@ -1,0 +1,3044 @@
+#70100
+Keywords:	metal ammo ammunition box standard hold-out pistol
+Name:	a box of standard hold-out pistol ammunition
+RoomDesc:$
+A metal box of standard hold-out pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	14
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+BREAK
+#70101
+Keywords:	metal ammo ammunition box APDS hold-out pistol
+Name:	a box of APDS hold-out pistol ammunition
+RoomDesc:$
+A metal box of APDS hold-out pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	1
+BREAK
+#70102
+Keywords:	metal ammo ammunition box explosive hold-out pistol
+Name:	a box of explosive hold-out pistol ammunition
+RoomDesc:$
+A metal box of explosive hold-out pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	2
+BREAK
+#70103
+Keywords:	metal ammo ammunition box EX hold-out pistol
+Name:	a box of EX hold-out pistol ammunition
+RoomDesc:$
+A metal box of EX hold-out pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	3
+BREAK
+#70104
+Keywords:	metal ammo ammunition box flechette hold-out pistol
+Name:	a box of flechette hold-out pistol ammunition
+RoomDesc:$
+A metal box of flechette hold-out pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	4
+BREAK
+#70105
+Keywords:	metal ammo ammunition box gel hold-out pistol
+Name:	a box of gel hold-out pistol ammunition
+RoomDesc:$
+A metal box of gel hold-out pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	5
+BREAK
+#70106
+Keywords:	metal ammo ammunition box standard light pistol
+Name:	a box of standard light pistol ammunition
+RoomDesc:$
+A metal box of standard light pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	6
+BREAK
+#70107
+Keywords:	metal ammo ammunition box APDS light pistol
+Name:	a box of APDS light pistol ammunition
+RoomDesc:$
+A metal box of APDS light pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	6
+	Val2:	1
+BREAK
+#70108
+Keywords:	metal ammo ammunition box explosive light pistol
+Name:	a box of explosive light pistol ammunition
+RoomDesc:$
+A metal box of explosive light pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	6
+	Val2:	2
+BREAK
+#70109
+Keywords:	metal ammo ammunition box EX light pistol
+Name:	a box of EX light pistol ammunition
+RoomDesc:$
+A metal box of EX light pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	6
+	Val2:	3
+BREAK
+#70110
+Keywords:	metal ammo ammunition box flechette light pistol
+Name:	a box of flechette light pistol ammunition
+RoomDesc:$
+A metal box of flechette light pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	6
+	Val2:	4
+BREAK
+#70111
+Keywords:	metal ammo ammunition box gel light pistol
+Name:	a box of gel light pistol ammunition
+RoomDesc:$
+A metal box of gel light pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	6
+	Val2:	5
+BREAK
+#70112
+Keywords:	metal ammo ammunition box standard machine pistol
+Name:	a box of standard machine pistol ammunition
+RoomDesc:$
+A metal box of standard machine pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	7
+BREAK
+#70113
+Keywords:	metal ammo ammunition box APDS machine pistol
+Name:	a box of APDS machine pistol ammunition
+RoomDesc:$
+A metal box of APDS machine pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	7
+	Val2:	1
+BREAK
+#70114
+Keywords:	metal ammo ammunition box explosive machine pistol
+Name:	a box of explosive machine pistol ammunition
+RoomDesc:$
+A metal box of explosive machine pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	7
+	Val2:	2
+BREAK
+#70115
+Keywords:	metal ammo ammunition box EX machine pistol
+Name:	a box of EX machine pistol ammunition
+RoomDesc:$
+A metal box of EX machine pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	7
+	Val2:	3
+BREAK
+#70116
+Keywords:	metal ammo ammunition box flechette machine pistol
+Name:	a box of flechette machine pistol ammunition
+RoomDesc:$
+A metal box of flechette machine pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	7
+	Val2:	4
+BREAK
+#70117
+Keywords:	metal ammo ammunition box gel machine pistol
+Name:	a box of gel machine pistol ammunition
+RoomDesc:$
+A metal box of gel machine pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	7
+	Val2:	5
+BREAK
+#70118
+Keywords:	metal ammo ammunition box standard heavy pistol
+Name:	a box of standard heavy pistol ammunition
+RoomDesc:$
+A metal box of standard heavy pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	8
+BREAK
+#70119
+Keywords:	metal ammo ammunition box APDS heavy pistol
+Name:	a box of APDS heavy pistol ammunition
+RoomDesc:$
+A metal box of APDS heavy pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	8
+	Val2:	1
+BREAK
+#70120
+Keywords:	metal ammo ammunition box explosive heavy pistol
+Name:	a box of explosive heavy pistol ammunition
+RoomDesc:$
+A metal box of explosive heavy pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	8
+	Val2:	2
+BREAK
+#70121
+Keywords:	metal ammo ammunition box EX heavy pistol
+Name:	a box of EX heavy pistol ammunition
+RoomDesc:$
+A metal box of EX heavy pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	8
+	Val2:	3
+BREAK
+#70122
+Keywords:	metal ammo ammunition box flechette heavy pistol
+Name:	a box of flechette heavy pistol ammunition
+RoomDesc:$
+A metal box of flechette heavy pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	8
+	Val2:	4
+BREAK
+#70123
+Keywords:	metal ammo ammunition box gel heavy pistol
+Name:	a box of gel heavy pistol ammunition
+RoomDesc:$
+A metal box of gel heavy pistol ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	8
+	Val2:	5
+BREAK
+#70124
+Keywords:	metal ammo ammunition box standard taser
+Name:	a box of standard taser ammunition
+RoomDesc:$
+A metal box of standard taser ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	9
+BREAK
+#70125
+Keywords:	metal ammo ammunition box APDS taser
+Name:	a box of APDS taser ammunition
+RoomDesc:$
+A metal box of APDS taser ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	9
+	Val2:	1
+BREAK
+#70126
+Keywords:	metal ammo ammunition box explosive taser
+Name:	a box of explosive taser ammunition
+RoomDesc:$
+A metal box of explosive taser ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	9
+	Val2:	2
+BREAK
+#70127
+Keywords:	metal ammo ammunition box EX taser
+Name:	a box of EX taser ammunition
+RoomDesc:$
+A metal box of EX taser ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	9
+	Val2:	3
+BREAK
+#70128
+Keywords:	metal ammo ammunition box flechette taser
+Name:	a box of flechette taser ammunition
+RoomDesc:$
+A metal box of flechette taser ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	9
+	Val2:	4
+BREAK
+#70129
+Keywords:	metal ammo ammunition box gel taser
+Name:	a box of gel taser ammunition
+RoomDesc:$
+A metal box of gel taser ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	9
+	Val2:	5
+BREAK
+#70130
+Keywords:	metal ammo ammunition box standard submachine gun
+Name:	a box of standard submachine gun ammunition
+RoomDesc:$
+A metal box of standard submachine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	10
+BREAK
+#70131
+Keywords:	metal ammo ammunition box APDS submachine gun
+Name:	a box of APDS submachine gun ammunition
+RoomDesc:$
+A metal box of APDS submachine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	10
+	Val2:	1
+BREAK
+#70132
+Keywords:	metal ammo ammunition box explosive submachine gun
+Name:	a box of explosive submachine gun ammunition
+RoomDesc:$
+A metal box of explosive submachine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	10
+	Val2:	2
+BREAK
+#70133
+Keywords:	metal ammo ammunition box EX submachine gun
+Name:	a box of EX submachine gun ammunition
+RoomDesc:$
+A metal box of EX submachine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	10
+	Val2:	3
+BREAK
+#70134
+Keywords:	metal ammo ammunition box flechette submachine gun
+Name:	a box of flechette submachine gun ammunition
+RoomDesc:$
+A metal box of flechette submachine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	10
+	Val2:	4
+BREAK
+#70135
+Keywords:	metal ammo ammunition box gel submachine gun
+Name:	a box of gel submachine gun ammunition
+RoomDesc:$
+A metal box of gel submachine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	10
+	Val2:	5
+BREAK
+#70136
+Keywords:	metal ammo ammunition box standard sport rifle
+Name:	a box of standard sport rifle ammunition
+RoomDesc:$
+A metal box of standard sport rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	11
+BREAK
+#70137
+Keywords:	metal ammo ammunition box APDS sport rifle
+Name:	a box of APDS sport rifle ammunition
+RoomDesc:$
+A metal box of APDS sport rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	11
+	Val2:	1
+BREAK
+#70138
+Keywords:	metal ammo ammunition box explosive sport rifle
+Name:	a box of explosive sport rifle ammunition
+RoomDesc:$
+A metal box of explosive sport rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	11
+	Val2:	2
+BREAK
+#70139
+Keywords:	metal ammo ammunition box EX sport rifle
+Name:	a box of EX sport rifle ammunition
+RoomDesc:$
+A metal box of EX sport rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	11
+	Val2:	3
+BREAK
+#70140
+Keywords:	metal ammo ammunition box flechette sport rifle
+Name:	a box of flechette sport rifle ammunition
+RoomDesc:$
+A metal box of flechette sport rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	11
+	Val2:	4
+BREAK
+#70141
+Keywords:	metal ammo ammunition box gel sport rifle
+Name:	a box of gel sport rifle ammunition
+RoomDesc:$
+A metal box of gel sport rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	11
+	Val2:	5
+BREAK
+#70142
+Keywords:	metal ammo ammunition box standard sniper rifle
+Name:	a box of standard sniper rifle ammunition
+RoomDesc:$
+A metal box of standard sniper rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	12
+BREAK
+#70143
+Keywords:	metal ammo ammunition box APDS sniper rifle
+Name:	a box of APDS sniper rifle ammunition
+RoomDesc:$
+A metal box of APDS sniper rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	12
+	Val2:	1
+BREAK
+#70144
+Keywords:	metal ammo ammunition box explosive sniper rifle
+Name:	a box of explosive sniper rifle ammunition
+RoomDesc:$
+A metal box of explosive sniper rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	12
+	Val2:	2
+BREAK
+#70145
+Keywords:	metal ammo ammunition box EX sniper rifle
+Name:	a box of EX sniper rifle ammunition
+RoomDesc:$
+A metal box of EX sniper rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	12
+	Val2:	3
+BREAK
+#70146
+Keywords:	metal ammo ammunition box flechette sniper rifle
+Name:	a box of flechette sniper rifle ammunition
+RoomDesc:$
+A metal box of flechette sniper rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	12
+	Val2:	4
+BREAK
+#70147
+Keywords:	metal ammo ammunition box gel sniper rifle
+Name:	a box of gel sniper rifle ammunition
+RoomDesc:$
+A metal box of gel sniper rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	12
+	Val2:	5
+BREAK
+#70148
+Keywords:	metal ammo ammunition box standard assault rifle
+Name:	a box of standard assault rifle ammunition
+RoomDesc:$
+A metal box of standard assault rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	13
+BREAK
+#70149
+Keywords:	metal ammo ammunition box APDS assault rifle
+Name:	a box of APDS assault rifle ammunition
+RoomDesc:$
+A metal box of APDS assault rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	13
+	Val2:	1
+BREAK
+#70150
+Keywords:	metal ammo ammunition box explosive assault rifle
+Name:	a box of explosive assault rifle ammunition
+RoomDesc:$
+A metal box of explosive assault rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	13
+	Val2:	2
+BREAK
+#70151
+Keywords:	metal ammo ammunition box EX assault rifle
+Name:	a box of EX assault rifle ammunition
+RoomDesc:$
+A metal box of EX assault rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	13
+	Val2:	3
+BREAK
+#70152
+Keywords:	metal ammo ammunition box flechette assault rifle
+Name:	a box of flechette assault rifle ammunition
+RoomDesc:$
+A metal box of flechette assault rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	13
+	Val2:	4
+BREAK
+#70153
+Keywords:	metal ammo ammunition box gel assault rifle
+Name:	a box of gel assault rifle ammunition
+RoomDesc:$
+A metal box of gel assault rifle ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	13
+	Val2:	5
+BREAK
+#70154
+Keywords:	metal ammo ammunition box standard shotgun
+Name:	a box of standard shotgun ammunition
+RoomDesc:$
+A metal box of standard shotgun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	14
+BREAK
+#70155
+Keywords:	metal ammo ammunition box APDS shotgun
+Name:	a box of APDS shotgun ammunition
+RoomDesc:$
+A metal box of APDS shotgun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	14
+	Val2:	1
+BREAK
+#70156
+Keywords:	metal ammo ammunition box explosive shotgun
+Name:	a box of explosive shotgun ammunition
+RoomDesc:$
+A metal box of explosive shotgun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	14
+	Val2:	2
+BREAK
+#70157
+Keywords:	metal ammo ammunition box EX shotgun
+Name:	a box of EX shotgun ammunition
+RoomDesc:$
+A metal box of EX shotgun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	14
+	Val2:	3
+BREAK
+#70158
+Keywords:	metal ammo ammunition box flechette shotgun
+Name:	a box of flechette shotgun ammunition
+RoomDesc:$
+A metal box of flechette shotgun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	14
+	Val2:	4
+BREAK
+#70159
+Keywords:	metal ammo ammunition box gel shotgun
+Name:	a box of gel shotgun ammunition
+RoomDesc:$
+A metal box of gel shotgun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	14
+	Val2:	5
+BREAK
+#70160
+Keywords:	metal ammo ammunition box standard light machine gun
+Name:	a box of standard light machine gun ammunition
+RoomDesc:$
+A metal box of standard light machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	15
+BREAK
+#70161
+Keywords:	metal ammo ammunition box APDS light machine gun
+Name:	a box of APDS light machine gun ammunition
+RoomDesc:$
+A metal box of APDS light machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	15
+	Val2:	1
+BREAK
+#70162
+Keywords:	metal ammo ammunition box explosive light machine gun
+Name:	a box of explosive light machine gun ammunition
+RoomDesc:$
+A metal box of explosive light machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	15
+	Val2:	2
+BREAK
+#70163
+Keywords:	metal ammo ammunition box EX light machine gun
+Name:	a box of EX light machine gun ammunition
+RoomDesc:$
+A metal box of EX light machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	15
+	Val2:	3
+BREAK
+#70164
+Keywords:	metal ammo ammunition box flechette light machine gun
+Name:	a box of flechette light machine gun ammunition
+RoomDesc:$
+A metal box of flechette light machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	15
+	Val2:	4
+BREAK
+#70165
+Keywords:	metal ammo ammunition box gel light machine gun
+Name:	a box of gel light machine gun ammunition
+RoomDesc:$
+A metal box of gel light machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	15
+	Val2:	5
+BREAK
+#70166
+Keywords:	metal ammo ammunition box standard medium machine gun
+Name:	a box of standard medium machine gun ammunition
+RoomDesc:$
+A metal box of standard medium machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	16
+BREAK
+#70167
+Keywords:	metal ammo ammunition box APDS medium machine gun
+Name:	a box of APDS medium machine gun ammunition
+RoomDesc:$
+A metal box of APDS medium machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	16
+	Val2:	1
+BREAK
+#70168
+Keywords:	metal ammo ammunition box explosive medium machine gun
+Name:	a box of explosive medium machine gun ammunition
+RoomDesc:$
+A metal box of explosive medium machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	16
+	Val2:	2
+BREAK
+#70169
+Keywords:	metal ammo ammunition box EX medium machine gun
+Name:	a box of EX medium machine gun ammunition
+RoomDesc:$
+A metal box of EX medium machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	16
+	Val2:	3
+BREAK
+#70170
+Keywords:	metal ammo ammunition box flechette medium machine gun
+Name:	a box of flechette medium machine gun ammunition
+RoomDesc:$
+A metal box of flechette medium machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	16
+	Val2:	4
+BREAK
+#70171
+Keywords:	metal ammo ammunition box gel medium machine gun
+Name:	a box of gel medium machine gun ammunition
+RoomDesc:$
+A metal box of gel medium machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	16
+	Val2:	5
+BREAK
+#70172
+Keywords:	metal ammo ammunition box standard heavy machine gun
+Name:	a box of standard heavy machine gun ammunition
+RoomDesc:$
+A metal box of standard heavy machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	17
+BREAK
+#70173
+Keywords:	metal ammo ammunition box APDS heavy machine gun
+Name:	a box of APDS heavy machine gun ammunition
+RoomDesc:$
+A metal box of APDS heavy machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	17
+	Val2:	1
+BREAK
+#70174
+Keywords:	metal ammo ammunition box explosive heavy machine gun
+Name:	a box of explosive heavy machine gun ammunition
+RoomDesc:$
+A metal box of explosive heavy machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	17
+	Val2:	2
+BREAK
+#70175
+Keywords:	metal ammo ammunition box EX heavy machine gun
+Name:	a box of EX heavy machine gun ammunition
+RoomDesc:$
+A metal box of EX heavy machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	17
+	Val2:	3
+BREAK
+#70176
+Keywords:	metal ammo ammunition box flechette heavy machine gun
+Name:	a box of flechette heavy machine gun ammunition
+RoomDesc:$
+A metal box of flechette heavy machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	17
+	Val2:	4
+BREAK
+#70177
+Keywords:	metal ammo ammunition box gel heavy machine gun
+Name:	a box of gel heavy machine gun ammunition
+RoomDesc:$
+A metal box of gel heavy machine gun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	17
+	Val2:	5
+BREAK
+#70178
+Keywords:	metal ammo ammunition box standard assault cannon
+Name:	a box of standard assault cannon ammunition
+RoomDesc:$
+A metal box of standard assault cannon ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	18
+BREAK
+#70179
+Keywords:	metal ammo ammunition box APDS assault cannon
+Name:	a box of APDS assault cannon ammunition
+RoomDesc:$
+A metal box of APDS assault cannon ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	18
+	Val2:	1
+BREAK
+#70180
+Keywords:	metal ammo ammunition box explosive assault cannon
+Name:	a box of explosive assault cannon ammunition
+RoomDesc:$
+A metal box of explosive assault cannon ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	18
+	Val2:	2
+BREAK
+#70181
+Keywords:	metal ammo ammunition box EX assault cannon
+Name:	a box of EX assault cannon ammunition
+RoomDesc:$
+A metal box of EX assault cannon ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	18
+	Val2:	3
+BREAK
+#70182
+Keywords:	metal ammo ammunition box flechette assault cannon
+Name:	a box of flechette assault cannon ammunition
+RoomDesc:$
+A metal box of flechette assault cannon ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	18
+	Val2:	4
+BREAK
+#70183
+Keywords:	metal ammo ammunition box gel assault cannon
+Name:	a box of gel assault cannon ammunition
+RoomDesc:$
+A metal box of gel assault cannon ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	18
+	Val2:	5
+BREAK
+#70184
+Keywords:	metal ammo ammunition box standard minigun
+Name:	a box of standard minigun ammunition
+RoomDesc:$
+A metal box of standard minigun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	19
+BREAK
+#70185
+Keywords:	metal ammo ammunition box APDS minigun
+Name:	a box of APDS minigun ammunition
+RoomDesc:$
+A metal box of APDS minigun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	19
+	Val2:	1
+BREAK
+#70186
+Keywords:	metal ammo ammunition box explosive minigun
+Name:	a box of explosive minigun ammunition
+RoomDesc:$
+A metal box of explosive minigun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	19
+	Val2:	2
+BREAK
+#70187
+Keywords:	metal ammo ammunition box EX minigun
+Name:	a box of EX minigun ammunition
+RoomDesc:$
+A metal box of EX minigun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	19
+	Val2:	3
+BREAK
+#70188
+Keywords:	metal ammo ammunition box flechette minigun
+Name:	a box of flechette minigun ammunition
+RoomDesc:$
+A metal box of flechette minigun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	19
+	Val2:	4
+BREAK
+#70189
+Keywords:	metal ammo ammunition box gel minigun
+Name:	a box of gel minigun ammunition
+RoomDesc:$
+A metal box of gel minigun ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	19
+	Val2:	5
+BREAK
+#70190
+Keywords:	metal ammo ammunition box standard grenade launcher
+Name:	a box of standard grenade launcher ammunition
+RoomDesc:$
+A metal box of standard grenade launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	20
+BREAK
+#70191
+Keywords:	metal ammo ammunition box APDS grenade launcher
+Name:	a box of APDS grenade launcher ammunition
+RoomDesc:$
+A metal box of APDS grenade launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	20
+	Val2:	1
+BREAK
+#70192
+Keywords:	metal ammo ammunition box explosive grenade launcher
+Name:	a box of explosive grenade launcher ammunition
+RoomDesc:$
+A metal box of explosive grenade launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	20
+	Val2:	2
+BREAK
+#70193
+Keywords:	metal ammo ammunition box EX grenade launcher
+Name:	a box of EX grenade launcher ammunition
+RoomDesc:$
+A metal box of EX grenade launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	20
+	Val2:	3
+BREAK
+#70194
+Keywords:	metal ammo ammunition box flechette grenade launcher
+Name:	a box of flechette grenade launcher ammunition
+RoomDesc:$
+A metal box of flechette grenade launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	20
+	Val2:	4
+BREAK
+#70195
+Keywords:	metal ammo ammunition box gel grenade launcher
+Name:	a box of gel grenade launcher ammunition
+RoomDesc:$
+A metal box of gel grenade launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	20
+	Val2:	5
+BREAK
+#70196
+Keywords:	metal ammo ammunition box standard missile launcher
+Name:	a box of standard missile launcher ammunition
+RoomDesc:$
+A metal box of standard missile launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	21
+BREAK
+#70197
+Keywords:	metal ammo ammunition box APDS missile launcher
+Name:	a box of APDS missile launcher ammunition
+RoomDesc:$
+A metal box of APDS missile launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	21
+	Val2:	1
+BREAK
+#70198
+Keywords:	metal ammo ammunition box explosive missile launcher
+Name:	a box of explosive missile launcher ammunition
+RoomDesc:$
+A metal box of explosive missile launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	21
+	Val2:	2
+BREAK
+#70199
+Keywords:	metal ammo ammunition box EX missile launcher
+Name:	a box of EX missile launcher ammunition
+RoomDesc:$
+A metal box of EX missile launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	21
+	Val2:	3
+BREAK
+#70200
+Keywords:	metal ammo ammunition box flechette missile launcher
+Name:	a box of flechette missile launcher ammunition
+RoomDesc:$
+A metal box of flechette missile launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	21
+	Val2:	4
+BREAK
+#70201
+Keywords:	metal ammo ammunition box gel missile launcher
+Name:	a box of gel missile launcher ammunition
+RoomDesc:$
+A metal box of gel missile launcher ammunition has been deposited here.~
+LookDesc:$
+Constructed of chunky steel, this box has been designed to withstand the vast
+majority of the hazards the Sprawl can throw at it. Good thing, too-- if the
+rounds inside started to cook off, whoever was carrying it would have one hell
+of a bad day. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	24
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	21
+	Val2:	5
+BREAK
+END

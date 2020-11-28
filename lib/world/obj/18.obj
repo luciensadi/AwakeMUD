@@ -69,9 +69,9 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	plastic
 [POINTS]
-	Weight:	0.00
+	Weight:	1.00
 	Barrier:	3
-	Cost:	1800
+	Cost:	0
 	AvailTN:	2
 	AvailDay:	7.00
 	LegalNum:	0
@@ -777,12 +777,12 @@ Long and extremely sharp; its edge reflects the light, looking almost
 monofilament. 
 ~
 Type:	Weapon
-WearFlags:	10000000000001
+WearFlags:	110000000000001
 ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.50
+	Weight:	2.00
 	Barrier:	6
 	Cost:	20
 	AvailTN:	0
@@ -865,7 +865,7 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.25
+	Weight:	2.00
 	Barrier:	2
 	Cost:	30000
 	AvailTN:	2
@@ -2880,5 +2880,31 @@ Material:	leather
 [VALUES]
 	Val5:	2
 	Val6:	4
+BREAK
+#1974
+Keywords:	dermal sheathing
+Name:	Dermal Sheathing III - delta
+RoomDesc:$
+~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	3
+	Val2:	3
 BREAK
 END

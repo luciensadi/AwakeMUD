@@ -903,7 +903,7 @@ Material:	organic
 	Val0:	15
 	Val1:	2
 	Val2:	2
-	Val4:	74
+	Val4:	75
 [AFFECT 0]
 	Location:	Init Dice
 	Modifier:	1
@@ -937,7 +937,7 @@ Material:	organic
 	Val0:	15
 	Val1:	3
 	Val2:	2
-	Val4:	167
+	Val4:	168
 [AFFECT 0]
 	Location:	Reaction
 	Modifier:	2
@@ -1107,7 +1107,7 @@ Material:	organic
 	Val0:	46
 	Val1:	3
 	Val2:	2
-	Val4:	179
+	Val4:	180
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	3
@@ -1141,7 +1141,7 @@ Material:	organic
 	Val0:	46
 	Val1:	4
 	Val2:	2
-	Val4:	239
+	Val4:	240
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	4
@@ -1271,7 +1271,7 @@ Material:	electronics
 	Val0:	45
 	Val1:	1
 	Val2:	2
-	Val4:	29
+	Val4:	30
 BREAK
 #340
 Keywords:	smartlink system delta
@@ -1303,7 +1303,7 @@ Material:	electronics
 BREAK
 #341
 Keywords:	dermal plating alpha
-Name:	a dermal plating III -alpha
+Name:	dermal plating III -alpha
 RoomDesc:$
 Upgraded dermal plating.~
 LookDesc:$
@@ -1358,7 +1358,7 @@ Material:	adv. plastics
 	Val0:	16
 	Val1:	3
 	Val2:	2
-	Val4:	89
+	Val4:	90
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
@@ -1493,7 +1493,7 @@ Material:	metal
 	Val0:	9
 	Val2:	2
 	Val3:	2
-	Val4:	134
+	Val4:	135
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -1530,7 +1530,7 @@ Material:	electronics
 	Val0:	9
 	Val2:	2
 	Val3:	1
-	Val4:	68
+	Val4:	69
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
@@ -1692,7 +1692,7 @@ Material:	electronics
 	Val0:	21
 	Val1:	2
 	Val2:	2
-	Val4:	179
+	Val4:	180
 BREAK
 #353
 Keywords:	wired reflexes beta
@@ -1720,7 +1720,7 @@ Material:	paper
 	Val0:	21
 	Val1:	3
 	Val2:	2
-	Val4:	299
+	Val4:	300
 BREAK
 #354
 Keywords:	wired reflexes delta
@@ -1872,7 +1872,7 @@ Material:	adv. plastics
 	Val0:	40
 	Val1:	2
 	Val2:	2
-	Val4:	83
+	Val4:	84
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
@@ -1906,7 +1906,7 @@ Material:	adv. plastics
 	Val0:	40
 	Val1:	3
 	Val2:	2
-	Val4:	125
+	Val4:	126
 [AFFECT 0]
 	Location:	Body
 	Modifier:	4
@@ -2151,7 +2151,7 @@ Material:	electronics
 BREAK
 #368
 Keywords:	razors hand handrazors retractable
-Name:	a retractable hand razors
+Name:	a set of retractable hand razors
 RoomDesc:$
 Some hand razors lie on the floor.~
 LookDesc:$
@@ -2205,7 +2205,7 @@ Material:	metal
 BREAK
 #370
 Keywords:	forearm snap blades
-Name:	a forearm snap blades
+Name:	a set of forearm snap blades
 RoomDesc:$
 A strange-looking forearm guard lies here.~
 LookDesc:$
@@ -2777,11 +2777,11 @@ Material:	paper
 BREAK
 #393
 Keywords:	pair smartgoggles goggles
-Name:	a pair of Smart Goggles
+Name:	a pair of smart goggles
 RoomDesc:$
 Someone has left a pair of goggles with a jack in the side here.~
 LookDesc:$
-These goggles completely cover the eyes, but still allow for a full field of
+These goggles completly cover the eyes, but still allow for a full field of
 vision. Not much of a fashion statement, these goggles are useless without a
 weapon with a smartgun link installed. 
 ~
@@ -3334,7 +3334,7 @@ Material:	organic
 	Modifier:	1
 [AFFECT 1]
 	Location:	Strength
-	Modifier:	2
+	Modifier:	1
 [AFFECT 2]
 	Location:	Willpower
 	Modifier:	1
@@ -3372,7 +3372,7 @@ Material:	organic
 	Modifier:	2
 [AFFECT 1]
 	Location:	Strength
-	Modifier:	4
+	Modifier:	2
 [AFFECT 2]
 	Location:	Willpower
 	Modifier:	2
@@ -4001,7 +4001,7 @@ Material:	metal
 BREAK
 #431
 Keywords:	razors hand handrazors retractable
-Name:	a retractable hand razors -alpha
+Name:	a set of retractable hand razors -alpha
 RoomDesc:$
 Some hand razors lie on the floor.~
 LookDesc:$
@@ -4056,7 +4056,7 @@ Material:	metal
 	Val0:	12
 	Val2:	2
 	Val3:	1
-	Val4:	5
+	Val4:	6
 BREAK
 #433
 Keywords:	spurs spur hand retractable
@@ -4104,19 +4104,19 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.00
+	Weight:	1.00
 	Barrier:	1
 	Cost:	46000
 	AvailTN:	10
 	AvailDay:	4.50
-	LegalNum:	3
-	LegalCode:	13
+	LegalNum:	0
+	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	13
 	Val2:	2
 	Val3:	1
-	Val4:	17
+	Val4:	18
 BREAK
 #435
 Keywords:	dermal plating
@@ -4181,7 +4181,7 @@ Material:	adv. plastics
 	Val0:	16
 	Val1:	1
 	Val2:	2
-	Val4:	29
+	Val4:	30
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
@@ -4249,7 +4249,7 @@ Material:	adv. plastics
 	Val0:	16
 	Val1:	2
 	Val2:	2
-	Val4:	59
+	Val4:	60
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -4395,7 +4395,7 @@ Material:	electronics
 	Val0:	8
 	Val2:	2
 	Val3:	4136
-	Val4:	29
+	Val4:	30
 BREAK
 #444
 Keywords:	datajack
@@ -5000,7 +5000,7 @@ Material:	metal
 	Val0:	20
 	Val1:	2
 	Val2:	2
-	Val4:	179
+	Val4:	180
 BREAK
 #466
 Keywords:	vehicle control rig alpha iii 3 three
@@ -5056,7 +5056,7 @@ Material:	metal
 	Val0:	20
 	Val1:	3
 	Val2:	2
-	Val4:	299
+	Val4:	300
 BREAK
 #468
 Keywords:	reflex trigger
@@ -5124,7 +5124,7 @@ Material:	paper
 [POINTS]
 	Weight:	0.00
 	Barrier:	1
-	Cost:	10500
+	Cost:	105000
 	AvailTN:	5
 	AvailDay:	2.00
 	LegalNum:	0

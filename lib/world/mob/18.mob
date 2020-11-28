@@ -285,8 +285,8 @@ LookDesc:$
 Given the general reputation of Knight-Errant Security, you'd
 likely be better off leaving him alone.
 ~
-ArriveMsg:	Ð†—
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	100011000000001010
 AffFlags:	0
 Race:	Human

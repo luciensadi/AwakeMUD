@@ -1,20 +1,21 @@
 #0
-Keeper:	0
-ProfitBuy:	1.000000
-ProfitSell:	1.000000
-Random:	3
+Keeper:	-1
+ProfitBuy:	1.00
+ProfitSell:	0.00
+Random:	0
 Open:	0
-Close:	24
-Type:	Grey
-NoSuchItemKeeper:	Sorry, we don't have that.
-NoSuchItemPlayer:	You don't seem to have that.
-NoNuyen:	You don't have enough nuyen!
-DoesntBuy:	We don't buy that.
-Buy:	That'll be %d nuyen.
+Close:	0
+Type:	Legal
+NoSuchItemKeeper:	Invalid selection. Insert nuyen and try again.
+NoSuchItemPlayer:	beep
+NoNuyen:	Insufficient funds. Insert nuyen and try again.
+DoesntBuy:	beep, beep, beep...
+Buy:	Please insert %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	A vending machine
 Flags:	0
 Races:	0
-Buytypes:	0
+Buytypes:	1
 Etiquette:	46
 [SELLING]
 BREAK

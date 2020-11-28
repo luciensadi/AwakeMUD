@@ -10,8 +10,8 @@ Neil appears to have had quite a number of cosmetic modifications, most likely
 covering old scars or cyber replacements. Familiar with all of the development
 equipment, Neil is one of the Guild's best trainers. 
 ~
-ArriveMsg:	Ð°X°
-LeaveMsg:	Gears
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001010
 AffFlags:	0
 Race:	Human
@@ -77,8 +77,8 @@ LookDesc:$
 A fairly young invididual, Dante can teach you the skills necessary for basic
 survival. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001010
 AffFlags:	0
 Race:	Human
@@ -110,8 +110,8 @@ LookDesc:$
 He has a long gray mustache, and short gray hair. His mustache is curled at
 the ends, handlebar style. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1000000000000000000000000011010
 AffFlags:	0
 Race:	Human
@@ -142,8 +142,8 @@ Covered in grease, this dwarf teaches all manner of vehicle skills.
  Type "prac" to see what skills you can learn, and "prac <skillname>" (no
 <>'s) to practice a specific skill that is available. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1000000000000001010000000011010
 AffFlags:	0
 Race:	Human
@@ -173,8 +173,8 @@ LookDesc:$
 Jet shows incredible agility in practicing his martial arts, even for a
 physical adept. His nametag says, "Jet L." 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	0
 Race:	Human
@@ -213,8 +213,8 @@ LookDesc:$
 Dressed in the uniform of the Neophytic Guild, Mick is ready to teach you how
 to operate a firearm. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	1000
 Race:	Human
@@ -250,11 +250,11 @@ A master adept sits here, teaching his abilities.
 ~
 LookDesc:$
 A rather small man, capable of incredible feats, the Adept Master's movements
-seem more fluid than even the latest move-by-wire system.  His nametag reads,
+seem more fluid than even the latest move-by-wire system. His nametag reads,
 "Bruce L." 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	0
 Race:	Human
@@ -289,12 +289,12 @@ Zahn, a First Master, hovers above the ground.
 ~
 LookDesc:$
 Zahn is a certified First Master of the Hermetic Order, answerable only to
-Second or Third Masters (of which there are very few).  He is garbed in a
+Second or Third Masters (of which there are very few). He is garbed in a
 deep, midnight blue cloak, which matches the color of his eyes with a stark
 exactness. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001010
 AffFlags:	0
 Race:	Human
@@ -331,11 +331,11 @@ Serphon stands here, surrounded by a sense of power.
 ~
 LookDesc:$
 Serphon was once shaman of a far-away tribe, known far and wide across the
-Sioux Nation.  Due to unfortunate events, he fled to Seattle, where he has
+Sioux Nation. Due to unfortunate events, he fled to Seattle, where he has
 taken residency at the Guild to teach new shamans his art. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001010
 AffFlags:	0
 Race:	Human
@@ -373,7 +373,7 @@ Doc Holiday, the Bodyware specialist, is cleaning some surgical tools.
 LookDesc:$
 Doc Holiday used to work for DocWagon. After being indited in a UCAS spanning
 organ-smuggling operation, he vanished from the face of the earth. He now
-seems to be somewhat atoning by his sins by working for the Neophyte Guild. 
+seems to be somewhat atoning for his sins by working for the Neophyte Guild. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
@@ -939,7 +939,7 @@ A bored dwarven geek sits behind the counter.
 
 ~
 LookDesc:$
-He looks short, hairy, and geeky.  You get the feeling that he's amazingly
+He looks short, hairy, and geeky. You get the feeling that he's amazingly
 bored, quite possibly from the drool slowly making its way from the right
 corner of his mouth. 
 ~
@@ -1002,8 +1002,8 @@ A weird child with a datajack stares at you with disdain.
 
 ~
 LookDesc:$
-This kid looks smart, really smart.  He's looking at you like you're a dog, a
-stray dog that is soaking wet and wandering through his house.  You think that
+This kid looks smart, really smart. He's looking at you like you're a dog, a
+stray dog that is soaking wet and wandering through his house. You think that
 he's friendly enough though, and really, who could he be kidding, he's just a
 kid. 
 ~
@@ -1229,7 +1229,7 @@ Doc Tanaki stands here, reading through some cyberware installation manuals.
 ~
 LookDesc:$
 Now, Doc Tanaki, literally a guy pulled in off the street. He used to sell
-coffee to executives in Novatech, now, through luck of random lottery, he
+coffee to executives in Novatech. Now, through luck of random lottery, he
 installs cyberware into people's heads in the Neophyte Guild. 
 ~
 ArriveMsg:	arrives from
@@ -1260,7 +1260,7 @@ Doc Bell stands here, poking at a human eyeball in a jar.
 
 ~
 LookDesc:$
-Doc Bell, prize son of Ma and Pa Bell, is what you would call "A sandwiches
+Doc Bell, prize son of Ma and Pa Bell, is what you would call "A few sandwiches
 short of a picnic", but he is fully qualified none the less. His favourite
 pasttime is saving all the eye's he's replaced and poking at them with a pen,
 as he is doing now. 
@@ -1324,35 +1324,45 @@ AttackType:	Bite
 	brawling:	5
 BREAK
 #60540
-Keywords:	gunsmith gary ork
-Name:	Gary the Gunsmith
+Keywords:	jean samuel pauly
+Name:	Jean Samuel Pauly
 RoomDesc:$
-A grease covered Ork is here working on firearms. 
+A spry Swede sits at a workbench here, pressing primers into cartridges. 
 
 ~
 LookDesc:$
-Gary stands here working on some firearms. He wears the uniform of the
-Neophyte guild and is more than ready to pass his considerable knowledge on. 
+Wearing clothes that could have come straight from the 1800s, this clean-cut
+Swede is pressing cartridges together with such speed and dexterity, it's like
+he invented the technology. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
+MobFlags:	10000000001011
 AffFlags:	0
-Race:	Ork
+Race:	Human
 Gender:	Male
 DefaultPos:	Standing
 [ATTRIBUTES]
-	Bod:	1
-	Qui:	1
-	Str:	1
-	Cha:	1
-	Int:	1
-	Wil:	1
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
 	Mag:	0
 [POINTS]
 	Height:	190
 	Weight:	134
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
 [SKILLS]
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
+BREAK
 BREAK
 #60541
 Keywords:	doc malik
@@ -2022,8 +2032,8 @@ The machines are all emblazoned with adds for snack foods, some as old as the
 late 20th century. Looks like the Neophyte guild struck on hard times and took
 to scavanging dumps. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1010
 AffFlags:	0
 Race:	Undefined
@@ -2054,8 +2064,8 @@ The machines are all emblazoned with adds for snack foods, some as old as the
 late 20th century. Looks like the Neophyte guild struck on hard times and took
 to scavanging dumps. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1010
 AffFlags:	0
 Race:	Undefined
@@ -2086,8 +2096,8 @@ The machines are all emblazoned with adds for snack foods, some as old as the
 late 20th century. Looks like the Neophyte guild struck on hard times and took
 to scavanging dumps. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1010
 AffFlags:	0
 Race:	Undefined
@@ -2118,8 +2128,8 @@ The machines are all emblazoned with adds for snack foods, some as old as the
 late 20th century. Looks like the Neophyte guild struck on hard times and took
 to scavanging dumps. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1010
 AffFlags:	0
 Race:	Undefined
@@ -2551,5 +2561,45 @@ DefaultPos:	Standing
 	Height:	190
 	Weight:	80
 [SKILLS]
+BREAK
+#60645
+Keywords:	swarm spiraling mass incoherent ideas
+Name:	a spiraling mass of incoherent ideas
+RoomDesc:$
+A swarm of incoherent ideas swirls through here, lacking any ability to affect
+its world. 
+
+~
+LookDesc:$
+It's comprised of all the things that showed up in the source books and looked cool.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
+[SKILLS]
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
 BREAK
 END

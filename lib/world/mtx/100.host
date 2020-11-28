@@ -1,30 +1,104 @@
 #10000
-Name:	Akujin's Pirated Host
-Keywords:	Akujin's Pirated
+Name:	Outside a White House
+Keywords:	outside door front out
 Description:$
-You are standing in a dark room with the Matrix code surrounding the room.
-There is a large Linux penguin standing in the center of the room. To the east
-and west is filing cabinets reaching to the ceiling. 
+You stand outside a white house, to the east. The house is located in a grassy
+plain, and you see a city in the distance. A forest lies to the west. 
 ~
-ShutdownStart:	A beautiful woman appears and announces a host shutdown then vanishes.
-ShutdownStop:	A beautiful woman appears and announces the host shutdown has been aborted then vanishes.
-Parent:	1101
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	0
 Colour:	0
 Security:	1
 Difficulty:	0
-Access:	6
+Access:	1
 AccessScramble:	0
 AccessTrapdoor:	0
-Control:	6
+Control:	1
 ControlTrapdoor:	0
-Index:	6
+Index:	1
 IndexTrapdoor:	0
-Files:	6
+Files:	1
 FilesScramble:	0
 FilesTrapdoor:	0
-Slave:	6
+Slave:	1
 SlaveScramble:	0
 SlaveTrapdoor:	0
-Type:	Controller
+Type:	Security
+[EXITS]
+	[EXIT 0]
+		Exit:	10001
+		Number:	east
+BREAK
+#10001
+Name:	A Living Room
+Keywords:	door house living room white
+Description:$
+A cozy living room with a fireplace, couch, tv and all the other things modern
+living requires. The front door leads out to the west, the kitchen is to the
+east and some stairs lead up to the attic. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	0
+Colour:	0
+Security:	1
+Difficulty:	0
+Access:	1
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	1
+ControlTrapdoor:	0
+Index:	1
+IndexTrapdoor:	0
+Files:	1
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	1
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[EXITS]
+	[EXIT 1]
+		Exit:	10000
+		Number:	west
+BREAK
+#10013
+Name:	A Server Farm PLTG
+Keywords:	unfinished host
+Description:$
+Massive datastreams zip to and fro the hosts hosted by this massive data
+center. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	0
+Colour:	2
+Security:	10
+Difficulty:	1
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	10
+ControlTrapdoor:	0
+Index:	10
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 2]
+		Exit:	10000
+		Number:	1100-ZORK
 BREAK
 END

@@ -464,7 +464,7 @@ BREAK
 #1812
 Name:	Ammunition
 Desc:$
-   Underneath a glass display case lies a large array of gun clips. 
+   Underneath a glass display case lies a large array of gun magazines. 
 ~
 Flags:	1000
 SecType:	Inside
@@ -1120,9 +1120,9 @@ BREAK
 #1830
 Name:	The Crying Wall
 Desc:$
-   Soon after its completion, the Crying Wall opened itself to visitors of all
-races.  Humans are carefully watched by the guards, however - the memory of
-the Night of Rage still strong in their minds. 
+   Soon after its completion, the Crying Wall opened itself to visitors of
+all races.  Humans are carefully watched by the guards, however - the memory
+of the Night of Rage still strong in their minds. 
 ~
 Flags:	0
 SecType:	Field
@@ -2302,7 +2302,7 @@ Name:	Living Lore
 Desc:$
    This shop's decoration scheme is a mix of archetypal and post-modern
 magical design. One side of the store is reserved for formulae and
-information, and the other side is stocked with all sorts of thamaturgical
+information, and the other side is stocked with all sorts of thaumaturgical
 supplies. 
 ~
 Flags:	1000
@@ -2610,7 +2610,7 @@ Name:	Avenue
 Desc:$
    There are some people sitting down, taking a quick break from the battle of
 the wills out there on the avenues. People do tend to get a little over
-agressive, which only makes the general mood worse. Supposedly, the bio-grown
+aggressive, which only makes the general mood worse. Supposedly, the bio-grown
 flowers that form a chain over the entire mall are meant to help make the
 place more aesthetically pleasing, but they don't seem to have much of an
 effect, certainly on the more grumpy lot. 
@@ -3975,7 +3975,7 @@ BREAK
 #1959
 Name:	Crossroads
 Desc:$
-   The hallway stops here, only to collide with another travelling sideways.
+   The hallway stops here, only to collide with another traveling sideways.
 You are now greeted by four different directions, three new, and one old,
 behind you. 
 ~
