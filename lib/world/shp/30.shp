@@ -1,0 +1,154 @@
+#3006
+Keeper:	3000
+ProfitBuy:	1.20
+ProfitSell:	0.60
+Random:	1
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	I don't offer that for sale.
+NoSuchItemPlayer:	Are you sure you have that item?
+NoNuyen:	You don't have enough credits, go away.
+DoesntBuy:	Sorry, I don't buy that item.
+Buy:	That will cost you %d credits.
+Sell:	I will give you %d credits for that.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	3002
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	3001
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	3000
+		Type:	Always
+		Stock:	0
+BREAK
+#3022
+Keeper:	3003
+ProfitBuy:	1.20
+ProfitSell:	0.70
+Random:	2
+Open:	8
+Close:	19
+Type:	Grey
+NoSuchItemKeeper:	I don't sell that here.
+NoSuchItemPlayer:	Are you sure you have that?
+NoNuyen:	You don't seem to be able to afford that.
+DoesntBuy:	Sorry, I don't buy those.
+Buy:	That will be %d credits.
+Sell:	I will give you %d credits for that item.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	3008
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	3007
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	3006
+		Type:	Always
+		Stock:	0
+BREAK
+#3023
+Keeper:	3004
+ProfitBuy:	1.20
+ProfitSell:	0.10
+Random:	2
+Open:	8
+Close:	12
+Type:	Grey
+NoSuchItemKeeper:	I don't carry any of those.
+NoSuchItemPlayer:	Are you sure you have that?
+NoNuyen:	You don't have enough credits for that.
+DoesntBuy:	Sorry, that's one of the few things I don't buy.
+Buy:	That costs %d credits.
+Sell:	I will pay %d credits for that item.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	10000001000011111111110
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	3011
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	3009
+		Type:	Always
+		Stock:	0
+BREAK
+#3029
+Keeper:	3006
+ProfitBuy:	1.20
+ProfitSell:	0.10
+Random:	10
+Open:	8
+Close:	12
+Type:	Grey
+NoSuchItemKeeper:	I don't carry any of those.
+NoSuchItemPlayer:	Are you sure you have that?
+NoNuyen:	You don't have enough credits for that.
+DoesntBuy:	Sorry, that's one of the few things I don't buy.
+Buy:	That costs %d credits.
+Sell:	I will pay %d credits for that item.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	1000011111111110
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	3039
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	3034
+		Type:	Always
+		Stock:	0
+BREAK
+#3032
+Keeper:	3008
+ProfitBuy:	1.20
+ProfitSell:	0.70
+Random:	3
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	I don't carry any of those.
+NoSuchItemPlayer:	Are you sure you have that?
+NoNuyen:	You don't have enough credits for that.
+DoesntBuy:	Sorry, that's one of the few things I don't buy.
+Buy:	That costs %d credits.
+Sell:	I will pay %d credits for that item.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	1000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	3036
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	3035
+		Type:	Always
+		Stock:	0
+BREAK
+END

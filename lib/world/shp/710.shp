@@ -1,0 +1,213 @@
+#71000
+Keeper:	71001
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Sorry, we're closed.
+Name:	Ducky's Gas and Grill
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	1939
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	35513
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	1925
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	16215
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	5913
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	1932
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	60345
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	71021
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	71022
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	71023
+		Type:	Always
+		Stock:	0
+BREAK
+#71001
+Keeper:	71002
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Sorry, we're closed.
+Name:	Carlos Nunyas
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	601
+		Type:	Always
+		Stock:	0
+BREAK
+#71002
+Keeper:	71003
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Benny the Mouse
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	71000
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	71001
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	71002
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	71003
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	71004
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	71005
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	71006
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	71007
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	71008
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	71009
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	71010
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	71011
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	71012
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	71013
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	71014
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	71015
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	71016
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	71017
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	71018
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	71019
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	71020
+		Type:	Always
+		Stock:	0
+BREAK
+#71004
+Keeper:	-1
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	0
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+BREAK
+END

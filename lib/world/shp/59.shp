@@ -1,0 +1,180 @@
+#5900
+Keeper:	5900
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	5914
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	5913
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	5912
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	5911
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	5910
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	5909
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	5908
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	5907
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	5906
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	5905
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	5904
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	5903
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	5902
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	5901
+		Type:	Always
+		Stock:	0
+BREAK
+#5911
+Keeper:	5911
+ProfitBuy:	1.20
+ProfitSell:	1.00
+Random:	1
+Open:	9
+Close:	19
+Type:	Legal
+NoSuchItemKeeper:	We don't carry that line here, maybe one of our other outlets would.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	I think you need a bit more than that.
+DoesntBuy:	This isn't a pawn shop.
+Buy:	That's %d nuyen, thanks for shopping Vashon Island.
+Sell:	Sorry, we're closed.
+Name:	Vashon Island
+Flags:	1100
+Races:	1100000
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	981
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	980
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	979
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	978
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	977
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	976
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	975
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	974
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	973
+		Type:	Avail
+		Stock:	0
+	[SELL 9]
+		Vnum:	972
+		Type:	Avail
+		Stock:	0
+BREAK
+#5912
+Keeper:	5912
+ProfitBuy:	1.20
+ProfitSell:	1.00
+Random:	1
+Open:	9
+Close:	19
+Type:	Legal
+NoSuchItemKeeper:	We don't seem to carry that design in here.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	We don't offer credit here.
+DoesntBuy:	This is not a pawn shop.
+Buy:	That's %d nuyen. Please come again.
+Sell:	That's %d nuyen. Please come again.
+Name:	Zoe Boutique
+Flags:	1100
+Races:	1100000
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	8493
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	8497
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	8496
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	8495
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	8494
+		Type:	Avail
+		Stock:	0
+BREAK
+END

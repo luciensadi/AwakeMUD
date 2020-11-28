@@ -1,0 +1,57 @@
+#2101
+Keeper:	2114
+ProfitBuy:	0.90
+ProfitSell:	0.00
+Random:	0
+Open:	0
+Close:	28
+Type:	Grey
+NoSuchItemKeeper:	Sorry, I don't carry that.
+NoSuchItemPlayer:	What, do you think I'm drunk?
+NoNuyen:	Sorry chummer, no free rides!
+DoesntBuy:	This is a bar chummer, try somewhere else.
+Buy:	%d nuyen. Thanks!
+Sell:	Here's a credstick for %d. Thanks!
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	17156
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	3037
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39911
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	1939
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	42175
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	17128
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	2105
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	2101
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	2100
+		Type:	Always
+		Stock:	0
+BREAK
+END

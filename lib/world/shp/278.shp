@@ -1,0 +1,33 @@
+#27800
+Keeper:	28600
+ProfitBuy:	1.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	0
+Close:	0
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	16204
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	27807
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	27806
+		Type:	Always
+		Stock:	0
+BREAK
+END

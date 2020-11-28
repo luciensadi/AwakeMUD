@@ -1,0 +1,57 @@
+#17600
+Keeper:	17600
+ProfitBuy:	3.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	1000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	17600
+		Type:	Always
+		Stock:	0
+BREAK
+#17601
+Keeper:	17601
+ProfitBuy:	2.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	100
+Races:	0
+Buytypes:	10001010010000000000
+Etiquette:	46
+[SELLING]
+	[SELL 1]
+		Vnum:	17606
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	17605
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	17604
+		Type:	Always
+		Stock:	0
+BREAK
+END

@@ -1,0 +1,160 @@
+#16400
+Keeper:	16400
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Uhh.. no? Ain't got that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Go scrounge together some scratch, chump.
+DoesntBuy:	Not interested in that lame shit.
+Buy:	That'll be %d nuyen, be sure to read the signs.
+Sell:	Here's your %d nuyen.
+Name:	Galganor's Talismans
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	16401
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	16402
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	16403
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	16404
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	16405
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	16406
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	16407
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	16408
+		Type:	Avail
+		Stock:	0
+BREAK
+#16401
+Keeper:	16401
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	We don't carry no shit like that omae.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You're broke, bitch!
+DoesntBuy:	I don't buy that shit, son.
+Buy:	That'll be %d nuyen, be sure to read the signs.
+Sell:	Here's your %d nuyen.
+Name:	Rahk's Talismans
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	16409
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	16410
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	16411
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	16412
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	16413
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	16414
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	16415
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	16416
+		Type:	Avail
+		Stock:	0
+BREAK
+#16402
+Keeper:	16402
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Don't got it, chief.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Man.. you're broke as fuck.
+DoesntBuy:	Don't want that shit..
+Buy:	That'll be %d nuyen, be sure to read the signs.
+Sell:	Here's your %d nuyen.
+Name:	Gorov's Talismans
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	16417
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	16418
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	16419
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	16420
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	16421
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	16422
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	16423
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	16424
+		Type:	Avail
+		Stock:	0
+BREAK
+END

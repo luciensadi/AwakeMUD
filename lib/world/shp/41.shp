@@ -1,0 +1,59 @@
+#4107
+Keeper:	4107
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+BREAK
+#4109
+Keeper:	4109
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	2
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	4123
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	4122
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	4120
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	4121
+		Type:	Avail
+		Stock:	0
+BREAK
+END

@@ -1,0 +1,165 @@
+#24800
+Keeper:	24803
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Brightwillow's Talismans and Curiosities
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	24804
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	24805
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	24806
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	18906
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	24808
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	24809
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	24843
+		Type:	Avail
+		Stock:	0
+BREAK
+#24801
+Keeper:	24802
+ProfitBuy:	1.50
+ProfitSell:	0.40
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	I don't have that, sorry.  Perhaps this weapon focus would interest you?
+NoSuchItemPlayer:	You don't have one of those, but if you have any spell formulae I would be more than interested...
+NoNuyen:	I think that is just a wee bit out of your price range.
+DoesntBuy:	We don't buy that, but if you have a focus of some kind I might be interested...
+Buy:	%d nuyen, please.
+Sell:	Ok, here's %d nuyen.  I'll be sure to put this to good use.
+Name:	Drafin's Witchery
+Flags:	0
+Races:	0
+Buytypes:	10100000000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	24810
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	24811
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	24812
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	24813
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	24814
+		Type:	Avail
+		Stock:	0
+BREAK
+#24802
+Keeper:	24800
+ProfitBuy:	1.60
+ProfitSell:	0.50
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	I don't have any.  Sorry.
+NoSuchItemPlayer:	You don't have that.
+NoNuyen:	You lack funding.
+DoesntBuy:	I will not buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	The Eyerie
+Flags:	0
+Races:	0
+Buytypes:	10100000000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	24816
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	24817
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	24818
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	24819
+		Type:	Avail
+		Stock:	0
+BREAK
+#24803
+Keeper:	24811
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Laubenstein's Magical Clearing House
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	24822
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	24823
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	24825
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	24844
+		Type:	Avail
+		Stock:	0
+BREAK
+END

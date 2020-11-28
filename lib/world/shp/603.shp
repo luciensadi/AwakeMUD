@@ -1,0 +1,379 @@
+#60307
+Keeper:	60312
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60327
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	60326
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60325
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	60324
+		Type:	Always
+		Stock:	0
+BREAK
+#60322
+Keeper:	60313
+ProfitBuy:	1.00
+ProfitSell:	0.50
+Random:	0
+Open:	0
+Close:	24
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Novatech Security Depot
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	856
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	850
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	745
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	60328
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	60329
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	60331
+		Type:	Avail
+		Stock:	0
+BREAK
+#60323
+Keeper:	60314
+ProfitBuy:	1.00
+ProfitSell:	0.50
+Random:	0
+Open:	0
+Close:	24
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60334
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	711
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60332
+		Type:	Always
+		Stock:	0
+BREAK
+#60324
+Keeper:	60315
+ProfitBuy:	1.00
+ProfitSell:	0.50
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60337
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	60336
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60335
+		Type:	Always
+		Stock:	0
+BREAK
+#60325
+Keeper:	60316
+ProfitBuy:	1.40
+ProfitSell:	0.20
+Random:	0
+Open:	0
+Close:	24
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Superhuman Inc. Cyberware Studio
+Flags:	110
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	1106
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	356
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	31527
+		Type:	Avail
+		Stock:	0
+BREAK
+#60326
+Keeper:	60317
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Superhuman Inc. Bioware Studio
+Flags:	110
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60342
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	60343
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	60344
+		Type:	Avail
+		Stock:	0
+BREAK
+#60327
+Keeper:	60330
+ProfitBuy:	1.40
+ProfitSell:	1.00
+Random:	0
+Open:	9
+Close:	19
+Type:	Grey
+NoSuchItemKeeper:	I can check with the manager if we have that out back if you like.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	That's more than you seem to have there.
+DoesntBuy:	This is an outlet, not a pawn shop.
+Buy:	That's %d nuyen. Here's your change, thank you for shopping at Novatech.
+Sell:	Here's your %d nuyen.
+Name:	Novatech Cyberdeck Utilities
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	1157
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	1158
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	1159
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	1160
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	1161
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	1162
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	1942
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	1943
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	1166
+		Type:	Avail
+		Stock:	0
+BREAK
+#60328
+Keeper:	60318
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	Orda numba TWELVE! %d nuyen, pops.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60348
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	60347
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60346
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	60345
+		Type:	Always
+		Stock:	0
+BREAK
+#60329
+Keeper:	60329
+ProfitBuy:	1.10
+ProfitSell:	1.00
+Random:	0
+Open:	9
+Close:	17
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	I'm sorry, we're a Novatech outlet, not a pawn shop.
+Buy:	That's %d nuyen, have a nice day.
+Sell:	Here's your %d nuyen.
+Name:	Novatech Cyberdeck Retailer
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60310
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	1916
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	4994
+		Type:	Avail
+		Stock:	0
+BREAK
+#60331
+Keeper:	60319
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60352
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	60350
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60351
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	60349
+		Type:	Always
+		Stock:	0
+BREAK
+END
