@@ -1,26 +1,382 @@
-#100000
-Keywords:	single-slot single slot chipjack 1 one
-Name:	a chipjack (1 slot)
+#10000
+Keywords:	formula anti bullet barrier
+Name:	anti bullet barrier
 RoomDesc:$
-An uninstalled chipjack is lying here.~
+A spell formula~
 LookDesc:$
-This specialized type of datajack allows the user to mentally access Datasofts and Knowsofts. If the user also has Skillwires, they may also access Activesofts.~
-~
-Type:	Cyberware
+It looks pretty much like an unfinished object~
+Type:	Spell Formula
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	electronics
+Material:	paper
 [POINTS]
-	Weight:	0.50
+	Weight:	1.00
 	Barrier:	1
-	Cost:	1000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	2000
+	AvailTN:	4
+	AvailDay:	4.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
+	Val0:	4
+	Val1:	52
+BREAK
+#10002
+Keywords:	pak flash compact package
+Name:	a Flash Pak
+RoomDesc:$
+A small compact package is lying here.~
+LookDesc:$
+The Flash Pak is a small compacted box, incredibly useful in the right hands.
+Watch where you wave it though.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10004
+Keywords:	rifle viper black gun
+Name:	a Viper Rifle
+RoomDesc:$
+A black rifle is lying here.~
+LookDesc:$
+The Viper Rifle was originally a prototype of an unknown artillery company,
+dropped after field tests deemed it too expensive to market. Somehow, someone
+got their hands on one, and here it is. Looks pretty heavy duty.
+~
+Type:	Weapon
+WearFlags:	1000010010000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	9000
+	AvailTN:	10
+	AvailDay:	6.00
+	LegalNum:	1
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val6:	30
+	Val10:	28
+BREAK
+#10006
+Keywords:	GPHMG gun machine heavy duty
+Name:	a GPHMG
+RoomDesc:$
+A heavy duty machine gun is lying on the ground.~
+LookDesc:$
+The General Purpose Heavy Machine Gun is pretty self explanatory. Large,
+mean, and very popular for the more brutal runs.
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	8
+	Cost:	5900
+	AvailTN:	18
+	AvailDay:	18.00
+	LegalNum:	2
+	LegalCode:	8
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	17
+	Val4:	19
+	Val5:	50
+	Val6:	50
+	Val10:	16
+BREAK
+#10008
+Keywords:	harness climbing
+Name:	a climbing harness
+RoomDesc:$
+A climbing harness is lying here.~
+LookDesc:$
+The harness straps around your body snugly, ensuring that little bit of extra
+help while you're trying to climb out of that cavern.
+~
+Type:	Climbing gear
+WearFlags:	110000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	3
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#10009
+Keywords:	pads combat pair
+Name:	a pair of combat pads
+RoomDesc:$
+A pair of combat pads is lying on the ground.~
+LookDesc:$
+Combat Pads are usually quite useless, unless you know how to use em. Most
+people don't, thus they're useless.
+~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#10010
+Keywords:	blade dikote gleaming
+Name:	a dikote blade
+RoomDesc:$
+A gleaming blade lies on the floor.~
+LookDesc:$
+The blade looks like a normal blade, that is, until the guy at the desk shows
+you a little test. This thing cut that army boot clean in two, without any
+sagging. That would be because of the Dikote edge.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	4650
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#10012
+Keywords:	jacket leather worn
+Name:	a worn leather jacket
+RoomDesc:$
+A black worn leather jacket is lying here.~
+LookDesc:$
+A ragged jacket made from real leather with extra padding underneath to add to
+protection. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	3
+	Val5:	3
+	Val6:	3
+BREAK
+#10016
+Keywords:	sign
+Name:	a large sign
+RoomDesc:$
+READ THIS SIGN !~
+LookDesc:$
+^cMOWICH BRIDGE CONSTRUCTION COMPANY^N
+-----------------------------------------------------------
+^w*^gABSAILING IS STRICTLY FORBIDDEN ON THESE PREMISES^w*^n
+----------------------------------------------------------- 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	67
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10017
+Keywords:	ruthenium dermal sheathing I
+Name:	ruthenium coated dermal sheathing I
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	174000
+	AvailTN:	8
+	AvailDay:	18.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	1
 	Val3:	1
+	Val4:	90
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 1]
+	Location:	Body
+	Modifier:	2
+BREAK
+#10018
+Keywords:	ceramic bone lacing alpha
+Name:	ceramic bone lacing -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	80000
+	AvailTN:	6
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val2:	1
+	Val3:	4
+	Val4:	120
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#10019
+Keywords:	encephalon 2 beta
+Name:	Encephalon II -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	460000
+	AvailTN:	11
+	AvailDay:	18.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	2
+	Val2:	2
+	Val4:	89
+[AFFECT 0]
+	Location:	Task Pool (Int)
+	Modifier:	2
+[AFFECT 1]
+	Location:	Hacking Pool
+	Modifier:	2
+BREAK
+#10020
+Keywords:	induction datajack beta
+Name:	induction datajack -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12000
+	AvailTN:	10
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	2
+	Val3:	1
+	Val4:	17
 BREAK
 END
