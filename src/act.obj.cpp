@@ -50,10 +50,7 @@ bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 }
 
 void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont)
-{
-  float old_carry_w = IS_CARRYING_W(ch);
-  int old_carry_n = IS_CARRYING_N(ch);
-  
+{  
   if (obj == ch->char_specials.programming)
   {
     send_to_char(ch, "You can't put something you are working on inside something.\r\n");
