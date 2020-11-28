@@ -1,0 +1,152 @@
+#65200
+Keeper:	65200
+ProfitBuy:	1.00
+ProfitSell:	0.65
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, out of stock.
+NoSuchItemPlayer:	Stop trying to play me.
+NoNuyen:	Sorry, your tab's already full.
+DoesntBuy:	Uh, how about no you crazy mutha?
+Buy:	%d creds, make it snappy.
+Sell:	Here chum, %d nuyen.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	65205
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	65204
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	65203
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	65202
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	65201
+		Type:	Always
+		Stock:	0
+BREAK
+#65201
+Keeper:	65202
+ProfitBuy:	1.00
+ProfitSell:	0.65
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Niet!
+NoSuchItemPlayer:	Niet!
+NoNuyen:	Need credit!
+DoesntBuy:	Don't need it.
+Buy:	%d credit!
+Sell:	Here, %d credit.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	65237
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	65227
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	65220
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	65215
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	65206
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	65200
+		Type:	Always
+		Stock:	0
+BREAK
+#65202
+Keeper:	65203
+ProfitBuy:	1.10
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry boss, don't got that.
+NoSuchItemPlayer:	Who's leg you trying to pull?
+NoNuyen:	Come on, you know I don't give you tabs.
+DoesntBuy:	Sorry, s'too hot to touch.
+Buy:	%d creds, cough it up.
+Sell:	Here's %d cred chummer.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	65216
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	65217
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	65218
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	65234
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	65235
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	65236
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	14634
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	14633
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	14632
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	14631
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	14630
+		Type:	Always
+		Stock:	0
+BREAK
+END

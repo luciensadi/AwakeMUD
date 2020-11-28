@@ -1,0 +1,30 @@
+#12501
+Keeper:	12501
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	8
+Close:	20
+Type:	Grey
+NoSuchItemKeeper:	We don't sell that kind of crap here.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds...good doin' business with ya!
+Sell:	Here you go...%d creds for that.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	100000000000010100000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	12606
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	12605
+		Type:	Always
+		Stock:	0
+BREAK
+END

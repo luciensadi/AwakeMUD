@@ -1,0 +1,146 @@
+#33200
+Keeper:	33200
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	10
+Races:	0
+Buytypes:	1010000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	580
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	592
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	582
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	583
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	584
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	585
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	586
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	587
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	588
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	589
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	590
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	591
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	575
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	572
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	573
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	574
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	576
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	577
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	578
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	579
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	33265
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	33266
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	32234
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	33264
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	33262
+		Type:	Always
+		Stock:	0
+	[SELL 25]
+		Vnum:	33200
+		Type:	Always
+		Stock:	0
+	[SELL 26]
+		Vnum:	33248
+		Type:	Always
+		Stock:	0
+	[SELL 27]
+		Vnum:	440
+		Type:	Always
+		Stock:	0
+	[SELL 28]
+		Vnum:	439
+		Type:	Always
+		Stock:	0
+	[SELL 29]
+		Vnum:	442
+		Type:	Always
+		Stock:	0
+	[SELL 30]
+		Vnum:	471
+		Type:	Always
+		Stock:	0
+BREAK
+END

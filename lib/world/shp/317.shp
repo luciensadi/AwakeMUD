@@ -1,0 +1,336 @@
+#31700
+Keeper:	31700
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Sorry, we're closed.
+Name:	unnamed shop
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	31742
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	31741
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	31740
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	31739
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	31738
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	31737
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	31736
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	31733
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	31732
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	31731
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	31730
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	31717
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	609
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	603
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	32918
+		Type:	Avail
+		Stock:	0
+	[SELL 15]
+		Vnum:	60320
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	31709
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	31703
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	14718
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	5905
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	5904
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	31105
+		Type:	Always
+		Stock:	0
+BREAK
+#31701
+Keeper:	31702
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry chummer, I don't serve that here.  Too square for us cats.
+NoSuchItemPlayer:	Uhh, you wanna sell what?  Sorry, maybe you left it elsewhere.
+NoNuyen:	Sorry daddy-o, this aint a free establishment, even members buy their drinks.
+DoesntBuy:	Heh, this ain't a flea market, chummer.  We sell, not buy, sorry.
+Buy:	That'll be %d sticks, cat.  Enjoy!
+Sell:	Sorry, we're closed.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	2105
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	28717
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	16227
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	31715
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	60351
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	14661
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	30111
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	4954
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	17125
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	42138
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	17128
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	30121
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	17156
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	35522
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	14610
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	14662
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	5913
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	16231
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	30118
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	42177
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	16229
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	16230
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	42176
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	42178
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	65202
+		Type:	Always
+		Stock:	0
+	[SELL 25]
+		Vnum:	65137
+		Type:	Always
+		Stock:	0
+	[SELL 26]
+		Vnum:	65141
+		Type:	Always
+		Stock:	0
+	[SELL 27]
+		Vnum:	65139
+		Type:	Always
+		Stock:	0
+	[SELL 28]
+		Vnum:	65144
+		Type:	Always
+		Stock:	0
+	[SELL 29]
+		Vnum:	65143
+		Type:	Always
+		Stock:	0
+	[SELL 30]
+		Vnum:	65145
+		Type:	Always
+		Stock:	0
+	[SELL 31]
+		Vnum:	65142
+		Type:	Always
+		Stock:	0
+	[SELL 32]
+		Vnum:	65138
+		Type:	Always
+		Stock:	0
+	[SELL 33]
+		Vnum:	65140
+		Type:	Always
+		Stock:	0
+	[SELL 34]
+		Vnum:	39910
+		Type:	Always
+		Stock:	0
+	[SELL 35]
+		Vnum:	28713
+		Type:	Always
+		Stock:	0
+	[SELL 36]
+		Vnum:	16225
+		Type:	Always
+		Stock:	0
+	[SELL 37]
+		Vnum:	39911
+		Type:	Always
+		Stock:	0
+BREAK
+#31702
+Keeper:	31706
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	31743
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	31734
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	31735
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	31722
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	31721
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	31720
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	31719
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	31718
+		Type:	Always
+		Stock:	0
+BREAK
+END

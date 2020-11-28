@@ -1,0 +1,230 @@
+#62200
+Keeper:	62204
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	5
+Open:	5
+Close:	20
+Type:	Grey
+NoSuchItemKeeper:	Don't carry that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Bit low on funds, coozan.
+DoesntBuy:	We don't buy that.
+Buy:	Plus sales tax.. comes to %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	62203
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	62204
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	62205
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	62206
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	62207
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	62208
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	62209
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	62210
+		Type:	Always
+		Stock:	0
+BREAK
+#62201
+Keeper:	62205
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	10
+Open:	6
+Close:	20
+Type:	Grey
+NoSuchItemKeeper:	We carry no such thing...
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You'll need to cough up the yen first.
+DoesntBuy:	We don't buy that.
+Buy:	That comes to %d nuyen. Enjoy your outfit.
+Sell:	Here's your %d nuyen.
+Name:	Fuselier's Fashion Faux Pas
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	62211
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	62212
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	62213
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	62214
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	62215
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	62216
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	62217
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	62218
+		Type:	Avail
+		Stock:	0
+BREAK
+#62202
+Keeper:	62206
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	If you don't like what I have, go somewhere else.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	I'm old, not stupid. Cough up the yen.
+DoesntBuy:	We don't buy that.
+Buy:	That's %d nuyen, youngster.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	62219
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	62220
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	62221
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	62222
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	62223
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	62224
+		Type:	Always
+		Stock:	0
+BREAK
+#62203
+Keeper:	62207
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	6
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	We don't have that..
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	This isn't a -free- clinic, coozan.
+DoesntBuy:	We don't buy that.
+Buy:	I can let it go for %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	A small island clinic
+Flags:	110
+Races:	0
+Buytypes:	1010000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	470
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	62225
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	60616
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	60617
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	60618
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	60619
+		Type:	Avail
+		Stock:	0
+BREAK
+#62204
+Keeper:	62220
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Huh..? We don't carry that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Yeah... Get some cash and we'll talk.
+DoesntBuy:	We ain't a pawn shop.
+Buy:	Mmm, yeah. That's %d nuyen. Sure. Bye bye.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	2109
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	62241
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	62242
+		Type:	Always
+		Stock:	0
+BREAK
+END

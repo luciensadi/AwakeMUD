@@ -1,0 +1,1152 @@
+#39600
+Keeper:	39601
+ProfitBuy:	1.00
+ProfitSell:	0.00
+Random:	0
+Open:	13
+Close:	23
+Type:	Black
+NoSuchItemKeeper:	Get the frag outta my shop!
+NoSuchItemPlayer:	You gotta be slottin' me
+NoNuyen:	You can't pay me with lint, cowboy...
+DoesntBuy:	You gotta be slottin' me..
+Buy:	I'll swap you %d for it
+Sell:	Take your %d 'yen and get outta here
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	39783
+		Type:	Avail
+		Stock:	0
+BREAK
+#39601
+Keeper:	39610
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	11
+Close:	3
+Type:	Legal
+NoSuchItemKeeper:	I think you got me mixed up with the Japs next door.
+NoSuchItemPlayer:	Stop talking, you're embarrassing yourself.
+NoNuyen:	Check your purse again, chum.
+DoesntBuy:	Are you crazy?
+Buy:	For you?  %d 'yen.
+Sell:	You got a deal for %d.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	39638
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39637
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39636
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39635
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39634
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39633
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	39632
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	39631
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	39630
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	39629
+		Type:	Always
+		Stock:	0
+BREAK
+#39602
+Keeper:	39612
+ProfitBuy:	1.00
+ProfitSell:	0.00
+Random:	0
+Open:	11
+Close:	3
+Type:	Legal
+NoSuchItemKeeper:	*cute little shrug with a clueless expression*
+NoSuchItemPlayer:	*furrows her brow at you*
+NoNuyen:	*taps her palm expectantly*
+DoesntBuy:	*shakes her head*
+Buy:	
+Sell:	
+Name:	unnamed shop
+Flags:	100
+Races:	1101000
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	2400
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	42007
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	42008
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	42009
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	9167
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	42175
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	42179
+		Type:	Always
+		Stock:	0
+BREAK
+#39603
+Keeper:	39604
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	We don't have that, but this would look wonderful on you!
+NoSuchItemPlayer:	Uhm..what're you trying to show me?
+NoNuyen:	Tee Hee!  Check your pockets for something other'n lint..
+DoesntBuy:	Eww..no!  That is SO last season!
+Buy:	That'll be %d yen.  Thanks for coming!  Drop by again..
+Sell:	I will give you %d yen for that.
+Name:	Hairstix
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39673
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39670
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39669
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39668
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39667
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39657
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	39656
+		Type:	Always
+		Stock:	0
+BREAK
+#39604
+Keeper:	39605
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	You must have us confused with The Gap
+NoSuchItemPlayer:	What, are you fraggin' with me?
+NoNuyen:	Let's try this again...
+DoesntBuy:	I'll have none of that!
+Buy:	Gimme %d yen.
+Sell:	*laughs at you*
+Name:	Hobogotten
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39665
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39666
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39663
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39664
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	4719
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	28461
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	28463
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	26705
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	26795
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	21908
+		Type:	Always
+		Stock:	0
+BREAK
+#39605
+Keeper:	39618
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	La Femme Fatale
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39662
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39661
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39610
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39660
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39659
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39658
+		Type:	Always
+		Stock:	0
+BREAK
+#39606
+Keeper:	39619
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	No such luck
+NoSuchItemPlayer:	How about you show me what you have in your -other- pocket?
+NoNuyen:	I don't take monopoly money
+DoesntBuy:	Man, get out of here..
+Buy:	I want %d 'yen for that
+Sell:	Take your %d yen and leave!
+Name:	Watcherz
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39674
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39676
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39675
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	26124
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	26126
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	26125
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	26119
+		Type:	Always
+		Stock:	0
+BREAK
+#39607
+Keeper:	39620
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	Let me show you something else...
+NoSuchItemPlayer:	Are you kidding me? *laughs*
+NoNuyen:	Should we try another account?
+DoesntBuy:	Uh, no
+Buy:	It's %d for that
+Sell:	Here's your %d yen..
+Name:	Silver Heron
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39655
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39654
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39653
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39652
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39651
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39650
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	39649
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	39648
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	39642
+		Type:	Always
+		Stock:	0
+BREAK
+#39608
+Keeper:	39621
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	You don't want -that-!  I have something over here, you'll flip for!
+NoSuchItemPlayer:	Eh...I've seen better
+NoNuyen:	Your credit was denied..let's try another card.
+DoesntBuy:	I will not take that.
+Buy:	Give me %d nuyen and we'll call it a deal!
+Sell:	Here's your %d nuyen.
+Name:	Stix n Stuff
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39612
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39611
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39640
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39624
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39623
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39615
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	39616
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	39622
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	39625
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	39639
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	39641
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	39643
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	39644
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	39645
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	39646
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	39647
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	39605
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	39603
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	39606
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	39602
+		Type:	Always
+		Stock:	0
+BREAK
+#39609
+Keeper:	39622
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	That's not in stock.
+NoSuchItemPlayer:	You're so funny!
+NoNuyen:	Maybe you should come back when you have cash.
+DoesntBuy:	I can't take that!
+Buy:	Your total today will be %d nuyen.
+Sell:	Thanks for shopping at Kitchen & Bath!
+Name:	Kitchen & Bath
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39604
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39617
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39618
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39619
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39620
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39621
+		Type:	Always
+		Stock:	0
+BREAK
+#39610
+Keeper:	39623
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	21
+Type:	Legal
+NoSuchItemKeeper:	Where do you get such hostility from?
+NoSuchItemPlayer:	Always play with their minds.
+NoNuyen:	My life has reached it's pinnacle.
+DoesntBuy:	Damn the man.
+Buy:	What's with today today? 
+Sell:	Joe, the money is gone. 
+Name:	Treble & Clef
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39694
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39693
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39692
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39691
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39690
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39689
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	39688
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	39687
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	39686
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	39685
+		Type:	Always
+		Stock:	0
+BREAK
+#39611
+Keeper:	39624
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	11
+Close:	21
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39701
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39700
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39699
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39698
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39697
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39696
+		Type:	Always
+		Stock:	0
+BREAK
+#39612
+Keeper:	39625
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	11
+Close:	21
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39705
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39704
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39703
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39702
+		Type:	Always
+		Stock:	0
+BREAK
+#39613
+Keeper:	39626
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	11
+Close:	21
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39708
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39707
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39706
+		Type:	Always
+		Stock:	0
+BREAK
+#39614
+Keeper:	39627
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	21
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Fry's Electronics
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	1112
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	1170
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	1174
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	1176
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	1187
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	1182
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	39709
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	3461
+		Type:	Always
+		Stock:	0
+BREAK
+#39615
+Keeper:	39628
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	21
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Office Box
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39713
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39712
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39711
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39710
+		Type:	Always
+		Stock:	0
+BREAK
+#39616
+Keeper:	39629
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	21
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Jackrobber
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39756
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39757
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39758
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39759
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39760
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39761
+		Type:	Always
+		Stock:	0
+BREAK
+#39617
+Keeper:	39630
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	9
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	Sorry chum, we don't carry that.
+NoSuchItemPlayer:	We don't deal with outside sources..
+NoNuyen:	You may want to rethink your career choice.
+DoesntBuy:	We don't deal without outside sources..
+Buy:	Ohh.. A sale. That'll be %d nuyen chum.
+Sell:	Here's your %d nuyen.
+Name:	Sofbyte Software
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	39714
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	39715
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	39716
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	39717
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	39718
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	39719
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	39720
+		Type:	Avail
+		Stock:	0
+BREAK
+#39618
+Keeper:	39639
+ProfitBuy:	1.00
+ProfitSell:	0.00
+Random:	0
+Open:	6
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	39728
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39727
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39726
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39725
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39724
+		Type:	Always
+		Stock:	0
+BREAK
+#39619
+Keeper:	39640
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	11
+Close:	3
+Type:	Grey
+NoSuchItemKeeper:	You must be thinkin' of another bar..
+NoSuchItemPlayer:	Who you tryin' to play for a fool?
+NoNuyen:	Come back when you have more money!
+DoesntBuy:	I don't want that drek!
+Buy:	Slide me %d sugah.
+Sell:	Here's your %d nuyen.
+Name:	RHoB Bar
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	39731
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	32334
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	32335
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	32336
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39729
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39730
+		Type:	Always
+		Stock:	0
+BREAK
+#39620
+Keeper:	39641
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	11
+Close:	1
+Type:	Grey
+NoSuchItemKeeper:	What do you think this is?  The Muse? *derisive laugh*
+NoSuchItemPlayer:	What'choo talkin' bout, Willis?
+NoNuyen:	Come back when you got the dubs. *sneer*
+DoesntBuy:	This ain't a pawn shop!
+Buy:	Your check is %d sweetness..
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	39740
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	39739
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39738
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39737
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	39736
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	39735
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	39734
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	39733
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	39732
+		Type:	Always
+		Stock:	0
+BREAK
+#39621
+Keeper:	39643
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	8
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that in stock.
+NoSuchItemPlayer:	We... Don't carry that in stock.
+NoNuyen:	You don't have enough creds for that operation...
+DoesntBuy:	The procedure costs %d nuyen.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	AC Body + TECH
+Flags:	110
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	474
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	62322
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	39721
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	39722
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	39785
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	39786
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	504
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	39376
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	39787
+		Type:	Avail
+		Stock:	0
+	[SELL 9]
+		Vnum:	39788
+		Type:	Avail
+		Stock:	0
+BREAK
+#39622
+Keeper:	39644
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	8
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	We don't have that in stock.
+NoSuchItemPlayer:	We don't carry those in stock.
+NoNuyen:	Go do some runs, chummer.
+DoesntBuy:	We don't buy that.
+Buy:	That's %d nuyen chummer. Smooth runnin'.
+Sell:	Here's your %d nuyen.
+Name:	Shady Supply Store
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	39789
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	39790
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	39791
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	39792
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	39793
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	39794
+		Type:	Avail
+		Stock:	0
+BREAK
+END

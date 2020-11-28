@@ -1,4 +1,4 @@
-#70000
+#700000
 Keywords:	key 1A
 Name:	A key to 1A
 RoomDesc:$
@@ -21,7 +21,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70001
+#700001
 Keywords:	key 2A
 Name:	A key to 2A (Defunct)
 RoomDesc:$
@@ -44,7 +44,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70002
+#700002
 Keywords:	key 3A
 Name:	A key to 3A (Defunct)
 RoomDesc:$
@@ -67,7 +67,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70003
+#700003
 Keywords:	key 4A
 Name:	A key to 4A
 RoomDesc:$
@@ -90,7 +90,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70004
+#700004
 Keywords:	key 5A
 Name:	A key to 5A
 RoomDesc:$
@@ -113,7 +113,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70005
+#700005
 Keywords:	key 6A
 Name:	A key to 6A (Defunct)
 RoomDesc:$
@@ -136,7 +136,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70006
+#700006
 Keywords:	key 7A
 Name:	A key to 7A
 RoomDesc:$
@@ -159,7 +159,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70007
+#700007
 Keywords:	key 8A
 Name:	A key to 8A
 RoomDesc:$
@@ -182,7 +182,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70008
+#700008
 Keywords:	key 9A
 Name:	A key to 9A (Defunct)
 RoomDesc:$
@@ -205,7 +205,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70009
+#700009
 Keywords:	key 10A
 Name:	A key to 10A (Defunct)
 RoomDesc:$
@@ -228,7 +228,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70010
+#700010
 Keywords:	key 1B
 Name:	A key to 1B (Defunct)
 RoomDesc:$
@@ -251,7 +251,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70011
+#700011
 Keywords:	key 2B
 Name:	A key to 2B
 RoomDesc:$
@@ -274,7 +274,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70012
+#700012
 Keywords:	key 3B
 Name:	A key to 3B
 RoomDesc:$
@@ -297,7 +297,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70013
+#700013
 Keywords:	key 4B
 Name:	A key to 4B
 RoomDesc:$
@@ -320,7 +320,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70014
+#700014
 Keywords:	key 5B
 Name:	A key to 5B
 RoomDesc:$
@@ -343,7 +343,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70015
+#700015
 Keywords:	golden master key
 Name:	A ^YGolden^n Master key
 RoomDesc:$
@@ -366,7 +366,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70016
+#700016
 Keywords:	key golden sunburst
 Name:	A key with a ^YGolden Sunburst^N (Defunct)
 RoomDesc:$
@@ -389,7 +389,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70017
+#700017
 Keywords:	blue key DE
 Name:	A ^Bblue^n key with the letters ^YDE^N
 RoomDesc:$
@@ -412,7 +412,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70018
+#700018
 Keywords:	red key DE
 Name:	A ^Rred^n key with the letters ^YDE^N
 RoomDesc:$
@@ -435,7 +435,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70019
+#700019
 Keywords:	green key DE
 Name:	A ^Ggreen^n key with the letters ^YDE^N
 RoomDesc:$
@@ -458,7 +458,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70020
+#700020
 Keywords:	black key DE
 Name:	A ^Lblack^N key with the letters ^YDE^N
 RoomDesc:$
@@ -481,7 +481,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70021
+#700021
 Keywords:	gold key DE
 Name:	A ^Ygold^N key with the letters ^YDE^N
 RoomDesc:$
@@ -504,7 +504,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70022
+#700022
 Keywords:	haven apartments key
 Name:	A Haven Apartments key (Defunct)
 RoomDesc:$
@@ -527,7 +527,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70023
+#700023
 Keywords:	stein german beer
 Name:	a stein of dark German beer
 RoomDesc:$
@@ -555,7 +555,7 @@ Material:	glass
 	Val1:	18
 	Val2:	13
 BREAK
-#70024
+#700024
 Keywords:	flagon mead
 Name:	a flagon of mead
 RoomDesc:$
@@ -583,7 +583,7 @@ Material:	metal
 	Val1:	20
 	Val2:	11
 BREAK
-#70025
+#700025
 Keywords:	cup coffee
 Name:	a cup of black coffee
 RoomDesc:$
@@ -611,7 +611,7 @@ Material:	paper
 	Val1:	16
 	Val2:	2
 BREAK
-#70026
+#700026
 Keywords:	cup french vanilla coffee
 Name:	a cup of French Vanilla coffee
 RoomDesc:$
@@ -639,7 +639,7 @@ Material:	paper
 	Val1:	18
 	Val2:	2
 BREAK
-#70027
+#700027
 Keywords:	cup decaf coffee
 Name:	a cup of decaf coffee
 RoomDesc:$
@@ -667,7 +667,7 @@ Material:	paper
 	Val1:	18
 	Val2:	2
 BREAK
-#70028
+#700028
 Keywords:	cup irish creme coffee
 Name:	a cup of Irish Creme coffee
 RoomDesc:$
@@ -694,7 +694,7 @@ Material:	paper
 	Val1:	18
 	Val2:	2
 BREAK
-#70029
+#700029
 Keywords:	cup amaretto coffee
 Name:	a cup of Amaretto coffee
 RoomDesc:$
@@ -722,7 +722,7 @@ Material:	paper
 	Val1:	18
 	Val2:	18
 BREAK
-#70030
+#700030
 Keywords:	coffee chicory reddish pungent strong cup mug
 Name:	a cup of chicory coffee
 RoomDesc:$
@@ -752,7 +752,7 @@ Material:	ceramic
 	Val1:	16
 	Val2:	2
 BREAK
-#70031
+#700031
 Keywords:	chocolate banana milkshake
 Name:	a ^ychocolate banana^N milkshake
 RoomDesc:$
@@ -780,7 +780,7 @@ Material:	glass
 	Val1:	20
 	Val2:	7
 BREAK
-#70032
+#700032
 Keywords:	milkshake rich vanilla
 Name:	a rich ^Wvanilla^N milkshake
 RoomDesc:$
@@ -808,7 +808,7 @@ Material:	glass
 	Val1:	20
 	Val2:	7
 BREAK
-#70033
+#700033
 Keywords:	pineapple milkshake
 Name:	a ^Ypineapple^N milkshake
 RoomDesc:$
@@ -836,7 +836,7 @@ Material:	glass
 	Val1:	20
 	Val2:	7
 BREAK
-#70034
+#700034
 Keywords:	real hamburger
 Name:	a real hamburger
 RoomDesc:$
@@ -863,7 +863,7 @@ Material:	organic
 [VALUES]
 	Val0:	16
 BREAK
-#70035
+#700035
 Keywords:	BLT sammich
 Name:	a BLT sammich
 RoomDesc:$
@@ -890,7 +890,7 @@ Material:	organic
 [VALUES]
 	Val0:	12
 BREAK
-#70036
+#700036
 Keywords:	hot ham cheese sammich
 Name:	a hot ham and cheese sammich
 RoomDesc:$
@@ -916,7 +916,7 @@ Material:	organic
 [VALUES]
 	Val0:	16
 BREAK
-#70037
+#700037
 Keywords:	glass cognac
 Name:	a glass of cognac
 RoomDesc:$
@@ -945,7 +945,7 @@ Material:	glass
 	Val1:	16
 	Val2:	21
 BREAK
-#70038
+#700038
 Keywords:	glass brandy
 Name:	a glass of brandy
 RoomDesc:$
@@ -973,7 +973,7 @@ Material:	glass
 	Val1:	16
 	Val2:	21
 BREAK
-#70039
+#700039
 Keywords:	glass vermouth
 Name:	a glass of vermouth
 RoomDesc:$
@@ -1001,7 +1001,7 @@ Material:	glass
 	Val1:	16
 	Val2:	26
 BREAK
-#70040
+#700040
 Keywords:	glass cold ice water
 Name:	a glass of cold ice water
 RoomDesc:$
@@ -1028,7 +1028,7 @@ Material:	glass
 	Val0:	15
 	Val1:	15
 BREAK
-#70041
+#700041
 Keywords:	pimp juice
 Name:	Pimp Juice
 RoomDesc:$
@@ -1056,7 +1056,7 @@ Material:	glass
 	Val1:	15
 	Val2:	16
 BREAK
-#70042
+#700042
 Keywords:	ice cold beer
 Name:	an ice cold beer
 RoomDesc:$
@@ -1084,7 +1084,7 @@ Material:	glass
 	Val1:	15
 	Val2:	10
 BREAK
-#70043
+#700043
 Keywords:	jersey seahawks
 Name:	A seattle seahawks jersey
 RoomDesc:$
@@ -1110,7 +1110,7 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70044
+#700044
 Keywords:	Seattle Seahawks jacket
 Name:	a Seattle Seahawks jacket
 RoomDesc:$
@@ -1139,7 +1139,7 @@ Material:	leather
 	Val2:	1
 	Val4:	2
 BREAK
-#70045
+#700045
 Keywords:	large metal gunsafe
 Name:	a large ^Lmetal^N gunsafe
 RoomDesc:$
@@ -1169,7 +1169,7 @@ Material:	metal
 	Val2:	-1
 	Val3:	6
 BREAK
-#70046
+#700046
 Keywords:	massive black rotweiler
 Name:	a massive, black rotweiler
 RoomDesc:$
@@ -1194,7 +1194,7 @@ Material:	organic
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70047
+#700047
 Keywords:	muscular pitbull
 Name:	a muscular pitbull
 RoomDesc:$
@@ -1219,7 +1219,7 @@ Material:	organic
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70048
+#700048
 Keywords:	black cloak
 Name:	a ^Lblack^N cloak
 RoomDesc:$
@@ -1246,7 +1246,7 @@ Material:	fabric
 [VALUES]
 	Val7:	12
 BREAK
-#70049
+#700049
 Keywords:	black hoodie
 Name:	a ^Lblack^N hoodie
 RoomDesc:$
@@ -1276,7 +1276,7 @@ Material:	fabric
 	Val4:	2
 	Val7:	4
 BREAK
-#70050
+#700050
 Keywords:	albino snake-skin dress shoes
 Name:	a pair of ^Walbino^n snake-skin dress shoes
 RoomDesc:$
@@ -1300,7 +1300,7 @@ Material:	leather
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70051
+#700051
 Keywords:	pair cowboy boots
 Name:	a pair of ^Lblack^n cowboy boots
 RoomDesc:$
@@ -1327,7 +1327,7 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70052
+#700052
 Keywords:	Stetson cowboy hat
 Name:	a ^Lblack^n Stetson cowboy hat
 RoomDesc:$
@@ -1353,7 +1353,7 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70053
+#700053
 Keywords:	jet black motorcycle helmet
 Name:	a ^Ljet black^n motorcycle helmet
 RoomDesc:$
@@ -1387,7 +1387,7 @@ Material:	adv. plastics
 	Location:	Impact
 	Modifier:	1
 BREAK
-#70054
+#700054
 Keywords:	long flowing black cape
 Name:	a floor length ^Lblack^n cape
 RoomDesc:$
@@ -1411,7 +1411,7 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70055
+#700055
 Keywords:	can skoal chewing tobacco
 Name:	a can of Skoal(TM)
 RoomDesc:$
@@ -1440,7 +1440,7 @@ Material:	plastic
 	Val1:	1
 	Val2:	-1
 BREAK
-#70056
+#700056
 Keywords:	can Copenhagen chewing tobacco
 Name:	a can of Copenhagen(TM)
 RoomDesc:$
@@ -1468,7 +1468,7 @@ Material:	plastic
 	Val1:	1
 	Val2:	-1
 BREAK
-#70057
+#700057
 Keywords:	crucifix gold chain
 Name:	a small crucifix hanging on a ^Ygold^n chain
 RoomDesc:$
@@ -1491,7 +1491,7 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70058
+#700058
 Keywords:	leather wallet
 Name:	a ^Lblack^n leather wallet
 RoomDesc:$
@@ -1520,7 +1520,7 @@ Material:	leather
 	Val1:	1
 	Val2:	-1
 BREAK
-#70059
+#700059
 Keywords:	blue beach towel
 Name:	a ^Bblue^n beach towel
 RoomDesc:$
@@ -1545,7 +1545,7 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70060
+#700060
 Keywords:	bottle sunscreen lotion
 Name:	a bottle of sunscreen
 RoomDesc:$
@@ -1569,7 +1569,7 @@ Material:	plastic
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70061
+#700061
 Keywords:	rows comfortable sauna benches
 Name:	A few rows of comfortable sauna benches
 RoomDesc:$
@@ -1593,7 +1593,7 @@ Material:	stone
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70062
+#700062
 Keywords:	oversized hot tub hot-tub
 Name:	An oversized hot-tub
 RoomDesc:$
@@ -1622,7 +1622,7 @@ Material:	adv. plastics
 	Val0:	500
 	Val1:	500
 BREAK
-#70063
+#700063
 Keywords:	temperature controlled pool
 Name:	A large temperature controlled pool
 RoomDesc:$
@@ -1653,7 +1653,7 @@ Material:	stone
 	Val0:	10000
 	Val1:	10000
 BREAK
-#70064
+#700064
 Keywords:	reinforced steel gunsafe safe
 Name:	A large reinforced steel gunsafe
 RoomDesc:$
@@ -1684,7 +1684,7 @@ Material:	metal
 	Val1:	1
 	Val2:	-1
 BREAK
-#70065
+#700065
 Keywords:	row blast-resistant ammo crates
 Name:	A row of blast-resistant ammo crates
 RoomDesc:$
@@ -1715,7 +1715,7 @@ Material:	metal
 	Val1:	1
 	Val2:	-1
 BREAK
-#70066
+#700066
 Keywords:	key 2A flimsy
 Name:	A key to 2A (Defunct)
 RoomDesc:$
@@ -1738,7 +1738,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70067
+#700067
 Keywords:	key 3A flimsy
 Name:	A key to 3A
 RoomDesc:$
@@ -1761,7 +1761,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70068
+#700068
 Keywords:	key 1B flimsy
 Name:	A key to 1B
 RoomDesc:$
@@ -1784,7 +1784,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70069
+#700069
 Keywords:	key 1C
 Name:	A key to 1C
 RoomDesc:$
@@ -1807,7 +1807,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70070
+#700070
 Keywords:	key 2C
 Name:	A key to 2C
 RoomDesc:$
@@ -1830,7 +1830,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70071
+#700071
 Keywords:	key 3C
 Name:	A key to 3C
 RoomDesc:$
@@ -1853,7 +1853,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70072
+#700072
 Keywords:	key 4C
 Name:	A key to 4C
 RoomDesc:$
@@ -1876,7 +1876,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70073
+#700073
 Keywords:	key 5C
 Name:	A key to 5C
 RoomDesc:$
@@ -1899,7 +1899,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70074
+#700074
 Keywords:	key 6C
 Name:	A key to 6C
 RoomDesc:$
@@ -1922,7 +1922,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70075
+#700075
 Keywords:	key 7C
 Name:	A key to 7C
 RoomDesc:$
@@ -1945,7 +1945,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70076
+#700076
 Keywords:	key 8C
 Name:	A key to 8C
 RoomDesc:$
@@ -1968,7 +1968,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70077
+#700077
 Keywords:	key 9C
 Name:	A key to 9C
 RoomDesc:$
@@ -1991,7 +1991,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70078
+#700078
 Keywords:	key 10C
 Name:	A key to 10C
 RoomDesc:$
@@ -2014,7 +2014,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70079
+#700079
 Keywords:	key 2A flimsy
 Name:	A key to 2A
 RoomDesc:$
@@ -2037,7 +2037,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70080
+#700080
 Keywords:	key 6A
 Name:	A key to 6A
 RoomDesc:$
@@ -2060,7 +2060,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70081
+#700081
 Keywords:	key 9A
 Name:	A key to 9A
 RoomDesc:$
@@ -2083,7 +2083,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70082
+#700082
 Keywords:	key 10A
 Name:	A key to 10A
 RoomDesc:$
@@ -2106,7 +2106,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70083
+#700083
 Keywords:	desk balsa sturdy wood
 Name:	a sturdy ^ybalsa wood^N desk
 RoomDesc:$
@@ -2137,7 +2137,7 @@ Material:	wood
 	Val2:	70084
 	Val3:	12
 BREAK
-#70084
+#700084
 Keywords:	keycard managers office electronic
 Name:	an electronic 'Managers Office' keycard (Defunct)
 RoomDesc:$
@@ -2161,7 +2161,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70085
+#700085
 Keywords:	key master golden
 Name:	a dull ^ygolden^N master key (Defunct)
 RoomDesc:$
@@ -2184,7 +2184,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70086
+#700086
 Keywords:	keycard managers office electronic
 Name:	an electronic 'Managers Office' keycard
 RoomDesc:$
@@ -2208,7 +2208,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70087
+#700087
 Keywords:	haven apartments key
 Name:	A Haven Apartments key
 RoomDesc:$
@@ -2231,7 +2231,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70088
+#700088
 Keywords:	key master golden
 Name:	A dull ^ygolden^N master key
 RoomDesc:$
@@ -2254,7 +2254,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#70089
+#700089
 Keywords:	key golden sunburst
 Name:	A key with a ^YGolden Sunburst^N
 RoomDesc:$

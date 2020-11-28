@@ -1,0 +1,135 @@
+#12700
+Keeper:	12700
+ProfitBuy:	1.20
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	12797
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	12798
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	12799
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	5024
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	3317
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	1939
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	1938
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	1937
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	1936
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	2101
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	17128
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	4025
+		Type:	Always
+		Stock:	0
+BREAK
+#12701
+Keeper:	12702
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	8
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't carry that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	It seems you don't have enough nuyen..
+DoesntBuy:	We're not a pawn shop, chummer.
+Buy:	Splendid, that'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Ronald Doityadamnself
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	12720
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	12721
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	12722
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	12723
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	12724
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	12725
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	12726
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	12727
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	12728
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	12729
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	12730
+		Type:	Always
+		Stock:	0
+BREAK
+END

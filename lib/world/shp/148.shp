@@ -1,0 +1,329 @@
+#14800
+Keeper:	14802
+ProfitBuy:	1.000000
+ProfitSell:	0.200000
+Random:	0
+Open:	9
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	14801
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	14802
+		Type:	Always
+		Stock:	0
+BREAK
+#14801
+Keeper:	14816
+ProfitBuy:	1.200000
+ProfitSell:	0.200000
+Random:	0
+Open:	9
+Close:	17
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 2]
+		Vnum:	14824
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	14823
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	14822
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	14821
+		Type:	Always
+		Stock:	0
+BREAK
+#14802
+Keeper:	14820
+ProfitBuy:	1.000000
+ProfitSell:	0.200000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	0
+Races:	0
+Buytypes:	101000000000
+Etiquette:	46
+[SELLING]
+	[SELL 6]
+		Vnum:	707
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	14834
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	14833
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	14832
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	14831
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	14830
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	14829
+		Type:	Always
+		Stock:	0
+BREAK
+#14803
+Keeper:	14821
+ProfitBuy:	1.200000
+ProfitSell:	0.200000
+Random:	0
+Open:	8
+Close:	20
+Type:	Grey
+NoSuchItemKeeper:	Piss off!  We don't carry that drek here.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Come back when ya have the nuyen, chummer.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	11000000000000000000000100000
+Etiquette:	46
+[SELLING]
+	[SELL 13]
+		Vnum:	609
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	610
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	14845
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	14844
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	940
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	785
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	14841
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	676
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	5113
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	777
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	608
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	834
+		Type:	Always
+		Stock:	0
+BREAK
+#14804
+Keeper:	14823
+ProfitBuy:	1.200000
+ProfitSell:	0.200000
+Random:	0
+Open:	10
+Close:	21
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	10
+Races:	0
+Buytypes:	10000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 25]
+		Vnum:	410
+		Type:	Always
+		Stock:	0
+	[SELL 26]
+		Vnum:	415
+		Type:	Always
+		Stock:	0
+	[SELL 27]
+		Vnum:	417
+		Type:	Always
+		Stock:	0
+	[SELL 28]
+		Vnum:	416
+		Type:	Always
+		Stock:	0
+BREAK
+#14805
+Keeper:	14824
+ProfitBuy:	1.000000
+ProfitSell:	0.200000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 29]
+		Vnum:	14850
+		Type:	Always
+		Stock:	0
+	[SELL 30]
+		Vnum:	14849
+		Type:	Always
+		Stock:	0
+	[SELL 31]
+		Vnum:	14848
+		Type:	Always
+		Stock:	0
+	[SELL 32]
+		Vnum:	14847
+		Type:	Always
+		Stock:	0
+BREAK
+#14806
+Keeper:	14825
+ProfitBuy:	1.400000
+ProfitSell:	0.200000
+Random:	3
+Open:	2
+Close:	18
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	10
+Races:	0
+Buytypes:	1000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 33]
+		Vnum:	333
+		Type:	Always
+		Stock:	0
+	[SELL 34]
+		Vnum:	332
+		Type:	Always
+		Stock:	0
+	[SELL 35]
+		Vnum:	351
+		Type:	Always
+		Stock:	0
+	[SELL 36]
+		Vnum:	350
+		Type:	Always
+		Stock:	0
+	[SELL 37]
+		Vnum:	338
+		Type:	Always
+		Stock:	0
+BREAK
+#14807
+Keeper:	14854
+ProfitBuy:	2.000000
+ProfitSell:	0.200000
+Random:	0
+Open:	8
+Close:	20
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	10100000000000000000000100000000
+Etiquette:	46
+[SELLING]
+	[SELL 38]
+		Vnum:	14876
+		Type:	Always
+		Stock:	0
+	[SELL 39]
+		Vnum:	450
+		Type:	Always
+		Stock:	0
+	[SELL 40]
+		Vnum:	14874
+		Type:	Always
+		Stock:	0
+	[SELL 41]
+		Vnum:	14873
+		Type:	Always
+		Stock:	0
+BREAK
+END

@@ -1,0 +1,103 @@
+#24500
+Keeper:	24500
+ProfitBuy:	1.20
+ProfitSell:	0.07
+Random:	10
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry chump, we don't got those in stock.
+NoSuchItemPlayer:	Uhh... what?
+NoNuyen:	Get your broke ass outta here..
+DoesntBuy:	We don't buy that shit..
+Buy:	Slide over %d nuyen, chump, and its all yours.
+Sell:	Here's your %d nuyen. Good doin business.
+Name:	Chicken Little
+Flags:	0
+Races:	0
+Buytypes:	1000000000000000000000100001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	853
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	859
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	12006
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	24506
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	24507
+		Type:	Always
+		Stock:	0
+BREAK
+#24501
+Keeper:	24502
+ProfitBuy:	1.25
+ProfitSell:	0.10
+Random:	10
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Not enough cash monies, chum.
+DoesntBuy:	I don't buy shit.
+Buy:	That comes to.. %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Henry Feed (Roosters Coop)
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	911
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	869
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	24527
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	24520
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	24521
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	24522
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	24523
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	24524
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	24525
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	24526
+		Type:	Always
+		Stock:	0
+BREAK
+END

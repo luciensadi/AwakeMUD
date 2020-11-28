@@ -1,0 +1,47 @@
+#1200
+Keeper:	1209
+ProfitBuy:	1.50
+ProfitSell:	1.00
+Random:	3
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	We've only got Neon here, fella.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	What do I look like?
+DoesntBuy:	We don't buy that.
+Buy:	It's %d nuyen per vial.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	1000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	1215
+		Type:	Always
+		Stock:	0
+BREAK
+#1201
+Keeper:	1260
+ProfitBuy:	1.00
+ProfitSell:	0.00
+Random:	3
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	1000000000000
+Etiquette:	46
+[SELLING]
+BREAK
+END

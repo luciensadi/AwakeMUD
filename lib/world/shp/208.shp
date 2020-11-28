@@ -1,0 +1,77 @@
+#20800
+Keeper:	20804
+ProfitBuy:	5.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	8
+Close:	20
+Type:	Grey
+NoSuchItemKeeper:	Hey, open your eyes and look at the inventory, that aint sold here.
+NoSuchItemPlayer:	What you trying to pass here?
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	Not here pal, take it to someone who cares.
+Buy:	Cough it up, that's %d nuyen!
+Sell:	Yeah take your fragging %d nuyen and go, yer bleeding me dry.
+Flags:	100
+Races:	0
+Buytypes:	10000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	2100
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	2015
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	2004
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	2005
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	2006
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	2007
+		Type:	Always
+		Stock:	0
+BREAK
+#20802
+Keeper:	20806
+ProfitBuy:	1.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Take your ganja'd hoop elsewhere chum.
+NoSuchItemPlayer:	Look Drekface, ya aint got it to sell.
+NoNuyen:	You jackass, comeback when you can slot the creds!
+DoesntBuy:	No deal chum.
+Buy:	That's right  %d nuyen, oh and I'll take more if you like.
+Sell:	here ya go chum, %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 6]
+		Vnum:	20820
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	2015
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	2014
+		Type:	Always
+		Stock:	0
+BREAK
+END

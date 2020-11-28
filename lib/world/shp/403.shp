@@ -1,0 +1,25 @@
+#40300
+Keeper:	40300
+ProfitBuy:	1.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	1
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Hey, what do i look like, GOD?!?! I don't have that crap!
+NoSuchItemPlayer:	If you try to sell me thin air again, I'll have to hurt you!
+NoNuyen:	Get a job you bum!
+DoesntBuy:	I do not want that bonafide POS!
+Buy:	%d nuyen you moron
+Sell:	Thanks, now take your %d nuyen and get the heck out!
+Flags:	0
+Races:	0
+Buytypes:	1111111111111111111111111111111111111110
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	40300
+		Type:	Always
+		Stock:	0
+BREAK
+END

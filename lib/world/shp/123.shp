@@ -1,0 +1,205 @@
+#12300
+Keeper:	12300
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	10
+Open:	6
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	I don't have it but now I want one!
+NoSuchItemPlayer:	Sometimes I see things that don't exist as well.
+NoNuyen:	I might be crazy but that price is even too low for me!
+DoesntBuy:	I don't want one of those it might bite me.
+Buy:	That comes to %d nuyen thanks!
+Sell:	Heres your %d nuyen.
+Name:	BurnsCo Truck Stop
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	14641
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	12300
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	12301
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	37507
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	37508
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	37514
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	14638
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	37598
+		Type:	Avail
+		Stock:	0
+BREAK
+#12301
+Keeper:	12301
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry darlin', we don't serve that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough scratch there, darlin'.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen darlin', enjoy.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	3001
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	8468
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	29033
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	18837
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	3036
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	9166
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	17130
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	39683
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	12061
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	26203
+		Type:	Always
+		Stock:	0
+BREAK
+#12302
+Keeper:	12302
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry chum, we don't carry that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You're broke! You ain't gettin nothin for free, chum.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen, enjoy the grub.
+Sell:	Here's your %d nuyen.
+Name:	PC Hotdog Vendor
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	3422
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	3000
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	8468
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	29033
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	60347
+		Type:	Always
+		Stock:	0
+BREAK
+#12303
+Keeper:	12303
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't carry that stuff..
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Sorry chummer, need nuyen for that.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen, enjoy.
+Sell:	Here's your %d nuyen.
+Name:	PC Supplies Shop
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	12304
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	5953
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	29324
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	29325
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	29326
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	12306
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	12305
+		Type:	Always
+		Stock:	0
+BREAK
+END

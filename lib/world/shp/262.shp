@@ -1,0 +1,73 @@
+#26204
+Keeper:	26201
+ProfitBuy:	1.00
+ProfitSell:	0.65
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, fresh out of that, honey.
+NoSuchItemPlayer:	Doesn't look like you've got one, honey.
+NoNuyen:	This is a charity for the girls, not you, honey.
+DoesntBuy:	Sorry, that's not anything I can use here.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	26205
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	26204
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	26203
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	26202
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	26201
+		Type:	Always
+		Stock:	0
+BREAK
+#26222
+Keeper:	26202
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Oh, god... please tell me that isn't /supposed/ to be here... If it is, I'll find it, but... oh dear...
+NoSuchItemPlayer:	Doesn't look like you've got one.
+NoNuyen:	Charity is upstairs. Did you get the memo?
+DoesntBuy:	Sorry, I don't think I can find a place to sort that into.
+Buy:	Gimme a second to check... Yes, that'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	26211
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	26209
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	26200
+		Type:	Always
+		Stock:	0
+BREAK
+END

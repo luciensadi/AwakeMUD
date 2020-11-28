@@ -1,0 +1,368 @@
+#700000
+Keeper:	700003
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't craft those.
+NoSuchItemPlayer:	I'm not really sure what you're asking of me..
+NoNuyen:	Please, we need nuyen for construction costs.
+DoesntBuy:	I'm not really sure what you're asking of me..
+Buy:	That'll be %d nuyen, enjoy your keys.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	700086
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	700082
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	700081
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	700080
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	700079
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	700069
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	700070
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	700071
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	700072
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	700073
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	700074
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	700075
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	700076
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	700077
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	700078
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	700000
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	700067
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	700003
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	700004
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	700006
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	700007
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	700068
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	700011
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	700012
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	700013
+		Type:	Always
+		Stock:	0
+	[SELL 25]
+		Vnum:	700014
+		Type:	Always
+		Stock:	0
+	[SELL 26]
+		Vnum:	700017
+		Type:	Always
+		Stock:	0
+	[SELL 27]
+		Vnum:	700018
+		Type:	Always
+		Stock:	0
+	[SELL 28]
+		Vnum:	700019
+		Type:	Always
+		Stock:	0
+	[SELL 29]
+		Vnum:	700020
+		Type:	Always
+		Stock:	0
+	[SELL 30]
+		Vnum:	700021
+		Type:	Always
+		Stock:	0
+BREAK
+#700001
+Keeper:	700001
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't carry that selection.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	We can't afford to give things away for free..
+DoesntBuy:	We don't buy that.
+Buy:	Cost comes to %d nuyen, please enjoy.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	700023
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	700024
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	700025
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	700026
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	700027
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	700028
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	700029
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	700030
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	700031
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	700032
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	700033
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	700034
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	700035
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	700036
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	700037
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	700038
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	700039
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	700040
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	700041
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	700042
+		Type:	Always
+		Stock:	0
+BREAK
+#700002
+Keeper:	700002
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't carry that in stock.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Come back when you can afford it, please.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen, enjoy your purchase!
+Sell:	Here's your %d nuyen.
+Name:	Dawn's Delights
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60320
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	610
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	65112
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	700043
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	700044
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	700045
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	700046
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	700047
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	700048
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	700049
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	700050
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	700051
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	700052
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	700053
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	700054
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	2113
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	2053
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	700055
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	700056
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	700057
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	700058
+		Type:	Avail
+		Stock:	0
+	[SELL 21]
+		Vnum:	700059
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	700060
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	31709
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	14618
+		Type:	Avail
+		Stock:	0
+BREAK
+END

@@ -1,0 +1,201 @@
+#32200
+Keeper:	32201
+ProfitBuy:	3.01
+ProfitSell:	0.78
+Random:	0
+Open:	6
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	Do you fraggin see that on the list, frag-face?
+NoSuchItemPlayer:	You don't fragging have that!
+NoNuyen:	Get the frag outta here and go fragging get some fragging money!
+DoesntBuy:	I don't fragging buy this fragging drek!
+Buy:	You fragging owe me %d fragging nuyen.
+Sell:	Here's your fragging %d nuyen.
+Flags:	10
+Races:	0
+Buytypes:	1010000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	32218
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	32217
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	32216
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	32215
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	32214
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	32213
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	32212
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	32211
+		Type:	Always
+		Stock:	0
+BREAK
+#32201
+Keeper:	32202
+ProfitBuy:	4.02
+ProfitSell:	0.78
+Random:	0
+Open:	6
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	I don't fragging have that!
+NoSuchItemPlayer:	You trying to cheat me, frag-face?
+NoNuyen:	Go fragging beg somewhere else!
+DoesntBuy:	I don't want this piece of shit!
+Buy:	%d nuyen, cash upfront.
+Sell:	You get %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	1000000000011000000000000000000001100000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	32229
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	32228
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	32227
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	608
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	32225
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	602
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	32223
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	32222
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	32221
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	32220
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	32219
+		Type:	Always
+		Stock:	0
+BREAK
+#32202
+Keeper:	32204
+ProfitBuy:	4.02
+ProfitSell:	0.62
+Random:	0
+Open:	6
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	I'm sorry but I'm out of those.
+NoSuchItemPlayer:	You do not possess that.
+NoNuyen:	You haven't got the cash.
+DoesntBuy:	I'm not interested.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	101000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	32210
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	32205
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	32204
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	32203
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	32202
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	711
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	32200
+		Type:	Always
+		Stock:	0
+BREAK
+#32203
+Keeper:	32207
+ProfitBuy:	1.12
+ProfitSell:	0.78
+Random:	0
+Open:	6
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	10
+Races:	0
+Buytypes:	1010000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	361
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	32234
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	32233
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	32232
+		Type:	Always
+		Stock:	0
+BREAK
+END

@@ -1,0 +1,128 @@
+#2300
+Keeper:	2303
+ProfitBuy:	1.00
+ProfitSell:	0.50
+Random:	5
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Doctor Aberration
+Flags:	10
+Races:	0
+Buytypes:	1000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	2317
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	2316
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	2315
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	2314
+		Type:	Always
+		Stock:	0
+BREAK
+#2301
+Keeper:	2321
+ProfitBuy:	6.20
+ProfitSell:	0.65
+Random:	5
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Hey, I make everything I've got, an' I sure as hell haven't made that.
+NoSuchItemPlayer:	You sure you got that on you?
+NoNuyen:	Take a trip to the ATM, then come back to me with some nuyen.
+DoesntBuy:	I don't want it.
+Buy:	That's gonna run ya %d 'yen, chummer. Good doin' business.
+Sell:	I guess I'll take that off your hands, here's %d 'yen.
+Name:	Shoot to Kill
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	2327
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	2326
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	2323
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	2322
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	2321
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	2320
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	2318
+		Type:	Avail
+		Stock:	0
+BREAK
+#2302
+Keeper:	2322
+ProfitBuy:	6.00
+ProfitSell:	1.00
+Random:	5
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, but I don't think I've got that.
+NoSuchItemPlayer:	Might want to double check if you really do have that.
+NoNuyen:	Come back when you've got the nuyen.
+DoesntBuy:	I'm not a pawn shop.
+Buy:	That will cost you %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Shoot to Kill
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	857
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	851
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	867
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	865
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	854
+		Type:	Avail
+		Stock:	0
+BREAK
+END
