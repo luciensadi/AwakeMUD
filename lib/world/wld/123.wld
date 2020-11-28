@@ -1,0 +1,414 @@
+#12300
+Name:	Vehicle Storage Room
+Desc:$
+   This is the room which vehicles would load in for the vehicle shop in room
+12301, I guess? So the description isn't all that important. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#12301
+Name:	The BurnsCo Truck Stop showroom
+Desc:$
+   This large mechanics garage is broken up into several sections, all of
+which is littered lightly with small oil stains and other vehicle run-off,
+most likely due to the vast amount of machinery dealt with on a daily basis
+around here. One of the sections is partially blocked off, and seems to be a
+customer service center, manned by a few desk clerks and a handful of capable
+mechanics. The other portion seems to be dominated by salesmen, some of whom
+sport crisp white collared shirts with ties, while others seem to have taken a
+more 'hands-on' approach to giving potential customers vehicle sale reviews. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	12302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12302
+Name:	The BurnsCo Truck Stop parking lot
+Desc:$
+   The BurnsCo Truck Stop has seen its fill of vehicles, to which the pock
+marked and heavily worn pavement in the parking lot can attest to ten-fold.
+There is plenty of room to park any assortment of vehicles one could desire,
+from the small and compact, to the almost mammoth sized transport trucks that
+call this stop home. A few standard spray painted green trash bins dot the
+landscape, some of which actually seem to have been used occasionally, while
+others have more rust than they do refuse. Across the lot sit long rows of
+gasoline and diesel pumps to refuel larger vehicles, with copious amounts of
+space to maneuver them about in. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2568
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	12301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	12304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12303
+Name:	The BurnsCo Truck Stop Shop
+Desc:$
+   A scuffed black and white checkered tiled floor has all sorts of tire racks
+and other display cases scattered almost randomly about its surface here.
+Everything you could wish for, and even some you never would, can be purchased
+here, including some vital components that may make that next hauling job a
+breeze. An old school bell settled above the door is set to trigger every time
+someone enters or leaves, letting the man behind the counter know when he has
+customers. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	12302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12304
+Name:	Inside the BurnsCo Truck Stop diner
+Desc:$
+   The aroma of greasy food and the smell of truckers and other drivers who
+have been on the road all day, night, or even week, combines to offer an
+almost stereotypical scene of what a truck stop should be. Plaid shirts and
+jeans as far as the eye can see, with beltbuckles the size of grapefruits,
+some polished bright enough to blind. Most of the seating is broken up into
+either booths that seat up to six people, or lines of swiveling padded chairs
+that hug the counter that winds its way along two walls of the establishment.
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	2
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	12302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12310
+Name:	Vehicle Storage for the Parker Center
+Desc:$
+   This is the storage area for vehicles that will be sold in the Parker
+Center vehicle shop, which is room 12311 for reference. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#12311
+Name:	The Parker Center Vehicle Depot
+Desc:$
+   A large show room seems to be dedicated here at the Parker Center, which
+deals in the latest model vehicles that have hit the market, as well as some
+old tried and true models that have become a staple in the business. The show
+room itself is seperated into several different sections, mostly by
+manufacturer, while a few others are designated by the types of models
+available. Wage slaves and office workers on their breaks meander around,
+looking over the vehicles and their price tags, most of which might even be
+within their price range if they could ever pry their checkbooks away from the
+companies they work for. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	1599
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12312
+Name:	Drone Storage for the Parker Center
+Desc:$
+   This room is for Drone storage for the Drone shop at the Parker center, its
+linked sale room is 12313, for reference. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#12313
+Name:	The Parker Center Drone Depot
+Desc:$
+   The show room here seems to be dedicated to multiple lines of drones and
+the various models available, and their salesmen waste no time in attempting
+to make a sale to anyone willing to step foot in here. Small show cases
+display some of the models, while others are available to 'test', as long as
+you're willing to put down a credstick for any problems with compensation that
+may arise from user error. Signs of different sizes are set up nearby, listing
+off whats available, along with design and function specs for each of them.
+For the most part, its simply sales propeganda, intent on making you purchase
+their respective models. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	1599
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12314
+Name:	An open-air Parker Center promenade
+Desc:$
+   This open-air section of the Parker Center is lined with benches and small
+tables with chairs, along with flimsy metal ashtrays and small steel basin
+water fountains with plastic outer casings. Wage slaves on their breaks wander
+about aimlessly, some window shopping, while others gather supplies for their
+offices. Others seem quite intent on simply taking their breaks in relative
+quiet and comfort, and due to the set up it makes it almost impossible to see
+any of the skyscrapers and other large buildings that dominate the East Tacoma
+skyline, giving it an open appearance, despite the areas congested terrain. 
+~
+Flags:	10000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	16
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12315
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	12316
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1599
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12315
+Name:	The Parker Center Office Supply store
+Desc:$
+   A small office supply shop seems to be set up here, complete with.. you
+guessed it, office supplies. They range from the most mundane to things you
+probably may not have expected. Shelves upon shelves and display cases are
+packed full of pretty much anything you could want, as far as office supplies
+go, while others wait to be filled with new shipments that haven't quite
+gotten to the store yet. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	12314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12316
+Name:	The Parker Center Indoor promenade
+Desc:$
+   More benches and tables are scattered about the area here, along with an
+assortment of potted plants that looked like they're watered regularly. The
+biggest difference between this area and the one to the north is fairly
+obvious, and that would be the sturdy over-hang that stretches from wall to
+wall above head, offering the wage slaves who mill around here a place to sit
+out of the rain, which is always a concern in this part of the country. All
+while still being able to enjoy their lunches in a relatively clean and
+pollution free atmosphere thats offered here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

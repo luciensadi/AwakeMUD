@@ -1,0 +1,313 @@
+#6500
+Name:	Entrance of Shastakowicz funeral home
+Desc:$
+   Located at one of the smaller streets and out of the loud traffic noise you
+find yourself in front of an average building. The walls are shabby and it
+looks like they have seen many years of acid rain. The windows in the first
+floor are colored completely black, as if there is something to be hidden
+behind them. Besides the two-winged wooden door there is a copper plate
+attached. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	6501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	~~~~~~~~
+	Desc:$
+ 
+~
+[EXTRADESC 1]
+	Keywords:	plate~~~~~~~~~
+	Desc:$
+There is the name Shastakowicz funeral home engraved into the copper plate. 
+~
+[EXTRADESC 2]
+	Keywords:	maglock~~~~~~~~
+	Desc:$
+The maglock looks pretty tough to crack. 
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#6501
+Name:	Lobby of Shastakowicz
+Desc:$
+   Its a really dark and majestic entrance hall. The bottom is laid out with a
+thick red carpet and the walls are decorated with  black velvet wallpapers
+embroidered with several golden ornaments. A slow and gentle melancholic music
+can be heard all over the hall. There is a smell of spruce needle in the air.
+Lots of burning candles heat up the whole hall and they are the only
+lightsources here. 
+~
+Flags:	10000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	6502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	6503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#6502
+Name:	Office of Shastakowicz
+Desc:$
+   Its a quite average looking office room with a clean atmosphere. The room
+also has an average size and is arranged with two white metal desks. The walls
+are painted white like the desks and the bottom is still covered with a thick
+red carpet. There are  computer screens at both desks and many documents and
+file folders are lying all-around. 
+~
+Flags:	10000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	6501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#6503
+Name:	Visiting Hall
+Desc:$
+   Thats the hall where you can see the deceased for the last time and give
+him the last good-bye. The  room is decorate with black velvet wallpapers with
+golden ornaments and the thick red carped, just the  same decor as you have
+seen in the entrance hall. There are many old chairs made from real mahogany
+wood and there is a table on which you can see a coffin made of fine platinum.
+All around you can see candles decorating the whole room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	6501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	coffin~~
+	Desc:$
+This coffin is made from the finest platinum you have ever seen. But taking a
+closer look to the material you discover that the coffin is basically made
+from wood and a very thin layer of platinum in order to pretend to be a
+massive one. Well who cares about the material when hes dead. After opening
+the coffin lid you look at an empty inside with a white silk pillow and cover.
+Otherwise its really empty and the light of the flickering candles is still
+glaring in the platinum. Maybe the one you search is somewhere else in the
+building. 
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#6504
+Name:	Entrance number of 2355 terrace appartments
+Desc:$
+   A composition of macroplastic and steel concrete makes this house something
+special, as well as every house build after 2020. Its typical grey-in-grey
+color with many strains that the acid rain left on the plasters surface give
+it someting warm and comfortable, but dont expect too much dude. The
+housenumber is partially covert with something indefinable maybe dirt or
+excrements. The macroplastic door was transparent some ages ago and it smells
+like a garbage dump. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	6506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	6505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	door~
+	Desc:$
+Made from macroplastic it looks very solid but the weak point at doors like
+this, isnt the material its  made from, but more likely the lock which looks
+pretty weak. 
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#6505
+Name:	an unfinished road
+Desc:$
+   The terrace road is running here from north to south but there is more
+litter flying around then cars that pass the area. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	6505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	6500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	6505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#6506
+Name:	Entrance number of 2357 terrace appartments
+Desc:$
+   Still the same composition of macroplastic and steel concrete. Its a simple
+and normal entrance likeyou  would expect in any apartment house in Seattle.
+Its typical grey-in-grey color with many strains that the  acid rain left on
+the plasters surface give it someting warm and comfortable, dont expect too
+much but its better then moste of the coffin hotels or motels around here. Its
+pretty clean at this entrance and thetransparent macroplastic door seems still
+be in good shape so you can take a look at floor behind it. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	6504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	door~
+	Desc:$
+Made from macroplastic it looks very solid but the week point at doors like
+this isnt the material its  made from, but more likely the lock which looks
+pretty weak. The floor behind it is filled with paper of advertisement flyers
+and newspapers that where delivered here some weeks ago. 
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

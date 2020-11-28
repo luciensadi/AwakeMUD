@@ -1,0 +1,3224 @@
+#71000
+Name:	Outside Aubury Fields
+Desc:$
+   What was once a series of baseball fields has been converted to a more
+practical use given the plague and urban blight.  The name however remains on
+a stone marker.  "Aubury Fields. In memory to those sons and daughters lost in
+2010."   A 10' chain link fence surrounds the perimeter of this now private
+airfield on the landward side keeping BTL addicts and stray animals from
+wandering onto the tarmac.  Besides the airstrip in the distance can be seen
+several hangers, one of which is oddly shaped, a blocky warehouse, a small
+control tower, a helipad and what looks to be a clubhouse/fuelstation
+overlooking a small sheltered marina where the airfield meets the sound. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	2085
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	71001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71001
+Name:	Security Checkpoint
+Desc:$
+   A small guard house stands adjacent to the road leading to the distant
+buildings.  A uniformed security guard mans the inbound barrier and checks the
+ID's and the business of non-members entering the facility.  A shredder bar is
+setup across the outbound lane should anyone be so foolish as to try to use it
+for entry.  The short road leads from the checkpoint to a parking lot near the
+clubhouse before continuing on to the hangers. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	71002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71002
+Name:	Ducky's Gas and Grill Parking lot
+Desc:$
+   This small well maintained and lit parking lot services both the store
+customers and the marina residents.   Clear orange lines designate parking for
+twenty normal cars and four extended lanes have been set aside for
+recreational vehicle.  Keyed metal plates near the RV lanes indicate power and
+utility plugs are available to marina members.  Ballistic resistant cameras
+look down upon the parking lot from the atop each of the four corner light
+posts.  The road continues east toward the airfield hangers. A well marked
+path leads down to the dock where a security gate prevents non-members from
+entering without the proper keypad code.  A locked freezer labled ice and a
+security cage for propane exchanges are on either side of the south east door
+to Ducky's. 
+~
+Flags:	110000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	71009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	71003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	gate
+	Desc:$
+A chain security gate with a keycard scanner. 
+~
+	ToVnum:	71004
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71000
+	LockRating:	8
+BREAK
+#71003
+Name:	Ducky's Gas and Grill
+Desc:$
+   This medium mulifunction store front serves as a convenience store,
+baitshop, gas station and short order place for the airfield workers and
+marina residents.  Seating inside is limited to two small booths but there is
+a sliding glass door leading out onto a screened and covered patio overlooking
+the marina where several tables are setup.  A lanky man with long grey hair
+wearing a reversed ballcap mans the grill while a young woman stays by the
+register greeting and helping new customers. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71080
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	71002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71004
+Name:	Ramp to dock
+Desc:$
+   At the base of the ramp are several boat ties next to two small multifuel
+pumps. Taped to them is a poorly written sign that says (Pay cashier to
+activate pumps.) The ramp continues on to several slips capable of mooring any
+boat up to a medium yacht or houseboat.  There is a service window to Ducky's
+where boaters can buy gas without walking all the way out to the parking lot.
+~
+Flags:	100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	10
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	gate
+	Desc:$
+A chain security gate with a keycard scanner 
+~
+	ToVnum:	71002
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71000
+	LockRating:	8
+[EXIT south]
+	ToVnum:	71005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71005
+Name:	Along the dock
+Desc:$
+   The ramp leads out onto a well maintained floating dock with evenly spaces
+slips for boats. Odd slips to the west and even to the east. Slip 1 and Slip
+2. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	10
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	71031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	71006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71006
+Name:	Further Along the dock
+Desc:$
+   The dock continues on.  Slip 3 and Slip 4. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	10
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	71035
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	71007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71007
+Name:	Along the dock
+Desc:$
+   The dock continues on.  Slip 5 and Slip 6. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	10
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	71039
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	71008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71037
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71008
+Name:	End of the dock
+Desc:$
+   The dock ends in with the final two slips.  Slip 7 and Slip 8.  Reaching
+the end of the dock you can just see around the point where a cloud nine
+amphibian is moored at a private dock running from a warehouse. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	71043
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71041
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71009
+Name:	By Aubry tower
+Desc:$
+   A round about circles a small control tower overlooking the runway and
+helipad before it continues on past a warehouse and feeds out onto the tarmac
+where several hangers are located. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	71011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71010
+Name:	Helipad
+Desc:$
+   A small well lit helipad is marked out near the parking lot just north of
+the control tower making this an ideal drop spot for an executive looking to
+go out for the weekend on his boat. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71011
+Name:	In front of a warehouse
+Desc:$
+   The road passes a decent sized warehouse connected to a nearby bulbous
+hanger by a covered walkway.  A weathered sign above the office door on the
+southwest side of the building reads "Seabreeze Charter Freight 24x7
+operations"  A large bay door offers access to several stepvans while larger
+vehicles are backed down to a loading ramp to make their cargo bays accessible
+to forklifts.  There seems to be some activity but clearly this business has
+seen better days. 
+~
+Flags:	110000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	18
+Y:	18
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door bay
+	Desc:$
+A large vehicle bay door. 
+~
+	ToVnum:	71013
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71009
+[EXIT southwest]
+	Keywords:	door office
+	Desc:$
+A weathered office door 
+~
+	ToVnum:	71012
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71012
+Name:	Inside the office
+Desc:$
+   A mousy clerk sits behind a counter keeping busy.  The sound of her typing
+on her terminal can be heard above the steady hiss of a the ventilation
+system.  Judging from a nearby white board, leasing of the marina slips and
+hangers is handled by this company.  Must be a side line gig to make ends meet
+given the low amount of freight moving through the place.  A locked door leads
+south into the warehouse proper. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door office
+	Desc:$
+A weathered office door 
+~
+	ToVnum:	71011
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Keywords:	door office
+	Desc:$
+A weathered office door 
+~
+	ToVnum:	71013
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71009
+BREAK
+#71013
+Name:	Inside the warehouse
+Desc:$
+   This multilevel warehouse appears to be used both for bulk parcel storage
+and as a service area for vehicles.  A section of the warehouse has been
+partitioned off with accoustic tiles but the sound of impact wrenches can
+still be heard echoing out from the workshops confines.  A freight elevator is
+visible against the left wall and appears to be the only way to get up to the
+catwalks and offices above.  A small bay door in the back of building leads
+down to a private dock.  Next to small rear bay door is a security cage
+surrounding what appears to be a secure storage area.  On the farside of the
+vehicle shop is the door leading to the covered walkway and nearby hanger. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door bay
+	Desc:$
+A large vehicle bay door. 
+~
+	ToVnum:	71011
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71009
+[EXIT east]
+	ToVnum:	71014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door steel motorized corrugated
+	Desc:$
+A motorized corrugated steel door. 
+~
+	ToVnum:	71018
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71009
+[EXIT southwest]
+	ToVnum:	71016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door office
+	Desc:$
+A weathered office door 
+~
+	ToVnum:	71012
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71009
+BREAK
+#71014
+Name:	Vehicle Repair Area
+Desc:$
+   A large part of the warehouse has been set aside and partitioned off with
+accoustic tiles to act as a workshop, the slightly muted noise coming from
+within echos out throughout the rest of the warehouse.  The shop contains
+everthing needed to work on most vehicles.  Two hydrallic lifts are set into
+the floor and an elaborate rail system is setup overhead to move around the
+heavier tools with ease.  Several support harnesses are setup up on one wall
+for the securing of drones in various states of disassembly. 
+~
+Flags:	100000100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71015
+Name:	Blimp Hanger
+Desc:$
+   This oddly shaped hanger appears suited to house a small to medium sized
+blimp or helicopter.  Padded struts connect the roof to several large
+hydraulic arms.  It is clear that this roof is capable of opening like a clam
+shell.   The hanger currently lies vacant save for a large amount of tools and
+diagnostic equipment setup around the edges. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	10
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	71014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71016
+Name:	Inside the cage
+Desc:$
+   Several storage lockers and shelves line the cage containing all manner of
+items.  The loot however plentiful is overshadowed by the heavily fortified
+room to the south which is accessible via a single armored door preventing
+accidental interruptions. An intercom is setup to talk folks inside when the
+door is locked. There are dolly scuff marks from where heavy loads have been
+wheeled into the secure room. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	71013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71017
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71017
+Name:	Summon Room
+Desc:$
+   This reinforced room contains an elaborate hermetic circle at it's center.
+The room is enclosed to allow incense to build up to heady concentrations.
+Four braziers are setup about the room at each of the four corners.  By the
+door is an intercom box next to two switches, one controlling a high speed
+ventilation fan mounted into the back wall and the other controlling the
+manual fire suppression system. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71016
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71018
+Name:	Ramp
+Desc:$
+   A well used cement ramp heads downward  from the HQ to a sheltered dock and
+boathouse. The dock continues past the boathouse and runs some 15 meters out
+into the sound before cutting back at a 90-degree angle and continuing on for
+another 10 meters. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	8
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door steel motorized corrugated
+	Desc:$
+A motorized corrugated steel door. 
+~
+	ToVnum:	71013
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71009
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71019
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71019
+Name:	Boathouse
+Desc:$
+   This large boathouse appears to be a combination shop and winterization
+facility.  There is a pneumatic lifting cradle feed by a an air compressor
+capable of  handling up to a patrol boat or small submarine.  The roof of this
+place is far too low for any sort of ship without a folding main mast. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71018
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71020
+Name:	Along the dock
+Desc:$
+   A cloud nine amphibian is tied up here on the northern side of the dock.
+It is painted in sky blue tones and has a classic WWII style pin up in
+bordello lingerie painted on the nose.  The caption reads "Risque' Venture".
+Those familiar with the company may take note that the face and form of the
+picture bare a striking resemblence to the copilot. There are enough ties to
+easily secure another large yacht or boat to the southern side of the dock. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	8
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	71018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	71022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71021
+Name:	Inside the cloud nine
+Desc:$
+   The cockpit seats two with two folding bench seats in back.  The
+electronics load out in the plane is quite extensive. There is an internal
+hardpoint for a heavy weapon and attachment points for pintle mounts by each
+door.  The back has enough room for a small amount of cargo. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	3
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71022
+Name:	An empty mooring
+Desc:$
+   The ties seem perfectly spaced for an ocean commander.  Too bad there isn't
+one here to tie down yet. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71023
+Name:	Inside a freight elevator
+Desc:$
+   The interior of this freight elevator is an older design, its decoration
+being spartan at best. Someone seems to have broken the speaker after getting
+tired of listening to the usual god awful music being pumped through them. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	3
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#71024
+Name:	Out onto the tarmac
+Desc:$
+   The road feeds onto a large central expanse of concrete seperating 6
+hangers from each other. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	10
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71045
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71010
+[EXIT east]
+	ToVnum:	71027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71048
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71011
+[EXIT west]
+	ToVnum:	71011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	71025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71025
+Name:	Taxiway
+Desc:$
+   A smoothly curving taxiway leads out to the runway. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	8
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	71024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71026
+Name:	Runway
+Desc:$
+   This long ribbon of concrete is well maintained and has evenly spaced
+landing lights down it's length for night and bad weather operations.  It
+appears capable of handing anything up to a skytruck in size. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	25
+Y:	10
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71027
+Name:	Down the tarmac
+Desc:$
+   The tarmac is well maintained with recent discolorations in the pavement
+indicating recent repairs and resurfacing. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	8
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71051
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71012
+[EXIT east]
+	ToVnum:	71028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71054
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71013
+[EXIT west]
+	ToVnum:	71024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71028
+Name:	End of the tarmac
+Desc:$
+   The tarmac ends 10 meters from a 4 meter drop off into the waters of the
+sound.  Based on the paint the tarmac also doubles as an emergency runway. 
+~
+Flags:	10000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	8
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71057
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71014
+[EXIT south]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71060
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71015
+[EXIT west]
+	ToVnum:	71027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71029
+Name:	Along Slip #1
+Desc:$
+   Walking down the dock you see a yellow mini-submarine resting lazily in the
+water, half submerged and idle bracketed by cushioned white float bumpers. The
+submersible's cockpit is clean and utilitarian, as seen through the heavily
+reinforced glass dome adorning the front of its deceptively large yellow
+chassis. A fin protruding from the top of the minisub reads SK23H. The
+submarine does not appear to be an offensive vehicle, but rather designed for
+exploration, retrieval, and rescue missions. The cargo hold and engine
+configuration comprise the majority of the vehicle. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	4
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	hatch glass
+	Desc:$
+A heavily reinforced glass hatch seals the vehicle. 
+~
+	ToVnum:	71030
+	Flags:	2
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	71001
+BREAK
+#71030
+Name:	Inside vehicle moored in Slip #1
+Desc:$
+   The inside of ths cockpit is decidedly cramped, yet comfortable enough and
+utilitarian for longer operations. Gauges and digital readouts adorn a long
+yellow dash in front of only two seats, each with their own set of controls.
+In the middle of the panel is a multifunctional flat panel display. The words
+'Saeder-Krupp Davy Jones' Locker' embellish the bottom of the panel. The glass
+cockpit gives a great view to all sides of the vehicle, as well as above and
+below. The submarine sports water and engine EnviroSeal, ten man hours of life
+support, a mechanical arm, a spotlight, electric engines, a large cargo hold,
+and rudimentary sonar and hydrophones. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	hatch glass
+	Desc:$
+A heavily reinforced glass hatch seals the vehicle. 
+~
+	ToVnum:	71029
+	Flags:	2
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	71001
+BREAK
+#71031
+Name:	Along Slip #2
+Desc:$
+   A large sports cruiser floats here, roughly twelve meters in length, the
+enclosed cockpit sitting quite far forward on the chasis, doors on either side
+of it the only entrance to the craft. The upper portion of this sleek
+watercraft is painted a metallic aquamarine blue, the lower portion, just
+visible above the waterline, is a much lighter sky blue. This boat looks
+impressively awesome, stupidly fast, and you probably want one now. Painted
+near the prow is a pin-up of a woman clad in scandalously tight, revealing,
+black leather attire, wielding a bullwhip which lashes out to underline the
+boat's name, "The Harsh Mistress". 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	4
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+An empty slip stands to the south. 
+~
+	ToVnum:	71032
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71002
+[EXIT west]
+	ToVnum:	71005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71032
+Name:	Inside a GMC Riverine
+Desc:$
+   The interior of the boat looks very impressive at first glance, the forward
+helm looking more like the inside of some SOTA fighter/bomber. The pilot and
+co-pilot's seats sit side by side at the front, controls and gleaming
+instrument panels laid out before and above them. The lighting can be switched
+from normal white to red in the event that stealth is required. Near the back
+of the helm is a folding bench seat, able to seat two normal-sized passengers
+comfortably. Next to this is a doorway leading into the meagre living
+quarters, made up of two sets of bunks mounted on the walls, which fold neatly
+away when not in use. There is a small, efficient kitchenette and a fold away
+table, with the lower bunks able to serve as seating. A small hatch at the
+rear leads to the meagre cargo bay. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+~
+	ToVnum:	71031
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71002
+BREAK
+#71033
+Name:	Along Slip #3
+Desc:$
+   The slip currently lies empty. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	4
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	71034
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71003
+BREAK
+#71034
+Name:	Inside vehicle moored in Slip #3
+Desc:$
+   Customizable room description for slip owner. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	71033
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71003
+BREAK
+#71035
+Name:	Along Slip #4
+Desc:$
+   The slip currently lies empty. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	4
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	71036
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71004
+[EXIT west]
+	ToVnum:	71006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71036
+Name:	Inside vehicle moored in Slip #4
+Desc:$
+   Customizable room description for slip owner. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	71035
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71004
+BREAK
+#71037
+Name:	Along Slip #5
+Desc:$
+   The slip currently lies empty. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	4
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	71038
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71005
+BREAK
+#71038
+Name:	Inside vehicle moored in Slip #5
+Desc:$
+   Customizable room description for slip owner. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	71037
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71005
+BREAK
+#71039
+Name:	Along Slip #6
+Desc:$
+   The slip currently lies empty. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	4
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	71040
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71006
+[EXIT west]
+	ToVnum:	71007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71040
+Name:	Inside vehicle moored in Slip #6
+Desc:$
+   Customizable room description for slip owner. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	71039
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71006
+BREAK
+#71041
+Name:	Along Slip #7
+Desc:$
+   A modern day 10 meter long motor yatch occupies this slip. It is painted
+pitch black matte with neon yellow running lights. Even the deck is painted
+black and has the tactile feel of sticky rubber. Even the surfaces you would
+expect to be chromed like the ladder running to the flying deck are covered in
+the tactile rubber save where it's drilled through to display, you guessed it
+neon yellow running lights. This thing looks like it could light up like a
+christmas tree at night or be a hole in the water. The main deck has plenty of
+room for a party of five and the below decks can be accessed through a hatch
+fore of the flying deck. The name on the stern and on the starboard lifeboat
+cover reads in striking golden font reads "Imminent Domain". 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	4
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	71042
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71007
+BREAK
+#71042
+Name:	Inside a Dolphin II
+Desc:$
+   The interior of the Dolphin II is a merger of seathworthy style and class.
+There is a galley, lounge, 3 cabins and a toilet facility. The interior does
+not appear to follow the external color scheme but the floor is painted with
+the same spray on black matte traction enhancing material. A set of rigger
+controls is build into the main cabin along with a satelitte uplink port. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	71041
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71007
+BREAK
+#71043
+Name:	Along Slip #8
+Desc:$
+   An elegant looking 18 meter sailing yacht occupies this slip. It is painted
+a stark white with red running lines and accenting around the port holes. Well
+polished railing and stancions adorn either side of the craft. There appears
+to be enough room for three to four people up on deck. The rigging is furled
+inside a thick main mast and the small spiderweb of cables running fore and
+aft give clear indication the rigging is automated. A wooden door just fore of
+the wheel leads down below. The name on the stern reads "Frisky Kitten". 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	4
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	71044
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71008
+[EXIT west]
+	ToVnum:	71008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71044
+Name:	Inside the "Frisky Kitten"
+Desc:$
+   The inside of the boat is fairly spartan yielding comfort to function. Down
+below is a small galley attached to a short hallway with two small alcoves.
+One alcove contains a set of bunkbed the other a small lavatory. The hallway
+terminates in a small cabin. Polished wood adorns almost all surfaces. The
+bottom bunk appears to be configured with rigger control gear. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	71043
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71008
+BREAK
+#71045
+Name:	Hanger 1
+Desc:$
+   This moderately large hanger contains a large open area for aircraft
+maintainance and storage with two rooms for equipment to the east and a small
+efficiency restroom to the south. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71046
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71010
+[EXIT south]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71024
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71010
+BREAK
+#71046
+Name:	Room 1
+Desc:$
+   This room is sized to be a small office at 5x8 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71045
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71010
+BREAK
+#71047
+Name:	Room 2
+Desc:$
+   This small storage room measures 4x5 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71046
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71048
+Name:	Hanger 2
+Desc:$
+   This moderately large hanger contains a large open area for aircraft
+maintainance and storage with two rooms for equipment to the east and a small
+efficiency restroom to the south. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71024
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71011
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71049
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71011
+BREAK
+#71049
+Name:	Room 1
+Desc:$
+   This room is sized to be a small office at 5x8 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71048
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71011
+BREAK
+#71050
+Name:	Room 2
+Desc:$
+   This small storage room measures 4x5 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71049
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71051
+Name:	Hanger 3
+Desc:$
+   This moderately large hanger contains a large open area for aircraft
+maintainance and storage with two rooms for equipment to the east and a small
+efficiency restroom to the south. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71052
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71012
+[EXIT south]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71027
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71012
+BREAK
+#71052
+Name:	Room 1
+Desc:$
+   This room is sized to be a small office at 5x8 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71051
+	Flags:	0
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71012
+BREAK
+#71053
+Name:	Room 2
+Desc:$
+   This small storage room measures 4x5 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71054
+Name:	Hanger 4
+Desc:$
+   This moderately large hanger contains a large open area for aircraft
+maintainance and storage with two rooms for equipment to the east and a small
+efficiency restroom to the south. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71027
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71013
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71055
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71013
+BREAK
+#71055
+Name:	Room 1
+Desc:$
+   This room is sized to be a small office at 5x8 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71054
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71013
+BREAK
+#71056
+Name:	Room 2
+Desc:$
+   This small storage room measures 4x5 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71057
+Name:	Hanger 5
+Desc:$
+   This moderately large hanger contains a large open area for aircraft
+maintainance and storage with two rooms for equipment to the east and a small
+efficiency restroom to the south. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71058
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71014
+[EXIT south]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71028
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71014
+BREAK
+#71058
+Name:	Room 1
+Desc:$
+   This room is sized to be a small office at 5x8 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71059
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71057
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71014
+BREAK
+#71059
+Name:	Room 2
+Desc:$
+   This small storage room measures 4x5 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71058
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71060
+Name:	Hanger 6
+Desc:$
+   This moderately large hanger contains a large open area for aircraft
+maintainance and storage with two rooms for equipment to the east and a small
+efficiency restroom to the south. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door hanger
+	Desc:$
+A large hanger door. 
+~
+	ToVnum:	71028
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71015
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71061
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71015
+BREAK
+#71061
+Name:	Room 1
+Desc:$
+   This room is sized to be a small office at 5x8 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71062
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A door stands here. 
+~
+	ToVnum:	71060
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71015
+BREAK
+#71062
+Name:	Room 2
+Desc:$
+   This small storage room measures 4x5 meters. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	5
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71063
+Name:	Central Hallway
+Desc:$
+   Clearly this used to be a massive open space for storage but it has been
+cleverly converted into seperate living areas. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the north. 
+~
+	ToVnum:	71068
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71016
+[EXIT east]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the east. 
+~
+	ToVnum:	71070
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71017
+[EXIT southeast]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the southeast. 
+~
+	ToVnum:	71072
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71018
+[EXIT south]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the south. 
+~
+	ToVnum:	71074
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71019
+[EXIT southwest]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the southwest. 
+~
+	ToVnum:	71077
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71020
+[EXIT west]
+	ToVnum:	71076
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	71064
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71064
+Name:	Relaxation area
+Desc:$
+   The freight elevator opens up into a large room with exits leading to a
+room to the north, an open kitchen to the east and a hallway to the south
+where it meets the eastern wall. Off centered in the room so as to provide a
+clear path from the elevator to the kitchen and hallway is a large trid unit
+surrounded by two synth leather recliners and a matching L shaped sofa
+sectional.  A large bean bag chair seems to be set aside for troll use judging
+by the patches from dermal punctures.  There is a service ladder adjacent to
+the elevator leading up to a locked hatch. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71066
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	71065
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	71063
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	hatch
+	Desc:$
+An armored hatch is up above. 
+~
+	ToVnum:	71067
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71009
+BREAK
+#71065
+Name:	Kitchen
+Desc:$
+   This breakroom has been converted into a full fledged kitchen, a large
+expanse of faux marble countertop surrounds a new sink with an adjacent
+cutting board and wooden knife holder.  There are numerous cupboards  above
+the countertop and additional dry goods can be stored in a pantry behind a
+sliding door set into the far wall .  A new oven range and inset microwave
+complete the northern wall.  A large refrigerator is here along the southern
+wall with a matching freezer.  A small table resides in the center of the room
+along with four chairs. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	71064
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71066
+Name:	Library
+Desc:$
+   This storeroom has been converted into a research library.  Several
+bookshelves line the walls of this small room.  A small reading table stands
+next to a large stuffed chair  behind which is a large chalkboard.
+Supplemental light is provided by a gooseneck reading lamp on the table. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71064
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71067
+Name:	Roof
+Desc:$
+   You emerge from the hatch onto a well maintained roof with a clear view of
+the sound, marina, runway and approach roads.  The hangers obscure the tarmac
+in several spots due to their height.  A sheltered area as been setup for
+drone storage and several rotodrones sit on their tripods ready for rapid
+deployment.  A doberman patrol drone has also been hoisted up here.  It
+appears to be armed with a very large sniper rifle and a light machine gun.
+It patrols the rooftop tethered to a central outlet to keep it's charge topped
+off.   An armored box attached to a large anteannae indicates a remote network
+signal booster has been setup here. 
+~
+Flags:	100000100000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	Keywords:	hatch
+	Desc:$
+An armored hatch leads down below. 
+~
+	ToVnum:	71064
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	71009
+BREAK
+#71068
+Name:	Lauren's Abode
+Desc:$
+As soon as you enter this room, you are immediately aware of its subdued, calming atmosphere.  The walls are painted a dark forest green in color, the floor a patterened hardwood, the ceiling a dark mid-night blue, illumination provided by hundreds of small lights in the ceiling, glistening like stars, their luminosty controlled by dials set about the room.  One wall is dominated by a queen sized, four post bed.  Sheer green curtains conceil the bed itself, covered in dark blue satin sheets.  Across from t
+he entryway, are two smaller doors.  One leds to a small, yet opulently decorated bathroom, the other to a spacy walk in closet.  On the wall opposite the bed, is a medium sized trid unit, mounted high enough to be viewed from the bed.  Oddly enough, a small glass aquarium sits next to the trid, though it is devoid of water.  Instead of that, it has a sand floor with many small rocks and a heat lamp.  If one were to gaze intently, they would be notice a large scorpion skitter out of a hidden burrow for a m
+oment, before scuttling back into its lair.  Hanging on the wall over the door is a large Confederate Flag.
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71069
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the south. 
+~
+	ToVnum:	71063
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71016
+BREAK
+#71069
+Name:	Storage Room
+Desc:$
+   This 3x3 storage room matches the decor of the main bedroom, minus the
+lighting.  Althought the room is currently storing a number of everyday things
+it still has room down the center to turn about and move in..  Against the
+south wall, is a large armoire, that runs almost it the entire length.  It has
+a full length mirror, with ample lighting about the room allowing one to gaze
+at themselves fully in it.  Across from it is a well made vanity, with a large
+mirror and wrap around lighting, its top full of various makeups, creams, and
+hair products.  Across from the door, is a large, heavy trunk. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	71068
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71070
+Name:	Guest Room
+Desc:$
+   This moderately sized bedroom is efficient but has a woman's touch.  A
+large chest of drawers stands next to a full length mirror.  A queen sized bed
+dominates the room.  Two doors lead east.  One goes into an efficiency
+bathroom and the other into a storage closet. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71071
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the west. 
+~
+	ToVnum:	71063
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71017
+BREAK
+#71071
+Name:	Walk in closet
+Desc:$
+   This 3 x 3 meters closest is large enough to store a ton of clothing or to
+setup a small microtronics shop. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	71070
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71072
+Name:	Nex's Niche
+Desc:$
+   This medium sized bedroom is dominated by a large desk along the west wall,
+scattered with old or burnt-out optical chips, along with the usual detritus
+that litters desks in frequent use. A queen-sized bed is shoved into the far
+corner, in a vain effort to keep it out of the way. A small couch lies against
+the north wall, almost, but not quite, blocking the doorway to the efficiency
+bathroom to the east. The other eastern door leads to a large storage closet.
+The faint odor of soldering and circuitry wafting in from there suggests it's
+not only used as a closet.  
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71073
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the northwest. 
+~
+	ToVnum:	71063
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71018
+BREAK
+#71073
+Name:	Walk in closet
+Desc:$
+   This 3 x 3 meters closest is large enough to store a ton of clothing or to
+setup a small microtronics shop. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	71072
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71074
+Name:	Spindrift's Sanctum
+Desc:$
+   The walls of this large bedroom are covered floor to ceiling with
+pressure-treated oak, stained in a clear matte finish to bring out the natural
+straw-colored grain of the wood. The floor is left bare, the structure's
+original grey cement polished smooth. Several large fluorescent lightboxes set
+into the walls emit soft, diffuse lighting, while recessed flood lights in the
+flat white ceiling provide brighter pools of illumination from above. A
+collection of arcane charts and diagrams covered in intricate runes and
+sketches, mounted on the lightboxes, casts elongated shadows and translucent
+patterns of occult symbols across every surface. Each corner of the room has a
+small wrought-iron gargoyle sconce holding a faux torch which burns with a
+computer generated flame.  A door to the south leads into a storage area which
+has been used to make a shamanic lodge.  A large photorealistic painting of a
+primeval forest hangs above the bed. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the north. 
+~
+	ToVnum:	71063
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71019
+[EXIT south]
+	ToVnum:	71075
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71075
+Name:	Meditation Room
+Desc:$
+   The walls and ceiling of this small room are painted sky blue, with fluffy
+white clouds and distant mountain peaks shrouded in mists, in trompe l'oeil
+style so that it does not seem like a room at all, but rather the view from a
+mountain summit. The floor of this room is packed soil. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	4
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71074
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71076
+Name:	Laundry Room
+Desc:$
+   This 5 meter square room is occupied by a counter and two top and bottom
+style washer/dryers. A clothes iron/steamer hanging on the wall for use with
+the slide out ironing board build into the countertop 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71063
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71077
+Name:	Spyder's Web
+Desc:$
+   This moderately sized bedroom is dimly lit.  It contains a queen-sized bed,
+a nightstand with reading lamp, a minifridge and tall chest of drawers.  A
+picture is on the nightstand of a middle aged man with his arm around Spyder.
+On the wall opposite the foot of the bed is framed picture of a FB Eagle with
+the caption Aim high, cause gravity is a slitch.  There are two small doorways
+off the room.  One leads to a small efficiency bathroom with an efficiency
+shower.  The other leads to a small walk in closet.  The small minifridge is
+plugged in on the opposited side of the bed closest to the closet. The dim
+green glow of LCDs can be seen spilling from the walk in closet into the room.
+The far wall is devoid of hangings the reason for which becomes clear as
+scenes play across it's surface.  Something in the other room is broadcasting
+security feeds and causing the nanopixels painted on the walls to display
+them. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71078
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	Keywords:	door bedroom
+	Desc:$
+A bedroom door stands to the northeast. 
+~
+	ToVnum:	71063
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	71020
+BREAK
+#71078
+Name:	Walk in closet
+Desc:$
+   It looks like someone has turned this walk-in closet into a make shift
+workspace for a microtronics workshop.  LCDs line the back wall of the closet
+above chest height connected to various sensor devices and computers.   A
+small table is pushed against one wall and underneath it are modular storage
+containers packed full of computer components. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	71077
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	71079
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71079
+Name:	Benny's Hollow
+Desc:$
+   This 3.5 square workroom is full of computer equipment, plastic melders and
+passkey coders. A small man sits on a stool nearby trying to type with some
+effort. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	2.50
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	71078
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#71080
+Name:	Patio
+Desc:$
+   This shaded and enclosed patio overlooks the marina and the bay. It
+contains a large sturdy wooden picnic table in the center with more intimate
+seating for two at small tables in each of the corners. The small kiosk
+mounted just outside the sliding glass door can be used for a price to pull up
+music which can then be piped in through a few speakers placed about the room
+or conversely to activate the white noise generators located adjacent to the
+four small ceiling fans which help cool the area. 
+~
+Flags:	0
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	71003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

@@ -1,0 +1,1557 @@
+#6000
+Name:	Highway 210
+Desc:$
+   Highway 210 forks off Highway 229, moving southeast to Camas a small
+industrial town on the Columbia River. Being a Sinsearach city, Camas'
+industry has been narrowed down to industries more conservative
+environmentally. The smokestacks to the southeast billow steam, not smoke,
+from the chemical free paper plants that populate the riverside town.  
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	6001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	17589
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6001
+Name:	Highway 210
+Desc:$
+   A ways to the southeast is Camas, not entirely distant, as you can see the
+tops of the smokestacks pouring steam into the air over the trees. Camas is an
+industrial city, but somewhat quieter than one might expect. It is home to
+paper mills along with an outlet of Blackwind Shipping. Sitting on the
+Columbia River, Camas is also a little known staging point for smugglers of
+cargo into and out of Tir Tairngire. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	6002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	6000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6002
+Name:	Highway 210 - Camas City Limit
+Desc:$
+   Highway 210 becomes Mill Plain Road here as it enters into the town of
+Camas, a small industrial town home to a paper mill along with an outlet of
+Blackwind Shipping, also a little known staging point for smugglers of cargo
+to and from Tir Tairngire over the Columbia River. While it's a quiet town,
+it's not at all deserted, with the occasional citizen walking through the
+street on a break from their duties at the mill. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	6003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	6001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6003
+Name:	Mill Plain Boulevard \\ Camas
+Desc:$
+   Mill Plain Boulevard ends here going westwards, where it curves to the
+northwest to become Highway 210, linking to nearby Vancouver and Highway 229.
+The street is flanked by some small one story buildings, random houses with a
+sort of a utilitarian and Spartan look about them, and a good deal of foliage
+of the evergreen variety. A paper mill is a ways to the south from here, where
+most of the people in this small, quiet yet industrial town work. At the far
+eastern end of Mill Plain is Columbia Avenue, which leads to the docks. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	6004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	6002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6004
+Name:	Mill Plain Boulevard \\ Camas
+Desc:$
+   Camas is rather small and quaint for an otherwise industrial town.
+Southwards, you can see large smokestacks from the paper mills spewing steam
+from the processing into the air. Lining Mill Plain are some small buildings,
+mostly small offices for local business nothing of major interest to a runner.
+The most interesting thing to a runner in Camas would probably be at the
+docks, to the east of here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	6005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6005
+Name:	Mill Plain Boulevard at Camas Avenue
+Desc:$
+   Camas Avenue leads southwards to the Weimerhauser paper mill, a profitable
+mill that exports chemical free paper throughout the world. An ecologically
+sound industry, it keeps the Sinsearach elves with a steady pay check, and
+brings a strong industry into the Vancouver/Camas area. To the east a ways are
+the docks, home to an outlet of Blackwind Shipping which uses the harbour for
+shipping and receiving through various oceanic routes.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	6006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6006
+Name:	Mill Plain Boulevard \\ Camas
+Desc:$
+   Mill Plain Boulevard runs east to west through Camas, ending at the east
+end, where it turns into a privately owned stretch of road leading to the
+Camas docks. To the west the road turns into Highway 210, which forks onto
+Highway 229. This is a rather quiet and crimeless section of Camas, with older
+buildings holding offices for local business and other non interesting places.
+To the east the Blackwind Shipping warehouses and docks are the bulk of
+western Camas save a few small offices and a paper packing facility. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	6007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6007
+Name:	Mill Plain Boulevard at Camas Docks
+Desc:$
+   To the southeast are the docks, from which ocean traffic to and from the
+Pacific prove beneficial to Camas, via an arrangement with Blackwind Shipping
+who ship all of Camas' paper product. Mill Blain Boulevard officially ends its
+eastern route here yet still continues westward where it eventually turns into
+Highway 210. While the road ends officially, it does narrow slightly and
+continue eastward toward the docks and warehouses of Blackwind Shipping. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	6008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6008
+Name:	A well maintained road off Mill Plain
+Desc:$
+   This well maintained road rides smoothly into and out of the Camas docks to
+the southeast. The road is flanked with high monowire fences to keep would be
+trespassers on the road and off of the privately owned grounds of Blackwind
+Shipping. At frequent intervals along the road, the tall monowire fence
+features bright signs declaring, "^WPRIVATE PROPERTY ^L- ^YTRESPASSERS WILL BE
+LAWFULLY ^REXECUTED!^n". The signs, while clear, are redundant considering the
+lethal monowire fence is generally more than enough to keep anyone out.
+Failing that, guards are sure to be on the grounds. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	6009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6009
+Name:	Near a guarded gate
+Desc:$
+   The road continues and to the east of you a well guarded gate marks the end
+of this well maintained road. To the west, the road leads back into Camas
+proper and Mill Plain Boulevard. To the south is a moderately sized warehouse
+that can only be the Blackwind Shipping headquarters. You're well into the
+compound now, evident by the large variety of cargo containers organized
+throughout the area. Either waiting to be filled, unpacked, or shipped, each
+one seems to have been placed with purpose and all are in pristine condition.
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	6010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6010
+Name:	A guarded gate
+Desc:$
+   A well guarded gate stands here marking the end of the road toward the
+docks. Passage beyond requires shipping papers which can only be obtained via
+the Blackwind Shipping office to the southwest. A sign posted on the gate
+states, "PRIVATE YARD! BLACKWIND SHIPPING USE ONLY!" A monowire fence prevents
+foot access beyond the gate and continues to border the access road and the
+parking lot to the southwest. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	gate
+	Desc:$
+A large metal gate. 
+~
+	ToVnum:	6011
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	15705
+	LockRating:	10
+[EXIT southwest]
+	ToVnum:	15700
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6011
+Name:	Access road leading to the docks 
+Desc:$
+   Being on this road either means you're affiliated with the Blackwind
+Smugglers, also known as their cover name on more legitimate channels as
+Blackwind Shipping, or were able to circumvent their well guarded gate. This
+access road leads southeast to where the Smugglers do what they do best. A
+ferry can be seen crossing the Columbia, no doubt loaded with nefarious cargo,
+destination unknown. 
+~
+Flags:	10000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	6012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	guarded gate
+	Desc:$
+A large metal gate. 
+~
+	ToVnum:	6010
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	15705
+BREAK
+#6012
+Name:	Northern Docks
+Desc:$
+   These northern docks are typically used as a receiving area for goods
+smuggled in to this port. Even though this area is relatively secure and
+protected from birds' eye spying, the pretence of legitimate shipping and
+receiving is still maintained as much as possible, even going to the point of
+legitimately shipping various goods, including all Camas' paper products. As a
+result, to all who search records, Blackwind Shipping is a legitimate private
+shipping company, but in reality, it is the home of the Blackwind Smugglers
+who rarely discriminate in the cargo they will smuggle for customers. The
+access road continues to the southern docks where loading is done for outgoing
+goods. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	6011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6013
+Name:	Out on the tarmac
+Desc:$
+   This section of the tarmac seems to be where some of the larger aircraft
+are kept, which features a much longer runway for them to get up to speed or
+land upon. Various mechanics and other employees can be seen running around,
+making sure everything is running smoothly in the meanwhile, refueling the
+aircraft as they arrive and wait for takeoff. 
+~
+Flags:	100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	5.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	15709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6014
+Name:	A private airstrip
+Desc:$
+   This private airstrip features various types of aircraft that line along
+side the shortened runway and tarmac, ranging from t-birds to other VTOL
+planes, making for quite the collection. It doesn't appear that there is any
+other way to this private island aside from a lengthy trip through the nearby
+Caribbean Sea, adding to the remote and private nature of this place. 
+~
+Flags:	100
+SecType:	Storm
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	gate fence
+	Desc:$
+A heavy gate keeps trespassers from climbing over it, thanks to all the razor
+wire topping the fence. 
+~
+	ToVnum:	70415
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7918
+BREAK
+#6015
+Name:	Along the smugglers dock
+Desc:$
+   The dock was constructed here some years ago, long before the wall went up,
+and has since then proven quite a valuable asset to have if smuggling is your
+line of business. The short wooden piers are heavily reinforced at their bases
+to help keep themselves from being ravaged by the ebb and flow of the Columbia
+it sits on the shores of. A few ship ramps are set up along the docks
+themselves, along with loading cranes to ease the backs of laborers needed for
+loading and off-loading various shipments of cargo. To the south sits the
+heart of the small shipyard, whos path is lined with stacks of old wooden
+palettes and cargo containers. 
+~
+Flags:	10000000000000000000100
+SecType:	Storm
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	6016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6016
+Name:	Entrance to a private dock
+Desc:$
+   Here lies the heart of this relatively small scale shipping yard, which
+even from here can be seen surrounded by thickets of woodland and forest area
+beyond the mono-wired topped fence that outlines the shipyard property itself.
+A storage warehouse lies off to the east, its large reinforced rolling doors
+strapped with heavy chains and padlocks, as well as a number of high tech
+security measures, ranging from cameras (which dot the entire shipyard, some
+noticable, while others are less conspicious), to encrypted maglock
+cardreaders and a various assortment of alarms. The road stretches off to the
+southwest, towards the main entrance gate of the yard. 
+~
+Flags:	100000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	6015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	doors double rolling
+	Desc:$
+A set of heavily reinforced rolling doors block entrance to the warehouse east
+of here. They are covered in various forms of security measures. 
+~
+	ToVnum:	6018
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	15705
+[EXIT southwest]
+	ToVnum:	6017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6017
+Name:	At the gate of a heavily reinforced fence
+Desc:$
+   The road leading out of the docks is blocked by a large, reinforced fence
+to the south, while back to the north are the docks and piers themselves.
+Signs can be seen along the long stretch of woodland road beyond the fence,
+reading things such as: ^W"^YKEEP OUT^N - ^LBLACKWIND SHIPPING BUSINESS ONLY^W"^N, as well
+as a few ^W"^RTRESPASSERS WILL BE SHOT ON SIGHT^W"^N warnings. The foliage alongside
+the road is entwined into the mono-wire topped fences that were erected there
+long ago, but are apparently often serviced and repaired. 
+~
+Flags:	100000000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	6016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6018
+Name:	Inside of a warehouse near the docks
+Desc:$
+   The interior of this warehouse just off the pier is starkly uninteresting,
+to say the least. It looks to be a storage warehouse, but the only thing
+currently being housed here is bits of machinery in various stages of
+disrepair and restoration, most of which have atleast some faint layer of dust
+upon their surfaces. A few generators are parked around, their cables leading
+to the assortment of small industrial cranes used to move heavy palette loads
+scattered about, as well a few hand powered chain and pulley lifters. Three
+sets of cargo rails are bolted to the floor, one along each side of the
+warehouse, as well as one running down its center. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	6
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	doors double rolling
+	Desc:$
+A set of heavily reinforced rolling doors seal the entrance of the warehouse.
+They are covered in various forms of security measures. 
+~
+	ToVnum:	6016
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	15705
+[EXIT down]
+	Keywords:	panel floor
+	Desc:$
+A panel sits on top of the lifter platform, keeping it from being used without
+being lifted clear. 
+~
+	ToVnum:	6019
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7916
+	HiddenRating:	12
+BREAK
+#6019
+Name:	Inside of a warehouse basement
+Desc:$
+   The entire area is paved and constructed in much the same manner as any
+basement would be. The walls are concrete reinforced with thick metal rebar,
+which in turn holds up a ceiling (or floor, depending on what side you're
+standing on) made in a similar manner. The center of the room is dominated by
+a large, two-tier pneumatic lift system. The bottom tier is level with the
+floor, while the top tier is level with the floor above ahead. When raised,
+the bottom tier lifts up to level off at the floor above ground, making it
+very useful for transfering heavy cargo loads up and down between the sublevel
+and ground floor. A set of rails bolted to the floor start on the lower tier
+plate, and apparently head off south to a pair of large metal security doors
+embedded into the wall. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	6020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	panel platform ceiling
+	Desc:$
+A panel sits on top of the lifter platform, keeping it from being used without
+being lifted clear. 
+~
+	ToVnum:	6018
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7916
+BREAK
+#6020
+Name:	Along a sub-basement hallway
+Desc:$
+   All four surfaces of this hallway are constructed in a flat, economically
+boring design, all of which consists of rebar weaved concrete blocks. Its
+spacious enough to drive a large truck through, and running down along its
+center are evenly spaced rails bolted to the floor to transport cargo along
+easier. To the north are a pair of heavy metal security doors, while the
+tunnel itself stretches off to the south before curving along towards the
+east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	6019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	6021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6021
+Name:	Through the twists and turns
+Desc:$
+   Concrete walls, a longggg stretch of them, which occasionally curves and
+sways from left to right as one wanders down this corridor. Lengthy metal
+rails snake their way along down its center, and the only real source of light
+is given off by the dim glow from an occasional tinted bulb lined along the
+bottom corners where the walls and floor meet. Its quite hard to see where
+exactly the tunnel leads due to its twists and turns, but there looks to be
+more of the same in each direction. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	8
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	6022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	6020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6022
+Name:	In a large concrete room
+Desc:$
+   The tunnel wanders in from the north and opens into a slightly larger room.
+A large square in the floor has been excavated and reinforced with cut blocks
+of stone. To the side of the hole itself is a heavy duty platform lifter,
+which drapes its lifting plate out over the hole, and seems to be small enough
+to be slowly lowered down beneath. What lies beneath isn't readily noticable
+from here, so one would have to ride it down to have a look see. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	6021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	6023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6023
+Name:	Down into the tunnels
+Desc:$
+   A large hole has been dug through the ceiling of this section of tunnels,
+atop which can be seen the bottom of the lifter platform used to get up and
+down. The tunnels themselves are roughly hewn out of the earth, and haven't
+been resurfaced for any building, so the footing can be treacherous. The
+tunnel almost resembles a natural cavern, if it weren't for the occasional
+tell-tale marks left behind by machinery. Most of the tunnel north of here has
+been collapsed, either purposefully, or by natural causes, its a bit difficult
+to tell. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	12
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	6024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	6022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6024
+Name:	Along a roughly hewn cavern
+Desc:$
+   The roughly hewn cavern continues its journey along in a fairly level
+manner, though bits and pieces of the surfaces jut out. An occasional hooded
+construction lamp are either bolted to the walls or ceiling, or simply hanging
+by old, now broken extension cord lines. The tunnels were originally excavated
+for use in the monorail system through-out Portland, but have been abandoned
+and left uncompleted long since. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	12
+Z:	8.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	6023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	6025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6025
+Name:	Entering a resufraced cavern
+Desc:$
+   This section of the cavern is the most complete one will probably see down
+in these old caverns. The floor has been worked smooth, and a the lighting is
+much more plentiful, or atleast to the extent where travelers won't be
+stumbling over their own feet. Off to the northeast it turns back into the
+cavern-esque appearance, while off to the south the tooled surfaces continue.
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	12
+Z:	8.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	6024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	6026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6026
+Name:	The stretch of tunnel continues
+Desc:$
+   This long stretch of tunnel levels out and has its floors almost clear of
+debris.. almost. The occasional pock mark blemishes its relatively smooth
+surface here and there, and scattered lumps of rock and dust that are present
+here have mostly been swept up against the walls to keep out of the travelers
+way. A small metal doorway, almost rusted off its hinges, can be seen making a
+home on an inset section of rock, closing off the small service room that was
+excavated behind it. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	12
+Z:	8.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	6025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door rusted
+	Desc:$
+A small rusted metal door is almost falling apart, but still somehow manages
+to block access to the service room east of here. 
+~
+	ToVnum:	6027
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	6028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6027
+Name:	An old tunnel service room
+Desc:$
+   This small service room has been jury-rigged to the tenth degree, starting
+with its walls, which are covered in corrugated aluminum sheets, dull and
+shabby looking, but still in place. A few lamps have been hung with makeshift
+housings for their extension cords and generators, allowing for most of the
+pleasures of home, if this could be call such. An old portable trideo set has
+been left behind, along with a few choice pieces of furniture, ranging from
+old couches to stolen bar stools, and even a few vehicle seats proped up on
+cinderblocks and two by four planks. Comfy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door rusted
+	Desc:$
+A small rusted metal door is almost falling apart, but still somehow manages
+to block access back into the tunnel west of here. 
+~
+	ToVnum:	6026
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6028
+Name:	A change in scenery.. sorta
+Desc:$
+   This section of the cavern is the most complete one will probably see down
+in these old caverns. The floor has been worked smooth, and a the lighting is
+much more plentiful, or atleast to the extent where travelers won't be
+stumbling over their own feet. Off to the southeast it looks to turn back into
+the cavern-esque appearance, while off to the north the tooled surfaces
+continue. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	12
+Z:	8.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	6026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	6029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6029
+Name:	Infront of a blocked portion of tunnel
+Desc:$
+   A large reinforced fence abruptly ends the passage through this tunnel any
+further south, which is apparently due to some kind of cave in. The fence is
+built right up against, and sometimes even constructed into, the large hunks
+of displaced earth that have collapsed in from the top and sides. An old
+service ladder is bolted onto the eastern side of the wall, and climbs up to a
+large hole that has been excavated in the ceiling. The bottom of a platform
+can be seen from here, along with a simple control for it draped down along a
+sturdy rubber wrapped wire. It features a single red and a single green
+button, with corresponding arrows stamped onto their surfaces. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	12
+Z:	8.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	6028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	6030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6030
+Name:	A large tooled stone cavern
+Desc:$
+   The features of this room are roughly cut from the earth, though the tool
+marks betray any chance of it being mistaken as a natural cavern. A large
+square in the floor has been excavated and reinforced with cut blocks of
+stone. To the side of the hole itself is a heavy duty platform lifter, which
+drapes its lifting plate out over the hole, and seems to be small enough to be
+slowly lowered down beneath. What lies beneath isn't readily noticable from
+here, so one would have to ride it down to have a look see. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	6031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	6029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6031
+Name:	A split in the tunnel
+Desc:$
+   The roughly cut cavern travels along to a split in its path, one turn
+abruplts cuts off and heads westward, while the other continues in its
+original direction. The path southward seems to end shortly beyond a subtle
+curve, while the other gradually descends down a level or two before its end
+can be seen. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	8
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	6030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6032
+Name:	At a nearly featureless dead-end
+Desc:$
+   The pathway comes to an end here, all passage sealed off by a massive slab
+of smooth stone that has jutted up from the earth, creating an impassable dead
+end. The walls are almost features aside from the occasional tool mark, and
+nothing of any particular interest seems to jump out upon observation. The
+only real path seems to be the one that extends back to the north, deeper into
+the caverns underground. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	8
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	6031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	slab stone massive
+	Desc:$
+A massive slab of stone, polished smooth with a masterful sheen, seals the
+passage to the south. 
+~
+	ToVnum:	7972
+	Flags:	2
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	7917
+BREAK
+#6033
+Name:	A dark stretch of tunnel
+Desc:$
+   A long section of tunnel curves as it descends down towards the southwest,
+and some of the floor has been cut and leveled off in a stepped manner to help
+with the climb. An occasional work lamp illuminates portions along the way,
+but for the most part they do little aside from slightly ease the darkened
+pathway. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	8
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	6031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	6034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6034
+Name:	A stepped expanse of tunnel
+Desc:$
+   The passageway rises to the northeast, while its curve to the south begins
+to level out, dotted by an occasional glimmer of light by artificial means.
+The floors are worked almost smooth. and for the most part is set with carved
+steps, allowing one to easily traverse its expanse. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	8
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	6033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	6035
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6035
+Name:	A spiral passageway of stone steps
+Desc:$
+   The cavern here becomes much narrower, and eventually the passageway begins
+curling in on itself, creating a large spiral staircase effect. The stones are
+polished smooth and cut to an obvious decor, apparently someone spent a lot of
+time going through the construction of it, since it was impossible to have
+been natural. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	25
+Y:	8
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	6034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	6036
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6036
+Name:	Inside a large cavern
+Desc:$
+   The lower portion of this section of cavern consists of a spiral staircase
+carefully cut from the stone, leading down to the depths of the underground.
+The upper area is actually quite spacious, widening to a degree where several
+large vehicles could be parked side by side. The only distinguishing feature
+here is a massive slab of stone, polished absolutely smooth, has been cut and
+plugged into place somehow, sealing off any passage beyond it in a blatent
+manner. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	8.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	slab stone massive secret
+	Desc:$
+A massive slab of polished smooth stone seals off passage to the southeast. 
+~
+	ToVnum:	7900
+	Flags:	2
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	7916
+[EXIT down]
+	ToVnum:	6035
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6098
+Name:	A Spare Room
+Desc:$
+   This is spare room set aside for the Columbia River crossing raid,
+possibly? Just in case. Never know if it'll come in handy. 
+~
+Flags:	0
+SecType:	Storm
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#6099
+Name:	Inside a Lear-Cessna Platinum II
+Desc:$
+   The interior of this Lear-Cessna Platinum II airplane would make any
+corporate executive green with envy, its lavish furnishings and elegant design
+matching its sleek exterior. It features high end living accomodations for
+extended trips and extremely comfortable seating for up to a dozen passengers.
+It comes complete with a fully stocked wet bar and all of the extras one would
+come to expect from such a classy ride. 
+~
+Flags:	1100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

@@ -1,0 +1,3560 @@
+#22600
+Name:	The mouth of an alley
+Desc:$
+   You exit off of Commerce drive and enter into this alley, littered with
+trash. You pass by a box which was recently inhabitated by a cat, which now
+scampers off with an angered meow. The collective smell of urine, vomit and
+general uncleanliness attacks your senses.  
+~
+Flags:	10000010000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	14337
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22601
+Name:	Further down the alley
+Desc:$
+   As the light from the flickering streetlights from Commerce Drive are
+consumed by looming brick walls, you enter further into the alley. Your nose
+has become a little more accustomed to the pungent smell accompanying you down
+your voyage through The Land  of Filth. Occasionally you have to kick a
+cardboard box out of the way. 
+~
+Flags:	10000010000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22602
+Name:	Further down the alley
+Desc:$
+   You make your way down the long alley, where another world seems to be
+developing from the desolate concrete stretch you just passed through. You can
+see boarded up windows on the high rise of the surronding brick walls. There
+is a niche in the wall to the south and to the west you can faintly make out
+some open terrain. 
+~
+Flags:	10000010000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22603
+Name:	A niche in the wall
+Desc:$
+   You move through a pathway cleared of garbage. Two plastic shopping carts
+stand tall at either side of the mouth of this doorway, like sentinels. 
+~
+Flags:	10000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22604
+Name:	The other side of the alley
+Desc:$
+    The alley finally ends here, opening up to a dirt lot with hordes of
+garbage piled up all over. In the middle of the lot, is a hulking building.
+Years ago, in some vandals fit of pyromaniac ectasy, this apartment building
+was charred with flame. Now squatters mill about in the dirt lot and you can
+see a few glaring down at you through the large holes in the side of the
+building.  
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22605
+Name:	Entrance to the dirt lot
+Desc:$
+   This lot is dominated by the burnt hulk of an apartment building to the
+east. Ash has washed from the building during rain and soaked into the ground
+here, staining the whole lot a dirty black. It's very quiet here, since the
+fire, not many people set foot here. 
+~
+Flags:	100000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	22607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22606
+Name:	Moving through a pile
+Desc:$
+   You step over a couple of stacked, water logged tires and the dirt lot is
+sprawled out before you. At the far end is an old brick building, which is in
+generally good condition, a lot moreso than its surroundings. A small neon
+light can be see hung over the heavy steel doors at the entrance that reads
+'Guns & Pawn'. Its windows are lined with security bars, to keep any unwanted
+break-ins from happening. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	24500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22607
+Name:	Against the wall
+Desc:$
+   Against the apartment wall which is lightly splashed with Halloweeners
+graffiti, lies a mound of trash. You take note that the trash is directly
+below a row of smashed-out windows. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT east]
+	ToVnum:	22606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	22605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22608
+Name:	Outside a fairly new apartment complex
+Desc:$
+   This is a fairly new apartment complex. It has been built on the site of
+the complex that was here at one time. It is apparently built by the same
+contractors because it's still cheap looking and not very well put together. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	6400
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22609
+Name:	Foyer
+Desc:$
+   A fork in the halls starts here, accompanied by an upturned desk that may
+have once employed a receptionist or security guard. The shag red carpet gets
+your attention for a few seconds as you step in a particularly putrid and damp
+section of it. The split in the hallway leads down two paths, both equally
+dark and ominous. 
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	22608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	22610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	22611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22610
+Name:	Southwest Corridor (L1)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactive child, you continue
+down the corridor that divides apartment 1A and 2A. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22643
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22610
+[EXIT northeast]
+	ToVnum:	22609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22644
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22611
+[EXIT west]
+	ToVnum:	22612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22611
+Name:	Northwest Corridor (L1)
+Desc:$
+   Flanked by rats, trash, and the occasional hyperactive child, you continue
+down the corridor that divides apartment 1B and 2B. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22637
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22615
+[EXIT southeast]
+	ToVnum:	22609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22664
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22612
+Name:	Southwest Corridor (L1)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactie child, you continue
+down the corridor that divides apartment 3A and 4A.  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22660
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22645
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22612
+[EXIT west]
+	ToVnum:	22613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22613
+Name:	Southwest Corridor (L1)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactive child, you continue
+down the corridor that divides the apartment 5A and 6A. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22646
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22613
+[EXIT east]
+	ToVnum:	22612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22647
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22614
+[EXIT west]
+	ToVnum:	22614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22614
+Name:	Southwest Corridor (L1)
+Desc:$
+   The southwest corridor thins to a single foyer to the west, and where the
+doors shutting out apartments 7A and 8A from the rest of the world are is
+anybody's guess. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22661
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22662
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	22618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22615
+Name:	Northwest Corridor (L1)
+Desc:$
+   The hallway sprawls out here, with it's usual depressing state. Apartments
+3B and 4B are on either side of this section. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22638
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22616
+[EXIT east]
+	ToVnum:	22611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22639
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	22617
+[EXIT west]
+	ToVnum:	22616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22616
+Name:	Northwest Corridor (L1)
+Desc:$
+   The hallway continues with it's usual depressing entourage of grime and
+poverty. You're flanked by 5B and 6B. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22665
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	22640
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22618
+[EXIT west]
+	ToVnum:	22617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22617
+Name:	Northwest Corridor (L1)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactie child, you continue
+down the corridor that divides apartment 7B and 8B.  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22641
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22619
+[EXIT east]
+	ToVnum:	22616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22642
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	22620
+[EXIT southwest]
+	ToVnum:	22618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22618
+Name:	End of the hallways
+Desc:$
+   The two hallways converge here, and you're faced with two choices. An
+elevator door is halfway ajar here, revealing an empty shaft. To it's right is
+a door marked 'Stairs.' 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	22617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	22614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	22619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	22620
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22619
+Name:	Elevator shaft
+Desc:$
+   This elevator shaft houses the rats that you've seen scampering around.
+They panic as you step into their domain. A long, woven metal cord hangs from
+the ceiling of the building, just in your reach. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	22618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	22663
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22620
+Name:	Stairwell
+Desc:$
+   This stairwell leads up to the second floor of the apartment building. The
+walls are coated in glow-in-the-dark graffiti, giving it an odd glow. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	22618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	22621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22621
+Name:	Stairwell
+Desc:$
+   Once again, the two hallways fork infront of you. You can see people
+milling about down the halls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	22622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	22623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	22620
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22622
+Name:	Northern expansion
+Desc:$
+   This is where the northern foyer expands and invites in the passage of the
+elevator, or it would have years ago. Today there's just a gaping hole in the
+wall where the elevator used to be. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22663
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	22621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22623
+Name:	Southeast Corridor (L2)
+Desc:$
+   The bleak hallway expands and continues on in it's predictable monotony. A
+large hole allows you easy viewing or entrance into one trashed apartment to
+the north, but from what you can tell all the good stuff has been taken
+already. To either side of you, the decrepid doors are marked 9B and 10B. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22667
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22648
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22626
+[EXIT northwest]
+	ToVnum:	22621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22624
+Name:	Southeast Corridor (L2)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactie child, you continue
+down the corridor that divides apartment 11B and 12B.    
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22649
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22627
+[EXIT east]
+	ToVnum:	22625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22650
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22628
+[EXIT west]
+	ToVnum:	22623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22625
+Name:	Southeast Corridor (L2)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactie child, you continue
+down the corridor that divides apartment 13B and 14B.    
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22668
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22651
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22629
+[EXIT west]
+	ToVnum:	22624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22626
+Name:	Southeast Corridor (L2)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactie child, you continue
+down the corridor that divides apartment 15B and 16B.    
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22652
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22630
+[EXIT northeast]
+	ToVnum:	22631
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22653
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22631
+[EXIT west]
+	ToVnum:	22625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22627
+Name:	Northeast Corridor (L2)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactie child, you continue
+down the corridor that divides apartment 11A and 12A.    
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22656
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22622
+	HiddenRating:	1
+[EXIT east]
+	ToVnum:	22628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22657
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22623
+[EXIT west]
+	ToVnum:	22622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22628
+Name:	Northeast Corridor (L2)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactie child, you continue
+down the corridor that divides apartment 13A and 14A.    
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22630
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22655
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22624
+[EXIT west]
+	ToVnum:	22627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22629
+Name:	Northeast Corridor (L2)
+Desc:$
+   Flanked by rats, trash and the occasional hyperactie child, you continue
+down the corridor that divides apartment 15A and 16A.    
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22654
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22625
+[EXIT southeast]
+	ToVnum:	22631
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22666
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22630
+Name:	Apartment 13A
+Desc:$
+   This apartment has remained fairly cleaner than the other abandoned wrecks
+you've wondered into. Milkcrates are arranged with stacks of paper on them and
+three young men hold a vibrant conversation around a coffee table that is
+missing a leg. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22631
+Name:	Adjoining foyer
+Desc:$
+   The two segmented hallways meet up here, and would continue on to a set of
+stairs if a massive chunk of the building wasn't missing. From the remaining
+cinders of wood and concrete, it looks like it was hit with an assault cannon,
+or something equally heavy. As you lean out the hole and into the wind, if you
+turn your head just right you can spot the floor of the third floor. Maybe if
+you pull yourself up.. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT southwest]
+	ToVnum:	22626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	22629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	22632
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22632
+Name:	The third floor
+Desc:$
+   Ah! you scramble to pull yourself onto the shattered remains of the third
+floor. Despite the massive damage from the assault cannon and the collective
+dust, this floor seems cleaner than the rest. The light provided from the hole
+allows you peer atleast ten feet into the hallway. There's definitely less
+human waste and definitely less rats on this floor, but you can't help but
+question what else might be lurking up here. 
+~
+Flags:	1000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	5
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	22633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	22631
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22633
+Name:	The damp, dark hallway
+Desc:$
+   Continuation down this hallway leads to squishy steps and dimmer light.
+Some rain, or other unknown liquids seems to have collected on the shag carpet
+and your feet make a *squish* sound whenever you take a step. You can still
+make out the outlines of the dusty doors, although both have had their numbers
+either written over or scratched off. It's getting really dark.. 
+~
+Flags:	10000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22632
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22634
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22634
+Name:	The damper, darker hallway
+Desc:$
+   If you haven't come prepared with a light by now, it's pitch black. You
+hear one of the few rats scamper across the carpet and make an outraged squeel
+at your intrusion. It also seems that there isn't anything in your way
+anymore. Where once even on this relatively clean floor abandoned furniture
+layed in the hallway, it's completely barren. The familiar sets of duel doors
+accompany you, at their determined distance from the last pair. 
+~
+Flags:	1
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22635
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22635
+Name:	The dampest, darkest hallway
+Desc:$
+   Your squishing steps are the only thing that accompanies you in this tomb
+of a hallway, or atleast you hope so. The wallpaper peels and curls at the
+edges from the damp atmosphere and if there were proper light, you could see
+the end of the hallway further along. One of the doors from the sentinel
+symmetrical apartments is completely missing, and the empty space digs into
+your consciousness, causing deep-waves of paranoia. Maybe you should turn
+back.. 
+~
+Flags:	1
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22634
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22636
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22636
+Name:	The end of the hallway
+Desc:$
+   If you came this far without a light, you might have run right into the end
+of the hallway. It ends, bluntly, with a wall of what feels like foot-thick
+concrete. In complete darkness, even the sentinel apartment doors are
+impossible to make out except for by touch. You wish that whoever had
+demolished the other end of the hallway could've done a matching set, so you
+could atleast see.. 
+~
+Flags:	1
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22635
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22637
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	22611
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22615
+BREAK
+#22638
+Name:	A crummy apartment
+Desc:$
+   A fairly clean apartment, the walls have been scrubbed down, and the holes
+in the walls have been patched. The carpet has been ripped up and floorboards,
+clean but not shiny, deck the room. The furniture is of a reasonable quality,
+not too shabby, but nothing expensive.
+    The futon, the only sleeping area in the room, is clean and looks new. The
+kitchen area, likewise, has been scrubbed down til the tiles sparkle. 
+~
+Flags:	1100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	22615
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22616
+BREAK
+#22639
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	22615
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	22617
+	LockRating:	5
+BREAK
+#22640
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	22616
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22618
+BREAK
+#22641
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22642
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	22617
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	22620
+BREAK
+#22643
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22610
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22610
+BREAK
+#22644
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22610
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22611
+BREAK
+#22645
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22612
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22612
+BREAK
+#22646
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22613
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22613
+BREAK
+#22647
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	22613
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22613
+BREAK
+#22648
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22623
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22649
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22624
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22650
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22624
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22651
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22625
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22652
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22626
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22653
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22626
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22654
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22629
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22655
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22628
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22656
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22657
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22627
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	22623
+BREAK
+#22658
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	1100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#22659
+Name:	A crummy apartment
+Desc:$
+   This is your humble abode, with the wallpaper peeling off and random holes
+through the plaster walls. The shag carpet smells of something rotten and the
+furniture has springs sticking out from the cushions. Your bed is a single,
+amazingly, unsoiled futon flopped in the corner of the tiny room. Home sweet
+home. 
+~
+Flags:	100000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#22660
+Name:	Apartment 3A
+Desc:$
+   This apartment was previously owned by someone who apparently had quite an
+extensive hobby. There're dozens of news paper articles from the 20th century
+tacked to the wall. Most of them have fallen victim to decay, or prying hands
+of the hyperactive beasts that roam here, but the one's that haven't depict
+mostly supernatural occurances. You read an article all about a Sasquatch
+being mislabelled as a "big-foot." 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22661
+Name:	Apartment 7A
+Desc:$
+   Suspiciously, you had to really push to open that door. Stepping inside,
+you find out why. There was an armchair shoved against the door and the
+furniture seems oddly arranged. The pattern is like a barricade, all of a
+sudden a shotgun barrel comes peeping over a tipped-over couch, pointed
+straight at you! 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22662
+Name:	Apartment 8A
+Desc:$
+   There's nothing in this apartment but trash. It seems that the whole
+population of the squatter apartment building has deemed it the garbage can
+and nobody ever bothered to clean it out. A putrid smell permeates from this
+room and it's a wonder you can even stay in it for this long. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22663
+Name:	Top of the elevator shaft
+Desc:$
+   Slowly tugging yourself up the hard, tough material of the elevator shaft
+rope, you make it to the second floor. You could opt to continue to the third
+but for some reason the elevator decided to stop at the second floor
+exclusively. 
+~
+Flags:	1000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	22619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22664
+Name:	Apartment 2A
+Desc:$
+   The furniture is either decrepit, dangerous or disgusting in this room.
+Although there does happen to be a nice fire going in a pit dug in the middle
+of the room.  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22665
+Name:	Apartment 5B
+Desc:$
+   This is one of the more orderly apartments you've seen around this sector.
+A mother has actually cleaned the place up and the walls don't seem as grimy
+as the entire atmosphere of the Apartment complex. There's a few pictures of
+kid's drawning done in various materials, mostly ashy wood hung on the walls
+by nails. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22666
+Name:	Apartment 16A
+Desc:$
+   This is a definitely familiar picture to the old fella's at Lone Star.
+Obviously, junkies of various vices have been inhabiting this room for as long
+as it's been available. There's piles of piles of burnt BTL chips, used
+syringes, cigarette boxes, bottles, food cartons shoved into the corners. The
+walls are coated with various stains, some streaks of blood. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22667
+Name:	Apartment 9B
+Desc:$
+   Just as predicted, there's nothing much to look at in this apartment. The
+furniture, even the stuff that was falling apart, has been lifted and there's
+only a birdcage left. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22668
+Name:	Apartment 13B
+Desc:$
+   There's a giant hole in the floor here, you can see into the apartment
+downstairs. Otherwise, it's okay. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22670
+Name:	Entrance to the Seattle Parking Garage
+Desc:$
+   The Entrance to the fairly massive garage is fairly uneventful, the
+ash-grey cement expanding into a single corridor so far. A sign is posted on
+the right-hand side of the wall, where a caricature of an employee of the
+garage guides you through the rules of the parkling lot, all of which you
+don't plan on following. Every noise is amplified down the vast and lonesome
+corridor to become a giant beastly reminder of its former self. 
+~
+Flags:	100000000000000000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	40
+Z:	3.20
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22671
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22671
+Name:	Further down the spiral
+Desc:$
+   The garage continues to sprawl out, a lifeless, concrete being, indifferent
+to your actions. This apathy is proven through random defacings on the wall,
+small time graffiti mostly. Even the heart of Seattle isn't without petty
+crime. Some cars are randomly distributed here, looking fresh and ready to
+roll. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22672
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22670
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22672
+Name:	The garage continues
+Desc:$
+   Your footsteps, if one were on foot, have completely engulfed the sound
+spectrum as you move down the midpart of the garage. You can see the end where
+a turnaround and rise to the second floor is emminent, and it seems they
+carved out a hole in the garage wall to let some sunlight in. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22673
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22671
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22673
+Name:	Approaching the turnaround
+Desc:$
+   The road beguns to slope upwards, very subtly as the garage begins the
+curve that'll lead you to an one-hundred and eighty degree turn, for more
+parking spots. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22674
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22672
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22674
+Name:	The first floor turnaround
+Desc:$
+   You begin to turn around and you can peer down the long corridor that
+resembles the first floor, only risen considerably higher. On the farwall,
+some innercity wannabe has sloppily scribbled "Oloth iz a babe!" in faded red
+chickenscratch. A railing runs along the right hand side of the garage,
+accompanied by a sidewalk, for any would be pedestrians. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22673
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22675
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22675
+Name:	Down the second floor
+Desc:$
+   The second floor sprawls out before you, about the size of a cityblock in
+length. It seems less sparsely populated by vehicles than the first floor,
+although some drekhead has decided his average Mitsuhama Roundabout needs an
+extra two parking spaces than any other vehicle. You resist the urge to smash
+in the windows and urinate onto the dashboard. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22674
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22676
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22676
+Name:	Middle of the second floor
+Desc:$
+   The monotony of the garage continues, the gray concrete rolling out and
+ending at the now quite visible end of the secondfloor. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22675
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22677
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22677
+Name:	Fun in garageland
+Desc:$
+   The second floor begins to become the past as the turnaround to the third
+floor approaches fast. Everything is less dense around here, vandalism, cars,
+people, braincells, you name it. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22676
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22678
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22678
+Name:	Approaching the turnaround
+Desc:$
+   Another bend in the road is here, leading up to the third floor. The third
+floor is conveinently sandwiched between the second and the fourth floor. If
+the third floor were not between the second and fourth floor, it would not be
+the third floor. You ponder over the madness of it all as you move along the
+rising slope. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22677
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22679
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22679
+Name:	The beginning of the third floor
+Desc:$
+   The third floor begins here, traffic signals painted onto the dull gray
+concrete direct you further on into the thirdfloor. After all, you've come
+this far, why don't you see what other surprises this magical land has? 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22678
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22680
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22680
+Name:	The third floor
+Desc:$
+      The windows carved out here provide a pretty good view of middle
+Seattle, and a peek at what would be Downtown Seattle. You can see the former
+location of Pook's, Dante's Inferno and a portion of Little Chiba from up
+here.  
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22681
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22679
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22681
+Name:	The third floor rolls on, and on..
+Desc:$
+   It's layed before you, a harsh, bleak landscape of concrete with barely a
+car in sight. You'd be amazed to see even the most paranoid of drivers,
+concerned for their car's safety from common criminals, to be slinking away
+from their vehicles up here. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22682
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22680
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22682
+Name:	Kiss me, kiss me, kiss me
+Desc:$
+   The third floor continues in it's usual, predictable patterns. There's
+nothing to see here except for the simple, but effective architecture of the
+garage. Massive pillars of pure concrete hold the roof from caving in on your
+head. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22683
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22681
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22683
+Name:	Approaching the turnaround
+Desc:$
+   As you can see from the oncoming change in scenery, this turnaround will
+lead to the fourth floor, the roof. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22684
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22682
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22684
+Name:	The fourth floor turnaround
+Desc:$
+   This turnaround leads you away from the continous and boring pattern of the
+garage onto the roof floor. The sky is sprawled out above you and it seems it
+would be a nice place to reflect on days past, events happening currently, and
+the outcome of your actions on the future. A pigeon roosts in a nitch of the
+garage, barely avoiding the beams of light. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22683
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22685
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22685
+Name:	The fourth floor
+Desc:$
+   The fourth floor continues, considerably majestic compared to the rest of
+the floors which you now reminiscence on with a feeling of cabin fever. The
+large outdoors-e feel to this floor provides a great sense of relief, although
+you've completely forgotten about parking a vehicle. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22684
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22686
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22686
+Name:	The fourth floor continues
+Desc:$
+      The fresh air fills your lungs as you continue on your way down the
+length of the fourth floor. If you were to walk over to where the sidewalk was
+and peer over the railing, Seattle would be sprawled before you like a
+majestic fortress. Concrete buildings and motor-driven carriages rumble across
+the street while you think you spot some familiar chummers hanging on the
+corner of North Fifth and Gray. A Lone Star patrol vehicle rolls along,
+looking almost as small and insignificant as a toy-car from this distance.  
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22685
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22687
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22687
+Name:	The fourth floor begins to stifle
+Desc:$
+   The obvious end of the fourth floor is marked by a two meter hall wall a
+bit further foreward, incase some crazy chummer decides to go for a joyride
+under the freedom of the universe the fourth floor provides. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22686
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22696
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22689
+Name:	The fourth floor ends
+Desc:$
+   It all ends here, chummer, with a fairly impressive concrete barrier to
+keep anyone brave enough from tottering off the edge and careening to their
+death. Overall, the fourth floor had a cleanliness that the lowerfloors
+couldn't achieve. Perhaps it was the air, but it seems to have released you
+from the common troubles and worries a chummer getting by in the Sprawl
+subconsciously broods over. You feel a bit more free..like you could fly. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#22690
+Name:	CrossWorld's Bag Check Counter
+Desc:$
+   This narrow hallway is partially blocked by a check-in counter. From here,
+you can see that the store's selections have been organized according to
+clothing type. Several large, dingy signs hang above the various sectors:
+shirts to the west, shoes to the northwest, jackets to the north and pants to
+the east. The store entrance is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22694
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22692
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22695
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22691
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	22693
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22691
+Name:	Shirts
+Desc:$
+   This section of the store is filled with shelves of neatly-folded shirts.
+Several shirts have also been pinned up behind the counter. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22690
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22692
+Name:	Pants
+Desc:$
+   Various types of pants, ranging from worn-in jeans to the occasional pair
+of business slacks, have been neatly folded and placed on synthwood racks. The
+wooden counter to the east looks old, but recently shined. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	22690
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22693
+Name:	Shoes
+Desc:$
+   A selection of shoes perch precariously on a ramshackle assortment of
+shelves, and several piles of empty shoeboxes are stacked in the southwest
+corner. The air smells faintly of sweat and rubber. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	22690
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22694
+Name:	Jackets
+Desc:$
+   Jackets of all shapes and sizes dominate this portion of the store, hanging
+from neatly-arranged racks and on the walls behind the counter. Several
+mirrors line the north wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	22690
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22695
+Name:	CrossWorld's Entrance
+Desc:$
+   This large warehouse-style building houses the Crossworlds Thrift Shop, a
+discount clothing retailer patronized by many of Tacoma's blue-collar
+residents. It's a very no-frills operation, furnished with little more than
+racks of clothing and payment counters. Fluorescent lights shine down from the
+high ceilings. A bag check counter is to the north, and the exit to Crescent
+Street is to the west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22690
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22696
+Name:	Over the edge
+Desc:$
+   The feeling of freedom has caused you to apparently go into a disillusional
+state, as you scale the banister and leap into the air, only to see the ground
+fast approaching. 
+~
+Flags:	10000000000000000010
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22687
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#22699
+Name:	Bleeding for you.
+Desc:$
+   An ooze of primordial scum, where beings evolutionize and melt chaotically.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

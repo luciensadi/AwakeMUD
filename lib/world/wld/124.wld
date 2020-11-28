@@ -1,0 +1,3250 @@
+#12400
+Name:	Along Horizon Heights Drive
+Desc:$
+   This sleepy little shoreside road is surrounded on almost all sides with
+the lush greenery the city is quite proud of, offering the perfect backdrop
+for the establishment a bit further up along the road from here. The rush of
+the city atmosphere is muffled here, allowing for a more calm and serene
+sensation, and the breeze blowing off from the nearby Sound beyond certainly
+helps with the matter. Mukilteo Speedway lies back off to the south, while
+Horizon Heights Drive itself continues it's journey along the opposite
+direction. 
+~
+NightDesc:$
+   This sleepy little shoreside road is surrounded on almost all sides with
+the lush greenery the city is quite proud of, offering the perfect backdrop
+for the establishment a bit further up along the road from here. The rush of
+the city atmosphere is muffled here, allowing for a more calm and serene
+sensation, and the breeze blowing off from the nearby Sound beyond certainly
+helps with the matter. Moonlight seeps in through holes in the canopy
+overhead, casting shadows and playing tricks on the eyes. Mukilteo Speedway
+lies back off to the south, while Horizon Heights Drive itself continues it's
+journey along the opposite direction. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	6.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	12401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	library display room
+	Desc:$
+This whole is neatly organized with fossils and screenshots of big events
+throughout history.  Many of the snapshots have the play button icon under
+them. There's shelves and shelves of datachips that the Trix distortion has
+turned into appearing to be real leather bound paper filled novels complete
+with the musty old scent. 
+~
+BREAK
+#12401
+Name:	Parking lot infront The Triple Tree Inn
+Desc:$
+   Tucked neatly away within masses of trees lies an establishment whose name
+is befitting of the locations scenery. The Triple Tree Inn has been catering
+to the needs of those who wish to spend a little time on the shore front of
+Puget Sound, in essence, an escape from the city without the unnecessarily
+long ride away from it. The place seems to be very well taken care of, and
+even though it has a more rustic appearance than most of its modern
+counterparts, that certainly seems to be a part of its charm. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	12440
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	12400
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12402
+Name:	The lobby of The Triple Tree Inn
+Desc:$
+   Comfortable. If one had to sum up the feeling exuding from the foundation
+of this rustic seaside inn with one word, that would have to be it. Tasteful
+yet not overly decorative furniture is arranged neatly about the front lobby,
+while a large receptionist desk is posted off to the far side with lease
+information for potential tenants, as well as offering daily amenities to
+already staying at the inn. 
+~
+Flags:	10000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	12
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	12401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12403
+Name:	Inside the elevator
+Desc:$
+   The elevator has aluminum surfaces, which have been tastefully subdued
+towards a more rustic appearance with the addition of cut and fitted, lightly
+stained wooden panels. The buttons on the elevator panel have white buttons
+with golden filagree lettering upon their surfaces, helping add a little bit
+of class for the ride. Soft music flows from the overhead speakers, which have
+been tucked away neatly as not to take away from the scenery. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#12404
+Name:	Passing the elevators
+Desc:$
+   This wide corridor travels down the length of this multi-story building,
+its floors adorned in a mixture of wood paneling and simple decorative
+carpeting as it stretches along. The spacious hallway allows tenants a
+comfortable walk, and when that fails, there is always the elevators that are
+posted off to the side of the area here. The subdued scent of a lemon cleaning
+agent drifts through the air, along with the fragrance coming from the vased
+groupings of fresh flowers displayed about the establishment. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	12402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12405
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 1A along the west side, while 2A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "2A" stands here. 
+~
+	ToVnum:	12415
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12402
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "1A" stands here. 
+~
+	ToVnum:	12414
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12401
+	LockRating:	8
+BREAK
+#12406
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 3A along the west side, while 4A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "4A" stands here. 
+~
+	ToVnum:	12417
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12404
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "3A" stands here. 
+~
+	ToVnum:	12416
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12403
+	LockRating:	8
+BREAK
+#12407
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 5A along the west side, while 6A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "6A" stands here. 
+~
+	ToVnum:	12419
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12406
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "5A" stands here. 
+~
+	ToVnum:	12418
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12405
+	LockRating:	8
+BREAK
+#12408
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 7A along the west side, while 8A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "8A" stands here. 
+~
+	ToVnum:	12421
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12408
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "7A" stands here. 
+~
+	ToVnum:	12420
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12407
+	LockRating:	8
+BREAK
+#12409
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 9A along the west side, while 10A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door glass sliding
+	Desc:$
+A sturdy sliding glass door stands to the north. 
+~
+	ToVnum:	12410
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "10A" stands here. 
+~
+	ToVnum:	12423
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12410
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "9A" stands here. 
+~
+	ToVnum:	12422
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12409
+	LockRating:	8
+BREAK
+#12410
+Name:	Entering the back terrace
+Desc:$
+   The corridor opens up onto the terrace at the rear of the complex, where
+tenants and their guests can relax and lounge while they enjoy the scenery of
+Puget Sound off a short ways in the distance. The breeze coming off of the
+water is mostly sheltered by the over hang at the entrance, while the terrace
+itself is an open air design along its edges. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	12413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door glass sliding
+	Desc:$
+A sturdy sliding glass door stands to the south. 
+~
+	ToVnum:	12409
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	12411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12411
+Name:	Beneath an over hang along the terrace
+Desc:$
+   An over hang affords a bit of protection from the elements, especially on
+those rainy days, which are quite common around these parts. Comfortable nylon
+lounge chairs and other furnishings have been waterproofed, just in case, and
+offer tenants and their guests a place to lounge and relax when the open air
+portions of the terrace may prove too uncomfortable. 
+~
+Flags:	100
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	12412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	12410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12412
+Name:	Along the open air terrace
+Desc:$
+   Comfortable seating is set up along the terrace, affording those tenants
+and guests the luxury of a place to rest after a long day, the scenery offered
+here helping them to unwind. The breeze coming off of the Sound, which can be
+seen through the woven pattern of greenery given by the masses of trees and
+plantlife behind the complex. The scenery also acts as a buffer, keeping the
+brunt of the chill from the sea from blowing onto the terrace itself. 
+~
+Flags:	100
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	12413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	12410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	12411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12413
+Name:	Along the open air terrace, near the pool
+Desc:$
+   An inground pool is set up along the edge of the open air terrace, whose
+steps smoothly lead down to the waters edge. Comfortable waterproof lounge
+chairs and umbrellas are set up along the sides, allowing tenants and guests
+to lounge and relax while they take in the splendid atmosphere offered here. 
+~
+Flags:	100
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	12410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	12412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12414
+Name:	Inside of apartment 1A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12405
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12401
+	LockRating:	8
+BREAK
+#12415
+Name:	Inside of apartment 2A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12405
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12402
+	LockRating:	8
+BREAK
+#12416
+Name:	Inside of apartment 3A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12406
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12403
+	LockRating:	8
+BREAK
+#12417
+Name:	Inside of apartment 4A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12406
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12404
+	LockRating:	8
+BREAK
+#12418
+Name:	Inside of apartment 5A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12407
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12405
+	LockRating:	8
+BREAK
+#12419
+Name:	Inside of apartment 6A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12407
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12406
+	LockRating:	8
+BREAK
+#12420
+Name:	Inside of apartment 7A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12408
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12407
+	LockRating:	8
+BREAK
+#12421
+Name:	Inside of apartment 8A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12408
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12408
+	LockRating:	8
+BREAK
+#12422
+Name:	Inside of apartment 9A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12409
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12409
+	LockRating:	8
+BREAK
+#12423
+Name:	Inside of apartment 10A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door stands here. 
+~
+	ToVnum:	12409
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12410
+	LockRating:	8
+BREAK
+#12424
+Name:	Near the elevators
+Desc:$
+   A set of elevators is set off to the west side of the corridor, offering a
+scenery much the same as the ground floor does. The southern wall is dominated
+here by a large panoramic storm window, which allows a nice view of the tree
+groves that dominate most of the landscape in the area. The rooms for first
+floor tenants are located further up along the corridor to the north,
+stretching all the way back to the end of the building. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12425
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12425
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 11A along the west side, while 12A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12426
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "12A" is here. 
+~
+	ToVnum:	12431
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12412
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12424
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "11A" is here. 
+~
+	ToVnum:	12430
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12411
+	LockRating:	8
+BREAK
+#12426
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 13A along the west side, while 14A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12427
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "14A" is here. 
+~
+	ToVnum:	12433
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12414
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12425
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "13A" is here. 
+~
+	ToVnum:	12432
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12413
+	LockRating:	8
+BREAK
+#12427
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 15A along the west side, while 16A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12428
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "16A" is here. 
+~
+	ToVnum:	12435
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12416
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12426
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "15A" is here. 
+~
+	ToVnum:	12434
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12415
+	LockRating:	8
+BREAK
+#12428
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 17A along the west side, while 18A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12429
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "18A" is here. 
+~
+	ToVnum:	12437
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12418
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12427
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "17A" is here. 
+~
+	ToVnum:	12436
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12417
+	LockRating:	8
+BREAK
+#12429
+Name:	Along a wide corridor
+Desc:$
+   This central corridor travels along the length of the establishment,
+leading to the rooms for the ground floor tenants. The rustic scenery
+continues, with comfortable carpeting lining the middle of the hallway, while
+a glimpse of lightly stained wood appears about the sides of the floor, along
+with a mildly decorated edging woodwork. The rooms are labeled clearly, with
+room 19A along the west side, while 20A is on the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "20A" is here. 
+~
+	ToVnum:	12439
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12420
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12428
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door labeled "19A" is here. 
+~
+	ToVnum:	12438
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12419
+	LockRating:	8
+BREAK
+#12430
+Name:	Inside of apartment 11A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12425
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12411
+	LockRating:	8
+BREAK
+#12431
+Name:	Inside of apartment 12A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12425
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12412
+BREAK
+#12432
+Name:	Inside of apartment 13A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12426
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12413
+	LockRating:	8
+BREAK
+#12433
+Name:	Inside of apartment 14A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12426
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12414
+	LockRating:	8
+BREAK
+#12434
+Name:	Inside of apartment 15A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12427
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12415
+	LockRating:	8
+BREAK
+#12435
+Name:	Inside of apartment 16A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12427
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12416
+	LockRating:	8
+BREAK
+#12436
+Name:	Inside of apartment 17A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12428
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12417
+	LockRating:	8
+BREAK
+#12437
+Name:	Inside of apartment 18A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12428
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12418
+	LockRating:	8
+BREAK
+#12438
+Name:	Inside of apartment 19A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12429
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12419
+	LockRating:	8
+BREAK
+#12439
+Name:	Inside of apartment 20A
+Desc:$
+   This comfortable studio apartment is set up like most other high efficiency
+rooms, which consists of a large main room with a connected kitchen and
+bathroom, while the bedroom is enclosed by actual walls to offer a bit more
+privacy for tenants who may happen to cater to guests. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A sturdy wooden door is here. 
+~
+	ToVnum:	12429
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	12420
+	LockRating:	8
+BREAK
+#12440
+Name:	Heading down the garage ramp
+Desc:$
+   This wide, two lane ramp descends down into the depths of the vehicles
+garages below the complex, where lease holders and others can store their
+rides without threat of theft or defacement. An office is set off to the side
+here, along with a slender security bar to keep traffic out unless waved
+through, while those with permit badges for their leases are let through with
+little hassle. 
+~
+Flags:	10000010000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	12442
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	12441
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	12401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12441
+Name:	Inside the garage office
+Desc:$
+   This office is set up to deal with tenants who wish to lease a garage to
+store their vehicles in, since apparently not everyone is comfortable with
+leaving their ride out in the elements afforded by the open air parking lot
+outfront of the complex. Racks of keys are set up along behind the counter
+here, which are stored under lock and key in turn to keep any intruders or
+thieves from making off with a set and causing havoc. 
+~
+Flags:	10000000000000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	12440
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12442
+Name:	In the underground garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B1 off to the
+west here, and B2 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12443
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B2" stands here. 
+~
+	ToVnum:	12448
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12422
+	LockRating:	8
+[EXIT southeast]
+	ToVnum:	12457
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	12440
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B1" stands here. 
+~
+	ToVnum:	12447
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12421
+	LockRating:	8
+BREAK
+#12443
+Name:	In the underground garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B3 off to the
+west here, and B4 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12444
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B4" stands here. 
+~
+	ToVnum:	12450
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12424
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12442
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B3" stands here. 
+~
+	ToVnum:	12449
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12423
+	LockRating:	8
+BREAK
+#12444
+Name:	In the underground garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B5 off to the
+west here, and B6 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12445
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B6" stands here. 
+~
+	ToVnum:	12452
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12426
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12443
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B5" stands here. 
+~
+	ToVnum:	12451
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12425
+	LockRating:	8
+BREAK
+#12445
+Name:	In the underground garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B7 off to the
+west here, and B8 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12446
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B8" stands here. 
+~
+	ToVnum:	12454
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12428
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12444
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B7" stands here. 
+~
+	ToVnum:	12453
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12427
+	LockRating:	8
+BREAK
+#12446
+Name:	In the underground garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B9 off to the
+west here, and B10 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B10" stands here. 
+~
+	ToVnum:	12456
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12430
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12445
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B9" stands here. 
+~
+	ToVnum:	12455
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12429
+	LockRating:	8
+BREAK
+#12447
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12442
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12421
+	LockRating:	8
+BREAK
+#12448
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12442
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12422
+	LockRating:	8
+BREAK
+#12449
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12443
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12423
+	LockRating:	8
+BREAK
+#12450
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12443
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12424
+	LockRating:	8
+BREAK
+#12451
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12444
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12425
+	LockRating:	8
+BREAK
+#12452
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12444
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12426
+	LockRating:	8
+BREAK
+#12453
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12445
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12427
+	LockRating:	8
+BREAK
+#12454
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12445
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12428
+	LockRating:	8
+BREAK
+#12455
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12446
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12429
+	LockRating:	8
+BREAK
+#12456
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12446
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12430
+	LockRating:	8
+BREAK
+#12457
+Name:	A ramp leading down to the sub-level
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The ramp here gradually descends, allowing vehicles with
+even the lowest of suspensions or rides to navigate their way up and down
+smoothly without fear of scraping their undersides. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	12442
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	12458
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12458
+Name:	A ramp leading to the upper garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The ramp here gradually ascends, allowing vehicles with
+even the lowest of suspensions or rides to navigate their way up and down
+smoothly without fear of scraping their undersides. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12459
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	12457
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12459
+Name:	In the underground sub-level garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B11 off to the
+west here, and B12 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12460
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B12" stands here. 
+~
+	ToVnum:	12465
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12432
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12458
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B11" stands here. 
+~
+	ToVnum:	12464
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12431
+	LockRating:	8
+BREAK
+#12460
+Name:	In the underground sub-level garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B13 off to the
+west here, and B14 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12461
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B14" stands here. 
+~
+	ToVnum:	12467
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12434
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12459
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B13" stands here. 
+~
+	ToVnum:	12466
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12433
+	LockRating:	8
+BREAK
+#12461
+Name:	In the underground sub-level garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B15 off to the
+west here, and B16 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12462
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B16" stands here. 
+~
+	ToVnum:	12469
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12436
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12460
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B15" stands here. 
+~
+	ToVnum:	12468
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12435
+	LockRating:	8
+BREAK
+#12462
+Name:	In the underground sub-level garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B17 off to the
+west here, and B18 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12463
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B18" stands here. 
+~
+	ToVnum:	12471
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12438
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12461
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B17" stands here. 
+~
+	ToVnum:	12470
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12437
+	LockRating:	8
+BREAK
+#12463
+Name:	In the underground sub-level garage
+Desc:$
+   This well lit corridor, which is wide enough for traffic to pass both ways,
+which is seperated along its center to keep from having any accidents or
+mishaps. Rolling garage doors line both sides of the lanes, which are wide
+enough and tall enough to deal with almost any size or shape vehicle and make
+for an easy passage. The doors are labeled for reference, with B19 off to the
+west here, and B20 set off to the east. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B20" stands here. 
+~
+	ToVnum:	12473
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12440
+	LockRating:	8
+[EXIT south]
+	ToVnum:	12462
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door labeled "B19" stands here. 
+~
+	ToVnum:	12472
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12439
+	LockRating:	8
+BREAK
+#12464
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12459
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12431
+	LockRating:	8
+BREAK
+#12465
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12459
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12432
+	LockRating:	8
+BREAK
+#12466
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12460
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12433
+	LockRating:	8
+BREAK
+#12467
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12460
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12434
+	LockRating:	8
+BREAK
+#12468
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12461
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12435
+	LockRating:	8
+BREAK
+#12469
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12461
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12436
+	LockRating:	8
+BREAK
+#12470
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12462
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12437
+	LockRating:	8
+BREAK
+#12471
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12462
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12438
+	LockRating:	8
+BREAK
+#12472
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12463
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12439
+	LockRating:	8
+BREAK
+#12473
+Name:	A spacious garage
+Desc:$
+   With surfaces constructed of concrete, these garages are built to dampen
+the sound of vehicles to keep from bothering tenants in the complex above, and
+they manage to do their intended jobs quite well. The floor has been power
+washed, but still retains the faint outline and stains of spilled oil and
+other liquids commonly used in vehicles. 
+~
+Flags:	10000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage
+	Desc:$
+A sturdy rolling garage door stands here. 
+~
+	ToVnum:	12463
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	12440
+	LockRating:	8
+BREAK
+END

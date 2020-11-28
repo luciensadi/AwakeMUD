@@ -1,0 +1,1520 @@
+#45200
+Name:	I-5 at Seattle Metroplex Border
+Desc:$
+   As the I-5 crosses off of Spencer Island it is brought to a halt by the
+border post between Seattle and the Salish-Shidhe region. All vehicles are
+stopped and checked before being let through. The guards here are far more
+polite and easy-going than most other border posts, but still armed to the
+teeth and ready to deal with any troublemakers. 
+~
+Flags:	10100000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	5
+Cover:	6
+X:	200
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	45201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45201
+Name:	I-5 near the Metroplex Border
+Desc:$
+   The I-5 passes over Spencer Island between Everett to the South and the
+northern Edge of the Seattle Metroplex to the north. Traffic here is
+infrequent, only let through the border outpost once it has been checked for
+contraband. 
+~
+Flags:	10100000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	45202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	45200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45202
+Name:	I-5 Entering Everett
+Desc:$
+   Everett rises to the south, along with sound walls to protect the residents
+from the noise of the I-5. To the north the interstate crosses high over
+Spencer Island, towards Seattle's border with the Salish-Shidhe territories. 
+~
+Flags:	10100000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	45203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	45201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45203
+Name:	I-5 Through Everett
+Desc:$
+   The I-5 passes through the eastern edge of Everett, sound walls blocking
+the view of all but the tallest of buildings alongside the busy Interstate. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	5
+Cover:	2
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45204
+Name:	I-5 surrounded by Everett
+Desc:$
+   Traffic is slightly busier towards the center of Everett, but thins out
+significantly to the north as the I-5 approaches the northern border of the
+Seattle Metroplex. Sound walls block the view of the city. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	4
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45205
+Name:	I-5 at Everett Offramp
+Desc:$
+   Sound walls block the view of all but the tallest buildings in downtown
+Everett along this banked section of interstate. There is quite a lot of
+traffic in the area. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	8
+Cover:	5
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45206
+Name:	I-5 surrounded by Everett
+Desc:$
+   Sound walls aren't needed here in this mostly light industrial section of
+Everett. To the east rolling pastures can be seen. Far in the distance the
+Cascade Mountains begin to rise above the landscape. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	4
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45207
+Name:	I-5 at Everett Offramp
+Desc:$
+   Flyovers and ramps turn the view from the interstate into one of nothing
+but concrete and steel. Signs tower over the road directing drivers towards
+the needed lanes for exiting to Everett. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	4
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45208
+Name:	I-5 surrounded by Everett
+Desc:$
+   Sound walls continue along the western edge of the interstate here, but
+aren't needed along the eastern side as the embankments are high enough to
+block most of the noise from traffic. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	6
+Cover:	2
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45209
+Name:	I-5 Entering Everett
+Desc:$
+   The sound walls continue along the western edge of the interstate here, but
+the east side has given way to trees. Through the occasionally gap in the
+trees the rolling green pastures of Snohomish can sometimes be glimpsed. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	5
+Cover:	4
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45210
+Name:	I-5 Near Everett
+Desc:$
+   The I-5 approaches downtown Everett to the north and the Everett Mall off
+ramp to the south. Sound walls help dampen the noise of the busy interstate to
+the local residents but also block the view of the surrounding area. 
+~
+Flags:	10100000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45211
+Name:	I-5 at State Route 526 Junction
+Desc:$
+   The interstate dives down to the west towards State Route 526 through
+Everett. A brief view of the city of Everett standing on the edge of the Puget
+Sound is visible through the gap in the sound walls. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	6
+Cover:	4
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45212
+Name:	State Route 526
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	4
+Cover:	2
+X:	30
+Y:	800
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	45211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	45213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45213
+Name:	State Route 526
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	5
+Cover:	3
+X:	30
+Y:	800
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	45212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	45214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45214
+Name:	State Route 526 Offramp at Confederated Boeing
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	6
+Cover:	3
+X:	30
+Y:	800
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	45213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	45215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45215
+Name:	State Router 526 Offramp at Palne Field-Snohomish Airport
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	5
+Cover:	4
+X:	30
+Y:	800
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	45214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45216
+Name:	I-5 at Everett Mall Offramp
+Desc:$
+   Billboards advertising the Everett Mall at the next off ramp are plastered
+along the edge of the sound wall that protects the local residents from the
+deafening noise of traffic of the interstate. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	6
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45217
+Name:	I-5 at Route 2 Junction
+Desc:$
+   State Route 2 separates from the I-5 and heads east towards the
+agricultural lands of Snohomish. Snohomish is very different from the rest of
+the Seattle Metroplex, still remaining mostly a farming community. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	5
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45218
+Name:	Interstate 5
+Desc:$
+   Sound walls start to rise to the north, in stark contrast to the trees that
+line the interstate to the south. Trees, however, can still occasionally be
+seen rising above the wall. Signs advertising Everett Mall to the north single
+the approaching shopping haven. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45219
+Name:	Interstate 5
+Desc:$
+   Trees line each side of the I-5 here, providing some semblance of beauty to
+the users of the interstate, and some semblance of quiet to nearby residents.
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45220
+Name:	Interstate 5
+Desc:$
+   Towards the south the huge cloverleaf junction with the I-405 can be seen
+rising above the trees that adorn both sides of the interstate here. The
+embankments of the I-5 are largely untouched by urban sprawl due to the
+endless amounts of noise coming from it. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45221
+Name:	I-5 at the I-405 Junction
+Desc:$
+   The I-5 joins onto the I-405 in a huge cloverleaf junction. Signs adorn
+every merge and divide, directing travelers to where they need to go. From the
+north-south route between Seattle and Everett, to the east bound I-405 towards
+Bellevue and the I-90. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45222
+Name:	Interstate 5
+Desc:$
+   The trees that line the I-5 towards Seattle drop away here to provide a
+view of the sprawling Alderwood Mall. The larger complex to the north easily
+dwarfs the smaller one to the south of the I-5. Towards the north the huge
+cloverleaf intersection with I-405 is easily visible. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45223
+Name:	Interstate 5
+Desc:$
+   Trees line either side of the I-5 here. While not as effective as the sound
+walls that line most of the I-5 through Seattle, they still serve the local
+residents well by dampening a lot of the traffic noise. The green backdrop
+makes the area seem a lot more rural than it really is. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45224
+Name:	Interstate 5
+Desc:$
+   The I-5 curves as it creeps north towards Everett. Trees line both sides of
+the interstate here, sparing local residents from the endless barrage of
+traffic that passes here. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45225
+Name:	Interstate 5
+Desc:$
+   Tall trees line the embankments along either side of the interstate here. A
+billboard advertising Ares Arms new Ares Predator 3 cuts through the otherwise
+rural atmosphere of this stretch of interstate. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45226
+Name:	Interstate 5
+Desc:$
+   Trees line either side of the interstate here. To the east a small office
+block can be seen rising above the trees, the only building visible north of
+Seattle from this vantage point. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45227
+Name:	Interstate 5
+Desc:$
+   The I-5 snakes through this portion of the Metroplex. The occasional run
+down house can be seen along the tops of the embankments on either side,
+probably long abandoned due to the proximity to the interstate. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45228
+Name:	I-5 nearing Seattle
+Desc:$
+   Trees line both sides of the interstate here, contrasting the scenery
+further south towards Seattle. Even though this area is quite urban the
+greenery along each side would easily make you think otherwise. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45229
+Name:	I-5 Entering Seattle
+Desc:$
+   The view from the east side of the I-5 at this point is dominated by the
+Jackson Park Golf Course. Green lawn stretches out, dotted with trees and well
+manicured playing areas. The other side of the interstate is in stark
+contrast, a solid grey sound wall, helping residents on that side sleep easier
+at night. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45230
+Name:	I-5 surrounded by Seattle
+Desc:$
+   Northgate mall lies to the east of the I-5 here. The colossal brown
+buildings that house a variety of shops have seen better days and are in dire
+need of a make over. Apartment buildings rise over the I-5 to the west, most
+likely low rent, as the noise from the interstate is not blocked by the near
+ubiquitous sound walls that cover most of the I-5 in this area of Seattle. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45231
+Name:	I-5 surrounded by Seattle
+Desc:$
+   The I-5 seems carved into the ground here, both sides are steep earth
+embankments. Hints of grass and trees sprout sporadically from the dirt, which
+is otherwise lifeless. Most probably due to years of pollution from passing
+vehicles. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	8
+Cover:	4
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45232
+Name:	I-5 nearing Downtown
+Desc:$
+   Traffic increases to the south as the I-5 approaches Downtown Seattle.
+Sound walls rise to the north to spare the residents of the mostly residential
+areas north of Seattle from the noise of the seemingly endless barrage of
+vehicles. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	8
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45233
+Name:	I-5 at University of Washington-Seattle Offramp
+Desc:$
+   The University buildings rise to the east of the I-5, standing out from the
+surrounding area of mostly residential dwellings. Union Bay can be seen just
+beyond the University, stretching east into Lake Washington. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	9
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45234
+Name:	I-5 over Lake Union
+Desc:$
+   This section of the I-5 crosses the edge of Lake Union where it joins onto
+Portage Bay. Any craft wishing to travel into Lake Washington must pass
+underneath it. High rises can be seen to the south, marking central Downtown
+Seattle. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	9
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45235
+Name:	I-5 Entering Downtown
+Desc:$
+   Sound walls begin to rise here towards Downtown Seattle, sparing the
+residents from the cacophony of the Interstate. High rises in central Downtown
+can be seen jutting above the edges of the walls. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	10
+Cover:	3
+X:	800
+Y:	30
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45236
+Name:	State Route 18
+Desc:$
+   State Route 18 intersects Interstate-5 to the west, causing traffic here to
+back up as people slowly edge their way onto the busy highway. The landscape
+around the highway is sparse, mostly single- and double-story houses, this
+part of the Metroplex hasn't been  bought out by the Corporations yet. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	8
+X:	800
+Y:	40
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	45237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1315
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45237
+Name:	State Route 18
+Desc:$
+   State Route 18 runs in a dead straight line up along the southern edge of
+North Lake. Traffic here is busy, mostly commuters between Auburn and Tacoma,
+but proceeds along orderly. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	8
+X:	800
+Y:	40
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	45239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	45236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45238
+Name:	State Route 18
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	8
+X:	800
+Y:	40
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	45239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	45237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45239
+Name:	State Route 18
+Desc:$
+   The huge turnpike that joins State Route 18 with Routes 167 and 512 is to
+the east, towering above the highway. From here you can also make out The
+Supermall of the Great Northwest, the sprawling mall complex that is the
+largest of its type in North America. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	8
+X:	800
+Y:	40
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	45240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	45237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45240
+Name:	State Route 18, SR-167 and SR-512 Junction
+Desc:$
+   A huge tangle of roads twists off from the three intersecting highways,
+shuttling traffic between them. Traffic is almost at a standstill as people
+drive slowly, cut lanes, and generally drive poorly while trying to negotiate
+the turnpike. The southeast side of the highway is dominated by the enormous
+SuperMall of the Northwest, one of the biggest malls on the continent. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	10
+X:	800
+Y:	800
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	45241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	45239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#45241
+Name:	State Route 18, Auburn Exit
+Desc:$
+   Signs above the highway show that the exit for Auburn is just up ahead.
+Most traffic on the highway passes through this exit with  little of important
+being further to the north east. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	8
+X:	800
+Y:	40
+Z:	0.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	1350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	45240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

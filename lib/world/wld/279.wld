@@ -1,0 +1,115 @@
+#27900
+Name:	Hallway through the Apartment Complex
+Desc:$
+   This is the hallway going through the apartment complex.  It is narrow and
+freshly painted, for it stinks of fresh paint. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	27901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#27901
+Name:	Hallway
+Desc:$
+   This hallway stinks of fresh paint while lights illuminate it.  The white
+walls reflect the light with intensity, glinting off of door handles and
+metallic objects carried. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	27900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	27903
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	27801
+	LockRating:	50
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#27903
+Name:	Living Area
+Desc:$
+   The room is lit by a flickering overhead light that appears to be hanging
+by one last screw in it's small rusty mounting. The air dense with smoke,
+coursing about the room, blown about by the random draft. God awful lime green
+shag carpet squishes and crunches about your feet as you enter various areas
+of the estate. Bare, dull, and white sheetrock encloses all sides of this room
+except to the east, where you find a doorway protruding. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	27901
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	27901
+	LockRating:	50
+[EXIT west]
+	ToVnum:	27904
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#27904
+Name:	Telemnar's Palace-o-Love'n
+Desc:$
+   The stench of week old rotton tuna aloft on particles of smoke manages to
+drift into one of your nostrils, the smell reminds you slightly of the girls
+who turn tricks down in Puyallup. This room is constructed as poorly as the
+rest of the apartment, complete with sheetrock walls riddled with holes. The
+most disturbing feature of the whole room is the fact the walls are lined with
+pictures of female feet that have been haphazardly slicded and diced from
+periodicals. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	27903
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

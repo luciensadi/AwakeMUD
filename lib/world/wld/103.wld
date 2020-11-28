@@ -1,0 +1,32 @@
+#10300
+Name:	A mob storage space
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	30
+	Y:	0
+	Z:	20
+BREAK
+#10301
+Name:	An Ancient Chinese Temple
+Desc:$
+   This room is very spacious, with very little on the floor except straw mats
+set infront of various shrines placed along the side walls. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

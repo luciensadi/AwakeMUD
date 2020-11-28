@@ -1,0 +1,653 @@
+#16070
+Name:	A small work room
+Desc:$
+   Small and quaint this little room houses many items the modern runner may
+need. 
+~
+Flags:	101000000000000000000010000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	16070
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16080
+Name:	A small church lobby
+Desc:$
+   Religous pamplets lign the walls and there is a corkboard with church
+announcements nailed to the wall.  The table next to the door has a geust sign
+in book for an upcoming wedding. 
+~
+Flags:	10000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	Thick oaken door
+	Desc:$
+Thick oaken door 
+~
+	ToVnum:	16081
+	Flags:	0
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16097
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16081
+Name:	Inside a small church
+Desc:$
+    Pews line the room on either side and a pulpit stands at the front of the
+room with a large book on it.  The windows are stainglass and depict religious
+history as well as some more modern history.  
+~
+Flags:	1000000000000111000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	6
+[EXIT north]
+	ToVnum:	16083
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	Thick oaken door
+	Desc:$
+Thick oaken door 
+~
+	ToVnum:	16080
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#16082
+Name:	^RR.E.D. Tech^n Garage
+Desc:$
+   a shop used for fixing vehicals, there are several work stations set up
+ready to work on whatever may be wrong with your car, from tire to engine this
+place has it all! 
+~
+Flags:	100000100000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	Garage Door
+	Desc:$
+Garage Door 
+~
+	ToVnum:	16097
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	50
+	HiddenRating:	50
+BREAK
+#16083
+Name:	The church gym
+Desc:$
+   A large audotorium with two basketball goals hung from either side of the
+room.  There are balloons and other various party favors and a DJ plays all
+the best dance mixes of today and yesterday! 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	16081
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16085
+Name:	Hampers Closet
+Desc:$
+   dresses, tuxedos, as well as any other thing you could want for a wedding
+line the walls in this small shop.  A clerk stands ready to fit you for
+whatever you may need. 
+~
+Flags:	100000000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	16097
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16090
+Name:	The Executive Suite and office
+Desc:$
+   This room has it all, from a sana to designer desk all the way down to the
+softest carpet money can buy.  Who ever works here is one lucky bastard! 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	a steel door
+	Desc:$
+a steel door 
+~
+	ToVnum:	16091
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	10
+BREAK
+#16091
+Name:	^RR.E.D. Tech^n Office Room
+Desc:$
+   a large well furnished office with a huge table in the middle and chairs
+lined along the sides.  The motto "We do it better, and better do it right"
+adorns the walls. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	steel Door
+	Desc:$
+steel Door 
+~
+	ToVnum:	16090
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	50
+	HiddenRating:	50
+[EXIT west]
+	Keywords:	large Double Doors
+	Desc:$
+large Double Doors 
+~
+	ToVnum:	16098
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	10
+BREAK
+#16092
+Name:	A shady back room
+Desc:$
+   A small room where a man stands with a black book full of semi to completly
+illegal orders. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16070
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	sliding brick wall
+	Desc:$
+a sliding brick wall 
+~
+	ToVnum:	16093
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	50
+	HiddenRating:	50
+BREAK
+#16093
+Name:	Staff break room
+Desc:$
+   A long table aligns the room to either side of the table there is a fridge
+humming away probably holding some guy's lunch for the day 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	1
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	brick wall
+	Desc:$
+wall 
+~
+	ToVnum:	16092
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	50
+	HiddenRating:	50
+[EXIT west]
+	Keywords:	wooden door
+	Desc:$
+Small wooden door 
+~
+	ToVnum:	16095
+	Flags:	1
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#16094
+Name:	A large storage room
+Desc:$
+   Boxes of parts are laying all about.  Someone should really organize this
+place 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+door 
+~
+	ToVnum:	16095
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	16069
+	LockRating:	10
+BREAK
+#16095
+Name:	A small hallway
+Desc:$
+   A small hallway leading to other rooms 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+door 
+~
+	ToVnum:	16093
+	Flags:	1
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	50
+[EXIT west]
+	Keywords:	door
+	Desc:$
+door 
+~
+	ToVnum:	16094
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	16069
+	LockRating:	10
+[EXIT up]
+	ToVnum:	16096
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16096
+Name:	A flight of stairs
+Desc:$
+   A winding flight of stairs 
+~
+Flags:	100001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	wooden door
+	Desc:$
+A large wooden door 
+~
+	ToVnum:	16098
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	10
+[EXIT down]
+	ToVnum:	16095
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16097
+Name:	^RR.E.D. Tech^n Parking Lot
+Desc:$
+   A spacey parking lot with plenty of room between the lines for even the
+largest car to park. 
+~
+Flags:	110000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16099
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16080
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1531
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16085
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	Garage door
+	Desc:$
+A hidden garage door 
+~
+	ToVnum:	16082
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	50
+	HiddenRating:	12
+BREAK
+#16098
+Name:	A clean show room
+Desc:$
+      A lobby with pictures hanging on the walls showing the latest models of
+cyberdecks and comparing R.E.D. Tech decks vs other decks.  
+~
+NightDesc:$
+      A lobby with pictures hanging on the walls showing the latest models of
+cyberdecks and comparing R.E.D. Tech decks vs other decks.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	6
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	large wooden double doors
+	Desc:$
+large wooden double doors 
+~
+	ToVnum:	16091
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	50
+[EXIT south]
+	ToVnum:	16099
+	Flags:	2
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	16000
+	HiddenRating:	6
+[EXIT down]
+	Keywords:	wooden door
+	Desc:$
+A large wooden door 
+~
+	ToVnum:	16096
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	16069
+	LockRating:	10
+	HiddenRating:	50
+BREAK
+#16099
+Name:	Entrance to ^RR.E.D. Tech^n Inc
+Desc:$
+   A set of tables with items are set up here and a smiling clerk awaits your
+purchase.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	3
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	15
+[EXIT north]
+	Keywords:	glass Door
+	Desc:$
+a sliding glass door 
+~
+	ToVnum:	16098
+	Flags:	1
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	0
+	LockRating:	10
+	HiddenRating:	8
+[EXIT south]
+	ToVnum:	16097
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

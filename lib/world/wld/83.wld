@@ -1,0 +1,288 @@
+#8300
+Name:	Elevator
+Desc:$
+   Inside the elevator, the music doesn't stop, as tracks from DJ Infernis
+resonate in the small acoustically engineered space, with a strobe light
+switching between blue and red patterns that make your sense of time distort.
+A panel is set up here with several buttons to tell you what button goes
+where.  A sign which translates the buttons to the more well known level names
+sits above the panel. 
+~
+Flags:	10000000000000101000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXTRADESC 0]
+	Keywords:	sign~~~~~
+	Desc:$
+G  - Ground Floor
+B1 - Second Hell
+B2 - Fourth Hell
+B3 - Seventh Hell
+B4 - Ninth Hell
+~
+BREAK
+#8301
+Name:	Before the Elevators
+Desc:$
+   A large dark red iron door covered in skulls and designs depicting the
+decapitation and dismembering of many unfortunate souls separates you from the
+elevator shaft behind the door.  Up above it, are several red numbers shaped
+like bones, showing the levels of the elevator.  The brightly lit one is where
+the elevator is at the moment.  The music resonates around you, creating an
+echo effect similar to the screams in the mythical realm of Pandemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	35501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#8302
+Name:	Before the Elevators
+Desc:$
+   A large dark red iron door covered in skulls and designs depicting the
+decapitation and dismembering of many unfortunate souls separates you from the
+elevator shaft behind the door.  Up above it, are several red numbers shaped
+like bones, showing the levels of the elevator.  The brightly lit one is where
+the elevator is at the moment.  The music resonates around you, creating an
+echo effect similar to the screams in the mythical realm of Pandemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northwest]
+	ToVnum:	35514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#8303
+Name:	Before the Elevators
+Desc:$
+   A large dark red iron door covered in skulls and designs depicting the
+decapitation and dismembering of many unfortunate souls separates you from the
+elevator shaft behind the door.  Up above it, are several red numbers shaped
+like bones, showing the levels of the elevator.  The brightly lit one is where
+the elevator is at the moment.  The music resonates around you, creating an
+echo effect similar to the screams in the mythical realm of Pandemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	35544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#8304
+Name:	Before the Elevators
+Desc:$
+   A large dark red iron door covered in skulls and designs depicting the
+decapitation and dismembering of many unfortunate souls separates you from the
+elevator shaft behind the door.  Up above it, are several red numbers shaped
+like bones, showing the levels of the elevator.  The brightly lit one is where
+the elevator is at the moment.  The music resonates around you, creating an
+echo effect similar to the screams in the mythical realm of Pandemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	35572
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#8305
+Name:	Before the Elevators
+Desc:$
+   A large dark red iron door covered in skulls and designs depicting the
+decapitation and dismembering of many unfortunate souls separates you from the
+elevator shaft behind the door.  Up above it, are several red numbers shaped
+like bones, showing the levels of the elevator.  The brightly lit one is where
+the elevator is at the moment.  The music resonates around you, creating an
+echo effect similar to the screams in the mythical realm of Pandemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	35603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#8306
+Name:	Inside the Elevator
+Desc:$
+   The yellow, green and white Aztechnology colors adorn the trim where the
+walls of the elevator meet the ceiling, and where the doors come together.
+Small lenses embedded in the ceiling are tell-tale signs of the surveillance
+placed in this elevator, in redundancy. The bubble-gum to security lens trick
+won't work here, unless you have several packs of gum, and a lot of time on
+your hands. There is a faint aromatic incense smell in this elevator, giving
+one the impression of relaxation... that is... if you weren't an unauthorized
+guest of the Aztechnology corporation.  
+~
+Flags:	10000000000000101100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+BREAK
+#8390
+Name:	An Elevator Inside The EWC
+Desc:$
+   This elevator is cylindrical thing, with doors at the south and north sides
+of it.  A small panel on the east wall controls the elevator, and a small
+display panel tells you what floor you're on. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+BREAK
+#8391
+Name:	Foyer Walkway
+Desc:$
+   This clear, tubular polymer walkway connects the food court of the Complex
+to the shopping center, as well as provides an elevator to the higher floors
+of the building.  Looking below you, through the polymer, you see people and
+vehicles moving through the street.  Above you the Complex reaches up into the
+sky, as do the other buildings in the surrounding area of Seattle. A panel on
+the north wall of the tube controls the elevator. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	38012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	38007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	~~~~~~~~
+	Desc:$
+~
+BREAK
+#8392
+Name:	Second Floor Lobby
+Desc:$
+   The lobby of the second floor is a great change from the food court and
+shopping center downstairs.  Large ceramic pillars reach from the floor to the
+ceiling, which is arched slightly and lined with small wall mounted lights,
+made to look like lanterns.  The floor is a mosaic of white and red tiles,
+sweeping into an orange spread before the doors of the offices here.  South of
+you is the elevator, as well as the call buttons. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	38020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	~~~~~~~
+	Desc:$
+~
+BREAK
+#8393
+Name:	Third Floor Lobby
+Desc:$
+   You find yourself staring out into a vast sea of cubicles here on the
+second floor.  The cubicles belong to the desk jockey's of the ECW, whose main
+tasks involve system security and security control throughout the building.
+From here you could find out most anything you wanted to know about the
+building.  To your south there's a closed set of doors and an elevator call
+button. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	38033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	~~~~~~~
+	Desc:$
+ 
+~
+BREAK
+#8394
+Name:	Fourth Floor Lobby
+Desc:$
+   You stand in the lobby of the fourth floor, an elevator panel to your
+south, as well as the doors.  The floor of the lobby is covered in a expensive
+red carpet and leads to a door to the north, which, you assume is the entrance
+to the management area of the Complex. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	38027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	~~~~~~~
+	Desc:$
+~
+BREAK
+END

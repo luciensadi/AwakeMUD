@@ -1,0 +1,16 @@
+#6700
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

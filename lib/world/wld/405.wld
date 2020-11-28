@@ -1,0 +1,1959 @@
+#40500
+Name:	Canyon Road and Hall Blvd.
+Desc:$
+   As you would expect from the intersection of two of Beaverton's remaining
+major roads, this area is quite congested. The corners are taken up by shops,
+though one of them is boarded up. The other three seem to be doing well
+enough, given Beaverton these days. The town has really gone to hell in the
+last decade or so, as evidenced by the bulletholes in all the walls and the
+graffiti on the boards of that abandoned shop (the symbol on the door seems to
+indicate a gang called the Death's Head Legion). Cars go careening by,
+oblivious to and unheeding of the shot-out traffic light dangling from a
+sparking electric cable.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40516
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40501
+Name:	Hall Blvd.
+Desc:$
+   Hall Boulevard runs north and south through Beaverton. A somewhat
+prosperous street in the past, Hall Boulevard has fallen into disrepair in
+recent decades. The shops along the sidewalk are mostly burned-out shells,
+though the few that remain don't seem to be doing too badly. Among them are a
+deli and a news-stand, both tended by depressed-looking elves in old clothes.
+Maybe this area isn't doing so well after all... 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40502
+Name:	Canyon Road
+Desc:$
+   Canyon Road, one of the few streets in Beaverton preserved mostly intact,
+bridges the gulf between the Watson Elementary section of town and Beaverton
+proper. A black wrought-iron fence borders the south side of the street,
+fencing off what used to be Beaverton Park. That tract of land is now
+overgrown, the weedy yellow grass averaging waist-high. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40503
+Name:	Hall Blvd.
+Desc:$
+   Hall Boulevard runs north and south. A trash can along the road side has
+been knocked over, appearantly by a speeding vehicle. A mailbox, not much
+further along the road, seems to have been pummeled with a baseball bat.
+Graffiti covers the walls, and no glass fills the burnt-out windows. A single
+tin can rolls down the street, its hollow clattering adding to the fornlorn
+emptiness of what used to be a main thoroughfare. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40504
+Name:	Hall Blvd. and Beaverdam Rd.
+Desc:$
+   Beaverdam Road and Hall Boulevard cross here. On the north side of the
+intersection, a collapsed building prevents further progress. Beaverdam Road
+begins to curve to the southwest, and continues east. The traffic light
+hanging over the intersection no longer has a functioning red light, and seems
+to be stuck with a green light on Beaverdam Road. The wreckage of an old
+Volkswagen lies on its roof, burning. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40505
+Name:	Beaverdam Road
+Desc:$
+   Beaverdam Road seems to be in a bit better condition than most other
+streets in Beaverton. None of the windows are blown out. None of the trash
+cans or streetlights are ruined. However, the walls and windows ARE covered
+with Graffiti - the symbol of the Death's Head Legion: a black skull
+superimposed over the blue-and-green of the Ancients' logo. A tall, lanky,
+dark-haired elf lounges in the shadows of a corner, looking out from hollow,
+bloodshot eyes. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40506
+Name:	Hall Blvd.
+Desc:$
+   Hall Boulevard continues! Twin lines of ragged trees take up both sides of
+the street. Though they look rather thin when bare, in summer they grow
+together and in winter they hold the snow. In either case, they turn Hall
+Boulevard into a vertiable hall of shade. Lounging among the shadows are
+various miscreants, and even the trees themselves are covered with burned-in
+initials and spraypainted graffiti. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40507
+Name:	Hall Blvd.
+Desc:$
+   Hall Boulevard darts onward, straight as an arrow, one of Beaverton's few
+streets that was not made by a drunken bulldozer operator. Lines of trees cast
+the street in perpetual shadows, making Hall Boulevard both a beautifully
+scenic street, and one home to many a shadow-walking ganger. Beyond the trees
+stand houses on the west side, and an overgrown former park on the east. A
+rusted gate proclaims the name, "Beaverton Park." 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40508
+Name:	Hall Blvd. and Farmington Rd.
+Desc:$
+   Hall Boulevard ends at a T-intersection with Farmington Road. At the end of
+Hall Boulevard, you can see a tall, white building: Beaverton town hall.
+Farmington Road is a nondescript little street, lined by newsstands and
+low-rent apartments - the residences of the Town Hall's various flunkies and
+hangers-on. Traffic creeps by at those painfully slow residential area speed
+limits, careful under the watchful eyes of both legitimate law enforcement and
+the Death's Head Legion. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40518
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40509
+Name:	Canyon Road
+Desc:$
+   Ganger country. That's all that can really describe Canyon Road. Ganger
+Country. Decent people speed through here. Indecent people are either marked
+as Death's Head Legion, or lay rotting in the dark allys. The buildings
+continue the pattern of Canyon Road: most are delapidated, damaged, and
+generally in ill repair. The windows are either missing or replaced with cheap
+plates of imitation wood. A few tattered Tir Tairngire flags hang limply from
+the windows, and motes of dust drift on the thin breeze. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	40500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40510
+Name:	Beaverdam Rd.
+Desc:$
+   Beaverdam Road continues its lazy arc to the southwest. Old, mostly rusted
+cars are parked in a line along both sides of the street. A few look like they
+might still be servicable. Others obviously have not moved in years -
+especially the one with a set of ratty curtains in the back windows, and the
+one with a veritable warehouse in the trunk. A streetlight overhead seems to
+be flickering erratically. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	40504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40511
+Name:	Beaverdam Road
+Desc:$
+   Beaverdam Road continues to meander along. The detritus of society lines
+the ill-kept, pothole-jagged roads. Sputtery street lights provide sparse
+illumination at night, making this area a hotbed of criminal activity. Roving
+bands of keen-eyed elves, their black vests emblazoned with the Death's Head
+Legion symbol, patrol this area like a grotesque parody of law-enforcement. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	40510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40512
+Name:	Beaverdam Road and Watson Ave.
+Desc:$
+   Beaverdam Road intersects Watson Avenue. On the corner stands an old
+school, its massive sign reading "Watson Elementary." The doors hang on their
+hinges, and it seems the place hasn't seen a repair man in years.
+Nevertheless, lights in the windows indicate classes are in session (or at
+least, the building is in use, not necessarily for educational purposes). No
+graffiti mars its red-brick walls, and a tattered flag showing the
+tree-and-stars of Tir Tairngire flutters above its roof. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	40511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40513
+Name:	Canyon Road and Watson Ave.
+Desc:$
+   It seems Canyon Road's lazily wavering path brings it very near to
+Beaverdam Road, with only a short stretch of Watson Avenue separating them.
+Watson Elementary and Beaverdam Road are both visible just north of here, and
+it seems both Canyon Road and Beaverdam Road end at the school. As it is near
+a school, this area is mercifully free of drugs and gangs. Unfortunately, this
+seems to be purely by the will of the Death's Head Legion themselves: a ruined
+TPF Thunderbird lies in flaming pieces on the roadside. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40514
+Name:	Canyon Road
+Desc:$
+   Canyon Road approaches an intersection. The graffiti and gang insignia are
+much reduced. The buildings themselves show a touch less wear and more care.
+The windows actually exist, and a few people (all of them elven) are actually
+visible sitting in them. Young children dart about, playing amongst the parked
+- undamaged - cars, even running around the feet of the occasional
+leather-clad elf: family members, well within Legion turf. Visible not too far
+distant is a school, cast in red brick and in remarkable condition considering
+the rest of the neighborhood. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40515
+Name:	Canyon Road
+Desc:$
+   The main thoroughfare of Beaverton runs onward. That black (where it hasn't
+rusted red) wrought-iron fence boarders the weedy, overgrown former park. The
+shattered remains of a fountain can be seen in the midst of the brush. Canyon
+Road itself is in remarkable condition, without a hint of graffiti or gang
+insignia anywhere. Cars are parked, unmolested, along both sides of the road.
+There are even proper yellow lines painted on the road. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40519
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40516
+Name:	Don't Put a Room Here
+Desc:$
+   Welcome to the black abyss. Don't put a room here. What? You mean, this
+room? Oh, this isn't a room, it's just a place-keeper. It won't be here the
+next time you come in, so enjoy it while it lasts. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40517
+Name:	Entry to the Plaid Pantry
+Desc:$
+   Is it a Stuffer Shack? Well, yes, sort of... It's actually a Plaid Pantry.
+They have had the brilliant idea to show off their historical knowledge by
+adding plaid to their logo: the words "Plaid Pantry" stand above the doors in
+big, bold letters colored like a Scottish tartan. They've somehow managed to
+keep their windows from being machine-gunned out. Maybe that has something to
+do with the huge axe-wielding dwarf in Plaid Pantry tartan sitting on the
+ground outside the door... 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	40505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40518
+Name:	Entrance to Beaverton Town Hall
+Desc:$
+   So that's why they called it Hall Boulevard. At the end of that street
+stands the Beaverton town hall. It is a large but simple building, all white
+walls and tinted windows. Twin black glass doors at the top of a flight of
+plain stone stairs allow admission to the building (although the guards next
+to the doors might not). The stairs are covered by an extended stone landing
+above; the railing around the landing suggests it may be accessible from
+within. It certainly is a long way up... 
+~
+Flags:	10000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40519
+Name:	Canyon Road, the Business District
+Desc:$
+   Canyon Road immediately goes from being a partially-clean,
+partially-corrupted hole, to being a perfectly pristine causeway. Lining the
+street are shops of every type. The road is in perfect repair. Mailboxes and
+garbage cans stand unharmed. Shop windows have real glass in them, and it
+remains in solid panes, rather than spiderwebbed or shattered bits. People
+walk around outside, even as the sunlight fades, unafraid as the wander the
+shops. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	40515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40600
+Name:	Office of Edgar Damien Powell
+Desc:$
+   The sign on the office door reads Edgar Damien Powell, and it is obvious
+that a member of the first family of media makes his lair within. In the
+center of the room is a massive desk - probably made of real wood - with a
+thronelike chair behind it. The wood is worked with intricate scrollwork, most
+of it elven, and the seat, back, and arms are heavily padded and covered in
+rich leather. In front of the desk sit two smaller chairs, facing towards the
+desk, both made of obviously fake wood and padded thinly with synthleather.
+The walls are paneled in dark faux wood, most of them hidden by bookcases.
+Even the books are a show of wealth, with leather-, cloth-, and wood-bound
+volumes dating back to the late 1800s. They include first editions of Edgar
+Allen Poe, John Steinbeck, and Ray Bradbury, among others. Behind the desk is
+a single window,floor to ceiling and easily half a dozen paces wide, looking
+out over the Portland sprawl. The smell of tobacco smoke hangs lightly in the
+air, no wonder with Edgar Powell sitting in his chair, smoking a long-stemmed
+pipe. On his desk stands a marble statue of two dragons - one definitely
+Dunkelzahn, the other labeled perhaps apocryphally as Bahamut - and an
+old-style electric lamp. 
+~
+Flags:	110000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40601
+Name:	Fiction Level - Horror
+Desc:$
+   Onward into the Horror section. The running lights along the shelves are
+green, casting the books in an unearthly light. Deep, mellow music - mostly
+that of cellos - fills the air. The faux wood is dark and there are
+antique-looking chairs scattered about. The names on the racks include Bram
+Stoker, Mary Shelley, and Stephen King, among others. A trace of sulpherous
+smoke scent hangs in the air, just enough to give that brimstone feeling
+without being offensive. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40602
+Name:	Fiction Level - Action/Adventure
+Desc:$
+   The action/adventure section celebrates those books that really get your
+blood flowing. Red running lights along each shelf cast a fearful glow across
+the spines of the books. Notable authors include Tom Clancy, Michael Crichton,
+Ian Fleming, and Jules Verne (shouldn't he be in the sci-fi section? Maybe
+someone is due for a firing...). The shelves are capped with busts of such
+figures as James Bond and Indiana Jones. The music is an inspiring march that
+sounds like it would be fun to walk to, and the smell in the air is of grass
+and mountain air, the perfect setting for an adventure. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40603
+Name:	Inside Powell's Books and Media
+Desc:$
+   Stepping in from the street, the climate-controlled air washes over you.
+The perfect contrast to the air outside, the inside of Powell's brings instant
+comfort. The walls are all paneled in soothing earth-tones, mostly beige. The
+floor just in front of the doors is tiled in green marble. Overhead, banks of
+lights pump light upward, to be reflected downward by curved mirrors. This
+creates the effect of diffusing the light into the room without it being
+painfully bright. Classical music lilts lightly from unseen speakers,
+providing an air of high intellectualism. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40604
+Name:	Fiction Level - Manga and Comics
+Desc:$
+   This section is home to loud colors and overdecoration. Welcome to the
+Manga and Comics racks. Individual authors don't mean a whole lot in this
+business, but notable names include Todd McFarlane and Stan Lee, bigwigs in
+the business back in the 20th. Publishers include Dark Horse, Marvel, and DC
+among the Americans, and disgustingly hard to say names among the Japanese,
+perhaps their most recognizable being Akira Toriyama. The shelves are marked
+with busts of such men as Christopher Reeve and Val Kilmer, recognized for
+portraying great heros of the comic world. The music is a rousingly heroic
+march, but there is no scent effect here aside from air purifiers. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40605
+Name:	The Stairs
+Desc:$
+   In the center of the first floor, there is a staircase leading upward. It
+is a towering clockwise-spiral affair, with space between the stairs that is
+open, allowing anyone climbing up the spiral to see a commanding view of the
+first floor as they leave it. The stairs themselves are made of simple black
+brushed metal, covered individually in cushy red carpeting. The handrails are
+not mounted to the floor of the spiral - instead they are suspended on thin
+silver wires from the section of spiral above the one guarded by the rail. A
+column runs up the center of the spiral, with globes of light projected off it
+on poles in a counterclockwise spiral. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40606
+Name:	Fiction Level - Classic Literature
+Desc:$
+   Just inside the palatial entryway, there stands the classical literature
+section. Racks run from the floor to the ceiling far above, with a walkway
+about halfway up. Ladders run along both decks, allowing various customers to
+scale their way up to search the shelves. The racks contain books by such
+names as Dickens, Dumas, Hugo, and others. Lines of small yellow lights run
+along every shelf, mounted into the faux wood. Not bright enough to read by,
+they are meant to disperse shadows and allow easy-on-the-eyes browsing. The
+lilting classical music plays on... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40607
+Name:	Fiction Level - Romance
+Desc:$
+   What a shame to find a section like this in the Powell building. It seems
+people still love their cheap romances. Apparently the powers that be have
+forced Harlequin Romance to change their name, as all of their titles are
+under the label of Horgahn Productions now. The most notable names on the
+shelf of course include Danielle Steele and others like her. The pallid busts
+of Fabio on each shelf add to the atmosphere, which is completed by the pink
+running lights and the scent of roses in the air. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40608
+Name:	Fiction Level - Mystery
+Desc:$
+   Further along the circle is the mystery section. The sound of violins fills
+the air here, as does the light scent of sweet tobacco. A bust of Sherlock
+Holmes caps each shelf, and the names on the racks include Sir Arthur Conan
+Doyle, Clive Cussler, and Agatha Christie, among others. The usual strips of
+lights line the bookshelves. A small reading area adorns this section,
+complete with high-backed overstuffed synthleather chairs and small faux wood
+tables for the placing of books. The diffused light from above is supplemented
+here by pole lamps for your reading conveniance. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40609
+Name:	Fiction Level - Science Fiction and Fantasy
+Desc:$
+   Further along the massive circular room that is the first floor of the
+Powell media tower stands the Science Fiction and Fantasy section. Althogh
+they still lump these two distinct genres together, at least the Powells have
+the decency to put them on seperate levels. The science fiction books stand on
+the lower deck and include such names as Frank Herbert, Isaac Asimov, and Ray
+Bradbury. The fantasy section, above, includes such names as Piers Anthony,
+Robert Jordan, and J.R.R. Tolkein. Bookends cap each shelf, UFOs and robots on
+the sci-fi shelves, elves and dragons on the fantasy shelves. In this section
+the music is different, more celtic, with bells and cymbals and flutes, even
+the occasional bagpipes when a Scottish flare seems to meld in. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40610
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40611
+Name:	Non-Fiction Level - History
+Desc:$
+   The History section is quite impressive. It contains books of history from
+the founding of the Roman empire and ancient Hebrew and Egyptian culture all
+the way up to current events. Archaeology, anthropology, sociology - all find
+their place here, along with the study of the world at large. The running
+lights are simple white and there is no furniture here. The music being played
+consists of the national anthems of countries past and present, showing no
+favoritism as the playlist cycles consistantly. Historical memorabilia hang
+about - most of it replicas but some of it real - including American Civial
+War sabers, an Egyptian bust, and the centerpiece of the historical
+collection: a cannon from a ship in the Spanish Armada, sunk in 1588 and just
+recently recovered and restored. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40612
+Name:	Non-Fiction Level - Arcana
+Desc:$
+   The Arcana section is the newest addition to Powell's. Until recently,
+magic and sorcery were considered the stuff of myth and legend. Now, with the
+Awakening fully recognized and mages selling their skills as paid employees,
+arcane lore has come to be recognized as non-fiction. The books include
+everything from the journals of famous mages to cookbooks of many arcane
+sorts. There are even some tomes dealing with the shamanic tradition, though
+these tend to be somewhat more rare. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40613
+Name:	Non-Fiction Level - Biography
+Desc:$
+   The biography section is ominously huge. It seems Powell's has at least
+three biographies on everybody who's anybody, from ancient names like Cicero
+and Galileo, to religious types like Buddha, to modern faces like Dunkelzahn.
+Pallid stone busts of such people adorn the shelves, with a massive sculpture
+of Dunkelzahn perched atop the racks, way up there. The running lights along
+the shelves are gold, and the music is instrumentals from various time
+periods. Most of it sounds like something out of Masterpiece Theater. The
+scent generators seem to be broken, as there is only a faint smell of burning
+in the air. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40614
+Name:	Non-Fiction Level - Computers and Technology
+Desc:$
+   Not surprisingly, the computers and technology section consists mostly of
+ominously massive tomes. Perhaps the only thing more arcane than books of
+magic, are books on computers. Titles range from "Unix for Dummies" to
+"Masterful Maniupulation of the Matrix Made Managable" to "Coding in Ancient
+Binary Volume 23." Severl clusters of computers are set up here to allow
+students of the technological sciences to test their newfound knowhow. There
+are even a few ports for connecting to the Powell building's public Matrix.
+The running lights highlight the books in pale orange, and the music is
+soothingly cerebral classical. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40615
+Name:	The Stairs
+Desc:$
+   The stairwell continues, with the black brushed-metal frame of the first
+floor blending with the mercurial silver of the third floor to create a
+brushed gray metal effect here. The stairs are covered now in dark purple
+carpeting. The column of lights is a double spiral on the second floor, with a
+pair of counterclockwise spirals shedding light on the stairs. The guardrails
+are suspended from the spirals above, as before, though this time from blue
+wires. A plate covers the space between the floors - it seems the stairs were
+built through a hole cut between levels. The plate is carved with reliefs of
+the All-Seeing Eye, the Caduceus, and other symbols of wisdom and power. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40616
+Name:	Nonfiction Level - True Crime
+Desc:$
+   The True Crime section is small but dense. Blue runner lights cast a cold
+glow on the books they illuminate. The titles include books on Billy the Kid,
+Al Capone, and more modern criminals like Sally, Many Names, and Kid Stealth.
+Wide synthleather padded couches form a small seating area, with a wide, low
+table in the middle. Music is playing that reminds you of police on the chase,
+and the smell in the air holds the light scent of gunpowder. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40617
+Name:	Non-Fiction Level - Reference Materials
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40618
+Name:	Non-Fiction Level - Plays
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40619
+Name:	Non-Fiction Level - Poetry
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	40616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40620
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40621
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40622
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40623
+Name:	Audio/Visual Level - Classical Music
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40624
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40625
+Name:	The Top of the Stairs
+Desc:$
+   The staircase ascends to its apex on the third floor. The stairs become
+mercurial, cast of specially comissioned plasticrete made to bend light around
+itself. The effect is rather like that of mercury - a mirror in liquid form.
+The stairs are covered in gray cushy carpet. Pale light filters down from the
+third floor. The plate separating the second and third floors is carved with
+inscriptions in Latin, Greek, Arabic, Sanskrit, Sperethiel, and other arcane
+and sacred languages. To those who can read them, the passages speak of
+knowledge and power and the divine origins of intellect. To those who cannot,
+they are simply a pretty decoration. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40626
+Name:	Audio/Visual Level - Rap/Hip-Hop/R&B
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40627
+Name:	An unfinished room
+Desc:$
+    
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40628
+Name:	moo boom
+Desc:$
+   boom moo 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40629
+Name:	Audio/Visual Level - Country and Oldies
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

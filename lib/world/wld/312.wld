@@ -1,0 +1,3417 @@
+#31200
+Name:	New Seattle Journal news room
+Desc:$
+   Absolute and utter chaos.  People are running back and forth, weaving in
+and out of a maze of desks scattered about the main floor, the clicking of
+people jacking in and out of the Matrix mixing with the murmur of chattering
+over cell phones, the hum of a printing press rising up from beneath the
+floor.  The screams of an enraged copy editor punctuate the softer droning,
+but the reporters and photographers remain oblivious, continuing to write
+stories and download both digi and holopics for the two different versions of
+the Journal.  Everyone is so focused on the story at hand, and shutting the
+editors up for a few hours, that even the most conspicuous stranger wouldn't
+be noticed. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31201
+Name:	Office of Gary Wizzler, Editor-in-Chief
+Desc:$
+   An aging, exhausted looking ork stares blankly forward from behind a large
+mahogany desk, papers and folders spread across the old wood along with the
+odd data disk.  On the back wall is an archaic, smiling picture of the last
+editors of the Seattle Times and the Intelligencier, back before the merger of
+'17.  Bookshelves line the left wall, and to the right is a large green-draped
+window.  There is a hint of drool starting to worm down the chief's stubbly
+chin. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31202
+Name:	Copy editing room
+Desc:$
+   A scattering of ripped papers, smashed data disks, and the remains of a
+couple of decks that appear to have been hurled against the wall litter the
+floor.  Standing on a desk by the window is a gray haired woman screaming
+obscenities mixed with babblings about grammar and sentence structure, waving
+around a fistful of papers.  A couple of her assistants are trying to talk her
+into stepping down and taking her tranquilizers. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31203
+Name:	Copy Editing Room
+Desc:$
+   A scattering of ripped papers, smashed data disks, and the remains of a
+couple of decks that appear to have been hurled against the wall litter the
+floor.  Standing on a desk by the window is a gray haired woman screaming
+obscenities mixed with babblings about grammar and sentence structure, waving
+around a fistful of papers.  A couple of her assistants are trying to talk her
+into stepping down and taking her tranquilizers. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	31200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31204
+Name:	Photo Room
+Desc:$
+   The stench of rotten eggs wafts through the room all this technology, and
+photo prints are Still made the old fashioned way, with silver nitrate and
+fixer solution.  Plastic canisters and light proof boxes fill several shelves
+on the left, and a large humming mass of metal spits prints out against the
+back wall.  Several framed shots of various historic moments in Seattle
+covered by the Journal paper the walls.  A large table with a glass top and
+light underneath fills a good portion of the room, with negatives and prints
+spread across it. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31205
+Name:	Hallway
+Desc:$
+   People rush up and down the hallway, dodging in and out of offices,
+clutching folders and cameras, pens and data disks wielded like tiny swords.
+Obnoxious, brightly colored posters with cartoonish images and 'inspirational'
+sayings smile out vapidly upon the oblivious.  
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31206
+Name:	Hallway
+Desc:$
+   Several office doors line the hall, randomly swinging open and shut as
+reporters try to escape their editors as quickly as possible.  The age of the
+building is more obvious here, with spots of peeling paint and cracked
+linoleum. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31207
+Name:	Office
+Desc:$
+   A blond, small-framed elf jacked into the system slumps in a heavily padded
+chair behind a glass topped desk, on which glow the shifting spreads of
+today's edition of the Journal.  On the wall are several framed plaques,
+mostly awards for digital art, several projecting tiny holovids of 3D
+renderings and graphic designs, surrounding a diploma from the Seattle
+Institute of Art. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31208
+Name:	Hallway
+Desc:$
+   The ceiling above is stain from several leaks, and those horrid posters
+seem to be covering depressions and holes in the plaster of the wall.  An
+office door swings halfway out onto the floor, decades of movement having
+scuffed a bare spot into the faded linoleum, exposing chipped concrete. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31209
+Name:	Office
+Desc:$
+   There are four desks, covered with papers, pens, and data disks, crowded
+against each wall.  Two of the desks proudly display the status of extra
+space, having adjoining file cabinets with half open drawers bursting with
+documents that could more efficiently be dealt with via email if the copy
+editor wasn't such an old fashioned psychopath.  The other two desks have been
+crammed into a corner to make room for the swinging of the rooms two doors.
+Over one of the corner disks is a picture of Dunkelzahn, and the rest of the
+walls are covered with tacked up memos and pictures of families. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31210
+Name:	Hallway
+Desc:$
+   The bulb up above needs to be replaced, flickering randomly, casting weird
+shadows over the cracks and bare spots along the floor and walls. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31211
+Name:	Hallway
+Desc:$
+   An archaic candy dispenser with a glass bowl top stands here, long unused
+and covered thickly with dust.  An office door stands half open, swinging out
+into the hallway. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31213
+Name:	Storage Room
+Desc:$
+   Boxes are stacked along the walls, and a chill fills the air, the lack of
+ventilated heat and concrete walls offering no heat.  A few cobwebs fill the
+corners, and a soggy stack of newsprint left under a nearby leak gives off the
+strong musty smell of mildew.  A door leads outside. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31214
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31214
+Name:	Parking Lot
+Desc:$
+   The asphalt is cracked into an unpatched jigsaw pattern, scattered with
+potholes and worn smooth in places from decades of use.  There are several
+large vans with the blue and white Journal logo painted on their  
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31295
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31213
+	Flags:	0
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31215
+Name:	Loading Dock
+Desc:$
+   A raised concrete shelf seems to have been scooped out from the back of the
+building, large enough for a semi to back up and unload into.  Some rusted
+metal steps lead up to the loading dock. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31216
+Name:	Loading Dock
+Desc:$
+   A large rig is  backed up against the dock.  Several orks and a couple of
+brawny trolls are unloading enormous rolls of fresh paper at least the size of
+a grown human. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	31215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31217
+Name:	On the loading dock
+Desc:$
+   The dock is several feet above the level of the decaying parking lot, with
+large steel double doors leading inside.  Workers wander around, hefting paper
+rolls and brining out stacks of today's edition to be delivered to the small
+minority that still prefers print.  Metal stairs lead down to the parking lot.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	31215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31218
+Name:	Storage Room
+Desc:$
+   Piles of boxes and paper rolls fill the room, the stair well leading down
+to the basement almost invisible in the mess.  There isn't much light, and the
+room feels rather damp for a place to store paper. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	31220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31219
+Name:	Storage Room
+Desc:$
+   More boxes tower up towards the darkened ceiling, and the dates and labels
+stamped on the cardboard show an increasing tendency for the contents to
+belong in a museum.  Heard over the roar of the printing press below is a
+slight scuttling sound, indicating nearby rodents, but it's difficult to tell
+if the little beasts are scurrying around up here, or are the echo of
+something much larger crawling about towards the bottom of the stairwell. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31220
+Name:	Stairwell
+Desc:$
+   The metal stairwell squeals with each step, as if screaming in fear of its
+approaching death.  It may not collapse today, but the rusting supports are
+definitely not an omen to take heart in.  The smell of mildew, and wet, and
+rodent den all waft up from the unnatural cavern ahead. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31221
+Name:	Printing room
+Desc:$
+   A large, bulky machine, clanking and humming away, stretches to the south.
+There are open vats of ink nearby, reds, yellows and blues with matching
+stains on the concrete giving evidence of past spills.  Half used paper rolls
+litter the area, mostly stacked against an overflowing recycle bin, while a
+few fresh rolls patiently stand by the press, waiting to be fed into the
+machine's growling maw. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31222
+Name:	Printing press
+Desc:$
+   Looming overhead, the press zooms a continuous feed of paper by, still
+uncut pages giving glimpses of tomorrow morning's edition.  The machine is old
+and rusted in some places, but until the demand for a printed edition
+completely dies out, the old press will run. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31223
+Name:	Printing press
+Desc:$
+   Large blades slice throught he paper feed, sending pages down into the
+folding machine, popping out as neatly folded packages caught by workers to be
+bagged and chunked into the pile. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31224
+Name:	Basement
+Desc:$
+   The harsh, reeking stench of an animal den is the first thing to be
+noticed.  The sloppy piles of supplies in the store rooms above seem almost
+organized when the chaos spreading out over the basement is viewed.  Old
+filing cabinets line the walls, which disappear into the threatening shadows,
+from which drift rustling, chittering sounds that can be made out even over
+the drone of the printing press in the other room.  
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31225
+Name:	Basement
+Desc:$
+   There is less light in this direction, but the forms of several file
+cabinets that have been knocked to the floor can be made out.  The metal of
+those lying on the floor is vibrating slightly along with the murmurings of
+the press.  Old yellowed copies of the Journal are everywhere, and show signs
+of having been chewed and shredded by something. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	31229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31226
+Name:	Basement
+Desc:$
+   The extreme absence of light here is a little shocking.  The last of the
+glow from the door is completely gone, and not even the forms of random junk
+and archives cabinets crowding the rest of the basement can be made out.
+There is an odd smell here, almost as if something, or someone, died down
+here. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31227
+Name:	Basement
+Desc:$
+   The sound of the printing press can be made out, vibrating the wall hiding
+it.  The trash and junk littering the floor is almost invisible as the last
+glow from the door fades, seeming to snake out and grab any foot that passes
+by.  Or maybe those are rats. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31228
+Name:	Basement
+Desc:$
+   A large pile of old style dumb terminals and hard drives have been junked
+here, along with a few incredibly archaic word processors, and several trashed
+decks that probably aren't worth salvaging.  The light isn't very strong here,
+turning the twisting trail through the junk into a cache of potential
+accidents.  The printing press gives off a muffled hum from somewhere out in
+the shadows of the basement. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31229
+Name:	Basement
+Desc:$
+   A rank, mildewed smell fills the fetid air, which is void of any even a
+slight movement and feels heavy and dead.  Trash litters the floor, and the
+dark shapes of boxes and other objects piled haphazardly about the large room
+can just barely be made out in the shadows with the light from the stair well
+above.  The distinct purr of the printing press can be made out somewhere to
+the west, along with the sounds of some creature snuffling about in the
+debris. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31230
+Name:	Stairwell
+Desc:$
+   Thick, unventilated air heavy with a strong odor of decay blasts up towards
+the door, carrying with it the loud whine of a printing press and the sounds
+of small (and not so small) creatures scuttling out of the way as light from
+the door pools out to reveal a sea of trash and junk that probably has been
+rising up in a reeking flood for decades. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31231
+Name:	Upper Stairwell
+Desc:$
+   The linoleum on the stairs is so worn that there is a double tracked groove
+eroded into the edge of each step, and the finish on the wooden banister is
+peeling off in ugly yellow strips.  That nasty smell from the basement that
+causes most of the Journal's employees to avoid the place like the plague
+(which might very well be found down there, according to some rumors) drifts
+up on a rising air current. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	31230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31232
+Name:	Photography Studio
+Desc:$
+   Three tripods supporting large, bulky boxes surround a young orc having a
+holopic taken for his Journal ID.   One of the walls holds several framed
+prints of nature scenes, and what appears to be a series of black and white
+with imposed pastel shades of several meta humans.   
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31233
+Name:	Equipment room
+Desc:$
+   An old laser printer sits on a table, humming every few seconds to spit out
+something else for the editor to bleed red with editing marks.  Set into the
+wall are several drawers with labels like "Sticky notes," "Data disks," Paper
+clips," etc.  A whiff of coffee breezes in from the nearby break room. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31234
+Name:	Breakroom
+Desc:$
+   A couple of threadbare couches occupy most of the floor space, with a
+handful of print mags covering the coffee table between them.  Mounted in one
+corner near the ceiling is a vid screen.  A counter holds a small coffee pot,
+a toaster, a microwave and a sink.  A small refrigerator stands next to the
+counter, covered with various notes pleaing the residence 'lunch thieves' to
+leave other people's food alone while also admonishing those foolish enough to
+not label their food containers. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31235
+Name:	Steps to the New Seattle Journal
+Desc:$
+   Several wide steps of concrete slab lead up to glass doors frosted with a
+blue and white icon, a stylized image of Mt Rainier, under which it says "New
+Seattle Journal."  The wall is a weathered red brick, with a  few small
+windows spaced across at equal intervals. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31236
+Name:	Mad Penguin Coffee House
+Desc:$
+   Low lighting and the rich smell of expensive real coffee give the cafe a
+relaxed atmosphere.  Old political posters are tacked to the wall, some from
+the efforts in recent years  to guarantee the equal rights of meta-humans, and
+some as old as the old NORML movement, with a faded green cannabis leaf on the
+yellowed paper.  It's usually pretty quiet here, except during the Saturday
+night poetry slam, advertised by a glowing holovid projected onto a bare patch
+on the wall. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31298
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31237
+Name:	Closed area with couches
+Desc:$
+   A few short steps lead up to a raised dais partitioned off from the rest of
+the caf by a low bookshelf.  A few comfortably worn couches are here, the old
+upholstery too faded to be ugly, set around a battered coffee table.  A few
+framed cheap paintings of sailboats near a beach decorate the wall. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	31236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31238
+Name:	Coffee
+Desc:$
+   Several coffee bean dispensers stand here, foreign names and flavors with
+ridiculously high prices of nuyen underneath labeling them.  The smell of
+fresh bean is strong here, and the decorations get even more random, a moth
+eaten moose-head mounted over a poster of old propaganda left over from the
+upheavals following the Awakening. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31239
+Name:	Main floor
+Desc:$
+   Black painted circular tables with unevenly distributed chairs and stools
+crowd the floor.  A few students are crouched over textbooks, and a couple of
+friendly chess matches are being played out.  Employees dodge in and out of
+the area, distributing orders and cleaning up emptied tables. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31240
+Name:	Cash Register
+Desc:$
+   A cash register sits on top of a fresh case displaying fresh pastries,
+cinnamon roll, and the caf's famous Penguin Cookies, reminiscent of the brand
+name Oreos that went bankrupt decades ago.  A bar with several stolls
+stretches out, and several coffee makers and mixer machines crowd the counter
+opposite the bar, a swinging door giving a peak of the supply room beyond. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31241
+Name:	Stage
+Desc:$
+   There is a small raised platform with lighting mounted overhead, a single
+microphone on show.  The wall behind is taken up with an art show from
+students at the university, this month featuring some student's varied
+attempts at cubism. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	31236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31242
+Name:	Back Kitchen
+Desc:$
+   Several metal shelves hold canvas bags of coffee and containers of
+Styrofoam cups, spoons, sweetener packages and baking suppliers.  There is a
+larger steel oven with a recently polished sheen, from which wafts the aroma
+of fresh cinnamon rolls.  A door leads to the alley out back. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31243
+Name:	Bulletin Board
+Desc:$
+   The blacked topped tales are far less crowded here, though most of the
+chairs have been spirited off to some other part of the caf.  A bulletin board
+occupies a good portion of the wall, with advertisements ranging from requests
+for a good drummer to reminders from some church of an impending apocalypse. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31244
+Name:	Stairs
+Desc:$
+   The dark wood of the banister is a little chipped and abused in places, but
+has a soft glow from regular polishing.  The steps are lined in a gaudy but
+threadbare wine colored upholstery, liberally painted with more than one
+decade's worth of stains. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31245
+Name:	Upstairs
+Desc:$
+   This room doesn't seem to get much use.  The white-washed walls are bare,
+the garish red carpet spilling out from the stairway isn't quite so peppered
+with mystery stains. A long black painted dining table has somehow been
+wrestled up here to dominate the room the neatly placed chairs contrasting the
+chaos below.  Through the large windows on either side of the screen door  can
+be seen a small balcony. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31247
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	31244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31246
+Name:	Balcony
+Desc:$
+   The wood of the balcony creaks slightly as a slight breeze blows by.  The
+extension of the roof protecting the area from rain doesn't look very stable,
+a hint of half rotted wood peeking through the peeling brown paint.  A few
+wicker lawn chairs dot the enclosed area, the original cushions long ago
+chucked over the railing 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31247
+Name:	Office
+Desc:$
+   There is an old, battered desk set away from the curtained window in the
+back wall, a swivel chair leaning at a precarious angle on its wobbly legs,
+foam stuffing gradually escaping through the seems.  The carpet has been
+removed to leave a floor of wooden planks, a small blue rug in front of the
+desk.  A bookshelf holds a few trinkets and old paper backs, no sign of more
+modern view chips in sight. 
+~
+Flags:	11000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	31245
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31248
+Name:	Alley
+Desc:$
+   A few upholstered chairs, ripped and rent beyond all recovery, are shoved
+back against the wall, rodent-fouled and mildewing in the fine Seattle
+weather. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31249
+Name:	Alley
+Desc:$
+   The breeze is cool and invigorating, but carries with it a whiff of
+mildewing cloth nearby.  The red brick of the surrounding walls brings to mind
+a narrow canyon or arroyo due a flash flood. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31250
+Name:	Alley
+Desc:$
+   A few bits of trash blow in the gently moving air.  The mottled red brick
+walls forming the alley cast a cool, unbroken shadow.  There is a stiff reek
+of garbage in the air. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31251
+Name:	Sidewalk
+Desc:$
+   The red, mottled brick walls lining the sidewalks are here divided by a
+shadowed alley to the east, as an unpleasant smelling breeze drifts out into
+the open air. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31252
+Name:	Sidewalk
+Desc:$
+   A glance skyward reveals a rickety set of stairs clinging to the brick
+wall, peering through a faded mural of sun and trees and archaic Peace
+symbols. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31283
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31253
+Name:	Sidewalk
+Desc:$
+   The gray concrete of the sidewalk is cracked and depressed into the ground,
+loose bits scattered about.  The corner of a brick building has been rounded
+and smoothed, any remnant of fresh sharpness lost to the elements. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31266
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31283
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31254
+Name:	Stairs
+Desc:$
+   The wind begins to pick up, creaking in the old, weathered gray wood of the
+staircase.  Each step continues a line of grooves caused by hundreds of feet
+over the decades running up and down the building. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31286
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	31282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31255
+Name:	Roof
+Desc:$
+   A collection of large metal boxes whir and hum in the open air of the roof,
+spots of bird mess speckling everything.  The wind whistles through an air
+duct, the high pitched whine the only other sound 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31286
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31284
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31256
+Name:	Roof
+Desc:$
+   A low railing of plaster and exposed brick edges the of the roof.  The
+alley below can be seen, shadowed in a narrow red brick canyon. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31284
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31257
+Name:	Roof
+Desc:$
+   Wide splotches and black bits litter every surface, from the floor to the
+plaster/brick railing edging the roof.  A few birds glare menacingly, but
+refuse to be scared off by any sentient presence.  There are no signs of
+nests, and there certainly isn't a park within site. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31284
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31258
+Name:	Roof
+Desc:$
+   The wind squealing in agony, like a child that has just seen its favorite
+puppy boiled alive in a vat of acid, there is little to be seen.  A raised bit
+of plaster and brick forms a lip around the corner of the roof, and the alley
+below can be seen, shadowed in a narrow red brick canyon. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31284
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31259
+Name:	Sandbox
+Desc:$
+   A large, octagonally shaped pit of sand, lined with green plastic, holds
+several children making castles, kicking other kids' castles, and tossing
+about plastic pales of varying sun-bleached colors.  In the center of the
+sandbox is a strange shaped, cat-sized lump in the sand, a few snickering boys
+surrounding it.  
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31260
+Name:	q
+Desc:$
+   The mild, not unpleasant, musty odor of aging paper fills the air, the
+whirring air conditioner adding a noticeable chill.  To the right is a low
+table covered with a large pile of paperbacks, the colored covers faded, pages
+yellowed, and the whole mess is topped with a piece of paper announcing a
+Buy-One-Get-One-Free deal. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31263
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31261
+Name:	Shelves
+Desc:$
+   Shelves line the walls floor to ceiling, books of all size and shape
+stuffed into every available crevice.  Titles range from Shakespeare's 'The
+Tempest' ot 'The Idiot's Guide to Shamanism.'  The stained yellow carpet looks
+to have been in place since the late 20th century. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31262
+Name:	Register
+Desc:$
+   Surrounded by stacks and stacks of hardback volumes, a cash register
+emerges as the one hint of acquiescence to technology in this store. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31288
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31263
+Name:	Shelves
+Desc:$
+   A large, airtight glass case is set within the wall, a security keypad near
+the upper right corner, protecting a few age worn, rare items, among them a
+stained but priceless New York Daily Tribune, printed October 9, 1849.  A
+small card in front of the magazine labels it as "The first published location
+of Poe's famous 'Annabel Lee.'"  There are also several difficult to acquire
+magical scrolls. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31264
+Name:	Stairs
+Desc:$
+   Past the inconspicuous door beyond the register, a set of dimly lit
+concrete stairs leads downwards.  The walls are slightly damp, the air chilled
+and marginally stale, and the mustiness of the entire store is more prominent.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	31265
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31265
+Name:	Basement
+Desc:$
+   Innumerable books in varying stages od decay have been piled about the
+concreet floor of the cramped, bunker like room, a small metal desk pushed
+into one corner covered with stacks of papyrus scrolls.  A stand topped with a
+glass case protects a few leather bound tomes and ancient, crumbling scrolls.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	31264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31266
+Name:	Rust n Dust Antiques
+Desc:$
+   An old wooden sign hangs above Dust n Rust Antiques, the weathered door set
+with a small pane of stained glass.  A peak inside the large bay windows
+jutting out from either side of the doorway offers a glimpse of assorted odds
+and ends of questionable uses.  
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31267
+Name:	Entrance
+Desc:$
+   As the door swings open, an electronic chime begins to screech out an
+agonizing rendition of some random millennial pop hit for an eternally long
+three seconds. Most of the light in the large, cluttered store is concentrated
+here near the windows.  To the fight a display of jewelry glitters, catching
+the eye. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31266
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31268
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31268
+Name:	Jewelry
+Desc:$
+   A large cabinet stands against the far wall, the shelves lined with
+mirrored glass, jewelry and knick-knacks of expensive materials proudly
+displayed, a large pale-green jade dragon especially prominent.  There are
+several pendants, amulets and rings, some decorated with esoteric symbols and
+precious stones.  Light streams in through the large bay window holding a
+display of the old 'tv's that became obsolete after the popularization of the
+holovid.  The gems and glass in the case glint and dull with the clouds seen
+through the window streaming across the sky. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31269
+Name:	Glass
+Desc:$
+   A maze of large rustic, unfinished cabinets forms a series of small
+cubbies, the shelves filled with glass bottles, vases, and figurines of all
+colors, shapes and sizes.  Filling one shelf is a collection of wine bottles
+painted with deep purples and golden astrological symbols, each with a tiny
+hole towards the base.  A small folded card on the shelf proclaims in sloppy
+red marker. "Incense Bottle, circa 1998." 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31270
+Name:	Books
+Desc:$
+   A few spinning racks of metal wire are crammed with paperback books in
+varying tattered states.  Pink, twisted into gaudy, girlish fonts assaults the
+eye most strongly, drowning out the brown westerns and dark pulp sci-fis.  A
+few cheap spell scrolls are spread out on a small folding table, held down
+with rocks and small chunks of concrete. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	31274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31271
+Name:	Furniture
+Desc:$
+   A few rolled up rugs and tapestries have been dumped onto a patched,
+plastic-lined green couch, positioned in the middle of the store between the
+back of a rough wooden cabinet and a rather unstable looking stack of large
+iron-wrapped trunks.  A few ornately carved chairs are clustered together, the
+age-darkened wood gleaming. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31272
+Name:	Toys
+Desc:$
+   Several blond, distortedly proportional dolls gaze out from pink cardboard
+boxes, dressed in skimpy bikinis and blindingly pink wedding gowns.  Locked
+behind a glass case is a pile of plush stuffed animals, a large heart with the
+letters TY printed on it in white bubble print pasted on the case.  In another
+display case are some old fashioned "game systems," form the dark ages before
+sims and the Matrix, strange black boxes labeled with the archaic labels of
+various companies, most now obsolete Sega, Nintendo, Sony. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31268
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31273
+Name:	Stairs
+Desc:$
+   Lined with a shaggy green carpet, each step displaying a pair of old dress
+shoes decades out of style, the stairs twist around to hide the store's other
+level.  The cramped space is dark and dusted with shadow, a lonely cobweb
+swinging with the breeze of passing bodies. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31274
+Name:	Register
+Desc:$
+   A wide glass counter, arranged with the electronic keypad of a security
+alarm protects bits of rare jewelry and other items of considerable worth from
+sticky fingers, a battered junk heap of a cash register sitting on top, having
+actual buttons to punch in place of the usual flat touch screen.  Hanging on
+the wall behind the counter are several small rugs, tapestries and lengths of
+woven cloth tacked up in bunches on display. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31275
+Name:	Upstairs
+Desc:$
+   A large pile of the most imaginably random mix of shoes is piled
+conspicuously near the stairs, spilling out of a closet holding several
+sequined evening gowns, a wild plethora of colors, materials, styles and time
+periods.  A purple boa hangs down from the closet door, a tattered red silk
+kimono draped on a large brass hook set into the door. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	31273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31276
+Name:	Dressing Room
+Desc:$
+   Drawing aside a dark beaded curtain reveals a single bench in one corner, a
+few brass hooks holding a discarded white linen blouse and a rubber belt
+patchy with silver glitter.  
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31277
+Name:	Coins
+Desc:$
+   Low glass cases lined with red cushions display coins both tarnished and
+gleaming in the sunlight streaming through the single window.  There are
+collections from Rome, Ancient China, and examples of the long vanished dollar
+of the old United States and the instantly worthless euro of the old
+Pre-Awakening European Union. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31280
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31278
+Name:	Clothes
+Desc:$
+   Clothing racks display blouses, military vests embroidered with griffons
+and dragons, original Levi's from before the days of water proof cotton,
+poodle skirts, vinyl dresses, leather dresses, and all the velvet a heart
+could ever desire.  A rack of belts holds leather, vinyl, chain, spikes,
+studs, plastic jewels, buckles to fit any taste, the surrounding carpet
+thickly encrusted with a growth of glitter. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31280
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31279
+Name:	Register
+Desc:$
+   A cash register sits on a small wooden counter holding several baskets of
+various trinkets, political buttons and patches, and a collection of the old
+"power bead" bracelets.  Behind the counter is a stack of framed posters
+leaning against he wall, mostly turn-of-the-century movie ads for such oldies
+as Lord of the Rings, American Beauty and Shrek 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	31281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31280
+Name:	Office
+Desc:$
+   Chaos reigns.  Papers and books and writing utensils and all sorts of wares
+from the store outside are scattered through out the room, a small writing
+desk barely visible in the mess.  There is a small vidscreen set into the side
+wall, the one sign of modernity in this entire rambling anachronism.  The eyes
+of a curious ferret peer out of the large cage in the far corner, explaining
+the musky smell. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31281
+Name:	Jewelry
+Desc:$
+   Inside the glass case is a velvet-lined bit of board has several jeweled
+brooches set in the cloth, the multi-colored gems winking in the light.  There
+is a matching ring, brooch and ear-whimsy set of sterling silver with a
+stylized Triple Moon Goddess design.  About two dozen rings have been pressed
+down into a slotted cushion of black cloth, tiny stickers denoting their
+sizes.  Several chains of silver and gold hang from a plastic rack on top of
+the case, with lengths and thickness suitable for a large troll or a
+diminutive pixie. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31280
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31282
+Name:	Dust n Rust Antiques
+Desc:$
+   The small deck wooden deck topping the stairs is weathered and gracefully
+age-bearing, a decorative wooden sign hanging from the post above a simple
+door with ornately wrought iron bars swinging in the breeze.  A glance inside
+the round, port hole like windows indicates a large room filled with all sorts
+of interesting bargains. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	31281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	31283
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31283
+Name:	Wooden Stairway
+Desc:$
+   A well weathered flight of wooden stairs grips the side of the brick wall,
+angling upwards to a door swinging out from the second story of the building,
+and dropping back down to the street below. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31284
+Name:	Roof
+Desc:$
+   Several eroded and stained statues crowd about, an array of tusk, teeth,
+horns and bat wings bringing to mind a typical modern day club, though judging
+by how old some of that marble looks, the artists were originally going for
+something extraordinary and unique.  But what's so interesting about a guy
+with horns these days? 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31285
+Name:	Roof
+Desc:$
+   Several winged, horned creatures cast in marble and granite stand here,
+stone eyes seeming a bit too alive for a piece of art.  Unaffected by the
+chill wind, the gargoyles laugh and glare and stare unmoving, yet they give
+off a sense of livelihood. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31284
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	31256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31286
+Name:	Landing
+Desc:$
+   Quivering with each step taken, the stability of this landing is definitely
+questionable, especially as it starts to shiver with the increased caress of
+cold wind up here.  A glance below gives a good view of the dull sidewalk, and
+the entry to a dark alley. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31287
+Name:	Store front
+Desc:$
+   Large panes of glass make up the front wall of the store, revealing several
+tables and shelves laden with books.  Large letters painted across the glass
+proclaim in chipping sharpness "The Last Book Store." 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31288
+Name:	Office
+Desc:$
+   A large pile of books, grouped into threes and fours and bound by rubber
+bands or yarn, occupies the long folding table shoved against one wall,
+spilling down into the plain metal chair and ugly orange carpet.  The walls
+are unadorned, broken only by a door to the east. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31291
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31289
+Name:	Closet
+Desc:$
+   The small closet is thick with several large, heavy coats, and the air is
+almost too stale to breathe.  Pushing a hand back through the press of
+garments reveals a patch of cool, empty air and the absence of a back wall. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31290
+Name:	Foot of stairs
+Desc:$
+   No wider than the stairwell looming overhead, this meter-cubed bit of
+hollow concrete is dull and grim.  Bits of light stream though the
+perforations of a dark-beaded curtain covering the doorway to the north. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31291
+Name:	Alley
+Desc:$
+   Half-dead weeds cling to a high wooden fence topped with barbed wire.  Tire
+tracks have been rutted down into the squelching mud, all in the cold shadow
+of a small building to the south. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31288
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31293
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31292
+Name:	Alley
+Desc:$
+   The broken pattern of cracked concrete is interrupted here by an intrusion
+of mud and scraggly weeds. The building to the southeast casting a cool,
+mottled shadow. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31293
+Name:	Empty Lot
+Desc:$
+   Large boulders of concrete rear up out of the waist-high patch of weeds and
+grass, the crumbling bones of some forgotten behemoth that once stood here.
+To the west is a small, insignificant looking building. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31291
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31296
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31294
+Name:	Parking Lot
+Desc:$
+   A few faded yellow lines are barely visible on the crumbling asphalt,
+reaching u to the shaded sidewalk hugging the glass-faced store to the north.
+No cars are present, providing not even a sign of either employee or owner. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31295
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31296
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31297
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31295
+Name:	Parking Lot
+Desc:$
+   A few vans and trucks are parked sporadically across the asphalt, all
+stained white and stamped with the mountainous logo of the New Seattle
+Journal.  To the south is a large building, while the crumbling parking lot
+expands northward. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	31295
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31295
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31296
+Name:	Asphalt and dirt
+Desc:$
+   Here the battle of Nature and Industry has been waged, Natured now the slow
+conqueror.  Seedy, stickly weeds and wild flowers have long ago infiltrated
+the preliminary defenses of the asphalt, conquered, blackened bits scattered
+about and cast aside, remnant rocky islands slowly being crumbled into their
+brethrens' oblivion. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	31294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	31293
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31297
+Name:	Side of building
+Desc:$
+   The plain, stuccoed wall of a building to the west offers little shade, the
+sidewalk cracked and breeding weeds.  To the north is a muddied alley, and a
+large parking lot lies south of the building. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	31294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31298
+Name:	Store front
+Desc:$
+   Large windows give a view inside, revealing several college kids studying
+at tables scattered somewhat irregularly about the room, along with a small
+stage and long bar.  The glass door is covered with advertisements for local
+bands and local political causes. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	31236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#31299
+Name:	Temporary office
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

@@ -1,0 +1,186 @@
+#24500
+Name:	The Rooster's Coop
+Desc:$
+   The first thing one expects when walking into this establishment has to be
+a face full of hot lead. Everything is displayed behind cages and sturdy
+display cases, leaving small aisles for customers to stroll through and look
+over the merchandise. Security is a big concern, for patrons that is, because
+this place is stacked to the brim with reasons not to give the employees
+trouble, which is a big plus for its location in the barrens. Twin automated
+defense turrets swivel and cover the entire storefront, tearing anyone stupid
+enough to try and rob this place into little more than brightly coloured
+confetti. The Rooster's Coop is well known as a place to unload firearms and
+ammunition, and has earned a reputation from its mostly ganger clients as
+being a reasonable place to exchange for cred, which almost matches it
+reputation for putting the hurt on anyone dumb enough to screw around. 
+~
+Flags:	10000000000000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	24501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#24501
+Name:	Back in The Rooster's office
+Desc:$
+   This back room is supposed to be an office, but, its more like a storage
+room. Stacks of old surplus ammo crates line the walls, which are covered in
+old propeganda posters from back in the 'Good Ol' USA' days. Quite a number of
+them are downright racist, such as the 'Slap A Jap' campaign, along with
+phrases such as "The only good gook is a dead gook". Apparently The Rooster
+wears his heart on his sleeve, and isn't shy about his racism in the
+slightest. Bits and pieces of firearms are strewn out across what flat work
+space can be found, some of which are being cleaned, while others are in the
+process of being put back together. Plenty of guns can be seen laying around
+the place, most of which are within easy reach of the owners very capable
+hands, making it enough reason to leave well enough alone. A single steel
+door, heavily draped with locks, is almost hidden along the far northern wall.
+~
+Flags:	10000000000000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door steel heavy
+	Desc:$
+A heavy steel door, draped with locks, seals off the northern passage. 
+~
+	ToVnum:	24503
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#24502
+Name:	A basement used for storage
+Desc:$
+   This basement has been constructed from thick slabs of rebar reinforced
+concrete, making it a veritable bomb shelter. Its currently being used to
+store The Rooster's personal stash of weapons and ammunition hes been
+collecting over the years, and he apparently goes through quite a deal of
+trouble to keep undeserving eyes and fingers off of them. Line after line of
+rifles are stacked along the walls and locked away behind display cases and
+chainlink security measures. Boxes of ammunition are pushed up along the far
+wall, as if this were a staging ground for some unforeseen war to come. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	door trap metal heavy
+	Desc:$
+Its a trap door, like you'd see on storm shelters. Its bolted in and built
+into the ceilings foundation. 
+~
+	ToVnum:	24503
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	24599
+BREAK
+#24503
+Name:	A short concrete hallway
+Desc:$
+   This short hallway has walls of smooth concrete, with very little else to
+see aside from an occasional crate of ammunition waiting around to be stored.
+A single bare light bulb hangs down from the ceiling near the back, its beaded
+draw string swaying about above the only other exit leading out of here. A
+large set of heavy metal doors are set into the ground, tightly bolted and
+built into the foundation itself. It would prove almost impossible to break
+through, and the series of heavy padlocks makes it all but useless to attempt
+picking. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	4
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door steel heavy
+	Desc:$
+A heavy steel door, draped with locks, seals off passage back into The
+Rooster's office. 
+~
+	ToVnum:	24501
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	door trap heavy steel
+	Desc:$
+Its a trap door, like you'd see on storm shelters. Its bolted in and built
+into the floors foundation. 
+~
+	ToVnum:	24502
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	24599
+BREAK
+END

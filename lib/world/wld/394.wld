@@ -1,0 +1,690 @@
+#39400
+Name:	A dark, shadow filled, black forest.
+Desc:$
+   The shadows around you seem to reach for you. The darkness consumes you and
+you hear nothing. An eerie silence that harasses your ears. All around you
+towering oaks reach up, to a ceiling far, far away. 
+~
+Flags:	0
+SecType:	Black Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	13
+[EXIT east]
+	Desc:$
+Behind large metal doors 
+~
+	ToVnum:	39402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Desc:$
+A white room 
+~
+	ToVnum:	39401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39401
+Name:	A field with a small stream
+Desc:$
+   You walk over the hill, following the stream. A large dark forest looms
+over the edge of the cliff you stand on. A small bird of amazing resolution
+swoops past you. 
+~
+Flags:	0
+SecType:	Black Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	13
+[EXIT north]
+	Desc:$
+A dark hallway 
+~
+	ToVnum:	39404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	39400
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39402
+Name:	A heavily secured vault.
+Desc:$
+   You step out of the forest into a small tunnel in a mountain. You hear a
+low rubling sound. And proceed towards a deep red glor on the north wall. The
+air is clammy...which is an odd feeling to experience in the matrix. 
+~
+Flags:	10000000000000000000100000
+SecType:	Red Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	12
+[EXIT north]
+	Desc:$
+Inside the vault 
+~
+	ToVnum:	39403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+A Black Forest 
+~
+	ToVnum:	39400
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39403
+Name:	Crimson Level Files
+Desc:$
+   A single glass table stands here. In labeled slots, assorted files are
+floating in place. You have entered the top-level security file database. 
+~
+Flags:	0
+SecType:	Red Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	12
+[EXIT south]
+	ToVnum:	39402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39404
+Name:	A long hallway
+Desc:$
+   At the south end of the hallway there is a pasture, and at the north end is
+an intersection 
+~
+Flags:	0
+SecType:	Red Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+[EXIT north]
+	ToVnum:	39405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39405
+Name:	An intersection.
+Desc:$
+   You are in an intersection. To the south lies a tunnel, a faint light at
+the end. To the East and West lie banks of screens, and to the north there is
+an elevator. 
+~
+Flags:	0
+SecType:	Blue Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+[EXIT north]
+	ToVnum:	39408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	
+	ToVnum:	39404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39406
+Name:	Security Protocol Control Center
+Desc:$
+   This room is filled with computer screens, each monitoring a different
+security system. On the end of the row, is the master control override. 
+~
+Flags:	0
+SecType:	Red Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+[EXIT west]
+	ToVnum:	39405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39407
+Name:	Elevator Control
+Desc:$
+   A bank of readouts pans the wall. Each reading a number of what floor an
+elevator is on. 
+~
+Flags:	0
+SecType:	Red Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+[EXIT east]
+	ToVnum:	39405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39408
+Name:	Sub-Level 5 [^LBlack^w]
+Desc:$
+   The elevator is shiny, the resolution and clarity of your reflection is
+beyond what you can comprehend, as you reach out to touch the perfect metal,
+you've arrived. 
+~
+Flags:	0
+SecType:	Orange Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	8
+[EXIT south]
+	ToVnum:	39405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	39409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39409
+Name:	Elevator
+Desc:$
+   You are in an elevator, it's traveling to your desired desination. 
+~
+Flags:	0
+SecType:	Green Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	5
+[EXIT up]
+	ToVnum:	39410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	39408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39410
+Name:	Sub-level 4 [^RRed^w]
+Desc:$
+   You are at the top of the elevator that brings you down to the bottom
+sublevel of Renraku 
+~
+Flags:	0
+SecType:	Blue Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	5
+[EXIT north]
+	ToVnum:	39414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	39409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39411
+Name:	Emergency Hardline Conrtol
+Desc:$
+   A Bank of switches sits here, each assigned to a phone in the building,
+each able to call LS at a milisecond's notice. The main switch is at the
+bottom, it would be easy enough to flick the switch. 
+~
+Flags:	0
+SecType:	Red Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+[EXIT north]
+	ToVnum:	39412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39412
+Name:	Internal Emergency Response Team Subrouter
+Desc:$
+   This room controls the automated coded beeps sent to the Arcology's Red
+Samurai for instant response to any internal crime. 
+~
+Flags:	0
+SecType:	Red Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+[EXIT south]
+	ToVnum:	39411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39413
+Name:	Emergency Lockdown Protocol
+Desc:$
+   This room access all the locks in the arcology simultaneously and switches
+them to [Lock] should an emergency occur. 
+~
+Flags:	0
+SecType:	Red Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+[EXIT north]
+	ToVnum:	39411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39414
+Name:	A ^Rred^w lit hallway.
+Desc:$
+   A long corridoor, with rooms here and there, scattered among the long metal
+walls. 
+~
+Flags:	0
+SecType:	Blue Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT north]
+	ToVnum:	39415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39415
+Name:	A ^Rred^w lit hallway.
+Desc:$
+   The hallway continues. To the south, there is an elevator, to the north,
+there are 2 more rooms, and a stairwell. 
+~
+Flags:	0
+SecType:	Blue Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT north]
+	ToVnum:	39417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39416
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39416
+Name:	Salary Reports and Bonus Funds.
+Desc:$
+   This room is where all of the money set aside for Bonus's is kept. Also the
+room where all of the calculations for the amount of Bonus money are done
+here. The salary records of every Renrakue employee is kept here. 
+~
+Flags:	0
+SecType:	Orange Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	8
+[EXIT west]
+	ToVnum:	39415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39417
+Name:	A ^Rred^w lit hallway.
+Desc:$
+   A hallway leads north and south. A room lies to the west. The eerie ^Rred^w
+glow is permeating your vision. A painting hangs on the wall, the resolution
+of which is better than any matrix representation you have ever seen. 
+~
+Flags:	0
+SecType:	Orange Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	8
+[EXIT north]
+	Keywords:	(none)
+	ToVnum:	39419
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39418
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39418
+Name:	Cyberterminal access.
+Desc:$
+   This room has a bnk of LED's, each dazzlingly bright as they flicker with
+action. Under each set of LED's, there is a switch, and a monitor to watch
+over what the individual is doing. In the center of everything there is a
+small screen and a keypad. From years of decker experience, you know that if
+you input the right passcode, you can inhibit, if not shut down the
+cyberterminal access for the whole building. 
+~
+Flags:	0
+SecType:	Red Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+[EXIT east]
+	ToVnum:	39417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39419
+Name:	A stairwell
+Desc:$
+   The stairs are made of platinum, the red from the hallway below creeps up
+the stairs. And the Orange from the level above sinks in to blend. 
+~
+Flags:	0
+SecType:	Orange Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	5
+[EXIT east]
+	ToVnum:	39420
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39420
+Name:	Stairwell
+Desc:$
+   The Orange from the level above is heightening, so that almost everything
+except the Icons that move about within it are a slight tint of orange. 
+~
+Flags:	0
+SecType:	Orange Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT west]
+	ToVnum:	39419
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39497
+Name:	Up the stairs.
+Desc:$
+   At the top of the staids looms a giant archway. The doors are open and
+there is a cacaphony of action is going on in the forum in front of you. The
+amount of icons within this meeting area is astounding, yet the walls and
+internal programs of this structure have a better resolution than many of the
+personas floating around. 
+~
+Flags:	0
+SecType:	Green Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+[EXIT north]
+	ToVnum:	39496
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39498
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39498
+Name:	The foot of the Renraku Complex.
+Desc:$
+   As you step off of the walkway, you look down onto the chrome steps you are
+standing on. You see your reflection on the ground as if you were looking at
+yourself, there are no blemishes, every single chrome step is perfect. 
+~
+Flags:	0
+SecType:	Green Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+[EXIT east]
+	ToVnum:	39497
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39499
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#39499
+Name:	A long walkway.
+Desc:$
+   You walk along a pathway. Ahead of you is a gargantuan structure. But you
+can't quite focus on any part of it. Anytime your eyes rest on a part of the
+structure, it shifts, and changes. A feathered serpent forms out of a pillar,
+the resolution of which is infinitely perfect. Even at hundreds of meters away
+you can make out distinct emerald colored feathers. 
+~
+Flags:	0
+SecType:	Green Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+[EXIT north]
+	ToVnum:	39498
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

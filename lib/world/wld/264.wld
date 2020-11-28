@@ -1,0 +1,1842 @@
+#26400
+Name:	Crumbling Alcove
+Desc:$
+   Voices carry through the thin, cracked walls, and the mingled smells of
+food and incense drift through this crumbling alcove. The bare tile floor is
+filthy, and half the fluorescent bulbs in the ceiling are burnt out. A small
+handwritten sign hangs on the cracked glass security door, scrawled in what
+looks like purple crayon. It reads "Roomz Fer Rent!" 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	2441
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	Glass
+	Desc:$
+Glass Door 
+~
+	ToVnum:	26401
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	2
+BREAK
+#26401
+Name:	Small Foyer
+Desc:$
+   The foyer of the small apartment building looks relatively decent. The
+patterned green-and-brown carpet is relatively clean, and the smell of mildew
+isn't quite as strong here. Cheap posters and paintings cover most of the
+cracks in the walls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Keywords:	glass
+	ToVnum:	26400
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26402
+Name:	Entry Hallway
+Desc:$
+   A flickering fluorescent bulb illuminates the set of small mailboxes that
+are bolted to the western wall of this narrow corridor.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26403
+Name:	Lobby
+Desc:$
+   The walls of this small lobby have been painted a rather unfortunate shade
+of dark brown. At least it matches the thin, rather worn green-and-brown
+carpeting that covers the floor. A small reception desk sits against the north
+wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	26404
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	26445
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	3
+[EXIT south]
+	ToVnum:	26402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26404
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	26403
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26405
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments A and B are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26419
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	26402
+	LockRating:	3
+[EXIT south]
+	ToVnum:	26404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26418
+	Flags:	2
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	26401
+	LockRating:	2
+BREAK
+#26406
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments C and D are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26421
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26404
+	LockRating:	3
+[EXIT south]
+	ToVnum:	26405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26420
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26403
+BREAK
+#26407
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments E and F are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26423
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26406
+	LockRating:	3
+[EXIT south]
+	ToVnum:	26406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26422
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26405
+	LockRating:	3
+BREAK
+#26408
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments G and H are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26425
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26408
+	LockRating:	3
+[EXIT south]
+	ToVnum:	26407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26424
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26407
+	LockRating:	3
+BREAK
+#26409
+Name:	Hall between Apartments
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments I and J are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26427
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26410
+	LockRating:	3
+[EXIT south]
+	ToVnum:	26408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26426
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26409
+	LockRating:	3
+BREAK
+#26410
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments K and L are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26429
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26412
+	LockRating:	3
+[EXIT south]
+	ToVnum:	26409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26428
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26411
+	LockRating:	3
+BREAK
+#26411
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments M and N are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	26430
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26414
+	LockRating:	3
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26431
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26413
+[EXIT south]
+	ToVnum:	26410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26412
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments O and P are to either
+side of you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26432
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26415
+	LockRating:	3
+[EXIT east]
+	ToVnum:	26411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26433
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26416
+	LockRating:	3
+[EXIT west]
+	ToVnum:	26413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26413
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments Q and R are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26434
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26417
+	LockRating:	3
+[EXIT east]
+	ToVnum:	26412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26435
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26418
+	LockRating:	3
+[EXIT west]
+	ToVnum:	26414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26414
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments S and T are to either
+side of you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26436
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26419
+	LockRating:	3
+[EXIT east]
+	ToVnum:	26413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26437
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26420
+	LockRating:	3
+[EXIT west]
+	ToVnum:	26415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26415
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments U and V are to either
+side of you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26438
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26421
+	LockRating:	3
+[EXIT east]
+	ToVnum:	26414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26439
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26422
+	LockRating:	3
+[EXIT west]
+	ToVnum:	26416
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26416
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments W and X are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26440
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26423
+	LockRating:	3
+[EXIT east]
+	ToVnum:	26415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26441
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26424
+	LockRating:	3
+[EXIT west]
+	ToVnum:	26417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26417
+Name:	A Narrow Hallway
+Desc:$
+   The carpet is rather threadbare, the paint on the walls is peeling, and the
+old-style fluorescent tube lights flicker incessantly. But otherwise, this
+narrow hallway is in fairly good condition. Apartments Y and Z are to either
+side of you. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+Door to apartment Y 
+~
+	ToVnum:	26442
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26425
+	LockRating:	3
+[EXIT east]
+	ToVnum:	26416
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26443
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26426
+	LockRating:	3
+BREAK
+#26418
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26405
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	26401
+BREAK
+#26419
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26405
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	26402
+	LockRating:	2
+BREAK
+#26420
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26406
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26403
+	LockRating:	3
+BREAK
+#26421
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26406
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26404
+	LockRating:	3
+BREAK
+#26422
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26407
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26405
+BREAK
+#26423
+Name:	An Apartment
+Desc:$
+   The walls of this small apartment have been lined with a wooden board
+wallpaper and off-white carpeting to give it a warmer feeling. The usually
+flimsy door has been replaced with a solid oak model with ^RHel^Ll Sc^ryth
+^WPro^Lgram^Wming^n written on a black metal sign hanging above the peephole. The
+apartment has been arranged more like an office then a home, a large desk sits
+near the eastern window with a small but powerful computer buzzing quitely
+atop it. Behind the desk are two shelves, the wooden one filled with a number
+of phones, radios, keycards, and other random items. The metal shelf on the
+other hand is lined with firearms, clips, and unassembled attachments. Over in
+the north western corner sits a wooden armoire with a loveseat and easy chair
+resting on either side of it along the wall. The kitchen is bare aside from a
+strange black fridge with a number of post-it notes stuck all over the freezer
+door explaining program codes and random computer babble. A massive "^RDO NOT
+TOUCH ANYTHING ON THE FLOOR^n" sign sits along the eastern wall, in direct view
+the second you walk through the door. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26407
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26406
+	LockRating:	3
+BREAK
+#26424
+Name:	An Apartment
+Desc:$
+   Your standing in a dark, run down apartment, there are piles of cords
+everywhere and various cartons of soy-food lying around. Theres an old hammock
+hung in the corner and a Trid Stand, that's been converted into a computer
+desk in the other one. There are a couple of band posters on the intact walls.
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26408
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26407
+	LockRating:	3
+BREAK
+#26425
+Name:	An Apartment
+Desc:$
+The gleaming white walls and freshly vacuumed grey carpet make this small room seem much larger. A combination tub/shower stall takes up one corner next to a pair of overstuffed chairs that sit next to a chest. Across the room a shelf competes for wall space with a small black footlocker and a futon piled with blankets and pillows. Four large boxes take up the back wall. These room smells faintly of gun oil, cigarette smoke, carpet powder, and sex. Your typical shadowrunners pad.
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26408
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26408
+	LockRating:	3
+BREAK
+#26426
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26409
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26409
+	LockRating:	3
+BREAK
+#26427
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26409
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26410
+	LockRating:	3
+BREAK
+#26428
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	ToVnum:	26410
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26411
+	LockRating:	3
+BREAK
+#26429
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26410
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26412
+	LockRating:	3
+BREAK
+#26430
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26411
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26414
+	LockRating:	3
+BREAK
+#26431
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	26411
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26413
+BREAK
+#26432
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26412
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26415
+	LockRating:	3
+BREAK
+#26433
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26412
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26416
+	LockRating:	3
+BREAK
+#26434
+Name:	An Apartment
+Desc:$
+It looks like someone started trying to clean the grime from the walls of this
+place, but gave up quickly. The carpet is stained and worn, but relatively clean.
+A few posters for various gun manufacturers are tacked up in strategic locations
+to hide cracks. Mismatched, cheap furniture is laid out around the room with
+no apparent rhyme or reason, but it's all comfortable. Take out containers and
+other food wrappings are stacked all over the counterspace and near the fridge.
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26413
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26417
+	LockRating:	3
+BREAK
+#26435
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26413
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26418
+	LockRating:	3
+BREAK
+#26436
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26414
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26419
+	LockRating:	3
+BREAK
+#26437
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26414
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26420
+	LockRating:	3
+BREAK
+#26438
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26415
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26421
+	LockRating:	3
+BREAK
+#26439
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+Just a door. 
+~
+	ToVnum:	26415
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26422
+	LockRating:	3
+BREAK
+#26440
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26416
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26423
+	LockRating:	3
+BREAK
+#26441
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26416
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26424
+	LockRating:	3
+BREAK
+#26442
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	26417
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26425
+	LockRating:	3
+BREAK
+#26443
+Name:	An Apartment
+Desc:$
+   This small, square room smells vaguely of mildew and old sweat. The ratty
+industrial carpeting that covers the floor is stained and pocked with
+cigarette burns, and the brown paint on the walls is peeling away in strips.
+But it's got a door, and a lock, and those are the most important things. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	ToVnum:	26417
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	26426
+	LockRating:	3
+BREAK
+#26444
+Name:	An apartment.
+Desc:$
+   A small unfurnished apartment. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#26445
+Name:	Back Hallway
+Desc:$
+   This dimly-lit hallway seems to lead to the back offices - which,
+presumably, include the manager's office. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	26403
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door
+	ToVnum:	26446
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26446
+Name:	Manager's Office
+Desc:$
+   The mingled smells of cheap cigar smoke and mildew fill this small, grimy
+room. The tattered industrial carpeting is full of burns, and the walls and
+ceiling are spattered with yellowish-brown stains. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door
+	ToVnum:	26445
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

@@ -1,0 +1,1335 @@
+#40600
+Name:	Office of Edgar Damien Powell
+Desc:$
+   The sign on the office door reads Edgar Damien Powell, and it is obvious
+that a member of the first family of media makes his lair within. In the
+center of the room is a massive desk - probably made of real wood - with a
+thronelike chair behind it. The wood is worked with intricate scrollwork, most
+of it elven, and the seat, back, and arms are heavily padded and covered in
+rich leather. In front of the desk sit two smaller chairs, facing towards the
+desk, both made of obviously fake wood and padded thinly with synthleather.
+The walls are paneled in dark faux wood, most of them hidden by bookcases.
+Even the books are a show of wealth, with leather-, cloth-, and wood-bound
+volumes dating back to the late 1800s. They include first editions of Edgar
+Allen Poe, John Steinbeck, and Ray Bradbury, among others. Behind the desk is
+a single window,floor to ceiling and easily half a dozen paces wide, looking
+out over the Portland sprawl. The smell of tobacco smoke hangs lightly in the
+air, no wonder with Edgar Powell sitting in his chair, smoking a long-stemmed
+pipe. On his desk stands a marble statue of two dragons - one definitely
+Dunkelzahn, the other labeled perhaps apocryphally as Bahamut - and an
+old-style electric lamp. 
+~
+Flags:	110000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40601
+Name:	Fiction Level - Horror
+Desc:$
+   Onward into the Horror section. The running lights along the shelves are
+green, casting the books in an unearthly light. Deep, mellow music - mostly
+that of cellos - fills the air. The faux wood is dark and there are
+antique-looking chairs scattered about. The names on the racks include Bram
+Stoker, Mary Shelley, and Stephen King, among others. A trace of sulpherous
+smoke scent hangs in the air, just enough to give that brimstone feeling
+without being offensive. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40602
+Name:	Fiction Level - Action/Adventure
+Desc:$
+   The action/adventure section celebrates those books that really get your
+blood flowing. Red running lights along each shelf cast a fearful glow across
+the spines of the books. Notable authors include Tom Clancy, Michael Crichton,
+Ian Fleming, and Jules Verne (shouldn't he be in the sci-fi section? Maybe
+someone is due for a firing...). The shelves are capped with busts of such
+figures as James Bond and Indiana Jones. The music is an inspiring march that
+sounds like it would be fun to walk to, and the smell in the air is of grass
+and mountain air, the perfect setting for an adventure. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40603
+Name:	Inside Powell's Books and Media
+Desc:$
+   Stepping in from the street, the climate-controlled air washes over you.
+The perfect contrast to the air outside, the inside of Powell's brings instant
+comfort. The walls are all paneled in soothing earth-tones, mostly beige. The
+floor just in front of the doors is tiled in green marble. Overhead, banks of
+lights pump light upward, to be reflected downward by curved mirrors. This
+creates the effect of diffusing the light into the room without it being
+painfully bright. Classical music lilts lightly from unseen speakers,
+providing an air of high intellectualism. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40604
+Name:	Fiction Level - Manga and Comics
+Desc:$
+   This section is home to loud colors and overdecoration. Welcome to the
+Manga and Comics racks. Individual authors don't mean a whole lot in this
+business, but notable names include Todd McFarlane and Stan Lee, bigwigs in
+the business back in the 20th. Publishers include Dark Horse, Marvel, and DC
+among the Americans, and disgustingly hard to say names among the Japanese,
+perhaps their most recognizable being Akira Toriyama. The shelves are marked
+with busts of such men as Christopher Reeve and Val Kilmer, recognized for
+portraying great heros of the comic world. The music is a rousingly heroic
+march, but there is no scent effect here aside from air purifiers. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40605
+Name:	The Stairs
+Desc:$
+   In the center of the first floor, there is a staircase leading upward. It
+is a towering clockwise-spiral affair, with space between the stairs that is
+open, allowing anyone climbing up the spiral to see a commanding view of the
+first floor as they leave it. The stairs themselves are made of simple black
+brushed metal, covered individually in cushy red carpeting. The handrails are
+not mounted to the floor of the spiral - instead they are suspended on thin
+silver wires from the section of spiral above the one guarded by the rail. A
+column runs up the center of the spiral, with globes of light projected off it
+on poles in a counterclockwise spiral. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40606
+Name:	Fiction Level - Classic Literature
+Desc:$
+   Just inside the palatial entryway, there stands the classical literature
+section. Racks run from the floor to the ceiling far above, with a walkway
+about halfway up. Ladders run along both decks, allowing various customers to
+scale their way up to search the shelves. The racks contain books by such
+names as Dickens, Dumas, Hugo, and others. Lines of small yellow lights run
+along every shelf, mounted into the faux wood. Not bright enough to read by,
+they are meant to disperse shadows and allow easy-on-the-eyes browsing. The
+lilting classical music plays on... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40607
+Name:	Fiction Level - Romance
+Desc:$
+   What a shame to find a section like this in the Powell building. It seems
+people still love their cheap romances. Apparently the powers that be have
+forced Harlequin Romance to change their name, as all of their titles are
+under the label of Horgahn Productions now. The most notable names on the
+shelf of course include Danielle Steele and others like her. The pallid busts
+of Fabio on each shelf add to the atmosphere, which is completed by the pink
+running lights and the scent of roses in the air. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40608
+Name:	Fiction Level - Mystery
+Desc:$
+   Further along the circle is the mystery section. The sound of violins fills
+the air here, as does the light scent of sweet tobacco. A bust of Sherlock
+Holmes caps each shelf, and the names on the racks include Sir Arthur Conan
+Doyle, Clive Cussler, and Agatha Christie, among others. The usual strips of
+lights line the bookshelves. A small reading area adorns this section,
+complete with high-backed overstuffed synthleather chairs and small faux wood
+tables for the placing of books. The diffused light from above is supplemented
+here by pole lamps for your reading conveniance. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40609
+Name:	Fiction Level - Science Fiction and Fantasy
+Desc:$
+   Further along the massive circular room that is the first floor of the
+Powell media tower stands the Science Fiction and Fantasy section. Althogh
+they still lump these two distinct genres together, at least the Powells have
+the decency to put them on seperate levels. The science fiction books stand on
+the lower deck and include such names as Frank Herbert, Isaac Asimov, and Ray
+Bradbury. The fantasy section, above, includes such names as Piers Anthony,
+Robert Jordan, and J.R.R. Tolkein. Bookends cap each shelf, UFOs and robots on
+the sci-fi shelves, elves and dragons on the fantasy shelves. In this section
+the music is different, more celtic, with bells and cymbals and flutes, even
+the occasional bagpipes when a Scottish flare seems to meld in. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	40606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40610
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40611
+Name:	Non-Fiction Level - History
+Desc:$
+   The History section is quite impressive. It contains books of history from
+the founding of the Roman empire and ancient Hebrew and Egyptian culture all
+the way up to current events. Archaeology, anthropology, sociology - all find
+their place here, along with the study of the world at large. The running
+lights are simple white and there is no furniture here. The music being played
+consists of the national anthems of countries past and present, showing no
+favoritism as the playlist cycles consistantly. Historical memorabilia hang
+about - most of it replicas but some of it real - including American Civial
+War sabers, an Egyptian bust, and the centerpiece of the historical
+collection: a cannon from a ship in the Spanish Armada, sunk in 1588 and just
+recently recovered and restored. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40612
+Name:	Non-Fiction Level - Arcana
+Desc:$
+   The Arcana section is the newest addition to Powell's. Until recently,
+magic and sorcery were considered the stuff of myth and legend. Now, with the
+Awakening fully recognized and mages selling their skills as paid employees,
+arcane lore has come to be recognized as non-fiction. The books include
+everything from the journals of famous mages to cookbooks of many arcane
+sorts. There are even some tomes dealing with the shamanic tradition, though
+these tend to be somewhat more rare. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40613
+Name:	Non-Fiction Level - Biography
+Desc:$
+   The biography section is ominously huge. It seems Powell's has at least
+three biographies on everybody who's anybody, from ancient names like Cicero
+and Galileo, to religious types like Buddha, to modern faces like Dunkelzahn.
+Pallid stone busts of such people adorn the shelves, with a massive sculpture
+of Dunkelzahn perched atop the racks, way up there. The running lights along
+the shelves are gold, and the music is instrumentals from various time
+periods. Most of it sounds like something out of Masterpiece Theater. The
+scent generators seem to be broken, as there is only a faint smell of burning
+in the air. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40614
+Name:	Non-Fiction Level - Computers and Technology
+Desc:$
+   Not surprisingly, the computers and technology section consists mostly of
+ominously massive tomes. Perhaps the only thing more arcane than books of
+magic, are books on computers. Titles range from "Unix for Dummies" to
+"Masterful Maniupulation of the Matrix Made Managable" to "Coding in Ancient
+Binary Volume 23." Severl clusters of computers are set up here to allow
+students of the technological sciences to test their newfound knowhow. There
+are even a few ports for connecting to the Powell building's public Matrix.
+The running lights highlight the books in pale orange, and the music is
+soothingly cerebral classical. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40615
+Name:	The Stairs
+Desc:$
+   The stairwell continues, with the black brushed-metal frame of the first
+floor blending with the mercurial silver of the third floor to create a
+brushed gray metal effect here. The stairs are covered now in dark purple
+carpeting. The column of lights is a double spiral on the second floor, with a
+pair of counterclockwise spirals shedding light on the stairs. The guardrails
+are suspended from the spirals above, as before, though this time from blue
+wires. A plate covers the space between the floors - it seems the stairs were
+built through a hole cut between levels. The plate is carved with reliefs of
+the All-Seeing Eye, the Caduceus, and other symbols of wisdom and power. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	40605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40616
+Name:	Nonfiction Level - True Crime
+Desc:$
+   The True Crime section is small but dense. Blue runner lights cast a cold
+glow on the books they illuminate. The titles include books on Billy the Kid,
+Al Capone, and more modern criminals like Sally, Many Names, and Kid Stealth.
+Wide synthleather padded couches form a small seating area, with a wide, low
+table in the middle. Music is playing that reminds you of police on the chase,
+and the smell in the air holds the light scent of gunpowder. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40617
+Name:	Non-Fiction Level - Reference Materials
+Desc:$
+   If this is still here tomorrow night, I'll finish this zone then. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40618
+Name:	Non-Fiction Level - Plays
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40619
+Name:	Non-Fiction Level - Poetry
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	40616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40620
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40621
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40622
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40623
+Name:	Audio/Visual Level - Classical Music
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40624
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40625
+Name:	The Top of the Stairs
+Desc:$
+   The staircase ascends to its apex on the third floor. The stairs become
+mercurial, cast of specially comissioned plasticrete made to bend light around
+itself. The effect is rather like that of mercury - a mirror in liquid form.
+The stairs are covered in gray cushy carpet. Pale light filters down from the
+third floor. The plate separating the second and third floors is carved with
+inscriptions in Latin, Greek, Arabic, Sanskrit, Sperethiel, and other arcane
+and sacred languages. To those who can read them, the passages speak of
+knowledge and power and the divine origins of intellect. To those who cannot,
+they are simply a pretty decoration. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40626
+Name:	Audio/Visual Level - Rap/Hip-Hop/R&B
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	40629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40627
+Name:	An unfinished room
+Desc:$
+    
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40628
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	40629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#40629
+Name:	Audio/Visual Level - Country and Oldies
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END
