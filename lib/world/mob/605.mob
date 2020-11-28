@@ -143,7 +143,7 @@ Covered in grease, this dwarf teaches all manner of vehicle skills.
 <>'s) to practice a specific skill that is available. 
 ~
 ArriveMsg:	arrives from
-LeaveMsg:	leaves
+LeaveMsg:	leaves
 MobFlags:	1000000000000001010000000011010
 AffFlags:	0
 Race:	Human
@@ -196,11 +196,11 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	brawling:	10
-	armed combat:	10
-	stealth:	10
-	leadership:	10
-	athletics:	10
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
 BREAK
 #60506
 Keywords:	mick teacher firearm
@@ -236,10 +236,10 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	brawling:	10
-	firearms:	10
-	leadership:	10
-	armed combat:	10
+	:	10
+	Firearms:	10
+	Leadership:	10
+	Armed Combat:	10
 BREAK
 #60507
 Keywords:	bruce trainer adept
@@ -250,7 +250,7 @@ A master adept sits here, teaching his abilities.
 ~
 LookDesc:$
 A rather small man, capable of incredible feats, the Adept Master's movements
-seem more fluid than even the latest move-by-wire system. His nametag reads,
+seem more fluid than even the latest move-by-wire system.  His nametag reads,
 "Bruce L." 
 ~
 ArriveMsg:	arrives from
@@ -274,11 +274,11 @@ DefaultPos:	Standing
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	brawling:	10
-	leadership:	10
-	stealth:	10
-	athletics:	10
-	armed combat:	10
+	:	10
+	Leadership:	10
+	Stealth:	10
+	Athletics:	10
+	Armed Combat:	10
 BREAK
 #60508
 Keywords:	zahn master man mage
@@ -289,7 +289,7 @@ Zahn, a First Master, hovers above the ground.
 ~
 LookDesc:$
 Zahn is a certified First Master of the Hermetic Order, answerable only to
-Second or Third Masters (of which there are very few). He is garbed in a
+Second or Third Masters (of which there are very few).  He is garbed in a
 deep, midnight blue cloak, which matches the color of his eyes with a stark
 exactness. 
 ~
@@ -316,11 +316,11 @@ DefaultPos:	Standing
 	Cash:	2000
 	Bank:	6000
 [SKILLS]
-	sorcery:	10
+	Sorcery:	10
 	:	10
-	brawling:	10
-	conjuring:	10
-	stealth:	10
+	:	10
+	Conjuring:	10
+	Stealth:	10
 BREAK
 #60509
 Keywords:	serphon master shaman man
@@ -331,7 +331,7 @@ Serphon stands here, surrounded by a sense of power.
 ~
 LookDesc:$
 Serphon was once shaman of a far-away tribe, known far and wide across the
-Sioux Nation. Due to unfortunate events, he fled to Seattle, where he has
+Sioux Nation.  Due to unfortunate events, he fled to Seattle, where he has
 taken residency at the Guild to teach new shamans his art. 
 ~
 ArriveMsg:	arrives from
@@ -358,10 +358,10 @@ DefaultPos:	Standing
 	Bank:	6000
 [SKILLS]
 	:	10
-	sorcery:	10
-	conjuring:	10
-	brawling:	10
-	throwing weapons:	10
+	Sorcery:	10
+	Conjuring:	10
+	:	10
+	Throwing Weapons:	10
 BREAK
 #60510
 Keywords:	doc holiday cybertechnician doctor
@@ -651,12 +651,12 @@ A scuzzy man smokes a cigarette, huddled in the shadow.
 ~
 LookDesc:$
 He wears a greasy old beige trenchcoat and a wide brimmed fedora, that covers
-most of his face. Under the fedora all you can see is his mustache with
-handlebars, and his goatee mottled with gray and black hair. 
+most of his face.  Under the fedora all you can see is his mustache with
+handlebars, and his goatee mottled with gray and black hair.  
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
+MobFlags:	1010
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -689,7 +689,7 @@ left in the kitchen. Maybe he's got a problem that you can help solve?
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
+MobFlags:	1010
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -819,7 +819,7 @@ Eatery. She's pretty young: must be doing this job to pay for college.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
+MobFlags:	1010
 AffFlags:	0
 Race:	Human
 Gender:	Female
@@ -939,7 +939,7 @@ A bored dwarven geek sits behind the counter.
 
 ~
 LookDesc:$
-He looks short, hairy, and geeky. You get the feeling that he's amazingly
+He looks short, hairy, and geeky.  You get the feeling that he's amazingly
 bored, quite possibly from the drool slowly making its way from the right
 corner of his mouth. 
 ~
@@ -1002,8 +1002,8 @@ A weird child with a datajack stares at you with disdain.
 
 ~
 LookDesc:$
-This kid looks smart, really smart. He's looking at you like you're a dog, a
-stray dog that is soaking wet and wandering through his house. You think that
+This kid looks smart, really smart.  He's looking at you like you're a dog, a
+stray dog that is soaking wet and wandering through his house.  You think that
 he's friendly enough though, and really, who could he be kidding, he's just a
 kid. 
 ~
@@ -1260,9 +1260,9 @@ Doc Bell stands here, poking at a human eyeball in a jar.
 
 ~
 LookDesc:$
-Doc Bell, prize son of Ma and Pa Bell, is what you would call "A few sandwiches
-short of a picnic", but he is fully qualified none the less. His favourite
-pasttime is saving all the eye's he's replaced and poking at them with a pen,
+Doc Bell, prize son of Ma and Pa Bell, is what you would call "A few sandwiches 
+short of a picnic", but he is fully qualified none the less. His favourite 
+pasttime is saving all the eye's he's replaced and poking at them with a pen, 
 as he is doing now. 
 ~
 ArriveMsg:	arrives from
@@ -1286,42 +1286,45 @@ DefaultPos:	Standing
 [SKILLS]
 BREAK
 #60539
-Keywords:	rat demon large nasty
-Name:	a large, nasty looking demon rat
+Keywords:	kyle mall ninja mall-ninja fellow trainer man
+Name:	Kyle
 RoomDesc:$
-A very large, very nasty looking rat is here, growling at your intrusion. 
+A mall-ninja-looking fellow is methodically flinging shuriken at a target. 
 
 ~
 LookDesc:$
-The demon rat is quite cunning with its animalistic intelligence, and makes
-devil rats look like their mundane counterparts. Aside from being larger,
-nastier stronger than the devil rat, its also rumored to carry even more
-contagious and deadly diseases. Its large fangs drip with an unknown ochre
-coloured bile, consisting of god knows what from god knows where. 
+In sharp contrast to Jet, Kyle looks more like your typical wage slave who has
+developed an interest in throwing weapons and archery. Still, he looks skilled
+with his craft, even if he's throwing stars that say "MADE IN CHINA". 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	101000
+MobFlags:	10000000001011
 AffFlags:	0
-Race:	Undef
+Race:	Human
 Gender:	Male
 DefaultPos:	Standing
-AttackType:	Bite
 [ATTRIBUTES]
-	Bod:	5
-	Qui:	6
-	Str:	5
-	Cha:	5
-	Int:	4
-	Wil:	4
-	Mag:	0
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
 [POINTS]
-	Height:	120
-	Weight:	15
-	Ballistic:	4
-	Impact:	4
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
 [SKILLS]
-	brawling:	5
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
 BREAK
 #60540
 Keywords:	jean samuel pauly
@@ -1349,214 +1352,60 @@ DefaultPos:	Standing
 	Cha:	40
 	Int:	40
 	Wil:	40
-	Mag:	0
+	Mag:	6
 [POINTS]
-	Height:	190
-	Weight:	134
+	Height:	0
+	Weight:	0
 	Ballistic:	15
 	Impact:	15
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
+	:	10
 	Armed Combat:	10
 	Stealth:	10
 	Leadership:	10
 	Athletics:	10
 BREAK
-BREAK
 #60541
-Keywords:	doc malik
-Name:	Doc Malik
+Keywords:	swarm spiraling mass incoherent ideas
+Name:	a spiraling mass of incoherent ideas
 RoomDesc:$
-Doc Malik is here, tinkering with a headware memory unit. 
+A swarm of incoherent ideas swirls through here, lacking any ability to affect
+its world. 
 
 ~
 LookDesc:$
-Doc Malik may not hold a professional degree, but he's cut more runners than
-flechette. It may not be by the book, but it works, so he's still in business.
+It's comprised of all the things that showed up in the source books and looked
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
+MobFlags:	10000000001011
 AffFlags:	0
 Race:	Human
 Gender:	Male
 DefaultPos:	Standing
 [ATTRIBUTES]
-	Bod:	6
-	Qui:	6
-	Str:	6
-	Cha:	6
-	Int:	6
-	Wil:	6
-	Mag:	0
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
 [POINTS]
-	Height:	190
-	Weight:	90
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
 [SKILLS]
-BREAK
-#60542
-Keywords:	doc julius
-Name:	Doc Julius
-RoomDesc:$
-Doc Julius is here, enjoying a cup of soykaf before surgery. 
-
-~
-LookDesc:$
-A refined gentlemen if there ever was one. Poor, as the soykaf may hint, but
-refined none the less. When he isn't slicing up greenhorns in the Neophyte
-Guild, he's actually contributing to society (unlike you) by voltuneering at
-free clinics in the Barrens. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Ork
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	6
-	Qui:	6
-	Str:	6
-	Cha:	6
-	Int:	6
-	Wil:	6
-	Mag:	0
-[POINTS]
-	Height:	200
-	Weight:	220
-[SKILLS]
-BREAK
-#60543
-Keywords:	Doc Killie
-Name:	Doc Killie
-RoomDesc:$
-Doc Killie is here, pretending he knows what he's doing. 
-
-~
-LookDesc:$
-Well, on the bright side, Doc Killie isn't some witty nickname given to him,
-it's his actual birthname. That said, he lives up to the namesake. Feeling
-lucky, chummer? 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	6
-	Qui:	6
-	Str:	6
-	Cha:	6
-	Int:	6
-	Wil:	6
-	Mag:	0
-[POINTS]
-	Height:	190
-	Weight:	80
-[SKILLS]
-BREAK
-#60544
-Keywords:	doc croke
-Name:	Doc Croke
-RoomDesc:$
-Doc Croke is sitting here, cooking the books. 
-
-~
-LookDesc:$
-Okay, so maybe Doc Croke is a crooked character, but that doesn't necessarily
-mean he's a bad doctor. It's not like the Neophyte Guild would hire him if he
-wasn't.... Right? 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	6
-	Qui:	6
-	Str:	6
-	Cha:	6
-	Int:	6
-	Wil:	6
-	Mag:	0
-[POINTS]
-	Height:	180
-	Weight:	90
-[SKILLS]
-BREAK
-#60545
-Keywords:	Doc Chew
-Name:	Doc Chew
-RoomDesc:$
-Doc Chew stands here, checking on a cryogenic vat of cybernetic eyes. 
-
-~
-LookDesc:$
-He makes eyes.
- Just eyes. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	6
-	Qui:	6
-	Str:	6
-	Cha:	6
-	Int:	6
-	Wil:	6
-	Mag:	0
-[POINTS]
-	Height:	170
-	Weight:	70
-[SKILLS]
-BREAK
-#60546
-Keywords:	otaku overweight neckbeard
-Name:	an overweight otaku
-RoomDesc:$
-An overweight otaku with a neckbeard fiddles with his computer here. 
-
-~
-LookDesc:$
-Yep, there's no doubt about it, he's definitely an otaku alright. Not even the
-good kind of otaku either, instead, he just sits in his room all day and
-night, firing off random hate mail and browsing the matrix until his eyes are
-bloodshot. He munches loudly and messily upon a mangled bag of cheeseballs,
-leaving his fingers a dingy orange colour that inevitably finds its way onto
-his Maria Mercurial t-shirt, which is at least two sizes too small for him. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Ork
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	6
-	Qui:	6
-	Str:	6
-	Cha:	6
-	Int:	6
-	Wil:	6
-	Mag:	0
-[POINTS]
-	Height:	170
-	Weight:	120
-[SKILLS]
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
 BREAK
 #60600
 Keywords:	zahn tall aztlan
@@ -2373,277 +2222,6 @@ DefaultPos:	Standing
 [SKILLS]
 BREAK
 #60639
-Keywords:	Knox
-Name:	Knox
-RoomDesc:$
-Knox, the LinguaSoft dealer is here, tending to customers. 
-
-~
-LookDesc:$
-Sifting through the various LinguaSofts that are stored securely behind the
-display cases, this fellow seems more than happy to lend a helping hand to any
-would-be customers... As long as they buy something, that is. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	3
-	Qui:	3
-	Str:	3
-	Cha:	3
-	Int:	3
-	Wil:	3
-	Mag:	0
-[POINTS]
-	Height:	180
-	Weight:	80
-[SKILLS]
-BREAK
-#60640
-Keywords:	monte
-Name:	Monte
-RoomDesc:$
-Monte, the LinguaSoft dealer, proudly displays his wares here. 
-
-~
-LookDesc:$
-Stocky and heavily built, Monte would seem like an imposing figure, if it
-weren't for his friendly smile and contagious aura of helpfulness that is. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Troll
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	4
-	Qui:	4
-	Str:	4
-	Cha:	4
-	Int:	4
-	Wil:	4
-	Mag:	0
-[POINTS]
-	Height:	220
-	Weight:	100
-[SKILLS]
-BREAK
-#60641
-Keywords:	Nigel
-Name:	Nigel
-RoomDesc:$
-Nigel is here, sorting through the ActiveSofts he sells. 
-
-~
-LookDesc:$
-This limey is your run of the mill corporate wageslave, his only concern is
-meeting his quota of sales for the day, the customer be fragged. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	4
-	Qui:	4
-	Str:	4
-	Cha:	4
-	Int:	4
-	Wil:	4
-	Mag:	0
-[POINTS]
-	Height:	180
-	Weight:	70
-[SKILLS]
-BREAK
-#60642
-Keywords:	Theo
-Name:	Theo
-RoomDesc:$
-Theo the ActiveSoft saleswoman peddles her wares here. 
-
-~
-LookDesc:$
-Tall, slender, and endowed with a brilliant smile. Theo is a saleswoman who
-can peddle her wares with little effort, as evident by the bevy of customers
-she commands. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Elf
-Gender:	Female
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	4
-	Qui:	4
-	Str:	4
-	Cha:	4
-	Int:	4
-	Wil:	4
-	Mag:	0
-[POINTS]
-	Height:	190
-	Weight:	70
-[SKILLS]
-BREAK
-#60643
-Keywords:	Isaias
-Name:	Isaias
-RoomDesc:$
-Isaias the miser is here, dealing in ActiveSofts. 
-
-~
-LookDesc:$
-If there ever was a miser, here he was. Isaias has earned a reputation for
-being more concerned with his money than himself, and it shows in his drab and
-unkempt appearance. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	4
-	Qui:	4
-	Str:	4
-	Cha:	4
-	Int:	4
-	Wil:	4
-	Mag:	0
-[POINTS]
-	Height:	180
-	Weight:	70
-[SKILLS]
-BREAK
-#60644
-Keywords:	Byron
-Name:	Byron
-RoomDesc:$
-Byron is busy here, sifting through his selection of ActiveSofts. 
-
-~
-LookDesc:$
-This ork sports a pressed and cleaned wageslave suit, upon which is pinned a
-nametag to his lapel which reads: "Byron". He offers customers a tusk filled
-smile before helping see to their needs. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
-AffFlags:	0
-Race:	Ork
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	4
-	Qui:	4
-	Str:	4
-	Cha:	4
-	Int:	4
-	Wil:	4
-	Mag:	0
-[POINTS]
-	Height:	190
-	Weight:	80
-[SKILLS]
-BREAK
-#60645
-Keywords:	swarm spiraling mass incoherent ideas
-Name:	a spiraling mass of incoherent ideas
-RoomDesc:$
-A swarm of incoherent ideas swirls through here, lacking any ability to affect
-its world. 
-
-~
-LookDesc:$
-It's comprised of all the things that showed up in the source books and looked cool.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	10000000001011
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	40
-	Qui:	40
-	Str:	40
-	Cha:	40
-	Int:	40
-	Wil:	40
-	Mag:	6
-[POINTS]
-	Height:	0
-	Weight:	0
-	Ballistic:	15
-	Impact:	15
-	Cash:	1000
-	Bank:	5000
-[SKILLS]
-	:	10
-	Armed Combat:	10
-	Stealth:	10
-	Leadership:	10
-	Athletics:	10
-BREAK
-#60646
-Keywords:	kyle mall ninja mall-ninja fellow trainer man
-Name:	Kyle
-RoomDesc:$
-A mall-ninja-looking fellow is methodically flinging shuriken at a target. 
-
-~
-LookDesc:$
-In sharp contrast to Jet, Kyle looks more like your typical wage slave who has
-developed an interest in throwing weapons and archery. Still, he looks skilled
-with his craft, even if he's throwing stars that say "MADE IN CHINA". 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	10000000001011
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	40
-	Qui:	40
-	Str:	40
-	Cha:	40
-	Int:	40
-	Wil:	40
-	Mag:	6
-[POINTS]
-	Height:	0
-	Weight:	0
-	Ballistic:	15
-	Impact:	15
-	Cash:	1000
-	Bank:	5000
-[SKILLS]
-	:	10
-	Armed Combat:	10
-	Stealth:	10
-	Leadership:	10
-	Athletics:	10
-BREAK
-#60647
 Keywords:	Doc Chew cybertechnician doctor
 Name:	Doc Chew
 RoomDesc:$
@@ -2674,7 +2252,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 BREAK
-#60648
+#60640
 Keywords:	Doc Croke cybertechnician doctor
 Name:	Doc Croke
 RoomDesc:$
@@ -2706,7 +2284,7 @@ DefaultPos:	Standing
 	Weight:	90
 [SKILLS]
 BREAK
-#60649
+#60641
 Keywords:	Doc Killie cybertechnician doctor
 Name:	Doc Killie
 RoomDesc:$
@@ -2738,7 +2316,7 @@ DefaultPos:	Standing
 	Weight:	80
 [SKILLS]
 BREAK
-#60650
+#60642
 Keywords:	Doc Julius cybertechnician doctor
 Name:	Doc Julius
 RoomDesc:$
@@ -2748,7 +2326,7 @@ Doc Julius is here, enjoying a cup of soykaf before surgery.
 LookDesc:$
 A refined gentlemen if there ever was one. Poor, as the soykaf may hint, but
 refined none the less. When he isn't slicing up greenhorns in the Neophyte
-Guild, he's actually contributing to society (unlike you) by volunteering at
+Guild, he's actually contributing to society (unlike you) by voltuneering at
 free clinics in the Barrens. 
 ~
 ArriveMsg:	arrives from
@@ -2771,7 +2349,7 @@ DefaultPos:	Standing
 	Weight:	95
 [SKILLS]
 BREAK
-#60651
+#60643
 Keywords:	Doc Malik cybertechnician doctor
 Name:	Doc Malik
 RoomDesc:$
