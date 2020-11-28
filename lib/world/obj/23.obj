@@ -377,7 +377,7 @@ An intimidating medium machine gun is resting here.~
 LookDesc:$
 The ultimate in squad level support weapons. This medium machine gun rips out
 firepower through a dual-feed firing mechanism operating off of two 35-round
-clips. Big, fairly heavy, and built as solid as most armored vehicles, the
+magazines. Big, fairly heavy, and built as solid as most armored vehicles, the
 Judgement is a truely impressive weapon. Able to handle recoil with uncanny
 ability, compliments of the gas vent 4 system, this thing puts Ultimax and
 FN's medium machine guns to shame. Aside from the barrel, the gun is painted
@@ -427,7 +427,7 @@ operational underwater, it fires an improved 6.5mm rocket, rather than the
 standard 6mm. The engineering of these rounds is made specifically for greater
 range and higher velocity, in order to make the weapon a little harder to
 dodge by those wired to hell street samurai. The drawback is a slightly
-smaller clip capacity, and more weight in the pistol itself to withstand the
+smaller magazine capacity, and more weight in the pistol itself to withstand the
 added launch power. The rockets themselves, once fired, emit an audible
 high-pitched shriek as they travel through the air. Due to the special design
 needed to accept and fire the rocket type ammo, the Nemesis is incapable of
@@ -475,8 +475,8 @@ going down the length of the barrel. While it creates a large and frightening
 muzzle flash because of this, it also acts as a type of gas vent. A high-power
 laser sight is built internally into the gun for greater accuracy. The bullpup
 configuration of the weapon, which places the trigger well in front of the
-clip, makes this shotgun even easier to handle... As well as hide. But the
-Stormhammer is in no way a stealthy weapon, it's very name is derrived from
+magazine, makes this shotgun even easier to handle... As well as hide. But the
+Stormhammer is in no way a stealthy weapon, its very name is derrived from
 the thundering, bassy noise it makes when fired. The Stormhammers construction
 also seems quite sturdy, and weighted in key points to make it an effective
 last-resort clubbing weapon. The phrase "Shoot To Kill" is etched into the
@@ -516,7 +516,7 @@ LookDesc:$
 In a direct attempt to make the Ruger Thunderbolt look like a cap gun, Shoot
 To Kill created this monstrosity of a heavy pistol. The Juggernaught is
 designed from the ground up to be a frightening weapon. A square and blocky
-shape, with a visibly weighted barrel and largely extended clip make this
+shape, with a visibly weighted barrel and largely extended magazine make this
 pistol hard to conceal. Many small slits are made on the upper right and left
 sides of the reinforced barrel, making even the muzzle flash look
 intimidating. The entirety of the gun is a smooth silver color, with the
@@ -618,7 +618,7 @@ is the epitome of versatality. It's size is more compact than many SMGs, and
 it's fire power is still able to contend with the better assault rifles.
 Partial composition of ceramic materials also make this assault rifle harder
 to detect by MAD systems than normal. Bullpup style design, with the trigger
-placed well in front of the clip, improves the weapons concealability and
+placed well in front of the magazine, improves the weapons concealability and
 handling. It's accuracy is even further increased by a level 3 gas vent
 system. The power of the Virulence mainly lies in the special chambering,
 designed for the best use of the propellant force behind the 7.62mm caseless
@@ -655,7 +655,7 @@ Material:	adv. plastics
 	Val10:	28
 BREAK
 #2327
-Keywords:	STK phalance SMG sub machine gun sub-machine
+Keywords:	STK phalanx SMG sub machine gun sub-machine
 Name:	an STK 'Phalanx' sub-machine gun
 RoomDesc:$
 A compact, but dangerous looking SMG lies here.~
@@ -670,7 +670,7 @@ and then brought back out by the push of a button or smartlink command. When
 extended, the thin stock helps cushion pressure on the shoulder with a complex
 spring-loaded system inside the gun. It's also able to be adjusted in length
 to better suit the size of the users arm, and make firing more comfortable.
-Another distinguishing characteristic is that the clip loads in diagnally, and
+Another distinguishing characteristic is that the magazine loads in diagonally, and
 on the top of the gun. The stock, coupled with the small size and relatively
 light weight of the Phalanx, make this an excellent choice for concealable
 fire power. However, the stealth of the gun is lowered by the inability to

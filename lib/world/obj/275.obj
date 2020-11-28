@@ -225,29 +225,6 @@ Material:	fabric
 	Location:	Charisma
 	Modifier:	15
 BREAK
-#27508
-Keywords:	clip drum
-Name:	a drum of ammo
-RoomDesc:$
-A drum of amunition sits here.~
-LookDesc:$
-You might not belive it, but theres 100 round of .50 calibur ammunition in
-this drum. Seems like too much, but you can never have to much when it come to
-ammunition. 
-~
-Type:	Gun Clip
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0
-	Barrier:	32
-	Cost:	0
-[VALUES]
-	Val0:	100
-	Val1:	25
-BREAK
 #27509
 Keywords:	pants slacks suit
 Name:	his pants

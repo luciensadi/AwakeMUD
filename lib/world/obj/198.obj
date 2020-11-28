@@ -1956,7 +1956,7 @@ RoomDesc:$
 A highly polished heavy pistol tarnishes on the floor here.~
 LookDesc:$
 The Ares Raptor is a highly potent heavy pistol, similar in shape to the Ares
-Predator series, but with a higher calibre, and less bullets per clip.  It is
+Predator series, but with a higher calibre, and less bullets per magazine.  It is
 weighty, and has quite a kick, and comes stock with top mounted laser sight. 
 ~
 Type:	Weapon
@@ -2030,7 +2030,7 @@ grain .75 caliber round, packed with powder, tops out at 5000 fps and will
 decimate everything. A warning on the barrel states "Caution!!! This gun
 should be used by ONLY superior marksmen and if used by an under-trained
 individual, it could kill them. Ares is not responsible for any deaths." The
-clip's for this weapon are low capacity for each round weighs so much. The
+magazines for this weapon are low capacity for each round weighs so much. The
 normal capacity is 5 though this one seems to have been altered to use 15.
 There is a sling attached to it for carrying. The bipod is a ZZ-Turbo made of
 carbon fiber and coated in latex. 

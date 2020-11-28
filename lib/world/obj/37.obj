@@ -598,8 +598,8 @@ Name:	a box of ammo
 RoomDesc:$
 A large green box is sitting here.~
 LookDesc:$
-The green box is full of clips for different guns. To differentiate each clip,
-the number of bullets in each clip is written on the front of each clip. 
+The green box is full of magazines for different guns. To differentiate each magazine,
+the number of bullets in each magazine is written on the front of each magazine. 
 ~
 Type:	Container
 WearFlags:	1

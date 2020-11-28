@@ -608,7 +608,7 @@ carbine draws air in through the inlet valve and into the firing chamber
 itself, allowing it to fire its ammunition underwater. Positive overpressure
 from the air source also ensures that no water is sucked in when it is fired,
 while a built in purge valve forces any water out of it when the user is
-changing clips. 
+changing magazines. 
 ~
 Type:	Weapon
 WearFlags:	10000000010000000000001

@@ -647,8 +647,8 @@ RoomDesc:$
 A decidedly-old scoped rifle is lying here.~
 LookDesc:$
 This ancient Thompson Center Contender isn't scoped, per se, but can take one
-with no problem.  It's been rechambered to take a larger round, and the clip
-feed has been reworked to take an extended clip. 
+with no problem.  It's been rechambered to take a larger round, and the magazine
+feed has been reworked to take an extended magazine. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001

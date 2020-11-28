@@ -224,7 +224,7 @@ A good sized black pistol with a sight of some sort attached lies here.~
 LookDesc:$
 This pistol boasts light to medium pistol size, with heavy pistol range, and
 packs a decent punch to boot. It fires caseless rounds, and can house 18
-bullets in a clip. Because of its size, it can't be hidden too well, but if
+bullets in a magazine. Because of its size, it can't be hidden too well, but if
 someone were to give you trouble, you could always hide it in their nose. 
 ~
 Type:	Weapon
@@ -258,7 +258,7 @@ RoomDesc:$
 A heavy revolver sits on the ground here, looking quite large.~
 LookDesc:$
 This revolver is named the Tri-Star and is made by Stein and Wasserman. It
-houses 6 massive bullets in a cylindrical clip, and is made for intimidation,
+houses 6 massive bullets in a cylindrical magazine, and is made for intimidation,
 and stopping power, but not so much for speed. A laser sight is attached to
 the top of it for either aiming, or to make the gun look bigger, you aren't
 sure exactly which. 
@@ -296,7 +296,7 @@ A fairly large smg with a silencer is here looking bad-ass.~
 LookDesc:$
 Another Heckler & Koch innovation, this SMG is bigger than most go-ganger type
 smg's, but doesn't hold much more firepower. Instead, it has an integral
-silencer, and an extended clip, which enables the gun to carry 35 rounds of
+silencer, and an extended magazine, which enables the gun to carry 35 rounds of
 semi auto, burst, or full auto fun, all suppressed by the integral sound
 suppressor. 
 ~
@@ -398,10 +398,10 @@ BREAK
 Keywords:	darra poly technic m 9 m9 assault rifle
 Name:	a Darra-Polytechnic M-9 assault rifle
 RoomDesc:$
-An long assault rifle with an extended clip an telescope sight is here.~
+An long assault rifle with an extended magazine and telescopic sight is here.~
 LookDesc:$
 This is a Darra-Polytech M-9 Assault Rifle, equipped with a rating 1 telescope
-sight, and an extended 40 shot clip, both stock. It fires caseless ammo at an
+sight, and an extended 40 shot magazine, both stock. It fires caseless ammo at an
 incredible rate of fire, and is capable of either burst or full-auto fire. A
 favorite for anyone who wants an assault rifle that is as powerful as it is
 versatile. 
@@ -429,14 +429,14 @@ Material:	metal
 	Val10:	28
 BREAK
 #5119
-Keywords:	h&k hk g 6 advanced squad automatic lmg
+Keywords:	h&k hk g 6 advanced squad automatic lmg machine gun
 Name:	a H&K G-6 Advanced Squad Automatic
 RoomDesc:$
-A machinegun with a telescope sight sits here, a short clip extending from its base.~
+A machine gun with a telescopic sight sits here, a short magazine extending from its base.~
 LookDesc:$
 Yet another Heckler and Koch wonder, this LMG comes standard with an internal
-smartlink II, and a rating 2 thermographic telescope sight. It fires caseless
-SMG ammunition at super machinegun rates. Nice construction tool if you need
+Smartlink II, and a rating 2 thermographic telescope sight. It fires caseless
+SMG ammunition at super machine gun rates. Nice construction tool if you need
 to build a wall of lead... 
 ~
 Type:	Weapon

@@ -286,10 +286,10 @@ BREAK
 Keywords:	ucas sniper rifle
 Name:	A UCAS Sniper Rifle
 RoomDesc:$
-A long barelled rifle is here, painted with the UCAS colors.~
+A long-barreled rifle is here, painted with the UCAS colors.~
 LookDesc:$
 It looks extremely well made, almost masterwork. It seems to hold a five shot
-clip. 
+magazine. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001

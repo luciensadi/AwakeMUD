@@ -85,27 +85,32 @@ Material:	metal
 	LegalPermit:	0
 BREAK
 #601
-Keywords:	clip
-Name:	a blank empty clip
+Keywords:	biomonitor docwagon basic service contract compact modulator
+Name:	a biomonitor with a DocWagon Basic service contract
 RoomDesc:$
-Someone has dropped a clip here.~
+A compact biomonitor bearing the DocWagon logo flashes on the ground.~
 LookDesc:$
-It's an ammunition clip for a firearm. 
+A small, compact device worn over the wrist or ankle, this combination
+biomonitor and homing beacon comes complete with a DocWagon Basic service
+contract, which will prompt the renowned rescue company to retrieve and
+resuscitate you if needed-- for a price. 
 ~
-Type:	Gun Clip
-WearFlags:	1
+Type:	DocWagon
+WearFlags:	10000001000000000001
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	electronics
 [POINTS]
-	Weight:	0.40
+	Weight:	0.00
 	Barrier:	6
-	Cost:	32
-	AvailTN:	2
-	AvailDay:	1.00
+	Cost:	6000
+	AvailTN:	0
+	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+[VALUES]
+	Val0:	1
 BREAK
 #618
 Keywords:	beretta 101t pistol
@@ -280,7 +285,7 @@ RoomDesc:$
 A Colt heavy pistol has been left here.~
 LookDesc:$
 A very popular gun among shadowrunners, this heavy pistol combines
-large clip size and power.
+large magazine size and power.
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -1545,7 +1550,7 @@ Name:	an Ares Predator
 RoomDesc:$
 An Ares Predator rests here.~
 LookDesc:$
-You see what many consider the premier heavy pistol.  It uses a clip and
+You see what many consider the premier heavy pistol.  It uses a magazine and
 looks deadly.
 ~
 Type:	Weapon
@@ -1902,7 +1907,7 @@ Using a special synthetic pad on the handle of the gun, Aztechnology has made
 it automatically attach itself to the user. The gun itself will not fire
 unless this attachment is secure. Therefore, since this synthetic lock is one
 of Aztechnology's most prized secrets, noone knows how to use them. The inside
-of the gun is equally perfectly crafted. Carrying a compressed clip of 25
+of the gun is equally perfectly crafted. Carrying a compressed magazine of 25
 "bolts", the pistol releases each crafted bullet linked to a highly
 sophisticated Smartlink-Zeta prototype. On impact, the APDS-II head pierces
 almost any armour produced, and ignites the explosive-flechette compound

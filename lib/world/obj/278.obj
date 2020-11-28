@@ -239,7 +239,7 @@ RoomDesc:$
 A shoulder holster is here, lying on the ground.~
 LookDesc:$
 It's made of leather and built to fit the shape of high calibre pistols.  It
-can also fit several clips of ammo. 
+can also fit several magazines of ammo. 
 ~
 Type:	Holster
 WearFlags:	10000000000000000000001
@@ -265,7 +265,7 @@ LookDesc:$
 This rifle is an assault rifle frame built to use non-standard high powered
 bullets.  Normal assault rifle skills won't do with this weapon, only people
 trained and masterful with rifles could take on such a high powered work of
-art.  The 30 round extended clip adds immense weight but also harbors the
+art.  The 30 round extended magazine adds immense weight but also harbors the
 superior 7.62 NATO High Powered explosive rounds.  The special nitro-glycerin
 is more stable than most normal nitro, but when the soft lead expands after
 impact upon any soft or hard target, the round blows up, creating mass damage.

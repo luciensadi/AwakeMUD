@@ -746,7 +746,7 @@ A pile of stiff black canvas roughly resembling a jacket lies here~
 LookDesc:$
 On the outside, this is just your plain, ordinary, black oil-canvas
 duster/trenchcoat. But on the inside is where it surprises you. Pockets galore
-is all you can think of, pockets for grenades, pockets for clips, slips for
+is all you can think of, pockets for grenades, pockets for magazines, slips for
 knives and surikens, larger pockets for other various and sundry small items,
 hell...this thing has it all, and it's got a thin layer of kevlar inside it
 too so that those stray bullets from irritated cops aren't such a problem. 
@@ -1940,7 +1940,7 @@ Name:	a sleek, black, ankle length trenchcoat
 RoomDesc:$
 A sleek black trenchcoat has been dumped here.~
 LookDesc:$
-The sleek black trenchcoat has space on the inside for many clips, and enough
+The sleek black trenchcoat has space on the inside for many magazines, and enough
 space to slip a holster or sheath into the lining, an inside breast pocket
 finishes the affair. The outside is simple, with just a couple of pockets
 around the hip. A small insignia on the tag reads ^YDSI^n 

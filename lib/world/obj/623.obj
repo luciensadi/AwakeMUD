@@ -1025,7 +1025,7 @@ RoomDesc:$
 A heavy pistol with a robust design has been left here.~
 LookDesc:$
 While not as popular as the Browning Max-Power or Ultra-Power, this heavy
-pistol with its robust design and fifteen around clip capacity functions just
+pistol with its robust design and fifteen-round magazine capacity functions just
 as well as any other firearm in its class.  
 ~
 Type:	Weapon
@@ -1923,11 +1923,11 @@ BREAK
 Keywords:	pistol machine Ruger P-4
 Name:	a Ruger P-4 machine pistol
 RoomDesc:$
-A small machine pistol with an extended clip sits here.~
+A small machine pistol with an extended magazine sits here.~
 LookDesc:$
 This machine pistol brought to the market by Ruger over a decade ago attempted
 to fill a particular niche in the market, which is to offer a burstfire
-capable light pistol that makes up for its lack of power with a extended clip
+capable light pistol that makes up for its lack of power with a extended magazine
 that carries more ammunition than any other in its class off the shelf. It
 features an improved gas venting III system straight from the factory, almost
 completely removing all felt recoil from its operation. 

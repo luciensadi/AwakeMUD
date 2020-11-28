@@ -586,7 +586,7 @@ Built to survive the harsh African climates, the SS-77 is standard SAW (Squad
 Automatic Weapon) for several merc companies around the world. Light enough to
 tote all day long, and with its collapsable stock its small enough to paradrop
 with, making the SS-77 the perfect answer to your fire support needs.
-Unfortuantely, due to the design of its clip, it cannot mount any underbarrel
+Unfortuantely, due to the design of its magazine, it cannot mount any underbarrel
 accessories. 
 ~
 Type:	Weapon
@@ -1723,7 +1723,7 @@ RoomDesc:$
 A large heavy pistol has been left here.~
 LookDesc:$
 The Thorvald Ltd. Orkslayer, a very famous pistol in its own right. It only
-chambers nine rounds and therefore is very hard to find proper clips for, but
+chambers nine rounds and therefore is very hard to find proper magazines for, but
 it makes up for it in stopping power. The only drawback is that its design
 doesn't allow for attachments. 
 ~

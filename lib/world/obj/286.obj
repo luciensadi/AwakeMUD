@@ -837,7 +837,7 @@ LookDesc:$
 Lightweight by design, this a military ops weapon, that being easily discerned
 from the scope, supressor, and flashlight.  It resembles the old fashioned
 M4A1s, but it is more like the M16A2 in its burst fire nature.  Short and
-packing a punch in its 28 round clip, this is a beautiful, high powered
+packing a punch in its 28 round magazine, this is a beautiful, high powered
 killing weapon.  
 ~
 Type:	Weapon
@@ -1216,7 +1216,7 @@ Name:	a military bandolier
 RoomDesc:$
 A large bandolier is lying here.~
 LookDesc:$
-A large bandolier, issued by military warehouses to carry ammo clips. 
+A large bandolier, issued by military warehouses to carry ammo magazines. 
 ~
 Type:	Worn
 WearFlags:	1000000000000000000001

@@ -891,7 +891,7 @@ RoomDesc:$
 A deadly looking submachinegun lies here.~
 LookDesc:$
 This is one of the most deadly Croc submachinegun models. It combines
-lightweight with excellent power and ammo clip capacity. 
+lightweight with excellent power and ammo magazine capacity. 
 ~
 Type:	Weapon
 WearFlags:	1

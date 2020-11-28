@@ -1165,32 +1165,6 @@ Material:	paper
 [VALUES]
 	Val0:	25000
 BREAK
-#83
-Keywords:	can sprite drink
-Name:	A Can of Sprite
-RoomDesc:$
-This is a can of sprite with bubbles and everything~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Gun Clip
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	paper
-[POINTS]
-	Weight:	0.45
-	Barrier:	1
-	Cost:	60
-	AvailTN:	6
-	AvailDay:	3.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	6
-	Val1:	24
-	Val2:	3
-BREAK
 #100
 Keywords:	credstick plastic
 Name:	a plastic credstick

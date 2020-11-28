@@ -400,7 +400,7 @@ Name:	a Fichetti Security 500
 RoomDesc:$
 A light security type pistol lies here.~
 LookDesc:$
-This pistol is designed for light security work and has a 25 round clip.
+This pistol is designed for light security work and has a 25 round magazine.
 ~
 Type:	Weapon
 WearFlags:	110000000000001

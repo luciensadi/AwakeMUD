@@ -555,13 +555,13 @@ Material:	brick
 	Val9:	-1
 BREAK
 #2921
-Keywords:	belt clip
-Name:	a leather clip belt
+Keywords:	leather magazine belt
+Name:	a leather magazine belt
 RoomDesc:$
-A belt usable for carrying ammunition clips has been set on the ground.~
+A belt usable for carrying ammunition magazines has been set on the ground.~
 LookDesc:$
 With an adjustable size and small loop-like pockets all around it, this
-belt has the capacity to carry up to eight clips of any size.
+belt has the capacity to carry up to eight magazines of any size.
 ~
 Type:	Container
 WearFlags:	100000000001

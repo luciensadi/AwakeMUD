@@ -1067,7 +1067,7 @@ RoomDesc:$
 A sleek machine pistol lies here.~
 LookDesc:$
 The Crusader is a light pistol capable of burst fire.  It comes with an
-extended clip and an improved gas vent II system. 
+extended magazine and an improved gas vent II system. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -2028,7 +2028,7 @@ Name:	a Beretta Model 70
 RoomDesc:$
 A Beretta submachinegun lies here.~
 LookDesc:$
-The Beretta Model 70 holds the distinction of having one of the large clips
+The Beretta Model 70 holds the distinction of having one of the large magazines
 available for a smg. It also comes with an integral laser sight. 
 ~
 Type:	Weapon
@@ -2201,8 +2201,8 @@ RoomDesc:$
 A deadly little submachine gun lies here.~
 LookDesc:$
 The Ingram SuperMach actually fires light pistol rounds in incredible six
-round bursts.  It has a very distinctive profile due to it's 40 round tube
-clip. 
+round bursts.  It has a very distinctive profile due to its 40 round tube
+magazine. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -6208,7 +6208,7 @@ these business outfits have a flat, smooth and sharp no-frills style.  As with
 previous lines, integrated Kevlar fibers and custom-shaped carbon-ceramic
 plates provided adequate protection.  The Actioneer long-coat designs are
 specially tailored for bodyguards and feature built-in concealed holsters and
-ammo-clip pockets. 
+ammo-magazine pockets. 
 ~
 Type:	Worn
 WearFlags:	10000000001

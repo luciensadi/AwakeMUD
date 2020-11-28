@@ -1162,7 +1162,7 @@ A rugged light pistol has been discarded here.~
 LookDesc:$
 The Walther PB-120 is a rugged light pistol, small and compact in design,
 which makes it perfect for keeping tucked away for a nice surprise. This
-particular model seems to be sporting an extended clip, which makes it a bit
+particular model seems to be sporting an extended magazine, which makes it a bit
 less concealable, but is a good trade off for the extra stand off
 capabilities. 
 ~
@@ -1189,33 +1189,6 @@ Material:	adv. plastics
 	Val7:	626
 	Val9:	-1
 	Val10:	4
-BREAK
-#25438
-Keywords:	clip 15-round
-Name:	a 15-round light pistol clip
-RoomDesc:$
-A light pistol clip has been discarded here.~
-LookDesc:$
-It appears to be a clip designed for a light pistol, and looks to hold
-15-rounds of ammunition. 
-~
-Type:	Gun Clip
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	2
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	15
-	Val1:	6
 BREAK
 #25439
 Keywords:	t-shirt cotton 100% JetBlack
@@ -6610,64 +6583,6 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-BREAK
-#25618
-Keywords:	clip smg 32-round APDS
-Name:	a 32-round SMG clip of APDS
-RoomDesc:$
-An SMG clip has been discarded on the ground here.~
-LookDesc:$
-It looks just like any other clip of ammunition, which appears to be designed
-for use in a submachine gun. It has a 32-round capacity, and for some reason
-there is a bit of blue tape wrapped around its bottom edge. 
-~
-Type:	Gun Clip
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	4
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	32
-	Val1:	10
-	Val2:	1
-BREAK
-#25619
-Keywords:	clip assault rifle 35-round APDS
-Name:	a 35-round assault rifle clip of APDS
-RoomDesc:$
-An assault rifle clip has been discarded on the ground here.~
-LookDesc:$
-It looks just like any other clip of ammunition, which appears to be designed
-for use in an assault rifle. It has a 35-round capacity, and for some reason
-there is a bit of blue tape wrapped around its bottom edge. 
-~
-Type:	Gun Clip
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	adv. plastics
-[POINTS]
-	Weight:	0.10
-	Barrier:	6
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	35
-	Val1:	13
-	Val2:	1
 BREAK
 #25620
 Keywords:	briefcase bloody hand handcuffed
