@@ -1,4 +1,4 @@
-#70000
+#700000
 Keywords:	valjean satyr smiling
 Name:	Valjean
 RoomDesc:$
@@ -39,7 +39,7 @@ DefaultPos:	Standing
 	sub-machine guns:	7
 	pistols:	7
 BREAK
-#70001
+#700001
 Keywords:	Chrystal Sharde slender woman fragile
 Name:	Chrystal Sharde
 RoomDesc:$
@@ -74,7 +74,7 @@ DefaultPos:	Standing
 	athletics:	2
 	brawling:	4
 BREAK
-#70002
+#700002
 Keywords:	Dawn Edwards woman young
 Name:	Dawn Edwards
 RoomDesc:$
@@ -113,7 +113,7 @@ DefaultPos:	Standing
 	pistols:	5
 	brawling:	4
 BREAK
-#70003
+#700003
 Keywords:	frail old keymaster
 Name:	A frail, old keymaster
 RoomDesc:$
@@ -147,7 +147,7 @@ DefaultPos:	Standing
 	Weight:	50
 [SKILLS]
 BREAK
-#70004
+#700004
 Keywords:	young blonde apprentice
 Name:	A young apprentice keymaster
 RoomDesc:$

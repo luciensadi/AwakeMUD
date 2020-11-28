@@ -2602,4 +2602,204 @@ DefaultPos:	Standing
 	Leadership:	10
 	Athletics:	10
 BREAK
+#60646
+Keywords:	kyle mall ninja mall-ninja fellow trainer man
+Name:	Kyle
+RoomDesc:$
+A mall-ninja-looking fellow is methodically flinging shuriken at a target. 
+
+~
+LookDesc:$
+In sharp contrast to Jet, Kyle looks more like your typical wage slave who has
+developed an interest in throwing weapons and archery. Still, he looks skilled
+with his craft, even if he's throwing stars that say "MADE IN CHINA". 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
+[SKILLS]
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
+BREAK
+#60647
+Keywords:	Doc Chew cybertechnician doctor
+Name:	Doc Chew
+RoomDesc:$
+Doc Chew stands here, checking on a cryogenic vat of cybernetic eyes. 
+
+~
+LookDesc:$
+He makes eyes.
+ Just eyes.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#60648
+Keywords:	Doc Croke cybertechnician doctor
+Name:	Doc Croke
+RoomDesc:$
+Doc Croke is sitting here, cooking the books. 
+
+~
+LookDesc:$
+Okay, so maybe Doc Croke is a crooked character, but that doesn't necessarily
+mean he's a bad doctor. It's not like the Neophyte Guild would hire him if he
+wasn't.... Right? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+[SKILLS]
+BREAK
+#60649
+Keywords:	Doc Killie cybertechnician doctor
+Name:	Doc Killie
+RoomDesc:$
+Doc Killie is here, pretending he knows what he's doing. 
+
+~
+LookDesc:$
+Well, on the bright side, Doc Killie isn't some witty nickname given to him,
+it's his actual birthname. That said, he lives up to the namesake. Feeling
+lucky, chummer? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+BREAK
+#60650
+Keywords:	Doc Julius cybertechnician doctor
+Name:	Doc Julius
+RoomDesc:$
+Doc Julius is here, enjoying a cup of soykaf before surgery. 
+
+~
+LookDesc:$
+A refined gentlemen if there ever was one. Poor, as the soykaf may hint, but
+refined none the less. When he isn't slicing up greenhorns in the Neophyte
+Guild, he's actually contributing to society (unlike you) by volunteering at
+free clinics in the Barrens. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	95
+[SKILLS]
+BREAK
+#60651
+Keywords:	Doc Malik cybertechnician doctor
+Name:	Doc Malik
+RoomDesc:$
+Doc Malik is here, tinkering with a headware memory unit. 
+
+~
+LookDesc:$
+Doc Malik may not hold a professional degree, but he's cut more runners than
+flechette. It may not be by the book, but it works, so he's still in business.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+BREAK
 END

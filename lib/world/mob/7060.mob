@@ -1,4 +1,4 @@
-#70600
+#706000
 Keywords:	trio bum hobo shady characters
 Name:	A trio of shady looking characters
 RoomDesc:$
@@ -31,7 +31,7 @@ DefaultPos:	Standing
 	Weight:	80
 [SKILLS]
 BREAK
-#70601
+#706001
 Keywords:	surly elf one-eyed
 Name:	A surly looking one-eyed elf
 RoomDesc:$
@@ -64,7 +64,7 @@ DefaultPos:	Standing
 	Weight:	70
 [SKILLS]
 BREAK
-#70602
+#706002
 Keywords:	elf old grey
 Name:	An old grey haired elf
 RoomDesc:$

@@ -1,4 +1,4 @@
-#70500
+#705000
 Keywords:	An energetic host is here, offering you choice tickets man
 Name:	A ticket agent
 RoomDesc:$
@@ -34,7 +34,7 @@ DefaultPos:	Standing
 	Weight:	100
 [SKILLS]
 BREAK
-#70501
+#705001
 Keywords:	man human male Sascha bartender
 Name:	Sascha
 RoomDesc:$
@@ -66,7 +66,7 @@ DefaultPos:	Standing
 	Weight:	80
 [SKILLS]
 BREAK
-#70502
+#705002
 Keywords:	male man player sam content black
 Name:	Sam
 RoomDesc:$
@@ -98,7 +98,7 @@ DefaultPos:	Sitting
 	Weight:	75
 [SKILLS]
 BREAK
-#70503
+#705003
 Keywords:	A young man of the cloth scribes something, next to a rack of supplies
 Name:	Father Sebastian
 RoomDesc:$
@@ -130,7 +130,7 @@ DefaultPos:	Sitting
 	Weight:	70
 [SKILLS]
 BREAK
-#70504
+#705004
 Keywords:	A blind priest quietly kneels here, praying father Hernandez
 Name:	Father Hernandez
 RoomDesc:$
@@ -163,7 +163,7 @@ DefaultPos:	Sitting
 	Weight:	70
 [SKILLS]
 BREAK
-#70505
+#705005
 Keywords:	A sultry, ebon-haired woman smiles coyly as she stands here black widow
 Name:	The Black Widow
 RoomDesc:$
@@ -201,7 +201,7 @@ DefaultPos:	Standing
 [SKILLS]
 	brawling:	12
 BREAK
-#70506
+#705006
 Keywords:	Julius A quiet black man dressed in a tuxedo and sunglasses sits patiently here
 Name:	Julius
 RoomDesc:$
