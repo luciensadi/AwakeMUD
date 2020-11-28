@@ -131,14 +131,6 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       obj_from_char(obj);
     obj_to_obj(obj, cont);
     
-    if (old_carry_w != IS_CARRYING_W(ch) || old_carry_n != IS_CARRYING_N(ch) - 1) {
-      sprintf(buf, "SYSERR: Weight/number calculations are off (worn branch). Carry weight delta is %f, carry number delta is %d. Auto-fixing.",
-              IS_CARRYING_W(ch) - old_carry_w,
-              IS_CARRYING_N(ch) - old_carry_n);
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      calc_weight(ch);
-    }
-    
     act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
     act("$n puts $p in $P.", FALSE, ch, obj, cont, TO_ROOM);
     return;
@@ -155,14 +147,6 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     else {
       obj_from_char(obj);
       obj_to_obj(obj, cont);
-      
-      if (old_carry_w != IS_CARRYING_W(ch) || old_carry_n != IS_CARRYING_N(ch) - 1) {
-        sprintf(buf, "SYSERR: Weight/number calculations are off (quiver branch). Carry weight delta is %f, carry number delta is %d. Auto-fixing.",
-                IS_CARRYING_W(ch) - old_carry_w,
-                IS_CARRYING_N(ch) - old_carry_n);
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        calc_weight(ch);
-      }
       
       GET_OBJ_VAL(cont, 2)++;
       act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
@@ -200,14 +184,6 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   else
     obj_from_char(obj);
   obj_to_obj(obj, cont);
-  
-  if (old_carry_w != IS_CARRYING_W(ch) || old_carry_n != IS_CARRYING_N(ch) - 1) {
-    sprintf(buf, "SYSERR: Weight/number calculations are off (default branch). Carry weight delta is %f, carry number delta is %d. Auto-fixing.",
-            IS_CARRYING_W(ch) - old_carry_w,
-            IS_CARRYING_N(ch) - old_carry_n);
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
-    calc_weight(ch);
-  }
   
   act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
   act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
