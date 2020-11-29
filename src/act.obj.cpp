@@ -246,7 +246,21 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
         return;
     }
   }
-  if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == 108)
+  // Prevent installing persona firmware into a store-bought deck.
+  if (GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM
+      && (GET_OBJ_VAL(obj, 0) == SOFT_BOD 
+          || GET_OBJ_VAL(obj, 0) == SOFT_SENSOR
+          || GET_OBJ_VAL(obj, 0) == SOFT_MASKING
+          || GET_OBJ_VAL(obj, 0) == SOFT_EVASION)) {
+    if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
+      send_to_char("That's firmware, you'll have to BUILD it into the deck along with the matching chip.", ch);
+    } else {
+      send_to_char(ch, "%s is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.",
+                   GET_OBJ_NAME(obj));
+    }
+    return;
+  }
+  else if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM)
     send_to_char("You can't install unburnt programs.\r\n", ch);
   else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
     display_cyberdeck_issues(ch, cont);

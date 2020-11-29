@@ -1410,7 +1410,7 @@ ACMD(do_connect)
   }
   PERSONA = icon;
   DECKER = new deck_info;
-  if (GET_OBJ_VNUM(cyberdeck) == 113) {
+  if (GET_OBJ_VNUM(cyberdeck) == OBJ_CUSTOM_CYBERDECK_SHELL) {
     struct obj_data *parts = cyberdeck->contains;
     for (; parts; parts = parts->next_content)
       if (GET_OBJ_TYPE(parts) == ITEM_PART && (GET_OBJ_VAL(parts, 0) == PART_ASIST_HOT || GET_OBJ_VAL(parts, 0) == PART_ASIST_COLD))
@@ -1455,7 +1455,7 @@ ACMD(do_connect)
   else
     DECKER->io = MIN(ch->in_room->io, GET_OBJ_VAL(cyberdeck, 4));
   DECKER->io = (int)(DECKER->io / 10);
-  if (GET_OBJ_VNUM(cyberdeck) != 113) {
+  if (GET_OBJ_VNUM(cyberdeck) != OBJ_CUSTOM_CYBERDECK_SHELL) {
     DECKER->asist[1] = 0;
     DECKER->asist[0] = 0;
     GET_MAX_HACKING(ch) = 0;
@@ -1464,7 +1464,7 @@ ACMD(do_connect)
   for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
     if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
       GET_OBJ_VAL(soft, 8) = GET_OBJ_VAL(soft, 9) = 0;
-      if (GET_OBJ_VNUM(soft) != 108) {
+      if (GET_OBJ_VNUM(soft) != OBJ_BLANK_PROGRAM) {
         switch (GET_OBJ_VAL(soft, 0)) {
         case SOFT_BOD:
           DECKER->bod = GET_OBJ_VAL(soft, 1);
@@ -1957,7 +1957,7 @@ ACMD(do_software)
     
     int bod = 0, sensor = 0, masking = 0, evasion = 0;
     for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
-      if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VNUM(soft) != 108) {
+      if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VNUM(soft) != OBJ_BLANK_PROGRAM) {
         switch (GET_OBJ_VAL(soft, 0)) {
         case SOFT_BOD:
           bod = GET_OBJ_VAL(soft, 1);

@@ -2103,18 +2103,30 @@ enum {
 #define RM_JUNKYARD_BIKES           70508
 
 // Objects, to remove the magic numbers from the code.
-#define OBJ_NEWBIE_RADIO           60531
-#define OBJ_MULTNOMAH_VISA         1
-#define OBJ_MAP_OF_SEATTLE         2041
-#define OBJ_ELEVATOR_SHAFT_KEY     998
-#define OBJ_BLANK_PHOTO            109
-#define OBJ_BLANK_PART_DESIGN      112
-#define OBJ_CUSTOM_CYBERDECK_SHELL 113
-#define OBJ_DOCWAGON_BASIC_MOD     16206
-#define OBJ_SEATTLE_TAXI_SIGN      600
-#define OBJ_PORTLAND_TAXI_SIGN     699
-#define OBJ_BLANK_AMMOBOX          121
-#define OBJ_BLANK_OPTICAL_CHIP     106
+#define OBJ_NEWBIE_RADIO            60531
+#define OBJ_MULTNOMAH_VISA          1
+#define OBJ_MAP_OF_SEATTLE          2041
+#define OBJ_ELEVATOR_SHAFT_KEY      998
+#define OBJ_DOCWAGON_BASIC_MOD      16206
+#define OBJ_SEATTLE_TAXI_SIGN       600
+#define OBJ_PORTLAND_TAXI_SIGN      699
+
+#define OBJ_BLANK_OPTICAL_CHIP      106
+#define OBJ_BLANK_PROGRAM_DESIGN    107
+#define OBJ_BLANK_PROGRAM           108
+#define OBJ_BLANK_PHOTO             109
+#define OBJ_ROLL_OF_NUYEN           110
+#define OBJ_PIECE_OF_MAIL           111
+#define OBJ_BLANK_PART_DESIGN       112
+#define OBJ_CUSTOM_CYBERDECK_SHELL  113
+#define OBJ_SHAMANIC_LODGE          114
+#define OBJ_HERMETIC_CIRCLE         115
+#define OBJ_CONJURING_MATERIALS     116
+#define OBJ_BLANK_SPELL_FORMULA     117
+#define OBJ_POCKET_SECRETARY_FOLDER 118
+#define OBJ_NEOPHYTE_SUBSIDY_CARD   119
+#define OBJ_GRAFFITI                120
+#define OBJ_BLANK_AMMOBOX           121
 
 /* ban struct */
 struct ban_list_element

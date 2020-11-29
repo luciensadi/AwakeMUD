@@ -491,12 +491,16 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   struct shop_sell_data *sell;
   int price, buynum;
   bool cash = FALSE;
+  
+  // Prevent negative transactions.
   if ((buynum = transaction_amt(arg)) < 0)
   {
     sprintf(buf, "%s A negative amount?  Try selling me something.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
+  
+  // Find the item in their list.
   if (!(sell = find_obj_shop(arg, shop_nr, &obj)))
   {
     if (atoi(arg) > 0) {
@@ -511,13 +515,25 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
       return;
     }
   }
+  
   one_argument(arg, buf);
+  
+  // Allow specification of cash purchases in grey shops.
   if (!str_cmp(buf, "cash"))
   {
+    if (shop_table[shop_nr].type == SHOP_LEGAL) {
+      sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      return;
+    }
+    
     arg = any_one_arg(arg, buf);
     skip_spaces(&arg);
     cash = TRUE;
-  } else if (!cred)
+  }
+  
+  // Fallback: You didn't specify cash, and you have no credstick on hand.
+  else if (!cred)
   {
     if (shop_table[shop_nr].type == SHOP_LEGAL) {
       sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
@@ -526,35 +542,55 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     }
     send_to_char("Lacking an activated credstick, you choose to deal in cash.\r\n", ch );
     cash = TRUE;
-  } else if (shop_table[shop_nr].type == SHOP_BLACK)
+  } 
+  
+  // You have a credstick, but the shopkeeper doesn't want it.
+  else if (shop_table[shop_nr].type == SHOP_BLACK)
   {
     send_to_char("The shopkeeper refuses to deal with credsticks.\r\n", ch);
     cash = TRUE;
   }
+  
+  // You must clarify what you want to buy.
   if (!*arg || !buynum)
   {
     sprintf(buf, "%s What do you want to buy?", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
+  
+  // Calculate the price.
   price = buy_price(obj, shop_nr);
   int bprice = price / 10;
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
     price = negotiate(ch, keeper, 0, price, 0, TRUE);
   if (sell->type == SELL_AVAIL && GET_AVAIL_OFFSET(ch))
     price += bprice * GET_AVAIL_OFFSET(ch);
+  
+  // Attempt to order the item.
   if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) > 0)
   {
-    for (int q = 0; q <= SHOP_LAST_IDNUM_LIST_SIZE; q++)
+    // Don't let people re-try repeatedly.
+    for (int q = 0; q <= SHOP_LAST_IDNUM_LIST_SIZE; q++) {
       if (sell->lastidnum[q] == GET_IDNUM(ch)) {
         sprintf(buf, "%s Sorry, I couldn't get that in for you.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         extract_obj(obj);
         return;
       }
+    }
+    
+    // Stop people from buying enormous quantities.
+    extern int max_things_you_can_purchase_at_once;
+    if (buynum > max_things_you_can_purchase_at_once) {
+      sprintf(buf, "%s I can't get that many in at once. Limit is %d.", GET_CHAR_NAME(ch), max_things_you_can_purchase_at_once);
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    }
+    
+    // Calculate TNs, factoring in settings, powers, and racism.
     int target = GET_OBJ_AVAILTN(obj) - GET_AVAIL_OFFSET(ch);
     target = MAX(0, target - GET_POWER(ch, ADEPT_KINESICS));
-    if (GET_RACE(ch) != GET_RACE(keeper))
+    if (GET_RACE(ch) != GET_RACE(keeper)) {
       switch (GET_RACE(ch)) {
         case RACE_HUMAN:
         case RACE_ELF:
@@ -566,51 +602,71 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
           target += 4;
           break;
       }
+    }
+    
+    // Calculate their skill level, including bioware.
     int skill = get_skill(ch, shop_table[shop_nr].ettiquete, target);
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
       if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES) {
         skill += GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
         break;
       }
+    
+    // Roll up the success test.
     int success = success_test(skill, target);
-    if (success < 1 || buynum > 50) {
+    
+    // Failure case.
+    if (success < 1) {
       sprintf(buf, "%s I can't get ahold of that one for a while.", GET_CHAR_NAME(ch));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      
+      // Add them to the forbidden list.
       for (int q = SHOP_LAST_IDNUM_LIST_SIZE; q >= 1; q--)
         sell->lastidnum[q] = sell->lastidnum[q-1];
       sell->lastidnum[0] = GET_IDNUM(ch);
+      
+      extract_obj(obj);
+      return;
+    } 
+    
+    // Placed order successfully.
+    float totaltime = ((GET_OBJ_AVAILDAY(obj) * buynum) / success) + (2 * GET_AVAIL_OFFSET(ch));
+    if (totaltime < 1) {
+      int hours = MAX(1, (int)(24 * totaltime));
+      sprintf(buf, "%s That will take about %d hour%s to come in.", GET_CHAR_NAME(ch), hours, hours == 1 ? "" : "s");
     } else {
-      float totaltime = ((GET_OBJ_AVAILDAY(obj) * buynum) / success) + (2 * GET_AVAIL_OFFSET(ch));
-      if (totaltime < 1) {
-        int hours = (int)(24 * totaltime);
-        sprintf(buf, "%s That will take about %d %s to come in.", GET_CHAR_NAME(ch), hours, hours == 1 ? "hour" : "hours");
-      } else {
-        sprintf(buf, "%s That will take about %d %s to come in.", GET_CHAR_NAME(ch), (int) totaltime, totaltime == 1 ? "day" : "days");
-      }
-      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-      struct shop_order_data *order = shop_table[shop_nr].order;
-      for (; order; order = order->next)
-        if (order->player == GET_IDNUM(ch) && order->item == sell->vnum)
-          break;
-      if (order) {
-        if (order->timeavail < time(0))
-          order->timeavail = time(0);
-        order->number += buynum;
-        order->timeavail = order->timeavail + (int)(SECS_PER_MUD_DAY * totaltime);
-      } else {
-        struct shop_order_data *order = new shop_order_data;
-        order->item = sell->vnum;
-        order->player = GET_IDNUM(ch);
-        order->timeavail = time(0) + (int)(SECS_PER_MUD_DAY * totaltime);
-        order->number = buynum;
-        order->price = price;
-        order->next = shop_table[shop_nr].order;
-        shop_table[shop_nr].order = order;
-      }
+      sprintf(buf, "%s That will take about %d day%s to come in.", GET_CHAR_NAME(ch), (int) totaltime, totaltime == 1 ? "" : "s");
     }
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    
+    // If they have a pre-existing order, just bump up the quantity and update the order time.
+    struct shop_order_data *order = shop_table[shop_nr].order;
+    for (; order; order = order->next)
+      if (order->player == GET_IDNUM(ch) && order->item == sell->vnum)
+        break;
+        
+    if (order) {
+      if (order->timeavail < time(0))
+        order->timeavail = time(0);
+      order->number += buynum;
+      order->timeavail = order->timeavail + (int)(SECS_PER_MUD_DAY * totaltime);
+    } else {
+      // Create a new order.
+      struct shop_order_data *order = new shop_order_data;
+      order->item = sell->vnum;
+      order->player = GET_IDNUM(ch);
+      order->timeavail = time(0) + (int)(SECS_PER_MUD_DAY * totaltime);
+      order->number = buynum;
+      order->price = price;
+      order->next = shop_table[shop_nr].order;
+      shop_table[shop_nr].order = order;
+    }
+    
+    // Clean up.
     extract_obj(obj);
   } else
   {
+    // Give them the thing without fanfare.
     shop_receive(ch, keeper, arg, buynum, cash, sell, obj, shop_table[shop_nr].type == SHOP_BLACK ? NULL : cred, price, shop_nr);
   }
 }

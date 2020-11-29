@@ -29,6 +29,7 @@ int max_filesize = 50000;
 int max_bad_pws = 3;
 int nameserver_is_slow = FALSE;
 int ELEVATOR_SHAFT_FALL_RATING = 6;
+int max_things_you_can_purchase_at_once = 50;
 
 bool DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS = TRUE;
 
