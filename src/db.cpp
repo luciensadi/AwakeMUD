@@ -3530,6 +3530,9 @@ bool resize_world_array()
   // remember that top_of_world is the actual rnum in the array
   for (counter = 0; counter <= top_of_world; counter++)
     new_world[counter] = world[counter];
+    
+  // TODO: Update EVERY SINGLE ROOM POINTER IN THE GAME to match the new array.
+  mudlog("The MUD will crash now, since required work is not done.", NULL, LOG_SYSLOG, TRUE);
 
   top_of_world_array += world_chunk_size;
 

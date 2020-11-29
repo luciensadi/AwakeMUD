@@ -350,7 +350,6 @@ ACMD(do_rclone)
     return;
   }
 
-
   num1 = real_room(arg1);
   num2 = real_room(arg2);
 
@@ -413,6 +412,8 @@ ACMD(do_rclone)
         temp->next = NULL;
     }
   }
+
+  ch->player_specials->saved.zonenum = zone_table[zone2].number;
 
   // null out some vars to keep probs away
   room->contents = NULL;
