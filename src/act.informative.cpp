@@ -2145,10 +2145,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                      ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
                      weapon_type[GET_OBJ_VAL(j, 1)]);
       break;
-    case ITEM_GUN_MAGAZINE:
-      // All info about these is displayed when you examine them.
-    case ITEM_QUEST:
     case ITEM_OTHER:
+      if (GET_OBJ_VNUM(j) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
+        sprintf(ENDOF(buf), "It is bonded to %s and has %d nuyen remaining on it.\r\n", 
+                GET_IDNUM(ch) == GET_OBJ_VAL(j, 0) ? "you" : "someone else",
+                GET_OBJ_VAL(j, 1));
+        break;
+      }
+      // fallthrough
+    
+    // All info about these is displayed when you examine them.
+    case ITEM_GUN_MAGAZINE:
+    case ITEM_QUEST:
     case ITEM_CAMERA:
     case ITEM_PHONE:
       sprintf(ENDOF(buf), "Nothing stands out about this item's OOC values. Try EXAMINE it instead.");
@@ -2290,6 +2298,12 @@ ACMD(do_examine)
   }
   
   if (tmp_object) {
+    if (GET_OBJ_VNUM(tmp_object) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
+      send_to_char(ch, "It is bonded to %s and has %d nuyen remaining on it.\r\n", 
+              GET_IDNUM(ch) == GET_OBJ_VAL(tmp_object, 0) ? "you" : "someone else",
+              GET_OBJ_VAL(tmp_object, 1));
+    }
+    
     if (GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER ||
         (GET_OBJ_TYPE(tmp_object) == ITEM_WORN && tmp_object->contains)) {
       if (!tmp_object->contains)

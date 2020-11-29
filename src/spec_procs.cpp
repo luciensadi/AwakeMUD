@@ -4101,6 +4101,22 @@ SPECIAL(locker)
   return TRUE;
 }
 
+struct obj_data *find_neophyte_housing_card(struct obj_data *obj) {
+  struct obj_data *temp, *result;
+  if (!obj)
+    return NULL;
+  
+  if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD)
+    return obj;
+    
+  if (obj->contains) {
+    for (temp = obj->contains; temp; temp = temp->next_content)
+      if ((result = find_neophyte_housing_card(temp)))
+        return result;
+  }
+  
+  return NULL;
+}
 SPECIAL(newbie_housing)
 {
   if (!ch || !cmd || !CMD_IS("recharge"))
@@ -4108,18 +4124,39 @@ SPECIAL(newbie_housing)
   if (GET_NUYEN(ch) < 10000)
     send_to_char("You don't have enough nuyen to recharge a housing card.\r\n", ch);
   else {
-    struct obj_data *card = NULL;
+    struct obj_data *card = NULL, *result = NULL;
+    
+    // Search their carried inventory for the housing card.
     for (card = ch->carrying; card; card = card->next_content)
-      if (GET_OBJ_VNUM(card) == 119)
+      if ((result = find_neophyte_housing_card(card))) {
+        card = result;
         break;
+      }
+      
+    // Search their worn inventory for the housing card.
     if (!card) {
-      card = read_object(119, VIRTUAL);
+      for (int i = 0; i < NUM_WEARS; i++)
+        if ((result = find_neophyte_housing_card(GET_EQ(ch, i)))) {
+          card = result;
+          break;
+        }
+    }
+        
+    // Couldn't find it anywhere? Give them a new one.
+    if (!card) {
+      card = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL);
       GET_OBJ_VAL(card, 0) = GET_IDNUM(ch);
       obj_to_char(card, ch);
     }
     GET_OBJ_VAL(card, 1) += 10000;
     GET_NUYEN(ch) -= 10000;
-    send_to_char(ch, "You place your card into the machine and add an extra 10,000 nuyen. The value is currently at %d nuyen.\r\n", GET_OBJ_VAL(card, 1));
+    
+    if (card->carried_by == ch)
+      send_to_char("You place your card into the machine and add an extra 10,000 nuyen.", ch);
+    else
+      send_to_char("You dig your card out and put it in the machine, adding 10,000 extra nuyen.", ch);
+    
+    send_to_char(ch, " The value is currently at %d nuyen.\r\n", GET_OBJ_VAL(card, 1));
   }
   return TRUE;
 }
