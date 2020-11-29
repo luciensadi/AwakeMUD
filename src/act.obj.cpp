@@ -1507,7 +1507,7 @@ ACMD(do_drop)
       random_donation_room = &world[real_room(donation_room_3)];
       break;
     }
-    if (!random_donation_room) {
+    if (!random_donation_room && mode != SCMD_JUNK) {
       send_to_char("Sorry, you can't donate anything right now.\r\n", ch);
       return;
     }
