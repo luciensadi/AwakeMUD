@@ -2825,21 +2825,23 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
   }
   
   // Calculate what the new amount of ammo will be.
-  int new_amount = GET_AMMOBOX_QUANTITY(ammobox) + amount;
+  GET_AMMOBOX_QUANTITY(ammobox) = GET_AMMOBOX_QUANTITY(ammobox) + amount;
   
-  // Update the cost to reflect the changed ammo quantity.
-  GET_OBJ_COST(ammobox) = new_amount * ammo_type[GET_AMMOBOX_TYPE(ammobox)].cost;
+  if (GET_AMMOBOX_QUANTITY(ammobox) < 0) {
+    mudlog("SYSERR: Updated ammobox to have negative ammo count! Restoring...", NULL, LOG_SYSLOG, TRUE);
+    GET_AMMOBOX_QUANTITY(ammobox) = 0;
+  }
   
-  // Update the weight as well.
-  GET_OBJ_WEIGHT(ammobox) = new_amount * ammo_type[GET_AMMOBOX_TYPE(ammobox)].weight;
+  // Calculate weight as (count / 10) * multiplier (multiplier is per 10 rounds).
+  GET_OBJ_WEIGHT(ammobox) = (((float) GET_AMMOBOX_QUANTITY(ammobox)) / 10) * ammo_type[GET_AMMOBOX_TYPE(ammobox)].weight;
+  
+  // Calculate cost as count * multiplier (multiplier is per round)
+  GET_OBJ_COST(ammobox) = GET_AMMOBOX_QUANTITY(ammobox) * ammo_type[GET_AMMOBOX_TYPE(ammobox)].cost;
   
   // Update the carrier's carry weight.
   if (ammobox->carried_by) {
     calc_weight(ammobox->carried_by);
-  }
-  
-  // Finally, update the actual ammo count.
-  GET_AMMOBOX_QUANTITY(ammobox) = new_amount;
+  }  
 }
 
 
