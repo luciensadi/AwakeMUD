@@ -551,13 +551,15 @@ SPECIAL(nerp_skills_teacher) {
     send_to_char("You don't have enough karma to improve that skill.\r\n", ch);
     return TRUE;
   }
-  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && GET_NUYEN(ch) < MAX(1000, (GET_SKILL(ch, skill_num) * 5000))) {
-    send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n",
-                 MAX(1000, (GET_SKILL(ch, skill_num) * 5000)));
-    return TRUE;
-  }
-  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
-    GET_NUYEN(ch) -= MAX(1000, (GET_SKILL(ch, skill_num) * 5000));
+  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    int skill_nuyen_cost = MAX(1000, (GET_SKILL(ch, skill_num) * 5000));
+    if (GET_NUYEN(ch) < skill_nuyen_cost) {
+      send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n", skill_nuyen_cost);
+      return TRUE;
+    }
+    GET_NUYEN(ch) -= skill_nuyen_cost;
+  }    
+    
   if (GET_SKILL_POINTS(ch) > 0)
     GET_SKILL_POINTS(ch)--;
   else
@@ -766,13 +768,14 @@ SPECIAL(teacher)
     send_to_char("You don't have enough karma to improve that skill.\r\n", ch);
     return TRUE;
   }
-  if (GET_NUYEN(ch) < MAX(1000, (GET_SKILL(ch, skill_num) * 5000)) && !PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n",
-                 MAX(1000, (GET_SKILL(ch, skill_num) * 5000)));
-    return TRUE;
+  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    int skill_nuyen_cost = MAX(1000, (GET_SKILL(ch, skill_num) * 5000));
+    if (GET_NUYEN(ch) < skill_nuyen_cost) {
+      send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n", skill_nuyen_cost);
+      return TRUE;
+    }
+    GET_NUYEN(ch) -= skill_nuyen_cost;
   }
-  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
-    GET_NUYEN(ch) -= MAX(1000, (GET_SKILL(ch, skill_num) * 5000));
   if (GET_SKILL_POINTS(ch) > 0)
     GET_SKILL_POINTS(ch)--;
   else
