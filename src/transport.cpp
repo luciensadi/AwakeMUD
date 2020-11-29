@@ -615,7 +615,7 @@ SPECIAL(taxi)
   if (!IS_NPC(ch) && memory(driver, ch) && (CMD_IS("north") ||
       CMD_IS("east") || CMD_IS("west") || CMD_IS("south") || CMD_IS("ne") ||
       CMD_IS("se") || CMD_IS("sw") || CMD_IS("nw") || CMD_IS("northeast") ||
-      CMD_IS("southeast") || CMD_IS("southwest") || CMD_IS("northwest")) && GET_ACTIVE(driver) != ACT_DRIVING) {
+      CMD_IS("southeast") || CMD_IS("southwest") || CMD_IS("northwest") || CMD_IS("leave")) && GET_ACTIVE(driver) != ACT_DRIVING) {
     forget(driver, ch);
     return FALSE;
   }

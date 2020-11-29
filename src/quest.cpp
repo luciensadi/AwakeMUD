@@ -700,7 +700,7 @@ SPECIAL(johnson)
   } else if (CMD_IS("nod") || CMD_IS("agree")) {
     comm = CMD_JOB_YES;
     need_to_act = TRUE;
-  } else if (CMD_IS("shake")) {
+  } else if (CMD_IS("shake") || CMD_IS("disagree")) {
     comm = CMD_JOB_NO;
     need_to_act = TRUE;
   } else if (CMD_IS("quests") || CMD_IS("jobs")) {
