@@ -1034,9 +1034,9 @@ SPECIAL(call_elevator)
 {
   int i = 0, j, index = -1;
   long rnum;
-  if (!cmd)
+  if (!cmd || !ch || !ch->in_room)
     return FALSE;
-
+    
   for (i = 0; i < num_elevators && index < 0; i++)
     for (j = 0; j < elevator[i].num_floors && index < 0; j++)
       if (elevator[i].floor[j].vnum == ch->in_room->number)
