@@ -36,7 +36,8 @@
 #define TAXI_DEST_TYPE_SHOPPING                   5
 #define TAXI_DEST_TYPE_ACCOMMODATIONS             6
 #define TAXI_DEST_TYPE_HOSPITALS                  7
-#define NUM_TAXI_DEST_TYPES                       8
+#define TAXI_DEST_TYPE_OTHER                      8
+#define NUM_TAXI_DEST_TYPES                       9
 
 struct taxi_dest_type
 {
