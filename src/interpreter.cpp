@@ -609,10 +609,10 @@ struct command_info cmd_info[] =
     { "mute"     , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCH },
     { "muteooc"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHOOC },
     { "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
-
-    { "news"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS },
+    
     { "newbie"   , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE },
     { "newbies"  , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_NEWBIE },
+    { "news"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS },
     { "nervestrike", POS_DEAD  , do_nervestrike, 0, 0 },
     { "notitle"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_NOTITLE },
 
