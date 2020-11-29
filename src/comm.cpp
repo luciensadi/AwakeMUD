@@ -2838,6 +2838,15 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       next = to->next_in_veh;
     else
       next = to->next_in_room;
+    if (to == next) {
+      sprintf(buf, "SYSERR: Encountered to=next infinite loop while looping over act string ''%s' for %s. Debug info: %s, type %d",
+              str, 
+              GET_CHAR_NAME(ch), 
+              to->in_veh ? "in veh" : "in room",
+              type);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return NULL;
+    }
     if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, to, type))
       perform_act(str, ch, obj, vict_obj, to);
   }

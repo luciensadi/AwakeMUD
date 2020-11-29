@@ -893,7 +893,6 @@ static void init_elevators(void)
         }
       }
       
-      
       // Ensure an exit from car -> landing and vice/versa exists. Store the shaft's exit.
       struct room_data *car = &world[real_room(elevator[i].room)];
       struct room_data *landing = &world[real_room(elevator[i].floor[car->rating].vnum)];

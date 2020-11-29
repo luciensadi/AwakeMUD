@@ -295,10 +295,16 @@ void do_start(struct char_data * ch)
   GET_COND(ch, COND_FULL) = FOOD_DRINK_MAX;
   GET_COND(ch, COND_DRUNK) = 0;
   GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
-
+  
+  // Wipe out their flags, if they have any.
+  AFF_FLAGS(ch).Clear();
+  PLR_FLAGS(ch).Clear();
+  PRF_FLAGS(ch).Clear();
+  
+  // Set the appropriate flags.
   PLR_FLAGS(ch).SetBit(PLR_NEWBIE);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, ENDBIT);
-  PRF_FLAGS(ch).RemoveBits(PRF_NOHASSLE, PRF_HOLYLIGHT, PRF_PACIFY, PRF_ROLLS, PRF_QUESTOR, PRF_NEWBIEHELPER, ENDBIT);
+  
   // PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
   ch->player.time.played = 0;
   ch->player.time.lastdisc = time(0);

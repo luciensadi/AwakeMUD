@@ -205,31 +205,35 @@ int damage_modifier(struct char_data *ch, char *rbuf)
     physical += ch->points.resistpain * 100;
     mental += ch->points.resistpain * 100;
   }
-  if (GET_TRADITION(ch) == TRAD_ADEPT
-      && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0)
-  {
-    physical += GET_POWER(ch, ADEPT_PAIN_RESISTANCE) * 100;
-    mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE) * 100;
-  }
-  if (GET_DRUG_STAGE(ch) == 1)
-    switch (GET_DRUG_AFFECT(ch)) {
-      case DRUG_NITRO:
-        physical += 600;
-        mental += 600;
-        break;
-      case DRUG_NOVACOKE:
-        physical += 100;
-        mental += 100;
-        break;
-      case DRUG_BLISS:
-        physical += 300;
-        mental += 300;
-        break;
-      case DRUG_KAMIKAZE:
-        physical += 400;
-        mental += 400;
-        break;
+  if (!IS_NPC(ch)) {
+    if (GET_TRADITION(ch) == TRAD_ADEPT
+        && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0)
+    {
+      physical += GET_POWER(ch, ADEPT_PAIN_RESISTANCE) * 100;
+      mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE) * 100;
     }
+    
+    if (GET_DRUG_STAGE(ch) == 1)
+      switch (GET_DRUG_AFFECT(ch)) {
+        case DRUG_NITRO:
+          physical += 600;
+          mental += 600;
+          break;
+        case DRUG_NOVACOKE:
+          physical += 100;
+          mental += 100;
+          break;
+        case DRUG_BLISS:
+          physical += 300;
+          mental += 300;
+          break;
+        case DRUG_KAMIKAZE:
+          physical += 400;
+          mental += 400;
+          break;
+      }
+  }
+  
   // first apply physical damage modifiers
   if (physical <= 400)
   {
