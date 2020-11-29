@@ -450,14 +450,15 @@ ACMD(do_hail)
       break;
     default:
       /* Cab doesn't service the area */
-      send_to_char("There don't seem to be any cabs in the area.\n\r",ch);
+      send_to_char("There don't seem to be any cabs in the area.\r\n",ch);
       return;
     }
   }
 
   if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
       || GET_INVIS_LEV(ch) > 0)  {
-    send_to_char("A cab almost stops, but guns it at the last second, splashing you...\n\r",ch);
+    send_to_char("A cab almost stops, but guns it at the last second, splashing you...\r\n",ch);
+    send_to_char("(OOC: You can't hail taxis while invisible.)\r\n", ch);
     return;
   }
 
