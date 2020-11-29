@@ -770,13 +770,13 @@ void make_elevator_door(vnum_t rnum_to, vnum_t rnum_from, int direction_from) {
   if (!DOOR->key)
     DOOR->key = OBJ_ELEVATOR_SHAFT_KEY;
   
-  if (!DOOR->key_level)
+  if (!DOOR->key_level || DOOR->key_level < 8)
     DOOR->key_level = 8;
   
-  if (!DOOR->material)
+  if (!DOOR->material || DOOR->material == MATERIAL_BRICK)
     DOOR->material = MATERIAL_METAL;
   
-  if (!DOOR->barrier)
+  if (!DOOR->barrier || DOOR->barrier < 8)
     DOOR->barrier = 8;
   
   // Set up the door's flags.

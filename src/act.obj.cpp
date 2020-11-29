@@ -691,15 +691,29 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       sprintf(buf, "You %s $p from $P.", (cyberdeck || computer ? "uninstall" : "get"));
       
       if (computer) {
-        for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room)
-          if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
-            send_to_char(ch, "You can't uninstall that while someone is working on it.\r\n");
-            return;
-          } else if (vict == ch && vict->char_specials.programming == obj) {
-            send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
-            STOP_WORKING(ch);
-            break;
+        if (ch->in_room) {
+          for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room) {
+            if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
+              send_to_char(ch, "You can't uninstall that while someone is working on it.\r\n");
+              return;
+            } else if (vict == ch && vict->char_specials.programming == obj) {
+              send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
+              STOP_WORKING(ch);
+              break;
+            }
           }
+        } else {
+          for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh) {
+            if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
+              send_to_char(ch, "You can't uninstall that while someone is working on it.\r\n");
+              return;
+            } else if (vict == ch && vict->char_specials.programming == obj) {
+              send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
+              STOP_WORKING(ch);
+              break;
+            }
+          }
+        }
         if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM)
           GET_CYBERDECK_TOTAL_STORAGE(cont) -= GET_OBJ_VAL(obj, 2);
         else
