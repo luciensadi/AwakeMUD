@@ -1478,7 +1478,7 @@ void leave_veh(struct char_data *ch)
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to exit the moving vehicle safely.\r\n", ch);
     } else {
-      send_to_char("That would just be crazy.\r\n", ch);
+      send_to_char("Your vehicle's moving! That would just be crazy.\r\n", ch);
       return;
     }
   }
@@ -1732,7 +1732,7 @@ ACMD(do_lay)
 ACMD(do_sleep)
 {
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("ARE YOU CRAZY!?\r\n", ch);
+    send_to_char("Sleeping while driving? ARE YOU CRAZY!?\r\n", ch);
     return;
   }
   if (ch->in_room && IS_WATER(ch->in_room)) {

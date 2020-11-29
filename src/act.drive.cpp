@@ -763,7 +763,7 @@ ACMD(do_control)
       jack = cyber;
 
   if (IS_WORKING(ch) || AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("Now that would be a neat trick.\r\n", ch);
+    send_to_char("While driving? Now that would be a neat trick.\r\n", ch);
     return;
   }
   if (!jack) {
@@ -1073,7 +1073,7 @@ ACMD(do_driveby)
   }
   dir = convert_look[dir];
   if (!EXIT(ch->in_veh, dir)) {
-    send_to_char("That would just be crazy...\r\n", ch);
+    send_to_char("Your vehicle can't go that way.\r\n", ch);
     return;
   }
 

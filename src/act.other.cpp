@@ -1950,7 +1950,7 @@ ACMD(do_astral)
   }
 
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("That would be a nice trick!\r\n", ch);
+    send_to_char("While driving? That would be a nice trick!\r\n", ch);
     return;
   }
   if (subcmd == SCMD_PERCEIVE) {

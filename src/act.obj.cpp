@@ -1464,7 +1464,7 @@ ACMD(do_drop)
     return;
   }
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("Now that would be a good trick!\r\n", ch);
+    send_to_char("While driving? Now that would be a good trick!\r\n", ch);
     return;
   }
 
@@ -2656,7 +2656,7 @@ ACMD(do_wear)
   two_arguments(argument, arg1, arg2);
 
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("Now that would be a good trick!\r\n", ch);
+    send_to_char("While driving? Now that would be a good trick!\r\n", ch);
     return;
   }
 
@@ -2801,7 +2801,7 @@ ACMD(do_remove)
   one_argument(argument, arg);
 
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("Now that would be a good trick!\r\n", ch);
+    send_to_char("While driving? Now that would be a good trick!\r\n", ch);
     return;
   }
 
