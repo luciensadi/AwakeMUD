@@ -1,0 +1,1372 @@
+#62100
+Keywords:	guard security airport
+Name:	an airport security guard
+RoomDesc:$
+An airport security guard stands here, making one last check over paperwork. 
+
+~
+LookDesc:$
+He appears to be your run-of-the-mill security guard, and he's sporting an
+airport security outfit to boot, so his reason for being here is obvious. He
+seems to be busily checking over the paperwork of outgoing passengers before
+they board their plane, just to be sure everything is on the up and up. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	8
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+	brawling:	8
+BREAK
+#62101
+Keywords:	vendor local souvenir
+Name:	a local souvenir vendor
+RoomDesc:$
+A local souvenir vendor is at his stall, peddling his wares to tourists. 
+
+~
+LookDesc:$
+One can tell simply by his appearance alone that he's a native to the island,
+which is evident by both his accent and clothing. He stands behind his stall,
+which is packed to the brim with souvenirs, which he is trying his best to
+peddle off to tourists as they stroll through the local park here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	brawling:	6
+BREAK
+#62102
+Keywords:	citizen local
+Name:	a local citizen
+RoomDesc:$
+A local citizen goes about their business here. 
+
+~
+LookDesc:$
+Probably a native to the mainland itself, but considering his apparel and
+demeanor, it's plain to see he's a local. He doesn't seem concerned or
+bothered with either the tourists or the law enforcement agents, in fact, he
+does his best to steer clear of both. Chances are he's out on his daily
+business, whether it's buying groceries or heading to a friends place. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	25
+	Bank:	50
+[SKILLS]
+	brawling:	2
+	driving/Bike:	3
+BREAK
+#62103
+Keywords:	tourist naive
+Name:	a naive tourist
+RoomDesc:$
+A naive tourist carelessly ambles through the streets here. 
+
+~
+LookDesc:$
+Considering his clothing and attitude, it's pretty easy to tell that this guy
+is a tourist, most likely here on the island for vacation. He seems to have
+eaten up the line of "The Caribbean is an island paradise", hook, line and
+sinker, because he seems way too carefree with his casual stride to be worried
+about the actual dangers present in the city and its shadows. 
+~
+ArriveMsg:	ambles in from
+LeaveMsg:	ambles
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+	Cash:	95
+	Bank:	125
+[SKILLS]
+	brawling:	2
+	driving/Bike:	2
+BREAK
+#62104
+Keywords:	local law enforcement member
+Name:	a member of the local law enforcement
+RoomDesc:$
+A member of the local law enforcement is on patrol here. 
+
+~
+LookDesc:$
+The "local law enforcement" on the Caribbean Islands means one of two things,
+either they're a part of a pirate gang, or they're a part of another crime
+syndicate. They learned a long time ago that they'd do well to protect one of
+their biggest incomes of nuyen, tourists, and they aim to keep up the
+appearance of a safe enviroment on the streets. While that's not to say they
+won't roll you for your cash or bust your skull if you give them lip, they at
+least have the common sense and decency to do so in a dark alley away from the
+prying eyes of the public. 
+~
+ArriveMsg:	slinks in from
+LeaveMsg:	slinks
+MobFlags:	10000000000001001000
+AffFlags:	1000000000
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	5
+	Impact:	5
+	Cash:	25
+	Bank:	45
+[SKILLS]
+	brawling:	4
+	clubs:	4
+	shotguns:	4
+	assault rifles:	4
+BREAK
+#62105
+Keywords:	vagrant old homeless bum
+Name:	an old vagrant
+RoomDesc:$
+An old vagrant is here, begging for change. 
+
+~
+LookDesc:$
+This old man is most likely homeless, or at least that's what he looks like.
+His clothes are quite 'worn in', though fortunately he doesn't have to worry
+about freezing to death in those rags, granted, it won't keep him from dying
+from exposure. He occasionally begs for change as tourists and locals alike
+pass him by, but very few even pay any attention to him, and even fewer toss
+him any spare change. 
+~
+ArriveMsg:	hobbles in from
+LeaveMsg:	hobbles
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	5
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	10
+[SKILLS]
+	brawling:	4
+BREAK
+#62106
+Keywords:	Heloise Guillaume older local man
+Name:	Heloise Guillaume
+RoomDesc:$
+An older local man manages the goods shop from behind his counter. 
+
+~
+LookDesc:$
+This older gentleman seems to be the purveyor of this establishment, which by
+the looks of things, has been here for quite some time. He has grey hair
+(what's left of it, at least), and a hunched posture from all the years he's
+put in working here. He has a native accent, French Creole by the sounds of
+it, but he speaks English well enough to get by and help out with purchases. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+BREAK
+#62107
+Keywords:	woman local
+Name:	a local woman
+RoomDesc:$
+A local woman is standing around here, wondering where her scooter is. 
+
+~
+LookDesc:$
+She looks a little lost... And seems to be searching for something in
+particular, probably the scooter she was driving around. Did she misplace it?
+Chances are she wrecked it, because even in 2064, women are still horrible
+drivers. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	2
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+	Cash:	25
+	Bank:	50
+[SKILLS]
+	brawling:	2
+	driving/Bike:	2
+BREAK
+#62108
+Keywords:	man local
+Name:	a local man
+RoomDesc:$
+A local man is here, wondering where the hell his truck is. 
+
+~
+LookDesc:$
+He seems disoriented.. Did he lose something? He seems to be murmuring
+something about his truck, having apparently misplaced it. Chances are he had
+one too many drinks, parked it somewhere, and just plum forgot where. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	10000000000000000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	35
+	Bank:	55
+[SKILLS]
+	brawling:	3
+	driving/Truck:	3
+	driving/Bike:	2
+	driving/Car:	2
+BREAK
+#62109
+Keywords:	dog stray ragged
+Name:	a stray dog
+RoomDesc:$
+A ragged looking stray dog is sniffing around here. 
+
+~
+LookDesc:$
+This mangy looking pooch is a stray, since it obviously doesn't have a collar
+or tags, hell, it doesn't even have most of its ears, they've been chewed off
+and shredded in fights with the local wildlife. He isn't skinny, so he's
+managed to find and eat plenty of things around the island, but he certainly
+doesn't look all that healthy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	3
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	50
+	Weight:	20
+[SKILLS]
+	brawling:	3
+BREAK
+#62110
+Keywords:	officer airport customs
+Name:	an airport customs officer
+RoomDesc:$
+An airport customs officer is behind the counter here. 
+
+~
+LookDesc:$
+The short little fellow behind the counter appears to work for the customs
+department here at Saint Patricks International Airport, so if you're looking
+for the proper paperwork to get onto an airplane, he'd be the one to talk to.
+He stands upon a raised portion of floor behind the counter so he can be at
+eye level to normal (meta)humans, and it seems all of his utensils have been
+retrofitted for use by dwarven hands, whether its his computer keyboard nearby
+or the height of his filing cabinets. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	80
+[SKILLS]
+	brawling:	6
+BREAK
+#62111
+Keywords:	tourists group disgruntled
+Name:	a group of disgruntled tourists
+RoomDesc:$
+A group of disgruntled tourists line the seats infront of the displays. 
+
+~
+LookDesc:$
+These tourists sure do look upset! Chances are it's because their flights keep
+getting delayed or canceled all together for various reasons. Whichever their
+circumstances, they all share the same quality of being mighty disgruntled at
+their treatment by the airline. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	4
+	Cash:	80
+	Bank:	180
+[SKILLS]
+	brawling:	5
+BREAK
+#62112
+Keywords:	Krishna Hare group
+Name:	a group of Hare Krishna
+RoomDesc:$
+A group of Hare Krishna chant and ask for donations from passerbys. 
+
+~
+LookDesc:$
+Known as followers of the "International Society for Krishna Consciousness",
+(ISKCON), or better known as the Hare Krishna Movement. They are decked out in
+their traditional saffron robes and chant the Maha Mantra as they ask and
+accept donations from tourists either arriving or departing from the airport
+terminal and lobby. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	150
+[SKILLS]
+	brawling:	6
+BREAK
+#62113
+Keywords:	ork baggage handler
+Name:	an ork baggage handler
+RoomDesc:$
+An ork baggage handler is here, sifting through luggage. 
+
+~
+LookDesc:$
+This ork grunt has been put in charge of making sure none of the luggage
+pouring in from the loading down jams the baggage rollers, and if they do, to
+promptly straighten the matter out before it becomes an issue. He effortlessly
+puts his miniature trog strength to use by manhandling other peoples luggage,
+obviously not all that worried about damaging. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	90
+	Cash:	90
+	Bank:	25
+[SKILLS]
+	brawling:	5
+BREAK
+#62114
+Keywords:	salesman airport
+Name:	an airport luggage saleswoman
+RoomDesc:$
+An airport luggage saleswoman is here, helping out potential customers. 
+
+~
+LookDesc:$
+This fairly good looking lady is in charge of the sales department here at the
+luggage shop, which as you might expect, caters to tourists who have
+conveniently had their previous luggage misplaced by the airline. She greets
+everyone potential customer with a warm smile and offers as much help as
+possible, along with a bit of coercement towards the more expensive brands
+they have on sale here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+	brawling:	4
+BREAK
+#62115
+Keywords:	clerk check-in Viltz Motel
+Name:	a check-in clerk for the Viltz Motel
+RoomDesc:$
+A clerk behind the check-in desk here helps folks to their rooms. 
+
+~
+LookDesc:$
+The clerk here seems to be an older dwarven fella with a nametag that reads
+"Henry", who is all too happy to help anyone interested (and has the cash) to
+check into one of the rooms here at the Viltz Motel. While it may not be the
+best place around, it certainly beats any of the coffin hotels around the
+city. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	7
+	Cha:	6
+	Int:	6
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	90
+[SKILLS]
+	brawling:	8
+BREAK
+#62116
+Keywords:	bouncer troll gruff
+Name:	a gruff looking troll bouncer
+RoomDesc:$
+A gruff looking troll bouncer stands here, arms crossed, looking badass. 
+
+~
+LookDesc:$
+This big ol' sum bitch towers over the entrance of the cantina, making it
+almost immediately known that he's the bouncer in this joint. His horns are
+thick and curly, almost covering his large head as if they were a helmet. His
+tusks are capped with ^Liron^N, and you can almost swear you saw a ^Ygold^N tooth in
+that gangly maw of his. He doesn't have to step in most of the time, in fact,
+his mere presence is enough to keep most people in line. So, he does what he
+does best, stands there looking like one tough S.O.B., and boy does he pull it
+off well. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000100000000001010
+AffFlags:	1000001000
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	10
+	Str:	14
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	10
+[POINTS]
+	Height:	280
+	Weight:	150
+	Ballistic:	8
+	Impact:	8
+	Cash:	155
+[SKILLS]
+	brawling:	8
+	edged weapons:	7
+BREAK
+#62117
+Keywords:	elven swarthy chummer
+Name:	a swarthy looking elven chummer
+RoomDesc:$
+A swarthy looking elven chummer is here, trying to mess up the orks shot. 
+
+~
+LookDesc:$
+He's a swarthy looking chummer alright, pretty scarred up as well, probably
+from all the bar fights he's been in. If there's any indication as to why he
+would get into so many fights, it's obvious after a few moments to watching
+him ridicule and harass the ork he's playing pool with, obviously trying to
+get his buddy to mess up the shot he has lined up. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	7
+	Impact:	7
+	Cash:	150
+[SKILLS]
+	brawling:	6
+	clubs:	6
+BREAK
+#62118
+Keywords:	ork scarred
+Name:	a heavily scarred ork
+RoomDesc:$
+A heavily scarred ork is here, trying to line up a shot. 
+
+~
+LookDesc:$
+He has scars on his face, neck, arms and hands, way too many to count. One of
+his tusks is chipped and broken off, leaving a jagged edge that gives him a
+bit of a lisp, which his elven chummer is all too eager to make fun of him
+about. He seems to be trying his best to concentrate and line up his shot on
+the pool table, but his buddy isn't making that an easy task. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	110
+	Ballistic:	7
+	Impact:	7
+	Cash:	155
+[SKILLS]
+	brawling:	7
+	clubs:	7
+BREAK
+#62119
+Keywords:	pirate retired
+Name:	a retired pirate
+RoomDesc:$
+A retired pirate is seated here, downing a glass of swill. 
+
+~
+LookDesc:$
+If you want to be polite, he's "retired", but if you want to be realistic,
+he's just a drunk who could no longer hack it as a crew hand, probably because
+he's missing one of them. Instead, he sports upon his stump of a hand a
+stereotypical hook hand, yes, the kind you see in those trideo specials and
+movies, kinda cliche. He seems rather soused, most likely due to all the swill
+he's been chugging during his downtime, which is always. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Ballistic:	4
+	Impact:	4
+	Cash:	125
+[SKILLS]
+	brawling:	5
+BREAK
+#62120
+Keywords:	Philomene muttonchops mutton chopper grey-haired man
+Name:	Philomene the Mutton Chopper
+RoomDesc:$
+A grey-haired man with a bitchin' set of muttonchops is relaxing here. 
+
+~
+LookDesc:$
+This old grey-haired fellow is, without a doubt, sporting the most bitchin'
+set of mutton chops you've ever laid eyes upon. He only has a little bit of
+hair on the top of his head left, since apparently most of it decided to
+migrate to his face instead. One of his eyes is a milky white colour, and not
+because its a cyber replacement, but because it's just plain fragged all to
+hell. Chances are he's a pirate, because with an appearance like his and a
+nickname like "Philomene the Mutton Chopper", you're sure he's done more than
+just grew his facial hair out to get a name like that. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	10
+	Str:	10
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	12
+[POINTS]
+	Height:	200
+	Weight:	90
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	brawling:	10
+BREAK
+#62121
+Keywords:	Campanel barkeep
+Name:	Campanel the barkeep
+RoomDesc:$
+Campanel the barkeep is here, wiping down the counter. 
+
+~
+LookDesc:$
+Big, tough, and probably good to have on your side in a fight, all of these
+things are what the vision of Campanel the barkeep brings to mind. He's got
+arms like truck tires and fists like cinderblocks, and hell, he's a human!
+Chances are he would have little trouble indimidating the largest of trolls,
+and if the rumors are to be believed, he's done more than just indimidate any
+unfortunate saps who though he let the bouncer handle all the ass kicking
+around his joint. He briefly looks up from his duty of cleaning glasses and
+wiping down the bar counter with a rag, offering a little up nod and waiting
+to hear your order. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	10
+[POINTS]
+	Height:	210
+	Weight:	100
+[SKILLS]
+	brawling:	10
+BREAK
+#62122
+Keywords:	maitre'd elderly man
+Name:	an elderly maitre'd
+RoomDesc:$
+An elderly maitre'd politely greets patrons as they enter. 
+
+~
+LookDesc:$
+This elderly gentleman is the person in charge of assigning customers to
+tables and dividing the dining area into areas of responsibility for the
+various servers on duty, as well as the person who receives and records
+reservations for dining. He is the first person to greet any patrons that walk
+through the door, as well as those who phone in for reservations, so it goes
+without saying that his manners be held accountable and are used as a standard
+for all other staff members. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	6
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	4
+	Impact:	4
+	Cash:	150
+	Bank:	75
+[SKILLS]
+	brawling:	7
+BREAK
+#62123
+Keywords:	waitress classy elven
+Name:	a classy elven waitress
+RoomDesc:$
+A classy elven waitress sees to the needs of the clientele. 
+
+~
+LookDesc:$
+This classy broad is dressed in a nice and conservative, professional manner,
+while still showing off hints of her natural curves beneath. She has a warm,
+welcoming smile and her fluidly smooth movements would make many heavily wired
+street samurais green with envy as she sees to the needs of patrons, weaving
+between tables and clientele masterfully to take orders. 
+~
+ArriveMsg:	smoothly steps in from
+LeaveMsg:	smoothly steps
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+	brawling:	4
+BREAK
+#62124
+Keywords:	Vistoire Montplaisir manager
+Name:	Vistoire Montplaisir
+RoomDesc:$
+The manager, Vistoire Montplaisir, is seated behind his desk here. 
+
+~
+LookDesc:$
+Just by glancing at this elven fellow, you can tell he's been wealthy since
+birth. Vistoire Montplaisir runs this restaurant, which was passed down to him
+from his father, who in turn received it from his own father, the business
+having been in the family for almost a century now. He has an athletic build,
+and if you're not mistaken, seems to have a bit of chrome, as a ^Ygold^N-^Yplated^N
+datajack is noticable near his temple. The manner in which he moves also hints
+towards other chrome or wares concealed beneath that deceptively slender frame
+of his. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	10
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	7
+	Impact:	7
+	Cash:	125
+	Bank:	225
+[SKILLS]
+	brawling:	6
+	clubs:	7
+	pistols:	7
+BREAK
+#62125
+Keywords:	gentleman johnson wealthy Mister Who
+Name:	Mister Who
+RoomDesc:$
+A wealthy looking gentleman in a fine suit is seated here. 
+
+~
+LookDesc:$
+Mister Who...? You don't need to know that. All you need to know is he's the
+big man around here, a Johnson who caters to clientele who would rather remain
+nameless, as would he. He is an obviously wealthy gentleman, as indicated by
+the fine suit he's decked out in, which is probably worth several years worth
+of shadowrunning to aquire just enough cash to find out the store the
+cufflinks are sold at. Yes, it's that god damn fine. He smoothly takes a drag
+from his cigar before offering you even so much as a glance, and even while
+sitting down, he still manages to look down upon you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	15
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	brawling:	12
+BREAK
+#62126
+Keywords:	bartender traditionally
+Name:	a traditionally dressed bartender
+RoomDesc:$
+A traditionally dressed bartender polishes a glass behind the counter. 
+
+~
+LookDesc:$
+This classy looking barkeep is dressed in a traditional garb, consisting of a
+snazzy black vest and a clean and pressed white undershirt, complete with a
+small black bowtie. He greets anyone who approaches the bar with a warm smile
+and nod of recognition before asking if there is something he can help them
+with, perhaps a nice stiff drink? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	8
+BREAK
+#62127
+Keywords:	priest voodounista
+Name:	a voodounista priest dressed in robes
+RoomDesc:$
+A voodounista priest dressed in robes chants a prayer at the altar. 
+
+~
+LookDesc:$
+This voodoo priest is decked out in the robes you would expect from a priest
+during religious ceremonies, which are loose and flowing about his slender
+form. From the first glance, it's all but blatant that he is a practitioner of
+the arts, from his demeanor to his appearance, they all indicate that he is
+well aware of the stigmata attached to those who practice the arts. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	6
+	Int:	8
+	Wil:	8
+	Mag:	8
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	4
+	Impact:	4
+	Cash:	125
+[SKILLS]
+	brawling:	6
+	whips & flails:	6
+	clubs:	6
+BREAK
+#62128
+Keywords:	zombie servant
+Name:	a zombie servant
+RoomDesc:$
+A zombie servant is here, standing guard at their post. 
+
+~
+LookDesc:$
+This servant is little more than an animated corpse, an empty meat puppet with
+no free will or thought of its own. Zombies simply follow their masters
+orders, which is what they do, unflinchingly and as responsive as one would
+expect from a man long dead. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000101010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	10
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	6
+	Impact:	6
+[SKILLS]
+	brawling:	6
+	edged weapons:	6
+BREAK
+#62129
+Keywords:	zombie servant
+Name:	a zombie servant
+RoomDesc:$
+A zombie servant is here, standing guard at their post. 
+
+~
+LookDesc:$
+This servant is little more than an animated corpse, an empty meat puppet with
+no free will or thought of its own. Zombies simply follow their masters
+orders, which is what they do, unflinchingly and as responsive as one would
+expect from a man long dead. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000101010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	8
+[POINTS]
+	Height:	180
+	Weight:	80
+	MaxPhys:	0
+	Ballistic:	8
+	Impact:	6
+[SKILLS]
+	brawling:	8
+	edged weapons:	8
+BREAK
+#62130
+Keywords:	serviteur guard heavily muscled
+Name:	a serviteur with a heavily muscled build
+RoomDesc:$
+A serviteur with a heavily muscled build stands guard here. 
+
+~
+LookDesc:$
+The serviteur, those whose belief in voodoo is so strong that they are able to
+be possessed by the Loa themselves, and are followers of an undoubtedly
+powerful houngan. While their physical stature is impressive on its own, they
+are likely being enhanced by the power of the spirits that have taken up
+residence within their bodies. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000101010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	4
+	Int:	8
+	Wil:	8
+	Mag:	6
+[POINTS]
+	Height:	200
+	Weight:	90
+	Ballistic:	6
+	Impact:	6
+	Cash:	165
+[SKILLS]
+	brawling:	7
+	edged weapons:	7
+BREAK
+#62131
+Keywords:	serviteur guard heavily muscled
+Name:	a serviteur with a heavily muscled build
+RoomDesc:$
+A serviteur with a heavily muscled build stands guard here. 
+
+~
+LookDesc:$
+The serviteur, those whose belief in voodoo is so strong that they are able to
+be possessed by the Loa themselves, and are followers of an undoubtedly
+powerful houngan. While their physical stature is impressive on its own, they
+are likely being enhanced by the power of the spirits that have taken up
+residence within their bodies. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000101010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	14
+	Str:	14
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	8
+[POINTS]
+	Height:	200
+	Weight:	90
+	Ballistic:	8
+	Impact:	8
+	Cash:	175
+[SKILLS]
+	brawling:	7
+	pole arms:	7
+BREAK
+#62132
+Keywords:	houngan priest high
+Name:	a high houngan priest
+RoomDesc:$
+A high houngan priest looks quite upset with your presence. 
+
+~
+LookDesc:$
+Decked out in the ceremonial robes befitting a priest of his stature, this
+houngan is well versed in the arts of voodoo. He is a houngan, he who
+communicates and bargains with the Loa, from whom he draws power and gives
+reverence to. Rest assured, his rank as high houngan priest is well earned, so
+tread lightly when speaking with this one. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	10
+	Str:	8
+	Cha:	8
+	Int:	10
+	Wil:	10
+	Mag:	12
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+	Cash:	200
+[SKILLS]
+	brawling:	7
+	edged weapons:	7
+	sorcery:	9
+BREAK
+#62133
+Keywords:	Ghede spirit tall man gentleman
+Name:	a spirit of Ghede
+RoomDesc:$
+A tall man sporting a top hat, black tailcoat and a cane is standing here. 
+
+~
+LookDesc:$
+This odd looking gentleman is decked out in a traditional top hat, black
+tailcoat and clutches within his grasp a fine looking cane. But, something is
+off with his appearance, and for good reason to, for this is the Loa known as
+Ghede, a spirit of voodoo. He offers a wide smile, his thin, wry lips pulling
+back to show off his pearly whites. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000101010
+AffFlags:	101000
+Race:	Elemental
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	200
+	Weight:	90
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	brawling:	10
+BREAK
+#62134
+Keywords:	Sarasses Saint Grande Zombie
+Name:	Saint Sarasses
+RoomDesc:$
+The Grande Zombie, Saint Sarasses himself stands here. 
+
+~
+LookDesc:$
+Sarasses was once a lowly zombie created by the original houngan leader who
+took over the church, but once his master was killed he gained his freedom,
+along with a bit of his power. That was nearly fifty years ago, and since then
+he has grown not only in power, but influence as well. He promptly took over
+the church itself and the followers, dubbed himself Saint Sarasses, and is now
+revered much the same as a diety. Even the mob families and pirate kings know
+of him, and if they don't respect him, they certainly fear him, for good
+reason.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	16
+	Str:	16
+	Cha:	8
+	Int:	16
+	Wil:	16
+	Mag:	20
+[POINTS]
+	Height:	200
+	Weight:	90
+	Ballistic:	8
+	Impact:	8
+	Cash:	850
+	Bank:	550
+[SKILLS]
+	brawling:	12
+	pole arms:	8
+	sorcery:	14
+BREAK
+#62135
+Keywords:	guard airport security
+Name:	an airport security guard
+RoomDesc:$
+An airport security guard stands here, making one last check over paperwork. 
+
+~
+LookDesc:$
+He appears to be your run-of-the-mill security guard, and he's sporting an
+airport security outfit to boot, so his reason for being here is obvious. He
+seems to be busily checking over the paperwork of outgoing passengers before
+they board their plane, just to be sure everything is on the up and up. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	6
+BREAK
+END

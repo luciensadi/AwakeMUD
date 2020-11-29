@@ -1,0 +1,498 @@
+#28400
+Name:	Yeth's Heavy Shop
+Desc:$
+   This is a rather tall and large by width weapons shop. At the northern part
+of it, there is a counter, where Yeth stands, taking a look at the browsing
+people. There are many lights organized on the ceiling, illuminating the
+ambient very well. Many shelves are organized in collumns, showing off his
+heavy ware. Rocket launchers, machine guns, shotguns, grenades, etc. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	28402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28401
+Name:	Yamato's Ninja Gear
+Desc:$
+   This is a round shaped room, at the center, there is a counter in a circle
+format. Inside it, Yamato sits on a chair in front of a computer, typing very
+fast and paying attention as you browse his gear. There is a good
+illumination, many shelves organized in circles show his very expensive ninja
+ware. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	28405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28402
+Name:	A Corner in The Hallway
+Desc:$
+   This is a corner in the hallway that circles the main structure of the
+mall. There are quality shops everywhere. The mall's structure and its walls
+are made of an extremely resistant material, able to sustain even the most
+powerful explosions. Many shoppers walk from place to place, some of the calm,
+others hasty. People of all races and jobs come to shop here. There are lights
+strategically organizated on the ceiling to provide the best illumination
+possible, and make the customers feel home. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	28400
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	28409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	28406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28403
+Name:	A Corner in The Hallway
+Desc:$
+   This is a corner in the hallway that circles the main structure of the
+mall. There are quality shops everywhere. The mall's structure and its walls
+are made of an extremely resistant material, able to sustain even the most
+powerful explosions. Many shoppers walk from place to place, some of the calm,
+others hasty. People of all races and jobs come to shop here. There are lights
+strategically organizated on the ceiling to provide the best illumination
+possible, and make the customers feel home. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	28406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	28407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	28410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28404
+Name:	A Corner in The Hallway
+Desc:$
+   This is a corner in the hallway that circles the main structure of the
+mall. There are quality shops everywhere. The mall's structure and its walls
+are made of an extremely resistant material, able to sustain even the most
+powerful explosions. Many shoppers walk from place to place, some of the calm,
+others hasty. People of all races and jobs come to shop here. There are lights
+strategically organizated on the ceiling to provide the best illumination
+possible, and make the customers feel home. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	28408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	28412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	28407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28405
+Name:	A Corner in The Hallway
+Desc:$
+   This is a corner in the hallway that circles the main structure of the
+mall. There are quality shops everywhere. The mall's structure and its walls
+are made of an extremely resistant material, able to sustain even the most
+powerful explosions. Many shoppers walk from place to place, some of the calm,
+others hasty. People of all races and jobs come to shop here. There are lights
+strategically organizated on the ceiling to provide the best illumination
+possible, and make the customers feel home. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	28401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	28408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	28409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28406
+Name:	The Mall Hallway
+Desc:$
+   The mall's hallway is big, wide and tall. The walls are made of an
+extremely resistant metals lacing, able to sustain the most powerful
+explosions. The color theme consists of a deep dark ground, similar to a
+street, where the shoppers walks, some of the clamly, others almost running.
+People of all the races can be seen wandering around. The walls are dark grey,
+with some black sections, maintaining the dark aspect of the hallway. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	28402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	28403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28407
+Name:	The Mall Hallway
+Desc:$
+   The mall's hallway is big, wide and tall. The walls are made of an
+extremely resistant metals lacing, able to sustain the most powerful
+explosions. The color theme consists of a deep dark ground, similar to a
+street, where the shoppers walks, some of the clamly, others almost running.
+People of all the races can be seen wandering around. The walls are dark grey,
+with some black sections, maintaining the dark aspect of the hallway. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	28404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	28403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28408
+Name:	The Mall Hallway
+Desc:$
+   The mall's hallway is big, wide and tall. The walls are made of an
+extremely resistant metals lacing, able to sustain the most powerful
+explosions. The color theme consists of a deep dark ground, similar to a
+street, where the shoppers walks, some of the clamly, others almost running.
+People of all the races can be seen wandering around. The walls are dark grey,
+with some black sections, maintaining the dark aspect of the hallway. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	28405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	28404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door steel
+	ToVnum:	28414
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28409
+Name:	The Mall Hallway
+Desc:$
+   The mall's hallway is big, wide and tall. The walls are made of an
+extremely resistant metals lacing, able to sustain the most powerful
+explosions. The color theme consists of a deep dark ground, similar to a
+street, where the shoppers walks, some of the clamly, others almost running.
+People of all the races can be seen wandering around. The walls are dark grey,
+with some black sections, maintaining the dark aspect of the hallway. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	28405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	28402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28410
+Name:	Riper-Doc Dagobah's Cybershop
+Desc:$
+   This place looks more like a surgery room. Its decoration is completely
+white. There are many mirrors and glasses spread around the shop. On the
+southwestern corner, there is a balcony, where Dagobah stands, selling his
+stuff. There are just a few customers here, many of them just looking for
+being curious. Dagobah's ware is expensive, but extremely useful for the one
+who pays the right price. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	28403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden
+	ToVnum:	28411
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	4
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28411
+Name:	Assis' Stethic Clinic
+Desc:$
+   This clinic is completely decorated with white color. There are many
+mirrors and glasses estrategically organized to make this place look bigger
+than it really is. Except for a circle shaped counter in the center, the room
+is empty. On the center of the circle, a man sits in a chair, smiling as you
+enter. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door wooden
+	ToVnum:	28410
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	4
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28412
+Name:	Richard's Electronics
+Desc:$
+   The room is rather big, looking more like a storage depot. There are many
+columns of crates containing phones, radios, electronic and medic kits,
+electronics in general. On a corner, there is a small wooden desk where
+Richard sits, waiting you to order anything. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	28404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28413
+Name:	Maul's Military
+Desc:$
+   This is a very large, both by height and width, storage depot. There are
+many shelves and crates organized in rows and collumns, some of them opened,
+to allow the customers to browse the stuff. Maul sits in a chair in his
+balcony to the northeast. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28414
+Name:	The Lloyd's Main Elevator (3rd Floor)
+Desc:$
+   This is the third floor of the Lloyd's Mall building. The elevator is
+considerably well kept, it's walls are very resistant looking, being made of a
+material similar to the used on tanks construction. 
+~
+Flags:	101001100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door steel
+	ToVnum:	28408
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	28415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#28415
+Name:	The Lloyd's Main Elevator (2nd Floor)
+Desc:$
+   This is the second floor of the Lloyd's Mall building. The elevator is
+considerably well kept, it's walls are very resistant looking, being made of a
+material similar to the used on tanks construction. 
+~
+Flags:	101001100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	28414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

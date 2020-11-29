@@ -1,0 +1,641 @@
+#20300
+Name:	Bellevue Way/Interstate 90 Junction
+Desc:$
+   The street splits off to the south into two parallel ramps that diverge and
+meet at the westbound and eastbound lanes of Interstate 90.  The sidewalk ends
+here, and a traffic control light flashes from green to red at regular
+intervals, in a sad attempt at controlling the traffic problems on the
+Interstate.  On top of the light post is a four-way camera designed to capture
+a 360 degree view of the area.  To the north, Bellevue Way stretches out,
+curving northwesterly a ways up.  The street is lined with high pine trees,
+and medium sized suburban track houses. 
+~
+NightDesc:$
+   The street splits off to the south into two parallel ramps that diverge and
+meet at the westbound and eastbound lanes of Interstate 90.  The streets are
+illuminated with a golden glow from sodium-based streetlights.  A haze
+surrounds the light sources, from the usual humidity of the Seattle region's
+marine climate.  The sidewalk ends here, and a traffic control light flashes
+from green to red at regular intervals, in a sad attempt at controlling the
+traffic problems on the Interstate.  On top of the light post is a four way
+camera designed to capture a 360 degree view of the area.  To the north,
+Bellevue Way stretches out, curving northwesterly a ways up.  The street is
+lined with intensely bright sodium lamps, whose light is obscured by the pine
+trees that stand like dark guardians over the street traffic. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	4
+Cover:	3
+X:	30
+Y:	120
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	12
+[EXIT north]
+	ToVnum:	20301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20301
+Name:	Bellevue Way, South End
+Desc:$
+   Along both sides of the street are high pine trees and boundaries of
+wrought iron fences of one and a half meters in height at the sides of each
+sidewalk.  Beyond the fences, track houses of medium size with driveways and
+garages line the street in this affluent suburban landscape.  Along the
+sidewalk, hopscotch courts are drawn in pink and white chalk, as well as a few
+doodles scribbled by children.  The air is fragrant and sweet, with only a
+mild tinge of pollutants.  The traffic is of medium density, usually
+consisting of a few corporate trucks and many clean and well-cared-for
+commuter cars. 
+~
+NightDesc:$
+   Along both sides of the street are high pine trees that obscure the golden
+cast of the sodium vapor streetlights spaced at regular intervals.  Beyond the
+darkened veil of brush are the porch-lights and interior lights of the
+suburban track houses built at each side of the street.  To the north,
+Bellevue Way runs into 113th at a "T" intersection, lit up with what appears
+to be a gas station and convenience store's florescent lighting.  To the
+south, the lights of Interstate 90 dominate the landscape, marking Bellevue's
+southern boundary. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	5
+Cover:	7
+X:	30
+Y:	120
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	20300
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	20302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20302
+Name:	Bellevue & 113th Street SE
+Desc:$
+   Bellevue Way meets with 113th Street here at an intersection.  113th Street
+runs south into a medium security corporate residential zone, and to the
+northwest, it hooks off into the wooded Bellefields Nature Park.  At this
+intersection, a gas station is set up to the east, selling petrochem and
+recharges to commuters.  On the west side of the street, a run-down
+convenience store stands, with two shady-looking individuals standing out
+front.  The sign on the store is yellow, and reads "Quick Stop Groceries" with
+the 'Stop' inside a red stop-sign.  A sheet is draped over the window on the
+left of the convenience store with the words "I ASSURE YOU WE ARE OPEN"
+scrawled on it in black ink. 
+~
+NightDesc:$
+   Bellevue Way meets with 113th Street here at an intersection.  113th runs
+south into a medium security corporate residential zone, and to the northwest
+it hooks off into the wooded Bellefields Nature Park.  A road gate into the
+park is closed, as the park is closed during the nighttime hours.  The streets
+are illuminated by yellow sodium vapor lamps, throwing a golden cast onto the
+wet streets.  On the east side of the street, a petrochem station lit up with
+phosphorescent lights serves nighttime commuters.  On the west side of the
+street, a convenience store stands, with two shady-looking individuals
+standing out front.  The sign on the store is yellow, and reads "Quick Stop
+Groceries" with the 'Stop' inside a red-stopsign. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	4
+X:	40
+Y:	120
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	20301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20306
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	20304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20303
+Name:	Front of the Quick Stop
+Desc:$
+   The front of the Quick Stop is a dingy gray color, stained from years in
+the rain and lax upkeep.  A rough  tarmac parking lot sits here, with a couple
+of mid-range cars parked in it and mud collecting in the low dips of the
+asphalt.  A grayish (but once white) tarp drapes the left window of the
+convenience store with the words "I ASSURE YOU WE ARE OPEN" scrawled on it in
+black shoe polish.  Built into the Quick Stop is a second store, RST Simsense,
+Inc., which rents and sells cheap simsense chips (of the legal variety).
+Standing in front of the Quick Stop are two shady looking individuals, a
+scrawny elf with the tendency to dance around and rap, and a chubby man with a
+beard and a baseball cap, worn backwards. 
+~
+NightDesc:$
+   The front of the Quick Stop is illuminated by the yellow Quick Stop sign,
+an incandescent light bulb at the store's entrance, and the yellow
+sodium-vapor street lights of the intersection.  A rough tarmac parking lot
+sits here with no cars parked in it, and mud collecting in the low dips of the
+asphalt.  Built into the Quick Stop is a second store, RST Simsense, Inc.,
+which rents and sells cheap simsense chips (of the legal variety).  Standing
+in front of the store are two shady-looking individuals; a scrawny elf with
+the tendency to dance around and rap, and a chubby man with a beard and a
+baseball cap, worn backwards. 
+~
+Flags:	100000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	7
+X:	10
+Y:	10
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	20302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20304
+Name:	Bellevue Way SE
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	20302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	20305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20305
+Name:	Bellevue Way SE
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	20304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20306
+Name:	113th Street SE
+Desc:$
+   The street is narrow, with two solidly built sidewalks at each side,
+complete with rain gutters, usually carrying rivulets of water into regularly
+positioned drains.  At each side of the street are track houses, with garages
+and driveways, cordoned off with picket fences and shrubbery.  Stapled to a
+telephone pole are a small collection of "LOST PET" signs with pictures of
+cats and dogs, and "HAVE YOU SEEN ME" flyers with the faces of lost or missing
+children. 
+~
+NightDesc:$
+   The street is narrow, with two solidly built sidewalks at each side,
+complete with rain gutters, usually carrying rivulets of water that twinkle
+with a golden glow from the yellow sodium-vapor streetlights that illuminate
+the street.  At each side of the street are track houses, usually lit up with
+incandescent porch lights, cordoned off from the street with picket fences and
+shrubbery.  The street glows with the reflected golden light of the yellow
+sodium-vapor streetlights. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	4
+Cover:	5
+X:	30
+Y:	75
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	20302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20307
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20307
+Name:	113th Street SE
+Desc:$
+   A narrow street with thick concrete sidewalks built into each side, and
+rain gutters carrying rivulets of water into regularly positioned drains.  On
+both sides of the street are modest track houses, painted in pastel colors,
+complete with garages and concrete or tarmac driveways.  The parcels they are
+built on are cordoned off from the public street and each other with simple
+picket fences and shrubs.  The air smells fresh and fragrant. 
+~
+NightDesc:$
+   A narrow street with thick concrete colors that glisten with a golden cast
+from the sodium-vapor streetlights positioned at regular intervals, flickering
+on occasion.  On both sides of the streets are modest track housdes,
+illuminated with incandescent porch lights, complete with concrete driveways
+and garages.  The parcels they are built on are cordoned off from the public
+street and each other with simple picket fences and shrubs.  The air smells
+fresh and fragrant on this quiet street. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	3
+Cover:	6
+X:	30
+Y:	75
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	20306
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20308
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20308
+Name:	113th Street SE
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	20307
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20309
+Name:	113th and 34th Street SE
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	20308
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20310
+Name:	34th Street SE
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	20309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	20311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20311
+Name:	112th & 34th Street SE
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	20312
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	20310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20312
+Name:	112th Street
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	20313
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20313
+Name:	112th Street
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	20314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20312
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20314
+Name:	112th Street
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	20315
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	20313
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#20315
+Name:	112th Street, North End
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	20314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

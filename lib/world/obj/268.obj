@@ -1,0 +1,256 @@
+#26890
+Keywords:	a massive program, nearly finished compiling
+Name:	a massive program, nearly finished compiling
+RoomDesc:$
+a huge glowing sphere of code, with bits flying towards it as it compiles.~
+LookDesc:$
+a huge swirl of bits ones and zeros, in forming a sphere, which gets so dense
+towards the center as to be black as the darkest relms of existance. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	100
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	100
+BREAK
+#26891
+Keywords:	huge book 
+Name:	a very large book
+RoomDesc:$
+a huge book sits here~
+LookDesc:$
+This book is massive filled with enough obscure scrawls to keep any academic
+busy for quite some time. 
+~
+Type:	Spell Formula
+WearFlags:	100000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	20
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	8
+BREAK
+#26894
+Keywords:	box parcel large package
+Name:	a large brown paper wrapped package tied with security wire, and sealed
+RoomDesc:$
+a large paper parcel has been left here by its owner.~
+LookDesc:$
+a large paper parcel its about 1 foot by 2 feet long, very heavy, wrapped in
+brown paper, tied with security wire and sealed so breaking the seal would be
+obvious.  other than that, it looks perfectly normal. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#26895
+Keywords:	gloves silver fingerless
+Name:	a pair of silver fingerless gloves. 
+RoomDesc:$
+a pair of silver gloves have been left there by Maria, please return them~
+LookDesc:$
+a pair of feminine fingerless silver gloves which have a strange metallic
+quicksilver appearance. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	2.00
+	Barrier:	24
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#26896
+Keywords:	silver pants
+Name:	shimmering silver pants
+RoomDesc:$
+a pair of stylish silver pants is here, designed to show of a womans curves. ~
+LookDesc:$
+a stylish pair of silver pants, designed for a woman to show off her curves,
+it looks like it was made out of incredibly expensive fabric 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	100100000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	4
+BREAK
+#26897
+Keywords:	breasts double d huge milk
+Name:	a pair of huge double D breasts
+RoomDesc:$
+a beautifully scuplted pair of mammaries.~
+LookDesc:$
+a huge pair of tits, perfectly formed, perky, and enormous. with large dark
+nipples and flawless skin.  the nipples seem to be wet with milk. which just
+increases the erotic nature of such fine mammeries. 
+~
+Type:	Liq Container
+WearFlags:	1001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100000
+	Val1:	1000000
+	Val2:	10
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	1
+BREAK
+#26898
+Keywords:	1967 stratocaster electric guitar
+Name:	a silver 1967 stratocaster electric guitar
+RoomDesc:$
+a silver 1967 stratocaster electric guitar lies here, with Maria Mercurials scrawling autograph on it.~
+LookDesc:$
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	100101000000
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	100000
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Magic
+	Modifier:	10
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	20
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	20
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	50
+[AFFECT 4]
+	Location:	Quickness
+	Modifier:	20
+BREAK
+#26899
+Keywords:	headphones phat sexy tora professional
+Name:	a sexy pair of professional silver headphones
+RoomDesc:$
+A sexy pair of professional grade headphones~
+LookDesc:$
+silver plated, with heavy earpeaces, and a broad headband, they look like the
+highest caliber of equipment also personalized, under the tag number is the
+engraved name "Tora" could these belong to the famous quicksilver dj? 
+~
+Type:	Worn
+WearFlags:	10000000000010101
+ExtraFlags:	100000000011
+AffFlags:	1000000000000000
+Material:	ceramic
+[POINTS]
+	Weight:	4.00
+	Barrier:	32
+	Cost:	90000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	10
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	20
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-20
+[AFFECT 3]
+	Location:	Ballistic
+	Modifier:	20
+[AFFECT 4]
+	Location:	Impact
+	Modifier:	20
+[AFFECT 5]
+	Location:	Magic
+	Modifier:	30
+BREAK
+END

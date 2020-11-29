@@ -1,0 +1,670 @@
+#11201
+Keywords:	Wageslave business suit
+Name:	DechTech Employee
+RoomDesc:$
+A wageslave in a business suit 
+
+~
+LookDesc:$
+Moving quickly about the building, this wageslave looks as though he is
+frantically trying to catch up with the demanding tasks assigned to him.  He
+has no time to even look at you as he quickly rushes by 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	3
+	Int:	6
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+	Cash:	500
+	Bank:	1000
+[SKILLS]
+BREAK
+#11202
+Keywords:	DechTech Security Guard
+Name:	DechTech guard
+RoomDesc:$
+A DechTech security guard stands here 
+
+~
+LookDesc:$
+Standing proudly in his DechTech security uniform, this guard is brandishing a
+sub-machine gun that looks quite capable of tearing you a new hoop hole
+chummer.  Not one to be trifled with, this guard looks as though he is
+ex-millitary.  The DechTech guards are very highly trained in any case 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	1000000000
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	110
+	Ballistic:	4
+	Impact:	2
+	Cash:	500
+	Bank:	1000
+[SKILLS]
+	sub-machine guns:	6
+	athletics:	4
+BREAK
+#11203
+Keywords:	A finely dressed ork
+Name:	A finely dressed ork
+RoomDesc:$
+A finely dressed, well groomed ork sits here. 
+
+~
+LookDesc:$
+Looking as though he was born into royalty, this ork has been groomed to
+perfection.  His eyes hold a certain proud characteristic found only in the
+most refined of people.  His hair has been pulled back into a tight scalp
+lock, and he is dressed for success.   
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	6
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	100
+	Ballistic:	3
+	Cash:	1000
+	Bank:	10000
+[SKILLS]
+BREAK
+#11204
+Keywords:	DechTech full body armor
+Name:	DechTech Guard in full body armor
+RoomDesc:$
+A DechTech guard in full body armor stands here 
+
+~
+LookDesc:$
+Are you talkin to me?  Are YOU talkin to ME?!?  That comes to mind as you gaze
+upon this trigger happy guard.  His body movements are swift, and he twitches
+involuntarily as though he has been cybered up.  A modified assault rifle is
+gripped firmly between both hands, and he eyes you suspiciouly 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	125
+	Ballistic:	7
+	Impact:	7
+	Cash:	500
+	Bank:	1000
+[SKILLS]
+	assault rifles:	7
+	sub-machine guns:	7
+BREAK
+#11205
+Keywords:	Midge elf computer 
+Name:	Midge
+RoomDesc:$
+Midge stands near one of the display cases, observing the contents inside 
+
+~
+LookDesc:$
+He looks to be rather thin, and is probably too smart for his own good.  Midge
+looks young, but intelligent none the less.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Grenade Launcher
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	10
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11206
+Keywords:	Chomp
+Name:	Chomp
+RoomDesc:$
+Chomp waits behind the counter, starring at you 
+
+~
+LookDesc:$
+A frail looking male human with a datajack implanted on the side of his head.
+He sits behind the counter eyeing you wearily, ready to make a sale.  His name
+tag reads 'Chomp' 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11207
+Keywords:	Smith human male
+Name:	Smith
+RoomDesc:$
+Smith sits behind the counter, waiting to help you 
+
+~
+LookDesc:$
+Yep, he's human alright.  Has the eyes, the nose.. Oh my god, where'd his ears
+go?!?  In any case his name tag reads  Smith 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11208
+Keywords:	Zim
+Name:	Zim
+RoomDesc:$
+Zim moves towards you asking, "Can I help you with anything?" 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11209
+Keywords:	Cid
+Name:	cid
+RoomDesc:$
+Cid stands behind the counter, starring at you blankly 
+
+~
+LookDesc:$
+Cid looks like he ended up on the wrong end of a nail gun.  He has more
+piercings than you dare to count, and probably some in places you'd rather not
+think about.   
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11210
+Keywords:	Jed
+Name:	Jed
+RoomDesc:$
+Jed sits behind the counter readng a magazine 
+
+~
+LookDesc:$
+He seems to be rather interested in that issue of skin.  You wonder if he even
+heard you enter the store 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11211
+Keywords:	Meat and spuds employee
+Name:	A meat and spuds employee
+RoomDesc:$
+A meat and Spuds employee waits for your order behind the counter 
+
+~
+LookDesc:$
+He looks like a vegetarian 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11212
+Keywords:	Mario
+Name:	Mario
+RoomDesc:$
+Mario sits behind the counter flinging dough 
+
+~
+LookDesc:$
+He seems to be a rather fat looking italian.   
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11213
+Keywords:	beefy burrito employee
+Name:	A beefy burrito employee
+RoomDesc:$
+A beefy burrito employee in a giant burrito costume, awaits your order behind
+the counter 
+
+~
+LookDesc:$
+What a drek stick.  This poor fella has been forced by his superiors to where
+the most humiliating burrito costume you have ever seen.  As if there are any
+non-humiliating burrito costumes 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11214
+Keywords:	Cute little number blue stands behind the counter
+Name:	A fish and chips employee
+RoomDesc:$
+A cute little number in blue stands behind the counter 
+
+~
+LookDesc:$
+She looks about the age where she'd do any type of work to get herself through
+college.  She seems to put on a fake smile as you walk in, and looks at you
+rather condescendingly 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11215
+Keywords:	Mac shack employee
+Name:	A Mac-Shack employee
+RoomDesc:$
+A Mac-Shack employee waits to take your order 
+
+~
+LookDesc:$
+He's a mac-shack employee and proud of it, so don't give em any lip 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11216
+Keywords:	Lee
+Name:	Lee
+RoomDesc:$
+Lee stands behind the cash register wiping down the counter 
+
+~
+LookDesc:$
+This little asian reminds you of the saying, 'dynamite comes in small
+packages' 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11217
+Keywords:	Raspy Old Man
+Name:	Rimsdale
+RoomDesc:$
+A raspy old man sits behind a desk, reading an ancient text 
+
+~
+LookDesc:$
+He peers up at you from behind frail looking spectacles.  As he grins his face
+display a certain intelligence only gained through experience, but his smile
+seems to be missing some teeth.  The name tag on the desk says "Rimsdale". 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11218
+Keywords:	DechTech sixth floor guard
+Name:	DechTech Sixth Floor Guard
+RoomDesc:$
+A DechTech security guard stalks the sixth floor hallways 
+
+~
+LookDesc:$
+As you make eye contact with him you realize he's not bringing up his sub
+machine gun for you to look at! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	125
+	Ballistic:	8
+	Impact:	8
+	Cash:	500
+	Bank:	100
+[SKILLS]
+	sub-machine guns:	10
+	assault rifles:	11
+	machine guns:	10
+BREAK
+#11219
+Keywords:	DechTech Scientist
+Name:	A DechTech Scientist
+RoomDesc:$
+A scientist works here 
+
+~
+LookDesc:$
+Covered head to toe in white paper TyVek coverals, and wearing a surgical mask
+over his face.  This scientist works thanklessly, jotting down notes and
+information. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	8
+	Int:	7
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Cash:	800
+	Bank:	2000
+[SKILLS]
+BREAK
+#11220
+Keywords:	Blonde
+Name:	Blonde
+RoomDesc:$
+A gorgeous looking blonde 
+
+~
+LookDesc:$
+Hot damn this girl is good lookin.  Long flowing blond hair reaches from the
+top of her head down to the floor.  Liquid blue eyes are set into a
+magnificently sculpted face.  She seems to be mute to... The perfect woman. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	1000000000000000000
+Race:	Other
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	150
+	Weight:	100
+	Ballistic:	100
+	Impact:	100
+	Cash:	999999
+	Bank:	999999
+	Karma:	1
+[SKILLS]
+BREAK
+END

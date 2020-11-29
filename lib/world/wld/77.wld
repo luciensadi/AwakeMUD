@@ -1,0 +1,1142 @@
+#7700
+Name:	Renraku Station
+Desc:$
+   Unlike most stations, Renraku tends to emphasise just how much money flows
+through this area. While most others would rather rest on the practicalities
+of a modern monorail station, Renraku prefers to comfort rather than
+facilitate travel. Several sets of glass double doors lead into the huge
+Ticket Foyer up ahead. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	7701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7701
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7700
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7702
+Name:	Northbound Platform
+Desc:$
+   A couple of stragglers wait nearby for the next monorail to come by. The
+quiet hum of electromagnetic energy purrs through the huge railings below, and
+the platform begins to rumble as a train nears. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7703
+Name:	Southbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7704
+Name:	7th & South Dearborn Station
+Desc:$
+   Being one of the busier sectors of the city, 7th & Dearborn is almost
+always congested. Not hanging on too much aesthetics, the station is carved
+out of an old stone exterior, leading into the small ticket foyer ahead. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	6175
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7705
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7704
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7706
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7706
+Name:	Northbound Platform
+Desc:$
+   A couple of stragglers wait nearby for the next monorail to come by. The
+quiet hum of electromagnetic energy purrs through the huge railings below, and
+the platform begins to rumble as a train nears. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7707
+Name:	Westbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7708
+Name:	Yesler Avenue Station
+Desc:$
+   The station is small enough to fit into that troll's pocket over there.
+Barely using up the space deemed for most Stuffer Shacks, it would appear that
+most of the room is taken up by the Ticket Machine further up.  
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	6007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7709
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7710
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7710
+Name:	Northbound Platform
+Desc:$
+   A couple of stragglers wait nearby for the next monorail to come by. The
+quiet hum of electromagnetic energy purrs through the huge railings below, and
+the platform begins to rumble as a train nears. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7711
+Name:	Southbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	7709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7712
+Name:	Boren & Cherry Station
+Desc:$
+   The station looms above you, leading you into the heart of monorail station
+machinery.  
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	5433
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7713
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7714
+Name:	North-Eastbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	7713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	503
+	Flags:	0
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#7715
+Name:	Southbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	7713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7716
+Name:	Broadway & Union Station
+Desc:$
+   Broadway & Union Station is always popular with the travelling crowd, who
+seem to come here simply for the sheer satisfaction of moving around. Perhaps
+they've noticed something you haven't. As various different people push their
+way into the station, you can see the large ticket foyer ahead. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	5305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7717
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7718
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7719
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7718
+Name:	North-Westbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	7717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7719
+Name:	South-Eastbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7720
+Name:	Yale & Denny Station
+Desc:$
+   The station serves most of the locals particularly well, the place's main
+focuses landing on practicality and efficiency. The station is known for being
+well cleaned and serviced, and utterly reliable. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	6958
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7721
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7722
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7723
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7722
+Name:	North-Westbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	7721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7723
+Name:	South-Eastbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7724
+Name:	Fairview & Thomas Station
+Desc:$
+   Being on the north side of the city, the station is usually chock-a-block
+with pedestrians and construction workers, heading north to the Lake District.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7726
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7727
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	6888
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7725
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7724
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7726
+Name:	Westbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7724
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7727
+Name:	South-Eastbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	7724
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7728
+Name:	Seattle Center Station
+Desc:$
+   Nestled comfortably inside the Seattle Center, this is one of the most
+popular stations in the city, being an absolute haven for the annoying
+tourists that just have to visit the Needle. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7729
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7729
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7728
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7730
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7731
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7730
+Name:	Southbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	7729
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7731
+Name:	Eastbound Platform
+Desc:$
+   A couple of stragglers wait nearby for the next monorail to come by. The
+quiet hum of electromagnetic energy purrs through the huge railings below, and
+the platform begins to rumble as a train nears. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7729
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7732
+Name:	5th & Denny Station
+Desc:$
+   Located on the vast highway known as Denny Way, the station is used mainly
+as a quick alternative to the usual traffic of the downtown avenues. Fast,
+efficient, and let's face it, cheap. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	6686
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7733
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7732
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7734
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7735
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7734
+Name:	South-Eastbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7735
+Name:	Northbound Platform
+Desc:$
+   A couple of stragglers wait nearby for the next monorail to come by. The
+quiet hum of electromagnetic energy purrs through the huge railings below, and
+the platform begins to rumble as a train nears. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7736
+Name:	5th & Stewart Station
+Desc:$
+   It's small and cozy, and minds its business. Unfortunately, because of
+this, the station is well known for the underhanded dealings that usually go
+on inside. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	5637
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7737
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7737
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7736
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7739
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7738
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7738
+Name:	South-Eastbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7737
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7739
+Name:	North-Westbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	502
+	Flags:	0
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7737
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7740
+Name:	3rd & Union Station
+Desc:$
+   Being inside the busiest night district of Seattle, 3rd & Union can always
+be relied upon to house some of the weirdest characters in town. Not all of
+them are harmful either, many are simply trying to remember how to get home. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7741
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5723
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7741
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7740
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7743
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7742
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7742
+Name:	South-Eastbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7741
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7743
+Name:	North-Westbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	7741
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7744
+Name:	3rd & Marion
+Desc:$
+   Sitting in the shadow of Renraku Arcology, the station is mainly used by
+those that don't want to have to deal with Renraku's ornate melting pot of a
+station, and prefer to stay with the practicalities to get there on time. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	7745
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	5140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7745
+Name:	Ticket Foyer
+Desc:$
+   A large, domed hall spans outwards before you, letting the rush of
+footsteps echo way out of control. Directly ahead of you is a large wall of
+ticket machines, and nearby lie the halls to the departure and arrival
+platforms. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7747
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7744
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7746
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7746
+Name:	South-Eastbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7745
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7747
+Name:	North-Westbound Platform
+Desc:$
+   The platform stretchs out for quite a long way, dotted with the odd
+pedestrians on their way to the next pinch of reality. Most of them seem to be
+heading towards the hallway nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	7745
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

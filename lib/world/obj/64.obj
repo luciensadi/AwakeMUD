@@ -1,0 +1,780 @@
+#6400
+Keywords:	machine pistol norinco p-2
+Name:	Norinco P-2 Machine Pistol
+RoomDesc:$
+A small light machine pistols lies on the floor.~
+LookDesc:$
+This is a small machine pistol that loads light pistol ammunition. It is set
+up in a bull-pup configuration to make it more compact and it almost screams
+grace and style. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	420
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	7
+	Val4:	11
+	Val5:	35
+	Val6:	35
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	12
+BREAK
+#6401
+Keywords:	PP90M smg submachine gun
+Name:	PP90M Submachine Gun
+RoomDesc:$
+A light, deadly looking smg lays on the floor.~
+LookDesc:$
+  
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6451
+Keywords:	key
+Name:	Key To Apartment 1A
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6452
+Keywords:	key
+Name:	Key To Apartment 1B
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6453
+Keywords:	key
+Name:	Key To Apartment 1C
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6454
+Keywords:	key
+Name:	Key To Apartment 1D
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6455
+Keywords:	key
+Name:	Key To Apartment 1E
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6456
+Keywords:	key
+Name:	Key To Apartment 1F
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6457
+Keywords:	key
+Name:	Key To Apartment 1G
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6458
+Keywords:	key
+Name:	Key To Apartment 1H
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6459
+Keywords:	key
+Name:	Key To Apartment 1I
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6460
+Keywords:	key
+Name:	Key To Apartment 1J
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6461
+Keywords:	key
+Name:	Key To Apartment 1K
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6462
+Keywords:	key
+Name:	Key To Apartment 1L
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6463
+Keywords:	key
+Name:	Key To Apartment 1M
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6464
+Keywords:	key
+Name:	Key To Apartment 1N
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6465
+Keywords:	key
+Name:	Key To Apartment 1O
+RoomDesc:$
+An apartment key lays on the floor here.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6466
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6467
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6468
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6469
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6470
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6471
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6472
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6473
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6474
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6475
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6476
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6477
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6478
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6479
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#6480
+Keywords:	key
+Name:	An Apartment Key
+RoomDesc:$
+The key to apartment 1A lays on the ground.~
+LookDesc:$
+This is a simple maglock key. The kind that is mass produced and then coded by
+assembly line. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

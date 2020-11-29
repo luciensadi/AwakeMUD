@@ -1,0 +1,683 @@
+#8800
+Keywords:	captain boat old crusty
+Name:	a crusty old boat captain
+RoomDesc:$
+A crusty old boat captain is at the helm, in just as bad of shape as his ship.
+
+~
+LookDesc:$
+He's obviously a crusty old barge captain, that much is obvious. He's sporting
+a ragged and stained navy sea coat, which is covered in ashes from his
+constantly smoking corncob pipe. His hair (or what's left of it), sticks out
+of the sides from beneath his captains cap. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	10
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	120
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	brawling:	8
+BREAK
+#8801
+Keywords:	smuggler firearms
+Name:	a firearms smuggler
+RoomDesc:$
+A firearms smuggler is here, showcasing his goods. 
+
+~
+LookDesc:$
+Just your run of the mill gun runner, the kind who board ships and other
+vessels, pack it to the brim with illegal weapons, and try to find their way
+to a location near you. He seems more than eager to off-load some of his
+goods, especially if it means conning you out of a few extra cred. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	8
+BREAK
+#8802
+Keywords:	smuggler firearms
+Name:	a firearms smuggler
+RoomDesc:$
+A firearms smuggler is here, showcasing his goods. 
+
+~
+LookDesc:$
+Just your run of the mill gun runner, the kind who board ships and other
+vessels, pack it to the brim with illegal weapons, and try to find their way
+to a location near you. He seems more than eager to off-load some of his
+goods, especially if it means conning you out of a few extra cred. 
+~
+ArriveMsg:	arrives
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	8
+BREAK
+#8803
+Keywords:	smuggler firearms
+Name:	a firearms smuggler
+RoomDesc:$
+A firearms smuggler is here, showcasing his goods. 
+
+~
+LookDesc:$
+Just your run of the mill gun runner, the kind who board ships and other
+vessels, pack it to the brim with illegal weapons, and try to find their way
+to a location near you. He seems more than eager to off-load some of his
+goods, especially if it means conning you out of a few extra cred. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	8
+BREAK
+#8804
+Keywords:	smuggler firearms
+Name:	a firearms smuggler
+RoomDesc:$
+A firearms smuggler is here, showcasing his goods. 
+
+~
+LookDesc:$
+Just your run of the mill gun runner, the kind who board ships and other
+vessels, pack it to the brim with illegal weapons, and try to find their way
+to a location near you. He seems more than eager to off-load some of his
+goods, especially if it means conning you out of a few extra cred. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	8
+BREAK
+#8805
+Keywords:	hydra wyrm massive
+Name:	a massive hydra wyrm
+RoomDesc:$
+A massive hydra wyrm is here on the rocks, its nine heads looking about. 
+
+~
+LookDesc:$
+This absolutely massive aquatic lizard has nine seperate meter and a half long
+heads perched upon tree trunk thick necks, each of their maws filled to the
+brim with serrated teeth the size of gardening trowels. The chitinous scales
+that cover its hulking form shift and fade along its length from dirty
+yellowish green along its back and spine, to an underbelly a greyish colour of
+an overcast sky. Its rear legs end in flipper like paddles, which it puts to
+good use while in the water, making it faster than most ships. Its forelimbs
+are lizard like, with webbed feet and formidable claws that could easily rend
+a man in twain. 
+~
+ArriveMsg:	arrives in a frenzy from
+LeaveMsg:	rushes off in a frenzy
+MobFlags:	111010
+AffFlags:	0
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	6
+	Wil:	8
+	Mag:	10
+[POINTS]
+	Height:	1000
+	Weight:	1400
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	brawling:	10
+	sorcery:	10
+BREAK
+#8806
+Keywords:	hydra wyrm head enormous
+Name:	an enormous hydra wyrm head
+RoomDesc:$
+An enormous hydra wyrm head snakes about above the nest here. 
+
+~
+LookDesc:$
+This absolutely enormous aquatic lizard head is almost a meter and a half
+long, perched upon a tree trunk thick neck, its maw filled to the brim with
+serrated teeth the size of gardening trowels. The chitinous scales that cover
+its hulking form shift and fade along its length from dirty yellowish green
+along its back and spine, to an underbelly a greyish colour of an overcast
+sky. It looks extremely pissed off due to intruders in its nest, and swings
+about, snapping ferociously at anything it can sink its teeth into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	10
+	Cha:	4
+	Int:	10
+	Wil:	10
+	Mag:	12
+[POINTS]
+	Height:	300
+	Weight:	200
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	sorcery:	10
+	brawling:	9
+BREAK
+#8807
+Keywords:	an enormous hydra wyrm head
+Name:	an enormous hydra wyrm head
+RoomDesc:$
+An enormous hydra wyrm head snakes about above the nest here. 
+
+~
+LookDesc:$
+This absolutely enormous aquatic lizard head is almost a meter and a half
+long, perched upon a tree trunk thick neck, its maw filled to the brim with
+serrated teeth the size of gardening trowels. The chitinous scales that cover
+its hulking form shift and fade along its length from dirty yellowish green
+along its back and spine, to an underbelly a greyish colour of an overcast
+sky. It looks extremely pissed off due to intruders in its nest, and swings
+about, snapping ferociously at anything it can sink its teeth into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	8
+	Wil:	6
+	Mag:	10
+[POINTS]
+	Height:	300
+	Weight:	250
+	Ballistic:	13
+	Impact:	12
+[SKILLS]
+	brawling:	10
+BREAK
+#8808
+Keywords:	hydra enormous wyrm head
+Name:	an enormous hydra wyrm head
+RoomDesc:$
+An enormous hydra wyrm head snakes about above the nest here. 
+
+~
+LookDesc:$
+This absolutely enormous aquatic lizard head is almost a meter and a half
+long, perched upon a tree trunk thick neck, its maw filled to the brim with
+serrated teeth the size of gardening trowels. The chitinous scales that cover
+its hulking form shift and fade along its length from dirty yellowish green
+along its back and spine, to an underbelly a greyish colour of an overcast
+sky. It looks extremely pissed off due to intruders in its nest, and swings
+about, snapping ferociously at anything it can sink its teeth into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	10
+	Str:	12
+	Cha:	1
+	Int:	8
+	Wil:	8
+	Mag:	12
+[POINTS]
+	Height:	300
+	Weight:	250
+	Ballistic:	14
+	Impact:	14
+[SKILLS]
+	brawling:	9
+BREAK
+#8809
+Keywords:	enormous hydra wyrm head
+Name:	an enormous hydra wyrm head
+RoomDesc:$
+An enormous hydra wyrm head snakes about above the nest here. 
+
+~
+LookDesc:$
+This absolutely enormous aquatic lizard head is almost a meter and a half
+long, perched upon a tree trunk thick neck, its maw filled to the brim with
+serrated teeth the size of gardening trowels. The chitinous scales that cover
+its hulking form shift and fade along its length from dirty yellowish green
+along its back and spine, to an underbelly a greyish colour of an overcast
+sky. It looks extremely pissed off due to intruders in its nest, and swings
+about, snapping ferociously at anything it can sink its teeth into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	10
+	Cha:	1
+	Int:	9
+	Wil:	9
+	Mag:	13
+[POINTS]
+	Height:	300
+	Weight:	220
+	Ballistic:	13
+	Impact:	13
+[SKILLS]
+	brawling:	8
+	sorcery:	9
+BREAK
+#8810
+Keywords:	enormous hydra wyrm head
+Name:	an enormous hydra wyrm head
+RoomDesc:$
+An enormous hydra wyrm head snakes about above the nest here. 
+
+~
+LookDesc:$
+This absolutely enormous aquatic lizard head is almost a meter and a half
+long, perched upon a tree trunk thick neck, its maw filled to the brim with
+serrated teeth the size of gardening trowels. The chitinous scales that cover
+its hulking form shift and fade along its length from dirty yellowish green
+along its back and spine, to an underbelly a greyish colour of an overcast
+sky. It looks extremely pissed off due to intruders in its nest, and swings
+about, snapping ferociously at anything it can sink its teeth into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	10
+	Str:	13
+	Cha:	1
+	Int:	8
+	Wil:	8
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	13
+	Impact:	13
+[SKILLS]
+	brawling:	10
+BREAK
+#8811
+Keywords:	enormous hydra wyrm head
+Name:	an enormous hydra wyrm head
+RoomDesc:$
+An enormous hydra wyrm head snakes about above the nest here. 
+
+~
+LookDesc:$
+This absolutely enormous aquatic lizard head is almost a meter and a half
+long, perched upon a tree trunk thick neck, its maw filled to the brim with
+serrated teeth the size of gardening trowels. The chitinous scales that cover
+its hulking form shift and fade along its length from dirty yellowish green
+along its back and spine, to an underbelly a greyish colour of an overcast
+sky. It looks extremely pissed off due to intruders in its nest, and swings
+about, snapping ferociously at anything it can sink its teeth into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	11
+	Str:	11
+	Cha:	1
+	Int:	9
+	Wil:	9
+	Mag:	11
+[POINTS]
+	Height:	300
+	Weight:	250
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	brawling:	8
+	sorcery:	9
+BREAK
+#8812
+Keywords:	enormous hydra wyrm head
+Name:	an enormous hydra wyrm head
+RoomDesc:$
+An enormous hydra wyrm head snakes about above the nest here. 
+
+~
+LookDesc:$
+This absolutely enormous aquatic lizard head is almost a meter and a half
+long, perched upon a tree trunk thick neck, its maw filled to the brim with
+serrated teeth the size of gardening trowels. The chitinous scales that cover
+its hulking form shift and fade along its length from dirty yellowish green
+along its back and spine, to an underbelly a greyish colour of an overcast
+sky. It looks extremely pissed off due to intruders in its nest, and swings
+about, snapping ferociously at anything it can sink its teeth into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	1
+	Int:	10
+	Wil:	10
+	Mag:	13
+[POINTS]
+	Height:	300
+	Weight:	225
+	Ballistic:	13
+	Impact:	13
+[SKILLS]
+	brawling:	10
+	sorcery:	9
+BREAK
+#8813
+Keywords:	enormous hydra wyrm head
+Name:	an enormous hydra wyrm head
+RoomDesc:$
+An enormous hydra wyrm head snakes about above the nest here. 
+
+~
+LookDesc:$
+This absolutely enormous aquatic lizard head is almost a meter and a half
+long, perched upon a tree trunk thick neck, its maw filled to the brim with
+serrated teeth the size of gardening trowels. The chitinous scales that cover
+its hulking form shift and fade along its length from dirty yellowish green
+along its back and spine, to an underbelly a greyish colour of an overcast
+sky. It looks extremely pissed off due to intruders in its nest, and swings
+about, snapping ferociously at anything it can sink its teeth into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	13
+	Cha:	1
+	Int:	10
+	Wil:	8
+	Mag:	12
+[POINTS]
+	Height:	300
+	Weight:	250
+	Ballistic:	13
+	Impact:	14
+[SKILLS]
+	brawling:	10
+BREAK
+#8814
+Keywords:	enormous hydra wyrm head
+Name:	an enormous hydra wyrm head
+RoomDesc:$
+An enormous hydra wyrm head snakes about above the nest here. 
+
+~
+LookDesc:$
+This absolutely enormous aquatic lizard head is almost a meter and a half
+long, perched upon a tree trunk thick neck, its maw filled to the brim with
+serrated teeth the size of gardening trowels. The chitinous scales that cover
+its hulking form shift and fade along its length from dirty yellowish green
+along its back and spine, to an underbelly a greyish colour of an overcast
+sky. It looks extremely pissed off due to intruders in its nest, and swings
+about, snapping ferociously at anything it can sink its teeth into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	13
+	Str:	13
+	Cha:	1
+	Int:	8
+	Wil:	8
+	Mag:	10
+[POINTS]
+	Height:	300
+	Weight:	250
+	Ballistic:	14
+	Impact:	12
+[SKILLS]
+	brawling:	9
+BREAK
+#8820
+Keywords:	officer airport customs
+Name:	an airport customs officer
+RoomDesc:$
+An airport customs officer is here behind the service counter. 
+
+~
+LookDesc:$
+The surly fellow behind the counter appears to work for the customs department
+here at Paine Field-Snohomish County Airport, so if you're looking for the
+proper paperwork to get onto an airplane, he'd be the one to talk to. He
+appears to be a prim and proper ork, with his tusks polished and his uniform
+buttoned up and looking neat and tidy, quite professional in appearance. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+[SKILLS]
+	brawling:	5
+BREAK
+#8821
+Keywords:	porter airport
+Name:	an airport porter
+RoomDesc:$
+An airport porter is handling baggage outfront the airport here. 
+
+~
+LookDesc:$
+This porter is in charge of taking care of the luggage of airline passengers,
+whether unloading or retrieving and making sure it gets to where it needs to
+be. They don't talk much, and instead are more apt to offer a tired smile and
+nod, though they certainly wouldn't mind being tipped for their services. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	25
+	Bank:	25
+[SKILLS]
+	brawling:	3
+BREAK
+#8822
+Keywords:	guard security airport
+Name:	an airport security guard
+RoomDesc:$
+An airport security guard is here, keeping the peace. 
+
+~
+LookDesc:$
+This airport security guard seems to take his job rather seriously, as
+indicated by both his demeanor and the way he grips his stun baton, itching to
+put it to use on anyone stupid enough to cause trouble in the airport. 
+~
+ArriveMsg:	patrols in from
+LeaveMsg:	patrols off
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	5
+	Impact:	5
+	Cash:	20
+	Bank:	50
+[SKILLS]
+	brawling:	4
+	clubs:	4
+BREAK
+END

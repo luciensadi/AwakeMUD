@@ -1,0 +1,99 @@
+#706000
+Keywords:	trio bum hobo shady characters
+Name:	A trio of shady looking characters
+RoomDesc:$
+A trio of shady looking characters warm themselves next to a burning barrel. 
+
+~
+LookDesc:$
+Three shady looking characters warm themselves next to a burn barrel obviously
+keeping an eye on things  in this alley way for their employers. Every now and
+then one seems to talk into a hidden device relaying the status of the alley.
+They appear armed and dangerous. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#706001
+Keywords:	surly elf one-eyed
+Name:	A surly looking one-eyed elf
+RoomDesc:$
+A surly looking one-eyed elf cleans a dirty beer mug behind the bar. 
+
+~
+LookDesc:$
+This elf is of average build, but has an obvious gruff demeanor. His face is
+scarred and he is missing an eye. He stares at you contemptuously waiting for
+you to order something as he spits into a mug and wipes its interior with a
+dirty old rag. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#706002
+Keywords:	elf old grey
+Name:	An old grey haired elf
+RoomDesc:$
+An old grey haired elf stares at you disdainfully from behind the counter. 
+
+~
+LookDesc:$
+This elf is old and looks irritated. An old ashtray overflowing with cigarette
+butts sits on the counter next to him. He appears to have a tracheotomy. He
+keeps an ever watchful eye upon you as you approach the counter. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+END

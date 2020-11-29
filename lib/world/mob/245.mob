@@ -1,0 +1,356 @@
+#24500
+Keywords:	Chicken Little punk rough kid shopkeeper
+Name:	Chicken Little
+RoomDesc:$
+A rough looking punk mans the caged in register near the back. 
+
+~
+LookDesc:$
+This young street punk goes by the name Chicken Little, which is a bit ironic,
+since even as young as he is, he looks like he could seriously ruin your day
+if need be. He earned the nickname from hanging around The Rooster for so
+long, who in turn took him in and basicly raises him as his son these days. He
+has earned a reputation almost on par with the owners, which is... Don't screw
+with him, or else. Not to mention the fact he can just press a button and have
+the autoturrets above head turn you into swiss cheese. Yeah, it'll pay off to
+be on your best behavior, especially this deep in the barrens, LS sure isn't
+coming. Hell, even DocWagon thinks twice before coming here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+	brawling:	10
+	negotiation:	6
+BREAK
+#24501
+Keywords:	Rooster The owner
+Name:	The Rooster
+RoomDesc:$
+The Rooster sits here, tinkering with his guns as usual. 
+
+~
+LookDesc:$
+This here is The Rooster, owner of this fine establishment. Hes an old war vet
+who served for the good ol' USA back when that actually meant something. Hes
+older than dirt, but is so damn tough that even death has decided it'd be
+better not to screw around with him until he's in a coma and can't fight back.
+He's seated on a swiveling chair with wheels, since he lost his legs back
+during his war stints. That aside, hes got arms like most peoples thighs, and
+a chest that puts most 18-wheeler grills to shame. The Rooster is quite
+racist, and if asked how he lost his legs, will often reply, "I left them up a
+Chinaman's ass" or something equally as suiting to his hatred for asians in
+general. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	70
+[SKILLS]
+	brawling:	10
+BREAK
+#24502
+Keywords:	Henry Feed burly man
+Name:	Henry Feed
+RoomDesc:$
+A burly man stacks crates and does inventory here. 
+
+~
+LookDesc:$
+This here is Henry Feed, also known as Chicken Feed. Hes soft spoken, but
+built like a troll, and is probably a little slow to boot. He isn't however,
+stupid enough to sway from anything The Rooster has told him, so theres no
+chance of him making a mistake. Hes got an entire inventory stored away in his
+head, and usually counts on his fingers to finish any math problems that
+arise. Hes never been jipped, namely because theres a long list of people who
+have tried, and either found themselves on his bad side, or worse, The
+Rooster's. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	90
+[SKILLS]
+	brawling:	10
+BREAK
+#24503
+Keywords:	triad bodyguard slick
+Name:	A slick looking Triad bodyguard
+RoomDesc:$
+A slick looking Triad bodyguard is on the lookout here. 
+
+~
+LookDesc:$
+He's a bodyguard, that much is obvious. His long black hair is slicked back,
+and his look completed with crisp black suits and black sunglasses. He's
+probably quite handy with that katana sheathed and draped about his waist for
+quick access, for obvious reasons. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	2
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	160
+	Ballistic:	6
+	Impact:	6
+	Cash:	200
+	Bank:	250
+[SKILLS]
+	brawling:	8
+	edged weapons:	8
+BREAK
+#24504
+Keywords:	Mei Lei Triad
+Name:	Mei Lei
+RoomDesc:$
+Mei Lei stands here, washing his hands and face at the sink. 
+
+~
+LookDesc:$
+This here is Mei Lei, a man whos earned a reputation amongst the Triad's as
+being a ruthless and efficient killer. He's well muscled and quite tall for an
+asian, so he tends to stick out when around them. Word in the shadows is that
+he's powerful adept, as most of the people who betray or upset him tend to
+turn up with fist sized holes in their torsos. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	10
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	10
+	Impact:	10
+	Cash:	425
+	Bank:	200
+[SKILLS]
+	brawling:	10
+BREAK
+#24505
+Keywords:	Fong Serpent Triad
+Name:	Fong the Serpent
+RoomDesc:$
+Fong the Serpent is seated here, awaiting someone. 
+
+~
+LookDesc:$
+This grey haired old man sports a fu-man-chu mustache, and has his long hair
+pulled back and tied with a simple ribbon of silk. He may look old, but hes a
+very dangerous man, the fact that he's been alive this long indicates he knows
+how to take care of himself. The Triads call him "Fong the Serpent", and for
+good reason to. Word on the street is he can kill with a single gaze, while
+others attribute his fear and prowess to the powerful magics he supposedly
+wields. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	6
+	Int:	10
+	Wil:	10
+	Mag:	15
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	10
+	Impact:	10
+	Cash:	525
+	Bank:	350
+[SKILLS]
+	brawling:	10
+	sorcery:	10
+BREAK
+#24506
+Keywords:	triad bodyguard slick
+Name:	A slick looking Triad bodyguard
+RoomDesc:$
+A slick looking Triad bodyguard is on the lookout here. 
+
+~
+LookDesc:$
+He's a bodyguard, that much is obvious. His long black hair is slicked back,
+and his look completed with crisp black suits and black sunglasses. He's
+probably quite handy with that katana sheathed and draped about his waist for
+quick access, for obvious reasons. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	8
+	Impact:	8
+	Cash:	235
+[SKILLS]
+	brawling:	8
+BREAK
+#24507
+Keywords:	bodyguard triad slick
+Name:	A slick looking Triad bodyguard
+RoomDesc:$
+A slick looking Triad bodyguard is on the lookout here. 
+
+~
+LookDesc:$
+He's a bodyguard, that much is obvious. His long black hair is slicked back,
+and his look completed with crisp black suits and black sunglasses. He's
+probably quite handy with that katana sheathed and draped about his waist for
+quick access, for obvious reasons. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	8
+	Impact:	8
+	Cash:	255
+[SKILLS]
+	brawling:	8
+BREAK
+#24508
+Keywords:	Yohei Shi Min
+Name:	Yohei Shi Min
+RoomDesc:$
+Yohei Shi Min is seated here, arms crossed in contemplation. 
+
+~
+LookDesc:$
+This Japanese guy looks like he just jumped out of a time machine, as he could
+pass as normal in fuedal Japan. He sporting a casual kimono, decorated with
+simple cherry blossoms, and upon his feet are a pair of old sandals. He sports
+a sleek katana sheath at his side, canted forward for ease of drawing. Just
+from a simple glance, its safe to say he's more than capable of putting it to
+good use. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	10
+	Str:	10
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	12
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	8
+	Impact:	8
+	Cash:	345
+	Bank:	255
+[SKILLS]
+	brawling:	9
+	edged weapons:	9
+BREAK
+END

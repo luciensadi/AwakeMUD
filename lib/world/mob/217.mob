@@ -1,0 +1,806 @@
+#21700
+Keywords:	monkey mojo jojo
+Name:	Mojo Jojo the Monkey Mastermind
+RoomDesc:$
+An evil monkey eyes you and spits in your direction. 
+
+~
+LookDesc:$
+An evil looking monkey, quite brilliant and his head is swollen to compensate
+the large brain. 
+~
+ArriveMsg:	waddles in from
+LeaveMsg:	limps
+MobFlags:	101110000001001000
+AffFlags:	1000000000001001000000
+Race:	Animal
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	57
+	Weight:	45
+	Level:	4
+	Ballistic:	20
+	Impact:	20
+	Cash:	105
+	Bank:	1079
+	Karma:	10
+[SKILLS]
+BREAK
+#21701
+Keywords:	dragon gold black
+Name:	a huge dragon
+RoomDesc:$
+A huge, gold and black dragon lies here. 
+
+~
+LookDesc:$
+The extremely large dragon lies contentedly on his enormous pile of treasures.
+His scales shimmer almost as much as the precious stones he hoards behind his
+spiked tail.  As he breathes out, the rush of steam is about enough to knock
+you over. 
+~
+ArriveMsg:	lumbers in from
+LeaveMsg:	stomps
+MobFlags:	10100000001010
+AffFlags:	1000000000000000000000
+Race:	Other
+Gender:	Male
+Position:	Resting
+DefaultPos:	Resting
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	11
+	Str:	37
+	Cha:	10
+	Int:	16
+	Wil:	13
+	Mag:	14
+[POINTS]
+	Height:	1205
+	Weight:	1092
+	Level:	8
+	Ballistic:	21
+	Impact:	12
+	Cash:	17089
+	Karma:	3
+[SKILLS]
+	brawling:	8
+	:	9
+	:	3
+	:	4
+	:	3
+BREAK
+#21702
+Keywords:	Guard Wolf
+Name:	a Guard Wolf
+RoomDesc:$
+A guard wolf growls at you. 
+
+~
+LookDesc:$
+A grey and brown, capable-looking wolf.  Fresh blood drips from his mouth and
+he tosses a clavical bone to the side and growls at you, advancing slowly. 
+~
+ArriveMsg:	sneaks quietly in from
+LeaveMsg:	scampers out
+MobFlags:	10000001000000101010
+AffFlags:	1000001000000000
+Race:	Animal
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	10
+	Str:	15
+	Cha:	1
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	122
+	Weight:	47
+	Level:	4
+	Ballistic:	7
+	Impact:	7
+	Cash:	31
+	Bank:	200
+	Karma:	6
+[SKILLS]
+	brawling:	9
+	leadership:	9
+	stealth:	7
+	:	3
+BREAK
+#21703
+Keywords:	wolf omega frail weak
+Name:	Omega Wolf
+RoomDesc:$
+ A frail, weakling Omega wolf huddles here. 
+
+~
+LookDesc:$
+A thin, frail wolf.  It's ribs almost show under the patchy, grey fur.  It
+looks quite weak. 
+~
+ArriveMsg:	sneaks in from
+LeaveMsg:	scurries 
+MobFlags:	100010001011110101000
+AffFlags:	1010000000000000
+Race:	Animal
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	11
+	Str:	9
+	Cha:	3
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	5
+	Cash:	127
+	Karma:	6
+[SKILLS]
+BREAK
+#21704
+Keywords:	Wolf Cub
+Name:	a wolf cub
+RoomDesc:$
+A small, fluffy wolf cub sleeps here. 
+
+~
+LookDesc:$
+A tiny little wolf cub.  It's grey-brown fur is quite soft and fluffy.  It's
+paws indicate that it will eventually become quite large. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000010001010
+AffFlags:	10000000000000
+Race:	Animal
+Gender:	Neutral
+Position:	Sleeping
+DefaultPos:	Sleeping
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	5
+	Cha:	9
+	Int:	1
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	24
+	Weight:	40
+	Level:	3
+	Ballistic:	3
+	Impact:	6
+	Cash:	27
+	Karma:	3
+[SKILLS]
+	brawling:	6
+BREAK
+#21705
+Keywords:	Alpha female wolf
+Name:	Alpha Female
+RoomDesc:$
+The Alpha female glances you over, seeing you as nothing more than a
+bothersome gnat. 
+
+~
+LookDesc:$
+She's the prettiest wolf you've ever seen. Her fur is topped with black, but
+deeper down, it's shades of speckled brown.  A line of dark fur circles her
+eyes, making a 'V' on her nose.  The only not too beautiful thing, is the
+blood dripping from her jowls. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000100000000001010
+AffFlags:	1000001000000000
+Race:	Animal
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	13
+	Str:	12
+	Cha:	5
+	Int:	3
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	4
+	Cash:	3819
+[SKILLS]
+	brawling:	6
+BREAK
+#21706
+Keywords:	alpha male
+Name:	Alpha Wolf
+RoomDesc:$
+The Alpha Male snarls at you. 
+
+~
+LookDesc:$
+Grey and brown fur covers a well-fed, muscle-toned killing machine of an
+animal.  And you have just invaded it's territory.  Uh oh.  
+~
+ArriveMsg:	struts in from
+LeaveMsg:	scampers 
+MobFlags:	10000100000000101010
+AffFlags:	1000001001001000000000
+Race:	Animal
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	15
+	Str:	12
+	Cha:	3
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	8
+	Ballistic:	10
+	Impact:	11
+	Cash:	396
+	Karma:	8
+[SKILLS]
+	brawling:	8
+	stealth:	6
+	:	3
+	leadership:	4
+	athletics:	6
+BREAK
+#21707
+Keywords:	ancient wolf strong
+Name:	an Ancient Wolf
+RoomDesc:$
+An Ancient Wolf looks at you as if you were a gnat. 
+
+~
+LookDesc:$
+A strong, very capable looking wolf.  The many scars interrupting the flow of
+smooth fur are badges of honor to this wolf.  Muscles ripple underneath the
+aged skin with the slightest movement. 
+~
+ArriveMsg:	struts in from
+LeaveMsg:	struts
+MobFlags:	10000100000000001110
+AffFlags:	1000001001001000010000
+Race:	Animal
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	15
+	Str:	14
+	Cha:	9
+	Int:	4
+	Wil:	9
+	Mag:	10
+[POINTS]
+	Height:	160
+	Weight:	90
+	Level:	8
+	Ballistic:	7
+	Impact:	6
+	Cash:	9182
+	Karma:	2
+[SKILLS]
+	stealth:	4
+	brawling:	3
+	:	1
+	:	1
+	:	2
+BREAK
+#21708
+Keywords:	wolf fairly thin
+Name:	a Subordinate Wolf
+RoomDesc:$
+A fairly thin wolf eyes you wearily. 
+
+~
+LookDesc:$
+This wolf looks a little better fed than the Omega wolves, but still not fed
+until full.  The grey fur is barely shining and the snouts are dry. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000010101010
+AffFlags:	1000001010000000000000
+Race:	Animal
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	5
+	Str:	10
+	Cha:	2
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	75
+	Level:	5
+	Ballistic:	8
+	Impact:	6
+	Cash:	205
+	Karma:	10
+[SKILLS]
+BREAK
+#21709
+Keywords:	cherry tree
+Name:	Dancing Cherry Tree
+RoomDesc:$
+A Cherry tree dances wildly, throwing cherries about. 
+
+~
+LookDesc:$
+A normal cherry tree -- except fot the fact that it's dancing around on its
+roots, cherries flying everywhere. 
+~
+ArriveMsg:	waltzes in from
+LeaveMsg:	discos
+MobFlags:	100000000001010
+AffFlags:	10000000000000
+Race:	Spirit
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	2
+	Str:	10
+	Cha:	2
+	Int:	1
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	273
+	Weight:	288
+	Level:	5
+	Ballistic:	6
+	Impact:	7
+	Cash:	2891
+	Karma:	10
+[SKILLS]
+BREAK
+#21710
+Keywords:	oak tree
+Name:	Discoing Oak Tree
+RoomDesc:$
+An Oak tree discos in circles. 
+
+~
+LookDesc:$
+A regular Oak tree, dancing to music in his head.  A squirrel in the brances
+chatters angerly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	10000000000000
+Race:	Spirit
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	5
+	Str:	15
+	Cha:	1
+	Int:	2
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	666
+	Weight:	230
+	Level:	6
+	Ballistic:	5
+	Impact:	10
+	Cash:	91
+	Karma:	5
+[SKILLS]
+BREAK
+#21711
+Keywords:	plam tree
+Name:	a Dancing Palm Tree
+RoomDesc:$
+A Palm Tree waltzes with itself. 
+
+~
+LookDesc:$
+Regular palm trees aren't supposed to dance, are they?  Well, this one does.
+Get used to it chummer. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	10000000000000
+Race:	Spirit
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	17
+	Qui:	3
+	Str:	16
+	Cha:	1
+	Int:	1
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	310
+	Weight:	310
+	Level:	5
+	Ballistic:	10
+	Impact:	20
+	Cash:	100
+	Karma:	8
+[SKILLS]
+BREAK
+#21712
+Keywords:	evergreen ever green tree
+Name:	an Evergreen tree
+RoomDesc:$
+An Evergreen tree does the robot. 
+
+~
+LookDesc:$
+This Evergreen has a birdhouse in it that swings back and forth as the tree
+dances. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	10000000000000
+Race:	Spirit
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Whip
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	14
+	Cha:	0
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	431
+	Weight:	333
+	Level:	3
+	Ballistic:	6
+	Impact:	8
+	Cash:	4
+	Karma:	2
+[SKILLS]
+BREAK
+#21713
+Keywords:	cheery bird
+Name:	an annoying bluejay
+RoomDesc:$
+A cheery bird's song grates your nerves. 
+
+~
+LookDesc:$
+A cute little bluejay with a hideous song.  You just want to kill it to put it
+out of it's misery. 
+~
+ArriveMsg:	flutters in from
+LeaveMsg:	takes it's hideous song
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Animal
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pierce
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	10
+	Str:	5
+	Cha:	20
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	25
+	Weight:	2
+	Level:	3
+	Ballistic:	4
+	Impact:	6
+	Cash:	45
+	Karma:	5
+[SKILLS]
+BREAK
+#21714
+Keywords:	small chipmunk
+Name:	a small chipmunk
+RoomDesc:$
+A small chipmunk chatters angerly at you. 
+
+~
+LookDesc:$
+A small, cute, normal chipmunk. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	scuddles
+MobFlags:	1001100
+AffFlags:	10000000000000
+Race:	Animal
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	7
+	Str:	5
+	Cha:	6
+	Int:	3
+	Wil:	2
+	Mag:	8
+[POINTS]
+	Height:	12
+	Weight:	2
+	Level:	2
+	Ballistic:	4
+	Impact:	8
+	Cash:	25
+	Karma:	3
+[SKILLS]
+BREAK
+#21715
+Keywords:	Hellhound vicous demon hound
+Name:	a Hellhound
+RoomDesc:$
+A vicious, demon hound bares its teeth at you. 
+
+~
+LookDesc:$
+A hideous creature, actually.  It looks like a Dobermann on seven hundred
+steroids, with oversized jowls and oddly pointed ears.  It's tail is unusually
+long, and ends in an Arrowhead-like tip.  Black and red fur covers the
+monsterous creature.  
+~
+ArriveMsg:	arrives with a freezing wind as it sneaks in from
+LeaveMsg:	whips its tail and exits
+MobFlags:	101110000001001000
+AffFlags:	100000011000000000000
+Race:	Animal
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	17
+	Qui:	14
+	Str:	15
+	Cha:	6
+	Int:	4
+	Wil:	14
+	Mag:	9
+[POINTS]
+	Height:	121
+	Weight:	82
+	Level:	6
+	Ballistic:	8
+	Impact:	10
+	Cash:	4817
+	Karma:	60
+[SKILLS]
+	stealth:	9
+	:	3
+	brawling:	9
+	:	9
+	:	3
+BREAK
+#21716
+Keywords:	wraith cloudy dark swirl lost soul
+Name:	a wraith
+RoomDesc:$
+A dark, cloudy swirl whips around you, chilling you to the bone. 
+
+~
+LookDesc:$
+A swirl of dark.  A lost, long-forgotten soul.  Your future. 
+~
+ArriveMsg:	makes an eery noise as it floats in from
+LeaveMsg:	slips out like a whisper as it heads
+MobFlags:	1011000
+AffFlags:	100001000001000000000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	15
+	Str:	4
+	Cha:	6
+	Int:	45
+	Wil:	30
+	Mag:	10
+[POINTS]
+	Height:	210
+	Weight:	0
+	Level:	7
+	Ballistic:	11
+	Impact:	9
+	Cash:	666
+[SKILLS]
+BREAK
+#21717
+Keywords:	starbuck's employee
+Name:	a Starbuck's employee
+RoomDesc:$
+A Starbuck's Employee says, "Come on in!" with an evil grin on his face. 
+
+~
+LookDesc:$
+A chunky man, wearing an extremely unflattering Starbuck's uniform.  He has an
+odd red substance on his hands that he insists is cherry syrup, but smells
+faintly of copper.  He gets irritated as he attempts to usher you inside. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	16
+	Str:	5
+	Cha:	10
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	3
+	Ballistic:	6
+	Impact:	5
+	Cash:	1009
+	Bank:	3102
+[SKILLS]
+BREAK
+#21718
+Keywords:	giant ant
+Name:	a giant ant
+RoomDesc:$
+A giant ant pushes past you. 
+
+~
+LookDesc:$
+Whoa.  That's a big fraggin' ant. Obviously this is some new paraspecies
+brought about by the awakening.  You have the sneaking suspicion the reason
+it's not documented is that there haven't been all that many people that have
+lived to tell the tale of seeing one. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100001001010
+AffFlags:	0
+Race:	Animal
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Impact:	2
+	Cash:	60
+[SKILLS]
+BREAK
+#21719
+Keywords:	wolf
+Name:	a wolf
+RoomDesc:$
+A wolf wanders through here. 
+
+~
+LookDesc:$
+A brownish-grey wolf, with sharp teeth. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	sniffs the air and lumbers
+MobFlags:	100001001000
+AffFlags:	0
+Race:	Animal
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	15
+	Str:	11
+	Cha:	5
+	Int:	7
+	Wil:	14
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	6
+	Cash:	210
+[SKILLS]
+BREAK
+#21720
+Keywords:	wolf boney
+Name:	a boney wolf
+RoomDesc:$
+A boney wolf growls at you, ready to strike when you are. 
+
+~
+LookDesc:$
+It's a wolf who looks like he doesn't exactly get a fair share of the wolf
+pack's kills, hence the reason he's hungry, and liking his chops as he looks
+you over. 
+~
+ArriveMsg:	sniffs the air as it wanders in from
+LeaveMsg:	catches a scent and follows it
+MobFlags:	100000001001000
+AffFlags:	10000000001000
+Race:	Animal
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	11
+	Str:	10
+	Cha:	3
+	Int:	11
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	5
+	Cash:	2190
+[SKILLS]
+BREAK
+END

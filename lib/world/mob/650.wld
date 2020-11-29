@@ -1,0 +1,884 @@
+#65000
+Name:	Mayor McNewbie's HQ
+Desc:$
+   An almost circular room, this looks like some newbie builder's first
+attempt to make something without fragging up. You notice pictures on the
+walls, one of which reminds you of a character from an old flatscreen anime
+about bounty hunters. A chair and a ^gdesk^N are situated on one side of the room
+in front of one of the other pictures, with a computer on the desk. The walls
+look like doors could sprout from them in any direction, and at any given
+time. Creepy. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	desk~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+This desk looks like it was stolen from some Salvation Army surplus store
+somewhere, so small that only a child would be able to fit his or her legs
+under it. 
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65001
+Name:	Mayor McNewbie's Kitchen
+Desc:$
+   Stepping in this room, you almost have to shield your eyes from a sudden
+brightness. The whole area is enveloped in bright white. You notice that as
+you walk, your dirty footsteps are almost sucked into the ground behind you,
+which is probably the reason that this area looks so spotless. Your steps echo
+across a floor you swear is marble as you walk through what is possibly the
+biggest kitchen you've ever seen. A large gray walk-in freezer is on the east
+wall, almost daring you to open it, if only to escape the brightness. An
+assortment of kitchen appliances line the counter near the freezer, looking as
+if they've rarely been used. You hear what sounds like techno music to the
+north. Must be some kind of party. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	freezer
+	ToVnum:	65002
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65002
+Name:	A Walk-In Freezer
+Desc:$
+   Well, it's cold in here, surprise, surprise. You shiver and see huge slabs
+of meat lining the far wall. The whiteness from the kitchen doesn't seem to
+spill over here, though. You begin to wonder what goes on here that so much
+meat would be needed at any given time. You see a carving knife on the floor
+that looks well used. This guy must be popular, whoever he is. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	freezer
+	ToVnum:	65001
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65003
+Name:	The Bebop
+Desc:$
+   You're standing in what looks like some sort of combination lounge and bar.
+A lot of different kinds of noise emanate from different corners of this room.
+You see two rows of arcade games lining the west wall, with the aforementioned
+bar to the east. A ^Bsign^N is posted on the wall next to you, near a spiraling
+starcase leading up. You hear what sounds like fighting above you, and wonder
+what kind of place this is. Maybe you should go knock down some liquid courage
+before going up there. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	65004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+Welcome to The Bebop! If you're here, you must be very special indeed, so feel
+free to try one of our fantastic selections at the bar, try your hand at a
+game of Dance Dance Revolution, or test your mettle upstairs with a fight or
+two, and get patched up with our friendly medical staff! ^rCaution: The
+Management assumes no liability for any permanent injuries sustained while
+upstairs.^N Enjoy your stay, space cowboy. 
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65004
+Name:	The Bebop's Bar
+Desc:$
+   You stand in front of a large, mahogany bar counter. The guy behind the
+counter notices you walk up and nods, while polishing a recently cleaned mug.
+You hear what sounds like jazz coming from behind the bar the music seems to
+have a soothing effect on the patrons, even those fresh from upstairs. You
+notice a trid mounted on the wall above the bar, broadcasting the latest Urban
+Brawl game and scores on a ticker. Looks like the Tacoma Wings have lost
+again. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	65003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65005
+Name:	An Arena
+Desc:$
+   You've walked into what looks like some sort of combat arena. There is a
+mat that covers most of the floor, with bloodstains here and there. There is a
+fighter standing here with his arms crossed, as if he's been waiting for a
+test of his skill. You see other rooms similar to this farther down the
+hallway, as if it's been designed as some sort of progressive test. The
+architect of this place must have known things would turn out this way. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT down]
+	ToVnum:	65003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65006
+Name:	The Bebop's Arcade
+Desc:$
+   Games line the wall here, mostly antique machines from an old series called
+'Dance Dance Revolution'. You see a couple of people using the machines,
+moving like they've been jazzed up with the latest wired reflexes. You think
+about giving it a try, but you don't want to make yourself look stupid. One
+guy in particular seems to be playing a song called '^YMax ^R300^N', but you don't
+see anything appearing on his screen, Hardcore. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	65003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65050
+Name:	A craggy peak
+Desc:$
+   The top. The rock here are precarious, and crunch underfoot, sending
+pebbles bouncing down below. Once you have your footing however, the view is
+breathtaking. The park lies below, a grassy oasis in the middle of a smog
+choked city. You can see ships in the harbour, and park visitors milling about
+below. 
+~
+Flags:	1000000000000000000000
+SecType:	Mountains
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT down]
+	ToVnum:	65051
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65051
+Name:	A steep path
+Desc:$
+   Rocks give way to a steeply inclined path, littered with pebbles and small
+stones. The occasional pebble bounces down the mound, landing at the foot of a
+sheer wall, pitted with hand and footholds. A strong breeze makes its way
+through here, bringing with it the smells of a city, and thin tendrils of
+oddly coloured smog. 
+~
+Flags:	0
+SecType:	Mountains
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	65050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	65052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65052
+Name:	A wooden staircase
+Desc:$
+   A set of wooden sleepers serve as stairs. A rope bannister here seperates
+the staircase from the rock face, and a sheer cliff. As they meander up the
+slope, the stairs give way to a rocky path, continuing up the face. 
+~
+Flags:	100
+SecType:	Mountains
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	65053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65051
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65053
+Name:	A path through the grass
+Desc:$
+   Grasslands give way to a rocky crag, a well worn path leads to a set of
+rough hewn stairs, leading up the face of the outcrop. A small sign politely
+informs you to take your rubbish with you. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	65052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	65055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+A small sign, reading 'Please take your rubbish with you. -- Park Management'
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65054
+Name:	A grassy expanse
+Desc:$
+   Straw coloured grass stretches toward the horizons, unbroken save for a
+recreation area to the south and a rocky outcrop further to the east. Small
+birds flitter in and out of the grasses, occasionally bursting into flight.
+They provide the only ambient noises to the area. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	65053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	65056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	65061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65058
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65055
+Name:	A campsite
+Desc:$
+   A small barbeque sits here, to one side of a cleared ring in the grass, a
+small depression in the center holds a small amount of blackened charcoal.
+Rocks have been arranged by years of visiting campers to form seats around the
+fire pit. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	65053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	65058
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65056
+Name:	The Ranger's cabin.
+Desc:$
+   A small log cabin is set here inamongst a copse of trees. It appears
+well-tended but deserted, the windows shuttered tight against an imaginary
+wind. A small weathered sign above the door reads 'Ranger', and a smaller
+sign, pinned to the door reads 'The ranger can be found at the office near the
+park gates'. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	65057
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	65054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65057
+Name:	A ransacked cabin
+Desc:$
+   Rotting paper lies strewn about on the floor, and what was once a desk lies
+in splinters in one corner. The windows, shuttered on the outside, have been
+broken on the inside, and a fair amount of glass lies with the paper.
+Electronics, smashed so as to be unrecognisable, lie next to a metal panel in
+the wall. Set into this panel is what appears to be a jackpoint. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	65090
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	65056
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65058
+Name:	A dirt road
+Desc:$
+   The tarmac gives way here to a dirt road that ends in grass not soon after.
+The words 'No parking' are stencilled on the road, but the tire marks in the
+dust tell of legions of visitors that didn't seem to agree. You can see a
+small campsite off to one side and a rocky outcrop  on the other side of a
+grassy expanse. 
+~
+Flags:	10000000000000000000000
+SecType:	Field
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	65054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	65055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65059
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65059
+Name:	The gates
+Desc:$
+   The road runs through a set of wrought iron gates here, becoming pitted at
+potholed as soon as it enters the park. By the gates sits a small guardhouse,
+barely more then a booth, where a ranger sits, dozing. The gates appear as
+though they're seldom closed and the ranger doesn't appear to be in any mood
+to collect the listed entry fee. 
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	65058
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65060
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65060
+Name:	A dusty parking lot
+Desc:$
+   The grass here has been worn to dust by the tread of countless cars and a
+tattered rope cordons off the area. White spraypaint on the ground marks out
+rough parking spots, and a small sign in one corner explains the terms and
+conditions of entry. 
+~
+Flags:	110000000000000000000000
+SecType:	Field
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65059
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign~~~~~~~~~~~~~~~~~~~
+	Desc:$
+The sign reads: 'Please make sure your vehicle is locked and secure before
+leaving it, park management takes no responsibility for any damage and/or
+stolen goods.' 
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65061
+Name:	An array of picnic tables
+Desc:$
+   A dozen wooden picnic tables sit here, under a corrogated iron roof. The
+roof has been here for years, and the rust has eaten scores of tiny holes in
+the iron. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65058
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	65054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65060
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65080
+Name:	The Ork's Pie Room
+Desc:$
+   You see an orc with a pie. The room is 10 feet by 10 feet. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65081
+Name:	Lone Star Tarislar Precinct - Lobby
+Desc:$
+   Obviously still under construction and coated everywhere in grey and white
+dust, the lobby is a hive of activity. A large desk set in front of the door
+serves as reception and a pair of desks shoved haphazardly against walls serve
+the myriad of Lone Star officers coming and going.
+   Large scaffolding and a small army of construction workers give the
+impression of frantic work, as they move between doorways through which wooden
+skeletons of offices can be glimpsed. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	4950
+	Flags:	1
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65082
+Name:	Lone Star Tarislar Precinct - Lobby
+Desc:$
+   You are in a quiet lobby, your footsteps echoing loudly on the marble
+floor. A heavy stone desk is built into one wall, behind which is a dark
+wooden door, standing open. Everything is new and highly polished, from the
+floors to the light fittings. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	65083
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	4950
+	Flags:	1
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65083
+Name:	A small foyer
+Desc:$
+   Three heavy wooden dividers reach to shoulder height, then become frosted
+glass as they reach to the ceiling, creating a small square room where they
+meet a forth, gyprock and plaster, wall. A dull and steady buzz can be heard
+from one frosted glass doorway. A small chrome keypad restricts access to the
+curious. Opposite this is another door, light wood, behind which muted
+conversation can be heard. A dull and steady buzz can be heard from one
+frosted glass doorway. A small chrome keypad restricts access to the curious.
+Opposite this is another door, light wood, behind which muted conversation can
+be heard. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	65084
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	8
+[EXIT south]
+	Keywords:	door
+	ToVnum:	65082
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	65085
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65084
+Name:	The server room
+Desc:$
+   This room is home to the information nerve center for the building. A large
+duct spills out into the room, bringing with it dozens of tight bundles of
+fibre optic cable. The lighting in this room is different, a harsh white,
+casting everything in sharp contrast. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	65083
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	8
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65085
+Name:	A set of cubicles
+Desc:$
+   This room is one large cubicle farm. Heavy, shoulder height divisors allow
+anyone to see row upon row of Lone Star officers and other peronnel working
+diligently at state-of-the-art terminals, a few are jacked in, others are
+blinking slowly at softly glowing screens. Right by the door is a small fridge
+and water cooler, besides which a few employees are standing talking. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	65083
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

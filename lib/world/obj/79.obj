@@ -1,0 +1,1868 @@
+#7900
+Keywords:	statue Tyr god marble white
+Name:	A beautifully crafted ^Wwhite marble^N statue of Tyr
+RoomDesc:$
+^gA large ^Wwhite marble^g statue, hypnotic in its beauty, dominates the courtyard.^N~
+LookDesc:$
+Here stands a great marble effigy of Tyr, the god of Combat Prowess, Victory,
+and the Sky. Chief of the Germanic pantheon of gods, Tyr sacrificed his right
+hand to bind the Fenris Wolf's jaws with Gleipnir and all these details seem
+to be mirrored in the creation of this marble masterpiece. His hair hangs to
+his shoulders, and a short beard adorns a regal face with squared jaw and
+fierce eyes that seem to retain a kind of fiery passion and liveliness through
+the stone used to craft it. The stump of his right wrist is proudly displayed
+and held at his side, refused to be hidden in shame. His left hand holds a
+viking longsword, held upright with an orichalcum-accented ^YTiwaz rune^N at the
+base of the blade, the symbol that represents the Sky God and his might. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	Tiwaz Rune
+	Desc:$
+The rune, Tiwaz, stands for Tyr, the Sky God. It represents Honor, Justice,
+Leadership and Authority. Analysis, Rationality. Knowing where one's true
+strengths lie, and Willingness to Self-Sacrifice. Victory and Success in any
+field of competition. 
+~
+BREAK
+#7901
+Keywords:	chandelier crystal massive stunningly detailed
+Name:	A massive, stunningly detailed ^Wcrystal^N chandelier
+RoomDesc:$
+^gA massive, stunningly detailed ^Wcrystal^g chandelier hangs here.^N~
+LookDesc:$
+Made from stunningly crafted crystal, almost all of its light reflecting
+surfaces are etched and designed to the finest of details. The Beauregard
+places more emphasis on design rather than on number of lights, and even with
+only six candles, the fixture has so many angled and masterfully cut crystals
+that the illumination from the candle lights easily reflects off of them to
+brighten even the largest of rooms. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7902
+Keywords:	fountain intricately crafted white marble
+Name:	An intricately crafted fountain of ^Wwhite marble^N
+RoomDesc:$
+^gAn intricately crafted fountain of ^Wwhite marble^g lines the western wall here.^N~
+LookDesc:$
+This intricately designed and detailed fountain is crafted from flawless ^Wwhite
+marble^N, which shines verily both day and night as filtered light slips down
+through the tree branches above, casting a fair bit of shade across most of
+this section of the courtyard garden. Cool, crisp water flows softly from
+carved symbolic figures, most of which consist of pantheonic members in line
+with older Germanic traditions. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	1
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	800.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	99999
+	Val1:	99998
+BREAK
+#7903
+Keywords:	fountain intricately crafted white marble
+Name:	An intricately crafted fountain of ^Wwhite marble^N
+RoomDesc:$
+^gAn intricately crafted fountain of ^Wwhite marble^g lines the eastern wall here.^N~
+LookDesc:$
+This intricately designed and detailed fountain is crafted from flawless ^Wwhite
+marble^N, which shines verily both day and night as filtered light slips down
+through the tree branches above, casting a fair bit of shade across most of
+this section of the courtyard garden. Cool, crisp water flows softly from
+carved symbolic figures, most of which consist of pantheonic members in line
+with older Germanic traditions. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	1
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	800.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	99999
+	Val1:	99998
+BREAK
+#7904
+Keywords:	table dining cherry wood
+Name:	A deeply coloured ^ycherry wood^N dining table
+RoomDesc:$
+^gA deeply coloured ^ycherry wood^g dining table sprawls across the hall here.^N~
+LookDesc:$
+Eating in a mansion just isn't the same if you don't eat at a table so long
+that you need to make a phone call to the person at the opposite end to see
+how their day went, and it is in that vein that this piece of furniture was
+created. Sixteen meters long and almost four wide, the magnificent and deeply
+coloured grain of the cherry wood table has been created to the specifics of
+its owner, its legs holding spiraling accents carved into them, terminating
+into clawed feet that, upon very close inspection, have Old Germanic runes
+engraved upon their surface. The symbols represent prosperity, satisfaction,
+and bounty, all of which are mirrored in the lavish elegance that this table
+presents itself with. Covered in an elongated diamond cloth along most of its
+surface, a great deal still peeks through with its highly polished surface to
+hold a meal for two or three dozen people with plenty of room for unexpected
+visitors. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	800.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7905
+Keywords:	statue tree ash white nidhogg fafnir
+Name:	A massive ^Wwhite ash^N tree surrounded by a magnificent stone statue
+RoomDesc:$
+^gA massive ^Wwhite ash^g surrounded as its base by a magnificent stone statue.^N~
+LookDesc:$
+This Ash tree appears to be ancient and well cared for, its trunk rising
+proudly toward the sky and the long branches stretching out across the
+courtyard garden in a way that offers a large patch of shade for any who
+may wish to contemplate beneath it. At its base, however, is the true
+amazing piece of architecture, as the roots run over a carefully designed
+stone planter and into soil though around it is entwined a creature that
+is difficult to identify as anything known in the world, though to those
+who know, its presence is unmistakable. On its folded wings the bodies of
+men are evident, and its large, perhaps overexaggerated teeth are kept open
+menacingly around one of the thick roots which bores into the earth, as if
+ready to cleave through it at a moment's notice. Strewn about the base of
+the structure are what appear to be innumerable corpses, lying prone in
+various stages of decay and damage, from those who are in perfect condition,
+to those who are missing great parts of their body and even skeletons creating
+a suitable mound for the draconic being to rest upon. Though it is made of
+marble, the faintest traces of metallic additions in the meticulously crafted
+scales give the dragon an almost sparkling appearance kept faded by the shade
+of the ash tree. This is Nidhogg, the Corpse Grinder, forever gnawing away at
+the World Tree's roots to bring the link of all nine worlds crashing down when
+Ragnarok comes. Though obviously spoken of as a dragon, it appears truly beastly
+in appearance, with feathered wings peeking beneath the corpses grasping to it,
+eyes that seem to shine maliciously despite the lack of ambient light glaring at
+the focus of its eternal task, always glancing up at the great trunk of Yggdrasil.
+A representation of the world in all its glory, and the impending doom that waits
+to be unleashed at the twilight of the age.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	9999.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7906
+Keywords:	tapestry silk detailed ornately wall
+Name:	An ornately detailed tapestry crafted from silk
+RoomDesc:$
+An ornately detailed tapestry crafted from silk stretches across the northern wall here.~
+LookDesc:$
+The massive tapestry is crafted from the finest silks of varying shades of
+colours, most of which are dark hues upon lighter complexions, allowing the
+depictions to stand out from the background beautifully. The story itself is
+written in what looks to be an older dialect of sperethiel, but anyone with an
+understanding of the language could most likely gleam the nature behind the
+story, and its indications along with help from the detailed scenes. It starts
+on the right hand side of the tapestry, and is read from top to bottom, left
+to right. The depictions seem to be namely of a large greater dragon, and a
+group of elves. It is known as "The Perfidy of Dragons", and has seven
+particular sections to its story. (Examine Section-One, Section-Two, et
+cetera.) 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	Section-One
+	Desc:$
+Every elf-child knows that no good can come of dragons. We learned this lesson
+from the dragon Alamaise, who cruelly took our good Queen Dallia from us. Now
+Queen Dallia was wise and just, with a kind heart that made everyone love her.
+And when the elves of Shosara strayed from elven ways, choosing foreign
+customs over our own, Queen Dallia showed them great mercy. She did not punish
+them in anger, though they richly deserved chastisement. Instead, she chose to
+travel from Wyrm Wood to see and judge Shosara with her own eyes before
+pronouncing their fate upon them. Alas for Wyrm Wood and for all elvenkind,
+that Queen Dallia's kindness should doom her in their place. 
+~
+[EXTRADESC 1]
+	Keywords:	Section-Two
+	Desc:$
+With her trustiest warriors at her side, Queen Dallia went forth. She had
+scarcely been two days on the road when suddenly the skies turned black and a
+fierce wind blew, as if a great storm was coming. Queen Dallia looked up, and
+saw that the darkness was no storm cloud. It was the vast shape of a dragon,
+hovering in front of the sun and making a cold wind with the beating of his
+mighty wings. 
+~
+[EXTRADESC 2]
+	Keywords:	Section-Three
+	Desc:$
+Queen Dallia bowed politely to the dragon and wished him good day. But the
+dragon showed no such courtesy. "I am Alamaise," he said, without so much as a
+word of greeting. "I am lord over Wyrm Wood, the forest Named for my kind
+since the world was made. I have come to claim your allegiance." Queen Dallia
+was greatly surprised by this, but answered graciously nonetheless. "I am
+Queen Dallia, sovereign of Wyrm Wood," she said. "Your words are strange to
+me, but I will gladly honor you if you can show me just cause." 
+~
+[EXTRADESC 3]
+	Keywords:	Section-Four
+	Desc:$
+Alamaise spread his wings wide, puffing himself up with arrogance. "You and
+your people are mine," he said. "You and your Wood belong to me. I gave you
+life." - "With Respect," Queen Dallia said, hiding her growing annoyance, "I
+think you are mistaken. The Passions Jaspree and Astendar gave us life, so
+that the tree Oak Heart would have fit companions. And Jaspree made Oak Heart,
+from which the Wood grew. How then are you our maker?" Alamaise puffed himself
+up even further. "I persuaded Jaspree to plant the seed that became Oak
+Heart," he said. "And I told the Passions to make the elves. Without me, you
+would not exist. And so you must bow down to me-- you and all your kind." 
+~
+[EXTRADESC 4]
+	Keywords:	Section-Five
+	Desc:$
+The dragon's words angered Queen Dallia, for she heard the lie in them. "My
+people bow to no one, save the Passions that created us and the Universe
+itself that made all life. We elves are a free people, and belong to no one
+but ourselves. You cannot have our allegiance, or even our respect, simply by
+demanding it-- you must deserve it. And from your ill manners and the
+falsehoods you have told, you deserve nothing but our scorn." Our queen's
+pride and beauty angered the dragon in turn. He flapped his wings and made a
+furious wind. "You dare defy me?!" he roared, in a voice as loud as ten
+thunderstorms. But Queen Dallia was not afraid. "I do," she answered him. "And
+so do all my people."  
+~
+[EXTRADESC 5]
+	Keywords:	Section-Six
+	Desc:$
+The dragon roared again, shaking the earth so hard that Queen Dallia and her
+warriors fell to the ground. Then he blew a mighty flame from his giant mouth,
+and burned our queen to cinders. He blew again, slaying half the warriors even
+as they struggled to nock arrows to their bows. Then, as he drew a breath to
+blow a third time, the sky opened and a shining light poured out. The light
+enveloped Alamaise, holding him motionless. From its bright heart stepped
+Jaspree and Astendar, their faces dark with sorrow and anger. They advanced
+upon the dragon and cursed him for the evil he had done to their children.
+Because he had taken life unjustly, all his works would turn to barrenness;
+because he had slain beauty, he would no longer know loveliness in any sight
+or sound. Then they took up the elves, both the living and the dead, and bore
+them on a river of light back to Wyrm Wood. 
+~
+[EXTRADESC 6]
+	Keywords:	Section-Seven
+	Desc:$
+The Passions' curse remains to this day, because no dragon has ever atoned for
+the crime of Alamaise. until they do so, the dragons will forever remain our
+enemies.
+ - ^L"^WNever deal with dragons.^L"^N 
+~
+BREAK
+#7907
+Keywords:	suit armour regal decorative ceremonial
+Name:	A regal suit of decorative ceremonial armour
+RoomDesc:$
+^gA regal suit of decorative ^Wceremonial armour^g guards the western staircase here.^N~
+LookDesc:$
+This suit of armour is decorated to the ninth degree with regalia that would
+be better suited to ceremonial purposes, but that certainly doesn't mean it
+could excell when being used for combat as well. Its plates are finely etched
+and inlaid with veins of orichalcum, and the material its crafted from isn't
+readily noted. It features mostly magnificent rose patterns, with extra detail
+put into the writhing mass of thorn covered vines that snake their way across
+the suits limbs. The thorns themselves seem to have something condensing and
+dripping down their lengths, a fluidity captured in metal, as their droplets
+form at the tips of the thorns, while others have dripped off and onto other
+sections of the plates. The entire suit radiates an aura of magic, but only
+the degree of its magical permeance can be gleamed from a quick study, its
+true purpose and function are, quite simply, unknown to all but the owner whos
+specifications it was tailored to. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7908
+Keywords:	suit armour regal decorative ceremonial
+Name:	A regal suit of decorative ceremonial armour
+RoomDesc:$
+^gA regal suit of decorative ^Wceremonial armour^g guards the eastern staircase here.^N~
+LookDesc:$
+This suit of armour is decorated to the ninth degree with regalia that would
+be better suited to ceremonial purposes, but that certainly doesn't mean it
+could excell when being used for combat as well. Its plates are finely etched
+and inlaid with veins of orichalcum, and the material its crafted from isn't
+readily noted. It features mostly magnificent rose patterns, with extra detail
+put into the writhing mass of thorn covered vines that snake their way across
+the suits limbs. The thorns themselves seem to have something condensing and
+dripping down their lengths, a fluidity captured in metal, as their droplets
+form at the tips of the thorns, while others have dripped off and onto other
+sections of the plates. The entire suit radiates an aura of magic, but only
+the degree of its magical permeance can be gleamed from a quick study, its
+true purpose and function are, quite simply, unknown to all but the owner whos
+specifications it was tailored to. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7909
+Keywords:	bed luxurious black oak four post canopy
+Name:	A luxurious carved ^Lblack oak^N, four post canopy bed
+RoomDesc:$
+^gA luxurious carved ^Lblack oak^g, four post canopy bed dominates the master bedroom.^N~
+LookDesc:$
+This bed isn't just large, its massive. Crafted from ^Lblack oak^N dotted along
+its length with finely faceted stones of ^Lonxy^N and ^ytopaz^N. Full blankets made of
+the finest ^bdeep midnight blue^N silks drape across the mattress itself, making
+it look extremely inviting and comfortable. Masses of pillows almost fall off
+the sides as they set and the carved wooden backboard of this bed. Black
+silken curtains cover the high top canopy, loosely draping down and falling to
+the sides over the posts. One could probably fit a dozen people very
+comfortably, but, who wants to share? By the looks of it you think you just
+might sink into the depths of nothingness once you lay upon its matress. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	800.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7910
+Keywords:	desk expensive intricately carved black oak
+Name:	An expensive, intricately carved ^Lblack oak^N desk
+RoomDesc:$
+^gAn expensive, intricately carved ^Lblack oak^g desk is parked against the western wall.^N~
+LookDesc:$
+This desk is absolutely massive, easily seven meters wide and two meters
+across, all carved from high quality, darkly lacquered ^Lblack oak^N wood. It has
+a large bank of mechanized plasma-screen monitors built into its surface that
+rises out of concealment from the surface of the desk when needed, bringing
+with it a keyboard, DNI link port and optical chip reader and
+encryption/decryption system, not to mention uncovering a dataport connection
+device for security interface needs. Several massive drawers sit on either
+side of the kneehole, each locked down tight with SOTA maglocks. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	800
+	Val1:	15
+	Val2:	7919
+BREAK
+#7911
+Keywords:	pool olympic-sized temperature controlled pool
+Name:	A deep, olympic-sized temperature controlled pool
+RoomDesc:$
+^gA deep, olympic-sized ^rtemperature^g controlled pool is set into the ground here.^N~
+LookDesc:$
+The contents of this massive stretch of in-ground pool is completely at the
+whim of a set of dials lining the electronics control panels dotting its
+edges, allowing the swimmer to relax in either warmer and hotter water for
+those long winter days, or to cool, crisp and refreshing on a hot summers day.
+The entire lip of the pool is lined with tiles of polished ^Lblack marble^N,
+matching the tiling that covers the bottom and sides of the pool as well. A
+small stonework sculpture sits at each corner, water trickling out from the
+open mouths of their gargoyle like features. 
+~
+Type:	Liq Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	1000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	99999
+	Val1:	99998
+BREAK
+#7912
+Keywords:	rotorcraft hughes wk-2 stallion helicopter
+Name:	A Hughes WK-2 Stallion transport rotorcraft
+RoomDesc:$
+^yA Hughes WK-2 Stallion transport rotorcraft sits powered down on the landing pad here.^N~
+LookDesc:$
+The Hughes WK-2 Stallion is the most widely produced helicopter in the world
+for a reason, due to its reliability, affordable price tag, and multiple
+internal configurations that make it fit as a transport, utility or cargo
+helicopter. Aside from its practical design, the sheer number of spare parts
+available for such a widely produced aircraft never make maintenance and
+upkeep a concern. This particular model is a transport, but sports a single
+micro-turret beneath its nose for security reasons, just in case it needs to
+switch roles in mid-flight. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7913
+Keywords:	airplane aircraft tilt-wing Ares TR-55 Traveler
+Name:	An Ares TR-55 Traveler tilt-wing aircraft
+RoomDesc:$
+^yAn Ares TR-55 ^W'^cTraveler^W'^y tilt-wing aircraft waits to take to the skies here.^N~
+LookDesc:$
+The Ares TR-55 Class "Traveler" tilt-wing aircraft are used all over the
+world, and for very good reason. its affordable price tag, reliability, not to
+mention VTOL capabilities. It can perform vertical take-offs like a
+helicopter, and then change into normal forward tilted props to fly as any
+normal prop-driven plane. Special customizations can be obtained for the
+luxurious TR-55 T class, and this baby shows it with its multitude of
+non-standard options. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7914
+Keywords:	banshee GMC thunderbird t-bird matte-black
+Name:	A dull ^Lmatte^N-^Lblack^N GMC Banshee thunderbird
+RoomDesc:$
+^yA dull ^Lmatte^y-^Lblack^y GMC Banshee thunderbird awaits a pilot here.^N~
+LookDesc:$
+The GMC Banshee is a light thunderbird, designed and used as a reconnaissance
+and courier vehicle for those who can afford it, due to the fact it can outrun
+damn near everything in the skies these days short of tactical jet fighters.
+Border patrols tend be big purchasers when it comes to this model, despite
+earlier set-backs with its design, it has bounced back into the lime light and
+is as reliable as ever. This particular craft has been given a custom coat of
+paint, which is dull ^Lmatte^N-^Lblack^N in colour, and upon closer inspection one can
+see it is actually photovoltic paint embedded with small conducters and
+strategically placed cameras, which in process the visual information and send
+electric signals around the aircraft and display images, SOTA optical
+camoflauge at its finest. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7915
+Keywords:	pool circular moons full crescent statue lined
+Name:	A statue lined pool representing a ^Lfull moon^N and two inner ^Wcrescent moons^N
+RoomDesc:$
+^gA statue lined pool representing a ^Lfull moon^g and two inner ^Wcrescent moons^g.^N~
+LookDesc:$
+The circular perimeter of this pool signifies a large full moon, contained
+within are two crescent moons, one smaller than the other, which fits into
+place a within is inner curved edge. Along the edge of the pool sit twelve
+figures crafted from various types of stone, each of which holds a vessel with
+which to empty its contents into the circulating pool of cool, crisp water. 
+~
+Type:	Liq Container
+WearFlags:	0
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9999
+	Val1:	9998
+BREAK
+#7916
+Keywords:	passcard security encrypted ID
+Name:	an encrypted security passcard
+RoomDesc:$
+An ID of some sort lies forgotten on the ground here.~
+LookDesc:$
+This ID serves as a passcard to an estate manor, which is pretty handy to have
+considering this sturdy plastic card is all that keeps you from being shot on
+sight once on the premises. It features an encrypted strip studded with tiny
+microchips, allowing it to be swipe through or read on various types of
+security card readers. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7917
+Keywords:	key skeleton old-fashioned updated
+Name:	an updated, old-fashioned skeleton key
+RoomDesc:$
+An old-fashioned skeleton key lies here.~
+LookDesc:$
+This apparently old-fashioned skeleton key is crafted from an obscure alloy of
+metals, and has been updated quite a deal with not only all the SOTA
+electronic securities options, but also some more arcane and esoteric
+benefits. The teeth are crafted from particularly faceted precious stones,
+which vibrate in a precise wave frequency to verify its authenticity. The very
+tip consists of a credstick-like port for jacking it in so it can handle
+various types of electronic decryption and verification, also very precise. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7918
+Keywords:	anklet ouroboros band engraved orichalcum serpent snake
+Name:	an engraved ^Worichalcum^N ouroboros anklet band
+RoomDesc:$
+^gAn odd little ^Wsilver serpent^g swallowing its tail has been left here.^N~
+LookDesc:$
+The detail and quality of ^Wsilver^N and ^Worichalcum^N used to forge this anklet is
+stunning, which suits its symolism perfectly. The Ouroboros is an ancient
+symbol depicting a serpent or dragon swallowing its own tail and forming a
+circle. The Ouroboros often represents self-reflexivity or cyclicality,
+especially in the sense of something constantly re-creating itself, the
+eternal return, and other things perceived as cycles that begin anew as soon
+as they end, much akin to the symbolism of the Phoenix. It can also represent
+the idea of primordial unity related to something existing in or persisting
+from the beginning with such force or qualities it cannot be extinguished. 
+~
+Type:	Key
+WearFlags:	10000000000000000001
+ExtraFlags:	1001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.10
+	Barrier:	32
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7919
+Keywords:	clockwork puzzlebox box puzzle ancient
+Name:	an ancient clockwork puzzlebox
+RoomDesc:$
+A weird looking clockwork puzzlebox has been left here, waiting to be solved.~
+LookDesc:$
+At first glance this puzzlebox looks new and modernly constructed, but it
+isn't until one holds it in their hand that they can tell the depths of its
+age, and the multitude of hands it has passed down through. This clockwork
+puzzlebox is a work of art surpassed by very few others, namely due to its
+intricate and finely detailed clockwork gears and pins, allowing it to be
+twisted, turned and slide its sections to solve its answer. The surfaces are
+designed immaculately to represent literally dozens of alternate symbols and
+letters, most of which aren't even within the same language. As to what it
+holds, no one can tell. Perhaps some things are best left unknown. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1001001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	32
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7920
+Keywords:	key skeleton ivory inlaid
+Name:	a small ^Wivory^N inlaid skeleton key
+RoomDesc:$
+^gA small hint of ^Wivory^g gleams off a key on the floor here.^N~
+LookDesc:$
+Its an old fashioned skeleton key, ^Wsilver^N plated and inlaid with tiny slivers
+of etched ^Wivory^N along its length and teeth. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7921
+Keywords:	hay bales stacked straw
+Name:	A few partially stacked bales of ^yhay^N with a ^Lpitchfork^N stuck in it
+RoomDesc:$
+^gA few partially stacked bales of ^yhay^g with a ^Lpitchfork^g stuck in it is here.^N~
+LookDesc:$
+Its a few bales of dried straw, squared into blocks and tied together. Some of
+the bindings are cut, and a good chunk of the hay has been pitched out thanks
+to the now stationary pitchfork, which is sticking out of one of the bales. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7922
+Keywords:	carabiner orichalcum sturdy etched
+Name:	a sturdy, ^Worichalcum^N etched carabiner
+RoomDesc:$
+A sturdy looking, detailed metal carabiner loop lies here.~
+LookDesc:$
+This carabiner is an orichalcum inlaid polished metal loop with a screwed
+gate. The loop part opposite the gate is referred to as the spine, which is
+etched with various runes, also inlaid with orichalcum to make them stand out.
+It can quickly and reversibly connect components in safety-critical systems.
+The word comes from "Karabinerhaken", meaning "hook for a carbine" in German.
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.05
+	Barrier:	32
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	1
+	Val2:	-1
+BREAK
+#7923
+Keywords:	lariat lasso cowboy old-school weighted
+Name:	an old-school, weighted cowboy lariat
+RoomDesc:$
+An old-fashioned lasso sits here in a neatly coiled pile.~
+LookDesc:$
+This lariat is made from stiff, wire reinforced rope so that the noose stays
+open when the lasso is thrown. It also allows the cowboy to easily open up the
+noose from horseback to release the cattle because the rope is stiff enough to
+be pushed a little. This high quality lasso is weighted for better handling,
+and it has a small reinforced loop at one end, called a honda, through which
+the rope passes to form a loop. The honda can be formed by a honda knot (or
+another loop knot), an eye splice, a seizing, or a metal ring. The other end
+is tied simply in a small, tight, overhand knot to prevent fraying. 
+~
+Type:	Weapon
+WearFlags:	1010001000010100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	8
+	Cost:	300
+	AvailTN:	5
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#7924
+Keywords:	boots tanker spurs
+Name:	a pair of ^Ldentiplast^N-^Lreinforced^N tanker boots with ^Worichalcum spurs^N
+RoomDesc:$
+^gA pair of ^Lblack leather^N tanker boots with ^Worichalcum spurs^g have been left sitting here.^N~
+LookDesc:$
+These ^Lblack leather^N tanker boots are military boots closely associated with
+soldiers who serve on tanks and tracked vehicles in general. Whereas regular
+combat boots are laced through metal eyelets along their leather upper, the
+tanker boots are fastened with leather straps which wrap around the upper
+ankle and buckle near the top. This benefits the wearer in several ways, as
+the problem with laces is that they can become undone easily and then
+entangled in the many exposed, moving parts of a tank, they also allow for
+improved circulation to the feet, and the design of their sewn-in tongue makes
+them waterproof. These boots are equipped with dentiplast toe-guards, as well
+as shank/heel guards, as befitting a boot intended for a hazardous operating
+environment. An accessory has been added by their owner, which comes in the
+form of ornately designed eight-pointed rowel riding spurs crafted from
+^Worichalcum^N. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.25
+	Barrier:	8
+	Cost:	500
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val4:	1
+	Val5:	1
+	Val6:	2
+	Val7:	4
+BREAK
+#7925
+Keywords:	sleeves combat full arm-length dentiplast-reinforced
+Name:	a pair of full arm-length ^Ldentiplast^N-^Lreinforced^N combat sleeves
+RoomDesc:$
+A pair of full arm-length sleeves meant for close combat purposes are lying here.~
+LookDesc:$
+These fitted, full arm-length sleeves cover a bit of the hand above the wrist
+and travel all the way up across the back of the shoulders and base of the
+neck, comfortably concealing themselves beneath most clothing. They seem to be
+constructed with both a flexible ^Lkevlar^N-^Lweave^N and strategically placed fitted
+and molded ^Ldentiplast plates^N to protection both the joints and vulnerable
+undearm areas. They would prove rather useful for turning away a blade in a
+close quarters fight, giving the wearer a slight edge over their opponent. 
+~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.20
+	Barrier:	8
+	Cost:	250
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val3:	3
+	Val4:	2
+	Val7:	2
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#7926
+Keywords:	helmet light-weight composite
+Name:	a light-weight ^Lmatte^N-^Lblack^N composite kevlar combat helmet
+RoomDesc:$
+^gA light-weight ^Lmatte^N-^Lblack^g composite kevlar combat helmet is sitting here.^N~
+LookDesc:$
+This high-quality composite combat helmet is based on the Gefechtshelm
+Schuberth B826 paratrooper helmet used by the German Bundeswehr and is made of
+ballistic resistant materials such as kevlar and aramid, which offer improved
+protection and an overall lighter weight compared to older variants. This
+helmet also has very good non-ballistic protective qualities, protecting
+against injuries that may be caused by many things, such as concussive shock
+waves from explosions, physical attacks, motor vehicle accidents or falls. Its
+fully adjustable straps can be fitted and worn in comfort while causing as
+little restriction as possible, and the interior about the ears is designed in
+mind for integration of radio receivers, as well as attachable facemask visors
+and goggle headsets. 
+~
+Type:	Radio
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	1000000000001000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.20
+	Barrier:	12
+	Cost:	850
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	8
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#7927
+Keywords:	chaps tailored riding
+Name:	a pair of tailored ^Lblack leather^N riding chaps with straps
+RoomDesc:$
+^gA pair of ^Lblack leather^N riding chaps have been left neatly folded here.^N~
+LookDesc:$
+These perfectly tailored ^Lblack leather^N chaps are actually traditionally
+western-styled riding chinks, which are rather loose in comparison and end in
+a decorative flare before reaching the ankles. Sleek and ornately detailed
+^Worichalcum^N buckles line long the exposed back of the legs, allowing them to be
+adjusted to suit the wearer comfortably. Beneath their somewhat soft and
+decorative ^Lblack leather^N exterior, they seem to be reinforced with a flexible
+kevlar weave to offer more protection to the legs while still remaining
+unrestrictive to the wearers movements. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	500
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	4
+	Val3:	4
+	Val4:	4
+	Val5:	2
+	Val6:	1
+BREAK
+#7928
+Keywords:	suit dragonskin aramid-weave form-fitting
+Name:	a flexible, form-fitting ^Laramid^N-^Lweave^N dragonskin suit
+RoomDesc:$
+A form-fitting dragonskin suit has been left behind here.~
+LookDesc:$
+This dragonscale armor is made of an imbricated overlapping configuration of
+high tensile ceramic discs encased in an aramid textile cover, offering a
+higher degree of protection and flexiability over older armoured vests and
+jackets, the suit fits snugly and comfortably and is able to be concealed
+beneath most forms of clothing. The discs are strategically placed to protect
+vital organs and arteries while not restricting the wearers movements nearly
+as much as the bulkier vests and other types of protective suits used in
+combat. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	100000000
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.75
+	Barrier:	24
+	Cost:	5000
+	AvailTN:	8
+	AvailDay:	18.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	5
+	Val6:	3
+	Val7:	12
+BREAK
+#7929
+Keywords:	sheath hardwood
+Name:	a beautifully etched ^Lblack^N hardwood sheath
+RoomDesc:$
+A beautifully crafted sheath made of polished hardwood.~
+LookDesc:$
+This beautifully crafted sheath is crafted from rare hardwoods, making it
+sturdy and able to take quite a beating. Chances are it could also be used as
+a club should things get to that point. 
+~
+Type:	Holster
+WearFlags:	10001000000100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	8
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#7930
+Keywords:	pistol colt combat commander m1911a1 chrome-plated
+Name:	a modified Colt 'Combat Commander' M1911A1 (10mm) ^Wchrome^N-^Wplated^N pistol
+RoomDesc:$
+^gA heavily modified ^Wchrome^g-^Wplated^g Colt M1911A1 pistol has been left here.^N~
+LookDesc:$
+The legend, the myth, this is a Colt M1911A1 pistol in all of its glory. Field
+tested and approved across the globe, this pistol has seen action nearly
+everywhere, and its design has not changed in well over a century, for good
+reason too. Sturdy, reliable and accurate for a combat pistol of its size and
+weight, it's easy to see why so many swear by it. This particular M1911A1 has
+been modified, and most of its guts have been updated with newer materials, as
+well has having its firing pin swapped out and its springs replaced to deal
+with the added stress of firing hotter and more powerful loads, as well as
+having its magazine extended to handle its eighteen rounds of 10mm ammunition. It
+has a polished ^Wchrome^N-^Wplated^N finish, which has been beautifully detailed with
+^Worichalcum^N inlaid designs, its etched ^Wivory^N grips helping add to its already
+elegant appearance. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	4
+	AvailDay:	0.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	18
+	Val9:	-1
+	Val10:	4
+BREAK
+#7931
+Keywords:	flammenschwert sword monosword ornately beautiful flame
+Name:	an ornately crafted flammenschwert with beautiful ^Worichalcum^N inlays
+RoomDesc:$
+^gAn ornately crafted monosword with an undulating flame blade is resting here.^N~
+LookDesc:$
+The flammenschwert, German for "Flame Blade", has a characteristically
+undulating style of blade, the wave pattern is often considered to contribute
+a flame-like quality to the appearance of the sword. While largely decorative,
+some attributes of the waved blade were useful in combat, including an
+increased cutting surface and slightly reduced weight. When parried or blocked
+by another blade in combat, the design of the blade causes unpleasant
+vibrations to be transmitted into the others blade, slowing their contact with
+additional friction as it encounters each successive wave. The edge seems to
+sport a monofilament treatment, and its blade and grip are quite long,
+allowing it to be wielded with equal ease in a single hand or both hands. A
+highly ornate pommel encases a carved ^Lzircon orb^N the size of a quarter to help
+perfectly balance the sword, as do its decorative parrying hooks and long
+^Worichalcum^N inlaid ricasso. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	2500
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#7932
+Keywords:	revolver pistol walker colt .44
+Name:	a beautifully decorated and ^Wpolished^N Walker Colt .44 heavy revolver
+RoomDesc:$
+A beautifully decorated Walker Colt .44 heavy revolver has been left here.~
+LookDesc:$
+The Walker Colt was the largest and most powerful black powder repeating
+handgun ever made, but it seems this particular gun has been modified and
+upgraded to fire an up to date cartridge. It was created in the mid-1840s in a
+collaboration between Captain Samuel Hamilton Walker and American firearms
+inventor Samuel Colt, building upon the earlier Colt Paterson design. Walker
+wanted a handgun that was extremely powerful at close range, and he got it
+with this single action revolver with a revolving cylinder holding six rounds
+chambered for .454 magnum cartridges, which were originally .44 ball rounds
+before it was modified and updated. The entire peice is covered with
+^Worichalcum^N inlays and etchings, and while its beautiful original walnut grip
+isn't in the best of condition, it only adds to its larger than life
+personality. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	8
+	Cost:	2000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	8
+	Val8:	-1
+	Val10:	2
+BREAK
+#7933
+Keywords:	yari spear ornate ivory
+Name:	an ornate yari with ^Wivory^N fittings adorned in ^bazure^N inlays
+RoomDesc:$
+^gAn ornate yari with ^Wivory^g fittings adorned in ^bazure^g has been left here.^N~
+LookDesc:$
+The jumonji yari, translated as "cross-shaped spear", is somewhat similar to a
+trident or partisan as it sports a pair of double-edged curved blades around
+its central lance, which measures at nearly a foot in length. Its habaki, the
+collar fitted beneath the blades to attach to the shaft, measures as long as
+the central blade itself and is fitted with a meticulously carved sheathing of
+^Wivory^N. A traditionally styled koi fish adorns each side of the habaki, its
+scales inset with ^bazure^N gemstone scales that shimmer and sparkle as light
+washes over it, their eyes set with small ^Lblack diamond^N pupils. The shaft is
+crafted from solid oak and covered in lacquered bamboo strips in a polygonal
+cross section, which are in turn wrapped in etched metal rings. A highly
+decorative ^Wivory^N pommel is affixed to the bottom to offer an impeccable degree
+of balance to the lengthy weapon, making it equally impressive hanging above a
+mantle or on the field of battle. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	3000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	3
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#7934
+Keywords:	pistol stk juggernaught customized automatic heavy
+Name:	a heavily customized STK 'Juggernaught' automatic heavy pistol
+RoomDesc:$
+A heavily customized heavy automatic pistol has been left here.~
+LookDesc:$
+Originally built and designed by the manufacturer "Shoot To Kill", the
+Juggernaught heavy automatic pistol is built to be sturdy, reliable and as
+frightening as possible when fired. It has a square, blocky construction, but
+its heavy nature helps make it solid and rather durable, able to handle the
+rigors of an urban battlefield. This particular pistol has had its barrel
+swapped out for a heavier, thicker barrel, which has been drilled and vented
+to allow for less felt recoil and reduced barrel climb, all while maintaining
+its distinctive and intimidating muzzle flash. The trigger mechanism and grip
+have been replaced entirely, which has been perfectly molded and tailored for
+a smaller hand, which is a bit odd considering this baby kicks like a mule and
+most trogs would have trouble wielding it with finesse. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	12
+	Cost:	3000
+	AvailTN:	5
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	25
+	Val9:	-1
+	Val10:	12
+BREAK
+#7935
+Keywords:	knife bowie damascus blade
+Name:	a large Bowie knife with a wide ^Wd^wa^Wm^Wa^ws^Wc^wu^Ws^w b^Wl^wa^Wd^we^N
+RoomDesc:$
+A wide bladed knife with a fancy damascus design on it is stuck into the ground here.~
+LookDesc:$
+This Bowie knife resembles a very lage butcher knife, having a relatively
+broad damascus blade measuring nearly three inches wide and almost ten inches
+in length. The engraved ^Wdeer bone^N handle is tailored fit for a specific
+individual and wrapped tightly in soft yet durable ^ybuckskin^N for a reliable
+grip, whose length and heavy decorative pommel help to balance the heavy
+almost sword-like blade on the other end. The grip itself is wide and fitted
+around a full tang blade design, the single piece construction making it
+sturdy and durable, and equally well balanced wether swung or thrown. This
+particular blade features a thick clip point tip, and its false edge seems to
+have been sharpened into a true edge, giving it nearly a nine inch blade
+length upon each side. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	12
+	Cost:	450
+	AvailTN:	3
+	AvailDay:	0.25
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#7936
+Keywords:	cleaver carbon-steel bone two-handed
+Name:	a two-handed bone cleaver with a heavy ^Lcarbon^N-^Lsteel^N blade
+RoomDesc:$
+A heavy two-handed bone cleaver that has been stolen from a slaughter house is here.~
+LookDesc:$
+This massive bone cleaver is best suited to a slaughter house, where it is put
+to use hacking cow carcasses in half with ease thanks to its design. The
+lengthy shaft features a slight curve, allowing for a better energy transfer
+to its meter long blade, which seems to be little more than a fat slab of
+dense ^Lcarbon steel^N. The single edge, which is wide and sharp, has a wedge
+design as not to malform when cutting through thick bones. While not made for
+fighting, it is a gruesome reminder of how effective basic technology can be
+when used in the right hands, as it could easily lop off a limb or cleave an
+unfortunate victim in two from from shoulder to hip. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000010
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	3000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	3
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#7937
+Keywords:	pistol heavy Mauser C-96 Bolo short-barreled
+Name:	a Mauser C-96 short-barreled "Bolo" heavy pistol
+RoomDesc:$
+An antique WWII pistol sits on display here.~
+LookDesc:$
+The Mauser C96, with its shoulder stock, long barrel and high-velocity
+cartridge, had superior range and better penetration than most other standard
+pistols, as the 7.63x25mm Mauser cartridge was the highest velocity
+commercially manufactured pistol cartridge in existence until the advent of
+the .357 Magnum cartridge in 1935. The wooden shoulder stock can double as a
+holster or carrying case, and a grip shaped like the handle of a broom, whose
+distinctive appearance earned the gun the nickname "Broomhandle" in the
+English-speaking world. The C-96 is a recoil operated, locked breech,
+semi-automatic pistol. It utilizes a short recoiling barrel with its bolt
+located inside the large barrel extension. The bolt and barrel are locked by
+the vertically tilting locking piece with two lugs, which lock into the
+recesses on the bottom of the bolt itself. It features a select fire switch,
+allowing it to fire in either semi-automatic or three round bursts. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	5
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	25
+	Val9:	-1
+	Val10:	12
+BREAK
+#7938
+Keywords:	LMG light machine gun vintage M1918 Browning automatic rifle BAR
+Name:	a vintage M1918 Browning automatic rifle
+RoomDesc:$
+An old light machine gun sits on display here.~
+LookDesc:$
+The Browning Automatic Rifle (BAR) is a family of United States automatic
+rifles and light machine guns used by the U.S. and numerous other countries
+during the 20th century. The primary variant of the BAR series was the M1918,
+this particular model, which is chambered for the .30-06 Springfield rifle
+cartridge and was designed by legendary firearms inventor John Browning in
+1917 for the U.S. Expeditionary Corps in Europe as a replacement for the
+French-made Chauchat and M1909 Benet-Mercie machine guns. The BAR was designed
+to be carried by advancing infantrymen, slung over the shoulder and fired from
+the hip, a concept known as "walking fire", thought to be necessary for the
+individual soldier during trench warfare. The M1918 is a selective fire,
+air-cooled automatic rifle that uses a gas-operated long stroke piston rod
+actuated by propellant gases bled through a vent in the barrel, which allows
+it to put down rapid bursts of walking fire for advancing infantry. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.75
+	Barrier:	8
+	Cost:	2200
+	AvailTN:	6
+	AvailDay:	5.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val3:	15
+	Val4:	19
+	Val5:	100
+	Val10:	28
+BREAK
+#7939
+Keywords:	MG42 heavy machine gun WWII antique HMG
+Name:	an antique WWII MG42 heavy machine gun
+RoomDesc:$
+An antique heavy machine gun sits on display here.~
+LookDesc:$
+The Maschinengewehr Model 42, better known as a the MG 42, is a 7.92x57mm
+machine gun that was developed in Nazi Germany and entered service with the
+Wehrmacht in 1942. This firearm has a proven record of reliability,
+durability, simplicity, and ease of operation, but is most notable for being
+able to produce a stunning volume of suppressive fire. The MG 42 has one of
+the highest average rates of fire of any single-barreled man-portable machine
+gun, between 1,200 and 1,500 rounds per minute, resulting in a distinctive
+muzzle report. At such a high rate the human ear cannot easily discern the
+sound of individual bullets being fired, and in use the gun makes a sound
+likened to "ripping cloth", which gave rise to its nickname, "Hitler's
+Buzzsaw". So distinct and terrifying was the weapon that the United States
+Army created training films to aid its soldiers in dealing with the
+psychological trauma of facing the weapon in battle, and even in this day and
+age, it has lost none of its lethality. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.25
+	Barrier:	12
+	Cost:	5200
+	AvailTN:	18
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	17
+	Val4:	19
+	Val5:	80
+	Val10:	16
+BREAK
+#7940
+Keywords:	HMG M2 .50 caliber heavy machine gun antique
+Name:	an antique M2 .50 caliber heavy machine gun
+RoomDesc:$
+An antique heavy machine gun sits on display here.~
+LookDesc:$
+The M2, otherwise known as the Browning .50 Caliber, is a heavy machine gun
+that was designed towards the end of World War I by legendary firearms
+inventor John Browning. It is very similar in design to John Browning's
+earlier M1919 Browning machine gun, which was chambered for the .30-06
+cartridge. The M2 uses the larger and more powerful .50 BMG cartridge, which
+was named for the gun itself (BMG standing for Browning Machine Gun). The M2
+has earned many nicknames in its lengthy time in service, such as the "Ma
+Deuce", or "The Fifty" in reference to its caliber. Even today it remains an
+effective weapon against infantry, unarmored or lightly armored vehicles and
+boats, light fortifications, and low-flying aircraft. This particular variant
+features a water jacket, which pumps cold water around the barrel to keep it
+from overheating, which it is apt to do with the high rate of fire it's
+capable of, allowing it to be fired for extended periods without warping the
+barrel. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.25
+	Barrier:	12
+	Cost:	5200
+	AvailTN:	18
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	17
+	Val4:	19
+	Val5:	80
+	Val10:	16
+BREAK
+#7941
+Keywords:	laesal fruit golden cherry
+Name:	a small laesal fruit
+RoomDesc:$
+A small golden cherry-like fruit is sitting on the ground here.~
+LookDesc:$
+This golden cherry-like fruit is sweet and can produce mild euphoria. In place
+of a cherry's pit, the fleshy red center is filled with small dark seeds. When
+powdered and added to food or drink (wine made from laesal fruit is especially
+effective), those who ingest the substance is can suffer from a period of
+unconciousness and cause a chemical inbalance in portions of the brain dealing
+with short term memory, often resulting in the complete short-term memory
+loss. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#7942
+Keywords:	boots knee-high blue leather swirled
+Name:	a pair of ^bbl^Bu^be^N ^ble^Ba^bthe^Br^N knee-high boots swirled with ^Wsi^Cl^Wver^N
+RoomDesc:$
+A pair of blue leather knee-high boots are sitting here.~
+LookDesc:$
+These stylish knee-high boots are covered and fitted with high quality ^bbl^Bu^be^N
+^ble^Ba^bthe^Br^N, upon which are actual ^Wsi^Cl^Wver^N inlaid lines which travel up along the
+calves and end in a beautiful set of swirls. The matching ^Wsilver^N zippers are
+concealed nicely along each side, as are the molded dentiplast insets that
+offer protection to the wearer. The interiors are lined with a kevlar-weave
+for added protection, which is covered in a plush, supple material to offer
+the wearer a breathable, comfortable fit. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.25
+	Barrier:	8
+	Cost:	500
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val5:	1
+	Val6:	2
+BREAK
+#7943
+Keywords:	pants blue leather
+Name:	a pair of ^bbl^Bu^be^N ^ble^Ba^bthe^Br^N pants that leave nothing to the imagination
+RoomDesc:$
+A pair of tight ass blue leather pants are folded neatly here.~
+LookDesc:$
+These tight little pants are crafted from high quality ^bbl^Bu^be^N ^ble^Ba^bthe^Br^N, between
+the layers of which is concealed a composite kevlar-weave that is fitted and
+smoothed perfectly to show show through in the slightest. The slender waist
+and seams are double stitched with a lovely little design in a matching
+coloured thread, and while it has pockets, it's doubtful anything could fit
+inside of them considering how snug the fit is on the wearer, which is sure to
+show off all of the curves they have. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	500
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	2
+	Val6:	1
+BREAK
+#7944
+Keywords:	sleeves blue leather
+Name:	a pair of ^bbl^Bu^be^N ^ble^Ba^bthe^Br^N sleeves with ^Wsi^Cl^Wver^N zippers
+RoomDesc:$
+A pair of blue leather protective sleeves have been left here.~
+LookDesc:$
+These fitted, full arm-length sleeves cover a bit of the hand above the wrist
+and travel all the way up across the back of the shoulders and base of the
+neck, comfortably concealing themselves beneath most clothing. They seem to be
+constructed with both a flexible ^Lkevlar^N-^Lweave^N and strategically placed fitted
+and molded ^Ldentiplast^N plates to protection both the joints and vulnerable
+undearm areas, which has been covered and fitted with ^bbl^Bu^be^N ^ble^Ba^bthe^Br^N for
+aesthetic purposes. They would prove rather useful for turning away a blade in
+a close quarters fight, giving the wearer a slight edge over their opponent. 
+~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.20
+	Barrier:	8
+	Cost:	250
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#7945
+Keywords:	suit form-fitting flexible aramid-weave dragonskin
+Name:	a flexible, form-fitting ^bar^Ba^bmi^Bd^N-^bwe^Ba^bve^N ^bdr^Ba^bgo^Bns^bk^Bin^N suit
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+This dragonscale armor is made of an imbricated overlapping configuration of
+high tensile ceramic discs encased in an aramid textile cover, offering a
+higher degree of protection and flexiability over older armoured vests and
+jackets, the suit fits snugly and comfortably and is able to be concealed
+beneath most forms of clothing. The discs are strategically placed to protect
+vital organs and arteries while not restricting the wearers movements nearly
+as much as the bulkier vests and other types of protective suits used in
+combat. This particular suit seems to have been tailored to a smaller, more
+slender feminine frame. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	100000000
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.75
+	Barrier:	24
+	Cost:	2500
+	AvailTN:	8
+	AvailDay:	18.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	5
+	Val6:	3
+	Val7:	12
+BREAK
+#7946
+Keywords:	satchel bag blue leather compact
+Name:	a compact ^bbl^Bu^be^N ^ble^Ba^bthe^Br^N satchel
+RoomDesc:$
+A compact blue leather satchel has been left sitting here.~
+LookDesc:$
+This fully-padded compact satchel bag protects up to a 18" (15.5" diagonal
+screen size) laptop and is crafted from fine ^bbl^Bu^be^N ^ble^Ba^bthe^Br^N. Four pockets on the
+outside front carry a variety of gear; a padded organizer opens from the back;
+Radio/GPS/Phone and water bottle pockets flank the sides, and the internal
+concealed weapon compartment, lined with velcro pile, is large enough to carry
+a full-size handgun and three spare mags. Its main zipper pull is equipped
+with a button lock safety device, while the bottom is made with waterproof,
+non-skid material, and includes an adjustable/detachable padded shoulder
+strap. 
+~
+Type:	Container
+WearFlags:	10001000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.20
+	Barrier:	8
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	60
+	Val1:	1
+	Val2:	-1
+BREAK
+#7947
+Keywords:	unit collection containment
+Name:	a collection and containment unit
+RoomDesc:$
+One of several collection and containment units line the path here.~
+LookDesc:$
+This high quality collection and containment unit has various settings
+available upon the wide dial covered control panel face, ranging from climate
+and temperature control, to flash freeze applications, all of which are used
+to keep the organic fruits from spoiling and going bad before they can be
+used. Multiple units line the pathway infront of the trees, allowing the
+bounty the orchard grows to be collected and safely stored for later use by
+their owner. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	1000011
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	1
+	Val2:	-1
+BREAK
+#7948
+Keywords:	sword scharfrichterschwert executioner transcendental
+Name:	an ornately engraved, transcendental scharfrichterschwert
+RoomDesc:$
+An executioner's sword of transcendental beauty hangs proudly on display here.~
+LookDesc:$
+This ornately adorned executioner's sword is of a German design that dates
+back to the early 15th century, which, as its name would suggest, was used in
+the execution of those found guilty by decapitation. Unlike most swords, it's
+wide blade is constructed in a perfectly straight manner from one end of the
+blade to its tip, which does not taper off to a point, and instead has a
+sharpened boxed edge. A beautifully stylized engraving travels a quarter of
+the way up the bottom of the blades wide fuller, which reads in German:
+"Werfen Sie im Namen des Gottes - Sie Schuldig". Various other Germanic runes
+decorate its length, obviously for ceremonial and decorative purposes, and
+while its edge is honed to a fine razor sharp quality, it features nicks and
+other blemishes, indicating where it was damaged while being used to
+decapitate its victims. It features no hilt, as it was not designed for the
+purpose of combat, and its handle and pommel are both equally adorned in
+lavish engravings for ritual purpose. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	2500
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#7962
+Keywords:	shades ultrasound slick
+Name:	a slick pair of ^bmi^Bd^bni^Bg^bht bl^Bu^be^N ultrasound shades
+RoomDesc:$
+A rather slick looking set of shades have been left folded here.~
+LookDesc:$
+These slick looking sunglasses have sleek ^bmi^Bd^bni^Bg^bht bl^Bu^be^N frames that sweep back
+smoothly to fit the user comfortably. The matching ^bmi^Bd^bni^Bg^bht bl^Bu^be^N shaded lenses
+seem to have quite a bit of technology packed into them as well, noted by the
+small concealed ultrasound emitters upon each edge, which allow the circuits
+embedded into the lenses themselves to display subtle variances in motion when
+activated. When not in use, however, the lenses have a crisp and clear
+visibility, despite being completely tinted and appearing practically opaque
+to anyone not wearing them. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	1000001000
+Material:	electronics
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	3000
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	1
+BREAK
+END

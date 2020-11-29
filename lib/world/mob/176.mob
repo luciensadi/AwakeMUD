@@ -1,0 +1,658 @@
+#17600
+Keywords:	elf blue e
+Name:	a tall beautiful blue haired elf is here holding tickets
+RoomDesc:$
+A tall beautiful blue haired elf is here holding tickets 
+
+~
+LookDesc:$
+The ticket vendor looks you up and down as she tries to sell you a ticket 
+~
+ArriveMsg:	saunters in from
+LeaveMsg:	swishes away to
+MobFlags:	1001010
+AffFlags:	11000
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	189
+	Weight:	65
+	Level:	5
+	Ballistic:	10
+	Impact:	10
+	Cash:	25
+	Bank:	15
+[SKILLS]
+BREAK
+#17601
+Keywords:	pimply teenager concession worker p t c w
+Name:	a concession worker
+RoomDesc:$
+A pimply faced teenager stands here 
+
+~
+LookDesc:$
+He looks bored out of his mind 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	5
+[SKILLS]
+BREAK
+#17602
+Keywords:	projectionist p
+Name:	a projectionist
+RoomDesc:$
+A projectionist stands here. 
+
+~
+LookDesc:$
+He looks eager to get his job over with. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	100010000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pierce
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	5
+	Cha:	4
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	2
+	MaxPhys:	0
+	MaxMent:	0
+	Ballistic:	4
+	Impact:	4
+	Cash:	25
+	Bank:	25
+	Karma:	2
+[SKILLS]
+	edged weapons:	3
+BREAK
+#17603
+Keywords:	tall rocky fan rif-raf r
+Name:	a tall male rocky fan
+RoomDesc:$
+A tall male rocky fan stares you up and down. 
+
+~
+LookDesc:$
+He looks like he's dressed up like Rif-Raff from the movie. 
+~
+ArriveMsg:	sneaks up from
+LeaveMsg:	stomps away
+MobFlags:	10000001001000
+AffFlags:	1000000000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Whip
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	90
+	Level:	1
+	MaxPhys:	0
+	MaxMent:	0
+	Ballistic:	3
+	Impact:	3
+	Cash:	15
+	Bank:	15
+	Karma:	2
+[SKILLS]
+	whips & flails:	3
+BREAK
+#17604
+Keywords:	gothic squatter g s
+Name:	a gothic squatter
+RoomDesc:$
+A gothic squatter lies here. 
+
+~
+LookDesc:$
+He doesn't seem to notice you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001110
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+Position:	Sleeping
+DefaultPos:	Sleeping
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	1
+	Cha:	3
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	2
+	Bank:	2
+	Karma:	2
+[SKILLS]
+	:	1
+BREAK
+#17605
+Keywords:	rocky fan flower r f
+Name:	a rocky fan
+RoomDesc:$
+A rocky fan stands here. Look he's made you a paper  flower, wasn't that
+sweet? 
+
+~
+LookDesc:$
+He looks like he's preoccupied with the women in the room. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100001001100
+AffFlags:	1000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Whip
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	1
+	Ballistic:	6
+	Impact:	2
+	Cash:	20
+	Bank:	40
+	Karma:	2
+[SKILLS]
+	whips & flails:	4
+BREAK
+#17606
+Keywords:	female rocky fan magenta f r f m
+Name:	a female rocky fan
+RoomDesc:$
+A female rocky fan stands here. 
+
+~
+LookDesc:$
+She looks like she dressed up to like the character Magenta. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011100
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	4
+	Cha:	3
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	1
+	Ballistic:	4
+	Impact:	2
+	Cash:	45
+	Bank:	50
+	Karma:	1
+[SKILLS]
+	brawling:	4
+	:	1
+BREAK
+#17607
+Keywords:	dirty ork squatter d o s
+Name:	a dirty ork squatter
+RoomDesc:$
+A dirty ork squatter sits here. 
+
+~
+LookDesc:$
+He looks like he's not very happy 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000011001011000
+AffFlags:	100000000000000000000
+Race:	Humanoid
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	3
+	Str:	7
+	Cha:	6
+	Int:	2
+	Wil:	3
+	Mag:	2
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	3
+	MaxPhys:	0
+	MaxMent:	0
+	Ballistic:	6
+	Impact:	5
+	Cash:	5
+	Karma:	4
+[SKILLS]
+	brawling:	4
+	stealth:	4
+BREAK
+#17608
+Keywords:	tranny trannsylvanian t
+Name:	a young trannsylvanian
+RoomDesc:$
+A young "Tranny" stands here. 
+
+~
+LookDesc:$
+It looks like it's doing the "Time Warp" 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001000
+AffFlags:	10000000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	2
+	Ballistic:	3
+	Impact:	6
+	Cash:	50
+	Bank:	65
+	Karma:	2
+[SKILLS]
+	edged weapons:	4
+	armed combat:	5
+BREAK
+#17609
+Keywords:	Brad b
+Name:	Brad Majors
+RoomDesc:$
+An actor who looks like they are playing Brad Majors is standing here. 
+
+~
+LookDesc:$
+He looks like he's a little bit lost. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000010001100
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	6
+	Wil:	7
+	Mag:	3
+[POINTS]
+	Height:	96
+	Weight:	175
+	Cash:	15
+	Bank:	25
+	Karma:	2
+[SKILLS]
+	brawling:	5
+BREAK
+#17610
+Keywords:	janet mousy woman j m w
+Name:	a mousy woman
+RoomDesc:$
+A mousy woman who looks like she is playing Janet stands here. 
+
+~
+LookDesc:$
+She looks like she might try and jump your bones. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000011100
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	3
+[POINTS]
+	Height:	112
+	Weight:	153
+	Cash:	15
+	Bank:	25
+	Karma:	2
+[SKILLS]
+	brawling:	5
+	sorcery:	4
+	:	3
+	:	3
+BREAK
+#17611
+Keywords:	franky frankenfurter dr. f 
+Name:	a tall man wearing lingerie
+RoomDesc:$
+the actor who appears to be playing Dr. frankenfurter stand here. 
+
+~
+LookDesc:$
+He looks like he's about to tear all your clothes off! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000111110
+AffFlags:	1000000000000
+Race:	Humanoid
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	9
+	Cha:	9
+	Int:	4
+	Wil:	4
+	Mag:	4
+[POINTS]
+	Height:	140
+	Weight:	157
+	Level:	2
+	Ballistic:	5
+	Impact:	4
+	Cash:	25
+	Bank:	45
+	Karma:	2
+[SKILLS]
+	sub-machine guns:	4
+	firearms:	6
+	:	3
+	shotguns:	5
+	assault rifles:	5
+BREAK
+#17612
+Keywords:	Rocky r stud s
+Name:	a studly looking blonde man
+RoomDesc:$
+A studly looking blonde man stands here flexing. 
+
+~
+LookDesc:$
+He looks alot like the creation in the movie "Rocky". 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001001100
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Resting
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	3
+	Str:	7
+	Cha:	3
+	Int:	2
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	173
+	Weight:	254
+	Level:	2
+	Ballistic:	2
+	Impact:	2
+	Cash:	45
+	Bank:	45
+	Karma:	2
+[SKILLS]
+	brawling:	9
+	grapple:	7
+BREAK
+#17613
+Keywords:	Columbia chunky woman c w
+Name:	A short chunky woman wearing glitter
+RoomDesc:$
+A short chunky woman wearing glitter winks at you. 
+
+~
+LookDesc:$
+She looks like she is supposed to be dressed up like "Columbia" the groupie
+from the movie. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000010001100
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Taser
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	213
+	Weight:	203
+	Level:	1
+	Ballistic:	3
+	Impact:	10
+	Cash:	5
+	Bank:	15
+	Karma:	2
+[SKILLS]
+	armed combat:	5
+	tasers:	5
+	:	4
+BREAK
+#17614
+Keywords:	Dr. Scott man d s m
+Name:	A fat bald man in a wheel chair
+RoomDesc:$
+A fat bald man sits in his wheelchair here. 
+
+~
+LookDesc:$
+He seems to be playing "Dr. Scott" from the movie, he doesn't need that
+wheelchair afterall! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11100
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	5
+	Cha:	2
+	Int:	6
+	Wil:	7
+	Mag:	3
+[POINTS]
+	Height:	193
+	Weight:	215
+	Level:	1
+	Ballistic:	2
+	Impact:	5
+	Cash:	100
+	Bank:	75
+	Karma:	2
+[SKILLS]
+	armed combat:	5
+	firearms:	5
+	pistols:	5
+BREAK
+#17615
+Keywords:	lighting director l d
+Name:	The lighting director
+RoomDesc:$
+The lighting director stands here flipping through a magazine. 
+
+~
+LookDesc:$
+He looks like he's been sleeping in the dump. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000011110
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	6
+	Cha:	8
+	Int:	9
+	Wil:	9
+	Mag:	4
+[POINTS]
+	Height:	215
+	Weight:	193
+	Level:	1
+	Ballistic:	5
+	Impact:	8
+	Cash:	5
+	Bank:	15
+	Karma:	3
+[SKILLS]
+	armed combat:	8
+	edged weapons:	6
+	:	3
+BREAK
+#17699
+Keywords:	Eddie
+Name:	a Very large troll
+RoomDesc:$
+Eddie the biker troll stands here giving you dirty looks 
+
+~
+LookDesc:$
+He looks like he's waiting to go on stage 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100001011010
+AffFlags:	1000000000001000011000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	9
+	Cha:	9
+	Int:	9
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	8
+	Ballistic:	50
+	Impact:	50
+	Cash:	100
+	Bank:	100
+	Karma:	5
+[SKILLS]
+	clubs:	9
+	armed combat:	9
+	:	3
+	:	3
+BREAK
+END

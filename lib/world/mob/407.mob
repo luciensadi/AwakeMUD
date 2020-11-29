@@ -1,0 +1,566 @@
+#40700
+Keywords:	A Saeder-Krupp JW Titan assembly robot glides around here
+Name:	A Saeder-Krupp JW Titan assembly robot 
+RoomDesc:$
+A Saeder-Krupp JW Titan assembly robot glides around here assembling 
+
+~
+LookDesc:$
+This is one of Saeder-Krupp's largest industrial assembly robots. Made to work
+round the clock for hundreds of thousands of hours they are found in the
+largest manufacturing plants. Capable of working with the finest optical chips
+to the heaviest military armours, these massive robots are a wonder to behold.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001001000
+AffFlags:	0
+Race:	Dragon
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	10
+	Str:	50
+	Cha:	1
+	Int:	10
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	500
+	Weight:	4700
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+	brawling:	10
+BREAK
+#40701
+Keywords:	alex gunter man male manager
+Name:	Alex Gunter
+RoomDesc:$
+A tall fit man in his early 50's is sitting at his desk engaged in paperwork 
+
+~
+LookDesc:$
+This is the facilities manager for the Federated-Boeing Renton facility. He
+appears in his early 50's, trim and confident. Often he can be found at his
+desk going over massive piles of paperwork, request forms, and endless
+complaints by just about everyone. On bad days like this one you notice the
+many rings of old coffee in the mug on his desk. It's defintely been a 3 pot
+day. It might have something to do with the red memo complaint form he is
+reading, those only come from the main office. Ouch. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	80
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+BREAK
+#40702
+Keywords:	a federated boeing elite forces security guard
+Name:	A Federated-Boeing Elite Forces security guard
+RoomDesc:$
+A Federated-Boeing Elite Forces security guard stands here menacingly 
+
+~
+LookDesc:$
+Covered in military hardened armour this guard exudes power over life and
+death. Employee's walk by them quite and subdued knowing they carry corporate
+license to kill. They each wear assault rifles in a tactical sling and are
+constantly keeping themselves in position to cover all arcs of fire. The
+drones wandering the facility even seem to keep at a respectful distance. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001100000111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	14
+	Str:	14
+	Cha:	8
+	Int:	6
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	16
+	Impact:	16
+	Cash:	200
+	Bank:	200
+[SKILLS]
+	assault rifles:	10
+BREAK
+#40703
+Keywords:	yakuza Beat Nashimura
+Name:	Beat Nashimura
+RoomDesc:$
+A young asian man stands here looking invincible 
+
+~
+LookDesc:$
+This looks like Beat Nashimura. Word on the street is he's giving the mafia a
+lot of headaches at the Seattle Docks.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	10
+	Str:	9
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	55
+	Ballistic:	10
+	Impact:	10
+	Cash:	2000
+	Bank:	1000
+[SKILLS]
+	brawling:	12
+BREAK
+#40704
+Keywords:	mafia man wiseguy
+Name:	Felipe D'Angelo
+RoomDesc:$
+An italian wiseguy in a flashy suit stands here 
+
+~
+LookDesc:$
+This guy has about a kilogram of grease in his hair, how he keeps his suit
+clean is an enigma. He nods and sneers, pointing to this person and that while
+yelling in English and Italian. Looks like he might be connected. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+BREAK
+#40705
+Keywords:	slave trader
+Name:	Aziz Abdul Haqq
+RoomDesc:$
+A Malaysian man stands here watching over his merchandise 
+
+~
+LookDesc:$
+This man exudes badness, and not in a good way. Your skin crawls as you
+approach him and goosebumps break out on your neck as you realize what he is.
+A slave trader. He turns to you, a large smile spreading across his oily skin
+as he beckons you closer to inspect his wares... 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000011011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	4
+	Cha:	1
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	130
+	Ballistic:	5
+	Impact:	5
+	Cash:	1000
+	Bank:	200
+[SKILLS]
+BREAK
+#40706
+Keywords:	girl woman receptionist smiling
+Name:	Doris Donasquezamytoosh
+RoomDesc:$
+A smiling receptionist sits here on her ample bottom 
+
+~
+LookDesc:$
+This solemn woman is busy answering calls and routing them to the appropriate
+department. She looks up at you as you enter with concern as she busily looks
+up who you might have an appointment with. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	100
+	Bank:	100
+[SKILLS]
+BREAK
+#40707
+Keywords:	bank teller man
+Name:	Jimmy Gordon
+RoomDesc:$
+A clean cut young man in his early twenties stands here 
+
+~
+LookDesc:$
+This looks like a good honest young man. He smiles and motions you over as his
+last customer leaves. Well built and obvious an athlete, the fact that he
+works at the Credit Union means he is on the Corporate track. He should make a
+good husband for some lucky girl. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	6
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Cash:	50
+	Bank:	50
+[SKILLS]
+	negotiation:	4
+	brawling:	6
+BREAK
+#40708
+Keywords:	man mechanic
+Name:	A Mechanic
+RoomDesc:$
+A mechanic mumbling under his breath about dumbass engineers stands here 
+
+~
+LookDesc:$
+This man is dressed in overalls loaded with tools and grease. He walks around
+wiping his hands off on a cloth as he inspects just about everything in the
+warehouse. Now and then he encounters an Engineer and a look of distaste
+washes over him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	90
+	Ballistic:	2
+	Impact:	2
+	Cash:	60
+	Bank:	50
+[SKILLS]
+BREAK
+#40709
+Keywords:	An Engineer
+Name:	An Engineer
+RoomDesc:$
+An engineer walks around inspecting things as he mumbles about dumbass
+mechanics under his breath 
+
+~
+LookDesc:$
+This man walks around, proudly inspecting everything in the warehouse. He
+wears a labcoat and a thick set of glasses. On his wist is a compact pocket
+secretary which he uses often to log information. As mechanics come near he
+puts on a conceited smile and nods to them.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+	Cash:	100
+	Bank:	100
+[SKILLS]
+BREAK
+#40710
+Keywords:	old engineer man male stanley hubris
+Name:	Stanley Hubris
+RoomDesc:$
+A middle aged man stands here tinkering with things 
+
+~
+LookDesc:$
+Stanley has been passed over time and time again for promotion. He seems to
+somehow glide through the entire facility like a ghost ignored by everyone.
+Being bitter and feeling ignored Stanley has decided to go into buisness for
+himself. With little patience he looks up at you wondering if your going to
+just ignore him like everyone else does. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	1
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	55
+[SKILLS]
+	negotiation:	4
+BREAK
+#40711
+Keywords:	quest mob kill
+Name:	quest mob kill
+RoomDesc:$
+quest mob kill 
+
+~
+LookDesc:$
+quest mob kill 
+~
+ArriveMsg:	èÄžt mob random
+LeaveMsg:	P5‰
+MobFlags:	11010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	2
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	50
+[SKILLS]
+BREAK
+#40712
+Keywords:	quest mob escort
+Name:	quest mob escort
+RoomDesc:$
+quest mob escort 
+
+~
+LookDesc:$
+quest mob escort 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	2
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	50
+[SKILLS]
+BREAK
+#40713
+Keywords:	federated boeing guard
+Name:	A Federated-Boeing Security Guard
+RoomDesc:$
+A Federated-Boeing security guard stands here 
+
+~
+LookDesc:$
+A Federated-Boeing security guard stands here looking over monitors and
+magazines as he clears people in and out of the Renton facility 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	1000000000000000000000000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Cash:	100
+	Bank:	200
+[SKILLS]
+	sub-machine guns:	6
+BREAK
+#40714
+Keywords:	èÄžt mob random
+Name:	quest mob random
+RoomDesc:$
+quest mob random 
+
+~
+LookDesc:$
+quest mob random 
+~
+ArriveMsg:	quest mob kill
+LeaveMsg:	P5‰
+MobFlags:	11010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	2
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	50
+[SKILLS]
+BREAK
+#40799
+Keywords:	Guardian Vines
+Name:	Guardian Vines
+RoomDesc:$
+Exotic vines cover this room entirely. 
+
+~
+LookDesc:$
+These are imported Guardian Vines from Amazonia. They are magically awakened
+and used for astral security. Capable of grabbing and holding onto astral
+forms they are incredibly dangerous. Rumors abound of them trapping and eating
+astral beings who wander to close to them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000001000000000000101010
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	20
+[POINTS]
+	Height:	100
+	Weight:	5
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	brawling:	20
+BREAK
+END

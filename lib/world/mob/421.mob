@@ -1,0 +1,1568 @@
+#42100
+Keywords:	Jorge Posada catcher Yankees pinstriped man muscular
+Name:	Jorge Posada
+RoomDesc:$
+A muscular man in a pinstriped baseball uniform is here. 
+
+~
+LookDesc:$
+This muscular, slightly-tanned man is wearing a white-and-blue pinstriped
+baseball uniform, a navy-blue baseball cap with an interlocking "NY" logo sewn
+into its front, and well-worn baseball cleats. His face is fairly plain, but
+amiable; its most salient features are a large pair of ears that stick out
+from under his cap. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	187
+	Weight:	92
+[SKILLS]
+BREAK
+#42101
+Keywords:	salesclerk imelda woman fashionably-dressed slim tall
+Name:	a slim, fashionably-dressed woman
+RoomDesc:$
+A slim, fashionably-dressed woman stands here. 
+
+~
+LookDesc:$
+A tall, slim woman in an impeccably-tailored pantsuit and an exquisite pair of
+square-toed patent leather boots wanders around the store, helping customers,
+arranging stock and transacting business with cheery, professional aplomb. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+BREAK
+#42102
+Keywords:	shopkeeper Annabel Li chubby female elf woman asian
+Name:	a chubby female elf
+RoomDesc:$
+A chubby female elf stands behind the counter. 
+
+~
+LookDesc:$
+Wearing a tightly corseted Victorian-era dress and button-up boots, this Asian
+elf of indeterminate age certainly looks the part of an antique shop
+proprietor. To complete the image, her long, straight black hair has been
+pinned up in a tight bun, and a pair of silver-rimmed pince-nez balances on
+her nose. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000100010000000011010
+AffFlags:	1000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+[SKILLS]
+BREAK
+#42103
+Keywords:	cashier bored guy bearded
+Name:	a bearded guy
+RoomDesc:$
+A bored-looking bearded guy stands behind the counter. 
+
+~
+LookDesc:$
+A perfectly unremarkable guy with a scraggly goatee and round-framed glasses
+putters around, arranging stock, ringing up customers and performing other
+drugstore cashier-type duties. His bright green Triple-D uniform and the
+bright fluorescent lighting make him look rather pasty, but he seems healthy
+enough. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	80
+[SKILLS]
+BREAK
+#42104
+Keywords:	cashier lauryn woman girl coffee-skinned
+Name:	a brown-skinned young woman
+RoomDesc:$
+A brown-skinned young woman stands here. 
+
+~
+LookDesc:$
+A tall, brown-skinned girl with grey-green eyes and a dazzlingly bright smile
+bustles busily around, acting as hostess, waitress and cashier all at once.
+She's wearing a bright red apron over faded carpenter pants and a tank top; a
+green kerchief is tied tightly over her close-cropped black hair. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	70
+[SKILLS]
+BREAK
+#42105
+Keywords:	cashier stout indian woman grey-haired shiva hora
+Name:	a grey-haired woman
+RoomDesc:$
+A grey-haired woman stands behind the counter. 
+
+~
+LookDesc:$
+This stout Indian woman manages to take orders, receive payments, hand out
+food and yell commands to the kitchen staff with unshakeable aplomb. Her
+movements are graceful, and her bright yellow sari remains unstained by food
+or drink. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	60
+[SKILLS]
+BREAK
+#42106
+Keywords:	cashier dark-skinned man curly-haired tall cheerful naser jabir
+Name:	a tall, curly-haired man
+RoomDesc:$
+A tall, cheerful man stands behind the counter. 
+
+~
+LookDesc:$
+This dark, curly-haired man wears simple white robes, a threadbare blue apron
+and a white, dazzling smile. Part cook, part waiter and part cashier, he
+fulfills his duties and chats with customers with infectious cheerfulness. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	70
+[SKILLS]
+BREAK
+#42107
+Keywords:	guard security man portly tubby Homer
+Name:	a security guard
+RoomDesc:$
+A portly security guard stands here. 
+
+~
+LookDesc:$
+A balding, chubby man in a blue security guard uniform at least one size too
+small for him. Despite his girth and amiable, somewhat dopey smile, he seems
+alert and competent enough. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	90
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+BREAK
+#42108
+Keywords:	man grey-haired tall Michael Holmes
+Name:	Michael Holmes
+RoomDesc:$
+A tall, grey-haired man stands here. 
+
+~
+LookDesc:$
+This man could be anywhere from an old 35 years old to a young 65. His wavy
+grey hair and lined, angular face are somewhat counterbalanced by twinkling
+blue eyes and the limber grace of his movements. He's dressed in a well-cut
+black suit and black leather loafers. A discreet datajack glimmers above his
+right ear, and three thin silver rings sparkle on the long fingers of his
+right hand. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	8
+	Int:	8
+	Wil:	6
+	Mag:	7
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+[SKILLS]
+	computers:	12
+	sorcery:	12
+	interrogation:	12
+	street etiquette:	10
+	corporate etiquette:	10
+BREAK
+#42109
+Keywords:	girl young punk pink-haired graphic designer Evangeline Evans
+Name:	a ^Mpink-haired^n girl
+RoomDesc:$
+A ^Mpink-haired^n girl stands here. 
+
+~
+LookDesc:$
+This pale human girl's short hair has been spiked and dyed bright pink. A
+single silver stud decorates the left side of her nose, and her clear blue
+eyes are half-hidden behind a pair of eyeglasses with thick rectangular
+frames. Her frame looks slim under the loose ^MAin't nowhere better than
+Erehwon^n t-shirt and baggy carpenter pants she's wearing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	61
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+	media etiquette:	12
+	corporate etiquette:	8
+	street etiquette:	8
+	computers:	6
+	electronics:	5
+BREAK
+#42110
+Keywords:	receptionist blonde perky pretty woman Penny
+Name:	a blonde receptionist
+RoomDesc:$
+A pretty blonde stands here. 
+
+~
+LookDesc:$
+A cheerful-looking woman with wavy blonde hair and bright blue eyes lounges
+around, not seeming to do very much at all. Judging by her expensive-looking
+red silk suit, silk stockings and alligator pumps, she gets very well paid to
+do so. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	63
+[SKILLS]
+BREAK
+#42111
+Keywords:	man dark-haired blue-eyed James St. John Smythe
+Name:	James St. John-Smythe
+RoomDesc:$
+A dark-haired, blue-eyed man stands here. 
+
+~
+LookDesc:$
+Tall, tanned and lean. A lock of his black hair perpetually curls into a comma
+down his forehead. Ice-blue eyes peer out of a hard, somewhat cruel face; a
+small scar runs down his right cheek, near the jawline. He's expensively
+dressed in a grey silk suit and what look like Italian loafers, and carries
+himself like someone to the manor born. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	11
+	Str:	11
+	Cha:	8
+	Int:	8
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	85
+	Ballistic:	11
+	Impact:	11
+[SKILLS]
+	interrogation:	12
+	leadership:	12
+	corporate etiquette:	12
+	pistols:	20
+	brawling:	20
+BREAK
+#42112
+Keywords:	telemarketer woman nondescript
+Name:	a telemarketer
+RoomDesc:$
+A nondescript young woman stands here. 
+
+~
+LookDesc:$
+Average height and weight, brown hair and eyes, dressed in a nondescript skirt
+and blouse outfit. She's just another young woman trying to make her way in
+the Sixth World. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+[SKILLS]
+	corporate etiquette:	7
+	media etiquette:	7
+BREAK
+#42113
+Keywords:	man pale brown-haired Jacob Grey lawyer
+Name:	Jacob Grey
+RoomDesc:$
+A brown-haired man in a black suit stands here. 
+
+~
+LookDesc:$
+Average height and weight, brown eyes and hair, dressed in a conservative
+black suit with a subdued blue-and-silver tie and leather oxfords. His most
+salient feature is the rich, deep baritone of his speaking voice, which he
+uses to full effect as adroitly as any maestro would a piano or violin. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	4
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	75
+[SKILLS]
+	negotiation:	20
+	corporate etiquette:	20
+	media etiquette:	20
+	street etiquette:	20
+	interrogation:	20
+BREAK
+#42114
+Keywords:	man asian tall long-haired John Son-ki
+Name:	the dispatcher
+RoomDesc:$
+A tall Asian man stands here. 
+
+~
+LookDesc:$
+A tall Asian man with a clean-shaven, high-cheekboned face stands here,
+talking into a phone, watching monitors and slotting plugs in and out of the
+datajack in his left temple at lightning speed. His black hair is pulled into
+a ponytail that hangs halfway down his back, and he's wearing jeans, a black
+t-shirt and a pair of well-worn combat boots. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	205
+	Weight:	80
+[SKILLS]
+BREAK
+#42115
+Keywords:	man stocky military brown-haired Jake Moinsde
+Name:	Jake Moinsde
+RoomDesc:$
+A stocky man in an expensive suit stands here. 
+
+~
+LookDesc:$
+While fairly short, this man is solid with muscle, and moves with the smooth
+precision of a seasoned fighter. Despite the expensive haircut and obviously
+tailored suit, a certain brusqueness in his manner and hard light in his grey
+eyes makes him seem more military - or mercenary - than corporate. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	11
+	Str:	11
+	Cha:	8
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+	Ballistic:	11
+	Impact:	11
+[SKILLS]
+BREAK
+#42116
+Keywords:	spirit ally humanoid misty figure
+Name:	a misty figure
+RoomDesc:$
+A misty, human-shaped figure hovers here. 
+
+~
+LookDesc:$
+It looks like a mass of grey smoke shaped into a perfect, incredibly detailed
+human male form: bald head, lean but well-muscled torso, long limbs and
+slender hands and feet. The only unusual things about it are its smooth,
+featureless face and genital area. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11000000000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	15
+	Int:	15
+	Wil:	15
+	Mag:	15
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+BREAK
+#42117
+Keywords:	bartender girl petite small blonde Satoko Smith
+Name:	the bartender
+RoomDesc:$
+A petite blonde mixes drinks behind the counter. 
+
+~
+LookDesc:$
+Though this tiny girl looks far too young to be in a bar, let along serving
+drinks behind one, she mixes and serves a wide variety of complicated-looking
+concotions with speed, ease and a certain amount of show-offy style. Despite
+her pale porcelain skin and blonde hair, her small nose and the upward tilt to
+her huge coffee-colored eyes imply mixed Japanese ancestry. She's dressed in a
+^Ggreen^n baby tee with the words "Porn Star" emblazoned on it, a black denim
+miniskirt and a pair of Doc Martens. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	3
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	55
+[SKILLS]
+BREAK
+#42118
+Keywords:	chef sushi man muscular japanese morimoto toshiro
+Name:	the sushi chef
+RoomDesc:$
+A muscular man stands behind the counter. 
+
+~
+LookDesc:$
+A huge, floppy chef's hat set atop this Japanese man's face nearly conceals
+his short black hair and casts shadows over his square, angular face. His
+loose, spotless white chef's outfit doesn't quite conceal his lean but
+muscular build. He slices fish, shapes rice and otherwise prepares the food
+with a combination of speed, grace and military precision. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+BREAK
+#42119
+Keywords:	barfly salaryman sarariman suit-clad man drunk drinker
+Name:	a suit-clad man
+RoomDesc:$
+A suit-clad man stands here, drink in hand. 
+
+~
+LookDesc:$
+Just your standard, suit-clad sarariman relaxing with a drink. His face is
+slightly flushed; his gestures, a bit too expressive; his voice, a little too
+loud. But he seems to be having a good time, and isn't bothering anyone else.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	87
+[SKILLS]
+BREAK
+#42120
+Keywords:	woman nervous ordinary-looking
+Name:	a nervous woman
+RoomDesc:$
+A woman eyes the stage nervously. 
+
+~
+LookDesc:$
+An ordinary-looking young woman in casual officewear eyes the stage carefully,
+obviously trying to work up the courage to get up there and sing. Every now
+and then, she takes a step forward, then a step back, immediately followed by
+a healthy swallow of the drink in her hand. A song or so later, this process
+repeats itself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	70
+[SKILLS]
+BREAK
+#42121
+Keywords:	man nervous ordinary-looking
+Name:	a nervous man
+RoomDesc:$
+An ordinary-looking man eyes the stage nervously. 
+
+~
+LookDesc:$
+An average, everyday man in casual officewear. Every now and then he'll take a
+step or two towards the stage, then back away, then take a swig from his
+drink. This entire process repeats itself every few minutes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+[SKILLS]
+BREAK
+#42122
+Keywords:	man brown-haired ponytailed tall slim Ryan
+Name:	a tall, brown-haired man
+RoomDesc:$
+A tall man with a long brown ponytail stands here. 
+
+~
+LookDesc:$
+A tall young man with a pleasant, blue-eyed face and a small silver datajack
+in his right temple. He seems to be in constant, rhythmic motion, bobbing his
+head to an inaudible beat, tapping his feet, deftly spinning a disk through
+his slender fingers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	70
+[SKILLS]
+	computers:	12
+	:	12
+	demolitions:	12
+	street etiquette:	8
+	pistols:	12
+BREAK
+#42123
+Keywords:	girl petite asian brown-haired bouncer alita small
+Name:	a petite, brown-haired girl
+RoomDesc:$
+A petite Asian girl scans the area carefully. 
+
+~
+LookDesc:$
+At first glance, she looks like a typical teenager: pink barettes in her
+bobbed brown hair, wearing a tight ^gKeroppi^n baby tee, baggy black corduroy
+pants and chunky green-and-brown sneakers. A closer look reveals some
+less-than-typical attributes: silver cybereyes in the pale, pointed face; the
+telltale skin textures of some sort of dermal armor; and movements much too
+quick and graceful to be entirely natural. Now the "Bouncer" tag pinned to her
+shirt begins to make more sense. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010100001011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	60
+[SKILLS]
+	brawling:	20
+	cyber implants:	20
+	armed combat:	20
+	interrogation:	12
+	assault cannons:	12
+BREAK
+#42124
+Keywords:	girl bored blonde clerk cashier rachel
+Name:	a blonde-haired girl
+RoomDesc:$
+A blonde-haired girl stands behind the counter. 
+
+~
+LookDesc:$
+This ordinary-looking teenager seems to be doing almost everything but working
+- chatting on her cellphone, changing the music piping through the speakers,
+reading a fashion magazine or watching a small trid set up beside her on the
+counter. She seems responsive enough to customers, though, once they get her
+attention. The nametag pinned to her uniform smock reads "Rachel." 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	65
+[SKILLS]
+BREAK
+#42125
+Keywords:	man chubby white-haired Raymond
+Name:	a white-haired man
+RoomDesc:$
+A white-haired man stands behind the counter. 
+
+~
+LookDesc:$
+Curly, unkempt white hair sticks out every which way from the top of this
+human male's head. He's probably two sizes too big for his jeans and shirt,
+though the stained white apron he's currently wearing seems to fit well
+enough. One reason for this portliness could be the constant snacking and
+tasting he does as he flips burgers, puts together sandwiches and arranges
+pastries in a glass display case. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000010101000000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	5
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	90
+[SKILLS]
+BREAK
+#42126
+Keywords:	man elf elven male blond slick roger avery manager telemarketer
+Name:	Roger Avery
+RoomDesc:$
+A blond male elf in a suit stands here. 
+
+~
+LookDesc:$
+This slim, blond man has the willowy build, delicate features and pointed ears
+typical of elves, but his nasal voice and rather flashy style of dress are
+more Mafioso than milessaratish. He's wearing a well-tailored but overly-slick
+pinstripe suit, thick gold cufflinks and necklaces, and way too much
+strong-smelling aftershave. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001010100001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	7
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	80
+[SKILLS]
+BREAK
+#42127
+Keywords:	receptionist tanned blond man aaron
+Name:	a tanned, blonde man
+RoomDesc:$
+A tanned blonde man stands here. 
+
+~
+LookDesc:$
+This almost aggressively healthy-looking young man looks like he should be
+modelling swimwear instead of manning the phones at a doctor's office. But
+hey, here he is - sun-bleached blonde hair, golden-brown tan, sparkling blue
+eyes, chiseled face, swimmer's build, and all. He's also wearing a well-cut
+blue linen suit and matching loafers. 
+ 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	75
+[SKILLS]
+BREAK
+#42128
+Keywords:	man doctor marlowe richard tall grey-haired
+Name:	Dr. Richard Marlowe
+RoomDesc:$
+A tall, grey-haired man stands here. 
+
+~
+LookDesc:$
+Impeccable dress and a distinguished appearance - wavy salt-and-pepper hair,
+an angular face with piercing brown eyes, a tall, limber build and impeccable
+posture - combine to give this middle-aged human an air of subtle but
+unmistakable authority. He's wearing a raw silk tie, obviously hand-tailored
+Italian suit and leather loafers, and moves with quiet, graceful assurance. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	4
+	Cha:	9
+	Int:	9
+	Wil:	9
+	Mag:	11
+[POINTS]
+	Height:	195
+	Weight:	75
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	sorcery:	12
+	leadership:	12
+	interrogation:	20
+	:	12
+	:	12
+BREAK
+#42129
+Keywords:	woman short black-haired curvy jill ballard marlowe doctor
+Name:	Dr. Jill Ballard-Marlowe
+RoomDesc:$
+A short woman with long black hair stands here. 
+
+~
+LookDesc:$
+Though she's barely five feet tall, this woman's flawless posture and air of
+quiet confidence make her seem much taller. Intense grey eyes peer critically
+out of an incongruously chubby, childlike face with pink-rosebud lips and a
+dimpled chin. Her long black hair is pulled back into a tight braid that
+reaches halfway down her back, and her severely-tailored black wool suit
+doesn't quite manage to conceal a curvy figure. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	50
+[SKILLS]
+	:	20
+	leadership:	12
+	biotech:	12
+	:	12
+	interrogation:	6
+BREAK
+#42130
+Keywords:	ogre big potbellied black-haired George Beano
+Name:	George Beano
+RoomDesc:$
+A potbellied ogre stands here. 
+
+~
+LookDesc:$
+This large, tall metahuman has that familiar look of a muscleman gone to seed:
+a bulky build, still solid with underlying muscle but overlaid with soft
+flesh. A large potbelly juts over the waistband of his stained slacks and
+threatens to pop the buttons on his rather faded button-down shirt. He sports
+a short black crewcut and always seems to be carrying a horrendous-smelling
+cigar. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Ogre
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	4
+	Str:	9
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	105
+[SKILLS]
+	interrogation:	20
+	negotiation:	12
+	pistols:	12
+	street etiquette:	20
+	data brokerage:	5
+BREAK
+#42131
+Keywords:	waitress woman old elderly tired-looking white-haired Rosie
+Name:	the waitress
+RoomDesc:$
+A white-haired woman moves around, serving customers. 
+
+~
+LookDesc:$
+This human woman's pure white hair, tied up neatly in a ponytail, wrinkled
+face and liver-spotted hands make her look at least 60 years old. Despite her
+eyebags and occasional slumping shoulders, she seems energetic and cheerful
+enough. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	5
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#42132
+Keywords:	schoolgirl girl student black-haired cute japanese mai
+Name:	a Japanese schoolgirl
+RoomDesc:$
+A cute Japanese girl in a school uniform stands here. 
+
+~
+LookDesc:$
+Dressed in the standard private-school outfit of plaid skirt, white
+shirtwaist, white knee socks and black Mary Janes, this Japanese teenager
+looks like the typical child of privilege. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011010
+AffFlags:	1000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	45
+[SKILLS]
+BREAK
+#42133
+Keywords:	bodyguard guard japanese black-suited burly man
+Name:	a bodyguard
+RoomDesc:$
+A burly man in a black suit stands here. 
+
+~
+LookDesc:$
+This muscular Japanese man looks like the typical bodyguard: crew-cut,
+mirrorshades, earbud radio, obviously-enhanced reflexes.... He's wearing a
+nice suit that bulges in all the wrong places from a combination of muscles,
+'ware and concealed weapons. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101010100001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	11
+	Str:	11
+	Cha:	6
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	11
+	Impact:	11
+[SKILLS]
+	brawling:	20
+	pistols:	20
+	armed combat:	20
+	firearms:	20
+	cyber implants:	20
+BREAK
+#42134
+Keywords:	Warren Fly greasy-haired male elf
+Name:	Warren Fly
+RoomDesc:$
+A greasy-haired male elf leans against the wall. 
+
+~
+LookDesc:$
+This tall, greasy-looking guy is the kind mothers warn their daughters about.
+The oil in his slicked-back black hair could probably keep Central Puyallup
+warm for weeks, and there's enough fabric in his loose, slightly stained zoot
+suit to clothe at least another two metahumans his size. A large golden hoop
+dangles from the lobe of one pointed ear, and a wispy little pencil moustache
+adorns his narrow, rather ratlike face. Not the most wholesome of characters.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	4
+	Cha:	4
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	brawling:	12
+	pistols:	6
+	street etiquette:	8
+BREAK
+#42135
+Keywords:	guy skinny blue-haired cashier Josh
+Name:	a ^Bblue-haired^n guy
+RoomDesc:$
+A skinny, ^Bblue-haired^n guy stands behind the counter. 
+
+~
+LookDesc:$
+Rather greasy ^Bblue^n locks dangle down this pale, rather skinny guy's forehead
+and around his narrow face. Dressed in baggy pants, replica Vans and a grungy
+white t-shirt with the logo of some obscure band on it, he seems sleepy - or
+stoned - but responsive enough to customers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	60
+[SKILLS]
+BREAK
+#42136
+Keywords:	guy man male human twitchy dishevelled logan
+Name:	a twitchy guy
+RoomDesc:$
+A twitchy, dishevelled male human shivers in a corner. 
+
+~
+LookDesc:$
+A scruffy human guy with a wild shock of disorderly brown hair, two-day-old
+stubble, bloodshot eyes and thin, chapped lips. He's wearing a wrinkled,
+somewhat stained flannel shirt, torn jeans, Doc Martens and - most
+interestingly - what seems to be half a pair of manacles around both his left
+wrist and his right ankle. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000011010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	3
+	Int:	6
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+[SKILLS]
+BREAK
+#42137
+Keywords:	woman shaman tall thin raven-haired human Eva Moore
+Name:	a thin, black-haired woman
+RoomDesc:$
+A thin, black-haired woman looks around with beady eyes. 
+
+~
+LookDesc:$
+A matted, tangled mess of long black hair dangles past her pale face and thin
+shoulders to halfway down her back. A beaky nose, thin lips and deep-set,
+glaring black eyes combine to give her an ominous, forbidding visage. She's
+wearing several layers of ragged clothing in various dark colors; her body is
+pale and almost skinny to the point of emaciation underneath them. She
+alternates between glaring at the sky, swooping around with outstretched arms,
+and raising her head to make an odd noise that's half caw and half screetch. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000100000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	3
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	8
+[POINTS]
+	Height:	170
+	Weight:	50
+[SKILLS]
+BREAK
+#42138
+Keywords:	man thin black-clad spy surveillance
+Name:	a thin, black-clad man
+RoomDesc:$
+A thin, ^Lblack-clad^n man stands behind the counter. 
+
+~
+LookDesc:$
+This human's face and overall bearing are almost aggressively generic. The
+only two even vaguely memorable things about him are that he's perhaps a bit
+thin for his height, and that he's clad entirely in black - fedora, suit, tie,
+trenchcoat and presumably socks and shoes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	65
+[SKILLS]
+BREAK
+#42139
+Keywords:	man white-clad thin spy security
+Name:	a thin, white-clad man
+RoomDesc:$
+A thin, ^Wwhite-clad^n man stands behind the counter. 
+
+~
+LookDesc:$
+This human's face and overall bearing are almost aggressively generic. The
+only two even vaguely memorable things about him are that he's perhaps a bit
+thin for his height, and that he's clad entirely in white - fedora, suit, tie,
+trenchcoat and presumably socks and shoes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000011110
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	65
+[SKILLS]
+BREAK
+#42147
+Keywords:	receptionist tanned blond man aaron
+Name:	a tanned, blond man
+RoomDesc:$
+A tanned blonde man stands here. 
+
+~
+LookDesc:$
+This almost aggressively healthy-looking young man looks like he should be
+modelling swimwear instead of manning the phones at a doctor's office. But
+hey, here he is - sun-bleached blonde hair, golden-brown tan, sparkling blue
+eyes, chiseled face, swimmer's build, and all. He's also wearing a well-cut
+blue linen suit and matching loafers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	75
+[SKILLS]
+BREAK
+#42148
+Keywords:	elf grimy mohawked skinny pimply Biff
+Name:	a pimply elf with a mohawk
+RoomDesc:$
+A punked-out, pimply elf leans against the counter. 
+
+~
+LookDesc:$
+Tall, pale and gangly, with a five-inch high green-and-red mohawk and a bunch
+of angry red pimples spread across his face, this elf looks none too happy to
+be here. 
+~
+ArriveMsg:	walks in from the
+LeaveMsg:	leaves to
+MobFlags:	101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	70
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	sorcery:	12
+	leadership:	12
+	interrogation:	20
+	:	12
+	:	12
+BREAK
+#42149
+Keywords:	man white-suited Japanese Alan Tsukamoto Johnson
+Name:	an Asian man in a white suit
+RoomDesc:$
+A white-suited Japanese man is here. 
+
+~
+LookDesc:$
+Despite the blindingly-white business suit and expensive, rather
+flashy-looking mirrorshades, this Japanese man looks almost unnervingly
+ordinary. Average height, average build, a nondescript face and manner. It's
+almost...extraordinary. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	70
+[SKILLS]
+BREAK
+#42150
+Keywords:	Eliseo Page Yuppie
+Name:	Eliseo Page
+RoomDesc:$
+A yuppie is enjoying a cup of joe here. 
+
+~
+LookDesc:$
+This young, professional looking yuppie looks like every other chump trying to
+climb their way up the ladder of life, granted he may have a bit more style in
+clothing than most. He sips away thoughtfully upon his cup of joe, most likely
+going over some business deal in his head. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	100
+[SKILLS]
+	brawling:	2
+BREAK
+END

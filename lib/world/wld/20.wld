@@ -526,7 +526,7 @@ street.  In obvious letters, however, you see "^WWEST SIDE ROVERZ CUZZ^n" and
 other such pieces that show exactly whose gang lays claim to this portion of
 Tacoma. 
 ~
-Flags:	10100000000010000000000
+Flags:	10100000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -879,7 +879,7 @@ portions of Tacoma.  The Rovers are very strong in presence on Crescent, one
 might guess by the increased amount of Rover graffiti along the road's sound
 walls and signs. 
 ~
-Flags:	10100000000010000000000
+Flags:	10100000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -1467,7 +1467,7 @@ distant north you see bank building, a sharp tower of glass and steel.  A
 large motion billboard saying, "^LDante's Inferno - One ^RHELL^L of a Nightclub!^n"
 sits alongside the road. 
 ~
-Flags:	10100000000010000000000
+Flags:	10100000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -1815,6 +1815,13 @@ the west, and an exit to the street is to the south.
 Flags:	1100
 SecType:	Inside
 MatrixExit:	70326
+IO:	500
+Bandwidth:	50
+Access:	-2
+Trace:	-2
+RTG:	1100
+JackID:	3210099
+Address:	VS&I Offices, Main Street, East Tacoma
 Crowd:	0
 Cover:	0
 X:	20
@@ -2296,10 +2303,10 @@ Desc:$
 see areas that were badly ravaged some time ago by the Night of Rage, and have
 seen very little renovation.  A neon sign north of here with the flashing word
 "^MHOTEL^n" catches your eye.  Beyond that are a smattering of fire scorched
-tenements probably slum-lorded over the years and barely patched up after the
+tenements probably slumlorded over the years and barely patched up after the
 rioting of that infamous night. 
 ~
-Flags:	10100000000010000000000
+Flags:	10100000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -2395,7 +2402,7 @@ underneath the freeway.  In the north is an industrial/residential area that
 is considered by the Rovers to be their home ground.  Southward on Venice is a
 red light district. 
 ~
-Flags:	10100000000010000000000
+Flags:	10100000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -2487,7 +2494,7 @@ Desc:$
 A commercial stretch of Tacoma surrounds you, with office structures and
 stores on both sides of the freeway. 
 ~
-Flags:	10100000000010000000000
+Flags:	10100000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -2581,7 +2588,7 @@ Desc:$
 Interstate between Seattle and Tacoma to a straight path that runs through
 Tacoma's center.  Athens Road, the easternmost Tacoma exit, lies to the north.
 ~
-Flags:	10100000000010000000000
+Flags:	10100000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -2861,7 +2868,7 @@ Name:	North Main & Venice
 Desc:$
    North Main cuts through the northern edge of Tacoma, where the buildings
 meet the bogs and marshlands between here and Puget Sound.  To the distant
-north you see a white tower, the control station of the Gaeatronics sewage
+north you see a white tower, the control station of the Gaiatronics sewage
 treatment plant.  Occasionally a foghorn from a ship coming into the shipyards
 will override the noises of traffic, but not often.  The street is lined with
 brick buildings, covered in graffiti from the Rovers gang.  Eastwards, you can
@@ -3036,7 +3043,7 @@ Name:	North Main
 Desc:$
    On the north side of the street, marked clearly by the Ares Macrotechnology
 insignia, and the very visible Knight-Errant guards on the inside, is the Ares
-Armor Store.  The street appears to be better kept on this side of Venice,
+Armor Store.  The street appears to be better kept on this side of Venice
 than the pothole pockmarked other end of North Main.  Eastwards on North Main
 are the Ares Weapons Store and a large neon sign at the end of North Main,
 advertising the Afterlife club.  Westwards past a cracked and broken stretch
@@ -3382,6 +3389,9 @@ Athens Road leads south.
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
+	Desc:$
+There's a whole pile of garbage to the west.
+~
 	ToVnum:	70500
 	Flags:	0
 	Material:	brick
@@ -3977,7 +3987,7 @@ Eastwards, Tacoma is a busy town, with traffic problems, gangs, busy
 wageslaves working for subsidiaries of subsidiaries of the monolithic
 megacorps, and general urban blight. 
 ~
-Flags:	10000000000010000000000
+Flags:	10000000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -4004,6 +4014,12 @@ Beyond a metal gate lies the Crying Wall.
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	71000
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -4441,8 +4457,8 @@ BREAK
 Name:	Venice Street - Beneath Interstate 5
 Desc:$
    Venice Street runs underneath an eight-lane overpass here. The roar of
-trucks, buzz of racebikes and putter of commuter cars are somewhat muffled by
-the many meters of tarmac and concrete above. The sharp smell of hot peppers
+trucks, buzz of racing bikes and putter of commuter cars are somewhat muffled
+by the many meters of tarmac and concrete above. The sharp smell of hot peppers
 from the east adds a tang to the thick scents of exhaust and car oil. 
 ~
 Flags:	10000000000010000000000
@@ -4496,7 +4512,7 @@ Desc:$
    A half-cloverleaf of single lane road bringing traffic up and down from
 Interstate 5 to Little Road, and vice versa.  This appears to be a bottleneck
 of sorts, slowing traffic from Little Road to a near standstill.  Once cars
-get up on the freeway though, its smooth speeding. 
+get up on the freeway though, it's smooth speeding. 
 ~
 Flags:	10000000000010000000000
 SecType:	City

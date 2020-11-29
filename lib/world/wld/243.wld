@@ -1,0 +1,70 @@
+#24397
+Name:	warez/
+Desc:$
+   
+~
+Flags:	0
+SecType:	Black Node
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24398
+Name:	mobs/
+Desc:$
+   
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	24399
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#24399
+Name:	Stew's Room
+Desc:$
+   
+~
+Flags:	10000000000000000000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[EXIT north]
+	ToVnum:	24398
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT matrix]
+	ToVnum:	3100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

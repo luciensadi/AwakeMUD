@@ -81,6 +81,77 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
+#60510
+Keywords:	staff bo wooden
+Name:	a wooden bo staff
+RoomDesc:$
+A wooden bo staff is laying on the ground here.~
+LookDesc:$
+It's an old fashioned wooden bo staff, sanded to a smooth finish and slightly
+tapered at each end to keep it perfectly balanced. A swift smack from this is
+sure to send your opponent sprawling. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	1
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60511
+Keywords:	mace heavy metal
+Name:	a heavy metal mace
+RoomDesc:$
+A heavy metal mace has been left behind here.~
+LookDesc:$
+This mace is constructed out of a heavy, dense metal and can quite easily
+crush a (meta)humans skull with a single blow. On the bright side, it should
+prove quite easy to clean off afterwards, so all those brains and gore won't
+make it rust. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	150
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
 #60512
 Keywords:	combat axe steel
 Name:	A steel combat axe
@@ -115,9 +186,45 @@ Material:	metal
 	Val8:	-1
 	Val9:	-1
 BREAK
+#60513
+Keywords:	spear sharp steel
+Name:	a sharp steel spear
+RoomDesc:$
+A sharp steel spear has been left here.~
+LookDesc:$
+This weapon measures around two meters in length and is of a sturdy steel
+construction. The steeple design of its tip has been sharpened and polished,
+and should shiskabob anything stupid enough to be standing on the wrong end of
+it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	200
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	4
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
 #60514
 Keywords:	thin steel fencing foil rapier
-Name:	A thin, steel rapier
+Name:	a thin, steel rapier
 RoomDesc:$
 A fencing foil is resting against a nearby wall.~
 LookDesc:$
@@ -126,7 +233,7 @@ graceful, rarely seen weapon represents an era that has long past.
 ~
 Type:	Weapon
 WearFlags:	10000000000001
-ExtraFlags:	1000000000
+ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
@@ -141,13 +248,156 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	2
+	Val3:	2
 	Val4:	3
 	Val5:	-1
-	Val6:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60515
+Keywords:	javelin dentiplast slender
+Name:	a slender dentiplast javelin
+RoomDesc:$
+A slender dentiplast javelin has been left here.~
+LookDesc:$
+This javelin has been constructed out of dentiplast, a tough plastic-like
+material that will keep its shape after the heaviest of beatings. Its tip has
+been sharpened to an extremely fine point, making it perfect for skewering
+your opponents with. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	100
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60516
+Keywords:	sai steel polished
+Name:	a polished steel sai
+RoomDesc:$
+^gA polished ^Wsteel^g sai has been left here.^N~
+LookDesc:$
+Hailing from the orient, this defensive weapon consists of a triple-prong
+design, used mostly for defending against swords and other bladed instruments.
+It is designed to capture and disarm opponents, but it also packs a rather
+nasty wallop when you get brained with it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	100
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60517
+Keywords:	sap black synth-leather
+Name:	a black synth-leather sap
+RoomDesc:$
+A black synth-leather sap has been left here.~
+LookDesc:$
+It's a slender synth-leather pouch filled with metal shot, which is used to
+club folks about the head and neck in hopes of knocking them unconcious. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	10
+	AvailTN:	2
+	AvailDay:	0.25
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60518
+Keywords:	chain steel heavy
+Name:	a heavy steel chain
+RoomDesc:$
+A length of heavy steel chain has been left here in a pile.~
+LookDesc:$
+Constructed from heavy steel rings that are linked and welded together, this
+street ganger weapon measures upwards of a meter in length. Great for whipping
+chumps into submission with or terrorizing civilians alike. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	10
+	AvailTN:	2
+	AvailDay:	0.25
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
 BREAK
 #60519
 Keywords:	black wooden nightstick
-Name:	A black wooden nightstick
+Name:	a black wooden nightstick
 RoomDesc:$
 A nightstick is here, waiting to club someone.~
 LookDesc:$
@@ -156,7 +406,7 @@ them off.
 ~
 Type:	Weapon
 WearFlags:	10000000000001
-ExtraFlags:	1000000000
+ExtraFlags:	0
 AffFlags:	0
 Material:	wood
 [POINTS]
@@ -174,11 +424,14 @@ Material:	wood
 	Val3:	1
 	Val4:	6
 	Val5:	-1
-	Val6:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
 BREAK
 #60520
 Keywords:	wooden nunchaku
-Name:	A wooden pair of nunchaku
+Name:	a wooden pair of nunchaku
 RoomDesc:$
 Some nunchaku have been left on the floor.~
 LookDesc:$
@@ -187,7 +440,7 @@ world of hurt.
 ~
 Type:	Weapon
 WearFlags:	10000000000001
-ExtraFlags:	1000000000
+ExtraFlags:	0
 AffFlags:	0
 Material:	wood
 [POINTS]
@@ -212,7 +465,7 @@ Material:	wood
 BREAK
 #60521
 Keywords:	coiled leather whip
-Name:	A coiled leather whip
+Name:	a coiled leather whip
 RoomDesc:$
 A leather whip has been neatly coiled and left on the floor.~
 LookDesc:$
@@ -269,6 +522,78 @@ Material:	leather
 	LegalPermit:	0
 [VALUES]
 	Val0:	1
+BREAK
+#60523
+Keywords:	tomahawk modern steel
+Name:	a modern steel tomahawk
+RoomDesc:$
+A tomahawk with a modern appearance has been left here.~
+LookDesc:$
+While crafted with modern technology, this weapon is nearly as old as mankind,
+and even in this day and age it remains a very functional and effective
+weapon. It consists of a single piece of steel, making it nice and sturdy, and
+its blade has been honed to a fine edge, allowing it to slice through nearly
+anything unfortunate enough to get in its way. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	200
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60524
+Keywords:	katar stylized punch blade
+Name:	a stylized katar
+RoomDesc:$
+A stylized punch blade has been left behind here.~
+LookDesc:$
+This ancient weapon from India is little more than a punch blade with an
+H-style grip and hand guard, allowing the wielder to plunge it firmly into
+their opponent, as well as using it for slashing attacks. Little about the
+weapon has changed over the years, aside from the materials and metals used in
+its construction. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.75
+	Barrier:	6
+	Cost:	800
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	3
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
 BREAK
 #60530
 Keywords:	phone mobile cell
@@ -387,7 +712,7 @@ A duffel bag that you can sling over your shoulder.
 ~
 Type:	Container
 WearFlags:	1000100000000000001
-ExtraFlags:	1000000000
+ExtraFlags:	0
 AffFlags:	0
 Material:	fabric
 [POINTS]
@@ -512,12 +837,14 @@ Material:	metal
 	Val2:	-2
 BREAK
 #60552
-Keywords:	laser sight attachable
-Name:	an attachable ^rlaser^N sight
+Keywords:	laser sight underbarrel
+Name:	an underbarrel laser sight
 RoomDesc:$
 A laser sight is on the floor.~
 LookDesc:$
-A laser sight, for increased accuracy. 
+A small, cylindrical attachment, which projects a thin red laser to improve
+speed and accuracy of shots fired. It appears to attach to the underbarrel of
+a firearm. 
 ~
 Type:	Gun Accessory
 WearFlags:	1
@@ -525,7 +852,7 @@ ExtraFlags:	0
 AffFlags:	100000000000000
 Material:	electronics
 [POINTS]
-	Weight:	1.00
+	Weight:	0.20
 	Barrier:	6
 	Cost:	500
 	AvailTN:	6
@@ -564,13 +891,14 @@ Material:	electronics
 	Val1:	2
 BREAK
 #60554
-Keywords:	firearm smartlink accessory
-Name:	A firearm smartlink accessory
+Keywords:	smartlink accessory top-mounted
+Name:	a top-mounted smartlink accessory
 RoomDesc:$
 A smartlink accessory for a firearm is on the floor.~
 LookDesc:$
 When attached to a modified firearm, the user will be able to link his
-smartlink cyberware with his weapon, enabling increased accuracy. 
+smartlink cyberware with his weapon, enabling increased accuracy. This
+particular model is a top-mounted device. 
 ~
 Type:	Gun Accessory
 WearFlags:	1
@@ -578,7 +906,7 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	electronics
 [POINTS]
-	Weight:	2.00
+	Weight:	0.20
 	Barrier:	4
 	Cost:	600
 	AvailTN:	4
@@ -587,8 +915,8 @@ Material:	electronics
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
-	Val0:	2
 	Val1:	1
+	Val2:	1
 BREAK
 #60555
 Keywords:	ration bar
@@ -604,7 +932,7 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	2.00
+	Weight:	0.10
 	Barrier:	1
 	Cost:	10
 	AvailTN:	0
@@ -696,7 +1024,7 @@ Material:	glass
 BREAK
 #60559
 Keywords:	pancakes plate homemade
-Name:	A plate of homemade pancakes
+Name:	a plate of homemade pancakes
 RoomDesc:$
 A plate of pancakes was left on a nearby table.~
 LookDesc:$
@@ -718,6 +1046,728 @@ Material:	organic
 	LegalPermit:	0
 [VALUES]
 	Val0:	20
+BREAK
+#60560
+Keywords:	hairpin gold small
+Name:	a small gold hairpin
+RoomDesc:$
+^gA small ^Ygold^g hairpin has been misplaced here.^N~
+LookDesc:$
+This small, thin hairpin is crafted from gold and bears very little in the way
+of flashy design short of the tiny matching pearls dotting its tips. 
+~
+Type:	Focus
+WearFlags:	10001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	120000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	2
+BREAK
+#60561
+Keywords:	torc bronze decorative
+Name:	a decorative bronze torc
+RoomDesc:$
+^gA decorative ^ybronze^g torc has been lost here.^N~
+LookDesc:$
+Made from a sturdy and robust braid of extra heavy bronze wire twisted into a
+single piece of jewelry, which is slightly flexible to allow the wearer to don
+and remove it easily. It seems to have a Norse like design, with stylized wolf
+heads adorning each end. 
+~
+Type:	Focus
+WearFlags:	101
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	180000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+BREAK
+#60562
+Keywords:	copper bangle braided
+Name:	a braided copper bangle
+RoomDesc:$
+^gA braided copper ^ybangle^g has turned up here.^N~
+LookDesc:$
+This bangle features a basic celtic braid design, which is wide enough that it
+should hang loosely about the wrist or ankle of anyone that doesn't happen to
+be a troll, in which case, it might be a tight fit. 
+~
+Type:	Focus
+WearFlags:	10000001000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	75000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	1
+BREAK
+#60563
+Keywords:	circlet silver thin
+Name:	a thin silver circlet
+RoomDesc:$
+^gA thin ^Wsilver^g circlet has been tossed aside here.^N~
+LookDesc:$
+Lacking in decoration, this circlet is of a slender, simple design that could
+easily be lost beneath the hair of its wearer. It doesn't quite wrap entirely
+around the head, and it has enough give in it to fit snugly, yet comfortably
+in place. 
+~
+Type:	Focus
+WearFlags:	10001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	225000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	3
+BREAK
+#60564
+Keywords:	ring signet engraved
+Name:	an engraved signet ring
+RoomDesc:$
+An engraved signet ring has gone missing here.~
+LookDesc:$
+These rings bear various designs etched or engraved into their surfaces,
+usually specific to the owner, which were used in the olden days to mark
+letters and other documents with imprints on their wax seals. 
+~
+Type:	Focus
+WearFlags:	11
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	210000
+	AvailTN:	6
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+BREAK
+#60565
+Keywords:	anklet ash leaf leaves
+Name:	an ash leaf anklet
+RoomDesc:$
+A anklet with tiny ash leaves has been tossed here.~
+LookDesc:$
+This fragile looking anklet is made out of sterling silver links and to form a
+thin chain, upon which hang several tiny decorative ash leaves made from
+matching precious metals. 
+~
+Type:	Focus
+WearFlags:	10000000000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	15000
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	1
+BREAK
+#60566
+Keywords:	talisman golden chain
+Name:	a golden talisman on a chain
+RoomDesc:$
+^gA talisman crafted from ^Ygold^g looks lonely sitting here.^N~
+LookDesc:$
+whether it's an affinity with a spirit animal, a keen interest in zodiac
+signs, or any other various charm the wearer feels a connection to, these
+types of talismans are a common sight around the necks, wrists and ankles of
+the awakened and mundane alike. 
+~
+Type:	Focus
+WearFlags:	10000001000000000101
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	45000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+BREAK
+#60567
+Keywords:	ring puzzle silver
+Name:	a silver puzzle ring
+RoomDesc:$
+A puzzle ring made out of several rings is here.~
+LookDesc:$
+This simple mechanical puzzle is made out of multiple rings crafted out of
+silver, when combined together they form a single ring, or can be dismantled
+and worn independantly. 
+~
+Type:	Focus
+WearFlags:	11
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	90000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	2
+BREAK
+#60568
+Keywords:	earring triskelion
+Name:	a triskelion earring
+RoomDesc:$
+An earring with a triskelion on it sits here.~
+LookDesc:$
+This earring features a triskelion motif, whose design consists of three
+interlocked spirals, which is a popular symbol in celtic art, as well as many
+other early western cultures. 
+~
+Type:	Focus
+WearFlags:	10000000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	135000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+BREAK
+#60569
+Keywords:	coat armor lined
+Name:	an armor lined coat
+RoomDesc:$
+An armor lined coat sits nearby in a pile.~
+LookDesc:$
+Available in a wide range of styles and cuts, these types of coats are popular
+with runners and gangers alike and have a Wild West appearance that always
+makes for quite the fashion statement. These coats are made even more popular
+by the incorporation of rigid armor plates and ballistic resistant materials
+used in its lining to offer protection to vital areas. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	700
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	3
+	Val5:	4
+	Val6:	2
+	Val7:	8
+BREAK
+#60570
+Keywords:	jacket camouflage
+Name:	a camouflage jacket
+RoomDesc:$
+A hunter has left behind their camouflage jacket here.~
+LookDesc:$
+Available in a wide range of designs and colour schemes to match practically
+any environment or terrain, making it easy to break up the wearers silhouette
+and help them blend into the background more easily. The fact that they're
+lightly armoured doesn't hurt either, of course. Whether on the urban
+battlefield or out deer hunting, camouflage always does the trick. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	800
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	1
+	Val4:	2
+	Val5:	3
+	Val6:	1
+BREAK
+#60571
+Keywords:	pants synth-leather
+Name:	a pair of synth-leather pants
+RoomDesc:$
+A pair of synth-leather pants are waiting to be worn.~
+LookDesc:$
+Crafted out of the second best thing to real leather, these synth-leather
+pants cost a fraction of the price and come in a wide assortment of styles and
+cuts. As long as nobody is taking a look up close, they can probably pass as
+the real deal. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	2
+	Val6:	1
+BREAK
+#60572
+Keywords:	pants leather real
+Name:	a pair of real leather pants
+RoomDesc:$
+A pair of real leather pants sits in a bundle here.~
+LookDesc:$
+Oh yeah baby, the real thing. These leather pants may run you a bit more nuyen
+than their synth-leather counterparts, but it's hard to argue against the fact
+that the real thing always looks better. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	1
+	Val4:	2
+	Val6:	2
+BREAK
+#60573
+Keywords:	beret military
+Name:	a military beret
+RoomDesc:$
+A military style beret has been discarded here.~
+LookDesc:$
+This military style beret is a practical piece of headware that comes in a
+variety of colours, and while it may have its roots in Europe it is in wide
+use by armed forces worldwide in this day and age. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60574
+Keywords:	cap baseball hat
+Name:	a baseball cap
+RoomDesc:$
+A baseball cap has been tossed here.~
+LookDesc:$
+While the namesake of this cap may be synonymous with baseball, there exists
+one for practically every sports team, regardless of the sport itself. A wide
+range of colours and emblems make it possible to cater to nearly any market. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60590
+Keywords:	credstick plastic busted
+Name:	a busted plastic credstick
+RoomDesc:$
+A plastic credstick that has seen better days is here.~
+LookDesc:$
+Well frag, this thing has certainly seen better days. When you said you wanted
+a cracked credstick, this probably isn't what you had in mind, since the
+cracks are quite literal, especially the one that nearly splits the casing in
+half as it runs end to end. Aside from the obvious physical beating this
+device has taken, it appears to function as well as one can wish for,
+hopefully it holds up until you can put it to good use. 
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.01
+	Barrier:	4
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+BREAK
+#60591
+Keywords:	case shipping small
+Name:	a small shipping case
+RoomDesc:$
+A small case used for shipping has been left unattended here.~
+LookDesc:$
+Rather non-descript in appearance, which isn't helped by the fact that it has
+no label or information posted on it. These small but sturdy cardboard boxes
+are made for shipping small items and are usually handled by delivery
+companies or couriers. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60592
+Keywords:	envelope courier taped hastily
+Name:	a hastily taped courier envelope
+RoomDesc:$
+A heavily taped courier envelope waits to be picked up here.~
+LookDesc:$
+It appears to be a standard manila envelope used to mail documents and other
+small materials, which has been taped up heavily in an apparent rush to get it
+sent off and delivered. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60593
+Keywords:	helmet motorcycle dented scuffed
+Name:	a dented and scuffed motorcycle helmet
+RoomDesc:$
+A dented and scuffed motorcycle helmet is rolling around here.~
+LookDesc:$
+This old motorycycle helmet has certainly seen better days, as indicated
+clearly by the various scuff marks and dents on its surface, undoubtedly from
+the poor fragger who was wearing it when he wrecked his bike into a brick
+wall. While the visor has been broken off, leaving behind little bits around
+the rivets that once held it in place, it should still keep the wearers skull
+intact from the occasional thrashing. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#60594
+Keywords:	IOU slip
+Name:	an IOU slip
+RoomDesc:$
+A slip of paper has been left here, which threatens to be tread upon.~
+LookDesc:$
+It's an IOU slip, better known as an "I owe you", since one normally gives
+them in place of money to be paid later down the road... That is, if they
+enjoy having intact kneecaps. It seems to be signed by one "Ricky", and is
+destined for the hands of George Beano. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60595
+Keywords:	ultrasound goggles mangled
+Name:	a mangled pair of ultrasound goggles
+RoomDesc:$
+A mangled pair of goggles is about to fall apart here.~
+LookDesc:$
+This is a mangled set of low grade ultrasound goggles. They come with an
+adjustable elastic strap to support their somewhat hefty bulk, but it is ratty
+and about to snap. Two noticeable small metal points are visible in each side
+of the scuffed and scraped lenses, and house the ultrasound emitters. While
+the images from this particular set make seeing somewhat difficult due to
+excessive distortion, they will allow you to see in the dark. Also useful for
+seeing those cloaked with improved invisibility, or advanced thermoptic
+technology. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	1000001000
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	3
+BREAK
+#60596
+Keywords:	book mangled little old black
+Name:	an old, mangled little ^Lblack^N book
+RoomDesc:$
+A mangled little black book was left here.~
+LookDesc:$
+This roughened-up little black book is small, old, relatively tattered and all
+together looks like someone left it behind a garbage can for a year. Most of
+the chicken scratch hand writing was illegible to begin with, and most of its
+pages have suffered water or grease damage. What portions are still able to be
+read are a few particular names and addresses. (Example: Read Page1, Read
+Page2, et cetera) 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	page1
+	Desc:$
+The first page is almost entirely smeared with what looks to be chicken
+grease. Whats most interesting is the fact that Ricky doesn't even serve any
+chicken dishes, so as to how it got on this book, is simply a mystery.
+Probably one best to never solve. 
+~
+[EXTRADESC 1]
+	Keywords:	page2
+	Desc:$
+Beano's Collection Agency:
+ Little Road, West Tacoma
+ Theres a notation here by the author: "Pay back Beano by Friday before he
+breaks my legs." 
+~
+[EXTRADESC 2]
+	Keywords:	page3
+	Desc:$
+Ly'trelli Imports:
+ Sims Drive, Tarislar 
+~
+[EXTRADESC 3]
+	Keywords:	page4
+	Desc:$
+This page almost falls apart as you turn to it. It seems to be indicating an X
+located on some sort of half-assed attempt to draw a map. It consists of
+extremely vague landmark references, such as a tree, a rock, and a poorly
+drawn square building. 
+~
+[EXTRADESC 4]
+	Keywords:	page5
+	Desc:$
+Davis Street Offices:
+ Tir Tairngire, Portland 
+~
+[EXTRADESC 5]
+	Keywords:	page6
+	Desc:$
+Blue's Strip Club:
+ Charlotte Street, Ork Underground
+ Theres a notation here by the author: "Hottest tail in Seattle."
+~
+[EXTRADESC 6]
+	Keywords:	page7
+	Desc:$
+Lin's Laundry-Mat
+ Seventh Street Plaza, Seattle 
+~
+[EXTRADESC 7]
+	Keywords:	page8
+	Desc:$
+Jim's FixIt
+ Athens Road, West Tacoma
+ That fragger Jim can fix damn near anything!
+~
+BREAK
+#60597
+Keywords:	flier nightclub half-crumpled
+Name:	a half-crumpled nightclub flier
+RoomDesc:$
+A half-crumpled nightclub flier blows around here.~
+LookDesc:$
+The flier is covered in masses of almost cheesey levels of 'light show' laser
+affects that span out across its flimsy synth-paper sheet construction. It has
+a small list of nightclubs in the local areas, along with bits and pieces of
+information for each. "Dante's Inferno" is the first on the list, afterall,
+its the most popular night club in all of Downtown Seattle. "The Reaper" is
+also detailed as the place to be, along with "The Afterlife" up in West
+Tacoma. On the back of the flier is an address in Auburn, the manufacturer and
+distributer of said fliers seems to be labeled "Circuit Couriers." 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
 BREAK
 #60598
 Keywords:	skeleton
@@ -759,7 +1809,7 @@ ExtraFlags:	1000000100
 AffFlags:	0
 Material:	wood
 [POINTS]
-	Weight:	5.00
+	Weight:	4.00
 	Barrier:	8
 	Cost:	0
 	AvailTN:	0
@@ -1191,8 +2241,8 @@ Material:	paper
 	Val4:	30
 BREAK
 #60616
-Keywords:	nictating membranes
-Name:	nictating membranes
+Keywords:	nictitating membranes
+Name:	nictitating membranes
 RoomDesc:$
 An unfinished object is lying here.~
 LookDesc:$
@@ -1292,31 +2342,5 @@ Material:	paper
 	Val0:	4
 	Val1:	3
 	Val4:	40
-BREAK
-#60620
-Keywords:	sign
-Name:	a self-help sign
-RoomDesc:$
-A sign suggests you ^YADVANCE SELF 9^g to gain administrative powers.^n~
-LookDesc:$
-Since this is a testing port, we've set up the system such that anyone can
-advance themselves to staff level 9 to become an administrator of the game. If
-you want to undo this later, you can always ADVANCE SELF 1 to revert the
-change. 
-~
-Type:	Other
-WearFlags:	0
-ExtraFlags:	100000000001
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	999999.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 END

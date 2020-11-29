@@ -1,0 +1,25 @@
+#20300
+Keeper:	20300
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	11
+Close:	23
+Type:	Black
+NoSuchItemKeeper:	Ha ha ha, I don't sell that kind of drek, yo!
+NoSuchItemPlayer:	I dunno.  Maybe Lunchbox here will suck your drekstick.
+NoNuyen:	If that money doesn't show then you owe-me-owe-me-owe!
+DoesntBuy:	How about I kick you in the nuts instead?
+Buy:	%d bucks, little man -- put that drek in my hand!
+Sell:	Snoochie boochies!
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	20300
+		Type:	Always
+		Stock:	0
+BREAK
+END

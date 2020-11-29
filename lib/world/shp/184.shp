@@ -1,0 +1,209 @@
+#18401
+Keeper:	18401
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	I don't have that drek for brains!
+NoSuchItemPlayer:	Are you simple you dim witted fragger, ya ain't got that!
+NoNuyen:	Go make some money pleasin the trolls you poor fragger!
+DoesntBuy:	What the frag am I gonna do with that you drek stick!
+Buy:	Gimme %d nuyen you dim wit!
+Sell:	Here's %d nuyen.  Now get the frag out!
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	18440
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	18419
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	18418
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	18417
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	18416
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	18415
+		Type:	Always
+		Stock:	0
+BREAK
+#18402
+Keeper:	18410
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	I ain't got that mate.
+NoSuchItemPlayer:	Ya ain't got that mate.
+NoNuyen:	Ya don't have the bank to buy chum.
+DoesntBuy:	I don't buy that mate
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	18424
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	18423
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	18422
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	18421
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	18420
+		Type:	Always
+		Stock:	0
+BREAK
+#18403
+Keeper:	18402
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	18427
+		Type:	Always
+		Stock:	0
+BREAK
+#18404
+Keeper:	18417
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	18437
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	18436
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	18435
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	35514
+		Type:	Always
+		Stock:	0
+BREAK
+#18552
+Keeper:	18552
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	611
+		Type:	Always
+		Stock:	0
+BREAK
+#18559
+Keeper:	18558
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	10
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	475
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	369
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	479
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	368
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	302
+		Type:	Avail
+		Stock:	0
+BREAK
+END

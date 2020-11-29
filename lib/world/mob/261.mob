@@ -1,0 +1,648 @@
+#26100
+Keywords:	Bear totem
+Name:	Bear
+RoomDesc:$
+A bear of incredible size and indescribable beauty stands placidly before you.
+
+~
+LookDesc:$
+It is an incredible bear, the very paragon of bearness. Huge, with muscles
+like titanium cable, the bear just sort of stands there, a sage look upon its
+brown-furred features. Its image is one of impossible power and ageless
+wisdom, and it verily seems to radiate the placid but unstoppable magic of the
+Bear. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Ballistic:	100
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26101
+Keywords:	Cat totem
+Name:	Cat
+RoomDesc:$
+A very regal, fluffy white Persian cat sits grooming itself. 
+
+~
+LookDesc:$
+It is a fluffy white Persian, representing all that is catlike. Fluffy and
+white and impeccably groomed, it is everything a cat should be - regal,
+poised, proud, and every inch the intellectual hunter. From nose to tail it is
+catly perfection personified, and verily seems to shine with the impish,
+mischeivious, and inescapable power of the Cat. 
+~
+ArriveMsg:	pads in from
+LeaveMsg:	pads off
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Ballistic:	100
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26102
+Keywords:	Coyote totem
+Name:	Coyote
+RoomDesc:$
+A coyote sits here, shrouded in the desert sand, and radiant with a lunar
+glow. 
+
+~
+LookDesc:$
+It is the pinnacle of all things coyote. Its fur is smooth and whole, not a
+hint of imperfection anywhere. Its teeth are clean and shine in the watery
+moonlight that seems to perpetually surround it. As it throws back its head,
+its howl holds a steady, clear note and seems to resonate in the night air. 
+~
+ArriveMsg:	slinks in from
+LeaveMsg:	slinks off
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26103
+Keywords:	Dog totem
+Name:	Dog
+RoomDesc:$
+Dog Totem 
+
+~
+LookDesc:$
+Dog Totem 
+~
+ArriveMsg:	Raven totem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26104
+Keywords:	Eagle totem
+Name:	Eagle
+RoomDesc:$
+Eagle Totem 
+
+~
+LookDesc:$
+Eagle Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26105
+Keywords:	Gator totem
+Name:	Gator
+RoomDesc:$
+Gator Totem 
+
+~
+LookDesc:$
+Gator Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26106
+Keywords:	Lion totem
+Name:	Lion
+RoomDesc:$
+Lion Totem 
+
+~
+LookDesc:$
+Lion Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26107
+Keywords:	Owl totem
+Name:	Owl
+RoomDesc:$
+Owl Totem 
+
+~
+LookDesc:$
+Owl Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26108
+Keywords:	Raccoon totem
+Name:	Raccoon
+RoomDesc:$
+Raccoon Totem 
+
+~
+LookDesc:$
+Raccoon Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26109
+Keywords:	Rat totem
+Name:	Rat
+RoomDesc:$
+Rat Totem 
+
+~
+LookDesc:$
+Rat Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Ballistic:	100
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26110
+Keywords:	Raven totem
+Name:	Raven
+RoomDesc:$
+Raven totem 
+
+~
+LookDesc:$
+Raven Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101100100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26111
+Keywords:	Shark totem
+Name:	Shark
+RoomDesc:$
+Shark Totem 
+
+~
+LookDesc:$
+Shark Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Ballistic:	100
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26112
+Keywords:	Snake totem
+Name:	Snake
+RoomDesc:$
+Snake Totem 
+
+~
+LookDesc:$
+Snake Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26113
+Keywords:	Wolf totem
+Name:	Wolf
+RoomDesc:$
+Wolf Totem 
+
+~
+LookDesc:$
+Wolf Totem 
+~
+ArriveMsg:	ÀF@ÀF@tem 
+LeaveMsg:	pZŒ	ÈF@
+MobFlags:	1000000000001101010100000011010
+AffFlags:	1000000000001000011000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	50
+	Weight:	0
+	Ballistic:	100
+	Impact:	100
+[SKILLS]
+	stealth:	50
+	shamanic studies:	50
+	sorcery:	50
+	conjuring:	50
+	!Power missile!:	1
+BREAK
+#26140
+Keywords:	firefighter casually dressed volunteer man male human
+Name:	a firefighter
+RoomDesc:$
+A casually dressed volunteer firefighter stands here. 
+
+~
+LookDesc:$
+If you want to get a good idea of who can be a firefighter, just imagine the
+population of a community as a whole. Remove those with respiratory problems,
+eyesight problems, low upper body strength, weight problems, and a lack of
+courage. Then select those with a sprinkle of dare-devil bravado, and a sense
+of civic responsibility. After all that you have a good idea of who exactly
+this man, and his fellow volunteers might be. He might be a little rough
+around the edges, and he might not be a snappy dresser. He might be rich or
+poor, and he might have seventeen kids. But when push comes to shove, he puts
+his life on the line to dive into the breach against an enemy older than
+metahumanity itself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	77
+[SKILLS]
+	edged weapons:	3
+	brawling:	3
+	leadership:	3
+	biotech:	3
+BREAK
+#26141
+Keywords:	firefighter captain volunteer older man male human air leadership
+Name:	a firefighter captain
+RoomDesc:$
+An older man with an air of leadership stands here. 
+
+~
+LookDesc:$
+This man is older than his peers, and looks like he is in his early to mid
+forties. He is missing the index finger on his left hand. Burn scars cover his
+hands, and forearms. Streaks of gray are eating away at the threads of his
+brown hair. Nonetheless he carries himself with a sense of command. A small
+badge on his breast marks him as the fire captain of a Seattle volunteer fire
+department. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	5
+	Cha:	5
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	80
+[SKILLS]
+	edged weapons:	4
+	brawling:	3
+	leadership:	6
+	biotech:	4
+BREAK
+#26199
+Keywords:	blackjack quest equipment dealer
+Name:	BlackJack, the Really, Really Illegal Quest Equipment Dealer
+RoomDesc:$
+BlackJack is here, selling Questing items. 
+
+~
+LookDesc:$
+It's BlackJack. He's got crazy gadgets. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+END

@@ -1,0 +1,54 @@
+#23200
+Name:	Novinha's Library
+Desc:$
+   The walls here are lined with many bookshelves full of books, scrolls and
+maps.  If one wanted to know something, they could find it here.  To the west
+is an open passageway leading into the desert. 
+~
+Flags:	10000110010000000000011000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[EXIT west]
+	ToVnum:	21899
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23299
+Name:	Novinha's Darkness
+Desc:$
+   Who comes to me wearing my own face,
+   As dull as ache with eyes of empty space.
+   What is its name, why this
+restles haunt?
+   What do you want?
+   What have I done that you come to me?
+   Your vacant stare takes the soul
+of me.
+   Your frigid grip, rigid claws that clutch.
+   I fear your touch. 
+~
+Flags:	10000000000000000000011000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	21899
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

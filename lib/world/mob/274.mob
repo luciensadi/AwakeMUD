@@ -1,0 +1,41 @@
+#27426
+Keywords:	TraderVix man
+Name:	TraderVix
+RoomDesc:$
+A well-dressed man is here, awaiting someone or something. 
+
+~
+LookDesc:$
+This impeccably-dressed and -groomed man seems to be looking in you, and not
+at you. A faint touch of grey hair lines his temples, and small wrinkles
+crease his forehead. But beyond that, his age is almost indiscernable. His
+aquamarine eyes regard you coolly, and his voice has a bemused, almost
+whimsical tone to it. 
+~
+ArriveMsg:	glides in from
+LeaveMsg:	glides off to the
+MobFlags:	1000000000000000100000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	14
+[POINTS]
+	Height:	180
+	Weight:	60
+	Level:	9
+	Ballistic:	1000
+	Impact:	1000
+[SKILLS]
+	sorcery:	50
+	pistols:	50
+BREAK
+END

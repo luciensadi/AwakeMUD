@@ -1,0 +1,32 @@
+#32000
+Name:	Kawasaki KLR 250 KLR250
+ShortDesc:	A Kawasaki KLR250
+RoomDesc:	A Kawasaki KLR250 sits here
+LongDesc:$
+It is painted all black, and seems extremely suped up for such an old bike. 
+~
+Inside:$
+It has an odometer and speedometer, along with a gas gauge, turn signals and a
+horn. It also seems to have various controls for weapons. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	leaves
+Arriving:	A KLR250 rides in
+Handling:	15
+Speed:	20
+Accel:	18
+Body:	12
+Armour:	12
+Pilot:	0
+Sig:	15
+Autonav:	12
+Seating:	20
+SeatingBack:	0
+Load:	20
+Cost:	10000000
+Type:	1
+Flags:	0
+Engine:	0
+BREAK
+END

@@ -1,0 +1,2816 @@
+#65100
+Name:	Cafe
+Desc:$
+   The walls, floor and ceiling of this rectangular area are covered with
+bright, multicolored spatters of paint or gel, making them look like an
+exceptionally cheerful Jackson Pollock painting. Framed movie posters from the
+20th and early 21st centuries also adorn the walls. Small wrought-iron tables
+and matching chairs are scattered around the east side of the room, near a
+glass case displaying some of the cafe's culinary offerings. The area along
+the west wall has been left bare of furnishings, providing moviegoers with a
+narrow north-south passageway into the theater area proper. A melancholy
+French ballad plays softly over hidden speakers, and the mingled smells of
+strong coffee, red wine and rich baker's chocolate fill the air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	north
+	Desc:$
+A corridor is there. 
+~
+	ToVnum:	65102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Keywords:	southeast se
+	Desc:$
+A corner table is there. 
+~
+	ToVnum:	65101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	south
+	Desc:$
+The lobby is there. 
+~
+	ToVnum:	65111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	posters walls~~~~~~~~~~~~~~~~~~
+	Desc:$
+While many of the faded posters are of French classics such as "Jules et Jim,"
+"Un Coeur en Hiver" and "Alphaville," others are of movies as disparate as
+"The Cabinet of Dr. Caligari," "Singing in the Rain," "The Seven Samurai,"
+"Tie Me Up! Tie Me Down!" and "The Return of the King." 
+~
+BREAK
+#65101
+Name:	A Corner Table
+Desc:$
+   This small, wrought-iron table is squeezed into a corner, providing it with
+relative isolation from its fellows. Four matching chairs surround it, their
+hard metal seats covered with soft, bright cushions. This spot also provides
+you with a good view of the street outside, albeit one partially blocked by
+the large potted plants that sit in a row along the windowframe. The sounds of
+the cafe and street alike are barely audible from here. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	Keywords:	northwest nw
+	Desc:$
+The rest of the cafe is there. 
+~
+	ToVnum:	65100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65102
+Name:	A Narrow Corridor
+Desc:$
+   The walls of this small, dim corridor are covered in old movie posters.
+Thick double doors to the north presumably lead into the cinema itself; a
+synthwood table and electronic cash register sit placidly in front of them.
+Two doors set into the east wall are labelled "Unisex Restroom" and "Manager's
+Office," respectively; a small spiral staircase sits in the northeast corner.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors double north
+	Desc:$
+Double doors lead into the cinema proper. 
+~
+	ToVnum:	65107
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	65106
+	LockRating:	20
+[EXIT east]
+	Keywords:	door east
+	Desc:$
+A door marked "Unisex Restroom" is there. 
+~
+	ToVnum:	65103
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Keywords:	door southeast se
+	Desc:$
+A door marked "Manager's Office" is there. 
+~
+	ToVnum:	65104
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	south 
+	Desc:$
+The cafe is back there. 
+~
+	ToVnum:	65100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	staircase up
+	Desc:$
+A staircase is there. 
+~
+	ToVnum:	65105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	posters walls~~~~~~~~~~~~~~~~~~
+	Desc:$
+Another wide assortment of film posters from various times and genres,
+including "The Seven Voyages of Sinbad," "Le Retour de Martin Guerre," "The
+Matrix," "Animal House" and "Hellraiser." There's even an ancient leaflet
+advertising "Spike and Mike's Sick and Twisted Festival of Animation." 
+~
+BREAK
+#65103
+Name:	A Unisex Restroom
+Desc:$
+   A small, clean bathroom with yellow-tiled floor and walls, and a bright
+halogen light mounted in the center of the white stucco ceiling. The porcelain
+toilet and sink are spotless, the mirror's been flawlessly shined, and a faint
+smell of lemon-scented freshener lingers in the air. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	Desc:$
+A door leads outside. 
+~
+	ToVnum:	65102
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65104
+Name:	An Office
+Desc:$
+   This small, windowless office is rescued from dreariness by three colorful
+abstract posters on the wall and the bright, tacky hula-dancer floor lamp in
+the northwest corner. A small synthwood desk and two chairs occupy the
+majority of the room; synthwood bookshelves along the walls hold a variety of
+books, ledgers, datadisks and even some old-fashioned film canisters. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	Keywords:	door northwest
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65102
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	posters colorful abstract~~~~~~~~~~~~~~~~~
+	Desc:$
+The caption of one of the posters - an intense aggregation of random-seeming
+paint splotches - identifies it as a reproduction of Jackson Pollock's "Full
+Fathom Five." The other two posters depict bright swirls and shapes against a
+heavily-textured dark background; their captions identify them as "Song 1" and
+"Video 3," both created in 2060 by someone named Eleanor Weitz. 
+~
+BREAK
+#65105
+Name:	A Spiral Staircase
+Desc:$
+    This narrow metal staircase spirals down to the cinema corridor and up to
+a narrow landing with just enough room for a single, battered synthwood door.
+The light from the corridor below is more than enough to illuminate the area.
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+A door is marked "Projection Room: Keep Out." 
+~
+	ToVnum:	65106
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	down
+	Desc:$
+The corridor is there. 
+~
+	ToVnum:	65102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65106
+Name:	Projectionist's Booth
+Desc:$
+   This rectangular room hangs over part of the movie theater downstairs. The
+large, plate-glass window to the north provides an excellent view of both the
+screen and the front half of the room below. Three different types of
+projectors - two digital and one old-fashioned 35mm spool machine - sit in
+front of the window proper, while a medium-sized soundboard has been set up
+against the east wall. The rest of the space is mostly taken up by shelves
+full of spare parts, cleaners, disks and even a wallful of old-fashioned film
+canisters. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	north
+	Desc:$
+The front of the booth is there. 
+~
+	ToVnum:	65110
+	Flags:	2
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	50
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A door leads back to the staircase. 
+~
+	ToVnum:	65105
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65107
+Name:	Inside the Movie Theater
+Desc:$
+   This back section of the small cinema consists of 10 rows of about 10 seats
+each, situated under what must be the projector room. Two carpeted aisles run
+down either side of the rows; tiny track lights along the boundary of wall and
+floor and a large dome light in the ceiling presumably provide illumination
+when the film isn't showing. The rectangular screen in the front of the movie
+house is surprisingly large, and the sound quality seems excellent. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	north
+	Desc:$
+The front of the cinema is there. 
+~
+	ToVnum:	65108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	doors double south
+	Desc:$
+Double doors lead back to the corridor. 
+~
+	ToVnum:	65102
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	65106
+BREAK
+#65108
+Name:	Inside the Movie Theater
+Desc:$
+   This front section of the small cinema consists of 15 rows of about 10
+seats each. Two carpeted aisles run down either side of the rows; tiny track
+lights along the boundary of wall and floor and a dome light in the ceiling
+presumably provide illumination when the film isn't showing. The rectangular
+screen in the front of the movie house is surprisingly large, and the sound
+quality seems excellent. A large plate-glass window above and to the south
+presumably houses the projection room; the opaque tinting that covers it is
+presumably one-way. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	south
+	Desc:$
+The back of the cinema is there. 
+~
+	ToVnum:	65107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	window plate-glass up
+	Desc:$
+The plate-glass window of the projectionist's booth is there. 
+~
+	ToVnum:	65109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65109
+Name:	Dangling Outside the Projectionist's Booth
+Desc:$
+   You find yourself above the cinema floor, with a clear view of the front
+half of the movie theater below. From here, you can make out little details
+such as the immaculate, dustless condition of the ceiling dome light and some
+hairline cracks in the whitewashed stucco ceiling. A vent is embedded into the
+east wall. 
+~
+Flags:	1000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	vent east
+	Desc:$
+A vent leads into the wall. 
+~
+	ToVnum:	42170
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	10
+[EXIT up]
+	Keywords:	window plate-glass up
+	Desc:$
+The window is there. 
+~
+	ToVnum:	65110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	down
+	Desc:$
+The movie theater is there. 
+~
+	ToVnum:	65108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65110
+Name:	By the Window
+Desc:$
+   This plate-glass window gives you a clear, unobstructed view of the front
+half of the theater and the screen. The projector currently in use stands at
+the window's center; the other two have been pushed to one side. An
+overstuffed easy chair sits next to the projector. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	south
+	Desc:$
+The rest of the booth is there. 
+~
+	ToVnum:	65106
+	Flags:	0
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	window plate-glass down
+	Desc:$
+The theater is there. 
+~
+	ToVnum:	65109
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65111
+Name:	A Tiny Lobby
+Desc:$
+   This small square room is barely large enough for three normal-sized
+humans. The whitewashed walls are covered in old movie posters, and a piece of
+paper tacked up next to the doorway provides film schedules and historical
+notes about the theater. A rubber mat covers most of the floor, and a halogen
+dome light is set into the ceiling. 
+~
+Flags:	100001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	north
+	Desc:$
+A small cafe is there. 
+~
+	ToVnum:	65100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	southwest sw
+	Desc:$
+The street is there. 
+~
+	ToVnum:	32588
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	paper historical schedules~~~~~~~~~~~~~~~~~
+	Desc:$
+The small black-and-white flier explains that the cafe/cinema was established
+in 2062 to give film aficionados a place in which to watch old two-dimensional
+movies in a theater setting. It goes on to note that the theater itself is a
+reproduction of a small, late 20th-century cinema, and has been built to
+conform to the THX standards used widely at the time. The schedule itself is a
+widely varied mixture of films from the 1920s to the 2020s. 
+~
+[EXTRADESC 1]
+	Keywords:	posters~~~~~~~~~~~~~~~~~
+	Desc:$
+Faded movie posters for classics such as "Casablanca," "La Dolce Vita," "Star
+Wars" and "Scary Movie 14" have been carefully framed and hung from the walls.
+~
+BREAK
+#65112
+Name:	A Narrow Stairwell
+Desc:$
+   A buzzing fluorescent ceiling tube casts a sickly yellow glow over this
+small, square entryway. The walls are made of peeling white plaster, and the
+floor is covered in black-and-white checkered tile. A few dented metal
+mailboxes hang from the east wall; a battered sign taped above them reads,
+"Seattle Voice, 2nd Floor."  The words "^GB^n^Rackstag^n^Ge^n Costuming and Theatrical
+Supplies" have been painted on the door to the north, and a narrow set of
+stairs leads up. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden north
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65113
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	Desc:$
+The street lies back through the doorway. 
+~
+	ToVnum:	32589
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65113
+Name:	Backstage Costuming and Theatrical Supplies
+Desc:$
+   This large, rectangular room is a mess of makeshift shelves, piled-up
+synthwood crates and glass display cases. Plastiboard signs hanging from the
+ceiling divide the chaos into three loose categories: "Costumes/Makeup," above
+a row of racks and an almost ceiling-high mound of assorted clothing;
+"Props/Scenery," atop a mess of furniture, fake weapons and rolled-up canvas
+backdrops; and "Equipment," above a collection of lights, soundboards and
+sundry machinery. The rhythmic beats and swirling synthesizers of neo-disco
+music blare from hidden speakers, and a faint, musty odor permeates the air. A
+tinted glass window to the west looks out onto First Street. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	Desc:$
+A sign on the door read: "Employees Only." 
+~
+	ToVnum:	65114
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden south
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65112
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65114
+Name:	A Back Room
+Desc:$
+   This cluttered space seems to serve as a combination office and storage
+area. Boxes of equipment and rolls of canvas are stacked against the walls,
+alongside wire baskets filled with assorted costumes. The space in the room's
+center is occupied by a small synthwood desk and matching chair. An
+old-fashioned ceiling fan/light hangs above them, twirling slowly, but not
+creating much of a disturbance in the thick, musty air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65116
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door wooden west
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65113
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	hatch steel down
+	Desc:$
+A steel hatch leads downward. 
+~
+	ToVnum:	65117
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+	HiddenRating:	18
+BREAK
+#65115
+Name:	A Narrow Stairwell
+Desc:$
+   A buzzing fluorescent ceiling tube casts a sickly yellow glow over this
+small, square stairwell. The walls are made of peeling white plaster, and the
+floor is covered in black-and-white checkered tile. A wooden door is to the
+north, and a narrow set of metal stairs leads down. A small, grimy skylight is
+set in the roof, high above you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+The words "Seattle Voice" are painted on the door. 
+~
+	ToVnum:	65118
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65122
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	65112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65116
+Name:	A Tiny Bathroom
+Desc:$
+   Just large enough to hold a porcelain toilet and an undersized sink, this
+white-tiled bathroom smells of lemon-scented air freshener. The toilet paper
+dispenser attached to the wall is shaped like a sceptre. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65114
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65117
+Name:	A Basement
+Desc:$
+   A series of halogen ceiling tubes cast a muted yellow glow over the
+cinderblock walls and concrete floor and ceiling of this large, rectangular
+basement. Matte-black metal lockers, all securely locked, line the cinderblock
+walls, interspersed with neat stacks of unlabelled plastiboard crates. Three
+large steel worktables stand in the middle of the room, their surfaces covered
+with tools and small electronic devices. A state-of-the-art holographic
+projector sits in the northeast corner, next to a roll of canvas, and steel
+rungs set into the northwest corner provide access to a ceiling hatch. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	hatch steel up
+	Desc:$
+A steel hatch leads upward. 
+~
+	ToVnum:	65114
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#65118
+Name:	The "Seattle Voice" Office
+Desc:$
+   A battered blue couch and synthwood coffee table by the entrance seem to be
+the only concession to guests. There's no reception desk, just six mismatched
+desk-and-chair sets arranged in two rows. Each desk sports a cyberterminal and
+varying amounts of papers, disks, personal effects, coffee mugs and, in some
+cases, empty takeout containers. The walls are covered with framed covers of
+past issues of the "Seattle Voice" and various journalism awards. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	70342
+IO:	300
+Bandwidth:	20
+Access:	-2
+Trace:	-2
+RTG:	1100
+JackID:	92061200
+Address:	425 First Street, 2nd Floor, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	65120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65115
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65119
+Name:	A Bathroom
+Desc:$
+   Just large enough to hold a porcelain toilet and an undersized sink, this
+white-tiled bathroom smells of pine-scented air freshener. The walls are
+covered with posters of obscure bands, unknown trid movies and
+bizarre-sounding performance acts. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65120
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65120
+Name:	A Tiny Kitchen
+Desc:$
+   More of an alcove, really, this little space is just big enough for a
+full-sized fridge and a crowded countertop, upon which a sink, a microwave, a
+very nice coffeemaker and a plastic dishrack jostle for space. A set of bare
+metal shelves above the counter are filled with plastic utensils, mismatched
+plates, paper napkins, various exotic condiments and entirely too many
+different types of tea. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+A sign on the door reads, "Restroom." 
+~
+	ToVnum:	65119
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A printout tacked to the door reads, "That ain't no moon! That's a space
+station!" 
+~
+	ToVnum:	65121
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65118
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65121
+Name:	A Small Meeting Room
+Desc:$
+   Cool, dry air from a ceiling grate provides ventilation to this small,
+windowless room. Most of the available space is taken up by a large synthwood
+conference table and several mismatched chairs. The shelves that line the
+white plaster walls are laden with books, disks, magazines and all sorts of
+odd little trinkets and toys. A small table against the east wall holds a
+trid, a stereo system and a projector. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65120
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65122
+Name:	Halfway to the Skylight
+Desc:$
+   Or to the floor of the stairwell below, whichever you prefer. You're close
+enough to the ceiling and the skylight itself to see the grey cobwebs in the
+corners and the irregularities in the dirty window glass. There's not much to
+get a grip on or hang onto here, though the plaster walls should support
+crampons decently, and hopefully the metal rebar next to the skylight can take
+a grappling hook. 
+~
+Flags:	1000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	skylight window up
+	Desc:$
+The skylight is there. 
+~
+	ToVnum:	65123
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	LockRating:	10
+[EXIT down]
+	ToVnum:	65115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65123
+Name:	A Rooftop
+Desc:$
+   This flat rooftop is covered with asphalt. A razorwire-topped fence runs
+along its borders. While it's mostly stood up to the rigors of time, weather
+and vandals, it does seem to sport a roughly human-sized hole in its eastern
+portion, which may make it possible to clamber down to the roof of the shorter
+building there. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	65124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	skylight window down
+	Desc:$
+The skylight is there. 
+~
+	ToVnum:	65122
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	LockRating:	10
+BREAK
+#65124
+Name:	Off the Roof
+Desc:$
+   You're either halfway up or halfway down the wall, between a higher roof to
+the west and a lower one to the east. The bricks are worn and weathered, but
+seem sturdy enough; the fence above you looks like it could support a
+grappling hook. 
+~
+Flags:	1000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	65123
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	65125
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65125
+Name:	A Rooftop
+Desc:$
+   This flat, rectangular rooftop is paved with black asphalt. There doesn't
+seem to be a fire escape leading to the street, nor are there are any doors or
+skylights that might provide a way into the building.  The center of the roof
+is to the east, and a climb up the western wall might just be possible. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	42171
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65126
+Name:	A Rooftop
+Desc:$
+    This flat, rectangular rooftop is paved with black asphalt. There doesn't
+seem to be a fire escape leading to the street, nor are there are any doors or
+skylights that might provide a way into the building. The center of the roof
+is to the west, and it looks like a climb up the east wall might be possible.
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	42171
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	42172
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65127
+Name:	A Tiny Entryway
+Desc:$
+   This small, square room is barely large enough for three normal-sized
+humans. The plaster walls are covered in colorful posters and leaflets
+advertising bands, apartment shares, lost pets, tutors and even the occasional
+part-time job. A doorway to the north leads back to the street; another to the
+south leads into a bright, noisy cafe. 
+~
+Flags:	100001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	32725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65128
+Name:	The Silent Cafe
+Desc:$
+   Its name notwithstanding, The Silent Cafe is anything but. No matter what
+time of day or night, a variety of students and sundry patrons can be found
+here, drinking soykaf, working, or chatting amongst themselves. A random
+assortment of jazz, retro-ambient and lounge music constantly drifts from the
+ceiling speakers. Colorful paintings in a variety of styles hang from the
+white plaster walls, and overstuffed sofas and chairs cluster around coffee
+tables of varying sizes, giving the place a warm, homey feel. The red-tiled
+floor is spotlessly clean, as are the glass display case and steel magazine
+rack next to the cash register. The smells of buttery croissants and fresh
+soykaf fill the air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65127
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	65130
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A sign on the door reads, "Unisex Restroom." 
+~
+	ToVnum:	65129
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	65131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65129
+Name:	A Bathroom
+Desc:$
+   The white plaster walls of this small bathroom are barely visible under
+multiple layers of posters for long-past concerts, plays, gallery showings and
+two-dimensional film revivals. A large red spider plant, obviously fake,
+dangles from the ceiling, right above the toilet. A small printed sign taped
+to the mirror above the sink says, "Employees - please wash your hands before
+returning to work. Patrons - this might be a good idea for you, too." 
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65128
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65130
+Name:	A Cozy Corner
+Desc:$
+   A battered but comfortable-looking red loveseat sits behind a large
+synthoak coffee table in the southeast corner, creating a cozy, fairly
+isolated spot for someone to sit in. Three overstuffed easy chairs surround
+the table as well, providing both additional seating and partial concealment.
+The music and general murmur of activity are less audible here, as well. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	65128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65131
+Name:	A Cozy Corner
+Desc:$
+   The southwest corner is occupied by three unmatched synthwood dining chairs
+and a wrought-iron table with a glass top. A synthwood shelf filled with
+plates, trays and periodicals provides partial concealment from the rest of
+the establishment. The music and general murmur of activity are less audible
+here, as well. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	65128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65132
+Name:	A Foyer
+Desc:$
+   Halogen lights in old-fashioned brass sconces cast a subdued glow over this
+luxurious, red-carpeted entryway. What seems to be genuine oak panelling lines
+the bottom half of the walls; brocaded wallpaper in a fleur-de-lis pattern
+covers the top. Two velvet-upholstered settees sit against the east wall, with
+an old-fashioned, sand-filled brass ashtray between them.  An oak podium with
+a touchscreen built into it stands by the north wall. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65135
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65133
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	doors double-doors south
+	Desc:$
+Double-doors lead back to the street. 
+~
+	ToVnum:	30548
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65133
+Name:	Coat Check
+Desc:$
+   A narrow oak counter divides this fairly small area into two. A red velvet
+curtain hangs behind it, presumably leading to the area where coats, shawls
+and wraps are actually kept. A closed brass jar with a slit in the top sits to
+one side of the counter. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	curtain velvet red east
+	Desc:$
+A red velvet curtain is there. 
+~
+	ToVnum:	65134
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65134
+Name:	Coat Storage Area
+Desc:$
+   This small area is separated from the coat check counter by a red velvet
+curtain. Three stainless-steel coatracks take up most of the available space,
+and rows of hooks have been built into the walls. A small table and chair sit
+against the west wall, and a couple of plastiboard crates have been stacked
+neatly in the northeast corner. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	curtain velvet red west
+	Desc:$
+A red velvet curtain is there. 
+~
+	ToVnum:	65133
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65135
+Name:	The Bar
+Desc:$
+   This square area is decorated in much the same way as the lobby: oak
+panelling, cream fleur-de-lis wallpaper, and a thick red carpet underfoot. A
+circular oak bar sits in the center of the room; small oak tables and leather
+armchairs line the walls, underneath gilt-framed oil paintings of Cossack
+soldiers and Russian nobility. Despite the barely-audible whir of what must be
+an extremely powerful filtration system, the faint smells of cigar smoke,
+vodka and expensive perfume permeate the air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Keywords:	door southeast se
+	Desc:$
+A small oval portrait of a Russian tsar hangs from this door. 
+~
+	ToVnum:	65137
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	door southwest sw
+	Desc:$
+A small oval portrait of a Russian tsarina hangs from this door. 
+~
+	ToVnum:	65136
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65136
+Name:	Ladies' Bathroom
+Desc:$
+   This large, luxurious paragon among bathrooms features white marble walls,
+floor and counter, brass fixtures, real oak stall doors and the latest in
+autocleaning toilet technology. A large potted plant sits in the northwest
+corner, the oak sidetable next to it stocked with neatly-arranged bottles of
+lotion, cologne and a selection of other grooming products for customer use. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door northeast ne
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65135
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65137
+Name:	Men's Bathroom
+Desc:$
+   This large, luxurious paragon among bathrooms features white marble walls,
+floor and counter, brass fixtures, real oak stall doors and the latest in
+autocleaning toilet and urinal technology. A large potted plant sits in the
+northeast corner, the oak sidetable next to it stocked with neatly-arranged
+bottles of aftershave, safety razors and a selection of other  grooming
+products for customer use. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	Keywords:	door northwest nw
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65135
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65138
+Name:	A Short Corridor
+Desc:$
+   Halogen bulbs in old-fashioned wall sconces cast a soft, regular glow over
+this short, red-carpeted hallway. The oil paintings hanging on the walls here
+depict Russian landmarks such as the Kremlin, the Winter Palace and St.
+Isaac's Cathedral. A small sign on a brass stand reads, "No smoking in the
+lounge area." 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65135
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65139
+Name:	Lounge
+Desc:$
+   This large, square room looks very much like an old-fashioned gentleman's
+club: thick-piled red carpeting, dark wood panelling, subdued but ornate
+wallpaper, dim lights in old-fashioned brass sconces. Small tables and leather
+armchairs line the walls; a few larger tables with wooden dining chairs
+arranged around them take up the middle of the room. A huge marble fireplace
+occupies most of the north wall. A mixture of old-fashioned ambient and
+Russian balalaika music plays softly from hidden speakers, and the mingled
+smells of vodka and leather fill the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65142
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	65144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65141
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	65143
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65140
+Name:	A Corner Table
+Desc:$
+   A small, circular oak table sits in the southwest corner of the room,
+flanked by two large, overstuffed leather armchairs. The already toned-down
+music and the subdued sounds of dining and conversation are even softer here.
+There are no sconces nearby, and the main source of light is a flickering
+candle in a crystal bowl at the table's center. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65143
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65141
+Name:	A Corner Table
+Desc:$
+   Three leather armchairs flank a small rectangular table in the lounge's
+southeast corner, under a painting of the onion-domed Cathedral of Sancta
+Sophia. The already toned-down music and the subdued sounds of dining and
+conversation are even softer here. There are no sconces nearby, and the main
+source of light is a flickering candle in a crystal bowl at the table's
+center. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	65144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65142
+Name:	In Front of the Fireplace
+Desc:$
+   A huge grey marble fireplace in the north wall dominates this portion of
+the room. Various ornaments - colorful nesting dolls, model ships, and an
+old-fashioned brass clock have been placed on the mantelpiece. A life-sized
+painting of a tall, moustached man in archaic clothing hangs directly above
+it; a small label on the ornate picture frame identifies him as "Peter I." Two
+oak tables and a few chairs sit to either side of the fireplace, far enough
+away to avoid burns, but close enough to warm cold extremities. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	65144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65143
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65143
+Name:	Near the Fireplace
+Desc:$
+   The life-sized oil portrait of a dark-haired lady in a grey silk gown hangs
+here; the legend on the gilt frame reads, "Catherine I." The only tables and
+chairs in this portion of the room sit against the north wall, below the
+painting, probably to allow the waitstaff easy access to the kitchen doors to
+the west. The heat from the fireplace is just barely noticeable from here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	65142
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	65139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	doors wooden swinging west
+	Desc:$
+A pair of wooden swinging doors is there. 
+~
+	ToVnum:	65145
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65144
+Name:	Near the Fireplace
+Desc:$
+   This portion of the lounge area is fairly dim, and the heat from the
+fireplace is just barely noticeable. There are no wall sconces, and the small
+candles placed in the tables' centers provide the primary source of
+illumination. A discreet oak door with a brass doorknob is embedded in the
+east wall, next to a life-sized oil painting of a melancholy-looking fellow in
+an archaic red military coat. A small plaque on the frame identifies him as
+"Alexander I." 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door wooden oak
+	Desc:$
+An oak door with a brass doorknob is there. 
+~
+	ToVnum:	65153
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65141
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	65139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65142
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65145
+Name:	The Kitchen
+Desc:$
+   In contrast to the rest of the establishment, the kitchen is bright,
+metallic and thoroughly modern. A long stainless steel counter stretches along
+the north wall, providing both sinks and working space; an industrial-sized
+dishwasher and garbage disposal rest beneath it. A huge freezer, two
+refrigerators and a walk-in pantry sit against the west wall, and a large,
+stainless-steel butcher block table stands in the center of the room. Counters
+along the east wall provide a place to park finished dishes for the waitstaff.
+A self-locking metal door to the west is marked "Exit." 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door metal north
+	Desc:$
+A metal door is there. 
+~
+	ToVnum:	65168
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	doors wooden swinging east
+	Desc:$
+A pair of wooden swinging doors is there. 
+~
+	ToVnum:	65143
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door autolocking west
+	Desc:$
+An autolocking door leads outside. 
+~
+	ToVnum:	30548
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65146
+Name:	A Corridor
+Desc:$
+   While this corridor retains the wood panelling, ornate wallpaper and red
+carpet of the lounge area, the halogen dome lamps that run the length of its
+ceiling provide a brighter, more modern light. There are no paintings on the
+walls. The corridor continues east and ends at a wooden door to the west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden north romanov
+	Desc:$
+A brass plaque on the wooden door reads, "Romanov Room." 
+~
+	ToVnum:	65147
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65149
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south pushkin
+	Desc:$
+A brass plaque on the wooden door reads, "Pushkin Room." 
+~
+	ToVnum:	65148
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	door ladies southwest sw
+	Desc:$
+A brass plaque on the wooden door reads, "Ladies' Room." 
+~
+	ToVnum:	65154
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west manager
+	Desc:$
+A brass plaque on the door reads, "Manager's Office." 
+~
+	ToVnum:	65156
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65147
+[EXIT northwest]
+	Keywords:	door metal nw northwest
+	Desc:$
+A metal door marked, "Service Stairs" is there. 
+~
+	ToVnum:	65167
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+BREAK
+#65147
+Name:	A Private Room
+Desc:$
+   A long table in the center of this private room is laid out for a formal
+dinner, with white linen tablecloth, colorful flower arrangements, elaborate
+candelabra, expensive-looking china, sparkling crystal glasses and heavy
+silver cutlery. Braziers, pitchers and ice buckets are neatly arranged on an
+oak sideboard, waiting to be used. The life-sized oil portrait of a
+prim-looking woman in a black dress hangs over the unlit fireplace; a small
+plaque on the gilt frame identifies her as "Catherine II." 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65146
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65148
+Name:	A Private Room
+Desc:$
+   A small table in the center of this room has been laid out for a two-person
+formal dinner, with white linen tablecloth, expensive-looking china, sparkling
+crystal glasses and heavy silver cutlery. Braziers, pitchers and ice buckets
+are neatly arranged on an oak sideboard against the east wall. The only
+illumination is from the silver candelabra on the table and a pair of tapers
+on the mantelpiece. A velvet loveseat has been placed near the fireplace, and
+the portrait of a curly-haired young man hangs above the mantelpiece. The
+plaque on the gilt frame identifies him as Alexander Pushkin. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65146
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65149
+Name:	A Corridor
+Desc:$
+   While this area retains the wood panelling, ornate wallpaper and red carpet
+of the lounge area, the halogen dome lamps that run the length of its ceiling
+provide a brighter, more modern light. There are no paintings on the walls.
+The corridor continues west and ends at a wooden door to the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden north dostoevsky
+	Desc:$
+A bronze plaque on the wooden door reads, "Dostoevsky Room." 
+~
+	ToVnum:	65150
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door wooden east
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65152
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Keywords:	door southeast se men's
+	Desc:$
+A brass plaque on the wooden door reads, "Men's Room." 
+~
+	ToVnum:	65155
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden south bolshevik
+	Desc:$
+A brass plaque on the wooden door reads, "Bolshevik Room." 
+~
+	ToVnum:	65151
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65146
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65150
+Name:	A Private Room
+Desc:$
+   A round poker table with a green felt surface and built-in chip shelves
+sits in the middle of the room, surrounded by eight comfortable-looking
+chairs. A sideboard on the west wall is laid out with plates, glasses,
+cutlery, and other dining needs. The mantelpiece of the grey marble fireplace
+is stocked with various gambling paraphernalia: decks of cards, wrapped dice,
+racks of brightly-colored plastic chips, and even a small stack of
+green-shaded visors. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65149
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65151
+Name:	A Private Room
+Desc:$
+   A large oval conference table and 12 matching executive chairs take up most
+of the space in this room. A state-of-the-art holoprojector occupies the
+center of the table, and the southern wall is taken up by a huge projection
+screen. A sideboard along the east wall holds plates, cutlery, crystalware and
+other dining needs; a large trideo unit, a sophisticated sound system and
+other electronic equipment are neatly arranged along the west wall. A switch
+marked "White Noise" is placed next to the door, right above an RJ-715
+dataport. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	1100
+IO:	500
+Bandwidth:	50
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+Address:	An undisclosed location
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door north
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65149
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65152
+Name:	A Stairwell
+Desc:$
+   This narrow, brightly-lit stairwell is decorated in much the same way as
+the rest of the restaurant: thick red carpet, oak panelling and cream
+wallpaper. The middle of the stairs are covered with a red runner, to prevent
+slippage, and the oak banisters are flawlessly shined. A small security camera
+blinks discreetly from one of the ceiling corners. A door stands to the west.
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65149
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	65153
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65153
+Name:	A Stairwell
+Desc:$
+   This narrow, brightly-lit stairwell is decorated in much the same way as
+the rest of the restaurant: thick red carpet, oak panelling and cream
+wallpaper. The middle of the stairs are covered with a red runner, to prevent
+slippage, and the oak banisters are flawlessly shined. A wooden door leads
+back to the lounge area, and the stairs continue upward. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door west
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65144
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65152
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65154
+Name:	Ladies' Room
+Desc:$
+   While small, this bathroom is luxuriously-appointed: marble walls, floor
+and counter, brass fixtures, and the latest in autocleaning sink and toilet
+technology. A straw basket of cologne, lotion and grooming aids sits by the
+sink, next to a small flower arrangement. 
+~
+Flags:	100001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door northeast ne
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65146
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65155
+Name:	Men's Room
+Desc:$
+   While small, this bathroom is luxuriously-appointed: marble walls, floor
+and counter, brass fixtures, and the latest in autocleaning sink, toilet and
+urinal technology. A metal tray containing various grooming products sits on
+the counter next to the sink. 
+~
+Flags:	100001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	Keywords:	door northwest nw
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65149
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65156
+Name:	An Office
+Desc:$
+   This sleek, minimalist office is all bare black marble walls and floor,
+metal furniture and almost blindingly-bright halogen lights. The north wall is
+covered by monitors which show security footage of every room in the
+restaurant/bar and its immediate environs. A large glass-and-steel desk, bare
+except for the large terminal embedded into it, sits in the room's center,
+facing the monitors. A large black leather office chair sits behind the desk,
+and a matching black leather couch is positioned against the east wall, right
+next to the door. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door east
+	Desc:$
+A door is there. 
+~
+	ToVnum:	65146
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65147
+BREAK
+#65166
+Name:	An Office
+Desc:$
+   A sleek, minimalist office - all white marble, metal furniture and almost
+blindingly-bright halogen lights. A large glass-and-steel desk sits in the
+center of the room, with a large terminal embedded into it. The north wall is
+covered by monitors which show security footage of every room in the
+restaurant/bar and its immediate environs. A large black leather office chair
+sits behind the desk, and a matching black leather couch is positioned against
+the east wall, right next to the door. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#65167
+Name:	A Stairwell
+Desc:$
+   This narrow, matter-of-fact stairway doesn't seem intended for much guest
+use. The walls are plain cinderblock; the stairs, metal, with a rubber
+non-slip runner down the middle; the lights, bright halogen. A small security
+camera with a fisheye lens blinks placidly from a ceiling corner. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door metal southeast se
+	Desc:$
+A metal door is there. 
+~
+	ToVnum:	65146
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	65168
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65168
+Name:	A Stairwell
+Desc:$
+   This narrow, matter-of-fact stairway doesn't seem intended for much guest
+use. The walls are plain cinderblock; the stairs, metal, with a rubber
+non-slip runner down the middle; the lights, bright halogen. A small security
+camera with a fisheye lens blinks placidly from a ceiling corner. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door metal south
+	Desc:$
+A metal door is there. 
+~
+	ToVnum:	65145
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65167
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65169
+Name:	^WWIZ!!!!!^n
+Desc:$
+   Insanely fast neo-speed-techno-house-pop blares from four corner speakers
+as you walk into this small boutique. Multicolored ceiling spotlights swing
+back and forth, randomly illuminating parts of the store. The walls, shelves
+and counter are all painted matte-black - probably to provide maximum contrast
+to the shiny, glittery, glowy, blinky and sometimes well-nigh blinding clothes
+and jewelry on sale. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	32685
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#65170
+Name:	Second Chances
+Desc:$
+   This small, cluttered shop smells like dust, old-lady perfume and used
+clothing. Japanese paper lanterns over the lightbulbs dangling from the
+ceiling soften the fluorescent glare somewhat. The synthoak walls are almost
+completely covered in various items of vintage clothing from a variety of
+ages; even more clothes sit unsorted in wire bins in the middle of the room. A
+small synthwood counter by the door holds a cash register and a selection of
+leaflets, most of them advertising underground art shows and obscure bands. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	32751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

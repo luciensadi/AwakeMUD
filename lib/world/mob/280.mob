@@ -1,0 +1,33 @@
+#28001
+Keywords:	Milla
+Name:	Milla the clerk
+RoomDesc:$
+Milla the clerk stands here, waiting to help you. 
+
+~
+LookDesc:$
+An average sized woman. Wearing a tight spandex bodysuit that covers an also
+tight body, she is the perfect woman to work where she does. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	60
+	Level:	6
+[SKILLS]
+BREAK
+END

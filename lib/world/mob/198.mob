@@ -1,0 +1,3186 @@
+#19800
+Keywords:	Shippo
+Name:	Shippo
+RoomDesc:$
+A small child with fox-ears and a tail stands here. 
+
+~
+LookDesc:$
+He's cute he's fuzzy and damn if he aint small. But he knows alot and can be
+quite useful at times. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#19801
+Keywords:	Damien Knight Ares
+Name:	Damien Knight of Ares Inc.
+RoomDesc:$
+A man dressed in a snazy blue suit is here sitting in a large executives
+chair. 
+
+~
+LookDesc:$
+The real CEO and Chairman of one of the most powerful megacorps in the
+world... you stand in awe before such a magnificent bastard as he. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101011100001111010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	199
+	Weight:	110
+	Ballistic:	20
+	Impact:	20
+	Cash:	2500
+	Bank:	10000
+[SKILLS]
+	brawling:	20
+	corporate etiquette:	50
+	leadership:	50
+	electronics:	50
+	computers:	50
+BREAK
+#19802
+Keywords:	alien elite covenant regal
+Name:	A Covenant Elite
+RoomDesc:$
+A regal looking alien dressed in blue armor stands here ready for battle. 
+
+~
+LookDesc:$
+It's bipedal and bears a superficial resemblance to humans from a distance.
+Standing 8 feet 6 inches tall in a fully upright position, with an
+arrow-shaped head that is more reptilian than humanoid  their distinctive
+feature is a quadri-hinged mandibled mouth which opens at the bottom. Torsos
+which are similar to the torso of a human, although the chest and abdomen are
+much wider and more muscular. It also appear to have a double set of pectoral
+muscles and a much more muscular chest and back. With shoulders that are
+nearly identical in structure to human shoulders, only longer in length and
+thicker. Its hands have four digits - two fingers and two opposable thumbs -
+which allow them to use most equipment designed for humans. It feet are
+digitigrade, allowing it to jump greater distances and run much faster than
+the human norm. The toe configuration resembles the cloven hooves of various
+Terran mammals  although it wear a soled boot, the overall shape of the
+"hooves" are still visible. 
+~
+ArriveMsg:	slips in stealthily from the
+LeaveMsg:	slips off stealthily to the
+MobFlags:	1000000001000001010100001001010
+AffFlags:	1
+Race:	Undefined
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	10
+	Ballistic:	1000
+	Impact:	1000
+	Cash:	80000
+	Bank:	999999
+[SKILLS]
+	steal:	50
+BREAK
+#19803
+Keywords:	Knight Errant Heavy Heavily
+Name:	A Unit 000 Knight-Errant Security Enforcer Special Ops Agent
+RoomDesc:$
+A heavily armed Knight-Errant is here scanning the room for threats. 
+
+~
+LookDesc:$
+Dressed in a flat black attribute enhancing combat suit these Knight-Errant
+rival SpecOps forces in covert ability. The raw power their huge hulking
+appearance gives is countered by the simple elegance which they move and
+operate. The back of the suit is marked with the dark grey words "Unit 000"
+giving the tell tale sign that these Knight-Errant are part of the special
+force designated to protect the company's CEO Damien Knight. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101111000001111010
+AffFlags:	10001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	6
+	Int:	14
+	Wil:	16
+	Mag:	18
+[POINTS]
+	Height:	190
+	Weight:	180
+	Level:	10
+	Ballistic:	18
+	Impact:	18
+	Cash:	350
+	Bank:	350
+	Karma:	1
+[SKILLS]
+	brawling:	18
+	sorcery:	16
+	edged weapons:	15
+	gunnery:	18
+	assault rifles:	12
+BREAK
+#19805
+Keywords:	Ares Shopkeeper jim
+Name:	Jim the ShopKeeper
+RoomDesc:$
+An average human with "Jim" on his name tag stands here ready to help you. 
+
+~
+LookDesc:$
+He is a picture of average, average height, weight, average brown hair and
+skin complextion, average looks, and even an average smile. He's so dang
+non-descript average it's almost creepy. He wears a red polo shirt with the
+Ares logo tucked into his khaky pants looking very clean cut. The gold name
+tag on his chest reads simply "Jim" in black letters, he smiles at you as you
+enter. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	154
+	Weight:	120
+	Ballistic:	5
+	Impact:	5
+	Cash:	900000
+	Bank:	900000
+[SKILLS]
+BREAK
+#19806
+Keywords:	knight errant guard
+Name:	A Knight-Errant Entrance Guard
+RoomDesc:$
+A Knight-Errant stands guard watching for anything suspicious. 
+
+~
+LookDesc:$
+The Corporate Guard KE are specialy trained for dealing with security in
+places where alot of people have access such as the public levels of the
+Knight Center. His heavy security vest, helmet and large assault rifle are
+enough to keep most people from messing with them. Dressed in black they have
+a large Ares logo embroidered on their back. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100011100000011010
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	18
+	Qui:	16
+	Str:	16
+	Cha:	6
+	Int:	10
+	Wil:	16
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	90
+	Level:	12
+	Ballistic:	10
+	Impact:	10
+	Cash:	125
+	Bank:	100
+[SKILLS]
+	assault rifles:	15
+	corporate etiquette:	9
+	brawling:	15
+	pole arms:	12
+	clubs:	12
+BREAK
+#19810
+Keywords:	Squad command Squadcommand sc mech
+Name:	A SQUADCOMMAND Mech Unit
+RoomDesc:$
+A Massive SQUADCOMMAND Mech towers over you looking ominous. 
+
+~
+LookDesc:$
+This is the leader of the Mech Crew as it where. He looks like he has a
+communicator headset going to where his mouth would be. He has a very
+authoratative look to him and the black and gold styling on his suit add to
+the feeling. His suit is almost all black with twin gold stripes that run down
+the left side of his body from shoulder to feet. On his belt line is a pair of
+what look like binoculars and a holster for his gun. On his back in steel grey
+letters bairly visible are the words SQUADCOMMAND SC-001. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000101010100000111110
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+BREAK
+#19811
+Keywords:	renegade mech rg
+Name:	A RENEGADE Mech Unit
+RoomDesc:$
+An imposing RENEGADE Mech Unit is here scanning the horizon. 
+
+~
+LookDesc:$
+This large mech unit resembles the old Gundam Suits from the 20th century.
+Done up in red and gold this mech looks almost like a knight from the days of
+old. The way the head is done makes it appear to be wearing a helmet. Slung
+across it's back is the holding strap for the large beam rifle that is this
+mechs signature weapon. On its back is a large pack that holds the Mechs main
+boosters and communication equipment as well as the words RENEGADE RG-001. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010100000011110
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	30
+	Str:	30
+	Cha:	0
+	Int:	30
+	Wil:	30
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+BREAK
+#19812
+Keywords:	berserker mech bk
+Name:	A BERSERKER Mech Unit
+RoomDesc:$
+A BERSERKER Mech Unit stands here looking powerful. 
+
+~
+LookDesc:$
+Midranged when it comes to height the BERSERKER Unit is the most memorable
+Unit in the Mech crew in that he is a deep purple color with very detailed
+lighting bolts that cross over his body at irregular intervals. Something
+about the way that his face has been done up gives you the impression that
+he's got a huge crazy grin on his face. On his back is a pack that is slightly
+larger than all the other Mechs which contains larger booster rockets. The
+BERSERKER is the only Mech that was specifically designed for space though
+they all can achieve space flight. On the top of the back in black letters
+that are bairly visible is BERSERKER BK-001. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010100000011110
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	25
+	Str:	25
+	Cha:	0
+	Int:	25
+	Wil:	25
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+BREAK
+#19813
+Keywords:	Assault mech at
+Name:	An ASSAULT Mech Unit
+RoomDesc:$
+An ASSAULT Mech Unit waits here armed to the teeth. 
+
+~
+LookDesc:$
+This mech is more of a tank with legs than a mech. Extra thick armor and many
+hidden weapons the ASSAULT mech was designed as the combat backbone of the
+Mech Crew. On each of the arms are two miny laser cannons equiped with rapid
+fire mechanisms. Within the head are two high velocity chain guns that feed of
+internal ammo supplys. The Mech is Red and White and looks almost like a giant
+medic. It's really ironic almost. Held in it's hands is a large Gatling Gun
+which is connected to its backpack. On the backpack is the word ASSAULT
+AT-001. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010100000011110
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	30
+	Str:	30
+	Cha:	0
+	Int:	30
+	Wil:	30
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+BREAK
+#19814
+Keywords:	Tactical mech ta
+Name:	A TACTICAL Mech Unit
+RoomDesc:$
+A TACTICAL Mech Unit stands here searching for threats. 
+
+~
+LookDesc:$
+This Mech is one of the lighter armored ones compared to the others. Painted
+in a clssical camoflauge configuration this Mech is prime for hitting a target
+with out it knowing it's anywhere near. Grasped firmly in both hands is a
+massive sniper rifle that looks like it might be longer than he is tall. His
+backpack is much smaller than most of the others and his booster rockets are
+specilly designed to be low noise and heat, on the pack the camo is reveresed
+to spell out TACTICAL TA-001. 
+~
+ArriveMsg:	scans for new targets as he enters from
+LeaveMsg:	checks his surroundings as he leaves
+MobFlags:	101011100001011110
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	40
+	Str:	30
+	Cha:	10
+	Int:	50
+	Wil:	40
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+BREAK
+#19815
+Keywords:	demo demolitions mech dt
+Name:	A DEMOLITIONS Mech Unit
+RoomDesc:$
+A huge DEMOLITIONS Mech stands here looking to blow something up. 
+
+~
+LookDesc:$
+Done up in a flat black color this Mech has very broad soulders and very heavy
+reinforced armor. One good word to describe it woud be Beefy. Criss crossed
+over its chest are two straps that each look to hold several explosive
+devices. A large assault rifle dangels from its strap under his right arm. The
+distinctive feature of this mech is he lacks the standard backpack that all
+the others sport. His booster rockets are mounted just above his waist line
+and poke out just a little bit. Not far above the rockets in high gloss black
+is the word DEMOLITIONS DT-001. 
+~
+ArriveMsg:	pounds in from
+LeaveMsg:	pounds off
+MobFlags:	1000101011100000011110
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	0
+[POINTS]
+	Height:	550
+	Weight:	1000
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+BREAK
+#19816
+Keywords:	mob unfinished
+Name:	An INFILTRATOR Mech Unit
+RoomDesc:$
+An unassuming INFILTRATOR Mech stands here looking innocent. 
+
+~
+LookDesc:$
+The smallest of the Mechs the INFILTRATOR looks quite a bit like your average
+human male. If he was encased in hardened armor that is. His armor is mostly
+grey with white accent lines around all the joint giving it an artistic flair.
+He doesn't seem to carry any weapon but knowing the Mech Crew he most likely
+has one hidden somewhere. The most notable difference between this mech and
+all the others is that he has two mini-visors that look more like eyes. On his
+back in dark grey letters is the word INFILTRATOR IR-001. 
+~
+ArriveMsg:	silently slips in from
+LeaveMsg:	quietly slips
+MobFlags:	101011100000011110
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+BREAK
+#19817
+Keywords:	mob unfinished
+Name:	An APOCALYPSE Mech Unit
+RoomDesc:$
+An APOCALYPSE Mech Unit stands here ready to call down the thunder. 
+
+~
+LookDesc:$
+The Mech is positively massive. Done up in Crimson and Black the very aura
+that this Mech radiates screams bringer of doom and death. Most of the shape
+of this Mech is hidden under the massive cloak he wears. The bottom of the
+cloak is ragged, torn and scorched from previous battles. Under the cloak you
+can bairly make out the shape of what looks like the weapon he uses and a
+similar one on the opposing side. His visor is locked in a constant state of
+blood red symbolizing his always present desire to kill. On each of his
+shoulders is a large gold insignia with the letters MC inside it. On the back
+of the cloak in red lettering is the word APOCALYPSE AL-001. 
+~
+ArriveMsg:	sends chills down your spine as he arrives from
+LeaveMsg:	wreaks havoc as he leaves
+MobFlags:	1000101011100000111110
+AffFlags:	1000000000000000000000
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	artillery:	50
+	brawling:	50
+BREAK
+#19818
+Keywords:	Mech security guard
+Name:	A MECH Base Security Guard
+RoomDesc:$
+A heavily armed security guard that bears the logo "MC". 
+
+~
+LookDesc:$
+Hevily armed with tactical assault rifles and heavy milspec armor these troops
+have been placed here to protect the enterance to the underground base.
+Dressed in dark grey armor they fade into the concrete walls. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000101011100000111110
+AffFlags:	0
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	18
+	Qui:	18
+	Str:	18
+	Cha:	2
+	Int:	6
+	Wil:	18
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	15
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	assault rifles:	20
+	brawling:	20
+BREAK
+#19819
+Keywords:	Mech security guard
+Name:	A MECH Base Security Guard
+RoomDesc:$
+A heavily armed security guard that bears the logo "MC". 
+
+~
+LookDesc:$
+Hevily armed with tactical assault rifles and heavy milspec armor these troops
+have been placed here to protect the enterance to the underground base.
+Dressed in dark grey armor they fade into the concrete walls. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000101011100000111110
+AffFlags:	0
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	18
+	Qui:	18
+	Str:	18
+	Cha:	2
+	Int:	6
+	Wil:	18
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	15
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	assault rifles:	20
+	brawling:	20
+BREAK
+#19820
+Keywords:	cute man puppy cute fuzzy employee
+Name:	A Cute n' Fuzzy Employee
+RoomDesc:$
+A man stands here cradeling a small puppy in his arms. 
+
+~
+LookDesc:$
+His look is clean and shaven, he's in his early 20's max. His dress is quite
+simple looking more like street clothes than a work uniform. In his arms he
+holds a small brown and white puppy that wiggles trying to get free. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001011
+AffFlags:	0
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	189
+	Weight:	200
+[SKILLS]
+BREAK
+#19821
+Keywords:	plump man suit salesman middle
+Name:	A middle aged salesman
+RoomDesc:$
+A plump man in a suit is here looking for a waiting customer to serve. 
+
+~
+LookDesc:$
+His hair is almost all gone save some survivors on the sides of his head but
+this guy is a real chrome dome. His suit looks like it should have been eaten
+by moths about 20 years ago. An ugly brown plad suit with a ghastly looking
+tie, hopefully his choice in matresses is better than his fasion sense. 
+~
+ArriveMsg:	(Œ<	Œ<	
+LeaveMsg:	˜r;	ð©Ž
+MobFlags:	1000000000000000000000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	300
+[SKILLS]
+BREAK
+#19822
+Keywords:	techno geek clean man pda
+Name:	A Techno Geeks Employee
+RoomDesc:$
+A clean cut man holding a PDA waits to answer all your questions about
+electronics. 
+
+~
+LookDesc:$
+Slick black hair and a clean shaven face this man looks like he knows what's
+going on. His outfit is very clean wearing khaki dickies with a black collared
+shirt tucked in. The MP4 player hanging from his pocket and the PDA in his
+hand give him the tell tale signs of a tech wiz. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	222
+	Weight:	150
+[SKILLS]
+BREAK
+#19823
+Keywords:	fry linux grungy dude user
+Name:	A grungy Linux user
+RoomDesc:$
+A grungy looking dude bashing on an old tower is here. 
+
+~
+LookDesc:$
+Long hair that looks like it hasn't been washed in a few days, a rather garly
+looking case of the 5 o'clock shadow gone bad and the faint sent of top ramen.
+That's right he's a Linux user and he's here to tell you what parts will make
+your computer totally leet. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	134
+	Weight:	100
+[SKILLS]
+BREAK
+#19824
+Keywords:	hippie looking man business casuals Steve
+Name:	Steve from Ritual Retails
+RoomDesc:$
+A hippie looking man in business casuals tinkers with one of the displays
+here. 
+
+~
+LookDesc:$
+His hair is greying slightly but other than that he doesn't look half bad. His
+beard is closly shaved and nicely trimmed. He looks very proper in his uniform
+and a glance from him invites you to ask any questions you have. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	146
+	Weight:	120
+[SKILLS]
+BREAK
+#19825
+Keywords:	stylish teen employee fashion faux pa female rachell
+Name:	a Fashion Faux Pa
+RoomDesc:$
+A stylishly dressed teen waits behind the counter to ring you up. 
+
+~
+LookDesc:$
+She looks to be about a day over 18 and quite enjoying her new job. Her
+clothes are all from the store and she does look quite nice in them. Her
+employee ID badge hangs around her neck showing her name to be "Rachell" and
+her welcoming smile encourages you to approach her. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	108
+[SKILLS]
+BREAK
+#19826
+Keywords:	somewhat bored looking man beanie carl
+Name:	Carl
+RoomDesc:$
+A somewhat bored looking man with a beanie on his head is here. 
+
+~
+LookDesc:$
+This rather average looking joe looks bored out of his gourd, and thats
+putting it lightly. He sports a beanie and a rather casual attire of loose
+fitting clothing, and occasionally even ventures out from behind the counter
+to help customers with purchases. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	102
+	Weight:	90
+[SKILLS]
+BREAK
+#19827
+Keywords:	somewhat aged man late 50
+Name:	A somewhat aged man
+RoomDesc:$
+A somewhat aged man in his late 50's tends the register here. 
+
+~
+LookDesc:$
+His dress is rather simple, a pair of brown pants, a white button up shirt and
+a dark navy blue vest. His face is somewhat wrinkled and his black hair is
+beginning to show some signs of thinning out and grey. As he sits behind the
+register he toys with a few random action figures. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	113
+	Weight:	100
+[SKILLS]
+BREAK
+#19828
+Keywords:	health nut employee woman
+Name:	A fit and toned woman
+RoomDesc:$
+A rather fit looking woman cleans shelves whilst attenting to customers here.
+
+~
+LookDesc:$
+Man is she fit, her arms, legs, and stomach are all incredibly well toned and
+she looks like she could easily beat a troll in a head to head spar. Despite
+being rather muscle oriented she's not let her attractiveness go to waste and
+she still draws a few glances. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#19829
+Keywords:	annoying peppy salesman sport mart
+Name:	An annoyingly peppy salesman
+RoomDesc:$
+An annoyingly peppy salesman is here ready to ring up your purchases. 
+
+~
+LookDesc:$
+Someone seriously needs to kick this dude in the nuts because he is way too
+happy about his job. But really who can blame him, he does work at Sports Mart
+and gets to be around sports equipment all the time. He looks rather young and
+his hair is up in short black spikes that look quite clean cut with his
+collared shirt. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	201
+	Weight:	176
+[SKILLS]
+BREAK
+#19830
+Keywords:	friendly female looking human
+Name:	A friendly looking female
+RoomDesc:$
+A friendly looking female human is here to help the occasion. 
+
+~
+LookDesc:$
+She looks fairly easy going and very relaxed, not only that but she seems
+eager and willing to help you plan that special get together or occasion. He
+flashes a warm smile and attempts to be as curteous as possible even when she
+can't help customers find what they want, pretty good service, maybe she
+deserves a raise. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	162
+	Weight:	124
+[SKILLS]
+BREAK
+#19831
+Keywords:	slick dj groov rock employee
+Name:	A sick lookin' DJ
+RoomDesc:$
+A slick lookin' DJ works the register here groovin' to the tunes. 
+
+~
+LookDesc:$
+This guy looks totally sick! He's got some of the hottest looking clothes n
+you've ever seen and a huge pair of headphones wrapped around his neck as he
+moves and bobs to the music. He looks to be asian in origin and has light
+brown hair and a rather strong looking build. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	170
+[SKILLS]
+BREAK
+#19832
+Keywords:	dressed female employee rave
+Name:	A well dressed female employee
+RoomDesc:$
+A well dressed female is working the floor here helping customers. 
+
+~
+LookDesc:$
+She looks to be in her mid 20's and is dressed in a semi-formal outfit that
+still looks fit for a night out on the town. Her shoulder length blond hair
+hangs freely and bounces slightly as she walks. Her warm smile and inviting
+tone almost will you to buy smething you don't really need, like more shoes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	192
+	Weight:	100
+[SKILLS]
+BREAK
+#19833
+Keywords:	stuffy haughty old lady
+Name:	A haughty old woman
+RoomDesc:$
+A rather stuffy old woman stands here regarding you with a haughty air about
+herself. 
+
+~
+LookDesc:$
+This woman screams stuck up old lady. She look down at you through the bottom
+of her glasses from the moment you enter the store to the moment you leave.
+Her clothes scream late 90's and are outdated to the point of being arcane.
+Despite all this she remains quite helpful when asked politely. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	85
+[SKILLS]
+BREAK
+#19835
+Keywords:	large burly dude looking
+Name:	A burly looking dude
+RoomDesc:$
+A rather large burly dude is here polishing a silver pistol. 
+
+~
+LookDesc:$
+He's got a rather huge build and looks more like a bouncer than someone who
+would work at a respectable place like this. His 5 o'clock shadow is quite
+apparent and his tanktop looks a little worse for the wear. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	196
+	Weight:	232
+[SKILLS]
+BREAK
+#19836
+Keywords:	dirty oily guy sharpen
+Name:	A dirty oily guy
+RoomDesc:$
+A dirty oily guy sharpens a katana on a grinding stone here. 
+
+~
+LookDesc:$
+His shirt is a dark soot black from the blow off of the fire. The edged are
+tatered and torn as well as scorched and burned from his long days of work.
+His hands are heavily calliced from hard work. His hair is rather long going
+down to about his shoulders and you realize that he is in fact an elf. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	230
+	Weight:	187
+[SKILLS]
+BREAK
+#19837
+Keywords:	everage civilian man looking
+Name:	An average civilian
+RoomDesc:$
+A rather average looking civilian stands here monitoring the store. 
+
+~
+LookDesc:$
+He looks like he could have walked in here off the street but after looking a
+litle closer you notice the buldge near his waist and how unusually tight his
+shirt is, obvious signs of a gun and possible body armor. His voice is deep
+and harsh commanding attention and his epert advice will help you get some of
+the best gear for the op you're planning. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	235
+	Weight:	250
+[SKILLS]
+BREAK
+#19838
+Keywords:	authoritative looking knight-errant official
+Name:	An authoritative looking Knight-Errant
+RoomDesc:$
+A very official looking Knight-Errant runs the store with a protective eye
+here. 
+
+~
+LookDesc:$
+His build is large and rather muscular while his large broad shoulders give
+him a dominant feeling to the point of being overbearing. His hair is shaven
+to the point that it's just a thin layer of fuzz on his head. His eyes have a
+hardness to them that comes from real combat experience. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	300
+[SKILLS]
+BREAK
+#19839
+Keywords:	militant man russian uniform
+Name:	A militant Russian man
+RoomDesc:$
+A militant looking man in a Russian uniform walks the floor supervising the
+customers. 
+
+~
+LookDesc:$
+He looks rather old with his face showing great signs of age being very
+wrinkled and drooping. His eyes are a rather dark blue color and they have a
+depth to them that's somewhat unusual. His uniform is devoutly old age russian
+with large red stars on it and several Lenin pins. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	176
+[SKILLS]
+BREAK
+#19840
+Keywords:	doc ross snyder redhaired man
+Name:	Doc Ross Snyder
+RoomDesc:$
+A redhaired man stands here over the operating table with a scalpel grinning
+happily. 
+
+~
+LookDesc:$
+His hair is a little messy and has a sort of mad scientist look to it. His
+white lab coat is perfectly spotless and the scalpel glints in the bright
+light. As he looks at you a smile creeps across his face and some sinister
+thought enters his brain. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	230
+	Weight:	100
+[SKILLS]
+BREAK
+#19841
+Keywords:	attractive woman doc rustee scott
+Name:	Doc Rustee Scott
+RoomDesc:$
+A rather attractive woman stands here holding what looks like a human heart. 
+
+~
+LookDesc:$
+She is quite slim and has an almost perfect figure, too perfect in fact. After
+a moment you realize that her entire body has been stylized using bioware
+engineering. She looks as you with steel grey eyes and a general distaste. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	201
+	Weight:	175
+[SKILLS]
+BREAK
+#19842
+Keywords:	bob troll large tinkers
+Name:	Bob
+RoomDesc:$
+A large troll with one eye tinkers with a monowhip behind the counter. 
+
+~
+LookDesc:$
+He's rather large even in the scope of trolls. His clothes are rather loose
+fitting, in fact his pants seem about ready to fall off... I'd suggest you not
+get to close. Despite his large hands he seems to work with great skill over
+the deadly monowire whip in his hand and seems apt enough to help with all
+your whip needs. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001001011
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	400
+[SKILLS]
+BREAK
+#19843
+Keywords:	bank large ammunition vending machine
+Name:	An Ammunition Vending Machine
+RoomDesc:$
+A large bank of ammunition vending machines sit here. 
+
+~
+LookDesc:$
+It looks like someone got the idea to convert candy machines into dispensers
+of led. What a sick person. They are made from a reinforced Titanium Alloy to
+prevent their own rounds from being used to break into them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001001011
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	114
+	Weight:	120
+[SKILLS]
+BREAK
+#19844
+Keywords:	large human broad shoulders
+Name:	A large man with broad shoulders
+RoomDesc:$
+A rather large human stands here waiting for you to buy something. 
+
+~
+LookDesc:$
+He's positively massive for a human with sholders that you'd swear are nearly
+4 feet wide and standing atleaast 6'6" he's quite the person. His tanned
+complextion and gruff unshaven look adds to his 'Don't even try it' look. He
+stands with his arms crossed lightly tapping his fingers in impatience as he
+waits for you to hurry up and buy something. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	230
+[SKILLS]
+BREAK
+#19845
+Keywords:	mage tidy wage human suit
+Name:	A tidy looking wage mage
+RoomDesc:$
+A human wearing a suit and sun glasses mans the counter here. 
+
+~
+LookDesc:$
+His hair is died silver and cut relatively short, nicely combed to the side.
+He looks like most other wage slaves aside from the snazzier than usual suit
+hes sporting, which sets him apart from his mundane little counter-parts. He
+flashes a wide smile at the notion of a purchase, and is more than willing to
+help customers.. if it looks like they actually plan on buying something,
+atleast. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	130
+[SKILLS]
+BREAK
+#19846
+Keywords:	bank large ammunition vending machine
+Name:	An Ammunition Vending Machine
+RoomDesc:$
+A large bank of ammunition vending machines sit here. 
+
+~
+LookDesc:$
+It looks like someone got the idea to convert candy machines into dispensers
+of led. What a sick person. They are made from a reinforced Titanium Alloy to
+prevent their own rounds from being used to break into them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001001011
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	114
+	Weight:	120
+[SKILLS]
+BREAK
+#19847
+Keywords:	large man heavy balistics armor rifle technician
+Name:	A rifle technician
+RoomDesc:$
+A large man wearing heavy balistics armor is standing here cleaning a rifle. 
+
+~
+LookDesc:$
+He's got the build of a brick wall and the heavy armor that he has on makes
+him seem that much larger. The vest, tank top combo serves to give him a huge
+ammount of body protection without sacrificing any dexterity of the arms. It
+seems he's as ready to guard his merchandise as he is to sell it to you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	200
+[SKILLS]
+BREAK
+#19848
+Keywords:	large hulking troll polishes
+Name:	A large hulking troll
+RoomDesc:$
+A large hulking troll polishes one of the cannons while keeping watch on the
+store. 
+
+~
+LookDesc:$
+Despite being a troll, hes dressed rather nicely in semi-formal wear and looks
+more like a business man who wandered in here one day and got stuck with a job
+behind a counter, instead of behind an assault cannon. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001011
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	290
+	Weight:	300
+[SKILLS]
+BREAK
+#19849
+Keywords:	a small gnome works scattered SMG
+Name:	a small gnome
+RoomDesc:$
+A small gnome works over the scattered pieces of an SMG trying to decipher
+what's wrong with it here. 
+
+~
+LookDesc:$
+This small gnome expertly works over the pieces of the SMG scattered across
+the counter before him assembling and disassembling it with extreme speed and
+ease. He occasionally looks up from his work to make sure that all his
+merchandise is still where it belongs. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001011
+AffFlags:	0
+Race:	Gnome
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	110
+	Weight:	60
+[SKILLS]
+BREAK
+#19850
+Keywords:	apt young woman
+Name:	an apt young woman
+RoomDesc:$
+An apt young woman stands behind the counter waiting to sell you a gun. 
+
+~
+LookDesc:$
+She looks quite phyisically fit and her Knight-Errant vest tells the tale of
+her skill level. She has a stone hard gave that seems to say "Don't even try
+some macho trip on me." Her fingers slowly tap on the counter as she waits for
+someone to buy something. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101100000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	197
+	Weight:	160
+[SKILLS]
+BREAK
+#19851
+Keywords:	old white grey elderly gentelman white beard wheel chair man
+Name:	An elderly gentleman with a white beard
+RoomDesc:$
+A wheelchair bound man rolls about answering customers various questions here.
+
+~
+LookDesc:$
+He's quite old looking maybe in his late 80's, a long white beard hangs from
+his chin and pools slightly into his lap. He sits in a motorized chair that at
+first just seems to assist his mobility. It is later apparent from further
+examination that the chair is a nessesity, his legs are cut clean off mid
+calf. For whatever reason he has chosen not to get prosthetics and wheels
+about in his chair. He seems to know a fair amount about the chips he sells
+and can answer most any question. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#19852
+Keywords:	knight center employee tired man
+Name:	A Knight Center Employee
+RoomDesc:$
+A rather tired looking man tends to the register here. 
+
+~
+LookDesc:$
+Dressed in Ares colors, his red slacks and light tan shirt do little for his
+physical apperance. Deep bags underline each of his eyes and his general
+attitude is one of too many people and not enough brains to go around. Best to
+just do your business and move on. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	140
+[SKILLS]
+BREAK
+#19881
+Keywords:	shop keeper owner male human annoying loud
+Name:	an overexcited human male
+RoomDesc:$
+an overexcited human male stands here ranting about bargains 
+
+~
+LookDesc:$
+This is an overly excited human male who just won't stop yelling and screaming
+about how insane the incredible bargains and savings in store for you and you
+alone, he's slightly above average height wise and quite masculinely built, he
+has murky brown eyes and his short brown hair is spiked and messy looking. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	7
+	Str:	5
+	Cha:	4
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	75
+	Cash:	10000
+	Bank:	4000
+[SKILLS]
+BREAK
+#19882
+Keywords:	Knight Errant Heavy Heavily
+Name:	A Unit 001 Knight-Errant magical threat enforcer
+RoomDesc:$
+A heavily armed Knight-Errant reserve enforcement officer 
+
+~
+LookDesc:$
+Dressed in a flat black attribute enhancing combat suit, these Knight-Errant
+security forces rival even the toughest of special operations forces in covert
+ability and overall power. The raw power their huge hulking appearance gives
+is countered by the simple elegance which they move about and operate. The
+back of the suit is marked with dark grey words, designated "Unit 001", giving
+the tell tale sign that these Knight-Errant are part of a special force
+designated to protect the company's CEO, Damien Knight. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010101111000000111010
+AffFlags:	10010001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	16
+	Str:	16
+	Cha:	6
+	Int:	15
+	Wil:	16
+	Mag:	16
+[POINTS]
+	Height:	196
+	Weight:	200
+	Level:	10
+	Ballistic:	16
+	Impact:	14
+	Cash:	250
+	Bank:	250
+	Karma:	1
+[SKILLS]
+	machine guns:	16
+	sorcery:	16
+	clubs:	16
+	brawling:	16
+	assault rifles:	16
+BREAK
+#19883
+Keywords:	Knight Errant Heavy Heavily
+Name:	A Unit 003 Knight-Errant enforcer stands at the ready.
+RoomDesc:$
+A heavily armed Knight-Errant enforcer stands at the ready. 
+
+~
+LookDesc:$
+Dressed in a flat black attribute enhancing combat suit, these Knight-Errant
+security forces rival even the toughest of special operations forces in covert
+ability and overall power. The raw power their huge hulking appearance gives
+is countered by the simple elegance which they move about and operate. The
+back of the suit is marked with dark grey words, designated "Unit 002", giving
+the tell tale sign that these Knight-Errant are part of a special force
+designated to protect the company's CEO, Damien Knight. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000111000
+AffFlags:	10000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	16
+	Str:	16
+	Cha:	6
+	Int:	12
+	Wil:	16
+	Mag:	16
+[POINTS]
+	Height:	196
+	Weight:	200
+	Level:	10
+	Ballistic:	16
+	Impact:	16
+	Cash:	200
+	Bank:	250
+	Karma:	1
+[SKILLS]
+	pole arms:	15
+	clubs:	15
+	edged weapons:	15
+	brawling:	15
+	assault rifles:	15
+BREAK
+#19884
+Keywords:	guard Knight-Errant security heavy-set
+Name:	A heavy-set Knight-Errant security guard
+RoomDesc:$
+A heavy-set Knight-Errant security guard checks ID's here. 
+
+~
+LookDesc:$
+Hes fairly heavy-set and looks like he could do some real damage if he doesn't
+receive the proper cooperation. He watches the area like a hawk in search of
+unauthorized personel, his radio lighting up with conversation every so often
+as he stands guard. Unless you have a personal invitation from Damien Knight,
+or perhaps you just have a death wish, you really shouldn't be screwing with
+him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000100001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	14
+	Str:	12
+	Cha:	6
+	Int:	10
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	120
+	Ballistic:	16
+	Impact:	14
+	Cash:	80
+	Bank:	125
+[SKILLS]
+	brawling:	12
+BREAK
+#19885
+Keywords:	Damien Knight Ares Imposter
+Name:	A Damien Knight of Ares Inc. imposter
+RoomDesc:$
+A man dressed in a snazzy ^bblue^N suit is here, sitting in an executives chair. 
+
+~
+LookDesc:$
+The CEO and Chairman of one of the most powerful megacorps in the world sits
+here... wait... is that even him? Better take a closer look, you may have just
+stumbled upon Damien Knight's stand-in. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101111100001111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	16
+	Str:	16
+	Cha:	12
+	Int:	14
+	Wil:	16
+	Mag:	20
+[POINTS]
+	Height:	199
+	Weight:	110
+	Level:	10
+	Ballistic:	18
+	Impact:	16
+	Cash:	500
+	Bank:	600
+[SKILLS]
+	brawling:	18
+	sorcery:	18
+	pole arms:	18
+	electronics:	50
+	computers:	50
+BREAK
+#19886
+Keywords:	well-dressed calm receptionist
+Name:	A well-dressed and calm looking receptionist
+RoomDesc:$
+A well-dressed and calm looking receptionist sits here. 
+
+~
+LookDesc:$
+Hes about in his mid or early thirties from the looks of his hair, which is
+beginning to collect a few grey strands here and there, but overall he looks
+to be in good shape. Hes dressed in a clean, pressed suit and flashes a
+welcoming smile to any and all who make their way up into his section of the
+floor, even if he has to turn them away. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	80
+[SKILLS]
+	brawling:	10
+BREAK
+#19887
+Keywords:	old gentleman fairly security guard
+Name:	A fairly old gentleman in security gear
+RoomDesc:$
+A fairly old security guard stands here, biding his time. 
+
+~
+LookDesc:$
+This security guard has all the threads, but, he looks to be a good thirty
+years past his prime, or atleast thats how he appears to the untrained eye.
+Look closely enough and you may take note of his demeanor, calm and collect,
+his gaze steady and keen. It wouldn't be wise to underestimate this old
+gentleman by any means, he reeks of dusty books and old paper, and his hands
+look like they've been turning pages since before you were born. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101100001101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	6
+	Int:	10
+	Wil:	10
+	Mag:	20
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	12
+	Impact:	12
+	Cash:	150
+	Bank:	150
+[SKILLS]
+	sorcery:	15
+	brawling:	15
+BREAK
+#19888
+Keywords:	ork burly large bad attitude
+Name:	A large, burly ork with a bad attitude
+RoomDesc:$
+A large, burly ork with a bad attitude stands here, arms crossed. 
+
+~
+LookDesc:$
+This ork doesn't look very happy, and if it was possible, it looks as if he is
+completely incapable of showing the slightest bit of emotion... unless, of
+course, you count the look of annoyance he gives you after staring at him for
+more than a few moments. It'd be best not to pick a fight with this guy, he
+looks damn tough, and could probably snap you in half like a twig.. Oh, did I
+mention the tusks this guy is packing? He puts most elephants to shame with
+his ivory, which are highly polished and gleam varily as the light catches
+them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	120
+[SKILLS]
+	brawling:	12
+BREAK
+#19889
+Keywords:	gentleman older spectacles tinker
+Name:	An older gentleman with thick spectacles
+RoomDesc:$
+An older gentleman with thick spectacles sits here, tinkering with weaponry. 
+
+~
+LookDesc:$
+This guy looks to be in his early or mid fifties, and from the looks of his
+palid complexion and pale skin tone, he probably didn't spend a lot of time
+outside, or in the sun in general. He looks to be busy tinkering with an
+assortment of firearms and weaponry, swiftly disassembling them and poking at
+their inards before slapping them back together in record timing. He sports
+some thick, coke bottle spectacles, which make his eyes look huge through
+their refraction. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#19890
+Keywords:	guard knight-errant security beady elven
+Name:	A Knight-Errant security guard with beady eyes
+RoomDesc:$
+A Knight-Errant security guard with beady eyes wanders around here. 
+
+~
+LookDesc:$
+This beady eye'd looking elf is dressed up in Knight-Errant security garb,
+which seems to have been lightened up for more flexibility, especially in the
+limbs and modifications to lessen visual hindrances due to the neck and
+shoulder straps. He doesn't look too happy, and seems to be concentrating on
+the task at hand, whatever that happens to be. 
+~
+ArriveMsg:	sneaks in from
+LeaveMsg:	sneaks off
+MobFlags:	101100001011100
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	8
+	Cha:	6
+	Int:	8
+	Wil:	10
+	Mag:	8
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	10
+	Impact:	8
+	Cash:	100
+	Bank:	100
+[SKILLS]
+	sorcery:	10
+	brawling:	8
+BREAK
+#19891
+Keywords:	woman lithe elven female knight guard mage
+Name:	A lithe elven female with ^Wpearly white^N skin and hair
+RoomDesc:$
+A woman with ^Wpearly white^N skin and waist-length ^Wwhite^N hair stands here. 
+
+~
+LookDesc:$
+Something definately isn't right with this elven woman.. though it was hard to
+place a finger on what exactly it was. Her skin radiates brightly with a
+^Wpearly white^N colour, while her well groomed, waist-length ^Wwhite^N hair was done
+up in an assortment of braids, which even had a few ^Wsilver^N hair clasps here
+and there inserted onto it. She wears small, silver framed reading glasses,
+and looks like shes spent more than her fair share of hours with that pert
+little nose in a book. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111000
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	16
+	Str:	12
+	Cha:	7
+	Int:	12
+	Wil:	16
+	Mag:	18
+[POINTS]
+	Height:	170
+	Weight:	60
+	Ballistic:	12
+	Impact:	12
+	Cash:	225
+	Bank:	200
+[SKILLS]
+	brawling:	16
+	sorcery:	16
+BREAK
+#19892
+Keywords:	mob unfinished
+Name:	Quest Testing Mob
+RoomDesc:$
+An unfinished mob stands here.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#19893
+Keywords:	Knight Errant Heavy Heavily
+Name:	A Unit 002 Knight-errant personal enforcer
+RoomDesc:$
+A heavily armed Knight-Errant enforcer stands at the ready. 
+
+~
+LookDesc:$
+Dressed in a flat black attribute enhancing combat suit, these Knight-Errant
+security forces rival even the toughest of special operations forces in covert
+ability and overall power. The raw power their huge hulking appearance gives
+is countered by the simple elegance which they move about and operate. The
+back of the suit is marked with dark grey words, designated "Unit 002", giving
+the tell tale sign that these Knight-Errant are part of a special force
+designated to protect the company's CEO, Damien Knight. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111000
+AffFlags:	10000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	16
+	Str:	16
+	Cha:	6
+	Int:	12
+	Wil:	16
+	Mag:	16
+[POINTS]
+	Height:	196
+	Weight:	200
+	Level:	10
+	Ballistic:	16
+	Impact:	16
+	Cash:	200
+	Bank:	250
+	Karma:	1
+[SKILLS]
+	pole arms:	15
+	clubs:	15
+	edged weapons:	15
+	brawling:	15
+	assault rifles:	15
+BREAK
+#19900
+Keywords:	shopper lost wander man joe
+Name:	A lost shopper
+RoomDesc:$
+A shopper wanders about aimlessly here. 
+
+~
+LookDesc:$
+He's your A-Typical average joe out for a day of shopping. He walks about
+stairing blanky into space and after watching him walk in circles for about 10
+minutes you realize he doesn't have a clue where he is and decide it's best to
+leave him on his adventure. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders off
+MobFlags:	10001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	120
+	Cash:	35
+	Bank:	55
+[SKILLS]
+	brawling:	4
+BREAK
+#19901
+Keywords:	errant guard knight security official
+Name:	A Knight-Errant security guard
+RoomDesc:$
+An official looking security guard patrols the area with vigor. 
+
+~
+LookDesc:$
+The Errant elite, hand picked from the scores of Knight-Errant that pass
+through the academy each year only the best are used to guard Ares
+strongholds. His armor protects him from most forms of light fire and even
+some biological contaminates. Blanket demeanor and a steady grip on his gun
+show him to be extremely dedicated to his job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000001100001011100
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	14
+	Str:	14
+	Cha:	3
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	222
+	Weight:	100
+	Ballistic:	10
+	Impact:	10
+	Cash:	100
+	Bank:	80
+[SKILLS]
+	pistols:	10
+	brawling:	10
+	corporate etiquette:	8
+	English:	20
+	clubs:	10
+BREAK
+#19902
+Keywords:	scientist bio engineering busily
+Name:	A bioengineering scientist
+RoomDesc:$
+A scientist busily goes about his work here. 
+
+~
+LookDesc:$
+The stereotypical white lab coat is oddly absent from this scientist. Instead
+he is encased within an environmental containment suit, his face hidden behind
+a lightly polarized mask. With sure movements and an overriding confidence he
+demonstrates his experience in the field without ever saying a word. Ignoring
+you and your unauthorized presence he continues about his work.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	6
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	65
+	Ballistic:	4
+	Impact:	3
+[SKILLS]
+BREAK
+#19903
+Keywords:	errant guard knight security official
+Name:	A Knight-Errant Security Checkpoint Guard
+RoomDesc:$
+A Knight-Errant security checkpoint guard stands here remaining ever vigilant.
+
+~
+LookDesc:$
+The Errant elite, hand picked from the scores of Knight-Errant that pass
+through the academy each year only the best are used to guard Ares
+strongholds. His armor protects him from most forms of light fire and even
+some biological contaminates. Blanket demeanor and a steady grip on his gun
+show him to be extremely dedicated to his job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000001100001011110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	17
+	Str:	19
+	Cha:	3
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	222
+	Weight:	123
+	Ballistic:	16
+	Impact:	16
+	Cash:	125
+	Bank:	125
+	Karma:	5
+[SKILLS]
+	brawling:	12
+	sub-machine guns:	14
+	corporate etiquette:	8
+	English:	20
+BREAK
+#19904
+Keywords:	errant guard knight security official
+Name:	A Knight-Errant Security Enforcer
+RoomDesc:$
+A Knight-Errant Corporate Guard patrols here actively searching for threats 
+
+~
+LookDesc:$
+The Errant elite, hand picked from the scores of Knight-Errant that pass
+through the academy each year only the best are used to guard Ares
+strongholds. His armor protects him from most forms of light fire and even
+some biological contaminates. Blanket demeanor and a steady grip on his gun
+show him to be extremely dedicated to his job. 
+~
+ArriveMsg:	takes stock of the situation as he enters from
+LeaveMsg:	calls in an "All Clear" as he exits
+MobFlags:	101010000001100001111100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	17
+	Str:	19
+	Cha:	3
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	222
+	Weight:	123
+	Ballistic:	16
+	Impact:	16
+	Cash:	125
+	Bank:	125
+[SKILLS]
+	pistols:	16
+	brawling:	8
+	corporate etiquette:	8
+	English:	20
+BREAK
+#19905
+Keywords:	errant guard knight security official
+Name:	A Knight-Errant Security Checkpoint Guard
+RoomDesc:$
+A Knight-Errant security checkpoint guard stands here remaining ever vigilant.
+
+~
+LookDesc:$
+The Errant elite, hand picked from the scores of Knight-Errant that pass
+through the academy each year only the best are used to guard Ares
+strongholds. His armor protects him from most forms of light fire and even
+some biological contaminates. Blanket demeanor and a steady grip on his gun
+show him to be extremely dedicated to his job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000001100001111110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	13
+	Str:	12
+	Cha:	3
+	Int:	8
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	222
+	Weight:	123
+	Ballistic:	16
+	Impact:	16
+	Cash:	150
+	Bank:	125
+	Karma:	5
+[SKILLS]
+	brawling:	12
+	sub-machine guns:	9
+	corporate etiquette:	8
+	English:	20
+BREAK
+#19906
+Keywords:	armed knight errant high security detail
+Name:	A Knight-Errant High Security Detail
+RoomDesc:$
+A well armed Knight-Errant keeps watch over the area here. 
+
+~
+LookDesc:$
+Wrapped in a thick shell of armor, his appearance is somewhat hunched, and
+large shoulder supports surrounding the area around his neck to distribute the
+weight of his gear. Charged with protecting corporate assets in the more
+dangerous sections of the Knight Center, hes constantly on the watch for
+threats. 
+~
+ArriveMsg:	scans the area as he enters from
+LeaveMsg:	gives a curt nod as he exits
+MobFlags:	1010000001100000001100
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	14
+	Str:	10
+	Cha:	3
+	Int:	8
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	150
+	Ballistic:	6
+	Impact:	5
+	Cash:	100
+	Bank:	125
+[SKILLS]
+	machine guns:	16
+	brawling:	10
+	corporate etiquette:	8
+	English:	20
+BREAK
+#19907
+Keywords:	armed knight errant high security detail
+Name:	A Knight-Errant High Security Detail
+RoomDesc:$
+A well armed Knight-Errant keeps watch over the area here. 
+
+~
+LookDesc:$
+Wrapped in a thich shell of armor his apperance is somewhat hunched large
+shoulder supports surrounding the area around his neck. Charged with
+protecting civilians in the more dangerous sections of the Knight Center he's
+constantly on the watch for threats. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010101011100000001110
+AffFlags:	11000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	16
+	Str:	10
+	Cha:	4
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	245
+	Weight:	90
+	Ballistic:	10
+	Impact:	10
+	Cash:	125
+	Bank:	125
+[SKILLS]
+	machine guns:	16
+	brawling:	10
+	clubs:	12
+	pole arms:	12
+BREAK
+#19908
+Keywords:	corporate executive
+Name:	A corporate executive
+RoomDesc:$
+A high-powered corporate executive kills time by wandering around here. 
+
+~
+LookDesc:$
+His sharp business suit is incredibly clean and the creases so sharp they look
+like they could do some serious damage to anyone who got too close. Slicked
+back black hair and a bair of brushed aluminum specs that accent nicely with
+his briefcase complete his look. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010011100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	201
+	Weight:	100
+	Cash:	50
+	Bank:	100
+[SKILLS]
+	brawling:	6
+	English:	20
+	corporate etiquette:	8
+BREAK
+#19909
+Keywords:	corporate executive
+Name:	a corporate executive
+RoomDesc:$
+A high-powered corporate executive kills time by wandering around here. 
+
+~
+LookDesc:$
+His sharp business suit is incredibly clean and the creases so sharp they look
+like they could do some serious damage to anyone who got too close. Slicked
+back black hair and a bair of brushed aluminum specs that accent nicely with
+his briefcase complete his look. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010011100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	4
+	Cha:	8
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	201
+	Weight:	100
+	Cash:	50
+	Bank:	100
+[SKILLS]
+	brawling:	6
+	English:	20
+	corporate etiquette:	8
+BREAK
+#19910
+Keywords:	shopper consumer
+Name:	a shopper
+RoomDesc:$
+A shopper wanders around quietly.
+
+~
+LookDesc:$
+The average consumer, wandering around the shops in search of the perfect
+bargain.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	67
+	Cash:	25
+	Bank:	50
+[SKILLS]
+	brawling:	2
+BREAK
+#19911
+Keywords:	shopper busy
+Name:	a shopper
+RoomDesc:$
+A busy shopper rumbles towards you.
+
+~
+LookDesc:$
+These people are dangerous. The hardcore shoppers don't like humans; they
+don't like anyone. Stay outta their way.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	149
+	Weight:	59
+	Impact:	1
+	Cash:	25
+	Bank:	80
+[SKILLS]
+	brawling:	4
+BREAK
+#20000
+Keywords:	dragon abomination nanite infected black science mythos
+Name:	A nanite infected black dragon abomination
+RoomDesc:$
+An abomination of science and mythos is waging genocide here. 
+
+~
+LookDesc:$
+The first thing you notice is the fact that hes simple massive in stature, his
+black scales ripple with untold amounts of physical prowess in the muscles
+hidden beneath them. Something is very wrong with it, that much else is
+readily apparent, the scales covering the entirety of one of its arms, as well
+as portions of its shoulders, neck and lower maw. Much of it is flaking off
+and bodily fluids are dripping from the cracks in its tiny honeycombed
+surfaces. Its claw in particular looks extremely lethal... what kind of
+experiments were they performing on this creature..? 
+~
+ArriveMsg:	rampages in from
+LeaveMsg:	flys off in a berserk rage to the
+MobFlags:	1000000101110100000101000
+AffFlags:	10001000000000
+Race:	Dragon
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	14
+	Str:	40
+	Cha:	8
+	Int:	10
+	Wil:	16
+	Mag:	18
+[POINTS]
+	Height:	280
+	Weight:	500
+	Ballistic:	16
+	Impact:	16
+[SKILLS]
+	pole arms:	12
+	sorcery:	16
+	brawling:	10
+	edged weapons:	12
+BREAK
+#20001
+Keywords:	injured knight errant security officer
+Name:	An Injured Knight-Errant Security Officer
+RoomDesc:$
+A security officer is resting here, clutching a bleeding wound at his side. 
+
+~
+LookDesc:$
+Hes badly injured, and while his wounds don't seem extremely life threatening,
+he has lost a lot of blood and seems to be having trouble standing up. Hes
+gripping a bleeding gash at his side, and blood trickles from between his
+fingers, the fact that hes in pain is apparently by the way hes gritting his
+teeth. Maybe you could help him out? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	6
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+BREAK
+#20002
+Keywords:	Scientist terrified man lab bioware research development
+Name:	A Bioware Research and Development Scientist
+RoomDesc:$
+A terrified looking man in a lab coat cowers here. 
+
+~
+LookDesc:$
+He looks like your average run-of-the-mill scientist, pretty stereotypical
+looking at that, thick glasses, white lab coat, hell, he even has a pocket
+protector. He looks absolutely terrified and cowers in a half-senseless
+manner, jumping at even the smallest sound or movement. This must be the guy
+you're looking for. 
+~
+ArriveMsg:	scurries in from
+LeaveMsg:	scurries off
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	2
+	Impact:	4
+[SKILLS]
+	brawling:	4
+BREAK
+#20003
+Keywords:	piasma bear ferocious foaming
+Name:	A ferocious piasma thats foaming heavily at the mouth
+RoomDesc:$
+A ferocious piasma lumbers around here, foaming heavily at the mouth. 
+
+~
+LookDesc:$
+This massive paracritter looks like a piasma, an awakened bear, and boy is it
+pissed off. Its fur ripples with the mass of muscle fibres beneath as it
+lumbers around, giving it a very ferocious appearance. Its foaming heavily at
+the mouth, and growling and flashing its fangs at anything that moves, and
+even at some things that don't. Its claws look just as deadly, which its put
+to good work rending equipment and other fixtures in the area. 
+~
+ArriveMsg:	lumbers in from
+LeaveMsg:	lumbers off
+MobFlags:	101100000101000
+AffFlags:	10001000000000
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	14
+	Cha:	2
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	125
+	Ballistic:	12
+	Impact:	14
+[SKILLS]
+BREAK
+#20004
+Keywords:	human well-built camouflage fatiques
+Name:	A well-built human in grey camouflage fatigues
+RoomDesc:$
+A well-built human in grey camouflage fatigues stands guard here. 
+
+~
+LookDesc:$
+This well-built human has a stocky appearance, short black hair, blue eyes and
+tan skin. He seems a bit disturbed by something going on in the area, and the
+finger he has on his firearms trigger twitches anxiously and in anticipation
+of something. What is it? Who knows. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	11
+	Str:	10
+	Cha:	4
+	Int:	8
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	assault rifles:	10
+	rifles:	10
+	clubs:	10
+BREAK
+#20005
+Keywords:	marksman elven elf scout lanky
+Name:	A lanky elven marksman
+RoomDesc:$
+A lanky elven marksman scouts the area and hallway here. 
+
+~
+LookDesc:$
+This elven fellow is rather lanky in appearance, and has the brown dreadlocks
+hes sporting tied back into a makeshift knot behind his head. Hes got keen
+blue eyes and pointy ears, and is probably an excellent scout because of them.
+The firearm hes carrying doesn't look like its for show, and instead, its
+intended use is business only. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000100000000111010
+AffFlags:	1000000010001000000000
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	12
+	Str:	8
+	Cha:	6
+	Int:	8
+	Wil:	8
+	Mag:	10
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	14
+	Impact:	10
+[SKILLS]
+	rifles:	10
+	pole arms:	10
+	clubs:	10
+	sorcery:	10
+BREAK
+#20006
+Keywords:	troll large dark brown fatigues
+Name:	A large ^ydark brown^N skinned troll in fatigues
+RoomDesc:$
+A large ^ydark brown^N skinned troll in fatigues paces around here. 
+
+~
+LookDesc:$
+This absolutely huge troll has dark brown skin that looks like it has the
+consistency of sandpaper, which helps add to his already imposing stature. Hes
+got huge troll muscles, and huge troll arms, not to mention a huge troll sword
+to give you huge troll problems. He doesn't looke too happy, and certainly
+seems to take his frustrations out on you. 
+~
+ArriveMsg:	skulks in from
+LeaveMsg:	skulks off
+MobFlags:	100000000101000
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	14
+	Str:	16
+	Cha:	3
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	120
+	Ballistic:	12
+	Impact:	15
+[SKILLS]
+	edged weapons:	10
+	brawling:	10
+BREAK
+#20007
+Keywords:	earth elemental golem-like large
+Name:	A large golem-like earth elemental
+RoomDesc:$
+A large golem-like earth elemental resides at its masters side here. 
+
+~
+LookDesc:$
+This earth elemental has a rather distinct humanoid appearance, aside from its
+obvious lack of facial detail and more subtle detail. It looks to be
+constructed out of some kind of sand stone, or whatever it is, it sure is
+heavy looking. Its fists are a bit larger in comparison to its overall
+stature, which it certainly seems ready to use. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	10001000000000
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	6
+	Str:	12
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	8
+[POINTS]
+	Height:	200
+	Weight:	60
+	Level:	8
+[SKILLS]
+	brawling:	8
+	sorcery:	8
+BREAK
+#20008
+Keywords:	ork single tusk single-tusk drab green
+Name:	A single-tusk ork with ^gdrab green^N skin
+RoomDesc:$
+A single-tusk ork with ^gdrab green^N skin creeps around the halls here. 
+
+~
+LookDesc:$
+Hes big and mean looking, that much is blatently obvious. Hes well muscled and
+lumbers around, and his skin is a drab olive green colour with a rough, scaley
+appearance to it. He only seems to have a single, snaggly tusk, the other is
+nowhere to be seen, apparently it must have broken off. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000000101000
+AffFlags:	1000010000001000000000
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	12
+	Cha:	4
+	Int:	6
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	shotguns:	10
+	clubs:	10
+	brawling:	10
+BREAK
+#20009
+Keywords:	dog-like creature angry
+Name:	An angry looking dog-like creature
+RoomDesc:$
+An angry looking dog-like creature pads around back and forth here. 
+
+~
+LookDesc:$
+You're not quite sure what this used to be, perhaps a dog or a wolf?
+Apparently they were attempting to modify and alter animals with differenty
+types of prototype bioware, so they could be used for sentry and guard duties
+on corporate soil. Its fur in matted and soaked with some type of fluid, and
+its lips and gums have receeded a good deal, so its permanent snarl makes it
+look even more ferocious. It seems to be angry, but also in pain, be a sport
+and put it out of its misery would you? 
+~
+ArriveMsg:	pads in from
+LeaveMsg:	pads off
+MobFlags:	1000010111000
+AffFlags:	10001000000000
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	10
+	Str:	10
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	60
+	Ballistic:	8
+	Impact:	10
+[SKILLS]
+	brawling:	8
+BREAK
+#20020
+Keywords:	orb magma molten floating elemental spirit earth
+Name:	A floating ^Rorb^N of dripping molten magma
+RoomDesc:$
+A floating ^Rorb^N of molten magma drips all over the place here. 
+
+~
+LookDesc:$
+This semi-molten orb has a liquid core with half-melted earthen plates
+shifting and working their way around its outer shell. It doesn't look very
+large, but it looks extremely hot, and the flames that occasional spill free
+from its cracks only help to reinforce the notion. Rocks and fire, a nice
+combination, wouldn't you say? 
+~
+ArriveMsg:	floats in from
+LeaveMsg:	floats off to the
+MobFlags:	1000001000001000000101000
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	10
+	Str:	16
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	12
+[POINTS]
+	Height:	30
+	Weight:	20
+	Level:	12
+[SKILLS]
+	brawling:	15
+	sorcery:	15
+BREAK
+#20021
+Keywords:	drake brown scales nanite infected slender
+Name:	A nanite infected drake with ^ybrown^N scales
+RoomDesc:$
+A slender drake with ^ybrown^N scales is attacking everything that moves here. 
+
+~
+LookDesc:$
+While not as large as a full grown dragon, more along the lines of a minature
+version, he was certainly no less frightening in appearance or stature.
+Something is horribly wrong with him, very obvious indeed. Aside from the fact
+he was freaking out and attacking anything within sight, including furniture
+and other inanimate things scattered about, one of his front claws was
+mishapen and gleamed verily beneath the sparks of light spilling throughout
+the area. 
+~
+ArriveMsg:	terrorizes his way in from
+LeaveMsg:	seeks victims off to the
+MobFlags:	100100010111000
+AffFlags:	10001000000000
+Race:	Dragon
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	16
+	Str:	18
+	Cha:	8
+	Int:	10
+	Wil:	14
+	Mag:	15
+[POINTS]
+	Height:	230
+	Weight:	250
+	Level:	10
+	Ballistic:	14
+	Impact:	14
+[SKILLS]
+	pole arms:	10
+	brawling:	12
+	sorcery:	14
+	edged weapons:	12
+BREAK
+END

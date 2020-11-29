@@ -1,0 +1,796 @@
+#62200
+Keywords:	denizen local
+Name:	a local denizen
+RoomDesc:$
+A local denizen wanders down the road here. 
+
+~
+LookDesc:$
+How do you know they're a local? You just do, granted, they aren't exactly
+trying to hide the fact, why would they? Between the French-Creole accent and
+the tan they're sporting, it's easy to see they belong around this township.
+They go about their daily business, not bothering to ask what any of these
+damn outsiders are doing here. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	35
+[SKILLS]
+	brawling:	3
+BREAK
+#62201
+Keywords:	mobster beefy Gambione
+Name:	a Gambione mobster
+RoomDesc:$
+A beefy mobster is enforcing the law of the land here. 
+
+~
+LookDesc:$
+This heavyset fellow has obviously gone under the knife once or twice in his
+life, either to get himself some chrome or to lumps of lead out of his flesh.
+He's a member of the Gambione Family, who are little more than a bunch of
+gangers who have staked their claim to portions of the island. While their job
+is to "keep the peace", much like any police force would, they have their own
+ambitions and goals, most of which aren't on the "just" end of the spectrum. 
+~
+ArriveMsg:	roves in from
+LeaveMsg:	roves
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	5
+	Impact:	5
+	Cash:	45
+	Bank:	85
+[SKILLS]
+	brawling:	4
+	clubs:	4
+	sub-machine guns:	4
+BREAK
+#62202
+Keywords:	citizen local
+Name:	A local citizen
+RoomDesc:$
+A local citizen is here, passing the time. 
+
+~
+LookDesc:$
+Another local? Is that surprising? Chances are you're the foreigner in this
+equation, so stop asking silly questions and being surprised when you meet a
+native, there's plenty to go around here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	25
+	Bank:	25
+[SKILLS]
+	brawling:	2
+	driving/Car:	2
+BREAK
+#62203
+Keywords:	citizen local
+Name:	A local citizen
+RoomDesc:$
+A local citizen is here, passing the time. 
+
+~
+LookDesc:$
+Another local? Is that surprising? Chances are you're the foreigner in this
+equation, so stop asking silly questions and being surprised when you meet a
+native, there's plenty to go around here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	25
+	Bank:	45
+[SKILLS]
+	brawling:	2
+	driving/Car:	2
+BREAK
+#62204
+Keywords:	Delatte Cournand owner shopkeeper
+Name:	Delatte Cournand
+RoomDesc:$
+Delatte Cournand, the owner of the shop, helps customers with purchases. 
+
+~
+LookDesc:$
+The proprietor of this shop also seems to be running the register as well from
+the looks of it. He is a middle-aged gentleman with no real descriptive
+features, and if you had to call him anything, it would probably be... bland.
+He offers a warm, albeit somewhat fake smile as customers make their way in,
+offering his help and expertise about the various types of weapons for sale
+here, which are purely for collector value ofcourse. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+	brawling:	6
+BREAK
+#62205
+Keywords:	Adele Fuselier proprietor shopkeeper
+Name:	Adele Fuselier
+RoomDesc:$
+Adele Fuselier, the proprietor of the shop, waits on customers here. 
+
+~
+LookDesc:$
+The owner of this shop, Adele Fuselier, runs a tight ship.. Ok, so maybe not a
+ship, but a tight shop. She is obviously quite fascinated with the period
+dress from the age of high piracy, as the outfits in her shop are apt to point
+out, if not being outright blatant. She is middle aged and fairly good
+looking, and seems to be sporting a rather genuine smile upon her thin lips as
+she meets the needs of customers looking for an outfit. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+	brawling:	6
+	negotiation:	3
+BREAK
+#62206
+Keywords:	vendor roadside food
+Name:	a roadside food vendor
+RoomDesc:$
+A roadside feed vendor is here, peddling his goods. 
+
+~
+LookDesc:$
+This little old lady looks to be damn near a hundred years old, but she's
+still as spry and energetic as a woman half her age. She goes about her
+business cooking up some local dishes, serving whoever happens upon her
+roadside tent, native and tourist alike. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+[SKILLS]
+BREAK
+#62207
+Keywords:	clinic staff member
+Name:	a staff member of the clinic
+RoomDesc:$
+A clinic staff member waits on patients here. 
+
+~
+LookDesc:$
+Well, his garments don't exactly breed confidence in his abilities, since he's
+wearing the standard white doctors coat over top of a pair of cut off blue
+jean shorts and an old t-shirt.. Granted, if you've ever been to a back alley
+cutter doc, he's probably dressed better than most of them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#62208
+Keywords:	soldier foot Gambione
+Name:	a Gambione foot soldier
+RoomDesc:$
+A Gambione foot soldier patrols around the lot here. 
+
+~
+LookDesc:$
+This surly mook isn't good for much aside from breaking legs and skulls, but
+that's all that's necessary when you're just a lowly foot soldier. This
+particular chump belongs to the Gambione family, one of the local mobster
+rackets that call the island home. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+	Cash:	75
+	Bank:	100
+[SKILLS]
+	brawling:	4
+	clubs:	4
+	sub-machine guns:	4
+BREAK
+#62209
+Keywords:	soldier foot Gambione
+Name:	a Gambione foot soldier
+RoomDesc:$
+A Gambione foot soldier is here, shooting dice. 
+
+~
+LookDesc:$
+This burly soldier is much like the rest, not exactly the brightest, but
+certainly chromed up enough and loyal enough to follow orders as they're
+given. He seems to be guarding the warehouse, though that seems secondary to
+the dice game he's currently involved in. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000101010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	7
+	Impact:	7
+	Cash:	85
+	Bank:	95
+[SKILLS]
+	clubs:	5
+	sub-machine guns:	5
+	brawling:	5
+BREAK
+#62210
+Keywords:	soldier foot Gambione
+Name:	a Gambione foot soldier
+RoomDesc:$
+A Gambione foot soldier is here, about to doze off on the job. 
+
+~
+LookDesc:$
+Well, this guy certainly doesn't have the best work ethic, that's for sure. He
+seems to be just a hairs breadth from falling asleep on the job. Granted, he's
+smart enough to wake up and pretend to be doing his job whenever someone else
+enters the room. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000101010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	6
+	Str:	12
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	120
+	Ballistic:	8
+	Impact:	8
+	Cash:	90
+	Bank:	90
+[SKILLS]
+	brawling:	6
+	clubs:	6
+	assault rifles:	6
+	shotguns:	6
+BREAK
+#62211
+Keywords:	worker warehouse
+Name:	a warehouse worker
+RoomDesc:$
+A warehouse worker is here, doing his job. 
+
+~
+LookDesc:$
+He doesn't really seem to be part of the Gambione family or look the part of a
+mobster, but he probably works for them, or at least one of the lower ranking
+members. He's dressed in an old, faded blue jumpsuit with the name tag torn
+off, which suggests he's just here to deal with the matters of handling the
+tasks of manual labour around here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	45
+	Bank:	50
+[SKILLS]
+	brawling:	3
+BREAK
+#62212
+Keywords:	Barthelemy Gambione lieutenant
+Name:	Barthelemy
+RoomDesc:$
+A Gambione lieutenant, Barthelemy, is here going over shipment papers. 
+
+~
+LookDesc:$
+While he may not be the highest ranking member of the Gambione family, he's a
+step above the foot soldiers under his command. He's fairly big and well
+muscled for a human and completely bald, though you may be better off not
+pointing that out to him, since it doesn't seem to be intentional. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	10
+	Str:	10
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	8
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	8
+	Impact:	8
+	Cash:	150
+	Bank:	100
+[SKILLS]
+	clubs:	7
+	shotguns:	7
+	brawling:	7
+	assault rifles:	7
+BREAK
+#62213
+Keywords:	wageslave
+Name:	a wageslave
+RoomDesc:$
+a wageslave ambles down the streets here. 
+
+~
+LookDesc:$
+Another typical day for another typical wageslave it seems. He has no defining
+features, and is as plain as plain could be. Hell, he makes bland look
+exciting. He keeps his head down and minds his own business as he strolls
+along on his way to or from a long day at work. 
+~
+ArriveMsg:	ambles in from
+LeaveMsg:	ambles
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	30
+	Bank:	25
+[SKILLS]
+	brawling:	2
+BREAK
+#62214
+Keywords:	dweller city
+Name:	a city dweller
+RoomDesc:$
+A city dweller wanders through the streets here. 
+
+~
+LookDesc:$
+Just a regular Joe from the looks of it, one of the teeming masses that is
+easily lost in a crowd that contains plenty of others who could easily take
+their place. He could work at a Stuffer Shack or sell drugs for all you know,
+granted, he could also do both. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders
+MobFlags:	10001000
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Cash:	40
+	Bank:	40
+[SKILLS]
+	brawling:	3
+BREAK
+#62215
+Keywords:	surly street muscle
+Name:	a surly piece of street muscle
+RoomDesc:$
+A surly piece of street muscle eyes up those who pass by them. 
+
+~
+LookDesc:$
+This big chunk of street muscle probably belongs to one of the local leg
+breaker unions, which is to say he's part of a criminal syndicate that makes
+its home in the city. If you had to guess, he most likely works for the
+Batista family, most likely as an enforcer, since his appearance isn't exactly
+on par with the role of an accountant. 
+~
+ArriveMsg:	stomps in from
+LeaveMsg:	stomps off
+MobFlags:	1000000001000
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	5
+	Impact:	5
+	Cash:	80
+	Bank:	35
+[SKILLS]
+	brawling:	4
+	clubs:	4
+	shotguns:	4
+BREAK
+#62216
+Keywords:	troll chromed heavily
+Name:	a heavily chromed out troll
+RoomDesc:$
+A heavily chromed out troll stands here, arms crossed, looking tough. 
+
+~
+LookDesc:$
+This big ol' trog sports more chrome than a Rolls-Royce, and chances are he
+has even more stuffed into that meaty body of his to boot. Wired to the gills
+and itching for a fight, a perfect mixture for ruining your day if you're not
+careful. 
+~
+ArriveMsg:	strolls in from
+LeaveMsg:	strolls off
+MobFlags:	1000000001000
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	290
+	Weight:	130
+	Ballistic:	8
+	Impact:	8
+	Cash:	95
+	Bank:	65
+[SKILLS]
+	brawling:	6
+	clubs:	6
+	assault rifles:	6
+BREAK
+#62217
+Keywords:	hoodlum shady
+Name:	a shady hoodlum
+RoomDesc:$
+A shady hoodlum is here, peering around suspiciously. 
+
+~
+LookDesc:$
+He's a hoodlum. How can you tell? It's just a vibe you get, he looks like he's
+up to no good, and chances are, he isn't. He occasionally peers around,
+reinforcing the idea that he's plotting and scheming something, most likely
+trying to find a tourist to rob so he can get burned out on BTLs. 
+~
+ArriveMsg:	skulks in from
+LeaveMsg:	skulks off
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	4
+	Impact:	4
+	Cash:	50
+[SKILLS]
+	brawling:	4
+	clubs:	4
+BREAK
+#62218
+Keywords:	police cop Victoria member
+Name:	a member of the Victoria police
+RoomDesc:$
+A member of the Victoria Police patrols the street here. 
+
+~
+LookDesc:$
+This man is a member of the local police force that is based out of the city
+of Victoria. He sports a bullet-proof vest and a heavy sidearm at his hip,
+which he's more than apt to use on anyone stupid enough to break the law when
+he's on the beat. 
+~
+ArriveMsg:	patrols in from
+LeaveMsg:	patrols off
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	2
+	Impact:	2
+	Cash:	65
+	Bank:	25
+[SKILLS]
+	brawling:	5
+	clubs:	5
+	pistols:	5
+BREAK
+#62219
+Keywords:	police cop patrol officer Victoria
+Name:	a patrol officer of the Victoria Police
+RoomDesc:$
+A Victoria Police patrol officer is doing his rounds here. 
+
+~
+LookDesc:$
+This member of the Victoria Police has the job of cruising around the city on
+patrol and keeping an eye out on any trouble makers, who he will promptly hit
+with his car and write up a report about them attempting to resist and the
+inevitable fact that he had to run them over because he felt his life was in
+danger. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+	Cash:	55
+	Bank:	55
+[SKILLS]
+	brawling:	4
+	driving/Car:	4
+BREAK
+#62220
+Keywords:	employee
+Name:	an electronics boutique employee
+RoomDesc:$
+An electronics boutique employee lounges behind the store counter. 
+
+~
+LookDesc:$
+This woman doesn't look like she'll be winning employee of the month due to
+her work ethic, and instead, earns herself such titles by being the only
+employee. Her name tag has been tossed on the counter, and aside from a small
+metal strong box, there doesn't even appear to be a working cash register
+aside from her painted fingers. Her attitude doesn't exactly disuade patrons
+from shoplifting, since she spends more time with her nose buried in a
+magazine than it does on the store itself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+BREAK
+END

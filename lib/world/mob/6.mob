@@ -105,7 +105,7 @@ AttackType:	Punch
 	Cash:	1000
 	Bank:	500
 [SKILLS]
-	unarmed combat:	9
+	brawling:	9
 	:	2
 	:	2
 	:	1
@@ -150,7 +150,7 @@ AttackType:	Punch
 	Ballistic:	7
 	Impact:	4
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	clubs:	10
 	interrogation:	8
 	assault rifles:	9

@@ -1,0 +1,485 @@
+#26900
+Keywords:	elf elven boy shaman
+Name:	an elven boy
+RoomDesc:$
+An elven boy stands in the middle of the field, a fierce look on his face. 
+
+~
+LookDesc:$
+Light green eyes contrast with his short blond hair and orange magical symbols
+on his face. The serious expression on his face shows inner turmoil. 
+~
+ArriveMsg:	walks in calmly from
+LeaveMsg:	walks calmly
+MobFlags:	101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	3
+	Cha:	6
+	Int:	6
+	Wil:	7
+	Mag:	8
+[POINTS]
+	Height:	148
+	Weight:	52
+	Ballistic:	18
+	Impact:	15
+[SKILLS]
+BREAK
+#26901
+Keywords:	sasquatch
+Name:	a big white sasquatch
+RoomDesc:$
+A huge furry sasquatch is here, snarling at all who pass. 
+
+~
+LookDesc:$
+Standing nearly 11 feet tall, this man long forgotten by time lumbers around
+snarling. Thick tufts of white fur grow from his skin, and he looks very
+primitive. 
+~
+ArriveMsg:	calmly walks from
+LeaveMsg:	calmly walks
+MobFlags:	101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	7
+	Cha:	3
+	Int:	4
+	Wil:	6
+	Mag:	7
+[POINTS]
+	Height:	280
+	Weight:	102
+	Ballistic:	15
+	Impact:	13
+[SKILLS]
+BREAK
+#26902
+Keywords:	elven warrior
+Name:	an elven warrior
+RoomDesc:$
+An Elven Warrior is here, looking able and alert. 
+
+~
+LookDesc:$
+This elf's hair is long and white. Strange magical symbols, mainly orange and
+red, covers his body and face. Light green eyes contrast with his clear white
+face and the long hair. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001100000001000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	5
+	Mag:	4
+[POINTS]
+	Height:	192
+	Weight:	72
+	Ballistic:	12
+	Impact:	10
+[SKILLS]
+	edged weapons:	9
+	brawling:	9
+BREAK
+#26903
+Keywords:	hellhound red
+Name:	a bright red hellhound
+RoomDesc:$
+A mangy red hound is here, wisps of fire snaking from its mouth. 
+
+~
+LookDesc:$
+It has bright red glowing eyes, sharp fangs and teeth. They show it's
+ferocity, as fire comes from its mouth. It's body is large, like a big and
+ferocious dog, buffing and running. 
+~
+ArriveMsg:	runs from
+LeaveMsg:	runs
+MobFlags:	101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	5
+	Cha:	3
+	Int:	3
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	170
+	Weight:	120
+	Ballistic:	18
+	Impact:	15
+[SKILLS]
+BREAK
+#26904
+Keywords:	elven guardian elf
+Name:	an elven guardian
+RoomDesc:$
+A sturdy elven man stands here, guarding the gate. 
+
+~
+LookDesc:$
+This man has a clear white skin, in contrast to his ight blue eyes. Long dark
+brown hair falls over his back. He looks strong and is rather tall. His long
+ears are pointed aside.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000101010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	9
+	Cha:	4
+	Int:	6
+	Wil:	8
+	Mag:	8
+[POINTS]
+	Height:	190
+	Weight:	75
+	Ballistic:	18
+	Impact:	16
+[SKILLS]
+	edged weapons:	9
+	brawling:	8
+BREAK
+#26905
+Keywords:	earth spirit
+Name:	an earth spirit
+RoomDesc:$
+An earth spirit is here, waiting for something. 
+
+~
+LookDesc:$
+This big earth spirit takes form of a very strong looking human. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	0
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	5
+	Int:	3
+	Wil:	4
+	Mag:	5
+[POINTS]
+	Height:	202
+	Weight:	123
+	Ballistic:	16
+	Impact:	14
+[SKILLS]
+BREAK
+#26906
+Keywords:	an old man
+Name:	an old man
+RoomDesc:$
+A thin old man stands in the middle of the room. 
+
+~
+LookDesc:$
+This old man is very thin and skinny. His eyes look like death. He looks at
+you as if waiting for you to say something.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	1
+	Cha:	6
+	Int:	6
+	Wil:	7
+	Mag:	20
+[POINTS]
+	Height:	158
+	Weight:	52
+[SKILLS]
+BREAK
+#26907
+Keywords:	elven elf commander khane
+Name:	Khane
+RoomDesc:$
+Khane, commander of the elven guard stands here. 
+
+~
+LookDesc:$
+This man is muscular and very strongly built. His hair is short and black. His
+eyes are of a dark gray. He has a sparse beard. There is a tattoo of a wolf on
+his right arm. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000100000101010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	8
+[POINTS]
+	Height:	190
+	Weight:	110
+	Level:	3
+	Ballistic:	25
+	Impact:	23
+[SKILLS]
+	shotguns:	18
+	brawling:	8
+BREAK
+#26908
+Keywords:	banshee
+Name:	a banshee
+RoomDesc:$
+A banshee howls at you loudly here. 
+
+~
+LookDesc:$
+The banshee looks more like a disformed colourless human. It is translucent,
+and has a look of anger on it's face. 
+~
+ArriveMsg:	hovers from
+LeaveMsg:	hovers
+MobFlags:	10000000101010
+AffFlags:	10011000000001000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	3
+	Wil:	6
+	Mag:	8
+[POINTS]
+	Height:	170
+	Weight:	30
+	Level:	3
+	Ballistic:	18
+	Impact:	16
+[SKILLS]
+BREAK
+#26909
+Keywords:	elven elf shaman amnestad
+Name:	Amnestad
+RoomDesc:$
+A thin elf stands here, clothed in a runed robe. 
+
+~
+LookDesc:$
+This is a thin but strongly built man. His skin is of a dark tan, and his face
+and torso are decorated with rustic jewelry. Magic symbols and runes cover all
+his body. He has dark green eyes and short curly dark brown hair.  
+ 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000011010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	11
+	Str:	9
+	Cha:	12
+	Int:	15
+	Wil:	15
+	Mag:	30
+[POINTS]
+	Height:	173
+	Weight:	71
+	Level:	8
+	Ballistic:	28
+	Impact:	26
+[SKILLS]
+	pole arms:	6
+	sorcery:	10
+BREAK
+#26910
+Keywords:	human sawmill worker
+Name:	a human worker of the sawmill
+RoomDesc:$
+A human male is working hard here. 
+
+~
+LookDesc:$
+This man is very strong, he spends all day working hard on the saws, cutting
+wood and making furniture, weapons and armour. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000010001110
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	2
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	183
+	Weight:	81
+	Ballistic:	13
+	Impact:	11
+	Cash:	10
+[SKILLS]
+BREAK
+#26911
+Keywords:	sinsearach healer shaman
+Name:	the Sinsearach healer
+RoomDesc:$
+A shaman sits in the middle of the lodge. 
+
+~
+LookDesc:$
+He wears white clothes, there are pelts attached to him, necklaces on his neck
+and magic symbols drawn on his body. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	2
+	Cha:	5
+	Int:	5
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	169
+	Weight:	79
+[SKILLS]
+BREAK
+#26912
+Keywords:	a small child
+Name:	a small child
+RoomDesc:$
+A small child sits at the table, waiting for something. 
+
+~
+LookDesc:$
+This child is a male elf, his chest is decorated with many tattoos and magical
+symbols. He wears leather clothes and a small earring with some bird's
+feathers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	1
+	Cha:	4
+	Int:	4
+	Wil:	5
+	Mag:	4
+[POINTS]
+	Height:	48
+	Weight:	134
+[SKILLS]
+BREAK
+#26913
+Keywords:	huge rat
+Name:	a huge rat
+RoomDesc:$
+The biggest rat you've ever seen runs around here, snarling. 
+
+~
+LookDesc:$
+This is a ferocious monstrocity, it is a troll sized rat. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	5
+	Str:	8
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	459
+	Ballistic:	17
+	Impact:	15
+[SKILLS]
+BREAK
+END

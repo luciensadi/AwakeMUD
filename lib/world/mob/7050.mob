@@ -1,0 +1,238 @@
+#705000
+Keywords:	An energetic host is here, offering you choice tickets man
+Name:	A ticket agent
+RoomDesc:$
+An energetic host is here, offering you choice tickets. 
+
+~
+LookDesc:$
+Before you stands a pompous, tiresome, and moreover, ridiculously annoying
+man. If it were not for his perpetual smile, resonant voice, and seeming
+acquaintance with the entire clientele of the opera house, you might very well
+slap him silly. He is well-dressed, handsome, and middle-aged, but not
+particularly unique. His forgettable features almost make you feel bad for not
+remembering his name when he greets you, until you recall that you never knew
+it in the first place. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+[SKILLS]
+BREAK
+#705001
+Keywords:	man human male Sascha bartender
+Name:	Sascha
+RoomDesc:$
+A carefree middle-aged, ruggedly-handsome bartender chats with the clientele
+here. 
+
+~
+LookDesc:$
+A middle-aged man with short hair grins as he cleans a glass behind the bar,
+talking with his clientele. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#705002
+Keywords:	male man player sam content black
+Name:	Sam
+RoomDesc:$
+A content black man smiles as he plays the piano here. 
+
+~
+LookDesc:$
+A quiet African-American's fingers dance over the ivory and ebony keys of his
+piano, keeping the bar alive as he smiles contentedly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	6
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	75
+[SKILLS]
+BREAK
+#705003
+Keywords:	A young man of the cloth scribes something, next to a rack of supplies
+Name:	Father Sebastian
+RoomDesc:$
+A young man of the cloth scribes something, next to a rack of supplies. 
+
+~
+LookDesc:$
+A clean-shaven young brown-haired human sits in ascetic silence, scribing
+something while apparently protecting a cache of armaments and other supplies.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	70
+[SKILLS]
+BREAK
+#705004
+Keywords:	A blind priest quietly kneels here, praying father Hernandez
+Name:	Father Hernandez
+RoomDesc:$
+A blind priest quietly kneels here, praying. 
+
+~
+LookDesc:$
+A blind, Hispanic priest, wearing a white collar and black suit kneels here in
+obeisance, muttering under his breath and praying, next to a rack outfitted
+with a number of supplies. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#705005
+Keywords:	A sultry, ebon-haired woman smiles coyly as she stands here black widow
+Name:	The Black Widow
+RoomDesc:$
+A sultry, ebon-haired woman smiles coyly as she stands here. 
+
+~
+LookDesc:$
+A sultry, ebon-haired woman smiles coyly as she stands here by the entrance to
+the Seattle Opera. Her soft, ruby lips parted in a sensuous smile, she seems
+ever-so-happy to greet the cultured patrons of the Seattle Opera. Her
+voluptuous feminine form is accentuated by her risque, yet tasteful black
+evening dress, this pale-skinned vixen characterizes the allure of the higher
+arts. Perhaps the only strange thing about her is her coal-black eyes, along
+with the blinding aura surrounding her on the Astral plane. Perhaps she is
+more than she seems... 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	15
+	Str:	12
+	Cha:	8
+	Int:	8
+	Wil:	9
+	Mag:	12
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+	Brawling:	12
+BREAK
+#705006
+Keywords:	Julius A quiet black man dressed in a tuxedo and sunglasses sits patiently here
+Name:	Julius
+RoomDesc:$
+A quiet black man dressed in a tuxedo and sunglasses sits patiently here. 
+
+~
+LookDesc:$
+This quiet African-American man bears a striking resemblance to the
+piano-player out by the bar, though one could not be certain due to the dark
+sunglasses he wears. Dressed in a formal tuxedo, he waits patiently by a small
+basket of amenities, offering them to the patrons of the Opera. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	75
+[SKILLS]
+	Brawling:	6
+BREAK
+END

@@ -1,0 +1,2905 @@
+#33300
+Keywords:	activesoft chip edged weapons
+Name:	an Edged Weapons 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Edged
+Weapons III', and contains within its electronic structure the basics of
+fighting techniques with edged weapons. It is meant to be used in conjunction
+with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	27
+BREAK
+#33301
+Keywords:	activesoft chip whips flails
+Name:	a Whips & Flails 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Whips &
+Flails III', and contains within its electronic structure the basics of
+fighting techniques with flails and whips. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	3
+	Val2:	27
+BREAK
+#33302
+Keywords:	activesoft chip pole arms
+Name:	a Pole Arms 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Pole Arms
+III', and contains within its electronic structure the basics of various
+techniques with pole arms. It is meant to be used in conjunction with a
+chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	3
+	Val2:	27
+BREAK
+#33303
+Keywords:	activesoft chip clubs
+Name:	a Clubs 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Clubs
+III', and contains within its electronic structure the basics of various
+techniques with clubs. It is meant to be used in conjunction with a chipjack
+and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	3
+	Val2:	27
+BREAK
+#33304
+Keywords:	activesoft chip brawling
+Name:	a Brawling 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Brawling
+III', and contains within its electronic structure the basics of brawling
+techniques. It is meant to be used in conjunction with a chipjack and
+skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val2:	27
+BREAK
+#33305
+Keywords:	activesoft chip cyber implants
+Name:	a Cyber Implants 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Cyber
+Implants III', and contains within its electronic structure the basics of
+various techniques with cyber implants. It is meant to be used in conjunction
+with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val2:	27
+BREAK
+#33306
+Keywords:	activesoft chip pistols
+Name:	a Pistols 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Pistols
+III', and contains within its electronic structure the basics of various
+techniques with pistols. It is meant to be used in conjunction with a chipjack
+and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	3
+	Val2:	27
+BREAK
+#33307
+Keywords:	activesoft chip rifles
+Name:	a Rifles 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Rifles
+III', and contains within its electronic structure the basics of various
+techniques with rifles. It is meant to be used in conjunction with a chipjack
+and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	3
+	Val2:	27
+BREAK
+#33308
+Keywords:	activesoft chip shotguns
+Name:	a Shotguns 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Shotguns
+III', and contains within its electronic structure the basics of various
+techniques with shotguns. It is meant to be used in conjunction with a
+chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	3
+	Val2:	27
+BREAK
+#33309
+Keywords:	activesoft chip sub-machine guns
+Name:	a Sub-machine Guns 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Sub-machine Guns III', and contains within its electronic structure the
+basics of various techniques with SMG's. It is meant to be used in conjunction
+with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val2:	27
+BREAK
+#33310
+Keywords:	activesoft chip Assault Rifles
+Name:	an Assault Rifles 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Assault
+Rifles III', and contains within its electronic structure the basics of
+various techniques with assault rifles. It is meant to be used in conjunction
+with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val2:	27
+BREAK
+#33311
+Keywords:	activesoft chip machine guns
+Name:	a Machine Guns 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Machine
+Guns III', and contains within its electronic structure the basics of various
+techniques with machine guns. It is meant to be used in conjunction with a
+chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	3
+	Val2:	27
+BREAK
+#33312
+Keywords:	activesoft chip gunnery
+Name:	a Gunnery 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Gunnery
+III', and contains within its electronic structure the basics of various
+gunnery techniques. It is meant to be used in conjunction with a chipjack and
+skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	3
+	Val2:	27
+BREAK
+#33313
+Keywords:	activesoft chip driving bike
+Name:	a Driving/Bike 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Driving/Bike III', and contains within its electronic structure the basics
+about driving and general knowledge and familiarity in a particular form of
+vehicle. It is meant to be used in conjunction with a chipjack and skillwires.
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	60
+	Val1:	3
+	Val2:	27
+BREAK
+#33314
+Keywords:	activesoft chip driving truck
+Name:	a Driving/Truck 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Driving/Truck III', and contains within its electronic structure the basics
+about driving and general knowledge and familiarity in a particular form of
+vehicle. It is meant to be used in conjunction with a chipjack and skillwires.
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	63
+	Val1:	3
+	Val2:	27
+BREAK
+#33315
+Keywords:	activesoft chip drone B/R
+Name:	a Drone B/R 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Drone B/R
+III', and contains within its electronic structure the basics about repairing
+and general knowledge and familiarity in a particular form of vehicle. It is
+meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	66
+	Val1:	3
+	Val2:	27
+BREAK
+#33316
+Keywords:	activesoft chip truck b/r
+Name:	a Truck B/R 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Truck B/R
+III', and contains within its electronic structure the basics about repairing
+and general knowledge and familiarity in a particular form of vehicle. It is
+meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	67
+	Val1:	3
+	Val2:	27
+BREAK
+#33317
+Keywords:	activesoft chip spell design
+Name:	a Spell Design 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Spell
+Design III', and contains within its electronic structure the basics spell
+design and general knowledge and familiarity in a particular construction used
+in a magical tradition. It is meant to be used in conjunction with a chipjack
+and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	4050
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val1:	3
+	Val2:	27
+BREAK
+#33318
+Keywords:	activesoft chip negotiation
+Name:	a Negotiation 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Negotiation III', and contains within its electronic structure the basics,
+general knowledge and familiarity in negotiation tactics. It is meant to be
+used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	39
+	Val1:	3
+	Val2:	27
+BREAK
+#33319
+Keywords:	activesoft chip corporate etiquette
+Name:	a Corporate Etiquette 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Corporate
+Etiquette III', and contains within its electronic structure the basics,
+general knowledge and familiarity in tactics used in corporate etiquette. It
+is meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	44
+	Val1:	3
+	Val2:	27
+BREAK
+#33320
+Keywords:	activesoft chip media etiquette
+Name:	a Media Etiquette 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Media
+Etiquette III', and contains within its electronic structure the basics,
+general knowledge and familiarity in tactics used in media etiquette. It is
+meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	3
+	Val2:	27
+BREAK
+#33321
+Keywords:	activesoft chip street etiquette
+Name:	a Street Etiquette 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Street
+Etiquette III', and contains within its electronic structure the basics,
+general knowledge and familiarity in tactics used in street etiquette. It is
+meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	3
+	Val2:	27
+BREAK
+#33322
+Keywords:	activesoft chip elf etiquette
+Name:	a Elf Etiquette 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Elf
+Etiquette III', and contains within its electronic structure the basics,
+general knowledge and familiarity in tactics used in elven etiquette. It is
+meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	48
+	Val1:	3
+	Val2:	27
+BREAK
+#33323
+Keywords:	activesoft chip computers
+Name:	a Computers 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Computers
+III', and contains within its electronic structure the basics, general
+knowledge and familiarity in the operation of computers. It is meant to be
+used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	3
+	Val2:	27
+BREAK
+#33324
+Keywords:	activesoft chip computer b/r
+Name:	a Computer B/R 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Computer
+B/R III', and contains within its electronic structure the basics, general
+knowledge and familiarity in computer b/r. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	3
+	Val2:	27
+BREAK
+#33325
+Keywords:	activesoft chip electronics b/r
+Name:	an Electronics B/R 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Electronics B/R III', and contains within its electronic structure the
+basics, general knowledge and familiarity in electronics b/r. It is meant to
+be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	34
+	Val1:	3
+	Val2:	27
+BREAK
+#33326
+Keywords:	activesoft chip cyberterminal design
+Name:	a Cyberterminal Design 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Cyberterminal Design III', and contains within its electronic structure the
+basics, general knowledge and familiarity in cyberterminal design. It is meant
+to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	4050
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	28
+	Val1:	3
+	Val2:	27
+BREAK
+#33327
+Keywords:	activesoft chip data brokerage
+Name:	a Data Brokerage 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Data
+Brokerage III', and contains within its electronic structure the basics,
+general knowledge and familiarity in data brokerage. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	4050
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	54
+	Val1:	3
+	Val2:	27
+BREAK
+#33328
+Keywords:	activesoft chip program design combat
+Name:	a Program Design (Combat) 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Combat) III', and contains within its electronic structure the basics,
+general knowledge and familiarity in program design (combat). It is meant to
+be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	4050
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	49
+	Val1:	3
+	Val2:	27
+BREAK
+#33329
+Keywords:	activesoft chip program design defensive
+Name:	a Program Design (Defensive) 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Defensive) III', and contains within its electronic structure the
+basics, general knowledge and familiarity in program design (defensive). It is
+meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	4050
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	3
+	Val2:	27
+BREAK
+#33330
+Keywords:	activesoft chip program design operational
+Name:	a Program Design (Operational) 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Operational) III', and contains within its electronic structure the
+basics, general knowledge and familiarity in program design (operational). It
+is meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	4050
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	51
+	Val1:	3
+	Val2:	27
+BREAK
+#33331
+Keywords:	activesoft chip program design special
+Name:	a Program Design (Special) 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Special) III', and contains within its electronic structure the
+basics, general knowledge and familiarity in program design (special). It is
+meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	4050
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	52
+	Val1:	3
+	Val2:	27
+BREAK
+#33332
+Keywords:	activesoft chip program design cyberterminal
+Name:	a Program Design (Cyberterminal) 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Cyberterminal) III', and contains within its electronic structure the
+basics, general knowledge and familiarity in program design (cyberterminal).
+It is meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	4050
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	53
+	Val1:	3
+	Val2:	27
+BREAK
+#33333
+Keywords:	activesoft chip stealth
+Name:	a Stealth 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Stealth
+III', and contains within its electronic structure the basics, general
+knowledge and familiarity in stealth operations. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	56
+	Val1:	3
+	Val2:	27
+BREAK
+#33334
+Keywords:	activesoft chip biotech
+Name:	a Biotech 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Biotech
+III', and contains within its electronic structure the basics, general
+knowledge and familiarity in biotech. It is meant to be used in conjunction
+with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	33
+	Val1:	3
+	Val2:	27
+BREAK
+#33335
+Keywords:	activesoft chip police procedures
+Name:	a Police Procedures 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Police
+Procedures III', and contains within its electronic structure the basics,
+general knowledge and familiarity in police procedures. It is meant to be used
+in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	4050
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	36
+	Val1:	3
+	Val2:	27
+BREAK
+#33336
+Keywords:	activesoft chip pistols b/r
+Name:	a Pistols B/R 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Pistols
+B/R III', and contains within its electronic structure the basics, general
+knowledge and familiarity in pistols b/r. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	101
+	Val1:	3
+	Val2:	27
+BREAK
+#33337
+Keywords:	activesoft chip shotguns b/r
+Name:	a Shotguns B/R 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Shotguns
+B/R III', and contains within its electronic structure the basics, general
+knowledge and familiarity in shotguns b/r. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	102
+	Val1:	3
+	Val2:	27
+BREAK
+#33338
+Keywords:	activesoft chip rifles b/r
+Name:	a Rifles B/R 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Rifles
+B/R III', and contains within its electronic structure the basics, general
+knowledge and familiarity in rifles b/r. It is meant to be used in conjunction
+with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	103
+	Val1:	3
+	Val2:	27
+BREAK
+#33339
+Keywords:	activesoft chip heavy weapons b/r
+Name:	a Heavy Weapons B/R 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Heavy
+Weapons B/R III', and contains within its electronic structure the basics,
+general knowledge and familiarity in heavy weapons b/r. It is meant to be used
+in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	104
+	Val1:	3
+	Val2:	27
+BREAK
+#33340
+Keywords:	activesoft chip submachine guns SMG b/r
+Name:	a Submachine Guns B/R 3 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Submachine Guns B/R III', and contains within its electronic structure the
+basics, general knowledge and familiarity in submachine guns b/r. It is meant
+to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	2700
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	105
+	Val1:	3
+	Val2:	27
+BREAK
+#33341
+Keywords:	activesoft chip edged weapons
+Name:	an Edged Weapons 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Edged
+Weapons V', and contains within its electronic structure the basics, general
+knowledge and familiarity in the use of edged weapons. It is meant to be used
+in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	5
+	Val2:	75
+BREAK
+#33342
+Keywords:	activesoft chip whips flails
+Name:	a Whips & Flails 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Whips &
+Flails V', and contains within its electronic structure the basics, general
+knowledge and familiarity in the use of whips and flails. It is meant to be
+used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	75
+BREAK
+#33343
+Keywords:	activesoft chip pole arms
+Name:	a Pole Arms 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Pole Arms
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of pole arms. It is meant to be used in conjunction
+with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	5
+	Val2:	75
+BREAK
+#33344
+Keywords:	activesoft chip brawling
+Name:	a Brawling 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Brawling
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of brawling techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	5
+	Val2:	75
+BREAK
+#33345
+Keywords:	activesoft chip cyber implants
+Name:	a Cyber Implants 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Cyber
+Implants V', and contains within its electronic structure the basics, general
+knowledge and familiarity in the use of cyber implant techniques. It is meant
+to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	5
+	Val2:	75
+BREAK
+#33346
+Keywords:	activesoft chip pistols
+Name:	a Pistols 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Pistols
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of pistol techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	5
+	Val2:	75
+BREAK
+#33347
+Keywords:	activesoft chip rifles
+Name:	a Rifles 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Rifles
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of rifle techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	5
+	Val2:	75
+BREAK
+#33348
+Keywords:	activesoft chip shotguns
+Name:	a Shotguns 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Shotguns
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of shotgun techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	5
+	Val2:	75
+BREAK
+#33349
+Keywords:	activesoft chip sub-machine guns
+Name:	a Sub-machine Guns 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Sub-machine Guns V', and contains within its electronic structure the basics,
+general knowledge and familiarity in the use of sub-machine gun techniques. It
+is meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	5
+	Val2:	75
+BREAK
+#33350
+Keywords:	activesoft chip assault rifles
+Name:	an Assault Rifles 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Assault
+Rifles V', and contains within its electronic structure the basics, general
+knowledge and familiarity in the use of assault rifle techniques. It is meant
+to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	5
+	Val2:	75
+BREAK
+#33351
+Keywords:	activesoft chip machine guns
+Name:	a Machine Guns 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Machine
+Guns V', and contains within its electronic structure the basics, general
+knowledge and familiarity in the use of machine gun techniques. It is meant to
+be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	5
+	Val2:	75
+BREAK
+#33352
+Keywords:	activesoft chip gunnery
+Name:	a Gunnery 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Gunnery
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of gunnery techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	5
+	Val2:	75
+BREAK
+#33353
+Keywords:	activesoft chip driving/bike driving bike
+Name:	a Driving/Bike 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Driving/Bike V', and contains within its electronic structure the basics,
+general knowledge and familiarity in the use of driving/bike techniques. It is
+meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	60
+	Val1:	5
+	Val2:	75
+BREAK
+#33354
+Keywords:	activesoft chip driving/truck driving truck
+Name:	a Driving/Truck 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Driving/Truck V', and contains within its electronic structure the basics,
+general knowledge and familiarity in the use of driving/truck techniques. It
+is meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	63
+	Val1:	5
+	Val2:	75
+BREAK
+#33355
+Keywords:	activesoft chip bike b/r
+Name:	a Bike B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Bike B/R
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of bike b/r techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	64
+	Val1:	5
+	Val2:	75
+BREAK
+#33356
+Keywords:	activesoft chip drone b/r
+Name:	a Drone B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Drone B/R
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of drone b/r techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	66
+	Val1:	5
+	Val2:	75
+BREAK
+#33357
+Keywords:	activesoft chip car b/r
+Name:	a Car B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Car B/R
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of car b/r techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	65
+	Val1:	5
+	Val2:	75
+BREAK
+#33358
+Keywords:	activesoft chip truck b/r
+Name:	a Truck B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Truck B/R
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in the use of truck b/r techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	67
+	Val1:	5
+	Val2:	75
+BREAK
+#33359
+Keywords:	activesoft chip negotiation
+Name:	a Negotiation 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Negotiation V', and contains within its electronic structure the basics,
+general knowledge and familiarity in negotiation tactics. It is meant to be
+used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	39
+	Val1:	5
+	Val2:	75
+BREAK
+#33360
+Keywords:	activesoft chip media etiquette
+Name:	a Media Etiquette 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Media
+Etiquette V', and contains within its electronic structure the basics, general
+knowledge and familiarity in media etiquette tactics. It is meant to be used
+in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	5
+	Val2:	75
+BREAK
+#33361
+Keywords:	activesoft chip street etiquette
+Name:	a Street Etiquette 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Street
+Etiquette V', and contains within its electronic structure the basics, general
+knowledge and familiarity in street etiquette tactics. It is meant to be used
+in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	5
+	Val2:	75
+BREAK
+#33362
+Keywords:	activesoft chip elf etiquette
+Name:	an Elf Etiquette 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Elf
+Etiquette V', and contains within its electronic structure the basics, general
+knowledge and familiarity in elf etiquette tactics. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	48
+	Val1:	5
+	Val2:	75
+BREAK
+#33363
+Keywords:	activesoft chip spell design
+Name:	a Spell Design 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Spell
+Design V', and contains within its electronic structure the basics, general
+knowledge and familiarity in spell design techniques. It is meant to be used
+in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	11250
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val1:	5
+	Val2:	75
+BREAK
+#33364
+Keywords:	activesoft chip computers
+Name:	a Computers 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Computers
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in computers. It is meant to be used in conjunction with a
+chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	5
+	Val2:	75
+BREAK
+#33365
+Keywords:	activesoft chip computer b/r
+Name:	a Computer B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Computer
+B/R V', and contains within its electronic structure the basics, general
+knowledge and familiarity in computer b/r. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	5
+	Val2:	75
+BREAK
+#33366
+Keywords:	activesoft chip electronics b/r
+Name:	an Electronics B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Electronics B/R V', and contains within its electronic structure the basics,
+general knowledge and familiarity in electronics b/r. It is meant to be used
+in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	34
+	Val1:	5
+	Val2:	75
+BREAK
+#33367
+Keywords:	activesoft chip program design combat
+Name:	a Program Design (Combat) 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Combat) V', and contains within its electronic structure the basics,
+general knowledge and familiarity in program design (combat). It is meant to
+be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	11250
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	49
+	Val1:	5
+	Val2:	75
+BREAK
+#33368
+Keywords:	activesoft chip program design defensive
+Name:	a Program Design (Defensive) 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Defensive) V', and contains within its electronic structure the
+basics, general knowledge and familiarity in program design (defensive). It is
+meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	11250
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	5
+	Val2:	75
+BREAK
+#33369
+Keywords:	activesoft chip program design operational
+Name:	a Program Design (Operational) 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Operational) V', and contains within its electronic structure the
+basics, general knowledge and familiarity in program design (operational). It
+is meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	11250
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	51
+	Val1:	5
+	Val2:	75
+BREAK
+#33370
+Keywords:	activesoft chip program design special
+Name:	a Program Design (Special) 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Special) V', and contains within its electronic structure the basics,
+general knowledge and familiarity in program design (special). It is meant to
+be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	11250
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	52
+	Val1:	5
+	Val2:	75
+BREAK
+#33371
+Keywords:	activesoft chip program design cyberterminal
+Name:	a Program Design (Cyberterminal) 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Program
+Design (Cyberterminal) V', and contains within its electronic structure the
+basics, general knowledge and familiarity in program design (cyberterminal).
+It is meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	11250
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	53
+	Val1:	5
+	Val2:	75
+BREAK
+#33372
+Keywords:	activesoft chip stealth
+Name:	a Stealth 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Stealth
+V', and contains within its electronic structure the basics, general knowledge
+and familiarity in stealth techniques. It is meant to be used in conjunction
+with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	56
+	Val1:	5
+	Val2:	75
+BREAK
+#33373
+Keywords:	activesoft chip pistols b/r
+Name:	a Pistols B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Pistols
+B/R V', and contains within its electronic structure the basics, general
+knowledge and familiarity in pistols b/r techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	101
+	Val1:	5
+	Val2:	75
+BREAK
+#33374
+Keywords:	activesoft chip shotguns b/r
+Name:	a Shotguns B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Shotguns
+B/R V', and contains within its electronic structure the basics, general
+knowledge and familiarity in shotguns b/r techniques. It is meant to be used
+in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	102
+	Val1:	5
+	Val2:	75
+BREAK
+#33375
+Keywords:	activesoft chip sub-machine guns
+Name:	a Sub-machine Guns 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads
+'Sub-machine Guns B/R V', and contains within its electronic structure the
+basics, general knowledge and familiarity in sub-machine gun b/r techniques.
+It is meant to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	105
+	Val1:	5
+	Val2:	75
+BREAK
+#33376
+Keywords:	activesoft chip rifles b/r
+Name:	a Rifles B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Rifles
+B/R V', and contains within its electronic structure the basics, general
+knowledge and familiarity in rifles b/r techniques. It is meant to be used in
+conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	103
+	Val1:	5
+	Val2:	75
+BREAK
+#33377
+Keywords:	activesoft chip heavy weapons b/r
+Name:	a Heavy Weapons B/R 5 ActiveSoft
+RoomDesc:$
+A small activesoft chip has been left here.~
+LookDesc:$
+This activesoft is designated with a label on its side, which reads 'Heavy
+Weapons B/R V', and contains within its electronic structure the basics,
+general knowledge and familiarity in heavy weapons b/r techniques. It is meant
+to be used in conjunction with a chipjack and skillwires. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	104
+	Val1:	5
+	Val2:	75
+BREAK
+#33378
+Keywords:	linguasoft chip japanese
+Name:	a Japanese 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Japanese - Rating
+Three". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	3
+	Val2:	27
+BREAK
+#33379
+Keywords:	linguasoft chip chinese
+Name:	a Chinese 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Chinese - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	3
+	Val2:	27
+BREAK
+#33380
+Keywords:	linguasoft chip sperethiel
+Name:	a Sperethiel 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Sperethiel - Rating
+Three". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	3
+	Val2:	27
+BREAK
+#33381
+Keywords:	linguasoft chip spanish
+Name:	a Spanish 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Spanish - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	75
+	Val1:	3
+	Val2:	27
+BREAK
+#33382
+Keywords:	linguasoft chip italian
+Name:	an Italian 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Italian - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	3
+	Val2:	27
+BREAK
+#33383
+Keywords:	linguasoft chip korean
+Name:	a Korean 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Korean - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	3
+	Val2:	27
+BREAK
+#33384
+Keywords:	linguasoft chip sioux
+Name:	a Sioux 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Sioux - Rating Three". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	3
+	Val2:	27
+BREAK
+#33385
+Keywords:	linguasoft chip makaw
+Name:	a Makaw 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Makaw - Rating Three". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	82
+	Val1:	3
+	Val2:	27
+BREAK
+#33386
+Keywords:	linguasoft chip crow
+Name:	a Crow 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Crow - Rating Three". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	3
+	Val2:	27
+BREAK
+#33387
+Keywords:	linguasoft chip navajo
+Name:	a Navajo 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Navajo - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	3
+	Val2:	27
+BREAK
+#33388
+Keywords:	linguasoft chip arabic
+Name:	an Arabic 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Arabic - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	3
+	Val2:	27
+BREAK
+#33389
+Keywords:	linguasoft chip latin
+Name:	a Latin 3 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Latin - Rating Three". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	3
+	Val2:	27
+BREAK
+#33390
+Keywords:	linguasoft chip chinese
+Name:	a Chinese 5 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Chinese - Rating Five".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	5
+	Val2:	75
+BREAK
+#33391
+Keywords:	linguasoft chip sperethiel
+Name:	a Sperethiel 5 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Sperethiel - Rating
+Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	5
+	Val2:	75
+BREAK
+#33392
+Keywords:	linguasoft chip korean
+Name:	a Korean 5 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Korean - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	5
+	Val2:	75
+BREAK
+#33393
+Keywords:	linguasoft chip sioux
+Name:	a Sioux 5 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Sioux - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	5
+	Val2:	75
+BREAK
+#33394
+Keywords:	linguasoft chip crow
+Name:	a Crow 5 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Crow - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	5
+	Val2:	75
+BREAK
+#33395
+Keywords:	linguasoft chip Navajo
+Name:	a Navajo 5 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Navajo - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	5
+	Val2:	75
+BREAK
+#33396
+Keywords:	linguasoft chip arabic
+Name:	an Arabic 5 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Arabic - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	5
+	Val2:	75
+BREAK
+#33397
+Keywords:	linguasoft chip latin
+Name:	a Latin 5 LinguaSoft
+RoomDesc:$
+A small linguasoft chip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Latin - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	5
+	Val2:	75
+BREAK
+END

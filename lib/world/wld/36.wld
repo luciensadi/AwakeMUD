@@ -1,0 +1,1124 @@
+#3600
+Name:	Tiny shack
+Desc:$
+   This tiny corrugated tiny shack is barely big enough for you to turn around
+in.  Dark spots are all over the walls showing where the weather has affected
+the metal.  A draft blows in from the hole that has been cut in the ceiling.
+Sprouting from the center of the shack is a black pipe from which a small
+wispy trail of black smoke drift.  The smoke entering and filling your nose
+reminds you of the stench of a trash dump. 
+~
+Flags:	100001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	3627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	panel small sliding
+	Desc:$
+A small sliding panel.
+~
+	ToVnum:	3601
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	4
+BREAK
+#3601
+Name:	Red Dragons' doss
+Desc:$
+   You have entered the lair of the street gang that calls themselves the Red
+Dragons.  Despite the crude shack above that serves as the entrance to the
+lair, this places has been constructed will great care.  Concrete, sprayed
+painted with various Red Dragon graffiti, serves as the walls and floor.  The
+interesting thing about the floors is the detailed footprints that have been
+carved into the stone.  Dragon sized footprints.  They were carved...right? 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	3605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	trapdoor wooden ceiling
+	Desc:$
+A wooden trapdoor is mounted in the ceiling.
+~
+	ToVnum:	3600
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3602
+Name:	Garbage dump
+Desc:$
+   This room stinks to high heaven, and the concrete walls don't help
+ventilate much.  Beads of sweat start to run down your neck as it occurs to
+you how hot it actually is in here.  To the north is a blast furnace that is
+most likely used to incinerate that garbage, bodies, and whatever else the
+gang needs to dispose of without anyone knowing about.  A large iron door with
+slots cut in it lets you view the raging inferno inside the furnace. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door furnace
+	Desc:$
+The furnace door.
+~
+	ToVnum:	3603
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	3609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3603
+Name:	Furnace
+Desc:$
+   Poor you, as you climb inside the furnace you're blinded by the heat and
+flame. As the fluid inside your eyes comes to a boil and explodes you can feel
+the flame that you are inhaling start to burn your lungs.  Your heart begins
+to beat faster, carrying the now boiling blood to all your major organs.
+Right before you pass out from the excruciating pain of your skin melting off
+and the muscle beneath it separating from the bone you can hear the sounds of
+your own brain beginning to boil. 
+~
+Flags:	1110
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door furnace
+	Desc:$
+The furnace door
+~
+	ToVnum:	3602
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Desc:$
+A chimmny leads up.
+~
+	ToVnum:	3600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3604
+Name:	Dining room
+Desc:$
+   The sight before you is somewhat shocking to say the least.  Instead of the
+usual wooden crate tables and iron pipe chairs that many gangs use, the Red
+Dragons apparently prefer to have a little bit of culture when they dine.  A
+hardwood table that must be a good six meters long is in the center of the
+room.  On the table is a red silken tablecloth with intricately designed lace
+edges.  Placed approximately every one or so meter are golden candelabras,
+which are holding flaming red candles, giving the room an eerie dangerous
+feel. Large Queen Victorian chairs with well cushioned seats surround the
+table except at the head.  At the head of the table, instead of a chair, is a
+huge smooth, blood-red stone.  Carvings on the stone depict a great battle
+between a western dragon named Sigmund and early Alamos 3000 members.  In the
+end, there was only one being left alive, which accounts for why none of the
+members ever reported being in such a fray. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	3607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3605
+Name:	Electronics room
+Desc:$
+   When this chamber was designed there was no doubt as to it's purpose.
+Carved into the concrete walls are receptacles that hold trideo sets,
+vidphones, high encryption multi frequency raidos, surveillance monitoring
+equipment, door controls, and ever other electronic gizmo you could think of.
+The farther you go into the depth of the doss, the more you realize the Red
+Dragons aren't your average chipped up, testosterone drivin' go-gang. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	3607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	3601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3606
+Name:	Meeting room
+Desc:$
+   Randomly scattered around this room are leather chairs, wooden benches,
+comfortable looking couches and other luxurious furniture to rest your bones
+in while a meeting of the minds is in session.  The meeting must be rather
+exciting event too, judging from the bullet holes, claw marks, and scorches on
+the walls, floor, and ceiling. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3607
+Name:	Hallway
+Desc:$
+   A hallway leads deeper into the doss to the east.  From the northwest you
+can smell an odor that could be food. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	3605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	3608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	3604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3608
+Name:	Hallway
+Desc:$
+   The plain stone hallway comes from the west and turns to the southeast. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	3610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	3612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	3607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3609
+Name:	Kitchen
+Desc:$
+   A very basic kitchen,  Sinks, stoves, microwaves.  All your neccessary
+cooking tools to sustain life.  If a somewhat limited life. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	3602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3610
+Name:	Map room
+Desc:$
+   This relatively small room has a few chair placed around it but the
+dominating feature are the maps.  Maps of Tacoma, downtown Seattle, Tarislar,
+Tacoma, Council Island, the Tir, and even some of wilderness areas surrounding
+Seattle. This must be where the Red Dragons plan their raids, smugglings, and
+other nefarious deeds. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	3608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3611
+Name:	An unnamed room
+Desc:$
+Unused
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#3612
+Name:	End of hallway
+Desc:$
+   The stone hallway dead ends here and provides passage to several room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	3615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	3614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	3608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3613
+Name:	Armoury
+Desc:$
+   Paydirt!  You have come across the main weapon and armor storage of the Red
+Dragons.  Unfortunatly they are kept inside storage cabinets.  And just as you
+guessed, the cabinets are kept locked. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	3618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3614
+Name:	Sleeping area
+Desc:$
+   Several sets of bunk beds are lining the walls in a style that reminds you
+of either prison, boot camp, or a combination of the two.  Here is where the
+Red Dragons rest when they arent partying, extorting, or raiding government
+offices. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	3612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3615
+Name:	Dog pens
+Desc:$
+   This is where the Red Dragons dogs stay when they are not guarding the doss
+or roaming the streets.  Stains from feces and other excrement are present on
+the floor and a powerfull smell wafts through the air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	3
+Y:	20
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door hidden
+	Desc:$
+You find a hidden door. 
+~
+	ToVnum:	3624
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	9
+[EXIT southwest]
+	ToVnum:	3612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3616
+Name:	An unnamed room
+Desc:$
+Unused
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#3617
+Name:	An unnamed room
+Desc:$
+Unused
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	3618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3618
+Name:	Hall of mirrors
+Desc:$
+   You feel like you have stumbled into a fun house.  Mirrors line the walls
+and ceilings.  Not normal mirrors either.  Some mirrors make you appear to be
+tiny and squat.  Others make you apper tall and skinny.  Even more change your
+reflection to a combination of the too. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	3623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	3613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	3624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	3624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	3625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3619
+Name:	Hall of the Claw
+Desc:$
+   You are in an unfinished room. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#3620
+Name:	Tip of the Claw
+Desc:$
+   You are in an unfinished room. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#3621
+Name:	An unnamed room
+Desc:$
+Unused
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#3622
+Name:	An unnamed room
+Desc:$
+Unused
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#3623
+Name:	Hall of mirrors
+Desc:$
+   You feel like you have stumbled into a fun house.  Mirrors line the walls
+and ceilings.  Not normal mirrors either.  Some mirrors make you appear to be
+tiny and squat.  Others make you apper tall and skinny.  Even more change your
+reflection to a combination of the too. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	3618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	3618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	3624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	3625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	3625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3624
+Name:	Hall of Mirrors
+Desc:$
+   You feel like you have stumbled into a fun house.  Mirrors line the walls
+and ceilings.  Not normal mirrors either.  Some mirrors make you appear to be
+tiny and squat.  Others make you apper tall and skinny.  Even more change your
+reflection to a combination of the two. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	Door
+	Desc:$
+A hidden door. 
+~
+	ToVnum:	3625
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	2
+[EXIT northeast]
+	ToVnum:	3623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	3618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	3618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	mirror wall
+	Desc:$
+An unusual lokking mirror
+~
+	ToVnum:	3615
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	4
+[EXIT west]
+	ToVnum:	3625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	3625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3625
+Name:	Hall of Mirrors
+Desc:$
+   You feel like you have stumbled into a fun house.  Mirrors line the walls
+and ceilings.  Not normal mirrors either.  Some mirrors make you appear to be
+tiny and squat.  Others make you apper tall and skinny.  Even more change your
+reflection to a combination of the too. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	3623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	3623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	3618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	3624
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	3624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	3624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3626
+Name:	Sigmund's Den
+Desc:$
+   As you step into the chamber from the hall blast of hot air hits you. Beads
+of sweat begin to drip down your face and burn your eyes as your body tried as
+hard as it can to cool you off.  It must be close to 40 degrees Celsius in
+here. Sigmund has recently renovated his room, adding thousands of  nuyen of
+turntables and mixing equipment. Posters of famous rap stars hang from the
+walls, and the sound of hardcore streetstyled beats assaults your senses. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	5
+X:	80
+Y:	100
+Z:	40.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	9
+[EXIT north]
+	ToVnum:	3612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3627
+Name:	Coal Plains
+Desc:$
+   You are in a desolate and empty part of the coal plains.  The dust is
+making you cough nearly constantly; it is incredibly hard to see, but you
+think there is a small shack to the east in which you might be able to take
+shelter. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	3600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	100002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

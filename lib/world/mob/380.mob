@@ -1,0 +1,1658 @@
+#38000
+Keywords:	shopper consumer person
+Name:	a shopper
+RoomDesc:$
+A shopper is wandering from store to store, looking for good purchases. 
+
+~
+LookDesc:$
+This poor soul has their hands full of bags and boxes. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders off
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	80
+	Cash:	25
+	Bank:	300
+[SKILLS]
+BREAK
+#38001
+Keywords:	businessman man suit
+Name:	a businessman
+RoomDesc:$
+A businessman is here on his break. 
+
+~
+LookDesc:$
+He looks to belong to some corporate office or other type of facility. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	205
+	Weight:	90
+	Bank:	80
+[SKILLS]
+BREAK
+#38002
+Keywords:	businesswoman business woman skirt
+Name:	a businesswoman
+RoomDesc:$
+A businesswoman is here on her break. 
+
+~
+LookDesc:$
+Dressed in a long skirt with a button top, she looks corporate, but is
+probably only a secretary. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	2
+	Cha:	6
+	Int:	5
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	50
+[SKILLS]
+BREAK
+#38003
+Keywords:	richard clerk owner
+Name:	Richard
+RoomDesc:$
+Richard, owner of the Richard's Men and Ladies Wear, waits to serve you. 
+
+~
+LookDesc:$
+Richard has an odd air of arrogance about him.  From his slicked back hair and
+his firm pressed suit, to his glancing eyes and drumming fingers.  He just
+knows he's better than you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	3
+	Cha:	6
+	Int:	3
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Cash:	30000
+	Bank:	30000
+[SKILLS]
+BREAK
+#38004
+Keywords:	sheng clerk owner
+Name:	Sheng
+RoomDesc:$
+Sheng stands here behind the counter, ready to sell his wares. 
+
+~
+LookDesc:$
+Sheng, in all his aged wisdom, still looks quite healthy.  He's bald, and has
+a long white beard, down to the top of his stomach.  The ends of his beard
+seem to be a bit scorched, probably from working with hot metal. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	4
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	75
+	Cash:	30000
+	Bank:	30000
+[SKILLS]
+BREAK
+#38005
+Keywords:	Leane owner clerk
+Name:	Leane
+RoomDesc:$
+Leane sits here behind the counter. 
+
+~
+LookDesc:$
+This beautiful elven woman has long blonde hair and crystal blue eyes; the
+jewelery only serves to compliment her looks. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	6
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	60
+	Cash:	30000
+	Bank:	30000
+[SKILLS]
+BREAK
+#38006
+Keywords:	clerk stuffer shack girl female dwarf
+Name:	a blonde female dwarf
+RoomDesc:$
+A female dwarf stands here behind the counter. 
+
+~
+LookDesc:$
+This Stuffer Shack clerk taps her foot quietly, twirling a finger through her
+hair as she waits for her shift to be over. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	2
+	Str:	4
+	Cha:	3
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	80
+	Cash:	1000
+	Bank:	1000
+[SKILLS]
+BREAK
+#38007
+Keywords:	clerk taco bell employee koborokuru male
+Name:	a male koborokuru
+RoomDesc:$
+A male koborokuru works the Taco Bell counter here. 
+
+~
+LookDesc:$
+This hairy koborokuru snorts at you quietly, obviously not pleased with having
+to work in the city.  Thankfully, despite him not liking his job, he has no
+way to tamper with the food because it's all flash fried and insta-bagged by a
+machine. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Koborokuru
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	2
+	Str:	5
+	Cha:	2
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	90
+	Cash:	1000
+	Bank:	1000
+[SKILLS]
+BREAK
+#38008
+Keywords:	nuke-it burger employee clerk male ork
+Name:	a Nuke-It Burger employee
+RoomDesc:$
+An ork Nuke-It Burger employee waits behind the counter. 
+
+~
+LookDesc:$
+This young ork wears the garb of the Nuke-It Burger food chain, a ^Rred^N and
+^Yyellow^N striped shirt and matching hat.  When he speaks his voice cracks. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	1
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	220
+	Weight:	110
+	Cash:	1000
+	Bank:	1000
+[SKILLS]
+BREAK
+#38009
+Keywords:	knight-errant errant security representative man suit
+Name:	A man in a suit
+RoomDesc:$
+A Knight-Errant Security representative is sitting here behind the desk. 
+
+~
+LookDesc:$
+Seeing as Knight-Errant provides the Espanoza Way Complex with it's security,
+it's only fitting that they have their very own office here as well.  The
+representative for Knight-Errant here is a firm faced man, who looks to be in
+his mid-forties.  He has grey hair which is slicked back over his head, and
+icy eyes.  His suit, an Armani by the looks of it, seems to be a bit too big
+for his body, and seems to contain a bulge of some kind. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Cash:	200
+[SKILLS]
+	brawling:	6
+	pistols:	6
+BREAK
+#38010
+Keywords:	knight-errant errant polygon guard
+Name:	a Knight-Errant guard
+RoomDesc:$
+A polygonal Knight-Errant guard is standing here. 
+
+~
+LookDesc:$
+It's rather block and chunky, and doesn't really look that real, save for the
+gun it's hand which looks way to real for the Matrix. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Level:	8
+[SKILLS]
+BREAK
+#38011
+Keywords:	raven ic giant
+Name:	a giant raven
+RoomDesc:$
+A giant raven is perched here, watching the data. 
+
+~
+LookDesc:$
+This raven has little detail to it, very basic.  It's point though is it's
+size, it's as big as cyclops. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	1
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	700
+	Weight:	300
+	Level:	10
+[SKILLS]
+BREAK
+#38012
+Keywords:	professional looking businessman johnson man pressed suit
+Name:	a professional looking businessman
+RoomDesc:$
+A man in a firmly pressed suit is sitting behind the desk. 
+
+~
+LookDesc:$
+This guy doesn't seem to have any affiliation with a company.  Or does he?
+He's dressed in a sharp business suit and has a very lean look to him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	176
+	Weight:	75
+[SKILLS]
+BREAK
+#38013
+Keywords:	susan blonde woman businesswoman suit
+Name:	a businesswoman
+RoomDesc:$
+A blonde woman in a fancy suit is sitting behind the desk. 
+
+~
+LookDesc:$
+She's a pretty average looking woman in a fancy suit.  She has long blonde
+hair and blue eyes, and a name tag on her suit points out to the world that
+her name is Susan, apparently of Eli and Erel Accounting. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	0
+	Cha:	4
+	Int:	6
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	199
+	Weight:	67
+	Bank:	300
+[SKILLS]
+BREAK
+#38014
+Keywords:	technician security man computer
+Name:	a technician
+RoomDesc:$
+A technician wanders around here, keeping things in order. 
+
+~
+LookDesc:$
+Your typical desk jockey. Glasses, messy hair, pocket computer in shirt
+pocket. He's seemingly well built but doesn't look the best, probably due to
+the stress of the job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	1
+	Int:	6
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Bank:	40
+[SKILLS]
+	brawling:	3
+BREAK
+#38015
+Keywords:	golem stone monster rock
+Name:	a stone golem
+RoomDesc:$
+A monstrous pile of rocks come to life and block your way. 
+
+~
+LookDesc:$
+This golem is very detailed in it's extreme high resolution, causing it to
+look extremely menacing.  Hell, even if this thing were pure polygon, it'd
+still look like it could break you in half. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	1
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	1000
+	Weight:	1000
+	Level:	14
+[SKILLS]
+BREAK
+#38016
+Keywords:	tall man suit fancy pressed calmly sitting
+Name:	a tall man in a nice suit
+RoomDesc:$
+Sitting behind the desk is a man in a fancy, pressed suit, looking up at you
+calmly. 
+
+~
+LookDesc:$
+This guy looked a little agitated that you're here, but he's calm none the
+less.  He smiles at you, revealing pure white teeth.  He clasps his hands
+infront of him and leans back in his chair, and then you note the sinister
+look in his pale eyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	75
+	Cash:	10000
+	Bank:	20000
+[SKILLS]
+	brawling:	8
+BREAK
+#38017
+Keywords:	drug dealer dope fiend
+Name:	a drug dealer
+RoomDesc:$
+A drug dealer is standing here, ready to push his dope on people. 
+
+~
+LookDesc:$
+You don't like the look of this guy, but that's alright.  He doesn't like the
+look of you either. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001001100
+AffFlags:	1000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	3
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	50
+[SKILLS]
+	brawling:	10
+	stealth:	8
+BREAK
+#38018
+Keywords:	gizmo owner shop clerk gnome male man
+Name:	a happy looking gnome
+RoomDesc:$
+A gnome is here behind the counter, with a big grin on his face. 
+
+~
+LookDesc:$
+You assume this is Gizmo, owner of the store.  He's a little gnome with a
+happy look on his face at seemingly all times. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Gnome
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	90
+	Weight:	45
+	Cash:	30000
+	Bank:	30000
+[SKILLS]
+BREAK
+#38019
+Keywords:	gnarly guy military phil shop keeper shopkeeper
+Name:	Phil
+RoomDesc:$
+A gnarly looking guy is standing here, waiting to outfit you in used military
+gear. 
+
+~
+LookDesc:$
+A wiry guy with long, curly hair, matted down in under a black beret and
+piercing but paranoid eyes.  He's outfitted in a tattered trench coat and worn
+checkered pants.  His worn combat boots are held together with duct tape, as
+are parts of his shirt, which display a large "DK" in the middle of it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	75
+	Cash:	100000
+	Bank:	200000
+[SKILLS]
+	street etiquette:	10
+	negotiation:	7
+BREAK
+#38020
+Keywords:	female troll woman ugly huge
+Name:	a female troll
+RoomDesc:$
+A huge female troll carries a bag of clothes past you. 
+
+~
+LookDesc:$
+This poor woman is absolutely hideous, not that you're surprised seeing as
+she's a troll. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001100
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	2
+	Str:	2
+	Cha:	1
+	Int:	3
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	230
+	Weight:	100
+	Cash:	100
+[SKILLS]
+	negotiation:	3
+BREAK
+#38021
+Keywords:	ork haggered woman female old shopkeeper keeper frail
+Name:	a haggard old woman
+RoomDesc:$
+An old, frail looking female ork is here, tending shop. 
+
+~
+LookDesc:$
+This old ork is very withered and frail.  Despite the natural size to her
+body, she looks as if a strong breeze would crack her in half. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	2
+	Int:	4
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	80
+	Cash:	200
+[SKILLS]
+BREAK
+#38022
+Keywords:	large burly troll scars shopkeeper keeper male
+Name:	a large troll
+RoomDesc:$
+A large troll is here banging a hammer on a piece of metal. 
+
+~
+LookDesc:$
+This troll's entire upper body lacks clothing and is covered in a web work of
+scars.  His muscles cause the scar tissue to ripple violently with every swing
+of the hammer he wields.  His eyes are peaceful, yet he looks quick to anger.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	4
+	Str:	10
+	Cha:	3
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	260
+	Weight:	160
+	Cash:	1000
+[SKILLS]
+BREAK
+#38023
+Keywords:	benny ork bulky short shopkeeper keep male owner
+Name:	Benny
+RoomDesc:$
+The owner of the shop, Benny, is standing here behind a display of guns. 
+
+~
+LookDesc:$
+Benny, it seems, is a little lacking in height for an ork.  Meanwhile, his
+mere girth makes up for it, as he looks like he could crush a car fender
+between his fingers if he tried. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	1
+	Str:	12
+	Cha:	1
+	Int:	3
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	220
+	Cash:	150
+[SKILLS]
+BREAK
+#38024
+Keywords:	clerk elven kid shopkeeper keeper elf
+Name:	an elven kid
+RoomDesc:$
+An elven kid is sitting here behind the counter, waiting to outfit you. 
+
+~
+LookDesc:$
+This kid has more metal in his face than Bunny's desk has on it.  He's covered
+in various pipe-metal piercings that are anywhere from 6 gauge to 1 guage, and
+that's just on his head.  He's dressed in a tight muscle shirt which reveals
+hardened, natural muscles, and a pair of Street-Runner courier pants. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	7
+	Cha:	5
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	75
+[SKILLS]
+BREAK
+#38025
+Keywords:	bunny rabbit male human old graying
+Name:	a graying old man
+RoomDesc:$
+A graying man sits behind the desk here, tapping viciously at the computers. 
+
+~
+LookDesc:$
+Even without the "Bunny" embroidered on the right-hand pocket of his brown
+Circuit Couriers shirt, it's fairly obvious that this is the boss of the
+operation: a stocky, tanned man with a greying crew-cut and a determined look
+on his face. He's a legend in courier circles, and widely regarded as the best
+to have run in the past 40 years. Despite his age, he's also got plenty of
+energy left in him, and is said to be always looking for someone who can do a
+faster, better delivery than he could. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	4
+	Int:	7
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+[SKILLS]
+BREAK
+#38026
+Keywords:	bartender tender man human barkeeperp bald
+Name:	a bald barkeep
+RoomDesc:$
+A bartender is here, serving drinks and food. 
+
+~
+LookDesc:$
+This guy is pretty big for a human, and he's got a look to him like he could
+kill an ork with one hand tied behind his back.  Thankfully he's only slinging
+the booze. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	6
+	Int:	3
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	230
+	Weight:	120
+[SKILLS]
+BREAK
+#38027
+Keywords:	gorg troll huge male
+Name:	a huge troll
+RoomDesc:$
+A huge troll stands here. 
+
+~
+LookDesc:$
+This extremely large troll looks like he eats GMC Bulldogs for breakfast. He's
+wearing a sharp Armani suit, custom-tailored for his size. A name tag pinned
+to the right lapel reads: "Staff: Gorg." 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	7
+	Str:	14
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	450
+	Weight:	300
+[SKILLS]
+	brawling:	14
+BREAK
+#38028
+Keywords:	jimmy smith johnson
+Name:	Jimmy Smith
+RoomDesc:$
+Mr. Smith is sitting behind his desk, waiting to speak to you. 
+
+~
+LookDesc:$
+Jimmy Smith, a fellow originally from Tir Na Nog, has a lot of Irish blood in
+him.  He came to Seattle over 20 years ago and sided with the Mafia, and thus
+far they've had a good business relationship.  He provides them with proper
+paper work, they provide him and his bar with protection from everything,
+including the Lone Stars. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	1
+	Str:	1
+	Cha:	7
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+[SKILLS]
+BREAK
+#38029
+Keywords:	old man printer clerk
+Name:	an old man
+RoomDesc:$
+An old man with a datajack sits here, piles of papers on his desk. 
+
+~
+LookDesc:$
+This old guy looks like those print press workers from the 1940's that they
+show on the public documentary shows.  He's got about a week's worth of facial
+hair growing on, and he squints as he looks at you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	2
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	60
+[SKILLS]
+BREAK
+#38030
+Keywords:	UCAS soldier armored guard
+Name:	a UCAS soldier
+RoomDesc:$
+A UCAS soldier is standing here, guarding an armored car. 
+
+~
+LookDesc:$
+This guy looks like he's about to rip you a new hole... better be careful. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	11
+	Str:	11
+	Cha:	6
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	230
+	Weight:	120
+	Ballistic:	12
+	Impact:	10
+[SKILLS]
+	brawling:	10
+BREAK
+#38031
+Keywords:	van ucas transport security
+Name:	a security transport van
+RoomDesc:$
+A UCAS transport van is here, being protected by guards. 
+
+~
+LookDesc:$
+This van is heavily fortified so it may take a while to get at what's inside,
+but at least it can't fight back if the guards are dead. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000101011000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	1000
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+BREAK
+#38032
+Keywords:	female ASG auburn street gear clerk
+Name:	a female ASG clerk
+RoomDesc:$
+An ASG clerk is sitting behind the plasteel barrier here. 
+
+~
+LookDesc:$
+From what you can see, which is not much, there is a female clerk with a shirt
+that displays the words "Auburn Street Gear" outlined in a burst of red gun
+fire from what looks like an Ares Predator. 
+~
+ArriveMsg:	a male ASG clerk
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	5
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+[SKILLS]
+BREAK
+#38033
+Keywords:	ASG auburn street gear clerk male
+Name:	a male ASG clerk
+RoomDesc:$
+An ASG clerk is sitting behind the plasteel barrier here. 
+
+~
+LookDesc:$
+From what you can see, which is not much, there is a male clerk with a shirt
+that displays the words "Auburn Street Gear" outlined in a burst of red gun
+fire from what looks like an Ares Predator. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	5
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+[SKILLS]
+BREAK
+#38034
+Keywords:	knight-errant errant guard security asg auburn street gear
+Name:	a Knight-Errant security guard
+RoomDesc:$
+A Knight-Errant security guard is here, patrolling Auburn Street Gear. 
+
+~
+LookDesc:$
+This Knight-Errant guard is big, well armored, and cybered out.  His primary
+objective is to keep little rats like you out of Auburn Street Gear unless
+you've got the proper legal papers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010100000011010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	9
+	Cha:	4
+	Int:	5
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	130
+[SKILLS]
+BREAK
+#38047
+Keywords:	flight attendant
+Name:	a female flight attendant
+RoomDesc:$
+A flight attendant stands here, doing here duties. 
+
+~
+LookDesc:$
+She looks pretty pre-occupied. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	90
+[SKILLS]
+	brawling:	6
+BREAK
+#38048
+Keywords:	female decker pilot elf elven
+Name:	a female elf
+RoomDesc:$
+A female elf, dressed in pilot attire, is jacked into the ship's navigation
+computer here. 
+
+~
+LookDesc:$
+She looks oblvious and totally spaced out. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	10
+	Str:	6
+	Cha:	8
+	Int:	12
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	80
+	Bank:	500
+[SKILLS]
+	brawling:	10
+	computers:	10
+BREAK
+#38049
+Keywords:	pilot boeing man
+Name:	a pilot
+RoomDesc:$
+A pilot is sitting here, monitoring the plane's systems. 
+
+~
+LookDesc:$
+This pilot, trimmed and spiffy, is monitoring the plane's diagnostics closely,
+watching for the slightest problem. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	9
+	Str:	7
+	Cha:	6
+	Int:	9
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Cash:	75
+[SKILLS]
+	brawling:	12
+BREAK
+#38050
+Keywords:	Joseph Charleston Mafia
+Name:	Joseph Charleston
+RoomDesc:$
+A man in a nicely pressed black suit stands here 
+
+~
+LookDesc:$
+This man is rather impressive looking. Black, double berasted, 3 piece suit,
+cuban cigar, and a rather professional demeanor. He stands arround, observing
+his surroundings carefully, without actually -looking- like he's being
+observant at all. He looks to be an italian, slightly dark complected, and he
+speaks with an italian accent, leading you to believe he just might be a
+maffia man. 
+~
+ArriveMsg:	steps quietly in from
+LeaveMsg:	walks calmly out to
+MobFlags:	10100000011010
+AffFlags:	1000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	10
+	Cha:	8
+	Int:	12
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	8
+	Cash:	5000
+	Bank:	10000
+[SKILLS]
+	brawling:	12
+	street etiquette:	10
+	corporate etiquette:	10
+BREAK
+#38051
+Keywords:	Yina Lei Yakuza Johnson
+Name:	Yina Lei
+RoomDesc:$
+A sort japanese woman in a nice business suit stands here 
+
+~
+LookDesc:$
+Yina Lei Is well known in the Yakuza circle for her ability to hire runners
+for some of the most obscure tasks and have them come out successfull. Of
+course, no onw knows who she is. So about all you know about her is that there
+is a slender built japanese woman standing here, dressed in a nice business
+suit that shows off her body in a very professional yet still provocative way.
+She looks at you with a pair of deep brown eyes that deffinately catch your
+attention. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100000011010
+AffFlags:	1000000000000000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	10
+	Str:	8
+	Cha:	11
+	Int:	13
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	7
+	Cash:	5000
+	Bank:	10000
+[SKILLS]
+	brawling:	10
+	street etiquette:	12
+	corporate etiquette:	13
+	armed combat:	12
+BREAK
+#38052
+Keywords:	Ming Chin Yakuza
+Name:	Ming Chin
+RoomDesc:$
+A fairly tall asian man stands here 
+
+~
+LookDesc:$
+Standing here before your eyes is an abnormally tall man of Asian descent.
+Short cropped black hair done up in a very businesslike style frames his
+obviously japanese face. A dark grey business suit, probably armahni,
+obviously expensive, shows his prowess with the workings of nuyen. On the
+webbing between thumb and forefinger on his left hand is a easily identified
+Yakuza tatoo. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	10
+	Str:	11
+	Cha:	9
+	Int:	10
+	Wil:	10
+	Mag:	8
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	8
+	Cash:	10000
+	Bank:	20000
+[SKILLS]
+	brawling:	8
+	sorcery:	10
+	corporate etiquette:	20
+	street etiquette:	20
+	negotiation:	20
+BREAK
+#38053
+Keywords:	Don Bonanno Aid Michael Kingston Tall Man Well Dressed Mafia
+Name:	Michael Kingston
+RoomDesc:$
+A tall, well dressed Mafia man is here, doing business with the others. 
+
+~
+LookDesc:$
+This man in the fancy suit is instantly familiar.  You've seen him in mugshots
+and you know his name.  This is Don Bonanno's personal aid, Michael Kingston.
+He's obviously here to on part of the Mafia. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	5
+	Cha:	6
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	75
+	Cash:	400
+[SKILLS]
+	pistols:	7
+	driving/Car:	10
+	stealth:	4
+	athletics:	5
+	street etiquette:	7
+BREAK
+#38054
+Keywords:	chicago mafia don frankato romero fat pressed suit
+Name:	Don Romero
+RoomDesc:$
+A fat man in a pressed suit is here, doing the biz. 
+
+~
+LookDesc:$
+You know this guy instantly, even if he is wearing mirrored sunglasses.  This
+Chicago's Mafia Don, Frankato Romero.  The guy is pasty face and downright
+ugly, but looks aren't what got him where he is, oh no. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	6
+	Cha:	3
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	150
+	Cash:	1500
+	Bank:	5000
+[SKILLS]
+	street etiquette:	10
+	corporate etiquette:	8
+	pistols:	12
+	brawling:	9
+	interrogation:	8
+BREAK
+#38055
+Keywords:	julius feshino buffalo mafia don tall slinky man suit armani italian
+Name:	Don Feshino
+RoomDesc:$
+A tall, slinky Italian man in an Armani suit is standing here. 
+
+~
+LookDesc:$
+You know this guy, his face has been on the news for the last four weeks.
+This is Julius Feshino, Buffalo City's Mafia head, and he's not a particularly
+nice guy.  What the hell is he doing in Seattle though? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	80
+	Cash:	1000
+	Bank:	4000
+[SKILLS]
+	pistols:	10
+	athletics:	10
+	brawling:	13
+	street etiquette:	8
+	driving/Car:	10
+BREAK
+#38056
+Keywords:	mafia man bodyguard suit guard
+Name:	a mafia bodyguard
+RoomDesc:$
+A Mafia bodyguard is here, dressed in an Armani suit. 
+
+~
+LookDesc:$
+It's just your typical Mafiaosa.  Kick'em in the shins and get it over with. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	3
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	500
+	Bank:	500
+[SKILLS]
+	pistols:	7
+	brawling:	7
+BREAK
+#38057
+Keywords:	clerk sales salesman psg inc sales
+Name:	a PSG, Inc. sales clerk
+RoomDesc:$
+A PSG, Inc. sales clerk sits here, looking bored with his job. 
+
+~
+LookDesc:$
+This is an average looking male human in his early twenties, wearing blue
+jeans and a golf shirt with the Professional Security Gear, Incorporated logo
+on the left breast.  He looks unimpressed with his job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	75
+[SKILLS]
+BREAK
+#38058
+Keywords:	Docto Cashin Greying Old Man
+Name:	Doc Cashin
+RoomDesc:$
+An old greying man in a doctor's smock is standing here, working on a cyber
+eye. 
+
+~
+LookDesc:$
+Doc Cashin is a gentle looking old man with two tufts of hair on the sides of
+his head.  He wears thick glasses and a white doctor's smock full of little
+gadgets.  He's been doing optical surgery and cyberware work since 2045 and is
+very experienced. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101000000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	95
+	Cash:	50000
+	Bank:	500000
+[SKILLS]
+	:	12
+	:	6
+	:	10
+	biotech:	5
+BREAK
+#38099
+Keywords:	mob unfinished
+Name:	Someone
+RoomDesc:$
+An unfinished mob stands here.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+END

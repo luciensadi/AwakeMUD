@@ -1,0 +1,490 @@
+#18200
+Office Entrance~
+   The tiles on the floor are spotless, you can even see your own reflection
+in them they're that shiny. In front of of you there is a secretary talking to
+herself and entering data into her deck that's on the front counter. Looking
+down the corridor as you approach the front desk you can see office doors
+running down the hallway walls. There is a corporate slogan written on the
+front desk. 
+~
+0 8 0 0
+D0
+
+~
+~
+0 0 18201 0 5 4 0
+D2
+~
+~
+0 0 18204 0 5 4 0
+E
+sign slogan~
+J & J Accountants, where your money is our money. 
+~
+S
+#18201
+A Hallway~
+   You can see fluorecent lights in the corners of the walls and the ceiling
+running down the length of the hallway. On each side there is an office door
+with the name of the employee printed on a little golden colored sign. You
+notice that there are no door handles instead there are black boxes with a
+slot in it resembling a identification machine to gain access to the office. 
+~
+0 8 0 0
+D0
+~
+~
+0 0 18205 0 5 4 0
+D2
+It's a steel door with Jean Thompson on it. 
+~
+door steel~
+2 18200 18203 4 8 6 0
+D4
+~
+~
+0 0 18200 0 5 4 0
+D6
+It's a steel door with David Williams on it. 
+~
+door steel~
+2 18200 18202 4 8 6 0
+E
+sign east~
+Jean Thompson 
+~
+E
+sign west~
+David Sims 
+~
+S
+#18202
+An Office~
+   In this office there is a desk in the centre of the room with cheap metal
+based chairs on either side. The executives family photos and odd trinkets
+scatter the desk. On closer inspection one of those trinkets is a pig holding
+a lit 100 bill and lighting his cigar with it. 
+~
+0 8 0 0
+D2
+~
+door steel~
+2 18200 18201 4 8 6 0
+S
+#18203
+An Office~
+   To the right there is a large desk with a phone, some papers and a terminal
+on it. An office clerk is on the phone talking business to customers
+interested in stocks and marketing options. The carpet is navy blue and the
+chairs are made of a cloth material dyed bright white. It's almost blinding to
+the eye to look at. 
+~
+0 8 0 0
+D6
+There is a steel door here. 
+~
+door steel~
+1 18200 18201 4 8 6 0
+S
+#18204
+Elevator~
+   Entering the elevator you notice the plush red fur lining the whole
+elevator, the floor,the ceiling, the arm rails, the lot. To the left are two
+buttons, it appears there are only two storeys to this building. There is also
+a warning sign just  above the buttons. 
+~
+0 8 0 0
+D6
+~
+~
+0 0 18200 0 5 4 0
+D8
+~
+~
+0 0 18214 0 5 4 0
+E
+sign~
+WARNING : Use of elevator restricted to authorized personell only. 
+~
+S
+#18205
+A Hallway~
+   You can see fluorecent lights in the corners of the walls and the ceiling
+running down the length of the hallway. On each side there is an office door
+with the name of the employee printed on a little golden colored sign. You
+notice that there are no door handles instead there are black boxes with a
+slot in it resembling a identification machine to gain access to the office. 
+~
+0 8 0 0
+D0
+~
+~
+0 0 18208 0 5 4 0
+D2
+It's a steel door with Wendy Charmers on it. 
+~
+door steel~
+2 18200 18207 4 8 6 0
+D4
+~
+~
+0 0 18201 0 5 4 0
+D6
+It's a steel door with John Clark on it. 
+~
+door steel~
+2 18200 18206 4 8 6 0
+E
+sign east~
+Jean Thompson 
+~
+E
+sign west~
+David Sims 
+~
+S
+#18206
+An Office~
+   In this office there is a desk in the centre of the room with cheap metal
+based chairs on either side. The executives family photos and odd trinkets
+scatter the desk. On closer inspection one of those trinkets is a pig holding
+a lit 100 bill and lighting his cigar with it. 
+~
+0 8 0 0
+D2
+~
+door steel~
+2 18200 18205 4 8 6 0
+S
+#18207
+An Office~
+   To the right there is a large desk with a phone, some papers and a terminal
+on it. An office clerk is on the phone talking business to customers
+interested in stocks and marketing options. The carpet is navy blue and the
+chairs are made of a cloth material dyed bright white. It's almost blinding to
+the eye to look at. 
+~
+0 8 0 0
+D6
+There is a steel door here. 
+~
+door steel~
+1 18200 18205 4 8 6 0
+S
+#18208
+Hallway Ending~
+   You can see fluorecent lights in the corners of the walls and the ceiling
+running down the length of the hallway. On each side there is an office door
+with the name of the employee printed on a little golden colored sign. You
+notice that there are no door handles instead there are black boxes with a
+slot in it resembling a identification  machine to gain access to the office.
+At the end of the hallway is a fire alarm button. 
+~
+0 8 0 0
+D2
+It's a steel door with Aaron Winter on it. 
+~
+door steel~
+2 18200 18210 4 8 6 0
+D4
+~
+~
+0 0 18205 0 5 4 0
+D6
+It's a steel door with Melissa Davies on it. 
+~
+door steel~
+2 18200 18209 4 8 6 0
+E
+sign east~
+Jean Thompson 
+~
+E
+sign west~
+David Sims 
+~
+S
+#18209
+An Office~
+   In this office there is a desk in the centre of the room with cheap metal
+based chairs on either side. The executives family photos and odd trinkets
+scatter the desk. On closer inspection one of those trinkets is a pig holding
+a lit 100 bill and lighting his cigar with it. 
+~
+0 8 0 0
+D2
+~
+door steel~
+2 18200 18208 4 8 6 0
+S
+#18210
+An Office~
+   To the right there is a large desk with a phone, some papers and a terminal
+on it. An office clerk is on the phone talking business to customers
+interested in stocks and marketing options. The carpet is navy blue and the
+chairs are made of a cloth material dyed bright white. It's almost blinding to
+the eye to look at. 
+~
+0 8 0 0
+D6
+There is a steel door here. 
+~
+door steel~
+1 18200 18208 4 8 6 0
+S
+#18211
+Second Floor~
+   You are standing on the second floor. This floor is much like the second in
+the way of style and color. You notice there are two doors north and south of
+here plus another elevator to the west all requiring some kind of
+identification to get in. 
+~
+0 8 0 0
+D0
+~
+~
+0 0 18212 0 5 4 0
+D2
+~
+~
+0 0 18214 0 5 4 0
+D4
+~
+~
+0 0 18215 0 5 4 0
+S
+#18212
+Well Furnished Office~
+   This large office has almost anything anyone in business could want. To the
+side is a reclining leatehr chair that vibrates. There are a few trinkets on
+the back shelf and a trid on the desk with a terminal. 
+~
+0 8 0 0
+D4
+~
+~
+0 0 18211 0 5 4 0
+S
+#18213
+Leisure Room~
+   This is the staff cafeteria. In hre it's where they get away from work and
+have thier lunch breaks. There are a few tables and chairs scattered all
+around the place. At the back you notice a fridge and a soycafe machine. There
+is a one way window looking out into the street where hundreds of people walk
+by everyday day. 
+~
+0 8 0 0
+S
+#18214
+Elevator~
+   Entering the elevator you notice the plush red fur lining the whole
+elevator, the floor,the ceiling, the arm rails, the lot. To the left are two
+buttons, it appears there are only two storeys to this building. There is also
+a warning sign just  above the buttons. 
+~
+0 8 0 0
+D6
+~
+~
+0 0 18211 0 5 4 0
+D9
+~
+~
+0 0 18204 0 5 4 0
+E
+sign~
+WARNING : Use of elevator restricted to authorized personell only. 
+~
+S
+#18215
+Well Furnished Office~
+   This large office has almost anything anyone in business could want. To the
+side is a reclining leatehr chair that vibrates. There are a few trinkets on
+the back shelf and a trid on the desk with a terminal. 
+~
+0 8 0 0
+D0
+~
+~
+0 0 18211 0 5 4 0
+S
+#18250
+Grumbles Hole~
+   Grumbles grumble hole 
+~
+0 8 3 0
+S
+#18291
+Dining Room~
+   Here is where all the people come to dine in the restaurant. Tables here
+and there filled with couples and corporate personel. Waiters walk calmly by
+serving diners thier drinks of champaign and thier food before bowing or
+giving a nod of the head and leaving the table. 
+~
+0 8 0 0
+D0
+~
+~
+0 0 18292 0 5 4 0
+D6
+~
+~
+0 0 18293 0 5 4 0
+D7
+~
+~
+0 0 18294 0 5 4 0
+S
+#18292
+Dining Room~
+   Here is where all the people come to dine in the restaurant. Tables here
+and there filled with couples and corporate personel. Waiters walk calmly by
+serving diners thier drinks of champaign and thier food before bowing or
+giving a nod of the head and leaving the table. 
+~
+0 8 0 0
+D4
+~
+~
+0 0 18291 0 5 4 0
+D5
+~
+~
+0 0 18293 0 5 4 0
+D6
+~
+~
+0 0 18294 0 5 4 0
+S
+#18293
+Dining Room~
+   Here is where all the people come to dine in the restaurant. Tables here
+and there filled with couples and corporate personel. Waiters walk calmly by
+serving diners thier drinks of champaign and thier food before bowing or
+giving a nod of the head and leaving the table. 
+~
+0 8 0 0
+D0
+~
+~
+0 0 18294 0 5 4 0
+D1
+~
+~
+0 0 18292 0 5 4 0
+D2
+~
+~
+0 0 18291 0 5 4 0
+S
+#18294
+Dining Room~
+   Here is where all the people come to dine in the restaurant. Tables here
+and there filled with couples and corporate personel. Waiters walk calmly by
+serving diners thier drinks of champaign and thier food before bowing or
+giving a nod of the head and leaving the table. 
+~
+0 8 0 0
+D2
+~
+~
+0 0 18292 0 5 4 0
+D3
+~
+~
+0 0 18291 0 5 4 0
+D4
+~
+~
+0 0 18293 0 5 4 0
+D6
+~
+~
+0 0 18298 0 5 4 0
+S
+#18295
+Freezer~
+   It's cold in here! The lights are bright in here even though it is a bit
+foggy from the mist. To the left are all the meats ranging from lamb chops to
+pork. The cattle hang up from hooks about 2 foot off the ground in the back of
+the freezer. To the right are all the vegetables for soups and it also has
+some delicacies like frogs legs and snails. 
+~
+0 8 0 0
+D4
+It's the door for the freezer. 
+~
+freezer door~
+1 0 18296 0 7 4 0
+S
+#18296
+Kitchen~
+   In this part of the kitchen there are dishes piled on top of each other
+around the sink. The two dish cleaners are hard at work to try and clean them
+all before a new lot comes in to be cleaned. Two cooks rush in to a freezer to
+the north and bring out several frozen items before closing the door again
+behind them. 
+~
+0 8 0 0
+D0
+It's the door for the freezer. 
+~
+freezer door~
+1 0 18295 0 7 4 0
+D6
+~
+~
+0 0 18297 0 5 4 0
+S
+#18297
+Kitchen~
+   This room smells delicous from all the cooking and preparing going on in
+here. There are two cooks running around yelling at poeple to hurry up and
+making sure the plates are perfect before leaving the kitchen. 
+~
+0 8 0 0
+D2
+~
+~
+0 0 18296 0 5 4 0
+D4
+It's a swinging door to the Dining Room. 
+~
+swinging door~
+1 0 18298 0 6 4 0
+S
+#18298
+Waiting for a table~
+   Looking out across the restaurant you notice there are about 8 tables with
+diners steated at about 5 of them. A steady flow of waiters come out of a
+swinging door to the north and out to the tables to serve customers with thier
+meals. 
+~
+0 8 0 0
+D0
+It's the swinging door to the kitchen. 
+~
+swinging door~
+1 0 18297 0 6 4 0
+D2
+~
+~
+0 0 18294 0 5 4 0
+D4
+~
+~
+0 0 18299 0 5 4 0
+S
+#18299
+Restaurant Entrance~
+   The light shades that hang from the ceiling are bright as you enter the
+restaurant. This is the coat room where people give thier coats before
+entering the restaurant to eat. 
+~
+0 8 0 0
+D0
+~
+~
+0 0 18298 0 5 4 0
+S
+$~

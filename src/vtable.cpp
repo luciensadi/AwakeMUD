@@ -197,7 +197,7 @@ int  VTable::Parse(File *in)
       strncpy(field_ptr->line, line_ptr, MAX_LINE_LENGTH);
     } else {
       // otherwise use ReadString to get a '~'-terminated multiline string
-      field_ptr->multiline = in->ReadString();
+      field_ptr->multiline = in->ReadString("(no section- vtable parse)");
     }
 
     in->GetLine(line, MAX_LINE_LENGTH*2, FALSE);

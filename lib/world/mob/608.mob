@@ -1,0 +1,83 @@
+#60800
+Keywords:	guard security
+Name:	A security guard
+RoomDesc:$
+A security guard patrols the perimeter here. 
+
+~
+LookDesc:$
+His uniform looking as old as the place he's guarding, this guy roams the
+grounds of St. Boniface, hoping to thwart thrill-seekers, homeless dregs and
+scavengers alike. His cadaverously thin frame and gaunt face doesn't make him
+very threatening, but his sunken eyes seem a bit too familiar with this place,
+almost as if he's lived here all his life. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100001001010
+AffFlags:	1
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	206
+	Weight:	50
+	Level:	1
+	Ballistic:	4
+	Impact:	4
+	Cash:	5
+	Karma:	1
+[SKILLS]
+	pistols:	4
+BREAK
+#60801
+Keywords:	image masako form ghostly spirit
+Name:	Masako, the Twisted One
+RoomDesc:$
+A humanoid form slips in and out of focus. 
+
+~
+LookDesc:$
+This small-framed figure is draped with black oily hair that covers her face
+as she keeps to the shadows. Her twisted form is draped with a soaking wet
+grey hospital robe that clings to her body, accentuating the grisly sight as
+she floats about the room, forever trapped here. Her blackened fingertips end
+in boned talons from which dangles strips of skin from countless past victims!
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000001000100000000101010
+AffFlags:	10000000000000000000000000000000010000101000
+Race:	Undefined
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	1
+	Cha:	1
+	Int:	0
+	Wil:	0
+	Mag:	12
+[POINTS]
+	Height:	134
+	Weight:	40
+	Level:	6
+	Ballistic:	50
+	Impact:	50
+	Karma:	1
+[SKILLS]
+	sorcery:	20
+	armed combat:	12
+BREAK
+END

@@ -1,0 +1,1048 @@
+#4900
+Keywords:	elf street kid
+Name:	an elven street kid
+RoomDesc:$
+An homeless elven youth is standing here, with a dazed look on his face.
+
+~
+LookDesc:$
+A grungy looking youth, whose tattered clothes and haunted facial expression
+tell a tale of a rough life.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001100
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pierce
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	50
+	Bank:	5
+[SKILLS]
+BREAK
+#4901
+Keywords:	elf street girl elven
+Name:	an elven runaway
+RoomDesc:$
+An elven girl stands here, far from home.
+
+~
+LookDesc:$
+She wears ripped shorts, a black t-shirt with the name of the most Nova-hot
+screech metal band out, and looks like she is lost.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001100
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	1
+	Cha:	5
+	Int:	3
+	Wil:	2
+	Mag:	1
+[POINTS]
+	Height:	150
+	Weight:	45
+	Ballistic:	1
+	Impact:	1
+	Bank:	10
+[SKILLS]
+BREAK
+#4902
+Keywords:	fynk shaman rat elf elven
+Name:	Fynk
+RoomDesc:$
+A very unkempt Shaman is standing here.
+
+~
+LookDesc:$
+Lying here with a big grin on his face, wearing a holey synth-leather jacket
+covered with fetishes safety-pinned to his jacket, is an elven shaman.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001110
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pierce
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	5
+	Cha:	4
+	Int:	6
+	Wil:	3
+	Mag:	6
+[POINTS]
+	Height:	200
+	Weight:	53
+	Ballistic:	5
+	Impact:	3
+	Bank:	250
+[SKILLS]
+	sorcery:	4
+BREAK
+#4903
+Keywords:	elven elf ganger punk black rain rains gang member
+Name:	a ganger
+RoomDesc:$
+A member of the Black Rains gang is standing here.
+
+~
+LookDesc:$
+An elven ganger with a mean look in his eye.  Black and silver mark him as
+a Black Rains gang member.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001100
+AffFlags:	1010000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	5
+	Cha:	6
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	45
+	Ballistic:	3
+	Impact:	2
+	Bank:	100
+[SKILLS]
+BREAK
+#4904
+Keywords:	tad elf elven ganger lieutenant ancients
+Name:	Tad
+RoomDesc:$
+Tad, a Lieutenant of the Ancients stands here. 
+
+~
+LookDesc:$
+A platinum haired elf with an unnaturally bulky build.  His movements are
+razor-keen, and his eyes are cybernetic, with the same platinum color as his
+hair. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	110000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	5
+	Cha:	7
+	Int:	5
+	Wil:	4
+	Mag:	1
+[POINTS]
+	Height:	198
+	Weight:	68
+	Ballistic:	5
+	Impact:	4
+	Cash:	1000
+[SKILLS]
+BREAK
+#4905
+Keywords:	elf bouncer guard ganger ancients elven
+Name:	An elven bouncer in Ancients colors
+RoomDesc:$
+An elven bouncer stands here guarding the entrance to the Blue Wyvern. 
+
+~
+LookDesc:$
+An elf of a strong build, wearing Ancients colors.  His job is to keep trouble
+out of the Blue Wyvern.  Well, trouble that the Ancients wouldn't approve of,
+anyways. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000000011010
+AffFlags:	100010000000001010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Whip
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	9
+	Str:	7
+	Cha:	1
+	Int:	1
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	70
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+BREAK
+#4906
+Keywords:	silent p ganger gang elf
+Name:	a Silent P's ganger
+RoomDesc:$
+A member of the Silent P's hangs around idly. 
+
+~
+LookDesc:$
+Tall and proud, with long hair tied back in a pony tail. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	50
+	Ballistic:	4
+	Impact:	4
+	Cash:	20
+[SKILLS]
+BREAK
+#4907
+Keywords:	doctor scientist stephen lords
+Name:	Dr. Stephen Lords
+RoomDesc:$
+A tall slender scientist with dark eyes stands here. 
+
+~
+LookDesc:$
+Tall, slender, wearing a white radiation suit and black slacks, he looks like
+he hasn't seen the sun since the 2030's.  He is wearing radiation goggles, and
+is carrying a portfolio. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	1
+	Cha:	1
+	Int:	8
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	60
+	Ballistic:	2
+	Impact:	1
+	Bank:	400
+[SKILLS]
+BREAK
+#4908
+Keywords:	security guard officer saeder krupp
+Name:	a SK Security officer
+RoomDesc:$
+A SK High-Security guard is standing here, looking for intruders like YOU!!!
+
+~
+LookDesc:$
+Big, buff, and chromed, he is Saeder-Krupp Security's cream de la creme high
+threat/high security force.  A one man force who knows how to work in a team.
+Very dangerous indeed.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000101010
+AffFlags:	100000000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	7
+	Cha:	3
+	Int:	6
+	Wil:	5
+	Mag:	1
+[POINTS]
+	Height:	188
+	Weight:	100
+	Ballistic:	6
+	Impact:	4
+	Bank:	600
+[SKILLS]
+BREAK
+#4909
+Keywords:	mercenary tough
+Name:	a tough mercenary
+RoomDesc:$
+A tough looking mercenary stands here. 
+
+~
+LookDesc:$
+A tough looking mercenary, with a tendency to not think before shooting. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	10000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	4
+	Cha:	4
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	198
+	Weight:	49
+	Ballistic:	3
+	Impact:	3
+	Cash:	20
+[SKILLS]
+	pistols:	3
+BREAK
+#4910
+Keywords:	hell hound
+Name:	a Hell hound
+RoomDesc:$
+The Ancients' pet hell hound sits here, waiting for supper. 
+
+~
+LookDesc:$
+Black hair, large size, and mean, glowing red eyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	110000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	4
+	Cha:	0
+	Int:	2
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	94
+	Weight:	112
+	Ballistic:	4
+	Impact:	4
+[SKILLS]
+BREAK
+#4911
+Keywords:	black rains leader ganger
+Name:	the leader of the Black Rains
+RoomDesc:$
+The leader of the Black Rains is standing here.
+
+~
+LookDesc:$
+After years of service to the gang, he was finally promoted to the rank of
+the leader of the gang.  Well, actually he killed the last leader but those
+are just details...
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	111010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	6
+	Cha:	8
+	Int:	6
+	Wil:	5
+	Mag:	8
+[POINTS]
+	Height:	210
+	Weight:	65
+	Ballistic:	5
+	Impact:	5
+	Cash:	50
+[SKILLS]
+BREAK
+#4912
+Keywords:	saeder krupp security officer guard
+Name:	a Saeder-Krupp Security officer
+RoomDesc:$
+A Saeder-Krupp Security officer stands here, and blocks your entrance into the compound.
+
+~
+LookDesc:$
+Wearing the colors of Saeder-Krupp security, he stands here with one mission.
+To make your life as difficult as possible. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	100010000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	8
+	Cha:	6
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	90
+	Ballistic:	6
+	Impact:	4
+	Bank:	20
+[SKILLS]
+BREAK
+#4913
+Keywords:	saeder krupp security mage wage guard
+Name:	a SK High-Threat Magical security guard
+RoomDesc:$
+An SK Security mage is standing here, looking to toast intruders like YOU!!!
+
+~
+LookDesc:$
+The best of the best in Saeder-Krupp's Magical Security Division.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010000000111010
+AffFlags:	100010000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	5
+	Int:	7
+	Wil:	6
+	Mag:	7
+[POINTS]
+	Height:	178
+	Weight:	85
+	Ballistic:	6
+	Impact:	5
+	Bank:	10
+[SKILLS]
+BREAK
+#4914
+Keywords:	scientist doctor theodore bradley
+Name:	Dr. Theodore S. Bradley
+RoomDesc:$
+A scientist is here, measuring deflected tachyons or something.
+
+~
+LookDesc:$
+One of the most respected scientists in the field of Nuclear Physics, Dr.
+Bradley is probably the most notably intelligent men you have ever seen.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	2
+	Cha:	4
+	Int:	12
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	73
+	Ballistic:	1
+	Impact:	1
+	Bank:	850
+[SKILLS]
+BREAK
+#4915
+Keywords:	sk security guard
+Name:	an SK security guard
+RoomDesc:$
+An SK Security guard is standing here, doing his rounds.
+
+~
+LookDesc:$
+Wearing the colors of Saeder-Krupp security, he is a formidable agent of an
+even more formidible corp. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	3
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	3
+	Bank:	500
+[SKILLS]
+BREAK
+#4916
+Keywords:	elf elven silent member gang ganger
+Name:	a member of the Silent P's
+RoomDesc:$
+A member of the Silent P's is hanging around, looking for trouble.
+
+~
+LookDesc:$
+Standing around with a troubled look in his eye, and wearing the colors
+of the notorious Silent P's gang.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	188
+	Weight:	70
+	Ballistic:	3
+	Impact:	1
+	Cash:	15
+[SKILLS]
+BREAK
+#4917
+Keywords:	elite elven security guard officer elf
+Name:	an elite security guard
+RoomDesc:$
+A security guard stands here, looking for intruders.
+
+~
+LookDesc:$
+A tall and proud elf wearing full security armor.  Looks chromed to the
+hilt, the way he carries himself almost perfectly.  Looks like
+he would probably be more than a good fight.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010100001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	202
+	Weight:	80
+	Ballistic:	8
+	Impact:	7
+[SKILLS]
+	rifles:	10
+	brawling:	10
+	assault rifles:	10
+BREAK
+#4918
+Keywords:	elerion mckeigh elf
+Name:	Elerion McKeigh
+RoomDesc:$
+You see what looks like a shadow turning into an elf.
+
+~
+LookDesc:$
+A master of the elven martial art of Carromeleg, Elerion McKeigh is probably
+one of the most dangerous hitmen in the Seattle area.  He wears all black,
+and blends into the shadows real well, has red hair and steel blue eyes.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010100000011010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	14
+	Str:	6
+	Cha:	8
+	Int:	7
+	Wil:	10
+	Mag:	9
+[POINTS]
+	Height:	218
+	Weight:	100
+	Ballistic:	10
+	Impact:	8
+[SKILLS]
+	whips & flails:	14
+	brawling:	14
+	elf etiquette:	9
+BREAK
+#4919
+Keywords:	guard security elite
+Name:	an elite security guard
+RoomDesc:$
+A security guard in black is standing here.
+
+~
+LookDesc:$
+An elite security guard
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010100001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+BREAK
+#4920
+Keywords:	centurion guard roman
+Name:	a Roman centurion
+RoomDesc:$
+A Roman centurion stands guard here.
+
+~
+LookDesc:$
+Clad in bronze colored platemail, and carrying a big spear, this Roman
+centurion looks set for any kind of conflict.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+	Ballistic:	1
+[SKILLS]
+BREAK
+#4921
+Keywords:	golden western dragon
+Name:	a golden Great Western dragon
+RoomDesc:$
+A shiny golden Western Dragon towers over you.
+
+~
+LookDesc:$
+Resembles Lofwyr.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	5
+	Karma:	1
+[SKILLS]
+BREAK
+#4922
+Keywords:	punk elf fatass puke feend
+Name:	Puke Feend
+RoomDesc:$
+A real punked out fatass elf sits behind the counter, scratching his ass. 
+
+~
+LookDesc:$
+This guy is a royal slob, wearing a RAMONES t-shirt and his face is pocked and
+acne-ridden.  He's elven, but only marginally, as he has none of the more tall
+and lanky characteristics.  He's fat and short.  Ugly too.  His hair stands
+one third a meter high in a liberty-spiked mohawk.  He is bobbing his head to
+some obscure thrash-punk band from the early 21st century. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	146
+	Weight:	130
+	Cash:	50000
+	Bank:	50000
+[SKILLS]
+BREAK
+#4950
+Keywords:	ancients motorcycle club go-ganger go ganger
+Name:	An Ancients go-ganger
+RoomDesc:$
+A tall, dangerous elf in leathers marked "Ancients M.C." stands here. 
+
+~
+LookDesc:$
+He dresses in black, green, and blue, the colors of the Ancients, and has an
+elaborately designed patch on the back of his jacket with the words "Ancients
+M.C." on the back. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks off
+MobFlags:	1100000011000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	7
+	Str:	10
+	Cha:	6
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	9
+	Cash:	20
+[SKILLS]
+	brawling:	10
+	shotguns:	8
+BREAK
+#4951
+Keywords:	green lucifer ancients eldrae leader noble looking elf alejandro kyliesearn
+Name:	Green Lucifer
+RoomDesc:$
+A very noble-looking elf in Ancients colors stands here. 
+
+~
+LookDesc:$
+Tall and blonde, with finely chiseled features, and a smile backed by a level
+of confidence rare in ganger culture, Green Lucifer is the de-facto leader of
+the Ancients in all of the Seattle Metroplex. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11100000011010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	17
+	Qui:	20
+	Str:	19
+	Cha:	8
+	Int:	12
+	Wil:	15
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	brawling:	18
+	edged weapons:	18
+	elf etiquette:	8
+	sorcery:	9
+BREAK
+#4975
+Keywords:	johnson relaxed elf business suit
+Name:	Mr. Johnson
+RoomDesc:$
+A relaxed looking elf in a business suit lazes with his feet on a table here.
+
+~
+LookDesc:$
+He is white, probably of european descent, and he has chrome eyes, cybernetic,
+with sapphire colored pupils. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000010001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	167
+	Weight:	85
+	Ballistic:	4
+	Impact:	2
+[SKILLS]
+	brawling:	4
+BREAK
+#4976
+Keywords:	persona scientist
+Name:	The persona of a scientist
+RoomDesc:$
+The persona of a scientist stands here, studying the data. 
+
+~
+LookDesc:$
+The persona of a scientist, wearing a lab coat and glasses. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Shuriken
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	1
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+[SKILLS]
+BREAK
+#4997
+Keywords:	captain kirk jt james jim
+Name:	Captain Kirk
+RoomDesc:$
+Captain James T. Kirk stands here proudly. 
+
+~
+LookDesc:$
+Wearing a Federation Starfleet uniform, with the Enterprise patch over the
+left side of his chest, he stands tall and proud, and ready to whoop any of
+the Klingon bastards who killed his son's asses!!!!!
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
+#4998
+Keywords:	corgan billy
+Name:	Billy Corgan
+RoomDesc:$
+Billy Corgan stands here playing his guitar to save the world. 
+
+~
+LookDesc:$
+A tall pale man with a shaved head, a ZERO t-shirt and a Gibson guitar,
+playing soaring riffs. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000100001010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	15
+	Int:	15
+	Wil:	15
+	Mag:	15
+[POINTS]
+	Height:	80
+	Weight:	20
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+BREAK
+#4999
+Keywords:	mega streisand barbra meganoid
+Name:	Mega-Streisand
+RoomDesc:$
+A gigantic robot towers over the skyscrapers, looking vaguely like Barbra Streisand 
+
+~
+LookDesc:$
+Huge, and with a giant nose too! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000011010
+AffFlags:	100000000001000011000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	5000
+	Weight:	200
+	Level:	8
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+BREAK
+END

@@ -1,0 +1,2545 @@
+#9100
+Keywords:	bouncer orc ork
+Name:	a bouncer
+RoomDesc:$
+A large Ork bouncer peers into the crowd watching out for troublemakers. 
+
+~
+LookDesc:$
+4 The tough looking orc meets your eyes and says, "Wadda want?" Covered with
+scars and other signs of battles, the bouncer is a very intimidating sight. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	3
+	Str:	5
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	3
+	Cash:	100
+	Bank:	400
+[SKILLS]
+	brawling:	4
+BREAK
+#9101
+Keywords:	Dancer
+Name:	a dancer
+RoomDesc:$
+A dancer twist and turns with the music.
+
+~
+LookDesc:$
+The dancer looks like your average party go'er.  At the moment he seems
+half-blitzed.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	2
+	Cha:	3
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	50
+	Bank:	300
+[SKILLS]
+	brawling:	2
+BREAK
+#9102
+Keywords:	hooker prostitute slut
+Name:	a hooker
+RoomDesc:$
+A hooker stands here looking for a trick.
+
+~
+LookDesc:$
+The stunningly attractive female licks her lips as she looks at you.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	6
+	Int:	2
+	Wil:	3
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	50
+	Bank:	200
+[SKILLS]
+	brawling:	2
+	street etiquette:	3
+	athletics:	4
+BREAK
+#9103
+Keywords:	tiberon bartender
+Name:	Tiberon the Bartender
+RoomDesc:$
+Tiberon is here, serving drinks.
+
+~
+LookDesc:$
+Tiberon has a sparkling smile that suggest cosmetic surgery.  He cheerfully
+ask you what you would like to drink as he mixes another customers drink.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	3
+	Str:	6
+	Cha:	4
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	4
+	Cash:	400
+	Bank:	1000
+[SKILLS]
+	brawling:	4
+	street etiquette:	3
+BREAK
+#9104
+Keywords:	Raymond Quinn
+Name:	Raymond Quinn
+RoomDesc:$
+Raymond Quinn sits at his desk doing paperwork.
+
+~
+LookDesc:$
+Numerous scars cover the hands of the burly ork. He looks away from his work
+at you and asks, "Can I help you with something?" 
+~
+ArriveMsg:	arrives from,
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	4
+	Str:	6
+	Cha:	4
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	5
+	Bank:	200
+[SKILLS]
+	brawling:	5
+	street etiquette:	3
+	corporate etiquette:	4
+	firearms:	3
+BREAK
+#9105
+Keywords:	shaman
+Name:	a shaman
+RoomDesc:$
+A shaman wanders here in a trance-like state.
+
+~
+LookDesc:$
+The shaman is dressed in wildly colored clothing and fetishes, the best of
+which look like feathered roadkill.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	5
+	Int:	4
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Impact:	2
+	Cash:	250
+	Bank:	500
+[SKILLS]
+	sorcery:	5
+	:	3
+	brawling:	2
+	:	3
+BREAK
+#9106
+Keywords:	poolshark
+Name:	a poolshark
+RoomDesc:$
+A poolshark stands here practicing his trade.
+
+~
+LookDesc:$
+The elf looks at you and ask if you would like to shoot a few rounds.  The
+first one can be a practice round, after all, he's not very good at this sort
+of thing.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	7
+	Str:	3
+	Cha:	5
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	200
+	Bank:	300
+[SKILLS]
+	pole arms:	5
+	street etiquette:	3
+BREAK
+#9107
+Keywords:	troll drinking
+Name:	a drinking troll
+RoomDesc:$
+A troll staggers about with a beer in his hand.
+
+~
+LookDesc:$
+The troll looks like he has had to much to drink.  Judging from his massive
+size, a bar owner somewhere is probably very rich right now.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	3
+	Str:	7
+	Cha:	1
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	40
+[SKILLS]
+	brawling:	4
+BREAK
+#9108
+Keywords:	Dominara
+Name:	Dominara
+RoomDesc:$
+Dominara stands here licking her lips seductively. 
+
+~
+LookDesc:$
+Dressed in a full body leather catsuit and holding a cat-of-9-tails whip in
+her hand Dominara slyly grins at you and crack the whip.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Whip
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	2
+	Cha:	6
+	Int:	3
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	2
+[SKILLS]
+	whips & flails:	5
+	sorcery:	4
+BREAK
+#9109
+Keywords:	block mental
+Name:	a mental block
+RoomDesc:$
+A mental block dances around. 
+
+~
+LookDesc:$
+No description available do to lack of creativity. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000101100100000001010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	0
+	Weight:	0
+	Karma:	573
+[SKILLS]
+	brawling:	50
+	armed combat:	50
+	sorcery:	50
+	firearms:	50
+BREAK
+#9110
+Keywords:	maitre'd amerindian dwarf
+Name:	an Amerindian maitre'd
+RoomDesc:$
+A maitre'd stands here with his nose in the air. 
+
+~
+LookDesc:$
+A typical, snooty maitre d', dressed in white tails and ready with a
+supercilious look for everyone. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	1
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	3
+[SKILLS]
+	armed combat:	2
+	corporate etiquette:	2
+BREAK
+#9111
+Keywords:	Daniella Illahie elf woman manager female suit
+Name:	Daniella Illahie
+RoomDesc:$
+A female elf in a business suit stands here. 
+
+~
+LookDesc:$
+Straight, black, shoulder-length hair frames this elven female's tanned,
+high-cheekboned face. She seems completely focused on her work - dealing with
+vendors and employees, balancing the books, placing orders and other such
+managerial duties. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Shotgun
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	2
+	Cha:	4
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	65
+	Ballistic:	3
+	Impact:	1
+[SKILLS]
+	firearms:	4
+	corporate etiquette:	3
+BREAK
+#9112
+Keywords:	vivian whirlwind chef ork black-haired female
+Name:	Vivian Whirlwind
+RoomDesc:$
+A black-haired female ork in chef's whites stands here. 
+
+~
+LookDesc:$
+This female ork's glossy black hair has been pinned into a neat bun; stray
+tendrils of it escape from under her floppy white chef's hat and curl around
+her large ears. Her tusks have been filed down, and her deep-set brown eyes
+are long-lashed and lovely. She moves around the kitchen with speed and grace,
+chopping, cooking, tasting and serving. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	4
+	Str:	6
+	Cha:	4
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	90
+	Ballistic:	7
+	Impact:	6
+	Cash:	50
+[SKILLS]
+	armed combat:	6
+BREAK
+#9113
+Keywords:	dwarf dwarven waiter
+Name:	a dwarven waiter
+RoomDesc:$
+A dwarven waiter walks around, delivering and taking orders. 
+
+~
+LookDesc:$
+This stocky male dwarf is dressed in an immaculate white dinner jacket and
+black dress pants. Even the long apron over his outfit seems freshly pressed
+and starched. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	3
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Impact:	1
+	Cash:	200
+	Bank:	1200
+[SKILLS]
+	brawling:	2
+BREAK
+#9114
+Keywords:	Jake Albright
+Name:	Jake Albright
+RoomDesc:$
+Jake Albright sits here smoking a cigarette.
+
+~
+LookDesc:$
+Jake Albright appears to be a squat AmerIndian.  Only about 1.5 meters tall,
+his feet have trouble touching the floor as he sits in the booth.  He looks at
+you and smiles.  Something isn't quite right about this guy.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110000000001010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	15
+	Str:	10
+	Cha:	9
+	Int:	12
+	Wil:	14
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	17
+	Impact:	15
+	Karma:	50
+[SKILLS]
+	brawling:	12
+	sorcery:	12
+BREAK
+#9115
+Keywords:	receptionist aquaculture
+Name:	a receptionist
+RoomDesc:$
+A receptionist is here popping her gum and filing her nails. 
+
+~
+LookDesc:$
+The pink haired ork looks at you then quickly shifts her interest back to her
+nails. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	1
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	200
+	Bank:	500
+[SKILLS]
+	corporate etiquette:	2
+BREAK
+#9116
+Keywords:	cashier aqualodge gift shop
+Name:	Gift shop cashier
+RoomDesc:$
+A cashier, sitting behind a plexiglass barrier, yawns as you enter.
+
+~
+LookDesc:$
+The bored cashier looks at you and asks if she can help you find anything.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	1
+	Cha:	2
+	Int:	1
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+	Cash:	1200
+	Bank:	3800
+[SKILLS]
+BREAK
+#9117
+Keywords:	officer security aqualodge
+Name:	an Aquacenter Security Officer
+RoomDesc:$
+An Aqualodge security officer is here.
+
+~
+LookDesc:$
+The guard is seems bored with his job.  After all, who wants to steal fish?
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Impact:	1
+[SKILLS]
+	firearms:	4
+BREAK
+#9118
+Keywords:	employee aqualodge
+Name:	an Aquacenter employee
+RoomDesc:$
+An employee stands about slacking.
+
+~
+LookDesc:$
+The employee looks unsatisfied with his job.  Day after day, nothing but
+watching fish. What an interesting life he must lead.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	100
+	Bank:	400
+[SKILLS]
+	brawling:	2
+	armed combat:	2
+BREAK
+#9119
+Keywords:	Carol Dr. Doctor Pehpeh
+Name:	Dr. Carol Pehpeh
+RoomDesc:$
+Dr. Carol Pehpeh is here daydreaming.
+
+~
+LookDesc:$
+Dr. Pehpeh is a homely dwarf perhaps of the age 30. She doesn't seem to
+notice, or care, that you are here.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	1
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	2
+	Bank:	400
+[SKILLS]
+	corporate etiquette:	3
+BREAK
+#9120
+Keywords:	bodyguard
+Name:	a Bodyguard
+RoomDesc:$
+Dr. Pehpeh's bodyguard eyes you suspiciously.
+
+~
+LookDesc:$
+This guard must have an easy job.  Allthough Dr. Pehpeh has an important
+position, she is not a particulary high value target.  The troll guard sizes
+you up as you look at him.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	3
+	Str:	7
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	firearms:	4
+	armed combat:	2
+	brawling:	2
+BREAK
+#9121
+Keywords:	fisherman old
+Name:	an old fisherman
+RoomDesc:$
+An old fisherman is here sleeping.
+
+~
+LookDesc:$
+The old human has a reed pole in the water and lightly naps while waiting for
+a bite.  The lines on his face and calluses on his hands indicate he had a
+very hard life.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sleeping
+DefaultPos:	Sleeping
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	100
+	Bank:	400
+[SKILLS]
+	armed combat:	1
+BREAK
+#9122
+Keywords:	guard council island
+Name:	a Council Island Guard
+RoomDesc:$
+A Council Island Guard stands here.
+
+~
+LookDesc:$
+Decked out in full regailia, the council Island guard is a powerful presence. 
+The guards keep an eye out for troublemakers, then if they spot one, swiftly
+and effciently remove the threat.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000001001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Shotgun
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	35
+[SKILLS]
+	sub-machine guns:	6
+	brawling:	3
+BREAK
+#9123
+Keywords:	clerk desk
+Name:	a desk clerk
+RoomDesc:$
+A desk clerk is here filling out paperwork.
+
+~
+LookDesc:$
+The cheery clerk looks you up and down then ask,"May I help you?"  His
+starched uniform with polished gold buttons and cufflinks makes the clerk look
+very impressive.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	2
+	Cha:	6
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Impact:	3
+	Bank:	30
+[SKILLS]
+	armed combat:	3
+BREAK
+#9124
+Keywords:	employee gift shop
+Name:	a gift shop employee
+RoomDesc:$
+A gift shop employee stands here.
+
+~
+LookDesc:$
+The young elf sits behing her plexi-glass barrier waiting for a transaction.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	brawling:	1
+BREAK
+#9125
+Keywords:	cleaner street sweeper
+Name:	a street cleaner
+RoomDesc:$
+A street cleaner is here, trying to clean up the graffiti. 
+
+~
+LookDesc:$
+The dwarf from the CISD is scrubbing the graffiti as fast as his short arms
+allow him to. He looks so pleased with his current position with the
+sanitation department that he wouldn't mind clubbing himself to death with his
+own scrubbrush. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	3
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#9126
+Keywords:	mercenary merc grizzled old
+Name:	a grizzled old mercenary
+RoomDesc:$
+A grizzled old mercenary is here smoking a cigar.
+
+~
+LookDesc:$
+The large, even by troll standards, man has numourous battle scars.  He slowly
+looks across the room taking in everything.  His movement is so quick you know
+must have some heavy duty cyberware.  When you look at him he blows smoke in
+your face.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	4
+	Str:	8
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	6
+	Bank:	100
+[SKILLS]
+	armed combat:	4
+	brawling:	4
+	firearms:	4
+BREAK
+#9127
+Keywords:	rat cave
+Name:	a cave rat
+RoomDesc:$
+A cave rat is here sniffing you.
+
+~
+LookDesc:$
+A white furred rodent peers at you with red eyes.  It twitches
+it's nose and looks unimpressed.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	3
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	1
+BREAK
+#9128
+Keywords:	bat cave
+Name:	a cave bat
+RoomDesc:$
+A cave bat flutters around the room.
+
+~
+LookDesc:$
+The flying mammal seems unconcerned with your presence.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	6
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	2
+BREAK
+#9129
+Keywords:	Cimas nosferatu vampire
+Name:	Cimas the Nosferatu
+RoomDesc:$
+Cimas the Nosferatu stands here, angered with your existance.
+
+~
+LookDesc:$
+Cimas appears to be a tall sinewy elf.  His head is completely
+bald and he has fang-like canine teeth.  As you peer at his eyes
+you feel a shiver run down your spine.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000110000000101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	10
+	Str:	10
+	Cha:	2
+	Int:	8
+	Wil:	10
+	Mag:	12
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	13
+[SKILLS]
+	brawling:	8
+	armed combat:	4
+	sorcery:	12
+BREAK
+#9198
+Keywords:	Minstral of robin
+Name:	a minstral of Robin
+RoomDesc:$
+One of Robin's minstral is here playing an annoying tune.
+
+~
+LookDesc:$
+You know who they are...you know what to do.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#9199
+Keywords:	gremlin little purple
+Name:	a little purple gremlin
+RoomDesc:$
+A little purple gremlin is here snickering.
+
+~
+LookDesc:$
+It's a purple gremlin....what are you expecting?
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	999999
+	Bank:	999999
+	Karma:	5
+[SKILLS]
+BREAK
+#9200
+Keywords:	Cimas Nosferatu
+Name:	Cimas the Nosferatu
+RoomDesc:$
+Cimas the Nosferatu is here, annoyed with your existance. 
+
+~
+LookDesc:$
+Cimas appears to be a tall sinewy elf.  His head is completely
+bald and he has fang-like canine teeth.  As you peer at his eyes
+you feel a shiver run down your spine.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100100000101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	8
+	Str:	10
+	Cha:	5
+	Int:	6
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	12
+[SKILLS]
+	brawling:	8
+	sorcery:	7
+	armed combat:	4
+BREAK
+#9201
+Keywords:	rat cave
+Name:	a cave rat
+RoomDesc:$
+A cave rat is here squeaking.
+
+~
+LookDesc:$
+The rat twiched his nose in your direction and seems unimpressed
+with you.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	3
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	1
+BREAK
+#9202
+Keywords:	Alex Dr. Scriptshaw
+Name:	Dr. Alex Scriptshaw
+RoomDesc:$
+Dr. Alex Scriptshaw is here with a crazed look in his eye.
+
+~
+LookDesc:$
+An old man with a long white beard look at you and cackles with
+and insane sort of cheerfullness.  According to rumor, Dr. Alex
+Scriptshaw, a leading hermetic professor, tried to leave the 
+atmosphere while astrally projecting.  Something he saw caused
+him to lose his mind.  Ever since then he has lived in the cabin
+on the edge of a cliff.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	4
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	13
+	Cash:	2000
+	Bank:	5000
+[SKILLS]
+	brawling:	6
+	sorcery:	8
+	firearms:	6
+BREAK
+#9203
+Keywords:	hounddog dog big
+Name:	a big hounddog
+RoomDesc:$
+A big hounddog is here, drooling.
+
+~
+LookDesc:$
+The old dog looks at you with sleepy eyes then goes back to what
+it was doing.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	3
+	Cha:	1
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	2
+BREAK
+#9204
+Keywords:	smuggler sleeping
+Name:	a smuggler
+RoomDesc:$
+A smuggler is here sleeping.
+
+~
+LookDesc:$
+The weathered old man is obviously tired out from making hundreds
+of trips from one side of the tunnel to another.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+Position:	Sleeping
+DefaultPos:	Sleeping
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	2
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	firearms:	4
+BREAK
+#9205
+Keywords:	autocannon
+Name:	an autocannon
+RoomDesc:$
+An autocannon is here. 
+
+~
+LookDesc:$
+A standard autocannon, built to detect, track and shoot intruders. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000100010000000101010
+AffFlags:	1000000100001000000000
+Race:	Human
+Gender:	Neutral
+Position:	Fighting
+DefaultPos:	Fighting
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	6
+	Cha:	1
+	Int:	4
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	machine guns:	8
+BREAK
+#9206
+Keywords:	salamander cave
+Name:	a cave salamander
+RoomDesc:$
+A cave salamander wanders about here.
+
+~
+LookDesc:$
+The small lizard like creature is blind from living underground
+for so long.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	1000000000000001
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	8
+	Str:	1
+	Cha:	1
+	Int:	2
+	Wil:	4
+	Mag:	7
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	sorcery:	2
+	brawling:	2
+BREAK
+#9207
+Keywords:	maniac crazed
+Name:	a crazed maniac
+RoomDesc:$
+A crazed maniac is here looking crazy.
+
+~
+LookDesc:$
+Something is not quite right about this guy.  You're not sure
+but you think he has lost more than his mind.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	1000000000000000000000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	5
+[SKILLS]
+	armed combat:	6
+	sorcery:	8
+BREAK
+#9208
+Keywords:	dragon baby black wyrm western
+Name:	a black, baby western dragon
+RoomDesc:$
+A vicious looking black, baby western dragon guards the room. 
+
+~
+LookDesc:$
+Small... For a dragon. Though the fact that it's 14 feet tall, 25 feet long,
+and looks to weigh about 6 or 700 pounds give off the distinct impression that
+it's not a creature to be taken lightly. It has sinister looking red eyes,
+which stand out among it's scaly black body. It has underdeveloped wings, but
+several claws that are at least 10 inches long adorn each one.   
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110000000101010
+AffFlags:	1000000000001001000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	17
+	Qui:	10
+	Str:	14
+	Cha:	6
+	Int:	6
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	11
+	Impact:	11
+	Karma:	1
+[SKILLS]
+	brawling:	11
+	sorcery:	9
+BREAK
+#9250
+Keywords:	Black Ghoul
+Name:	A Black Ghoul
+RoomDesc:$
+A Black Ghoul stands here looking pissed 
+
+~
+LookDesc:$
+This ghoul's skin is completely black but not in a african way no his skin is
+black in a way that seems to suck in all the light. Another thing seperating
+this ghoul from others is the jerky movements he makes as well as cyber-eyes
+that have been implanted into his blind eyes. Cyber on ghouls is a
+impossibility though...or it was anyways. Something tells you you're pretty
+fucked now. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001000000101000
+AffFlags:	1000000100001000011000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	10
+	Str:	7
+	Cha:	1
+	Int:	15
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	10
+[SKILLS]
+	brawling:	9
+BREAK
+#9300
+Keywords:	kid annoying
+Name:	an annoying kid
+RoomDesc:$
+An annoying kid babbles nonsensically to himself. 
+
+~
+LookDesc:$
+This scrawny, messy child doesn't seem to be paying attention to much of
+anything. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	1000000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	1
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#9301
+Keywords:	employee eagle lodge
+Name:	an employee
+RoomDesc:$
+An employee dutifully trudges about his job.
+
+~
+LookDesc:$
+The employee looks oh so happy with his job of collecting samples
+of bird excriment.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	3
+	Cash:	100
+	Bank:	700
+[SKILLS]
+	brawling:	4
+	armed combat:	4
+BREAK
+#9302
+Keywords:	Martin Walks Strong Chief
+Name:	Martin Walks-Strong
+RoomDesc:$
+Martin Walks-Strong is sitting here humming.
+
+~
+LookDesc:$
+The Chief of the Eagle Lodge, Martin often spends his luxurious
+days studying the birds habits and patterns.  Martin himself is a
+strong bodied elf in his late 30's.  He sizes you up with
+experienced eyes and something about him makes you wonder,
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	5
+	Cha:	10
+	Int:	5
+	Wil:	4
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	5
+	Bank:	400
+	Karma:	6
+[SKILLS]
+	firearms:	5
+	sorcery:	5
+	brawling:	4
+BREAK
+#9303
+Keywords:	Office worker
+Name:	an office worker
+RoomDesc:$
+A busy office worker almost knocks you over as he rushes about.
+
+~
+LookDesc:$
+Stuck with trying to make the chief look good.  This wage slave works his
+butt off yet never gets any of the credit.
+~
+ArriveMsg:	hurries in from
+LeaveMsg:	rushes off to the
+MobFlags:	1000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Impact:	2
+	Cash:	10
+[SKILLS]
+	corporate etiquette:	3
+	brawling:	2
+BREAK
+#9304
+Keywords:	autocannon
+Name:	an autocannon
+RoomDesc:$
+An autocannon tracks you with its barrel. 
+
+~
+LookDesc:$
+The deadly automatic cannon swivvels it's muzzel in your general
+direction as it prepares to fire
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000100011100000111010
+AffFlags:	110001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	0
+	Cha:	0
+	Int:	6
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	8
+	Karma:	20
+[SKILLS]
+	brawling:	6
+	firearms:	6
+	gunnery:	6
+BREAK
+#9305
+Keywords:	rat tunnel
+Name:	a tunnel rat
+RoomDesc:$
+A tunnel rat scurries about in the darkness.
+
+~
+LookDesc:$
+The brown fur of the rat is coated with a light covering of dust.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000010001000
+AffFlags:	1000001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	8
+	Str:	2
+	Cha:	0
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	3
+BREAK
+#9306
+Keywords:	guard security
+Name:	a lodge security guard
+RoomDesc:$
+A security guard stand here motionless.
+
+~
+LookDesc:$
+The elven guard has the responsibility of making sure no-one who
+doesn't belong gets into the lodge.  He stand's motionless at the
+door, but is prepared to leap into action at moments notice.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001100000001010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	4
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	4
+[SKILLS]
+	firearms:	4
+	armed combat:	5
+	brawling:	4
+BREAK
+#9307
+Keywords:	Moses chief
+Name:	Chief Moses
+RoomDesc:$
+Chief Moses is here meditating.
+
+~
+LookDesc:$
+The old human appears to be in his late 40's.  His long grey beard
+goes down to his waist and his hair is in about the same condition.
+Despite his ragged appearance, Chief Moses is one of the islands
+most intelligent, and well respected inhabitants.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	sorcery:	8
+	brawling:	6
+BREAK
+#9308
+Keywords:	doctor trauma
+Name:	a trauma doctor
+RoomDesc:$
+A trauma doctor stands here. 
+
+~
+LookDesc:$
+The dark circles under this pale man's eyes make him look as if he hasn't had
+proper sleep in weeks. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	biotech:	8
+BREAK
+#9309
+Keywords:	patient surgery bleeding
+Name:	a bleeding patient
+RoomDesc:$
+A patient is here bleeding all over the floor
+
+~
+LookDesc:$
+Youre not sure what got ahold of this ork, but, whatever it was, it was
+definately hungry, or at least angry.  A section, at least half a meter, has
+been torn from the poor guys midsection.  At the moment you recognize
+something that at one time was a kidney in a jar next to the table and his
+intestines are slowly leaking out onto the floor.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Stunned
+DefaultPos:	Stunned
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	MaxPhys:	0
+	MaxMent:	0
+[SKILLS]
+BREAK
+#9310
+Keywords:	doctor busy
+Name:	a doctor
+RoomDesc:$
+A busy doctor is here examining a patients chart.
+
+~
+LookDesc:$
+The doctor is one of the higher paid specialist.  His hair is starting to turn
+grey around the sideburns and his mustache is completely grey from years of
+seeing annoying patients.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	4
+	Cha:	3
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	3
+[SKILLS]
+	brawling:	3
+	biotech:	6
+BREAK
+#9311
+Keywords:	Willis chief administrator
+Name:	Chief Administrator Willis
+RoomDesc:$
+Chief Administrator Willis is here inspecting the hospital.
+
+~
+LookDesc:$
+Chief Willis rose to fame back in 2026 after being the first troll to finish
+med school and later he started working here as the hospital administrator. 
+Mr. Willis has a strong build, even for a troll and eyes you with a curious,
+but alert, eye.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000011000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	3
+	Str:	11
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	7
+	Bank:	100
+[SKILLS]
+	sorcery:	9
+	brawling:	3
+	biotech:	10
+BREAK
+#9312
+Keywords:	beast nasty green horned monster eyedol icky huge mutant mutated
+Name:	a mutated beast
+RoomDesc:$
+A horribly mutatated beast drools and snarls in the darkness.
+
+~
+LookDesc:$
+Standing nearly four and a half meters tall, the beast towers over you.  Its
+lower body is covered in matted fur of a sickly brown color splotches of gray.
+The feet on the beast are twisted hooves and its hands shaped into three
+fingered claws.  From its waist up, vomit-green scales cover its body with the
+exception of the many black wart-like cancers that swarm near its neck.
+Sprouting from the side of its head is a half meter long horn that curls
+around to the other side of its head before it sticks out.  A truly gruesome
+sight indeed.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100100010011101001000
+AffFlags:	1000000001001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	4
+	Str:	15
+	Cha:	5
+	Int:	4
+	Wil:	6
+	Mag:	8
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	12
+[SKILLS]
+	brawling:	6
+	:	1
+BREAK
+#9313
+Keywords:	ghoul monster man human
+Name:	a ghoul
+RoomDesc:$
+A gaunt looking human wanders blindly.
+
+~
+LookDesc:$
+The human is extremely pale and bald.  His canine teeth hang over his lips and drool rolls off of them.  This poor individual appears to have been infected with the strain of HMHVV that causes ghouls.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001101000
+AffFlags:	1000000001
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	6
+	Cha:	0
+	Int:	1
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	3
+[SKILLS]
+	brawling:	2
+BREAK
+#9400
+Keywords:	scanner white ic id
+Name:	an ID scanner
+RoomDesc:$
+An ID scanner beeps at you.
+
+~
+LookDesc:$
+The small box has a keypad and tiny legs and arms.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	1
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+[SKILLS]
+BREAK
+#9401
+Keywords:	guard white access ic security
+Name:	a security guard
+RoomDesc:$
+A security guard asks you for your ID.
+
+~
+LookDesc:$
+The guard is dressed in a simple silver uniform and has a large whistle
+around his neck.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	1
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+[SKILLS]
+BREAK
+#9402
+Keywords:	cop traffic access white
+Name:	a traffic cop
+RoomDesc:$
+A traffic cop is here.
+
+~
+LookDesc:$
+The traffic cop examines the destination and departure locations of all the
+data flying by.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	6
+	Ballistic:	1
+	Impact:	1
+[SKILLS]
+BREAK
+#9403
+Keywords:	wall barrier ic shifting shifts energy
+Name:	a wall of energy
+RoomDesc:$
+A shifting wall of energy is here crackling.
+
+~
+LookDesc:$
+The wall is made of blue energy and crackles violently as you approach.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	1
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	6
+[SKILLS]
+BREAK
+#9404
+Keywords:	bodyguard white access ic
+Name:	an elite bodyguard
+RoomDesc:$
+An elite bodyguard carefully scans each visitor.
+
+~
+LookDesc:$
+The elite bodyguard is nearly twice your size and three times as threatening.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	8
+	Ballistic:	1
+	Impact:	1
+	Karma:	3
+[SKILLS]
+BREAK
+#9405
+Keywords:	shreader scramble ic paper machine
+Name:	a paper shreader
+RoomDesc:$
+A paper shreader hums noisily.
+
+~
+LookDesc:$
+The machine rumbles back and forth as it looks for files to shread.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+[SKILLS]
+BREAK
+#9406
+Keywords:	S.W.A.T. swat officer gray grey ic
+Name:	a S.W.A.T. officer
+RoomDesc:$
+A S.W.A.T. officer is on the prowl.
+
+~
+LookDesc:$
+Dressed in black from head to toe, the officer is a very impressive sight.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	6
+	Karma:	1
+[SKILLS]
+BREAK
+#9407
+Keywords:	grunt Council Island Police Department C.I.P.D officer
+Name:	an officer
+RoomDesc:$
+A C.I.P.D. officer is patrolling here.
+
+~
+LookDesc:$
+The officer is one of the few dozen grunts of the Council Island Police
+department.  Not even issued a car, the officer must patrol his beat on foot.
+That's not much of a problem though, since the inhabited areas of the island
+are so small.  And the uninhabited areas...no one goes there and comes back.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	8
+	Cash:	4
+	Bank:	20
+[SKILLS]
+	firearms:	5
+	brawling:	3
+BREAK
+#9408
+Keywords:	Nobles Sergeant Sgt. Clara cop officer C.I.P.D.
+Name:	Sgt. Nobles
+RoomDesc:$
+Sgt. Nobles watches you warily.
+
+~
+LookDesc:$
+Sergeant Clara Nobles is one of Council Island Police Department's finest
+detectives.  Not only is she a great detective, but she is also a great street
+cop.  Growing up in the streets of Puyallup has taught this troll more in the
+last twenty years than most people learn in their lifetime.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001100000011000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	4
+	Str:	8
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	14
+	Impact:	12
+	Cash:	40
+[SKILLS]
+	brawling:	6
+	firearms:	6
+BREAK
+#9409
+Keywords:	Kack Dr. Vajorkian crazy man doctor cybersurgeon surgeon doc
+Name:	Dr. Kack Vajorkian
+RoomDesc:$
+Dr. Kack Vajorkian snaps his gloves as you enter.
+
+~
+LookDesc:$
+Dr. Vajorkian is the island's best, and only cybersurgeon.  The only licensed
+one at least.  His obviously cybered right eye sends a chill down your spine
+as it spins and whirs while it focuses on you.  A cosmetic surgery smile
+creeps across Doctor Kack's face he starts to sterilize some of his tools. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	20
+	Impact:	20
+	Cash:	1000
+	Bank:	10000
+[SKILLS]
+	:	10
+	brawling:	4
+	:	6
+BREAK
+#9410
+Keywords:	troll wall huge mutherfucker guard
+Name:	a huge troll
+RoomDesc:$
+A large wall resembling a troll crosses his arms and stares at you.
+
+~
+LookDesc:$
+This troll could easily pass for a defensive tackle for the Seattle Seahawks.
+Hell, he could pass for the entire defensive line!  Cyber-enhanced muscles
+bulge from underneath his armidillo-like dermal sheathing and his quick fluid
+motions infer that something other than the reflex system he was born with is
+under his skin.  Something about the way his stare pierces your eyes, and
+continues through the wall behind, says that you dont want to anger him.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001100000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	3
+	Str:	10
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	12
+	Cash:	50
+[SKILLS]
+	firearms:	6
+	brawling:	8
+BREAK
+#9411
+Keywords:	Drake Yeldnif chief fat man huge human immense blob
+Name:	Chief Yeldnif
+RoomDesc:$
+Chief Yeldnif is here mumbling something about due process and warrants. 
+
+~
+LookDesc:$
+Drake Yeldnif is a large man...well, an immense man.  Weighing in at nearly
+500 pounds, he is the fattest human you have ever seen.  He face is red, most
+likely due it high blood pressure, and rivulets of sweat drip down his face.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	2
+	Str:	5
+	Cha:	1
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	12
+[SKILLS]
+	brawling:	2
+	armed combat:	3
+	firearms:	5
+BREAK
+#9412
+Keywords:	test guard
+Name:	a test guard
+RoomDesc:$
+A test guard is here
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#9413
+Keywords:	man shadowy shadow trainer teacher
+Name:	the shadowy man
+RoomDesc:$
+A man covered in shadows stops levitating and looks at you as you enter.
+
+~
+LookDesc:$
+A man peers at you from beneath a hooded cloak.  He does not move his mouth but
+you hear a voice in your head.  "My child," the voice says," I know what you
+have come for and I will be happy to provide it.  Not everyone seeks to
+understand the higher mysteries of magic, but for those few I can help."
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	3
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	sorcery:	10
+	:	8
+	:	8
+	conjuring:	8
+BREAK
+#9414
+Keywords:	mob test
+Name:	a test mob
+RoomDesc:$
+A test mob stands here. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Karma:	5
+[SKILLS]
+BREAK
+END

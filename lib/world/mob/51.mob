@@ -1,0 +1,123 @@
+#5100
+Keywords:	man suit grey thin
+Name:	a tall man in a grey suit
+RoomDesc:$
+A tall, thin human in a grey suit stands here, idly rolling a pen over his
+fingers. 
+
+~
+LookDesc:$
+This human is probably just over six feet tall, and is fairly thin, though
+most of his physique is hidden beneath his wool suit. He glances about the
+room calmly, and idly rolls a pen over and through his fingers with some
+degree of quickness. His hair is short and brown, and he is of a tan
+complection. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	strides
+MobFlags:	1000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	5
+	Cha:	6
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	205
+	Weight:	72
+	Ballistic:	3
+	Impact:	5
+	Cash:	300
+	Karma:	1
+[SKILLS]
+	athletics:	5
+	negotiation:	6
+	brawling:	6
+	leadership:	6
+	corporate etiquette:	6
+BREAK
+#5101
+Keywords:	man fixer jacket human average smoking
+Name:	a man wearing a short stiff jacket
+RoomDesc:$
+A man in a short jacket is here smoking a cigarette. 
+
+~
+LookDesc:$
+This man is wearing a stiff jacket and has his arms crossed across his chest.
+Every once and a few moments he cracks his mouth to take a drag and blow out
+smoke. He is a human of average height, and is slightly overweight, with black
+hair and brown eyes. 
+~
+ArriveMsg:	quietly walks in from
+LeaveMsg:	quietly steps
+MobFlags:	1010
+AffFlags:	100000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	80
+	Ballistic:	6
+	Impact:	4
+[SKILLS]
+BREAK
+#5102
+Keywords:	street samurai man ghost leader
+Name:	a member of the hakagure samurai
+RoomDesc:$
+A member of the hakagure samurai is here, sword across his back, automatic
+weapon in hand. 
+
+~
+LookDesc:$
+A member of the hakagure samurai, trained by ghost dog. He doesn't look happy.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	10
+	Cha:	5
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	120
+	Level:	2
+	Ballistic:	15
+	Impact:	12
+	Bank:	100
+	Karma:	50
+[SKILLS]
+	edged weapons:	12
+	athletics:	9
+	brawling:	10
+	sub-machine guns:	10
+	assault rifles:	10
+BREAK
+END

@@ -1,0 +1,1151 @@
+#32200
+Keywords:	suit hardened military armor
+Name:	a suit of hardened military armor
+RoomDesc:$
+A suit of hardened military armor is lying here.~
+LookDesc:$
+It is a suit of hardened military armor. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	70000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	7
+	Val6:	6
+	Val7:	-6
+BREAK
+#32202
+Keywords:	hardened heavy military overcoat
+Name:	a hardened heavy military overcoat
+RoomDesc:$
+It is a hardened heavy military overcoat.~
+LookDesc:$
+It is a hardened heavy military overcoat. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	12.00
+	Barrier:	24
+	Cost:	40000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	1
+	LegalCode:	20
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	10
+	Val2:	10
+	Val5:	3
+	Val6:	2
+	Val7:	-4
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	3
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#32203
+Keywords:	hardened military wrist guard
+Name:	a hardened military wrist guard
+RoomDesc:$
+A hardened military wrist guard is lying here.~
+LookDesc:$
+It is a hardened military wrist guard. 
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+	Val7:	-2
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#32204
+Keywords:	a hardened military arm guard
+Name:	a hardened military arm guard
+RoomDesc:$
+A hardened military arm guard is lying here.~
+LookDesc:$
+It is a hardened military arm guard. 
+~
+Type:	Worn
+WearFlags:	10000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+	Val7:	-2
+BREAK
+#32205
+Keywords:	hardened military grade helmet
+Name:	a hardened military grade helmet
+RoomDesc:$
+A hardened military grade helmet is lying here.~
+LookDesc:$
+It is a hardened military grade helmet. 
+~
+Type:	Radio
+WearFlags:	10001
+ExtraFlags:	1000000000
+AffFlags:	1000000010001000000000
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	16
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	8
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	3
+BREAK
+#32206
+Keywords:	necklace dry leaves leaf
+Name:	a necklace made of dry leaves
+RoomDesc:$
+A necklace made of dry leaves is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	1
+BREAK
+#32207
+Keywords:	bloody red orange cloth stripe
+Name:	a ^rbloody red^n and ^yorange^n cloth stripe
+RoomDesc:$
+A bloody red and orange cloth stripe is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	10000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32208
+Keywords:	smartlink delta
+Name:	smartlink -delta
+RoomDesc:$
+Smartlink.~
+LookDesc:$
+A more essence-friendly version of the smartlink. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	20000
+	AvailTN:	12
+	AvailDay:	4.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	1
+	Val2:	3
+	Val4:	25
+BREAK
+#32209
+Keywords:	customized barret model 121 sniper rifle
+Name:	a customized Barret Model 121
+RoomDesc:$
+A customized sniper rifle is lying here.~
+LookDesc:$
+It's a customized Barret Model 121, with a scope firmly connected to it's top.
+Removing the scope would damage the rifle. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	1000000000000000000000
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	12
+	Cost:	5200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	14
+	Val6:	14
+	Val7:	-1
+BREAK
+#32210
+Keywords:	pair green yellow combat pants
+Name:	a pair of ^ggreen^n and ^yyellow^n combat pants
+RoomDesc:$
+A pair of green and yellow combat pants.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	8
+	Val2:	6
+	Val5:	2
+	Val6:	2
+	Val7:	-2
+BREAK
+#32211
+Keywords:	orthoskin ii cultured
+Name:	orthoskin II -cultured
+RoomDesc:$
+Orthoskin.~
+LookDesc:$
+A customized version of the orthoskin. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	240000
+	AvailTN:	10
+	AvailDay:	40.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val2:	1
+	Val4:	75
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#32212
+Keywords:	orthoskin iii customized
+Name:	orthoskin III -cultured
+RoomDesc:$
+Orthoskin.~
+LookDesc:$
+A customized version of the orthoskin. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	400000
+	AvailTN:	10
+	AvailDay:	40.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val2:	1
+	Val4:	112
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#32213
+Keywords:	cerebral booster i customized
+Name:	a cerebral booster I
+RoomDesc:$
+Cerebral Booster.~
+LookDesc:$
+A cultured version of the cerebral booster. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	1
+	Val2:	6
+	Val4:	40
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+BREAK
+#32214
+Keywords:	cerebral booster ii customized
+Name:	a cerebral booster II
+RoomDesc:$
+Cerebral Booster.~
+LookDesc:$
+A cultured version of the cerebral booster. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	110000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	2
+	Val2:	6
+	Val4:	80
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	2
+[AFFECT 1]
+	Location:	Task Pool (Int)
+	Modifier:	1
+BREAK
+#32215
+Keywords:	symbiotes i cultured
+Name:	symbiotes I -cultured
+RoomDesc:$
+Symbiotes.~
+LookDesc:$
+A cultured version of symbiotes. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	7
+	AvailDay:	50.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	1
+	Val2:	1
+	Val4:	30
+BREAK
+#32216
+Keywords:	symbiotes ii cultured
+Name:	symbiotes II -cultured
+RoomDesc:$
+Symbiotes.~
+LookDesc:$
+A cultured version of symbiotes. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	140000
+	AvailTN:	7
+	AvailDay:	50.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	2
+	Val2:	1
+	Val4:	52
+BREAK
+#32217
+Keywords:	symbiotes iii cultured
+Name:	symbiotes III -cultured
+RoomDesc:$
+Symbiotes.~
+LookDesc:$
+A cultured version of symbiotes. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	240000
+	AvailTN:	7
+	AvailDay:	50.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val2:	1
+	Val4:	75
+BREAK
+#32218
+Keywords:	tailored pheromones ii customized
+Name:	tailored pheromones II -cultured
+RoomDesc:$
+Tailored Pheromones.~
+LookDesc:$
+A cultured version of tailored pheromones. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	180000
+	AvailTN:	14
+	AvailDay:	70.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val2:	1
+	Val4:	45
+BREAK
+#32219
+Keywords:	ami mosquito self defense pistol
+Name:	an AMI Mosquito self-defense pistol
+RoomDesc:$
+A self-defense pistol is lying here.~
+LookDesc:$
+It is a self-defense pistol designed by the Amazonnian Military Insitute. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	650
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val3:	8
+	Val4:	11
+	Val5:	18
+	Val6:	18
+	Val8:	-1
+	Val9:	-1
+BREAK
+#32220
+Keywords:	ami abelha heavy pistol
+Name:	an AMI Abelha heavy pistol
+RoomDesc:$
+A heavy pistol is lying here.~
+LookDesc:$
+It is a heavy pistol designed by the Amazonia Military Institute. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	18
+	Val6:	18
+	Val9:	-1
+BREAK
+#32221
+Keywords:	ami picapau submachinegun
+Name:	an AMI Picapau submachinegun
+RoomDesc:$
+A submachinegun is lying here.~
+LookDesc:$
+It is a submachinegun designed by the Amazonian Military Institute. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	12
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	48
+	Val6:	48
+	Val9:	-1
+BREAK
+#32222
+Keywords:	object unfinished
+Name:	an AMI Jacare combat shotgun
+RoomDesc:$
+A combat shotgun is lying here.~
+LookDesc:$
+It is a combat shotgun designed by Amazonian Military Institute. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	12
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	8
+	Val6:	8
+	Val8:	-1
+BREAK
+#32223
+Keywords:	ami cobra rocket launcher
+Name:	an AMI Cobra rocket launcher
+RoomDesc:$
+A rocket launcher is lying here.~
+LookDesc:$
+It is a rocket launcher designed by the Amazonian Military Institute. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	12
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	4
+	Val3:	21
+	Val4:	20
+	Val5:	4
+	Val6:	4
+	Val8:	-1
+	Val9:	-1
+BREAK
+#32228
+Keywords:	ami smartlink
+Name:	an AMI smartlink
+RoomDesc:$
+A smartlink is lying here.~
+LookDesc:$
+A smartlink designed for use with Amazonian Military Institute weapons. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	600
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+BREAK
+#32229
+Keywords:	ami shock pad
+Name:	an AMI shock pad
+RoomDesc:$
+A shock pad is lying here.~
+LookDesc:$
+A shock pad designed for use with the Amazonian Military Institute weapons. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	200
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+BREAK
+#32230
+Keywords:	ami experimental vibro-blade
+Name:	an AMI experimental vibro-blade
+RoomDesc:$
+An experimental vibro-blade is lying here.~
+LookDesc:$
+It is an experimental vibro-blade designed by the Amazonian Military
+Institute. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000010
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	75000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	1
+BREAK
+#32232
+Keywords:	move-by-wire wire iv delta
+Name:	Move-by-Wire IV -delta
+RoomDesc:$
+Move-By-Wire.~
+LookDesc:$
+It is a grade 4, deltaware move-by-wire. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	16000000
+	AvailTN:	29
+	AvailDay:	135.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	43
+	Val1:	4
+	Val2:	3
+	Val4:	350
+BREAK
+#32233
+Keywords:	wired reflexes iii delta
+Name:	wired reflexes III -delta
+RoomDesc:$
+Wired Reflexes.~
+LookDesc:$
+It is a grade 3, deltaware wired reflexes. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	4000000
+	AvailTN:	17
+	AvailDay:	42.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	3
+	Val2:	3
+	Val4:	250
+BREAK
+#32234
+Keywords:	datajack delta
+Name:	datajack -delta
+RoomDesc:$
+Datajack.~
+LookDesc:$
+It is a datajack, delta grade. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	8000
+	AvailTN:	9
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	3
+	Val4:	10
+BREAK
+#32235
+Keywords:	envelope white sealed
+Name:	a white sealed envelope
+RoomDesc:$
+A white sealed envelope is lying here.~
+LookDesc:$
+It is white, and it's sealed to prevent wrong people from reading it. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32236
+Keywords:	heavy metal crate
+Name:	a heavy metal crate
+RoomDesc:$
+A heavy metal crate is lying here.~
+LookDesc:$
+It is very heavy and made of a very hard metal. There's no way you could see
+what's inside. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32237
+Keywords:	box mechanical tools high-grade toolkit
+Name:	a high-grade mechanical toolkit
+RoomDesc:$
+A box full of mechanical tools is lying here.~
+LookDesc:$
+It is a box full of high-grade mechanical tools to auxiliate building and
+repairing mechanical devices. It includes not only the basic, but also
+specific devices for working even the more complex machines. 
+~
+Type:	Kit
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+BREAK
+#32238
+Keywords:	ami sensors upgrade mkv v
+Name:	an AMI sensors upgrade MkV
+RoomDesc:$
+An AMI sensors upgrade is lying here.~
+LookDesc:$
+It is a set of electronics for upgrading a vehicle's sensors rating. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+[AFFECT 0]
+	Location:	Age
+	Modifier:	5
+BREAK
+#32239
+Keywords:	ami suspension upgrade
+Name:	an AMI suspension upgrade
+RoomDesc:$
+An AMI suspension upgrade is lying here.~
+LookDesc:$
+It is a set of vehicle parts and pieces designed for upgrading any vehicle's
+suspension, giving it more stability and allowing an easier handle. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	4
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+[AFFECT 0]
+	Location:	Body
+	Modifier:	-2
+BREAK
+#32240
+Keywords:	ami engine replacement
+Name:	an AMI engine replacement
+RoomDesc:$
+An AMI engine replacement is lying here.~
+LookDesc:$
+It is a huge and heavy engine, designed and constructed by the Amazonian
+Military Institute, primarily for insertion on their own military vehicles,
+though it was later sold to civilian access due to their need for money. It
+offers a heavy improvement of the vehicle's speed and acceleration. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	24.00
+	Barrier:	1
+	Cost:	8000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	24
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	35
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	1
+BREAK
+#32241
+Keywords:	ami vehicle plating
+Name:	an AMI vehicle plating
+RoomDesc:$
+An AMI vehicle plating is lying here.~
+LookDesc:$
+It is a set of hardened armor plates to be installed in a vehicle, increasing
+it's armor rating. It includes needed tools for the proper installation and a
+small manual for basic procedures. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	12
+	Cost:	6000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	20
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	3
+[AFFECT 1]
+	Location:	Charisma
+	Modifier:	1
+BREAK
+#32242
+Keywords:	ami internal computer
+Name:	an AMI internal computer
+RoomDesc:$
+An AMI internal computer is lying here.~
+LookDesc:$
+It is composed of many electronic parts and wires connected to a small display
+panel. The electronic parts and wires are to be connected to the many devices
+of the vehicle, while the small panel is attached to the vehicle's panel
+itself, allowing input from the driver and output from the vehicle. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	12000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 1]
+	Location:	Willpower
+	Modifier:	-1
+[AFFECT 2]
+	Location:	Essence
+	Modifier:	3
+[AFFECT 3]
+	Location:	Age
+	Modifier:	1
+[AFFECT 4]
+	Location:	Weight
+	Modifier:	3
+[AFFECT 5]
+	Location:	Quickness
+	Modifier:	15
+BREAK
+#32243
+Keywords:	ami ignition system
+Name:	an AMI ignition system
+RoomDesc:$
+An AMI ignition system is lying here.~
+LookDesc:$
+It is composed of some electronic parts, enhanced fuel burning chambers and
+other intermediarie devices for attachment into any motorized vehicle that
+consumes liquid fuel. It lessens the energy dissipation as heat and converts
+into mechanic energy to the transmission. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	8
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	8
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	15
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	3
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	2
+BREAK
+END

@@ -1,0 +1,676 @@
+#1200
+Keywords:	timmy dealer man
+Name:	Timmy
+RoomDesc:$
+Timmy stands shadowed in the corner of the station entrance. 
+~
+LookDesc:$
+Timmy's dressed in simple streetwear, black and shades of grey. Don't even
+think of small talk. Just do your thing and get on with it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1201
+Keywords:	carlos dealer man
+Name:	Carlos
+RoomDesc:$
+Carlos nods quietly at you, watching carefully as you pass him by. 
+~
+LookDesc:$
+Carlos is one despicable looking muther. He'd probably shoot his kids if it
+turned profit. He'd even reassure you if you didn't believe it. He's known
+by reputation as a hard person to stay cool with, and one person definitely,
+definitely not to fuck with. Despite his scraggy exterior, this man is higher
+up and better connected than you might have once thought.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1202
+Keywords:	jason dealer man
+Name:	Jason
+RoomDesc:$
+Jason sits at his flowerstand, waiting for someone to arrive. 
+~
+LookDesc:$
+Jason may look like the absolute nice guy, and he may sell flowers, but that's
+simply his day job. And he uses it to quite obviously cover what he's really
+up to. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1203
+Keywords:	nick man thin sickly young dealer
+Name:	Nick
+RoomDesc:$
+A thin, sickly looking young man strolls up to you quietly.
+~
+LookDesc:$
+Nick, as he's known to you, looks like he's about to die. Still, he manages
+to discuss business with you quickly, efficiently, and without any small
+talk. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	76
+BREAK
+#1204
+Keywords:	ariel elven tall businessman dealer
+Name:	Ariel
+RoomDesc:$
+A tall, elven businessman sits at his booth.
+~
+LookDesc:$
+Seeing that you've now found Ariel, you may want to brighten up your
+own act some. He's dressed in extremely chic, expensive gear, and
+obviously means serious business.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1205
+Keywords:	alex troll middle aged dealer
+Name:	Alex
+RoomDesc:$
+A middle aged troll stares at you momentarily, and then looks away.
+~
+LookDesc:$
+Alex is well known around these parts, not really because of his individual
+work, but his reputation for having so many contacts. Certainly not a man
+to cross.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1206
+Keywords:	duffy scummy weasel dealer
+Name:	Duffy
+RoomDesc:$
+A scummy looking weasel checks you over quietly.
+~
+LookDesc:$
+Eugh. This guy is just a complete skank, and certainly not someone you'd
+ever want to be connected with, if you wish to get anywhere down here.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	10
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	pistols:	9
+BREAK
+#1207
+Keywords:	ferris stupid youngster dealer
+Name:	Ferris
+RoomDesc:$
+A stupid looking youngster runs across the road.
+~
+LookDesc:$
+Ferris doesn't look like the sort of person you'd let run around
+alone. If anything, he looks like he could use all the advice you
+have.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1208
+Keywords:	shane long haired whiteboy dealer
+Name:	Shane
+RoomDesc:$
+A long haired whiteboy stands and waits his turn at the pooltable.
+~
+LookDesc:$
+Shane is one of your more helpful contacts. Rather than just let you
+get gunned down by some unworthy junkhead, he might actually help out
+on occasion.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1209
+Keywords:	chris well dressed executive dealer
+Name:	Chris
+RoomDesc:$
+A well dressed executive reclines on a plush sofa.
+~
+LookDesc:$
+Chris is an extremely well connected man, known in the highest and
+darkest realms of society. He dresses well, lives in an extremely
+well fitted place, and obviously likes to play. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1210
+Keywords:	shauna slim young brunette
+Name:	Shauna
+RoomDesc:$
+A slim young brunette smiles at you.
+~
+LookDesc:$
+Shauna's known to be a huge maneater around these parts, though many
+have wisened up to her game and steered well clear. Nothing but
+trouble.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1211
+Keywords:	pamela busty young blonde woman
+Name:	Pamela
+RoomDesc:$
+A busty young blonde winks at you slyly and hides behind her man.
+~
+LookDesc:$
+Pamela may have the charms of a buxom bombshell, but she also carries
+the screen of street life with her. Certainly not a long-term relationship
+person, more a one-nighter really.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1250
+Keywords:	jonathan spiky haired young man buyer
+Name:	Jonathan
+RoomDesc:$
+A spiky haired young man approaches you.
+~
+LookDesc:$
+His baggy clothes and slicked hair tell a lot about him. He's obviously
+not in this for the long story, just the occasional deal. If that's the
+case, so be it.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1251
+Keywords:	karl man buyer
+Name:	Karl
+RoomDesc:$
+Karl nods at you silently and continues sipping his drink.
+~
+LookDesc:$
+Karl looks like the sort of guy you could scam, and he wouldn't hold it
+against you. Not exactly the smartest sort. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1252
+Keywords:	kyle man slouchy guy buyer
+Name:	Kyle
+RoomDesc:$
+A slouchy-looking guy is lying down on the far sofa.
+~
+LookDesc:$
+He stands alone in the room, probably a lot. Doesn't look like he
+meets many other human beings other than his suppliers. Whether or
+not that has any impact on them is another thing.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1253
+Keywords:	stan player cool buyer man
+Name:	Stan
+RoomDesc:$
+Stan sides up to you quietly, acting cool as always.
+~
+LookDesc:$
+Stan is a player. And a buyer. And a good one at that. If you know Stan
+well, then he's definitely a contact to hold onto. While he may not come
+across as the most serious of characters, this guy knows his shit and he
+knows a lot of other people's too. The one big thing not to do, is ever, 
+EVER rip him off.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1254
+Keywords:	christina ghostly woman buyer
+Name:	Christina
+RoomDesc:$
+A ghostly looking woman stares at you in desperation.
+~
+LookDesc:$
+This total shell of a person could have had some kind of character
+at one point in her life. However, she's a slave now, and heavily
+addicted to an expensive mix of Green and Neon. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Female
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1255
+Keywords:	alison pretty tense woman buyer
+Name:	Alison
+RoomDesc:$
+A tense young woman sits down next to you.
+~
+LookDesc:$
+There is absolutely no way this woman could ever be a user. It may be
+pretty easy for someone to cover up their habits and vices, but this
+one could never go that far. She's obviously a mediator for a larger
+buyer, what from her stiff arched back and scarily powerful facelift.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Female
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1256
+Keywords:	alan lanky man khakis buyer
+Name:	Alan
+RoomDesc:$
+A lanky man in khakis sides up to you.
+~
+LookDesc:$
+Alan is the epitome of a simple buyer, the staple crop of this business. He
+takes it seriously, but not professionally, and never likes to get in over
+his head. From what he wants, he's probably just picking up for some friends
+and a little personal of his own. However, he could probably never hook you
+up with a big time buyer or business proposition.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1257
+Keywords:	carter psychotic mad deranged wacko buyer man
+Name:	Carter
+RoomDesc:$
+A psychotic mad-looking deranged wacko in tweed prances towards you.
+~
+LookDesc:$
+This guy is scary. Many have told you, even warned you about Carter, but
+they've also said he's a very good buyer, very easy to work with. And this
+is true. But so is the former. Despite his constant business and generous
+backing, can you *imagine* getting to know someone like this???
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1258
+Keywords:	ryan man gang skater punk buyer
+Name:	Ryan
+RoomDesc:$
+Ryan nods quietly and waddles over towards you.
+~
+LookDesc:$
+Another skater/gang punk. He's obviously the liaison officer between his gang
+and you. Perhaps he has some interesting friends. Or maybe they do. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1259
+Keywords:	matt unhealthy young man buyer
+Name:	Matt
+RoomDesc:$
+A terrifyingly unhealthy young man almost crumples as he approaches you.
+~
+LookDesc:$
+It's pitiful that people sink this low from their vices. Matt might have
+been a great old guy before, but his habit has destroyed the guy. Utterly.
+He looks like he's slept in solitary confinement for the last year or so,
+and even might have enjoyed it.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#1260
+Keywords:	sarah tired pretty young woman buyer
+Name:	Sarah
+RoomDesc:$
+A tired, pretty young woman smiles at you.
+~
+LookDesc:$
+Sarah looks like she could use some sleep. Not that she looks unhealthy,
+just tired. Although this probably isn't she does much, when she does,
+she does it all the way. Still, if that's the way she likes to do things,
+so be it.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Female
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+END

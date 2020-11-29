@@ -1,0 +1,843 @@
+#23600
+Name:	An Underground Alcove
+Desc:$
+   You stand in a cavernous room, obviously once the basement of the abandoned
+police station above. It has been renovated into some sort of communal house.
+Curtains partition off several alcoves. North,  pillows and a small fire make
+up an alter with a Wolf's head carved from sandelwood centerd on it.  South,
+the entire wall is filled with a massive bookshelf, stacked from floor to
+ceiling with ancient texts  and dusty tomes.  East, three smaller alcoves are
+recessed into the wall. The first is piled with weapons,  armor and clips. A
+hugh water bed with a blue bong sitting next to it takes up its center. Next,
+a clean  spartan room, with a rack set against it's far wall holds a
+Wakizashi, there is room for a Katana but it is  currently missing. A monitor
+displays a small court yard, Faust's secret dojo. The last is filled with a
+troll  size bed and Lazyboy recliner. A trivid is playing the Discovery
+Channel. A hugh cooler next to the chair  reads "Dahamma's Beerz, Keap Out".
+You recognize those names, this is the HQ of the ^W*Shad^wowsai^LntS*^N! 
+~
+Flags:	110000001100000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+Address:	An undisclosed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+[EXIT up]
+	Keywords:	trapdoor door~~~
+	Desc:$
+A heavy metal trapdoor set into the ceiling 
+~
+	ToVnum:	4950
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	23601
+	LockRating:	32
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23601
+Name:	In the Shrubs
+Desc:$
+   This area is covered thickly in shrubs and plants of all sorts. Dead leaves
+litter the ground, garbage is tossed carelessly about, and... Wait. Garbage?
+It seems a bit strange that so much made it back this far into the thick of
+the bushes. Empty booze bottles, food wrappers, and all other variety of junk
+is strown about the plant life. Walking in this place also feels, different,
+somehow. The ground does not quite feel the same, but much more solid than the
+dirt path from before. Trees heavily block the sunlight, and their roots seem
+to avoid the center of this area. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT down]
+	Keywords:	platform door hidden
+	Desc:$
+Upon very close inspection, this portion of the ground does not seem to be
+ground at all. A covering of dirt overlaps a metal plate, which has very
+deceiving fake plants 'growing' from it. It seems locked shut, but it's hard
+to tell from where. 
+~
+	ToVnum:	23602
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+	LockRating:	2
+	HiddenRating:	11
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23602
+Name:	The Night Hunters Secret Lair
+Desc:$
+   This is the start of an underground hallway, heading south. The concrete
+walls are cracked and worn, with periodic blood stains covering them. Small
+patches of moss grow here and there, and the hallway is lit by a row of light
+traveling the length of its ceiling. The somewhat dirty ground is littered
+occasionally with empty bottles and wrappers... Along with a couple empty
+syringes every now and then. Spent bullet casings are shoved away against the
+sides of the wall, and the air has the faint, but still unpleasant aroma of
+people not showering for quite some time. 
+~
+Flags:	1000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	23603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	23601
+	Flags:	0
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23603
+Name:	Down the Hallway
+Desc:$
+   The fairly messy hallway continues on it's way, but this time it branches
+off to the west. Lockers lining the wall of the room can be glimpsed under a
+flickering, damaged light. Down the hall, the lights seem to become
+increasingly unkept. Some are dim, others flicker faintly. A nearly haunting
+hum of the damaged lights and the whir of some form of machinery add a gloomy
+touch to an already eery atmosphere. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23604
+Name:	Night Hunter Locker Room
+Desc:$
+   A faint buzzing can be heard in this room as it's single light flickers
+violently, creating a near strobe light effect. Dirty clothes are tossed about
+the room, and through the flashing light you can see a makeshift bulletin
+board sitting between two sets of lockers that wrap around this rectangular
+room. Most of the messages are torn apart or smudged beyond readability, but 2
+still remain that are readable. The lockers themselves are scratched and
+dented, but look to have had names on them at one point. These names however,
+are weathered and worn to badly to decypher. Instead, the method of
+indentification has simply been replaced by written numbers in permanent
+marker. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	23603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23605
+Name:	Deeper in the Lair
+Desc:$
+   The lights begin cutting off to a disturbing amount, barely keeping the
+hallway lit enough to be seen with unaided vision. Some are broken and not
+working completely, on top of an even higher frequency of dimmed and
+flickering ones. A wire falls off of one of them, sparking as it twirls around
+in the air like a hyperactive snake. But perhaps even more disturbing than the
+decreasing amount of light is the available emplacement for a Smart-Turret to
+be mounted. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23606
+Name:	A Darkening Corridor
+Desc:$
+   The last bastions of light end here. A periodic flicker is all that
+remains, and the whirring sound of some kind of machine is even more audible
+here. Activity is heard all around, much to your displeasure. Very faint
+scittering sounds can be heard moving on the ground, but it's hard to tell
+from what. The hallway comes to an abrupt end here, and takes a turn
+eastwards. The air has an almost damp feeling to it. 
+~
+Flags:	1010000000000001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	23607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23607
+Name:	A Widening Corridor
+Desc:$
+   The corridor here is completely devoid of light, though you don't know if
+that's on purpose or not. It gets substantially wider, and several crates
+varying in composition from metal to rotting wood are slid against the walls-
+Perfect for cover. A set of pipes portrude from the ceiling, and then follow
+the length of it. A couple small water droplets can be seen leaking from the
+welds in them. Some sort of small antennas are poking from random points in
+the walls, perhaps a communications relay system to help with radio
+transmissions in this underground lair. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	23608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23608
+Name:	Further into the Fray
+Desc:$
+   The corridor continues on it's path, the empty crates still randomly lining
+the walls. A couple security cameras have been strategically mounted to the
+walls to cover the entire area, but thankfully the wires running from them
+have not yet been connected to anything. A thick metal door lies to the north,
+with an incomplete maglock system on it... This place must have only recently
+been constructed. The water pipes part momentarily, making room for a turret
+emplacement in the center of the cracked and chipped concrete ceiling. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	23610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23609
+Name:	Mercenary Locker Room
+Desc:$
+   This room actually has some lighting, albeit a very faint amount that
+barely makes the numbers bolted into the well-kept lockers readable. All the
+lockers are very sturdily built, and have state-of-the-art biometric maglocks
+on them. Two crates sit on the far western side of the room. One is labeled
+"Standard" and the other has "EX" printed on it. Both of which also include
+heavy duty titanium construction, and near impossible maglocks. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	23608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23610
+Name:	Depths of the Night Hunter Lair
+Desc:$
+   The corridor still remains completely void of all lighting, and the hum of
+machinery is still harassing your nerves. The water pipes end here, and reveal
+a dangerous duo of large turret mounts on the ceiling. Moss still infests a
+couple places on the somewhat battered walls, and dirt grates against the
+concrete floor. The amount of crates present decreases here, and ahead lies an
+imposingly open area that seems to have a disturbingly low amount of cover
+possibilities. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	23611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23611
+Name:	Mercenary Operations Area
+Desc:$
+   This is where the nerve racking sound of machinery was coming from. The
+ceiling is much higher in here, and the water pipes from the corridors once
+again show up here. They link into some sort of generator, which emits a noise
+that might not be so horrific except for the already dark and grimm atmosphere
+in this place. Even more worrying is how open this area is, with a lack of
+cover. Only a few sparsely placed crates offer possibilities for hiding.
+Corridors branch out in every direction, and by now the impression that you're
+not exactly welcome here has become more than evident. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	23613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23612
+Name:	Northern Corridor
+Desc:$
+   This is a comparatively short corridor, and may only serve the purpose of
+giving space for the turret mount up above. A closed metal door sits at the
+end, with a small red light beaming off of a fully activated maglock. The word
+"Bunks" has been stenciled on to it in text vaguely resembling a militaristic
+style. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door metal
+	Desc:$
+You see a sturdy metal door that has a relatively basic numeric passworded
+maglock system. 
+~
+	ToVnum:	23615
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+	LockRating:	10
+[EXIT south]
+	ToVnum:	23611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23613
+Name:	Eastern Corridor
+Desc:$
+   This is a comparatively short corridor, and may only serve the purpose of
+giving space for the turret mount up above. A closed metal door sits at the
+end, with a small red light beaming off of a fully activated maglock. The word
+"Armory" has been stenciled on to it in text vaguely resembling a militaristic
+style. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door metal
+	Desc:$
+You see a sturdy metal door that has a relatively basic numeric passworded
+maglock system. 
+~
+	ToVnum:	23616
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+	LockRating:	10
+[EXIT west]
+	ToVnum:	23611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23614
+Name:	Southern Corridor
+Desc:$
+   This is a comparatively short corridor, and may only serve the purpose of
+giving space for the turret mount up above. A closed metal door sits at the
+end, with a small red light beaming off of a fully activated maglock. The
+words "Captain J.G. Leopold" have been stenciled on to it in text vaguely
+resembling a militaristic style. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door metal
+	Desc:$
+This is a basic metal security door with a numeric passworded maglock system.
+~
+	ToVnum:	23618
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+	LockRating:	10
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23615
+Name:	Mercenary Bunk Room
+Desc:$
+   This room does in fact have lighting in it, and strangely, a suitable
+amount. Cheap metal bunks have been set up across the length of the room, and
+each one seems to he a footlocker on either side of it. A couple portable
+space heaters have been set up, giving a little warmth to the room when
+necessary. A small bathroom is also in here, though it's pretty grotesque and
+definatly doesn't look like it has proper plumbing. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	door metal
+	ToVnum:	23612
+	Flags:	0
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23616
+Name:	Mercenary Armory
+Desc:$
+   This room is filled with weapons racks, and for the most part they seem
+empty. Lots of depleted ammunition crates and emptied out clips are scattered
+randomly around the area. This room has a security camera in the upper west
+corner, and it seems to be turned on judging by the little red light in the
+front of it. There is also a hatch located directly beneath the camera, and
+doesn't look like it has any locking mechanisms on it. At a closer look, the
+words "Holding Chamber" have been engraved sloppily into it. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	door metal
+	ToVnum:	23613
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	hatch metal door
+	ToVnum:	23617
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23617
+Name:	Holding Chamber
+Desc:$
+   No lighting what so ever is present here, and the room isn't even made out
+of concrete. Mud composes the floor, and you don't even want to know what kind
+of liquid is turning it into that. Dirty cavernous walls sorround the room
+with moss growing in between various cracks. The air has a damp feel to it,
+and a god aweful stench. Empty needles have been discarded here, and much to
+your horror you think you see the bone of a human (or metahuman) lying half
+buried in the mud. 
+~
+Flags:	1001000000000000001001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+[EXIT up]
+	Keywords:	hatch metal door
+	ToVnum:	23616
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23618
+Name:	Captain J.G. Leopold's Room
+Desc:$
+   This room is most likely the most well kept of all of them, and has
+relatively good lighting. A file cabinet is slid against the eastern wall, and
+a desk sits in the middle of the room. A flat screen computer monitor flickers
+on top of it, and the computer itself seems somewhat new. All variety of notes
+are scattered on the desk detailing recent contracts with the Night Hunters
+gang to capture metahumans for some sort of experiments, and some also hint at
+a recent weapons shipment that may or may not have arrived yet. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undiscolsed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door metal
+	ToVnum:	23614
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23699
+Name:	^BSean's Plane of Euphoric Disjunction^n
+Desc:$
+   Drifting aimlessly in an astral void all its own, is this large transparent
+cube. Peering outside of this cubicle, made up of unseen forces, you see
+nothing but an endless mystical ^Bs^bw^Bi^br^Bl^bi^Bn^bg^n of a ^bdark blue fog^n, against an
+infinite ^Lblack backdrop^n. The serenity in the atmosphere calms you to the point
+of being unable to tell if this is just a surreal reality, or a distant part
+of a lost dream. Your senses seem deprived of their normal input, but are
+infused by a prodigy of limitless perception. Sound emenates from all around
+you, every imaginable song or noise you have heard... All blended together in
+a flawless harmony, and all able to be peiced apart and heard again in their
+perfect form. A perpetual silence, containing every sound known to human
+comprehension, and those far beyond any reality or supernatural perception.
+The real world is left behind in a shroud of unreality. Because here, time
+stands still. No one leaves, and no one will. 
+~
+Flags:	110000000000000001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+Address:	An undisclosed location
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

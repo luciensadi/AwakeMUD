@@ -1,0 +1,448 @@
+#12500
+Keywords:	suit man business guy
+Name:	a suit
+RoomDesc:$
+A man wearing a nice suit is standing here.
+
+~
+LookDesc:$
+This suit is looking around, eyeing everyone closely. This makes you wonder
+what's going on around here to attract suits. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001011100
+AffFlags:	1000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	82
+	Ballistic:	5
+	Impact:	4
+	Cash:	25
+	Bank:	120
+[SKILLS]
+	stealth:	3
+	pistols:	3
+	athletics:	4
+	corporate etiquette:	5
+BREAK
+#12501
+Keywords:	shopkeeper shop keeper larry orc ork
+Name:	an ork shopkeeper
+RoomDesc:$
+An ork shopkeeper stands here. 
+
+~
+LookDesc:$
+He is an middle-aged man that looks like he's been to hell and back. He has an eye patch over his left eye and his name tag reads: Larry.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001110
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Shotgun
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	3
+	Str:	4
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	198
+	Weight:	165
+	Ballistic:	2
+	Impact:	2
+	Cash:	100
+	Bank:	300
+[SKILLS]
+	shotguns:	3
+	:	3
+BREAK
+#12502
+Keywords:	squatter bum man guy
+Name:	a squatter
+RoomDesc:$
+A squatter is trying to keep warm here.
+
+~
+LookDesc:$
+This homeless person has obviously seeked shelter from this abandoned warehouse. He has tattered clothes and looks like he hasn't eaten for about 2 weeks.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	2
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	158
+	Weight:	79
+	Cash:	3
+[SKILLS]
+	brawling:	3
+	athletics:	2
+BREAK
+#12503
+Keywords:	guard troll mafia dick
+Name:	a mafia guard
+RoomDesc:$
+One of the biggest trolls that you've ever laid eyes on stands crossing his arms here.
+
+~
+LookDesc:$
+This *HUGE* troll is obviously in the mafia around here due to his obidience
+to the boss. he stands a whoppin' 3.2 meters tall and has equally proportioned
+muscles to match. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000101110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	18
+	Qui:	8
+	Str:	20
+	Cha:	1
+	Int:	4
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	320
+	Weight:	350
+	Level:	3
+	Ballistic:	10
+	Impact:	14
+[SKILLS]
+	armed combat:	5
+	clubs:	4
+	throwing weapons:	10
+	rifles:	7
+BREAK
+#12504
+Keywords:	guard mafia jim dwarf
+Name:	a short mafia guard
+RoomDesc:$
+A short, dwarven mafia guard stands here.
+
+~
+LookDesc:$
+This guard is a dwarf...that's clear as day by his height and build. He also apears to be stuffed to the eyelashes with all sorts of ammo.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000100000001110
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	5
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	87
+	Weight:	129
+	Ballistic:	10
+	Impact:	9
+[SKILLS]
+	rifles:	8
+	armed combat:	4
+	:	2
+BREAK
+#12505
+Keywords:	zuben mafia leader mob man suit
+Name:	Zuben
+RoomDesc:$
+A man wearing a pin-striped suit stands here.
+
+~
+LookDesc:$
+This man obviously looks important. He's dressed very nice and seems to always look pissed off. He glares at you, "You lookin' at me?...There ain't nobody else here so you must be lookin' at me."
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100011101000
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	10
+	Str:	15
+	Cha:	3
+	Int:	7
+	Wil:	9
+	Mag:	1
+[POINTS]
+	Height:	178
+	Weight:	120
+	Level:	1
+	Ballistic:	10
+	Impact:	8
+	Cash:	120
+	Karma:	50
+[SKILLS]
+	firearms:	7
+	pistols:	9
+	:	4
+BREAK
+#12506
+Keywords:	burns mr man old
+Name:	Mr. Burns
+RoomDesc:$
+Mr. Burns is here ready to help you out.
+
+~
+LookDesc:$
+Mr. Burns is quite an old fellow. He stands with a hunch and is almost completely bald. He has a kind of sinister look to him.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	1
+	Cha:	2
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	69
+	Weight:	102
+	Ballistic:	1
+	Cash:	25
+	Bank:	305
+[SKILLS]
+	interrogation:	4
+	negotiation:	6
+	corporate etiquette:	4
+BREAK
+#12507
+Keywords:	jack man shopkeeper
+Name:	Jack
+RoomDesc:$
+A strong looking man named Jack is here assisting people.
+
+~
+LookDesc:$
+Jack is kind of a tough man. His muscles are pretty big. One thing's for sure...don't piss him off.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	6
+	Cha:	5
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	98
+	Weight:	150
+	Ballistic:	3
+	Impact:	3
+	Cash:	58
+	Bank:	500
+[SKILLS]
+	brawling:	4
+	:	2
+BREAK
+#12508
+Keywords:	lara woman wife
+Name:	Lara
+RoomDesc:$
+Lara, Jack's good-looking wife and fellow employee is here helping customers.
+
+~
+LookDesc:$
+Lara is actually quite a beautiful woman. She is helping out costumers here and seems to know quite a bit about weapons.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001110
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	4
+	Mag:	6
+[POINTS]
+	Height:	143
+	Weight:	49
+	Ballistic:	3
+	Impact:	2
+	Cash:	300
+	Bank:	1250
+[SKILLS]
+	brawling:	4
+	pistols:	3
+	:	2
+BREAK
+#12600
+Keywords:	johnson dark suit man stasis
+Name:	a dark suited, dark haired man
+RoomDesc:$
+A dark suited, dark haired man is here. 
+
+~
+LookDesc:$
+Standing a bit over six feet in height, this man is wearing a finely tailored
+Brooks Brother's suit, the fit indicative of an astronimical price tag. His
+hair is raven's black, his skin the  darkened artificial tan of someone who
+spends his time under heat lamps, as opposed to the sun. His fingers are long
+and  delicate, the fingernails obviously manicured.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	3
+	Cha:	6
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	191
+	Weight:	60
+	Level:	1
+	Ballistic:	6
+	Impact:	4
+	Bank:	100
+[SKILLS]
+	pistols:	6
+BREAK
+#12650
+Keywords:	mr johnson test mutha fucka
+Name:	Mr. Johnson
+RoomDesc:$
+A man in a jet black suit is sitting here at a table. 
+
+~
+LookDesc:$
+He's a Mr. Johnson, need I say more? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000001001011
+AffFlags:	1000000001001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	197
+	Weight:	73
+	Ballistic:	15
+	Impact:	15
+	Cash:	30000
+	Bank:	250000
+[SKILLS]
+BREAK
+#12699
+Keywords:	Andrew squat fat man
+Name:	A squat, fat man
+RoomDesc:$
+A squat, fat man stands here. 
+
+~
+LookDesc:$
+This man doesn't even quite reach five feet, but his weight obviously pushes
+three hundred pounds. His poorly fitted, pin stripe suit hangs  baggy at his
+calf skin boots, and too tight around his middle.  His greasy black hair lays
+matted back against his head, and his dark eyes look piggishly out from behind
+a pair of wire-rimmed  glasses. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	3
+	Str:	1
+	Cha:	6
+	Int:	8
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	80
+	Weight:	10
+	Ballistic:	1
+	Impact:	20
+[SKILLS]
+	:	9
+BREAK
+END

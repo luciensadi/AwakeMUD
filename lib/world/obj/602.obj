@@ -1,0 +1,1846 @@
+#60200
+Keywords:	martial art training robe dragon insignia
+Name:	A martial art training robe with a dragon insignia
+RoomDesc:$
+A crumpled martial arts robe is on the floor.~
+LookDesc:$
+The comfortable robes bear the mark of the School of the Red Dragon. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	3
+	Val7:	12
+BREAK
+#60201
+Keywords:	saber ivory grip
+Name:	a steel ^Wsaber^N with an ^Wivory^N grip
+RoomDesc:$
+A steel saber is propped up against a wall.~
+LookDesc:$
+A flawlessly crafted steel saber with a razor sharp edge. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60202
+Keywords:	blue crescent halberd
+Name:	The ^BBlue Crescent^N halberd
+RoomDesc:$
+A shimmering, ^Bblue^N bladed halberd is stuck in the floor.~
+LookDesc:$
+An Oriental-style spear with a thick, serrated blade. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	3
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60203
+Keywords:	black oak pair nunchaku
+Name:	a pair of ^Lblack oak^N nunchaku
+RoomDesc:$
+A pair of nunchaku have been set on a nearby table.~
+LookDesc:$
+Made of smooth, black wood, these look quite lethal in the right hands.
+Reminds you of the old Bruce Lee vids. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60204
+Keywords:	a gauzy blue hakama robe
+Name:	A gauzy ^Bblue^N silk hakama robe
+RoomDesc:$
+A pile of silk is on the floor.~
+LookDesc:$
+Long devided skirt,garment covering the legs and feet, used in Kendo, Aikdo
+and other Japanese Martial Arts. The long robe is said to mask the intricate
+footwork of the practioner, therefore making it difficult for an opponent to
+judge his movements. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	1
+	Val7:	14
+BREAK
+#60205
+Keywords:	leather gauntlets pair
+Name:	A pair of ^yleather^N gauntlets
+RoomDesc:$
+Some hand gauntlets are resting on the floor.~
+LookDesc:$
+Complete with leather bracers that wrap around your wrists, these gauntlets
+help keep the user's hands in proper position for unarmed combat. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60206
+Keywords:	dazzling red silk hakama robe
+Name:	A dazzling ^rred^N silk hakama robe
+RoomDesc:$
+A pile of silk is on the floor.~
+LookDesc:$
+Long devided skirt,garment covering the legs and feet, used in Kendo, Aikdo
+and other Japanese Martial Arts. The long robe is said to mask the intricate
+footwork of the practioner, therefore making it difficult for an opponent to
+judge his movements. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	1
+	Val7:	14
+BREAK
+#60207
+Keywords:	forest green hooded cloak
+Name:	a ^gforest green^N hooded cloak
+RoomDesc:$
+A cloak is draped over the floor.~
+LookDesc:$
+A hooded cloak, with a small orichalcum clasp. It floats around your body as
+though made of silk, though it feels as though it is canvas. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	12
+BREAK
+#60208
+Keywords:	wakizashi steel
+Name:	a razor sharp ^Wsteel^N wakizashi
+RoomDesc:$
+A wakizashi is on the floor, sheathed and therefore harmless.~
+LookDesc:$
+Also known as the "companion" blade, a Wakizashi goes well with a traditional
+Samurai or Ronin's no-daichi. True warriors don't go anywhere without a
+wakizashi by their sides. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+BREAK
+#60210
+Keywords:	dikote tipped javelin
+Name:	A ^Ldikote^N tipped javelin
+RoomDesc:$
+A javelin with a dikote tip is leaning against a wall.~
+LookDesc:$
+A fine steel javelin with a dikoted tip. This looks like it's sharp enough to
+punch through military armor. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60211
+Keywords:	steel katana engraved
+Name:	A ^Wsteel^N katana with an engraved handle
+RoomDesc:$
+A steel katana with an engraved handle is leaning against a wall.~
+LookDesc:$
+This shining katana bears an Eastern Dragon engraved on the pommel of its
+cloth-wrapped handle. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	1750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60212
+Keywords:	mattock fire hardened iron axe
+Name:	a ^Rfire hardened^N iron mattock
+RoomDesc:$
+A nasty looking mattock was lodged into the ground.~
+LookDesc:$
+An iron battle axe that looks like it would make quite a mess when used
+against someone. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	2250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60213
+Keywords:	matched daggers silver
+Name:	A pair of matched ^Wsilver^N daggers
+RoomDesc:$
+Two identical daggers have been sheathed and set next to each other.~
+LookDesc:$
+These twin daggers were crafted together, and are identical in every aspect.
+They're weighted and look designed to be used together. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	3200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+BREAK
+#60214
+Keywords:	fried rice dish vegetables beef
+Name:	A fried rice dish with vegetables and beef
+RoomDesc:$
+A dish of fried rice is sitting on the table, getting cold.~
+LookDesc:$
+Typical Asian cuisine. Looks good. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#60215
+Keywords:	steaming bowl of pho noodles
+Name:	A steaming bowl of pho noodles
+RoomDesc:$
+A bowl of Vietnamese noodles is on the floor.~
+LookDesc:$
+Topped with various types of meats and vegetables and submerged in a warm
+soup. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#60216
+Keywords:	side roast duck
+Name:	A side of roast duck
+RoomDesc:$
+A roast duck is soaking in its own juices.~
+LookDesc:$
+Half of a roast duck, prepared Chinese style. Looks salty, and looks like your
+heart would stop working after eating it, but it probably tastes damn good. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+BREAK
+#60217
+Keywords:	bottle sake small
+Name:	small bottle of sake
+RoomDesc:$
+A small bottle of sake is lying here.~
+LookDesc:$
+This is a small plastic bottle of sake, rice wine. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	8
+	Val2:	26
+BREAK
+#60219
+Keywords:	oaken fire hardened quarterstaff
+Name:	an ^Loaken^N, fire hardened quarterstaff
+RoomDesc:$
+A black quarterstaff is propped up against the wall.~
+LookDesc:$
+An oak quarterstaff that seems to have been treated over a large fire. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60220
+Keywords:	celestial fury scimitar
+Name:	The ^rCelestial Fury^N scimitar
+RoomDesc:$
+A blood red scimitar was lodged into the ground.~
+LookDesc:$
+A wicked looking red scimitar with a dikoted edge. The middle of the curved
+blade is decorated with a flame-like pattern and inscribed with various Elven
+runes. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	500
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	4
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60221
+Keywords:	red silk oriental dress
+Name:	A ^Rred silk^N Oriental dress
+RoomDesc:$
+A red silk dress with Oriental patterns is lying on the floor.~
+LookDesc:$
+A beautifully tailored dress with various Oriental patterns. Smooth and
+comfortable, this looks like it would look stunning on any woman's body. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	180
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	14
+BREAK
+#60222
+Keywords:	spa
+Name:	A ^Cnatural spring water^N spa
+RoomDesc:$
+A green tiled spa pumped with hot, ^Cnatural spring water^N is here, waiting for you to climb in.~
+LookDesc:$
+A warm, natural spring-water supplied spa. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	500.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100000
+	Val1:	100000
+BREAK
+#60230
+Keywords:	loincloth leather brown sturdy
+Name:	a sturdy ^ybrown leather^N loincloth
+RoomDesc:$
+Someone's loincloth has been tossed here.~
+LookDesc:$
+These few scraps of rough ^ybrown leather^N barely cover everything that needs to
+be covered if you don't want to be arrested for indecent exposure. Just make
+sure you tie it tight, wouldn't want any slip-ups. 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.05
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60231
+Keywords:	pelt leopard-skin beautiful
+Name:	a beautiful ^Yl^Le^Yo^Lp^Ya^Lr^Yd^L-^Ys^Lk^Yi^Ln^N pelt
+RoomDesc:$
+A beautiful leopard-skin pelt lies here in a bundle.~
+LookDesc:$
+This beautiful ^Yl^Le^Yo^Lp^Ya^Lr^Yd^L-^Ys^Lk^Yi^Ln^N pelt is quite real, and is crafted from almost the
+entire pelt of the animal, just short of its head and hind legs. The front
+paws, however, are still intact, and the forelegs are used to tie around ones
+neck and drape about the shoulders, which offers ample cover of ones back and
+upper chest. The claws have had their tips filed down, as not to cut or slice
+the wearer as they move around with it on. The tail hangs off the back of it
+and almost touches the ground if worn by an average sized person. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val6:	1
+BREAK
+#60232
+Keywords:	cape pelt bear-skin rough
+Name:	a rough looking ^ybear^N-^yskin^N pelt cape
+RoomDesc:$
+^gA rather rough looking pile of ^ybear^g-^yskin^g lies here in a heap.^N~
+LookDesc:$
+This makeshift cape is made of a rough, natural looking ^ybear^N-^yskin^N pelt, most
+likely from a brown bear (did the colour tip you off?). Its crafted from the
+skinned hide of the upper portion of the bears pelt, including its forelegs
+and front paws, which are made to be tied about ones neck loosely and drape
+over the shoulders and back. If you're going for the 'Conan the Barbarian'
+look, this baby was made just for you. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.15
+	Barrier:	3
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val6:	1
+BREAK
+#60233
+Keywords:	pemmican wad rawhide pouch green
+Name:	a wad of pemmican stuffed into a rawhide pouch
+RoomDesc:$
+A green rawhide pouch sits on the floor here.~
+LookDesc:$
+Pemmican is a concentrated mixture of fat and protein used as a nutritious
+emergency foodstuff. The word comes from the Cree word pimihkan, which itself
+is derived from the word pimi "fat/grease" It was invented by the native
+peoples of North America, and widely used during the fur trade era. It is
+composed of lean, dried and crushed venison meat, melted bone marrow fat and
+crushed cranberries. The resulting mixture is then packed into "green" rawhide
+pouches for storage, and is ready to be eaten at any moment. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.05
+	Barrier:	3
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#60234
+Keywords:	succotash bowl wooden vegetables
+Name:	a small ^ywooden bowl^N of succotash
+RoomDesc:$
+A small wooden bowl full of various vegetables sits here.~
+LookDesc:$
+This dish of succotash consists primarily of ^glima beans^N, ^Ycorn^N, ^rtomato^N and
+small bits and pieces of cured ^Wcod fish^N. It has been cooked up with a bit of
+^Ybutter^N and rendered fat, as well as a few choice ^gherbs^N and ^Rspices^N. Guarunteed
+to keep one warm on a cold winters night. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	45
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+BREAK
+#60235
+Keywords:	bread piki thin sheet
+Name:	a thin sheet of piki bread
+RoomDesc:$
+A thin piece of bread sits here, going to waste.~
+LookDesc:$
+Piki, or piki bread as its more commonly refered as, is a thin, dry rolled
+bread made by the Hopi out of corn meal, which obtains its dark ^cgrayish^N-^cblue^N
+colour and unique flavor from to the use of ^cblue corn^N and culinary ^Wjuniper
+ash^N. The light, thin sheets are dried to the point of brittleness, but melt in
+the mouth, and have a delicate corn flavor. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#60236
+Keywords:	akutaq eskimo icecream healthy aqutak
+Name:	a healthy serving of Akutaq
+RoomDesc:$
+Some kind of icecream is sitting here, melting away.~
+LookDesc:$
+Akutaq or 'Agutak', also known as Eskimo ice cream. It is a common food in
+western Alaska, consisting of whipped moose tallow mixed with crowberries,
+cloudberries, blueberries, salmon and a small amount of sugar. It is an
+aquired taste, and isn't for those with delicate stomaches. Although, if
+you've been eating soykibble and soylent green, this is probably a step up,
+since its actually made with fresh (and real) meat and fruits. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#60237
+Keywords:	hoecake cornbread delicious scrumptious
+Name:	a delicious looking ^Yhoecake^N
+RoomDesc:$
+A scrumptious looking piece of cornbread sits here.~
+LookDesc:$
+Hoecakes are a type of thin ^Ycornbread^N made of cornmeal, salt, and water, which
+is baked on a griddle. It became known as "hoecake" because field hands often
+cooked it on a shovel or hoe held to an open flame. They're quite delicious,
+go ahead and have a bite. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#60238
+Keywords:	biltong beef stokkie homemade strip dried
+Name:	a homemade beef biltong stokkie
+RoomDesc:$
+A strip of dried beef sits here, just waiting to be eaten.~
+LookDesc:$
+Biltong is a kind of cured meat that originated in South Africa. Many
+different types of meat can be used to make it, ranging from beef to various
+game meats, even to fillets of ostrich. This one happens to be made from raw
+fillets of beef cut into strips following the grain of the muscle. It is
+similar to beef jerky in that they are both spiced, dried meats, but differ in
+their typical ingredients, taste and production process. The word biltong is
+from the Dutch word bil ("rump") and tong ("strip" or "tongue"). 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	55
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#60239
+Keywords:	crawdads crayfish crawfish lobster skewered stick
+Name:	a row of crawdads skewered on a stick
+RoomDesc:$
+A wooden stick with tiny lobsters skewered on it sits here.~
+LookDesc:$
+Crayfish, 'crawfish', or 'crawdads' are freshwater crustaceans that resemble
+small lobsters, to which they are closely related. They have been shiskabobbed
+on carved wooden skewers, doused with a mixture of spices and herbs, and slow
+roasted over an open flame. They are cooked to perfection and are quite
+delicious, try some. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#60240
+Keywords:	amala paste dish earthenware
+Name:	a small dish of Amala paste
+RoomDesc:$
+A small earthenware dish with a thick paste on it sits here.~
+LookDesc:$
+Amala is a type of food eaten in West Africa, precisely among the Yoruba
+peoples of Nigeria. It is made by slicing yams, which are a very popular
+vegetable in Nigeria, drying and grinding it into a flour. It is then sieved
+and processed into amala by mixing the powder into boiling water and stirring
+it to a desired texture. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	45
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#60241
+Keywords:	asi black drink whelkshell cup
+Name:	a large ^Wwhelkshell^N cup of Asi
+RoomDesc:$
+^gA large ^Wwhelkshell^g cup with a ^Lblack liquid^g inside it sits here.^N~
+LookDesc:$
+Asi, or 'Black Drink' is a beverage brewed by the Native Americans of the
+Southeastern United States. It was prepared from the roasted leaves and stems
+of the Yaupon Holly (Ilex vomitoria), which is native to the Atlantic and Gulf
+Coasts. The active ingredient in the drink is caffeine. Creeks, Cherokees,
+Choctaws, and others believed it purified the drinker and purged him of anger
+and falsehoods. The Black drink is prepared by Speaks-with-Many personally,
+and is served in a large whelkshell cup. Originally it was consumed by men in
+the tribal council, who were served in order of precedence, starting with
+important visitors. They would consume large quantities at a sitting, and
+afterwards, purge themselves by vomiting. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	85
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	28
+	Val1:	28
+	Val2:	5
+BREAK
+#60242
+Keywords:	firewater earthenware cup
+Name:	an earthenware cup of firewater
+RoomDesc:$
+An earthenware cup full of a clear liquid sits here.~
+LookDesc:$
+This sturdy earthenware cup seems to be hand crafted, and while it has very
+little decoration, its very well fabricated and is a piece of art all by
+itself. Its contains a copious amount of the infamous liquid known to the
+Native American peoples simply as 'Firewater'. It is crystal clear and smells
+stronger than paint thinner, and you swear it just singed your nose hairs from
+a simple wiff. Its unclear what proof the liquid is, but its safe to say its
+high enough to make you murder your children, eat half your livestock, beat
+your wife, and keep you in a coma for the next week and a half. Enjoy. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	95
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	18
+BREAK
+#60243
+Keywords:	shedah dish ceramic shallow
+Name:	a shallow ^cceramic^N dish full of Shedah
+RoomDesc:$
+A shallow ceramic dish sits here, waiting to be sipped upon.~
+LookDesc:$
+Shedeh is a drink that was prized in ancient Egypt, and this particular type
+is made from pomegranates. It has a bittersweet aftertaste, which is balanced
+fairly well with the natural sweetness of the fruit, it has somewhat of an
+aquired taste, and certainly isn't for the casual drinker. It is served in a
+hand-made ^cdark blue ceramic^N dish, which has been polished to a gleam, its
+raised lip helping to keep its contents within when one wanders around with it
+in hand. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.05
+	Barrier:	3
+	Cost:	85
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	26
+BREAK
+#60244
+Keywords:	object unfinished
+Name:	a slender ^ybronze^N vassal of Kykeon
+RoomDesc:$
+^gA dull ^ybronze^g cup of some sort has been left here.^N~
+LookDesc:$
+Kykeon (Greek for "to stir, to mix") is an ancient Greek drink comprised
+mainly of water, barley and herbs. It was used at the climax of the Eleusinian
+Mysteries to break a sacred fast, but it was also a favourite drink of Greek
+peasants. It is supposed to have digestive properties, but Kykeon is more
+infamously known for being processed with barley parasitized by ergot, which
+is a fungus that once consumed has various psychoactive properties, and has
+been known to trigger intense experiences. Fortunately, this is a mild
+mixture, so the drinker should only have the slightest affects... or atleast
+thats what the tender implied. Won't know until you try it. It is served in a
+dull, hand-hammered ^ybronze^N cup. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	95
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	10
+BREAK
+#60245
+Keywords:	vessal delftware sturdy water eggshell white
+Name:	an ^Weggshell white^N delftware water vessal
+RoomDesc:$
+^gA sturdy ^Weggshell white^g delftware vessal sits here.^N~
+LookDesc:$
+This old style of English pottery is tin-glazed delftware, which is quite
+sturdy and stands up well to abuse. It is capped with a cork, and has very
+sparse decoration, most of which is simple, yet stylish, dark cobolt blue
+small brush paintings wrapping around its exterior. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	22
+	Val1:	22
+BREAK
+#60248
+Keywords:	leopard bronze statuette ornate cast
+Name:	an ornately cast ^ybronze^N leopard statuette
+RoomDesc:$
+^gAn ornate cast ^ybronze^g leopard statuette sits perched here.^N~
+LookDesc:$
+The leopard is, undoubtedly, the animal of greatest significance in Benin
+royal art, as well as one of the most graceful. This bronze casting of the
+leopard captures its powerful haunches, clawed paws, rich dappled coats and
+fierce, sharp toothed countenances. The leopard represents the Benin king
+(Oba) wisely restraining his limitless powers. Only the Oba and his hunters
+were entitled to kill leopards and then, only for sacrificial purposes. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60249
+Keywords:	pot clay sturdy kiln-cooked rustic brown drawings
+Name:	a sturdy kiln-cooked, ^yrustic brown^N clay pot
+RoomDesc:$
+^gA sturdy little ^yclay pot^g with various drawings on it sits here.^N~
+LookDesc:$
+This hand made and kiln-fired clay pot is ^yrustic brown^N in colour, quite
+sturdy, and seems to be covered in various, albeit simplistic 'swift creek'
+inlays around its outer surface. Thin water-like lines travel symmetrically
+around the pot, which spiral in onto themselves before traveling along in the
+opposite direction to continue the unbroken lines. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.20
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60250
+Keywords:	mask chokwe pwo dance beautifully carved wooden tribal
+Name:	A beautifully carved ^ywooden^N Chokwe Pwo dance mask
+RoomDesc:$
+^gA beautifully carved ^ywooden^g tribal dance mask rests here.^N~
+LookDesc:$
+The 'Pwo' is a Chokwe dance mask and represents the incarnation of the female
+ancestor, the ideal woman. It is made of single piece of beautifully carved
+hard wood. The mask displays the expressiveness and facial sensitivity that
+have made Chokwe sculptors are reknowned for, and it has a deep, polished
+mahogany colour with a raffia basket headdress and wooden beads as trailing
+down along its back as "dreads". 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60251
+Keywords:	suit grey business tres chic
+Name:	^na ^Lgrey^n, Tres Chic, business ^Lsuit^n
+RoomDesc:$
+A fancy grey suit lies in a wrinkled mess, on the floor.~
+LookDesc:$
+Top of the line in fashion sense, this Tres Chic suit is form fitting.  Made
+of silverish grey fabric, it is the color of choice in Seattle's upper crust.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60252
+Keywords:	parka dull grey fur-lined hood jacket coat
+Name:	a dull grey parka with a ^Wfur^N-^Wlined^N hood
+RoomDesc:$
+A fur-lined hooded parka rests lifelessly here.~
+LookDesc:$
+This thick, warm-looking parka features a rather beautiful ^Wfur^N-^Wlined^N hood with
+a braided leather drawstring, lengthy sleeves and spacious side pockets, along
+with a single larger front pouch to keep ones hands warm. The hem is also
+lined with a strip of puffy ^Wwhite fur^N, which ends just above the knee.
+Wind-proof.. water-proof.. The only thing it isn't is bullet-proof. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	285
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	6
+	Val2:	4
+	Val3:	6
+	Val4:	6
+	Val6:	2
+	Val7:	10
+BREAK
+#60253
+Keywords:	club gnarled nasty-looking big wooden
+Name:	a large gnarled nasty-looking club
+RoomDesc:$
+A big wooden caveman club has been dropped here.~
+LookDesc:$
+Ugh. Pick up club. Hit girlfriend over head. Drag back to cave by hair. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60255
+Keywords:	desk expensive polished oak
+Name:	A very large and expensive, polished ^ybrown oak^N desk
+RoomDesc:$
+^gA very large and expensive, polished ^ybrown oak^g desk sits here.^N~
+LookDesc:$
+This very large, and very expensive looking ^ybrown oak^N desk is polished so much
+that one can easily make out their reflection on its surface. A small laptop
+computer takes up a portion of its top, while most of it is clear of debris
+and objects, aside from a few thin stacks of paper with barely legible hand
+writing on them. Aside from that, the only real thing of concern is a small
+black book.. most likely containing incriminating evidence against the clubs
+owner.. granted the price to pay for taking such a thing would be ones life.
+An somewhat full ashtray sits near the other side of the desk, looking as if
+it gets plenty of use. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	250.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60256
+Keywords:	fedora gangster hat foppish pale lavender
+Name:	a large, foppish ^mpale lavender^N gangster fedora
+RoomDesc:$
+^gA large, foppish ^mpale lavender^g fedora sits here.^N~
+LookDesc:$
+A soft ^mpale lavender^N felt fedora hat with a lengthwise crease. Perfect for any
+turn of the century gangster. It seems a bit foppish, and larger than it
+should normally be. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60257
+Keywords:	suit jacket pale lavender double-button slick
+Name:	a slick ^mpale lavender^N double-button suit jacket
+RoomDesc:$
+^ga slick ^mpale lavender^g double-button suit jacket sits here.^N~
+LookDesc:$
+This slick mobster style suit is ^mpale lavender^N in colour and has a
+double-button overcoat design. Nothing extremely fancy, but, its sure to bring
+out the mobster in the wearer. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60258
+Keywords:	cigar cuban fat ash lengthy
+Name:	a fat cuban ^ycigar^N with a lengthy ^Wash^N
+RoomDesc:$
+^gA fat cuban ^ycigar^g with a lengthy ^Wash^g lies here, smoldering.~
+LookDesc:$
+Its a pretty fat cuban cigar, looks real too. Whoever was smoking it hasn't
+bothered flicking the ash even once so far, and it extends down about a
+quarter of its length. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.05
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60259
+Keywords:	gatsby cap hat floppy big
+Name:	a big, floppy ^ybrown^N gatsby cap
+RoomDesc:$
+^gA big, floppy ^ybrown^g gatsby cap sits here.^N~
+LookDesc:$
+Its a very big, and quite floppy looking ^ybrown^N gatsby hat, something you'd see
+one a New York paperboy back at the turn of the century. They've fallen out of
+style over the years... and maybe you can see why. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60260
+Keywords:	jacket suit brown throw-back
+Name:	a throw-back ^ybrown^N suit jacket thats way too small
+RoomDesc:$
+^gA throw-back ^ybrown^g suit jacket thats way too small sits here.^N~
+LookDesc:$
+Its a throw-back ^ybrown^N suit jacket, which looks like its been stretched out to
+the point that its literally about to split down the back between the
+shoulders. This wear and tear is more commonly known as the 'fat man in a
+little coat'. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60261
+Keywords:	suit beat-up smelly horrible ragged
+Name:	a beat-up suit that needs a serious wash or two or five
+RoomDesc:$
+A ragged looking suit sits here, smelling horrible, please light it on fire.~
+LookDesc:$
+This suit has an awful stench to it, and aside from that it looks as if it
+could fall apart at the seams at any moment. It should be burned, immediately,
+for the safety of all who may come into contact with it. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60262
+Keywords:	pistol colt trollhunter heavy
+Name:	a large Colt Trollhunter heavy pistol
+RoomDesc:$
+A large Colt heavy pistol has been left here.~
+LookDesc:$
+The Trollhunter is a Colt Manhunter that has been modified to accept the
+larger .50 caliber round, not to mention its grip and trigger guard have been
+altered to allow for someone with much larger than normal hands and fingers to
+use it. This baby packs quite a punch, so be careful who you aim at it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	16
+	Val6:	16
+	Val7:	5105
+	Val9:	-1
+	Val10:	4
+BREAK
+#60263
+Keywords:	jacket bomber coat brown leather sturdy shearling
+Name:	a sturdy ^ybrown leather^N shearling bomber jacket
+RoomDesc:$
+^gA sturdy ^ybrown leather^g bomber jacket with wool trim lies here.^N~
+LookDesc:$
+This brown leather bomber jacket is has a tonal shearling trim on the collar
+and cuffs, which is always helpful for those cold Seattle days. Its notched
+collar is adjustable, and its button-down front overlaying flaps have a hidden
+zipper concealed beneath for added comfort and style. It boasts zippered
+pockets on the chest, as well as dual front flap pockets. Made from a
+combination of Acetate, polyester and wool, while its interior layers are
+lined with kevlar and slightly rigid plates, which helps hide its protective
+qualities from the prying eyes of Johnny Law. Its tag states "Dry clean only.
+Made in Italy." 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	1350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	3
+	Val6:	2
+	Val7:	6
+BREAK
+#60264
+Keywords:	cocktail basin street blues
+Name:	a ^BBasin Street Blues^N cocktail
+RoomDesc:$
+^gA very ^Bblue^g drink sits here in a cocktail glass.^N~
+LookDesc:$
+Well, its blue for starters, probably due to the drop or two of blue food
+colouring thats used to make it match its name. Two parts bourbon, one part
+triple sec, one part lemon juice, shook with cracked ice, drained and served
+in a fancy cocktail glass. Delicious. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	16
+BREAK
+#60265
+Keywords:	cocktail linseed glass
+Name:	a Linseed cocktail
+RoomDesc:$
+A cocktail glass sits here, filled to the brim with.. a cocktail.~
+LookDesc:$
+A bit of a change of pace, as far as whiskey cocktails go. Concocted with
+blended whiskey, pineapple juice, a touch of powdered sugar, a dash of
+anisette and a smidgen of lemon juice. Sweet, sour, both at the same time.
+Guaranteed to wake you up, or make you puke, maybe even both. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	55
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	23
+BREAK
+#60266
+Keywords:	tequila sour liquor glass
+Name:	a tequila sour
+RoomDesc:$
+A glass of liquor sits on the floor here, waiting to be sipped.~
+LookDesc:$
+If you're into sour things, and into tequila, this one is definately right up
+your alley. Two parts tequila, one part lemon juice and a spoonful of powdered
+sugar, all shaken together with ice, strained into a snazzy cocktail glass and
+topped with a cherry. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	20
+BREAK
+#60267
+Keywords:	drink liquor sex beach
+Name:	a Sex on the Beach
+RoomDesc:$
+A Sex on the Beach sits here, looking tastey.~
+LookDesc:$
+Ofcourse you've heard of this one, but have you ever actually tried it? One
+part vodka, one part peach schnapps, three parts cranberry juice and three
+parts orange juice. Perfect for a night on the town, and a morning draped over
+the toilet, hope you have someone to hold your hair back for you. Enjoy! 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	60
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	19
+BREAK
+#60268
+Keywords:	martini cocktail glass standard
+Name:	a standard martini
+RoomDesc:$
+A martini cocktail glass sits here, looking pretty.~
+LookDesc:$
+Your standard martini, which comes in a its trademark cocktail glass. Five
+parts gin and one part sweet vermouth. Guaranteed to make you look
+sophisticated, or atleast until you drink your fifth martini. Things might
+start to get fuzzy after that, but then again, maybe you'll look cooler? It
+even comes with an olive, enjoy. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	24
+BREAK
+#60269
+Keywords:	martini bradford cocktail
+Name:	a Bradford martini
+RoomDesc:$
+A martini cocktail glass sits here, looking yummy.~
+LookDesc:$
+Better known as the drink of choice of the infamous James Bond, and as you
+might expect, the Bradford is (insert Sean Connery voice-over) "Shaken, not
+stirred." Six parts gin, one part dry vermouth. Are you an agent of her
+majesties secret service? If so, this drink is for you. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	24
+BREAK
+#60270
+Keywords:	applejack lowball glass liquor
+Name:	a lowball glass of Applejack
+RoomDesc:$
+A lowball glass sits here, full of some kind of liquor.~
+LookDesc:$
+Applejack is an alcoholic drink made from apples, which traces its origins
+back to the American colonies. It is made by concentrating hard cider via
+evaporative distillation. It smells and tastes heavily of apples, and has
+quite a kick to it. Its served in a lowball glass, which contains more than
+enough of the liquid the consumer to feel its effects. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	18
+	Val2:	21
+BREAK
+#60271
+Keywords:	peanuts cajun bag
+Name:	a small bag of cajun peanuts
+RoomDesc:$
+A small wax-paper bag of peanuts sits here.~
+LookDesc:$
+These peanuts have been glazed in egg whites and covered lightly in a mixture
+of paprika, salt, oregano, thyme, garlic powder, onion powder, black, white
+and red peppers. They are then baked until the peanuts are toasted and
+completely dry. They come in a small wax-paper pouch, and seem to be perfect
+for working off the affects of a night of heavy drinking. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#60272
+Keywords:	envelope manila lumpy small
+Name:	a small, lumpy manila envelope
+RoomDesc:$
+A small manila envelope sits on the floor here, looking suspicious.~
+LookDesc:$
+This small manila envelope looks like any other office supply, although it
+does seem to have a cylindrical lump inside of it, since apparently something
+has been stuffed into it. The seal is a little rough, and there looks to be a
+few stains on the paper towards one end of whatever is inside, which has a
+dark orange/brown colour to it. If one feels and squeezes it, it seems to
+roughly be the size of a finger.... but maybe thats just a coincidence? 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60273
+Keywords:	heckler koch hk227 smg gun submachinegun
+Name:	a Heckler & Koch HK227
+RoomDesc:$
+A submachinegun lies in the dust here.~
+LookDesc:$
+The HK227 is one of the most common submachineguns in the world; it is
+commonly seen in corporate security forces as well as on the streets.  It
+comes standard with a gas vent II and a laser sight. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	28
+	Val6:	28
+	Val7:	626
+	Val8:	650
+	Val10:	28
+BREAK
+END

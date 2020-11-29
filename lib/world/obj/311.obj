@@ -1,0 +1,874 @@
+#31100
+Keywords:	black gold embossed keycard
+Name:	a black gold embossed keycard
+RoomDesc:$
+A black gold embossed keycard is lying here.~
+LookDesc:$
+This gold embossed black keycard is used to open the doors of several clinics
+in little Chiba.  
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1010001100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31101
+Keywords:	cobra black steel
+Name:	a black steel cobra
+RoomDesc:$
+A black extendable rod is lying here.~
+LookDesc:$
+This is an extendable rod from which 3 strands of monowire flash out of. It
+looks like a very dangerous weapon and it takes some skill to use it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	24
+	AvailDay:	14.00
+	LegalNum:	1
+	LegalCode:	10
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#31102
+Keywords:	bottle sake small
+Name:	small bottle of sake
+RoomDesc:$
+A small bottle of sake is lying here.~
+LookDesc:$
+This is a small plastic bottle of sake, rice wine. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	8
+	Val2:	31
+BREAK
+#31103
+Keywords:	rice white plain
+Name:	plain white rice
+RoomDesc:$
+A carton of plain white rice lies here.~
+LookDesc:$
+This is a carton of plain white rice. It smells very good and goes well with
+another order of meat. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#31104
+Keywords:	taka's special
+Name:	Taka's special
+RoomDesc:$
+A small carton of takeout food is on the ground here.~
+LookDesc:$
+This is a takeout order of japanese food from Taka's takeout. You can smell
+the rice, spices and fish that make up this great dish. There is the symbol
+for takeout place on the side. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#31105
+Keywords:	12 pack ice tea
+Name:	12 pack of ice tea
+RoomDesc:$
+A 12 pack of ice tea is just lying here.~
+LookDesc:$
+There are 12 cans here and each can holds twelve ounces of ice cold tea. This
+brewed beverage is the product of the Tabuku Bottling Company. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	12.00
+	Barrier:	3
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	5
+BREAK
+#31106
+Keywords:	phoenix cyberdeck deck
+Name:	a Phoenix cyberdeck
+RoomDesc:$
+A golden colored cyber deck is lying gathering dust~
+LookDesc:$
+This is one of the cyberdecks built by Shiba Stables. It has a golden case and
+looks to be made out of pretty solid materials. It looks like would be able to
+take a bullet or two and keep working. There is a small symbol on the side. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	4
+	Val2:	300
+	Val3:	500
+	Val4:	300
+BREAK
+#31107
+Keywords:	soup sharkfin fin
+Name:	sharkfin soup
+RoomDesc:$
+A bowl of sharkfin soup is lying here.~
+LookDesc:$
+This is a bowl of sharkfin soup. It looks great and you see hunks of sharks
+floating in this great smelling dish. It is very filling and highly
+nutritious, also very expensive. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#31108
+Keywords:	bamboo steak
+Name:	Bamboo steak
+RoomDesc:$
+A bamboo steak is lying here on a platter.~
+LookDesc:$
+This is a bamboo steak, one of the new creations by the Iron Chef. It is
+several pieces of young bamboo that have been woven through a delicate piece
+of steak and roasted over a slow flame. It has been basted with a mixture of
+plum wine and ginger soy sauce. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#31109
+Keywords:	bamboo rice shrimp tube
+Name:	a bamboo tube packed with rice and shrimp
+RoomDesc:$
+A bamboo tube packed with food is lying here.  ~
+LookDesc:$
+This looks great, smells good and is a unique dish. A young bamboo tube has
+been cooked till very tender and packed with precooked rice and small shrimp,
+then it was folded up on one end. You can hold this dish in one hand and take
+bites of it without spilling any. It makes a great snack. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#31110
+Keywords:	small cup cherry blossom wine
+Name:	a small cup of cherry blossom wine
+RoomDesc:$
+A small cup of dark red wine is lying here.~
+LookDesc:$
+This wine is specially made for the Inn. It is made from cherry blossoms and
+some other secret substances. As you smell it, you think of a spring day with
+cherry blossoms falling all around you, and a lovely woman holding your hand.
+Then you shake your head and the vision passes. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	4
+	Val2:	27
+BREAK
+#31111
+Keywords:	smartlink II smart link accessory
+Name:	smartlink II accessory
+RoomDesc:$
+A smartlink accessory is lying on the ground here.~
+LookDesc:$
+This is smartlink II accessory. It allows for better accuracy and targeting
+especially when used with a smartgun link II. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	800
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	4
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	2
+	Val1:	1
+BREAK
+#31113
+Keywords:	atm machine
+Name:	an ATM
+RoomDesc:$
+An ATM is setup here for your use.~
+LookDesc:$
+Built with a credstick insertion slot as well as nuyen input for
+universal compatibility.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31114
+Keywords:	stun cloud spell formula ratskin
+Name:	stun cloud spell formula
+RoomDesc:$
+A spel formula is lying here.~
+LookDesc:$
+This spell formula is that of the stun cloud spell. It is written on a ratskin
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	5
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	7
+BREAK
+#31116
+Keywords:	manabolt mana bolt formula unknown animal pelt
+Name:	the pelt of an unknown animal
+RoomDesc:$
+a strange looking pelt is lying here~
+LookDesc:$
+The beast this pelt comes from remains unknown, but it is an exotic one to be
+sure. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12000
+	AvailTN:	12
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	2
+	Val2:	1
+BREAK
+#31117
+Keywords:	stone ring carved 
+Name:	a ring carved from stone
+RoomDesc:$
+A ring carved from stone is lying here.~
+LookDesc:$
+This ring is carved from stone and seem light and heavy at the same time. 
+~
+Type:	Focus
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.35
+	Barrier:	12
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+BREAK
+#31118
+Keywords:	brick ring
+Name:	a brick ring
+RoomDesc:$
+A brick ring is lying here~
+LookDesc:$
+This is a ring made of brick that fits around your finger. It is very helpful
+for summoning hearth spirits. 
+~
+Type:	Focus
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	30000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	2
+	Val2:	6
+BREAK
+#31120
+Keywords:	dark blue suit
+Name:	a dark blue suit
+RoomDesc:$
+A dark blue suit is lying here.~
+LookDesc:$
+This looks like a great dark blue suit. It is expensive and just reeks high
+class. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	900
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	3
+	Val5:	2
+	Val6:	2
+	Val7:	2
+BREAK
+#31121
+Keywords:	deerskin leggings
+Name:	A pair of deerskin leggings
+RoomDesc:$
+Some deerskin leggings are lying here.~
+LookDesc:$
+These leggings are made from very soft deerskin and are also very tough. They
+come with a deerskin loincloth that can be wrapped to protect the valuables. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val6:	1
+	Val7:	-1
+BREAK
+#31122
+Keywords:	futon comfortable-looking mattress
+Name:	a futon
+RoomDesc:$
+A comfortable-looking futon lies here.~
+LookDesc:$
+Though this hand-stuffed, fabric-covered mattress bears more of a resemblance
+to the Japanese sleeping mat than the Westernized sofa-bed, it does come with
+its own wooden frame. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	30.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31123
+Keywords:	mats tatami straw
+Name:	some tatami mats
+RoomDesc:$
+Rectangular straw mats cover the floor.~
+LookDesc:$
+These yellow, dark-bordered rush mats are fairly fragile, and should be walked
+upon barefoot or in socks. 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	7.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31124
+Keywords:	table heatable wooden kotatsu synthwood
+Name:	a heatable table
+RoomDesc:$
+A low, four-legged wooden table is here.~
+LookDesc:$
+This wooden table comes with an electrical unit to be placed underneath its
+frame, and a futon-like quilt to place over it to hold the heat. A good piece
+of furniture to gather around and warm your feet with in the cold winter
+months. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	20.00
+	Barrier:	1
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31125
+Keywords:	screen shoji wood ricepaper delicate
+Name:	a shoji screen
+RoomDesc:$
+A wood-and-ricepaper screen stands here.~
+LookDesc:$
+These folding screens are made with translucent ricepaper over a wooden frame.
+They're a light, flexible and visually appealing way to partition off spaces.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31126
+Keywords:	lamp shoji ricepaper hanging
+Name:	a shoji lamp
+RoomDesc:$
+A ricepaper lamp casts a soft glow from the ceiling.~
+LookDesc:$
+A square wooden frame covered in treated ricepaper, with a ceiling attachment
+and room for a 60-watt lightbulb. When lit, it gives off a soft yellow glow. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31127
+Keywords:	chest japanese clothing closet tansu ishu-danso paulownia
+Name:	a Japanese clothing chest
+RoomDesc:$
+A wooden closet leans against the wall.~
+LookDesc:$
+A two-section isho-dansu (Japanese clothing chest) crafted from blondish
+paulownia wood, with bolt iron lockplates, hinges and bracketing. About 1.7
+meters high and 0.8 meters wide, it features a large cabinet area suitable for
+both hanging and folded clothes, and two bottom drawers for additional
+storage. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	40.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	60
+	Val1:	1
+	Val3:	-1
+BREAK
+#31128
+Keywords:	painting japanese silk-on-ink rectangular
+Name:	a Japanese silk painting
+RoomDesc:$
+A delicate silk painting hangs on one of the walls.~
+LookDesc:$
+A delicate, detailed illustration, done in Japanese ink on silk, then mounted
+on a darker piece of cloth. The painting itself is 1.3 meters long and 0.3
+meters wide. 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31129
+Keywords:	pain editor
+Name:	a pain editor
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val4:	60
+BREAK
+#31130
+Keywords:	muscle toner I cultured
+Name:	muscle toner I -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val2:	1
+	Val4:	30
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+BREAK
+#31131
+Keywords:	muscle toner II cultured
+Name:	muscle toner II -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val2:	1
+	Val4:	60
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+BREAK
+#31132
+Keywords:	muscle toner III cultured
+Name:	muscle toner III -cultured
+RoomDesc:$
+1~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	300000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val2:	1
+	Val4:	90
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	3
+BREAK
+#31133
+Keywords:	metabolic arrester cultured
+Name:	a metabolic arrester -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	80000
+	AvailTN:	8
+	AvailDay:	40.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	1
+	Val2:	1
+	Val4:	45
+BREAK
+#31134
+Keywords:	synthacardium II cultured
+Name:	synthacardium II -cultured
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	50.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	2
+	Val2:	1
+	Val4:	22
+BREAK
+END

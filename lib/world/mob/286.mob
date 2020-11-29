@@ -1,0 +1,620 @@
+#28600
+Keywords:	Rifkin's Buddy
+Name:	Rifkin's Buddy
+RoomDesc:$
+Rifkin's buddy stands here. 
+
+~
+LookDesc:$
+He looks like Rifkin, same hair and eyes and facial features, except he is not
+Rifkin. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	35
+	Str:	20
+	Cha:	20
+	Int:	25
+	Wil:	35
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	8
+	Cash:	12
+	Bank:	200
+[SKILLS]
+	brawling:	6
+BREAK
+#28601
+Keywords:	lone star guard
+Name:	a Lone Star guard
+RoomDesc:$
+A guard wearing a Lone Star uniform is here. 
+
+~
+LookDesc:$
+He is tall and serious looking which the business he is in calls for. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000000011000001010
+AffFlags:	1000000000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	5
+	Str:	10
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	150
+	Level:	1
+	Ballistic:	15
+	Impact:	15
+	Cash:	15
+	Bank:	20
+[SKILLS]
+	rifles:	9
+	pistols:	9
+BREAK
+#28602
+Keywords:	tall dark haired man
+Name:	a tall, dark haired man
+RoomDesc:$
+A tall, dark haired man stands here. 
+
+~
+LookDesc:$
+He is a tall, dark haired man. His eyes, contained on his coy face are round
+and dark, with a icy look, staring. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	200
+	Impact:	200
+	Cash:	500000
+	Bank:	50000
+[SKILLS]
+BREAK
+#28603
+Keywords:	troll large
+Name:	the troll
+RoomDesc:$
+A large troll stands here selling armor. 
+
+~
+LookDesc:$
+He is large and intimidating.  His eyes portray a greater anger. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	212
+	Weight:	150
+	Ballistic:	20
+	Impact:	20
+	Cash:	999999
+	Bank:	999999
+[SKILLS]
+	brawling:	9
+BREAK
+#28604
+Keywords:	ugly troll
+Name:	an ugly troll
+RoomDesc:$
+An ugly troll stands here. 
+
+~
+LookDesc:$
+Tall, hefty, and overbearing, he grins at those who wish to buy stuff.  His
+yellow-black unkept teeth glare in the bad lighting, making a nasty sight. A
+smell lingers over him, the smell of an unbathed troll kept in a small room
+for long whiles. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	4
+	Str:	10
+	Cha:	1
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	150
+	Ballistic:	20
+	Impact:	20
+	Cash:	20000
+	Bank:	50000
+[SKILLS]
+	brawling:	9
+BREAK
+#28605
+Keywords:	Lone star officer
+Name:	a Lone Star officer
+RoomDesc:$
+A Lone Star officer walks around his office. 
+
+~
+LookDesc:$
+He looks to be average size and is an ork. His tusks are pearl white, kept
+clean and well cared for.  His skin contains green hues and his hair ia a dark
+brown. Emeralds for eyes, they gaze outwards, searching for something, some
+clue to a case he has been baffling him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	8
+	Str:	8
+	Cha:	5
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	120
+	Ballistic:	9
+	Impact:	9
+	Cash:	260
+	Bank:	40
+[SKILLS]
+	:	9
+	brawling:	9
+BREAK
+#28606
+Keywords:	armor salesman man
+Name:	the armor salesman
+RoomDesc:$
+An armor salesman stands here. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	6
+[POINTS]
+	Height:	150
+	Weight:	200
+	Level:	1
+	Ballistic:	40
+	Impact:	40
+	Cash:	999999
+	Bank:	999999
+[SKILLS]
+	:	4
+	brawling:	9
+BREAK
+#28607
+Keywords:	man
+Name:	the tall, strong man
+RoomDesc:$
+A tall, ox-strong man is here, pawning armor. 
+
+~
+LookDesc:$
+He is tall and his muscles bulge, sending ripples across his skin.  His hair
+is sand-paperish; short and rough, being light brown in color. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	200
+	Ballistic:	15
+	Impact:	15
+	Cash:	999999
+	Bank:	999999
+[SKILLS]
+BREAK
+#28608
+Keywords:	the jail guard
+Name:	the jail guard
+RoomDesc:$
+The jail guard sleeps here. 
+
+~
+LookDesc:$
+He wears his blue jailer uniform with sholder stips and a badge. His keyring
+jingles and he snores and sits in his stool. 
+~
+ArriveMsg:	strolls in from
+LeaveMsg:	strolls out
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sleeping
+DefaultPos:	Sleeping
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	70
+	Ballistic:	6
+	Impact:	6
+	Cash:	5
+	Bank:	9
+[SKILLS]
+	brawling:	9
+	:	9
+BREAK
+#28609
+Keywords:	the receptionist
+Name:	the receptionist
+RoomDesc:$
+The receptionist sits here, typing on her console.  
+
+~
+LookDesc:$
+The receptionist sits here, typing on her console.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	1
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	120
+	Ballistic:	4
+	Impact:	4
+	Cash:	50
+	Bank:	50
+[SKILLS]
+	brawling:	6
+BREAK
+#28610
+Keywords:	lone star officer
+Name:	the Lone Star officer
+RoomDesc:$
+A Lone Star officer stands here. 
+
+~
+LookDesc:$
+This is a large, burly, officer.  He carries a Glock model 21 .40 cal in his
+holster with pride, his billy club in his hand, slapping it gently on his
+other palm, this man means business. 
+~
+ArriveMsg:	enters intimidatingly from
+LeaveMsg:	walks out with pride to the
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	8
+	Cha:	3
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	250
+	Ballistic:	5
+	Impact:	5
+	Cash:	6
+	Bank:	6
+[SKILLS]
+	firearms:	9
+	pistols:	9
+BREAK
+#28611
+Keywords:	female lone star officer
+Name:	the female officer
+RoomDesc:$
+A female Lone Star officer stands here. 
+
+~
+LookDesc:$
+She fits her uniform well and wears her holster with pride.  The shield on her
+chest gives her rights, empowering her to keep the streets the way she wants
+them. 
+~
+ArriveMsg:	strolls in from the
+LeaveMsg:	struts off to the
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	150
+	Ballistic:	6
+	Impact:	6
+	Cash:	20
+	Bank:	20
+[SKILLS]
+	brawling:	9
+	:	9
+BREAK
+#28612
+Keywords:	annalise
+Name:	Annalise
+RoomDesc:$
+Annalise! 
+
+~
+LookDesc:$
+Beauty eminates from her, her aura floods the goodness of her heart, her
+wonderous personality, and her over all greatness.  She is in shape, from
+playing tennis, and jams to the likes of Incubus. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	50
+	Level:	2
+	Ballistic:	1000
+	Impact:	1000
+	Cash:	50
+[SKILLS]
+	firearms:	9
+	pistols:	9
+BREAK
+#28613
+Keywords:	fletcher ferret
+Name:	Fletcher
+RoomDesc:$
+to* 
+
+~
+LookDesc:$
+He is a spry ferret, colored a beautiful brown and black.  He sleeps in
+Rifkin's old tee-shirts, and eats from his bowl of unlimited food. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Resting
+DefaultPos:	Resting
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	5
+	Weight:	1
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	brawling:	9
+	:	9
+BREAK
+#28614
+Keywords:	vigorous scarred human
+Name:	A scarred human
+RoomDesc:$
+A vigorous, Scarred human who pedals his rifles from behind the counter. 
+
+~
+LookDesc:$
+Vigorous, yet battle scarred, this vet from the streets is mean looking, but
+friendly as he passes along stories from his days while trying to sell his
+weapons. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	500000
+	Bank:	500000
+[SKILLS]
+BREAK
+#28616
+Keywords:	mob unfinished
+Name:	a doctor, in a lone star uniform
+RoomDesc:$
+A cop stands here, with a scapel and a surgeons mask. 
+
+~
+LookDesc:$
+He is a regualar cop it seems, but he holds the scalpel and wears the mask,
+which makes you think he is the head operator. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	300000
+	Bank:	300000
+[SKILLS]
+BREAK
+#28617
+Keywords:	large human
+Name:	a large human
+RoomDesc:$
+A large human, wearing a black trenchcoat. 
+
+~
+LookDesc:$
+A tall man, white skinned, and human, with long black hair, and a draping
+leather trenchcoat stands here, selling various armor peices.  He looks well
+dressed, and very tough. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+	Cash:	500000
+	Bank:	500000
+[SKILLS]
+BREAK
+END

@@ -1,0 +1,597 @@
+#20800
+Keywords:	Street kid
+Name:	Elven street kid
+RoomDesc:$
+An elven street kid is squatting here. 
+
+~
+LookDesc:$
+Cold and hungry, it looks toward you as if to ask for money, but the bruises
+on its face show it won't say a word. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	sighs sadly and moves on
+MobFlags:	100111001010100001100
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	6
+	Cha:	5
+	Int:	6
+	Wil:	7
+	Mag:	6
+[POINTS]
+	Height:	150
+	Weight:	67
+	Level:	3
+	Ballistic:	8
+	Impact:	10
+	Cash:	5
+[SKILLS]
+	brawling:	10
+	edged weapons:	7
+	armed combat:	9
+BREAK
+#20801
+Keywords:	a clone of Rei
+Name:	a clone of Rei
+RoomDesc:$
+A clone of Rei is sittign here . 
+
+~
+LookDesc:$
+Quiet and reserved, her form graceful adn supple, but her Demenor far too
+dark, she sits in quiet abandon reading poetry. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	1
+	Weight:	30
+	Ballistic:	11
+	Impact:	9
+	Cash:	500
+	Bank:	4090
+	Karma:	10
+[SKILLS]
+	:	3
+	:	10
+	brawling:	6
+	:	3
+	:	3
+BREAK
+#20802
+Keywords:	Natures child
+Name:	Nature's Child Ganger
+RoomDesc:$
+A Ganger dressed in green and brown looks for something to break. 
+
+~
+LookDesc:$
+An elven ganger looking to destroy the city is here checking out what he can
+damage. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000110101001100
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	7
+	Mag:	2
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	7
+	Ballistic:	13
+	Impact:	9
+	Cash:	10
+	Karma:	1
+[SKILLS]
+	edged weapons:	5
+	grenade launchers:	6
+	armed combat:	6
+BREAK
+#20803
+Keywords:	Ganger violet biker New
+Name:	a New World Ganger
+RoomDesc:$
+A New World Biker polishes his ride here. 
+
+~
+LookDesc:$
+Clad in violet and black leather, the New World biker is always close to his
+bike.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	6
+	Cha:	3
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	130
+	Bank:	300
+[SKILLS]
+BREAK
+#20804
+Keywords:	Kerrik
+Name:	Kerrick the shopkeeper
+RoomDesc:$
+Kerrik stands ready to make a sale. 
+
+~
+LookDesc:$
+His nametag reads, "Kerrick"; he himself is a slighty greasy Korean elf who's
+missing a few teeth. He's obviously less classy than many in the area, but is
+known as one of the better suppliers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	8
+	Cha:	2
+	Int:	1
+	Wil:	4
+	Mag:	1
+[POINTS]
+	Height:	200
+	Weight:	50
+	Ballistic:	10
+	Impact:	10
+	Cash:	600
+	Karma:	1
+[SKILLS]
+BREAK
+#20805
+Keywords:	A Lone Star Judge
+Name:	a Lone Star Judge
+RoomDesc:$
+A Lone Star Judge 
+
+~
+LookDesc:$
+Dressed in black robes, and wearing a white wig. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	4
+	Cha:	2
+	Int:	10
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+BREAK
+#20806
+Keywords:	Echo
+Name:	Echo
+RoomDesc:$
+Echo is standing here 
+
+~
+LookDesc:$
+Echo is a stunning elf, his hair so whit its almost the colour of virgin snow,
+with gleaming blood red tips. His face is pale, with shimmering emerald
+coloured eyes, and painted black lip turned in a pout while his poet shirt
+carries the gentle sway of the floor fan nearby, he raises his hands with such
+long thin fingers capped with cracked black polish he parts his lips and says
+"May I help you?" 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110000000001011
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	8
+	Str:	5
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	10
+[POINTS]
+	Height:	165
+	Weight:	52
+	Ballistic:	50
+	Impact:	50
+	Cash:	1000
+	Bank:	7000
+	Karma:	10
+[SKILLS]
+BREAK
+#20807
+Keywords:	Neckla the bouncer
+Name:	Neckla the bouncer
+RoomDesc:$
+Neckla the bouncer stands here 
+
+~
+LookDesc:$
+Neckle Looks at you with her intense gold eyes, her long mane of frizzy yellow
+hair makes her seem like a feirce lionesse.  She eyes you with contempt as you
+seek entrance to her sanctuary. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000100000001010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	9
+	Str:	11
+	Cha:	4
+	Int:	5
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	197
+	Weight:	49
+	Ballistic:	15
+	Impact:	15
+	Cash:	5000
+	Bank:	7254
+	Karma:	10
+[SKILLS]
+	brawling:	50
+	:	3
+	:	50
+BREAK
+#20808
+Keywords:	Manda
+Name:	Manda
+RoomDesc:$
+A beautiful red haired elf is dancing here. 
+
+~
+LookDesc:$
+With moon pale skin this elf entices you with her sea like eyes and her red
+hair as she smiles her full lips at those who surround her before almost
+forgetting they are there and moving back into her dance moves here on the
+sige lines the way her body sways makes you wish you were her dance partner. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	145
+	Weight:	48
+	Ballistic:	10
+	Impact:	10
+	Cash:	50
+[SKILLS]
+BREAK
+#20809
+Keywords:	Vik georgous elf
+Name:	Vik
+RoomDesc:$
+A georgous elf dances here. 
+
+~
+LookDesc:$
+With long black hair with streaks of blue-green, her hair begins to remind you
+of the sea at night. Upon occasion through her enticing dance she looks up,
+flaring radiant green eyes at you only for a moment, before continuing with
+her rythmic moves, and her perfect face dissappears under the waves of her
+ocean-like hair. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	13
+	Str:	4
+	Cha:	15
+	Int:	6
+	Wil:	7
+	Mag:	8
+[POINTS]
+	Height:	123
+	Weight:	55
+	Ballistic:	12
+	Impact:	11
+	Karma:	10
+[SKILLS]
+	brawling:	7
+	:	10
+BREAK
+#20810
+Keywords:	Lina
+Name:	Lina
+RoomDesc:$
+Lina is here standing. 
+
+~
+LookDesc:$
+Firey redhair, big cute eyes, and a shap small sleightly upturned nose, with
+te small mouth is what you see first.  Dressed in flashy red garb, this
+sorceress is very in love with fancy things, including herself.  The next
+thing you note is her apparent l lack of breasts. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	10
+	Str:	6
+	Cha:	10
+	Int:	11
+	Wil:	15
+	Mag:	15
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	100
+	Impact:	100
+[SKILLS]
+	sorcery:	50
+	edged weapons:	50
+	armed combat:	50
+BREAK
+#20899
+Keywords:	A Hanged man
+Name:	a Hanged man
+RoomDesc:$
+A burned, charred corpse dangles from the ceiling here. 
+
+~
+LookDesc:$
+Skin like ancient parchment but blackeded with fire, pure evil and hate its
+power,  The aura of death surrounds it, like a choking black veil.  You sence
+an aura of power from it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	0
+	Cha:	0
+	Int:	10
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	173
+	Weight:	500
+	Level:	1
+	Cash:	5000
+	Bank:	10000
+	Karma:	10
+[SKILLS]
+BREAK
+#20995
+Keywords:	Fed Ex man
+Name:	Fed Ex man
+RoomDesc:$
+An unfinished mob stands here.
+LookDesc:$
+It looks barely coherent as it waits to be created.
+
+~
+LookDesc:$
+He looks pretty unfinished.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#20997
+Keywords:	Cat blackberry
+Name:	Blackberry Cat
+RoomDesc:$
+Blackberry cat 
+
+~
+LookDesc:$
+Sleek adn solid black, save for a crecent moon over its eye 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	7
+	Str:	4
+	Cha:	9
+	Int:	7
+	Wil:	6
+	Mag:	3
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	11
+[SKILLS]
+BREAK
+#20998
+Keywords:	Man in black
+Name:	a man wearing a black suit, and very dark sunglasses
+RoomDesc:$
+A man in black is standing here 
+
+~
+LookDesc:$
+Rather well built humanoid looking man is here wearing a black double breasted
+suit with a black shirt, adn no tie.  Adorning his face is a pair of black
+raybans. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	9
+	Str:	8
+	Cha:	5
+	Int:	9
+	Wil:	12
+	Mag:	12
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	11
+	Bank:	100
+	Karma:	3
+[SKILLS]
+	brawling:	2
+	pistols:	12
+	sorcery:	8
+BREAK
+#20999
+Keywords:	a Secret Service Agent
+Name:	a Secret Service Agent
+RoomDesc:$
+A man in black stands here. 
+
+~
+LookDesc:$
+A mysterious man ina black suit and dark glasses, a plain white shirt.  very
+nice double breasted suit with a cream hankie in the left brest pocket. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001110
+AffFlags:	1000000100001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	168
+	Weight:	75
+	Level:	3
+	Ballistic:	25
+	Impact:	25
+[SKILLS]
+	firearms:	10
+	rifles:	15
+	brawling:	50
+BREAK
+END

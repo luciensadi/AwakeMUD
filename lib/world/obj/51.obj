@@ -1,0 +1,615 @@
+#5101
+Keywords:	pistol heavy h&k hk OHWS
+Name:	a H&K OHWS heavy pistol
+RoomDesc:$
+A heavy pistol with a flashlight and laser sight attached sits here on the floor.~
+LookDesc:$
+This is a heavy pistol made by Heckler and Koch. It features a flashlight and
+laser sight and is intended for security use. It holds 12 full metal jacket
+rounds, and packs quite a punch for its size. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	3805
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val6:	12
+	Val7:	5105
+	Val9:	-1
+	Val10:	4
+BREAK
+#5102
+Keywords:	flashlight attachment under barrel
+Name:	a small under barrel flashlight
+RoomDesc:$
+a small flashlight with a clip on top of it lies here.~
+LookDesc:$
+This small flashlight is intended for lighting up targets, and is the right
+size to be attached to a pistol. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	110
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+BREAK
+#5103
+Keywords:	credstick certified
+Name:	a certified silver credstick
+RoomDesc:$
+a silver credstick lies here, apparently misplaced.~
+LookDesc:$
+This credstick has a set credit amount visible on an LCD screen at its tip. It
+appears to be used for a set payment or perhaps to count out credit amounts
+for a company. 
+~
+Type:	Money
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12500
+	Val1:	1
+	Val2:	2
+BREAK
+#5104
+Keywords:	holster concealed gun
+Name:	a concealed quickdraw gun holster
+RoomDesc:$
+A strap leg holster is here in a heap, and it is uncertain whether it holds a gun.~
+LookDesc:$
+This holster is meant to conceal a weapon, but make it ready for quick access
+in a fight. It is made to hold a pistol type weapon, most likely up to a
+medium or heavy pistol size. 
+~
+Type:	Holster
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	650
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	1
+BREAK
+#5105
+Keywords:	laser top barrel sight
+Name:	a top mounted laser sight
+RoomDesc:$
+A black tube with a clip on it sits here.~
+LookDesc:$
+This is a laser sight intended for use as an over barrel mount on a medium or
+heavy pistol. It is attached via a clip and is fastened to the end of the gun
+for aided aiming. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+BREAK
+#5106
+Keywords:	IMI Chain knife chainknife
+Name:	an IMI "Chainknife"
+RoomDesc:$
+What looks like a knife crossed with a chainsaw is sitting here unused.~
+LookDesc:$
+This is a nasty looking tool indeed. It is about the size of a hunting knife,
+but has a deadly twist to it. It is serrated to the fifth power. This weapon
+cuts right through any sort of impact armor, and rends flesh from bone, and is
+also small enough to conceal with a fair amount of ease. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	375
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-1
+BREAK
+#5107
+Keywords:	dynatech hand taser
+Name:	a Dynatech Industries hand taser
+RoomDesc:$
+A fairly concealable taser sits here on the ground.~
+LookDesc:$
+This is a hand taser made by dynatech industries. It boasts a small,
+concealable size, with a massive taser punch. The range isn't great, but any
+weapon that shocks your foe into submission makes up for that with it's scare
+appeal. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	950
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	9
+	Val4:	17
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#5108
+Keywords:	beretta m97p pistol medium gun
+Name:	a Beretta M97P medium pistol
+RoomDesc:$
+A good sized black pistol with a sight of some sort attached lies here.~
+LookDesc:$
+This pistol boasts light to medium pistol size, with heavy pistol range, and
+packs a decent punch to boot. It fires caseless rounds, and can house 18
+bullets in a magazine. Because of its size, it can't be hidden too well, but if
+someone were to give you trouble, you could always hide it in their nose. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	1020
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	8
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val3:	8
+	Val4:	11
+	Val5:	18
+	Val6:	18
+	Val9:	-1
+	Val10:	4
+BREAK
+#5110
+Keywords:	stein wasserman sw tri star revolver
+Name:	a S&W "Tri-Star" revolver
+RoomDesc:$
+A heavy revolver sits on the ground here, looking quite large.~
+LookDesc:$
+This revolver is named the Tri-Star and is made by Stein and Wasserman. It
+houses 6 massive bullets in a cylindrical magazine, and is made for intimidation,
+and stopping power, but not so much for speed. A laser sight is attached to
+the top of it for either aiming, or to make the gun look bigger, you aren't
+sure exactly which. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	875
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val6:	6
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#5112
+Keywords:	hk heckler koch MP 2013 smg msmg
+Name:	a H&K MP-2013 M-SMG
+RoomDesc:$
+A fairly large smg with a silencer is here looking bad-ass.~
+LookDesc:$
+Another Heckler & Koch innovation, this SMG is bigger than most go-ganger type
+smg's, but doesn't hold much more firepower. Instead, it has an integral
+silencer, and an extended magazine, which enables the gun to carry 35 rounds of
+semi auto, burst, or full auto fun, all suppressed by the integral sound
+suppressor. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	12
+	Cost:	1765
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	35
+	Val6:	35
+	Val8:	28614
+	Val10:	14
+BREAK
+#5114
+Keywords:	arasaka WCAA rapid assault shot 12
+Name:	an Arasaka WCAA shotgun
+RoomDesc:$
+A large assault shotgun of a foreign make lies here.~
+LookDesc:$
+The Arasaka WCAA "Rapid Assault Shot 12" 12-gauge shotgun is capable of single
+or full auto shotgun fire. It doesn't have quite the stopping power of many
+shotguns, but it more than makes up for it with its full auto capabilities, as
+long as you don't value your shoulders or arms. The kick on this isn't exactly
+like a baby. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.00
+	Barrier:	16
+	Cost:	2745
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	20
+	Val6:	20
+	Val9:	-1
+	Val10:	12
+BREAK
+#5116
+Keywords:	grenade flash bang pack stun
+Name:	a flash pack stun grenade
+RoomDesc:$
+A stun grenade lies here.~
+LookDesc:$
+This grenade is a box with a pin. Pull the pin, and a loud flash and a bang
+ensue, causing anyone who is near it to become disoriented and stunned. Quite
+nasty in a large group, and a perfect addition to any riot. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	155
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	314
+	Val4:	27
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#5117
+Keywords:	darra poly technic m 9 m9 assault rifle
+Name:	a Darra-Polytechnic M-9 assault rifle
+RoomDesc:$
+An long assault rifle with an extended magazine and telescopic sight is here.~
+LookDesc:$
+This is a Darra-Polytech M-9 Assault Rifle, equipped with a rating 1 telescope
+sight, and an extended 40 shot magazine, both stock. It fires caseless ammo at an
+incredible rate of fire, and is capable of either burst or full-auto fire. A
+favorite for anyone who wants an assault rifle that is as powerful as it is
+versatile. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	100000000000000000
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	12
+	Cost:	2215
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	40
+	Val10:	28
+BREAK
+#5119
+Keywords:	h&k hk g 6 advanced squad automatic lmg machine gun
+Name:	a H&K G-6 Advanced Squad Automatic
+RoomDesc:$
+A machine gun with a telescopic sight sits here, a short magazine extending from its base.~
+LookDesc:$
+Yet another Heckler and Koch wonder, this LMG comes standard with an internal
+Smartlink II, and a rating 2 thermographic telescope sight. It fires caseless
+SMG ammunition at super machine gun rates. Nice construction tool if you need
+to build a wall of lead... 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	16
+	Cost:	4125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	8
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val3:	15
+	Val4:	19
+	Val5:	100
+	Val6:	100
+	Val9:	31111
+	Val10:	24
+BREAK
+#5121
+Keywords:	crate weapon wooden large
+Name:	a large wooden crate
+RoomDesc:$
+A large wooden crate is here with some illegible black markings on it.~
+LookDesc:$
+3 A large wooden crate is here with some illegible black markings on it, and
+it  has an arrow pointing to the side of the crate that is facing up. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	15.00
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	150
+	Val1:	5
+	Val2:	-1
+BREAK
+#5124
+Keywords:	deadly blade ice
+Name:	^LDark blade^w of^B Ice^w
+RoomDesc:$
+A jeweled sword emanates a cold, dark aura here.~
+LookDesc:$
+Said to have been used my the Legendary Samurai Black Ice. The blade is
+composed of a combination of Orichalcum, Melted Shaow, and Liquid Nitrogen,
+the handle is made of emerald, and covered in dragon scales. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	24
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-100
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	100
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	10
+[AFFECT 3]
+	Location:	Max Mental
+	Modifier:	100
+[AFFECT 4]
+	Location:	Max Physical
+	Modifier:	100
+[AFFECT 5]
+	Location:	Combat Pool
+	Modifier:	125
+BREAK
+#5125
+Keywords:	hk h&k heckler koch rifle hk77uk
+Name:	a H&K HK77UK rifle
+RoomDesc:$
+A rifle with a folding stock and sound suppressor is here.~
+LookDesc:$
+The folding stock on this gun is intended for concealability. This weapon
+features assault rifle fire modes, with the range of a light machinegun. An
+integral smartlink is attached, which can be used with smartlink cyberware or
+smart goggles, and a sound suppressor is also attached. This particular model
+has an extended 45-round magazine. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	12
+	Cost:	3125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	45
+	Val6:	45
+	Val8:	28640
+	Val9:	31111
+	Val10:	28
+BREAK
+#5127
+Keywords:	nomad 7.62 bolt action rifle
+Name:	a Nomad 7.62mm bolt action rifle
+RoomDesc:$
+A bolt action sporting rifle lies here on the ground.~
+LookDesc:$
+This rifle has a six shot capacity, single load method, and contains 7.62mm
+rounds. Its intended use is hunting game animals, as it is quite heavy and not
+at all concealable. A favorite of hunters in north america. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.00
+	Barrier:	8
+	Cost:	950
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	6
+	Val6:	6
+	Val10:	2
+BREAK
+END

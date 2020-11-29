@@ -1,0 +1,740 @@
+#32300
+Keywords:	elf large leather black dressed
+Name:	Frederick
+RoomDesc:$
+A large elf dressed in black leather stands here, watching the door. 
+
+~
+LookDesc:$
+This man is rather large and muscular for an elf. He has a handsome but
+serious face, and spiked blonde hair. He is wearing a tight black leather
+shirt which details the muscles on his torso and a pair of black leather
+pants. Draped across his chest over the shirt are two criss-crossing chains
+that appear to be made from silver.  Dressed head to toe in black leather and
+chains, this man's image and outward appearance scream 'bouncer'. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	10000000000000
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	100
+	Cash:	460
+[SKILLS]
+	brawling:	10
+BREAK
+#32301
+Keywords:	cetheral genevieve
+Name:	Genevieve
+RoomDesc:$
+A raven haired, cetheral skinned elven woman serves the bar. 
+
+~
+LookDesc:$
+The bartender is tall and stunningly beautiful in that stereotypical elven
+way, but really makes her stand out is the rare pearly, iridescent skin tone
+constrasting with her long black hair. She's dressed in tight latex pants and
+a gauzy shirt pulled so tight across her chest it fails to conceal anything.
+Though it's hard to get much of a look as she moves from one end of the bar to
+the other filling glasses and serving drinks. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001010000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	50
+[SKILLS]
+BREAK
+#32302
+Keywords:	topless elven waitress heels
+Name:	A topless elven waitress in heels
+RoomDesc:$
+A topless elven waitress in heels roams around with a tray of drinks. 
+
+~
+LookDesc:$
+Even the waitresses here are damn good looking. Shes roaming around topless to
+showcase her assests, with a very short skirt and high-heels for added
+flavour. Multiple drinks are sitting on top of the serving tray she carries
+around, balancing it expertly while weaving through the crowds of drunken
+clubbers, certainly not an easy feat. 
+~
+ArriveMsg:	roams in from
+LeaveMsg:	weaves her way
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	7
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	50
+[SKILLS]
+BREAK
+#32303
+Keywords:	well-endowed elven receptionist woman
+Name:	A well-endowed elven receptionist
+RoomDesc:$
+A well-endowed elven receptionist is reading magazines here. 
+
+~
+LookDesc:$
+She is absolutely stunning, she has dyed ^Lblack^N hair that extends to the middle
+of her back. Her eyes are an ^cicy blue^N, and seem to be infinite in depth as she
+gazes at you. She's wearing a ^Lblack^N skirt and blouse, with old fashioned
+^Lblack^N nylons wrapped tight around her shapely legs. Your eyes follow the seam
+of her nylons until you're suddenly looking into her eyes and realize how
+pathetic you really are. When shes not busy answering the phone for legitimate
+business calls concerning the club or taking messages for the owner, shes
+flipping through the newest magazines from the stack on her desk. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000000000001000000000001000
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+BREAK
+#32304
+Keywords:	hunched elven man
+Name:	a hunched elven man
+RoomDesc:$
+An elderly eleven man is here cutting a new set of keys. 
+
+~
+LookDesc:$
+Wearing a backwards visor the keymaster is constantly hunched over his work
+place. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	70
+	Cash:	5000
+	Bank:	100
+[SKILLS]
+BREAK
+#32305
+Keywords:	old elven storeroom clerk
+Name:	An old elven storeroom clerk
+RoomDesc:$
+An old storeroom clerk stands here, tidying things up. 
+
+~
+LookDesc:$
+An older elven man, with long silvered hair. He looks like he knows where to
+find things, and if need be, tell you where to put them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	3
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#32306
+Keywords:	Shiloh attractive elven woman
+Name:	Shiloh
+RoomDesc:$
+An incredibly attractive elven woman leans on the counter, ready to sell you
+things. 
+
+~
+LookDesc:$
+This woman is gorgeous, and that immediately makes one wonder what the hell
+she's doing here at a VRCade. If she wasn't working here, and if The Joy Stick
+wasn't attached to a strip club, she might look pretty out of place. She wears
+a white cowboy hat with the sides bent upward on top of long, dark brown hair
+that frams her smooth, tanned skin. She has decidedly elven features, though
+her ears are tucked under her hat. A "The Joy Stick" t-shirt stretches across
+her generous chest, the logo an outline of a hand grasping a joystick with a
+ball top, two buttons placed just below the bottom of the joystick. It almost
+looks like a... 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	5
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+	brawling:	10
+BREAK
+#32307
+Keywords:	elven beauty topless Mallory Dalton
+Name:	Mallory Dalton
+RoomDesc:$
+A seductive, topless elven beauty tends the bar here. 
+
+~
+LookDesc:$
+This visage of elven beauty tends the private bar with an overly warm,
+welcoming smile. Long charcoal black hair contrasts heavily against her pearly
+white, cetheral skin tone. Her eyes are obvious cosmetic modifications, since
+they burned a bright red, giving her an almost sinister, yet very seductive
+appearance. Her wardrobe is risque and consists of only heels and a pleated
+red and black mini-skirt, since she quite obviously had no need for a top. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	7
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	50
+[SKILLS]
+BREAK
+#32308
+Keywords:	gorgeous female night-one cage dancer
+Name:	An absolutely gorgeous female night-one cage dancer
+RoomDesc:$
+An absolutely gorgeous female night-one works her magic in the cage. 
+
+~
+LookDesc:$
+This well-endowed female night-one is dancing seductively in the center cage
+without a single piece of clothing on, revealing her fur thats dyed bright
+colors. They constrast with her natural dark tones in a hypnotic pattern as
+she moves, making it nearly impossible not to stare, especially at things you
+probably shouldn't be looking at in general. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Night-One
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	8
+	Str:	2
+	Cha:	8
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	50
+[SKILLS]
+	brawling:	6
+BREAK
+#32309
+Keywords:	watcher spirit
+Name:	a watcher spirit
+RoomDesc:$
+a small blob of ectoplasm wanders around here 
+
+~
+LookDesc:$
+This small blob of ectoplasm wanders from here to there on the look out for
+anything it's master has asked it to watch for. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000001000000100001001000
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	6
+BREAK
+#32310
+Keywords:	huge three-headed cerberus hound
+Name:	A huge, three-headed cerberus hound
+RoomDesc:$
+A huge cerberus hound pads around, guarding the hallways here. 
+
+~
+LookDesc:$
+The cerberus hound is an enormous three-headed ^Lmidnight black^N dog thats almost
+as large as most (meta)humans, its form bulging with thick muscles and sinew
+that show easily through its short fur. All three of the heads seem busy
+checking the area around it out, sniffing at the air and its surroundings for
+any scents that shouldn't be there, their ears flicking from time to time as
+they catch a stray sound. It certainly didn't look friendly, by any means, but
+they certainly made one hell of a guard dog, reinforced by the fact that each
+one of the heads sported a thick ^Lblack leather^N collar with an emblazoned
+letter ^L'^WV^L'^N done in ^Wsilver^N, so apparently the creature is someones pet. 
+~
+ArriveMsg:	pads in from
+LeaveMsg:	pads off
+MobFlags:	1000000000000000100000000001000
+AffFlags:	10001000000000
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	6
+	Cha:	1
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	110
+[SKILLS]
+	brawling:	6
+BREAK
+#32311
+Keywords:	Roofie Date Rapes band
+Name:	Roofie and the Date Rapes
+RoomDesc:$
+The metal band 'Roofie and the Date Rapes' is thrashing on the stage. 
+
+~
+LookDesc:$
+This band has enjoyed great success in the underground scene for years, and
+has finally been signed on for performances at The Se-curo Ja. Ronald 'Roofie'
+Tannin, the lead vocal and electric guitar artist, is a your stereotypical
+heavy metal elf and has short messy black hair, piercings and black chromed
+studded leather galore. 'The Date Rapes' consist of the rest of his band
+members. A relatively unknown elf by the name Rick "The Trigger Man" Trigg is
+on the bass, while the synthboard is being manipulated expertly by a rough
+looking human known only as 'Wild Bill'. Last but not least, the only ork
+member of the band, Charles 'Brick Fist' Langston, is also one of the most
+talented (and most hated because of it) drummers to ever come out of the Ork
+Underground, and probably the entire metroplex itself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	8
+BREAK
+#32312
+Keywords:	band comprehensive insanity box jar
+Name:	Comprehensive Insanity in a Box
+RoomDesc:$
+The artist 'Comprehensive Insanity in a Box' is performing on the stage. 
+
+~
+LookDesc:$
+This entire band consists of a single entity, Quincy Duran, who was once a
+normal elf like any other. As a child he was diagnosed with Duchenne muscular
+dystrophy (DMD), by his tenth birthday he was confined to a wheelchair, and by
+age fourteen he was completely paralyzed. In lieu of being confined to a
+hospital bed for the rest of his life, as short as it would have been in that
+state, he opted for a complete biopod conversion. He now lives his life inside
+of a reinforced steel and ballistic glass canopic jar, which holds his brain,
+central nervous system, a fair amount of bone marrow, chunks of liver, pieces
+of kidney and a variety of glands supported in an aqueous solution of
+preprocessed nutrient-rich fluids. This would keep most people from living any
+sort of successful or fulfilling life, but instead, it opened the door for new
+possibilities. With his hefty datajack, VCR, variable simsense and synthlink
+cyberware, he can share his musical genius with others. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Taser
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	1
+	Str:	1
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	60
+	Weight:	50
+[SKILLS]
+	brawling:	6
+BREAK
+#32313
+Keywords:	voluptuous brunette female elven elf stripper
+Name:	A voluptuous, ^ybrunette^N elven stripper
+RoomDesc:$
+A voluptuous, ^ybrunette^N elven stripper is offering a sublime performance here.
+
+~
+LookDesc:$
+The female elf performing onstage is a breathtaking beauty to the say least,
+her voluptuous and well-endowed form swaying and moving with an almost
+un-natural grace and poise as she dances, slowly and meticulously peeling off
+what few garments she wears as the striptease proceeds. Her skin is lightly
+tanned, which matches beautifully with her long ^ychestnut brown^N tresses, her
+^Csky blue^N eyes pierce right through you as her gaze works over the crowd
+gathered around. 
+~
+ArriveMsg:	We don't buy that.
+LeaveMsg:	Draneer
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	7
+	Str:	2
+	Cha:	6
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	54
+[SKILLS]
+	brawling:	6
+BREAK
+#32314
+Keywords:	inebriated clique clubbers
+Name:	An inebriated clique of clubbers
+RoomDesc:$
+An inebriated clique of clubbers are having a good time here. 
+
+~
+LookDesc:$
+This group of fairly intoxicated club patrons consists mostly of elves with a
+few humans dotting their ranks, they're carrying on in usual drunken fashion,
+dancing, laughing and having a great time. The majority of them are females,
+who are dressed in the usual skimpy and brightly coloured garments the
+clubbers are fond of, even a few are sporting flickerclad clothing. 
+~
+ArriveMsg:	stumble in from
+LeaveMsg:	stumble off
+MobFlags:	1000000000000000000100000001000
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	5
+BREAK
+#32315
+Keywords:	ivory midnight-black elven stripper elf female
+Name:	An ^Wivory^N skinned, ^Lmidnight^N-^Lblack^N haired elven stripper
+RoomDesc:$
+An ^Wivory^N skinned, ^Lmidnight^N-^Lblack^N haired elven stripper is grooving onstage. 
+
+~
+LookDesc:$
+The female elf performing onstage is a breathtaking beauty to the say least,
+her voluptuous and well-endowed form swaying and moving with an almost
+un-natural grace and poise as she dances, slowly and meticulously peeling off
+what few garments she wears as the striptease proceeds. Her skin has an
+pallid, ivory white appearance, which contrasts heavily with her long
+^Lmidnight^N-^Lblack^N tresses, with eyes the colour of dull ^ggreen^N emeralds. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	7
+	Str:	2
+	Cha:	6
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	54
+[SKILLS]
+	brawling:	6
+BREAK
+#32316
+Keywords:	astute chromed-out security rigger
+Name:	An astute, ^Wchromed^N-^Wout^N security rigger
+RoomDesc:$
+An astute, ^Wchromed^N-^Wout^N security rigger is interfacing with the systems. 
+
+~
+LookDesc:$
+This heavily ^Wchromed^N security guard is busy interfacing with the slew of
+systems at his disposal while lounging in a chair infront of the console. He
+sports a collar-like device with multiple dataports, most of which have
+optical-link running from it into the security console, the others are either
+plugged with metal dust caps or connected to an external communication device
+so he can relay any problems directly to the owner. His eyes have been
+completely replaced with overly obvious, not to mention heavily modified
+cybereyes, which casually scan over the screens with an unblinking stare when
+he isn't fully jacked in. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	7
+	Str:	3
+	Cha:	2
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#32317
+Keywords:	figure water whirling gently
+Name:	A gently whirling figure of ^Ccrystal clear water^N
+RoomDesc:$
+A gently whirling figure of ^Ccrystal clear water^N stands behind the bar. 
+
+~
+LookDesc:$
+This humanoid-esque figure has no real distinguishable bodily features and is
+constructed completely out of water, its inner and outer layers dancing
+fluidly amoungst one another and churns and whirls gently within itself. Its
+standing behind the wet bar, where it should be, having mastered the talents
+of barkeeping and mixing drinks, all the while being careful not to get any of
+himself into the glasses, lest he water their contents down. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+[SKILLS]
+BREAK
+#32318
+Keywords:	well-fed flame jackal wolf
+Name:	A large, well-fed flame jackal
+RoomDesc:$
+A large, well-fed wolf covered in ^Rflames^N stands guard here. 
+
+~
+LookDesc:$
+This flame jackal is similar in appearance to a wolf in size and weight, its
+fur colour on the other hand wasn't anything alike, sporting a reddish-brown
+coat, but that certainly wasn't where its name was derived from. Its
+pyrotechnic ability on the other hand suited its namesake just fine. The
+majority of its coat was covered in short, flickering flames that danced
+around like tufts of fur in the wind, giving it a very fearsome appearance,
+not to mention its jaw strength could easily crush every single bone in your
+body with little effort. This fearsome predator has been known to tackle the
+largest of foes and defend its territory even when alone and outnumbered, its
+safe to assume why it makes such a good guard dog. With the scents of every
+authorized personel member in its system, unless directed otherwise it will
+immediately attack any trespassers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001000000000100000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	1
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	25
+[SKILLS]
+	brawling:	5
+BREAK
+#32319
+Keywords:	golem obsidian ornately carved
+Name:	an ornately carved ^Lobsidian^N golem
+RoomDesc:$
+^LAn ornately carved obsidian golem stands here, tending the fire pit.^N 
+
+~
+LookDesc:$
+Hes huge, that much is readily apparent. He seems to be crafted from ornately
+carved sections of glossy black ^Lobsidian^N that shines like highly polished
+glass. He expertly tends the fire pit here, stuffing his huge stone hands
+directly into the flames without flinching as he cooks up delicious dishes
+left and right. Hes a machine, well... not literally, but you get the drift.
+Restaraunts worldwide would kill for this rocky bastard behind their stove. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	4
+	Str:	10
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	260
+	Weight:	500
+[SKILLS]
+BREAK
+END

@@ -375,7 +375,7 @@ Desc:$
    You are in the ring with the boxers who spar here.  They are slamming their
 fists against each others facemasks, practicing for the big fight. 
 ~
-Flags:	1000001000
+Flags:	1000001100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -742,7 +742,7 @@ Desc:$
    You are in a spacious lobby, with steel walls, and a reception desk made
 out of high-impact glass.  A receptionist sits at the desk, directing people
 to the offices of the executives when they have an appointment.  The ceiling
-is very high, probably around 75 meters up.  Directly north of you is an
+is very high, probably around 25 meters up.  Directly north of you is an
 elevator, and south is towards the intersection of Sixth and Marion in
 Downtown Seattle.  On the north wall is a huge metallic, sterile Mitsuhama
 logo, with a light behind it to illuminate it. 
@@ -750,12 +750,12 @@ logo, with a light behind it to illuminate it.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
+Crowd:	2
+Cover:	2
+X:	50
+Y:	50
+Z:	25.00
+RoomType:	9
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -763,17 +763,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	17187
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
 [EXIT south]
 	ToVnum:	17120
 	Flags:	0
@@ -806,17 +795,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	0
-	Flags:	1
-	Material:	metal
-	Barrier:	8
-	KeyVnum:	998
-	LockRating:	8
 BREAK
 #17123
 Name:	A Steel Elevator
@@ -938,9 +916,12 @@ BREAK
 Name:	Research Level
 Desc:$
    A long corridor, sterile, clean polished white tile covers the walls and
-floor.  The ceiling is lined with high-grade fluorescent lighting, keeping a
-bright, yet glareless cast of light over the corridor.  Northwards is a clean
-room, heavily guarded. 
+floor. The ceiling is lined with high-grade fluorescent lighting, keeping a
+bright, yet glareless cast of light over the corridor. Northwards is a clean
+room, heavily guarded. Plastered across the walls are several signs, which
+read along the lines of "^RAUTHORIZED PERSONNEL ONLY!^N" and the old favourite,
+"^RTRESSPASSERS WILL BE SHOT ON SIGHT, CHECKED FOR SIGNS OF LIFE, THEN SHOT
+AGAIN IF NECESSARY!^N". Apparently they mean business here. 
 ~
 Flags:	1000
 SecType:	Inside
@@ -964,17 +945,6 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT south]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	17181
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
 BREAK
 #17128
 Name:	A Hallway
@@ -1001,17 +971,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	17186
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
 [EXIT east]
 	ToVnum:	17139
 	Flags:	0
@@ -1126,17 +1085,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	17185
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
 [EXIT east]
 	ToVnum:	17143
 	Flags:	0
@@ -1225,17 +1173,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	17184
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
 [EXIT east]
 	ToVnum:	17147
 	Flags:	0
@@ -1326,17 +1263,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	17183
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
 [EXIT east]
 	ToVnum:	17151
 	Flags:	0
@@ -1418,17 +1344,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	17182
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
 [EXIT east]
 	ToVnum:	17155
 	Flags:	0
@@ -1885,7 +1800,7 @@ BREAK
 #17151
 Name:	Miyoko Hamamoto's Office
 Desc:$
-   You are in a very tidy office, with a calendar on the wall, and a modern
+   You are in a very tidy office, with a ^ccalendar^N on the wall, and a modern
 desk with a computer on top of the desk.  The executive's family is in
 holographic pictures that sit upon the desk, and the computer displays a
 screen saver.  There is a seat for visitors and a great view of Downtown
@@ -1913,6 +1828,11 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	calendar
+	Desc:$
+Today's date is marked: "Lunch at Dante's Inferno, Ninth Hell." 
+~
 BREAK
 #17152
 Name:	Front Office of SDM, Incorporated

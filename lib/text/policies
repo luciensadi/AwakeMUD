@@ -1,2 +1,66 @@
-You may create your MUD's policy by editing the lib/text/policies file.
-Be sure to end the file with a new line.
+^WPolicies
+^W------------------
+
+^Wo^N Multiplaying
+ - You may have multiple characters, however only one can be connected at any
+   one time, except in the case where one is enganged in a B/R activity (Including
+   Program design, deck building, spell creating and upgrading vehicles)
+ - Multiple characters may not interact with each other in any way. This
+   includes transferring items or nuyen between them or having them share
+   vehicles or apartments.
+
+^Wo^N Player Killing
+  - Player killing is allowed as long as both parties are flagged PK.
+  - Attacking players, casting hostile spells, and attacking player vehicles
+    are all forms of PK.
+  - Harassing or tricking people into turning on PK is a punishable offense.
+
+^Wo^N Cheating
+ - Cheating is defined with common-sense, if you don't have it, you don't belong.
+  + Bug exploitation: Those found exploiting bugs for personal gain, or other  
+    reasons will be dealt with accordingly.
+  + Code-base exploitation, Those found exploiting limitations or what not in the
+    code base will be dealt with appropriately.
+
+^Wo^n Mudbotting
+ - Botting is illegal, it's strictly powergaming supportive and we do not support 
+   powergaming, therefore, persons found MUD-Botting will be dealt with accordingly.
+ - Setting up triggers to act while you are away from the computer (build lists for
+   automated deck building/spell designing etc.) is illegal. This includes anything
+   that periodically sends commands to the MUD. You will not time out if you are
+   engaged in something that allows you to stay AFK for long periods of times.
+
+^Wo^N Blacklisting
+ - Blacklisting removes major forms of advancement and makes playing the MUD a lot
+   harder. Imms will award you the blacklist flag for the following reasons:
+   + PK without a valid reason. "My character is a hunter/psycho" is NOT a valid reason.
+   + Attacking player vehicles outside of situations that require it. Eg. Being attacked
+     by the vehicle.
+   + Taking up OOC grievances through IC means. Eg. Hunting down characters ICly just
+     because you don't like the player who plays them.
+
+^Wo^n Restrings
+ - Items or vehicles must be restrung to something of similar type as the original
+   object. Failure to do so will result in you forfeiting ownership and karma will
+   not be refunded.
+
+^Wo^n Permadeath
+ - Permadeath decisions are always voluntary on the part of the victim of permadeath. 
+   Permadeath is purely optional.
+ - You cannot refuse to permadeath if you agree to go on a run where permadeath is a
+   possibility.
+
+^Wo^n Impersonation
+ - Impersonating immortals, mobs, or players with the customize
+   command is a breach of Awake policy.  Immortals may ask you to change
+   your descriptions for any given reason.  Descriptions should be appropriate
+   for your character.
+
+^Wo^n Authority
+ - Staff members' word is final, no argument.
+
+^Wo^n Policy Addendums
+    Anything written as policy in a help file or the message of the day (type
+    motd to read) is considered policy in addendum to this file.
+
+++ All policies are open to change without notice.

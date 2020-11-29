@@ -1,0 +1,540 @@
+#24800
+Keywords:	alan eagle shaman shopkeeper talismonger
+Name:	Alan-of-the-Eagle
+RoomDesc:$
+A tall frail amerind man in shamanic fetishes stands here. 
+
+~
+LookDesc:$
+An older, somewhat frail built amerindian man, wearing a large quantity of
+fetishes and focuses.  He wears a deerskin vest, jeans, and has a headdress of
+a Sioux shaman. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	5
+	Cha:	6
+	Int:	5
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	198
+	Weight:	80
+	Level:	1
+	Ballistic:	50
+	Impact:	50
+	Cash:	150000
+	Bank:	150000
+[SKILLS]
+	sorcery:	8
+	brawling:	5
+	:	10
+	tribal etiquette:	8
+BREAK
+#24801
+Keywords:	elf security aquilor mage
+Name:	An Aquilor Security Mage
+RoomDesc:$
+An elf in black and midnight blue security armor stands here. 
+
+~
+LookDesc:$
+He wears black and midnight blue security armor, and has eyes of an awareness
+that is uncommon to all save those who understand the ways of magic.  He
+carries an ares predator as a sidearm. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	7
+	Cha:	6
+	Int:	6
+	Wil:	7
+	Mag:	8
+[POINTS]
+	Height:	201
+	Weight:	74
+	Level:	1
+	Ballistic:	5
+	Impact:	4
+	Bank:	200
+[SKILLS]
+	sorcery:	6
+	brawling:	10
+	pistols:	8
+BREAK
+#24802
+Keywords:	drafin mage shopkeeper enchanter talismonger
+Name:	Drafin, the Mage Talismonger
+RoomDesc:$
+A man in a white trenchcoat with magical symbols on it stands here. 
+
+~
+LookDesc:$
+A short and stocky human, not a dwarf, wearing a trench with all sorts of
+magical symbols on it, with greying hair, and a goofy smile that never seems
+to disappear from his mug, and stubble, showing that he hasn't shaved in at
+least three days. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	6
+	Mag:	5
+[POINTS]
+	Height:	150
+	Weight:	80
+	Level:	1
+	Ballistic:	12
+	Impact:	12
+	Cash:	200000
+	Bank:	200000
+[SKILLS]
+	brawling:	5
+	sorcery:	8
+	conjuring:	5
+	:	8
+BREAK
+#24803
+Keywords:	erin shaman talismonger elf brightwillow
+Name:	Erin Brightwillow
+RoomDesc:$
+A lovely female elf in shamanic fetishes stands here. 
+
+~
+LookDesc:$
+Tall, shapely, with dark blue eyes, and reddish hair, wearing a bunch of
+shamanic fetishes, and a deerskin trenchcoat.  She has some magical looking
+tattoos on the right side of her face, and a large supply of shamanic magical
+gear. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	5
+	Cha:	8
+	Int:	7
+	Wil:	8
+	Mag:	10
+[POINTS]
+	Height:	197
+	Weight:	85
+	Ballistic:	20
+	Impact:	20
+	Cash:	200000
+	Bank:	200000
+[SKILLS]
+	brawling:	12
+	elf etiquette:	6
+	tribal etiquette:	7
+	:	8
+	sorcery:	9
+BREAK
+#24804
+Keywords:	spirit elemental great earth huge rock creature free
+Name:	A free Great Earth Elemental
+RoomDesc:$
+A huge creature made of rock stands here guarding the archway. 
+
+~
+LookDesc:$
+A huge creature made of granite, and other rocks and minerals stands here with
+a face expressing vigilance. He sits guard over the archway, making sure that
+only those of a magical orientation can enter the Moonlight Mall. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	110000000011010
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	20
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	20
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	brawling:	15
+	sorcery:	20
+	:	4
+BREAK
+#24805
+Keywords:	spirit health
+Name:	A Spirit of Health
+RoomDesc:$
+A ^Wwhite, glowing^N spirit stands here on a pedestal. 
+
+~
+LookDesc:$
+Glowing brightly, he seems to give off the feeling of health and well being.
+His shape is humanoid, but his face and form is detail-less, excepting his two
+legs, head, body and two arms.  A shopper with a disease comes up to it, gives
+him nuyen and is healed completely. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1101010000000011010
+AffFlags:	100000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	130
+	Weight:	20
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	brawling:	10
+	sorcery:	10
+BREAK
+#24806
+Keywords:	hermes mage teacher trainer
+Name:	Hermes
+RoomDesc:$
+A mage in a white robe stands here, rich in wisdom. 
+
+~
+LookDesc:$
+Wearing a white robe, and a silver fedora with a moon upon it, he smiles
+brightly.  His eyes are blue-silver, and his teeth appear to be polished, as
+they shine, almost unnaturally. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	7
+	Int:	8
+	Wil:	7
+	Mag:	12
+[POINTS]
+	Height:	190
+	Weight:	90
+	Level:	2
+	Ballistic:	20
+	Impact:	20
+	Cash:	120000
+	Bank:	120000
+[SKILLS]
+	:	8
+	sorcery:	8
+	conjuring:	8
+BREAK
+#24811
+Keywords:	laubenstein magical dealer cutrate wholesaler trenchcoat
+Name:	Laubenstein
+RoomDesc:$
+A man in a trenchcoat stands here with a cocky grin. 
+
+~
+LookDesc:$
+Adorned with magical paraphernalia, his trenchcoat looks more... low than the
+other dealers in the Moonlight Mall.  Over and over he shouts, "I GOT A DEAL
+FOR YOU COME HERE AND LOOK AT THIS!" 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	1
+	Str:	1
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	4
+[POINTS]
+	Height:	170
+	Weight:	102
+	Ballistic:	2
+	Impact:	1
+	Cash:	50000
+[SKILLS]
+BREAK
+#24894
+Keywords:	night one silver haired dark furred mistress venom spider shaman sylenis gieron
+Name:	A silver haired, blue-furred female Night-One
+RoomDesc:$
+A silver haired, dark furred female Night-One stands here. 
+
+~
+LookDesc:$
+Wearing tight-knit silver spidersilk coat, and underneath a skintight polymer
+mesh, black bodysuit, she is stunning in a dark way.  Her hair is long and
+silver, and reaches down just slightly above the knee, and is tied back in a
+tight ponytail.  You note a gunbelt made of the same polymer mesh material as
+her bodysuit, with a rather large chrome pistol in it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000011010
+AffFlags:	1000011000001000011010
+Race:	Night-One
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	35
+	Str:	30
+	Cha:	8
+	Int:	10
+	Wil:	40
+	Mag:	45
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+	edged weapons:	30
+	sorcery:	45
+	pistols:	35
+BREAK
+#24895
+Keywords:	klingon general kronak hispanic man dark skinned
+Name:	a dark skinned man
+RoomDesc:$
+A large dark skinned man, with a fu-manchu mustache stands here. 
+
+~
+LookDesc:$
+He appears to be larger than the average human, about the proper size for an
+ork.  He appears to be a human however.  His skin is a brown color, and his
+eyes hazel.  He has the grin of conquest upon his face, denoting some sort of
+alien bloodlust.  His mustache is a fu-manchu style. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	7
+	Str:	9
+	Cha:	4
+	Int:	4
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	140
+	Level:	2
+	Ballistic:	10
+	Impact:	8
+[SKILLS]
+BREAK
+#24896
+Keywords:	elf spock vulcan green tinged
+Name:	A pale elf
+RoomDesc:$
+A pale elf, with a green tinge to his skin stands tall here. 
+
+~
+LookDesc:$
+He is pale, and stands tall, even for an elf.  His body also seems a little
+larger than normal for his race.  His skin, though pale as one of nordic
+descent, seems to have a greenish tinge to it.  His eyes are dark and his
+eyebrows are thick and V shaped.  He seems to have a cold, calculating look to
+his facial expression. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	1000000000000000000000000001010
+AffFlags:	100000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	8
+	Cha:	3
+	Int:	9
+	Wil:	8
+	Mag:	2
+[POINTS]
+	Height:	0
+	Weight:	130
+	Ballistic:	10
+	Impact:	4
+[SKILLS]
+BREAK
+#24897
+Keywords:	tiberius james captain kirk unassuming man
+Name:	An unassuming man
+RoomDesc:$
+An unassuming man sits here in normal clothing. 
+
+~
+LookDesc:$
+He has blond hair, and stands tall, but he looks as if he is trying real hard
+to not stand out.  He seems friendly, and his eyes carry no malice. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	100
+	Level:	2
+	Ballistic:	4
+	Impact:	2
+[SKILLS]
+BREAK
+#24898
+Keywords:	terrorist alamos 20k 20000 nazi bigot murderer
+Name:	a human in black
+RoomDesc:$
+A human in a black bodysuit stands here, guns ready. 
+
+~
+LookDesc:$
+A look of cold hatred in his eyes tells a story of years of blind rage,
+against an enemy he doesn't understand, and a distrust of magic. 
+~
+ArriveMsg:	^n
+LeaveMsg:	^n
+MobFlags:	101011000000011010
+AffFlags:	1000011000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	8
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	101
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	throwing weapons:	20
+	brawling:	20
+	firearms:	20
+	demolitions:	10
+	gunnery:	20
+BREAK
+#24899
+Keywords:	elven noble tall elf
+Name:	An Elven noble
+RoomDesc:$
+An elf wearing exquisite clothing stands here. 
+
+~
+LookDesc:$
+He has sharp blue eyes that are crystalline like a hawk, and sharply chiseled
+features that show the purity of his elven bloodline.  His clothes are the
+highest grade silken and linen garments one can find in Tir Tairngire. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	7
+	Cha:	8
+	Int:	6
+	Wil:	7
+	Mag:	12
+[POINTS]
+	Height:	198
+	Weight:	60
+	Ballistic:	34
+	Impact:	34
+[SKILLS]
+	firearms:	8
+	sorcery:	20
+	brawling:	10
+BREAK
+END

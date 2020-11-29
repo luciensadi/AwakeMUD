@@ -1,0 +1,401 @@
+#14307
+Keywords:	pentacle necklace
+Name:	a pentacle necklace
+RoomDesc:$
+A pentacle necklace is lying on the ground here.~
+LookDesc:$
+A necklace with an upward-pointing 5-point star inside of a circle. There are
+small runes engraved in the pointed area of the star. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	runes
+	Desc:$
+These runes are the symbols for the various elements, earth, wind, fire,
+water, and spirit. 
+~
+BREAK
+#14308
+Keywords:	black orange halloweener trench plated worn
+Name:	a worn black trench with orange magical symbols
+RoomDesc:$
+A black and orange trenchcoat lies in a heap here.~
+LookDesc:$
+An old, worn, black trenchcoat, painted with Halloweeners' graffiti
+and strange magical symbols in orange paint.  Oddly, they look Celtic,
+of an ancient dialect.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	16
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	4
+	Val2:	6
+	Val3:	6
+	Val4:	8
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#14309
+Keywords:	earring ruby skull fire
+Name:	a ruby encrusted skull earring
+RoomDesc:$
+An earring with a fiery skull on it lies here.~
+LookDesc:$
+A skull with ruby eyes, surrounded by ruby fire, on a dangling
+earring
+~
+Type:	Worn
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#14310
+Keywords:	jacket halloweeners black plated leather
+Name:	an orange and black plated leather
+RoomDesc:$
+An orange and black leather lies here in a heap.~
+LookDesc:$
+A black and orange leather, with kevlar underlining and thin titanium
+plates underneath for extra protection.  It has a fiery jack o'
+lantern on the back, and a fire design painted on it.
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	6.00
+	Barrier:	24
+	Cost:	950
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	2
+	Val5:	5
+	Val6:	4
+BREAK
+#14311
+Keywords:	cleaver meat large
+Name:	a large bloody meat cleaver
+RoomDesc:$
+A bloody meat cleaver is lying here.~
+LookDesc:$
+A blood stained meat cleaver with a razor-sharp blade.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#14312
+Keywords:	switchblade switch blade knife stiletto
+Name:	a stiletto switchblade
+RoomDesc:$
+A stiletto switchblade is lying here.~
+LookDesc:$
+A sleek shiny switchblade.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#14313
+Keywords:	bar iron
+Name:	an iron bar
+RoomDesc:$
+A thick iron bar is lying on the ground here.~
+LookDesc:$
+A thick heavy iron bar.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	2
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#14314
+Keywords:	everclear bottle liquor
+Name:	a bottle of everclear
+RoomDesc:$
+A bottle of pure grain alcohol sits here.~
+LookDesc:$
+Purest alcohol you can find, 197 proof.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	32
+	Val3:	1
+BREAK
+#14316
+Keywords:	shell bullet
+Name:	an empty bullet shell
+RoomDesc:$
+A bullet shell lies here.~
+LookDesc:$
+A bullet shell with "Ares APDS-Pro 9mm" etched on the end of it. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#14317
+Keywords:	arm severed
+Name:	a severed arm
+RoomDesc:$
+A severed arm is lying here.~
+LookDesc:$
+A cleanly severed arm. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	1000000100
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#14318
+Keywords:	head severed
+Name:	a severed head
+RoomDesc:$
+^gA round, ^Rbloody^g object barely recognisable as a severed head lies here.^N~
+LookDesc:$
+^RA bloody severed head that has been mutilated by some deranged psycho.^N 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#14320
+Keywords:	teddy bloody
+Name:	a bloody teddy
+RoomDesc:$
+A teddy covered with blood lies here.~
+LookDesc:$
+This teddy was once white, but has been covered with the blood of the victims
+of the teddy's owner.  There is a weird electrical charge you feel when you
+touch it, could be some kind of magic. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	1001001000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	3
+	Val6:	2
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	1
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	-2
+BREAK
+#14321
+Keywords:	desk metal black
+Name:	a black metal desk
+RoomDesc:$
+A plain black metal desk sits here.~
+LookDesc:$
+A plain black metal desk. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	4
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	5
+	Val2:	-1
+BREAK
+#14322
+Keywords:	long metal table operating
+Name:	an operating table
+RoomDesc:$
+An elongated sterile metal table sits here.~
+LookDesc:$
+An elongated sterile steel operating table. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	210.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

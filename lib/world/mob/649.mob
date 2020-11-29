@@ -1,0 +1,935 @@
+#64900
+Keywords:	Air Elemental
+Name:	A large air elemental
+RoomDesc:$
+A large air elemental warns you to leave now! 
+
+~
+LookDesc:$
+It looks barely coherent, hovering in space, guarding the room. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1101010100000001010
+AffFlags:	1000001000
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+BREAK
+#64901
+Keywords:	man beaten
+Name:	Lionel Day
+RoomDesc:$
+A badly beaten man sits, doubled over. 
+
+~
+LookDesc:$
+A badly beaten man. Dark purple welts and bruises provide channels for blood,
+dripping from an ugly wound above his left eye. Another trickle of deep
+crimson runs from his nose and onto a white, silken shirt. His right sleeve is
+covered in deep red and drying blood, by the smears on his face, where it was
+used to clear his eyes. 
+~
+ArriveMsg:	slowly limps from
+LeaveMsg:	slowly limps
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	89
+[SKILLS]
+BREAK
+#64902
+Keywords:	large man suit thug1
+Name:	A large, armed man
+RoomDesc:$
+A large man in a suit is sitting here, apparently at ease. 
+
+~
+LookDesc:$
+A large man, his cheap blue suit bulging unnaturally in various places. He
+surveys the room carefully, one hand sitting inside his jacket. He has an
+oddly angled nose, and short, greasy hair, combed back and gelled heavily into
+place. From the size of his arms and legs, he may have been a chronic
+bodybuilder at some point. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	120
+[SKILLS]
+BREAK
+#64903
+Keywords:	thug2 thin cheap wiry
+Name:	A thin, twitching man
+RoomDesc:$
+A thin man in a cheap suit lounges here at ease. 
+
+~
+LookDesc:$
+A thin man, with a long, drawn face and wearing a cheap, polyester suit. He
+fidgets often with his tie and collar, as if his shirt was a few sizes too
+small for him. He shifts from one foot to another on highly polished shoes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	61
+[SKILLS]
+BREAK
+#64904
+Keywords:	thug3 dwarf stout gaze
+Name:	A stout, confident dwarf
+RoomDesc:$
+A stout dwarf sits here gazing steadily around the room. 
+
+~
+LookDesc:$
+A stout dwarven man. He is wearing a long, greasy beard that curls down his
+chest, partially obscuring a bulky black vest, to which a heavy webbing has
+been attached. His arms are bare, untanned, in constrast to his darkly tanned
+face, and large. He is constanly pushing his long, dark red hair from his face
+as he looks around with a sort of wary confidence. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	100
+[SKILLS]
+BREAK
+#64905
+Keywords:	thugboss elf ugly
+Name:	An unattractive elf, with a superior look on his face
+RoomDesc:$
+An unattractive elf is sitting here, fiddling with a pocket secretary. 
+
+~
+LookDesc:$
+An elven man, with sharply pointed ears and dirty, wild hair. His beady eyes
+look down a long, freckled nose above a dirty white singlet. His exposed flesh
+has obviously been plated, and by the looks of things, cheaply, like dozens of
+pebbles glued to his skin. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	78
+[SKILLS]
+BREAK
+#64906
+Keywords:	teenaged young register girl
+Name:	A bored cashier
+RoomDesc:$
+A young, teenaged girl sits at a register looking bored. 
+
+~
+LookDesc:$
+A fairly young teen, dressed in a dark blue uniform. She sits behind a cash
+register and watches over the store wearily. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	negotiation:	6
+BREAK
+#64911
+Keywords:	man dark brown
+Name:	A well-connected Fixer
+RoomDesc:$
+A man in a dark brown overcoat leans against a wall, smoking a cigar. 
+
+~
+LookDesc:$
+A fairly pale man, dressed in a heavy dark-brown overcoat is here, lounging
+against a wall. He appears entirely at ease, and chews slowly on a cigar. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	8
+	Int:	8
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	187
+	Weight:	82
+[SKILLS]
+BREAK
+#64914
+Keywords:	large man pot belly prison tatoos hans delivery guy
+Name:	Hans, the delivery guy
+RoomDesc:$
+A large man with a pot belly and a set of prison tatoos stands here. 
+
+~
+LookDesc:$
+A large man, reeking of sweat and cigarette smoke. He wears a tight fitting
+dark blue muscle shirt, stretched over his pot belly with a nametag reading
+"Hans" pinned to it at an angle. A set of blue and red tatoos, obvious ameteur
+work, cover his forearms. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	4
+	Str:	10
+	Cha:	2
+	Int:	2
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	98
+[SKILLS]
+BREAK
+#64915
+Keywords:	dark man robes johnson
+Name:	Jeremy Carson
+RoomDesc:$
+A dark-skinned man in long, flowing robes. 
+
+~
+LookDesc:$
+Draped in long, flowing robes, this man stares at the world with a perpetual
+scowl. A heavy, golden chain around his neck holds a large iron crucifix,
+which he toys with in one hand. His robes are adorned with all sorts of
+symbols and icons, embroided in gold thread. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#64916
+Keywords:	man filthy suit
+Name:	Daniel Stiles
+RoomDesc:$
+A man in a filthy, rumpled suit stand here nervously. 
+
+~
+LookDesc:$
+A man in a creased and filthy suit, his face is a mess of bruises and blood,
+and he is clutching one arm tightly to his chest. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#64925
+Keywords:	yargh troll woman
+Name:	Yargh
+RoomDesc:$
+A hulking female troll stands grilling something behind the bar. 
+
+~
+LookDesc:$
+A massive troll woman, wearing an apron with 'Yargh' scrawled on it in black
+ink. Her unkempt hair has been tied in a bun around her two stubby horns, and
+she is humming softly to herself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	4
+	Str:	9
+	Cha:	4
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	261
+	Weight:	281
+	Cash:	999999
+[SKILLS]
+BREAK
+#64926
+Keywords:	merchant store ork
+Name:	An short orkish vendor
+RoomDesc:$
+An orkish vendor wanders through here, pushing a cart laden with fresh corn. 
+
+~
+LookDesc:$
+A fairly well presented ork is pushing his cart through here, yelling the
+virtues of his product. The smell of fresh food curls slowly from a covered
+cart, coloured on all sides in garish reds and yellows and scribbled with
+prices. 
+~
+ArriveMsg:	uncovers his cart as he pushes it in from
+LeaveMsg:	covers his cart carefully and pushes it
+MobFlags:	1000000000000000010000000001000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#64927
+Keywords:	troll cart
+Name:	A trollish vendor
+RoomDesc:$
+A large troll is selling food from a cart here. 
+
+~
+LookDesc:$
+A large troll tends to his cart. It seems overflowing with numerous sitting on
+top of metal trays full of meat shavings. None of it looks very clean. 
+~
+ArriveMsg:	begins unpacking his cart and hawking his wares as he arrives from
+LeaveMsg:	packs up his cart quickly and pushes it, creaking,
+MobFlags:	1000000000000000010000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#64950
+Keywords:	Lone Star Patrol Officer
+Name:	A Lone Star Patrol Officer
+RoomDesc:$
+A Lone Star Officer stands here, watching. 
+
+~
+LookDesc:$
+This Lone Star officer is nothing unusual, he stands alert and ready,
+surveying his surroundings. Occasionally he adjusts his Lone Star issue
+uniform and shifts some of the gear around on his belt, but otherwise he is an
+image of calm confidence. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	120
+[SKILLS]
+	pistols:	5
+	brawling:	3
+BREAK
+#64951
+Keywords:	Lone Star Tactical Enforcer
+Name:	Lone Star Tactical Enforcer
+RoomDesc:$
+A Lone Star enforcer stands here, keeping the peace 
+
+~
+LookDesc:$
+Ready and waiting to take the sergeants command.  Trained and battle hardened,
+ready to leave you full of holes 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	9
+	Cha:	3
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	165
+	Ballistic:	9
+	Impact:	9
+[SKILLS]
+	athletics:	10
+	rifles:	8
+	assault rifles:	8
+BREAK
+#64952
+Keywords:	Lone Star Enforcer Mage
+Name:	Lone Star Enforcer mage
+RoomDesc:$
+A Lone Star Enforcer mage is standing here, waiting for orders 
+
+~
+LookDesc:$
+Standing as tall and as proud as the other enforcers, this one seems to retain
+magical abillities.  A tribal eye is tattooed on her forehead. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000100000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Whip
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	8
+	Wil:	9
+	Mag:	9
+[POINTS]
+	Height:	170
+	Weight:	75
+	Ballistic:	9
+	Impact:	9
+[SKILLS]
+	whips & flails:	8
+BREAK
+#64953
+Keywords:	Lone Star Enforcer Lieutenant
+Name:	Lone Star Enforcer Lieutenant
+RoomDesc:$
+A Lone Star Enforcer Lieutenant stands here, barking orders 
+
+~
+LookDesc:$
+This man has his war wounds, oh yes, and he obviously knows what he's doing.
+Directing his troops into ranks and preparing them for whatever may come. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Shotgun
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	9
+	Str:	10
+	Cha:	3
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	shotguns:	11
+BREAK
+#64954
+Keywords:	Lone Star Heavy Enforcer
+Name:	Lone Star Heavy Enforcer
+RoomDesc:$
+A Lone Star Heavy Enforcer stalks the area 
+
+~
+LookDesc:$
+This bad ass looks like he was trained with the idea of "Shoot To Kill!"  He's
+packing a heavily modified assault rifle, and an itchy trigger finger.  Best
+watch your hoop 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	9
+	Str:	10
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	150
+[SKILLS]
+	assault rifles:	12
+	machine guns:	12
+	sub-machine guns:	12
+	athletics:	15
+BREAK
+#64955
+Keywords:	Lone Star Heavy Enforcer Mage
+Name:	Lone Star Heavy Enforcer Mage
+RoomDesc:$
+A Lone Star Heavy Enforcer Mage stands here holding a fireball 
+
+~
+LookDesc:$
+He holds a fire ball in his right hand and is pointing at you grinning with
+his left hand.   
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	5
+	Cha:	8
+	Int:	10
+	Wil:	11
+	Mag:	11
+[POINTS]
+	Height:	185
+	Weight:	120
+	Ballistic:	9
+	Impact:	9
+[SKILLS]
+	sorcery:	11
+	conjuring:	11
+	:	11
+BREAK
+#64956
+Keywords:	Lone Star Enforcer Captain
+Name:	Lone Star Enforcer Captain
+RoomDesc:$
+A Lone Star Enforcer Captain is here, shooting stuff 
+
+~
+LookDesc:$
+You probably didn't have time to even look at him before he fragged you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	8
+	Int:	15
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	14
+[SKILLS]
+	assault cannons:	18
+BREAK
+#64957
+Keywords:	Lone Star Elite Enforcer
+Name:	A Lone Star Elite Enforcer
+RoomDesc:$
+An Elite Heavy Enforcer pumps rounds into the surrounding area 
+
+~
+LookDesc:$
+You have enough time to catch a glimpse of him, before your world turns black.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	8
+	Int:	15
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	225
+	Weight:	225
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	assault cannons:	18
+BREAK
+#64995
+Keywords:	old dwarven dwarf man Leo
+Name:	Leo
+RoomDesc:$
+An old dwarven man is here, serving out meals. 
+
+~
+LookDesc:$
+This dwarf has a long, thick gray beard on a face that almost always displays
+a welcoming smile. His gray hair is brushed back, and comes to a small curl at
+the base of his neck. He posesses a vaguely chubby build which is covered
+partially by a white apron, but he seems quite active for his apparent age and
+physical shape. He has bright winter eyes, and a general appearance that would
+appear to distinguish him to be of Irish descent. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	2
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	85
+	Cash:	500
+	Bank:	500
+[SKILLS]
+BREAK
+#64996
+Keywords:	vanilla pale white night one albino female
+Name:	Vanilla
+RoomDesc:$
+A pale white, albino female night one is watching a table here. 
+
+~
+LookDesc:$
+Vanilla is a part of a small time smuggling ring who are relatively new to the
+area. She is pale white, due to albinism, and has pink pupils in her bright
+green eyes. Her hair, on the other hand, is dyed a very deep blue color.
+Despite being of elvish descent, she looks quite muscular. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000000000
+Race:	Night-One
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	7
+	Str:	5
+	Cha:	6
+	Int:	4
+	Wil:	7
+	Mag:	6
+[POINTS]
+	Height:	190
+	Weight:	75
+	Cash:	15000
+	Bank:	5000
+[SKILLS]
+	:	2
+	:	3
+	negotiation:	2
+BREAK
+#64997
+Keywords:	very well-built troll dark skinned Jack-Knife knife
+Name:	Jack-Knife
+RoomDesc:$
+A very well-built, dark skinned troll tends the table here. 
+
+~
+LookDesc:$
+Jack-Knife is another smuggler. Don't let him being a troll fool you though,
+talking with him or negotiating prices shows him to be a fairly intelligent
+individual. Long, dark brown braids of hair conceal his hazel eyes and most of
+his face. While built impressively well, he does seem to be quite sluggish in
+his movements. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	2
+	Str:	10
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	340
+	Weight:	300
+	Cash:	10000
+	Bank:	5000
+[SKILLS]
+	negotiation:	3
+BREAK
+#64998
+Keywords:	attractive human female jade garbed green
+Name:	Jade
+RoomDesc:$
+An attractive human female garbed in green watches the table here. 
+
+~
+LookDesc:$
+Jade is an attractive young woman, that as her name would suggest, has a
+fondness for the color green. She has dark green hair, bright green eyes, and
+wears clothing of various elegant tones. Jade earrings also add to this theme.
+She doesn't look to be physically tough, but her movements have a highly
+abnormal swiftness to them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000100000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	9
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	8
+[POINTS]
+	Height:	170
+	Weight:	55
+	Cash:	10000
+	Bank:	5000
+[SKILLS]
+	:	3
+	:	3
+	:	1
+	negotiation:	5
+BREAK
+#64999
+Keywords:	short stocky male ork Brick
+Name:	Brick
+RoomDesc:$
+A short, but stocky male Ork tends to the table here. 
+
+~
+LookDesc:$
+This is Brick. He's rumored to be a former shadowrunner in the Seattle area in
+his younger days. Now, a few gray hairs are mixed in with a once brown color.
+He has a brown eyes, and a thick brown and gray goatee to compliment them. He
+stands only 6 feet tall, but looks to weigh around 225 pounds. Age doesn't
+seem to have affected his physical shape much, as he still remains pretty fit.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	5
+	Str:	7
+	Cha:	3
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Cash:	10000
+	Bank:	5000
+[SKILLS]
+	negotiation:	3
+BREAK
+END

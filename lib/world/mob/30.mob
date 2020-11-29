@@ -1,0 +1,969 @@
+#3000
+Keywords:	jodie vendor
+Name:	Jodie the station vendor
+RoomDesc:$
+Jodie is here with her cart, ready to offer you a meal.
+
+~
+LookDesc:$
+Quite the attractive elven lady, Jodie has been selling hot dogs,
+pretzels and soda to travelers for close to three years now.  She
+is known for her fast, decent cooking, fair prices, and a winning
+smile.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	153
+	Weight:	55
+	Bank:	500
+[SKILLS]
+	negotiation:	7
+BREAK
+#3001
+Keywords:	traveler weary
+Name:	a weary traveler
+RoomDesc:$
+A weary traveler slowly proceeds through the lobby.
+
+~
+LookDesc:$
+Slightly wrinkled after long hours in the basement offices of some
+megacorp, the poor soul wants only to go home and sleep for an eon
+or two.
+~
+ArriveMsg:	trudges in from
+LeaveMsg:	trudges
+MobFlags:	11001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	3
+	Cha:	2
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	167
+	Weight:	85
+	Bank:	50
+[SKILLS]
+	brawling:	1
+BREAK
+#3002
+Keywords:	traveler busy
+Name:	a busy traveler
+RoomDesc:$
+An extremely busy traveler pushes her way past you.
+
+~
+LookDesc:$
+"Hey, watch it, jerk," she exclaims as she shoulders you out of the way.
+No time to waste with such trivialties as politeness, she rushes off to
+whatever place she is not presently at.
+~
+ArriveMsg:	barges in from
+LeaveMsg:	pushes her way
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	1
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	159
+	Weight:	60
+	Bank:	15
+[SKILLS]
+	brawling:	2
+BREAK
+#3003
+Keywords:	hamlin grocer
+Name:	Hamlin the Grocer
+RoomDesc:$
+Hamlin stands behind his table and offers you his best.
+
+~
+LookDesc:$
+For ten years now, Hamlin has been setting up his shop here in the
+station market.  He is as much a fixture to this establishment as
+the monorail itself.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	5
+	Cha:	9
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	99
+	Bank:	500
+[SKILLS]
+	negotiation:	6
+BREAK
+#3004
+Keywords:	lester dealer pawn
+Name:	Lester the Pawn Dealer
+RoomDesc:$
+Lester sneers at the passers-by, sure that he owns something of theirs.
+
+~
+LookDesc:$
+Making a career out of others' financial setbacks, Lester shows no
+remorse when buying a family heirloom on consignment and selling
+it again for twice the cost.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	1
+	Int:	8
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	174
+	Weight:	97
+	Bank:	500
+[SKILLS]
+	negotiation:	12
+	media etiquette:	3
+BREAK
+#3005
+Keywords:	barkeep bartender
+Name:	the Thieves' barkeep
+RoomDesc:$
+The barkeep smiles and drops you a knowing wink.
+
+~
+LookDesc:$
+Partner in the ownership of this quaint establishment, this middle-
+aged woman is also proud to boast the invention of the local specialty,
+the "Dirty Backstabber".
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	3
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	82
+	Bank:	250
+[SKILLS]
+BREAK
+#3006
+Keywords:	crowfoot shaman
+Name:	Crowfoot the Shaman
+RoomDesc:$
+Crowfoot, shaman of the Owl, oversees his talismans.
+
+~
+LookDesc:$
+With skin like old leather and a gaze that makes you restless,
+he minds his modest array of talismans for sale.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	5
+[POINTS]
+	Height:	160
+	Weight:	90
+	Bank:	600
+[SKILLS]
+	sorcery:	9
+	:	8
+	conjuring:	8
+BREAK
+#3007
+Keywords:	guard metro rail
+Name:	a Metro-Rail guard
+RoomDesc:$
+One of the Metro-Rail guards observes all activity in the station.
+
+~
+LookDesc:$
+A young orkish male, he pursued the job as transportation security
+in the hopes of someday being selected by Lone Star for his diligence
+and respect for order.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100001001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	4
+	Str:	7
+	Cha:	1
+	Int:	1
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	115
+	Bank:	75
+[SKILLS]
+	firearms:	3
+	armed combat:	2
+	media etiquette:	3
+BREAK
+#3008
+Keywords:	moira waitress
+Name:	Moira the waitress
+RoomDesc:$
+Moira smiles sweetly and hands you the menu.
+
+~
+LookDesc:$
+You gaze at a stunning redhead with eyes of the deepest emerald
+green.  She is the entire wait staff at the Retrospect, not a
+demanding job as such, but one she does well at.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	60
+	Bank:	100
+[SKILLS]
+	negotiation:	4
+BREAK
+#3009
+Keywords:	don giuseppe bonanno
+Name:	Don Bonanno
+RoomDesc:$
+The tall gaunt figure of Don Guiseppe Bonanno sits in a leather chair. 
+
+~
+LookDesc:$
+Don Bonanno is a newcomer to the Seattle crime scene, but he is swiftly making
+his mark as the Godfather of the metroplex.  His family dates back to the
+early 20th century and was linked to Al Capone, and dates back to Sicily for
+many generations. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	6
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	163
+	Weight:	90
+	Ballistic:	2
+	Impact:	1
+	Cash:	200
+	Bank:	200
+[SKILLS]
+	negotiation:	5
+	media etiquette:	4
+	brawling:	5
+BREAK
+#3010
+Keywords:	ork guard bodyguard
+Name:	a bodyguard
+RoomDesc:$
+A massive ork watches over the Don's well-being. 
+
+~
+LookDesc:$
+This huge ork's dark-colored business suit bulges with both muscle and what
+are probably the signs of concealed weapons. He glares around him constantly.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100001001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	7
+	Cha:	3
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	183
+	Weight:	78
+	Ballistic:	3
+	Impact:	1
+	Cash:	50
+	Bank:	100
+[SKILLS]
+	firearms:	4
+	sub-machine guns:	4
+	brawling:	3
+	armed combat:	5
+BREAK
+#3011
+Keywords:	janitor mst
+Name:	a janitor
+RoomDesc:$
+An MST janitor trundles about, sweeping up the area.
+
+~
+LookDesc:$
+Overworked, underpaid, and generally undereducated, this dwarf is
+as filthy as the grime he cleans.
+~
+ArriveMsg:	shuffles in from
+LeaveMsg:	pushes his broom
+MobFlags:	11001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	148
+	Weight:	75
+[SKILLS]
+	armed combat:	2
+BREAK
+#3013
+Keywords:	tech technician mst matrix
+Name:	an MST Matrix technician
+RoomDesc:$
+The MST Matrix technician watches over the terminal output.
+
+~
+LookDesc:$
+While a skilled corporate decker, this slightly scarred dwarf also
+appears to be no stranger to a good brawl, either.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	152
+	Weight:	80
+[SKILLS]
+	:	3
+	computers:	4
+	:	4
+	electronics:	4
+	firearms:	3
+BREAK
+#3014
+Keywords:	traveler sleeping
+Name:	a sleeping traveler
+RoomDesc:$
+A much-fatigued traveler catches some quick sleep.
+
+~
+LookDesc:$
+Wearing a crumpled suit and a creased brow, the traveler snores
+loudly, much to the disturbance of others.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sleeping
+DefaultPos:	Sleeping
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	4
+	Cha:	4
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	90
+	Weight:	180
+	Bank:	20
+[SKILLS]
+	brawling:	2
+BREAK
+#3015
+Keywords:	security chief 
+Name:	the chief of security
+RoomDesc:$
+The station chief of security hates his job...and you.
+
+~
+LookDesc:$
+An orc approximately the size of a bus fills every centimeter of
+the MST security uniform, with muscle to spare.  A former mercenary,
+he feels the pay at this job doesn't balance the aggravation.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	8
+	Cha:	2
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	150
+	Bank:	400
+[SKILLS]
+	firearms:	5
+	brawling:	3
+	armed combat:	2
+	leadership:	5
+BREAK
+#3016
+Keywords:	grunarr mage
+Name:	Grunarr the Mage
+RoomDesc:$
+A wizened old mage wanders the area, searching for aspiring minds.
+
+~
+LookDesc:$
+Decades of perfecting the arts of sorcery have left this elf
+yearning for the satisfaction of bestowing his knowledge upon
+another.  His silver eyes look warmly upon you from under a
+bushy pair of eyebrows.
+~
+ArriveMsg:	slowly enters from
+LeaveMsg:	mutters softly, and heads
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	4
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	187
+	Weight:	81
+	Bank:	35
+[SKILLS]
+	sorcery:	8
+	:	8
+	conjuring:	8
+	armed combat:	3
+BREAK
+#3017
+Keywords:	punk wirehead
+Name:	a wirehead punk
+RoomDesc:$
+A filthy looking punk stares at the sky.
+
+~
+LookDesc:$
+Multiple scars line the arms and neck of this poor piece of street trash.
+Deemed a "wirehead" for his affiliation with both designer implants and
+psychosis alteration drugs, he lives the life of a pariah dog.
+~
+ArriveMsg:	skulks in from
+LeaveMsg:	wanders
+MobFlags:	100001001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	3
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	154
+	Weight:	60
+[SKILLS]
+	armed combat:	3
+	media etiquette:	2
+BREAK
+#3018
+Keywords:	child troll
+Name:	a troll child
+RoomDesc:$
+A rambunctious troll child skips up and kicks you in the shin.
+
+~
+LookDesc:$
+With a face covered in krillbar, and an ear to ear grin that would
+make your average wiz-worm think twice, this tiny menace has free
+reign within the confines of the station lobby.
+~
+ArriveMsg:	skips in from
+LeaveMsg:	runs off to
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	2
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	68
+	Weight:	27
+[SKILLS]
+	armed combat:	1
+BREAK
+#3019
+Keywords:	guard access hired fuchi
+Name:	a hired Fuchi access guard
+RoomDesc:$
+A hulk of a guard, hired from Fuchi to watch over the access terminal
+  stands at attention.
+
+~
+LookDesc:$
+The troll is not known for neither patience nor tolerance, as he
+has been trained by the leading Matrix development corporation
+to keep those who qualify as "questionable" from abusing the
+public access booths.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	6
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	186
+	Weight:	87
+	Ballistic:	2
+	Impact:	1
+	Bank:	200
+[SKILLS]
+	firearms:	5
+	armed combat:	4
+	gunnery:	3
+	brawling:	3
+BREAK
+#3020
+Keywords:	samurai scarred kiyama yoshi
+Name:	Kiyama Yoshi
+RoomDesc:$
+A scarred samurai watches you with one eye, and his drink with the other.
+
+~
+LookDesc:$
+Decades of a his life as one of the premier street sams, Yoshi-san
+has seen the good and the bad fall just the same.  He feels little
+compassion for others, but has been known to offer knowledge of his
+trade so that others may have a better chance to survive.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	4
+	Cha:	4
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	78
+	Bank:	150
+[SKILLS]
+	brawling:	4
+	armed combat:	3
+	media etiquette:	3
+BREAK
+#3021
+Keywords:	timmy dealer man
+Name:	Timmy
+RoomDesc:$
+Timmy stands shadowed in the corner of the station entrance. 
+
+~
+LookDesc:$
+Timmy's dressed in simple streetwear, black and shades of grey. Don't even
+think of small talk. Just do your thing and get on with it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#3086
+Keywords:	Doogie Howser
+Name:	Doogie Howser, M.D.
+RoomDesc:$
+An unfinished mob stands here.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#3087
+Keywords:	leather demon leader
+Name:	the leather demon leader
+RoomDesc:$
+The leader of the leather demons sits here atop his hog. 
+
+~
+LookDesc:$
+Burly and grizzled, this man has seen many a battle, and many a crash. His
+bike is scratched and worn from use, yet it appears to be in fine working
+order. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	1000000100000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	9
+	Cha:	3
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	223
+	Weight:	103
+	Ballistic:	18
+	Impact:	23
+	Cash:	30
+[SKILLS]
+	brawling:	18
+	athletics:	10
+BREAK
+#3088
+Keywords:	LS lonestar reaction member
+Name:	A LoneStar Reaction Team Member
+RoomDesc:$
+A LoneStar is here, ready to deal with whatever they see. 
+
+~
+LookDesc:$
+This person is one of the elite LoneStars that was chosen as a member of a
+reaction team. When bad shit goes down, these people step up to take care of
+it, however they see fit. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	12
+	Str:	9
+	Cha:	4
+	Int:	8
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	216
+	Weight:	98
+	Ballistic:	19
+	Impact:	19
+[SKILLS]
+	brawling:	17
+	clubs:	16
+	assault cannons:	19
+BREAK
+#3089
+Keywords:	corp ninja man
+Name:	A corp ninja
+RoomDesc:$
+A man in dark clothing stands here, silently appraising all he sees. 
+
+~
+LookDesc:$
+This man is wearing tight fitting black armor and a long billowing black coat.
+Strapped across his back you see a large blade. His face is one that you could
+loose in a crowd of one, and his eyes show little interest in the current
+situation. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	11
+	Str:	10
+	Cha:	6
+	Int:	9
+	Wil:	9
+	Mag:	14
+[POINTS]
+	Height:	189
+	Weight:	86
+	Ballistic:	21
+	Impact:	22
+[SKILLS]
+	brawling:	18
+	edged weapons:	20
+	interrogation:	18
+BREAK
+#3090
+Keywords:	Draven mobile suit
+Name:	Draven in a mobile suit
+RoomDesc:$
+A large mobile suit is here, piloted by Lt. Draven Locke. 
+
+~
+LookDesc:$
+This massive metal shell is painted blue and yellow, the LoneStar colors. It
+is equiped with massive autocannons, a mmg, and a capacitor laser. It has
+propulsion that allows it short periods of flight.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	1000000100001000001000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	28
+	Qui:	14
+	Str:	28
+	Cha:	6
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	28
+	Impact:	32
+[SKILLS]
+	brawling:	22
+BREAK
+#3091
+Keywords:	Sergeant lonestar lone star
+Name:	a short LoneStar Sergeant
+RoomDesc:$
+A short LoneStar Sergeant stands here, looking insignificant. 
+
+~
+LookDesc:$
+This sergeant is short, standing a little under five feet tall, and his greasy
+skin glints in the fluorescence of the lights above him. His uniform looks
+wrinkled and stained, and a slightly offensive odor wafts from his body. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	4
+	Cha:	2
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	132
+	Weight:	78
+	Ballistic:	6
+	Impact:	4
+	Cash:	200
+	Bank:	140
+[SKILLS]
+	pistols:	7
+	brawling:	6
+BREAK
+END

@@ -1,0 +1,71 @@
+#35300
+Keywords:	tatalia starr girl
+Name:	Tatalia Starr
+RoomDesc:$
+A little girl looks at you and covers her mouth, giggling. 
+
+~
+LookDesc:$
+Barely six years old, the little girl before you before you is the prettiest
+human child you've ever layed eyes on. Pure innocense radiates from her, and
+you strive to supress a smile everytime you lock eyes. The little girl wears a
+white dress which accents a small white lotus in full bloom tucked in behind
+her left ear. 
+~
+ArriveMsg:	skips in
+LeaveMsg:	skips away
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	4
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#35305
+Keywords:	boy
+Name:	A smiling boy in rags
+RoomDesc:$
+A young boy in rags and marred with dirt sits here. 
+
+~
+LookDesc:$
+A thin young boy in tattered garmets sits here, smiling. On catching his gaze
+you feel a warmth beyond that which you've felt before - in or out of the
+matrix. A knowledgable smile stretches across his dirt-marred face, and he
+nods in your direction. In his cupped hands the boy holds an open lotus
+blossom. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+END

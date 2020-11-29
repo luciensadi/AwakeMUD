@@ -1,0 +1,1457 @@
+#2700
+Name:	Elevators
+Desc:$
+   At the north end of the TTB lobby are three elevators, leading up to the
+upper floors of the TTB tower.  South of here, the white marble fountain
+splashes water about, creating a constant bubbling sound that fills the air,
+overshadowing any cleaning that may be going on at any hour.  The elevators
+have stainless steel metal doors, kept polished to a mirror shine. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	14753
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2701
+Name:	Hallway
+Desc:$
+   This is a simple hallway with simple white walls broken only by the line of
+simple wooden doors, with gold bidecimal (Sperethiel) numbers on them.  The
+floor is a dull gray color, and the ceiling is white stucco plaster with
+fluorescent lighting in the middle, with a glass case over the bulbs to
+disperse the light. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	oak door
+	Desc:$
+An oak door with the Sperethiel number 101 on it. 
+~
+	ToVnum:	2766
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2702
+Name:	Hallway
+Desc:$
+   A simple white color is painted on the walls, and the doors on each side of
+the hall between you and the offices are a simple tan wood color, with a
+standard veneer.  On each of the door is a symbol that would look odd to the
+Seattleite eye, Sperethiel bidecimal numbers.  Lousy elves can't even use 0-9
+like every other country in the world eh? 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	oak door
+	Desc:$
+A large oak door to the east with the Sperethiel number 102 over the door. 
+~
+	ToVnum:	2767
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#2703
+Name:	Stark Street (SW)
+Desc:$
+   Stark Street stands in front of an ominous gray building, that has been
+converted from an old US Federal Reserve building into a three level
+'alternative lifestyles' dance club called "The Jail".  To the south is a
+brick square, a small park with a large fountain, nicknamed long ago by
+denizens of Portland, "Paranoia Park", despite its true name being O'Bryant
+Square.  Its not as much a haven for the 'alternative lifestyles' crowd as it
+is for street rats and homeless people, as many a feed for the homeless is
+held there.  Paranoia Park is a haven for street rats, junkies, chipheads, and
+gutter trash.  The north side of the park is elevated above the street, as a
+ramp goes down under O'Bryant Square to a small underground parking lot. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	14739
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	2704
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2704
+Name:	Portland City Parking - O'Bryant Square
+Desc:$
+   Underneath the brick square/park that is Paranoia Park, or O'Bryant Square,
+depending on who you ask, is an ugly underground parking lot, with a grease
+stained concrete floor, and a piss-yellow colored ceiling that is illuminated
+with cheap fluorescent lighting, creating a rather nasty glare that gives one
+a headache to think about, much less to gaze upon. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	2703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	trapdoor door
+	Desc:$
+A metal trapdoor is set into the floor. 
+~
+	ToVnum:	42109
+	Flags:	2
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	20
+BREAK
+#2705
+Name:	Stark Street and Park, Southwest
+Desc:$
+   The blare of car horns mixes with the automated pedestrian traffic
+management system's high-pitched beeps, which alert waiting pedestrians so
+they can cross the street at timed intervals. This stoplight-enabled
+intersection marks a border of sorts between the corporate and entertainment
+districs. Stark Street, which continues to the east, is filled with
+rainbow-colored restaurants that cater to an alternative lifestyles crowd,
+while Park Street defines the northern border of the corporate sector.
+Northwards another block is Burnside, the center boulevard that flows from
+north to south through the heart of the city. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2706
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2710
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2706
+Name:	Park Avenue, Southwest
+Desc:$
+   On the east side of the street, is The Jail, a three level 'alternative
+lifestyles' nightclub.  Not a very popular place for shadowrunners or
+Johnsons, but still a *ahem* very popular place.  On the west side of the
+street is a record store, specializing in old music of all genres, called
+Django's.  This stretch of road runs between the high traffic Burnside, and
+the colorful Stark Street. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	14723
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2707
+Name:	Eighth Street
+Desc:$
+   A large white marble building stands just east of you, a tower belonging to
+Morningstar Enchantments, the semi-autonomous subsidiary of Andalusian Light
+Industries, known in Seattle for the creation of the Moonlight Mall, a whole
+structure completetly crafted with manipulation and illusion spells.  This
+building is no piece of magic, but contains much magical power within, as it
+glows like a lighthouse on the astral plane.  The building is covered with
+wisps of ivy, from the first floor up to the top of the skyscraper.  West of
+here is O'Bryant Square, known to many of the locals as "Paranoia Park".
+Southwards is Washington Street, which runs through the northern end of the
+Corporate Sector to the east, on to Thirteenth, which runs alongside the 405
+freeway. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	14739
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2708
+Name:	Eighth Street and Washington, Southwest
+Desc:$
+   Eighth and Washington criss-cross here, two narrow one-way streets with
+little traffic, and no need for a stoplight.  Stop signs, red octagonal shapes
+with STOP written in plain white English and Sperethiel letters manage the
+traffic finely here.  Just north of here is the Tri-Met bus stop for the 17
+line, which leads up into the upper parts of Northwest Portland, via
+Washington and 21st Streets.  The main entranceway to O'Bryant Square (or
+Paranoia Park) is northwest. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2709
+Name:	Washington Street, Southwest
+Desc:$
+   Washington Street runs east to west, parallel to Stark and Burnside north
+of here, from Waterfront Park, on the far eastern end of the Corporate Sector,
+to a mish mash of commercial and residential areas west, ending at a ballpark.
+A Tri-Met bus stop is here, with a wooden overhanging to protect riders from
+the rain.  A couple homeless people are sprawled out on the benches, using the
+bus shelter in a manner never meant, but satisfactorily adequate for their
+needs.  Paranoia Park, or as it is properly named, O'Bryant Square, is to the
+north of here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	2708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2710
+Name:	Park Street, Southwest
+Desc:$
+   Park Street is a narrow, lightly-trafficked road that cuts between Stark
+and Washington. To the west is a solitary, 20th-century style office building,
+which, despite its separation from the rest of the corporate sector, seems to
+be well-kept. Homeless people can often be seen sleeping under the overhang of
+the building's entrance. A line of small trees to the east marks the edge of
+O'Bryant Square, which is also known as Paranoia Park; a small, single-story
+building also stands discreetly to that side. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	east e
+	Desc:$
+A small shop lies to the east. 
+~
+	ToVnum:	42102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2711
+Name:	Washington and Park, Southwest
+Desc:$
+   Westward, Washington Street runs through some rather drab mish-mashes of
+lower quality commercial areas, with working class residential areas, and the
+occasional higher class apartment building made of brick, covered in the ivy
+that just sings "snooty rich Tir elves live here, go away we hate you".  It
+varies from block to block.  Eastwards, Washington cuts into the northern edge
+of the Corporate Sector, running between skyscrapers full of rich elves, and
+even more elves with ambitions of becoming rich.  Park runs north to south, on
+the south end it runs alongside the South Park Blocks up to the Tir Tairngire
+Royal University.  Northwards it leads to the North Park Blocks, alongside
+Powell's Technical Books and ending at a postal station up in Northwest. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2710
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2709
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2712
+Name:	O'Bryant Square
+Desc:$
+   This part of O'Bryant Square is densely populated with squatters and street
+rats, sitting at benches, doing drugs, slotting chips, and talking about
+nothing.  Their clothes are dirty, just short of rags.  They don't look too
+friendly either.  A brick pathway is contained by benches, with no room to
+sit, unless you feel like enjoying a nice skirmish with the natives.  North of
+you is a fountain, west of there is another bench with an overhanging, and
+above the fountain farther north is a set of benches elevated above Stark
+Street. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2713
+Name:	O'Bryant Square
+Desc:$
+   By the fountain, you can smell the thick chlorination being used to
+sterilize the reclaimed water (read, MUCH treated sewage water) so that the
+homeless folks hanging out here won't die of some disease.  They sit at the
+fountain, and splash each other with this nasty chlorinated water during the
+summer, and even use it to clean themselves.  Brick red is the color here, as
+the fountain is built with a brick foundation and the floor of the park is
+completely brick.  Behind the fountain, north is an elevated place with
+benches overlooking Stark Street. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2714
+Name:	O'Bryant Square
+Desc:$
+   A pathway goes northwest to the Southwest Park and Stark Street
+intersection, while several benches are lined up underneath an overhang.  A
+small TPF Constabulary station is visible directly across Park Street on the
+southwestern corner of the intersection.  Ahh, so that's why they call it
+Paranoia Park. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	2713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2705
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2715
+Name:	O'Bryant Square
+Desc:$
+   Several benches, populated most of the time by paranoid homeless street
+rats and BTL users are lined in a manner close to a cement partition that
+keeps people from falling onto Stark Street below.  From up here you can see
+the driveway that goes into Portland City Parking's O'Bryant Square garage,
+underneath Paranoia Park.  The street rats like to hang over the overhang and
+spit on the cars going down into the ramp. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	2713
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2750
+Name:	City Center Parking
+Desc:$
+   The front entrance to City Center Parking is rather gray and drab, as most
+of City Center Parking is rather gray and drab.  One three level parking
+structure made of unpainted concrete, where the only color you see is the red
+on the warning signs, and the yellow on curbs in front of the lifts to the
+upper floors.  Even the paint on the tarmac to separate parking spots is a
+dull white color. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	2751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	14751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2751
+Name:	City Center Parking, First Level
+Desc:$
+   A bleak ceiling overhead with bare high-glare incandescent bulbs lighting
+the garage does not contrast in the least with the bleak concrete below, dull
+gray, painted white to separate parking slots orderly.  The room smells like
+exhaust and gasoline, with the occasional acrid smell of battery acid. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2752
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	2754
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2753
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2750
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2752
+Name:	City Center Parking, First Level
+Desc:$
+   A bleak ceiling overhead with bare high-glare incandescent bulbs lighting
+the garage does not contrast in the least with the bleak concrete below, dull
+gray, painted white to separate parking slots orderly.  The room smells like
+exhaust and gasoline, with the occasional acrid smell of battery acid. An
+elevator is on the north end of the room. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	2751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2753
+Name:	City Center Parking, First Level
+Desc:$
+   A bleak ceiling overhead with bare high-glare incandescent bulbs lighting
+the garage does not contrast in the least with the bleak concrete below, dull
+gray, painted white to separate parking slots orderly.  The room smells like
+exhaust and gasoline, with the occasional acrid smell of battery acid.  A huge
+oil slick sits in the pathway for driving between rows of parking spots.  Good
+thing most sane people don't go cruising through a garage at speeds of 80+
+kph. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2754
+Name:	Ramp to Level 2
+Desc:$
+   A slanted ramp spirals around the building, up to the second level of the
+parking structure.  A partition separates you from the outside, and keeps you
+from driving (or jumping) down onto Burnside and Fourth below. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	2751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2755
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2755
+Name:	Ramp to Level 2
+Desc:$
+   A slanted ramp spirals around the building, up to the second level of the
+parking structure.  A partition separates you from the outside, and keeps you
+from driving, or jumping down onto Burnside below.  The wind blows through
+here, and occasionally rain will spray in sideways, despite the ceiling
+overhead. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	2754
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2756
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2756
+Name:	City Center Parking - Level 2
+Desc:$
+   The second level of the parking structure is not nearly as crowded as the
+first, as many people jam themselves into a spot down on the lower level,
+creating more inconvenience than they wish to make for themselves by not
+driving up the ramp to the second level.  The floors are clean concrete, a
+dull gray color.  A warning sign says that anything higher than 4 meters will
+not make clearance.  An elevator is situated just northwest of here. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2755
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2757
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2757
+Name:	City Center Parking - Level 2
+Desc:$
+   The second level of the parking structure is sparsely populated with a good
+well-rounded variety of makes and models of automobiles, from the upper end,
+Rhiati Veiluron luxury sedans, to the lower end Jackrabbit-E's.  Fluorescent
+lights overhead flicker, needing maintenance, and probably having needed
+maintenence for a while.  Signs at regular intervals read "^RMAX CLEARANCE - 4
+METERS^n" in plain English and Sperethiel lettering. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2756
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2758
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2758
+Name:	City Center Parking - Level 2
+Desc:$
+   The parking structure curves here, leading to the ramp, moving up to the
+third and top floor of the parking structure.  The third level is the least
+popular, as it is completely exposed to the elements, no better than a parking
+lot, in fact somewhat worse, considering the navigation that one must do to
+get there.  Overhead, a sign reads ^W"^RMAX CLEARANCE - 4 METERS^W"^n in English and
+Sperethiel lettering. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2759
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2757
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2759
+Name:	Ramp to Third Level
+Desc:$
+   No ceiling hangs overhead, as the ramp to the top level, circles around the
+edge of the building.  Arrows guide the way for cars riding to and from the
+third level.  From the third level, one can get a pretty good view of the
+city, the skyscrapers in the corporate center south of here, and the brick and
+stucco buildings of Old Town, north of here. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	2758
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2760
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2760
+Name:	Ramp to Third Level
+Desc:$
+   A plain concrete ramp, two lanes wide for traffic going up and coming down.
+Wind and rain are not blocked, by anything, save for the short walls one meter
+high.  Arrows are painted in the lanes to direct traffic.  Some graffiti is
+painted on the short walls. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	2759
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	2761
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	graffiti~~~~~~~~~~~
+	Desc:$
+^BA^GN^BC^GI^BE^GN^BT^GS ^C503 ^BM^GO^BF^GR^BA^GG^BG^GA^BS^G!!!^N 
+~
+BREAK
+#2761
+Name:	Ramp to Third Level
+Desc:$
+   A plain concrete ramp, two lanes wide for traffic going up or coming down.
+Wind and rain are not blocked by anything other than the side of the building,
+which is not very high at this point.  Green and blue graffiti is on the wall
+just as it curves into the lot. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	2760
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2762
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	graffiti~~~~~~~~~~~
+	Desc:$
+^GL^BE^GI^BA^GT^BH ^Cand ^GGREEN ^BD^GA^BW^GG ^Cwuz ^GH^BE^GR^BE^N 
+~
+BREAK
+#2762
+Name:	City Center Parking - Level 3
+Desc:$
+   Overhead, nothing but sky.  Usually cloudy, rainy, gray sky.  Below, a
+tarmac parking lot, with neatly painted numbers and letters, in English and
+Sperethiel.  Lights stand in the corners of the lot, flickering on at night,
+off at day.  A meter high wall separates the lot from the three meter drop to
+the earth below. 
+~
+Flags:	100000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2763
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2764
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2761
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2763
+Name:	City Center Parking - Level 3
+Desc:$
+   Overhead, nothing but sky.  Usually cloudy, rainy, gray sky.  Below, a
+tarmac parking lot, with neatly painted numbers and letters, in English and
+Sperethiel.  Lights stand in the corners of the lot, flickering on at night,
+off at day.  A meter high wall separates the lot from the three meter drop to
+the earth below.  An elevator stands at the north end of the lot, the only
+existing sheltered structure on this level. 
+~
+Flags:	100000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	2762
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2764
+Name:	City Center Parking - Level 3
+Desc:$
+   Overhead, nothing but sky.  Usually cloudy, rainy, gray sky.  Below, a
+tarmac parking lot, with neatly painted numbers and letters, in English and
+Sperethiel.  Lights stand in the corners of the lot, flickering on at night,
+off at day.  A meter high wall separates the lot from the three meter drop to
+the earth below. 
+~
+Flags:	100000000000010000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2762
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2765
+Name:	A Steel and Glass Elevator
+Desc:$
+   A steel and glass elevator, with carved letters scratched into the steel.
+A metal panel shows the floors of the elevator, 1, 2, and 3, with the floor
+you are on lit up.  The glass 'window' to the north is bulletproof and
+unbreakable, but you can see the ugly stretch of Burnside between Fifth and
+Fourth Street through it plain as day.  As the elevator reaches its height,
+you can see all of Old Town clear up to the abandoned Trans-Oregon Trucking
+building (or is that the Portland Crime Mall?  All depends on who you ask). 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+BREAK
+#2766
+Name:	Ann Foley's Office
+Desc:$
+   Ann Foley is a noblewoman, with a title recently given to her in the last
+Rite of Progression.  She's taking full advantage of her new status, and this
+luxurious office filled with the latest in technology shows it.  A large
+crystal-glass desk with embedded computer technologies, capable of receiving
+live matrix flash upgrades to keep it SOTA sits facing away from the large
+wall sized window on the other side of the room.  A carpet, fine but low with
+crisscrossing crimson, black, and violet geometric patterns covers the floor.
+The walls are covered with bookshelves, and the door is a thick oak door. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	oak door
+	Desc:$
+A large oak door. 
+~
+	ToVnum:	2701
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#2767
+Name:	Kelovan Martin's Office
+Desc:$
+   Kelovan Martin is an older executive of TTB, who first started as a teller
+here in the days when TTB was still called USBank.  He is senior executive of
+the securities department, and enjoys his tenure here as the highest Gentry
+level citizen employed by TTB, in both pay and position.  His office is rather
+conservative, with a wooden bookshelf on one end, a conservative black veneer
+mahogany desk, overlooking Fifth Street and Stark below. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	oak door
+	Desc:$
+A large oak door to the hallway west. 
+~
+	ToVnum:	2702
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#2801
+Name:	Audio/Visual Level - Romance/Drama
+Desc:$
+   Visited mostly by women, and those men who think like women, this section
+stores all of Powell's tear-jerkers. Mixed in are their limited selection of
+"family" movies, including just about every movie ever made by the Walt Disney
+company, and not much else. Their selection of romantic and dramatic titles is
+vast, including "Casablanca", "Gone With the Wind", and so on. The runner
+lights are mostly red and pink, and the scent-o-matic is pumping out the aroma
+of roses like there's no tomorrow. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2802
+Name:	Audio/Visual Level - Suspense/Horror/Mystery
+Desc:$
+   Movies for people who like to spend a lot of time watching movies. Some of
+the films on here drag on for so long they make you feel older than their
+titles. Others are suspensful in a fast-paced sort of way, just enough to keep
+you guessing. It is not all suspense, some are mysteries and run-of-the-mill
+drama, or shock-a-minute horror flicks. Titles include "The Big Goodbye" and
+the "Halloween" series, in its entirety. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	2806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2803
+Name:	Audio/Visual Level Country/Oldies
+Desc:$
+   This is the Country Music section of the Audio/Visual level. Running lights
+frame the shelves, which are lined by albums by bands such as The Nitty-Gritty
+Dirt Band, and Lonestar. Some of the better known names include Garth Brooks
+and Alabama. A strong scent of fresh-cut grass and warm dust hangs in the air.
+A trid display, like those that run in every section up here, is playing. The
+display is a music video by The Dixie Chicks, a band who gained and lost great
+fame in the early 21st. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2804
+Name:	Audio/Visual Level - Anime/Sci-Fi/Fantasy
+Desc:$
+   This section comprises the best of imported animation, science fiction, and
+fantasy. The running lights that frame the shelves are mostly bright, neon
+tones like those popular as hair colors for anime characters. The light scent
+of sake hangs in the air, and the temperature is slightly lower than normal,
+giving that cold-space-ship feeling. Titles on the shelves include the "Alien"
+trilogy, "Neon Genesis Evangelion", and a single copy of an uberdisk
+containing the entire series of "W-Gundam." The trid display is flicking out a
+video of "The Lord of the Rings: Return of the King", part of the LotR boxed
+set, also available. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	2808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2805
+Name:	The Top of the Stairs
+Desc:$
+   The staircase ascends to its apex on the third floor. The stairs become
+mercurial, cast of specially comissioned plasticrete made to bend light around
+itself. The effect is rather like that of mercury - a mirror in liquid form.
+The stairs are covered in gray cushy carpet. Pale light filters down from the
+third floor. The plate separating the second and third floors is carved with
+inscriptions in Latin, Greek, Arabic, Sanskrit, Sperethiel, and other arcane
+and sacred languages. To those who can read them, the passages speak of
+knowledge and power and the divine origins of intellect. To those who cannot,
+they are simply a pretty decoration.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	2809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	2801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	40615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2806
+Name:	Audio/Visual Level - Rap/Hip-Hop/R&B
+Desc:$
+   Storing possibly the most graphic and controversial of music is the
+Rap/Hip-Hop/R&B collection. The running lights are missing, having apparently
+been stolen, and the trid display has a switchblade sticking out of where its
+lens used to be. Bands, if they can be called so, include "Nappy Roots," and
+artists like Busta Rhymes. The scent in the air is of gunpowder and gasoline.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	2802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2807
+Name:	Audio/Visual Level - Action/Comedy
+Desc:$
+   Ahh... the fun stuff. Any movie that will make you laugh or get your blood
+pumping (no, sadly, there's no porn in this section) is probably here. The
+running lights are red and orange, and the scent in the air is of gunpowder
+and the temperature is a few degrees warmer than usual, giving that
+"something-just-exploded" feeling. Titles on the shelves include all seven
+"Lethal Weapon" movies, and just about anything with something being blown up
+in it. The trid display is running the entire film of "The Matrix," a movie
+from the late 20th that pushed the previous cult genre of cyberpunk into the
+mainstream. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	2808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2808
+Name:	Audio/Visual Level - Rock/Pop/Metal
+Desc:$
+   The most varied of the sections of the A/V level is right here. It contains
+everything from Barry Manilow to Sevendust, and damn near everything in
+between. The runner lights are dark purple but occasionally turn to silver or
+gold or black or whatever, usually something that fits the trid display. Right
+now it's flickering a video of Ozzy Osbourne and Black Sabbath performing the
+song "War Pigs." The smell in the air is a peculiar blend of perfumes that
+puts the thought of ravens in mind. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	2809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	2804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2809
+Name:	Audio/Visual Level - Classical Music
+Desc:$
+   Reminding you that, yes, in fact, there is still culture in an age of
+degredation, Powell's boasts a classical music section. It is somewhat small -
+after all, how many versions of Beethoven does one need? - but it includes all
+the major composures and all the major orchestras from several periods in
+their development. Also in this section are those bands who experimented with
+blending classical music into other styles, most notably Trans-Siberian
+Orchestra, whose album "Beethoven's Last Night" was very popular in the early
+21st century. The smell in the air is of candle smoke and very fine brandy,
+and the trid display is showing, with full and very rich sound, the Moscow
+Philharmonic performing a medley of Classical pieces. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	2806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	2805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2899
+Name:	Inside the Elevator
+Desc:$
+   A very clean elevator, with plush layers over the walls, and chiseled
+marble buttons displaying the floor numbers in decimal and Sperethiel Standard
+bidecimal.  A melodic harp melody plays in the background, a form of elevator
+music just one notch better, one notch less annoying than the Muzak heard in
+megacorporate elevators in Seattle.  The floors are a a dark red carpet, very
+soft to the step.  The doors are stainless steel, with an engraved artwork of
+valiant elven knights standing in front of an ancient palace. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+BREAK
+END

@@ -1,0 +1,343 @@
+#3501
+Keywords:	street monk fergis
+Name:	a street monk
+RoomDesc:$
+Fergis the street monk stands here yelling about fornication.
+~
+LookDesc:$
+You see an unbathed urchin with a wild shock of hair who screams
+tirelessly about sin. His favorite subject is interracial fornication...
+he seems to think humans and metahumans should be segregated.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	1
+	Cha:	3
+	Int:	1
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+#3502
+Keywords:	frank soho ork
+Name:	Frank Soho
+RoomDesc:$
+Frank Soho, the bank president, stands here.
+~
+LookDesc:$
+In his uncreased suit and polite manner it is easy to see that Soho's
+life has been built around compromise and congeniality. In contrast to
+his rough and plated appearance, Soho desires nothing more than a 
+kind of fundamental smoothness and order. In another life he would have
+agreed with medieval natural philosophers who preferred spheres to ellipses.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	2
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	2
+	Mag:	1
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	2
+	Bank:	200
+BREAK
+#3503
+Keywords:	guard
+Name:	a bank guard
+RoomDesc:$
+A tough-looking bank guard eyes each customer.
+~
+LookDesc:$
+In an effort to deter robbery, Soho hires only orks to guard his place
+of business. To further deter crime he has them carry a huge axe.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	3
+	Str:	6
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	95
+	Ballistic:	5
+	Impact:	3
+	Bank:	50
+BREAK
+#3504
+Keywords:	kendra tourist
+Name:	Kendra, a tourist
+RoomDesc:$
+Kendra smiles at the thought of new possibilities.
+~
+LookDesc:$
+Kendra is one of the many tourists that visit Seattle each year in an
+attempt to enliven their lives. Like most people, she believes that
+travel solves more problems than it actually does.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	3
+	Str:	1
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	55
+	Bank:	50
+BREAK
+#3505
+Keywords:	bum jerry
+Name:	Jerry the bum
+RoomDesc:$
+A bum named Jerry sits on the floor here. 
+~
+LookDesc:$
+Jerry makes thrusting motions with his hands constantly. He babbles
+incoherently except for one phrase he repeats over and over: "gimme
+five dolla." Curious that he uses an antiquated term for money.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001110
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	68
+BREAK
+#3506
+Keywords:	jose guadalupe calaveras
+Name:	Jose Guadalupe Calaveras
+RoomDesc:$
+Jose Guadalupe Calaveras stands here.
+~
+LookDesc:$
+Calaveras possesses a great deal of charm. He smiles at everyone and
+has made attempts to ingratiate himself into the community. There is
+an aspect about him -- braggadocio, shiftiness -- a quality hard to
+identify which makes him seem untrustworthy, however.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	6
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	68
+	Bank:	75
+BREAK
+#3507
+Keywords:	lone star officer foot patrol
+Name:	a Lone Star foot patrol officer
+RoomDesc:$
+A well-prepared Lone Star foot patrol officer stands here.
+~
+LookDesc:$
+You see a tight-lipped and thick-skinned member of Lone Star. These people
+are generally unironic and hard to amuse, as the survival rate is not good.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	68
+	Bank:	50
+BREAK
+#3508
+Keywords:	lunatic
+Name:	a nameless lunatic
+RoomDesc:$
+A nameless lunatic stands here calmly.
+~
+LookDesc:$
+The lunatic, in sedate tones, claims to be from Mars. He spins tales
+of a great civilization and a party he must attend; attempts to convince
+him of the unreality of his statements are wasted.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	58
+BREAK
+#3509
+Keywords:	erika nettles
+Name:	Erika Nettles
+RoomDesc:$
+Erika Nettles appears quite busy.
+~
+LookDesc:$
+Miss Nettles is a petite but strong-looking woman with a concrete
+will and an eye for abstraction. She spends much of her life presenting
+herself -- her taste, judgment, and ability to make an impression are
+constantly tested -- and seems not worse for wear.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	2
+	Cha:	4
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	156
+	Weight:	62
+	Bank:	100
+BREAK
+#3510
+Keywords:	daniel grey chef ork
+Name:	Daniel Grey
+RoomDesc:$
+An ork in a chef's hat stands here, chopping up a slab of beef. 
+~
+LookDesc:$
+An Asian descended ork wearing a white chef's hat and a bloody apron stands
+here chopping up a slab of beef as he prepares the main course for the night.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	3
+	Str:	5
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	88
+	Ballistic:	3
+	Impact:	3
+	Cash:	120
+	Bank:	120
+[SKILLS]
+	armed combat:	3
+BREAK
+#3511
+Keywords:	ork patron big rhino
+Name:	An Ork patron of the Big Rhino
+RoomDesc:$
+An Ork patron of the Big Rhino enjoys his meal. 
+~
+LookDesc:$
+An Ork patron of the Big Rhino is enjoying his meal, which looks ghastly to
+any non ork or troll, but delicious if you are one of those races. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	2
+	Str:	4
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	80
+	Ballistic:	2
+	Impact:	1
+	Cash:	35
+	Bank:	35
+[SKILLS]
+	brawling:	2
+BREAK
+END

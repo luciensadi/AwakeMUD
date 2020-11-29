@@ -1,0 +1,660 @@
+#23100
+Name:	Preparation Area
+Desc:$
+   Back here, make-up is applied, girls help out each other smear on glitter,
+bronzing powder, and everything else you could possibly think of and never
+need. Girls are also getting into their costumes back here, or changing out of
+them if their shift is over for the night.  Try not to drool, it looks bad. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23101
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	22595
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	23102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22599
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23102
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23196
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	23103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23103
+Name:	Edge of Stage
+Desc:$
+   Stairs lead up onto the stage here, but, I don't think these bouncers are
+just going to LET you walk up there, do you?  If you do, you're delusional.
+But remember, everyone who works here is a LADY, and must be treated as such,
+unless you want to be visiting the owner of the joint, and from rumors, you
+really, *really* don't want to frag with him. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	22597
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23104
+Name:	Designated Drunks Area
+Desc:$
+   This area is padded, and smells quite bad, probably due to the huge puddle
+of barf on the floor, and all the drunks lounging around on the floor. A few
+people are passed out, and are moved by employees into a corner, out of the
+way of the other stumbling customers. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	22598
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	23105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23105
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	22599
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	23106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23106
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23107
+Name:	The Stage
+Desc:$
+   The end of the stage curves out, getting the dancers close to all the
+patriots.  Some poles are mounted up on stage, which the dancers make use of,
+and money falls from some of their g-strings.  Loud, cheesy music is blasted
+through the area,  but is especially loud here, making you pity the dancers...
+until you remember that they're making shitloads in tips.  Where can you sign
+up...? 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	23108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23108
+Name:	Back of the Stage
+Desc:$
+   Dances swirl around you, molesting some metal poles.  There's stairs
+leading down off the stage, into the main area, and guards stand at both
+sides, frowning furiously. There's a beaded curtain against the wall, which is
+where the dancers come out from.  Probably the dressing room... ooh...
+dressing room... 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	curtain beaded
+	ToVnum:	23109
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23109
+Name:	Back Room
+Desc:$
+   You've gotten into the backroom. Bad!  This is for strippers and the club
+owner only!  The girls who are set to go out next stand anxiously by the
+beaded curtain, dressed in everything from cat costumes, to Catholic
+schoolgirl outfits, even one in a an outfit made entirely of feather boas.
+Now, don't touch!  You're already in enough trouble for being back here! 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	23100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	curtain beaded
+	ToVnum:	23108
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23110
+Name:	Back Corner of the Room
+Desc:$
+   You're in the far back corner of the room, and oddly enough, there's really
+not much here.  The music is still very loud, probably because there's a
+speaker mounted high above your head, sadly, above your reach. A small
+vertical plate of silver is on the wall, and has a small slit in it.  Might
+want to look at that closer, eh?  
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	23111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	23114
+	Flags:	2
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	23101
+	LockRating:	20
+	HiddenRating:	50
+[EXTRADESC 0]
+	Keywords:	silver plate
+	Desc:$
+It's quite odd, because it almost looks like a keyhole, even though, try as
+you might, you can't see a door here. 
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23111
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	23112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23112
+Name:	Edge of the Stage
+Desc:$
+   The stage, full of dancers, in to your north. One topless dancer holds onto
+a pole and leans backwards, then winks at you. Feel special? You should. Now,
+before you get two excited, look to your south, there's a private booth.
+Probably for more ...private... lapdances.  Might have to check that out, huh?
+Loud, cheesy music fills your ears, hurting your head. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	23113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23113
+Name:	Edge of Stage
+Desc:$
+   Stairs lead up onto the stage here, but, I don't think these bouncers are
+just going to LET you walk up there, do you?  If you do, you're delusional. To
+the south is a little private booth, perhaps a place for a slighty more
+personal table dance.  But remember, everyone who works here is a LADY, and
+must be treated as such, unless you want to be visiting the owner of the
+joint, and from rumors, you really, *really* don't want to frag with him. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	23112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23114
+Name:	Owner's Room
+Desc:$
+   Chances are, if you're in this heavily guarded room, you've either killed
+alot of people in the stripjoint, or you're in deep trouble with the
+bodyguards, chummer.  Actually, either way, your hoop is toast. Security
+cameras follow your every move, not leaving a corner unseen.  The room smells
+faintly of blood, and is very poorly lit. 
+~
+Flags:	1001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	23110
+	Flags:	2
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	23101
+	LockRating:	4
+	HiddenRating:	4
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23115
+Name:	Private Table
+Desc:$
+   This table is intended for more private customer/employee interactions, but
+can also be used for meetings... although I don't know what that would say
+about the organazation having it's meetings in a stripclub.  There's a small
+sign on the wall. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign
+	Desc:$
+No sex allowed with the ladies.
+ Respect anything you're told, or you will be promptly escorted out.
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23116
+Name:	Private Table
+Desc:$
+   This table is intended for more private customer/employee interactions, but
+can also be used for meetings... although I don't know what that would say
+about the organazation having it's meetings in a stripclub.  There's a small
+sign on the wall. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign
+	Desc:$
+No sex allowed with the ladies.  Respect anything you're told, or you will be
+promptly escorted out. 
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23117
+Name:	Private Table
+Desc:$
+   This table is intended for more private customer/employee interactions, but
+can also be used for meetings... although I don't know what that would say
+about the organazation having it's meetings in a stripclub.  There's a small
+sign on the wall.  
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	23113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign
+	Desc:$
+No sex allowed with the ladies.
+ Respect anything you're told, or you will be promptly escorted out.
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#23196
+Name:	Entrance to Bambi's
+Desc:$
+   Welcome to Bambi's.  This place is a very poorly lit, kinda run-down strip
+joint.  But hey, nude girls!  That makes up for the puddle of vomit you just
+*barely* avoided stepping in, right?  If you're not 21, you better watch out,
+this place isn't for babies. Some guy over at the bar screams and throws a bar
+stool. Hmm. You may not want to go over there. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22597
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	23102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22595
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

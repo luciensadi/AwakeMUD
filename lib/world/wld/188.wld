@@ -1,0 +1,7064 @@
+#18800
+Name:	Telestrian Habitat Main Entrance
+Desc:$
+   You stand at the grand entrance to the famed Telestrian Habitat. You look
+up and you think you make out 15 floors on this megaplex. Back on the streets,
+waves of elven hustle in and out of this HUGE megaplex, some carrying out
+shopping bags, others bringing in with them a will to shop. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	24126
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18801
+Name:	Telestrian Habitat Main Entrance
+Desc:$
+   You stand at the grand entrance to the famed Telestrian Habitat. You look
+up and you think you make out 15 floors on this megaplex. Back on the streets,
+waves of elven hustle in and out of this HUGE megaplex, some carrying out
+shopping bags, others bringing in with them a will to shop. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18800
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18802
+Name:	Telestrian Habitat Main Entrance
+Desc:$
+   You stand at the grand entrance to the famed Telestrian Habitat. You look
+up and you think you make out 15 floors on this megaplex. Back on the streets,
+waves of elven hustle in and out of this HUGE megaplex, some carrying out
+shopping bags, others bringing in with them a will to shop. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18803
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18804
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18800
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18805
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18806
+Name:	Ground Floor
+Desc:$
+   The service counter at Midnight Streetwear is bustling with activity.
+Adolescent elves come and go, some of them carrying their street savvy
+purchases with them as they leave the store. At what looks to be a solid
+wooden counter, young sales assistants finalizing customer purchases and give
+you a greeting as you approach the counter.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18807
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18808
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18809
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18810
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18811
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18812
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18813
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18814
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18815
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18816
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18817
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18818
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18819
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18820
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18821
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18822
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above you. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18823
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. To the east you see the entrance to
+Midnight Streetwear, a clothing store for the street savvy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18905
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18824
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18825
+Name:	DarkSun Seating Area
+Desc:$
+   This is the seating area of the DarkSun cafe. Simple wooden chairs and
+tables are placed here in an orderly fashion, where patrons sit and enjoy they
+cups of soy-kaf and a sweet pastry. The seated area continues to the north. To
+the north east stands the service counter of the cafe. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18826
+Name:	The DarkSun Cafe
+Desc:$
+   The DarkSun cafe is an indoor version of an al fresco cafe and is situated
+in the middle of the thoroughfare on the ground floor of the Habitat - an
+island in an ocean of shoppers. You look down and you see a large symbol of a
+stylised sun in black on a crimson background, which marks off the space the
+cafe occupies. Tables and chairs are set up to the west and north west, where
+weary shoppers sit to have a break and a perhaps a small snack, while the
+service counter is to your north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18827
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18828
+Name:	Telestrian Habitat Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18829
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18830
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. To the east you see Fonics Music
+Outlet - a store dedicated to modern, youth oriented bands. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18831
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18832
+Name:	DarkSun Seating Area
+Desc:$
+   This is the seating area of the DarkSun cafe. Simple wooden chairs and
+tables are placed here in an orderly fashion, where patrons sit and enjoy they
+cups of soy-kaf and a sweet pastry. The seated area continues to the south. To
+the east stands the service counter of the cafe. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18833
+Name:	DarkSun Service Counter
+Desc:$
+   You stop for a moment to appreciate the smell of good quality soy-kaf
+blending it's rich aroma with the sweet smell of the warm pastries at the
+service counter of the DarkSun cafe. A large glass counter displays the
+various cakes and pastries available for sale. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18834
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18835
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18836
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18837
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18909
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18838
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18839
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18840
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18841
+Name:	By the Up Escalator to Mezzanine Level 1
+Desc:$
+   A set of escalators are arranged here, leading up and back down to this
+floor.  Shoppers move onto the escalators in a frenzied motion, moving
+frenetically about the Habitat. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	18859
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18842
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18843
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18844
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18910
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18845
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18852
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18846
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18853
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18847
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18848
+Name:	By the Down Escalator
+Desc:$
+   The escalator down from the Mezzanine level above carries a large populace
+of shoppers who crowd the escalator from railing to railing.  The escalators
+themselves are shiny examples of how the powers that be in Tir Tairngire wish
+their nation to be a clean and shiny example of a perfect elven nation, with a
+perfect balance of technology, magic, and nature. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18855
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18849
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18850
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18857
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18851
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18912
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18852
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18853
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18853
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18852
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18854
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18855
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18853
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18855
+Name:	Ground Floor - At Elevators
+Desc:$
+   The ground floor has a very open and spacious feel to it, due mainly to the
+several mezzanine levels up around you, and the resulting ceiling  that looms
+floors above you.  Just north is a call panel for an elevator. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18856
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18857
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18855
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18857
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18858
+Name:	Ground Floor
+Desc:$
+   The ground floor of the Telestrian Habitat has a very open and spacious
+feel to it, due mainly to several mezzanine levels up around you, and the
+resulting ceiling that looms several floors above. You see a sea of elven
+shoppers, almost as far as the eye can see. The occasional elf bumps into you
+as they swarm around in a shopping frenzy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18857
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18859
+Name:	Escalators Up
+Desc:$
+   On this platform the escalator starts, leading passengers up to the
+Mezzanine level above.  Looking upwards you can see the large trees that were
+planted in the habitat area above, to create a natural oxygen generation
+system. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	18864
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18860
+Name:	Going Down The Escalator
+Desc:$
+   The escalator glides down slowly, cutting into the ceiling of the first
+floor and the floor of the second, moving down into an enclosed area filled
+with shops and shoppers alike. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	18848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18861
+Name:	On the Down Escalator
+Desc:$
+   spec proc or something ;/ 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#18862
+Name:	On the Up Escalator
+Desc:$
+   spec proc or something ;/ 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#18863
+Name:	By the Down Escalator
+Desc:$
+   You are on the center of a path between two very large gardens with very
+tall rainforest plants and trees that climb way up to the ceiling, some 500
+meters up.  These trees never see the light of the sun, as they are kept alive
+by the closed environment and lighting of the habitat itself.  Northwards you
+see the elevators that take you out of the mall section and into the actual
+corporate sectors of the Telestrian Habitat. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18864
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	18860
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18864
+Name:	By the Up Escalator
+Desc:$
+   The escalators are very ornate, with long glass crystalline guard rails and
+a flexi-grip surface in which shoppers move up and down the escalators between
+the two main levels of the Telestrian Habitat Shopping Center.  The flexi-grip
+is designed to look like a marble, that morphs and changes to form into steps
+along the escalator.  You are surrounded by the Telestrian Habitat Gardens, a
+cultivated jungle of rainforest plants and trees that climb five hundred
+meters up to the ceiling of the shopping center.  This horticultural
+experiment has been very successful, for twenty years these plants have grown
+without ever experiencing the wind of the outdoors or the light of the sun. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18863
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18865
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   You are near the escalators, whose ornate design is sharp and shiny, with
+glass handrailing and flexiglass steps designed to look like white marble.  On
+both sides of you to the south are very tall trees, grown completely indoors,
+complete with undergrowth such as ferns and rainforest plants.  To the north
+is a glass elevator designed to enhance the great view of the interior of the
+Habitat. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18866
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18863
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18869
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18866
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   A crowd of shoppers floods the area, moving out of the elevators north of
+here, and into them, to the west and east you see the bright lights of the
+shopping areas of the Telestrian Habitat.  South, along the east and west
+sides, you see very tall trees that crawl up stories above you to the very
+ceiling of this part of the Habitat. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18868
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18867
+Name:	Inside the Elevator
+Desc:$
+   The elevator is made with crystalline glass in a bubble, to give you a
+panoramic view of the forests being grown in the Habitat horticultural
+systems.  As the elevator goes upwards, you get a full view of all the shops
+to the east and west of the entrance, on the  mezzanine level of Telestrian's
+shopping center. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#18868
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   Along the northern wall, shoppers move back and forth, carrying goods from
+the stores, or money to the stores.  On the north wall is a large mural, with
+elven figures working, in progression to a bright future with sunlight and
+rainbows. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18866
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18869
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18869
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   There is much activity here in the corner separating the incomplete west
+wing of the Telestrian Habitat first Mezzanine level and the more complete
+east wing.  A tree is planted in a pot here by the edge of the wall.  A spray
+from a mist-jet sprinkles a small amount of mist through here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18868
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18870
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   A very large sculpture is chiselled into the white marble of the northern
+wall.  The sculpture depicts a vast scene where elves are the custodians of
+the Earth, with happy humans, orks, trolls, and dwarves working beneath them.
+Shoppers move back and forth rapidly, trying to make deadlines as they wedge
+shopping into their busy schedules. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18866
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18871
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   Shoppers line the guardrails, which are a golden color, very reflective,
+with a threading of orichalcum.  The air is rich with the scent of evergreen
+trees from the Habitat Horticulture system, which is cultivating evergreen
+trees nearby.  To the east are a set of stores. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18872
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18872
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   The area has an evergreen smell to it, a natural one that is rare inside
+enclosed arcologies, excepting of course this one whose life support system
+relies upon natural factories of oxygen.  A light mist drifts by you, subtly
+making the side of your face damp.  The level is thick with shoppers as this
+is where some of the best places are to find many a gift or a selfish splurge.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18873
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   Shoppers pack the corner of the mezzanine as they move towards the northern
+section of the level, and from the same.  The floor is made of a very
+exquisite marble, with veins of silver and orichalcum crisscrossing each other
+in a hypnotic pattern.  On the corner, there is a statue of a fine-looking
+elven warrior wearing chainmail, with a charismatic gaze upon his face. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	18874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18872
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18874
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   Everywhere you look, you see one group of shoppers or another, be it a
+family or just some wandering tourist trying to find a gift for his
+significant other or spouse.  Above you is an array of white lights with the
+full quality of the sun's rays.  East of here is a famous Formal Wear store
+for those who think of themselves as trend-setters, or simple executives with
+a wish for elegant attire. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18916
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18872
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	18873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18875
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   A flowered vine crawls up a redwood tree here, vibrant with color.  The
+mist from the environmental systems drifts through the air, making the floor
+just damp enough to be dangerous.  Away from the humidity are a set of tables
+and chairs for the denizens and visitors of the Telestrian Habitat to have a
+seat and relax for a few, maybe play some Chess or some other board game. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18872
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18878
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18876
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   The shoppers are everywhere here, of all shapes and sizes within the
+spectrum of elvenkind.  Families carrying loads of goods purchased from the
+myriad of stores here mingle through the crowd with lone shoppers out to find
+a gift for their spouse or significant other, and mallrat kids with pointy
+ears. To the east is a toy store. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18922
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18877
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18877
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   Shoppers move quickly up and down this stretch of mezzanine mall level,
+often bumping into each other and dropping packages.  East is a simsense chain
+store outlet, called Sensory Overload.  A wad of gum is dried up and caked
+into the marble.  The air is fresh with an evergreen scent to it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18921
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18878
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18878
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   A bum has himself set up in a corner here by the wall, with a big cardboard
+sign written in marker, "HELP - HUNGRY - NEED NUYEN".  Overhead a branch from
+the trees in the environmental system's natural oxygen generation system hangs
+over the area.  The floors are white marble, as is the wall separating here
+from the environmental area where the trees grow.  Shoppers push each other as
+they move through here in crowds. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18877
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18879
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18879
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   You are at the southeastern corner of the horticultural systems of the
+habitat.  A plaque sits in the embankment just under the rail, describing the
+many species of flora kept alive inside the Habitat, and how it generates
+oxygen to balance out the CO2 generated by the inhabitants of the Habitat. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18878
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18881
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18883
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18880
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   Shoppers are crowded about here, as this area presents a bottleneck in
+shopper traffic, the corner of the Mezzanine.  To the east is a store called
+Paramount Imports, which caters to those who smoke, and to those who love
+music.  Incense fills the air as you near the store.  Inside there are trendy
+looking elves, lava lamps, and racks full of t-shirts, as well as cases full
+of jewelry and trendy gear. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18877
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18919
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	18881
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18879
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18881
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   A rush of shoppers moving from the east to the south wings, and vice versa
+keep this area of the mall crowded during most of the shopping day.  There is
+a sculpture here of some bizarre shapes looping through each other.  Under the
+sculpture is the inscription in Sperethiel, "Knowledge and Wisdom must
+balance, lest our knowledge be our enemy."  To the south is Aera Talismans, a
+talismongery focused on Hermetic magic. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18879
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	18880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18918
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18882
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18882
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   Shoppers rush through swiftly between the stores on the eastern end and the
+stores on the western and southern ends.  You smell some candy corn in the air
+here, and notice a sales cart to the north of you.  To the south is Telestrian
+Arms' retail outlet, the place to buy guns here in Tir Tairngire. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18883
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18881
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18915
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18885
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18883
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   The air is thick with the smell of evergreen trees from the Habitat's
+horticultural system, which is growing some dark green coloured broad leafed
+evergreen rainforest plants.  A gentle mist is in the air here, giving a sense
+of dampness.  There is a marble seating area with chessboards built into the
+marble tables.  A cart selling candy is nearby the rail between the
+horticulture systems and the area of the mall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18879
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18882
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18884
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   The air is humid, richly scented and cool, as mists from the environmental
+system keeping the trees in the Habitat alive gently spray against you.  There
+is a small food cart here selling some vegetarian elven snacks.  The
+escalators to the first floor are north of here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18864
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18883
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18885
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18885
+Name:	Telestrian Habitat Mezzanine Level
+Desc:$
+   Shopper traffic is thick here, in the midst of the southern wing of the
+Mezzanine shopping area.  Stores line the southern end of the Habitat,
+including Graagen Auto Parts, directly south of you.  You hear a screaming
+elven child in the background.  There is a distinctive smell of coffee in the
+air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18882
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18923
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18900
+Name:	Battlegear(TM) Counter
+Desc:$
+    You stand before the northern counter of the store. A large sign hanging
+from the ceiling proclaims that this section of the store is devoted to the
+sale of Trojan's Battlegear(TM), a line of products for "the fashion conscious
+runner who doesn't want to sacrifice style at the cost of protection," or so
+their catch-phrase goes. Various pieces of armor hang from the display board
+on the wall, while a glass display counter in front of you displays various
+electronic gadgets. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	18903
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	18902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18901
+Name:	The Trojan Combat Supplies Store
+Desc:$
+   The Trojan Combat Supplies store is not as crowded as the rest of the
+Habitat. Other than the occasional curious civilian shopper, the customers
+here look like seasoned runners gearing up for their next run. Various items,
+from armor to electronic gear, hang from display stands or are kept the glass
+display counters. To the north, you see a sign hanging over the counter that
+reads Sneakware(TM). To the east, a sign reads Battlegear(TM); to the south,
+you see the standard Trojan logo over a counter where various impulse-buy
+items are kept. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18903
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18902
+Name:	Sneakware(TM) Counter
+Desc:$
+   A large sign which reads Sneakware(TM) hangs above the northern counter of
+the Trojan store. This section of the store sells equipment to those with more
+of a subtle touch, mainly dealing with equipment suitable for intrusion and
+evasion. A complete lightweight suit of some sort is arranged on a display on
+the far wall and verious items are displayed in the glass counter in front of
+it. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	18900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18903
+Name:	Trojan Impulse Counter
+Desc:$
+   Colorful and eye-catching displays draws the eyes and nuyen to this section
+of the store, selling a vast array of various miscellaneous and impulse items.
+In the glass counter, as well as on display stands, items such as packaged
+foodstuffs, consumer electronics, gadgets and the like are displayed here. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	18900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18904
+Name:	Store Manager's Office
+Desc:$
+   You stand in the back room of the store that is the store managers office.
+Around you shelves contain datacards and hard copies of various bits of
+information required to run a store like this. You also see a desk and a
+comfortable chair at the far end of this small office, where the manager sits
+to conduct his managerial tasks.   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#18905
+Name:	Midnight Streetwear
+Desc:$
+   You stand at the entrance to Midnight Streetwear - a store dedicated to the
+sale of street savvy clothing. The store is essentially split down the middle
+with menswear on the left side and the women's clothing on the right. Near the
+entrance you see an assortment of shoes, then comes various articles of street
+clothing - from pants, to shirt, to jackets and so on - and ends finally at a
+service counter you can see towards the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18906
+Name:	MS Service Counter
+Desc:$
+   The service counter at Midnight Streetwear is bustling with activity.
+Adolescent elves come and go, some of them carrying their street savvy
+purchases with them as they leave the store. At what looks to be a solid
+wooded counter, young sales assistants, finalizing customer purchases and give
+you a greeting as you approach the counter. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	18905
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18907
+Name:	Fonics Music Outlet
+Desc:$
+   A burst of electronic sounds and heavy bass beats hits you as you enter the
+store, which is a stark contrast to the lack of noise just outside the store.
+It must be the way the sound is projected. Anyhow, you look around you and you
+see display stands all around the store containing an assortment of simsense
+chips of modern, youth orientated bands. Around the store, various posters
+fill the blank wall space, mainly elven bands from the well established
+Neonbabies to the hottest up-and-coming poliband called Homeland, which
+incidently is what is being played in the store. A hush comes over the store
+as the music dies down and Ella's angelic voice cradles you as lifts you up to
+heaven, then the music changes to raw static as the banshee's voices pierces
+your ears as she claws your soul back down to hell. Oh, you also see a service
+counter to the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18908
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18908
+Name:	Fonics Counter
+Desc:$
+   A large trid image is project above the black duraplast counter that serves
+as as the service counter of the store. You see in the trid a punk looking
+female elf, with bright pink hair in long dreadlocks shifting from a screech
+to a light-as-air tone. You see she has several piercings along her ears and
+her crooked teeth does her soft, pale face no justice. You look back down from
+the four-piece band and see that the counter has various displays selling
+novelty fan based items. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	18907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18909
+Name:	The Rose Garden Florist
+Desc:$
+   You enter a small shop with modest furnishing. Before you is a small
+duraplast counter and on the wall behind it, a large sign covered in what
+looks to be rose petals states that this is The Rose Garden - your one stop
+shop for all your rose buying needs. Around you, hanging from the walls and
+sitting in buckets of water, are the roses this place is so famous for. You
+notice the more expensive and rare genetically modified roses in deep purple,
+blue and black sit in eye catching displays secured behind the counter. It's
+only now that the subtle fragrance of the roses hit you, which gives you an
+uplifting feeling, perhaps uplifting enough for you to purchase a rose or
+twelve. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	18837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18910
+Name:	Gizmo's Electronics
+Desc:$
+   You stand at the entrace to a small but well kept store known as Gizmo's
+Electronics, as indicated by the blue neon sign that is situated above the
+entrance. To either side of the store, white shelves run along the walls
+towards the counter to the east, displaying the larger electrical good
+available for sale. To the east, you see the store's counter along with
+display cabinets and various promotional posters and signs. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18911
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18911
+Name:	GE Counter
+Desc:$
+   You approach the counter area and you are bombarded with various
+promotional posters, signs and display stands, which is in stark contrast to
+the plain minimalist white shelves you passed on your way here. The
+promotional material displays various characterics of the latest Sony
+Blastman(TM) or the benefits of owning a Mitsuhama headset phone. Tall
+plexi-glass display cases flank either end of the white service counter
+securing the small, higher priced items. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	18910
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18912
+Name:	Entrance to the Dandilion's Den
+Desc:$
+   You stand at the entrance of the Dandiloin's Den where trees and vines give
+the motif of the store somewhat of a jungle feel. This playroom/fast food
+restaurant hybrid seems fairly popular as you see hoards of parents bustle in
+and out of this place with their young children in tow. To the east, you see a
+service counter, brightly lit in an explosion of colours where adolescent
+elves stand ready to take your order. To the north is a seated area and beyond
+that you see what seems to be the playroom thoughtfully partitioned by
+soundproof, transparent wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18914
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18913
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18913
+Name:	Service Counter
+Desc:$
+   You approach a bright yellow service counter where the service attendants
+tend to your purchasing whims. The somewhat plain, monochromatic counter makes
+a somewhat stark contrast with rainbow of colors that garland the various
+promotional materials as well as brightly lit menu board that hangs above the
+service attentants. Behind the attendants, you see a lively kitchen, preparing
+the various consumables available on the menu. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	18912
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18914
+Name:	Seated Area
+Desc:$
+   You enter the seated area of Lilliput or so it seams as you look down at
+the minature tables and chairs which are suited only for young children. The
+table tops consist of what seems to be one large Etch-a-sketch surface,
+allowing the children to draw whatever their heart desires. A bar runs along
+the western wall with stools place at even intervals at a height suitable for
+adults.To the north you see a large (thankfully) soundproof tranparent wall
+with a door inset to allow young elves to access the facilities of the
+activity centre. To the east you see the entrance to the toilets and to the
+south is the service counter. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	18912
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18915
+Name:	Telestrian Arms Retail Outlet
+Desc:$
+   The walls in here are clean and plain, with posters detailing the many
+virtues of Telestrian Arms weaponry, from Systeri series blades to the TAX-440
+submachineguns used extensively by elven corporate militaries such as Aquilor
+Security and Andalusion Light Industries Security division, as well as the
+expected Tir Tairngire Peace Force.  At the end of the room is a glass case,
+with an array of weapons showcased at this outlet. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18882
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18916
+Name:	Alequirrie's Formal Wear
+Desc:$
+   As you step inside this room the first thing that hits you is the smell of
+fresh, new clothes. Surrounding you on all sides are sets of formal attire
+that not only look snazzy, but are probably pretty pricy. Racks of suits and
+dresswear line the main isle where you're standing, leading up to a large
+mahogany counter with a nicely dressed elf standing behind it, waiting for you
+to pick something with a large grin. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18917
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18917
+Name:	Jewelry and Accessories section
+Desc:$
+   This section of the store has a square glass counter showing off jewelery
+and accessories. A nicely dressed elven woman is standing behind the counter,
+waiting to assist you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	18916
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18918
+Name:	Aera Talismans
+Desc:$
+   The talismongery Aera Talismans is not well known for having the best and
+most state of the art in magic, but it is well known for having some downright
+high quality magical gear, from spell formulae to weapon foci.  The room seems
+to have a glow to it, as several magical designs focus power into the room,
+creating a mild, yet positive background count.  A glass case holds the more
+intensely magically imbued items and spell formulae. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18881
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18919
+Name:	Paramount Imports
+Desc:$
+   Paramount Imports is the place to find smoking supplies in Tir Tairngire.
+On one wall are countless 'water pipes' (read: bongs) of all shapes and sizes,
+everything from skull bongs to ceramic hookas to 5 meter tube bongs, all
+designed for the ultimate in um... smoking pleasure.  Available also are an
+array of incense, apparel, and even lava lamps.  In the corner of your eye you
+spot them opening up a panel and going into a back room.  Hmmmm.... 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	Looks like there might be a panel that you can open.
+	ToVnum:	18920
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	12
+[EXIT west]
+	ToVnum:	18880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18920
+Name:	Paramount Imports - Back Room
+Desc:$
+   This back 'storeroom' seems to have another purpose than what they probably
+tell the Tir Tairngire Peace Force.  As you walk in, the smell of something
+herbal hits your nostrils and gives you a subtle light-headed feeling.  At the
+end of the back room is an elf with dreadlocks wearing a Concrete Dreams
+shirt, dealing out baggies filled with something herbal and green to anyone
+who wishes to purchase them.  People in groups pass pipes around with each
+other, seemingly trying out the selection sold in the legitimate part of the
+store. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	panel
+	Desc:$
+The panel opens to bring you back into the legitimate part of the store. 
+~
+	ToVnum:	18919
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18921
+Name:	Sensory Overload
+Desc:$
+   From front to back, and from top to bottom, this store is decked out with
+every kind of media hardware that money can buy.  Wall sized trideo screens to
+simsense arcade units, microdiscs to optical chips, every major label band out
+there, and every major movie release or simsense film release that has been
+put out there.  Its all right here at Sensory Overload. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	18877
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18922
+Name:	Kabby's Toys
+Desc:$
+   A small toy store with a lot of toys.  Nothing in here would be of interest
+to a shadowrunner, save for the toy guns that can be used for circumstances
+when one would need to fake their way through a situation. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	18876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18923
+Name:	Graagen Auto Parts
+Desc:$
+   A basic auto parts store with lots of useful auto parts for sale, and the
+aroma of motor oil in the air.  Unlike the Habitat, this shop has a plain
+concrete floor.  Metal racks complete the aisles, covered with everything from
+spark plugs to Castero(tm) motor oil. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18885
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18925
+Name:	Near the Elevators
+Desc:$
+   The elevator doors on the northern wall are clear glass, and through them,
+you can see the view on the other side of the glass tube which carries the
+elevator, as well as the sterile chrome strands of metal which function as the
+elevator cables.  To the east and west are hallways, clean to a near sterile
+quality, but keeping an intrinsic beauty, with marble walls carrying an
+orichalcum vein.  A mechanical sliding door separates the hall from Apartment
+100, to the south. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18926
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door mechanical sliding electronic airlock
+	Desc:$
+A mechanical sliding door, airtight, similar to an airlock door. 
+~
+	ToVnum:	18946
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18940
+	LockRating:	6
+[EXIT west]
+	ToVnum:	18927
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18926
+Name:	Hallway - Habitation Level A
+Desc:$
+   Along the northern end of the Habitation Level A of the Telestrian Habitat
+are hallways with thoroughly polished white marble carrying an orichalcum
+vein, and a faint silverish vein.  The floors are a green and black pattern,
+almost an argyle pattern but not quite, in a very low cut carpeting.  Markers
+in English and Sperethiel read 'APARTMENTS 101-106 --->', pointing eastward. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	18928
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	18925
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18927
+Name:	Hallway - Habitation Level A
+Desc:$
+   Along the northern end of the Habitation Level A of the Telestrian Habitat
+are hallways with thoroughly polished white marble carrying an orichalcum
+vein, and a faint silverish vein.  The floors are a green and black pattern,
+almost an argyle pattern but not quite, in a very low cut carpeting.  Markers
+in English and Sperethiel read '<--- APARTMENTS 106-109', pointing westward. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18925
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	18929
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18928
+Name:	Hallway - Habitation Level A
+Desc:$
+   In front of Apartment 101, the sterile, clean, corporate feel pervades,
+with the marble wall on the west end of the wall, and a nearly airlock-like
+mechanical door that separates Apartment 101 from the hallway of the level to
+the east.  A potted plant sits alongside the door. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door airlock-style mechanical
+	Desc:$
+A mechanical door that slides open and closed with the press of a button, when
+unlocked. 
+~
+	ToVnum:	18937
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18941
+	LockRating:	6
+[EXIT south]
+	ToVnum:	18931
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	18926
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18929
+Name:	Hallway - Habitation Level A
+Desc:$
+   In front of Apartment 109, the sterile, clean, corporate feel pervades,
+with the marble wall on the east end of the wall, and a nearly airlock-like
+mechanical door that separates Apartment 109 from the hallway of the level to
+the west.  A potted plant appears to be dying, alongside the door.  The
+fluorescent lighting seems to need some minor repair, as a faint flicker
+creates a nearly subconscious distraction. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	18927
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18930
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door mechanical sliding
+	Desc:$
+A sliding mechanical door, with a passkey mechanism to open it. 
+~
+	ToVnum:	18945
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18949
+	LockRating:	6
+BREAK
+#18930
+Name:	Hallway - Habitation Level A
+Desc:$
+   In front of Apartment 108, the sterile, clean, corporate feel pervades,
+with the marble wall on the east end of the wall, and a nearly airlock-like
+mechanical door that separates Apartment 108 from the hallway of the level to
+the west.  A potted plant thrives here, green and lush with life, sitting on
+the left side of the door.  On the east wall is a fire extinguisher in a red
+case with a glass faceplate, reading "BREAK GLASS AND USE IN EMERGENCY" in
+English and Sperethiel. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18929
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door airtight mechanical sliding airlock
+	Desc:$
+A mechanical sliding door, airtight like an airlock door. 
+~
+	ToVnum:	18933
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18948
+	LockRating:	6
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A regular mechanical door. 
+~
+	ToVnum:	18944
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18948
+BREAK
+#18931
+Name:	Hallway - Habitation Level A
+Desc:$
+   In front of Apartment 102, the sterile, clean, corporate feel pervades,
+with the marble wall on the west end of the wall, and a nearly airlock-like
+mechanical door that separates Apartment 102 from the hallway of the level to
+the east.  A potted plant tries to grow here, looking pathetic, sitting on the
+right side of the door.  On the west wall is a fire extinguisher in a red case
+with a glass faceplate, reading "BREAK GLASS AND USE IN EMERGENCY" in English
+and Sperethiel. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18928
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door mechanical airlock air-lock style
+	Desc:$
+A mechanical sliding door, airlock style. 
+~
+	ToVnum:	18938
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18942
+	LockRating:	6
+[EXIT south]
+	ToVnum:	18932
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18932
+Name:	Hallway - Habitation Level A
+Desc:$
+   In front of Apartment 103, the sterile, clean, corporate feel pervades,
+with the marble wall on the west end of the hall, and a nearly airlock-like
+mechanical door that separates Apartment 103 from the hallway of the level on
+the east.  A potted plant sits on the left side of the door, completely dead.
+A bulb has burned out on one of the lights above you, creating a dimmer
+environment in front of this apartment.  The hall curves southwest to
+Apartments 104-106. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18931
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door mechanical sliding airlock style air-lock
+	Desc:$
+An airlock style mechanical sliding door. 
+~
+	ToVnum:	18939
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18943
+	LockRating:	6
+[EXIT southwest]
+	ToVnum:	18935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18933
+Name:	Hallway - Habitation Level A
+Desc:$
+   In front of Apartment 107, the sterile, clean, corporate feel pervades,
+with the marble wall on the east end of the hall, and a nearly airlock-like
+mechanical door that separates Apartment 107 from the hallway of the level on
+the west.  A potted plant sits on the left side of the door, a rather boring
+looking fern.  The hallway curves southeast of here to Apartment 106. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18930
+	Flags:	0
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	18934
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door mechanical sliding airlock style air-lock
+	Desc:$
+A mechanical sliding door with an electronic passkey mechanism. 
+~
+	ToVnum:	18943
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18947
+	LockRating:	6
+BREAK
+#18934
+Name:	Hallway - Habitation Level A
+Desc:$
+   In front of Apartment 106, the sterile, clean, corporate feel pervades,
+with the marble wall on the north end of the hall, and a nearly airlock-like
+mechanical door that separates Apartment 106 from the hallway of the level on
+the south.  A potted plant sits on the right end of the door, barely
+surviving.  The hallway curves northwest, and goes eastward. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	18936
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door sealed mechanical airtight airlock style
+	Desc:$
+A sliding mechanical door, sealed airtight. 
+~
+	ToVnum:	18942
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18946
+	LockRating:	6
+[EXIT northwest]
+	ToVnum:	18933
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18935
+Name:	Hallway - Habitation Level A
+Desc:$
+   In front of Apartment 104, the sterile, clean, corporate feel pervades,
+with the marble wall on the north end of the hall, and a nearly airlock-like
+mechanical door that separates Apartment 104 from the hallway of the level on
+the south.  A potted plant sits on the left side of the door, tall and lush,
+with small flowers budding.  The hallway curves northeast, and goes westward.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	18932
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door sliding mechanical airlock air-lock style
+	Desc:$
+A mechanical sliding door, electronically opened or closed, airlock-style. 
+~
+	ToVnum:	18940
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18944
+	LockRating:	6
+[EXIT west]
+	ToVnum:	18936
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18936
+Name:	Hallway - Habitation Level A - Junction
+Desc:$
+   In front of Apartment 105, the sterile, clean, corporate feel dominates.
+The carpet is freshly shampooed, adding to the sterile atmosphere.  Northward,
+a hallway extends into the core of the level, with a sign reading "Temporary
+Living Quarters, Level Security -->" pointing northward.  The door on the
+south, with "105" printed on a sign over the door, is an airlock-like
+mechanical door, common to the apartments on this level.  A potted plant sits
+on the right hand side of the door, looking battered and beaten. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18947
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	18935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door mechanical sliding airlock
+	Desc:$
+An airlock style mechanical sliding door. 
+~
+	ToVnum:	18941
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18945
+	LockRating:	6
+[EXIT west]
+	ToVnum:	18934
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18937
+Name:	Apartment 101
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door sliding mechanical
+	Desc:$
+A sliding mechanical door. 
+~
+	ToVnum:	18928
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18941
+	LockRating:	6
+BREAK
+#18938
+Name:	Apartment 102
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door sliding mechanical
+	Desc:$
+A mechanical sliding door. 
+~
+	ToVnum:	18931
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18942
+	LockRating:	6
+BREAK
+#18939
+Name:	Apartment 103
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door sliding mechanical
+	Desc:$
+A mechanical sliding door. 
+~
+	ToVnum:	18932
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18943
+	LockRating:	6
+BREAK
+#18940
+Name:	Apartment 104
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door mechanical sliding
+	Desc:$
+A sliding mechanical door. 
+~
+	ToVnum:	18935
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18944
+	LockRating:	6
+BREAK
+#18941
+Name:	Apartment 105
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door mechanical sliding electronic
+	Desc:$
+A sliding mechanical door with an electronic mechanism for opening it. 
+~
+	ToVnum:	18936
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18945
+	LockRating:	6
+BREAK
+#18942
+Name:	Apartment 106
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door mechanical sliding
+	Desc:$
+A mechanical sliding door, with an electronic keycard mechanism. 
+~
+	ToVnum:	18934
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18946
+	LockRating:	6
+BREAK
+#18943
+Name:	Apartment 107
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door mechanical sliding
+	Desc:$
+A mechanical sliding door. 
+~
+	ToVnum:	18933
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18947
+	LockRating:	6
+BREAK
+#18944
+Name:	Apartment 108
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door mechanical sliding
+	Desc:$
+A mechanical sliding door. 
+~
+	ToVnum:	18930
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18944
+	LockRating:	6
+BREAK
+#18945
+Name:	Apartment 109
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door mechanical sliding
+	Desc:$
+A sliding mechanical door, airtight, like an airlock, with a passkey mechanism
+to open it. 
+~
+	ToVnum:	18929
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18949
+	LockRating:	6
+BREAK
+#18946
+Name:	Apartment 100
+Desc:$
+   A spacious apartment, with clean and new furniture and amenities, such as a
+trideo unit, refrigeration system, and simsense reception system.  The floor
+is clean carpet in the living room and two bedrooms, and freshly laid out
+linoleum in the kitchen and restroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door mechanical sliding
+	Desc:$
+A mechanical sliding door with an electronic mechanism to open it. 
+~
+	ToVnum:	18925
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	18940
+	LockRating:	6
+BREAK
+#18947
+Name:	Temporary Habitation
+Desc:$
+   Temporary Habitation consists of a set of cubicles for overnight stays, or
+temporary living, such as for workers at Telestrian staying on a visitors visa
+and the like.  The cubicles are clean, but don't include much more than a bed,
+a microwave oven, and a small trideo set. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18949
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18936
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18948
+Name:	A Cubicle
+Desc:$
+   A simple cubicle with white walls, a plain gray carpet, a small bed, a
+sink, a microwave oven, a toilet, and a trideo set. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	18947
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18949
+Name:	Security Desk
+Desc:$
+   A small corner of the habitat, consisting of a seat, a desk with several
+trideo screens of each hallway corner of this level, and snack wrappers strewn
+about the desk.  A swivelling seat is behind the desk, and a guardsman sits
+behind the desk, paying very little attention to the screens. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	18947
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18950
+Name:	Utility Level A
+Desc:$
+   Two corridors stretch, southeast and southwest of this point, to the
+control centers and janitorial supply rooms for the lower levels of the
+Habitat.  The walls are a dull polished steel, and the floor is a plain white
+linoleum with golden speckles in it.  The ceiling is comprised of white panels
+set in a lattice pattern, with long flourescent lights in the center,
+flickering lightly. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	18952
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	18951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18951
+Name:	Utility Level A
+Desc:$
+   South of here is a long hallway with office doors on each side of the hall.
+The walls are a plain metal, as are the office doors, though the office doors
+are colored a drab rusty color and have black stencilled numbers painted on
+them.  A security camera hangs over this bend in the hall, scanning back and
+forth. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	18950
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18953
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18952
+Name:	Utility Level A
+Desc:$
+   South of here is a long hallway with office doors on each side of the hall.
+The walls are plain metal, as are the office doors, though the office doors
+are colored with a drab rust color and have black stencilled numbers painted
+on them.  A security camera hangs over this bend of the hall, scanning back
+and forth, slowly.  The white linoleum floor seems to have a few scuff marks
+on them, from the boots of someone rushing through here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	18958
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	18950
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18953
+Name:	Utility Level A
+Desc:$
+   On each side of the hallway are two metal doors, separating here from the
+utility and control offices on each side of the room.  The office doors have
+the numbers "1", west of here, and "2", east of here stenciled on in black
+paint.  There is a chemical smell in the air, like floor polish.  The doors
+have passkey systems on them, electronic keys with fingerprint verification. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door metal
+	Desc:$
+An ugly rust colored door with the number "2" painted on it. 
+~
+	ToVnum:	18964
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18955
+[EXIT south]
+	ToVnum:	18954
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door metal
+	Desc:$
+A large rust colored metal door with the number "1" painted on it in black. 
+~
+	ToVnum:	18965
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18954
+	LockRating:	10
+BREAK
+#18954
+Name:	Utility Level A
+Desc:$
+   On each side of the hallway are two metal doors, separating this hallway
+from the utility and control offices on each side of the room.  The office
+doors have the numbers "3", and "4" stenciled on them in black paint.  There
+is a vague smell of cleaning solution in the air, acrid enough to make the
+sinuses sting lightly.  The doors have passkey systems on them, electronic
+keys with fingerprint verification.  A "^yWARNING^n" label is emblazoned on the
+door to the east, the door with the number four painted on it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18953
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door metal
+	Desc:$
+A large metal door with a warning labelled on it. 
+~
+	ToVnum:	18967
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18957
+	LockRating:	10
+[EXIT south]
+	ToVnum:	18955
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door metal
+	Desc:$
+A large rust red metal door with the black number "3" painted on it near the
+top. 
+~
+	ToVnum:	18966
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18956
+	LockRating:	10
+[EXTRADESC 0]
+	Keywords:	warning~~~~~~~~~~~~
+	Desc:$
+A black warning label with yellow lettering reads:
+^n
+^yWARNING:
+AUTHORIZED ACCESS ONLY
+VIOLATORS WILL BE DEALT WITH
+USING LETHAL MEANS.^n
+^n
+^yAquilor Security, Incorporated               ^n
+^n
+~
+BREAK
+#18955
+Name:	Utility Level A
+Desc:$
+   On each side of the hallway are two rust-colored painted metal doors,
+separating this hallway from the utility and control offices on each side of
+the room.  The office doors have the number "5", to the west, and "6" to the
+east, painted on them with stencils, in black paint.  There is a dull smell of
+chemical floor cleaner in the air, creating a lingering taste in the mouth.
+The doors on each side of the room have passkey systems on them, electronic
+keys with fingerprint verification. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18954
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door metal
+	Desc:$
+A large rust colored metal door with the number "6" painted on it. 
+~
+	ToVnum:	18968
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18959
+	LockRating:	10
+[EXIT south]
+	ToVnum:	18956
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door metal
+	Desc:$
+A large metal door outward to the rest of the level. 
+~
+	ToVnum:	18969
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18958
+	LockRating:	10
+BREAK
+#18956
+Name:	Utility Level A
+Desc:$
+   North of here is a long hallway with office doors on each side of the hall.
+The walls are a plain metal, as are the office doors, the office doors painted
+with a drab orange rusty color, and have black stencilled numbers painted on
+them.  A security camera in the corner pans back and forth, scanning the
+hallway north and the hallway southeast.  A sign on the south wall reads
+"CENTRAL CONTROL --->", pointing southeast. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18955
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	18957
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18957
+Name:	Utility Level A - Junction
+Desc:$
+   A junction with halls branching northwest, northeast, and north is here,
+and it seems that extra security has been set up in the surveillance category.
+Redundant security cameras on each corner of each hallway pan and scan, taking
+in every motion in this junction.  To the north you can see several armed
+guards and a checkpoint, and bright florescent lights beyond the checkpoint.
+Motion sensors can be spotted, mounted in the walls of each hallway in each
+direction from this junction.  There is a faint buzzing sound in the air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18962
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	18961
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	18956
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18958
+Name:	Utility Level A
+Desc:$
+   On each side of the hallway are two rust-colored painted metal doors,
+separating this hallway from the utility and control offices on each side of
+the room.  The office doors have the numbers "7", west, and "8", east, painted
+upon them in black spraypaint using large stencilled letters.  There is a dull
+smell of chemical floor cleaner in the air, acrid enough to make the eyes
+water slightly.  The doors on each side of the room have passkey systems on
+them, electronic keys with fingerprint verification. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18952
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door large metal orange rust
+	Desc:$
+A large metal door, painted with an orange rust color paint, with the number
+eight painted on it in black, with a stencil. 
+~
+	ToVnum:	18971
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18961
+	LockRating:	10
+[EXIT south]
+	ToVnum:	18959
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door rust metal
+	Desc:$
+A large rust orange door, with the number seven painted on it in black. 
+~
+	ToVnum:	18970
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18960
+	LockRating:	10
+BREAK
+#18959
+Name:	Utility Level A
+Desc:$
+   On each side of the hallway are two rust-colored painted metal doors,
+separating this hallway from the utility and control offices on each side of
+the room.  The office doors have the numbers "9", west, and "10", east,
+painted on them in black stencilled spraypaint, using large letters.  There is
+a dull chemical smell in the air, making the air taste vaguely putrid.  The
+doors on each side of the room have passkey systems on them, electronic keys
+with fingerprint verification.  Over Room 10, a security camera hangs, and its
+passkey system includes an additional retinal scanner. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18958
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door metal large
+	Desc:$
+A large metal door, colored with a rust oranage paint, with the number 10
+painted on it. 
+~
+	ToVnum:	18973
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	18963
+	LockRating:	5
+[EXIT south]
+	ToVnum:	18960
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door metal
+	Desc:$
+A large metal door, with the number 9 painted on it in black. 
+~
+	ToVnum:	18972
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18962
+	LockRating:	10
+BREAK
+#18960
+Name:	Utility Level A
+Desc:$
+   On each side of the hallway are too large rust metal colored doors,
+separating this hallway from the utility and control offices on each side of
+the room.  The office doors have the numbers "11", west, and "12", east,
+painted on them in black stencilled spraypaint, using large letters.  The
+chemical smell in the air is somewhat thick and acrid, creating sinus pains
+and watery eyes in runners with weaker constitutions.  Some scuffmarks are on
+the floor here, created by the boots of someone rushing down the hall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18959
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door restroom metal
+	Desc:$
+A large metal door, painted with orange rust colored paint, with the number
+"12" painted on it in black.  Under the number, in both Sperethiel and
+English, is the word "RESTROOM". 
+~
+	ToVnum:	18975
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	18965
+[EXIT south]
+	ToVnum:	18961
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door metal large
+	Desc:$
+A large metal door, painted an ugly orange rust color.
+ Painted in black on the upper middle of the door is the number 11.
+~
+	ToVnum:	18974
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	18964
+	LockRating:	4
+BREAK
+#18961
+Name:	Utility Level A
+Desc:$
+   North of here is a long hallway with office doors on each side of the hall.
+The walls are a plain metal, as are the office doors, which are painted with a
+dull rust color.  The doors have black numbers painted on them, stenciled,
+probably painted with black spraypaint.  A security camera in the corner pans
+back and forth, scanning the hallway north, and the hallway southwest.  A sign
+on the south wall reads "CENTRAL CONTROL --->", pointing southwest. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	18960
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	18957
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18962
+Name:	Armed Checkpoint
+Desc:$
+   An electronic gate separates the control center north of here and the main
+part of the Utility level.  The area buzzes with an electrical buzz, created
+from the sounds of the computer systems north of here.  Heavily armored
+corporate soldiers stand guard here, protecting the control center from
+unauthorized intruders.  On both walls, cameras and motion sensors watch the
+gate to the control center with much scrutiny. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	gate electronic
+	Desc:$
+An electronic gate blocks entry northward. 
+~
+	ToVnum:	18963
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	18957
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#18963
+Name:	Central Control - Lower Habitation Levels
+Desc:$
+   A large mainframe and server center is built here, in a large, clean, white
+octagonal room, filled with many engineers who oversee the control systems for
+all the mechanics on the lower levels.  Screens and terminals are layed out at
+control stations, each belonging to every servo, gear, and track on the
+ground, mezzanine, and lower habitation levels.  The room buzzes loudly, the
+sound of the millions of joules of power used to control this section of the
+Telestrian Habitat Control system.  This mainframe only houses a single SPU,
+connected to others of its kind. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	gate electronic
+	Desc:$
+An electronic gate separates you from the Checkpoint and the Utility Level
+halls southward. 
+~
+	ToVnum:	18962
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#18964
+Name:	Office
+Desc:$
+   A simple spartan office, with a metal desk including an embedded drafting
+table, and a couple pictures on the desk, and a low grade personal computer,
+with a flat panel screen.  The floor has no carpeting, just a gray linoleum
+that hasn't been mopped or polished in a couple months.  The seat behind the
+desk is a metal stool, which offers the engineer who uses this office little
+comfort.  Upon the walls are posted graphs and technical charts. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door metal
+	Desc:$
+A metal door leads out to the hallway of the Utility Level. 
+~
+	ToVnum:	18953
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18955
+	LockRating:	10
+BREAK
+#18965
+Name:	Janitorial Supplies
+Desc:$
+   This room is dominated by long metal racks, with heaps of bottles of
+various cleaning solvents and solutions.  At the far end of the room is a rack
+with a line of mops and brooms of every variety  from simple whiskbrooms to
+powerbrooms.  A switchbox sits in the corner, seeing little use as it only
+covers the lights on this level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door metal
+	Desc:$
+A large metal door. 
+~
+	ToVnum:	18953
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18954
+	LockRating:	10
+BREAK
+#18966
+Name:	Storeroom
+Desc:$
+   A store room filled with boxes upon boxes of printouts and paper records
+belonging to the Engineering division of the Telestrian Habitat.  Large dark
+brown cardboard boxes with marked up labels describe (poorly) the contents of
+each box, which are stacked up to the ceiling, and blocking the florescent
+lights that illuminate this level, making it somewhat dark. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	18956
+	Desc:$
+The door leads back to the hallway. 
+~
+	ToVnum:	18954
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+	LockRating:	10
+BREAK
+#18967
+Name:	Armand Tourval's Office
+Desc:$
+   Public Habitat Engineering Senior Manager Armand Tourval's office is rather
+well kept, with actual sheetrock walls instead of the plasticrete all too
+common among other offices on this level.  The floor is a brown carpeting,
+kept cleaned and shampooed frequently.  A large oak desk with an up to date
+personal computer sitting upon it is in the back of the room, as is a red
+plush swivel chair, where the PHE Senior Manager sits when he is at work. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door metal
+	Desc:$
+A large metal door, covered with technical graphs and charts. 
+~
+	ToVnum:	18954
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18957
+	LockRating:	10
+BREAK
+#18968
+Name:	Room Six
+Desc:$
+   Room Six is mainly used as a miscellaneous junk storeroom. Parts and from
+obsolete server and mainframe equipment sit, completely disregarded, in
+plastic crates. Presentation boards sit quietly in corners, dusty from months
+to years of unuse.  A poster on the north wall shows a hard-working engineer
+mastering the controls of a mainframe terminal, with the slogan "Persistence
+is Progress" printed above his head in Sperethiel letters. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door metal
+	Desc:$
+A large metal door. 
+~
+	ToVnum:	18955
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18959
+	LockRating:	10
+BREAK
+#18969
+Name:	Guards' Lounge
+Desc:$
+   A plain white room with a counter and a sink, and a microwave oven on the
+counter.  Posters with TOSHA announcements and workers' laws on it are mounted
+on a billboard.  A red table sits in the middle of the room below the
+florescent lighting, and two guards are playing cards at the table,
+(hopefully) on break.  The room smells of pine scented floor cleaner. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door metal
+	Desc:$
+A large metal door blocks the way to the halls outside. 
+~
+	ToVnum:	18955
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18958
+	LockRating:	10
+BREAK
+#18970
+Name:	Kieran McLanders' Office
+Desc:$
+   A rather plain looking office, with a metal desk, a few boring technical
+charts on one of the walls, and a low grade computer terminal on top of the
+desk.  The only thing of even moderate interest in this plasticrete room with
+no windows and florescent lighting is a small globe on top of the desk, with
+the borders of the countries from before the Year of Chaos.  Upon close
+examination, a label shows the globe as dated to the year 2000.  The globe is
+in perfect condition, most likely a replica.  The air smells of incense, and
+there is an incense burner on the desk with some ash in it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door metal large
+	Desc:$
+A large metal door to the hallway outside. 
+~
+	ToVnum:	18958
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18960
+	LockRating:	10
+BREAK
+#18971
+Name:	Mechanical Devices Storeroom
+Desc:$
+   This room looks less like a storeroom and more like a (marginally) clean
+junkyard.  Piles of old rusted gears and cables are strewn about haphazardly,
+with little attention paid to layout or order.  The walls, ceiling, and floor
+are all the same ugly gray plasticrete, and on the east end are some block
+shaped windows, with gray light pouring down through them. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door metal large
+	Desc:$
+A large metal door leads out of the storeroom. 
+~
+	ToVnum:	18958
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18961
+	LockRating:	10
+[EXTRADESC 0]
+	Keywords:	window~~~~~~~~~~
+	Desc:$
+Below you, you can see an aerial view of Downtown Portland's soutwestern
+skyline, a sight to behold.  The KOIN tower, the Andalusian Spire, and the
+TT-Bank Tower all glisten in the light of the sky, and at night time give off
+a golden cast from sodium lights common throughout the city. 
+~
+BREAK
+#18972
+Name:	Planning Center
+Desc:$
+   A large circular room with a circular table in the center, with 26 seats
+surrounding the table at equal intervals.  At each seat is a terminal system
+connected to the larger Telestrian mainframe.  A projector array with eight
+screens creates trideo presentations to each direction of the table.  Here is
+where Telestrian engineers discuss the future plans related to the lower
+levels of the Habitat, such as new add-ons, applying stores hoping to be
+granted rental rights to a storefront on one of the Mezzanine levels, or even
+the Ground Floor.  This is mainly an adminstrative location, where engineers
+discuss the technical end of Telestrian's plans for the public levels of the
+Habitat. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door metal
+	Desc:$
+The door on the east end of the room is large, made of polished metal, and is
+quite thick. 
+~
+	ToVnum:	18959
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	18962
+	LockRating:	9
+BREAK
+#18973
+Name:	Engineers' Lounge
+Desc:$
+   A basic breakroom with a few simsense arcade games in one corner of the
+room, a coffee machine and a vending machine selling soda pop.  There are a
+few tables arranged throughout the room, most of them with messy tops, newsfax
+printings, technology magazines, and spilt coffee cups on them. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door metal large
+	Desc:$
+A large metal door sits between here and the hall. 
+~
+	ToVnum:	18959
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	18963
+	LockRating:	5
+BREAK
+#18974
+Name:	A Cubicle Farm
+Desc:$
+   A large plasticrete walled room with a white ceiling lined with long
+florescent lighting arrays.  Partitions are set up here to create many small
+sub-rooms, or cubicles, complete with their own desks and terminals.
+Engineers work here when they aren't in the control room, as this is the main
+office for the grunt-level Habitat engineers. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door metal
+	Desc:$
+A large metal door between this set of cubicles and the hallway outside. 
+~
+	ToVnum:	18960
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	18964
+BREAK
+#18975
+Name:	Restrooms
+Desc:$
+   A clean, white, sterile bathroom with shiny linoleum tile grout walls, and
+regularly polished mirrors.  Urinals line the north wall, and toilets are far
+on the east end of the room, a line of several toilets with blue colored
+partitions separating them for privacy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door metal
+	Desc:$
+The door leads to the hallway outside. 
+~
+	ToVnum:	18960
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	18965
+BREAK
+#19199
+Name:	Quartermaster's Store
+Desc:$
+   This is where Winter loads up various mobs and items she uses in the game
+to RP 
+~
+Flags:	110000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

@@ -1,0 +1,450 @@
+#11400
+Keywords:	Appolonius mastiff german blue dog
+Name:	Appolonius
+RoomDesc:$
+A massive ^cblue^N German mastiff is lazily sleeping near the entrance here. 
+
+~
+LookDesc:$
+Better known as the Great Dane, and is one of the tallest breeds of dog in the
+world, this one measuring nearly four and a half feet from paw to the top of
+its head. It easily weighs more than an average human, and from the tip of its
+tail to its nose, it is probably taller than some trolls by comparison. This
+particular is a blue, indicated by the colour of its fur, which is a highly
+desirable by breeders due to its ^cpure steel blue^N coat. It wears a heavy ^Lblack
+leather^N and ^Wchromed^N choke chain combination collar, with a polished nameplate
+that reads; "Appolonius". While this particular dog could be quite fearsome
+and imposing, and no doubt make a wonderful guard dog... It seems more than
+content with sleeping the hours away, sprawled out across the floor near the
+door and taking up quite a bit of space in the process. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undefined
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	3
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	120
+[SKILLS]
+	brawling:	8
+BREAK
+#11401
+Keywords:	attendant bowling alley
+Name:	A bowling alley attendant
+RoomDesc:$
+A bowling alley attendant hangs out at the refreshment stand here. 
+
+~
+LookDesc:$
+This guy surely isn't anything special, he's just working here part time to
+make ends meet. Although fairly youthful, the energy seems to have been sapped
+from him from being in this bowling alley all day, making sure everything is
+run smoothly. He has a wide selection of refreshments to choose from, and
+quickly serves up orders once made. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11407
+Keywords:	large troll gal personality jenny jennifer
+Name:	A large Troll gal with lots of "personality"
+RoomDesc:$
+A buxom female Troll darts about through the area, taking orders and
+delivering drinks. 
+
+~
+LookDesc:$
+This woman must have had an easy interview process. Her ample curves are plush
+and while she isn't dressed in anything skimpy or revealing, they are still
+nicely outlined in the simple wench's outfit that only seems appropriate for a
+place like this. Her face is kind, and while she isn't a spring chicken, she
+looks as though she has a while to go before she has to worry about
+biosculpting. Two small horns curl back through her long brown hair kept in a
+braid or bun so that it won't interfere with her work. Large, hazel eyes peer
+at the patrons and visitors to the hall with the kind of warmth one would
+expect from someone who truly enjoys the satisfied look of those who have
+enjoyed their meals. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	200
+[SKILLS]
+	brawling:	10
+BREAK
+#11414
+Keywords:	towel boy 
+Name:	The Towel Boy
+RoomDesc:$
+A towel-boy stands here waiting to sell you something. 
+
+~
+LookDesc:$
+A young boy dressed in boxing attire with a towel around his neck stands here
+next to a table full of items that are for sale here at the gym. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	5
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11418
+Keywords:	over hill human woman red old Elaine
+Name:	An over-the-hill Human woman with red hair
+RoomDesc:$
+An older woman darts through the large kitchen, preparing food with the skill
+of a mother. 
+
+~
+LookDesc:$
+With greying hair, this short woman looks like she is easily in her 40's
+though the way she moves hints that she isn't burdened by her age. Zipping
+through different stations of the area, often with little or no help at all,
+keeping up with the variosu orders from the hall and pumping out food at a
+pace that would seem unnatural to most. She often shoos at those who spend too
+much time in the kitchen, either offering them a taste of something to bribe
+them into leaving or brandishing whatever kitchen implement she is currently
+using  and threatening the kneecaps of people left and right. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	5
+	Cha:	6
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	50
+[SKILLS]
+BREAK
+#11425
+Keywords:	Bones Bristol cyber elf bonde dread-lock
+Name:	Bones Bristol
+RoomDesc:$
+A heavily cybered elf with long blonde dread-locks sits here cleaning an
+assault rifle. 
+
+~
+LookDesc:$
+This big fella screams chrome all over. His arms are huge, both of which have
+been replaced with synthetic cyberarms. A etched Irish flag on the left.
+Protective covers are over his eyes, You never know quite where he might be
+looking. He's dressed in a complete street BDU outfit, and combat boots. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	12
+	Str:	10
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	firearms:	12
+BREAK
+#11426
+Keywords:	ammo man
+Name:	Charlie Mack
+RoomDesc:$
+A young man wearing a clean green jumpsuit stands here holding a clipboard. 
+
+~
+LookDesc:$
+Charlie stands here waiting to fill out your ammo sheet for you. He's dressed
+in the basic Hooligans quick response jumpsuit and combat boots. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	10
+	Cha:	6
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11427
+Keywords:	padded melee training robot
+Name:	A padded melee training robot stands here.
+RoomDesc:$
+A padded melee training robot stands here ready to take a beating. 
+
+~
+LookDesc:$
+Looks like this robot's taken quite a few beatings in the past. 
+~
+ArriveMsg:	
+LeaveMsg:	8d"	es
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	1
+	Cha:	1
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	20
+[SKILLS]
+BREAK
+#11428
+Keywords:	padded melee training robot
+Name:	A perforated target dummy
+RoomDesc:$
+A perforated target dummy hangs here. 
+
+~
+LookDesc:$
+A perforated target dummy, riddled with bullet holes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	20
+[SKILLS]
+BREAK
+#11432
+Keywords:	Mikhail Rosseau ugly ruskie hot pizza
+Name:	Mikhail Rosseau
+RoomDesc:$
+An ugly ruskie is here waiting to forcefeed you hot pizza. 
+
+~
+LookDesc:$
+A large Russian male stands here, dark eyes peering out from almost abnormally
+pale skin. Dark locks of hair surround his eyes and face, hanging down nearly
+to his pale pink lips. Surrounding his body are the insignias of "Mother
+Russia", covering nearly everything he owns. Military gear comprises most of
+his armament, though other items can be found upon him. A small beard and
+goatee cover his face, just barely there, but all too noticeable, the black
+hair on pale flesh. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11479
+Keywords:	keymaster
+Name:	The Keymaster
+RoomDesc:$
+A frail old man is here making keys. 
+
+~
+LookDesc:$
+This frail old man is standing here, grinding away. Making keys and such for
+the Hooligan members. He ignores you completely. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	2
+	Cha:	3
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11480
+Keywords:	hobo bum crazy guy
+Name:	A crazy hobo
+RoomDesc:$
+A guy that only has one shoe on is slumped over here. 
+
+~
+LookDesc:$
+This is an old, unkempt, smelly ass bum who reeks of cheap liquor, pot, and
+stale urine. He's wearing really dirty clothes that probably weren't even cool
+when they were made, and only has a shoe (no sock) on his left foot. His right
+foot, however, is not without protection: it has a brown paper bag over it,
+kept in place with a rubber band around the ankle. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	4
+	Cha:	1
+	Int:	2
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#11481
+Keywords:	hobo bum crazy guy
+Name:	A crazy hobo
+RoomDesc:$
+A guy that only has one shoe on is slumped over here. 
+
+~
+LookDesc:$
+This is an old, unkempt, smelly ass bum who reeks of cheap liquor, pot, and
+stale urine. He's wearing really dirty clothes that probably weren't even cool
+when they were made, and only has a shoe (no sock) on his left foot. His right
+foot, however, is not without protection: it has a brown paper bag over it,
+kept in place with a rubber band around the ankle. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	4
+	Cha:	1
+	Int:	2
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+END

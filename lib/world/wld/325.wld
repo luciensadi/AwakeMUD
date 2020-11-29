@@ -97,7 +97,7 @@ A small restaurant is there.
 	KeyVnum:	0
 BREAK
 #32502
-Name:	Harbour Way and Espanoza Way
+Name:	Harbour Avenue and Espanoza Way
 Desc:$
    The traffic lights overhead change dimly through a silvery blanket of dust
 and smog collected over the years from the neighbourhoods only residents.
@@ -670,6 +670,12 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT east]
 	ToVnum:	32516
 	Flags:	0
@@ -1941,7 +1947,10 @@ BREAK
 Name:	Market Street
 Desc:$
    Market Street takes you south, away from the northern border of the
-district, deeper into the heart of the industrial complexes down the street. 
+district, deeper into the heart of the industrial complexes down the street.
+Between the two distinctly different districts is the Seattle Municipal Zoo,
+the entrance of which is on the eastern edge of the road here beyond a small
+parking lot. 
 ~
 Flags:	10000000000010000000000
 SecType:	City
@@ -1961,6 +1970,12 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT north]
 	ToVnum:	32544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	3345
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2844,9 +2859,11 @@ BREAK
 #32569
 Name:	Gray Street
 Desc:$
-   What would appear to be a HotDog factory whirrs away busily across the
+   What would appear to be a Hot Dog factory whirrs away busily across the
 street from here, producing god only knows what for the modern consumer. In
-fact, there's a hotdog vendor just up the street....  
+fact, there's a hot dog vendor just up the street. Is it just coincidence that
+the Seattle Municipal Zoo is located across the road from the factory? Surely,
+those two things aren't connected in the slightest.... Surely. 
 ~
 Flags:	10000000000010000000000
 SecType:	City
@@ -2864,6 +2881,12 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3324
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT east]
 	ToVnum:	32568
 	Flags:	0
@@ -3195,7 +3218,9 @@ BREAK
 Name:	Park Avenue
 Desc:$
    Park Avenue winds calmly east, before meeting Main Street and twisting
-south, running alongside the Highway overpass. 
+south, running alongside the Highway overpass. The northern entrance of the
+Seattle Municipal Zoo is also located here, a view of which is offered on the
+overpass nearby. 
 ~
 Flags:	10000000000010000000000
 SecType:	City
@@ -3215,6 +3240,12 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT east]
 	ToVnum:	32576
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3355
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -4598,7 +4629,7 @@ here.  The exit is off to the south, and a ramp runs down to the street.
 Complimentary to the exit sign is another sign saying, "Highland Drive, 2
 kilometers." 
 ~
-Flags:	10000000000010000000000
+Flags:	10000000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -4748,7 +4779,7 @@ BREAK
 Name:	I-5 at Highland Drive Junction
 Desc:$
    Sound walls cover each side of the street, making it nearly impossible to
-see what is occuring in the neighborhoods on each side of the street.  A sign
+see what is occurring in the neighborhoods on each side of the street.  A sign
 with an arrow pointing to the west says, "Exit 20, Highland Drive." 
 ~
 Flags:	10100000000010000000000
@@ -4789,8 +4820,9 @@ BREAK
 #32616
 Name:	Interstate 5
 Desc:$
-   I-5 is backed up in both lanes north of here, to an impassible level.  Some
-construction has traffic moving at a slow fraction of a trickle. 
+   Sound walls on either side of the Interstate block the view of this mostly
+residential area on the edge of downtown. They open up further to the north
+though as the Interstate approaches the bridge over Lake Union. 
 ~
 Flags:	10100000000010000000000
 SecType:	City
@@ -4808,6 +4840,12 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	45235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT south]
 	ToVnum:	32615
 	Flags:	0
@@ -4957,7 +4995,7 @@ BREAK
 #32621
 Name:	Onramp
 Desc:$
-   This is one of the main arterys of the city, pouring the lifeblood of
+   This is one of the main arteries of the city, pouring the lifeblood of
 traffic in and out of this district. 
 ~
 Flags:	10000000000010000000100
@@ -6328,11 +6366,22 @@ BREAK
 Name:	Third Street
 Desc:$
    Third Street is lined with prefab towers and highrise buildings, with
-various restaurants populating the bottom floor of each, excepting the
-occasional Brute Power(tm) day labour outlets.  Mounds of garbage accumulated
-from weeks of poor waste management line each curb at regular intervals.
-Above, are many office spaces full of bored workers for various corporations
-renting the space. 
+various restaurants populating the bottom floor of each, except the occasional
+Brute Power(tm) day labour outlets.  Mounds of garbage accumulated from weeks
+of poor waste management line each curb at regular intervals. Above, are many
+office spaces full of bored workers for various corporations renting the
+space. A parking lot to the east echoes the pounding reverberations of bass,
+which is pouring out of one of the many nightclubs in the downtown area. 
+~
+NightDesc:$
+   Third Street is lined with prefab towers and highrise buildings, with
+various restaurants populating the bottom floor of each, except the occasional
+Brute Power(tm) day labour outlets.  Mounds of garbage accumulated from weeks
+of poor waste management line each curb at regular intervals. Above, are many
+office spaces full of bored workers for various corporations renting the
+space. A parking lot to the east echoes the pounding reverberations of bass,
+which is pouring out of one of the many nightclubs in the downtown area. A
+smokey neon glow bathes this section of Third Street once night falls. 
 ~
 Flags:	10000000000010000000000
 SecType:	City
@@ -7325,10 +7374,10 @@ BREAK
 #32677
 Name:	Espanoza Way, under Intercity 90
 Desc:$
-   Espanoza Way curls northwards, sneaking under the shadow the highway above.
-The gigantic concrete supports send off the odd vibration of massive cargo
-trucks passing overheard at speed, and the sidewalk is coated in an almost
-dusty mist. 
+   Espanoza Way curls northwards, sneaking under the shadow of the highway
+above. The gigantic concrete supports send off the odd vibration of massive
+cargo trucks passing overhead at high speed, and the sidewalk is coated in an
+almost dusty mist. 
 ~
 Flags:	10000000000010000000000
 SecType:	City
@@ -7420,7 +7469,7 @@ concrete square surrounding the center gives space to people to relax and
 pause along the tree-lined promenades that lead you into the Center.  A two
 story structure is dwarfed to the south, a plasticrete school of sorts. 
 ~
-Flags:	10000000000010000000000
+Flags:	10000000000010000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -8111,12 +8160,6 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT east]
-	ToVnum:	70303
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
 [EXIT south]
 	ToVnum:	32695
 	Flags:	0
@@ -8368,6 +8411,12 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT south]
+	ToVnum:	12703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT west]
 	ToVnum:	32693
 	Flags:	0
@@ -8566,7 +8615,7 @@ Desc:$
 skyscrapers on each side of the street.  On the street level, there are
 newsstands and food vendors up and down the street, selling food that would
 make a cockroach vomit, despite its popularity with wageslaves.  Sacrificing
-taste for convienence, its the corporate way! 
+taste for convienence, it's the corporate way! 
 ~
 Flags:	10000000000010000000000
 SecType:	City
@@ -9806,7 +9855,7 @@ immediate view, the noise and chaos of the 6th street intersection spilling
 over onto Gray Street.  To the north begins a sprawling complex of puny duplex
 apartments totally oblivious to the wild traffic, run down cars parked at
 random along sidewalks or up in grassless yards, flashes of red squiggling
-along wallsindicating a Red Dragon ganger presence. 
+along the walls indicating a Red Dragon ganger presence. 
 ~
 Flags:	10000000000010000000000
 SecType:	City
@@ -11000,11 +11049,11 @@ BREAK
 Name:	Hellhound Bus Lines, near the Garage
 Desc:$
    Turnstiles separate the garage from the main lobby of the bus depot, with
-passengers coming from and going to the bus to their destinations.  A few bums
+passengers coming from and going to the bus to their destinations. A few bums
 sit with their packs, trying to look like they are waiting for their bus that
-never comes.  The security guards generally ignore them, unless they are
-ordered not to.  It's hard to find a warm place away from the Seattle rainfall
-to these poor chummers.  
+never comes. The security guards generally ignore them, unless they are
+ordered not to. It's hard to find a warm place away from the Seattle rainfall
+for these poor chummers. 
 ~
 Flags:	1000
 SecType:	Inside
@@ -11544,6 +11593,13 @@ has been mounted in the northeast corner of the ceiling.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	70345
+IO:	300
+Bandwidth:	20
+Access:	-2
+Trace:	-2
+RTG:	1100
+JackID:	8206
+Address:	Allen & Associates, Boren and Eighth, Seattle
 Crowd:	0
 Cover:	0
 X:	20

@@ -1,0 +1,309 @@
+#9500
+Keywords:	tie
+Name:	a black tie
+RoomDesc:$
+A narrow black tie sits here, seeking a good home.~
+LookDesc:$
+This is a narrow black tie. A stain mars its surface, but you
+can hardly see it. Put it on, look like a corp guy!
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9501
+Keywords:	sunglasses shades
+Name:	a pair of shades
+RoomDesc:$
+A pair of slick dark shades waits to be worn.~
+LookDesc:$
+These are a pair of dark sunglasses. They do a good job of
+hiding your eyes, and making you look cool as well.
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9502
+Keywords:	suit
+Name:	a black suit
+RoomDesc:$
+A black suit lies here on the floor, getting dirty.~
+LookDesc:$
+This is a slick black suit, commonly worn by corporate types.
+It makes a great fashion statement, and provides minimal
+armor as well.
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val6:	1
+BREAK
+#9503
+Keywords:	briefcase case 
+Name:	a briefcase
+RoomDesc:$
+A shiny briefcase sits here, waiting to be picked up.~
+LookDesc:$
+This is a shiny black briefcase, common in the corporate world.
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val1:	1
+	Val2:	-1
+BREAK
+#9504
+Keywords:	keycard key card
+Name:	a silver keycard
+RoomDesc:$
+A silver colored keycard sits here on the floor.~
+LookDesc:$
+This is a keycard, colored silver. Interesting, huh?
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000000100
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9506
+Keywords:	coat
+Name:	i679
+RoomDesc:$
+A secure long-coat lies here in a crumpled heap.~
+LookDesc:$
+This is a secure long-coat. It provides good protection.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	10.00
+	Barrier:	2
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val4:	5
+	Val5:	4
+	Val6:	2
+BREAK
+#9510
+Keywords:	suit blue
+Name:	a dark blue suit
+RoomDesc:$
+A fine dark blue suit lies here.~
+LookDesc:$
+This is an expensive suit, dyed to a dark blue color.
+It has added armor protection for those paranoid execs.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	3
+	Val5:	3
+	Val6:	1
+BREAK
+#9511
+Keywords:	jeans
+Name:	a pair of blue jeans
+RoomDesc:$
+A pair of blue jeans lie here.~
+LookDesc:$
+A pair of normal blue jeans. Exciting, no?
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9512
+Keywords:	shirt tshirt t-shirt
+Name:	a white t-shirt
+RoomDesc:$
+A white t-shirt lies morosely on the ground.~
+LookDesc:$
+This is a plain white t-shirt. Yay.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9513
+Keywords:	papers folder
+Name:	a folder of papers
+RoomDesc:$
+A folder full of papers sits here.~
+LookDesc:$
+This is a plain folder, filled with all sorts of papers. Most
+of it looks like nothing but junk, but something in it might
+be useful to the right person.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9514
+Keywords:	disk datafile data
+Name:	a datafile
+RoomDesc:$
+A disk lies here.~
+LookDesc:$
+This is a small, unlabeled disk.
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	5
+	Val3:	2
+BREAK
+#9515
+Keywords:	disk datafile data
+Name:	a datafile
+RoomDesc:$
+A disk lies here.~
+LookDesc:$
+This is a small, unlabeled disk.
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	6
+	Val3:	5
+BREAK
+END

@@ -4,7 +4,9 @@ Keywords:	(null)
 Description:$
 (null)~
 ShutdownStart:	A deep echoing voice announces a host shutdown.
+
 ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
 Parent:	0
 Colour:	0
 Security:	0
@@ -20,6 +22,34 @@ Files:	0
 FilesScramble:	0
 FilesTrapdoor:	0
 Slave:	0
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+BREAK
+#100
+Name:	Death Dealer's Pub
+Keywords:	Death Dealer's Pub Dealer
+Description:$
+This host is unfinished.~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	1101
+Colour:	1
+Security:	3
+Difficulty:	1
+Access:	1
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	15
+ControlTrapdoor:	0
+Index:	1
+IndexTrapdoor:	0
+Files:	1
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	1
 SlaveScramble:	0
 SlaveTrapdoor:	0
 Type:	Datastore
@@ -105,32 +135,6 @@ Type:	PLTG
 		Alert:	Passive
 		IC:	2
 BREAK
-#100
-Name:	Death Dealer's Pub
-Keywords:	Death Dealer's Pub Dealer
-Description:$
-This host is unfinished.~
-ShutdownStart:	A deep echoing voice announces a host shutdown.
-ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
-Parent:	1101
-Colour:	1
-Security:	3
-Difficulty:	1
-Access:	1
-AccessScramble:	0
-AccessTrapdoor:	0
-Control:	15
-ControlTrapdoor:	0
-Index:	1
-IndexTrapdoor:	0
-Files:	1
-FilesScramble:	0
-FilesTrapdoor:	0
-Slave:	1
-SlaveScramble:	0
-SlaveTrapdoor:	0
-Type:	Datastore
-BREAK
 #101
 Name:	Death Dealer's Control Center
 Keywords:	r
@@ -138,6 +142,7 @@ Description:$
 This host is unfinished.~
 ShutdownStart:	B) Shutdown Stop Text: A deep echoing voice announces the shutdown has been aborted.
 ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
 Parent:	0
 Colour:	0
 Security:	0

@@ -1,0 +1,53 @@
+#21910
+Keeper:	21910
+ProfitBuy:	10.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	8
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	we dont got that now bugger off
+NoSuchItemPlayer:	stop screwing with me, you aint got that crap
+NoNuyen:	your to poor
+DoesntBuy:	we dont take that kinda crap
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	100000100000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	21909
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	21907
+		Type:	Always
+		Stock:	0
+BREAK
+#21924
+Keeper:	21924
+ProfitBuy:	3.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	1100100
+Buytypes:	10000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 2]
+		Vnum:	21951
+		Type:	Always
+		Stock:	0
+BREAK
+END

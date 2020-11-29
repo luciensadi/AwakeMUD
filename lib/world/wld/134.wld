@@ -1,0 +1,1452 @@
+#13400
+Name:	A private, one way road.
+Desc:$
+   This road travels up a hill to a fairly large building....at first you
+wonder what the building could be but as you look around you see a sign off to
+your right. 
+~
+Flags:	10000000000000000000000
+SecType:	Hills
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+Half-way to the restraunt. 
+~
+	ToVnum:	13401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	30548
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13401
+Name:	Half-way up the hill to the restaurant
+Desc:$
+   You slowly walk up the well groomed and well lit drive way up to the
+restaurant admiring the plants among the way... Then *Splat* a Nightsky drives
+by you and splashes up some mud onto your "nice" clothes....just as you draw
+your gun you realize... Your about to shoot at a NIGHTSKY, you slowly put your
+gun away thinking you'll get em later... 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+The entrance to La'Charve' 
+~
+	ToVnum:	13402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+A private road. 
+~
+	ToVnum:	13400
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13402
+Name:	The entrance to the La' Charne Restraunt.
+Desc:$
+   You stand before a rather large, fancy looking building, red carpeting
+rolled out through the glass doors, 2 giant spot lights on either corner of
+the building and of coarse...Valet parking...to bad you don't have a
+vehicle....oh look its that Nightsky from earlier....heh... 
+~
+Flags:	100000000000000000000000
+SecType:	Field
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door glass~~
+	Desc:$
+The front lobby. 
+~
+	ToVnum:	13403
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Half-way up the hill. 
+~
+	ToVnum:	13401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13403
+Name:	The Front lobby.
+Desc:$
+   After making that nice red carpet a slight tint of brown(you didn't know
+the mud on your boots wasn't dry) you find your self in the front lobby of the
+restraunt. A few leather chairs are set about here, there is artwork littering
+this whole room from the early 2010's. You feel very outta place here mostly
+cause you lack there Chic clothing...mabey if you drag one of them out back an
+let them meet your Predator II you can get some Chic clothing off them or at
+least there corpse. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	glass double door~~
+	Desc:$
+Entrance... 
+~
+	ToVnum:	13402
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13404
+Name:	The front of the dining room.
+Desc:$
+   You enter the front of the dining room where you see multiple table spread
+out along the walls and around the room....each table just as fancy as the
+next, bus boys and waiter are running about the whole restrant... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	13408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	13410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13405
+Name:	Coat check area
+Desc:$
+   You walk into a fairly small room with a single desk....sitting behind the
+desk, just barely visible is, belive it or not, an attractive dwarven
+female... Beyond her you see rows and rows of Coats hung up, all of them chic
+and fancy....hmm you see a nice fur-coat that might go good with your full
+body armor... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	13403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13406
+Name:	On of the corner tables.
+Desc:$
+   Here sits one of the corner tables, no one is sitting here right now but ya
+never know ehh....damn mages.... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	13409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13407
+Name:	Shadowrunners Corner...
+Desc:$
+   This corner table is darker then the rest then you see why...one of the
+more well know Johnson's, Ed Hickey, sits here...He looks up to your from the
+Shadows and asks you to sit... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	13409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13408
+Name:	Table after table
+Desc:$
+   Walking a bit further up you notice a lot of tables...some up agianst the
+wall providing a private booth. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	13404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	13412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13409
+Name:	The Center of the Dining room
+Desc:$
+   You are in the very Center of the dining room...there are multiple tables
+spread out along here as well as one really long table. Must be for the Big
+Spenders. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	13411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	13406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	13407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	13413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13410
+Name:	Deckers Hangout.
+Desc:$
+   A few tables pushed up agianst the wall with cyber terminals and decks
+littering them....why no one says anthing about this is only cause the Master
+Decker, Brian sits here.... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	13412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	13404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13411
+Name:	Back Corner.
+Desc:$
+   Again more tables are here with one corner booth...its the back of the
+dining room.... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	13408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	13409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13412
+Name:	The Back of the dining room.
+Desc:$
+   There are just a few tables back in this part of the dining room, you can
+see why as you look on that back wall and notice a set of double doors that
+the waiters and waitresses come in and out of...must be the kitchen. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	Double Door~~
+	ToVnum:	13414
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	13408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	13410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13413
+Name:	The Bar.
+Desc:$
+   A Long Polished Oak bar is here in the back corner.  A rather musculer
+bartender stands behind it dressed in a tuxedo, he must double as the bouncer.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	13412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	13409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13414
+Name:	Entrance to the Kitchen
+Desc:$
+   As you open the double doors your sences are over welmed....sents of
+freshely cooked food fills you noss.  The Kitchen its self is bright and
+white....waiters and waitresses run around with peoples orders while the cooks
+do what else....cook..... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	Double Door~~
+	ToVnum:	13412
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13415
+Name:	Food Pick up counter.
+Desc:$
+   As you enter further into the kitching you notice a long white counter with
+food on it....you figure this must be the pick-up and order counter mostly
+because you see multiple waiters here picking up orders and droping more off.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	13416
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13416
+Name:	Moving around the right side of the pick-up counter.
+Desc:$
+   After realizing that you can't hop the pick-up counter that was infront of
+you, you deside to go around it...this way you won't draw any attention...if
+you haven't already that is... 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13418
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13417
+Name:	Moving around the left side of the pick-up counter.
+Desc:$
+   After realizing that you can't hop the pick-up counter that was infront of
+you, you deside to go around it...this way you won't draw any attention...if
+you haven't already that is... 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13419
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13418
+Name:	Around the right side of the counter.
+Desc:$
+   As you turn around the right side of the counter you now see the cooks
+bringing food to the counter and moving back to there stations, you also here
+a someone yelling at the top of his lungs... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	13416
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13420
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13419
+Name:	Around the left side of the counter.
+Desc:$
+   As you turn around the left side of the counter you now see the cooks
+bringing food to the counter and moving back to there stations, you also here
+a someone yelling at the top of his lungs... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	13420
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13420
+Name:	On the other side of the pick-up counter.
+Desc:$
+   Ha.  Finaly you made it to the other side of the counter without drawing
+too much attention you hope...  You notice a Food Prep area up ahead of you. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13421
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13418
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13419
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13421
+Name:	Food Prep area.
+Desc:$
+   Walking away from the pick-up counter you come across a long metal table
+with fresh vegtibles on it and some cook apprentices making some salads...The
+loud yelling voice is getting louder and the apprentice's look somewhat
+frightened. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	13422
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13420
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13422
+Name:	Cooks Area
+Desc:$
+    Moving more toward the loud voice you see some cooks here, cooking stews
+and meats. It all smells so good...but you dare not touch any of it cause you
+fear the wrath of these...cooks... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	13423
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13421
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13423
+Name:	The Chefs area
+Desc:$
+   As you enter this Area you are surrounded by odd devices like out of a
+sci-fi trid...looking around you see a few people with Chef's hats on and On
+person with a Gold Chefs hat on(you guess this is the chefs area).   These are
+the guys that do all the hard dishs.  Better be careful, that head chef looks
+mad. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	13424
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13422
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13424
+Name:	A small hallway.
+Desc:$
+   You head down a small hallway...at the end of it you see a door. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	wooden door~~
+	ToVnum:	13425
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	13423
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13425
+Name:	The Owners room.
+Desc:$
+   You enter through the door you notice a large oak desk, Leather couch and
+chairs, and one Large Leather chair.  Apon further examination you notice
+there is someone sitting in the chair....you know notice the name plate on the
+desk...its the owner of the restraunt.... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	Secret~~
+	ToVnum:	13428
+	Flags:	1
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	wooden door~~
+	ToVnum:	13424
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	trapdoor~~
+	ToVnum:	13426
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	13426
+	LockRating:	1
+	HiddenRating:	1
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13426
+Name:	Falling through a trapdoor.
+Desc:$
+   Well It looks like the owner didn't like you. 
+~
+Flags:	1000000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	5
+[EXIT down]
+	ToVnum:	13427
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13427
+Name:	A rotating floor with spikes...
+Desc:$
+   DEATH!!!!!!!!!!!!!!!!!! 
+~
+Flags:	1000000000000000001010
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13428
+Name:	Entrance to the back rooms.
+Desc:$
+   Looks like Seth liked you....as you now can see this restraunt has more
+then meets the eye. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	Secret~~
+	ToVnum:	13425
+	Flags:	1
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	13429
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13429
+Name:	Down some stairs.
+Desc:$
+   You begin to head down some stairs carved out of stone...the only light is
+a few torchs on the wall...you hear a crack of a whip in the distance... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	13428
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	13430
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13430
+Name:	Bottom of the stairs.
+Desc:$
+   Finally you reach the bottom of the stairs. Looking around you see all
+sorts of interesting torture devices, whips and chains hang on the walls and
+very sexy females are walking around in tight leather or rubber suits adorned
+with chains. You wonder what kind of restaurant this is. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13431
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	13429
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13431
+Name:	Tables with people tied to them.
+Desc:$
+   You walk in a little further almost bumping into a table with chains on
+it....looking around you see a person tied to one of the tables, wearing
+almost nothing, and getting whiped by a female in a leather and chain suit. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13433
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13434
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13430
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	13432
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13432
+Name:	Just another Chain in the wall.
+Desc:$
+   A few chains line the wall here with some females wearing absolutly nothing
+but some thing strips of leather straped to the wall being whipped by other
+females in dominatrix costumes. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	13431
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13433
+Name:	An english horse.
+Desc:$
+   There is an english horse here with a female on it....a dominatrix attachs
+more weights to her ankles. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	13431
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13434
+Name:	A Dark hallway.
+Desc:$
+   You begin to move through a Dark hallway, you can hear voices at the
+end....there defently differn't voices then what you would figure to
+hear....whats going on... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	Secret~~
+	ToVnum:	13435
+	Flags:	1
+	Material:	brick
+	Barrier:	24
+	KeyVnum:	13434
+	LockRating:	9
+	HiddenRating:	9
+[EXIT west]
+	ToVnum:	13431
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13435
+Name:	The other side of the door.
+Desc:$
+   You move through the door and POW, your in a bright, bright room....it
+takes a moment for your eyes to adjust to the sudden light. When your eyes
+finaly recover you relize your in a brightly lit hallway...ahead of you is a
+over look....what the frag is going on here...?!? 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13436
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	Secret~~
+	ToVnum:	13434
+	Flags:	1
+	Material:	brick
+	Barrier:	24
+	KeyVnum:	13434
+	LockRating:	9
+	HiddenRating:	9
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13436
+Name:	An over look.
+Desc:$
+    Yoou stand on an overlook in what seems to be a well kept cave...looking
+down you see a large truck getting loaded up with some very illegal
+weapons... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	13435
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	13437
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13437
+Name:	The bottom of some stairs.
+Desc:$
+   From the bottom of these stairs you can see this whole room as it seems to
+be a rather large garage with crates of weapons everywhere.  There are very
+few guards here as it apears that the rest are probably on a break. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Desc:$
+Along some crates. 
+~
+	ToVnum:	13438
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Desc:$
+Up some Stairs... 
+~
+	ToVnum:	13436
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13438
+Name:	Along a stack of crates.
+Desc:$
+   As you move along a long line of crates trying to keep your head down and
+your ears listening you fail to notice the large mound of muscle infront of
+you.  Next thing you know, SLAM, you run head-long into a rather large,
+unhappy looking troll... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+To some stairs. 
+~
+	ToVnum:	13437
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	13439
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13439
+Name:	Around the Corner
+Desc:$
+   As you turn the corner around the crates you realize this just isn't your
+day.... 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13438
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	13440
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13440
+Name:	A Garage Door.
+Desc:$
+   Before you stand a rather large garage door, probably where the on and off
+loading of all the weapons takes place. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door~~
+	Desc:$
+It's a hidden door. 
+~
+	ToVnum:	13441
+	Flags:	2
+	Material:	organic
+	Barrier:	12
+	KeyVnum:	13440
+	LockRating:	12
+	HiddenRating:	12
+[EXIT west]
+	ToVnum:	13439
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13441
+Name:	Outside an unusually flat sided hill.
+Desc:$
+   You stand out side a rather tall, flat sided hill.  Looking up you notice a
+rather large restraunt upon the hill with spot lights a shooting into the
+night. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	flat garage camoflauged door~~
+	ToVnum:	13440
+	Flags:	2
+	Material:	organic
+	Barrier:	12
+	KeyVnum:	13440
+	LockRating:	15
+	HiddenRating:	12
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13498
+Name:	Shadowens Load room
+Desc:$
+   Welcome to ^RHell ^nNo.2 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	13499
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#13499
+Name:	Shadowen's Garden
+Desc:$
+   Here the shadows swirl around you and all things that live.  The garden of
+shadows its called, before you could never understand why...now you can.
+Flowers of all the differn't night blooming plants grow here, thriving on the
+shadows this room is made of. A small dark river runs through to what appears
+to be a reflecting pool, at first looking like water, upon closer examination
+you realize that it is really pure darkness that flows soothinly to the pool.
+~
+Flags:	10000000000000000000
+SecType:	Field
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

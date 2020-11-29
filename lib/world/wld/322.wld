@@ -1,0 +1,1733 @@
+#32200
+Name:	Dead End at Sebastiao St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32201
+Name:	Sebastiao St.
+Desc:$
+   Sebastiao street was one of the first streets stablished over these parts.
+It is rather dirty, with trash thrown in the building corners. A few
+streetlights illuminate the ambient by night, while others were broken by
+local gangs. Few cars run through these streets, for they are known to be
+hangout of violent gangs. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32202
+Name:	Intersection of Sebastiao and Joana
+Desc:$
+   This is the crossing between the two streets. Even though dirty and unkept,
+the place is well sinalized, and a semaphore controls the driving flux through
+the intersection. There are cars waiting for the semaphore to open, while the
+others drive by, either continuing forward or turning to the other street.
+Pedestrians cross the street whenever the semaphore stop the cars. Some
+malfunctioning streetlights illuminate the ambient. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32203
+Name:	Sebastiao St.
+Desc:$
+   Sebastiao street was one of the first streets stablished over these parts.
+It is rather dirty, with trash thrown in the building corners. A few
+streetlights illuminate the ambient by night, while others were broken by
+local gangs. Few cars run through these streets, for they are known to be
+hangout of violent gangs. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32204
+Name:	Intersection of Sebastiao and Mario
+Desc:$
+   This is the crossing between the two streets. Even though dirty and unkept,
+the place is well sinalized, and a semaphore controls the driving flux through
+the intersection. There are cars waiting for the semaphore to open, while the
+others drive by, either continuing forward or turning to the other street.
+Pedestrians cross the street whenever the semaphore stop the cars. Some
+malfunctioning streetlights illuminate the ambient. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32205
+Name:	Sebastiao St.
+Desc:$
+   Sebastiao street was one of the first streets stablished over these parts.
+It is rather dirty, with trash thrown in the building corners. A few
+streetlights illuminate the ambient by night, while others were broken by
+local gangs. Few cars run through these streets, for they are known to be
+hangout of violent gangs. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32206
+Name:	Intersection of Sebastiao and Antonio
+Desc:$
+   This is the crossing between the two streets. Even though dirty and unkept,
+the place is well sinalized, and a semaphore controls the driving flux through
+the intersection. There are cars waiting for the semaphore to open, while the
+others drive by, either continuing forward or turning to the other street.
+Pedestrians cross the street whenever the semaphore stop the cars. Some
+malfunctioning streetlights illuminate the ambient. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32207
+Name:	Sebastiao St.
+Desc:$
+   Sebastiao street was one of the first streets stablished over these parts.
+It is rather dirty, with trash thrown in the building corners. A few
+streetlights illuminate the ambient by night, while others were broken by
+local gangs. Few cars run through these streets, for they are known to be
+hangout of violent gangs. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32208
+Name:	Dead End at Sebastiao St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	window
+	ToVnum:	32209
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	4
+[EXIT west]
+	ToVnum:	32207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32209
+Name:	An Abandoned Apartment
+Desc:$
+   It is an old abandoned apartment. It has no furnishing, and the walls seem
+to be about to fall, so dirty and unkept is their state. Spider web covers the
+corners, hiding tiny house spiders, that seem to be the only dwellers of this
+forgotten place. There is an exit to the east through a broken door. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	window
+	ToVnum:	32208
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	4
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32210
+Name:	An Apartment Room
+Desc:$
+   Inside this dark room in the abandoned apartment, is an old and worn bed,
+already corroded by termites, and perforated by insects. On the corner of the
+room is an old desk and a wooden chair. This room is less dirty than the rest
+of the apartment, but still very unclean. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	32209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32211
+Name:	Vinicius' Biosculpt
+Desc:$
+   This is the most famous bioware shop in the amazonian capital: Vinicius'
+Biosculpt. It is a very clean and well-kept room whoose walls exhibit the
+lastest releases of the bioware developing corporations. At the northeastern
+corner there is a counter, where the shop owner often stands, to attend the
+rich customers. A small security camera is attached to a corner of the
+ceiling, intimidating any aggresive visitor. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	32214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32212
+Name:	Victor's Illegals
+Desc:$
+   This is a small room where Vinicius' brother, Victor, exhibit his illegal
+equipment. It is rather small, but big enough to fit the counter where he
+works in and some tables where he shows his wares. There are many weapons and
+accessories resting over them, all of them made by the Amazonian Military
+Institute. It seems Victor somehow gets his supplies directly from the
+government army. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	32216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32213
+Name:	Intersection of Manauara and Joana
+Desc:$
+   This is the crossing between the two streets. Even though dirty and unkept,
+the place is well sinalized, and a semaphore controls the driving flux through
+the intersection. There are cars waiting for the semaphore to open, while the
+others drive by, either continuing forward or turning to the other street.
+Pedestrians cross the street whenever the semaphore stop the cars. Some
+malfunctioning streetlights illuminate the ambient. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32214
+Name:	Manauara St.
+Desc:$
+   Carrying the name of those who are born in the capital, the Manauara street
+has an historic value to the local government. It is a rather well-kept street
+if compared to the others in the neighboor. A few citizens can be seen
+walking, either going to work or coming back home, but not likely to be taking
+a walk, given the permanent threat of the violent local gangs. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32215
+Name:	Intersection of Manauara and Mario
+Desc:$
+   This is the crossing between the two streets. Even though dirty and unkept,
+the place is well sinalized, and a semaphore controls the driving flux through
+the intersection. There are cars waiting for the semaphore to open, while the
+others drive by, either continuing forward or turning to the other street.
+Pedestrians cross the street whenever the semaphore stop the cars. Some
+malfunctioning streetlights illuminate the ambient. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32216
+Name:	Manauara St.
+Desc:$
+   Carrying the name of those who are born in the capital, the Manauara street
+has an historic value to the local government. It is a rather well-kept street
+if compared to the others in the neighboor. A few citizens can be seen
+walking, either going to work or coming back home, but not likely to be taking
+a walk, given the permanent threat of the violent local gangs. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32217
+Name:	Intersection of Manauara and Antonio
+Desc:$
+   This is the crossing between the two streets. Even though dirty and unkept,
+the place is well sinalized, and a semaphore controls the driving flux through
+the intersection. There are cars waiting for the semaphore to open, while the
+others drive by, either continuing forward or turning to the other street.
+Pedestrians cross the street whenever the semaphore stop the cars. Some
+malfunctioning streetlights illuminate the ambient. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32218
+Name:	Manauara St.
+Desc:$
+   Carrying the name of those who are born in the capital, the Manauara street
+has an historic value to the local government. It is a rather well-kept street
+if compared to the others in the neighboor. A few citizens can be seen
+walking, either going to work or coming back home, but not likely to be taking
+a walk, given the permanent threat of the violent local gangs. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32219
+Name:	Joana St.
+Desc:$
+   Joana street runs across the amazonian capital in the north-south
+direction. It is dirty, with many streetlights broken or in malfunction. The
+view is most basically composed of buildings and a few shops. Some citizens
+can be seen walking around, either going to or coming back from work. A few
+cars drive by. This street, just as the others in the capital, are not very
+patrolled by the local police. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32220
+Name:	Mario St.
+Desc:$
+   Mario street runs across the amazonian capital pararell to Joana. It is as
+well dirty, with many streetlights broken or in malfunction. The view is most
+basically composed of buildings and a few shops. Some citizens can be seen
+walking around, either going to or coming back from work. A few cars drive by.
+This street, just as the others in the capital, are not very patrolled by the
+local police. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32221
+Name:	Antonio St.
+Desc:$
+   The street that carries the first amazonian governor's name runs along the
+eastern part of the capital's main district, in the north-south direction.
+Some malfunctioning streetlights illuminate the ambient sparsely. The are is
+poorly patrooled by the local police. That has caused accelerated growth of
+the local gangs, whoose members are often seen in the local bars, either
+drinking, brawling, or looking to cause trouble. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32222
+Name:	Dead End at Manauara St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	32218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32223
+Name:	Manauara St.
+Desc:$
+   Carrying the name of those who are born in the capital, the Manauara street
+has an historic value to the local government. It is a rather well-kept street
+if compared to the others in the neighboor. A few citizens can be seen
+walking, either going to work or coming back home, but not likely to be taking
+a walk, given the permanent threat of the violent local gangs. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32224
+Name:	Dead End at Manauara St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32225
+Name:	Joana St.
+Desc:$
+   Joana street runs across the amazonian capital in the north-south
+direction. It is dirty, with many streetlights broken or in malfunction. The
+view is most basically composed of buildings and a few shops. Some citizens
+can be seen walking around, either going to or coming back from work. A few
+cars drive by. This street, just as the others in the capital, are not very
+patrolled by the local police. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32226
+Name:	Intersection of Jungle and Joana
+Desc:$
+   This is the crossing between the two streets. Even though dirty and unkept,
+the place is well sinalized, and a semaphore controls the driving flux through
+the intersection. There are cars waiting for the semaphore to open, while the
+others drive by, either continuing forward or turning to the other street.
+Pedestrians cross the street whenever the semaphore stop the cars. Some
+malfunctioning streetlights illuminate the ambient. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32227
+Name:	Joana St.
+Desc:$
+   Joana street runs across the amazonian capital in the north-south
+direction. It is dirty, with many streetlights broken or in malfunction. The
+view is most basically composed of buildings and a few shops. Some citizens
+can be seen walking around, either going to or coming back from work. A few
+cars drive by. This street, just as the others in the capital, are not very
+patrolled by the local police. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32228
+Name:	Dead End at Joana St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	32227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32229
+Name:	Joana St.
+Desc:$
+   Joana street runs across the amazonian capital in the north-south
+direction. It is dirty, with many streetlights broken or in malfunction. The
+view is most basically composed of buildings and a few shops. Some citizens
+can be seen walking around, either going to or coming back from work. A few
+cars drive by. This street, just as the others in the capital, are not very
+patrolled by the local police. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32230
+Name:	Dead End at Joana St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32231
+Name:	Mario St.
+Desc:$
+   Mario street runs across the amazonian capital pararell to Joana. It is as
+well dirty, with many streetlights broken or in malfunction. The view is most
+basically composed of buildings and a few shops. Some citizens can be seen
+walking around, either going to or coming back from work. A few cars drive by.
+This street, just as the others in the capital, are not very patrolled by the
+local police. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32232
+Name:	Approaching the Docks
+Desc:$
+   These streats are the in and out exit leading to the Manaus docks. It is
+dirty around, with trash lying in the building corners. The fresh breeze
+coming from the great Amazonia river reaches this area. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32233
+Name:	Mario St.
+Desc:$
+   Mario street runs across the amazonian capital pararell to Joana. It is as
+well dirty, with many streetlights broken or in malfunction. The view is most
+basically composed of buildings and a few shops. Some citizens can be seen
+walking around, either going to or coming back from work. A few cars drive by.
+This street, just as the others in the capital, are not very patrolled by the
+local police. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32234
+Name:	Intersection of Jungle and Mario
+Desc:$
+   This is the crossing between the two streets. Even though dirty and unkept,
+the place is well sinalized, and a semaphore controls the driving flux through
+the intersection. There are cars waiting for the semaphore to open, while the
+others drive by, either continuing forward or turning to the other street.
+Pedestrians cross the street whenever the semaphore stop the cars. Some
+malfunctioning streetlights illuminate the ambient. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32235
+Name:	Mario St.
+Desc:$
+   Mario street runs across the amazonian capital pararell to Joana. It is as
+well dirty, with many streetlights broken or in malfunction. The view is most
+basically composed of buildings and a few shops. Some citizens can be seen
+walking around, either going to or coming back from work. A few cars drive by.
+This street, just as the others in the capital, are not very patrolled by the
+local police. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32236
+Name:	Dead End at Mario St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	32235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32237
+Name:	Antonio St.
+Desc:$
+   The street that carries the first amazonian governor's name runs along the
+eastern part of the capital's main district, in the north-south direction.
+Some malfunctioning streetlights illuminate the ambient sparsely. The are is
+poorly patrooled by the local police. That has caused accelerated growth of
+the local gangs, whoose members are often seen in the local bars, either
+drinking, brawling, or looking to cause trouble. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32238
+Name:	Antonio St.
+Desc:$
+   The street that carries the first amazonian governor's name runs along the
+eastern part of the capital's main district, in the north-south direction.
+Some malfunctioning streetlights illuminate the ambient sparsely. The are is
+poorly patrooled by the local police. That has caused accelerated growth of
+the local gangs, whoose members are often seen in the local bars, either
+drinking, brawling, or looking to cause trouble. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32239
+Name:	Antonio St.
+Desc:$
+   The street that carries the first amazonian governor's name runs along the
+eastern part of the capital's main district, in the north-south direction.
+Some malfunctioning streetlights illuminate the ambient sparsely. The are is
+poorly patrooled by the local police. That has caused accelerated growth of
+the local gangs, whoose members are often seen in the local bars, either
+drinking, brawling, or looking to cause trouble. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32240
+Name:	Intersection of Jungle and Antonio
+Desc:$
+   This is the crossing between the two streets. Even though dirty and unkept,
+the place is well sinalized, and a semaphore controls the driving flux through
+the intersection. There are cars waiting for the semaphore to open, while the
+others drive by, either continuing forward or turning to the other street.
+Pedestrians cross the street whenever the semaphore stop the cars. Some
+malfunctioning streetlights illuminate the ambient. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32241
+Name:	Dead End at Antonio St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32242
+Name:	Dead End at Antonio St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	32238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32243
+Name:	Jungle St.
+Desc:$
+   This street is the most recently constructed by the government of Manaus.
+It runs through the northern part of the amazonian capital. It's streetlights
+are mostly working, and the building corners less filled with trash and paper
+sheets. It is as well the most crowded part of the capital. Citizens can be
+seen crossing the streets most of the time, both during day and at night. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32244
+Name:	Jungle St.
+Desc:$
+   This street is the most recently constructed by the government of Manaus.
+It runs through the northern part of the amazonian capital. It's streetlights
+are mostly working, and the building corners less filled with trash and paper
+sheets. It is as well the most crowded part of the capital. Citizens can be
+seen crossing the streets most of the time, both during day and at night. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32245
+Name:	Jungle St.
+Desc:$
+   This street is the most recently constructed by the government of Manaus.
+It runs through the northern part of the amazonian capital. It's streetlights
+are mostly working, and the building corners less filled with trash and paper
+sheets. It is as well the most crowded part of the capital. Citizens can be
+seen crossing the streets most of the time, both during day and at night. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32246
+Name:	Jungle St.
+Desc:$
+   This street is the most recently constructed by the government of Manaus.
+It runs through the northern part of the amazonian capital. It's streetlights
+are mostly working, and the building corners less filled with trash and paper
+sheets. It is as well the most crowded part of the capital. Citizens can be
+seen crossing the streets most of the time, both during day and at night. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32247
+Name:	Dead End at Jungle St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32248
+Name:	Dead End at Jungle St.
+Desc:$
+   The street halts between the worn buildings to a dead end. It is too dirty,
+there are sheets of paper flying around, carried by the soft wind. Pieces of
+glass from the buildings' broken windows decorate some corners of the street.
+Some of the streetlights are broken as well, but the few who survived the
+street gangs still illuminate the ambient, even if sparsely. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	32243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32249
+Name:	Octus' Armoury
+Desc:$
+   The shop is a big and very clean room. It does not call much attention from
+outside, nor does Octus wants it to, but from inside you feel that the
+business involves the flux of a fat ammount of cash. Octus, the armoury owner,
+usually sits by the counter on a corner of the room, waiting to serve the few
+customers. Spread over the room are glass stands containing the military ware.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32250
+Name:	The Docks of Manaus
+Desc:$
+   This is the Manaus dockyard. Many ships use this port to load and unload
+both passengers and cargo. Even the amazonian militia use it often when not in
+secret operations. Their low funds do not allow building of a special port
+yet. The fresh breeze of the Amazonia river runs free through the dock. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32251
+Name:	Hilly's Delta Clinic
+Desc:$
+   You stand by a miriad of technological brilliance. This clinic really looks
+like what you would call the last word in high cyberware technology. There are
+no pieces of cyberware shown over tables or in showrooms, but walls covered by
+installation and development equipment, designed to work with high-grade
+cyberware: deltaware. In the center of the room is a desk, where Hilly's, the
+clinic's doctor spends most of the time, attending his rare customers. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32252
+Name:	The Amazonia Ferry
+Desc:$
+   A thin stretch of tarpaulin stretched between four rickety poles lends a
+blue tint to a collection of rotting wood beams and rusty railings, held
+together by little more then a few lengths of rope and the occasional nail and
+far from waterproof. A large, noisy outboard motor to one end of the makeshift
+barge leaks oil onto the timbers as it revs unevenly, spewing blue smoke out
+across the water. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

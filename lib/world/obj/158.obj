@@ -1,0 +1,3035 @@
+#15800
+Keywords:	a huge, polished ^rcherry wood^N 'Belmont' king-sized bed
+Name:	a huge, polished ^rcherry wood^N 'Belmont' king-sized bed
+RoomDesc:$
+A huge ^rcherry wood^N bedframe and king-sized matress lays here.~
+LookDesc:$
+The frame of this monstrosity is constructed of polished cherry wood, resting
+snugly atop of it being a huge, king sized mattress. The sides are lined with
+English dovetail drawers, which were framed in a manner to give depth to the
+wooden face, their handles complete with a polished nickel finish. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	100.00
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val2:	-1
+BREAK
+#15801
+Keywords:	seattle open clinic keycard card maglock
+Name:	A Seattle Open Clinic maglock keycard
+RoomDesc:$
+A Seattle Open Clinic maglock keycard has been dropped here.~
+LookDesc:$
+This keycard is made from a pure white plastic, and has the SOC's logon
+emblazoned proudly on its face. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15802
+Keywords:	ultra-light Ghillie Spectrum suit
+Name:	an ultra-light Ghillie 'Spectrum' suit
+RoomDesc:$
+A bundle of rags and leaves lies here.~
+LookDesc:$
+This SOTA Ghillie suit is substantially more comfortable and much more
+effective than a traditional Ghillie suit. The UCAS and CAS armed forces have
+rigorously field tested them and found the Spectrum Ghillie suit equaled or
+surpassed traditional ghillies in every category. The synthetic fabric is
+extremely strong, durable, and sound absorbent. Sewn onto the suits frame are
+hundreds of small leaves made of ruthenium fabric. This system allows the suit
+to individually place preloaded images onto each ruthenium leaf. A
+mini-computer attached to the wearers wrist can store dozens of images such as
+grass, leaves, wheat, pine needles, the bark of various trees, camouflage
+patterns ranging from urban camo to jungle tiger pattern, and the full
+spectrum of matte colors. While not able to give a user true invisibility this
+suit assists the wearer immensely in stalking and any situation requiring
+stealth and high concealment on the modern battlefield. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.50
+	Barrier:	12
+	Cost:	30000
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	10
+	Val2:	4
+	Val3:	4
+	Val4:	8
+	Val7:	24
+BREAK
+#15803
+Keywords:	a large, glossy ^Lblack^N feathered common raven
+Name:	a large, glossy ^Lblack^N feathered common raven
+RoomDesc:$
+A large ^Lblack^N raven is here, staring intently.~
+LookDesc:$
+This adult common raven is actually a northwestern crow, its smaller, square
+tail is a tell tale sign to a trained eye. Its plumage is a glossy black
+color, while its cold beady eyes are a darker shade, which tend to stare at
+you intently. The creature barely measures out to a foot from beak to the tip
+of its tail, but makes up for its physical stature in an audible manner,
+occasionally offering one of its deep patented croaks or a hoarse "rrronk." 
+~
+Type:	Other
+WearFlags:	10000000101000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15804
+Keywords:	a rather drab looking garter snake 
+Name:	a rather drab looking garter snake
+RoomDesc:$
+A small snake slithers around here.~
+LookDesc:$
+Measuring up to a little over a foot and a half long, the pattern on this
+common garter snake consists of three longitudinal white stripes on the back,
+and has speckled dull greenish-yellow scales, with a hint of black spotting
+here and there along its length. While it is non-venomous, it sure won't stop
+the little bugger from sinking its fangs into your fingers or hands, should
+they become too close for its comfort. 
+~
+Type:	Other
+WearFlags:	101000000000101
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	5.00
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15805
+Keywords:	an adorable little ^Lblack^N-^Lfooted^N ferret
+Name:	an adorable little ^Lblack^N-^Lfooted^N ferret
+RoomDesc:$
+A domestic ferret weasels its way around here.~
+LookDesc:$
+This black-footed ferrets is about 45 cm (18 in) long, with a furry 15 cm (6
+in) tail, weighing roughly 1 kg (2 lbs). Like most members of its genetic
+family, it is very low to the ground, with an elongated body and very short
+legs. Its fur is white at the base but darkens at the tips, making it appear
+yellowish-brown overall, with black feet and tail-tip, and a distinctive black
+face mask. This once endangered species is currently thriving in population,
+regardless of the degradation of the world around it. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15806
+Keywords:	an eyeball with electronic markings
+Name:	an eyeball with electronic markings (Defunct)
+RoomDesc:$
+An eyeball rolls around here.~
+LookDesc:$
+This odd looking orb seems to be crafted from an optical sensory array, and
+has all the tell-tale signs of an eyeball, granted that its cornea and pupil
+have been replaced with embedded electronic information and sequences. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15807
+Keywords:	a small ^rred^N-^reyed^N albino lab rat
+Name:	a small ^rred^N-^reyed^N albino lab rat
+RoomDesc:$
+A small ^Wwhite^N rat scurries around here.~
+LookDesc:$
+This little bundle of vermin is simply the cutest thing to come out of the lab
+in quite some time. It's about the size of a mouse, and has (mostly) clean
+white fur, whiskers, beady red eyes, and comes complete with two enlarged
+front teeth for nibbling on anything it can gets a hold of. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15808
+Keywords:	an elegant ^Lblack oak^N 'Stafford' antique chest
+Name:	an elegant ^Lblack oak^N 'Stafford' antique chest
+RoomDesc:$
+A large, but elegant ^Lblack oak^N chest sits here.~
+LookDesc:$
+This large chest is crafted from hardwood ^Lblack oak^N solids with cathedral
+styled veneers, turned posts, pierced carvings, and decorative overlays that
+just scream high class. Five wide drawers have English dovetailed fronts and
+French dovetailed backs, with antique brass hardware fixtures, and seamless
+wood-on-wood glide tracks. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	20.00
+	Barrier:	8
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	60
+	Val1:	1
+	Val2:	-1
+BREAK
+#15809
+Keywords:	a wall mounted, universal gun rack
+Name:	a wall mounted, universal gun rack
+RoomDesc:$
+A wooden gun rack is firmly bolted to the wall here.~
+LookDesc:$
+This standard, universal unit offers a clover leaf design where the barrel
+rest accommodates a variety of barrel lengths and profiles, over & under, side
+by side, bull barrel, carbine, and even smaller side arms. These units can be
+mounted in series side by side for you gun enthusiasts out there, not to
+mention the red oak with a natural finish gives pretty any room they're in a
+lift. The felt lined and indexed shelf support can be fastened to any wall
+brick, cement, or stud via a rock solid ledger board system. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	20.00
+	Barrier:	8
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	60
+	Val1:	1
+	Val2:	-1
+BREAK
+#15810
+Keywords:	a large ^ywooden^N framed ^Cglass^N display case
+Name:	a large ^ywooden^N framed ^Cglass^N display case
+RoomDesc:$
+A large glass display case sits here.~
+LookDesc:$
+This rather simple piece of furniture is a must-have for all those collectors
+out there, no matter what their interests are, this display case would suffice
+to show off whatever one places inside. Its simple but sturdy synthwood and
+steel reinforced frame is covered on the sides and front with thick
+plexi-glass panels, offering a bit of protection to the valuables being stored
+in it, a simple maglock seems to be installed, although it looked as if it
+could be readily modified for other security measures, this must be one of
+their generic models. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	40.00
+	Barrier:	12
+	Cost:	3500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	1
+	Val2:	-1
+BREAK
+#15811
+Keywords:	medical workshop tools sterilized
+Name:	The SOC's medical workshop
+RoomDesc:$
+Sterilized medical tools have been neatly arrayed here.~
+LookDesc:$
+These tools comprise the SOC's medical workshop, containing everything from
+basic scalpels to a full diagnostics machine. 
+~
+Type:	Workshop
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+BREAK
+#15812
+Keywords:	cabinet white red medical
+Name:	A medical cabinet
+RoomDesc:$
+A ^Wwhite^N cabinet with a ^Rred^N cross on the front stands here.~
+LookDesc:$
+This cabinet is well-made and is designed to hold treatments and prescriptions
+for the immediate medication of symptoms, ailments and diseases that are
+diagnosed. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	4
+	Val2:	-1
+BREAK
+#15813
+Keywords:	a highly polished ^ymahogany^N chifforobe
+Name:	a highly polished ^ymahogany^N chifforobe
+RoomDesc:$
+A rather large free-standing wardrobe closet.~
+LookDesc:$
+A chifforobe is a closet-like piece of furniture that combines a long space
+for hanging clothes (that is, a wardrobe or armoire) with a chest of drawers.
+The wardrobe section runs down one side of the piece, while the drawers occupy
+the other side, it seems to be crafted from quality mahogany, and has an
+antique lacquered look to it. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	80.00
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	120
+	Val1:	1
+	Val2:	-1
+BREAK
+#15814
+Keywords:	a 'Canyon Ridge' ^ybrown synth-leather^N sleeper sofa
+Name:	a 'Canyon Ridge' ^ybrown synth-leather^N sleeper sofa
+RoomDesc:$
+A comfortable looking ^ybrown leather^N sleeper sofa sits here.~
+LookDesc:$
+This treated brown leather sofa is comfortable, stain resistant and easy to
+clean. Its stands up to everyday use and still maintains that brand new look,
+thanks to its two large tapestry toss pillows. The frame is constructed with
+hardwoods and furniture grade laminates, and all of its joints are
+double-doweled, blocked, glued and screwed to the frame, complete with a heavy
+duty sinuous coil spring system, to keep you comfortable for many years to
+come. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	150.00
+	Barrier:	8
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15815
+Keywords:	comfortable blackhawk phoenix backpack
+Name:	a comfortable BlackHawk(TM) Phoenix tactical backpack
+RoomDesc:$
+A comfortable looking backpacks lays here.~
+LookDesc:$
+The Phoenix back pack is a uniquely designed frameless pack with a padded back
+and body. The contoured "S" shoulder straps have a detachable sternum strap
+and torso lumbar support. The inside back has a pouch to fit an optional 100
+oz. HydraStorm hydration system with our tube routing system to feed the drink
+tube out the top and over either shoulder. This feature allows the user to
+efficiently carry 2.5 qts. of hot or cold liquid to drink on the move. The
+pack's main compartment has two (2) internal securing straps and a pair of
+utility gear attachment straps. 
+~
+Type:	Container
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	2500
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	1
+	Val2:	-1
+BREAK
+#15816
+Keywords:	compact blackhawk LRRP butt-pack pack
+Name:	a compact BlackHawk(TM) L.R.R.P. butt-pack
+RoomDesc:$
+A compact waist pack lays here.~
+LookDesc:$
+The BlackHawk L.R.R.P. attaches to any belt with sturdy BTS belt loops or can
+replace the belt all together. The back panel is made from an IVS molded foam
+for excellent stability and comfort, with the IVS helping keep the packs shape
+when over-loaded or under-loaded. The IVS also helps with floatation when
+traveling across rivers and streams or over the beach ops. Features include: A
+top pouch with dual zippers and silent pulls, side and back pouches with
+adjustable silent side release buckles and cinch top for NVG's, canteens,
+gloves, goggles, batteries, rations, et cetera. 
+~
+Type:	Container
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	8
+	Cost:	2500
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val1:	1
+	Val2:	-1
+BREAK
+#15817
+Keywords:	a luxurious ^yleather^N 'Vanguard' rocker recliner
+Name:	a luxurious ^yleather^N 'Vanguard' rocker recliner
+RoomDesc:$
+The most comfortable ^ybrown leather^N recliner in existence sits here.~
+LookDesc:$
+This masterpiece of comfort is crafted from the same leathers used in WW2
+bomber jackets.  The smooth silkiness of lambs skin covers most if it, stained
+a dark rich brown. With more resilient horse leather coating the arm and head
+rests.  All the leather has been perfectly cured and treated to resist
+moisture and aging. The frame is constructed of furniture grade 6 & 8
+plywood's, has a removable backing and a simple touch-button recline system,
+with heavy duty 8-gauge Morley offset seat springs for maximum comfort. There
+seems to be a everything from a small PDA installed beneath an arm, a phone, a
+small flip-up trid, and last but not least, a snazzy cup holder for you lazy
+alcoholics. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	50.00
+	Barrier:	6
+	Cost:	8000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15818
+Keywords:	a wooden framed 'Versailles' queen-sized bed
+Name:	a wooden framed 'Versailles' queen-sized bed
+RoomDesc:$
+An ornate, carved wooden frame queen-sized bed lays here.~
+LookDesc:$
+This is a huge bed. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	80.00
+	Barrier:	6
+	Cost:	4500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val2:	-1
+BREAK
+#15819
+Keywords:	drab green blackhawk battle bag
+Name:	A drab ^golive^N BlackHawk(TM) enhanced battle bag
+RoomDesc:$
+A drab olive luggage bag lays here.~
+LookDesc:$
+BlackHawk(TM) introduces an enhanced modular version of this great selling
+on-the-go bag. Designed with MOLLE webbing on 3 sides to allow the user to
+configure it to their needs. It is slightly larger in all dimensions to
+accommodate a small laptop computer or cyberdeck, with stiffened construction
+to retain structure when in use. A HawkTex(TM) pad on the shoulder strap
+equates to extra comfort, as well as a carry handle ontop of the bag. 
+~
+Type:	Container
+WearFlags:	10001000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	8
+	Cost:	2850
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	38
+	Val1:	1
+	Val2:	-1
+BREAK
+#15820
+Keywords:	blackhawk omega drop-leg medic pouch
+Name:	a BlackHawk(TM) 'Omega' drop-leg medic pouch
+RoomDesc:$
+A black nylon medical pouch lays here.~
+LookDesc:$
+There are two words to describe this piece of gear - versatile and awesome! It
+can be worn on the thigh, at the ready, when immediate action is needed. It
+can also be worn on the front of an Omega Tactical modular vest or on the back
+of other Omega tactical vests. Another option is to mount it on your belt in a
+high ride position, but the drop-leg thigh properties are easily the most
+comfortable. Particularly designed for field medics who need to keep their
+hands free, and are already fully loaded with gear. 
+~
+Type:	Container
+WearFlags:	1000000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	2000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val2:	-1
+BREAK
+#15821
+Keywords:	tactical STRIKE CQC drop-leg platform
+Name:	A tactical STRIKE CQC drop-leg platform
+RoomDesc:$
+A tactical drop-leg platform lies here.~
+LookDesc:$
+This CQC (Close Quarter Combat) equipment is crafted from a high density
+carbon-fiber polymer material, and is used to secure holsters, rails, and
+carbon-fiber accessories such as lights and magazine cases. This set is based
+on a drop-leg platform that provides the outer thigh with limited protection,
+snugly secured by straps clipped onto the belt and also a double strap for the
+leg. 
+~
+Type:	Worn
+WearFlags:	1000000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	1250
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+BREAK
+#15822
+Keywords:	leather pistol lanyard
+Name:	An oldschool ^ybrown leather^N pistol lanyard
+RoomDesc:$
+A leather pistol lanyard lies on the floor here.~
+LookDesc:$
+This is a throwback special from the western era, a good old fashioned pistol
+lanyard. This one is made out of a thickly braided throng of tanned ^ybrown
+leather^N, which attaches around ones neck or wrists, leaving their hands free
+while always keeping their weapon drawn, just in case. Just another innovation
+in technology at the time, useful for those extra paranoid types, or maybe
+those who are a little slower on the draw than whatever it is they're worried
+bout. 
+~
+Type:	Holster
+WearFlags:	10000000001000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15823
+Keywords:	modular nylon universal rig
+Name:	A modular ^Lblack^N-^Lnylon^N universal shoulder rig
+RoomDesc:$
+A shoulder rig lies on the floor here.~
+LookDesc:$
+This peice of gear is designed to rest snugly on your shoulder to distribute
+weight and spread out its load, its double underarm straps allow you to mount
+a variety of holsters and mag-pouches. Its modular design allows left and
+right usage alike, and can be easily be combined with a partner rig, allowing
+for even more weight distribution and overall comfort while being worn. 
+~
+Type:	Worn
+WearFlags:	10000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	8
+	Cost:	1250
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val7:	8
+BREAK
+#15824
+Keywords:	sturdy blackhawk patrol belt
+Name:	A sturdy BlackHawk(TM) padded patrol belt
+RoomDesc:$
+A sturdy looking patrol belt lies here.~
+LookDesc:$
+The BlackHawk Patrol Belt & Pad is made of 1k denier NyTaneon with 2 1/4" Web
+Belt on the outside and 3/8" closed cell foam with CoolMax on the inside. It
+comes with a dual adjustable 2" side release buckle in the front for emergency
+quick release. The 2 1/4" Web Belt is sewn directly to the belt pad for
+increased load bearing efficiency. It is designed to carry basicly any extra
+pouches, mag-straps or the BlackHawk BTS wrap around system as well as
+attaching any type of load bearing suspenders and/or thigh and shoulder
+straps. 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	8
+	Val2:	2
+	Val4:	2
+BREAK
+#15825
+Keywords:	sturdy BDU jacket urban-camo
+Name:	A sturdy ^Lblack^N BDU jacket with urban-camo accents
+RoomDesc:$
+A black BDU jacket with urban-camo accents lies here.~
+LookDesc:$
+This custom BDU jacket is solid black with ^Lu^Wr^Lb^Wa^Ln ^Lc^Wa^Lm^Wo^Lu^Wf^Ll^Wa^Lg^We^N accents on the
+collar, lapels, cuffs and pocket closure flaps. They feature two large waist
+pockets on each side, as well as two smaller cargo-style pockets on the chest.
+Their lining is double-reinforced and come with both button-up and zippered
+closures. They're constructed from super soft yet durable ripstop cotton and
+are extremely comfortable. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	8
+	Cost:	1250
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	3
+	Val6:	1
+BREAK
+#15826
+Keywords:	sturdy hoodie urban-camo
+Name:	A sturdy ^Lblack^N hoodie with urban-camo accents
+RoomDesc:$
+A black hoodie with urban-camo accents lies here.~
+LookDesc:$
+This thick fabric hoodie is solid black with ^Lu^Wr^Lb^Wa^Ln ^Lc^Wa^Lm^Wo^Lu^Wf^Ll^Wa^Lg^We^N accents on the
+hoods trim, draw-string loops for both the hood and waist, as well as the
+front pockets trim and inner lining. They feature a large front pocket, an
+adjustable waist draw-string and a double-reinforced back, and sleeves and
+hood. They're constructed from super soft yet durable ripstop cotton and are
+extremely comfortable. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	1250
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val5:	2
+	Val6:	2
+	Val7:	8
+BREAK
+#15827
+Keywords:	vintage paratrooper fatigue pants
+Name:	A pair of vintage paratrooper fatigue pants
+RoomDesc:$
+A pair of black, vintage paratrooper pants lies here.~
+LookDesc:$
+These vintage paratrooper fatigue pants are done in a stylish cargo design and
+are solid black with ^Lu^Wr^Lb^Wa^Ln ^Lc^Wa^Lm^Wo^Lu^Wf^Ll^Wa^Lg^We^N accents on the belt loops, pockets and
+bellows. They feature roughly eight pockets, adjustable waist tabs, a
+double-reinforced seat and knee and drawstring bottoms. They're constructed
+from super soft yet durable ripstop cotton and are extremely comfortable. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	1250
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val5:	2
+	Val6:	1
+BREAK
+#15828
+Keywords:	mirroed lens aviator sunglasses
+Name:	A pair of mirrored-lens Aviator sunglasses
+RoomDesc:$
+Some cop left their sunglasses on the floor here.~
+LookDesc:$
+Oh shit! The Fuzz! Cheese it! That was the immediate response these shades
+usually had on the public. These aviator styled shades were made popular to
+the public by law enforcement and harken back to not-so-fond memories for
+most. The reason why they were so popular is easy to see, not only did their
+large, slightly curved design offer a broader range of protection from glare
+and brighter lighting situations, but they also restricted ones peripheral
+vision less than the majority of most other types of glasses. Despite their
+namesake, these glasses were not originally intended for pilots, but rather,
+their design was intended for shooting. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	8
+	Cost:	2250
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15829
+Keywords:	goggles smoke
+Name:	A pair of motorcycle goggles with smoke lenses
+RoomDesc:$
+A bulky pair of motorcycle goggles lies here.~
+LookDesc:$
+These sturdy 'bug-eyed' styled goggles are a perfect choice for any serious
+motorcycle enthusiast. Their design offers complete protection from high-speed
+wind without the need for a closed visor helmet, while still offer a great
+range of vision to their wearer. A thick, triple-stitched stretch band can be
+adjusted as needed to keep them snugly fit over your eyes, while the lenses
+themselves were smoked and kept that pesky glare from being any trouble. They
+also features a small compartment near each ear, capable of storing most small
+ear-piece radio sets and headset phones. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.20
+	Barrier:	8
+	Cost:	2500
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+BREAK
+#15830
+Keywords:	a polished ^Ygold^N and ^Wsterling silver^N woven necklace
+Name:	a polished ^Ygold^N and ^Wsterling silver^N woven necklace
+RoomDesc:$
+A polished ^Ygold^N and ^Wsterling silver^N woven necklace is lying here.~
+LookDesc:$
+Meshed sterling silver gets a fashionable wrap from polished 18kt yellow gold
+ribbed spacers. From Italy, this simple box clasp necklace measures almost 1/2
+an inch in width, and shines verily even in low-light. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15831
+Keywords:	a marine-link ^Wwhite gold^N necklace with an ^Lonyx^N pendant
+Name:	a marine-link ^Wwhite gold^N necklace with an ^Lonyx^N pendant
+RoomDesc:$
+A marine-link ^Wwhite gold^N necklace with an ^Lonyx^N pendant sits here.~
+LookDesc:$
+A smooth square of black onyx creates the backdrop for a design that features
+a distinctive outline of a cross. The interior of the design, as well as at
+marquise shaped accents on the corners, are embellished with diamond accents.
+In sterling silver, roughly 2' and 1/2" inches long, with a fixed 3/8th bale,
+through which is looped a beautiful white gold marine-link necklace.  
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15832
+Keywords:	a small round ^Wwhite sapphire^N stud
+Name:	a small round ^Wwhite sapphire^N stud
+RoomDesc:$
+A small round ^Wwhite sapphire^N stud has been left here.~
+LookDesc:$
+This polished round white sapphire stud is set in a pronged 14kt white gold
+fixture, and shines brightly like a diamond when the light hits it. 
+~
+Type:	Worn
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15833
+Keywords:	white fountain large
+Name:	A massive white fountain
+RoomDesc:$
+A massive ^Wwhite^N fountain fills the air with shimmering water here.~
+LookDesc:$
+This fountain is huge, standing easily fifteen feet tall and casting spray up
+to seventy feet high.  The spray-nozzles are wired to an advanced calibration
+system that constantly aligns them according to wind direction and speed,
+ensuring that all the water sprayed falls neatly back into the reflecting pool
+around it.  The Serenity Corporation's symbol has been proudly etched into its
+face, the interlocking SC floating inside a starry corona. 
+~
+Type:	Fountain
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	75000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50000
+	Val1:	50000
+BREAK
+#15834
+Keywords:	an ^Lonyx^N set, two-tone ^Ygold^N and ^Wsilver^N band
+Name:	an ^Lonyx^N set, two-tone ^Ygold^N and ^Wsilver^N band
+RoomDesc:$
+An ^Lonyx^N set, two-tone ^Ygold^N and ^Wsilver^N band lies here.~
+LookDesc:$
+A richly ribbed two-tone 14kt ^Ygold^N and ^Wsterling silver^N bands flow around a
+sleek ^Lblack onyx^N oval, which measures roughly 14x10mm and gleams brightly
+under light. 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15835
+Keywords:	a braided ^Wsilver^N band set with a ^gserpentine^N gem
+Name:	a braided ^Wsilver^N band set with a ^gserpentine^N gem
+RoomDesc:$
+A braided ^Wsilver^N band set with a ^gserpentine^N gem sits here.~
+LookDesc:$
+An 8.00 carat, oval ^gserpentine^N ring with a braided frame and knotted details
+is a sight to behold. Cast from high quality ^Wsilver^N, with an antique finish to
+give it an older appearance. 
+~
+Type:	Other
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15836
+Keywords:	a small ^Lblack diamond^N bellybutton stud
+Name:	a small ^Lblack diamond^N bellybutton stud
+RoomDesc:$
+A small ^Lblack diamond^N bellybutton stud sits here.~
+LookDesc:$
+This small sterling silver prong design is set with a 2.00 carat ^Lblack
+diamond^N, giving it a murky, shaded appearance due to small impurities,
+although it shines as readily as any other diamond around. 
+~
+Type:	Worn
+WearFlags:	1000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15837
+Keywords:	coffe A stout cup of Celebes Kalossi coffee sits here.
+Name:	a stout cup of Celebes Kalossi coffee
+RoomDesc:$
+A stout cup of Celebes Kalossi coffee sits here.~
+LookDesc:$
+Though this coffee shares some of the heavy body of other Indonesian coffees,
+it has a bit more zest, with a smoother flavor. Celebes Kalossi (pronounced:
+sel-eh-bees ca-low-see) is a prized and rare coffee. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	2
+BREAK
+#15838
+Keywords:	java a Styrofoam cup of Mocha Java
+Name:	a Styrofoam cup of Mocha Java
+RoomDesc:$
+A Styrofoam cup of Mocha Java sits destroying our ozone.~
+LookDesc:$
+A blend of the two original coffees from the Red Sea area and the Dutch East
+Indies. Spicy, rich, and full-bodied, definitely making it a good choice. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	2
+BREAK
+#15839
+Keywords:	tea a sleeved paper cup of ^Wwhite silver tip^N tea
+Name:	a sleeved paper cup of ^Wwhite silver tip^N tea
+RoomDesc:$
+A sleeved paper cup of ^Wwhite silver tip^N tea sits here.~
+LookDesc:$
+Revered in China and once reserved for the only the emperor himself, a white
+tea that is soft and fragrant and is a must try for tea enthusiasts.  
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	5
+BREAK
+#15840
+Keywords:	desert a chocolate covered jalapeno 
+Name:	a chocolate covered jalapeno
+RoomDesc:$
+A chocolate covered jalapeno sits here.~
+LookDesc:$
+Silky smooth Lindt(TM) Ecuador (90% Cocoa) dark chocolate with full-bodied
+aroma of exquisite Arriba cocoa, which grows in the tropical coastal area of
+the Ecuadorian lowlands, seems to be more than generously covering a red
+jalapeno pepper. The odd mixture is a rather pleasant surprise, as the flavors
+compliment one another with neither overpowering the other, aside from the
+peppers lasting aftertaste. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+[EXTRADESC 0]
+	Keywords:	tenure
+	Desc:$
+The Tenure policy is as follows:  If an employee nets 50,000 nuyen or more in
+profit for the Company, they are considered a valuable or "tenured" employee.
+They are granted a promotion in their departments and are given the
+opportunity to purchase a room in the Residencies for 10,000 nuyen if they so
+desire. 
+~
+[EXTRADESC 1]
+	Keywords:	Contents
+	Desc:$
+PAYSCALE
+ HONOR
+ TENURE
+ PUNISHMENTS 
+~
+[EXTRADESC 2]
+	Keywords:	credits
+	Desc:$
+This tome was put together by Starlight, and bound by the Vyani'sa Bookbinders
+of Portland. 
+~
+[EXTRADESC 3]
+	Keywords:	punishment punishments
+	Desc:$
+Punishments for misdeeds are leveled whenever a company employee errs
+unforgivably.  Some examples of punishable offenses are theft, betrayal, and
+breaching the Honor policy.  The punishments leveled may include (but are not
+limited to):
+ Revokement of Tenure
+ Expulsion from the Company
+ Fines being leveled
+ Legal action
+ Incarceration
+ Demotion
+ Revokement of
+Room in the Residencies 
+~
+[EXTRADESC 4]
+	Keywords:	honor
+	Desc:$
+The Honor Policy:
+ All members of the Serenity Corporation agree that they will not lie to any
+Company members, will not cheat any Company members of anything, and will not
+steal from the Company or its members.  Failure to comply with this policy can
+result in serious punishment- READ PUNISHMENT to find out more about those. 
+~
+[EXTRADESC 5]
+	Keywords:	payscale
+	Desc:$
+The Serenity company's payscale works on the following basis:  Fair
+distribution.  What that means is we pay the person who did the most work with
+the largest share of the profits.  Each share of the profits is one percent of
+the total profits gained off of the sale.
+ A brief outline of what happens:  1)  The company takes 10% of the profit to
+pay for expenses.  2)  All participating employees are asked to send the CEO a
+piece of mail stating the amount of time they worked on the project.  3)  The
+profits are split up according to amounts of work.
+ Please make sure that you read the company's honor policy- READ HONOR to find
+out more. 
+~
+BREAK
+#15841
+Keywords:	desert a healthy serving of ^R'^LDeath by Chocolate^R'^N
+Name:	a healthy serving of ^R'^LDeath by Chocolate^R'^N
+RoomDesc:$
+A healthy serving of ^R'^LDeath by Chocolate^R'^N sits here.~
+LookDesc:$
+This magnificent treat is an amalgamation of chocolate and other delightful
+sweets, the epitome of a chocolate lover's dish. Multitudes of layers are
+laced and mixed through-out this dish, which include chocolate brownie chunks,
+chocolate pudding, graham crackers, English toffee, chopped walnuts and
+pecans, with a heavy whipped cream topping drizzled with a thick caramel
+sauce. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+[EXTRADESC 0]
+	Keywords:	CONTENTS
+	Desc:$
+The screen hums warmly, then prints:
+ ^G You may access the following categories of information about our company:
+ABOUT, BUSINESS, JOINING, HELP.^N
+ 
+~
+[EXTRADESC 1]
+	Keywords:	ABOUT
+	Desc:$
+The screen hums warmly, then prints:^G
+ Welcome to the ABOUT section!  Feel free to return to the main menu at any time
+by typing READ ABOUT, or to the table of contents by typing READ CONTENTS.
+ While you're here, why not check out our HISTORY or the information on our
+current CEO?  You can even read some customer REVIEWS or learn about the
+companies who have PURCHASED from us before. ^N 
+~
+[EXTRADESC 2]
+	Keywords:	HISTORY
+	Desc:$
+The screen hums warmly, then prints:^G
+ The Serenity Cyberdecks corporation was founded by Starlight Sh'an-fir in the
+hopes of providing inexpensive yet high-quality cyberdecks and programs to the
+general public.  Members were recruited by using a fine-toothed interview
+process, making sure to staff the Group with only the best of the best.  We
+were even approached by Daedalus, famed deckbuilder, who was interested in
+joining our company! ^N 
+~
+[EXTRADESC 3]
+	Keywords:	CEO
+	Desc:$
+The screen hums warmly, then prints:^G Our CEO Starlight Sh'an-fir was a lowly
+Wakyambi in his youth, struggling to make his way in the hostile streets of a
+distinctly racist Seattle.  However, he soon discovered the ways of decking
+and programming and immediately became enraptured with such technologies,
+vaulting his way up from a beginning programmer to a very good one in the
+space of a year.  He founded the Group as a forum for other like-minded
+individuals to join in the trade of cyberdeck manufacturing, and soon started
+the company itself as a full business. ^N 
+~
+[EXTRADESC 4]
+	Keywords:	reviews
+	Desc:$
+The screen hums warmly, then prints:^G
+ The head of the Novatech IT department says, "I love Serenity Cyberdecks!  They
+provide quality equipment, low costs and a cheerful support service for their
+products!  They helped me get my customer database online in record time.
+Thanks, Serenity! ^N 
+~
+[EXTRADESC 5]
+	Keywords:	purchased
+	Desc:$
+The screen hums warmly, then prints:^G
+ The Novatech Corporation
+ Hard Times of Portland
+ The Seattle Public Library
+ The Renraku Arcology
+ Darkwaters Shipping of New Hampshire
+ ...and many, many more! ^N 
+~
+[EXTRADESC 6]
+	Keywords:	business
+	Desc:$
+The screen hums warmly, then prints:^G
+ We do business with almost anyone, excluding those who have attacked our
+company memebers, company property or the property of our members.  Contact
+Starlight to find out more about our deckbuilding, programming, deals and
+more! ^N 
+~
+[EXTRADESC 7]
+	Keywords:	joining
+	Desc:$
+The screen hums warmly, then prints:^G If you're interested in joining the
+Corporation, please contact Starlight or Dyne to arrange an interview with us.
+We accept members from all walks of life, whether you be a builder,
+programmer, bladeswinger, mage or anything else you can think of.  We are
+actively searching for advanced builders, programmers and diplomats or
+negotiators. ^N 
+~
+[EXTRADESC 8]
+	Keywords:	Help
+	Desc:$
+The screen hums warmly, then prints:^G
+ Type READ <file> to read what you are interested.  To leave this program,
+simply type READ EXIT.
+ Program created by Starlight. ^N 
+~
+[EXTRADESC 9]
+	Keywords:	Exit
+	Desc:$
+You type in the quit command and step back from the terminal. 
+~
+BREAK
+#15842
+Keywords:	cheesecake a slice of ^bblueberry rum^N cheesecake
+Name:	a slice of ^bblueberry rum^N cheesecake
+RoomDesc:$
+A slice of ^bblueberry rum^N cheesecake sits here.~
+LookDesc:$
+This slice of heaven is all you could ask for, creamy, silky smooth cheesecake
+with a heavy topping of thick blueberry rum sauce, the distinct taste of the
+liquor, combined with the cheesecake and blueberries makes you debate a change
+of pants afterwards, it's that damn good. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+[EXTRADESC 0]
+	Keywords:	
+	Desc:$
+~
+[EXTRADESC 1]
+	Keywords:	
+	Desc:$
+~
+[EXTRADESC 2]
+	Keywords:	
+	Desc:$
+~
+[EXTRADESC 3]
+	Keywords:	
+	Desc:$
+~
+[EXTRADESC 4]
+	Keywords:	
+	Desc:$
+~
+[EXTRADESC 5]
+	Keywords:	
+	Desc:$
+~
+BREAK
+#15843
+Keywords:	luxurious double-breasted pinstripe suit jacket
+Name:	a luxurious ^Lblack^N double-breasted pinstripe suit jacket
+RoomDesc:$
+A luxurious suit jacket has been hung on a stand here.~
+LookDesc:$
+This suit is done in a rare, luxurious Italian design, crafted from an
+expensive black silk and a high-twist wool blend. This peaked lapel, fully
+lined jacket is more than enough to make any gangster or corporate CEO green
+with envy. Its silver'ish white pinstripes only help add to its character and
+prestige, which is custom tailored to fit the owner not only perfectly, but
+comfortably. Its moderately deep interior pockets and outer flap pocket can
+hold pretty much anything, all without tarnishing or destroying the suits
+fashionable good looks in any manner. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	8
+	Cost:	8500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val4:	4
+BREAK
+#15844
+Keywords:	slim attache briefcase
+Name:	a slim ^Lblack^N attache briefcase
+RoomDesc:$
+A slim ^Lblack^g attache briefcase has been left here.~
+LookDesc:$
+This briefcase is made from reinforced metal, carbon-coated with black polymer
+and locked with a pair of old-school manual combination latches on the top. It
+bears a small howling coyote infront of a full moon insignia upon its top, and
+looks like it can hold a fair amount. 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	12
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	1
+	Val2:	-1
+BREAK
+#15845
+Keywords:	OXSYS artificial gill
+Name:	an OXSYS artificial gill
+RoomDesc:$
+An odd looking mask with gills lays here.~
+LookDesc:$
+This light, compact and easy to use OXSYS artificial gill consists of a
+wrap-around face piece with a series of filters along both sides of the jaw.
+The filters draw in water and extract oxygen from it by forced osmosis. Carbon
+dioxide and waste gases are then absorbed into the water through reverse
+osmosis and expelled from the system at the back of the neck. However, because
+they extract pure oxygen, they can be used only at depths less than 7 meters.
+Divers using them at deeper depths risk oxygen toxicity. 
+~
+Type:	Worn
+WearFlags:	100000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	4000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15846
+Keywords:	sturdy blackhawk stalker drag bag
+Name:	a sturdy Blackhawk(TM) 'Stalker' drag bag
+RoomDesc:$
+A sturdy black nylon weapon case sits here.~
+LookDesc:$
+The Stalker drag bag is the latest addition in Blackhawks(TM) arsenal of
+weapon cases, and is meant for the true smooth operator. The Stalker can be
+used as a drag bag, a long and short barrel arms carry case, a shooting mat,
+and includes a Hawk-Tex shoulder pad and strap which is great for throwing
+over your shoulder to get in position, whether up on a roof or on the other
+side of a tarmac. Features include: Para cord attachments on one side of the
+case in 2" increments to allow for ghillie additions, full wrap around carry
+handles made of heavy duty webbing for superior weight support, and interior
+weapon securing straps. 
+~
+Type:	Container
+WearFlags:	10001000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	24
+	Cost:	8000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	1
+	Val2:	-1
+BREAK
+#15847
+Keywords:	M-95 facemask respirator gas mask
+Name:	an M-95 full facemask respirator
+RoomDesc:$
+A black gas mask lays here waiting to be used.~
+LookDesc:$
+The M-95 full facemask respirator embodies the highest levels of efficiency
+and comfort coupled with the latest innovations in respiratory protection.
+They feature extremely low breathing resistance, are light weight, has a
+stretch polyester/lycra head harness to enhance the wearers comfort, and offer
+an extremely wide field of vision. 
+~
+Type:	Worn
+WearFlags:	100000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15848
+Keywords:	expensive intricately carved oak desk
+Name:	An expensive, intricately carved ^yoaken^N desk
+RoomDesc:$
+An expensive oaken desk dominates the center of the room.~
+LookDesc:$
+This desk is absolutely massive, easily seven feet wide and ten feet long, all
+carved from high quality, darkly lacquered oak. It has a large mechanized
+plasma-screen monitor built into its surface that rises out of the desk when
+needed, bringing with it a keyboard, mouse and optical chip reader, not to
+mention uncovering a dataport connection device for cybernetic interface
+needs. Several massive drawers sit on either side of the kneehole, each locked
+down tight with SOTA maglocks. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	700
+	Val1:	15
+	Val2:	15879
+	Val3:	50
+BREAK
+#15849
+Keywords:	server DH-42XVA desert howler
+Name:	The DH-42XVA "Desert Howler" server
+RoomDesc:$
+A massive server has been installed into the room.~
+LookDesc:$
+This server's name plate designates it as 'Desert Howler', and is an extremely
+powerful server that makes up this facilities private host. It seems to be
+been upgraded and rebuilt for some reason or another, as the craftsmanship
+obviously differs from one part to the next. It runs with the DH-42XVA custom
+operating system, which is capable of uploading and downloading up to two
+million gigapulses per milisecond, and is the only machine capable of running
+the millions of simultaneous equations that keep its large sculpted host
+active. It is heavily armoured to prevent physical damage, and the massive
+racks of intercoolers and liquid nitrogen tanks attached to it protect it from
+heat damage. A massive red handle is embedded inti its side, marked "EMERGENCY
+SHUTDOWN", and is secure in place via a high-end maglock bolt. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	10
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15850
+Keywords:	a pair of ^bdark blue^N and ^Wwhite^N high-top Converse(TM) All-Star sneakers 
+Name:	a pair of ^bdark blue^N and ^Wwhite^N high-top Converse(TM) All-Star sneakers
+RoomDesc:$
+A pair of ^bdark blue^N and ^Wwhite^N high-top Converse(TM) All-Star sneakers sit here.~
+LookDesc:$
+These sneakers were unmistakable, no matter where or when you were born, and
+if you don't recognize them, you should be dragged outback and shot on the
+spot. The Converse(TM) All-Star series has been going strong longer than most
+dragons have been around, most of their purchases coming by way of die-hard
+customers of the brand. This particular set was ^bdark blue^N with a standard
+^Wwhite^N trim, the Converse(TM) logo stamped blatently on the side of the ankle.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	45
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15851
+Keywords:	a pair of ^rdark red^N and ^Wwhite^N high-top Converse(TM) All-Star sneakers 
+Name:	a pair of ^rdark red^N and ^Wwhite^N high-top Converse(TM) All-Stars sneakers
+RoomDesc:$
+A pair of ^rdark red^N and ^Wwhite^N high-top Converse(TM) All-Stars sneakers sit here.~
+LookDesc:$
+These sneakers were unmistakable, no matter where or when you were born, and
+if you don't recognize them, you should be dragged outback and shot on the
+spot. The Converse(TM) All-Star series has been going strong longer than most
+dragons have been around, most of their purchases coming by way of die-hard
+customers of the brand. This particular set was ^rdark red^N with a standard
+^Wwhite^N trim, the Converse(TM) logo stamped blatently on the side of the ankle.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	45
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15852
+Keywords:	a pair of ^Lblack^N and ^Wwhite^N high-top Converse(TM) All-Star sneakers 
+Name:	a pair of ^Lblack^N and ^Wwhite^N high-top Converse(TM) All-Star sneakers
+RoomDesc:$
+A pair of ^Lblack^N and ^Wwhite^N high-top Converse(TM) All-Star sneakers sit here.~
+LookDesc:$
+These sneakers were unmistakable, no matter where or when you were born, and
+if you don't recognize them, you should be dragged outback and shot on the
+spot. The Converse(TM) All-Star series has been going strong longer than most
+dragons have been around, most of their purchases coming by way of die-hard
+customers of the brand. This particular set was ^Lblack^N with a standard ^Wwhite^N
+trim, the Converse(TM) logo stamped blatently on the side of the ankle. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	45
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15853
+Keywords:	a pair of ^Wcrisp white^N Up-Town sneakers
+Name:	a pair of ^Wcrisp white^N Up-Town sneakers
+RoomDesc:$
+A pair of ^Wcrisp white^N Up-Town sneakers sit here.~
+LookDesc:$
+These pristine white sneakers are better known as 'Air Force Ones's, a
+matching white stitched inlay of the Nike(TM) emblem can be found on either
+outside of the shoe and small black lettering upon the side of the sole
+reading 'Air'. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	45
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15854
+Keywords:	a pair of Collezione pure ^Lleather^N apron shoes
+Name:	a pair of Collezione pure ^Lleather^N apron shoes
+RoomDesc:$
+A pair of Collezione pure ^Lleather^N apron shoes sit here.~
+LookDesc:$
+Crafted from soft leather for an impeccable finish, these elegant shoes
+combine a unique hand stitched design with Italian styling, providing superior
+flexibility and comfort. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15855
+Keywords:	a pair of pure ^yleather^N Gibson brogues 
+Name:	a pair of pure ^yleather^N Gibson brogues
+RoomDesc:$
+A pair of pure ^yleather^N Gibson brogues are sitting here.~
+LookDesc:$
+With Jeffery-West's signature design providing a thoroughly modern formal
+finish, these shiny pure leather brogues feature fetching stitching and a
+classic square toe.  
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15856
+Keywords:	a pair of Collezione pure ^Lleather^N classic brogues
+Name:	a pair of Collezione pure ^Lleather^N classic brogues
+RoomDesc:$
+A pair of Collezione pure ^Lleather^N classic brogues are sitting here.~
+LookDesc:$
+Crafted from soft leather for an impeccable finish, these elegant shoes
+combine a unique hand stitched design with Italian styling, providing superior
+flexibility and comfort.  
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15857
+Keywords:	a wide-brimmed, ^Wwhite^N Panama summer hat
+Name:	a wide-brimmed ^Wwhite^N Panama summer hat
+RoomDesc:$
+A wide-brimmed ^Wwhite^N Panama summer hat is lying here.~
+LookDesc:$
+The traditional Panama hat has been revisited this season by combining a
+lightweight fabric with a broad brim - an easy style for laid-back summer
+days. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15858
+Keywords:	a classic luxury Panama hat with a ^Lblack^N band 
+Name:	a classic luxury Panama hat with a ^Lblack^N band
+RoomDesc:$
+A classic luxury Panama hat with a ^Lblack^N band is lying here.~
+LookDesc:$
+Ideal for casual evenings out, the broad brim hat is a stylish alternative to
+a beanie. Conveying a strong image, its a great way to add a bit of character
+to your look. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15859
+Keywords:	a Borsalino 'Ultimo' ^ybrown^N beaver fur fedora
+Name:	a Borsalino 'Ultimo' ^ybrown^N beaver fur fedora
+RoomDesc:$
+A Borsalino 'Ultimo' ^ybrown^N beaver fur fedora is lying here.~
+LookDesc:$
+A 100% beaver fur felt fedora for men, like the Stingy Ultimo, but with
+slightly larger brim at 2 3/8 inches. Fully-lined, hand-sewn leather
+sweatband. Imported from Italy.  
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15860
+Keywords:	a dark grey Borsalino 'Stingy Ultimo' fedora 
+Name:	a dark grey Borsalino 'Stingy Ultimo' fedora
+RoomDesc:$
+A dark grey Borsalino 'Stingy Ultimo' fedora is lying here.~
+LookDesc:$
+They should have called this fur felt fedora The Gorgeous. From Borsalino, The
+Stingy Ultimo Fedora is a fully-lined 100% beaver fur felt hat with a stingy
+two-inch brim. With its hand-sewn leather sweatband inserted for comfort, the
+Ultimo Fedora is sure to feel as good as it looks. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15861
+Keywords:	a Stetson ^Lblack fur felt^N 'Firenze' fedora
+Name:	a Stetson ^Lblack fur felt^N 'Firenze' fedora
+RoomDesc:$
+A Stetson ^Lblack fur felt^N 'Firenze' fedora is lying here.~
+LookDesc:$
+A Stetson top of the line fedora for men, the fur felt Firenze is of sovereign
+quality (it really is fit for a king). Made from an exquisite blend of beaver
+and rabbit, the hat has a smooth, silk-like finish and sports a grosgrain band
+with feather, comfort sweatband and satin lining. This particular hat comes in
+black, the brim is 2 3/8 inches.  
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15862
+Keywords:	a stylish, ^Woff^N-^Wwhite^N Baku porkpie hat
+Name:	a stylish, off-white Baku porkpie hat
+RoomDesc:$
+A stylish, off-white Baku porkpie hat is lying here.~
+LookDesc:$
+The use of Baku straw, gathered from around the Caspian Sea, is the reason why
+this classic pork pie hat has a lightweight feel and airy texture. Intricately
+woven, the alternating diamond pattern on the hat is highlighted by a two tone
+grosgrain band with the Borsalino name stitched in gold. The Baku Porkpie hat
+has a cooling grosgrain sweatband that comes in a variety of colours, this
+particular band is a light blue colour, the brim is 2 1/2 inches. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15863
+Keywords:	a two-tone ^Wwhite^N, handwoven 'Boss Hogg' straw dress hat
+Name:	a two-tone ^Wwhite^N handwoven 'Boss Hog' straw dress hat
+RoomDesc:$
+A two-tone ^Wwhite^N handwoven 'Boss Hog' straw dress hat is lying here.~
+LookDesc:$
+A straw cowboy hat for men, unlined and cool, is authentic western wear. This
+vented men's cowboy hat from Milano features a handsome two-tone weave and 4
+inch brim. There's a hand-fitted leather sweatband that'll add to your comfort
+level, and the straw hat has a tooled leather trim with silver buckle to
+complete the distinctive look. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15864
+Keywords:	a traditional ^bdark blue^N Homburg with a ^Lblack^N band 
+Name:	a traditional ^bdark blue^N Homburg with a ^Lblack^N band
+RoomDesc:$
+A traditional ^bdark blue^N Homburg with a ^Lblack^N band is lying here.~
+LookDesc:$
+This Homburg is about as nice as they come. Rich fur felt, satin lining,
+perfect shape. Done in traditional dark blue, you're starting to feel more
+gangster already. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15865
+Keywords:	a traditional ^rdark red^N Homburg with a ^Lblack^N band 
+Name:	a traditional ^rdark red^N Homburg with a ^Lblack^N band
+RoomDesc:$
+A traditional ^rdark red^N Homburg with a ^Lblack^N band is lying here.~
+LookDesc:$
+This Homburg is about as nice as they come. Rich fur felt, satin lining,
+perfect shape. Done in traditional dark red, you're starting to feel more
+gangster already. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15866
+Keywords:	jacket polyester huggy bear orangutan-orange lengthy
+Name:	a lengthy, ^yorangutan^W-^yorange^N 'Huggy Bear' polyester jacket
+RoomDesc:$
+A lengthy, ^yorangutan^W-^yorange^N 'Huggy Bear' polyester jacket is lying here.~
+LookDesc:$
+This is the mack that set those Hos back. The 70's orangutan-orange, polyester
+suit jacket with real leather lapels and pocket covers is part of a 3 peice
+pimp suit. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val4:	2
+	Val5:	3
+	Val6:	1
+BREAK
+#15867
+Keywords:	a fully lined, ^yorangutan^N-^yorange^N vest 
+Name:	a fully lined, ^yorangutan^W-^yorange^N vest
+RoomDesc:$
+A fully lined, ^yorangutan^W-^yorange^N vest is lying here.~
+LookDesc:$
+This fly ass vest is part of a 3-peice 'Huggy Bear' polyester suit, gotta
+match if you wanna mack.  
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	2
+BREAK
+#15868
+Keywords:	a pair of wide, ^yorangutan^N-^yorange^N bell-bottom pants 
+Name:	a pair of wide, ^yorangutan^W-^yorange^N bell-bottoms
+RoomDesc:$
+A pair of wide, ^yorangutan^W-^yorange^N bell-bottoms are lying here.~
+LookDesc:$
+These slick ass 'Huggy Bear' bellbottoms, the the wide pant legs will fit over
+any size platform shoes.  
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	2
+BREAK
+#15869
+Keywords:	overcoat fully lined dark red five-button
+Name:	a fully lined, crushed ^rdark red^N velvet five-button overcoat
+RoomDesc:$
+^gA fully lined, ^rdark red^g overcoat is laying the smack down here.^N~
+LookDesc:$
+The Millennium Mack is here! Even The Magic Don would be proud to rep this
+crushed red velvet, five-button, fully lined coat.  
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	10000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	4
+	Val3:	4
+	Val4:	4
+	Val5:	5
+	Val6:	3
+	Val7:	9
+BREAK
+#15870
+Keywords:	a pair of ^rdark red^N super slick slacks 
+Name:	a pair of ^rdark red^N super slick slacks
+RoomDesc:$
+A pair of ^rdark red^N super slick slacks are laying here.~
+LookDesc:$
+You'll need these loose fitn slacks cuz room is the key, when you hung to the
+knee. These pimp pants fit the big ballers from 28" to 44" waist and have
+extra length in the inseam to fit those fish tank plats.  
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	2
+BREAK
+#15871
+Keywords:	overcoat pimp fur pristine plush white
+Name:	a plush, ^Wpristine white^N pimp fur overcoat
+RoomDesc:$
+A plush pristine ^Wwhite^N pimp fur overcoat sits here.~
+LookDesc:$
+This plush, ^Wwhite^N pimp fur coat has a silky smooth platinum lining on the
+inside for added comfort. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val5:	4
+	Val6:	2
+	Val7:	8
+BREAK
+#15872
+Keywords:	a slick, ^Wplatinum^N satin collared shirt 
+Name:	a slick ^Wplatinum^N satin collared shirt
+RoomDesc:$
+A slick ^Wplatinum^N satin collared shirt lays here.~
+LookDesc:$
+This platinum satin shirt with a 70s style collar is pressed up straight so
+they know you's a big baller. These shirts are loose (like your Ho's) and come
+in sizes that will even fit all you XXL Playas. 
+~
+Type:	Worn
+WearFlags:	100000010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	1
+BREAK
+#15873
+Keywords:	a pair of slick, ^Wpristine white^N slacks 
+Name:	a pair of slick, ^Wpristine white^N slacks
+RoomDesc:$
+A pair of slick, ^Wpristine white^N slacks lay here.~
+LookDesc:$
+You'll need these loose fit'n slacks cuz room is the key, when you hung to the
+knee. These pimp pants fit the big ballers from 28" to 44" waist and have
+extra length in the inseam to fit those fish tank plats. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	2
+BREAK
+#15874
+Keywords:	a crisp ^Wwhite^N collared dress shirt 
+Name:	a crisp ^Wwhite^N collared dress shirt
+RoomDesc:$
+A crisp ^Wwhite^N collared dress shirt lies here.~
+LookDesc:$
+This clean and pressed collared white dress shirt is ready to give you that
+almost corporate look, while remaining one fly ass son of a bitch. 
+~
+Type:	Worn
+WearFlags:	100000010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+BREAK
+#15875
+Keywords:	slick oakley-ban shades
+Name:	A pair of slick ^Lblack^N oakley-ban shades
+RoomDesc:$
+A pair of slick looking shades lies on the floor.~
+LookDesc:$
+These sleek, sporty wrap-around style shades were very popular in the late
+20th century, and even today enjoy some marginal success with the younger
+crowd. The dark, almost jet black tint the lenses offered were perfect for
+those cool types who just had to wear all black, and they went wonderfully
+with leather outfits as well, perfect for that poser in you! Oakley(TM) has
+certainly outdone themselves this time around, giving the frontrunner consumer
+exactly what they wanted. Their signature 'O' emblem is stamped onto the
+sides, just so everyone knew what you were wearing. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	8
+	Cost:	3250
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15876
+Keywords:	grindmaster VX-2P pour-over coffee brewer
+Name:	A Grindmaster(TM) ^LVX^N-^L2P^N pour-over coffee brewer
+RoomDesc:$
+A compact coffee maker sits here, brewing up some java.~
+LookDesc:$
+Grindmasters(TM) line of pour-over brewers combines durable stainless steel
+construction and a space saving design. These economical and dependable units
+brew into airpot or decanters to offer a variety of coffee types and flavors.
+This model features two warmers, lighted switches to indicate when warmers are
+"On" and a front pour-in basin conveniently located on the top front of the
+machine. Complete with an attractive black and clean stainless steel
+appearance styled to compliment any decor or setting. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	8
+	Cost:	4750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	100
+	Val2:	2
+BREAK
+#15877
+Keywords:	a slick looking ^Lblack^N digital wristwatch
+Name:	a slick looking ^Lblack^N digital wristwatch
+RoomDesc:$
+A slick looking ^Lblack^N digital wristwatch sits here.~
+LookDesc:$
+This peice of electronics is pretty straight foward, its a watch (obviously),
+and it comes stacked with all the extras, like an alarm clock and stopwatch
+for starters, and a keen dark red LCD display screen. It also has a concealed
+camera setting. 
+~
+Type:	Worn
+WearFlags:	101000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15878
+Keywords:	a real ^gA^rl^yl^gi^rg^ya^gt^ro^yr^N skin wallet by Fendi
+Name:	a real ^gA^rl^yl^gi^rg^ya^gt^ro^yr^N skin wallet by Fendi
+RoomDesc:$
+An expensive designer wallet sits here.~
+LookDesc:$
+This wallet is made from real alligator skin by the well established European
+fashion designer Fendi. It is one of the nicest wallets you have ever seen.
+Totally functional with every kind of design built into it you have ever
+wanted. When you pull this out in public salespeople, waiters, and anyone you
+are dealing with suddenly become a little nicer to you. It's almost as nice as
+having an ebony credstick. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.20
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	5
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	-1
+BREAK
+#15879
+Keywords:	odd black-metal clockwork key
+Name:	An odd looking ^Lblack^N-^Lmetal^N clockwork key (Defunct)
+RoomDesc:$
+A very odd looking clockwork key lies here.~
+LookDesc:$
+This key featured a very odd amalgamation of different designs, and was
+crafted mostly from a ^Lmatte^N-^Lblack^N, high carbon steel. For starters it had a
+large, flat clockwork bow, reminicent of an old wind-up clock or toy. Its
+collar was engraved with small archaic runes inlaid with high quality ^Wsilver^N,
+while traveling down along the shank until it hit the shoulder was a sleeve of
+polished ^Ls^Wn^Lo^Ww^Lf^Wl^La^Wk^Le o^Wb^Ls^Wi^Ld^Wi^La^Wn^N. Its shoulder on the other hand was composed of
+three bands of metal, all of high quality, one ^Wsilver^N, the other ^Ygold^N, both
+surrounding a thicker band of sparkling orichalcum. The stem was a late 16th
+century Bramah design with awkward angles and tips ending with electronic
+receptors, while the bit itself was an odd looking microchip. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1001101000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.05
+	Barrier:	24
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15880
+Keywords:	SOTA autonomous Sentry smart gun turret
+Name:	A SOTA autonomous Sentry(TM) 'Smart Gun' turret
+RoomDesc:$
+A SOTA autonomous Sentry(TM) 'Smart Gun' turret swivels around here.~
+LookDesc:$
+This autonomous security system is a SOTA model Sentry(TM) 'Smart Gun', which
+incorporates sophisticated low light, thermographic and ultrasound targeting
+and tracking systems into an advanced tactical-analysis data processing system
+thats linked into the buildings own security sensors. Between the biometric
+scanners, security rigger input and various other security protocols set in
+place, the sentry system is able to effectively offer defensive and very
+lethal fire over a fairly wide area and initiate multiple threats at once. The
+array of sensory input allows the system to guard against nearly any
+concievable threat, and since it was built around a modified heavy assault
+rifle set-up, it looks as if it could drop just about anything it feels it
+needs to. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	250.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15881
+Keywords:	digital Funk-a-Deliks home theatre system
+Name:	A digital '^LFunk^r-^La^r-^LDeliks^r(^WTM^r)^N' home theatre system
+RoomDesc:$
+An expensive home theatre system with massive speakers stands here.~
+LookDesc:$
+This home theatre system includes a 1800W 'Mega-Power' fully programmable
+CD/OC-Audio/Video package with two front surround speakers (5.2ch selectable),
+a set of two-way side speakers, a wide centeral speaker for your deep bass
+needs, as well as two thin surround-sound speakers for high quality tenor:
+Featuring HDMI input (1080p Pass-Through), digital direct progressive scan
+output, USB host connection and Dir-X ultra playback. It is fully capable of
+processing ACT and Dir-X simsense with the correct accessories, such as
+simlinks and headsets, as well as direct connection for users equiped with
+their own internal jacks. Simple connection methods can also be used to adapt
+and link it up to almost any standard trideo system to make for an all
+inclusive home entertainment center. 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	75.00
+	Barrier:	12
+	Cost:	8200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15882
+Keywords:	sony beautiful dreamer simsense deck
+Name:	A Sony^L(^WTM^L)^N '^cB^Leautiful ^cD^Lreamer II^N' simsense deck
+RoomDesc:$
+An high-quality simsense deck waits to be jacked into here.~
+LookDesc:$
+This high-quality simsense deck is brought to you by Sony, the specific model
+line of it is denoted as a "Beautiful Dreamer - II". This simulated sensory
+impression playback device allows the user to jack in and experience
+recordings and sensations as if they were actually there. It is fully capable
+of handling both baseline and full-x classification recordings, as well as
+poly-POV and multi-POV perspective outputs depending on the desired recordings
+output, not to mention Dir-X (Direct Experience) and ACT (ASIST Control
+Transport) formats. With a bit of modifcation and warranty breaking, it seems
+plausible it could also handle an illegal BTL format. A dataport in the back
+also allows one to connect it via simlink optic-cables to a cyberdeck and
+download hosted programs from various simsense sites on the matrix. It has
+seperate slots to accept both CD and OC (optical chip) recordings. 
+~
+Type:	Worn
+WearFlags:	10001000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	5.00
+	Barrier:	12
+	Cost:	5800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	1
+BREAK
+#15883
+Keywords:	expensive tailored pinstripe pants
+Name:	a pair of expensive, tailored pinstripe suit pants
+RoomDesc:$
+A pair of finely tailored suit pants are folded neatly here.~
+LookDesc:$
+These pants are very rare and original to say the least and are constructed
+from a blend of fine italian black silk and high twisted wool. They are
+perfectly tailored and lined to the knee, made to compliment a suit jacket of
+the same design to make for an extremely fashionable wardrobe set. The pockets
+are tailored to not only allow storage, but to keep from taking away from the
+design and look of the garment even when they're packed full of whatever you
+might want to keep in them. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.05
+	Barrier:	8
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val4:	4
+BREAK
+#15884
+Keywords:	satin silk forzieri tie
+Name:	a solid ^Wsilver^N pure satin silk Forzieri tie
+RoomDesc:$
+An expensive silk tie is hanging neatly here.~
+LookDesc:$
+This will undoubtedly add a touch of class to your office wardrobe, with the
+help of this beautifully crafted satin silk tie by Forzieri. Its subtle sheen
+looks incredibly elegant with muted hues and clean, crisp lines. Made in
+Italy. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.05
+	Barrier:	6
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15885
+Keywords:	pair two-tone vinci shoes
+Name:	a pair of two-tone ^Lblack^N and ^Wwhite^N 'Vinci' leather shoes
+RoomDesc:$
+A pair of two-tone leather dress shoes sit together here.~
+LookDesc:$
+A perfect union of european-inspired styling and hand-crafted design. These
+Italian made shoes are a contemporary take on a classic wing-tip done in a
+two-tone ^Lblack^N and ^Wwhite^N leather with elegant designs, great for any sort of
+business or fancy dress occasion. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.05
+	Barrier:	8
+	Cost:	2800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15886
+Keywords:	slick gangster fedora hat
+Name:	a slick ^Lblack^N gangster styled fedora
+RoomDesc:$
+Someone left a gangster styled fedora hanging here.~
+LookDesc:$
+The gangster hat, more commonly called a fedora hat, first appeared around
+1908. Since that time, gangster hats have become the most preferred of all
+men's hats, with gangster hats being the most popular during the swing era and
+the days of the Chicago mobs. The gangster fedora hat has been associated with
+characters on both sides of the law, they have been seen on everyone from Al
+Capone to Elliot Ness, and Frank Sinatra. This gangster hat has a 2 3/8" brim
+and is made of crushable black wool felt (so it keep its great shape). Because
+it's soft, it is an easy hat to personalize by breaking down the brim in the
+front, back and sides, or pinching the crown in varying degrees. You can flip
+it all kinds of ways, put it on and shape it the way you want it. It's like
+wearing a new hat everyday. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.05
+	Barrier:	8
+	Cost:	1800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15887
+Keywords:	battletac master tactical computer component
+Name:	a BattleTac Master tactical computer
+RoomDesc:$
+A small, tactical computer system sits on the floor here.~
+LookDesc:$
+The BattleTac system integrates tactical communications and data transfer into
+a battlefield information exchange network, and is capable of quickly and
+effeciently giving essential tactical information, such as mapping features,
+enemy identification and positioning, current status of individuals, targeting
+data, tactical requests and commands, as well as video feeds and other
+factors. The master component inputs sensory data from a number of linked
+sources and transmits them to BattleTac receiver components via either a laser
+link, micro-wave link, or a satellite uplink feed. This unit is capable of
+being controlled with a datajack or a DNI device, and can be connected
+manually via multiple data cables to share information with other electronic
+sensors and information devices. 
+~
+Type:	UNDEFINED
+WearFlags:	10000000000000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	30000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15888
+Keywords:	battletac computer receiver component unit
+Name:	a BattleTac computer receiver unit
+RoomDesc:$
+A small, tactical receiver computer system sits here.~
+LookDesc:$
+The BattleTac receiver component is used to transmit information back to a
+master component, as well as receiving the tactical data and analysis sent
+back by its linked master computer unit. This tactical information consists of
+but is not limited to: Mapping features, enemy identification and positioning,
+current status of individuals within the linked exchange, targeting data,
+tactical requests and commands, as well as video feeds and other factors. The
+receiver component receives its information either by laser link, micro-wave
+link, or a satellite uplink feed. Essentially, when used in conjunction with a
+master unit, this receiver is capable of providing the user with a multimedia
+display of the situation and allowing them to response more quickly and
+effectively to a tactical situation. This unit can be used either manually, or
+connected and controlled via datajack or DNI link. 
+~
+Type:	UNDEFINED
+WearFlags:	10000000001000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15889
+Keywords:	an eyeball with electronic markings
+Name:	an eyeball with electronic markings
+RoomDesc:$
+An eyeball rolls around here.~
+LookDesc:$
+This odd looking orb seems to be crafted from an optical sensory array, and
+has all the tell-tale signs of an eyeball, granted that its cornea and pupil
+have been replaced with embedded electronic information and sequences. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15890
+Keywords:	odd black-metal clockwork key
+Name:	An odd looking ^Lblack^N-^Lmetal^N clockwork key
+RoomDesc:$
+A very odd looking clockwork key lies here.~
+LookDesc:$
+This key featured a very odd amalgamation of different designs, and was
+crafted mostly from a ^Lmatte^N-^Lblack^N, high carbon steel. For starters it had a
+large, flat clockwork bow, reminicent of an old wind-up clock or toy. Its
+collar was engraved with small archaic runes inlaid with high quality ^Wsilver^N,
+while traveling down along the shank until it hit the shoulder was a sleeve of
+polished ^Ls^Wn^Lo^Ww^Lf^Wl^La^Wk^Le o^Wb^Ls^Wi^Ld^Wi^La^Wn^N. Its shoulder on the other hand was composed of
+three bands of metal, all of high quality, one ^Wsilver^N, the other ^Ygold^N, both
+surrounding a thicker band of sparkling orichalcum. The stem was a late 16th
+century Bramah design with awkward angles and tips ending with electronic
+receptors, while the bit itself was an odd looking microchip. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1001101000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.05
+	Barrier:	24
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15891
+Keywords:	lockbox box safe unit
+Name:	a massive ^Lblack^N-^Lmetal^N lockbox and safe unit
+RoomDesc:$
+^gA massive ^Lblack^g-^Lmetal^g lockbox and safe unit rests here.^N~
+LookDesc:$
+This entire unit could be considered a beautiful work of art in its own right,
+even though its purpose to house valuables and other such items. The unit is
+lined with multiple lockboxes and small safes, ranging from the more mundane
+to the SOTA electronic security measures, and even some which are lined with
+precious metals and other powerful telesma combined with magical wards of
+various sorts. Its sturdy ^Lmetallic black^N construction is surprisingly
+lightweight for such a massive setup of thickly lined locked containers. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	1000010
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	24
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	510
+	Val1:	15
+	Val2:	15890
+	Val3:	50
+BREAK
+#15892
+Keywords:	book nine shadowrunner commandments
+Name:	a book labeled: The Nine Shadowrunner Commandments
+RoomDesc:$
+^gA heavy ^Lblack^g book has been left sitting here.^N~
+LookDesc:$
+This heavy, bound hardcover book has a jacket of sturdy ^Lblack^N synth-leather.
+Upon its surface is inlaid in ^Ygold filigree^N, which reads: "The Nine
+Shadowrunner Commandments". (Read Chapter1 - Read Chapter9). 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	Chapter9
+	Desc:$
+Commandment #9: You Word Is Your Bond - The whole point of these rules is to build some kind of trust between runners and Johnsons. Laugh all you want, but that's the deal. Shadowrunners and those who hire them have to be able to trust each other, if only a little, or the whole system falls apart. A Johnson who gets a reputation for fragging over runners and hiring for suicide missions won't be able to hire very many runners after a while. A runner who gets a rep for burning employers and flapping his lips
+ about every run will end up unemployable (or floating face down in the nearest body of water). This is where the quality they used to call honor comes in. If you tell a Johnson you're going to do something, do it. If a Johnson betrays you, make sure everyone knows it. Remember, the shadows work both ways. The corps need us like we need them; they don't want a rogue Johnson making them target number one (or worse, blacklisted by the quality talent). The pressure is on a corp with a rogue Johnson is immense
+-- and if you get the plum job of hunting the bastich down, think of where you stand with the corp and the shadow community.
+~
+[EXTRADESC 1]
+	Keywords:	Chapter8
+	Desc:$
+Commandment #8: Maintain Silence - This rule is related to not fragging over your employer. Once you've finished a run, keep your mouth shut about it. The corp is paying for your silence along with your expertise. That means don't go blabbing at the local watering hole about the latest run you pulled off, don't post the gory details all over the Matrix and don't go telling your friends how you helped pull off the run of the century. If you just have to talk about a run on a secure node like Shadowland, at 
+least change the names and dates to protect your employer's interests. If word leaks about a run, Mr. Johnson will come looking for you first. And if you think that having this information gives you something to hold over Mr. Johnson's head, think again. It just makes you worth more to him dead than alive. On the other hand, share as much as you can with your runner chummers. I know that sounds like a contradiction, but if you tell us about the bleeding-edge security measures at a Novatech site you just hi
+t, we don't care who hired you or why-- we just need to know the stuff that may impact us.
+~
+[EXTRADESC 2]
+	Keywords:	Chapter7
+	Desc:$
+Commandment #7: Don't Frag Over Your Employer - Pay attention; the next
+sentence is the most important one you'll ever read. DO NOT FRAG OVER YOUR
+EMPLOYER. A shadowrunner who gets caught double-dealing or trying to betray an
+employer is almost certainly a dead shadowrunner. Even if you manage to
+survive scamming your Johnson, you can pretty much forget about ever working
+the shadows again. (You can always change your name and face, or go somewhere
+they've never heard of you, but it better be somewhere your Johnson and his
+corporation can't find you.) Corporations rely on shadowrunners, but they
+can't afford to let runners think they can pull drek and get away with it.
+Shadowrunners who turn against their employers are usually made an example for
+the rest of us. I've seen a few in my time, and I learned my lesson well.
+Don't frag with Mr. Johnson-- It's just not worth it. 
+~
+[EXTRADESC 3]
+	Keywords:	Chapter6
+	Desc:$
+Commandment #6: Limit Collateral Damage - The corps expect a certain number of
+shadowruns to happen; that's the price of doing business. However, the more
+damage you do, the more you cost the corp. The more you cost it, the more
+likely the corp is to come down hard on you. In other words, never make it
+more worthwhile for the corp to geek you than to leave you alone. Collateral
+damage means wrecking anything you don't absolutely need to in order to get at
+your target; killing or wounding corporate personnel, destroying corporate
+property, trashing security systems and so forth. The ideal shadowrun leaves
+no clue that you were ever there. The less damage you do, the better.
+Generally, Johnsons want their runs done quietly, which means not following a
+trail of bodies behind you for corp security to follow. Of course, if your
+client wants collateral damage-- Go nuts! 
+~
+[EXTRADESC 4]
+	Keywords:	Chapter5
+	Desc:$
+Commandment #5: Take Care Of Your Sources - Your contacts are some of the most
+valuable resources you've got. Take care of them and they'll take care of you.
+That means protecting their identity of your sources, and not asking about
+other people's (a sure sign of a newbie shadowrunner). Don't put your sources
+in positions you wouldn't want to be in. If you've got a friend working for a
+corp, and she passes information on to you that gets her fired, you've just
+lost a contact as well as a friend. Make sure to reward your contacts for
+helping you out. 
+~
+[EXTRADESC 5]
+	Keywords:	Chapter4
+	Desc:$
+Commandment #4: Do Your Homework - On the other hand, you should find out as
+much as you can on your own. It's considered bad form to let a Johnson know
+you're checking up on him, but it's also stupid not to do a little sniffing
+around to make sure of a Johnson's motives and ties. Likewise, when it comes
+to the run, do your legwork, it may save your life as well as your rep. Find
+out all you can about your target before you make the run. Talk to your
+contacts and find out what they know. Put together a plan in advance, and a
+backup for when Plan A gets shot to hell (it almost always does). Above all,
+remember that no plan ever survives contact with the enemy. 
+~
+[EXTRADESC 6]
+	Keywords:	Chapter3
+	Desc:$
+Commandment #3: Don't Ask Too Many Questions - Simple fact of life; your Mr.
+Johnson won't tell you everything. He won't tell you his real name, who he
+really works for or why he's really hiring you, and half the time he won't
+even tell you the point of the shadowrun. Everything in the shadows is on a
+need-to-know basis, and most of the time runners don't need to know. In fact,
+the more you know, the worse off you are in a lot of wags; even in this day
+and age, there's such a thing as "knowing too much." A Johnson who thinks
+you're too much of a risk is likely to try to have you silenced, permanently.
+~
+[EXTRADESC 7]
+	Keywords:	Chapter2
+	Desc:$
+Commandment #2: Don't Embarrass Yourself - You're supposed to be a
+professional, so act like one. I can't tell you how many times i've gone into
+meets with runners who are fresh out of some urban hellhole like the Redmond
+Barrens or El Infierno. They're usually gangers or ex-gangers accustomed to
+being hot drek on the streets. They bluster, show off and play dominance games
+with the Johnson, like he even cares who's the big man in the Sprawl. Most of
+those runner wannabes got passed over, or worse, hired as cannon fodder for
+suicide runs. Don't be stupid. Want to be treated like a professional? Then BE
+professional. 
+~
+[EXTRADESC 8]
+	Keywords:	Chapter1
+	Desc:$
+First Commandment: Don't Get Caught - Rule Numero Uno of shadowrunning.
+Whatever you do, don't get caught doing it. The corps may regard a certain
+amount of shadowrunning as part of doing business, but don't expect that to
+help you if you set off an alarm in the middle of a high-security corporate
+compound. The guards won't buy "Hey, chummers, it's just biz!", and your
+employer will deny ever hiring you. Runners who frag up usually die: even if
+they live, their reputation will have gone down the tubes. 
+~
+BREAK
+END

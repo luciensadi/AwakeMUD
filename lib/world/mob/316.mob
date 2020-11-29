@@ -1,0 +1,451 @@
+#31600
+Keywords:	tiny three-toed sloth
+Name:	A tiny three-toed sloth
+RoomDesc:$
+A tiny three-toed sloth hides here behind a grapefruit. 
+
+~
+LookDesc:$
+This small sloth appears to be wearing a traditional japanese ninja costume,
+as you bend down closer to look at it you feel its presence inside your mind.
+~
+ArriveMsg:	crawls in at a snails pace from
+LeaveMsg:	crawls out at a snails pace to
+MobFlags:	100001100
+AffFlags:	1000000000
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	15
+	Int:	15
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	10
+	Weight:	5
+	Ballistic:	20
+	Impact:	20
+	Cash:	100000
+	Bank:	50000
+[SKILLS]
+	brawling:	12
+	stealth:	20
+	edged weapons:	20
+BREAK
+#31601
+Keywords:	mitsuhama security guard elite forces
+Name:	a Mitsuhama special division soldier
+RoomDesc:$
+A Mitsuhama special division soldier stands here, looking mean. 
+
+~
+LookDesc:$
+This heavily armoured behemoth towers up to a staggering 9 feet, thanks to a
+custom designed exoskeleton. As his heavy footsteps echo through the room, you
+realize that you have fragged with the wrong corp. 
+~
+ArriveMsg:	thunders in from
+LeaveMsg:	walks
+MobFlags:	1001100000011010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	1
+	Int:	9
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	2700
+	Weight:	350
+	Ballistic:	18
+	Impact:	12
+	Karma:	96
+[SKILLS]
+	assault cannons:	12
+	brawling:	12
+	corporate etiquette:	3
+	assault rifles:	10
+BREAK
+#31602
+Keywords:	captain guard leopard 
+Name:	a leopard guard captain
+RoomDesc:$
+A Leopard Guard Captain checks all his troops' positions. 
+
+~
+LookDesc:$
+The captain sports the same golden yellow body armour as the Leopard
+guards, save for the silver stars on his shoulder. Rather than the
+traditional decoration on the chest, the captain has three stars
+pinned to his right shoulder. He also seems to be sporting a more
+advanced weapon.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	8
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	firearms:	20
+	brawling:	20
+	armed combat:	20
+BREAK
+#31603
+Keywords:	lieutenant red samurai man renraku
+Name:	a Red Samurai Lieutenant
+RoomDesc:$
+A Red Samurai Lieutenant watches over you and his guards. 
+
+~
+LookDesc:$
+The Lieutenant watches over the guards in his patrol, and is held directly
+responsible for their actions and mistakes. Thus, he drills all of them to a
+degree no man would choose to swap with. The Lieutenant is marked out by a
+yellow streak across his red sash. 
+~
+ArriveMsg:	marches in from
+LeaveMsg:	leaves
+MobFlags:	10101110000000001000
+AffFlags:	1000000000001000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	11
+	Str:	10
+	Cha:	3
+	Int:	9
+	Wil:	9
+	Mag:	5
+[POINTS]
+	Height:	180
+	Weight:	96
+	Level:	3
+	Ballistic:	6
+	Impact:	6
+	Bank:	12495
+	Karma:	40
+[SKILLS]
+	edged weapons:	11
+	sorcery:	6
+BREAK
+#31604
+Keywords:	elite Novatech security enforcer
+Name:	An elite Novatech security enforcer
+RoomDesc:$
+An elite Novatech security enforcer patrols the area with rifle in hand. 
+
+~
+LookDesc:$
+Cold black eyes can barely be seen through the visor of this security guard's
+helmet. A dangerous looking rifle is in his hands, ready to drop any intruder
+he detects. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	100000001000001000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	8
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Bank:	1000
+[SKILLS]
+	rifles:	10
+	brawling:	9
+BREAK
+#31605
+Keywords:	elite novatech security mage
+Name:	An elite Novatech Security Mage
+RoomDesc:$
+A Novatech Security Mage is here, ready to slice an intruder's head off. 
+
+~
+LookDesc:$
+A wicked scimitar in one hand, a pool of magical energy in the other, this
+mage is a force to be reckoned with, more than capable of taking down entire
+squads of men with ease. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110000000001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	9
+	Str:	8
+	Cha:	8
+	Int:	8
+	Wil:	9
+	Mag:	7
+[POINTS]
+	Height:	180
+	Weight:	100
+	Ballistic:	7
+	Impact:	7
+	Cash:	3000
+	Bank:	10000
+[SKILLS]
+	edged weapons:	11
+	brawling:	7
+	sorcery:	8
+	:	1
+BREAK
+#31606
+Keywords:	captain swat lone star swatcapt
+Name:	a Lone Star SWAT Captain
+RoomDesc:$
+A Lone Star SWAT Captain stands here proudly, determined to make order. 
+
+~
+LookDesc:$
+A grizzled tough old SWAT captain with plenty of experience. 
+~
+ArriveMsg:	marches out to
+LeaveMsg:	marches out to
+MobFlags:	1010
+AffFlags:	1000011000000000001000
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	12
+	Str:	10
+	Cha:	12
+	Int:	8
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	150
+	Ballistic:	12
+	Impact:	8
+[SKILLS]
+	stealth:	10
+	athletics:	10
+	firearms:	11
+	brawling:	10
+	driving/Car:	12
+BREAK
+#31607
+Keywords:	medit swat lone star swatmedi
+Name:	a Lone Star SWAT medic
+RoomDesc:$
+A Lone Star SWAT medic stands here, ready to clean up. 
+
+~
+LookDesc:$
+The cream of the crop in Lone Star's Security Forces.
+~
+ArriveMsg:	hurries in from
+LeaveMsg:	runs out to
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Shotgun
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	9
+	Cha:	1
+	Int:	10
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Ballistic:	10
+	Impact:	6
+[SKILLS]
+	stealth:	10
+	shotguns:	12
+	brawling:	9
+	athletics:	10
+	biotech:	12
+BREAK
+#31608
+Keywords:	corporal swatcorp lone star
+Name:	A Lone Star SWAT corporal
+RoomDesc:$
+A Lone Star SWAT corporal stands here, rifle raised. 
+
+~
+LookDesc:$
+The cream of the crop in Lone Star's Security Forces.
+~
+ArriveMsg:	runs out to
+LeaveMsg:	
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	9
+	Cha:	1
+	Int:	10
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Ballistic:	10
+	Impact:	6
+[SKILLS]
+	stealth:	10
+	rifles:	12
+	brawling:	9
+	athletics:	10
+	tasers:	12
+BREAK
+#31609
+Keywords:	sergeant swat lone star
+Name:	A Lone Star SWAT sergeant
+RoomDesc:$
+A Lone Star SWAT sergeant stands here, shotgun ready. 
+
+~
+LookDesc:$
+The cream of the crop in Lone Star's Security Forces.
+~
+ArriveMsg:	runs in from
+LeaveMsg:	runs out to
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Shotgun
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	9
+	Cha:	1
+	Int:	10
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Ballistic:	10
+	Impact:	6
+[SKILLS]
+	stealth:	10
+	shotguns:	12
+	brawling:	9
+	athletics:	10
+	tasers:	12
+BREAK
+#31610
+Keywords:	
+Name:	Giant drop bear
+RoomDesc:$
+A giant drop bear is here, hanging from the ceiling. 
+
+~
+LookDesc:$
+It looks as if it is coming for Che. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	1000
+	Weight:	6000
+[SKILLS]
+BREAK
+#31611
+Keywords:	bandersnatch
+Name:	a mutated bandersnatch
+RoomDesc:$
+A huge, thickly furred humanoid stands here, saliva dripping from its jaws. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	charges in from
+LeaveMsg:	runs
+MobFlags:	110100000101000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	6
+	Str:	12
+	Cha:	1
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	400
+	Weight:	500
+	Ballistic:	4
+	Impact:	4
+[SKILLS]
+BREAK
+END

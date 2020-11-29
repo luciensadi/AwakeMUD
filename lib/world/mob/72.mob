@@ -1,0 +1,1028 @@
+#7201
+Keywords:	Lu Bei
+Name:	Lu Bei
+RoomDesc:$
+Lu Bei stands here, cleaning the counter top.  
+
+~
+LookDesc:$
+Behind the ivory counter stands Lu Bei. A mean looking Asian that'll whip your
+hoop in a second. He serves drinks so quickly you're not sure if he actually
+mixes them.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	10
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#7202
+Keywords:	Flying Dragon Waitress
+Name:	Flying Dragon Waitress
+RoomDesc:$
+A flying dragon waitress is taking orders here. 
+
+~
+LookDesc:$
+She looks of Asian descent and speaks broken English.  She has a certain
+beauty about her found only in Asian women.  Better flag her down before she
+heads back to the kitchen to place your order.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	50
+[SKILLS]
+BREAK
+#7203
+Keywords:	A flying dragon cook
+Name:	A flying dragon cook
+RoomDesc:$
+A flying dragon cook slaves away in the kitchen. 
+
+~
+LookDesc:$
+Working hard over a hot stove to prepare your meal.  This guy is cookin on the
+top burner. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bifurcate
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#7204
+Keywords:	A Flying Dragon Cook
+Name:	A Flying Dragon Cook
+RoomDesc:$
+A Flying Dragon Cook yells, "Get out of the kitchen!" 
+
+~
+LookDesc:$
+This chef is brandishing a large meat cleaver in your general direction, it
+might be wise to do as he says. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#7206
+Keywords:	Manager of The Flying Dragon
+Name:	The manager of the Flying Dragon
+RoomDesc:$
+The manager of the Flying Dragon sits behind his sdesk, working dilligently. 
+
+~
+LookDesc:$
+A humble little white man, who looks to be about eighty-nine.  He reminds you
+a little bit of that character from the Christmas show... What was his name..
+Scrooge?  In any case he's tallying up the restaraunts current cashier
+balance.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	6
+	Int:	10
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	50
+	Ballistic:	1
+	Impact:	1
+	Cash:	20
+[SKILLS]
+BREAK
+#7207
+Keywords:	Yun
+Name:	Yun
+RoomDesc:$
+Yun sits behind the bar polishing a glass. 
+
+~
+LookDesc:$
+A younger looking oriental man, who looks to be no older than his late
+twenties.  Yun seems to succesfully create the atmosphere of a vacationers'
+paradise inside his bar.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	125
+[SKILLS]
+BREAK
+#7208
+Keywords:	obie honest
+Name:	Honest Obie
+RoomDesc:$
+Honest Obie stands here selling equipment. 
+
+~
+LookDesc:$
+You see a short, fat dwarf.  He's wearing greasy overalls and an Urban Brawl
+cap.  And let's not forget the enormous stogie he's chomping on as well. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	5
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	70
+	Ballistic:	6
+	Impact:	5
+[SKILLS]
+	negotiation:	7
+BREAK
+#7209
+Keywords:	woman Rita
+Name:	Rita
+RoomDesc:$
+A woman in a white lab coat is working here. 
+
+~
+LookDesc:$
+Rita is a tall asian woman (an oxymoron perhaps?) wearing professional
+clothing.  Her hair is tied back in a rather severe looking bun.  She is also
+sporting a pair of ananchronistic plastic framed glasses. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+	Ballistic:	3
+	Cash:	3000
+	Bank:	4000
+[SKILLS]
+BREAK
+#7211
+Keywords:	doc oblivion man purple
+Name:	Doc Oblivion
+RoomDesc:$
+A man in a deep purple lab coat is sitting at his desk going through some
+papers. 
+
+~
+LookDesc:$
+The good doctor is wearing a deep purple lab coat.  His cybereyes have been
+modified so that as you gaze into them, they appear to have infinite depth. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	70
+	Ballistic:	4
+	Impact:	2
+	Cash:	50000
+	Bank:	50000
+[SKILLS]
+BREAK
+#7212
+Keywords:	small man xiang
+Name:	a small man
+RoomDesc:$
+A small man sits behind a makeshift table here. 
+
+~
+LookDesc:$
+This small Asian man is dressed in surplus army fatigues.  Though you
+don't see any obvious weapons on him, clearly from the disdain in his eye he
+doesn't think he'd have any trouble dispatching you.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Ballistic:	5
+	Impact:	3
+	Cash:	999999
+	Bank:	40000
+[SKILLS]
+	negotiation:	4
+BREAK
+#7213
+Keywords:	Domu
+Name:	Domu
+RoomDesc:$
+Domu is here, sharpening a unique looking katana. 
+
+~
+LookDesc:$
+He seems wize beyond his years.  His eyes hold a blazing fire of dedication to
+his work, masterpiece after masterpiece has been made by this man. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#7214
+Keywords:	Xhen
+Name:	Xhen
+RoomDesc:$
+Xhen sits with red eyes behind the counter. 
+
+~
+LookDesc:$
+Looking like he just got off the set of a Cheech and Chong Xhen is here ready
+to sell you whatever smoking utensils you need.  If he can remember the price
+that is... 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#7215
+Keywords:	Betty
+Name:	Betty
+RoomDesc:$
+Betty sits behind the counter, reading a horticulture book. 
+
+~
+LookDesc:$
+Betty looks to be about twenty-five, and in college.  She's very slender and
+seems to be oblivious to the world around here.  Her long blond hair has been
+twisted up above the back side of her head and held in place by a pencil.  As
+you enter her tiny little shop she peers up at you over a pair of half lensed
+reading glasses and smiles. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#7216
+Keywords:	Mystique
+Name:	Mystique
+RoomDesc:$
+A blue skinned night-one is here meditating, slightly elevated off the floor.
+
+~
+LookDesc:$
+She is extremely gorgeous, you almost can't take your eyes off of her.  She
+doesn't appear to be wearing any clothes, yet her long dark hair covers up
+anything that would be revealing.  As you enter the shop her eyes flutter open
+and fix on you, burning bright orbs of white light that chill you to the bone.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#7217
+Keywords:	Rosco fat little dwarven man dwarf
+Name:	Rosco
+RoomDesc:$
+A fat little dwarven man sits in a plush leather chair, reading a book. 
+
+~
+LookDesc:$
+ Looking rather comfortable in his plush leather chair and diligently
+devouring his book he hardly takes notice of anything else going on around
+him.  Thin metal spectacles rest peacefully on the end of his nose and a curly
+gray beard rests on his belly.  He seems not to have a care in the world, and
+could almost pass for Saint Nicholas.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	negotiation:	4
+BREAK
+#7218
+Keywords:	Si
+Name:	Si
+RoomDesc:$
+Si stands out from her sisters, ready to sell you something. 
+
+~
+LookDesc:$
+She looks like a typical Asian women.  Short, skinny, and darn good lookin' at
+the ripe old age of 24.  Better buy something from her.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#7219
+Keywords:	triad enforcer
+Name:	a Triad enforcer
+RoomDesc:$
+A Triad enforcer dressed in an impeccable suit keeps the peace here. 
+
+~
+LookDesc:$
+Dressed in an impeccable suit, this young Chinese man keeps a watch on the
+goings on around Chinatown. The general populace seem oblivious to his
+presence, but the local shopkeepers seem to treat him with genuine kindness an
+respect. 
+~
+ArriveMsg:	strides from
+LeaveMsg:	strides
+MobFlags:	1100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	5
+	Impact:	3
+	Cash:	20
+[SKILLS]
+	sub-machine guns:	7
+	brawling:	5
+BREAK
+#7220
+Keywords:	ganger triad elite
+Name:	an elite triad ganger
+RoomDesc:$
+An elite triad ganger stands here. 
+
+~
+LookDesc:$
+Dressed in a fine dark blue suit, he wouldn't look out of place in a board
+meeting. However, this is Chinatown, and an outfit like that means only one
+thing, Triad. His presenation is impeccable and he seems to possess a calm
+self assurance that would make any normal person nervous.  
+~
+ArriveMsg:	saunters casually from
+LeaveMsg:	saunters out to
+MobFlags:	1000000001100000101000
+AffFlags:	110100001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	3
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Ballistic:	9
+	Impact:	6
+	Cash:	100
+[SKILLS]
+	assault rifles:	6
+	brawling:	3
+	rifles:	9
+	:	2
+BREAK
+#7221
+Keywords:	ganger triad elite
+Name:	an ultra elite triad ganger
+RoomDesc:$
+An ultra elite triad ganger stands here. 
+
+~
+LookDesc:$
+This is one bad mambajama, better slot and run chumma. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001100000101100
+AffFlags:	110100001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	3
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Ballistic:	9
+	Impact:	6
+[SKILLS]
+	assault rifles:	6
+	brawling:	3
+	rifles:	9
+	:	2
+BREAK
+#7222
+Keywords:	asian man suit tatooed arms ken do shing triad lieutenant
+Name:	Ken Do Shing
+RoomDesc:$
+An asian man in a three piece suit with tattooed arms stands here. 
+
+~
+LookDesc:$
+Dressed in a three piece tres chic suit, he stands proudly.  Under his left
+eye is a very small tattoo of a Yin-Yang, and on his left hand the traditional
+chinese character for "ruler of the temple". 
+~
+ArriveMsg:	strides in from
+LeaveMsg:	strides off
+MobFlags:	101110000000011010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	15
+	Str:	20
+	Cha:	6
+	Int:	6
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	177
+	Weight:	75
+[SKILLS]
+	edged weapons:	15
+	brawling:	15
+	sorcery:	15
+	sub-machine guns:	12
+BREAK
+#7223
+Keywords:	man old shing
+Name:	Shing
+RoomDesc:$
+An old man practices martial arts here. 
+
+~
+LookDesc:$
+This is Shing, the master of the dojo. He is a wiry old man. His movements are
+graceful and deliberate, as are his words. He has a large scar running down
+the side of his face from forehead to neck. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	6
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	5
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	3
+	Impact:	4
+	Cash:	120
+[SKILLS]
+	brawling:	12
+BREAK
+#7224
+Keywords:	student pracitising
+Name:	a martial arts student
+RoomDesc:$
+A student is here practicing martial arts. 
+
+~
+LookDesc:$
+Dressed in simple white training garb the student dilligently practices,
+taking careful instruction from his master. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	164
+	Weight:	68
+[SKILLS]
+	brawling:	8
+BREAK
+#7226
+Keywords:	mistress asian woman
+Name:	The brothel headmistress
+RoomDesc:$
+The brothel mistress stands here, selling, um, merchandise. 
+
+~
+LookDesc:$
+Dressed in a long flowing black silk, and looking to please her customers, the
+brothel head mistress is here waiting to direct you to your room. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	25
+	Str:	30
+	Cha:	10
+	Int:	15
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	138
+	Weight:	70
+	Ballistic:	25
+	Impact:	20
+	Cash:	100000
+[SKILLS]
+BREAK
+#7250
+Keywords:	Kazuo Kiriyama
+Name:	Kazuo Kiriyama
+RoomDesc:$
+A young man named Kiriyama sits here, watching you intently. 
+
+~
+LookDesc:$
+Damn, this kid couldn't be more than 16 or 17, and he looks like he's seen
+more combat than the average retired street sam. He looks at anyone who passes
+his way, as if sizing up each person he meets for combat. Based on the way
+he's sitting, you don't think there's any way he could get close enough to you
+in time to strike with the sword he's holding sheathed in his hands. The Uzi
+he's packing across his back is another story, however. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	20
+	Str:	20
+	Cha:	15
+	Int:	15
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	65
+	Ballistic:	10
+	Impact:	8
+	Cash:	50000
+	Bank:	40000
+[SKILLS]
+	sub-machine guns:	12
+	brawling:	12
+	edged weapons:	12
+	pistols:	10
+BREAK
+#7251
+Keywords:	old Chinese man peddler
+Name:	an old Chinese man
+RoomDesc:$
+An old Chinese man is here, peddling his wares. 
+
+~
+LookDesc:$
+This old, crusty Chinese fellow has set up his little cart, which is stacked
+to the brim with an odd assortment of clothing and other articles. He sports a
+fu-man-chu, and seems quite partial to stroking it while laughing at how
+incompetent you are, though that doesn't keep him from still trying to sell
+you his wares. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+[SKILLS]
+	brawling:	20
+BREAK
+#7252
+Keywords:	oni heavily scarred
+Name:	a heavily scarred Oni
+RoomDesc:$
+A heavily scarred Oni guards the first floor here. 
+
+~
+LookDesc:$
+This rough looking bastard is an Oni, which is a bit odd considering his
+placement within the dojo, since this ork metavarient is originally found in
+Japan. Whatever his reasons may be, he now guards the first floor of the Triad
+dojo, and does a fairly good job at it too. His face, neck and arms are
+heavily scarred, showcasing the fact that he has been in his fair share of
+fights. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111010
+AffFlags:	0
+Race:	Oni
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	10
+	Str:	12
+	Cha:	5
+	Int:	8
+	Wil:	7
+	Mag:	10
+[POINTS]
+	Height:	210
+	Weight:	140
+	Ballistic:	50
+	Impact:	10
+	Cash:	300
+[SKILLS]
+	edged weapons:	9
+BREAK
+#7253
+Keywords:	Chinese guy intimidating
+Name:	an intimidating looking Chinese guy
+RoomDesc:$
+An intimidating looking Chinese guy is here, twirling around his nunchaku. 
+
+~
+LookDesc:$
+This intimidating Chinese guy has large brown almond shaped eyes, which seem
+to be perpetually squinted into a fearsome gaze. He is quite stocky, and shows
+off this fact by wearing no shirt and flexing his arms as much as possible,
+even when it is completely unnecessary. He wields a pair of nunchaku with the
+style and grace of a master, and seems quite happy with the prospect of
+cracking a few skulls with them whenever he gets the slightest chance to. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	12
+	Cha:	6
+	Int:	8
+	Wil:	8
+	Mag:	12
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	50
+	Impact:	12
+	Cash:	300
+[SKILLS]
+	whips & flails:	8
+BREAK
+#7254
+Keywords:	troll brown-skinned gruff guard
+Name:	a gruff looking brown-skinned troll
+RoomDesc:$
+A gruff looking brown-skinned troll stands guard here, dealing with intruders.
+
+~
+LookDesc:$
+Towering over the dojo at nearly ten feet tall, this gruff looking trog has a
+look of malice in his beady eyes. His skin is brown and marred heavily with
+dermal deposits and other wounds from past battles, and clenched in his huge
+mitts is a massive weapon capable of cleaving even the sturdiest of opponents
+in two with a single swipe. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	12
+	Str:	15
+	Cha:	4
+	Int:	7
+	Wil:	7
+	Mag:	14
+[POINTS]
+	Height:	290
+	Weight:	250
+	Ballistic:	50
+	Impact:	12
+	Cash:	300
+[SKILLS]
+	pole arms:	8
+BREAK
+#7255
+Keywords:	wakyambi lanky tall
+Name:	a tall, lanky Wakyambi
+RoomDesc:$
+A tall, lanky Wakyambi is here, cracking his knuckles. 
+
+~
+LookDesc:$
+This Wakyambi sports a huge afro, which brushes against the ceiling since he
+stands damn near ten feet tall, and even taller if you count his hair-do.
+While lanky for his size, he still has massive muscles in comparison to a
+normal human, perhaps even on par with a troll. He sports a pair of snazzy
+tinted sunglasses and little in the way of clothing aside from a pair of
+shorts and an unbuttoned silk shirt. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	8
+	Int:	8
+	Wil:	10
+	Mag:	15
+[POINTS]
+	Height:	290
+	Weight:	180
+	Ballistic:	50
+	Impact:	15
+	Cash:	300
+[SKILLS]
+	brawling:	12
+BREAK
+END

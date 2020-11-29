@@ -103,7 +103,7 @@ DefaultPos:	Standing
 	athletics:	2
 	firearms:	4
 	interrogation:	3
-	unarmed combat:	4
+	brawling:	4
 BREAK
 #7403
 Keywords:	wage slave wageslave
@@ -137,7 +137,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Bank:	40
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #7404
 Keywords:	elemental rock figure spirit great giant
@@ -173,7 +173,7 @@ AttackType:	Bludgeon
 	Ballistic:	5
 	Impact:	5
 [SKILLS]
-	unarmed combat:	7
+	brawling:	7
 	sorcery:	7
 BREAK
 #7405
@@ -212,7 +212,7 @@ DefaultPos:	Standing
 	sorcery:	6
 	pistols:	5
 	armed combat:	4
-	unarmed combat:	5
+	brawling:	5
 	:	6
 BREAK
 #7406
@@ -407,9 +407,9 @@ DefaultPos:	Standing
 	Weight:	0
 	Ballistic:	3
 	Impact:	1
-	Bank:	215
+	Bank:	115
 [SKILLS]
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #7412
 Keywords:	black ic soldier camoflauge
@@ -444,7 +444,7 @@ AttackType:	Machine Gun
 [SKILLS]
 	computers:	15
 	machine guns:	15
-	unarmed combat:	15
+	brawling:	15
 BREAK
 #7413
 Keywords:	mark kornen johnson black suit
@@ -580,7 +580,7 @@ DefaultPos:	Standing
 [SKILLS]
 	:	50
 	sorcery:	50
-	unarmed combat:	50
+	brawling:	50
 	conjuring:	40
 	:	40
 BREAK

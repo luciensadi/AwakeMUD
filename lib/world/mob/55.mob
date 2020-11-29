@@ -1,0 +1,243 @@
+#5500
+Keywords:	your lawyer
+Name:	Your lawyer
+RoomDesc:$
+Your lawyer stands here, looking pissed. You're in a whole lot of trouble. 
+
+~
+LookDesc:$
+This guy is a criminal's best friend: well-dressed, charismatic, and able to
+pull some obscure case law out of his hoop that just might save yours. Might.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000100010000000001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	500
+	Bank:	1000
+[SKILLS]
+	negotiation:	9
+	interrogation:	5
+	corporate etiquette:	7
+	media etiquette:	9
+	driving/Car:	4
+BREAK
+#5501
+Keywords:	rp fascisti mobile suit
+Name:	An RPF Mobile Suit
+RoomDesc:$
+A Mobile Suit for the RP Fascisti wanders around, looking for anything vaguely
+OOC to annihilate. 
+
+~
+LookDesc:$
+This is a customized LSMP Mobile Suit, upgraded and repainted with the red and
+white of the RP Fascisti, the logo of which glares balefully on the chest. The
+suit's operator wanders the MUD, searching for signs of bad RP and
+powergaming, and acts on his orders to FUCK YOUR SHIT UP! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000001010
+AffFlags:	1000000100001000000000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	1000
+	Weight:	1900
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+	brawling:	30
+	firearms:	30
+	gunnery:	30
+BREAK
+#5502
+Keywords:	ped xing
+Name:	Ped Xing
+RoomDesc:$
+Ped Xing is here, screwing around with a pocket computer. 
+
+~
+LookDesc:$
+Ped Xing is a small, well-dressed sarariman, currently fiddling with a small
+pocket computer. He looks irritated. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000100110000000011010
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	9
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#5503
+Keywords:	judge
+Name:	The judge
+RoomDesc:$
+The judge sits up on his bench, deciding your fate. 
+
+~
+LookDesc:$
+This guy has your life in his hands. He can do whatever the Hell he wants with
+you, and usually, he wants to see you fry. Hopefully you caught him on a good
+day. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000100010000000001010
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#5504
+Keywords:	clone
+Name:	clone
+RoomDesc:$
+An unfinished mob stands here.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#5505
+Keywords:	lone star cyberdoc doc
+Name:	a Lone Star cyberdoc
+RoomDesc:$
+A stern-looking man in white scrubbers stands here, checking instruments. 
+
+~
+LookDesc:$
+This is the resident doctor of Lone Star, responsible for scanning and
+removing illegal cyberware from criminals held in custody. He looks like he
+hates his job, and you. He'd rather be playing golf, with his friends from med
+school. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000100010000000001010
+AffFlags:	1000001000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	4
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+	:	9
+	:	10
+	:	9
+	biotech:	9
+BREAK
+#5506
+Keywords:	corky
+Name:	Corky
+RoomDesc:$
+Corky stands here, asking if you're his girlfriend.  
+
+~
+LookDesc:$
+Corky is retarded, just like you! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101110000000011110
+AffFlags:	1000000000001000001000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	707
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+BREAK
+END

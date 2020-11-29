@@ -1,3 +1,12 @@
+xyz 0 0
+What are you trying to do?
+$n looks confused.
+You sneeze, coating $N in snot!
+$n sneezes, covering $N in phlegm.
+$n sneezes on you... You may want antibiotics.
+You hold in the urge to sneeze, as you can't find your target.
+You sneeze violently into your hands.  Get a kleenex!
+$n covers $s face and sneezes violently!
 
 facepalm 0 0
 You facepalm.
@@ -331,7 +340,7 @@ $n raises an eyebrow, curious about $mself.
 lol 0 5
 You're laughing out loud!  (Must be funny!)
 $n is laughing out loud!
-You're laughing out loud over $N!  (Funny, isn't $e?)
+You're laughing out loud over $N!  (Funny, isn't $E?)
 $n is laughing out loud over $N!
 $n is laughing out loud over your hilarity!  (Must have been funny!)
 That person isn't here to laugh aloud about.
@@ -1359,7 +1368,7 @@ $n looks totally confused.
 #
 
 congrat 0 5
-#
+Congratulate who?
 #
 You congratulate $N with a friendly pat on the back.
 $n congratulates $N with a friendly pat on the back.

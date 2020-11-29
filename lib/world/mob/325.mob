@@ -30,9 +30,89 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	3
 [SKILLS]
-	:	5
+	brawling:	5
 	pistols:	5
 	police procedures:	4
+BREAK
+#32501
+Keywords:	ganger biker punk Leather Devils
+Name:	A Leather Devils biker punk
+RoomDesc:$
+A Leather Devils biker punk rides his bike through here. 
+
+~
+LookDesc:$
+The Leather Devils go-gangers lay claim to a good portion of I-90 as it
+travels eastward out of Downtown Seattle. They sport ^Rred^N and ^Lblack^N religiously
+as their set colours, and don't seem overly afraid of dealing with other biker
+gangs that try and scoot into their territory. Word on the grapevine is that
+they have ties to the Mafia located in the district, so most other gangers
+tend to give them the space they need to operate, but it isn't entirely
+unheard of for them to go on the war path. 
+~
+ArriveMsg:	rolls in from
+LeaveMsg:	rolls off
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	173
+	Weight:	70
+	Cash:	35
+[SKILLS]
+	brawling:	4
+	clubs:	4
+	pistols:	4
+BREAK
+#32502
+Keywords:	Damien leader leather devils biker punk
+Name:	Damien, leader of the Leather Devils
+RoomDesc:$
+A biker punk with glowing ^Rred^N cybereyes rides through here. 
+
+~
+LookDesc:$
+This is Damien, the self-proclaimed leader of the Leather Devils. He sports
+obviously cybereyes that glow and burn a bright red colour, which is always
+useful when trying to intimidate other members of the gang into accepting his
+leadership. Aside from that, he doesn't seem all too tough looking, though it
+has been suggested that he also wields the power of a mage, so not many of the
+other members are all too willing to test their might against him. 
+~
+ArriveMsg:	roars in from
+LeaveMsg:	roars off
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	110
+[SKILLS]
+	sub-machine guns:	5
+	sorcery:	6
+	brawling:	5
+	clubs:	4
 BREAK
 #32598
 Keywords:	mister thomas johnson man blue suit
@@ -70,7 +150,7 @@ DefaultPos:	Standing
 [SKILLS]
 	negotiation:	12
 	corporate etiquette:	12
-	:	15
+	brawling:	15
 BREAK
 #32599
 Keywords:	damien knight ceo ares macrotechnology tall well built man black hair goatee proud
@@ -111,7 +191,7 @@ AttackType:	Punch
 [SKILLS]
 	pistols:	20
 	sorcery:	20
-	:	20
+	brawling:	20
 	edged weapons:	20
 BREAK
 #32600
@@ -146,7 +226,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	6
 [SKILLS]
-	:	5
+	brawling:	5
 	rifles:	10
 	clubs:	12
 BREAK
@@ -165,7 +245,7 @@ questions later.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000010100011100000001010
+MobFlags:	100011000000001010
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -179,14 +259,15 @@ DefaultPos:	Standing
 	Wil:	5
 	Mag:	0
 [POINTS]
-	Height:	0
-	Weight:	0
+	Height:	180
+	Weight:	80
 	Ballistic:	4
 	Impact:	4
-	Cash:	20
+	Cash:	25
+	Bank:	100
 [SKILLS]
 	sub-machine guns:	8
-	:	6
+	brawling:	6
 	clubs:	8
 BREAK
 #32700
@@ -226,7 +307,7 @@ AttackType:	Pistol
 [SKILLS]
 	athletics:	6
 	armed combat:	12
-	:	12
+	brawling:	12
 BREAK
 #32701
 Keywords:	woman young blonde suit short

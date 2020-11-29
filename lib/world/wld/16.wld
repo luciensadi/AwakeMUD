@@ -1,0 +1,598 @@
+#1600
+Name:	Burton Road
+Desc:$
+   Burton Street changes into Burton Road here, as it leaves the more
+populated parts of Redmond and into a dusty wasteland to the south.  To the
+north you see a slum of abandoned buildings turned into squats, and to the
+south there are hills, with a bleak gray cast to them.  A vague chemical smell
+is in the air. 
+~
+Flags:	10000000000010000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	14312
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1601
+Name:	Burton Road
+Desc:$
+   Burton Road blends through the hills here.  There is very little life out
+here of any kind, and everything is covered in a coat of a grayish dust. There
+is a a smell of ammonia and chlorine in the air.  The wind carries this
+sickening pungent dust with it, which is more than distracting. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	1600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1602
+Name:	Burton Road
+Desc:$
+   There is absolutely no life out here of any kind.  The air is filled with a
+solid silence, other than the sounds of the wind whistling against your ear,
+or against the windshield of your automobile.  On the sides of the road to the
+horizon, are hills, and drifts of a bleak gray dust.  The smell in the air is
+a disgusting chemical smell, acrid like ammonia, but thick like chlorine.  The
+road is pockmarked with potholes, and broken up with cracks, denoting complete
+lack of maintenance in decades. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	1601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1603
+Name:	Burton Road
+Desc:$
+   A lone streetlight here, with the casing broken, but the bulb itself still
+intact, stands a solemn vigil to the almost alien landscape of toxic dust. No
+life of any kind is out here, not a bug, not a critter.  The road is cracked
+and broken, and covered with some bizarre red and green chemical stains that
+streak across it. The road forks off to the southeast where Microsoft Way
+leads to an abandoned complex, once a corporate megaplex for the Microsoft
+Corporation of the pre-2029 technological world. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	1602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	45000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1604
+Name:	Burton Road
+Desc:$
+   The road is covered with a thick coat of gray dust, and as you travel
+through, you are greeted by many dips and cracks in the road, which hasn't
+seen a repaving or a maintenance crew in probably thirty years.  The wind
+carries a pungent smell of ammonia and chlorine, with a thick acidic quality
+to it that cuts to your sinuses.  There is no life of any kind, not a bug, not
+a mouse, not a rat. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	1605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1605
+Name:	Burton Road
+Desc:$
+   The dust gets thicker here, and the chemical smell more profuse. A drift
+covers the road, but is thin enough to be driven through or walked through.
+The smell of chemicals is so thick that you have to spit to keep from
+swollowing whatever ungodly poisons are in the dusty air.  Many red and green
+and white chemical painted streaks are in the broken up, pothole covered road.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	1603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1606
+Name:	Burton Road
+Desc:$
+   The dust gets thinner here, and the drifts flatter in size.  There is no
+life of any kind to be seen here, not an ant or stray cat in sight. The area
+is filled with the thick chemical smell of ammonia.  You can hear some
+activity to the distant south, engines and the occasional deep-sounding fire
+of high calibre ordinance. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	1604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1607
+Name:	Burton Road
+Desc:$
+   Life is sparse here, some very stubborn scrub and grass grow in little
+bunches along the sides of the road.  There is a thin coat of a grayish dust
+here, and the vague air of chlorine.  To the south, and a ways to the west,
+you can hear the occasional sound of gunfire of very high calibres, and the
+sounds of engines running. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	1606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1608
+Name:	Burton Road and UCAS Military Route 11
+Desc:$
+   Burton Road ends here, at a simple two lane road divided by two yellow
+lines in the middle.  The land out here is scrub and barren, but not toxic
+like the road to the north.  To the west you hear the sounds of engines
+running, autofire, and the occasional loud bang of a high calibre artillery
+round fired. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	1607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1609
+Name:	UCAS Military Road 11
+Desc:$
+   Route 11 runs east to west through the barren scrub south of Redmond, a
+border road against the Cascade Ork lands.  The road curves to the northwest,
+where you can see lights and some structures in the distance.  From the area
+near the structures, you can hear the occasional sounds of artillery fire, and
+autofire of large calibre machine guns.  The sounds of engines run in the
+distance. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	1608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1610
+Name:	Weisman Drive
+Desc:$
+   Weisman Drive cuts along the northern edge of Renton, leading towards
+Second Street in Auburn.  Along both sides of the street are very high
+plasticrete walls, with extensive monowire arrays at the top to keep anyone
+from even thinking of attacking the industrial complexes on the other side.
+The air is acrid and bitter, leaving a foul aftertaste, and inspiring the urge
+to gag for those who do not use breathers. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	30136
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	1611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1611
+Name:	Weisman Drive
+Desc:$
+   Weisman Drive cuts along the northern edge of Renton, leading towards
+Second Street in Auburn.  Along both sides of the street are very high
+plasticrete walls, with extensive monowire arrays at the top to keep anyone
+from even thinking of attacking the industrial complexes on the other side.
+The air is acrid and bitter, leaving a foul aftertaste, and inspiring the urge
+to gag for those who do not use breathers.  Some empty bullet shells strewn
+about are the only signs of life contrasting this bleak, industrial hell. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	1610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	1612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1612
+Name:	Weisman Drive
+Desc:$
+    Weisman Drive cuts along the northern edge of Renton, leading towards
+Second Street in Auburn.  Along both sides of the street are very high
+plasticrete walls, with extensive monowire arrays at the top to keep anyone
+from even thinking of attacking the industrial complexes on the other side.
+The air is acrid and bitter, leaving a foul aftertaste, and inspiring the urge
+to gag for those who do not use breathers.  A hateful Humanis inspired
+graffiti mural covers one wall, depicting the lynching of a stereotypical
+looking elf by hooded Humanis thugs. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	1611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	1613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1613
+Name:	Weisman Drive
+Desc:$
+   Weisman Drive cuts along the northern edge of Renton, leading towards
+Second Street in Auburn.  Along both sides of the street are very high
+plasticrete walls, with extensive monowire arrays at the top to keep anyone
+from even thinking of attacking the industrial complexes on the other side.
+The air is acrid and bitter, leaving a foul aftertaste, and inspiring the urge
+to gag for those who do not use breathers.  The wall here is covered in Brain
+Eaters graffiti, and racist Humanis slogans.  The street is sterile, as if
+nothing is alive on it at all. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	1612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	1614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1614
+Name:	Second Street
+Desc:$
+   Along both sides of the street are very high plasticrete walls, with
+extensive monowire arrays at the top to keep anyone from even thinking of
+attacking the industrial complexes on the other side. The air is acrid and
+bitter, leaving a foul aftertaste, and inspiring the urge to gag for those who
+do not use breathers.  To the north is the more lively residential regions of
+Auburn.  
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	29025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	5064
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	1613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

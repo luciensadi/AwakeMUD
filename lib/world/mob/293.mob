@@ -1,0 +1,211 @@
+#29300
+Keywords:	bartender portly grey-haired human male man guy joe mccann
+Name:	Joe the bartender
+RoomDesc:$
+A portly, grey-haired human male stands behind the bar. 
+
+~
+LookDesc:$
+A stocky, grey-haired man with a handlebar mustache stands behind the bar,
+serving drinks, cleaning glasses and otherwise going about his business.
+Despite the beer belly that bulges over the waistband of his polyester slacks,
+there still seems to be some solid muscle under the the flab. That, combined
+with his military-style crew cut and a certain professional watchfulness to
+his dark blue eyes, implies a possible past as a cop or a military grunt. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000011010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+[SKILLS]
+BREAK
+#29301
+Keywords:	officer lone star
+Name:	a Lone Star officer
+RoomDesc:$
+A Lone Star officer stands here, looking around. 
+
+~
+LookDesc:$
+A tall, broad-shouldered man with a military crewcut, ramrod-straight posture
+and a serious expression on his face. He's dressed in the standard Lone Star
+uniform, and armed accordingly. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	100001011110
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	7
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	70
+	Ballistic:	13
+	Impact:	15
+	Cash:	100
+	Bank:	100
+[SKILLS]
+	pistols:	14
+	brawling:	12
+BREAK
+#29302
+Keywords:	cashier brunette woman curvy Rachel
+Name:	the cashier
+RoomDesc:$
+A curvy brunette stands behind the counter. 
+
+~
+LookDesc:$
+A pretty, snub-nosed young woman with a toned, extremely curvy figure. Her
+hairstyle and makeup are subtly and professionally done; her clothes,
+expensive and cut just right. She looks far too well put-together to be
+working behind a cleaning supply counter, but seems happy enough to be doing
+so nonetheless. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000011010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+BREAK
+#29303
+Keywords:	Marilyn Miller blonde curvy sexy pouty woman human platinum-blonde
+Name:	Marilyn Miller
+RoomDesc:$
+A curvy woman with platinum-blonde hair stands here. 
+
+~
+LookDesc:$
+Wavy platinum-blonde hair, a voluptuous figure, huge brown eyes and full,
+pouty lips - she's actually the spitting image of a 1950s flatvid icon, down
+to the v-necked, full-skirted white dress she's currently wearing. And no, she
+doesn't look at all like the proprietor of a cleaning service. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000011010
+AffFlags:	1000
+Race:	Other
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	8
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	65
+[SKILLS]
+BREAK
+#29304
+Keywords:	steve man muscular mustached human cashier
+Name:	Steve
+RoomDesc:$
+A muscular, mustached man stands here. 
+
+~
+LookDesc:$
+This human male's body is large, bulging and muscular - he definitely
+subscribes to the old-school, bigger-is-better aesthetic. Rippling chest
+muscles and carved-out biceps are barely contained by his white cotton
+t-shirt, and rock-hard thigh and leg muscles are visible through his faded
+blue jeans. The chubby, mustached face with twinkling blue eyes and a brown
+mustache set on the heavily corded neck seems almost like an afterthought. A
+nametag pinned to his shirt identifies him as "Steve." 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	3
+	Str:	50
+	Cha:	6
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+[SKILLS]
+BREAK
+#29305
+Keywords:	clerk cashier sleepy-looking old woman grey-haired human
+Name:	the cashier
+RoomDesc:$
+A sleepy-looking old woman stands behind the counter. 
+
+~
+LookDesc:$
+A pale, wrinkle-faced human woman stands behind the counter, looking like
+she's at least 70 or 80. She doesn't seem to have had any cosmetic or medical
+anti-ageing treatments, from the top of her grey-haired head to her trembling,
+liver-spotted hands. But she does seem alert and competent enough. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	6
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	50
+[SKILLS]
+BREAK
+END

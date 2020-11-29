@@ -1,0 +1,1685 @@
+#62300
+Keywords:	police victoria precinct desk sergeant
+Name:	a Victoria police precinct desk sergeant
+RoomDesc:$
+A Victoria police precinct desk sergeant is seated behind the front desk. 
+
+~
+LookDesc:$
+This desk jockey's job is to direct inquiries to the proper office and point
+people in the general direction of which office they need to take their issue
+up with. He doesn't seem to like his job very much, then again, it certainly
+beats going out on patrol and getting shot in the face. He can eat all the
+donuts he wants while pushing papers and pens here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	5
+	Impact:	5
+	Cash:	65
+	Bank:	65
+[SKILLS]
+BREAK
+#62301
+Keywords:	officer patrol police victoria
+Name:	a Victoria police patrol officer
+RoomDesc:$
+A Victoria police patrol officer wanders around the precinct. 
+
+~
+LookDesc:$
+This patrol officer either just got off of his beat or is getting ready for
+it, one of which consists of mumbling to himself over the matter of paperwork
+and the other consists of mumbling about having to get ready to do his job. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders off
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	80
+[SKILLS]
+	brawling:	4
+	clubs:	4
+	pistols:	5
+BREAK
+#62302
+Keywords:	Martine Caraby Victoria police lieutenant
+Name:	Lieutenant Martine Caraby
+RoomDesc:$
+Martine Caraby, a Victoria police lieutenant is here, briefing patrolmen. 
+
+~
+LookDesc:$
+He appears to be in his mid to early thirties and has probably been on the
+force for quite a number of years, as his rank and occupation would indicate.
+His job is to brief patrol officers on their routes and to handle any issues
+that arise with them before booting their asses out onto the mean streets of
+the city. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	6
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+	Cash:	100
+	Bank:	25
+[SKILLS]
+	brawling:	5
+	clubs:	5
+	pistols:	6
+BREAK
+#62303
+Keywords:	rookie police Victoria
+Name:	a Victoria police rookie
+RoomDesc:$
+A Victoria police rookie is here, soaking up information. 
+
+~
+LookDesc:$
+He may be the newest member of the force, but he's certainly trying his best
+to gather as much information and experience as possible during his time here.
+He may not see any action on the streets soon, but when he finally does, he'll
+be ready. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Ballistic:	5
+	Impact:	5
+	Cash:	45
+	Bank:	45
+[SKILLS]
+	brawling:	4
+	clubs:	4
+BREAK
+#62304
+Keywords:	officer booking police victoria
+Name:	a Victoria police booking officer
+RoomDesc:$
+A Victoria police booking officer is here, booking chumps as they arrive. 
+
+~
+LookDesc:$
+The desk she's seated behind is protected from uppity criminals by a mesh
+fence of wire reinforced safety glass to keep anyone from either spitting on
+her or jumping over the counter, since people she books aren't exactly pleased
+by their presence here. She handles all the paperwork involved with booking
+incoming individuals, and doesn't look entirely too pleased with her lot in
+life. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Ballistic:	5
+	Impact:	5
+	Cash:	15
+	Bank:	85
+[SKILLS]
+	brawling:	4
+BREAK
+#62305
+Keywords:	officer dispatch
+Name:	a dispatch officer
+RoomDesc:$
+A Victoria police dispatch officer is manning the communications system here.
+
+~
+LookDesc:$
+Constantly switching lines and checking incoming reports, this dispatch
+officers job is to make sure all the information is sorted and gets to who it
+needs to get to. They handle both emergency calls and back-up requests for
+officers out on the beat so they can keep the city running smoothly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	5
+	Impact:	5
+	Cash:	35
+	Bank:	35
+[SKILLS]
+	brawling:	4
+BREAK
+#62306
+Keywords:	police Victoria Commander Watch
+Name:	a Victoria police Watch Commander
+RoomDesc:$
+A Victoria police Watch Commander is here, sorting through paperwork. 
+
+~
+LookDesc:$
+Well, a desk job certainly beats hoofing it around town all day and night, at
+least the office has air conditioning. He casually sorts through paperwork,
+checking and rechecking them before handing them off to his assistants and
+telling them where they need to be filed. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	85
+	Bank:	65
+[SKILLS]
+	brawling:	5
+BREAK
+#62307
+Keywords:	assistant
+Name:	a Watch Commander's assistant
+RoomDesc:$
+A Watch Commander's assistant, filing paperwork in its proper place. 
+
+~
+LookDesc:$
+Not exactly the most glamorous of work details, but filing paperwork certainly
+keeps the precinct running smoothly, since if the correct information isn't
+available it throws a wrench into the gears for everyone involved. He files
+stacks of papers in the nearby filing cabinets, taking special care to make
+sure everything is where it's supposed to be. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	35
+	Bank:	35
+[SKILLS]
+	brawling:	4
+BREAK
+#62308
+Keywords:	officer management property
+Name:	a property management officer
+RoomDesc:$
+A property management officer for the precinct is on duty here. 
+
+~
+LookDesc:$
+The fellows job is to make sure everything that comes through the doors as
+evidence is tagged correctly, packaged and securely shipped off sight.
+Whenever someone needs a piece of property, they have to go through him and a
+lot of paperwork as well. He seems to be a bit too keen on his position, and
+chances are he's probably known to be a dick because of it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+	Cash:	25
+	Bank:	85
+[SKILLS]
+	brawling:	5
+BREAK
+#62309
+Keywords:	guard holding police cell
+Name:	a holding cell guard
+RoomDesc:$
+A holding cell guard is here, twirling a set of keys about his finger. 
+
+~
+LookDesc:$
+This officer is obviously in charge of the holding cells and making sure
+everyone who is put into them stays in them. He may not be the most polite,
+but that's probably from having to constantly deal with disorderly drunks and
+criminals all day and night. Can you blame him? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000101000000011010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	8
+	Impact:	8
+	Cash:	85
+	Bank:	45
+[SKILLS]
+	brawling:	6
+	clubs:	6
+BREAK
+#62310
+Keywords:	Roger Verbal Kint
+Name:	Roger "Verbal" Kint
+RoomDesc:$
+Roger "Verbal" Kint is here, biding his time. 
+
+~
+LookDesc:$
+This here is Roger "Verbal" Kint, some small time two-bit con-man who was
+picked up on in connection to various crimes. He has a slender build and slick
+black hair sported in somewhat of a comb over and a slight limp. He seems to
+be biding his time and waiting for his release, which is scheduled soon since
+they can't seem to find anything to charge him with. 
+~
+ArriveMsg:	limps in from
+LeaveMsg:	limps off
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	brawling:	7
+BREAK
+#62311
+Keywords:	Bubbles Mr Mister troll
+Name:	Mr. Bubbles
+RoomDesc:$
+The biggest troll you've laid eyes on, Mr. Bubbles, is here in this cell. 
+
+~
+LookDesc:$
+Good god this trog is huge, and that's not even the worst part of it. He seems
+to a transvestite that was picked up on prostitution charges, and that
+horrendously skimpy sequin dress he's wearing isn't doing him any favours, and
+neither is his smeared lipstick and nailpolish painted on his tusks. If you're
+looking for a good time, for the love of god, don't call Mr. Bubbles. 
+~
+ArriveMsg:	traipses in from
+LeaveMsg:	traipses off
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	290
+	Weight:	180
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	brawling:	8
+BREAK
+#62312
+Keywords:	crook small time
+Name:	a small time crook
+RoomDesc:$
+A small time crook is here, sleeping in his cell. 
+
+~
+LookDesc:$
+He doesn't look all that impressive, and that's probably because he isn't.
+Word is he was picked up for tagging a few buildings in the city and jacking a
+few car systems. He isn't exactly what's known in the business as a
+"professional", but he's certainly a career criminal. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	brawling:	4
+BREAK
+#62313
+Keywords:	Dee Cryption
+Name:	Dee Cryption
+RoomDesc:$
+Dee Cryption is here, tapping away at an imaginary keyboard. 
+
+~
+LookDesc:$
+Dee Cryption is a hacker with a microchip on her shoulder. Ever since she
+caught a nasty computer virus, she has been pursuing a program to take over
+the world's computer networks. However, Dee Cryption's fuzzy logic hasn't
+helped her reach her goal. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+	brawling:	4
+BREAK
+#62314
+Keywords:	detective Victoria police
+Name:	a Victoria police detective
+RoomDesc:$
+A Victoria police detective is here, going over case files. 
+
+~
+LookDesc:$
+One step above a patrol jockey, this detective's job is to track down clues
+and figure out crimes that go down in the city. He's pretty good at what he
+does, and certainly doesn't do it for the money, though he isn't complaining
+about the extra credits in his account every month. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	7
+	Cha:	5
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+	Cash:	95
+	Bank:	95
+[SKILLS]
+	brawling:	6
+	clubs:	6
+	pistols:	7
+BREAK
+#62315
+Keywords:	Duval Beaumond Station Sergeant police
+Name:	Station Sergeant Duval Beaumond
+RoomDesc:$
+The precinct Station Sergeant, Duval Beaumond is here, smoking a cigar. 
+
+~
+LookDesc:$
+This rough looking ork has certainly gain some notoriety around the city as
+being a hard nosed son of a bitch who doesn't take shit from damn near anyone.
+He doesn't give a frag if you're rich, he doesn't give a frag if you're
+someone important. If you break the law in his city, you get a size 16 boot up
+your ass. Word on the streets is the Batista's have a contract out on his
+head, and he's itchin to catch up to anyone who wants to take up the offer. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000101000000011010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	10
+	Str:	12
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	12
+[POINTS]
+	Height:	210
+	Weight:	100
+	Ballistic:	8
+	Impact:	8
+	Cash:	125
+	Bank:	150
+[SKILLS]
+	brawling:	8
+	clubs:	8
+	pistols:	8
+BREAK
+#62316
+Keywords:	Chief Superintendent Fondall Cazenave
+Name:	Chief Superintendent Fondall Cazenave
+RoomDesc:$
+Chief Superintendent Fondall Cazenave is seated behind his desk here. 
+
+~
+LookDesc:$
+While he may be the Chief Superintendent here at the Victoria Precinct, he
+isn't well liked by neary everyone in its employ. Rumor is he and the Station
+Sergeant are apt to butt heads, and the only thing that has kept the Sergeant
+from wringing his scrawny neck is his position of authority. If you don't dot
+your I's and cross your T's, chances are he's going to be all over your case.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	5
+	Impact:	5
+	Cash:	125
+	Bank:	85
+[SKILLS]
+	brawling:	4
+BREAK
+#62317
+Keywords:	suspect nervous
+Name:	a nervous suspect
+RoomDesc:$
+A nervous suspect is seated here, stewing in handcuffs. 
+
+~
+LookDesc:$
+It seems this rather nervous looking fellow was brought in under suspicion of
+being linked to a few crimes around town, and if his body language was any
+indication, he's as guilty as sin. He fidgets constantly, glancing towards the
+camera posted nearby every few moments as he debates how he's going to get out
+of this situation. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+	brawling:	3
+BREAK
+#62318
+Keywords:	woman old talismonger
+Name:	an old talismonger woman
+RoomDesc:$
+An old talismonger woman minds the shop here. 
+
+~
+LookDesc:$
+Perhaps in her late fifties or early sixties, she's certainly seen her fair
+share of the world and had more experience under her belt than almost anyone
+who stumbles into this shop. She doesn't speak much, and instead, simply
+points to the hand drawn signs when asked about prices. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	10
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+BREAK
+#62319
+Keywords:	Doctor LeMaitre middle-aged woman
+Name:	Doctor LeMaitre
+RoomDesc:$
+A middle-aged woman, Doctor LeMaitre, goes over medical paperwork here. 
+
+~
+LookDesc:$
+This professional looking woman looks to be in her early thirties and is
+decked out in scrubs and a white doctors coat, and most of her free time seems
+to be spent going over patient documents and medical paperwork, just to make
+sure her procedures go off without a hitch. Too much preparation is never a
+bad thing, afterall. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+BREAK
+#62320
+Keywords:	associate DocWagon sales friendly
+Name:	a DocWagon sales associate
+RoomDesc:$
+A friendly DocWagon sales associate is parked behind the counter here. 
+
+~
+LookDesc:$
+This friendly DocWagon associate is here to help with any and all questions
+involving the business practices and contract details for anyone who has
+enough cash to pony up for their services. They greet each and every
+individual that walks through the doors with a warm smile, obviously seeing
+them all as possible customers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+BREAK
+#62321
+Keywords:	guard security McHugh's friendly
+Name:	an friendly McHugh's security guard
+RoomDesc:$
+A friendly McHugh's security guard stands on alert at the entrance. 
+
+~
+LookDesc:$
+It appears the McHugh's Fast Food franchise takes security of the
+establishments quite seriously, as evident by the guards they have hired on to
+handle security matters. They have friendly faces and cheerful demeanors, but
+any runner worth their salt can see right through their act. They wear
+well-tailored and casual uniforms that fit loosely, which is to conceal the
+fact they're wearing armoured jackets, which allow easy access to their
+concealed holsters when shit hits the fan. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Bank:	80
+[SKILLS]
+	brawling:	4
+	clubs:	5
+	pistols:	5
+BREAK
+#62322
+Keywords:	staff smiling McHugh's member
+Name:	a smiling McHugh's staff member
+RoomDesc:$
+A smiling McHugh's staff member mans the service counter here. 
+
+~
+LookDesc:$
+He has a friendly, albeit a bit fake, smile plastered across her face as she
+greets customers and takes their orders. She works the cash register with a
+swiftness that denotes she has been working here for quite some time, which
+may explain that fake smile of hers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+	brawling:	5
+BREAK
+#62323
+Keywords:	manager head McHugh's
+Name:	a head manager for McHugh's
+RoomDesc:$
+A head manager for McHugh's is here, sorting through the days receipts. 
+
+~
+LookDesc:$
+He is middle aged and has probably been working here for quite some time to
+have gotten this position, flipping burgers is far behind his career path now.
+Instead, he has to deal with sorting through the receipts for the sales
+records and going over every single cent aquired before finishing up his
+paperwork. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	3
+	clubs:	3
+	pistols:	3
+BREAK
+#62324
+Keywords:	cook McHugh's
+Name:	a cook for McHugh's
+RoomDesc:$
+A cook for McHugh's mans the heat lamps, casually flipping soyburgers. 
+
+~
+LookDesc:$
+He's a teenager, most likely working part time here so he can save up and
+afford himself whatever it is teenagers want most these days. A car, a girl,
+some simporn? Probably all of those, maybe just not in that order. He casually
+flips the soyburgers with his spatula, making sure each side is "cooked" to
+golden brown perfection. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	35
+	Bank:	40
+[SKILLS]
+	brawling:	3
+	clubs:	3
+BREAK
+#62325
+Keywords:	bouncer wakyambi lanky
+Name:	a lanky wakyambi bouncer
+RoomDesc:$
+A lanky wakyambi bouncer sorts out the rabble at the doorway here. 
+
+~
+LookDesc:$
+This lanky wakyambi stands taller than most trolls do, though he isn't built
+nearly as thick or muscled as one. He is dressed in a cut and tailored suit
+with a fedora topping his head, from beneath which his large pointed ears poke
+out from. He looks over possible patrons as they try to get in, waving in a
+few locals without a second glance, while others get a velvet rope infront of
+them to cut off their entrance into the club. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Wakyambi
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	10
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	290
+	Weight:	100
+	Cash:	95
+	Bank:	55
+[SKILLS]
+	brawling:	6
+	clubs:	6
+BREAK
+#62326
+Keywords:	man bartender tuxedo black tall
+Name:	a tall black man in a tuxedo and top hat
+RoomDesc:$
+A tall black man in a tuxedo and top hat serves drinks behind the bar. 
+
+~
+LookDesc:$
+This classy looking black fellow is dressed to the nines, his tailored and
+nicely fitting tuxedo is crisp and clean, and the top hat upon his head is
+fitted perfectly. He smoothly mixes up drinks and sees to it that everyone
+gets exactly what they ordered, and perhaps a bit more thanks to his
+expertise, but never anything less. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	6
+BREAK
+#62327
+Keywords:	woman elven young
+Name:	a young elven woman
+RoomDesc:$
+A young elven woman is on stage, masterfully manipulating synth-links. 
+
+~
+LookDesc:$
+Decked out in synth-links and other hardware necessary to directly interact
+with the construction and production of music on the fly or from previously
+prepared memory, this lovely elven female artist masterfully manipulates them
+to produce their music. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	6
+	Cha:	6
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	70
+	Cash:	50
+	Bank:	120
+[SKILLS]
+	brawling:	5
+BREAK
+#62328
+Keywords:	Derrick Ray Surgeon Duke
+Name:	Derrick "Surgeon Duke" Ray
+RoomDesc:$
+Derrick "Surgeon Duke" Ray is here relaxing, enjoying a drink. 
+
+~
+LookDesc:$
+Better known around the Caribbean shadows as "Surgeon Duke", this street
+samurai has seen more action and lived to tell the tale than most runners
+you're bound to come across in this hemisphere. He's supposed has no magical
+talent and no ware to speak of if you believe the rumours, and instead has had
+to rely on his wit and sensibility towards forethought to see it this far into
+life. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+	Cash:	100
+	Bank:	100
+[SKILLS]
+	brawling:	6
+	clubs:	6
+	sub-machine guns:	7
+BREAK
+#62329
+Keywords:	Montreuil Mister professionally businessman
+Name:	Mister Montreuil
+RoomDesc:$
+A professionally dressed businessman is relaxing here. 
+
+~
+LookDesc:$
+He's dressed in a cut and tailored business suit, so he must be doing well for
+himself to have afforded it. He slowly sips on his drink, occasionally
+glancing up towards the doorway as someone makes their presence known before
+offering a warm and overly friendly smile. Chances are, if you want to do
+business, he's the man to speak with. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+[SKILLS]
+	brawling:	7
+BREAK
+#62330
+Keywords:	gentleman guard quiet zombie
+Name:	a quiet zombie gentleman
+RoomDesc:$
+A quiet gentleman silently guards the back office here. 
+
+~
+LookDesc:$
+Upon closer inspection, you realize why he's so quiet, chances are it's
+because he's dead. Very dead. In fact, he's an animated corpse, a fairly fresh
+one too, none of that zombie rot has spread too far yet, and thanks to the
+ventilation systems in the club he could easily pass as just another staff
+member until you got up close to him for a gander. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000101000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	10
+	Cha:	2
+	Int:	6
+	Wil:	8
+	Mag:	6
+[POINTS]
+	Height:	180
+	Weight:	70
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	brawling:	6
+	clubs:	6
+	assault rifles:	6
+BREAK
+#62331
+Keywords:	Dolliole Voodoo Queen Galafate Mambo
+Name:	Dolliole "The Voodoo Queen" Galafate
+RoomDesc:$
+Dolliole "The Voodoo Queen" Galafate is seated at her office desk here. 
+
+~
+LookDesc:$
+This woman's birth name is Dolliole Galafate, but those in the know and in the
+shadows know her best as The Voodoo Queen. She is a mambo, a practitioner of
+the arts of voodoo, and word on the street is she is one of the most
+knowledgable students on the island. She seems rather young for such a title,
+but looks can be deceiving, afterall.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000100000000011010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	8
+	Int:	10
+	Wil:	10
+	Mag:	15
+[POINTS]
+	Height:	190
+	Weight:	70
+	Ballistic:	10
+	Impact:	10
+	Cash:	125
+	Bank:	150
+[SKILLS]
+	brawling:	7
+	edged weapons:	8
+	sorcery:	12
+BREAK
+#62332
+Keywords:	guard front door Grandmaion Casino security
+Name:	a Grandmaion Casino front door guard
+RoomDesc:$
+A Grandmaion Casino guard is stationed at the front doors. 
+
+~
+LookDesc:$
+This casino guard was hired on for his distinct lack of intimidation, since he
+has the duty of handling the entrance of the establishment, the owners want
+someone with a friendly face as not to scare off potential gamblers. However,
+that shouldn't imply he isn't very capable of dishing out the hurt if someone
+gets out of line. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Cash:	80
+	Bank:	50
+[SKILLS]
+	brawling:	5
+	pole arms:	5
+	pistols:	5
+BREAK
+#62333
+Keywords:	guard security casino Grandmaion floor
+Name:	a Grandmaion Casino floor security guard
+RoomDesc:$
+A Grandmaion Casino security guard patrols and monitors the floor. 
+
+~
+LookDesc:$
+While just as friendly in appearance as the guards at the front entrance, the
+fact that he carries a weapon should indicate that he knows well enough how to
+put it to good use if necessary. He patrols and monitors the floors, keeping
+in constant communication with other security officers so he knows if his
+presence is needed elsewhere in the establishment. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders off
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	90
+	Cash:	85
+	Bank:	65
+[SKILLS]
+	brawling:	6
+	clubs:	6
+	pistols:	6
+BREAK
+#62334
+Keywords:	officer security Grandmaion Casino
+Name:	a Grandmaion Casino security officer
+RoomDesc:$
+A Grandmaion Casino security officer is here, keeping an eye on the monitors.
+
+~
+LookDesc:$
+This member of the security staff is in charge of keeping his cybereyes peeled
+and on the look out as he stares intently at the bank of screens on the nearby
+monitoring station. He is well trained in the art of noticing subtle details
+as patrons make the rounds at the different gambling venues offered out on the
+casino floor. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	5
+	clubs:	5
+	pistols:	5
+BREAK
+#62335
+Keywords:	gambler
+Name:	a gambler
+RoomDesc:$
+A gambler is here, pressing their luck in this den of vice. 
+
+~
+LookDesc:$
+This gambler is just one of many that visit the establishment, always hedging
+their bet in an attempt to get a fix. Some just enjoy the rush and thrill of
+gambling, while others do it professionally. Then there are the majority, who
+simply can't help themselves and rely solely on luck, though they're usually
+the walks who walk out broke at the end of the day. 
+~
+ArriveMsg:	strolls in from
+LeaveMsg:	strolls off
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	145
+	Bank:	45
+[SKILLS]
+	brawling:	3
+BREAK
+#62336
+Keywords:	manager floor casino Grandmaion
+Name:	a Grandmaion Casino floor manager
+RoomDesc:$
+A Grandmaion Casino floor manager wanders through the crowd here. 
+
+~
+LookDesc:$
+Tasked with making sure everything is running smoothly on the casino floor, as
+well as keeping an eye on the employees as well, this friendly host is always
+offering friendly smiles and nods to those he recognizes as habituates. 
+~
+ArriveMsg:	strays in from
+LeaveMsg:	strays off
+MobFlags:	1000
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	85
+	Bank:	65
+[SKILLS]
+	brawling:	4
+BREAK
+#62337
+Keywords:	bartender classy
+Name:	a classy looking bartender
+RoomDesc:$
+A classy looking bartender mixes and pours drinks here. 
+
+~
+LookDesc:$
+He has a slim build and is dressed in rather classy attire, attempting to look
+as professional as possible as he mixes up drinks for casino patrons. He seems
+to be sporting a bit of a weary smile, probably because he has to listen to so
+many sob stories from people who have lost all of their cash. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	0
+[SKILLS]
+	brawling:	7
+BREAK
+#62338
+Keywords:	guard security heavily armed
+Name:	a heavily armed security guard
+RoomDesc:$
+A heavily armed security guard is posted here at top of the stairs. 
+
+~
+LookDesc:$
+This heavily armed and armoured security guard works some of the tougher
+positions here at the casino, where he is charged with making sure nobody
+screws around with keeping the establishment running smoothly. Anyone who
+wants to get into the off-limits area with him around is in for a fight it
+seems. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	90
+	Cash:	80
+[SKILLS]
+	brawling:	6
+	sub-machine guns:	6
+	clubs:	6
+BREAK
+#62339
+Keywords:	guard security heavily armed
+Name:	a heavily armed security guard
+RoomDesc:$
+A heavily armed security guard is stationed here. 
+
+~
+LookDesc:$
+This heavily armed and armoured security guard works some of the tougher
+positions here at the casino, where he is charged with making sure nobody
+screws around with keeping the establishment running smoothly. Anyone who
+wants to get into the off-limits area with him around is in for a fight it
+seems. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Cash:	85
+[SKILLS]
+	brawling:	7
+	clubs:	7
+	assault rifles:	7
+BREAK
+#62340
+Keywords:	guard security heavily armed
+Name:	a heavily armed security guard
+RoomDesc:$
+A heavily armed security guard keeps an eye on the employees here. 
+
+~
+LookDesc:$
+This heavily armed and armoured security guard works some of the tougher
+positions here at the casino, where he is charged with making sure nobody
+screws around with keeping the establishment running smoothly. He seems more
+interested in the staff members than any trespassers that come through the
+area, though he's probably more than capable if any do show up. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101000000111010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	90
+	Cash:	95
+	Bank:	85
+[SKILLS]
+	brawling:	8
+	clubs:	7
+	assault rifles:	7
+	machine guns:	7
+BREAK
+#62341
+Keywords:	guard security magical threat
+Name:	a magical threat security guard
+RoomDesc:$
+A magical threat security guard waits here for any trespassers to handle. 
+
+~
+LookDesc:$
+He doesn't look that imposing, but chances are he is. Why else would he be
+given such a position? He probably has an ace up his sleeve, otherwise he
+wouldn't be of much use to the casino as a security guard, now would he. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	4
+	Int:	8
+	Wil:	8
+	Mag:	10
+[POINTS]
+	Height:	190
+	Weight:	80
+	Cash:	95
+	Bank:	95
+[SKILLS]
+	brawling:	7
+	clubs:	7
+	sorcery:	9
+BREAK
+#62342
+Keywords:	manager grandmaion casino
+Name:	the manager of The Grandmaion Casino
+RoomDesc:$
+The manager of The Grandmaion Casino is seated behind his desk. 
+
+~
+LookDesc:$
+While not lavishly dressed, he certainly seems to carry an aire of authority
+and professionalism. His suit is tailored but modest, and he wears no jewelry
+aside from a single silver band and his matching cufflinks. He wears a ^Wwhite^N
+security passkey around his neck, probably for some of the more restricted
+areas on the lower level of the casino. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	6
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Cash:	150
+	Bank:	85
+[SKILLS]
+	brawling:	7
+	clubs:	6
+	pistols:	6
+BREAK
+#62343
+Keywords:	employee casino
+Name:	a casino employee
+RoomDesc:$
+A casino employee is here, checking over the equipment. 
+
+~
+LookDesc:$
+This staff member has the task of making sure all the equipment is clean and
+kept in working order, and if it isn't, fixing it when there's an issue. When
+the time comes every month, he's the grunt who gets the job of going over the
+records and handling all of the currency that comes in and out of the vault.
+Chances are he has to be pretty damn trust worthy, or at the least, thoroughly
+checked before and after his shift to be in such a position. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	85
+	Bank:	65
+[SKILLS]
+	brawling:	4
+BREAK
+#62344
+Keywords:	dealer casino
+Name:	a casino card dealer
+RoomDesc:$
+A casino card dealer is here, shuffling a deck. 
+
+~
+LookDesc:$
+This dealer shows off his skills by smoothly shuffling and flipping through a
+crisp deck of cards, his swift and seamless movements denoting how well
+aquainted he is with the game. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+	brawling:	3
+BREAK
+END

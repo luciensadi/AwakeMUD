@@ -1,0 +1,37 @@
+#3100
+Keywords:	haburi equaliser cyberdeck deck bulky
+Name:	a Haburi Equaliser
+RoomDesc:$
+A bulky, jet black cyberdeck has been carelessly left here.~
+LookDesc:$
+This deck is a legend on the streets. Reputed to be entirely hand made by the
+best deckers in the 'plex, the power of this deck has to be seen to be
+believed. It is covered in an bulky, jet black casing, to provide protection
+to its inner components. As anyone who's opened it up has witnessed, the
+inside is a mess. Wires and components joined in a seemingly random order,
+making this deck near impossible to upgrade or maintain, even by it's original
+creators. Etched into the back are the words "Frag the Corps". 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	8.00
+	Barrier:	4
+	Cost:	80000000
+	AvailTN:	20
+	AvailDay:	240.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	10
+	Val2:	6000
+	Val3:	10000
+	Val4:	4000
+	Val6:	3
+BREAK
+END

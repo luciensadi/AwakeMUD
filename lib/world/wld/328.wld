@@ -1,0 +1,933 @@
+#32800
+Name:	Foyer to Ares Macrotechnology
+Desc:$
+   In between the bullet-proofed glass doors it is very corporate.  To the
+left and right, the walls are a light Plast-i-crete(TM), with several plauges
+from the city of Seattle for honorable actions in the line of fire, dedicated
+to the Knight Errant division of Ares.  Another plague is from the UCAS
+showing their appreciation for some military weapons deal.   
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	glass door
+	Desc:$
+Bullet Proofed Glass Doors 
+~
+	ToVnum:	32801
+	Flags:	1
+	Material:	glass
+	Barrier:	8
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32801
+Name:	Reception Desk
+Desc:$
+   From the bleakness of the entrance to the stylish reception area, the vast
+wealth of the company can be seen.  The plast-i-crete is no long able to be
+seen;  rather the walls are polished soft wood, gleaming from the lights which
+dangle from the ceiling.  Looking like it was decorated by an interior
+decorator who had exquisite taste with a wild streak, the color scheme centers
+around finished wood and laquered metal. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	glass door
+	Desc:$
+Bullet Proofed Glass Door 
+~
+	ToVnum:	32800
+	Flags:	1
+	Material:	glass
+	Barrier:	8
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32802
+Name:	Ares Hallway (East Bank)
+Desc:$
+   The plast-i-crete blocks line the wall.  For the most part the hallway his
+desolate.  It is void of employees and nearly void of everything else, but
+there are pictures and art work hanging on the left and right walls, while the
+hallway looks far to the north, which ends a distance away in offices. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32803
+Name:	Ares Hallway (West Bank)
+Desc:$
+   The plast-i-crete blocks line the wall.  For the most part the hallway his
+desolate.  It is void of employees and nearly void of everything else, but
+there are pictures and art work hanging on the left and right walls, while the
+hallway looks far to the north, which ends a distance away in offices. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	32801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32804
+Name:	Ares Hallway (West Bank)
+Desc:$
+   Along the East side of the hallway there is windows, looking out into a
+grassy courtyard. There is a small enclosed box-like thing in between the
+inner sides of the building, right in the middle of the courtyard.  On the
+right side are offices for lower level Ares Execs who take part in managing
+the many divisions that make of Ares Macrotechnologies.  The suits on this
+floor mean little to Ares and their operations, so killing them would be
+meaningless, thus the lowered security on this floor. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32811
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32805
+Name:	Ares Hallway (West Bank)
+Desc:$
+   The last stretch of the North West hallway, the windows continue to gleam
+to the east.  The Eastern corridor is masked by the elevator shaft which the
+grassy courtyard is build around.  Part of the shack out on the grass, the
+enclosure, can still be seen.  A peice of metal will sometimes glint off of it
+when light hits it just perfectly.  It resembles a latch to what may be a door
+leading down.  To the west are more offices held by insignificant suits.
+Sometimes phones can be heard ringing, men and women talking, and other times
+nearly complete silence, except for the hum of the lights and a murmur that
+rumbles through the plast-i-crete ever so slightly on occasion. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32812
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32806
+Name:	Ares Hallway (East Bank)
+Desc:$
+   To the east and north a way are offices for lower level execs who work for
+Ares several multi-national divisions.  The walls have art work for several
+famous artists, and on the west wall, there is a long row of windows.
+Outside, there is a courtyard complete with green grass and a small enclosure
+with, from this angle, seems to be a small door on top.  The enclosure is in
+the middle of the West and East wall, which looks so easy to run to. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32813
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32807
+Name:	Ares Hallway (East Bank)
+Desc:$
+   Idle phone chatter is can be heard from the offices, along with the
+click-click of typing.  Oblivious to the world around them, these execs work
+hard at their jobs.  The bland plast-i-crete and its occasional pictures drags
+on a little bit further, while to the west, the small enclosure can barely be
+viewed, obscured by the elevator shaft that makes the courtyard into a
+U-shaped grassy island in the middle of corporate sprawl. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32814
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32808
+Name:	Ares Hallway (North Bank)
+Desc:$
+   To the south is a long corridor, leading out to the reception area, then to
+the street.  To the east continues the hallway.  A short distance east is the
+elevator bank, complete with armed guards checking for authorization.  To the
+North is a row of offices, holding the better of the low end execs on this
+floor. The walls are the continous drab plast-i-crete color, with several
+hangings, ranging from newsclips involving execs in the offices to paintings
+done by 20th century artists. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32815
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32809
+Name:	Ares Hallway (North Bank)
+Desc:$
+   To the south, leading all the way to the receptionist and then to the
+street, is the Eastern hallway.  A glance to the west would reveal a bank of
+elevators, guarded by Knight Errants, made for Authorized Persons only. The
+better low execs hold offices on the north side of this hallway, but the
+silence coming from them would suggest somber dreams of unattainable riches. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32816
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32810
+Name:	Ares Hallway (Elevator Banks)
+Desc:$
+   Along the south wall are the elevator banks, which require an ID card that
+gives proper clearence to access the above and below levels of this facility.
+There is a security camera watching the elevators mounted on the north
+ceiling, about 3 meters off the ground.  This will get a good shot of any
+person boarding the elevators, in case of any incidents. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32811
+Name:	Low Level Executive Office
+Desc:$
+   Everything in this room is banal.  The carpet, the bare walls, even the
+furniture.  The reason for this could be one of many, but that is irrelevant.
+This exec holds little leverage with Ares on any playing field;  just another
+meaningless pawn. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32804
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32812
+Name:	Ares Macrotechnology Executive Office
+Desc:$
+   One of the many small time exec offices on this floor, this suit seems to
+work hard. Papers clutter his desk in seemingly random piles, while he types
+madly on his personal computer.  The papers seem to contain all numbers,
+probably quarterly data of shipments and sales in the general Seattle area.
+Nothing to important, this exec's life is meaningless to the company. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32805
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32813
+Name:	Low Executive Office
+Desc:$
+   Unmanned, this office leaves a hole for security.  A computer, left on and
+logged in, idles on the desk.  The drawer is open and some papers spill on the
+floor.  It seems who ever left here, left in a hurry. The decor is cheerful,
+some ads on the way display pictures of Ares products;  everything from
+Predators to Antiochs, it is on a poster here.  The suit in here takes pride
+in the company.   
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32806
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32814
+Name:	Ares Low Executive Office
+Desc:$
+   The interior decor isn't so bad in here.  The desk is not the company
+standard metal one, but rather an immense oak behemoth that takes up alot of
+room.  Upon it there is a computer, numerous volumes of books (also found on
+book racks around the room) and piles of seemingly random papers.  Somewhere
+amongst the clutter, one would find a phone, and other basic office supplies.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32807
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32815
+Name:	Executive Office
+Desc:$
+   One of the many small time exec offices on this floor, this suit seems to
+work hard. Papers clutter his desk in seemingly random piles, while he types
+madly on his personal computer.  The papers seem to contain all numbers,
+probably quarterly data of shipments and sales in the general Seattle area.
+Nothing to important, this exec's life is meaningless to the company. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32808
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32816
+Name:	Executive Office
+Desc:$
+   One of the many small time exec offices on this floor, this suit seems to
+work hard. Papers clutter his desk in seemingly random piles, while he types
+madly on his personal computer.  The papers seem to contain all numbers,
+probably quarterly data of shipments and sales in the General Seattle area.
+Nothing to important, this exec's life is meaningless to the company. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	Office Door
+	Desc:$
+Office Door 
+~
+	ToVnum:	32809
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32817
+Name:	Upper Level Elevator
+Desc:$
+   Whether getting on or getting off of the elevator, security is tight.
+Armed guards check for armor and weapons, and use the full force of the
+corporate extraterritoriality laws.  There is less offices on this floor, but
+the men that are held within are the real important men who run this
+installation. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32818
+Name:	Upper Northern Hallway
+Desc:$
+   To the south is the long hallway that leads to the installation director's
+office.  There is one office on the way down there and on west side of the
+hallway, windows over look the courtyard.  To the west here, there is an
+elevator, with guards covering it closely and the hallway continues beyond
+that. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	32823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32819
+Name:	Upper Northern Hallway
+Desc:$
+   To the east is the elevator, with armed Knight-Errant special guards taking
+care of it.  To the south is a well lit hallway that leads right to the
+Director's office, with one exec office in between.  The floors all around
+seem to be well kept, polished and waxed, probably because this is the floor
+with the VIP's. To the east is the elevator, with armed Knight-Errant special
+guards taking care of it.  To the south is a well lit hallway that leads right
+to the Director's office, with one exec office in between.  The floors all
+around seem to be well kept, polished and waxed, probably because this is the
+floor with the VIP's. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32820
+Name:	Upper Ares Hallway (West Bank)
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32821
+Name:	Upper Ares Hallway (West Bank)
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32822
+Name:	Upper Ares Hallway (West Bank)
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	32826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32823
+Name:	Upper Ares Hallway (East Bank)
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32824
+Name:	Upper Ares Hallway (East Bank)
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32825
+Name:	Upper Ares Hallway (East Bank)
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32826
+Name:	Director's Office
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32827
+Name:	Upper Executive Office
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32828
+Name:	Upper Executive Office
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	32824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

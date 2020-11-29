@@ -1,0 +1,180 @@
+#24395
+Keywords:	man black suit
+Name:	A suit
+RoomDesc:$
+A man wearing a black suit and black shades is standing here. 
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	15
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	10
+	firearms:	10
+BREAK
+#24396
+Keywords:	cyrus hc fixer shady
+Name:	Cyrus
+RoomDesc:$
+A shady looking fixer loiters here, occasionally peering behind him. 
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	30
+	Str:	30
+	Cha:	5
+	Int:	30
+	Wil:	30
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Cash:	999999
+[SKILLS]
+	brawling:	16
+	firearms:	16
+BREAK
+#24397
+Keywords:	cactus
+Name:	a cactus
+RoomDesc:$
+A small, green cactus floats here. 
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	10
+	Weight:	0
+	Cash:	999999
+	Bank:	999999
+[SKILLS]
+	brawling:	50
+	:	3
+	:	3
+	:	4
+	:	10
+BREAK
+#24398
+Keywords:	lsm mobile suit huge robot lone star
+Name:	an LSMP Mobile Suit
+RoomDesc:$
+A huge robot stands here, scanning the area. 
+
+~
+LookDesc:$
+A giant, humanoid robot, painted in the Lone Star colors.  It waits patiently
+for an order, assault cannon at the ready. 
+~
+ArriveMsg:	lumbers in from
+LeaveMsg:	stomps out
+MobFlags:	100000000000000100010000001001010
+AffFlags:	1000000100001000000000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	12
+	Str:	50
+	Cha:	0
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	1000
+	Weight:	1900
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+	brawling:	15
+	assault cannons:	15
+	:	3
+	:	4
+	:	10
+BREAK
+#24399
+Keywords:	lone star lonestar ls lsmp mobile police officer
+Name:	a LS Mobile Police officer
+RoomDesc:$
+A Lone Star Mobile Police officer is here, awaiting an order. 
+
+~
+LookDesc:$
+Wearing a suit of bright blue, full body armor, and brandishing a large
+assault rifle, these guys don't look like they're messing around. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100011100001001010
+AffFlags:	1000000100000000001000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	16
+	Str:	16
+	Cha:	8
+	Int:	16
+	Wil:	30
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	brawling:	12
+	assault rifles:	13
+	firearms:	12
+	:	4
+	:	3
+BREAK
+END

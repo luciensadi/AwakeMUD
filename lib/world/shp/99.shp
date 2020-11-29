@@ -12,6 +12,7 @@ NoNuyen:	You ain't got dat kinda munney!  Get da frag outta here!!
 DoesntBuy:	I wouldn't buy dat if it were one of a kind and worth a million yen!
 Buy:	Gimme %d creds.
 Sell:	Here's ya %d creds.
+Name:	STuphR ShAK
 Flags:	0
 Races:	11100
 Buytypes:	11000000000000000001000100000
@@ -26,26 +27,18 @@ Etiquette:	46
 		Type:	Avail
 		Stock:	0
 	[SELL 2]
-		Vnum:	603
-		Type:	Avail
-		Stock:	0
-	[SELL 3]
 		Vnum:	878
 		Type:	Avail
 		Stock:	0
-	[SELL 4]
-		Vnum:	614
-		Type:	Avail
-		Stock:	0
-	[SELL 5]
+	[SELL 3]
 		Vnum:	9908
 		Type:	Always
 		Stock:	0
-	[SELL 6]
+	[SELL 4]
 		Vnum:	9907
 		Type:	Always
 		Stock:	0
-	[SELL 7]
+	[SELL 5]
 		Vnum:	9999
 		Type:	Always
 		Stock:	0
@@ -64,6 +57,7 @@ NoNuyen:	You don't have enough creds!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d creds.
 Sell:	Here's your %d creds.
+Name:	Renaldo's Mix and Match
 Flags:	0
 Races:	0
 Buytypes:	0
@@ -144,37 +138,38 @@ NoNuyen:	You ain't got enuff money!   Get the frag out of here, you slot!
 DoesntBuy:	We don't buy that kind of drek here!
 Buy:	That'll be %d creds.
 Sell:	Here's your %d creds.
+Name:	Rumble's Armory
 Flags:	0
 Races:	0
 Buytypes:	11000000000000000000000100000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	658
-		Type:	Avail
+		Vnum:	922
+		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	17220
+		Vnum:	925
 		Type:	Avail
 		Stock:	0
 	[SELL 2]
-		Vnum:	9934
+		Vnum:	658
 		Type:	Avail
 		Stock:	0
 	[SELL 3]
-		Vnum:	9933
+		Vnum:	17220
 		Type:	Avail
 		Stock:	0
 	[SELL 4]
-		Vnum:	955
+		Vnum:	9934
 		Type:	Avail
 		Stock:	0
 	[SELL 5]
-		Vnum:	882
+		Vnum:	9933
 		Type:	Avail
 		Stock:	0
 	[SELL 6]
-		Vnum:	936
+		Vnum:	882
 		Type:	Avail
 		Stock:	0
 	[SELL 7]
@@ -196,6 +191,7 @@ NoNuyen:	You don't have enough creds!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d creds.
 Sell:	Here's your %d creds.
+Name:	unnamed shop
 Flags:	0
 Races:	11100
 Buytypes:	0
@@ -240,28 +236,33 @@ NoNuyen:	You don't have enough creds!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d creds.
 Sell:	Here's your %d creds.
+Name:	Doc Dodie
 Flags:	10
 Races:	11100
 Buytypes:	1000000000000000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	300
+		Vnum:	412
 		Type:	Avail
 		Stock:	0
 	[SELL 1]
-		Vnum:	301
+		Vnum:	300
 		Type:	Avail
 		Stock:	0
 	[SELL 2]
-		Vnum:	312
+		Vnum:	301
 		Type:	Avail
 		Stock:	0
 	[SELL 3]
-		Vnum:	319
+		Vnum:	312
 		Type:	Avail
 		Stock:	0
 	[SELL 4]
+		Vnum:	319
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
 		Vnum:	309
 		Type:	Avail
 		Stock:	0
@@ -280,6 +281,7 @@ NoNuyen:	Keep wastin my time slot, and I'll have Guido feed ya to Koloth.
 DoesntBuy:	I ain't buyin dat.
 Buy:	%d rocks, pay up.
 Sell:	Here's da %d clams I owe yas.
+Name:	unnamed shop
 Flags:	0
 Races:	11100
 Buytypes:	0

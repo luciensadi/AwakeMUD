@@ -103,7 +103,7 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val1:	1
-	Val3:	310
+	Val3:	3
 	Val4:	5
 	Val5:	-1
 	Val6:	-1
@@ -352,7 +352,7 @@ Material:	metal
 [VALUES]
 	Val1:	1
 	Val2:	3
-	Val3:	313
+	Val3:	2
 	Val4:	4
 	Val5:	-1
 	Val6:	-1
@@ -512,7 +512,6 @@ Material:	metal
 [VALUES]
 	Val1:	4
 	Val2:	4
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	-1
@@ -589,7 +588,6 @@ Material:	electronics
 [VALUES]
 	Val1:	4
 	Val2:	3
-	Val3:	311
 	Val4:	3
 	Val5:	-1
 	Val6:	-1
@@ -649,7 +647,7 @@ BREAK
 Keywords:	fifth chernobyl vodka
 Name:	a fifth of ^RChernobyl^N(tm) ^rred vodka^N
 RoomDesc:$
-A red glass bottle marked with the radation hazard symbol has been dropped.~
+A red glass bottle marked with a radiation hazard symbol has been dropped here.~
 LookDesc:$
 This is a small bottle of Chernobyl vodka, which is known for its distinctive
 red coloring. 
@@ -1064,7 +1062,6 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	3
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	-1

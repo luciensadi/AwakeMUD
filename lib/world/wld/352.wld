@@ -1,0 +1,1376 @@
+#35200
+Name:	Middlefield
+Desc:$
+   As you go along this sections of Middlefield you see a couple of stop
+lights. There is a brick wall that has been tagged with  spray paint and
+bullet holes. On the other side of the street there is a tangled mess that
+looks to be a car, that is riddled with gunshots, rusting out from exposure to
+the elements. The paint depicts a bright red nuclear bomb.  
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	35201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	14375
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35201
+Name:	Middlefield and Banrk
+Desc:$
+   Here Middlefield intersects with Banrk road. There is a building here that
+has big spotlights sitting out in front of the Entrance. Four stoplights are
+hung across light poles at the intersection. A big sign has the same red nuke
+picture on the front of it. There is a HUGE crater near the road. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	Keywords:	glass
+	ToVnum:	35202
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35202
+Name:	Entry Way
+Desc:$
+   There are a few exits to the entrance way. The way is lit by the spotlights
+just outside of the door. The wind whistles in somewhere from the north. 
+~
+Flags:	10000000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	glass
+	ToVnum:	35201
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	3
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35203
+Name:	A small hallway
+Desc:$
+   This very dark hallway seems to channel the wind. There is a musty, rotting
+smell coming from some where. On the walls there is a sign that reads The
+Nucleus is somewhere. You seem to hear the sound of music and voices drifting
+in to the hallway. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	(None)
+	ToVnum:	35202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35204
+Name:	Along the hall
+Desc:$
+   The whisping sound of the wind seems to be coming from the fan about your
+head. The voices seem to be comthing from the light you see up ahead. There
+are a few dwarfs and ^RRed Hot Nuke ^wgangers^n walking around here. You start to
+hear some of Maria Mercurial's hit songs. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	(none)
+	ToVnum:	35205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35205
+Name:	^RT^rh^Re ^rE^Rn^rT^Rr^rA^Rn^rC^Re to The Nucleus
+Desc:$
+   Here you see dwarfs entering and leaving the bar. Smelling the smoke and
+hearing the LOUD music you wonder if this is the place that you want to go
+into. Peering into the bar you see two dwarfs in a darkened corner getting
+into a fight over something. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	(none)
+	ToVnum:	35206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	(none)
+	ToVnum:	35204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35206
+Name:	The Relaxing Area.
+Desc:$
+   This is where you come to just relax from a hard day of shadowrunning.
+There is a jukebox in one of the corners of this semi-spacious room. At the
+jukebox there are two dwarfs fighting over what song to play. The current song
+is one of Maria Mecurials greatest hits "I Wanna Run With You". 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	(none)
+	ToVnum:	35205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	(none)
+	ToVnum:	35207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35207
+Name:	The Bar
+Desc:$
+   Seeing a bunch on liqour bottles, taps, and some seating, you assume that
+your at the bar. Looking around you see that this is a semi-stuffy room,
+mostly populated by dwarfs, trolls, orks, and you are sure that some of them
+are shadowrunners. There is another part to this bar and that is the
+restaurant and patio section of this bar. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	(none)
+	ToVnum:	35208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	(none)
+	ToVnum:	35206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35208
+Name:	The patio of The Nucleus.
+Desc:$
+    There are some tables and chairs arranged here. Also a bench sitting
+paralel from where you just you just walked in from. Smelling a sweet scent in
+the air you automaticly wonder what it is. The smell appears to be burgers and
+fries being cooked in the back. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	(none)
+	ToVnum:	35207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35209
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	(none)
+	ToVnum:	35201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	metal
+	ToVnum:	35210
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35210
+Name:	Inside the Crater
+Desc:$
+   Stepping into the crater, you can almost feel the leftover radiation in the
+air. Your skin bristles and the hairs in your nose shrivel even before the
+stench of scorched rock assails your senses. The rock looks shorn ragged in
+some places; in others, it is melted smooth, like volcanic glass. At the
+bottom of the pit rests a boulder that looks like it was not here for the
+blast. Maybe it's still loose... 
+~
+Flags:	10000000000000000000010000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	35201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	Metal
+	ToVnum:	35211
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35211
+Name:	Red Hot Nuke Depo.
+Desc:$
+   Going in from above you can hear the faint sounds of people walking around.
+There are some boxes and shell caseings lieing around. All of the walls seem
+to be rittled with bullet holes and a few of the holes seem to be from a
+SHOTGUN!?!?! 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	metal
+	ToVnum:	35210
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35212
+Name:	A seemingly big hallway
+Desc:$
+   This hall seems to be 'newer' than from where you entered. It looks like
+someone has gotten new walls. There is a BIG ^RRed nuclear bomb^w on the right
+wall. There is a faint smell of gun powder and fresh blood in this room.  
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	35213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35213
+Name:	Walking along the hallway
+Desc:$
+    This hallway is 'newer' also. The walls are a ^rRed^w & White swirl. The wall
+on your left seems to have a faint crack in it. When you look at the ceiling
+there are dark red splatters in a few places. Guess that someone didnt paint
+over them. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	metal door
+	ToVnum:	35214
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+	LockRating:	5
+[EXIT southwest]
+	ToVnum:	35212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35214
+Name:	Nuke Gear
+Desc:$
+    When you come in through the door you see an assortment of clothing
+hanging on the walls. The clothing ranges from boots to hats. This store seems
+like it has everything a runner could need...besides a loo. Here the dealer
+walks around with a few gangers showing them whatthey might be looking to buy.
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	secret
+	ToVnum:	35213
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	0
+	LockRating:	5
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35215
+Name:	The Intersection
+Desc:$
+   Now you have come to the chice of the day which way do you go?? Maybe you
+go to the left. maybe to the right, one wrongs step and you might die. The
+footsteps are very close now. The voices are also getting very close. You
+start to think about hightailing out the way you came. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	(none)
+	ToVnum:	35296
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	(none)
+	ToVnum:	35213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35216
+Name:	Banrk Rd. North
+Desc:$
+   Why is the ground to the side of the road glowing? Maybe it is because of
+the Shiawase Atomic plant! In a near distance you can see the front gate to
+the plant. There is also a gaggle of black clothed things moving around. A
+thick covering of smog also coats the area. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35217
+Name:	Path to the gate
+Desc:$
+   This area is completly black from the smog pouring out of the Shiawase
+Atomic plant. There is a faint glow from the ground around you. 
+~
+Flags:	10010000000000000000000001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	(none)
+	ToVnum:	35218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35218
+Name:	the GATE
+Desc:$
+   There are a bunch of guards milling about here! There is a big fan to push
+the smog away to the right of the gate. Behind the gate you can see the
+Shiawase Nuclear Facility looming up into the sky. On the other side of the
+gate there are even more guards, trying to get into the actual building will
+be very hard. Near the top of the building there is a very big smokestack that
+is pouring out the smog that was covering the entrance to the plant. 
+~
+Flags:	10100000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	Gate
+	ToVnum:	35219
+	Flags:	1
+	Material:	concrete
+	Barrier:	12
+	KeyVnum:	0
+	LockRating:	7
+[EXIT south]
+	ToVnum:	35217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35219
+Name:	In the parking lot
+Desc:$
+    There are some guards walking around here. Cars are parked here by the
+dozen. One of the first things that you notice is that the Shiawase building
+is HUGE.  
+~
+Flags:	10000100000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	Gate
+	Desc:$
+~
+	ToVnum:	35218
+	Flags:	1
+	Material:	concrete
+	Barrier:	12
+	KeyVnum:	0
+	LockRating:	7
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35220
+Name:	The Lobby
+Desc:$
+   The marble floor that you are walking on is finely polished, hell you can
+barely see the buffer swirls. Every few seconds there are some guards walking
+by. Not to mention the plain old joes walking to thier respected positions.
+There is a single guard sitting behind the desk that is for informational
+uses. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35221
+Name:	A hallway
+Desc:$
+   This hallway has a few doors along the yellowish walls that badly need a
+coat of paint. There are a few pieces of cheap art on the walls too. The
+marble that was once perfect is now scratched and in need of replacement or a
+wax due to the heavy traffic of guards and workers trudging along to and fro.
+On one side of the walls there is a long, thin line that almost could be a
+door hidden in the wall. About half way down the hall there is a MAD sensor
+built into the ceiling not to mention the cameras at both ends of the hall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	Wall
+	ToVnum:	35223
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	3
+	HiddenRating:	2
+[EXIT south]
+	ToVnum:	35220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35299
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35222
+Name:	the End of the Hallway
+Desc:$
+   After walking down this shortish hallway you finally come to the end. There
+are a few doors and an elevator bank in this room. A security camera is
+panning around in the upper corner to the left of the elevator. The carpet is
+rather plush and there is slight matting near the elevator from heavy use.
+Plants that are in greenish-blue pots also adorn the Shiawase logo. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35223
+Name:	A Small Shop
+Desc:$
+    This is the workshop of a burned out decker from the looks of it. There
+are a lot of progs and decks laying around here. The man that used to use
+these things is sitting behind a four legged table with most of this items
+layied out on it. 
+~
+Flags:	10000000000000000010001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	Wall
+	ToVnum:	35221
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	3
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35224
+Name:	Elevator room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	35222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35225
+Name:	The Beggining of the Reaserch and Developement area
+Desc:$
+   After walking down this shortish hallway you finally come to the end. There
+are a few doors and an elevator bank in this room. A security camera is
+panning around in the upper corner to the left of the elevator. The carpet is
+rather plush and there is slight matting near the elevator from heavy use.
+Plants that are in greenish-blue pots also adorn the Shiawase logo. 
+~
+Flags:	10000000000000000010001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	metal door big
+	Desc:$
+a big metal door 
+~
+	ToVnum:	35226
+	Flags:	1
+	Material:	metal
+	Barrier:	16
+	KeyVnum:	0
+	LockRating:	10
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35226
+Name:	The hallway leading to the R&D area
+Desc:$
+   As you come through the door you notice that there is a single camera
+watching the sliding doors 10 meters down the hall. The doors are solid metal,
+as you walk closer to them you swear you hear noises but when you turn and
+look around you see nothing. The door is opperated by the same key that you
+used to come through the first door. 
+~
+Flags:	10000000000000000010001000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	metal big door
+	Desc:$
+a big metal door 
+~
+	ToVnum:	35225
+	Flags:	1
+	Material:	metal
+	Barrier:	16
+	KeyVnum:	35226
+	LockRating:	10
+[EXIT south]
+	Keywords:	Pressurized
+	Desc:$
+a big, pressurized door. 
+~
+	ToVnum:	35295
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35227
+Name:	Near the elevator
+Desc:$
+   This is the start of the first basement floor in the power plant. There are
+a few doors and an elevator bank in this room. A security camera is panning
+around in the upper corner to the left of the elevator. The carpet is rather
+plush and there is heavy matting near the elevator from heavy use. Plants that
+are in greenish-blue pots also adorn the Shiawase logo. 
+~
+Flags:	10000001000000000000001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	0
+	ToVnum:	35224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35228
+Name:	An unfinished room
+Desc:$
+   The other side l 
+~
+Flags:	10000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35229
+Name:	Near the elevator
+Desc:$
+   This is the start of the third basement floor in the power plant. There are
+a few doors and an elevator bank in this room. A security camera is panning
+around in the upper corner to the left of the elevator. The carpet is rather
+plush and there is heavy matting near the elevator from heavy use. Plants that
+are in greenish-blue pots also adorn the Shiawase logo. 
+~
+Flags:	10000001000000000010001100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35269
+Name:	Magire's lair
+Desc:$
+You are in an unfinished room.
+~
+Flags:	100000000110000000000000011000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35294
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35295
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35295
+Name:	Decontamination
+Desc:$
+   You are surrounded by pressure locked doors, as you can see the one you
+just came thru is now closed. You hear a slight hissing sound as the decond
+camber is starting to fill with gas. After about 15 seconds you start coughing
+and wheezing unable to breate thru the harsh chemical decontaminant. 
+~
+Flags:	10000001000000000010011100
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	35226
+	Flags:	0
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	(none)
+	ToVnum:	35294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35296
+Name:	An extending hallway
+Desc:$
+   The same red and white swirl patter that you have seen before is just
+repeated again while you walk down this long hallway. Ever now and again you
+see a darker red that seems to be a splotch of blood. The voices are getting
+close and the footsteps seem to be getting further away. The out of  no where
+you see the flickering of light to the north. Now the voices have seemed to
+fade and the thumping of feet is getting closer. Maybe this would be a good
+time to run. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	35215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35297
+Name:	Women's Room
+Desc:$
+   Everything in this bathroom sparkles so much that it looks like it has
+never been used. The toilets and stalls are self-cleaning. There are a few
+greenish-blue plant pots with the Shiawase logo on them.  
+~
+Flags:	10000000000000000000011000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	Keywords:	wooden door
+	ToVnum:	35299
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35298
+Name:	Men's Room
+Desc:$
+   There isn't much to say about this bathroom. Everything in it sparkles so
+much that it looks like it has never been used. The toilets and urinals are
+self-cleaning. There are a few greenish-blue plant pots with the Shiawase logo
+on them. 
+~
+Flags:	10000000000000000000011000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	Keywords:	wooden door
+	ToVnum:	35299
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#35299
+Name:	a small alcove
+Desc:$
+   There is some peeling wallpaper covering the walls. There is a sign here
+point to the men and womens restrooms. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	Keywords:	wooden door
+	ToVnum:	35297
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	wooden door
+	ToVnum:	35298
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

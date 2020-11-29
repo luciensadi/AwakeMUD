@@ -1,0 +1,169 @@
+#65200
+Keywords:	spider barkeep bartender tender keep male young man blonde
+Name:	Spider
+RoomDesc:$
+A young looking man with long blonde hair is here tending the bar. 
+
+~
+LookDesc:$
+This would be the decker formerly known as The Spider, at least judging from
+the tattoo on his bare left shoulder.  He was one of the many deckers who had
+made passes on Renraku during the Deus days and was thought dead from neural
+feedback, but here he is, tending the bar of The Gentlemen Loser.  He's got
+long blonde hair down to his shoulders and piercing blue eyes, his teeth have
+been modified into canines and he's had both his ears replaced with cyber ones
+and also has a string of datajacks along the right side of his head.  He wears
+faded blue jeans and a mesh shirt over a muscle shirt, topping it all off with
+a pair of sunglasses that he wears low on his nose that have a hologram of a
+spider reflected on them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000100010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	2
+	Cha:	4
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	201
+	Weight:	70
+	Cash:	1000
+[SKILLS]
+	brawling:	4
+	computers:	10
+	:	11
+	corporate etiquette:	5
+	media etiquette:	7
+BREAK
+#65201
+Keywords:	mike miles hand god dwarf short bearded
+Name:	Mike "The Hand of God" Miles
+RoomDesc:$
+A grease-covered dwarf in coveralls is here, working at a dismantled engine
+near the ramp. 
+
+~
+LookDesc:$
+This little dwarf is Mike Miles - at least, that's what the name tag on his
+grease-stained coveralls says. He's also known as The Hand of God - a name
+given to him because of the rigging work he did when he was younger. He's
+pushing fifty now, but is still one hell of a wrench man. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000100010000000001010
+AffFlags:	1000000000
+Race:	Dwarf
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	3
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	110
+	Weight:	95
+	Cash:	250
+[SKILLS]
+	BR/Bike:	9
+	BR/Car:	9
+	BR/Drone:	10
+	BR/Truck:	9
+	electronics:	8
+BREAK
+#65202
+Keywords:	ratz kremlin bald human tall russian male
+Name:	Ratz Kremlin
+RoomDesc:$
+A tall, bald russian with a vicious looking cyberarm is standing here, packing
+stuff away. 
+
+~
+LookDesc:$
+This is Ratz Kremlin, local muscle man for Lana Zone, the resident fixer.
+Ratz is a war veteran turned runner turned muscle who's got experience with
+the biggest, baddest, ugliest weapons in the world.  And he's not scarred to
+use them, so don't screw around in here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000100010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	12
+	Str:	15
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	175
+	Ballistic:	9
+	Impact:	13
+	Cash:	100000
+[SKILLS]
+	brawling:	12
+	assault cannons:	11
+	missile launchers:	10
+	:	9
+	leadership:	8
+BREAK
+#65203
+Keywords:	lana zone fixer female elf business suit serve
+Name:	Lana Zone
+RoomDesc:$
+A short elf in a clean cut business suit stands here serving people from
+behind the armored glass. 
+
+~
+LookDesc:$
+Lana Zone was a well known fixer before she disappeared from the scene, she's
+since taking to working here, making small deals while the dust on her past
+blows over.  Her muscle man Ratz is behind her, keeping an eye on her.  She's
+about five foot four and has a beautiful elven complexion with long green hair
+and sharp pointed ears. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	2
+	Cha:	7
+	Int:	7
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	65
+[SKILLS]
+	street etiquette:	12
+	corporate etiquette:	10
+	media etiquette:	10
+	negotiation:	12
+	interrogation:	11
+BREAK
+END

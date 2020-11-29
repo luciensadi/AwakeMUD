@@ -1,0 +1,228 @@
+#23600
+Keywords:	Johnson mister J
+Name:	J
+RoomDesc:$
+J stands here 
+
+~
+LookDesc:$
+Average j guy 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	MaxPhys:	0
+	MaxMent:	0
+	Cash:	999999
+	Bank:	999999
+	Karma:	1
+[SKILLS]
+BREAK
+#23601
+Keywords:	white giant gator alligator
+Name:	a giant white alligator
+RoomDesc:$
+A giant white alligator stands here. 
+
+~
+LookDesc:$
+As you look at the giant white gator you realize the more than earthly
+intelligence lurks behind those cold yellow eyes. He is huge and only there to
+stop intruders from defiling the home of the person that freed him from
+bondage and made him a free spirit. 
+~
+ArriveMsg:	crawls from
+LeaveMsg:	crawls 
+MobFlags:	100010111010101001000
+AffFlags:	11000000000000010
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Sitting
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	20
+	Str:	30
+	Cha:	7
+	Int:	15
+	Wil:	15
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	brawling:	8
+	:	3
+	stealth:	8
+	:	8
+	:	4
+BREAK
+#23602
+Keywords:	fox brown cute beautiful
+Name:	a beautiful brown fox
+RoomDesc:$
+A little fox sniffs around here, looking for food. 
+
+~
+LookDesc:$
+It's coat is a thick, shiny redish-brown, with white underparts. It sniffs
+around, untill it notices you. Looking up at you, it lets out a little bark,
+then trots up to you, expecting something. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000010000110000001001000
+AffFlags:	1000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#23603
+Keywords:	colonel Hazard middle-aged man
+Name:	COL Ashley SM Hazard
+RoomDesc:$
+A middle-aged man stands here rigidly 
+
+~
+LookDesc:$
+A tall middle-aged man stands here. From what you can see, he is well muscled
+but lean not bulky. His black hair is cut in a tight flattop with only a hint
+of grey showing in the short hair on the side. A rough scar runs from inside
+the hairline and terminates at his chin. It would run through his eye except
+that an ancient cybereye sits in it's path. You know the eye is old due to
+it's construction, more a blocky metal prosthesis than an implant. It's angry
+red glow twinkles as he surveys the room. He moves with economy, as if
+ensuring no energy is wasted. And though his face seems set in a permanent
+scowl, you sense that he does not lose control but rather executes his
+decisions with deliberate determination. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000000100000001000
+AffFlags:	1000000100001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	15
+	Int:	15
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	15
+	firearms:	15
+	leadership:	15
+	driving/Car:	15
+	throwing weapons:	15
+BREAK
+#23604
+Keywords:	supressive sentry turret ceiling mounted
+Name:	A ceiling-mounted suppressive turret
+RoomDesc:$
+A ceiling-mounted suppressive turret guards the area. 
+
+~
+LookDesc:$
+Equipped with advanced sensors and ultrasonic detection systems, this turret
+is hard to evade. Armor plating shrowds everything right down the the
+mounting, and a large barrel that seems to be fit for 7.62mm rounds portrudes
+from the structure. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000010000000111010
+AffFlags:	100100000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	8
+	Cha:	1
+	Int:	10
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	9
+	Impact:	8
+[SKILLS]
+	machine guns:	8
+BREAK
+#23699
+Keywords:	Sophia Dymier very young kobalt blue night one
+Name:	Sophia Dymier
+RoomDesc:$
+A very young, kobalt blue night-one girl is here. 
+
+~
+LookDesc:$
+This small night-one girl is covered in pleasant, kobalt blue colored fur. She
+seems very well taken care of, posessing nicely kept hair that is just
+slightly brighter than her fur. It flows loosely down to the middle of her
+back, and small groups of it are placed forward from her elvish ears. A pair
+of big and vivid purple eyes stand out among a vaguely narrow face, and add an
+innocent compliment to a small, bright pink mouth. She stands shy of 5 feet,
+more around the 4 foot 10 inches mark. Her build is slender, but far from a
+toothpick, and she seems to have a subtle hint of athletecism about her. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	10000000000000
+Race:	Night-One
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	2
+	Cha:	7
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+END

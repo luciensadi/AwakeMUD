@@ -1,0 +1,2159 @@
+#4200
+Keywords:	orc mean guard biohyde
+Name:	an orkish BioHyde security guard
+RoomDesc:$
+A security guard in a BioHyde uniform stands here. 
+
+~
+LookDesc:$
+This security guard is heavy, muscular and well-armed. He stands with the
+ramrod-straight but somehow relaxed posture often found in ex-military men. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	3
+	Str:	9
+	Cha:	1
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	120
+	Ballistic:	5
+	Impact:	1
+	Bank:	500
+[SKILLS]
+	machine guns:	6
+	brawling:	5
+BREAK
+#4201
+Keywords:	piasma rabid
+Name:	a rabid piasma
+RoomDesc:$
+A huge piasma growls as it patrols the area. 
+
+~
+LookDesc:$
+This beast's huge, black-furred body would be intimidating enough without the
+red eyes, razor-sharp fangs and foaming jaws. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100000111010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	4
+	Str:	12
+	Cha:	1
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	173
+	Weight:	212
+	Ballistic:	9
+	Impact:	6
+	Karma:	30
+[SKILLS]
+	edged weapons:	7
+BREAK
+#4202
+Keywords:	woman biohyde pretty lady
+Name:	a BioHyde secretary
+RoomDesc:$
+A pretty woman sits here.
+
+~
+LookDesc:$
+Slim, trim and well-dressed, this young secretary is in good shape and looks
+quite absorbed in her work. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	2
+	Cha:	5
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	66
+	Cash:	50
+[SKILLS]
+	corporate etiquette:	4
+	brawling:	2
+BREAK
+#4203
+Keywords:	worker man biohyde thin
+Name:	a BioHyde worker
+RoomDesc:$
+A thin BioHyde worker is standing here.
+
+~
+LookDesc:$
+This man is far too thin for his own good, and shows obvious signs of stress
+and tension. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders
+MobFlags:	10000010001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	2
+	Str:	2
+	Cha:	4
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	179
+	Weight:	66
+	Ballistic:	3
+	Cash:	75
+[SKILLS]
+	corporate etiquette:	3
+	brawling:	1
+BREAK
+#4204
+Keywords:	man chemist biohyde white
+Name:	a Bio-Chemist
+RoomDesc:$
+A man in a white coat is standing here.
+
+~
+LookDesc:$
+The Bio-Chemist is hard at work, and he seems truly enthralled in the data on 
+ his little clipboard. You might be interested in the data too, if only he'd  
+  let you see what was on it. ~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	2
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	89
+	Ballistic:	4
+	Bank:	325
+[SKILLS]
+	biotech:	6
+	brawling:	2
+BREAK
+#4205
+Keywords:	scientist
+Name:	a scientist
+RoomDesc:$
+A scientist stands here examining all around him.
+
+~
+LookDesc:$
+The scientist is, on sight, one of the most intelligent men you've ever seen. 
+ But as a BioHyde employee, he really does need to be. ~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	92
+	Ballistic:	1
+	Impact:	1
+	Bank:	125
+[SKILLS]
+	brawling:	4
+	biotech:	4
+BREAK
+#4206
+Keywords:	harlten man chief smart executive
+Name:	Chief Executive Harlten
+RoomDesc:$
+A smart looking man is standing here.
+
+~
+LookDesc:$
+Chief Executive Harlten is an ingenious man, who seems to almost glow with
+true self confidence and modesty. He holds more power in the corporate world
+than    you will ever do, but he's also doesn't seem content with life as you
+might come to expect from a man with almost everything and anything he's ever
+wanted  as well as more money than you can think of. ~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000011001
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	179
+	Weight:	84
+	Ballistic:	9
+	Impact:	3
+	Cash:	200
+[SKILLS]
+	corporate etiquette:	5
+	brawling:	5
+BREAK
+#4207
+Keywords:	man officer quarantine silver
+Name:	a Quarantine Officer
+RoomDesc:$
+A large man draped in silver stands here.
+
+~
+LookDesc:$
+The ~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	6
+	Cha:	2
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	168
+	Weight:	75
+	Ballistic:	7
+	Bank:	125
+[SKILLS]
+	brawling:	4
+BREAK
+#4208
+Keywords:	expreen executive clever man
+Name:	Chief Executive Expreen
+RoomDesc:$
+A tall man dressed in chic clothing is standing here.
+
+~
+LookDesc:$
+Chief Executive Expreen is one of the best executives in the corporate world  
+ right now, and he commands a huge realm of power and influence. He is dressed
+  in impeccable clothes, and wears a shiny pair of copper specs. ~
+ArriveMsg:	arrives from
+LeaveMsg:	strolls casually
+MobFlags:	1010000000011000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	4
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	3
+	Mag:	4
+[POINTS]
+	Height:	185
+	Weight:	93
+	Ballistic:	10
+	Impact:	4
+	Bank:	100
+[SKILLS]
+	brawling:	8
+	corporate etiquette:	5
+BREAK
+#4209
+Keywords:	branson vice president man stout short
+Name:	Vice President Branson
+RoomDesc:$
+A short, stout man is here, looking for someone to fire.
+
+~
+LookDesc:$
+Vice President Branson is a stout, oily and horrible-looking man. His
+constantly raised voice and the perpetual snarl that seems to occupy his
+florid face doesn't bode well for any of his workers -- or, indeed, for anyone
+who has any dealings with him at all. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	grumpily walks
+MobFlags:	10000000011001
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	151
+	Weight:	93
+	Ballistic:	9
+	Impact:	5
+	Bank:	550
+[SKILLS]
+	brawling:	9
+	corporate etiquette:	6
+BREAK
+#4210
+Keywords:	troll big guard huge
+Name:	a huge Troll Guard
+RoomDesc:$
+A huge troll is sitting here, reading.
+
+~
+LookDesc:$
+) Look description: Huge and sweaty, this is the epitome of all mean buggers.
+Standing over 6ft high and weighing in at over 188kgs, this dude is MASSIVE.
+That's probably why he's been hired as a security guard. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	2
+	Str:	11
+	Cha:	1
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	188
+	Ballistic:	8
+	Impact:	3
+	Cash:	175
+[SKILLS]
+	brawling:	6
+BREAK
+#4211
+Keywords:	technician old bearded man white
+Name:	a Technician
+RoomDesc:$
+An old bearded technician is here, trying to work.
+
+~
+LookDesc:$
+The technician is old and withered, years of hard work and torture have
+worn away any life this old man may have had.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	154
+	Weight:	67
+	Ballistic:	4
+	Impact:	1
+[SKILLS]
+	brawling:	3
+	electronics:	4
+BREAK
+#4212
+Keywords:	instructor latex well built man
+Name:	an Instructor
+RoomDesc:$
+An instructor is here, twitching in his latex bodysuit.
+
+~
+LookDesc:$
+The training instructor treats the mercenaries like small children, and guide
+them through their early stages of life as bio-engineered species.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	6
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	194
+	Weight:	73
+	Ballistic:	9
+	Impact:	1
+	Cash:	350
+[SKILLS]
+	brawling:	5
+	armed combat:	5
+BREAK
+#4213
+Keywords:	psychoanalyst man oily psycho
+Name:	a Psychoanalyst
+RoomDesc:$
+An oily looking man stands here, cleaning his glasses.
+
+~
+LookDesc:$
+The Psychoanalyst is a seedy, horrible man, who thinks he can understand the
+goings on inside the bicameral mind of a bio-engineered killer. Well, no he
+can't, but the company has him anyway. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001000
+AffFlags:	100000000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	152
+	Weight:	59
+	Ballistic:	4
+	Impact:	7
+	Cash:	180
+[SKILLS]
+	brawling:	3
+	corporate etiquette:	6
+BREAK
+#4214
+Keywords:	robot combat level 2 machine
+Name:	a level-2 Combat Robot
+RoomDesc:$
+An armoured fighting machine is here, growling mechanically.
+
+~
+LookDesc:$
+The level-2 Combat Robot is the second stage in the Bio-Engineered mercenaries
+combat training. These are the last robots to test the mercs before they are
+sold as shadowrunners.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	rolls
+MobFlags:	100000000000000000010100000001000
+AffFlags:	100000000000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	10
+	Cha:	1
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	6
+	Cash:	300
+[SKILLS]
+	brawling:	7
+BREAK
+#4215
+Keywords:	man biohyde geneticist
+Name:	a BioHyde Genetecist
+RoomDesc:$
+A geneticist is standing here.
+
+~
+LookDesc:$
+The geneticist is one of the key men in the whole creation process at Biohyde.
+He designs the mercenaries that are made, and is responsible for their
+turnout.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	4
+	Str:	7
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	4
+	Bank:	50
+[SKILLS]
+BREAK
+#4216
+Keywords:	robot combat bot level-1 machine
+Name:	a Level-1 Combat Robot
+RoomDesc:$
+A lean Combat Robot is hovering here.
+
+~
+LookDesc:$
+The Ares Combat Robot series was developed many years ago, but scrapped a year
+later when field test proved the robots were too tough for any shadowrunner to
+handle. The size of an average man, the robot has arms of shining steel, with
+twin mono-edge blades attached to either wrist.
+~
+ArriveMsg:	buzzes in from
+LeaveMsg:	hovers its way
+MobFlags:	100000000000000000010000000101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	6
+	Cha:	1
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	5
+[SKILLS]
+	brawling:	6
+BREAK
+#4217
+Keywords:	rowan
+Name:	rowan
+RoomDesc:$
+Palanthus is standing here.
+
+~
+LookDesc:$
+Palanthus is an idiotic looking fiend, with eyes of kraft cheese. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#4218
+Keywords:	fun xp
+Name:	an XP mob
+RoomDesc:$
+an XP mob is here waiting to be vaporized.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Bank:	1
+[SKILLS]
+BREAK
+#4219
+Keywords:	hadolf nitler nazi german evil man satan fucker
+Name:	The Zombie form of Hadolf Nitler
+RoomDesc:$
+Hadolf Nitler's animated corpse walks around looking for life to devour. 
+
+~
+LookDesc:$
+Hadolf Nitler was evil before?  HAH!  Now he's a shedim zombie!  Be afraid! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000011000000001010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	5
+	Str:	8
+	Cha:	1
+	Int:	7
+	Wil:	14
+	Mag:	13
+[POINTS]
+	Height:	179
+	Weight:	63
+	Ballistic:	13
+	Impact:	12
+	Bank:	15000
+	Karma:	104
+[SKILLS]
+	brawling:	10
+	sorcery:	5
+	firearms:	1
+BREAK
+#4220
+Keywords:	guard man member black nazi evil satan
+Name:	a Black Guard
+RoomDesc:$
+A Member of the Black Guard is standing here.
+
+~
+LookDesc:$
+Fully dressed in heavily plated black armour, this guy is built like a tank,
+and has the attitude of a randy bull on cocaine. A huge rifle is slung over
+his shoulder, and he eyes you with a look of such superiority, it makes you
+want to puke on his shiny black shoes.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100000101000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	4
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	90
+	Ballistic:	9
+	Impact:	2
+	Cash:	100
+	Bank:	300
+	Karma:	41
+[SKILLS]
+	machine guns:	7
+	brawling:	4
+	assault rifles:	8
+	rifles:	6
+BREAK
+#4221
+Keywords:	elf dirty poor man 
+Name:	a Poor Dirty Elf
+RoomDesc:$
+A poor dirty elf is shivering here.
+
+~
+LookDesc:$
+The elf is tormented with a body of skin and bones, due to lack of nourishment
+and fresh air. He has an air that harbinges death and decay, making you wish
+you had died when you were born.
+~
+ArriveMsg:	trudges
+LeaveMsg:	trudges
+MobFlags:	10001000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+Position:	Resting
+DefaultPos:	Resting
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	1
+	Cha:	8
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	174
+	Weight:	32
+	Ballistic:	1
+	Impact:	1
+[SKILLS]
+	missile launchers:	3
+	corporate etiquette:	2
+	brawling:	3
+BREAK
+#4222
+Keywords:	dwarf old bent haggard man
+Name:	a Haggard Old Dwarf
+RoomDesc:$
+A haggard old dwarf is standing here, coughing up blood.
+
+~
+LookDesc:$
+The dwarf has beaten repeatedly to a pulp by the guards at the camp. He is
+obviously in pain as he moves around the camp, you can see from his limp.
+~
+ArriveMsg:	hobbles from
+LeaveMsg:	hobbles
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	2
+	Str:	3
+	Cha:	1
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	1
+[SKILLS]
+	brawling:	2
+	assault cannons:	2
+BREAK
+#4223
+Keywords:	tyriel dealer elf dark drugged
+Name:	Tyriel the Dealer
+RoomDesc:$
+Tyriel the Dark Drugged Dealer is standing here, puffing smoke.
+
+~
+LookDesc:$
+Tyriel is the only source of outside world objects in the camp. All the
+inmates depend on him for food to stay alive, as well as mind numbing
+narcotics to 
+keep them alive during the cycle of beatings. His hair is black with white
+streaks down the back, and he is dressed in full black clothing. Even in this
+hell of a camp, he is able to maintain a semi-human status, through deals
+with the guards.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010011010
+AffFlags:	11000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	9
+	Str:	8
+	Cha:	0
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	169
+	Weight:	62
+	Ballistic:	11
+	Impact:	4
+	Cash:	200
+	Karma:	15
+[SKILLS]
+	brawling:	7
+	edged weapons:	5
+BREAK
+#4224
+Keywords:	guard camp evil nazi man grim
+Name:	a Camp Guard
+RoomDesc:$
+A grim looking guard stands here.
+
+~
+LookDesc:$
+The camp guard is one of the ugliest people you've seen in a looong time. He
+is covered in boils and huge zits. Not exactly the nicest person. He got this
+position because he is an absolute sadist and a very mean bastard.
+~
+ArriveMsg:	marches in from
+LeaveMsg:	storms off
+MobFlags:	1100000101100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	2
+	Str:	6
+	Cha:	0
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	12
+	Bank:	350
+[SKILLS]
+	shotguns:	7
+	brawling:	5
+BREAK
+#4225
+Keywords:	guard gate nazi man
+Name:	the ^RGate Guard^N
+RoomDesc:$
+The ^RGate Guard^N towers above you.
+
+~
+LookDesc:$
+The gate guard is an 8-foot tall thing, dressed in medieval gear. He looks
+just like an executioner from one of the darkest periods in all of Earth's
+history. He carries a huge double-bladed axe by his side, and it has a slick
+film of blood on the razor sharp edge.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	3
+	Str:	8
+	Cha:	0
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	198
+	Weight:	99
+	Ballistic:	9
+	Impact:	10
+	Cash:	500
+	Karma:	10
+[SKILLS]
+	armed combat:	6
+	brawling:	7
+BREAK
+#4226
+Keywords:	executive man aztech aztechnology young
+Name:	a young Aztechnology Executive
+RoomDesc:$
+A young man is sitting here, puffing on a havana.
+
+~
+LookDesc:$
+Dressed out in the latest tres-chic clothing, this guy is the ultimate city
+corp executive. He puffs away smugly on one of the most expensive cigars you
+have ever seen, and contemplates when his next million will arrive.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	2
+	Cha:	4
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	68
+	Ballistic:	3
+	Impact:	2
+	Bank:	350
+[SKILLS]
+BREAK
+#4227
+Keywords:	beurring man scrawny thin tall nazi commander evil
+Name:	Commander Beurring
+RoomDesc:$
+A tall scrawny man is standing here.
+
+~
+LookDesc:$
+The commander stands and views you with an air of superiority while he
+decides whether your bone structure is worthy of his display case.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	3
+	Str:	5
+	Cha:	0
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	58
+	Ballistic:	7
+	Impact:	5
+[SKILLS]
+	brawling:	5
+BREAK
+#4228
+Keywords:	general tarmile man chubby nazi evil
+Name:	General Tarmile
+RoomDesc:$
+A short chubby man is standing here trying to balance his immeasurable body
+fat. 
+
+~
+LookDesc:$
+Tarmile is the man that finances the camp with the revenue from his huge neo-
+twinky industry. His second hobby after eating is killing of any metahumans
+in sight, so this is why he's involved in this satanic plan.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	3
+	Str:	8
+	Cha:	2
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	59
+	Weight:	198
+	Ballistic:	11
+	Impact:	6
+	Bank:	200
+[SKILLS]
+	brawling:	9
+BREAK
+#4229
+Keywords:	guard troll huge aztech secure
+Name:	an Aztechnology Security Guard
+RoomDesc:$
+A nasty Aztechnology troll guard eyes you evilly.
+
+~
+LookDesc:$
+The Aztechonology security guard is impoverished with the role of guarding
+the premises of the Aztechnology Magic Facility. Although the job is 
+horrendously tough, the mages and shamans have placed so much magic on the
+guy it's crazy. His dermal plates are so thick they push through the dark
+blue suit, and the rest of his clothing ripples on top of heavy muscle.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010100000011010
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	5
+	Str:	13
+	Cha:	0
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	250
+	Ballistic:	15
+	Impact:	15
+	Bank:	100
+[SKILLS]
+	assault cannons:	5
+	brawling:	6
+BREAK
+#4230
+Keywords:	strange humanoid spirit shadow shade
+Name:	a strange humanoid spirit
+RoomDesc:$
+The glittering shadow of a man hovers in the air shifting rhythmically. 
+
+~
+LookDesc:$
+The spirit stands taller than any human being you have ever seen. His
+shimmering form seems to waver and move in the air, and your eyes strain to
+try and focus. As soon as you seem to get a clear picture, the particles
+around him shift and mutate, making him near impossible to target. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000010100000011010
+AffFlags:	1000000000000000001010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	15
+	Str:	10
+	Cha:	0
+	Int:	9
+	Wil:	12
+	Mag:	11
+[POINTS]
+	Height:	198
+	Weight:	59
+	Ballistic:	18
+	Impact:	13
+[SKILLS]
+	brawling:	6
+	whips & flails:	7
+	sorcery:	7
+BREAK
+#4231
+Keywords:	alaric master aztech old dwarf dwarven mage forge
+Name:	Alaric
+RoomDesc:$
+Alaric, Master of the Forge, stands here before you. 
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000010100000011010
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	6
+	Str:	12
+	Cha:	0
+	Int:	9
+	Wil:	11
+	Mag:	10
+[POINTS]
+	Height:	123
+	Weight:	126
+	Ballistic:	15
+	Impact:	9
+[SKILLS]
+	clubs:	9
+	sorcery:	6
+	:	3
+BREAK
+#4232
+Keywords:	duplessis worm mother master mage aztech shaman insect
+Name:	Duplessis the Insect Master
+RoomDesc:$
+A massive mother worm is sprawled on the silk, resting. She glows brightly!
+
+~
+LookDesc:$
+Duplessis is the huge master of the Glow-worm hive. From her luxurious placing
+she controls the hive mind with an inhuman power. Duplessis is one of the 
+renowned masters of the Academy. She shares power of the Shaman section with
+Jadis, the Toxic Master. Duplessis is known to be one of the most deadly
+Insect shamans around, notorious for her horrific tortures of her enemies
+with insectoid mutation and breeding experiments.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001110000000001110
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	2
+	Str:	15
+	Cha:	1
+	Int:	9
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	200
+	Weight:	200
+	Ballistic:	16
+	Impact:	10
+[SKILLS]
+	brawling:	7
+	sorcery:	7
+BREAK
+#4233
+Keywords:	jadis master toxic shaman being aztech sludge hellfire evil
+Name:	Jadis the Toxic Master
+RoomDesc:$
+A being enwrapped in toxic sludge and hellfire bellows at your entrance.
+
+~
+LookDesc:$
+Jadis the Toxic Master is the youngest of the four leaders of the Academy, a
+mere 395 years old. When young, the ambitious Elf was thrown into a huge
+toxic mixing plant and left for dead. From that time, he has followed the path
+of the Toxic Shaman, and harnessed its powers to become the most powerful
+Toxic shaman of all time. He commands the waves of sludge and poison in his
+den, and deals with his enemies in all manners of horrific torture schemes
+involving Hydrofloric Acid, Mercury, and Zyclon B.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000010100000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	19
+	Str:	16
+	Cha:	0
+	Int:	8
+	Wil:	10
+	Mag:	12
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	sorcery:	12
+	brawling:	6
+	edged weapons:	9
+BREAK
+#4234
+Keywords:	disciple man black robed aztech
+Name:	a Black Robed Disciple
+RoomDesc:$
+A black robed disciple stands here meditating.
+
+~
+LookDesc:$
+The disciple is the youngest member of the Shamanic caste. He is in the 
+beginner's stages of learning, and is still very much a virgin in the ways
+of Magic. He wanders the hallways, studying and reciting the texts that the
+older and wiser shamans give him, as a passage to becoming a shaman.
+~
+ArriveMsg:	silently enters from the
+LeaveMsg:	silently departs
+MobFlags:	10100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	4
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	4
+	Cash:	20
+[SKILLS]
+	brawling:	3
+	sorcery:	5
+BREAK
+#4235
+Keywords:	ezyra assassin poly r63 woman girl
+Name:	Ezyra the R63 Poly-Assassin
+RoomDesc:$
+Ezyra the R63 Poly-Assassin is standing here, flexing her dermal sheath.
+
+~
+LookDesc:$
+Ezyra is the pride and joy of the Bio-Merc department. She has been created
+from artificially modified body parts, of choice individuals. On a
+macrocellular level, Ezyra has reached a level of perfection never before
+seen. She is resistant to all forms of poison and chemical weaponry known to
+man, and her exoskeleton has been enhanced with a ortho-chitin hybrid form of
+skin. Her skin has been tanned and colored to help her blend in, but she also
+has the capacity to change her outer color for camouflage purposes. Her right
+arm has been transformed into a brutal weapon, a composite steel bayonet,
+attached to a fully automatic rail gun. Her muscles have also been
+strengthened to sustain the weight and recoil. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000010100000011110
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Pierce
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	14
+	Str:	11
+	Cha:	0
+	Int:	11
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	12
+	Impact:	16
+[SKILLS]
+	brawling:	15
+	edged weapons:	15
+BREAK
+#4236
+Keywords:	dean man hardened mason aztech
+Name:	Dean Mason
+RoomDesc:$
+Dean Mason sits at his desk, examining the latest test reports. 
+
+~
+LookDesc:$
+Dean Mason is a tough, hardened man, whose stern features seem oddly out of
+place in the cool, elegant atmosphere of his Victorian-themed office. In the
+course of many harsh and violent encounters during his tenure, the Dean
+gradually came to the conclusion that only a strong arm and a sound thrashing
+will sort out any unruly students. Hence, his reputation as a staunch advocate
+and user of corporal punishment. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	8
+	Cha:	0
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	9
+	Impact:	10
+	Cash:	750
+[SKILLS]
+	pole arms:	8
+	brawling:	8
+BREAK
+#4237
+Keywords:	apprentice bumbling man aztech
+Name:	a Bumbling Apprentice
+RoomDesc:$
+A bumbling apprentice is here, struggling to succeed.
+
+~
+LookDesc:$
+The apprentice is struggling to do anything right, under the scrutinous eye
+of his tutor. In the world of the mage, there is no room for error, and no
+room for messing around. Yup, this guy has it hard alright.
+~
+ArriveMsg:	shuffles in from
+LeaveMsg:	shuffles
+MobFlags:	100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	3
+	Cha:	0
+	Int:	4
+	Wil:	4
+	Mag:	4
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	5
+	Bank:	10
+[SKILLS]
+	sorcery:	5
+	brawling:	6
+BREAK
+#4238
+Keywords:	teacher man scruffy aztech shaman
+Name:	a Scruffy Teacher
+RoomDesc:$
+A scruffy old teacher stands here lecturing the class.
+
+~
+LookDesc:$
+The shaman teacher takes a very unorganized and chaotic outlook to the
+teaching profession. Dressed in the traditional robes and animal furs, the
+teacher goes
+to his courses with two things: Shamanic knowledge and unpredictability.
+In essence the teacher is keeping to the characteristics of his totem.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	78
+	Ballistic:	7
+	Impact:	7
+	Cash:	40
+[SKILLS]
+	brawling:	7
+	sorcery:	7
+BREAK
+#4239
+Keywords:	teacher clean cut man aztech mage
+Name:	a Tidy Looking Teacher
+RoomDesc:$
+A tidy looking teacher stands at the podium, addressing the class.
+
+~
+LookDesc:$
+The teacher is one of a measly earning elite in the Academy. His clothes are
+tacky and over-worn, his salary only enough to keep him alive. His pay,
+however, is not the reason that he works for the academy.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	7
+	Bank:	50
+[SKILLS]
+	brawling:	7
+	sorcery:	6
+BREAK
+#4240
+Keywords:	glenda secretary woman pretty lady
+Name:	Dean Mason's Secretary Glenda
+RoomDesc:$
+Dean Mason's secretary Glenda sits at her desk chatting on the phone.
+
+~
+LookDesc:$
+Glenda Draveson has worked for the deans of the Academy for twelve years now.
+Although she has spent inordinate and truly irretrievable times of her life
+in this place, she does not respect this job much. After all, working for a
+man that resorts to corporal punishment in the 21st Century cannot be all
+that much fun.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	65
+	Ballistic:	5
+	Impact:	6
+	Bank:	20
+[SKILLS]
+	brawling:	5
+BREAK
+#4241
+Keywords:	shaman man raccoon aztech
+Name:	a Raccoon Shaman
+RoomDesc:$
+A fur-clad Raccoon Shaman eyes you tensely.
+
+~
+LookDesc:$
+The Raccoon shaman sits in the center of the circle, humming to a tune of the
+woods, and chewing on a small piece of bark. He is wrapped in lovely furs of
+his totem, and wears the scalp of a Raccoon on his head.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	5
+	Int:	7
+	Wil:	7
+	Mag:	7
+[POINTS]
+	Height:	0
+	Weight:	66
+	Ballistic:	9
+	Impact:	9
+[SKILLS]
+	brawling:	7
+	sorcery:	7
+BREAK
+#4242
+Keywords:	shaman man rat dirty aztech
+Name:	a Rat Shaman
+RoomDesc:$
+A dirty Rat Shaman stands here nibbling on trash and eyeing you beadily.
+
+~
+LookDesc:$
+The Rat Shaman looks after the circle, and it is his duty to protect it from
+anyone the Totem dislikes. He keeps the circle in its present condition and
+helps look after the younger Rat shamans who seek solace after a hard days
+work.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	0
+	Int:	7
+	Wil:	8
+	Mag:	7
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	9
+	Impact:	9
+[SKILLS]
+	sorcery:	7
+	brawling:	5
+BREAK
+#4243
+Keywords:	shaman man bear hulking aztech
+Name:	a Bear Shaman
+RoomDesc:$
+A hulking Bear Shaman roams around the circle, mumbling strange mystical
+words. 
+
+~
+LookDesc:$
+The Bear Shaman's tanned skin ripples with tight sinewed muscle loosely
+clothed in natural brown furs. His face has been boldened by the influence of
+his
+totem, and he has accumulated an excess of facial hair as one result. His
+teeth are sharpened, and his body seems more compact and strengthened.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	8
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	7
+[POINTS]
+	Height:	0
+	Weight:	89
+	Ballistic:	9
+	Impact:	8
+[SKILLS]
+	sorcery:	7
+	brawling:	7
+BREAK
+#4244
+Keywords:	shaman man shark vicious aztech
+Name:	a Shark Shaman
+RoomDesc:$
+A vicious Shark Shaman glares at you icily as you intrude upon his turf.
+
+~
+LookDesc:$
+The Shark Shaman is the embodiment of violence, standing before you. As he is
+present in the shamanic lodge all of his life, his link with the Shark totem
+has grown unbreakable. The influence of this all too much bloodthirsty
+creature has left it's mark on the man, giving him bloodshot, heavy eyes and
+unnaturally sharpened teeth.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	5
+	Mag:	7
+[POINTS]
+	Height:	0
+	Weight:	77
+	Ballistic:	7
+	Impact:	9
+[SKILLS]
+BREAK
+#4245
+Keywords:	shaman evil snake woman aztech
+Name:	a Snake Shaman
+RoomDesc:$
+A woman stands here, shrouded in a snakeskin cloak and glowing eerily.
+
+~
+LookDesc:$
+The Snake Shaman glares at you with beady black eyes, watching your every move
+with ponderous curiosity. Slick, wet, green hair trails down her back and
+curls down to her waist. Her body shimmers with a dull green glow, pulsating
+and
+crackling with power.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	3
+	Int:	7
+	Wil:	7
+	Mag:	7
+[POINTS]
+	Height:	0
+	Weight:	78
+	Ballistic:	9
+	Impact:	8
+[SKILLS]
+	brawling:	7
+	sorcery:	7
+BREAK
+#4246
+Keywords:	shaman wolf man solemn
+Name:	a Wolf Shaman
+RoomDesc:$
+A solemn Wolf Shaman regards you with less than rampant excitement.
+
+~
+LookDesc:$
+The Wolf shaman, although naturally a dormant creature, regards any intruders
+on his territory as direct enemies to the sanctity of his home. The man has
+been transformed from a human being to the most powerful of the shaman circle
+keepers. Navy blue copper wires snake around his arms, and you can see the
+retraction tubes of cyber-spurs, enabling the shaman to be more effective in
+combat, while at the same time he keeps his magical potential at a full.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	5
+	Int:	7
+	Wil:	7
+	Mag:	7
+[POINTS]
+	Height:	0
+	Weight:	78
+	Ballistic:	9
+	Impact:	9
+[SKILLS]
+	brawling:	7
+	sorcery:	7
+BREAK
+#4247
+Keywords:	bouncer human man flak
+Name:	an Adept Bouncer
+RoomDesc:$
+A heavily built man stands at the door, examining all of the entrees.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	7
+	Cha:	0
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	9
+	Impact:	9
+[SKILLS]
+	sorcery:	7
+	brawling:	8
+BREAK
+#4248
+Keywords:	guard secure aztech aztechnology
+Name:	an Aztechnology Secure Guard
+RoomDesc:$
+An Aztech Secure Guard patrols the area.
+
+~
+LookDesc:$
+The guard diligently walks the halls in silence, keeping an eye out for anyone
+not meant to be wandering around the Academy. He is dressed in nightshade
+combat clothing, with military boots and accessories. He is pumped up to the
+height of steroid capability, and looks absolutely terrifying. Well, almost.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	0
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	67
+	Ballistic:	5
+	Impact:	5
+	Bank:	50
+[SKILLS]
+	shotguns:	5
+	brawling:	5
+BREAK
+#4249
+Keywords:	guard shark man
+Name:	a Shark Guard
+RoomDesc:$
+A Shark Guard leaps on you!
+
+~
+LookDesc:$
+The guard diligently walks the halls in silence, keeping an eye out for anyone
+not meant to be wandering around the Academy. He is dressed in nightshade
+shark skin, with tribal boots and accessories. He is pumped up to the
+height of human capability, and looks absolutely terrifying.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	0
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	67
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	shotguns:	5
+	brawling:	5
+BREAK
+#4250
+Keywords:	master teacher mage initiate dark man
+Name:	a mage initiate master
+RoomDesc:$
+A Dark Robed Initiate Master stands here, reciting ancient texts.
+
+~
+LookDesc:$
+Embued with almost unspeakable energy, this man glows with an eerie light
+that few see in their lifetimes. He stands motionless and still, keeping
+an eye over the other initiates that attempt to further their power.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001000000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	50
+	Mag:	11
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#4251
+Keywords:	master teacher man shaman dark robed initiate
+Name:	a shaman initiate master
+RoomDesc:$
+A Dark Robed Initiate Master stands here, gazing at the group.
+
+~
+LookDesc:$
+Embued with almost unspeakable energy, this man glows with an eerie light
+that few have the luck to see in their lifetimes. It really is amazing. He
+watches over the initiation group, and monitors their progress much like a
+father looking over his family.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001000000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	50
+	Mag:	12
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1000
+	Impact:	1000
+[SKILLS]
+BREAK
+#4252
+Keywords:	mage initiate man
+Name:	an initiate mage
+RoomDesc:$
+An initiate mage studies quietly in the corner, keeping a constant watch.
+
+~
+LookDesc:$
+The initiate mage studies constantly, without fatigue, and dedicates himself
+fully to the work. The search for more power and greater knowledge drives
+these people, and they're magical capabilities should never be underestimated.
+~
+ArriveMsg:	shaman initiate man
+LeaveMsg:	(
+MobFlags:	10001001000000101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	0
+	Int:	3
+	Wil:	4
+	Mag:	5
+[POINTS]
+	Height:	0
+	Weight:	67
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	shotguns:	5
+	brawling:	5
+BREAK
+#4253
+Keywords:	shaman initiate man
+Name:	an initiate shaman
+RoomDesc:$
+An initiate shaman studies quietly in the corner, keeping a constant watch.
+
+~
+LookDesc:$
+A shaman initiate is something never to be thought of as a *wimp*. Oh no.
+Strong, determined, and tremendously sound of mind, these are people that
+have spent their lives perfecting their mind and though process.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001001000000101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	0
+	Int:	3
+	Wil:	4
+	Mag:	5
+[POINTS]
+	Height:	0
+	Weight:	67
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	shotguns:	5
+	brawling:	5
+BREAK
+#4254
+Keywords:	guard leopard man
+Name:	a leopard guard
+RoomDesc:$
+A Leopard Guard stands to attention in the office.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#4255
+Keywords:	frederick man massive trainer
+Name:	Frederick
+RoomDesc:$
+A massive muscle-bound madman with a moustache glares at you.
+
+~
+LookDesc:$
+A deep pale cover of hardened skin barely contains this very angry
+looking brute. Growling, sniveling, yet all the while confined to his
+cage like a warthog on antibiotics, Frederick is no happier about this
+predicament than you are. However, he is here to train you, to make you
+the BEST you can be! Use his help wisely.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#4256
+Keywords:	captain black guard man nazi
+Name:	a black guard captain
+RoomDesc:$
+A black guard captain stands at the foot of the gates.
+
+~
+LookDesc:$
+Three silver stripes and a jackal on his right shoulder tell you a little
+more than you'd like to know about this character. He sports the same
+suit of mobile armor as the other black guards, yet he looks pensive,
+far more intelligent and unscrupulous than any of the other guards. Do not
+forget however, that in this case, intelligence and a lack of scruples are
+the last things you're looking for at the moment.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	7
+	Str:	9
+	Cha:	2
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	205
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+	Bank:	5200
+	Karma:	66
+[SKILLS]
+	shotguns:	7
+	armed combat:	7
+	brawling:	8
+BREAK
+#4257
+Keywords:	nazi towering
+Name:	the Towering Nazi
+RoomDesc:$
+A towering Nazi raises his gun at you. 
+
+~
+LookDesc:$
+The guy is huge. He appears to be using a specialised rifle, unlike almost any
+you've ever seen before. And the only ones that were similar, everyone else
+that saw them is now dead. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+END

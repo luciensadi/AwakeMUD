@@ -1,0 +1,25 @@
+#29700
+Name:	A Dark Alley
+Desc:$
+   This alley seems rather narrow. The steam from the sewer grates fills the
+air with a faint stench and humidity. Shadows lay over the alley from various
+things on the roof tops of the surounding buildings. Along the side of the
+wall you see a black van parked and a shady looking man standing next to it. 
+~
+Flags:	10000000000000000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	2552
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

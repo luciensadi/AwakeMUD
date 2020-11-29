@@ -31,7 +31,7 @@ DefaultPos:	Standing
 	Height:	310
 	Weight:	400
 [SKILLS]
-	:	14
+	brawling:	14
 BREAK
 #35501
 Keywords:	cindie girl teenage clubber wannabe
@@ -98,7 +98,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	58
 [SKILLS]
-	:	1
+	brawling:	1
 	sorcery:	2
 BREAK
 #35503
@@ -165,7 +165,7 @@ AttackType:	Punch
 	Height:	159
 	Weight:	55
 [SKILLS]
-	:	2
+	brawling:	2
 BREAK
 #35505
 Keywords:	nolan troll bouncer menacing staff
@@ -201,7 +201,7 @@ DefaultPos:	Standing
 	Ballistic:	8
 	Impact:	8
 [SKILLS]
-	:	10
+	brawling:	10
 BREAK
 #35506
 Keywords:	samael bartender fallen angel
@@ -267,7 +267,7 @@ AttackType:	Slash
 	Height:	162
 	Weight:	75
 [SKILLS]
-	:	6
+	brawling:	6
 BREAK
 #35508
 Keywords:	XNtric ork mage smiling
@@ -301,7 +301,7 @@ DefaultPos:	Standing
 	Height:	161
 	Weight:	78
 [SKILLS]
-	:	12
+	brawling:	12
 	sorcery:	12
 	shotguns:	12
 BREAK
@@ -340,7 +340,7 @@ DefaultPos:	Standing
 	Impact:	2
 	Bank:	100
 [SKILLS]
-	:	5
+	brawling:	5
 	sorcery:	4
 BREAK
 #35510
@@ -410,7 +410,7 @@ DefaultPos:	Standing
 	Ballistic:	8
 	Impact:	7
 [SKILLS]
-	:	20
+	brawling:	20
 	rifles:	15
 	clubs:	12
 BREAK
@@ -512,7 +512,7 @@ DefaultPos:	Standing
 	Height:	410
 	Weight:	350
 [SKILLS]
-	:	15
+	brawling:	15
 	rifles:	15
 	edged weapons:	15
 BREAK
@@ -550,7 +550,7 @@ DefaultPos:	Standing
 	Ballistic:	5
 	Impact:	4
 [SKILLS]
-	:	12
+	brawling:	12
 	pistols:	12
 BREAK
 #35516
@@ -585,7 +585,7 @@ DefaultPos:	Standing
 	Height:	172
 	Weight:	80
 [SKILLS]
-	:	14
+	brawling:	14
 	shotguns:	12
 	rifles:	15
 	assault cannons:	15
@@ -627,7 +627,7 @@ DefaultPos:	Standing
 [SKILLS]
 	shotguns:	12
 	sorcery:	12
-	:	12
+	brawling:	12
 BREAK
 #35518
 Keywords:	yautja predator lord hunt troll sleek metallic
@@ -671,10 +671,10 @@ AttackType:	Blast
 	Impact:	18
 [SKILLS]
 	edged weapons:	25
-	:	25
+	:	25
 	sorcery:	25
 	rifles:	25
-	:	25
+	:	25
 BREAK
 #35519
 Keywords:	elf blue armor jackabon motas
@@ -716,7 +716,7 @@ AttackType:	Slash
 	Ballistic:	12
 	Impact:	14
 [SKILLS]
-	:	25
+	:	25
 	conjuring:	25
 	edged weapons:	25
 BREAK
@@ -840,9 +840,9 @@ AttackType:	Pierce
 	Ballistic:	13
 	Impact:	9
 [SKILLS]
-	:	37
+	brawling:	37
 	electronics:	50
-	:	30
+	:	30
 	computers:	20
 	cyber implants:	35
 BREAK
@@ -916,7 +916,7 @@ DefaultPos:	Standing
 	Height:	159
 	Weight:	58
 [SKILLS]
-	:	3
+	brawling:	3
 BREAK
 #35525
 Keywords:	roxanne wunter woman stylish tres-chic
@@ -953,7 +953,7 @@ DefaultPos:	Standing
 	Ballistic:	4
 	Impact:	2
 [SKILLS]
-	:	3
+	brawling:	3
 BREAK
 #35526
 Keywords:	lunatyk elf simsense star male thrill
@@ -994,7 +994,7 @@ AttackType:	Punch
 	Ballistic:	4
 	Impact:	4
 [SKILLS]
-	:	9
+	brawling:	9
 BREAK
 #35527
 Keywords:	lana woman elegant bartender silk dress
@@ -1107,8 +1107,8 @@ Pink Freud's drummer moves like lightning over the set.
 ~
 LookDesc:$
 A master of percussion in the same calibre as John Bonham and Jimmy
-Chaimberlain, Bruce Agers owns the drums when he plays them.  He speeds his
-sets, without falling a nanosecond out of time. 
+Chamberlin, Bruce Agers owns the drums when he plays them. He speeds his sets,
+without falling a nanosecond out of time. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
@@ -1164,7 +1164,7 @@ AttackType:	Bludgeon
 	Height:	178
 	Weight:	110
 [SKILLS]
-	:	10
+	brawling:	10
 BREAK
 #35532
 Keywords:	stoney aaron stone bassist pink freud
@@ -1237,7 +1237,7 @@ DefaultPos:	Standing
 	Cash:	50000
 	Bank:	50000
 [SKILLS]
-	:	20
+	brawling:	20
 	rifles:	20
 	negotiation:	18
 BREAK
@@ -1340,7 +1340,7 @@ DefaultPos:	Standing
 	Height:	152
 	Weight:	55
 [SKILLS]
-	:	10
+	brawling:	10
 	sorcery:	15
 BREAK
 #35537
@@ -1441,7 +1441,7 @@ AttackType:	Taser
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	:	10
+	brawling:	10
 	negotiation:	10
 	media etiquette:	10
 	rifles:	10

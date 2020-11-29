@@ -1,0 +1,380 @@
+#62500
+Keywords:	bartender swarthy
+Name:	a swarthy bartender
+RoomDesc:$
+A swarthy bartender idly polishes a clean glass behind the counter. 
+
+~
+LookDesc:$
+Swarthy.. Doesn't that stand for dark and hairy? That seems to be the case in
+this young gentlemans case. He is dressed casually in a button down shirt with
+a colour design on it, cargo shorts and flip-flops. While he may not be the
+best person around to go to for fashion advice, but if you need a stiff drink
+mixed up on the spot, he's the man to talk to. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	brawling:	6
+BREAK
+#62501
+Keywords:	shark small fin
+Name:	a small shark
+RoomDesc:$
+A small fin cuts through the surface of the water here. 
+
+~
+LookDesc:$
+This shark is relatively small compared to some of the others swimming around
+in the waters. It has a mouth full of sharp teeth and is quite a capable
+predator, especially for smaller prey that are abound, and it appears it could
+give any (meta)humans who stumble across it a bit of a fight as well if it was
+so inclined. 
+~
+ArriveMsg:	darts in from
+LeaveMsg:	darts
+MobFlags:	1000010001000
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	60
+	Ballistic:	1
+	Impact:	1
+[SKILLS]
+	brawling:	4
+	athletics:	8
+BREAK
+#62502
+Keywords:	shark large fin
+Name:	a large shark
+RoomDesc:$
+A large fin cuts through the surface of the water here. 
+
+~
+LookDesc:$
+This shark is quite a large specimen and could pose quite the threat to
+anything stupid enough to be swimming in the waters near it. It can smell
+blood from miles away, and once it does, it goes into a frenzy putting its
+massive jaws lined with razor sharp teeth to good use. Tangling with this
+thing in the water is like signing your own death certificate for all intents
+and purposes. 
+~
+ArriveMsg:	swims in from
+LeaveMsg:	swims off
+MobFlags:	1000010001000
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	10
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+	brawling:	6
+BREAK
+#62503
+Keywords:	dolphin
+Name:	a dolphin
+RoomDesc:$
+A dolphin swims through the waters nearby. 
+
+~
+LookDesc:$
+It's a dolphin! At first it could be mistaken as a shark, especially at a
+distance, but upon closer inspection it appears to be a rather friendly
+dolphin. There isn't much threat to be had from this creature, as long as you
+don't attempt to attack it or its pod members. 
+~
+ArriveMsg:	swims in from
+LeaveMsg:	swims
+MobFlags:	1000
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	60
+[SKILLS]
+	brawling:	4
+	athletics:	8
+BREAK
+#62504
+Keywords:	leviathan whale massive
+Name:	a massive leviathan
+RoomDesc:$
+A massive whale cruises through the nearby waters. 
+
+~
+LookDesc:$
+This carnivorous whale is absolutely massive, measuring nearly twenty meters
+from the tip of its head to the tip of its tail. It looks quite similar in
+appearance to a killer whale, but has a broader and flatter body in
+comparison. It is an aggressive predator that will take any prey it has the
+advantage over, which is just about anything in the water, or any (meta)human
+stupid enough to jump in for a swim. 
+~
+ArriveMsg:	cruises in from
+LeaveMsg:	cruises
+MobFlags:	1100000001000
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	6
+	Str:	10
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	2000
+	Weight:	1000
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+	brawling:	7
+	athletics:	8
+BREAK
+#62505
+Keywords:	sailor
+Name:	a sailor
+RoomDesc:$
+A sailor is here, doing what he does best. 
+
+~
+LookDesc:$
+Just your run of the mill sailor, doing what he does best on the open seas,
+putting his experience and knowledge to use as he navigates the waters of the
+Caribbean. 
+~
+ArriveMsg:	swims in from
+LeaveMsg:	swims
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+	brawling:	3
+	driving/Car:	5
+BREAK
+#62506
+Keywords:	executive vacationing
+Name:	a vacationing executive
+RoomDesc:$
+An executive on vacation enjoys a cruise through the ocean here. 
+
+~
+LookDesc:$
+This pompous looking executive is on vacation it seems, or at least that's
+what it appears to be. He probably works for some mid-level business or
+corporation, which is enough to garner him some of the finer things that life
+has to offer. 
+~
+ArriveMsg:	swims in from
+LeaveMsg:	swims off
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	250
+	Bank:	200
+[SKILLS]
+	brawling:	4
+	athletics:	4
+	driving/Car:	6
+BREAK
+#62507
+Keywords:	kraken squid giant
+Name:	a kraken
+RoomDesc:$
+A giant squid breaks the surface of the water here. 
+
+~
+LookDesc:$
+This massive sea creature resembles a giant squid, which measures over twenty
+five meters in length. Its tentacles are elongated and themselves measure more
+than fourty meters in length, which has it has twelve of, two of which are
+even longer than the others. Each of its tentacles ends in a fleshy oval pad,
+which it uses to capture its prey before introducing them to its huge
+bird-like beak, which is more than capable of crushing even the sturdiest of
+watercraft hulls. 
+~
+ArriveMsg:	rushes in from
+LeaveMsg:	rushes off
+MobFlags:	100010100011100011000
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	20
+	Cha:	1
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	2500
+	Weight:	1000
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	pole arms:	7
+	athletics:	10
+BREAK
+#62508
+Keywords:	sailor stranded
+Name:	a stranded sailor
+RoomDesc:$
+A stranded sailor is here, looking lonesome. 
+
+~
+LookDesc:$
+This sailor looks rather lost, and seems to have been stranded out at sea for
+a while, as his shabby appearance and demeanor are apt to indicate. He looks
+rather hungry, so it would probably be best to find him a good place to rest
+where they have food before he gets the wrong idea about you. 
+~
+ArriveMsg:	stumbles in from
+LeaveMsg:	stumbles off
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+	brawling:	2
+	athletics:	5
+BREAK
+#62509
+Keywords:	dragon western turquoise scales
+Name:	a large western dragon with ^Cturquoise^N scales
+RoomDesc:$
+A large western dragon with ^Cturquoise^N scales is roosting here. 
+
+~
+LookDesc:$
+While not native to the Caribbean, it appears this western dragon has decided
+to take up residence on this uninhabited little island, having made quite a
+home for its self here. It stands roughly three meters in height at its
+shoulders, and its entire body from the tip of its snout to the base of its
+tail measuring about twenty meters, the tail consisting of almost another
+twenty. It has large horns upon each side of the back of its skull where it
+meets up with its long neck, at the base of which are its wings, which
+unfurled, could easily blot out the sun on this small island. It has turquoise
+coloured scales, which dull to a pale white-blueish colour along its belly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111010
+AffFlags:	0
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	10
+	Str:	40
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	15
+[POINTS]
+	Height:	350
+	Weight:	1000
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	pole arms:	9
+	sorcery:	10
+BREAK
+END

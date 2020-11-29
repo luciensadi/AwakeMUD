@@ -1,0 +1,854 @@
+#41020
+Keywords:	pants gauze sheer pair
+Name:	a pair of sheer gauze pants
+RoomDesc:$
+A white set of sheer gauze pants lays here neatly folded.~
+LookDesc:$
+These comfortable pants can be worn as a cover-up, a vacation outfit, or your
+favorite PJs. Made from sheer and light gauze fabric, they are so flimsy that
+you can almost see through them. They have an elastic waistband, marked with
+the ^MVictoria's Secret^n logo, and fit loosly all the way down to the ankle. 
+~
+Type:	Worn
+WearFlags:	100100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	225
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41021
+Keywords:	shirt gauze sheer nightshirt
+Name:	a sheer gauze night shirt
+RoomDesc:$
+A sheer gauze night shirt lies here.~
+LookDesc:$
+Whether worn casually at home, or over a swimsuit at the beach, this long and
+lean night shirt may be one of the sexiest, most comfortable items you own. It
+is so thin that you can actually see through it. The tag inside says ^LVS^n in
+soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41022
+Keywords:	shorts sheer gauze pair
+Name:	a set of sheer gauze shorts
+RoomDesc:$
+A set of sheer gauze shorts lies here.~
+LookDesc:$
+These fun little sheer shorts can be worn as PJs or over your swimsuit at the
+beach. Loose, light and sexy, with an elastic band featuring the ^MVictoria's
+Secret^n imprint. 
+~
+Type:	Worn
+WearFlags:	100100100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41023
+Keywords:	top tie gauze
+Name:	a gauze tie top
+RoomDesc:$
+A gauze tie top is lying here.~
+LookDesc:$
+Light gauze fabric gently covers your bust, while a front tie controls and
+secures the fit. This top can be worn as part of a vacation outfit or as comfy
+pajamas. The tag inside says ^MVS^n in soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	245
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41024
+Keywords:	shirt sheer gauze
+Name:	a sheer gauze shirt
+RoomDesc:$
+A gauze shirt is lying here.~
+LookDesc:$
+Light and airy, this sheer gauze shirt can be worn alone or over a bikini or
+blouse. The soft feel of the fabric and the versatility of style softly murmer
+^MVictoria's Secret^n. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41025
+Keywords:	dress sexy little
+Name:	a sexy little dress
+RoomDesc:$
+A sexy little dress lies on the floor.~
+LookDesc:$
+Made from strech mesh fabric, this dress is short, sheer and totally sexy. The
+tag inside says ^MVS^n in soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	755
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41026
+Keywords:	shirt t-shirt tee sheer sparkle-sheen
+Name:	a sheer, fitted sparkle sheen tee
+RoomDesc:$
+a sheer, fitted, sparkle-sheen tee~
+LookDesc:$
+Made form light, sparkle-sheen fabric, this fitted t-shirt is very sexy and
+very see-throught. The tag on the inside is marked ^MVS^n in soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41027
+Keywords:	nightie nightgown stretch satin
+Name:	a stretch satin nightie
+RoomDesc:$
+A satin nightie lies here on the ground.~
+LookDesc:$
+This fitted satin nightie features halter-style ties at the neck, providing
+great cleavage and total support. A slight A-line cut makes the body look slim
+and sexy. A tag fastened inside the hem is marked with ^MVS^n in soft, pink
+letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41028
+Keywords:	dress black weekend getaway
+Name:	a black weekend getaway dress
+RoomDesc:$
+A little ^Lblack^n dress lies here.~
+LookDesc:$
+This loose-fitting little black dress features suggestive, sexy but supportive
+straps and a daring plunging neckline. A small tag in the back reads,
+^MVictoria's Secret^n." 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	950
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	5
+BREAK
+#41029
+Keywords:	dress sheer lounge
+Name:	a sheer lounge dress
+RoomDesc:$
+A sheer lounge dress has been left here.~
+LookDesc:$
+This breathtakingly sexy dress can make nearly any woman turn heads. Black
+strech metallic fabric with a halter-style neck and a plunging back reveals
+every inch of the body. The dress falls to just above the knee, with a tiny
+tag inside marked ^MVS^n in soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	5
+BREAK
+#41030
+Keywords:	dress disco blue
+Name:	an electric ^Bblue^n disco dress
+RoomDesc:$
+an electric ^Bblue^g disco dress is laying here.~
+LookDesc:$
+This skintight, curves-showing dress will fit right in at the hottest spots in
+town - hip and flashy with a smooth, stretchy, metallic glow. A tiny tag with
+^MVS^n in soft, pink letters is just inside the hem. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	6
+BREAK
+#41031
+Keywords:	dress beach cafe
+Name:	a beach cafe dress
+RoomDesc:$
+A beach cafe dress lies here.~
+LookDesc:$
+This cute little dress is a year-round best seller. The comfy, soft-spun
+cotton light shapes the body, making the wearer feel cool and confident. A
+sassy scoop in both front and back adds a flirty little edge to this signature
+^MVictoria's Secret^n dress. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	5
+BREAK
+#41032
+Keywords:	top velvet absolute back-tie
+Name:	a back-tie, absolute velvet top
+RoomDesc:$
+A velvet top lies here.~
+LookDesc:$
+This fabulous velvet top with a back tie is appropriate for dress-up and
+dress-down; it looks great with everything from a pair of jeans to a summer
+skirt or tailored pants. A tiny tag with ^MVS^n in soft, pink letters is tucked
+inside the halter-style neck. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	3
+BREAK
+#41033
+Keywords:	top capri tight-fitting
+Name:	a tight-fitting capri top
+RoomDesc:$
+A nylon capri top lies here.~
+LookDesc:$
+This fun little top is made from stretch Lycra nylon and has an open back. The
+tiny tag, just inside the collar, has ^MVS^n written in soft pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	375
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	3
+BREAK
+#41034
+Keywords:	skirt french lace
+Name:	a french lace skirt
+RoomDesc:$
+A lace skirt lies here.~
+LookDesc:$
+This skirt is long and lean, with a high side slit. Black and white lace
+fabric shows off the wearer's natural curves. The drawstring at the waist has
+^MVictoria's Secret^n woven into it in tiny, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	5
+BREAK
+#41035
+Keywords:	top cocktail tie metallic
+Name:	a cocktail tie top
+RoomDesc:$
+A metallic tie-top lies here.~
+LookDesc:$
+This sexy, strapless stretch top is must-have for any wardrobe. Perfect with
+just about anything, it ties in the back but provides great support. A tiny
+tag near the ties reads ^MVS^n in soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	3
+BREAK
+#41036
+Keywords:	skirt stripes cool summer
+Name:	a cool stripes summer skirt
+RoomDesc:$
+A striped skirt lies crumpled on the floor.~
+LookDesc:$
+This little A-line skirt has a loose, comfy fit. The fabric is soft and very
+comfortable. The elastic waist band is marked with the ^MVictoria's Secret^n logo.
+~
+Type:	Worn
+WearFlags:	100100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	5
+BREAK
+#41037
+Keywords:	shirt t-shirt cool stripes
+Name:	a cool stripes tee
+RoomDesc:$
+A striped shirt lies here.~
+LookDesc:$
+This tee is fun and fitted, with a plunging neckline. It's made to match
+perfectly with ^MVictoria's Secret^n's cool stripes skirt. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	235
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	3
+BREAK
+#41038
+Keywords:	top tank crochet
+Name:	a crochet tank top
+RoomDesc:$
+A crocheted tank top lies here.~
+LookDesc:$
+This sexy little stretch crochet tank top can be worn with anything. Seamed
+cups and straps in back offer excellent support, as expected from the tiny ^MVS^n
+tag inside the left strap. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	115
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	3
+BREAK
+#41039
+Keywords:	shirt t-shirt tee cropped
+Name:	a cropped tee
+RoomDesc:$
+A cropped t-shirt lies here.~
+LookDesc:$
+Cropped at the waist and hugging the body, this cute little t-shirt is one of
+^MVictoria's Secret^n's year-round best-sellers. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	130
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	3
+BREAK
+#41040
+Keywords:	top cuban fiesta glittery
+Name:	a cuban fiesta top
+RoomDesc:$
+A glittery top lies here.~
+LookDesc:$
+This sexy, backless top is covered in glitter. It has a very tight fit and
+offers a built in shelf bra for support. A tiny tag inside says ^MVS^n in soft,
+pink letters. 
+~
+Type:	Other
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	325
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41041
+Keywords:	bra adjustable front tie underwire
+Name:	adjustable front tie underwire bra
+RoomDesc:$
+A bra lies here.~
+LookDesc:$
+This adjustable, front-tie underwire bra is available in all sizes. It's quick
+to adjust for comfort, which also makes it easy to get on and off. A tiny tag
+inside the left strap declares the maker, ^MVS^n, in soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	110
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41042
+Keywords:	bikini neon microfiber top
+Name:	a neon, microfiber bikini top
+RoomDesc:$
+A neon bikini top lies here.~
+LookDesc:$
+The sizzling neon fabric of this simple bikini top is hot, spicy, and tons of
+fun. A tiny tag inside the left strap declares the maker, ^MVS^n, in soft, pink
+letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	175
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41043
+Keywords:	bikini microfiber neon bottom
+Name:	a neon, microfiber bikini bottom
+RoomDesc:$
+A neon bikini bottom was thrown here.~
+LookDesc:$
+This slim-cut neon Rio bottom makes the backside look trim and sexy. A tiny
+tag inside the waist declares the maker, ^MVS^n, in soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100110000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41044
+Keywords:	top crop-top microfiber
+Name:	a microfiber crop top
+RoomDesc:$
+A microfiber crop-top lies here.~
+LookDesc:$
+Cropped at the waist and snug to the body, this top makes the wearer's
+features stand out. A tiny tag inside the collar declares the maker, ^MVS^n, in
+soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	185
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41045
+Keywords:	bra underwire satin
+Name:	a satin underwire bra
+RoomDesc:$
+A bra lies here.~
+LookDesc:$
+This underwire bra fits like a glove, providing comfort, support and shape. A
+tiny tag inside the left strap declares the maker, ^MVS^n, in soft, pink letters.
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	140
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41046
+Keywords:	panties elegant pair satin
+Name:	a pair of elegant satin panties
+RoomDesc:$
+A pair of panties lies here.~
+LookDesc:$
+This pair of satin panties provides a comfortable fit while shaping your
+derriere. The inside of the waistband features the ^MVictoria's Secret^n logo. 
+~
+Type:	Worn
+WearFlags:	100100100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	220
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41047
+Keywords:	corset ruffles lace
+Name:	a lace corset
+RoomDesc:$
+A corset lies here.~
+LookDesc:$
+This corset is designed to be worn under dresses and make its wearer appear to
+be slimmer and more buxom. A tiny tag under the left arm declares the maker,
+^MVS^n, in soft, pink letters. 
+~
+Type:	Worn
+WearFlags:	100100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	550
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	5
+BREAK
+#41048
+Keywords:	thong satin
+Name:	a satin thong
+RoomDesc:$
+A thong lies here.~
+LookDesc:$
+This satin thong feels smooth on the skin and leaves little to the
+imagination. The inside of the waistband features the ^MVictoria's Secret^N logo.
+~
+Type:	Worn
+WearFlags:	100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.05
+	Barrier:	4
+	Cost:	475
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#41051
+Keywords:	desert eagle mark mk pistol magnum xix fearsome
+Name:	a Desert Eagle Mk. XIX
+RoomDesc:$
+A fearsome looking pistol lies here.~
+LookDesc:$
+This pistol is very large. It is rehashed Desert Eagle XIX and is a very
+powerful handgun. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	16200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	7
+	Val6:	7
+	Val7:	626
+	Val9:	-1
+	Val10:	4
+BREAK
+#41058
+Keywords:	patch anti-viral
+Name:	an Anti-Viral Patch
+RoomDesc:$
+A patch is lying here.~
+LookDesc:$
+This is an Anti-Viral patch created bt the World Health Org to help against
+VITAS. 
+~
+Type:	Patch
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+BREAK
+#41063
+Keywords:	m16 m-16 assault rifle m16a4
+Name:	an M16A4 assault rifle
+RoomDesc:$
+A long assault rifle lies here.~
+LookDesc:$
+The M16A4 is the common assault rifle used in the UCAS army. 
+~
+Type:	Weapon
+WearFlags:	1000110000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	2050
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val6:	30
+	Val7:	-1
+	Val8:	-1
+	Val9:	670
+	Val10:	28
+BREAK
+END

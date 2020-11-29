@@ -4934,7 +4934,7 @@ ACMD(do_settime)
 ACMD(do_tail)
 {
   char arg[MAX_STRING_LENGTH];
-  FILE *out;
+  FILE *out = NULL;
   int lines = 20;
 
   //out = new FILE;

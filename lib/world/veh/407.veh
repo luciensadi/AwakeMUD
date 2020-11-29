@@ -1,0 +1,126 @@
+#40700
+Name:	squirrel robot drone
+ShortDesc:	a furry squirrel
+RoomDesc:	A small grey squirrel with a big bushy tail constantly scanning the area of predators
+LongDesc:$
+This small animal usually runs around areas with trees. It collects nuts and
+small insects. It is very fast and has incredible reflexes. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	A small grey squirrel runs away
+Arriving:	A small grey squirrel runs in
+Handling:	1
+Speed:	12
+Accel:	12
+Body:	1
+Armour:	1
+Pilot:	4
+Sig:	12
+Autonav:	4
+Seating:	0
+SeatingBack:	0
+Load:	0
+Cost:	1000000
+Type:	0
+Flags:	0
+Engine:	2
+BREAK
+#40701
+Name:	A small grey rabbit
+ShortDesc:	A small grey rabbit looking around for predators
+RoomDesc:	a small grey rabbit is sitting here
+LongDesc:$
+This small grey rabbit can hop around with surprising speed. It is cute and
+fluffy. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	a rabbit hops out
+Arriving:	A rabbit hops in
+Handling:	1
+Speed:	9
+Accel:	9
+Body:	1
+Armour:	1
+Pilot:	4
+Sig:	12
+Autonav:	4
+Seating:	0
+SeatingBack:	0
+Load:	0
+Cost:	800000
+Type:	0
+Flags:	0
+Engine:	2
+BREAK
+#40702
+Name:	humming bird hummingbird drone robot
+ShortDesc:	a beautiful humming bird
+RoomDesc:	a humming bird sits here
+LongDesc:$
+Magic to behold. This humming bird seems to float without effort moving almost
+to fast for the eye to see from one point in space to another. Truly one of
+natures finest creations. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	A humming bird buzzes away
+Arriving:	A humming bird buzzes in from
+Handling:	0
+Speed:	30
+Accel:	20
+Body:	1
+Armour:	1
+Pilot:	4
+Sig:	10
+Autonav:	4
+Seating:	0
+SeatingBack:	0
+Load:	0
+Cost:	2000000
+Type:	0
+Flags:	10
+Engine:	2
+BREAK
+#40703
+Name:	Raiden MK1 Urban Combat RPV
+ShortDesc:	Raiden MK1 Urban Combat RPV
+RoomDesc:	A Raiden MK1 Urban Combat RPV stands here deactivated
+LongDesc:$
+This is a prototype robotic drone built for urban warefare. It stands 3 meters
+in height and was created to cause shock and awe in those who face it. A
+gleaming pod brisling with sensors sits atop its anthropomorphic frame as a
+head. Long articulated arms with massive hydraulic servos capable of rending
+steel hang on it as arms. Its digitigrade legs are firmly attached to its body
+and its huge webbed steel feet like appendages rest solidly on the ground. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	leaves
+Arriving:	arrives
+Handling:	4
+Speed:	10
+Accel:	10
+Body:	3
+Armour:	7
+Pilot:	4
+Sig:	5
+Autonav:	3
+Seating:	0
+SeatingBack:	0
+Load:	1500
+Cost:	3000000
+Type:	0
+Flags:	0
+Engine:	2
+BREAK
+END

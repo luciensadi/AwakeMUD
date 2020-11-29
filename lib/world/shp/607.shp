@@ -1,0 +1,214 @@
+#60700
+Keeper:	60700
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	I don't have that at the moment, would you like me to order it in?
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	I don't give discounts to anyone.  Sorry.
+DoesntBuy:	This is a bookstore chummer.  Not a pawn store.
+Buy:	That's a total of %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60710
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	60707
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60705
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	60703
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	60702
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	60701
+		Type:	Always
+		Stock:	0
+BREAK
+#60701
+Keeper:	60701
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Chum, your options are coffee, or coffee.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	This is a coffee house.  I don't want your drek.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60325
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	60324
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60327
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	65205
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	60557
+		Type:	Always
+		Stock:	0
+BREAK
+#60702
+Keeper:	60702
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Dude, I just got a spare key, an a spare coat.  Whatcha want from me?
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	This drek don't grow on trees.
+DoesntBuy:	We don't buy that.
+Buy:	It cost %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+BREAK
+#60703
+Keeper:	60705
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	^R*Beep*^N Invalid Selection.
+NoSuchItemPlayer:	^R*Beep*^N Invalid Selection.
+NoNuyen:	^R*Beep*^N You're broke, bitch.
+DoesntBuy:	^R*Beep*^N Learn to read.
+Buy:	^R*Beep*^N Eat up, fatty.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60719
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	5907
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	1936
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	5908
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	60720
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	60721
+		Type:	Always
+		Stock:	0
+BREAK
+#60704
+Keeper:	60706
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Wallets a little light.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen, slick.
+Sell:	Here's your %d nuyen.
+Name:	The Batcave
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	60733
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	60700
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60708
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	60732
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	60726
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	60727
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	60728
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	60729
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	60730
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	60731
+		Type:	Always
+		Stock:	0
+BREAK
+END

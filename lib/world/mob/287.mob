@@ -1,0 +1,98 @@
+#28700
+Keywords:	waiter
+Name:	The Waiter
+RoomDesc:$
+The waiter walks around passing food out here. 
+
+~
+LookDesc:$
+Wearing a tux, he walks around passing out food to the customers. Frantic and
+over worked, he sometimes makes mistakes. 
+~
+ArriveMsg:	walks in carefully balancing trays of food from
+LeaveMsg:	carefully walks out to the
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	75
+	Cash:	99999
+	Bank:	99999
+[SKILLS]
+BREAK
+#28701
+Keywords:	bellboy
+Name:	A bellboy
+RoomDesc:$
+A bellboy stands here selling tickets to get in to the restuarant. 
+
+~
+LookDesc:$
+He wears a red bellboy suit with yellow tassles and seems cheerful enough. He
+hopes for tips while he pawns the tickets for a premium price. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	99999
+	Bank:	99999
+[SKILLS]
+BREAK
+#28702
+Keywords:	Bartender
+Name:	A Bartender
+RoomDesc:$
+A bartender stands here mixing drinks behind a counter. 
+
+~
+LookDesc:$
+Looking and mixing like a professional this bartender deserves a tip for his
+hard work. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+END

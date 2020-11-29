@@ -83,6 +83,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 BREAK
 #601
 Keywords:	biomonitor docwagon basic service contract compact modulator
@@ -109,56 +110,9 @@ Material:	electronics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	1
-BREAK
-#602
-Keywords:	biomonitor docwagon service contract compact modulator gold
-Name:	a biomonitor with a DocWagon Gold service contract
-RoomDesc:$
-A compact biomonitor bearing the DocWagon logo flashes on the ground.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	DocWagon
-WearFlags:	10000001000000000001
-ExtraFlags:	0
-AffFlags:	0
-Material:	electronics
-[POINTS]
-	Weight:	0.00
-	Barrier:	6
-	Cost:	6000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	2
-BREAK
-#603
-Keywords:	biomonitor docwagon service contract compact modulator platinum
-Name:	a biomonitor with a DocWagon Platinum service contract
-RoomDesc:$
-A compact biomonitor bearing the DocWagon logo flashes on the ground.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	DocWagon
-WearFlags:	10000001000000000001
-ExtraFlags:	0
-AffFlags:	0
-Material:	electronics
-[POINTS]
-	Weight:	0.00
-	Barrier:	6
-	Cost:	6000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	3
 BREAK
 #618
 Keywords:	beretta 101t pistol
@@ -184,10 +138,11 @@ Material:	metal
 	LegalNum:	8
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	12
 	Val6:	12
@@ -217,10 +172,11 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	25
 	Val6:	25
@@ -249,6 +205,7 @@ Material:	metal
 	LegalNum:	6
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	9
 	Val1:	2
@@ -256,8 +213,7 @@ Material:	metal
 	Val4:	11
 	Val5:	15
 	Val6:	15
-	Val8:	630
-	Val9:	-1
+	Val9:	-2
 	Val10:	4
 BREAK
 #622
@@ -283,6 +239,7 @@ Material:	metal
 	LegalNum:	6
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	9
 	Val1:	2
@@ -315,6 +272,7 @@ Material:	metal
 	LegalNum:	6
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	10
 	Val1:	2
@@ -349,6 +307,7 @@ Material:	metal
 	LegalNum:	6
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	9
 	Val1:	2
@@ -356,6 +315,7 @@ Material:	metal
 	Val4:	11
 	Val5:	16
 	Val6:	16
+	Val8:	626
 	Val9:	-1
 	Val10:	4
 BREAK
@@ -381,10 +341,11 @@ Material:	metal
 	LegalNum:	8
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	18
 	Val6:	18
@@ -392,13 +353,14 @@ Material:	metal
 	Val10:	4
 BREAK
 #626
-Keywords:	sight laser
-Name:	a laser sight
+Keywords:	laser sight top-mounted
+Name:	a top-mounted laser sight
 RoomDesc:$
 An uninstalled laser sight has been tossed aside.~
 LookDesc:$
-A small, cylindrical attachment, which projects a thin red laser
-to improve speed and accuracy.
+A small, cylindrical attachment, which projects a thin red laser to improve
+speed and accuracy of shots fired. It appears to attach to the top of a
+firearm. 
 ~
 Type:	Gun Accessory
 WearFlags:	1
@@ -406,7 +368,7 @@ ExtraFlags:	0
 AffFlags:	100000000000000
 Material:	electronics
 [POINTS]
-	Weight:	0.25
+	Weight:	0.20
 	Barrier:	4
 	Cost:	500
 	AvailTN:	6
@@ -414,6 +376,7 @@ Material:	electronics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 BREAK
@@ -439,6 +402,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 BREAK
@@ -464,6 +428,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 BREAK
@@ -489,25 +454,27 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 BREAK
 #630
-Keywords:	smartgun link smartlink
-Name:	a smartgun link
+Keywords:	smartlink accessory underbarrel
+Name:	an underbarrel smartlink accessory
 RoomDesc:$
 A smartgun link sits on the floor.~
 LookDesc:$
-When used with a cybernetic receiver, this increases the accuracy
-with which one shoots.
+When used with a cybernetic receiver, this accessory increases the accuracy
+with which one shoots. This particular model appears to be an underbarrel
+device. 
 ~
 Type:	Gun Accessory
 WearFlags:	1
-ExtraFlags:	1000000000
+ExtraFlags:	0
 AffFlags:	0
 Material:	adv. plastics
 [POINTS]
-	Weight:	1.00
+	Weight:	0.20
 	Barrier:	3
 	Cost:	600
 	AvailTN:	4
@@ -515,9 +482,11 @@ Material:	adv. plastics
 	LegalNum:	4
 	LegalCode:	13
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	2
 	Val1:	1
+	Val2:	1
 BREAK
 #631
 Keywords:	enfield shotgun as-7
@@ -541,6 +510,7 @@ Material:	metal
 	LegalNum:	5
 	LegalCode:	6
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	8
 	Val1:	3
@@ -563,7 +533,7 @@ durability.
 ~
 Type:	Weapon
 WearFlags:	110000000000001
-ExtraFlags:	0
+ExtraFlags:	1000000000000
 AffFlags:	0
 Material:	metal
 [POINTS]
@@ -575,6 +545,7 @@ Material:	metal
 	LegalNum:	5
 	LegalCode:	2
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	3
@@ -608,6 +579,7 @@ Material:	metal
 	LegalNum:	4
 	LegalCode:	2
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	2
@@ -641,6 +613,7 @@ Material:	wood
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	1
 	Val2:	4
@@ -674,14 +647,14 @@ Material:	metal
 	LegalNum:	5
 	LegalCode:	3
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	6
 	Val1:	3
-	Val3:	1
+	Val3:	9
 	Val4:	6
 	Val5:	-1
 	Val6:	1
-	Val7:	-1
 	Val8:	-1
 	Val9:	-1
 BREAK
@@ -710,6 +683,7 @@ Material:	metal
 	LegalNum:	3
 	LegalCode:	2
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	3
@@ -742,6 +716,7 @@ Material:	metal
 	LegalNum:	3
 	LegalCode:	2
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	3
 	Val4:	3
@@ -773,6 +748,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	1
 	Val2:	3
@@ -804,6 +780,7 @@ Material:	wood
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	2
@@ -833,6 +810,7 @@ Material:	wood
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	4
@@ -863,6 +841,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val3:	317
@@ -893,6 +872,7 @@ Material:	wood
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 BREAK
 #643
 Keywords:	bolt
@@ -917,6 +897,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	1
 BREAK
@@ -943,6 +924,7 @@ Material:	leather
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	25
 BREAK
@@ -968,6 +950,7 @@ Material:	leather
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	25
 	Val1:	1
@@ -994,6 +977,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	1
 	Val3:	315
@@ -1025,6 +1009,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	1
 	Val3:	316
@@ -1056,6 +1041,7 @@ Material:	fabric
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	12
 	Val1:	3
@@ -1083,6 +1069,7 @@ Material:	fabric
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val3:	12
 	Val4:	3
@@ -1109,6 +1096,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	1
 	Val1:	3
@@ -1136,6 +1124,7 @@ Material:	adv. plastics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	1
 	Val1:	4
@@ -1162,6 +1151,7 @@ Material:	metal
 	LegalNum:	8
 	LegalCode:	1
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	1
 	Val4:	3
@@ -1192,6 +1182,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	1
 	Val1:	3
@@ -1219,6 +1210,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	1
 	Val1:	3
@@ -1247,6 +1239,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	3
 	Val2:	3
@@ -1280,10 +1273,11 @@ Material:	wood
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	3
-	Val3:	2
+	Val3:	1
 	Val4:	4
 	Val5:	-1
 	Val6:	2
@@ -1292,8 +1286,8 @@ Material:	wood
 	Val9:	-1
 BREAK
 #657
-Keywords:	club
-Name:	a club
+Keywords:	club wooden
+Name:	a wooden club
 RoomDesc:$
 A club has been dropped on the ground.~
 LookDesc:$
@@ -1314,19 +1308,21 @@ Material:	wood
 	LegalNum:	6
 	LegalCode:	3
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	1
 	Val3:	1
 	Val4:	6
 	Val5:	-1
+	Val6:	1
 	Val7:	-1
 	Val8:	-1
 	Val9:	-1
 BREAK
 #658
 Keywords:	large combat axe
-Name:	a combat axe
+Name:	a steel combat axe
 RoomDesc:$
 A large axe is lying here.~
 LookDesc:$
@@ -1347,6 +1343,7 @@ Material:	metal
 	LegalNum:	3
 	LegalCode:	2
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	3
 	Val3:	2
@@ -1380,6 +1377,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val4:	3
@@ -1407,16 +1405,17 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	0.10
 	Barrier:	6
-	Cost:	9000
+	Cost:	4500
 	AvailTN:	24
 	AvailDay:	14.00
 	LegalNum:	1
 	LegalCode:	10
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	3
+	Val3:	2
 	Val4:	5
 	Val5:	-1
 	Val6:	2
@@ -1448,6 +1447,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	1
@@ -1481,6 +1481,7 @@ Material:	metal
 	LegalNum:	3
 	LegalCode:	2
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	4
 	Val2:	1
@@ -1514,10 +1515,11 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	3
 	Val2:	2
-	Val3:	1
+	Val3:	2
 	Val4:	6
 	Val5:	-1
 	Val6:	1
@@ -1547,6 +1549,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	3
 	Val3:	1
@@ -1566,7 +1569,7 @@ It looks like a katana with a monofilament line bonded along the cutting edge.
 ~
 Type:	Weapon
 WearFlags:	10000000000001
-ExtraFlags:	0
+ExtraFlags:	1000000000000
 AffFlags:	0
 Material:	metal
 [POINTS]
@@ -1578,6 +1581,7 @@ Material:	metal
 	LegalNum:	5
 	LegalCode:	2
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	4
@@ -1611,6 +1615,7 @@ Material:	metal
 	LegalNum:	6
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	9
 	Val1:	2
@@ -1643,6 +1648,7 @@ Material:	adv. plastics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	2
 	Val1:	1
@@ -1671,6 +1677,7 @@ Material:	electronics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 BREAK
 #672
 Keywords:	sword monosword
@@ -1696,6 +1703,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	3
@@ -1730,6 +1738,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	8
 	Val1:	3
@@ -1750,8 +1759,8 @@ Thermite is the leading soft explosive on the market today, and
 the offensive grenade ensures that with accurate aim, no target
 is safe from its blast.
 ~
-Type:	Weapon
-WearFlags:	110000000000001
+Type:	Other
+WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
 Material:	adv. plastics
@@ -1764,15 +1773,7 @@ Material:	adv. plastics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-[VALUES]
-	Val0:	8
-	Val1:	3
-	Val3:	318
-	Val4:	26
-	Val5:	-1
-	Val7:	-1
-	Val8:	-1
-	Val9:	-1
+	StreetIndex:	0.00
 BREAK
 #678
 Keywords:	vest security kevlar
@@ -1796,6 +1797,7 @@ Material:	adv. plastics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val5:	3
 	Val6:	2
@@ -1823,6 +1825,7 @@ Material:	fabric
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val4:	4
 	Val5:	4
@@ -1852,6 +1855,7 @@ Material:	fabric
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val4:	1
 	Val5:	3
@@ -1879,6 +1883,7 @@ Material:	adv. plastics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	1
 	Val1:	2
@@ -1909,6 +1914,7 @@ Material:	adv. plastics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val5:	2
 	Val6:	1
@@ -1935,6 +1941,7 @@ Material:	adv. plastics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val5:	3
 	Val6:	2
@@ -1955,7 +1962,7 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.75
+	Weight:	0.50
 	Barrier:	6
 	Cost:	450
 	AvailTN:	3
@@ -1963,12 +1970,12 @@ Material:	metal
 	LegalNum:	6
 	LegalCode:	1
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	1
 	Val2:	2
 	Val4:	3
 	Val5:	-1
-	Val6:	1
 	Val7:	-1
 	Val8:	-1
 	Val9:	-1
@@ -2006,6 +2013,7 @@ Material:	metal
 	LegalNum:	6
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	9
 	Val1:	3
@@ -2039,6 +2047,7 @@ Material:	orichalcum
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	9
 	Val1:	2
@@ -2072,6 +2081,7 @@ Material:	adv. plastics
 	LegalNum:	4
 	LegalCode:	11
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val5:	6
 	Val6:	4
@@ -2100,6 +2110,7 @@ Material:	metal
 	LegalNum:	6
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	9
 	Val1:	2
@@ -2134,10 +2145,11 @@ Material:	metal
 	LegalNum:	8
 	LegalCode:	5
 	LegalPermit:	1
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	6
 	Val6:	6
@@ -2151,8 +2163,8 @@ Name:	an improved gas vent IV
 RoomDesc:$
 Someone has left the materials for a gas vent system here.~
 LookDesc:$
-Gas Vent IV is the pinacle of venting technology. It vents gasses much more
-effectivly than any other system of the same type, nearly eliminating recoil.
+Gas Vent IV is the pinnacle of venting technology. It vents gasses much more
+effectively than any other system of the same type, nearly eliminating recoil.
 ~
 Type:	Gun Accessory
 WearFlags:	1
@@ -2168,6 +2180,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	1
 	Val1:	3
@@ -2196,6 +2209,7 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	2
 	Val1:	4
@@ -2223,10 +2237,11 @@ Material:	plastic
 	LegalNum:	8
 	LegalCode:	3
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	2
-	Val3:	2
+	Val3:	1
 	Val4:	4
 	Val5:	-1
 	Val6:	2
@@ -2258,6 +2273,7 @@ Material:	metal
 	LegalNum:	5
 	LegalCode:	3
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	1
@@ -2271,7 +2287,7 @@ Material:	metal
 BREAK
 #695
 Keywords:	morning star ball chain
-Name:	a morning star
+Name:	a medieval morning star
 RoomDesc:$
 A ball and chain have been left here.~
 LookDesc:$
@@ -2291,20 +2307,21 @@ Material:	metal
 	LegalNum:	4
 	LegalCode:	3
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	2
 	Val3:	3
 	Val4:	5
 	Val5:	-1
-	Val6:	-1
+	Val6:	2
 	Val7:	-1
 	Val8:	-1
 	Val9:	-1
 BREAK
 #696
-Keywords:	3 section three staff
-Name:	a 3-section staff
+Keywords:	three-section three section staff
+Name:	a three-section staff
 RoomDesc:$
 A three section staff is sitting on the ground.~
 LookDesc:$
@@ -2325,6 +2342,7 @@ Material:	metal
 	LegalNum:	8
 	LegalCode:	3
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val1:	2
 	Val2:	2
@@ -2358,6 +2376,7 @@ Material:	plastic
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	2
 	Val1:	8
@@ -2384,6 +2403,7 @@ Material:	plastic
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 [VALUES]
 	Val0:	2
 	Val1:	9
@@ -2404,12 +2424,11 @@ Toadstool          - The Toadstool, off Burnside
 Powell             - Powell's Books Main Store
 Hospital           - Tir Tairngire Royal Hospital
 City               - Portland City Center Garage
-Bank               - TTBank Tower
+Bank               - TTBank
 Hellhound          - Hellhound Bus Lines/Blanchet House
 Postal             - Royal Postal Station
 Rocco              - Rocco's Pizza
 Hard               - Hard Times
-Bank               - TTBank
 Tower              - TTBank Tower
 ^n
 ~
@@ -2427,5 +2446,6 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+	StreetIndex:	0.00
 BREAK
 END

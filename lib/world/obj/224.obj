@@ -1,0 +1,638 @@
+#22400
+Keywords:	sign
+Name:	a sign
+RoomDesc:$
+A sign is posted at the edge of the fountain.~
+LookDesc:$
+Welcome to the Seattle Downtown Plaza!  Please be advised that any form of
+weaponry or illegal body armor is forbidden here, and security has been
+authorized to use physical force.  Elevators are to the west of here, please
+follow the directions posted inside.  You will find a list of shops at the
+entrance to each level.  Thankyou, and enjoy your stay at SDA! 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22401
+Keywords:	A clubhouse with fries and gravy
+Name:	clubhouse fries gravy
+RoomDesc:$
+A scumptious looking clubhouse with a side of fries and gravy~
+LookDesc:$
+The steam pouts off the fries, fresh from the deep fryer. It looks delicous,
+almost too good to eat. But yum. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#22432
+Keywords:	green sash headband cloth
+Name:	a long, dark green cloth sash
+RoomDesc:$
+A long, dark green cloth sash lays on the floor here.~
+LookDesc:$
+This long, dark green cloth sash looks like it could be worn as a headband,
+waist sash, or around an arm or wrist. It could also be used as a makeshift
+bandage or rope if need be. 
+~
+Type:	Worn
+WearFlags:	10000000001100000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22433
+Keywords:	racoon coon coonskin 'coonskin cap
+Name:	a 'coonskin cap
+RoomDesc:$
+A cap made of a racoon's tail lies here.~
+LookDesc:$
+Eww, a hat made from a racoon.  Its tail hangs goofily down the back of the
+neck.  Who the hell wears these things? 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22437
+Keywords:	ammo belt bandolier
+Name:	a bandolier
+RoomDesc:$
+A bandolier lies coiled up on the ground.~
+LookDesc:$
+You, too, can look like Rambo. 
+~
+Type:	Worn
+WearFlags:	10001000000110000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	90
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	15
+	Val7:	-8
+BREAK
+#22438
+Keywords:	jungle knife
+Name:	a jungle knife
+RoomDesc:$
+A big ol' knife is stuck into the wall, here.~
+LookDesc:$
+Looks like the kind of knife Crocodile Dundee pulled on those unsuspecting
+thugs in the movie.  Very large, with a serrated edge, and a camouflage
+handle. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#22439
+Keywords:	belt huge buckle
+Name:	a belt with a huge buckle
+RoomDesc:$
+An enourmous buckle, with a belt attached lies here.~
+LookDesc:$
+The buckle is around the size of a dinner plate, and portrays a cartoon
+alligator with a can of beer.  The belt is made from gator skin.  How
+distasteful. 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22440
+Keywords:	bandages set
+Name:	some bandages
+RoomDesc:$
+A set of bandages lies rolled up here.~
+LookDesc:$
+A couple of medicated bandages, used to ^Wtreat^W wounds. 
+~
+Type:	Kit
+WearFlags:	1000111111001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22442
+Keywords:	plastic biomonitor wristband
+Name:	a plastic biomonitor
+RoomDesc:$
+A plastic wristband lies here.~
+LookDesc:$
+A small, black, wristband, with a digital reading of the wearers condition and
+heart rate. 
+~
+Type:	DocWagon
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	4500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#22443
+Keywords:	gold biomonitor wristband
+Name:	a gold biomonitor
+RoomDesc:$
+A gold wristband lies here.~
+LookDesc:$
+It's a small, gold wristband, with a digital readout of the wearers condition,
+and heart rate. 
+~
+Type:	DocWagon
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#22444
+Keywords:	platinum biomonitor wristband
+Name:	a platinum biomonitor
+RoomDesc:$
+A shiny platinum wristband lies here.~
+LookDesc:$
+A small, reflective platinum wristband, with a digital readout of the wearers
+condition, and heart rate. 
+~
+Type:	DocWagon
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	45000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#22445
+Keywords:	atm automatic teller machine
+Name:	an ATM
+RoomDesc:$
+An ATM is mounted on the wall, displaying a VSI advertisement.~
+LookDesc:$
+There appears to be only three options on this standard ATM.  BALANCE will
+give you your balance of credits in your bank.  WITHDRAW will allow you to
+withdraw whatever available credits you have in the bank, and place them into
+your credstick.  DEPOSIT will deposit funds from your credstick to your bank
+account. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22450
+Keywords:	mug beer
+Name:	a mug of beer
+RoomDesc:$
+A mug of beer sits on the bar.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	10
+BREAK
+#22451
+Keywords:	glass vodka
+Name:	a glass of vodka
+RoomDesc:$
+A glass of vodka sits on the bar.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	19
+BREAK
+#22452
+Keywords:	glass whisky
+Name:	a glass of whisky
+RoomDesc:$
+A glass of whisky sits on the bar.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	23
+BREAK
+#22453
+Keywords:	glass tequila
+Name:	a glass of tequila
+RoomDesc:$
+A glass of tequila sits on the bar.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	20
+BREAK
+#22488
+Keywords:	big fucking sign
+Name:	a big fucking sign
+RoomDesc:$
+A ^RBIG FUCKING SIGN^n is here.  ^RLOOK AT IT!^n~
+LookDesc:$
+Rule number 1.  You don't talk about fight club.
+ Rule number 2.  YOU DO NOT TALK ABOUT FIGHT CLUB!
+ Rule number 3.  To the
+west is the non-ranged section of Fight Club.  Grenades, or any weapon that
+causes explosions will be useless here, unless you are clever.  In here your
+life is in your own hands.  (OOC - The pk/spamkilling rules need not apply
+here.)
+ Rule number 4.  What happens in fight club STAYS IN FIGHT CLUB!
+ 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	10000000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22489
+Keywords:	big fucking sign
+Name:	a big fucking sign
+RoomDesc:$
+A ^RBIG FUCKING SIGN^n is here.  ^RLOOK AT IT!^n~
+LookDesc:$
+Rule number 1.  You don't talk about fight club.
+ Rule number 2.  YOU DO NOT TALK ABOUT FIGHT CLUB!
+ Rule number 3.  This is
+the ranged combat area of Fight Club. Grenades, sniper rifles, rockets,
+whatever, are allowed in this area.  Your life is in your own hands if you
+enter.
+ Rule number 4.  What happens in fight club STAYS IN FIGHT CLUB! 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	10000000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22491
+Keywords:	baton
+Name:	a baton
+RoomDesc:$
+A baton stands against the wall.~
+LookDesc:$
+A short, thick wooden rod, for beating the shit out of punks and troublemakers
+in the security business. 
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#22495
+Keywords:	green exit sign
+Name:	an exit sign
+RoomDesc:$
+A green exit sign flickers above the door.~
+LookDesc:$
+^g[^W EXIT^g ]^n 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22496
+Keywords:	bulletin board cork
+Name:	the bulletin board
+RoomDesc:$
+A bulletin board, covered in scraps of paper, is nailed above the table.~
+LookDesc:$
+Advertising names such as Shadowsaints, the Street Drek Mercenaries, and the
+Black Circle Syndicate, this board looks like a good place to post
+advertisements, bounties and anything in between.
+ <<OOC NOTE>> This is a separate terminal from the public one in the Tacoma
+Mall, used for posting IC info.  Please don't abuse it... 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22497
+Keywords:	sign
+Name:	a sign
+RoomDesc:$
+A wooden sign is nailed above the door of the bar.~
+LookDesc:$
+POOK'S PLACE 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22498
+Keywords:	pool table pooltable
+Name:	a pool table
+RoomDesc:$
+A cheap looking pool table stands here.~
+LookDesc:$
+Barely standing on a few rickety looking wooden legs, this pool table is an
+antique, and not a very well looked after one, at that.  A few small tears in
+the felt have been patted down, and in one corner, the net underneath the hole
+is missing.  Still, it does the job well. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22499
+Keywords:	small charm
+Name:	a charm
+RoomDesc:$
+A small charm dangles above the door.~
+LookDesc:$
+A long, thin, cut amethyst, hanging from a beaded string above the door.
+Perhaps to dispel magic..? 
+~
+Type:	Light
+WearFlags:	100
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+BREAK
+END

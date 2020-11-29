@@ -1,0 +1,71 @@
+#6400
+Keeper:	6402
+ProfitBuy:	1.50
+ProfitSell:	1.00
+Random:	0
+Open:	4
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	A damp basement
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	851
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	857
+		Type:	Avail
+		Stock:	0
+BREAK
+#6401
+Keeper:	6403
+ProfitBuy:	2.00
+ProfitSell:	1.00
+Random:	0
+Open:	8
+Close:	20
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Fargo Security Hardware
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	861
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	855
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	61512
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	635
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	5107
+		Type:	Always
+		Stock:	0
+BREAK
+END

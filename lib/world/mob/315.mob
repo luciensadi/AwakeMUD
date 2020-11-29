@@ -1,0 +1,358 @@
+#31500
+Keywords:	A Red Dot Sniper
+Name:	A Red Dot Sniper
+RoomDesc:$
+A sniper, dressed in red and black stands here. 
+
+~
+LookDesc:$
+standing here is one mean lookin mo-fragger. Slung over his shoulder and at
+the ready is a mean lookin sniper rifle fitted with both a LAM and a big
+scope. He looks like he's ready to take your head off. Deffinately not an Elf
+to mess with. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001000100000011010
+AffFlags:	11000000101000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	25
+	Str:	25
+	Cha:	25
+	Int:	25
+	Wil:	25
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+	Ballistic:	10
+	Impact:	10
+	Cash:	1200
+	Bank:	20000
+	Karma:	1
+[SKILLS]
+	brawling:	12
+	rifles:	20
+BREAK
+#31501
+Keywords:	helcopter chopper cobra
+Name:	An old style Cobra gunship helicopter.
+RoomDesc:$
+A Cobra gunship Helicopter, with a bright red dot painted on the underbelly 
+
+~
+LookDesc:$
+this thing is old...but mean. Hovering several hundred meters off the ground
+this old attack chopper bristles with machineguns and rockets. Painted on the
+underbelly is the insignis for the Red Dot Sniper force...hrm...seems they've
+got some serrious firepower. 
+~
+ArriveMsg:	hovers noisily in from
+LeaveMsg:	hovers noisily out to
+MobFlags:	100000000000000101010000000001010
+AffFlags:	1000000101001001001000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Rocket
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	7
+	Str:	20
+	Cha:	2
+	Int:	7
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	500
+	Ballistic:	20
+	Impact:	20
+	Cash:	20000
+	Bank:	20000
+	Karma:	1
+[SKILLS]
+BREAK
+#31502
+Keywords:	Soldier dot red elf
+Name:	A Red Dot Soldier
+RoomDesc:$
+A soldier, with a mean assault rifle stands here. 
+
+~
+LookDesc:$
+This man, dressed in Red and black, wields an assault rifle and looks like he
+knows how to use it...perhaps one might want to think twice before screwin
+with 'em. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011000000001010
+AffFlags:	100000001001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	188
+	Weight:	70
+	Ballistic:	1
+	Impact:	1
+	Cash:	1000
+	Bank:	10000
+	Karma:	1
+[SKILLS]
+	firearms:	20
+	brawling:	10
+	sub-machine guns:	20
+BREAK
+#31503
+Keywords:	red dot mage
+Name:	A Red Dot Mage
+RoomDesc:$
+a Mage dressed in Red and black flowing robes 
+
+~
+LookDesc:$
+An old, wizened elf, dressed in a flowing red robe and muttering incantations
+to himself....these guys are pretty hard core....better be carefull. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110000010011010
+AffFlags:	1000000010010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	30
+	Int:	30
+	Wil:	30
+	Mag:	20
+[POINTS]
+	Height:	140
+	Weight:	40
+	Level:	5
+	Ballistic:	10
+	Impact:	10
+	Cash:	2000
+	Bank:	10000
+[SKILLS]
+	conjuring:	15
+	sorcery:	15
+	:	15
+	pole arms:	20
+	brawling:	20
+BREAK
+#31504
+Keywords:	mitsuhama security guard company man
+Name:	a Mitsuhama Security guard
+RoomDesc:$
+A man in the Mitsuhama Security colors stands here at guard. 
+
+~
+LookDesc:$
+Ever vigilant, he watches for anyone and everyone who looks out of place in
+this secure corporate environment. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	10000001000001011010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	85
+	Level:	1
+	Ballistic:	10
+	Impact:	8
+[SKILLS]
+	sub-machine guns:	8
+	corporate etiquette:	4
+	brawling:	4
+	:	3
+BREAK
+#31505
+Keywords:	decker dot red
+Name:	A Red Dot Decker
+RoomDesc:$
+A scrawny elf, dressed in the colors of the Red Dot sits here 
+
+~
+LookDesc:$
+scrawny, with a datajack in his left temple, this guy is a wiz with his
+deck... 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010001010
+AffFlags:	1001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	50
+	Ballistic:	8
+	Impact:	8
+	Cash:	15000
+	Bank:	10000
+	Karma:	1
+[SKILLS]
+	electronics:	12
+	computers:	12
+	:	12
+	brawling:	6
+BREAK
+#31506
+Keywords:	dealer poker suit man
+Name:	The dealer
+RoomDesc:$
+A man dressed in a nice suit deals out poker hands 
+
+~
+LookDesc:$
+He stands about 6 feet tall, and is dressed in a nice black suit. He stands
+there confidently, waiting for the game to continue. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100011011010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	10
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	76
+	Level:	6
+	Ballistic:	8
+	Impact:	6
+	Cash:	200
+[SKILLS]
+	negotiation:	10
+	brawling:	20
+	street etiquette:	10
+	stealth:	10
+BREAK
+#31550
+Keywords:	senior lonestar officer mcree
+Name:	Senior Sergeant McRee
+RoomDesc:$
+A lone star officer scans the area here. 
+
+~
+LookDesc:$
+McRee is a rather large senior officer in the Lone Star force. His short brown
+hair stands atop a very stern looking face, and he looks ready to snap at any
+moment. He seems to have 5 times the muscle mass of a normal human, almost
+approaching the look of a troll. However, it is wildly known McRee very rarely
+results to violence, and is prized by Lone Star for his negotiation and
+prisoner interrogation skills. It's also rumoured he is prone to take a little
+on the side to overlook infringements. 
+~
+ArriveMsg:	saunters in from
+LeaveMsg:	saunters
+MobFlags:	1000000000000001010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	8
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	187
+	Weight:	140
+	Ballistic:	8
+	Impact:	5
+[SKILLS]
+	interrogation:	10
+	pistols:	8
+	sub-machine guns:	8
+	negotiation:	8
+	street etiquette:	8
+BREAK
+#31551
+Keywords:	small japanese girl crooked brown nevada
+Name:	Nevada-chan
+RoomDesc:$
+A small japanese girl with short brown hair and a crooked smile stares vacantly into the distance.
+
+~
+LookDesc:$
+She doesn't look any older than 11 or 12, and she stands here staring vacantly
+into space, not paying much attention to anyone else in the cafe. Her short
+brown hair is scruffy, falling above her shoulder and obscuring her eyes. She
+wears a black hoodie, the word "Nevada" printed across the front.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	1
+	Cha:	4
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	138
+	Weight:	32
+[SKILLS]
+	edged weapons:	12
+BREAK
+END

@@ -1,0 +1,34 @@
+#7018
+Keeper:	7009
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	WHOOOOAH! Sorry dude, we don't got that man!
+NoSuchItemPlayer:	Impossible, you ain't got that.
+NoNuyen:	Man, come back again when you got the 'yen.
+DoesntBuy:	I don't wan't this shit.
+Buy:	I can hook ya up for %d nuyen
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	10100000000000000010
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	7014
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	7013
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	7012
+		Type:	Always
+		Stock:	0
+BREAK
+END

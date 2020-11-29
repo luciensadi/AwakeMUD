@@ -1,0 +1,36 @@
+#9600
+Keywords:	tiger tigers gang member ganger
+Name:	A member of the Tigers gang
+RoomDesc:$
+A ganger in orange and red stands here, looking fierce. 
+~
+LookDesc:$
+He sports a very punkish attitude and acts like he owns the streets. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	80
+	Ballistic:	4
+	Impact:	3
+	Cash:	75
+	Bank:	200
+[SKILLS]
+	firearms:	5
+	armed combat:	4
+	brawling:	5
+BREAK
+END

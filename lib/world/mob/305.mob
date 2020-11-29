@@ -1,0 +1,572 @@
+#30500
+Keywords:	garth
+Name:	Garth
+RoomDesc:$
+Garth stands behind a metal table, watching the trid. 
+
+~
+LookDesc:$
+A greasy looking human who seems to care less about what is going on around
+here, as long as he gets paid. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	154
+	Weight:	100
+[SKILLS]
+BREAK
+#30501
+Keywords:	wage slave wageslave
+Name:	a wage slave
+RoomDesc:$
+A wage slave walks through here quickly, dressed in breathers. 
+
+~
+LookDesc:$
+Dressed in breathers and a rain jacket, he looks like a nobody. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	75
+	Cash:	15
+	Bank:	20
+[SKILLS]
+BREAK
+#30502
+Keywords:	rioter
+Name:	A rioter
+RoomDesc:$
+A rioter runs through the streets here, breaking windows and wreaking havoc. 
+
+~
+LookDesc:$
+Looks just like just about any average citizen, only he is very very angry and
+is running down the streets breaking everything in his path. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	50
+	Bank:	50
+[SKILLS]
+	brawling:	4
+BREAK
+#30503
+Keywords:	Lin Owner Girl Female Petite Asian Elf Elven
+Name:	A petite asian elf
+RoomDesc:$
+A petite elf stands behind the counter watching over her laundry-mat. 
+
+~
+LookDesc:$
+She's rather young looking, even for an elf, and below the average elven
+height.  Assuming she's the owner of the place then her name is probably Lin.
+She smiles at you. 
+~
+ArriveMsg:	strolls in from
+LeaveMsg:	strolls out
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	5
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	38
+	Cash:	200
+[SKILLS]
+BREAK
+#30504
+Keywords:	pimple faced teenager man human clerk safeway
+Name:	a safeway clerk
+RoomDesc:$
+A pimple faced teenager stands behind the counter waiting to serve you. 
+
+~
+LookDesc:$
+This human teen looks like he got beat with an ugly stick.  Hell, you'd say he
+smacked into the whole tree.  His voice cracks when he speaks, his face is
+dotted with zits, his hair's greasy.  He's the perfect example of someone you
+wouldn't want handling your food, yet, he's your clerk, because the Safeway
+uniform he's wearing says so. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	2
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	75
+[SKILLS]
+BREAK
+#30505
+Keywords:	waiter tuxedo man human male
+Name:	a tuxedo clad waiter
+RoomDesc:$
+A waiter dressed in a tuxedo waits to seat you. 
+
+~
+LookDesc:$
+The waiter is balding a bit, and what hair he has left is grey.  He carries a
+small notepad in the breast pocket of his tuxedo jacket.  He glances at you
+and turns his nose up slightly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	2
+	Cha:	6
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	80
+[SKILLS]
+BREAK
+#30506
+Keywords:	jacke doctor toshika female elf elven
+Name:	Doctor Jackie Toshika
+RoomDesc:$
+Doctor Toshika sits behind her desk here, doing paper work. 
+
+~
+LookDesc:$
+While the beautiful woman infront of you looks like an elf, she was once a
+very disturbingly ugly ork.  When she was younger she wanted to be beautiful
+and followed the career of biosculpting, and along the way she practiced her
+art on herself, transforming her into this blonde haired, blue eyed,
+six-foot-five beauty with pointed ears. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	6
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	220
+	Weight:	70
+[SKILLS]
+BREAK
+#30507
+Keywords:	surgeon bioware doctor employee
+Name:	an employee of Jackie's
+RoomDesc:$
+A surgeon stands here, waiting for her next customer. 
+
+~
+LookDesc:$
+This surgeon is dressed in a white smock which is crisp and clean.  The pocket
+of the smock holds a couple basic tools; scalpel, mirror, saline syringe.  The
+surgeon himself smiles at you with two rows of teeth.  He's a balding man with
+calm, blue eyes... but the teeth are very disturbing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	6
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	85
+	Cash:	500000
+[SKILLS]
+	:	6
+	:	7
+BREAK
+#30508
+Keywords:	Jin man Asian elderly white-haired cashier
+Name:	Jin
+RoomDesc:$
+An elderly Asian man stands behind the counter. 
+
+~
+LookDesc:$
+While his shock of pure white hair and the many wrinkles around his face imply
+an advanced age, this short Asian man moves with a spryness and vigor that
+would put most teenagers to shame. He's wearing a grey sweatshirt, faded blue
+jeans, and a pair of blue sneakers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+[SKILLS]
+BREAK
+#30595
+Keywords:	beastly fido
+Name:	the beastly fido
+RoomDesc:$
+A beastly fido is mucking through the garbage looking for food here. 
+
+~
+LookDesc:$
+The fido is a small dog that has a foul smell and pieces of rotted meat
+hanging around his teeth. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#30596
+Keywords:	daecryn tuvitor elf mage ta'yree tilaen
+Name:	Ta'yree Tilaen
+RoomDesc:$
+An elf in crimson, violet and silver clothing stands here, wearing a crown. 
+
+~
+LookDesc:$
+A tall elven figure, wearing a dark forest green cloak, almost medieval in
+appearance.  The cape surrounding his neck is tied at the neck with a indigo
+stone, with a silver inlaid eight pointed star made of two criscrossing
+squares. His pale blonde hair comes out from under his cloak, as it is grown
+long, with an odd, thin black streak on the bangs hanging from the left side
+of the cloak.
+ When unmasked, you see a finely chiseled elven face, with deep violet eyes.
+His gaze is ethereal in a manner, denoting a very distant sort of wisdom. 
+~
+ArriveMsg:	strides in from
+LeaveMsg:	strides off
+MobFlags:	101110000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	32
+	Str:	30
+	Cha:	18
+	Int:	25
+	Wil:	35
+	Mag:	40
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	9
+	Ballistic:	60
+	Impact:	60
+[SKILLS]
+	sorcery:	40
+	edged weapons:	30
+	projectiles:	25
+	elf etiquette:	15
+	tribal etiquette:	21
+BREAK
+#30597
+Keywords:	ken do shing chinese triad lieutenant
+Name:	Ken Do Shing
+RoomDesc:$
+An asian man in a three piece suit with tattooed arms stands here. 
+
+~
+LookDesc:$
+Dressed in a three piece tres chic suit, he stands proudly.  Under his left
+eye is a very small tattoo of a Yin-Yang, and on his left hand the traditional
+chinese character for "ruler of the temple". 
+~
+ArriveMsg:	strides in from
+LeaveMsg:	strides off
+MobFlags:	101110000000011010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	15
+	Str:	20
+	Cha:	6
+	Int:	6
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	177
+	Weight:	75
+[SKILLS]
+	edged weapons:	15
+	brawling:	15
+	sorcery:	15
+BREAK
+#30598
+Keywords:	odif yltsaeb
+Name:	the odif yltsaeb
+RoomDesc:$
+An odif yltsaeb is here, walking backwards. 
+
+~
+LookDesc:$
+The odif is a small god that has been reversed by some dog. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#30599
+Keywords:	cityguard
+Name:	a cityguard
+RoomDesc:$
+A cityguard stands here. 
+
+~
+LookDesc:$
+A big, strong, helpful cityguard. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Impact:	4
+[SKILLS]
+	edged weapons:	4
+BREAK
+#30700
+Keywords:	professor socrates smith linguistics teacher man middle aged white haired
+Name:	Professor Socrates Smith
+RoomDesc:$
+A middle aged man sits here, peering over an arcane text in an ancient
+language. 
+
+~
+LookDesc:$
+A middle aged man with white hair, and sharp cold blue eyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	80
+[SKILLS]
+BREAK
+#30701
+Keywords:	olivia receptionist
+Name:	Olivia the receptionist
+RoomDesc:$
+A nice young lady sits behind her desk. 
+
+~
+LookDesc:$
+A young lady, with long brown locks, and green eyes, sits behind her desk,
+selling suites in this building. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#30702
+Keywords:	niece lindsie smith
+Name:	Lindsie Smith
+RoomDesc:$
+The owner's niece stands behind a counter here, flicking through a
+german-english dictionary. 
+
+~
+LookDesc:$
+Although plain, she has a sweet smile on her face as she flicks through the
+dictionary, absorbing all the information within. Next to her on the table is
+a skillchip dispenser, for those people who don't have the time or capacity to
+learn another language properly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	46
+[SKILLS]
+BREAK
+END

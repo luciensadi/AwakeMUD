@@ -1,0 +1,1075 @@
+#60300
+Keywords:	security guard novatech
+Name:	A Novatech Security Guard
+RoomDesc:$
+A Novatech security guard patrols the area, looking for trouble. 
+
+~
+LookDesc:$
+Dressed in a vest of light kevlar and toting a pistol at his side, this
+security guard diligently patrols the Novatech building to keep an eye out for
+troublemakers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Cash:	50
+	Bank:	150
+[SKILLS]
+	pistols:	6
+	brawling:	6
+	clubs:	6
+BREAK
+#60301
+Keywords:	Novatech security trooper
+Name:	A Novatech Security Trooper
+RoomDesc:$
+A well-armored member of the Novatech Security force patrols the area. 
+
+~
+LookDesc:$
+Dressed in medium security armor and sporting a mean looking submachine gun,
+this security guard looks fairly experienced in keeping the Novatech building
+safe from threats. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	5
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Cash:	150
+	Bank:	150
+[SKILLS]
+	sub-machine guns:	8
+	brawling:	7
+BREAK
+#60302
+Keywords:	novatech sentry environmental guard security
+Name:	A heavily armored Novatech sentry
+RoomDesc:$
+A heavily armored sentry stands here, scanning the area for intruders. 
+
+~
+LookDesc:$
+Armed with a rather threatening assault rifle and heavily armored in an
+environmentally sealed suit of armor, this security guard looks emotionless
+and ready to kill at a moment's notice. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	5
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Bank:	300
+[SKILLS]
+	assault rifles:	9
+	brawling:	8
+	clubs:	8
+BREAK
+#60303
+Keywords:	elite Novatech security enforcer
+Name:	An elite Novatech security enforcer
+RoomDesc:$
+An elite Novatech security enforcer patrols the area with rifle in hand. 
+
+~
+LookDesc:$
+Cold black eyes can barely be seen through the visor of this security guard's
+helmet. A dangerous looking rifle is in his hands, ready to drop any intruder
+he detects. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101010
+AffFlags:	100000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	8
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Bank:	200
+[SKILLS]
+	assault rifles:	10
+	brawling:	9
+	clubs:	12
+BREAK
+#60304
+Keywords:	elite novatech security mage
+Name:	An elite Novatech Security Mage
+RoomDesc:$
+A Novatech Security Mage is here, ready to slice an intruder's head off. 
+
+~
+LookDesc:$
+A wicked scimitar in one hand, a pool of magical energy in the other, this
+mage is a force to be reckoned with, more than capable of taking down entire
+squads of men with ease. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	9
+	Str:	8
+	Cha:	8
+	Int:	8
+	Wil:	9
+	Mag:	7
+[POINTS]
+	Height:	180
+	Weight:	100
+	Ballistic:	7
+	Impact:	7
+	Cash:	85
+	Bank:	85
+[SKILLS]
+	edged weapons:	11
+	brawling:	7
+	sorcery:	8
+	athletics:	4
+BREAK
+#60305
+Keywords:	spirit of man spirit-of-man shambling
+Name:	A shambling Spirit-of-man
+RoomDesc:$
+A shambling spirit-of-man floats about, ready to tear intruders to pieces. 
+
+~
+LookDesc:$
+An astral form of a spirit of man, this spirit looks vaguely humanoid, except
+draped in tattered astral mist. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010
+AffFlags:	1000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	brawling:	10
+	sorcery:	10
+BREAK
+#60306
+Keywords:	drone ventilation duct
+Name:	A ventilation duct drone
+RoomDesc:$
+A drone blocks the ventilation duct, vaporizing organic lifeforms. 
+
+~
+LookDesc:$
+It's main function is to keep the ventilation ducts unclogged by vaporizing
+any organize life form it encounters. This includes fungus that grows inside
+the vents, clogs of dust, and unfortunately for you, animals as well. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	30
+	Weight:	10
+[SKILLS]
+BREAK
+#60307
+Keywords:	novatech businessman
+Name:	A Novatech businessman
+RoomDesc:$
+A Novatech businessman walks around with a briefcase in hand. 
+
+~
+LookDesc:$
+A neat haircut, a well tailored suit, and a briefcase, this employee of the
+Novatech corporation lives to earn money, enslaved to his paycheck. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	80
+	Cash:	80
+	Bank:	80
+[SKILLS]
+BREAK
+#60308
+Keywords:	gyrating nightclubber
+Name:	A gyrating nightclubber
+RoomDesc:$
+A nightclubber is dancing here, gyrating wildly. 
+
+~
+LookDesc:$
+He's waving his hands in the air. Waving them around, like he just doesn't
+care. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	5
+	Cha:	4
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	120
+	Cash:	85
+	Bank:	85
+[SKILLS]
+	brawling:	3
+BREAK
+#60309
+Keywords:	nightclubber scantily clad
+Name:	A scantily clad nightclubber
+RoomDesc:$
+A scantily clad nightclubber smoothly dances to the music. 
+
+~
+LookDesc:$
+She's dancing to the music, well aware of the crowds of men around her
+watching her every move. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Sting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	50
+	Cash:	100
+	Bank:	150
+[SKILLS]
+BREAK
+#60310
+Keywords:	scientist novatech
+Name:	A Novatech scientist
+RoomDesc:$
+A scientist in a biohazard suit walks around, researching. 
+
+~
+LookDesc:$
+You can barely see his face through the glaze reflecting off his biohazard
+mask. He doesn't seem to notice you, as he's a bit absorbed in his work. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	4
+	Cha:	5
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	125
+	Bank:	125
+[SKILLS]
+BREAK
+#60311
+Keywords:	corporate decker
+Name:	A Novatech corporate decker
+RoomDesc:$
+A frail decker is jacked into the Matrix, completely oblivious to your
+presence. 
+
+~
+LookDesc:$
+His frail, malnourished body does not appear to have seen natural sunlight in
+at least a few weeks. The decker is jacked into the workstation cyberterminal,
+and has various tubes connected to his body supplying it with nourishment. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	1
+	Cha:	2
+	Int:	8
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	30
+	Cash:	35
+	Bank:	35
+[SKILLS]
+BREAK
+#60312
+Keywords:	peet coffee cashier
+Name:	The cashier of Peet's coffee
+RoomDesc:$
+The cashier of Peet's coffee is rushing to and fro, trying to satisfy the
+customers' orders. 
+
+~
+LookDesc:$
+Teenaged and dressed in Peet's uniform, he's probably working to pay off some
+debt, or to fund his education. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Cash:	2000
+[SKILLS]
+BREAK
+#60313
+Keywords:	surplus gun dealer shopkeeper cashier
+Name:	A Novatech Surplus gun dealer
+RoomDesc:$
+A man is behind the counter, tinkering with a dissassembled pistol. 
+
+~
+LookDesc:$
+He's wearing a Novatech uniform, and he sells the surplus equipment the
+Novatech security forces use. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	120
+[SKILLS]
+BREAK
+#60314
+Keywords:	surplus armor dealer cashier vendor storekeeper
+Name:	A Novatech Surplus Armor Dealer
+RoomDesc:$
+A Novatech employee is behind the counter, stitching together a rip in a
+kevlar jacket. 
+
+~
+LookDesc:$
+He supplies the general public with surplus protective equipment that the
+Novatech security forces use. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Whip
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	120
+[SKILLS]
+BREAK
+#60315
+Keywords:	phil employee cashier action
+Name:	Phil, an Action Electronics employee
+RoomDesc:$
+Phil stands behind the counter with a friendly smile. 
+
+~
+LookDesc:$
+A close relative to Mike, the Action Electronics store owner, Phil runs this
+Novatech branch of the Action Electronics franchise. A small button on Phil's
+jacket reads, "Find us in Downtown Seattle too!". 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	140
+[SKILLS]
+BREAK
+#60316
+Keywords:	Doctor dr goode cybertechnician
+Name:	Dr. Goode, the cybertechnician
+RoomDesc:$
+A small old cybertechnician is here, waiting for a new patient. 
+
+~
+LookDesc:$
+One of the most skilled cybertechnicians in the city, Dr. Goode has good
+reputation for making the installation process as painless as possible. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	70
+[SKILLS]
+BREAK
+#60317
+Keywords:	bioware specialist badde doctor dr
+Name:	Dr. Badde, the bioware specialist
+RoomDesc:$
+The bioware specialist for Superhuman Inc. is digging into a bioware tank,
+looking for a lost eyeball. 
+
+~
+LookDesc:$
+He's sloppily dressed in a ratty grey labcoat, and he doesn't look sanitary at
+all. Nonetheless, Dr. Badde and his partner, Dr. Goode, are the among the best
+bioware/cyberarm installers in the city. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	100000
+	Bank:	100000
+[SKILLS]
+BREAK
+#60318
+Keywords:	chuck diner owner
+Name:	Chuck, the owner of Chuck's diner
+RoomDesc:$
+Chuck is behind the counter, grinding some hamburger.. chuck. 
+
+~
+LookDesc:$
+A little pudgy in the belly area and wearing a greasy chef's outfit, Chuck
+makes one of the finest burgers in the city. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	160
+	Cash:	2000
+	Bank:	2000
+[SKILLS]
+BREAK
+#60319
+Keywords:	enigma bartender
+Name:	The Enigma bartender
+RoomDesc:$
+A bartender of the Enigma is behind the bar, mixing drinks. 
+
+~
+LookDesc:$
+He's working faster than lightning, cranking out a large number of brightly
+colored drinks with colorful, bubbly fizz. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	150
+	Cash:	2000
+	Bank:	2000
+[SKILLS]
+BREAK
+#60320
+Keywords:	dj scarlet
+Name:	DJ Scarlet
+RoomDesc:$
+DJ Scarlet is here, mixing up some tunes. 
+
+~
+LookDesc:$
+DJ Scarlet, one of the most skilled DJs in the nightclub business, cranks out
+tunes for the nightclubbers at the Enigma. She's wearing a red tanktop that
+stretches over her chest, and her hair has been tied into pigtails to avoid
+getting caught in anything as she's spinning the turntables. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	7
+	Cha:	8
+	Int:	8
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	180
+	Weight:	60
+	Ballistic:	5
+	Impact:	5
+	Cash:	125
+	Bank:	75
+[SKILLS]
+	brawling:	8
+	edged weapons:	6
+BREAK
+#60321
+Keywords:	maniacal cyberzombie
+Name:	A maniacal cyberzombie
+RoomDesc:$
+A maniacal cyberzombie twitches and spasms, seeimingly out of control. 
+
+~
+LookDesc:$
+This used to be a human being, but now very little remains that can still be
+considered human. Excessive cyberware installations have taken their toll on
+this person's body, as well as their mind. Twin cyberarms sport razor sharp
+spurs with your name on them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	11
+	Cha:	1
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Ballistic:	7
+	Impact:	9
+	Karma:	2
+[SKILLS]
+	cyber implants:	10
+BREAK
+#60322
+Keywords:	cyberware test subject
+Name:	A cyberware test subject
+RoomDesc:$
+A cyberware test subject is suspended in the air, being electrocuted by the
+machinery. 
+
+~
+LookDesc:$
+He's locked behind a chamber and suspended by a contraption of some sort
+that's sending a large number of volts through his body. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	50
+[SKILLS]
+BREAK
+#60323
+Keywords:	cyberzombie sealed suspension tank asimov argent
+Name:	A cyberzombie in a sealed animated suspension tank
+RoomDesc:$
+A comatose cyberzombie is submerged in a vat of liquid, trying to escape from
+its captors. 
+
+~
+LookDesc:$
+This chrome humanoid seems to have been kept for years of research by the
+Novatech scientists. Eyes seething with anger indicate that this cyberzombie
+is desperate to escape from his suspension tank and wreak havoc on its
+creators.
+ Next to a small slot in the machinery that allows the technicians to supply
+his body with nourishment is a small plaque that reads, "Asimov, Argent". 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000000000001010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	300
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+BREAK
+#60324
+Keywords:	Nicolas Lambardi johnson suit
+Name:	Nicolas Lambardi
+RoomDesc:$
+A man in a well-tailored suit sits in the private room with a drink in hand. 
+
+~
+LookDesc:$
+Slicked-back hair, sunglasses, and a suit. This man definitely looks like a
+corporate Johnson, and a well-paid one at that. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Cash:	90000
+	Bank:	90000
+[SKILLS]
+BREAK
+#60325
+Keywords:	Victor Graft lawyer
+Name:	Victor Graft, the hotshot lawyer
+RoomDesc:$
+A well dressed lawyer with good posture stands behind the table, looking
+through some files. 
+
+~
+LookDesc:$
+He looks a bit surprised at your intrusion, and motions for his bodyguard to
+deal with you as he continues his work. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Cash:	2000
+[SKILLS]
+BREAK
+#60326
+Keywords:	bodyguard graft
+Name:	Victor Graft's bodyguard
+RoomDesc:$
+Victor Graft's bodyguard is here, ready to deal with any threats to his
+client. 
+
+~
+LookDesc:$
+A burly Ork in a suit, he doesn't look very friendly at all. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	8
+	Str:	7
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	225
+	Weight:	100
+	Ballistic:	5
+	Impact:	4
+	Cash:	1200
+[SKILLS]
+	brawling:	6
+	pistols:	8
+BREAK
+#60327
+Keywords:	angela wright johnson businesswoman
+Name:	Angela Wright
+RoomDesc:$
+A lovely young businesswoman sits behind her desk, sifting through a pile of
+papers. 
+
+~
+LookDesc:$
+She's dressed in the standard corporate uniform for a woman: black skirt,
+white blouse, high heeled shoes. Her strawberry blonde hair has been tied back
+into a bun, with some loose strands falling over her face. She gives you a
+curious eyebrow when you walk into her office, but doesn't seem too alarmed by
+your presence, like she's used to the company of shadowrunners. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	60
+	Cash:	20000
+	Bank:	20000
+[SKILLS]
+BREAK
+#60328
+Keywords:	receptionist secretary novatech pretty
+Name:	A pretty Novatech receptionist
+RoomDesc:$
+A charming, petite woman sits behind the reception desk, assisting visitors. 
+
+~
+LookDesc:$
+Sex appeal sells, which is exactly why corporations assign their most
+attractive, charismatic employees to the front desk. This young, elfin woman
+sits behind the desk talking into a telephone headset that she's wearing over
+her streaked brunette hair.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	2
+	Cha:	8
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	45
+	Cash:	100
+	Bank:	100
+[SKILLS]
+	brawling:	5
+BREAK
+#60329
+Keywords:	novatech dealer cyberdeck
+Name:	A Novatech Cyberdeck Dealer
+RoomDesc:$
+A Novatech Cyberdeck dealer gazes longingly into one of the display cabinets.
+
+~
+LookDesc:$
+He is wearing a Novatech uniform, and is selling one of the precious
+cyberdecks he would love to own. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	120
+[SKILLS]
+BREAK
+#60330
+Keywords:	novatech software retailer bored
+Name:	A Novatech Software Retailer
+RoomDesc:$
+A bored looking young man with glasses is here, filling out the jumble. 
+
+~
+LookDesc:$
+You have never seen a more bored looking person in your life. He is hunched
+over the counter glancing down at his jumble, idling twirling a pen in his
+hand. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	50
+[SKILLS]
+BREAK
+END

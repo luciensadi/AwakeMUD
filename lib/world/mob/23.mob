@@ -1,0 +1,775 @@
+#2301
+Keywords:	squatter
+Name:	a squatter
+RoomDesc:$
+The squatter sits here miserably.
+
+~
+LookDesc:$
+You see a person who is in a state of living death, so accustomed
+to squalor and hopelessness that nothing remains but habit.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001100
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+	brawling:	2
+BREAK
+#2302
+Keywords:	guard
+Name:	Guard
+RoomDesc:$
+A guard stands here, prepared to shoot any intruders.
+
+~
+LookDesc:$
+You see a person dressed head-to-toe in armor, wielding a large gun.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000001101000
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	3
+	Str:	3
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Impact:	3
+	Bank:	100
+[SKILLS]
+	brawling:	2
+BREAK
+#2303
+Keywords:	doctor aberration
+Name:	Doctor Aberration
+RoomDesc:$
+Doctor Aberration stands here, lost in thought.
+
+~
+LookDesc:$
+You see a scrawny, seemingly always distracted human of medium height. He
+wears a pair of goggles over his eyes for no discernible reason.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Cash:	10000
+[SKILLS]
+	brawling:	2
+	cybersurgery:	6
+BREAK
+#2304
+Keywords:	mutt gang member
+Name:	Mutt
+RoomDesc:$
+Mutt stands here, talking incessantly to Jeff.
+
+~
+LookDesc:$
+You see a short but tough-looking member of the Black Rains gang. He
+is wired, possibly chipped, and constantly fools with the pistol in his
+hand.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	2
+	Cash:	60
+[SKILLS]
+	brawling:	2
+BREAK
+#2305
+Keywords:	jeff gang member
+Name:	Jeff
+RoomDesc:$
+Jeff stands here, ignoring Mutt.
+
+~
+LookDesc:$
+You see a tall and tough-looking gang member.  He is calm, although somewhat
+irritated with his Black Rains fellow.
+~
+ArriveMsg:	leaves
+LeaveMsg:	arrives from
+MobFlags:	1011
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	3
+	Str:	6
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	2
+	Cash:	78
+[SKILLS]
+	brawling:	2
+BREAK
+#2306
+Keywords:	pike troll
+Name:	Pike
+RoomDesc:$
+You see a grubby troll named Pike.
+
+~
+LookDesc:$
+You see a tired but obviously capable troll. His is a calm temperment, but
+then very few people try to irritate him.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	3
+	Str:	11
+	Cha:	3
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	4
+	Bank:	100
+[SKILLS]
+	armed combat:	4
+	negotiation:	2
+	grapple:	2
+BREAK
+#2307
+Keywords:	shara elf
+Name:	Shara
+RoomDesc:$
+Shara sits here morosely.
+
+~
+LookDesc:$
+She appears distraught. There is no way of knowing which stricture she
+has broken, but it is clear she is an outcast.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	4
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+	brawling:	2
+BREAK
+#2308
+Keywords:	kyrie elf
+Name:	Kyrie
+RoomDesc:$
+Kyrie sits here, glaring at you.
+
+~
+LookDesc:$
+Kyrie projects control. Her movements are careful and slow without being
+pompous. Nothing like fear is in her eyes.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Impact:	4
+	Cash:	10
+[SKILLS]
+	brawling:	2
+BREAK
+#2309
+Keywords:	auntie entity
+Name:	Auntie Entity
+RoomDesc:$
+Auntie Entity looks down upon you haughtily.
+
+~
+LookDesc:$
+Entity, a female human, wears clothes considered outlandish even in the
+year 2050. Her face reveals permanent scorn; her laughter is Hobbesian.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	6
+	Int:	4
+	Wil:	5
+	Mag:	5
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Impact:	3
+	Bank:	250
+[SKILLS]
+	brawling:	2
+BREAK
+#2310
+Keywords:	guard ahmet
+Name:	Ahmet
+RoomDesc:$
+Ahmet, Entity's personal bodyguard, is standing here.
+
+~
+LookDesc:$
+You see a battle-weary dwarf who appears ready for combat. In addition to
+his armor and weapon, he has two ammo belts running crosswise around his body.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	2
+	Str:	5
+	Cha:	1
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	4
+	Bank:	60
+[SKILLS]
+	brawling:	2
+BREAK
+#2311
+Keywords:	policlub member
+Name:	the Policlub member
+RoomDesc:$
+The Policlub member smiles ingratiatingly and holds out his hand
+in friendship.
+
+~
+LookDesc:$
+The member is plain-looking and conservative.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001011101001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	2
+	Int:	1
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+	brawling:	2
+BREAK
+#2312
+Keywords:	policlub leader
+Name:	the Policlub leader
+RoomDesc:$
+The Policlub leader rants here.
+
+~
+LookDesc:$
+Dressed in white, the leader is charismatic but clearly unhinged.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000011100001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Cash:	10
+[SKILLS]
+	brawling:	2
+BREAK
+#2313
+Keywords:	gang member blackrains
+Name:	a Black Rains gang member
+RoomDesc:$
+A Black Rains gang member defends his turf here.
+
+~
+LookDesc:$
+You see a young tough wearing clothes entirely in black.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	4
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	1
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Cash:	10
+[SKILLS]
+	brawling:	2
+BREAK
+#2314
+Keywords:	soldier mercenary
+Name:	a mercenary
+RoomDesc:$
+One of Petrowski's mercenaries scowls at you.
+
+~
+LookDesc:$
+You see a well-trained soldier. Petrowski cares enough to hire the very best.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000101000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	3
+	Cash:	10
+	Bank:	200
+[SKILLS]
+	brawling:	2
+BREAK
+#2315
+Keywords:	gang member reality hackers sociopath young
+Name:	a Reality Hackers Gang Member
+RoomDesc:$
+A bright young sociopath stands in your way.
+
+~
+LookDesc:$
+You see a strange species of gangbanger, dressed in a collared shirt
+and dress pants, but wielding a knife.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+	brawling:	2
+BREAK
+#2316
+Keywords:	petrowski
+Name:	Petrowski
+RoomDesc:$
+Petrowski is busy with the logistics of running his farms.
+
+~
+LookDesc:$
+You see a tall, middle-aged man who would have been pronounced a 
+criminal by Poe. His brow slopes, but his eyes flicker with intellect.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100
+AffFlags:	0
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	5
+	Ballistic:	5
+	Impact:	4
+	Cash:	10
+	Bank:	500
+	Karma:	34
+[SKILLS]
+	brawling:	2
+BREAK
+#2317
+Keywords:	mercenary head chief
+Name:	Head Merc
+RoomDesc:$
+The chief mercenary stands here, ready to kill.
+
+~
+LookDesc:$
+You see a nasty, brutish, and short individual.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000101010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	4
+	Cash:	2000
+	Bank:	4151
+[SKILLS]
+	brawling:	2
+	shotguns:	4
+BREAK
+#2318
+Keywords:	street doc
+Name:	Street Doc
+RoomDesc:$
+The Street Doc is irritated but will see you.
+
+~
+LookDesc:$
+You see a spry old man with a crude sense of humour.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+	Bank:	200
+[SKILLS]
+	brawling:	2
+BREAK
+#2319
+Keywords:	boulette soldier
+Name:	Boulette
+RoomDesc:$
+Auntie Entity's second-in-command, Boulette, stands here.
+
+~
+LookDesc:$
+You see a man dressed in scuffed black kevlar. His motions give him
+away as a street samurai.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	4
+	Cha:	3
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	90
+	Ballistic:	5
+	Impact:	3
+	Bank:	300
+[SKILLS]
+	brawling:	2
+BREAK
+#2320
+Keywords:	renfield scavenger
+Name:	Renfield the scavenger
+RoomDesc:$
+Renfield is here, trying to scavenge items.
+
+~
+LookDesc:$
+Renfield is a hideous and misshapen lunatic that lives on carrion and
+insects. If questioned, he babbles about pleasing his "master."
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001100
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	2
+	Cha:	1
+	Int:	2
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	68
+[SKILLS]
+	brawling:	2
+BREAK
+#2321
+Keywords:	stocky well built muscular dwarf gnarl
+Name:	Gnarl
+RoomDesc:$
+A stocky, well-built and very muscular dwarf tinkers with his guns. 
+
+~
+LookDesc:$
+This is Gnarl, a new, but already well-reputed gun smith. This dwarf has got
+his hands on several prototype, or never completed gun schematics and used
+them for his own purposes. He looks built enough to carry practically any gun
+he can make, allowing him to test them until they fit his liking. A datajack
+sits in the side of his neck, and he has a pair of very odd cybereyes with
+blue irisis and a red pupil. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000001000000001010
+AffFlags:	1000000010001000000000
+Race:	Humanoid
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	4
+	Str:	8
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	80
+	Cash:	55000
+	Bank:	15000
+[SKILLS]
+	negotiation:	3
+BREAK
+#2322
+Keywords:	Fire fly firefly lean elven woman platinum blonde albino
+Name:	Firefly
+RoomDesc:$
+A lean, albino elven woman tends the area, tinkering with her newest
+creations. 
+
+~
+LookDesc:$
+This is Firefly, she's one of the extremely scarce people that Gnarl trusts
+enough to work with his weapon designs. Her name is derived from her albino
+characteristics... Very pale skin, platinum blonde hair, and bright red pupils
+amidst the bright blue irises of her eyes. Unlike her partner Gnarl, they
+aren't cybereyes however. Her build is vaguely thin by most standards, but she
+does have some prominent muscles to contrast the stereotypical elvish build. A
+datajack rests at the side of her neck, hidden mostly by her hair. While not
+strong enough to test some of the heavier weapons she and Gnarl produce, she
+still does her best to make sure they live up to her own fairly high
+standards.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000001000000001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	7
+	Str:	4
+	Cha:	6
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	60
+	Cash:	55000
+	Bank:	15000
+[SKILLS]
+	negotiation:	5
+BREAK
+END

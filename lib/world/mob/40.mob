@@ -1,0 +1,1143 @@
+#4000
+Keywords:	gopher
+Name:	a small gopher
+RoomDesc:$
+A small, earthen coloured gopher scurries around here. 
+
+~
+LookDesc:$
+This small, rodent-like creature is actually pretty cute upon closer
+inspection. A wide face with a small stubby nose makes up the main
+characteristics, that and its earthen hued fur. Tiny feet play home to
+surprisingly sharp claws, and it's beady black eyes appear relatively
+intelligent. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011000
+AffFlags:	10000000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	10
+	Cha:	0
+	Int:	4
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	3
+	Ballistic:	8
+	Impact:	6
+[SKILLS]
+	stealth:	2
+	brawling:	4
+BREAK
+#4001
+Keywords:	lone star officer cop
+Name:	a Lone Star Officer
+RoomDesc:$
+A Lone Star officer rides a bicycle through here, alert for any trouble. 
+
+~
+LookDesc:$
+Dressed in the classic colours of Lone Star, his sole job is to do rounds
+about the park, ensuring there are no troubled youths, or indeed adults,
+getting up to no good. 
+~
+ArriveMsg:	rides in from
+LeaveMsg:	pedals
+MobFlags:	10000000100001001001
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	197
+	Weight:	90
+	Bank:	250
+[SKILLS]
+	firearms:	3
+	armed combat:	2
+	brawling:	3
+BREAK
+#4002
+Keywords:	jogger man
+Name:	a jogger
+RoomDesc:$
+An athletic man jogs through at a leisurely pace. 
+
+~
+LookDesc:$
+Physically fit, this jogger doesn't appear to be breaking a single bead of
+sweat. Plugged into his ears are a set of headphones, separating him from any
+distractions aside from the path ahead. 
+~
+ArriveMsg:	runs in from
+LeaveMsg:	runs
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	142
+	Weight:	85
+	Cash:	100
+[SKILLS]
+	brawling:	3
+	athletics:	3
+BREAK
+#4003
+Keywords:	mugger suspicious man
+Name:	a mugger
+RoomDesc:$
+A suspicious-looking man is standing here.
+
+~
+LookDesc:$
+With what he is wearing, he bears quite a lot of similarities to a gang
+member.  You wouldn't be surprised if he had a gun in his pocket...
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001001
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	3
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	75
+	Ballistic:	1
+	Impact:	1
+	Bank:	150
+[SKILLS]
+	brawling:	5
+	firearms:	4
+BREAK
+#4004
+Keywords:	joe
+Name:	Joe
+RoomDesc:$
+Joe is here, throwing a frisbee to Bob.
+
+~
+LookDesc:$
+Quite short in stature, this young man seems to have an expression of absolute
+delight. His freckled face is accompanied by a mop of red hair and sparkling
+blue eyes. Clearly he's having a good time. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	70
+	Ballistic:	2
+	Impact:	2
+	Bank:	186
+[SKILLS]
+	brawling:	3
+BREAK
+#4005
+Keywords:	bob
+Name:	Bob
+RoomDesc:$
+Bob stands here, waiting for Joe to throw him the frisbee.
+
+~
+LookDesc:$
+Taller than his companion, this man has a decent amount of muscle on his arms
+and upper body. His facial expression, covered in a five o'clock shadow, is
+slightly more stern than his frisbee throwing accomplice. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	162
+	Weight:	80
+	Ballistic:	2
+	Impact:	2
+	Cash:	50
+	Bank:	200
+[SKILLS]
+	brawling:	4
+BREAK
+#4006
+Keywords:	jill
+Name:	Jill
+RoomDesc:$
+Jill is sitting here, having a friendly chat with Tom.
+
+~
+LookDesc:$
+Long, impeccably straight auburn hair drapes across her back in a subtle wave,
+the glossy locks married well to her pale toned skin. Looking to be in her
+early twenties, she's not beautiful, but her eyes have an enchanting quality
+to them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	2
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Ballistic:	2
+	Impact:	2
+	Cash:	23
+[SKILLS]
+	brawling:	3
+	whips & flails:	2
+BREAK
+#4007
+Keywords:	tom
+Name:	Tom
+RoomDesc:$
+Tom chews on a sandwich here.
+
+~
+LookDesc:$
+Without being overly tall and hulking, it's hard to place this man as a
+brutish looking fellow, however his mannerisms speak otherwise. Haphazardly
+stuffing a sandwich into his mouth, he swigs on a beer bottle without even
+waiting long enough to swallow his food. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	3
+	Str:	3
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	184
+	Weight:	80
+	Ballistic:	2
+	Impact:	2
+	Cash:	100
+	Bank:	325
+[SKILLS]
+	brawling:	3
+BREAK
+#4008
+Keywords:	maintenance man
+Name:	a park maintenance man
+RoomDesc:$
+A park maintenance man is picking up stray rubbish. 
+
+~
+LookDesc:$
+Dressed in a jump suit of dark blue, the words 'COMMUNITY SERVICE' have been
+printed across the shoulder blades. Looking generally glum, it's obvious this
+worker would rather be elsewhere instead of picking up dropped cans and
+litter. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001001
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	183
+	Weight:	85
+	Cash:	15
+[SKILLS]
+	armed combat:	4
+	brawling:	2
+	firearms:	2
+BREAK
+#4009
+Keywords:	guard man
+Name:	a gate guard
+RoomDesc:$
+A well-equipped man guards the gate to the house.
+
+~
+LookDesc:$
+Beneath the bulk of his armor, this man is not all hot air and appears to be
+quite well-built despite everything. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001100000011011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	4
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	183
+	Weight:	90
+	Ballistic:	3
+	Impact:	3
+	Cash:	150
+	Bank:	175
+[SKILLS]
+	firearms:	5
+	armed combat:	5
+	pistols:	5
+BREAK
+#4010
+Keywords:	dob billon tamborineman
+Name:	Dob Billon
+RoomDesc:$
+Dob Billon is here, playing strange music.
+
+~
+LookDesc:$
+Dob has long hair, in the form of dreads.  He wears clothes similar to
+those common in the late 1960's.  Dob's music is nothing special, although
+you become absorbed in his lyrics.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001110
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	5
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	177
+	Weight:	80
+	Ballistic:	4
+	Impact:	3
+	Cash:	125
+	Bank:	710
+[SKILLS]
+	brawling:	5
+	firearms:	1
+BREAK
+#4011
+Keywords:	bird swallow
+Name:	a swallow
+RoomDesc:$
+A small bird sits in a tree.
+
+~
+LookDesc:$
+The small bird is mostly brown, but has a small patch of light red under
+its beak.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	10000000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	8
+	Str:	2
+	Cha:	0
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	15
+	Weight:	2
+	Ballistic:	6
+	Impact:	4
+[SKILLS]
+	brawling:	3
+BREAK
+#4012
+Keywords:	squirrel
+Name:	a squirrel
+RoomDesc:$
+A squirrel stands here.
+
+~
+LookDesc:$
+It's a small, furry creature that lives in trees and eats nuts.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11011
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	20
+	Weight:	5
+	Ballistic:	4
+	Impact:	3
+[SKILLS]
+	brawling:	3
+BREAK
+#4013
+Keywords:	orc sick
+Name:	a sick orc
+RoomDesc:$
+An orc kneels here, vomiting into the toilet.
+
+~
+LookDesc:$
+He looks really sick.  It makes you wonder why he's even in the park.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1111
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	3
+	Str:	4
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	4
+	Impact:	3
+	Bank:	142
+[SKILLS]
+	firearms:	4
+	brawling:	3
+BREAK
+#4014
+Keywords:	troll guard
+Name:	a troll guard
+RoomDesc:$
+A troll guard is here, eyeing you with violent intent.
+
+~
+LookDesc:$
+He is tall, even by troll standards.  You'd guess he's almost eleven feet.
+Of course, his weight is probably proportional to his height.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000001100
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	9
+	Cha:	1
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	230
+	Ballistic:	2
+	Impact:	3
+	Cash:	20
+	Karma:	20
+[SKILLS]
+	firearms:	6
+	brawling:	5
+BREAK
+#4015
+Keywords:	oriental chef
+Name:	a chef
+RoomDesc:$
+An oriental chef is preparing dinner.
+
+~
+LookDesc:$
+He's oriental, and wears the common garb of chefs.  A white jacket, white
+pants, and the stereotypical white chef hat.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	5
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+	Cash:	152
+[SKILLS]
+	armed combat:	5
+	brawling:	6
+BREAK
+#4016
+Keywords:	adept bodyguard guard physical
+Name:	a physical adept bodyguard
+RoomDesc:$
+A stern, muscular man guards the door. 
+
+~
+LookDesc:$
+The ripple of pure muscle is evident in any shift this man makes, though there
+are no immediately obvious enhancements to his physique. His expression seems
+to only have one level - stoic. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000011111
+AffFlags:	100010000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	7
+	Cha:	3
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	5
+	Impact:	4
+	Bank:	480
+	Karma:	15
+[SKILLS]
+	:	2
+	brawling:	6
+	:	3
+	:	3
+	:	4
+BREAK
+#4017
+Keywords:	ork guard
+Name:	an ork guard
+RoomDesc:$
+An olive skinned Ork guard stands here vigilantly. 
+
+~
+LookDesc:$
+Broad shoulders, bald, and with an impressive set of tusks, the scars that mar
+this orks face tell of his ol' fightin' days. Apparently they're not over. He
+appears uncybered, and would probably pass for clueless if it weren't for the
+high-tech gear coating his person. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000011100000011110
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	7
+	Cha:	1
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	205
+	Weight:	100
+	Ballistic:	7
+	Impact:	5
+	Bank:	432
+[SKILLS]
+	armed combat:	5
+	brawling:	6
+	firearms:	5
+	demolitions:	1
+BREAK
+#4018
+Keywords:	dwarf guard
+Name:	a dwarven guard
+RoomDesc:$
+A stocky, rust bearded dwarf stands here. 
+
+~
+LookDesc:$
+He stands just over three feet, and carries a gun that's almost as tall as
+him.  Don't let his height fool you, though, he's quite experienced.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000011100000001110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	4
+	Str:	7
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	75
+	Ballistic:	6
+	Impact:	6
+	Bank:	912
+[SKILLS]
+	firearms:	5
+	armed combat:	4
+	brawling:	6
+	electronics:	4
+BREAK
+#4019
+Keywords:	kenji tsuyama proud oriental man
+Name:	Kenji Tsuyama
+RoomDesc:$
+A proud oriental man sits at the edge of the bed. 
+
+~
+LookDesc:$
+Clearly a man of power, this human is oriental with salt and pepper hair
+pulled back into a lax plait. His suit is crisp, tailored perfectly to his
+shoulders. Laying across his lap is a beautifully made katana, which the
+fingers of his left hand never seem to leave. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100010000000001111
+AffFlags:	10000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	12
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	183
+	Weight:	80
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	armed combat:	7
+	brawling:	6
+	firearms:	6
+	:	1
+	:	2
+BREAK
+#4020
+Keywords:	sentry house roam roaming
+Name:	a house sentry
+RoomDesc:$
+A large oriental human roams around the house. 
+
+~
+LookDesc:$
+Built like a brick shit house, this oriental man wears an expression that
+hints at pride in his job. A stern expression brings his eyes ever narrower,
+the constant frowning giving him permanent lines across his forehead. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100001100001111000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	6
+	Cha:	2
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	7
+	Impact:	7
+	Bank:	50
+[SKILLS]
+	firearms:	5
+	brawling:	5
+BREAK
+#4022
+Keywords:	guard man sentry
+Name:	a cavern sentry
+RoomDesc:$
+A human sentry surveys the caverns for intruders.
+
+~
+LookDesc:$
+Equiped in some of the latest security gear, he looks like he is protecting
+something very valuable.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010000001111100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	6
+	Cha:	1
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	7
+	Impact:	7
+	Bank:	4960
+[SKILLS]
+	firearms:	7
+	brawling:	4
+BREAK
+#4023
+Keywords:	sentry guard ork
+Name:	a cavern sentry
+RoomDesc:$
+An orkish sentry scans the area for intruders.
+
+~
+LookDesc:$
+An ugly ork, dressed in high-tech gear.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010000001111100
+AffFlags:	10000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	3
+	Str:	7
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	90
+	Ballistic:	7
+	Impact:	7
+[SKILLS]
+	firearms:	6
+	brawling:	4
+BREAK
+#4024
+Keywords:	sentry guard elf mage
+Name:	a cavern sentry
+RoomDesc:$
+An elvish guard stands here, magically protecting something.
+
+~
+LookDesc:$
+Dressed in protective gear as well as magic foci, he looks dangerous.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010000001111000
+AffFlags:	1010000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	5
+	Cha:	2
+	Int:	5
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	6
+	Impact:	6
+	Bank:	6238
+[SKILLS]
+	firearms:	4
+	sorcery:	6
+	brawling:	5
+BREAK
+#4025
+Keywords:	troll bodyguard protector
+Name:	a troll bodyguard
+RoomDesc:$
+A large troll bodyguard stands here threateningly.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	4
+	Str:	8
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	8
+[SKILLS]
+	firearms:	7
+	brawling:	8
+	armed combat:	4
+BREAK
+#4026
+Keywords:	man dealer sales representative
+Name:	a short, black-clad man
+RoomDesc:$
+A short, black-clad man stands here.
+
+~
+LookDesc:$
+He stands about five feet tall.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001001000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	65
+[SKILLS]
+	firearms:	9
+	brawling:	6
+	street etiquette:	9
+	negotiation:	8
+	corporate etiquette:	2
+BREAK
+#4027
+Keywords:	troll sentinel guard big
+Name:	a troll sentinel
+RoomDesc:$
+A troll sits here, playing cards.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010000000101110
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	4
+	Str:	10
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	9
+	Impact:	7
+[SKILLS]
+	firearms:	6
+	brawling:	5
+BREAK
+#4028
+Keywords:	ork sentinel guard
+Name:	an ork sentinel
+RoomDesc:$
+An ork sits at the table, playing a game of cards.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010000000101110
+AffFlags:	10000000000000000
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	6
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	8
+	Impact:	8
+	Bank:	387
+[SKILLS]
+	firearms:	6
+	brawling:	5
+BREAK
+#4029
+Keywords:	servant man
+Name:	a servant
+RoomDesc:$
+A servant rests on the bed.
+
+~
+LookDesc:$
+A small man, taking a rest from a hard day's work.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Resting
+DefaultPos:	Resting
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	80
+	Ballistic:	8
+	Impact:	8
+	Cash:	700
+[SKILLS]
+	brawling:	6
+BREAK
+#4030
+Keywords:	overseer over seer man
+Name:	the overseer
+RoomDesc:$
+An overseer watches for anything suspicious.
+
+~
+LookDesc:$
+You see nothing special...
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11100001011000
+AffFlags:	10000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	5
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	193
+	Weight:	95
+	Ballistic:	9
+	Impact:	8
+[SKILLS]
+	firearms:	6
+	brawling:	4
+BREAK
+#4050
+Keywords:	syinlueth dragon great western
+Name:	Syinlueth, the Great Dragon
+RoomDesc:$
+A large, wrathful Dragon looms high above you.
+
+~
+LookDesc:$
+It is an extremely large dragon, one of the western kin, for it displays a
+large set of leathery wings upon its back.  It stands nearly 6 meters tall,
+and
+about 55 meters long, from head to tail.  Smoke streams from his nostrils, and
+every so often he lets loose a massive cloud of fire into the air.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000011011
+AffFlags:	1000011000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	10
+	Str:	50
+	Cha:	9
+	Int:	9
+	Wil:	13
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	250
+	Ballistic:	14
+	Impact:	14
+	Cash:	2392
+	Bank:	82930
+	Karma:	161
+[SKILLS]
+	brawling:	6
+	:	6
+	:	10
+	armed combat:	6
+BREAK
+END

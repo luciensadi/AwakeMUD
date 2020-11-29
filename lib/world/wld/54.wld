@@ -1,0 +1,1441 @@
+#5400
+Name:	Ele'gnani Road (Highway 21)
+Desc:$
+   A small road in the hamlet of J'Valdi, this road is covered in cobblestone
+and the buildings are covered in ivy.  Along all the frames of the wooden
+houses are sculpted carvings with many celtic-style patterns. 
+~
+Flags:	10000010000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17547
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5401
+Name:	Ele'gnani Road (Highway 21)
+Desc:$
+   Ele'gnani Road runs between two rows of beautiful wooden houses with no
+paint, but with natural pitch veneer, and ornate artwork carved into the
+siding and frames of them.  Farther on west is a small bar, and a hotel. 
+~
+Flags:	10000010000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	5400
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5402
+Name:	Ele'gnani Road (Highway 21)
+Desc:$
+   Ele'gnani ends here between a small tavern and a hotel, both built in
+polished stones, covered with ivy.  The hotel has a sign on the door, saying
+"CLOSED FOR REMODELING" in English and Sperethiel, but the tavern is open,
+with the smell of quality ale and home-cooked bread coming from inside. 
+~
+Flags:	10000100000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	5401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	8195
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5403
+Name:	Ryseril Thelanei
+Desc:$
+   Ryseril Thelenei is a very homey sort of tavern, with dark light, wood
+veneer interior, and a plush carpet that stays clean despite the liquor sold
+here.  The ambiance is calm and soothing, and the air smells sweet, a mixing
+of quality ales and home-baked bread. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5404
+Name:	Ryseril Thelanei, at the Bar
+Desc:$
+   The bar is a very highly polished mahogany, with carved runes along the
+edges.  On the other side of the bar are several shelves lined with polished
+crystal glasses carved with runes and geometric designs.  Several plants hang
+over a beam that runs over the bar, adding to the elven ambience. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	5
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	5405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5405
+Name:	Ryseril Thelanei, Back Room
+Desc:$
+   The back room of the bar has a few tables lined out in equal spaces.  The
+tables are polished redwood and the chairs are the same with ornate carvings
+along the legs and edges. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	4
+X:	5
+Y:	6
+Z:	4.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	5404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5406
+Name:	East 33rd Street
+Desc:$
+   33rd Street runs from north to south in the highly militarized city of
+Vancouver. Vancouver is built as a military stronghold out of paranoia on the
+part of the Salish Sidhe nation, who fears the day the Council of Princes
+decide to annex Sinsearach into Tir Tairngire.  You regularly see fully armed
+soldiers walking these streets, and patrol vehicles covered with turrets and
+every large type of weapon imaginable. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17593
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5407
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5408
+Name:	East 33rd Street and Buena Vista Boulevard
+Desc:$
+   33rd Street runs into Buena Vista Boulevard in a four way intersection
+governed by stopsigns.  All around are neighborhoods filled with dark wooden
+duplexes, triplexes, and quadplexes.  The dark wood that seems universal in
+this area is placed in siding, gives these tract houses something of a
+neo-rustic feel. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5409
+Name:	East 33rd Street
+Desc:$
+   Thirty Third Street runs up northward to a more commercial part of
+Vancouver, up past the block of wood-sided tract housing.  Traffic here seems
+to be constant at all hours, mostly native Sinsearach and Salish locals. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5410
+Name:	East 33rd Street and Evergreen Boulevard
+Desc:$
+   Evergreen Boulevard is a vastly commercial strip through Vancouver, with
+lines of stores and office clusters.  Gaeatronics has a large plant just east
+of here, and to the west are several shopping centers. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	5409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5411
+Name:	Buena Vista Boulevard
+Desc:$
+   Buena Vista Boulevard is largely surrounded by military barracks and
+hangars that have been built in a makeshift manner after a recent invasion
+scare.  Soldiers regularly march in formation down this street, which was once
+a flourishing residential area. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	5408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5412
+Name:	Buena Vista Boulevard and East 12th Street
+Desc:$
+   East 12th runs parallel to I-5 until just south, where it curves into I-5.
+Buena Vista east of here is filled with makeshift military encampments and
+barracks, hangers and armories, built after a recent invasion scare. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5416
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	5411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5413
+Name:	East Twelfth Street, at Interstate 5
+Desc:$
+   Twelfth Street runs north of here through the downtown commercial sector of
+Vancouver, which doesn't say much.  A few four story office buildings and a
+street with some stores on it.  Southwest is an exit onto Interstate Five. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	17595
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5414
+Name:	Evergreen Boulevard
+Desc:$
+   Evergreen Boulevard is lined with office buildings for various corps with
+NAN presence, such as Gaeatronics and many lesser known corporations.  On the
+north side of the street is a shopping center filled with a few basic stores.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5431
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	5410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5415
+Name:	Evergreen Boulevard and East Twelfth Street
+Desc:$
+   Evergreen and 12th run into each other in an area surrounded by four and
+five story tall office buildings, nothing majorly noteworthy, save for
+Gaeatronics' administrative offices in the area.  This is the downtown part of
+Vancouver, which looks like more of a suburban center than any metropolitan
+sprawl. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	5414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5416
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	8196
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5416
+Name:	East 12th Street
+Desc:$
+   This block of East 12th Street is one of maybe three blocks in Vancouver
+that are considered downtown.  A few clustered office buildings of four and
+five stories high, and some storefronts brought somewhat close together.  It
+isn't quite the other Vancouver, traditionally this town has functioned as a
+suburb of Portland, but considering the national boundary between here and
+there, that is not entirely feasible now. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5417
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5418
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5419
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5420
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5421
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5422
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5423
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5424
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5425
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5426
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5427
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5428
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5429
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5430
+Name:	Blank Road
+Desc:$
+   Its a street.  Describe it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#5431
+Name:	Vancouver Center Parking Lot
+Desc:$
+   Vancouver Center is the shopping area for the Vancouver area, with a few
+assorted shops to pick up basic supplies.  The center is a mini mall, two
+stories high.  There is a tall sign with fancy neon colors just over the
+entrance. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	glass doors
+	Desc:$
+Glass doors with "PUSH" signs on them to open them, and steel bars that
+function as the door opening apparatus. 
+~
+	ToVnum:	5432
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5432
+Name:	Inside Vancouver Center
+Desc:$
+   Vancouver Center is a small enclosed shopping center, with a few stores of
+note.  To the west of here is Executive Body Enhancements, a cyberware clinic
+with a lofty reputation, and to the east of here is SecureTech Protective
+Accessories' retail outlet. To the north are some more stores. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5436
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	5435
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	glass doors
+	Desc:$
+Glass doors with signs that say "PULL" to direct the opening of them, and
+steel bars that function as the opening apparatus. 
+~
+	ToVnum:	5431
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5433
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5433
+Name:	Executive Body Enhancements
+Desc:$
+   Executive Body Enhancements is well known for its quality of service and
+quality of goods, world-wide.  The laws in Vancouver are rather lax on
+cybernetic enhancements, which makes for easy access here.  Executive Body
+Enhancements have taken advantage of this easy legislation by setting up shop
+in a place where people can buy, just as long as they have the cash, despite
+their SIN status or lack thereof. The carpet is a clean forest green color,
+and the walls are an off-white color, with several lithographs of the artists
+of the 2010's.  There is a plush couch here for waiting patients. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	5434
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	5432
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5434
+Name:	Executive Body Enhancements - Operating Room
+Desc:$
+   A very clean clinic with a soft operating table.  On one end of the room
+are some shelves and racks with surgical tools.  The floor is a very sterile,
+clean linoleum, and the walls are clean, off-white with lithographs from
+several artists of very calming impressionistic paintings. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	5433
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5435
+Name:	SecureTech Protective Accessories
+Desc:$
+   SecureTech is well known for their manufacture of many first tier quality
+forms of armor.  When you walk in you see mannequins wearing full armor suits
+and fashionable forms of body armor, such as armor clothing and long coats.
+This outlet, because of the lax legislation in sales of armor, sells both the
+mil-spec and security-spec to anybody who walks in with enough nuyen on their
+credsticks. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	5432
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5436
+Name:	Inside Vancouver Center
+Desc:$
+   You are at the north end of Vancouver Center, between two clothing stores.
+West of here, Taena's for Women sells tres chic clothing for women (or men if
+they are into that sort of thing) from intimate apparel to fine dresses.  East
+of here Mac's Mountaineer sells rugged clothing for the outdoorsman or the
+poseur outdoorsman who wants to look rough. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	5438
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	5432
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5437
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5437
+Name:	Taena's for Women
+Desc:$
+   A sleekly laid out women's clothing store, with crystalline pillars and
+mannequins that look more like people than dummies. The mannequins are set up
+with various hairstyles and colors, skin colors and makeup orientations to
+show what dress or blouse looks best with what sort of body type or hair
+color.  In the center of the store is a crystalline front counter, with a
+dazzlingly dressed woman standing behind it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	5436
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5438
+Name:	Mac's Mountaineer
+Desc:$
+   Up on the walls, nearing the ceiling are many different 'hunting trophies'
+or displays of the taxidermist 'art', to give the place the 'hunter' air to
+it.  On racks are various pieces of clothing, from armored plaid flannels to
+gortex pants to hiking boots.  Anything a hunting or mountaineering man (or
+poseur) could want, they can find here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	5436
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5439
+Name:	Dirt Road
+Desc:$
+   A long stretch of dirt road that wraps alongside the mountains and winds
+along the face of the mountains.  The forests are dense, and potholes are
+quite commonplace along the road.  The smell of pine and fir fills the air,
+moist in the northwestern setting. Down below, you can see a river canyon,
+when it is not obscured by the forest. 
+~
+Flags:	10000010000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	5440
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	8192
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5440
+Name:	Dirt Road
+Desc:$
+   A long stretch of dirt road that wraps alongside the mountains and winds
+along the face of the mountains.  The forests are dense, and potholes are
+quite commonplace along the road.  The smell of pine and fir fills the air,
+moist in the northwestern setting. Down below, you can see a river canyon,
+when it is not obscured by the forest. 
+~
+Flags:	10000010000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	5439
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	5441
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5441
+Name:	Dirt Road
+Desc:$
+   A long stretch of dirt road that wraps alongside the mountains and winds
+along the face of the mountains.  The forests are dense, and potholes are
+quite commonplace along the road.  The smell of pine and fir fills the air,
+moist in the northwestern setting. Down below, you can see a river canyon,
+when it is not obscured by the forest.  A path goes up the mountain through a
+copse of trees. 
+~
+Flags:	10000010000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	5440
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	5442
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5442
+Name:	A dirt path
+Desc:$
+   The path moves up the mountain, and is muddy and steep.  Some stepping
+stones have been set up some time ago to make the path navigable in the
+steeper parts.  Up ahead the flat area seems to form, with a grassy meadow.
+You see the tops of oak trees in the distance. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	5443
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	5441
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5443
+Name:	A Circle of Trees
+Desc:$
+   A grassy meadow upon the mountain, with eight oak trees placed in an even
+circle.  The smell in the air is fresh and evergreen tinted, and is clean and
+free of pollution.  You can hear the sounds of wildlife in the distance quite
+frequently, and birds in the surrounding forests in all daytime hours.  The
+grass is soft and lush.  The trees are spaced evenly, and in relation to the
+four directions perfectly.  There is a vibrancy in the air, strong enough even
+for a mundane to feel. 
+~
+Flags:	10000000000000010000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	8
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT east]
+	ToVnum:	5442
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

@@ -12,6 +12,7 @@ NoNuyen:	I think you have the wrong showroom.
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	Crescent Computer
 Flags:	0
 Races:	0
 Buytypes:	0
@@ -44,6 +45,7 @@ NoNuyen:	Sure you wouldn't go for something... cheaper?
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	Crescent Computers
 Flags:	100
 Races:	0
 Buytypes:	0
@@ -80,6 +82,7 @@ NoNuyen:	Maybe something in a lower price bracket?
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	Crescent Computers
 Flags:	100
 Races:	0
 Buytypes:	0
@@ -112,6 +115,7 @@ NoNuyen:	What? You trying to frag with me? You don't have the nuyen.
 DoesntBuy:	I'm trying to sell you this workshop, not buy drek from you.
 Buy:	%d nuyen, come on now hurry up.
 Sell:	Here's your %d nuyen.
+Name:	Crescent Computers
 Flags:	0
 Races:	0
 Buytypes:	0
@@ -136,6 +140,7 @@ NoNuyen:	You don't have enough nuyen for that. Please return when your credstick
 DoesntBuy:	This is a Microdeck outlet, not a pawn shop.
 Buy:	That's %d nuyen, just insert your credstick here.
 Sell:	Here's your %d nuyen.
+Name:	Microdeck
 Flags:	100
 Races:	0
 Buytypes:	0
@@ -184,6 +189,7 @@ NoNuyen:	Hey, what you trying to pull? Pay up or leave me alone.
 DoesntBuy:	Back up chummer, I don't want that drek.
 Buy:	Hey chum, that'll sling you %d creds.
 Sell:	%d creds chum, and that's being generous.
+Name:	Terell Davis
 Flags:	0
 Races:	0
 Buytypes:	0

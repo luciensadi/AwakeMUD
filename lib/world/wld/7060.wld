@@ -1,0 +1,617 @@
+#706000
+Name:	A Darkened Alleyway
+Desc:$
+   Tucked between two buildings and just under the I-5 overpass, this alley is
+in perpetual shadow. Steam rises through a street manhole and drifts over the
+soggy newspapers and rubbish that litter the wet pavement. The sounds of the
+traffic on the nearby I-5 overpass echo throughout the alley. A rusty old
+barrel with its contents burning sits off to the side while a few shady
+looking characters huddle around it. On the eastern side of the alley, a
+derelict building looms above you and appears to be an old multi-level
+warehouse. The windows are yellowed and several of the panes have been broken.
+The old brick that this building was made from years ago is obviously
+deteriorating. A curiously new looking large steel reinforced roll-down style
+garage door prevents entry. 
+~
+Flags:	10000000000000000001100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	5
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	garage door steel
+	Desc:$
+A large steel reinforced roll-down style garage door. 
+~
+	ToVnum:	706001
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706000
+[EXIT south]
+	ToVnum:	32515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#706001
+Name:	A Decrepit Loading Dock
+Desc:$
+   A steep concrete ramp leads away from a massive bay door and into a large
+concrete parking area. Old burnout marks and oil stains mar the cracked slab
+where several junked fork-lifts sit. Several well-kept tool shelves sit up on
+the docking area where old freighters would butt their trailers up to for
+unloading. A set of crumbling stairs with a rusty handrail lead up to another
+doorway that goes further into the structure. 
+~
+Flags:	100000100000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	706002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	garage door steel
+	Desc:$
+A large steel reinforced roll-down style garage door. 
+~
+	ToVnum:	706000
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706000
+BREAK
+#706002
+Name:	An Old Warehouse Entrance
+Desc:$
+   The stairway leads up to an area surrounded by steel guardrails that over
+looks the loading area. Set into the wall is a steel door with  a glass window
+that looks through to another hallway where you see two sets of metal stairs
+leading up an down into the structure. An old cobwebbed time clock sits to the
+left of the door; abandoned and covered in dust and old greasy hand prints. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	706003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	706001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#706003
+Name:	A Corridor within the Building
+Desc:$
+   Beyond the entryway is a long corridor containing two metal staircases. One
+leads upwards to a steel mezzanine that overlooks where the corridor continues
+if you follow it. The corridor leads to another set of doors that has a
+massive room beyond it stacked with huge dusty shipping containers. The other
+staircase leads down into what looks like a sub-level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	706002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	706007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	706004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#706004
+Name:	A Basement Stairwell Landing
+Desc:$
+   The bottom of the landing is dark, with only a flickering light bulb
+suspended from the ceiling. In the room beyond, not much is visible. Overhead
+piping and wires lead to some archaic looking boiler. A set of flickering
+fluorescent bulbs set high into a far wall cut through the darkness to reveal
+a door below them. The door looks to be made of thick metal and is set into a
+concrete wall. The door has a slot at eye level thats currently closed. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	706005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	706003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#706005
+Name:	A Basement Hideout
+Desc:$
+   Beyond the door is a dark room with cinder block walls situated somewhere
+below the warehouse. A long wooden bar marred with gouges, yet still polished
+to a sheen, sits off to your right. Plenty of bar stools sit before the bar
+and a long brass footrest stretches the length of it. A barred street level
+window filters in a meager amount of light from the sidewalk above. A card
+table with old beer cans, poker chips and playing cards sits off in a dark
+niche. Another steel door is set into a far wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door metal large
+	Desc:$
+This metal door is stained with rust and grime. There is a slot at eye level
+that is currently closed. 
+~
+	ToVnum:	706006
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706000
+[EXIT west]
+	ToVnum:	706004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#706006
+Name:	A Back Room
+Desc:$
+   Old dented lockers sit around the room with various name tags and
+decorations on them. A steel cage surrounds an area filled with stacked boxes
+and crates full of ammunition and gear. There is a portal in the cage just
+above the counter so that goods gathered through the groups nefarious
+activities can be sold or distributed to people who have access to this room.
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door metal large
+	Desc:$
+This metal door is stained with rust and grime. There is a slot at eye level
+that is currently closed. 
+~
+	ToVnum:	706005
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706000
+BREAK
+#706007
+Name:	A Metal Staircase Landing
+Desc:$
+   The staircase lead up to metal mezzanine walkway with steel guard rails to
+keep you from falling into the main warehouse area. From up here the entire
+floor of the old warehouse with all its crates and boxes can be seen. There is
+a door just to the north and there are more doors set into the wall as the
+walkway continues. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A sturdy metal door stands here. 
+~
+	ToVnum:	706009
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706003
+[EXIT east]
+	ToVnum:	706008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door
+	Desc:$
+A standard door stands to the northwest here. 
+~
+	ToVnum:	706013
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706005
+[EXIT down]
+	ToVnum:	706003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#706008
+Name:	A Metal Walkway
+Desc:$
+   As you continue down the walkway you see another door set into the wall to
+the north and another where the walkway ends to the east. The old railing is
+the only thing that separates you from falling to your certain death into the
+warehouse floor below. The handrail here looks old and wobbly and covered in
+bird droppings. The sound of pigeons flapping echoes throughout the huge room
+beyond guard rail as they are startled from their roost and alight on the
+rafters. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A sturdy metal door stands here. 
+~
+	ToVnum:	706010
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706001
+[EXIT northeast]
+	Keywords:	door
+	Desc:$
+A sturdy metal door stands here. 
+~
+	ToVnum:	706011
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706002
+[EXIT southeast]
+	Keywords:	door
+	Desc:$
+A sturdy metal door stands here. 
+~
+	ToVnum:	706012
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	706004
+[EXIT west]
+	ToVnum:	706007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#706009
+Name:	Priest's Room
+Desc:$
+   This room almost looks like a prison cell, the walls are stark white, the
+floor is faded hardwood there is one colorful ^Bblue^n rug in the center of the
+room. To one side is plain grey cot, the military style. On the other side of
+the room is small altar with half a dozen candles burning. In one corner is a
+small kitchenet. The back wall is lined with bookshelves, the content covering
+all sorts of magic, philosophy, and religion, there are also a number of
+fictional books. The only other decorations are a small painting of a
+beautiful woman in a kimono and heavily silver inlaid wooden cross with a man
+crucified on it. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A sturdy metal door stands here. 
+~
+	ToVnum:	706007
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706003
+BREAK
+#706010
+Name:	A Neat And Organized Room
+Desc:$
+   Upon entering this room, the first thing noticed is how well the layout of
+everything is. A gun rack is in one corner with a foot locker set beside it,
+both next to a bed with a pistol handle showing from under a pillow. A  little
+refrigerator sets on the far wall and a little plug-in stove next to it. The
+walls and floor are made of plywood. They look to be just thrown there to
+cover up the mess that was there before. There is a square cut in the plywood
+to give access to the window that was there before. All in all a pretty clean
+room given the fact that it is located in not such a clean building. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A sturdy metal door stands here. 
+~
+	ToVnum:	706008
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706001
+BREAK
+#706011
+Name:	Loagan's Room
+Desc:$
+   The old wooden warehouse floor has been highly polished despite all of its
+gouges and time-worn scars. A leather bronze-buttoned executive chair looms up
+from beyond an enormous wooden desk that dominates the center of the room. An
+antique desk lamp with a green glass lamp-shade illuminates an ashtray full of
+old cigarette butts and a disarrayed stack of ink stained ledgers. Small
+particles of dust and smoke are illuminated as they drift through the fitful
+light cast from a flickering street-lamp that lies beyond the half drawn
+blinds of the office window taking up the entire wall behind the desk. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	Keywords:	door
+	Desc:$
+A sturdy metal door stands here. 
+~
+	ToVnum:	706008
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706002
+BREAK
+#706012
+Name:	Maika's Room
+Desc:$
+   A small corner of a warehouse that someone has cut out for themselves. It
+appears that this room was probably an office at one time. Whatever it was
+does not matter anymore as it now seems to be taken over by gypsies. There are
+candles spaced randomly along the bare northen metal wall. The rest of the
+walls are covered in ^Gt^Bi^Ye^Rd^Gy^Be ^Rt^Ma^Gp^Be^Gs^Yt^Mr^Ri^Be^Ms^n that have been  nailed in place. The
+floor is covered in pillows of all shapes and sizes with a path to the bed at
+the far end of the room. A strong odor of patchouli permeates the air cutting
+off any other sents that may be present. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	Keywords:	door
+	Desc:$
+A sturdy metal door seals off the room. 
+~
+	ToVnum:	706008
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	706004
+BREAK
+#706013
+Name:	Minerva's Room
+Desc:$
+   This room looks like a large storage closet that was reclaimed and turned
+into a small bedroom. The floor is covered by a plush rug. There's no bed, but
+there's lots of pillows and blankets. The walls themselves are entirely
+covered in a mural that wraps around across each of them. It begins with a
+^yrustic cabin^n on a ^Ggreen hill^n. A young girl with ^Llong black hair^n wearing
+^yprimitive leather clothes^n wanders down the hill towards a ^Br^Ci^Wv^Ce^Br, which runs
+along the bottom of the entire mural, disappearing into a ^glush forest^n. Through
+the ^gtrees^n dances a nude elven woman with beautiful ^Bb^Cl^Wu^Be hair^n. She cavorts
+through the ^ggrowth^n, beautiful and unblemished, save for a ^rscar^n on her left
+hand. A single ^Lblack bird^n flies through the sky overhead. The entire mural
+pays great attention to detail in the ^Ggrass^n and ^gtrees^n, making the whole room
+seem ^glush and verdant^n. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door
+	Desc:$
+A standard door blocks the exit southeast here. 
+~
+	ToVnum:	706007
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	706005
+BREAK
+END

@@ -1,0 +1,141 @@
+#12300
+Keywords:	bored clerk human automotive
+Name:	A rather bored looking automotive clerk
+RoomDesc:$
+A rather bored looking automotive clerk leans against the counter here. 
+
+~
+LookDesc:$
+He's a stocky sort of fellow sporting a fairly muscular figure and short messy
+black hair, which spills out around a tightly worn green clerks visor,
+complete with a pencil stuck behind one of his ears. He seems to be busy
+flipping through an 'Easy Rider' magazine, and its almost safe to say he isn't
+reading the articles. A glance is given up to occasionally help customers, or
+whenever the door bell triggers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	174
+	Weight:	85
+[SKILLS]
+BREAK
+#12301
+Keywords:	waitress diner over-worked underpaid Flo'
+Name:	An over-worked and underpaid diner waitress
+RoomDesc:$
+An over-worked and underpaid diner waitress takes orders here. 
+
+~
+LookDesc:$
+Shes dressed in one of those old waitress one-piece blouses and skirts that
+you've probably seen at every two-bit trucker stop and dive this side of the
+border, which has a large embroided name tag that reads, " Flo' ". Her hair
+looks almost fake, and its bee-hive appearance must have atleast three cans of
+hairspray dumped into it for to hold its design. She flips open a small
+notepad and jots down orders before sliding a lightly chewed pencil back into
+her hair-do, yelling orders to the back after receiving each one. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+BREAK
+#12302
+Keywords:	vendor hotdog lonesome food cart
+Name:	A lonesome hotdog vendor
+RoomDesc:$
+A lonesome hotdog vendor wheels his cart around here. 
+
+~
+LookDesc:$
+While he may look lonesome, he does seem to be doing very well for himself.
+Apparently hes just about cornered the market at the Parker Center, and is
+dispensing hotdog goodness of all kinds to the wage slave masses that wander
+about. Hes quick to jump at a sale, and isn't afraid of waving down the
+toughest of passerbys in an attempt to get them to buy some of his chow. The
+smells eminating from his hotdog cart are, at the least, mouth watering. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#12303
+Keywords:	clerk elven office supplies shop
+Name:	An elven office supplies shop clerk
+RoomDesc:$
+An elven office supplies shop clerk stands behind the counter here. 
+
+~
+LookDesc:$
+This fairly good looking elven woman sits perched behind the counter, lazily
+watching the wage slaves that wander in and out of the shop, or keeping an eye
+on any windowshoppers who eye up the merchandise too long and start getting
+ideas of theft. She noisily chews on her bubblegum, popping it loudly to pass
+the time inbetween nail manicures she gives herself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	2
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+[SKILLS]
+BREAK
+END

@@ -1,0 +1,3363 @@
+#3301
+Name:	Inside the White Buffalo Pen
+Desc:$
+   This large, penned-in area is a permanent home for two large White Buffalo.
+These two specimens are actually property of the Denver Zoo, but are part of
+an inter-zoo animal trading program and were one of the first awakened species
+to be put onto display at the Seattle Municipal Zoo. Fresh food is brought in
+to them daily, but judging by their disgruntled dispostions, they would
+obviously much rather be fending for themselves in the open plains. 
+~
+Flags:	0
+SecType:	Prairie
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	cage pen
+	Desc:$
+Outside the Buffalo Pen
+~
+	ToVnum:	3381
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	3
+BREAK
+#3302
+Name:	Inside the Bandit Cage
+Desc:$
+   The interior of the Bandit cage is littered with trees here and there,
+though unlike most of the other open air exhibits, this area had to be caged
+in to keep the little critters from escaping. Several of the creatures can be
+seen hiding up in the trees, either lounging around or causing mischief as
+they're apt to do. One will immediately notice that several spots in the cage
+have been shored up keep them from escaping as well, as they have shown an
+incredible knack for doing exactly that. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	cage
+	Desc:$
+Outside the Bandit Cage
+~
+	ToVnum:	3382
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	3
+BREAK
+#3303
+Name:	Inside the Bombardier Cage
+Desc:$
+   This is the home of the Bombardiers, which resemble large flying squirrels,
+who apparently enjoy nothing more than dropping things on unsuspecting
+victims, so anyone who ventures inside should keep an eye out on the little
+devils above. There are many trees nearby in which they make their nests,
+almost all of which reach all the way up to the fenced in roofing that keeps
+them from escaping. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	cage
+	Desc:$
+Outside the Bombardier Cage
+~
+	ToVnum:	3380
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	3
+BREAK
+#3304
+Name:	Inside the Black Annis Cage
+Desc:$
+   This is where a single Black Annis resides, as they are highly territorial
+and solitary creatures outside of mating season. Small maple trees surround a
+man-made cave off in the corner of the cage, offering the nocturnal creature
+what little security and privacy it can manage. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	cage
+	Desc:$
+Outside the Black Annis Cage
+~
+	ToVnum:	3379
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	6
+BREAK
+#3305
+Name:	A small rest area
+Desc:$
+   There are many small benches here that line the pathway leading to more of
+the animal exhibits, offering visitors a very peaceful place to rest, along
+with large oak trees to offer some degree of shade during the hot days. An
+intersection off to the east down the pathway leads to more of the animal
+exhibits. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Intersection
+~
+	ToVnum:	3378
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Outside the Mini-Petting Zoo
+~
+	ToVnum:	3327
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3306
+Name:	Inside of the Shadowhound Pen
+Desc:$
+   If you were smart, you would feel very uneasy about entering this dimly lit
+domed pen. A half-eaten deer carcass in the corner should indicate that the
+occupant hasn't finished its lunch yet... So that means it's still hungry! It
+may prove a wise decision to slot and run, chummer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	cage
+	Desc:$
+Outside the Shadowhound Pen
+~
+	ToVnum:	3377
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	4
+BREAK
+#3307
+Name:	Inside of the Saber-toothed Cat Cage
+Desc:$
+   Numerous large rocks are nestled in between a couple large trees here,
+giving the animals inside the pen the choice of basking in the sun or hiding
+in the shade the trees offer. Since this is a mating pair, expect them to be
+extremely aggressive if their enclosure is tresspassed into.. But, considering
+they're saber-fragging-toothed cats, shouldn't it already be common knowledge
+that it's a bad idea to come into this cage in the first place..? 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	cage
+	Desc:$
+Outside the Saber-toothed Cat Cage
+~
+	ToVnum:	3376
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	4
+BREAK
+#3308
+Name:	Inside the Piasma Cage
+Desc:$
+   You are inside of the Piasma cage now for some reason, wether through sheer
+folly or downright stupidity. You get the distinct impression that it is not a
+terribly bright idea to have come in here, and the numerous piles of bones
+scattered around the beasts enclosure quickly reinforces the initial thought.
+~
+Flags:	0
+SecType:	Mountain
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+Outside the Piasma Cage
+~
+	ToVnum:	3331
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	6
+BREAK
+#3309
+Name:	Inside the Icedrake Pen
+Desc:$
+   You are in the climate controlled pen that is home to the icedrake, which
+is probably not a great idea. The first thing you are bound to notice is the
+sharp drop in temperature, quickly followed by the second though, which is
+wondering how anything could live in this kind of climate. 
+~
+Flags:	0
+SecType:	Storm
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+Outside the Icedrake Pen
+~
+	ToVnum:	3332
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	8
+BREAK
+#3310
+Name:	Inside a vacant enclosure
+Desc:$
+   The inside of this empty stall contains no traces of its previous occupant,
+and it appears to be primed and ready for a new animal to be brought in.
+Everything is very neat and tidy, with a fresh straw bedding layered on the
+ground. 
+~
+Flags:	100
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	cage pen door
+	Desc:$
+You can see outside of the enclosure. 
+~
+	ToVnum:	3333
+	Flags:	1
+	Material:	brick
+	Barrier:	6
+	KeyVnum:	0
+	LockRating:	4
+BREAK
+#3311
+Name:	Inside of the Scorpyrine Cage
+Desc:$
+   Several fallen trees mark this pen, along with numerous areas of scrub
+brush and other small plants to allow the creatures inside to hide from the
+view of visitors in case they want a little privacy. They are often lured out
+for viewing during feeding time, which consists of the zoo keepers releasing
+small rodents and birds who have had their wings clipped, making for easy
+prey. Small little hovels have been dug into the dirt all around the
+enclosure, making for perfect spots to hide in and ambush their lunch. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+Outside the Wolverine Cage
+~
+	ToVnum:	3334
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	8
+BREAK
+#3312
+Name:	Inside the Juggernaut Pen
+Desc:$
+   You are now inside of the Juggernaut pen, and while at first an aura of
+peacefulness and tranquility seems apparent here, it would probably be best to
+remind you that these creatures are indeed omnivores. The pen itself is
+designed similar to a small meadow, with knee high grass (ankle high for this
+creature) that is good for grazing, along with plenty of large bugs to munch
+on to keep the creature happy. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+Outside the Unicorn Pen
+~
+	ToVnum:	3335
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	4
+BREAK
+#3313
+Name:	Inside the Firedrake Pen
+Desc:$
+   You now stand inside the firedrake pen, which definitely isn't the greatest
+idea you've had yet. As you look around, you're bound to notice charred
+remains of logs and several burn marks in the stones that make up the small
+cave in the center of the pen. The firedrake, however, is an extremely
+aggressive creature, not to mention very territorial, and isn't likely to take
+your visit lightly. 
+~
+Flags:	0
+SecType:	Prairie
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+Outside the Firedrake Pen
+~
+	ToVnum:	3336
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	8
+BREAK
+#3314
+Name:	Inside the Century Ferret Cage
+Desc:$
+   You are now inside of the Century Ferret cage, which is decorated with
+numerous branches and logs jutting out of the ground at all different angles,
+giving the playful ferrets a place to climb around and play. Small sealed
+holes are also built into the enclosure, allowing zoo keepers to release
+insects and other small prey for these creatures to eat, usually around peak
+visitor hours so visitors can get a good look at them in their habitat. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+Outside the Ferret Cage
+~
+	ToVnum:	3337
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+BREAK
+#3315
+Name:	The Zoo Infirmary
+Desc:$
+   This Zoo Infirmary isn't really designed for any major medical emergency,
+and instead just barely equipped for dealing with small problems such as
+skinned knees, dizzy spells, and other such minor ailments. There are a few
+small cots lining one wall for patients, while other basic medical supplies
+can be found stuffed into the assortment of cabinets along another. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Before the Zoo Infirmary
+~
+	ToVnum:	3351
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3316
+Name:	A large holding area
+Desc:$
+   This is the holding area used for new specimens being introduced to the
+zoo, but before they can be placed inside of an exhibit, there is a waiting
+period they need to be held in quarantine so they can make sure they're
+perfectly healthy and aren't in danger of spreading any contagious pathogens
+and diseases to other animals here. Several cages and holding pens line the
+area, each of which are padlocked, just to be on the safe side. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	cell door cage pen
+	Desc:$
+A holding cell is here for holding new arrivals. 
+~
+	ToVnum:	3320
+	Flags:	1
+	Material:	brick
+	Barrier:	16
+	KeyVnum:	3304
+	LockRating:	12
+[EXIT west]
+	Keywords:	door pen cage
+	Desc:$
+Cobblestoned Pathway
+~
+	ToVnum:	3359
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	3304
+BREAK
+#3317
+Name:	Inside the Zoo Security Office
+Desc:$
+   This office looks very lively, or perhaps a better word for it would be
+messy. There are magazines and newspapers strewn about, along with various
+documents and security slips stacked upon the desks lining the room. A large
+synthwood desk in the center of the room features an almost stereotypical
+security chief, who has his feet propped up on his desk, and only seems to
+stop watching the soaps on his portable trid-screen long enough to go send
+others out to do his job. Pretty cushy gig, huh? 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	steel door
+	Desc:$
+Cobblestoned Pathway
+~
+	ToVnum:	3359
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3303
+	LockRating:	5
+BREAK
+#3318
+Name:	The Zoo Office
+Desc:$
+   You are standing inside the Zoo Office, which features a lovely flow of air
+conditioning on hot days, allowing the office employees to bask in it unlike
+those chump zoo keepers outside. There are numerous plaques and licenses
+hanging framed on the wall, all of which are legit, ofcourse. There is a door
+marked "Curator's Office" on one side of the room, while this particular area
+is used by the secretary, who stops doing her nails just long enough to ask,
+"Do you have an appointment?" 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+Outside the Office
+~
+	ToVnum:	3353
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Curator's Office
+~
+	ToVnum:	3391
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3320
+Name:	A sturdy holding cell
+Desc:$
+   This holding pen is a bit larger than the others, and also features a bit
+more reinforcing in its design to deal with some of the more 'dangerous'
+animals that are making their way into the zoo. Old claw marks of various
+sorts and roughly chewed bars on the doorways show that not all of the
+creatures that were held here enjoyed their stay, afterall, wild animals never
+are fond of captivity, regardless of how 'humane' their treatment is. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	cell pen door cage
+	Desc:$
+Holding Area
+~
+	ToVnum:	3316
+	Flags:	1
+	Material:	brick
+	Barrier:	16
+	KeyVnum:	3304
+	LockRating:	12
+BREAK
+#3321
+Name:	The employee lounge
+Desc:$
+   This is where the faithful employees of the Seattle Municipal Zoo come to
+take breaks and to eat lunch. There are a couple of tables and numerous chairs
+here, none of which are particularly comfortable by the looks of it, but they
+serve their purpose none the less. The smell of freshly brewed coffee lingers
+in the air, hinting towards the caffiene addiction some of the employees
+apparently have. Afterall, it's probably a good idea to be at full alert when
+dealing with dangerous animals all day, especially considering some of the
+creatures here at the zoo. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	3333
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3322
+Name:	Inside the Women's Restroom
+Desc:$
+   This is the Women's Restroom. Surprise surprise, it looks exactly like a
+typical public bathroom, complete with three private stalls and two sinks, a
+lengthy mirror, a few paper towel dispensers and an electric hand blower/dryer
+mounted onto the wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Outside the Saber-toothed Cat Cage
+~
+	ToVnum:	3376
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3323
+Name:	Inside the Men's Restroom
+Desc:$
+   You are in what appears to be a typical Men's Restroom, in all of its
+fairly disgusting and uncouth glory. There are three private stalls, three
+matching urinals, two sinks, a lengthy mirror above them and a paper towel
+dispenser, which just so happens to be empty. There seems to be ^Wwriting^N
+scrawled above one of the urinals in magic marker. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+Outside the Piasma Cage
+~
+	ToVnum:	3331
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	writing
+	Desc:$
+Best Piasma riding time: 6 seconds
+ Signed, Gerald Wallace. 
+~
+BREAK
+#3324
+Name:	Southern Entrance of Seattle Municipal Zoo
+Desc:$
+   Standing before the entrance to the Seattle Zoo, visitors are immediately
+prompted by a ticket booth (this place doesn't run on well wishes and love,
+afterall, they need cold hard cash to keep it going). Inside one can see first
+hand many different types of paranormal animals, along with just as many
+people gawking at them. From the sounds coming from behind the outer walls, it
+sounds very busy today. 
+~
+Flags:	10000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Inside the Entrance
+~
+	ToVnum:	3325
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32569
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign
+	Desc:$
+Merr wuz here.........
+~
+BREAK
+#3325
+Name:	Inside of the zoo entrance
+Desc:$
+   Having passed through the entrance, one can see the whole zoo is bustling
+with activity. Many visitors are wandering around, mostly with their children,
+enjoying all the zoo has to offer, (Spoiler alert: It's animals). Paths to the
+animal exhibits lie to the east and the west along the cobblestone pathways.
+There is a large, round ^Wstone^N set off the path, which seems to have something
+scrawled on it. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Cobblestoned Pathway
+~
+	ToVnum:	3326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The Seattle Zoo Entrance
+~
+	ToVnum:	3324
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3375
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	stone
+	Desc:$
+In loving memory of Gerald Wallace: He really shouldn't have tried to ride
+that piasma.. R.I.P. 
+~
+BREAK
+#3326
+Name:	Along a cobblestone pathway
+Desc:$
+   The air is full of the sounds of childrens laughter mixed with the noise of
+cheerful music as you walk along this section of the pathway. Unfortunately,
+the smell of animals also accompanies the scenery, and it isn't always very
+pleasant, but at least the view is. To the west is the southern entrance of
+the zoo, while down along the frequently swept cobblestone pathway to the east
+is a T-shaped junction leading to a portion of the animal enclosures. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Inside the Entrance
+~
+	ToVnum:	3325
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3327
+Name:	Outside the Mini-Petting Zoo
+Desc:$
+   You stand outside the Mini-Petting Zoo, where a small fence keeps the more
+tame of animals from roaming around, however, one can effortlessly reach over
+the fence in order to pet and feed the animals that stand near its perimeter.
+A double gate in the center of the fence allows zookeepers access to feed and
+care for the animals inside, as well as allow visitors to walk in and pet the
+animals if they desire. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	gate
+	Desc:$
+The Mini-Petting Zoo
+~
+	ToVnum:	3330
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+[EXIT east]
+	Desc:$
+A Rest Area
+~
+	ToVnum:	3305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Outside the Lion Cage
+~
+	ToVnum:	3340
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3328
+Name:	At a souvenir stand
+Desc:$
+   You stand before a small booth with numerous little doo-dads and trinkets
+to be purchased as reminders of what a great time you had at the zoo. The
+vendor behind the counter will be happy to serve you, and eagerly tries to
+pressure children into forcing their parents into buying whatever they want.
+In for a penny, in for a pound. Marketing at its finest. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3329
+Name:	At a T-shaped junction
+Desc:$
+   You stand in the middle of a busy T-shaped junction, the cobblestone
+pathway leading off to the zoo entrance west of here, while off to the east
+side of the path a vendor is selling souvenirs at his stand. Traveling down
+the cobblestone pathway to the north of here leads to several of the animal
+exhibits and enclosures, leading into what is apparently the awakened species
+section of the zoo. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Piasma Cage
+~
+	ToVnum:	3331
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Souveneir Stand
+~
+	ToVnum:	3328
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Cobblestoned Pathway
+~
+	ToVnum:	3326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3330
+Name:	Inside of the Mini-Petting Zoo
+Desc:$
+   This area has been decorated as an old-fashioned farm pen, containing
+numerous troughs lining the perimeter of the fence, so the animals
+conveniently have to get near the spectators to eat and drink. Many bales of
+hay are arranged around an old farm wagon, and there is one central water
+trough in the center of the area just in case the others are occupied. This is
+a new attraction to the zoo, and several types of animals are being displayed
+here at this time, mostly for the children to pet and feed. 
+~
+Flags:	100
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	gate
+	Desc:$
+Outside the Mini-Petting Zoo
+~
+	ToVnum:	3327
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+BREAK
+#3331
+Name:	Outside the Piasma Cage
+Desc:$
+   You are standing outside the Piasma enclosure, and by peering in the cage
+one can notice a large, black bear-like creature angrily pacing back and
+forth. A small ^yplaque^N is fastened to a wooden post in front of the cage, while
+on the opposite side of the cobblestone pathway there is a door marked with a
+sign reading: MEN'S RESTROOM, just in case you need to handle some business. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Icedrake Pen
+~
+	ToVnum:	3332
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	cage pen
+	Desc:$
+the Piasma Cage
+~
+	ToVnum:	3308
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	6
+[EXIT south]
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Men's Restroom
+~
+	ToVnum:	3323
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+The plaque reads:
+PIASMA
+Scientific Name: Ursus piasma
+The piasma is a well-adapted predator derived from the north american black
+bear(Ursus americanus). It has a stout body, which favors strength over 
+speed. The piasma's ears are short and its large head is equipped with the
+thick, short tusks of a boar. It has typical bear feet with large, rending
+claws. A male adult piasma reaches a height of 1.5 meters and can weigh
+over 600 kilograms.
+~
+BREAK
+#3332
+Name:	Outside the Icedrake Pen
+Desc:$
+   You are standing outside the Icedrake pen, which is encased in high-impact
+transparent plastic and hooked up to a cold weather simulator to keep the
+climate bearable for an animal whose habitat is very cold. A small ^yplaque^N is
+fastened to a wooden post in front to the enclosure for visitors to read. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Hoop Snake Pen
+~
+	ToVnum:	3333
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	cage pen
+	Desc:$
+Icedrake Pen
+~
+	ToVnum:	3309
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	8
+[EXIT south]
+	Desc:$
+Outside the Piasma Cage
+~
+	ToVnum:	3331
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+This plaque reads: Icedrake
+ Scientific Designation: Draco Algoris Articus
+ The icedrake is a lizard that reaches a length of up to 1.5 meters and
+closely resembles a western dragon, as it has no wings. It has small red eyes,
+and is a carnivore. It is a very aggressive predator, and its diet consists
+mainly of mountain sheep and goats, along with any other animals it can chase
+down or ambush. This includes unlucky (meta)humans, so teasing the specimen is
+not suggested. 
+~
+BREAK
+#3333
+Name:	Outside an vacant enclosure
+Desc:$
+   You are outside of an empty stall, as the zoo likes to keep a couple stalls
+vacant just in case they can acquire a new specimen or happen to have any new
+animals on loan from other zoos. On the west side of the cobblestone pathway
+is a small building, which apparently is where the employee lounge is located.
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3334
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	cage pen door
+	Desc:$
+You can see inside of the empty stall. 
+~
+	ToVnum:	3310
+	Flags:	1
+	Material:	brick
+	Barrier:	6
+	KeyVnum:	0
+	LockRating:	4
+[EXIT south]
+	Desc:$
+Outside the Icedrake Pen
+~
+	ToVnum:	3332
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Employee Lounge
+~
+	ToVnum:	3321
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3334
+Name:	Outside the Scorpyrine Cage
+Desc:$
+   You are currently standing outside of the scorpyrine cage, and based on
+what you've heard, these "little" creatures are one that you'd rather not
+tangle with if it can be helped. A small ^yplaque^N is fastened on a wooden post
+in front of the cage, allowing visitors to read up on the creature contained
+inside. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Unicorn Pen
+~
+	ToVnum:	3335
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	cage pen
+	Desc:$
+The Wolverine Cage
+~
+	ToVnum:	3311
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	8
+[EXIT south]
+	Desc:$
+Outside the Hoop Snake Pen
+~
+	ToVnum:	3333
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+This plaque reads: Scorpyrine
+ Scientific Designation: Euscorpius Igneus
+ This arachnid is close relative of the common scorpion found throughout most
+of the world, and share many attributes with them, such as being a predator of
+small mammals and birds. Measuring in at nearly 40 centimeters when fully
+grown, these lethal hunters prefer to reserve the powerful venom in their
+stinger for self-defense, and instead, use its claws to dispatch and pin down
+their prey while they devour it. 
+~
+BREAK
+#3335
+Name:	Outside the Juggernaut Pen
+Desc:$
+   You are standing outside the Juggernaut pen, and by judging by the crowd
+gathered around it, this must be one of the more popular attractions here at
+the zoo, especially popular with the children visitors. There is a small
+weathered ^yplaque^N fastened to a small wooden post in front of the cage. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Firedrake Pen
+~
+	ToVnum:	3336
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	cage pen
+	Desc:$
+The Unicorn Pen
+~
+	ToVnum:	3312
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	5
+[EXIT south]
+	ToVnum:	3334
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+This plaque reads: Juggernaut
+ Scientific Designation: Dasypus Praegrandis
+ The Juggernaut closely resembles and shares many of the same characteristics
+as its closest relative, the common armadillo, granted it is much larger.
+Measuring in at nearly 14 meters from the tip of its snout to the end of its
+tail, these omnivores are known to cut huge swathes of destruction in their
+enviroments when they feed. These massive creatures are protected by a thick
+armoured scale plating, much like the common armadillo, which has been known
+to resist even small arms fire. 
+~
+BREAK
+#3336
+Name:	Outside the Firedrake Pen
+Desc:$
+   You are now standing outside of the firedrake pen, which seems to be
+constructed from heat-resistant materials due to the creatures penchant for
+using its flame breath. Even from this view, one can notice the occasional
+gout of flame shooting out of a waist high, manmade mound of earth and rock,
+inside of which is undoubtedly a large firedrake. There is a ^yplaque^N attached
+to a small wooden post here, offering visitors the chance to read up on this
+animal. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Century Ferret Cage
+~
+	ToVnum:	3337
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	cage pen
+	Desc:$
+The Firedrake Pen
+~
+	ToVnum:	3313
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	8
+[EXIT south]
+	Desc:$
+Outside the Unicorn Cage
+~
+	ToVnum:	3335
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+This plaque reads: Firedrake
+ Scientific Designation: Neovaranus Minimalis Americanus
+ The firedrake is a
+lizard that grows up to a length of 1.25-1.30 meters at full maturity. It is
+covered with scales, which range in colour from a reddish brown to a light tan
+along its underside. Its eyes are small, beady and blood red in colour, giving
+this creature a fearsome and well deserved appearance. The firedrake, keeping
+in line with its namesake, is able to breathe a gout of flame from its mouth,
+and this very aggressive carnivore often uses it to "cook" its meals before
+devouring them. 
+~
+BREAK
+#3337
+Name:	Outside the Century Ferret Pen
+Desc:$
+   You are outside the Century Ferret Pen, and upon peering through the bars,
+you are greeted by the scenery of several logs and branches built into the
+ground, which shoot up at various angles, giving the busy little creatures
+plenty to climb on. There is a small ^yplaque^N fastened to a small wooden post in
+front of the cage. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3338
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	cage pen
+	Desc:$
+Century Ferret Pen
+~
+	ToVnum:	3314
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	4
+[EXIT south]
+	Desc:$
+Outside the Firedrake Pen
+~
+	ToVnum:	3336
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+This plaque reads: Century Ferret
+ Scientific Designation: Mustela Millenniae
+ The Century Ferret, discovered
+on January 1st, 2000, and discovered by the news station KSAF, bears the name
+of its discovery date. They typically grow to a length of two meters, and
+sport a coat of yellow-brown mink with a matching dark brown fur covering
+their feet, tail and face mask. Its eyes are red in colour, and it is an
+incredibly quick and flexible little creature. It is carnivorous, but mostly
+feeds on small insects and the occasional bird, as well as rodents and other
+small mammals. They are known to be uniquely sensitive to the ebb and flow of
+mana. 
+~
+BREAK
+#3338
+Name:	At an intersection
+Desc:$
+   The hustle and bustle of zoo patrons can be heard and seen from every
+direction at this intersection. Off to the west you spot the Zoo Management
+offices, while on the eastern end of the cobblestone pathway you notice an old
+fountain accompanied by benches and tables. Down the path to the south, you
+see make out the beginning of the animal exhibits. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Before the Infirmary
+~
+	ToVnum:	3351
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+A Small Fountain
+~
+	ToVnum:	3339
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Outside the Century Ferret Pen
+~
+	ToVnum:	3337
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Office Entrance
+~
+	ToVnum:	3353
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3339
+Name:	At a small fountain
+Desc:$
+   You see before you a small stone fountain, which the elements have damaged
+to the point of uselessness. It has been drained and now serves as a monument,
+since it was originally built at the time of the zoos construction. Several
+birds, who now use it as a perch and nesting site, fly off as visitors
+approach. Several benches and tables are scattered about the area, allowing
+visitors a nice place to rest their feet after walking about and viewing the
+exhibits. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	0
+	Desc:$
+Intersection
+~
+	ToVnum:	3338
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3340
+Name:	Outside the Lion Cage
+Desc:$
+   Now standing outside the Lion Cage, one is offered a clear view inside of
+it, where the ferocious 'king' of the jungle is pacing back and forth under a
+tree. The African Lion has been on the endangered species list for some time
+now, and this is one of the many that are now only found in captivity. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Outside the Mini-Petting Zoo
+~
+	ToVnum:	3327
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	cage
+	Desc:$
+The Lion Cage
+~
+	ToVnum:	3341
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	8
+[EXIT west]
+	ToVnum:	3342
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3341
+Name:	Inside of the Lion Cage
+Desc:$
+   You are now inside the cage of the mighty African Lion, who, in general, do
+not take kindly to being disturbed in any way, and this one is certainly no
+exception. The interior of the cage is about what one would expect to see on
+an African plain, or at least what it used to look like before mankind decided
+to screw with it. A large tree in the center of the cage offers shelter from
+the elements, as well as allowing it to stay cool on hotter days. 
+~
+Flags:	0
+SecType:	Prairie
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	cage
+	Desc:$
+Outside the Lion Cage
+~
+	ToVnum:	3340
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	8
+BREAK
+#3342
+Name:	Outside the Chimpanzee Cage
+Desc:$
+   A slight breeze sways the tree tops in the large cage to the north, which
+houses a small group of chimpanzees. The chimps are peering back out at
+visitors with about as much curiousity as those viewing them. There is a small
+weathered ^yplaque^N attached to a wooden post in front of the cage, along with a
+warning to visitors to not aggitate the animals inside, since they are
+notorious for flinging their droppings at people who harass them. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	cage
+	Desc:$
+The Chimpanzee Cage
+~
+	ToVnum:	3343
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	4
+[EXIT east]
+	Desc:$
+Outside the Lion Cage
+~
+	ToVnum:	3340
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Outside the Grizzly Bear Cage
+~
+	ToVnum:	3344
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+These Chimpanzees are on temporary loan from the Philadelphia Zoo.
+~
+BREAK
+#3343
+Name:	Inside the Chimpanzee Cage
+Desc:$
+   There are several tall synth-oak trees inside the cage being used by the
+primates for not only shelter, but as a playground of sorts. The cage's
+occupants regard tresspassers curiously when approached, but are more than
+likely more afraid of anyone brave enough to enter and aren't likely to attack
+unless provoked, fortunately. They are, however, very likely to pelt anyone
+stupid enough to enter their enclosure with their favourite projectile, none
+other than their own feces. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	cage
+	Desc:$
+Outside the Chimpanzee Cage
+~
+	ToVnum:	3342
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	4
+BREAK
+#3344
+Name:	Outside the Grizzly Bear Cage
+Desc:$
+   A low, rumbling growl is apt to send a shiver down the spine of passerby's
+as they walk past this cage. Peering in, one can see an incredibly large brown
+grizzly bear inside of the pen. There is a spacious cave which serves as a
+shelter for the animal, which is tucked away in the corner of the cage. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Outside the Chimpanzee Cage
+~
+	ToVnum:	3342
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	cage
+	Desc:$
+The Grizzly Bear Cage
+~
+	ToVnum:	3346
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	6
+[EXIT west]
+	ToVnum:	3345
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3345
+Name:	Western Entrance of Seattle Municipal Zoo
+Desc:$
+   The western entrance to the Seattle Municipal Zoo is a section that
+consists mostly of displays of the majority of normal, 'un-awakened' animals
+being kept here. There are cages on either side of this cobblestone pathway,
+which travels along towards an intersection where more of the 'normal'
+exhibits are. 
+~
+Flags:	10000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Outside the Grizzly Bear Cage
+~
+	ToVnum:	3344
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32547
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign
+	Desc:$
+if you can read this, it works.....
+~
+BREAK
+#3346
+Name:	Inside the Grizzly Bear Cage
+Desc:$
+   It would be around this time that the little voice in the back of your head
+should be telling you that it might not have been such a great decision to
+enter this cage. However, since you decided against the application of a
+little common sense, you'll have to deal with the consequences that accompany
+stumbling blindly into the habitat of a grizzly bear, which usually leads to
+having your face eaten and turn into lovely bear patties. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	cage
+	Desc:$
+Outside the Grizzly Bear Cage
+~
+	ToVnum:	3344
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	6
+BREAK
+#3349
+Name:	At the Information Booth
+Desc:$
+   This here would be the information booth, where visitors can come to ask
+questions about the animals, or anything else pertaining to the zoo itself.
+There is a large '^yOUT TO LUNCH^N' sign hanging above the booth, so it looks like
+you'll have to look elsewhere for answers to your questions, chummer. So much
+for being helpful... 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	4
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3350
+Name:	At a T-shaped junction
+Desc:$
+   This three-way junction on the cobblestone path leads off to the east where
+an information booth can be seen, while traveling south you're bound to notice
+the rows of cages lining the side of the walkway. Visitors and their children
+mill through the junction, blabbering and making a ruckus all the while, which
+probably ticks off the animals quite a bit. But, who cares what's good for the
+animals? This is a zoo afterall, if they really cared, they probably wouldn't
+have them stuffed into cages to begin with. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Information Booth
+~
+	ToVnum:	3349
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Before the Infirmary
+~
+	ToVnum:	3351
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Cobblestoned Pathway
+~
+	ToVnum:	3352
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3351
+Name:	Before the Infirmary
+Desc:$
+   The Zoo's Infirmary can be found here, which normally deals with simple
+things such as fatigue (fat people + walking = trouble waiting to happen).
+There is an intersection directly to your south down along the cobblestone
+pathway, which also travels north around one of the ends of the zoo. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+Zoo Infirmary
+~
+	ToVnum:	3315
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Intersection
+~
+	ToVnum:	3338
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3352
+Name:	Along a cobblestone pathway
+Desc:$
+   A slight breeze blows through this section of the path, scattering loose
+leaves across the cobblestones the path is made of, which date back over a
+century from the zoos original construction and are certainly looking their
+age. This whole area reminds you of the way things used to be, or at least
+what you remember from that U.S. History chip you scanned a while back. The
+pathway continues from west to east, leading to the various creature exhibits.
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Inside the Entrance
+~
+	ToVnum:	3354
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3353
+Name:	The Zoo Office Entrance
+Desc:$
+   Before you stands a small brick building, a sign on which reads, "Zoo
+Management Office". Peering through the clear plexiglass window, one can see a
+secretary behind a desk, doing her fingernails and passing the time reading
+magazines and answering the phones. Another small building is down the end of
+the western walkway here. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	5
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Intersection
+~
+	ToVnum:	3338
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+Zoo Office
+~
+	ToVnum:	3318
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Narrow Pathway
+~
+	ToVnum:	3357
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3354
+Name:	Inside the Entrance
+Desc:$
+   Passing beyond the entranceway of the zoo leads to an old cobblestone
+pathway, which travels west and east, leading visitors to the exhibits of live
+paranormal animals that the place is somewhat famous for. The zoo is bustling
+with activity, as well as foot traffic, as numerous children run to and fro,
+looking at all the things there are to see. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Seattle Zoo Entrance
+~
+	ToVnum:	3355
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Cobblestoned Pathway
+~
+	ToVnum:	3352
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Cobblestoned Pathway
+~
+	ToVnum:	3356
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3355
+Name:	North entrance of the Seattle Municipal Zoo
+Desc:$
+   You stand before the entrance to the Seattle Municipal Zoo, which is
+surrounded by a ten foot high brick wall, adding a quaint, if not outright
+antique touch to this place in an attempt to class it up a little. Nowadays,
+new composite materials are the norm in construction, but the majority of this
+place was built over a century ago. Although not as structurally sound as the
+pre-fabbed materials, the masonwork adds a nice touch and is easier on the
+eyes, as long as old fashioned appearances appeals to your tastes. Swarms of
+visitors, mostly with their children in tow, mill past the ticket booths,
+eager to get a glimpse of the animals on display here. 
+~
+Flags:	10000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	32578
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Inside the Entrance
+~
+	ToVnum:	3354
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3356
+Name:	Along a cobblestone pathway
+Desc:$
+   There is a festive atmosphere here as one strolls down along this
+cobblestone pathway. It almost seems unusual to see people with such a
+carefree attitude as they have here, and with the sounds of children's
+laughter in the air, it's made that much more awkward for those who spend
+their lives in the shadows. Ahead in the distance a fast food stand stands out
+amongst the lines of exhibits and displays. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Inside the Gates
+~
+	ToVnum:	3354
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3358
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3357
+Name:	Inside a small brick building
+Desc:$
+   This small brick building seems to contain all of the fliers and other junk
+the zoo tends to give out for free to visitors and use as swag to draw in new
+patrons. It isn't very tidy, and could certainly use a sprucing up. Most of
+the fliers are outdated, and feature exhibits that the zoo no longer has. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Outside the Zoo Office
+~
+	ToVnum:	3353
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3358
+Name:	At a T-shaped junction
+Desc:$
+   Standing in the middle of a T-shaped junction, one can see down along the
+different pathways that split off in several directions. The smell of freshly
+cooked food coming from the food stand west of here is apt to remind you that
+it's been a while since your last meal, which is the exact reason it's parked
+right here. The zoo security office can be seen off to the south, while off to
+the east you're bound to notice a large gathering of people in front of the
+northern entrance. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Cobblestoned Pathway
+~
+	ToVnum:	3356
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3359
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Food Stand
+~
+	ToVnum:	3362
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3359
+Name:	Passing the Zoo Security Office
+Desc:$
+   This slender portions of walkways split off towards the sides of the main
+cobblestone pathway, one of which leads to the Zoo Security Office on the
+western edge, while several large holding cells for new specimens being held
+in quarantine is off to the east side, the two buildings being located across
+from one another certainly not being a coincidence. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3358
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door pen cage
+	Desc:$
+Holding Area
+~
+	ToVnum:	3316
+	Flags:	1
+	Material:	metal
+	Barrier:	12
+	KeyVnum:	3304
+[EXIT south]
+	Desc:$
+Intersection
+~
+	ToVnum:	3360
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	steel door
+	Desc:$
+Zoo Security Office
+~
+	ToVnum:	3317
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3303
+	LockRating:	5
+BREAK
+#3360
+Name:	An intersection
+Desc:$
+   The cobblestone pathway splits apart briefly, snaking its way around a
+large tree planted in the center and surrounded by a small flower bed. Off to
+the south, one can hear the sounds of animals and spot many people roaming
+from cage to cage, peering in at the occupants within. Numerous benches line
+the walkway to the west, which apparently leads off to another rest area,
+since from the looks of these hefty visitors, they need all the chances they
+can get to rest between the dozen meter walk it takes to get to the next
+exhibit. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3359
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Outside the White Buffalo Pen
+~
+	ToVnum:	3381
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+A rest area
+~
+	ToVnum:	3361
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3361
+Name:	A shaded rest area
+Desc:$
+   This is where tired (or just plain out of shape) parents can catch a
+breather after chasing around after their overly excited children. A large
+molded plastic picnic table sits underneath a tree off to the side of the
+path, offering enough shade for at least a dozen or so people at a time. A
+small playground of sorts has also been constructed on the opposite side of
+the path, consisting of a few aluminum shells cast in the shape of animals and
+set upon sturdy springs so they can be rocked upon. 
+~
+Flags:	10000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Intersection
+~
+	ToVnum:	3360
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	picnic table
+	Desc:$
+This macroplast table, although sturdy, is uncomfortable. It is big
+enough to sit 10 people.
+~
+BREAK
+#3362
+Name:	Uncle Al's Delicacies
+Desc:$
+   The smell of imitation food coming from the grill inside this stand almost
+overwhelms you, but fortunately there also seems to be a few things made of
+edible ingredients. Looking around, you see several people enjoying their
+lunches, mostly because these wage slaves and their children have been been
+raised on this soy crap their entire lives. A large sign above the order
+window reads; Welcome to Uncle Al's Delicacies... Home of the world famous
+'Big Kahuna Soyburger'! 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	6
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3358
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3374
+Name:	Inside of a storage room
+Desc:$
+   You are now standing inside of a normal looking storage area. The room
+contains cleaning supplies, mops, brooms, and yes, even pooper-scoopers! This
+room is not very organized, and ironically enough, could use the help of a
+janitor to come in here and straighten up the place. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+T-Shaped Junction
+~
+	ToVnum:	3375
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3375
+Name:	Approaching a T-shaped junction
+Desc:$
+   You are standing at a junction of the pathway that circles around the
+interior of the zoo. Off to the west one can see a small building with a sign
+bolted onto the door, while off to the east the pathway continues along
+towards the other side of the zoo's enclosures. Peering off to the north, one
+can see the beginning of the awakened animal exhibits and a sign for the
+female restrooms. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Saber-toothed Cat Cage
+~
+	ToVnum:	3376
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	3325
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Storage room
+~
+	ToVnum:	3374
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	Sign
+	Desc:$
+STORAGE ROOM: Employees Only! 
+~
+BREAK
+#3376
+Name:	Outside the Saber-Tooth Cat Pen
+Desc:$
+   You stand before the Saber-toothed Cat exhibit, inside of which one can see
+two of the magnificent creatures lounging about, minding their business and
+doing what giant man eating cats do best: Look intimidating. There is a small
+^yplaque^N on a wooden post in front of the cage, and a door marked 'Women's
+Restroom' leads off to the east. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Shadowhound Pen
+~
+	ToVnum:	3377
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+Women's Restroom
+~
+	ToVnum:	3322
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3375
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+Inside the Saber-toothed Cat Cage
+~
+	ToVnum:	3307
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	5
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+This plaque reads: Saber-Toothed Cat
+ Scientific Designation: Felis Novalis
+ The saber-toothed cat is an awakened species derived from the cougar or
+mountain lion (Felis concolor). It reaches a length of about 1.8 meters at
+full maturity, and is distinguished by its two large, curved fangs that
+protrude down from its upper jaw. The cat is fast and powerful, and its thick
+coat is a tawny brown and features very little in the way of markings. 
+~
+BREAK
+#3377
+Name:	Outside the Shadowhound Pen
+Desc:$
+   You are now standing outside of the Shadowhound pen. Since direct sunlight
+is harmful to creatures the zoo architects have built a large dome over the
+pen which is lined with low-light lamps, allowing visitors to view the animals
+without causing harm to them. There is a small ^yplaque^N on a wooden post in
+front of the pen, offering information on the creature contained inside. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside an Empty Stall
+~
+	ToVnum:	3378
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Outside the Saber-toothed Cat Cage
+~
+	ToVnum:	3376
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+The Shadowhound Pen
+~
+	ToVnum:	3306
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	4
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+This plaque reads: Shadowhound
+ Scientific Designation: Canis Umbrae
+ The shadowhound resembles a huge dog and often reaches a height of 1.2-1.3
+meters at the shoulder. Its coat is a charcoal gray colour marked with dark
+black patches, which have the ability to move and shift. This provides the
+creature with excellent camouflage at night, as it is a nocturnal predator
+that feeds on rabbits, rats, deer and other small mammals. 
+~
+BREAK
+#3378
+Name:	A busy intersection
+Desc:$
+   You stand in the middle of a busy intersection, which has quite a bit of
+foot traffic as visitors continue on their way to the western portion of the
+zoo which contains species of Non-Awakened animals, while off in the other
+directions are the awakened animal exhibits. The pathway continues from north
+to south, with a nice rest area to the west. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Black Annis Cage
+~
+	ToVnum:	3379
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	0
+	Desc:$
+Outside the Shadowhound Pen
+~
+	ToVnum:	3377
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+A Rest Area
+~
+	ToVnum:	3305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3379
+Name:	Outside the Black Annis Cage
+Desc:$
+   The interior of the pen here resembles a small forest with dense
+vegetation, with a small cave nearby for the creature inside to seek shelter
+in. The cave features a clear safety glass wall, allowing visitors to view the
+Black Annis during the daytime (since it's nocturnal) and giving it as little
+privacy as possible. There is a small ^yplaque^N attached to a wooden post outside
+the cage. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Bombardier Cage
+~
+	ToVnum:	3380
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Outside an Empty Stall
+~
+	ToVnum:	3378
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+The Black Annis Cage
+~
+	ToVnum:	3304
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	6
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+The plaque reads: Black Annis
+ Scientific Designation: Papio Annisae
+ The Black Annis is a humanoid creature standing 1.7 meters tall with a
+hunched posture, and most taxonomists believe it to be an awakened form of
+Mandrill (Papio Sphinx). The creatures are highly territorial and aggressive
+carnivores, using their strength and speed to overpower prey. They are
+nocturnal hunters with exceptional night vision, making them very dangerous to
+deal with if anyone stumbles into their territory. 
+~
+BREAK
+#3380
+Name:	Outside the Bombardier Cage
+Desc:$
+   Another exhibit that features quite a number of trees in its display is
+here, home to the Bomardier, many of whom are roosting in the upper branches,
+as high as they possibly can before hitting the fenced in roof topping off the
+pen. The little critters fly and drift about between the trees, helping
+themselves to what little airspace they have offered to them. There is a small
+weathered ^yplaque^N posted infront of the cage, like many of the other exhibits.
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the Bandit Cage
+~
+	ToVnum:	3382
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Outside the Black Annis Cage
+~
+	ToVnum:	3379
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	cage pen
+	Desc:$
+The Bombardier Cage
+~
+	ToVnum:	3303
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	3
+[EXTRADESC 0]
+	Keywords:	plaque
+	Desc:$
+The plaque reads: Bombardier
+ Scientific Designation: Glaucomys Teli
+ The Bombardier is an awakened version of the flying squirrel (Glaucomys
+Volans), and it resembles a slightly larger version of its progenitor. They
+are indigenous to the wooded areas along the North American East Coast, and
+are very similar to the typical flying squirrel, subsisting mostly on nuts and
+berries, and hibernating in the winter on a store of hoarded food. 
+~
+BREAK
+#3381
+Name:	Outside the White Buffalo Pen
+Desc:$
+   Standing in front of a much larger cage that dwarves most of the others,
+one can peer through the bars and see a pair of large White Buffalo, which
+have become somewhat famous around the zoo for having been one of the first
+awakened species put on display at the zoo here. As customary, there is a
+small polished ^yplaque^N that is fastened to a wooden post in front of the cage.
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	3360
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3382
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	cage
+	Desc:$
+White Buffalo Pen
+~
+	ToVnum:	3301
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	3
+[EXTRADESC 0]
+	Keywords:	plaque small
+	Desc:$
+The plaque reads: White Buffalo
+ Scientific Designation: Bison Bison Blanc
+ The White Buffalo, an awakened form of the plains bison, is much larger than
+their mundane cousins. As their namesake implies, they have brilliant white
+hair and short dark horns, standing on average at a height of 3.0 meters at
+the shoulder and nearly 5.2-5.3 meters in length. More territorial and
+aggressive than their common relatives, Native American legends are abound
+that the White Buffalo existed long before the awakening, but disappeared into
+the pages of history. 
+~
+BREAK
+#3382
+Name:	Outside the Bandit Cage
+Desc:$
+   Set along side the cobblestone pathway is a medium sized cage housing what
+appears to be several large raccoons sitting in the trees inside. The zoo
+seems to have gone through quite a bit of trouble to reinforced and double
+(sometimes even tripling) the safety measures to keep these mischievous little
+creatures inside of their cages, as they are notorious for having escaped more
+times than the employees care to admit. A small ^yplaque^N is fastened to a wooden
+post in front of the cage. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Outside the White Buffalo Pen
+~
+	ToVnum:	3381
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3380
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	cage
+	Desc:$
+The Bandit Cage
+~
+	ToVnum:	3302
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	3301
+	LockRating:	3
+[EXTRADESC 0]
+	Keywords:	plaque small
+	Desc:$
+The plaque reads: Bandit
+ Scientific Designation: Procyon Latri
+ The Bandit is an Awakened version of the raccoon (Procyon lotor), and is
+larger than its mundane cousins, growing up to 1.0 meter in length, it also
+has opposable thumbs. The Bandit is an omnivore, subsisting on roots, berries,
+small mammals and even water fowl. It is notorious for rummaging through
+garbage cans in various parks and urban areas. It is an accomplished thief of
+food and shiny objects, and shows a remarkable cunning for a supposedly
+non-sentient creature. There are rumors of language and tool use among Bandit
+families, as well as an innate ability to open simple locks and latches. 
+~
+BREAK
+#3390
+Name:	Employee Cafeteria
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	3334
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3391
+Name:	The Curator's Office
+Desc:$
+   You are now inside of the curator's office. This is where the day to day
+decisions about what goes on at the zoo are made. Numerous pictures of
+celebrities and other famous people who have appeared at the zoo adorn the
+walls, along with dozens of animal pictures, some of which are from this
+particular zoo, while others were taken in their natural habitats. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+Zoo Office
+~
+	ToVnum:	3318
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

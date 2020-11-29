@@ -1,0 +1,323 @@
+#37500
+Keeper:	37501
+ProfitBuy:	1.20
+ProfitSell:	0.50
+Random:	0
+Open:	9
+Close:	17
+Type:	Grey
+NoSuchItemKeeper:	We don't got that.
+NoSuchItemPlayer:	Frag off chummer, you don't got that.
+NoNuyen:	Fragging slitch, get out of here.
+DoesntBuy:	What you tryin' to sell me chummer.
+Buy:	That'll be %d yen.
+Sell:	Here, i'll give you %d yen for it.
+Name:	Jameson's Spares
+Flags:	0
+Races:	0
+Buytypes:	101000000000000000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	37537
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	37599
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	37597
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	37530
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	37511
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	37510
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	37506
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	37504
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	37503
+		Type:	Avail
+		Stock:	0
+	[SELL 9]
+		Vnum:	37502
+		Type:	Avail
+		Stock:	0
+	[SELL 10]
+		Vnum:	37501
+		Type:	Avail
+		Stock:	0
+	[SELL 11]
+		Vnum:	37500
+		Type:	Avail
+		Stock:	0
+BREAK
+#37501
+Keeper:	37503
+ProfitBuy:	1.20
+ProfitSell:	0.60
+Random:	0
+Open:	9
+Close:	19
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that in stock.
+NoSuchItemPlayer:	What are you trying to do?
+NoNuyen:	Sorry, my manager would kill me if I gave it to you for that.
+DoesntBuy:	Sorry?
+Buy:	Excellent choice! That'll be %d nuyen.
+Sell:	Excellent, here's your %d nuyen.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	100000000000000000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	37514
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	37513
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	37512
+		Type:	Avail
+		Stock:	0
+BREAK
+#37502
+Keeper:	37504
+ProfitBuy:	1.50
+ProfitSell:	0.40
+Random:	0
+Open:	9
+Close:	17
+Type:	Grey
+NoSuchItemKeeper:	We don't have that, dude.
+NoSuchItemPlayer:	Woah man, what are you trying to pull?
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	Cool, but I can't buy that from you, I might get fired and my mum would get pissed!
+Buy:	%d nuyen dude!
+Sell:	Drive on! Here's %d nuyen.
+Name:	Slipstream Ultra Xtra Auto
+Flags:	100
+Races:	0
+Buytypes:	100000000000000000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	37531
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	37524
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	37523
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	37522
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	37521
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	37520
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	37519
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	37518
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	37517
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	37516
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	37515
+		Type:	Always
+		Stock:	0
+BREAK
+#37505
+Keeper:	37505
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	6
+Close:	21
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Roswell's Garage
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	946
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	947
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	37525
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	37526
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	37527
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	37528
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	881
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	879
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	902
+		Type:	Avail
+		Stock:	0
+	[SELL 9]
+		Vnum:	1305
+		Type:	Avail
+		Stock:	0
+	[SELL 10]
+		Vnum:	37530
+		Type:	Avail
+		Stock:	0
+BREAK
+#37506
+Keeper:	37506
+ProfitBuy:	1.50
+ProfitSell:	1.00
+Random:	0
+Open:	9
+Close:	17
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	This isn't a wreckers.
+Buy:	%d nuyen, just sign here please.
+Sell:	Here's your %d nuyen.
+Name:	Auburn Paint and Panel
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	38087
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	37534
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	37533
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	37532
+		Type:	Avail
+		Stock:	0
+BREAK
+#37507
+Keeper:	37508
+ProfitBuy:	2.20
+ProfitSell:	0.00
+Random:	15
+Open:	8
+Close:	17
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Racespec Performance Workshop
+Flags:	1000
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	14639
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	37512
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	37505
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	37510
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	37536
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	37539
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	37500
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	37538
+		Type:	Avail
+		Stock:	0
+BREAK
+END

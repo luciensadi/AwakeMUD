@@ -1,0 +1,292 @@
+#25000
+Keywords:	dweller guardian metaplanes threshold
+Name:	the ^rDweller^n of the ^WThreshold^n
+RoomDesc:$
+The ^rDweller^n of the ^WThreshold^n hovers slightly above the ground. 
+
+~
+LookDesc:$
+A transparent, humaniod form of pure, mystical energy, hovers about a meter
+off the ground. It has two specks of yellowish light, that appear to be its
+eyes. It doesn't appear to move except for the slight hovering motion. 
+~
+ArriveMsg:	materializes from
+LeaveMsg:	floats
+MobFlags:	101110000000001010
+AffFlags:	1000000000001000011000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	12
+	Int:	12
+	Wil:	12
+	Mag:	15
+[POINTS]
+	Height:	250
+	Weight:	100
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	brawling:	9
+BREAK
+#25001
+Keywords:	spirit free test battle
+Name:	a free spirit
+RoomDesc:$
+A humanoid spirit stands ready to attack. 
+
+~
+LookDesc:$
+This is the spirit of the arena.  Undesputed champion, this spirit has
+vanquished many who have tried to pass. A humanoid spirit, it resembles a
+human in shape and form. Fanged teeth drip with some thick, crimson ichor.
+This astral creature moves with deadly grace, as it snarls like a rabid
+animal. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000100001101100
+AffFlags:	11000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	7
+[POINTS]
+	Height:	200
+	Weight:	90
+	Level:	2
+	Ballistic:	6
+	Impact:	6
+	Karma:	58
+[SKILLS]
+	sorcery:	5
+	:	5
+	conjuring:	5
+	brawling:	6
+	:	4
+BREAK
+#25002
+Keywords:	judge spirit man
+Name:	a spirit of justice
+RoomDesc:$
+The judge sits behind the platform, deciding the defendant's fate. 
+
+~
+LookDesc:$
+This spirit embodies all that is just and right.  It has no eyes, symbolizing
+the age old saying, Justice is blind. Large, pointed ears, rest on the sides
+of its head, making listening to the facts, easier. It is dressed in the garb
+of an english magistrate, with wig, gown, and gavel. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100011000000001010
+AffFlags:	11000
+Race:	Spirit
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	6
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	8
+[POINTS]
+	Height:	200
+	Weight:	90
+	Level:	3
+	Ballistic:	7
+	Impact:	7
+	Karma:	73
+[SKILLS]
+	brawling:	6
+	sorcery:	8
+	conjuring:	8
+	:	8
+BREAK
+#25003
+Keywords:	prosecutor free spirit attorney
+Name:	a prosecution attorney
+RoomDesc:$
+^nThe ^wprosecutor^n sits behind the table, thinking of his next line of
+questioning. 
+
+~
+LookDesc:$
+Dressed in a grey, Tres Chic suit, and patten leather shoes, this spirit looks
+like it means business. It squints, through wire-rimmed glasses, at a yellow
+notepad with strange scrawlings on it. It wears a black necktie, with a
+picture of a western, hangman's noose, on it. An over-confident smile can be
+seen on its face. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000010001010
+AffFlags:	11000
+Race:	Human
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	8
+[POINTS]
+	Height:	200
+	Weight:	90
+	Level:	2
+	Ballistic:	8
+	Impact:	7
+	Karma:	71
+[SKILLS]
+	negotiation:	9
+	sorcery:	7
+	conjuring:	8
+	:	8
+	interrogation:	10
+BREAK
+#25004
+Keywords:	unfinished mob
+Name:	a jury member
+RoomDesc:$
+A jury member carefully listens to the proceedings. 
+
+~
+LookDesc:$
+The blank face makes it hard to determine, which side this jury member leans.
+It appears to be listening intently to the proceedings. With an occasional
+nod, it signifies understanding. No other movements or emotions can be seen or
+felt. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	200
+	Weight:	90
+	Ballistic:	4
+	Impact:	4
+	Karma:	52
+[SKILLS]
+	sorcery:	6
+	conjuring:	6
+	:	6
+	negotiation:	9
+	media etiquette:	5
+BREAK
+#25005
+Keywords:	spirit free defense attorney
+Name:	a spirit of defense
+RoomDesc:$
+^nThe ^Bdefense^n shakes its head in disbelief. 
+
+~
+LookDesc:$
+Dressed in a bargain suit, this spirit appears to be the public defender. It
+shakes its head frequently with a look of disbelief. An occasional frown, or
+rolling of the eyes, suggest things aren't going well. Its attention seems to
+be distracted and it radiates a feeling of resignation. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000010001010
+AffFlags:	0
+Race:	Spirit
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	4
+[POINTS]
+	Height:	200
+	Weight:	90
+	Ballistic:	3
+	Impact:	3
+	Karma:	40
+[SKILLS]
+	sorcery:	5
+	:	5
+	conjuring:	5
+	negotiation:	1
+BREAK
+#25006
+Keywords:	teacher spirit free kindergarden
+Name:	Kindergarden Teacher
+RoomDesc:$
+The teacher is ready to begin class. 
+
+~
+LookDesc:$
+This free spirit resembles a female humanoid. Its face is stern, yet kind.
+Its voice is soft and soothing. A soft smile parts its astral lips. There is a
+sense of intelligence and wisdom that eminates from this spirit. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000010000000001010
+AffFlags:	1000000000011000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	7
+	Int:	9
+	Wil:	8
+	Mag:	9
+[POINTS]
+	Height:	200
+	Weight:	90
+	Level:	2
+	Ballistic:	5
+	Impact:	5
+	Karma:	64
+[SKILLS]
+	sorcery:	7
+	:	8
+	conjuring:	8
+BREAK
+END

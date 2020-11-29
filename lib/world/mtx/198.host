@@ -1,0 +1,1008 @@
+#19800
+Name:	Knight Center Public Entrance
+Keywords:	Knight Center KC
+Description:$
+A large, three turreted castle made of a dark grey stone rises up in the
+center of this host, which is surrounded by a deep gouge of a moat and set on
+slightly elevated ground to offer a better vantage point. Rolling hills spread
+away from the central structure, and a single path, wide and well worn through
+use of them links the drawbridge of the castle to the Tacoma LTG. Banners
+flutter from each of the turrets, while in the center is the Helmeted Spartan
+emblem of Ares Macrotechnology, and from each of the lesser side turrets are
+the stylized KE banners of the Knight Errant. A small guard shack sits on this
+side of the drawbridge, from which emerge squires to assist any of the
+visiting icons who may stop there for directions or help. 
+~
+ShutdownStart:	Trumpets sound from the towers and the draw bridge begins raising.
+ShutdownStop:	Trumpets sound from the towers and the draw bridge begins lowering.
+Parent:	1101
+Colour:	0
+Security:	4
+Difficulty:	0
+Access:	5
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	5
+ControlTrapdoor:	0
+Index:	5
+IndexTrapdoor:	0
+Files:	5
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	5
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 0]
+		Exit:	19815
+		Number:	Ares-PLTG
+	[EXIT 1]
+		Exit:	19801
+		Number:	Courtyard
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 1]
+		Step:	54
+		Alert:	No Alert
+		IC:	19807
+	[TRIGGER 2]
+		Step:	48
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	42
+		Alert:	No Alert
+		IC:	19806
+	[TRIGGER 4]
+		Step:	42
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 5]
+		Step:	36
+		Alert:	No Alert
+		IC:	19805
+	[TRIGGER 6]
+		Step:	30
+		Alert:	No Alert
+		IC:	19804
+	[TRIGGER 7]
+		Step:	24
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 8]
+		Step:	18
+		Alert:	No Alert
+		IC:	19803
+	[TRIGGER 9]
+		Step:	12
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 10]
+		Step:	6
+		Alert:	No Alert
+		IC:	19801
+BREAK
+#19801
+Name:	Before the Keep
+Keywords:	Courtyard Drawbridge
+Description:$
+The walls of the castle encircle this wide open courtyard, providing a space
+for all of the support services for the main keep. Busy peasants mill all
+around you, occasionally broken up by a light-footed messenger or a heavily
+armoured knight, either on foot or horseback. A herald stands just within the
+portcullis, incessantly hawking the same directions over and over, "Proceed to
+ye right to visit yon Bazaar, to ye left shall ye find yon Convention Center!"
+~
+ShutdownStart:	Knights begin ushering people out as the portcullis starts closing.
+ShutdownStop:	The portcullis re-opens and the knights return to their normal posts.
+Parent:	19800
+Colour:	0
+Security:	4
+Difficulty:	0
+Access:	5
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	5
+ControlTrapdoor:	0
+Index:	5
+IndexTrapdoor:	0
+Files:	5
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	5
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 11]
+		Exit:	19804
+		Number:	Portcullis
+	[EXIT 12]
+		Exit:	19802
+		Number:	Convention
+	[EXIT 13]
+		Exit:	19810
+		Number:	Bazaar
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 1]
+		Step:	54
+		Alert:	No Alert
+		IC:	19807
+	[TRIGGER 2]
+		Step:	48
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	42
+		Alert:	No Alert
+		IC:	19806
+	[TRIGGER 4]
+		Step:	42
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 5]
+		Step:	36
+		Alert:	No Alert
+		IC:	19805
+	[TRIGGER 6]
+		Step:	30
+		Alert:	No Alert
+		IC:	19804
+	[TRIGGER 7]
+		Step:	24
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 8]
+		Step:	18
+		Alert:	No Alert
+		IC:	19803
+	[TRIGGER 9]
+		Step:	12
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 10]
+		Step:	6
+		Alert:	No Alert
+		IC:	19801
+BREAK
+#19802
+Name:	The Convention Center
+Keywords:	convention center
+Description:$
+A large semi-circle of red and white striped canvas tents have been erected
+here, laying inbetween the castle wall and the inner keep. Large, brightly
+lettered signs have been set before each of the tents, attempting to draw any
+passing icons close enough to hear their associated hawker over all of the
+others in close proximity. There are a few well-armoured knights passing in
+predictable routes through the crowd, apparently on patrol, but the bulk of
+traffic in this area seems to be visiting icons moving in well ordered chaos
+from one tent to the next. A beaten trail leads back to the main portcullis of
+the outer wall. 
+~
+ShutdownStart:	The hawkers grab up their signs and begin closing tent flaps.
+ShutdownStop:	The tent flaps open and hawkers set out their signs.
+Parent:	19801
+Colour:	0
+Security:	6
+Difficulty:	0
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	10
+ControlTrapdoor:	0
+Index:	9
+IndexTrapdoor:	0
+Files:	9
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Controller
+[EXITS]
+	[EXIT 11]
+		Exit:	19803
+		Number:	Tents
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 1]
+		Step:	54
+		Alert:	No Alert
+		IC:	19807
+	[TRIGGER 2]
+		Step:	48
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	42
+		Alert:	No Alert
+		IC:	19806
+	[TRIGGER 4]
+		Step:	42
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 5]
+		Step:	36
+		Alert:	No Alert
+		IC:	19805
+	[TRIGGER 6]
+		Step:	30
+		Alert:	No Alert
+		IC:	19804
+	[TRIGGER 7]
+		Step:	24
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 8]
+		Step:	18
+		Alert:	No Alert
+		IC:	19803
+	[TRIGGER 9]
+		Step:	12
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 10]
+		Step:	6
+		Alert:	No Alert
+		IC:	19801
+BREAK
+#19803
+Name:	Behind the Tents
+Keywords:	tent tents wagon behind
+Description:$
+A long row of covered wagons has been hidden discretely behind the semi-circle
+of tents, while the rough-faced guards with sunken knuckles and billy-clubs
+that wander between them give the distinct impression that this is not
+intended for public access. Merchants, vendors, and other employees move
+unrestricted between the covered wagons and the nearby tents, carrying sealed
+crates and casks to fuel the nearby promotions and displays. 
+~
+ShutdownStart:	A shout goes up and the wagon drivers begin pulling away.
+ShutdownStop:	The wagons slow to a halt, then circle and come back into place.
+Parent:	19802
+Colour:	0
+Security:	7
+Difficulty:	1
+Access:	12
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	11
+ControlTrapdoor:	0
+Index:	12
+IndexTrapdoor:	0
+Files:	11
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	13
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 1]
+		Step:	54
+		Alert:	No Alert
+		IC:	19807
+	[TRIGGER 2]
+		Step:	48
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	42
+		Alert:	No Alert
+		IC:	19806
+	[TRIGGER 4]
+		Step:	42
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 5]
+		Step:	36
+		Alert:	No Alert
+		IC:	19805
+	[TRIGGER 6]
+		Step:	30
+		Alert:	No Alert
+		IC:	19804
+	[TRIGGER 7]
+		Step:	24
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 8]
+		Step:	18
+		Alert:	No Alert
+		IC:	19803
+	[TRIGGER 9]
+		Step:	12
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 10]
+		Step:	6
+		Alert:	No Alert
+		IC:	19801
+BREAK
+#19804
+Name:	Entering the Keep
+Keywords:	portcullis keep employee
+Description:$
+A long, arched stone corridor extends for what seems like miles as it makes
+its way from the outer courtyard and into the central keep. Along the way are
+numerous spiked gates, ready to drop and seal off access, as well as a number
+of murder holes, from which any number of nasty things could be rained down
+upon unwanted guests. Niches have also been carved out sporadically along this
+pathway, and from time to time a heavily armed knight can be seen emerging
+from one to check the credentials of passing icons. 
+~
+ShutdownStart:	The gates begin to drop, starting from the keep and moving outward.
+ShutdownStop:	The gates draw up one at a time, from the yard inward.
+Parent:	19801
+Colour:	1
+Security:	8
+Difficulty:	1
+Access:	8
+AccessScramble:	6
+AccessTrapdoor:	0
+Control:	10
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Security
+[EXITS]
+	[EXIT 11]
+		Exit:	19806
+		Number:	Corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19819
+	[TRIGGER 1]
+		Step:	55
+		Alert:	No Alert
+		IC:	19818
+	[TRIGGER 2]
+		Step:	50
+		Alert:	No Alert
+		IC:	19817
+	[TRIGGER 3]
+		Step:	50
+		Alert:	No Alert
+		IC:	19816
+	[TRIGGER 4]
+		Step:	50
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 5]
+		Step:	45
+		Alert:	Active
+		IC:	0
+	[TRIGGER 6]
+		Step:	40
+		Alert:	No Alert
+		IC:	19815
+	[TRIGGER 7]
+		Step:	35
+		Alert:	No Alert
+		IC:	19813
+	[TRIGGER 8]
+		Step:	30
+		Alert:	No Alert
+		IC:	19812
+	[TRIGGER 9]
+		Step:	25
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 10]
+		Step:	20
+		Alert:	No Alert
+		IC:	19811
+	[TRIGGER 11]
+		Step:	15
+		Alert:	No Alert
+		IC:	19810
+	[TRIGGER 12]
+		Step:	10
+		Alert:	No Alert
+		IC:	19809
+	[TRIGGER 13]
+		Step:	5
+		Alert:	No Alert
+		IC:	19802
+BREAK
+#19805
+Name:	Killing Jar
+Keywords:	blue circle
+Description:$
+This host has no exits, not even the way you logged in.  What it does have,
+however are thousands of small holes and an incessant buzzing sound.  The
+smell of honey hangs heavily in the air, and the golden liquid oozes from the
+holes and drifts across to the other side of the spherical room in hundreds
+little bubbles that obey no laws of gravity. 
+~
+ShutdownStart:	The holes in the wall begin to seal and the buzzing quiets.
+ShutdownStop:	Thousands of holes in the wall begin opening and a buzzing sound starts.
+Parent:	0
+Colour:	4
+Security:	12
+Difficulty:	2
+Access:	18
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	18
+ControlTrapdoor:	0
+Index:	17
+IndexTrapdoor:	0
+Files:	18
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	16
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Security
+BREAK
+#19806
+Name:	In a Circular Corridor
+Keywords:	corridor arched central keep
+Description:$
+A huge corridor circles the outer reaches of the keep, which has high grey
+stone walls lined with tapestries depicting scenes of medieval wars, great
+champions swinging broadswords and huge war elephants needled with arrows
+crashing through a line of pike-men. The ceilings are high, supported by rich
+mahogany rafters that have been set with intricate gold gilding. Every twenty
+or thirty feet along the outer wall is a large open arch that lets light in
+and allows icons to return quickly to the front yard of the keep. Opposite
+each one is a large placard that points icons in the direction of services
+that are offered. Some of the items included on the signs are a large book, a
+plate of food with utensils crossing it. 
+~
+ShutdownStart:	The inner doors seal and the ceiling begins to lower.
+ShutdownStop:	The ceiling rises back into place and the inner doors open.
+Parent:	19804
+Colour:	1
+Security:	9
+Difficulty:	1
+Access:	11
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	12
+ControlTrapdoor:	0
+Index:	14
+IndexTrapdoor:	0
+Files:	13
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	12
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Controller
+[EXITS]
+	[EXIT 14]
+		Exit:	19808
+		Number:	Messhall
+	[EXIT 15]
+		Exit:	19807
+		Number:	Library
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19819
+	[TRIGGER 1]
+		Step:	55
+		Alert:	No Alert
+		IC:	19818
+	[TRIGGER 2]
+		Step:	50
+		Alert:	No Alert
+		IC:	19817
+	[TRIGGER 3]
+		Step:	50
+		Alert:	No Alert
+		IC:	19816
+	[TRIGGER 4]
+		Step:	50
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 5]
+		Step:	45
+		Alert:	Active
+		IC:	0
+	[TRIGGER 6]
+		Step:	40
+		Alert:	No Alert
+		IC:	19815
+	[TRIGGER 7]
+		Step:	35
+		Alert:	No Alert
+		IC:	19813
+	[TRIGGER 8]
+		Step:	30
+		Alert:	No Alert
+		IC:	19812
+	[TRIGGER 9]
+		Step:	25
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 10]
+		Step:	20
+		Alert:	No Alert
+		IC:	19811
+	[TRIGGER 11]
+		Step:	15
+		Alert:	No Alert
+		IC:	19810
+	[TRIGGER 12]
+		Step:	10
+		Alert:	No Alert
+		IC:	19809
+	[TRIGGER 13]
+		Step:	5
+		Alert:	No Alert
+		IC:	19802
+BREAK
+#19807
+Name:	A Massive Library
+Keywords:	book library books
+Description:$
+The vaulted ceilings so common to the inner keep of the Knight Center host
+continue on within this library, only here there are endless rows of shelves,
+all meticulously marked, that rise almost all the way up each wall. There is a
+small desk near the open doorway that leads out to the main corridor, as well
+as a large filing ledger and a helpful, albeit wizened librarian. The only
+other obvious exit is a small unmarked door in the rear, though if one knew
+what they were looking for, or were authorized to issue a query to the
+librarian, just about anything could probably be found from here. 
+~
+ShutdownStart:	The shelves begin retracting into the floor.
+ShutdownStop:	The book shelves rise back into place.
+Parent:	19806
+Colour:	1
+Security:	5
+Difficulty:	0
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	9
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Controller
+[EXITS]
+	[EXIT 14]
+		Exit:	19806
+		Number:	Doorway
+	[EXIT 15]
+		Exit:	19809
+		Number:	Archives
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19819
+	[TRIGGER 1]
+		Step:	55
+		Alert:	No Alert
+		IC:	19818
+	[TRIGGER 2]
+		Step:	50
+		Alert:	No Alert
+		IC:	19817
+	[TRIGGER 3]
+		Step:	50
+		Alert:	No Alert
+		IC:	19816
+	[TRIGGER 4]
+		Step:	50
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 5]
+		Step:	45
+		Alert:	Active
+		IC:	0
+	[TRIGGER 6]
+		Step:	40
+		Alert:	No Alert
+		IC:	19815
+	[TRIGGER 7]
+		Step:	35
+		Alert:	No Alert
+		IC:	19813
+	[TRIGGER 8]
+		Step:	30
+		Alert:	No Alert
+		IC:	19812
+	[TRIGGER 9]
+		Step:	25
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 10]
+		Step:	20
+		Alert:	No Alert
+		IC:	19811
+	[TRIGGER 11]
+		Step:	15
+		Alert:	No Alert
+		IC:	19810
+	[TRIGGER 12]
+		Step:	10
+		Alert:	No Alert
+		IC:	19809
+	[TRIGGER 13]
+		Step:	5
+		Alert:	No Alert
+		IC:	19802
+BREAK
+#19808
+Name:	The Mess Hall
+Keywords:	plate food mess messhall utensils
+Description:$
+A thick, wood planked semi-circle balcony sits around the greater portion of
+the room, while the vaulted ceilings leave ample space for the most
+extravagant of icons. Tables have been set up, varying in size to seat
+anywhere from one to twenty, and all spaced to offer a bit of privacy in an
+otherwise public setting. The smells of different foods waft through the air,
+and the sound of steel against steel reverberates from the sandy pit below.
+There are two sets of steps leading down to the dueling area, and the lines
+are usually reasonable, except during the heart of peak hours ofcourse. A
+large open archway leads back to the main hall. 
+~
+ShutdownStart:	Waitresses gather up the drinks and usher icons out.
+ShutdownStop:	Waitresses begin setting drinks on the tables again.
+Parent:	19806
+Colour:	0
+Security:	6
+Difficulty:	1
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 14]
+		Exit:	19806
+		Number:	Archway
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 1]
+		Step:	54
+		Alert:	No Alert
+		IC:	19807
+	[TRIGGER 2]
+		Step:	48
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	42
+		Alert:	No Alert
+		IC:	19806
+	[TRIGGER 4]
+		Step:	42
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 5]
+		Step:	36
+		Alert:	No Alert
+		IC:	19805
+	[TRIGGER 6]
+		Step:	30
+		Alert:	No Alert
+		IC:	19804
+	[TRIGGER 7]
+		Step:	24
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 8]
+		Step:	18
+		Alert:	No Alert
+		IC:	19803
+	[TRIGGER 9]
+		Step:	12
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 10]
+		Step:	6
+		Alert:	No Alert
+		IC:	19801
+BREAK
+#19809
+Name:	The Archives
+Keywords:	Archives door unmarked
+Description:$
+Both the ceiling and floor in this area stretch almost infinitely both up and
+down, making it hard to determine where the floor starts and the ceiling
+itself ends. Settled in lengthy lanes are massively tall shelves that look to
+hold just about any kind of information one would ever want to know. Each of
+the shelves have multiple rolling ladders perched against them, some of which
+are occupied by various icons, some keeping things nice and tidy as you
+relocate books and documents to their proper places, while others have simply
+immersed themselves in the reading material offered. An occasional heavily
+armoured knight with a rather nasty halberd makes his rounds through the area,
+making sure everything is on the up and up and that theres no intruders. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	19806
+Colour:	1
+Security:	7
+Difficulty:	1
+Access:	11
+AccessScramble:	6
+AccessTrapdoor:	0
+Control:	14
+ControlTrapdoor:	0
+Index:	13
+IndexTrapdoor:	1
+Files:	11
+FilesScramble:	6
+FilesTrapdoor:	0
+Slave:	14
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19819
+	[TRIGGER 1]
+		Step:	55
+		Alert:	No Alert
+		IC:	19818
+	[TRIGGER 2]
+		Step:	50
+		Alert:	No Alert
+		IC:	19817
+	[TRIGGER 3]
+		Step:	50
+		Alert:	No Alert
+		IC:	19816
+	[TRIGGER 4]
+		Step:	50
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 5]
+		Step:	45
+		Alert:	Active
+		IC:	0
+	[TRIGGER 6]
+		Step:	40
+		Alert:	No Alert
+		IC:	19815
+	[TRIGGER 7]
+		Step:	35
+		Alert:	No Alert
+		IC:	19813
+	[TRIGGER 8]
+		Step:	30
+		Alert:	No Alert
+		IC:	19812
+	[TRIGGER 9]
+		Step:	25
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 10]
+		Step:	20
+		Alert:	No Alert
+		IC:	19811
+	[TRIGGER 11]
+		Step:	15
+		Alert:	No Alert
+		IC:	19810
+	[TRIGGER 12]
+		Step:	10
+		Alert:	No Alert
+		IC:	19809
+	[TRIGGER 13]
+		Step:	5
+		Alert:	No Alert
+		IC:	19802
+BREAK
+#19810
+Name:	The Bazaar
+Keywords:	Bazaar
+Description:$
+Almost immediately the ruckus is overwhelming, the various noises and
+clamboring of icons mixed together in a swirling and always shifting sea of
+colour and smells, most people would find themselves quickly retreating from
+the chaos going on within this area. Hawkers and icons of all shapes, sizes,
+colours and demeanor gather here to exchange ideas, information, goods, and
+even sometimes their lives, as not all deals go quite as well as hoped, and
+sometimes things can easily get out of hand. There a multiple sentry knights
+posted around the Bazaar, but most seem, at the least, unwilling to enter the
+fray unless its absolutely needed. A first time visitor may find quite a deal
+of trouble dealing with the hardnosed locals that have set up shop here, so be
+wary. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	19801
+Colour:	0
+Security:	5
+Difficulty:	0
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	10
+IndexTrapdoor:	1
+Files:	8
+FilesScramble:	2
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19808
+	[TRIGGER 1]
+		Step:	54
+		Alert:	No Alert
+		IC:	19807
+	[TRIGGER 2]
+		Step:	48
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	42
+		Alert:	No Alert
+		IC:	19806
+	[TRIGGER 4]
+		Step:	42
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 5]
+		Step:	36
+		Alert:	No Alert
+		IC:	19805
+	[TRIGGER 6]
+		Step:	30
+		Alert:	No Alert
+		IC:	19804
+	[TRIGGER 7]
+		Step:	24
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 8]
+		Step:	18
+		Alert:	No Alert
+		IC:	19803
+	[TRIGGER 9]
+		Step:	12
+		Alert:	No Alert
+		IC:	19802
+	[TRIGGER 10]
+		Step:	6
+		Alert:	No Alert
+		IC:	19801
+BREAK
+#19815
+Name:	Ares Macrotechnology PLTG
+Keywords:	Ares Macrotechnology PLTG
+Description:$
+Large, cold steel and concrete structures arise along the horizon, while the
+node itself stretches off into an unimaginable distance, disappearing into the
+curvature of the land itself. In the center of the amalgamation of buildings
+and datatrails that criss-cross the node stands a huge statue, which is
+sculpted into a roman-esque image of some form of fighter, who seems to be
+sporting a tunic, a shield and spear, as well as a spartan helmet. At the base
+of the statues pedestal are the words, 'Ares Macrotechnology', which burn such
+a bright red, that its seems as they could cause serious injury if one was to
+approach too close. One of the larger trails of data and icons are headed off
+towards one direction, which is marked as well, this time reading, "KC: Knight
+Center", while another smaller datatrail leads off beneath the one marked,
+"KEA: Knight Errant Academy". 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	0
+Colour:	1
+Security:	9
+Difficulty:	1
+Access:	11
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	13
+ControlTrapdoor:	0
+Index:	12
+IndexTrapdoor:	0
+Files:	12
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	11
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 11]
+		Exit:	19800
+		Number:	Ares-KC-0321
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	19829
+	[TRIGGER 1]
+		Step:	55
+		Alert:	No Alert
+		IC:	19828
+	[TRIGGER 2]
+		Step:	45
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	40
+		Alert:	No Alert
+		IC:	19827
+	[TRIGGER 4]
+		Step:	35
+		Alert:	No Alert
+		IC:	19826
+	[TRIGGER 5]
+		Step:	30
+		Alert:	No Alert
+		IC:	19825
+	[TRIGGER 6]
+		Step:	25
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	20
+		Alert:	No Alert
+		IC:	19823
+	[TRIGGER 8]
+		Step:	15
+		Alert:	No Alert
+		IC:	19822
+	[TRIGGER 9]
+		Step:	10
+		Alert:	No Alert
+		IC:	19821
+	[TRIGGER 10]
+		Step:	5
+		Alert:	No Alert
+		IC:	19820
+BREAK
+END

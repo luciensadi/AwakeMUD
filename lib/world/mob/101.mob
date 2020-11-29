@@ -35,7 +35,7 @@ AttackType:	Blast
 	Karma:	100
 [SKILLS]
 	firearms:	50
-	unarmed combat:	50
+	brawling:	50
 	armed combat:	50
 BREAK
 #10101
@@ -75,7 +75,7 @@ AttackType:	Blast
 	Bank:	1000000
 	Karma:	10
 [SKILLS]
-	unarmed combat:	50
+	brawling:	50
 	armed combat:	50
 BREAK
 #10102
@@ -116,7 +116,7 @@ AttackType:	Machine Gun
 [SKILLS]
 	gunnery:	5
 	firearms:	7
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #10103
 Keywords:	Melvak Peeblas Director Movie Trogploitation Film Cinema Ork
@@ -156,7 +156,7 @@ DefaultPos:	Resting
 	Impact:	8
 	Karma:	35
 [SKILLS]
-	unarmed combat:	10
+	brawling:	10
 	:	4
 	:	3
 	:	8
@@ -200,7 +200,7 @@ DefaultPos:	Standing
 	Impact:	6
 [SKILLS]
 	armed combat:	7
-	unarmed combat:	7
+	brawling:	7
 	gunnery:	5
 	firearms:	5
 BREAK
@@ -239,7 +239,7 @@ DefaultPos:	Standing
 [SKILLS]
 	stealth:	10
 	firearms:	10
-	unarmed combat:	9
+	brawling:	9
 	athletics:	10
 BREAK
 #10106
@@ -279,7 +279,7 @@ DefaultPos:	Standing
 	stealth:	10
 	athletics:	10
 	firearms:	11
-	unarmed combat:	10
+	brawling:	10
 BREAK
 #10107
 Keywords:	needles punk bitch
@@ -310,7 +310,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	unarmed combat:	1
+	brawling:	1
 BREAK
 #10108
 Keywords:	large ork
@@ -346,7 +346,7 @@ DefaultPos:	Standing
 [SKILLS]
 	firearms:	6
 	:	2
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #10109
 Keywords:	Angus ork tunnel guard short stocky schoolboy
@@ -382,7 +382,7 @@ DefaultPos:	Standing
 	Weight:	155
 [SKILLS]
 	clubs:	16
-	unarmed combat:	5
+	brawling:	5
 BREAK
 #10110
 Keywords:	Rob Bryner short skinny ork
@@ -419,7 +419,7 @@ DefaultPos:	Sitting
 [SKILLS]
 	computers:	5
 	electronics:	3
-	unarmed combat:	2
+	brawling:	2
 BREAK
 #10150
 Keywords:	gateway access ic
@@ -490,6 +490,6 @@ AttackType:	Blast
 [SKILLS]
 	sorcery:	3
 	:	3
-	unarmed combat:	10
+	brawling:	10
 BREAK
 END

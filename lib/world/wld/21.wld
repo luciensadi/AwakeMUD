@@ -1,0 +1,1076 @@
+#2100
+Name:	The Lobby of Club Penumbra
+Desc:$
+   Even here, in the lobby, it's hard to hear yourself think. The music from
+further inside the club is amplified by the speakers hanging from the roof in
+here. A single valet mans the cloakroom, but he seems pressed for time as he
+rushes to and fro, trying to deal with the strangely large amount of patrons
+for this time of day. A pair of elaborate double doors stands to the west,
+allowing a view further into the club, which even during the day, still has
+quite a few people in it. 
+~
+NightDesc:$
+   Even here, in the lobby, it's hard to hear yourself think. The music from
+further inside the club is amplified by the speakers hanging from the roof in
+here. A team of valets man the cloakroom, working double time to manage with
+the throng of clubbers coming and going. Elaborate double doors are thrown
+wide open, allowing a view further into the club. Occasionally a stray
+laserlight will shine through here and out the front doors. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	8
+Cover:	2
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	12
+[EXIT east]
+	ToVnum:	32587
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2101
+Name:	By the Entrance
+Desc:$
+   Standing here affords a view of the entirety of the public area of Club
+Penumbra. A raised area here, and to the south contains seating and tables for
+people to relax and meet at. The entire club is packed to capacity, getting a
+chair in this area, or the area further south would be near impossible, as
+would getting out onto the dancefloor. The walls and roof sparkling with a
+faux starlight, giving the impression of being outdoors. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	10
+Cover:	3
+X:	5
+Y:	20
+Z:	5.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	6
+	Background:	2
+	BackgroundType:	12
+[EXIT east]
+	ToVnum:	2100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2102
+Name:	The Dancefloor
+Desc:$
+   Even though it's the middle of the day the dancefloor is still swarming
+with people. The floor is filled mostly with hardcore habitues, dancing like
+their lives depended on it to the beat of the music and extravagent laser
+light and smoke show above. Looking down reveals the floor to be painted in a
+moon surface motif. 
+~
+NightDesc:$
+   People everywhere. It's the only real way to describe the Dancefloor. It's
+a mass of swarming bodies and limbs, dancing to the beat of the near defeaning
+music. Even shouting your voice could not be heard. The smoke and laser show
+lights up area extending up to the high ceiling above, whipping the crowd into
+a frenzy. Looking down reveals the floor to be painted in a moon surface
+motif. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	10
+Cover:	0
+X:	50
+Y:	50
+Z:	7.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	6
+	Background:	2
+	BackgroundType:	12
+[EXIT north]
+	ToVnum:	2103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	2106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2103
+Name:	Dancefloor by the Stage
+Desc:$
+   During the day the music and light shows are completely canned, and as such
+the stage is not the center of attention. That doesn't mean this area is clear
+though, far from it. Dancers pack the area, using all the available space to
+strut their moves. The music here is deafening due to the proximity to the
+massive speaker system used by the club. 
+~
+NightDesc:$
+   The crowd is surging against the stage, trying to get as close as possible
+to the DJ who stands behind his control board. He manipulates the boards with
+slick precision, sending the lasers scattering around the club in elaborate
+displays. The music here is deafening due to the proximity to the massive
+speaker system used by the club. The sweaty bodies of the dancers make it hard
+to move, not that it bothers many of the people this close to the stage. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	10
+Cover:	0
+X:	50
+Y:	20
+Z:	7.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	6
+	Background:	2
+	BackgroundType:	12
+[EXIT south]
+	ToVnum:	2102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2104
+Name:	Seating and Chillout Area
+Desc:$
+   The tables and chairs give way to a large arrangement of plush black
+couches. Between some of the couches are tables for people to place their
+drink on, the rest just face in seemingly random directions. The couches are
+mostly empty at the moment, though many groups of people are still using them,
+most of them rather professional looking, like they are on a business meeting.
+~
+NightDesc:$
+   The tables and chairs give way to a large arrangement of plush black
+couches. Between some of the couches are tables for people to place their
+drink on, the rest just face in seemingly random directions. It would be hard
+right now to get a seat on one, they are either filled with groups of people
+watching the Dancefloor or couples making the most of the dim light and hectic
+atmosphere. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	8
+Cover:	4
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	2
+	BackgroundType:	12
+[EXIT north]
+	ToVnum:	2101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2105
+Name:	Seating Area
+Desc:$
+   Tables and chairs have been set up here, to give people a chance to relax
+and meet while not using the dancefloor or other areas of the club. Lasers
+from the light show scatter along the wall here, displaying intricate patterns
+and movement that could best be described as hypnotising. To the south a
+rarely used doorway can be seen leading into a darkened corridor. 
+~
+NightDesc:$
+   Tables and chairs have been set up here, to give people a chance to relax
+and meet while not partaking in the frenzied dance that can be seen on the
+Dancefloor. Lasers from the light show scatter along the wall here, displaying
+intricate patterns and movement that could best be described as hypnotising.
+To the south a rarely used doorway can be seen leading into a darkened
+corridor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	9
+Cover:	4
+X:	20
+Y:	5
+Z:	5.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	6
+	Background:	2
+	BackgroundType:	12
+[EXIT north]
+	ToVnum:	2102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2106
+Name:	Southern end of the Bar
+Desc:$
+   During the day the staff set up stools down this end of the bar to cater
+for the executive crowd who just come in for a quick drink. This area is
+relatively quiet, due to the sheer amount of powerful people it attracts. That
+said, people still occasionally spill down here when the northern area of the
+bar gets busy. 
+~
+NightDesc:$
+   Through all the hustle and bustle of the rest of the club this area is
+relatively quiet. Likely due to the crowd that is attracted to this section.
+This is where the real movers and shakers meet, before heading into the
+private rooms. That said, the area is still packed with people, most of them
+trying to get a drink while the north part of the bar is packed to capacity. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	9
+Cover:	5
+X:	5
+Y:	10
+Z:	8.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	6
+	Background:	2
+	BackgroundType:	12
+[EXIT north]
+	ToVnum:	2107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	2102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2107
+Name:	By the Bar
+Desc:$
+   Even during the day the bar is crammed with patrons trying to get a drink.
+The highly trained staff seem very able to cope however, handing out drinks
+and taking nuyen like it is second nature. This area also affords a good view
+of the dancefloor and the entrance to the club. 
+~
+NightDesc:$
+   At this time of night there is standing room only by the bar. The bar staff
+rush back and forth trying to serve all the customers, but it is a losing
+battle. People crowd the area, either trying to get served, or standing and
+watching the dancefloor while finishing their drinks. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	10
+Cover:	4
+X:	20
+Y:	10
+Z:	8.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	6
+	Background:	2
+	BackgroundType:	12
+[EXIT east]
+	ToVnum:	2102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2108
+Name:	Corridor to Private Rooms
+Desc:$
+   The star light walls flow seemlessly into this short corridor. 4 doors lead
+off, each a deep matte black. Music thunders in from the north but the air
+conditioning in here keeps the smoke out allowing a slight respite from the
+hectic atmosphere of the rest of the club. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	2
+Y:	20
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+The door is sturdy and soundproof. It is marked with a gold number 1. 
+~
+	ToVnum:	2109
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Keywords:	door
+	Desc:$
+The door is sturdy and soundproof. It is marked with a gold number 2. 
+~
+	ToVnum:	2112
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	door
+	Desc:$
+The door is sturdy and soundproof. It is marked with a gold number 3. 
+~
+	ToVnum:	2111
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+The door is sturdy and soundproof. It is marked with a gold number 4. 
+~
+	ToVnum:	2110
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2109
+Name:	A Private Room
+Desc:$
+   The music from the main area of the club is subdued here, making it easy to
+have a conversation. The star covered walls and roof are still present, as is
+the moon rock themed floor. Plush red lounges are arranged around a low table
+in the middle, all of the highest quality. A small white noise generator is
+embedded in the center of the table to allow people the security to know no
+one is listening in if the need arises. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A thick black door opens into the corridor. 
+~
+	ToVnum:	2108
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2110
+Name:	A Private Room
+Desc:$
+   The music from the main area of the club is subdued here, making it easy to
+have a conversation. The star covered walls and roof are still present, as is
+the moon rock themed floor. Plush red lounges are arranged around a low table
+in the middle, all of the highest quality. A small white noise generator is
+embedded in the center of the table to allow people the security to know no
+one is listening in if the need arises.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+The thick black door opens into the corridor. 
+~
+	ToVnum:	2108
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2111
+Name:	A Private Room
+Desc:$
+   The music from the main area of the club is subdued here, making it easy to
+have a conversation. The star covered walls and roof are still present, as is
+the moon rock themed floor. Plush red lounges are arranged around a low table
+in the middle, all of the highest quality. A small white noise generator is
+embedded in the center of the table to allow people the security to know no
+one is listening in if the need arises.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door
+	Desc:$
+A thick black door opens into the corridor. 
+~
+	ToVnum:	2108
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2112
+Name:	A Private Room
+Desc:$
+   The music from the main area of the club is subdued here, making it easy to
+have a conversation. The star covered walls and roof are still present, as is
+the moon rock themed floor. Plush red lounges are arranged around a low table
+in the middle, all of the highest quality. A small white noise generator is
+embedded in the center of the table to allow people the security to know no
+one is listening in if the need arises.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	Keywords:	door
+	Desc:$
+A thick black door opens into the corridor. 
+~
+	ToVnum:	2108
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2126
+Name:	Coffin Motel
+Desc:$
+   This is the cheapest place to rent in Tacoma, and verifies, beyond any
+doubt, the saying: "you get what you pay for." A corridor leads off from here,
+ladders go up to the coffins on either side of it. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	2
+X:	5
+Y:	40
+Z:	6.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	2045
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2127
+Name:	A Coffin
+Desc:$
+   There is enough room in here to sleep and nothing else. These budget
+coffins don't even have a monitor to watch the Trid on. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	2
+Y:	1
+Z:	1.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	2126
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2130
+Name:	Space Needle
+Desc:$
+   The Space Needle towers overhead, dwarfing many of the surrounding
+buildings. The dual usage as both an exclusive restaurant and a public
+observation deck brings people of all types here, from families to the movers
+and shakers of the business world. Due to it's iconic status, Lone Star
+patrols are very frequent around this area. 
+~
+Flags:	100
+SecType:	City
+MatrixExit:	0
+Crowd:	5
+Cover:	2
+X:	40
+Y:	40
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32679
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2131
+Name:	Space Needle Lobby
+Desc:$
+   The double doors to the south open up into a large arena, filled with many
+displays related to the history of the Space Needle. The centerpiece is a
+scale model of Downtown Seattle with the Space Needle in the center. The area
+is filled with families, the kids leaning over the railing trying to touch the
+model while their parents attempt to restrain them. The elevators to the
+restaurant and observation deck are to the east. 
+~
+NightDesc:$
+   The double doors to the south open up into a large arena, filled with many
+displays related to the history of the Space Needle. The centerpiece is a
+scale model of Downtown Seattle with the Space Needle in the center. The area
+is nearly empty, only the occasional patron of The Eye of The Needle using the
+elevator to the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	2
+X:	60
+Y:	60
+Z:	10.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	2130
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2132
+Name:	Space Needle Gift Shop
+Desc:$
+   The sheer amount of Space Needle branded merchandise in here is mind
+blowing. Everything from the standard models and t-shirts, to the more
+outlandish Space Needle range of snack foods. The place is full of families,
+trying to placate their invariably screaming children with some sort of cheap
+toy. 
+~
+NightDesc:$
+   The sheer amount of Space Needle branded merchandise in here is mind
+blowing. Everything from the standard models and t-shirts, to the more
+outlandish Space Needle range of snack foods. The gift shop is nearly empty at
+this time of night, though the occasional high flyer visiting the restaurant
+up above will come in to buy something for his family. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	6
+X:	20
+Y:	15
+Z:	4.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	2131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2133
+Name:	Inside the Elevator
+Desc:$
+   Serving both the private restaurant and the public observation deck the
+elevator is tastefully decorated. The walls are a neutral white, kept
+immaculately clean by the staff. Light piano music plays softly in the
+background during the 42 second trip up and down the Space Needle. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	2
+Y:	2
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	0
+	Flags:	0
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#2134
+Name:	Middle of the Observation Deck
+Desc:$
+   This area is solely for waiting for the elevator. The dark red walls have a
+couple of posters, advertising guided tours and upcoming events. To the west
+it is possible to see out the window, giving a taste of what is available. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	0
+X:	5
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	2138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2135
+Name:	Lobby of The Eye of The Needle
+Desc:$
+   This area is barricaded off and a large "UNDER RENOVATION" sign hangs from
+the roof. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#2136
+Name:	East Side of the Observation Deck
+Desc:$
+   A lot of the view to this side is blocked by the Renraku Arcology. It
+stands slightly taller than the Space Needle and is easily one of the most
+imposing structures in the Metroplex. Beyond the arcology it is possible to
+see Council Island in the middle of Lake Washington, and the vast expanse of
+the Redmond Barrens running to the foot of the Cascade Mountains. 
+~
+NightDesc:$
+   A lot of the view to this side is blocked by the Renraku Arcology. It
+stands slightly taller than the Space Needle and is easily one of the most
+imposing structures in the Metroplex. Off in the distance it's possible to see
+the faint flicker of lights eminating from the Redmond Barrens, a stark
+contrast to the tightly packed cluster of lights in Downtown and Bellevue. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	0
+X:	20
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	2137
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2137
+Name:	South Side of the Observation Deck
+Desc:$
+   Even on cloudy days Mt. Rainer is the main focal point on this side. It's
+snow cap tip standing far above the vast plains of ash easily visible below.
+Closer than that planes can be spotted taking off and landing at Sea-Tac
+Airport and the I-5 can be seen running towards downtown Tacoma. 
+~
+NightDesc:$
+   The streets below sparkle in the night, a dazzling array of colour and
+movement. This is in contrast to much further south, where the northern edge
+of the Puyallup Barrens is black as night. Downtown Tacoma can also be seen to
+the southwest, a shining beacon across the Puget Sound. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	0
+X:	10
+Y:	20
+Z:	3.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	2136
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2138
+Name:	West Side of the Observation Deck
+Desc:$
+   The view from this side extends over Puget Sound. On a clear day you can
+even see the Olympic Mountains off in the distance. Look down the I-5 is
+visible, their lights streaming back and forth. The lights of ships can be
+seen far off into the sound, and it's possible to make out the lights on the
+otherside of the Sound, in Native American territory. 
+~
+NightDesc:$
+   The view from this side extends over Puget Sound. On a clear day you can
+even see the Olympic Mountains off in the distance. Look down the I-5 is
+visible, their lights streaming back and forth. The lights of ships can be
+seen far off into the sound, and it's possible to make out the lights on the
+other side of the Sound, in Native American territory. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	0
+X:	20
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	2139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2134
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2137
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2139
+Name:	North Side of the Observation Deck
+Desc:$
+   The twin glass plated skyscrapers of Mitsuhama Towers takes a large degree
+of attention away from the rest of Downtown Seattle. The shipyards further
+north in Everett can clearly be seen along the edge of the Puget Sound, along
+with the huge Federated-Boeing complex, the largest building in the world. 
+~
+NightDesc:$
+   The lights of downtown reflect off of the glass plated Mitsuhama Towers,
+leaving it looks like a successful experiment in modern art. The lights along
+the runways at the Federated-Boeing facility can be seen, along with the huge
+patches of darkness marking their factories. The lights of Vancouver can be
+seen further north, casting a mild glow over the horizon. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	0
+X:	10
+Y:	20
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	2136
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	2138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

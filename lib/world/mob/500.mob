@@ -1,0 +1,76 @@
+#50000
+Keywords:	ucas¿F@der patrol soldier
+Name:	A UCAS Border Patrol soldier
+RoomDesc:$
+A UCAS Border Patrol soldier stands here. 
+
+~
+LookDesc:$
+Dressed in plain black and gray fatigues with the UCAS Border Patrol logo, the
+soldier looks more bored than anything, nodding at cars as they pass and
+asking if they are bringing anything southward that needs to be tariffed.
+He's got a nice big assault rifle, but it rarely sees any use, save for when
+smugglers try to shoot through. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	10000001000000011010
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	7
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+	Ballistic:	3
+	Impact:	2
+[SKILLS]
+	assault rifles:	8
+	brawling:	6
+BREAK
+#50001
+Keywords:	native american soldier salish sidhe border patrol
+Name:	A Salish-Sidhe Border Patrol soldier
+RoomDesc:$
+A Salish-Sidhe Border Patrol soldier guards the border vigilantly. 
+
+~
+LookDesc:$
+Wearing a camoflage BDU uniform, and carrying an assault rifle, this human
+male, of Native American descent, probably either Crow, Makaw, or Salish,
+patrols the border vigilantly, watching for any sign of smugglers on the wrong
+side of the UCAS/Salish-Sidhe border. 
+~
+ArriveMsg:	strolls in from
+LeaveMsg:	strolls
+MobFlags:	10000001000000001010
+AffFlags:	100000001000000000
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	8
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	70
+[SKILLS]
+	brawling:	6
+	assault rifles:	7
+BREAK
+END

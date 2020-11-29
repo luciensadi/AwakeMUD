@@ -1,0 +1,1922 @@
+#60200
+Keywords:	initiate guard
+Name:	An initiate of the School of the Red Dragon
+RoomDesc:$
+An initiate to the School of the Red Dragon stands by the door. 
+
+~
+LookDesc:$
+He's a fairly young, muscularly cut Ork. The robes that he's wearing bear the
+insignia of an eastern dragon. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	8
+	Str:	8
+	Cha:	5
+	Int:	6
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Ballistic:	4
+	Impact:	4
+[SKILLS]
+	brawling:	8
+	:	2
+	:	2
+	:	2
+BREAK
+#60201
+Keywords:	dias braveheart swordsman fencer
+Name:	Dias Braveheart
+RoomDesc:$
+A skilled swordsman circles his opponent, saber in hand. 
+
+~
+LookDesc:$
+Floppy blonde hair is draped over his eyes, but this swordsman's attention
+lies on his opponent, and the movement of their blade. The fencer moves with
+blinding speed, and it's difficult to follow his fluid, swift movement. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pierce
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	9
+	Str:	8
+	Cha:	5
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	50
+	Ballistic:	5
+	Impact:	4
+[SKILLS]
+	edged weapons:	9
+BREAK
+#60202
+Keywords:	agile troll asuka 
+Name:	Asuka
+RoomDesc:$
+An agile looking troll hefts a wicked halberd, dueling his opponent. 
+
+~
+LookDesc:$
+This troll bears a few Asian physical characteristics. His trusty halberd is
+in his grip, and despite his bulky frame, he looks more than capable of moving
+at lightning speed. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	10
+	Str:	11
+	Cha:	5
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	200
+	Ballistic:	5
+	Impact:	4
+[SKILLS]
+	pole arms:	9
+BREAK
+#60203
+Keywords:	Lee Asian man jeet kune do
+Name:	Lee
+RoomDesc:$
+A small Asian man leads a few students in basic Jeet Kune Do drills. 
+
+~
+LookDesc:$
+Lee is an expert in the Jeet Kune Do art, or the "Way of the Intercepting
+Fist". The fighting style consists of fluid body motions that allow the
+practitioner to instantaneously react to their opponent's moves. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	12
+	Str:	11
+	Cha:	5
+	Int:	8
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	163
+	Weight:	60
+	Cash:	100
+[SKILLS]
+	brawling:	12
+	whips & flails:	8
+	athletics:	8
+BREAK
+#60204
+Keywords:	student
+Name:	A Jeet Kune Do student
+RoomDesc:$
+A student practices a few Jeet Kune Do moves against a dummy. 
+
+~
+LookDesc:$
+He's dressed in the robes of the School of the Red Dragon, and moves with
+fluid grace and agility. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	7
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	brawling:	8
+BREAK
+#60205
+Keywords:	saori woman hakama
+Name:	Saori
+RoomDesc:$
+A woman in a blue hakama robe is flinging oncoming attackers left and right. 
+
+~
+LookDesc:$
+This young Asian woman in her mid twenties is twisting the arms of people
+twice her size, flinging them fifteen feet into the air effortlessly. Her
+speed, grace, and skill at intercepting incoming attacks is typical of her
+Aikido training. Just watching her fight is like watching a lava lamp: her
+fluid motions are entrancing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	6
+	Cha:	7
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	40
+	Ballistic:	4
+	Impact:	3
+[SKILLS]
+	brawling:	9
+	:	3
+	:	2
+BREAK
+#60206
+Keywords:	sun fu chinese man drunken boxer
+Name:	Sun Fu
+RoomDesc:$
+A Chinese man is practicing a Drunken Boxing form. 
+
+~
+LookDesc:$
+His movements are like flowing water, and give off the impression that he's
+simply wandering about in a drunken stupor. Quite the contrary, Sun Fu's
+random movements are designed to confuse and distract the opponent to leave
+them open for a sharp blow from the ground or sides. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+	brawling:	9
+	:	2
+	:	2
+BREAK
+#60207
+Keywords:	hakim black man
+Name:	Hakim
+RoomDesc:$
+A tall black man stands in front of his class, leading his students in some
+drills. 
+
+~
+LookDesc:$
+A tall black man with poofy hair and a quasi-beard. He looks like he could've
+made a career in professional basketball, but his extreme height gives him a
+major advantage in martial arts. His Mantis-style Kung Fu is a force to be
+reckoned with. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	9
+	Str:	8
+	Cha:	3
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	260
+	Weight:	90
+	Ballistic:	5
+	Impact:	4
+[SKILLS]
+	brawling:	9
+BREAK
+#60208
+Keywords:	old man koshira misuro tien hsueh
+Name:	Koshira Misuro
+RoomDesc:$
+An old man draped in a flowing robe strikes at various vital points marked on
+a practice dummy. 
+
+~
+LookDesc:$
+A skilled artist of the Tien-Hsueh fighting style, Koshira Misuro, through
+extensive knowledge of the human anatomy and rigorous practice, is capable of
+killing his opponents with a single strike to a vital portion of the
+(meta)human body. So precise is his knowledge that he can kill with a single
+touch of the finger.Not merely kill instantly, but kill inevitably, so the
+victim will die hours, or even days, after the injury.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	5
+	Int:	9
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	40
+	Ballistic:	5
+	Impact:	4
+[SKILLS]
+	brawling:	8
+	:	4
+BREAK
+#60209
+Keywords:	attractive woman lynn wong
+Name:	Lynn Wong
+RoomDesc:$
+An attractive woman in a red hakama leads some students in Jujitsu drills. 
+
+~
+LookDesc:$
+Lynn Wong is half Japanese, half white. Silky brunette hair tops off her
+already attractive physical features. She's an expert practitioner of Jujitsu,
+a martial art style that favors practicality over anything else. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	9
+	Str:	6
+	Cha:	8
+	Int:	7
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	169
+	Weight:	45
+	Ballistic:	5
+	Impact:	4
+[SKILLS]
+	brawling:	9
+	athletics:	7
+	:	2
+	:	2
+BREAK
+#60210
+Keywords:	tarrago hispanic man
+Name:	Tarrago
+RoomDesc:$
+A Hispanic man is at the center of the ring, resting from his last opponent. 
+
+~
+LookDesc:$
+Tarrago has demonstrated his mastery of Muay Thai kick boxing many times, and
+has won quite a few world championships. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	12
+	Str:	9
+	Cha:	4
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	5
+	Impact:	4
+[SKILLS]
+	brawling:	10
+	:	3
+BREAK
+#60211
+Keywords:	geist elven warrior
+Name:	Geist
+RoomDesc:$
+An Elven warrior blends into the nearby surroundings with ease. 
+
+~
+LookDesc:$
+The elven man before you has tousled, white hair that has been haphazardly
+combed. A fair amount of stubble grows from his chin. Playful eyes observe the
+surroundings, taking in every miniscule detail. A thin, cut musculature is
+obscured by a semi-formal outfit. He moves with a swift, eloquent grace
+unmatched by any normal man. His harmony with nature suggests that he
+practices Carromeleg, a secretive fighting style known to a few Elven
+cultures.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	11000001000000010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	10
+	Str:	7
+	Cha:	8
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	50
+	Ballistic:	3
+	Impact:	2
+[SKILLS]
+	brawling:	10
+	:	2
+BREAK
+#60212
+Keywords:	blur toshisugu ninja
+Name:	Toshisugu
+RoomDesc:$
+A blur of movement in the shadows catches your eye. 
+
+~
+LookDesc:$
+Toshisugu is a Ninjitsu expert, but not like the stereotypical ninjas you see
+on the trid. He's dressed in just a casual black outfit, but is more than
+capable of staying hidden and out of sight. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	11000001000000010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	10
+	Str:	8
+	Cha:	5
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	50
+	Ballistic:	3
+	Impact:	2
+[SKILLS]
+	edged weapons:	10
+BREAK
+#60213
+Keywords:	old man kasama wise
+Name:	Kasama the Wise
+RoomDesc:$
+An old man sits at the base of the fountain, leading the students in
+meditation exercises. 
+
+~
+LookDesc:$
+A wizened old man, his old, wrinkled face looks like it's seen countless years
+of turmoil and traumatic events. He looks willing to part with his
+near-infinite wisdom, however. Maybe you could learn something from him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	50
+[SKILLS]
+BREAK
+#60215
+Keywords:	wu jen asian man blacksmith
+Name:	Wu Jen the Blacksmith
+RoomDesc:$
+An old Asian man is hammering away at a smoldering piece of metal. 
+
+~
+LookDesc:$
+An elderly Asian man works at the kiln and the smithy, producing some very
+fine weapons for the students of the dojo to use. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	50
+[SKILLS]
+BREAK
+#60216
+Keywords:	stanley chef chinese man
+Name:	Stanley the Chef
+RoomDesc:$
+A young Chinese man is frying some food over the stove. 
+
+~
+LookDesc:$
+He must be the chef that the School hires to prepare their meals. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	90
+[SKILLS]
+BREAK
+#60217
+Keywords:	amerindian eagle rock man
+Name:	Eagle Rock
+RoomDesc:$
+An AmerIndian man sits at the center of the room in meditation. 
+
+~
+LookDesc:$
+One of the most skilled teachers in the School of the Red Dragon, Eagle Rock
+is an extremely skilled Adepts with a great number of physical feats at his
+disposal. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	10
+	Str:	10
+	Cha:	5
+	Int:	8
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+	pole arms:	10
+	:	3
+	:	2
+	:	2
+BREAK
+#60218
+Keywords:	vincent templar cybered man
+Name:	Vincent Templar
+RoomDesc:$
+A heavily cybered man in black clothing is not too pleased with your
+intrusion. 
+
+~
+LookDesc:$
+He seemed to have been in deep meditation before you walked in. His heavily
+cybered body rests in the middle of the room, with his hands over a sheathed
+scimitar. Coal black eyes return your gaze- they make it difficult to stare
+directly into his eyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	9
+	Str:	8
+	Cha:	3
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	edged weapons:	10
+	throwing weapons:	10
+BREAK
+#60219
+Keywords:	xian zhong beautiful woman
+Name:	Xian Zhong
+RoomDesc:$
+A seductively beautiful woman in an Oriental dress looks at you with interest.
+
+~
+LookDesc:$
+The beautiful Asian woman before you is in her late twenties, and is quite
+possibly one of the most lethal martial artists in the world. She's started
+the School of the Red Dragon to foster the development of martial arts.
+Learning under her is an incredibly rare privilege, reserved for the best of
+the best. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	12
+	Str:	10
+	Cha:	8
+	Int:	9
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	45
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	brawling:	11
+	:	3
+	:	3
+	:	3
+BREAK
+#60230
+Keywords:	female club patron animal furs dancer
+Name:	a female club patron dressed in animal furs
+RoomDesc:$
+A female club patron dressed in animal furs dances wildly here. 
+
+~
+LookDesc:$
+This female club patron is dressed to the nines in various animal furs, and
+shes dancing like theres no tomorrow in sight, apparently caught up in the
+beastial atmosphere hanging in the air here. Her features hint at an Native
+American ancestry, but its hard to tell since she won't stand still long
+enough to offer a good look. Her eyes are wild and filled with energy, her
+primal urges are fueling her tenacious dance moves. 
+~
+ArriveMsg:	dances in from
+LeaveMsg:	dances off to the
+MobFlags:	101000010001100
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	5
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	45
+[SKILLS]
+	brawling:	4
+	athletics:	5
+BREAK
+#60231
+Keywords:	clubber club savage male patron
+Name:	a savage looking male club patron
+RoomDesc:$
+A savage looking male club patron grooves to the beat here. 
+
+~
+LookDesc:$
+He seems to be a bit more stoic in appearance and demeanor than most of the
+female club-goers, but that doesn't mean hes afraid to bust a move when the
+opportunity arises, but in the meanwhile he seems content with simply grooving
+to the beats resounding about the club around him. Much like the others here,
+he seems to be dressed in an assortment of animal furs, some more significant
+and meaningful than others. His heritage is a bit murky from a simple glance,
+and its hard to tell where exactly hes from. His skin has a darker bronze
+colour to it, which hints towards perhaps a Native American ancestry, but his
+facial features give the impression hes from the territories that lie further
+to the south. 
+~
+ArriveMsg:	grooves in from
+LeaveMsg:	grooves to the beat as he leaves
+MobFlags:	101000010001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	4
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	5
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	42
+[SKILLS]
+	brawling:	5
+	athletics:	5
+BREAK
+#60232
+Keywords:	wakyambi lanky ceremonial garbs cook
+Name:	a lanky wakyambi dressed in ceremonial garbs
+RoomDesc:$
+A lanky wakyambi dressed in ceremonial garbs tends the grill here. 
+
+~
+LookDesc:$
+This lanky wakyambi is tending the grill skillfully, taking care not to burn
+or overcook any of the pieces, which he rarely ever does. Hes dressed in an
+African ceremonial garb, most of which consists of hand-sewn garments, the
+occasional piece of jewelry crafted from seashells and other random bits. He
+has his sleeves rolled up just so there aren't any mishaps while hes cooking,
+and his attention only lifts from the grill before him to take orders or hand
+off completed dishes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000100000000001010
+AffFlags:	0
+Race:	Wakyambi
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	7
+	Mag:	8
+[POINTS]
+	Height:	240
+	Weight:	90
+[SKILLS]
+	brawling:	6
+BREAK
+#60233
+Keywords:	woman native american good looking bartender
+Name:	a fairly good looking Native American woman
+RoomDesc:$
+A fairly good looking Native American woman serves up drinks at the bar. 
+
+~
+LookDesc:$
+This Native American woman is fairly petite, and by most standards rather good
+looking, with a pearly white smile thats enough to make most patrons hearts
+melt and their wallets quickly emptied. She serves up drinks in a manner that
+suggests shes no stranger to tending bars, and occasionally brushes her long,
+thick black hair back past her shoulders to keep it from getting in the way.
+She seems to be wearing a buckskin dress, and looks much akin to a storybook
+picture of Pocahontas. She wears quite a deal of turquoise inlaid jewelry,
+including a thick beaded necklace of it, whose pattern is occasionally
+interupted by a piece of carved, bleach white sea shell and animal bone. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000100000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	160
+	Weight:	60
+[SKILLS]
+	brawling:	6
+BREAK
+#60234
+Keywords:	band tribal various race ethnicities
+Name:	a tribal band of various race and ethnicities
+RoomDesc:$
+A tribal band of various race and ethnicities jams out on-stage here. 
+
+~
+LookDesc:$
+This mix-and-match tribal band consists of various races and ethnicities from
+all parts of the globe, and the only real thing in common they have is their
+tribal nature. A Sinsearach elf is getting down on a reed flute, while a
+skinny wakyambi man dressed in similar garbs as the cook nearby bangs away on
+a set of animal-skin drums. An ork from the tribal lands seems to be doing
+most of the singing, his tusks polished a bright white, which add a depth to
+his syllables, making his harmony unique as he matches pace with the other
+members. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	60
+[SKILLS]
+	brawling:	6
+BREAK
+#60235
+Keywords:	Speaks-with-Many Native American Indian old man
+Name:	Speaks-with-Many
+RoomDesc:$
+An old Native American man sits cross-legged here behind his desk. 
+
+~
+LookDesc:$
+Speaks-with-Many is an old Native American man who came to Seattle from the
+Amerind lands, and has currently taken interest in the club scene,
+particularly with the shamanic natives who often visit this place from
+surrounding territories. His eyes glow with a knowledge far beyond that of any
+normal person, and even though they are dimmed with the white cataracts of
+age, it is plain to see he is a very well learned man. His name is well
+suited, and many around these parts see him as a tribal elder, some of whom
+come from far and wide to ask for his advice. He speaks bluntly, and never
+seems to shy away from telling anyone what they need to hear, reguardless of
+how they may take his words, but he is also polite whenever possible. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	10
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	65
+	Bank:	25
+[SKILLS]
+	brawling:	6
+	conjuring:	8
+BREAK
+#60236
+Keywords:	fox red white tufted
+Name:	a large ^rred^N fox with ^Wwhite^N tufted fur
+RoomDesc:$
+a large ^rred^N fox with ^Wwhite^N tufted fur is inspecting the area here. 
+
+~
+LookDesc:$
+Its a plain ^rred^N fox, aside from the fact its much larger than any other fox
+you've seen before. It bears ^Wwhite^N tufts bordered with thin ^Lblack bands^N atop
+its triangular ears and the tip of its tail, while its paws are solid ^Lblack^N in
+colour below the ankles. Its ears are perked high, as if having caught a sound
+of interest, and it seems to be inspecting the area atop the roof vigilantly.
+~
+ArriveMsg:	slinks in from
+LeaveMsg:	slinks off to the
+MobFlags:	101100010001100
+AffFlags:	0
+Race:	Undefined
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	2
+	Cha:	5
+	Int:	3
+	Wil:	3
+	Mag:	8
+[POINTS]
+	Height:	40
+	Weight:	30
+[SKILLS]
+	brawling:	6
+	sorcery:	8
+BREAK
+#60237
+Keywords:	bear grizzly massive brown-furred
+Name:	a massive ^ybrown^N-^yfurred^N grizzly bear
+RoomDesc:$
+A massive ^ybrown^N-^yfurred^N grizzly bear lumbers through the area. 
+
+~
+LookDesc:$
+This grizzly is simply massive, it makes even the largest of trolls look like
+ragdolls. Rough and weathered ^ybrown^N fur  covers it from head to claw, whose
+somewhat fluffy nature beguiles the tank-like physique and muscle structure
+beneath, which is hinted to at its large, thick shoulders as it moves around.
+He mosies along like he hasn't a worry in the world, then again, why would he
+be worried about anything? 
+~
+ArriveMsg:	lumbers in from
+LeaveMsg:	lumbers off to the
+MobFlags:	101100000001100
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	7
+	Str:	13
+	Cha:	5
+	Int:	3
+	Wil:	3
+	Mag:	8
+[POINTS]
+	Height:	280
+	Weight:	300
+	Ballistic:	1
+[SKILLS]
+	brawling:	7
+BREAK
+#60238
+Keywords:	leopard tawny furred spotted black
+Name:	a sleek, tawny furred ^Lspotted black^N leopard
+RoomDesc:$
+a sleek, tawny furred ^Lspotted black^N leopard stalks around here. 
+
+~
+LookDesc:$
+This sleek melanistic ^Lblack^N panther has spotted fur of faint, dark ^ygolden^N
+rings, which are barely visible until one is upclose and personal, which is
+probably too close by any account. Its a very large specimen, and it seems
+very capable of defending itself should the need arise. Its almost certain
+that if it didn't want you to see it, you simply wouldn't, and if it felt you
+were a worth item of prey, you would never see it coming until it was already
+too late. 
+~
+ArriveMsg:	stalks in from
+LeaveMsg:	stalks off to the
+MobFlags:	101100000001100
+AffFlags:	1000000000000000
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	9
+	Cha:	5
+	Int:	2
+	Wil:	2
+	Mag:	8
+[POINTS]
+	Height:	140
+	Weight:	120
+[SKILLS]
+	brawling:	7
+	stealth:	8
+BREAK
+#60239
+Keywords:	Clothed-in-New-Fame tidy native american suit
+Name:	Clothed-in-New-Fame
+RoomDesc:$
+A tidy Native American in a slick suit is seated back in a private booth here.
+
+~
+LookDesc:$
+This immaculately clean and tidy Native American man has finely combed and
+kempt dark black hair, chic sunglasses, a sweetly polished time piece upon his
+wrist and is decked out in one of the finest suits you've ever laid eyes upon.
+Its safe to say hes been doing quite well for himself, and from it he has
+gained a new moniker which he goes by. Clothed-in-New-Fame.
+Clothed-in-New-Fame is a believer that his people can grow and prosper in the
+modern world, while still clinging to their central beliefs and
+understandings, but, as with all things in this modern world, wealth in an
+essential. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#60240
+Keywords:	ork stocky polished tusks
+Name:	A stocky ork with brightly polished tusks
+RoomDesc:$
+A stocky ork with brightly polished tusks stands here, arms crossed. 
+
+~
+LookDesc:$
+This ork is quite the specimen, and his physical prowess seems cut from the
+finest cloth. His physique itself is a bit out of proportion, then again,
+which orks isn't? Well-muscled arms and neck give the impression he certainly
+knows how to crack a skull or two, but for the most part his demeanor is
+relaxed, calm, and gives off an overall peaceful quality. He speaks softly and
+carries a big stick, and while his speech may be a bit hard to understand due
+to his proudly polished tusks, the stick almost never has a problem with
+miscommunication. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000100000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	8
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	300
+	Weight:	110
+	Impact:	1
+	Cash:	80
+[SKILLS]
+	clubs:	6
+	brawling:	6
+BREAK
+#60250
+Keywords:	Mugsy Phillipe Vizzini short slick suit cigar mafiaso mobster
+Name:	Phillipe "Mugsy" Vizzini
+RoomDesc:$
+A rather short man sporting a slick suit and a cigar sits behind a desk here.
+
+~
+LookDesc:$
+The first thing you notice is how extremely short he is, and the second would
+be the slick suit hes sporting, for a little guy hes got some style. He has
+somewhat broad shoulders, but overall his stature is diminutive at best, which
+is highlighted even more as he sits behind the massive wooden desk set up
+here. A fairly large cigar is always present in his lips, and he never even
+removes it, even when hes speaking, and the ash on it continues to grow
+treacherously long in the meanwhile. All in all, the best way to describe him
+would be... a miniature mobster. Word on the street is that he has ties to the
+Genovese family, and in turn is a made man. It would be wise not to tangle
+with this little guy, for your own safety. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	40
+[SKILLS]
+	brawling:	6
+BREAK
+#60251
+Keywords:	Rocky goon lackey massive
+Name:	Rocky the Goon
+RoomDesc:$
+A simply massive goon lackey stands beside the desk here. 
+
+~
+LookDesc:$
+This goon is simply massive, hes almost as wide as he is tall, and its safe to
+say even though he looks pudgy around the waist, that it all can't be fat. He
+doesn't look extremely bright, and the look in his eyes gives the impression
+that the lights are on, but nobody is home. But, his job isn't to think, its
+to bludgeon any foolish patrons or intruders to death with his hamhock sized
+fists. He wears a brown suit that isn't all that stylish, and his jacket looks
+to be atleast three sizes too small for his frame, which is threatening to rip
+to shreds under the stress of the mass it conceals. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	12
+	Cha:	2
+	Int:	2
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	290
+	Weight:	230
+[SKILLS]
+	brawling:	10
+BREAK
+#60252
+Keywords:	Shakey the Toad squat little man beat-up suit
+Name:	Shakey the Toad
+RoomDesc:$
+A squat little man in a beat-up suit sits on the mattress here. 
+
+~
+LookDesc:$
+This squat little fellow is better known by his nickname, Shakey the Toad,
+which is well deserved if you take more than five seconds to talk to him. Hes
+rather grimey looking, and quite smarmy in appearance, not to mention his
+beat-down 'suit' (if it can even be called that at this point) could use a
+serious wash, or simply lit on fire, either would be a massive improvement. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	1
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+[SKILLS]
+BREAK
+#60253
+Keywords:	Dante The Spook Menendez extremely large man bouncer
+Name:	Dante "The Spook" Menendez
+RoomDesc:$
+An extremely large bouncer stands behind a velvet rope here. 
+
+~
+LookDesc:$
+Before you stands a very, very large bouncer, who is standing behind a velvet
+rope, which seems to be keeping most foot traffic from passing. His job is
+simple, which is to keep nosey people out of the private area in the back of
+the club, which hes very adept at. Dante "The Spook" Menendez earned his
+nickname not just due to his size, but the fact that he imposes such a threat
+that most people simply back down rather than risk a bout of fisticuffs (or
+worse) with him. He speaks very little, and instead prefers letting his body
+language do all the talking... which, at the moment is saying, "Step past this
+rope, and see what happens, chump." 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	6
+	Str:	12
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	220
+	Ballistic:	4
+	Impact:	4
+	Cash:	85
+	Bank:	55
+[SKILLS]
+	brawling:	8
+	pistols:	8
+	clubs:	8
+BREAK
+#60254
+Keywords:	Sonny the brick bouncer well-muscled club
+Name:	Sonny the Brick
+RoomDesc:$
+A well-muscled club bouncer stands here, weeding out the chumps. 
+
+~
+LookDesc:$
+Sonny the Brick is the bouncer for The Pharoah nightclub, that much is
+obvious. He is tasked with the duty of standing outfront, looking tough, and
+weeding out the wannabes in line from the worthwhile patrons. He is a bit
+swarthy in appearance, with dark hair and a jaw like a cinderblock, not to
+mention he has a set of seriously dangerous looking mitts. While he may not be
+the most charismatic of the employees here, hes more than capable of being
+persuasive, especially if it involves breaking someones face. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Cash:	75
+	Bank:	25
+[SKILLS]
+	brawling:	7
+BREAK
+#60255
+Keywords:	bartender tender bar attractive female
+Name:	A rather attractive female bartender
+RoomDesc:$
+A rather attractive female bartender serves drinks from behind the bar. 
+
+~
+LookDesc:$
+Shes rather attractive, but then again, what half-decent female bartenders
+aren't? It seems to be a prerequisite for nightclubs these days. She wears
+somewhat revealing clothing, without seeming too raunchy, or at the least, not
+as raunchy as most of the other female patrons that dance their way around the
+establishment. She whips together drinks at a fast past, and seems very adept
+at tending in general. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+BREAK
+#60256
+Keywords:	bartender tender bar attractive female
+Name:	A rather attractive female bartender
+RoomDesc:$
+A rather attractive female bartender serves drinks from behind the bar. 
+
+~
+LookDesc:$
+Shes rather attractive, but then again, what half-decent female bartenders
+aren't? It seems to be a prerequisite for nightclubs these days. She wears
+somewhat revealing clothing, without seeming too raunchy, or at the least, not
+as raunchy as most of the other female patrons that dance their way around the
+establishment. She whips together drinks at a fast past, and seems very adept
+at tending in general. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+BREAK
+#60257
+Keywords:	bartender tender bar good looking male
+Name:	A fairly good looking male bartender
+RoomDesc:$
+A fairly good looking male bartender whips up drinks behind the bar. 
+
+~
+LookDesc:$
+Hes fairly good looking, as far as men go, probably better looking than most
+of the other male patrons that visit the establishment. It seems to be working
+in his favour, because most of the rauncy female patrons are flocking like
+geese to him to buy drinks and chat him up in their drunken stupor. Its safe
+to assume he receives quite a few tips while on duty, not to mention a fair
+amount of digits. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+BREAK
+#60258
+Keywords:	bartender tender bar good looking male
+Name:	A fairly good looking male bartender
+RoomDesc:$
+A fairly good looking male bartender whips up drinks behind the bar. 
+
+~
+LookDesc:$
+Hes fairly good looking, as far as men go, probably better looking than most
+of the other male patrons that visit the establishment. It seems to be working
+in his favour, because most of the rauncy female patrons are flocking like
+geese to him to buy drinks and chat him up in their drunken stupor. Its safe
+to assume he receives quite a few tips while on duty, not to mention a fair
+amount of digits. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+BREAK
+#60259
+Keywords:	female clubber raunchy
+Name:	a raunchy female clubber
+RoomDesc:$
+A raunchy female clubber dances around wildly here. 
+
+~
+LookDesc:$
+Shes not particularly drunk, but what she lacks in that department she more
+than makes up for in the fact that shes downright raunchy. Wether its her
+clothes or her personality, both are working off of equally low standards. The
+only real saving grace is the fact that shes sober enough to actually dance
+somewhat well, unlike most of the other clubbers, who seem to think flailing
+their limbs wildly in a siezure-like manner as they shuffle around, atleast
+shes got some rhythm in her movements. 
+~
+ArriveMsg:	dances her way in from
+LeaveMsg:	dances off to the
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	35
+	Bank:	25
+[SKILLS]
+	brawling:	5
+BREAK
+#60260
+Keywords:	female clubber wasted flailing
+Name:	a wasted female clubber
+RoomDesc:$
+A wasted female clubber practically flails as she dances here. 
+
+~
+LookDesc:$
+Its doubtful that she even knows where she is at the moment, since the only
+thing she seems to be interested in is flailing around wildly as she dances,
+if it can even be called dancing at this point. A prime target for sober and
+smashed male patrons alike, since its more than easy to tell she won't have
+much problems with the selection of personality (or lack of) pertaining to the
+would-be swooners that want to charm their way into her panties, which, shes
+most likely not wearing. 
+~
+ArriveMsg:	flails in from
+LeaveMsg:	flails off to the
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	3
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	60
+	Cash:	25
+	Bank:	20
+[SKILLS]
+	brawling:	4
+BREAK
+#60261
+Keywords:	male clubber club patron
+Name:	a sober male club patron
+RoomDesc:$
+A sober male club patron tries to pick up chicks here. 
+
+~
+LookDesc:$
+Hes not that bad looking, but more importantly, hes not as smashed as most of
+the other patrons that are currently meandering around the establishment.
+Since hes not hindered by beer goggles, he can apt'ly pick and choose his prey
+as he dances through the crowd, keeping an eye out for the prettiest (and
+probably drunkest) of the female clubbers so he can put his sober charm to
+good work. 
+~
+ArriveMsg:	slides in from
+LeaveMsg:	slides off to the
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	45
+	Bank:	30
+[SKILLS]
+	brawling:	5
+BREAK
+#60262
+Keywords:	wing-man wing man lost
+Name:	a lost wing-man
+RoomDesc:$
+A lost wing-man accepts his fate and hits on the ugly chicks. 
+
+~
+LookDesc:$
+Someone seems to have lost their wing-man, who is an essential part of the
+club scene for many male club-goers. This pudgy guy isn't that great looking,
+but hes never shy when it comes to showing off his dance moves. His role in
+the nightly club routine is the keep the pretty chicks ugly friend busy while
+his friend macks on her, although he doesn't seem horribly upset at getting
+the short end of the stick, atleast he'll be getting laid. 
+~
+ArriveMsg:	ambles in from
+LeaveMsg:	ambles off to the
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	45
+	Bank:	25
+[SKILLS]
+	brawling:	6
+BREAK
+#60263
+Keywords:	man business busy
+Name:	a 'business' man
+RoomDesc:$
+A 'business' man is currently using this booth.. don't ask. 
+
+~
+LookDesc:$
+Well, hes a 'business' man, but it may not be the kind of business you're
+expecting to see. Seriously, do you have to have it spelled out for you? Hes
+sitting in a back room, paying good money to watch a dame dance behind a glass
+divider... Do the math. Oh, so now you get what kinda business hes up to?
+Congratulations, that mental image is sure to burn itself into the back of
+your brain and stay there for quite some time. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+	Cash:	55
+[SKILLS]
+	brawling:	6
+BREAK
+#60264
+Keywords:	pudgy business man
+Name:	a pudgy business man
+RoomDesc:$
+A pudgy business man is seated on the mattress here. 
+
+~
+LookDesc:$
+This pudgy business man is wearing a decent suit, or at least at this point,
+part of it, thankfully hes still got his pants and undershirt on. Hes seated
+on the ragged mattress offered here, and is intently watching his date for the
+night dance for him. Hes practically zoned out by this point as his gaze
+remains locked upon her, all kinds of ideas going through his mind, the most
+important of all being what he has in store when his paid date is done dancing
+and is ready to get down to some real business. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	6
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Cash:	80
+	Bank:	20
+[SKILLS]
+	brawling:	7
+BREAK
+#60265
+Keywords:	female skanky employee dancer seductive
+Name:	a somewhat skanky female 'employee'
+RoomDesc:$
+A somewhat skanky female 'employee' dances seductively here. 
+
+~
+LookDesc:$
+Shes dressed in what looks to be lingerie, albeit the cheap kind you buy for
+your mistress on the side when you're planning a trip to a cheap hotel when
+the misses is out of town. Shes in the process of dancing seductively for her
+client, whos obviously paid for her time, and its pretty plain to see that her
+'dancing' isn't the only thing thats been paid for. Haven't you ever heard of
+privacy? Damn. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	45
+[SKILLS]
+	brawling:	4
+BREAK
+#60266
+Keywords:	hooker ork skeezy missing teeth prostitute
+Name:	a skeezy ork hooker thats missing quite a few teeth
+RoomDesc:$
+An ork hooker thats missing teeth looks for clientele here. 
+
+~
+LookDesc:$
+Wow. Not exactly a prime cut of meat here. Shes probably the ugliest ork
+you've ever laid eyes upon, reguardless of gender. One of her tusks is broken
+and most of her other teeth seem to be missing, while her face looks like it
+went twelve rounds with a heavily cybered Mike Tyson in his prime. Shes
+wearing some very revealing clothes, way... way.. way too revealing for
+someone of her... caliber. She offers passerbys her best smile, or rather,
+flashes her gums and good tusk at them and shows a little leg, which is more
+than enough to make the bile raise in any onlookers throat. 
+~
+ArriveMsg:	lumbers in from
+LeaveMsg:	lumbers off to the
+MobFlags:	1010
+AffFlags:	0
+Race:	Ork
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	8
+	Cha:	1
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+[SKILLS]
+	brawling:	4
+BREAK
+#60267
+Keywords:	man paranoid trenchcoat impatiently
+Name:	a paranoid looking man in a trenchcoat
+RoomDesc:$
+A paranoid looking man in a trenchcoat waits impatiently here. 
+
+~
+LookDesc:$
+He's decked out in a dull grey trenchcoat and dark sunglasses and looks
+extremely uneasy, his gaze perpetually moving from side to side as he takes in
+his surroundings. Hes obviously waiting for something, but its hard to tell
+what, but by the location and the scenery, its probably safe to say its
+something unsavory. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	70
+[SKILLS]
+	brawling:	4
+BREAK
+#60268
+Keywords:	fat italian mafia man
+Name:	a fat italian man
+RoomDesc:$
+A fat italian man sits here, eating a spaghetti dinner. 
+
+~
+LookDesc:$
+This italian man is about as tall as he is wide, and is sweating profusely,
+since apparently his girth made simple tasks like eating a physical effort.
+Hes dressed in a fairly nice suit, although hes missing his jacket and has his
+undershirt unbuttoned to help cool himself off. Hes currently digging into a
+spaghetti and meatball dinner, almost completely unaware of his surroundings
+as he enjoys his meal. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Ballistic:	5
+	Impact:	5
+	Cash:	350
+[SKILLS]
+	brawling:	6
+BREAK
+#60269
+Keywords:	bodyguard guard suit mafia
+Name:	a bodyguard dressed in a black suit
+RoomDesc:$
+A bodyguard dressed in a black suit stands at attention here. 
+
+~
+LookDesc:$
+Hes tall, for starters, and sports a tidy black suit along with a pair of dark
+sunglasses, making the attention of his gaze hard to determine. Hes obviously
+a bodyguard, and doing his best impression of a secret service agent, complete
+with the silent, stoic body posturing and demeanor. Hes also well armed, so be
+careful. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	80
+	Ballistic:	7
+	Impact:	7
+	Cash:	125
+[SKILLS]
+	brawling:	7
+	sub-machine guns:	7
+	shotguns:	7
+	clubs:	7
+BREAK
+#60270
+Keywords:	bodyguard guard suit mafia
+Name:	a bodyguard dressed in a black suit
+RoomDesc:$
+A bodyguard dressed in a black suit stands at attention here. 
+
+~
+LookDesc:$
+Hes tall, for starters, and sports a tidy black suit along with a pair of dark
+sunglasses, making the attention of his gaze hard to determine. Hes obviously
+a bodyguard, and doing his best impression of a secret service agent, complete
+with the silent, stoic body posturing and demeanor. Hes also well armed, so be
+careful. 
+~
+ArriveMsg:	enters from
+LeaveMsg:	
+MobFlags:	10000001000000101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	80
+	Ballistic:	7
+	Impact:	7
+	Cash:	125
+[SKILLS]
+	brawling:	7
+	sub-machine guns:	7
+	shotguns:	7
+	clubs:	7
+BREAK
+END

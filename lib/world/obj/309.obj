@@ -1,0 +1,35 @@
+#30901
+Keywords:	ruger d4-880/s d4 880 rifle specialized
+Name:	A Ruger D4-880/S Rifle
+RoomDesc:$
+A specialized high-powered semiautomatic rifle sits here.~
+LookDesc:$
+A large calibre rifle for taking out large humanoid targets. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	16
+	Cost:	4800
+	AvailTN:	14
+	AvailDay:	30.00
+	LegalNum:	2
+	LegalCode:	9
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val3:	12
+	Val4:	12
+	Val5:	10
+	Val6:	10
+	Val7:	9154
+	Val8:	653
+	Val9:	630
+	Val10:	4
+BREAK
+END

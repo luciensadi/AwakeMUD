@@ -1,0 +1,646 @@
+#37500
+Name:	Entrance to Jameson's Mechanics
+Desc:$
+   You stand at the entrance of Jameson's Mechanics, one of the most popular
+mechanics in Tacoma. A multitude of working and semi-working cars are strewn
+around the front lot, a few shells completing the scene. The smell of petrol
+and oil hangs heavy in the air. Beside the garage, to the east, you notice a
+shopfront, selling spare parts. 
+~
+Flags:	110000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	37501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	37502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2551
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37501
+Name:	The Workshop
+Desc:$
+   The sound of powertools and the smell of oil overpowers you as you walk
+into this crowded workshop. By the looks of the work done on some vehicles,
+this place isn't entirely above board. It feels about 15 degrees hotter in
+here than outside. A middle-aged human seems to be directing the mechanics
+about their chores. 
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	37500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37502
+Name:	Jameson's Spares
+Desc:$
+   This grungy area is dirty, grimy, and smells of motor oil. While a small
+portion of the room is dedicated to new parts, most of them are at least
+second-hand - in fact, many of them look as if they were just ripped out of
+vehicles and tossed in here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	37500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37503
+Name:	Denny Way Tires
+Desc:$
+   Tires line the walls, and sit in stands around the brightly lit room. This
+place is class, offering every kind of tire known to man. The sales assistant,
+dressed in a dashing blue and yellow uniform looks more than eager to cater to
+your every tire related whim. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	30589
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37504
+Name:	Vinnie's DroneMart Storage
+Desc:$
+   Unconnected room where drones for sale in Vinnie's Dronemart are stored 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#37505
+Name:	Vinnie's Drone Mart
+Desc:$
+   This used to be the hideout of Vincent, the famed credstick whore. After
+his arrest and subsequent murder it was taken over by a small ork rigger going
+by the name Toothy. He has made a lot of changes in his time here, turning
+this place into a bustling little shopfront, frequented by riggers of all
+sorts, still he manages to retain a low profile. A small handpainted sign
+hangs just inside the entrance, "Vinnie's Drone Mart", he must have named it
+in memory of the famed cracker. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door maglocked~~~~~~~~~~~~~~~
+	Desc:$
+You can leave Vincent's Hideaway to the south.
+~
+	ToVnum:	2083
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2013
+	LockRating:	20
+BREAK
+#37506
+Name:	Harbor Trucks and Vans Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#37507
+Name:	Harbor Trucks and Vans
+Desc:$
+   Trucks and Commerical Vehicles of all sorts line the lot. From Huge
+Transports to Pickup trucks, it's all here. A small office sits in the middle,
+a greedy little man peering at you from inside the window. 
+~
+Flags:	100000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	32507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37508
+Name:	Cutting Edge Auto Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#37509
+Name:	Cutting Edge Auto
+Desc:$
+   You step inside the showrooms of Cutting Edge Auto, Seattle's premier
+Sports Car dealership. From the Westwind to the Dynamit to the Mustang, they
+are all here. A smartly dressed salesman chats casually with what looks to be
+a regular customer. 
+~
+Flags:	100000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	30537
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37510
+Name:	Road Hog Racing Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#37511
+Name:	Road Hog Racing
+Desc:$
+   Bikes line the showroom of Road Hog Racing, and upon the walls are mounted
+pictures and various chrome parts off of some more famous machines. The
+showroom flows out into the garage area, where a mechanic is busy working on a
+Yamaha Rapier, or atleast, what's left of it. 
+~
+Flags:	100000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	2502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37512
+Name:	Corperate Edge Security Automotives Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#37513
+Name:	Corporate Edge Security Automotives
+Desc:$
+   This place is a runners paradise. From the mightiest riot control vehicle
+to the smallest armoured two-seater, Corporate Edge Security Automotives will
+be able to get it for you. An Ares Mobmaster is the centerpiece of the
+showroom, sitting on a rotating plate with many spotlights shining on it. 
+~
+Flags:	100000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	30553
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37514
+Name:	Slipstream Ultra Xtra Auto Supplies Store
+Desc:$
+   A massive, thudding bassline pounds from a demostand of speakers and
+subwoofers towards the back of the room, rattling the windows and shaking the
+walls. The store itself is bright and shiny, and seems to be more chromed than
+even the legendary Hatchetman. Decals and steering wheels line the walls, and
+the shelves are stocked with near-useless add-ons for everything from the
+fastest Eurocar to the most humble Runabout. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	29310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37515
+Name:	Roswell's Garage
+Desc:$
+   Nestled in a corner of Puyallup, a garage is built.  Inside, you see a
+large array of diagnostic equipment, and half-rebuilt customized vehicles.  In
+the distance you hear the sound of punk rock being played at a high volume at
+all hours.  The garage was named after a noted rigger, whose brother owns the
+shop.  Grease and gasoline fumes fill the air, and the concrete floor sports
+many grease stains. 
+~
+Flags:	100000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	37516
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2445
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37516
+Name:	Roswell's Garage - Supply Cashwrap
+Desc:$
+   It appears that this supply section has a focus on vehicle combat oriented
+supplies.  Various hardpoints and firmpoints for mounting weaponry, as well as
+some weaponry designed for vehicles are mounted on racks on the wall.  An elf,
+covered in piercings, tattoos and grease mans the counter, bobbing his head to
+the hardcore punk rock coming out of his stereo system. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	37515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37517
+Name:	Auburn Paint and Panel
+Desc:$
+   The office is simply decorated, a small desk sits against the north wall, a
+terminal the only thing on the it. 2 comfortable looking chairs sit against
+the window that overlooks the carpark. The smell of oil and paint drifts in
+from the workshop next door. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	4
+X:	3
+Y:	5
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	29399
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	37518
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37518
+Name:	Auburn Paint and Panel Garage
+Desc:$
+   The smell of oil, petrol and paint mix in this garage, filling the air with
+a noxious aroma. Mechanics work on cars, popping out dents, replacing panels
+and sanding them down ready for painting in the huge booth to the back. This
+workshop has the reputation as being one of the best in the area, and as such
+is always busy. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	5
+X:	20
+Y:	35
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	37517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	29399
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#37519
+Name:	Auburn Paint and Panel Booth
+Desc:$
+   This room is used by the spec proc to store the vehicle that is currently
+being worked on. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#37520
+Name:	Racespec Performance Workshop
+Desc:$
+   This building has been divided into a showroom here and, through a glass
+wall to the west, a workshop. A half dozen people are working on some heavily
+sponsored cars in the workshop, which is kept almost spotless. The showroom is
+full to the brim of car parts, some still in boxes, some open and on display.
+A trophy cabinet sits at the back of the room behind the counter, displaying
+all of the workshops victories in recent times. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	6
+X:	8
+Y:	20
+Z:	2.20
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	30573
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

@@ -1,0 +1,193 @@
+#25300
+Keywords:	wage slave
+Name:	a wage slave
+RoomDesc:$
+A wage slave timidly strolls along the sidewalk here. 
+
+~
+LookDesc:$
+Whether they're working out of a nearby office building or business, or
+they're from out of town in hopes of finding some action for the night,
+they've taken the correct approach of being wary during their stay on these
+streets. 
+~
+ArriveMsg:	timidly strolls in from
+LeaveMsg:	timidly strolls
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	85
+	Bank:	65
+[SKILLS]
+	brawling:	2
+BREAK
+#25301
+Keywords:	Lone Star mobile patrol unit
+Name:	a Lone Star mobile patrol unit
+RoomDesc:$
+A Lone Star mobile patrol unit glides through traffic here. 
+
+~
+LookDesc:$
+Cruising the streets in a Chrysler-Nissan Patrol-1 and keeping their eyes
+peeled for trouble, this mobile patrol unit is usually the first to response
+to distress calls from other officers due to its speed and maneuverability. It
+has a fairly distinct engine and exhaust noise, which can easily tip off
+locals and gangers that the fuzz has arrived on the scene, which is usually a
+good time to cheese it. 
+~
+ArriveMsg:	cruises in from
+LeaveMsg:	cruises
+MobFlags:	100000000000010000001000000001000
+AffFlags:	10000000000000
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	500
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	brawling:	5
+BREAK
+#25302
+Keywords:	officer Lone Star foot patrol
+Name:	a Lone Star foot patrol officer
+RoomDesc:$
+A Lone Star foot patrol officer makes his rounds here. 
+
+~
+LookDesc:$
+If you've seen one of them, you've seen a million. Decked out in the tell tale
+armoured vest and matching helmet, both of which visibly bear the Lone Star
+emblem, just so there isn't any mistake who they are. Depending on who you are
+and what you're doing, they may or may not take a shoot first and ask
+questions later approach. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	10000001000001001000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	70
+	Cash:	95
+[SKILLS]
+	brawling:	3
+	pistols:	4
+BREAK
+#25303
+Keywords:	officer Lone Star chromed patrol
+Name:	a chromed out Lone Star patrol officer
+RoomDesc:$
+A chromed out Lone Star patrol officer is on the lookout for trouble. 
+
+~
+LookDesc:$
+A bit different than the usual Lone Star patrol officer, that much you can
+tell from the glance. It's likely the amount of chrome they're sporting that
+tips you off, or it could be the increased firepower they're packing in
+comparison to their squishier counterparts hitting the beat. Their movements
+are indicative of being wired, and it appears that portions of their legs and
+arms are either partially or fully replaced by cybernetic upgrades. 
+~
+ArriveMsg:	strides in confidently from
+LeaveMsg:	strides confidently
+MobFlags:	10000001000001001000
+AffFlags:	10001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	80
+	Cash:	125
+[SKILLS]
+	brawling:	5
+	pistols:	5
+	clubs:	5
+BREAK
+#25304
+Keywords:	ganger Brain Eaters
+Name:	a Brain Eaters ganger
+RoomDesc:$
+A Brain Eaters ganger is strutting around like they own the place. 
+
+~
+LookDesc:$
+The Brain Eaters operate out of portions of Redmond, but mostly keep to
+Touristville in particular. Their colours are black over white, and they all
+wear a distinctive red fez regardless of their rank in the gangs hierarchy.
+They're fairly tame and are more akin to neighborhood watch than gangers, so
+Lone Star doesn't harass them much since they keep to themselves and don't
+hassle the local citizens. 
+~
+ArriveMsg:	struts in from
+LeaveMsg:	struts off
+MobFlags:	1000001001000
+AffFlags:	10000000000000
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	7
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	4
+	Impact:	4
+	Cash:	115
+	Bank:	45
+[SKILLS]
+	brawling:	4
+	pistols:	4
+	clubs:	4
+BREAK
+END

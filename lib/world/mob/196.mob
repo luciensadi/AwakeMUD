@@ -1,0 +1,757 @@
+#19600
+Keywords:	surgeon
+Name:	a cyberware surgeon
+RoomDesc:$
+A cyberware surgeon is here with his scalpel. 
+
+~
+LookDesc:$
+Quiggely's personal cyberdoc. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	8
+	Cash:	999999
+	Bank:	999999
+	Karma:	1
+[SKILLS]
+	:	50
+	:	50
+	biotech:	50
+	:	50
+BREAK
+#19601
+Keywords:	ic door doorway
+Name:	a shimmering doorway
+RoomDesc:$
+A shimmering doorway blocks the path. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+[SKILLS]
+BREAK
+#19602
+Keywords:	cannon camara autocannon
+Name:	a camara mounted autocannon
+RoomDesc:$
+An autocannon is mounted to the ceiling camara and sweeps the room. 
+
+~
+LookDesc:$
+The short barreled gun is mounted to the security camara so a remote building
+rigger can fire into the room. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000100011000000001010
+AffFlags:	100000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	1
+	Int:	8
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	5
+	Karma:	34
+[SKILLS]
+	armed combat:	10
+	brawling:	10
+	assault cannons:	10
+BREAK
+#19603
+Keywords:	MP guard UCAS
+Name:	a UCAS MP
+RoomDesc:$
+A guard in MP clothing wanders the hallways. 
+
+~
+LookDesc:$
+The guard is a well built human but moves with a grace of someone who is
+obviously cybered.  He glances at you with chromed cybereyes then dismisses
+you for the moment. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000000001000
+AffFlags:	100100000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	5
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	125
+	Weight:	110
+	Ballistic:	8
+	Impact:	6
+	Cash:	800
+	Bank:	1000
+[SKILLS]
+	assault rifles:	5
+BREAK
+#19604
+Keywords:	mage guard MP
+Name:	a mage MP
+RoomDesc:$
+A MP wearing little armor is here. 
+
+~
+LookDesc:$
+The MP doesn't have any visible body armor other than the standard issue
+fatigues. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	saunters out to the
+MobFlags:	1010000001000000011000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	5
+	Int:	6
+	Wil:	5
+	Mag:	6
+[POINTS]
+	Height:	190
+	Weight:	70
+	Ballistic:	4
+	Impact:	4
+	Cash:	1000
+	Bank:	1500
+[SKILLS]
+	sorcery:	5
+	armed combat:	6
+	conjuring:	5
+	gunnery:	3
+	firearms:	3
+BREAK
+#19605
+Keywords:	adept MP guard
+Name:	A gate guard
+RoomDesc:$
+The gate guard is here checking IDs. 
+
+~
+LookDesc:$
+The elven guard looks to be bored out of his mind. He wanders over to you and
+stands there expectantly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	7
+	Str:	6
+	Cha:	3
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	80
+	Ballistic:	6
+	Impact:	5
+	Cash:	600
+	Bank:	900
+[SKILLS]
+	armed combat:	5
+	brawling:	5
+	:	2
+	:	3
+BREAK
+#19606
+Keywords:	reserve troop UCAS
+Name:	an UCAS reserve troop
+RoomDesc:$
+A reserve troop wanders around without a purpose. 
+
+~
+LookDesc:$
+The troop is stationed here for training unless he has been called out for
+active duty. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	5
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	85
+	Ballistic:	4
+	Impact:	3
+[SKILLS]
+	brawling:	5
+	armed combat:	5
+	firearms:	5
+BREAK
+#19607
+Keywords:	bioware doc
+Name:	a bioware doc
+RoomDesc:$
+A bioware doc is here. 
+
+~
+LookDesc:$
+Quiggely's personal biodoc 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	999999
+	Bank:	999999
+	Karma:	5
+[SKILLS]
+BREAK
+#19608
+Keywords:	Yuchi Kamazaki yakuza mobster
+Name:	Yuchi Kamazaki
+RoomDesc:$
+Yuchi Kamazaki stands here. 
+
+~
+LookDesc:$
+The small oriental human has long black hair bound at the back. His build is
+thin but wirey and he moves with a smooth pace you have only seen on high
+cybered individuals or master adepts. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	65
+	Ballistic:	6
+	Impact:	5
+	Cash:	20000
+	Bank:	20000
+	Karma:	10
+[SKILLS]
+	brawling:	6
+	armed combat:	6
+	firearms:	6
+	gunnery:	6
+	throwing weapons:	6
+BREAK
+#19609
+Keywords:	driver man
+Name:	a truck driver
+RoomDesc:$
+A truck driver is here smoking. 
+
+~
+LookDesc:$
+The man has a large flannel shirt and blue jeans. His gut hangs over his belt
+and his cigar's smoke is blowing in your direction. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	2
+	Str:	3
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	160
+[SKILLS]
+	brawling:	2
+BREAK
+#19610
+Keywords:	MP checkpoint guard
+Name:	a checkpoint guard
+RoomDesc:$
+An MP stands at attention here. 
+
+~
+LookDesc:$
+The guard is well built, even for a military grunt. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	6
+	Cha:	3
+	Int:	2
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	110
+	Ballistic:	6
+	Impact:	5
+	Cash:	400
+	Bank:	600
+[SKILLS]
+	firearms:	8
+	gunnery:	8
+	brawling:	6
+BREAK
+#19611
+Keywords:	target
+Name:	a target
+RoomDesc:$
+A simu-life target wanders back and forth. 
+
+~
+LookDesc:$
+The target is designed so immitate the basic actions of a real person. It will
+wander in circles and even 'die' if hit correctly. If engaged in mellee combat
+the target will fight back, although not effectivly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	10
+[SKILLS]
+BREAK
+#19612
+Keywords:	Hartman Sgt Sergeant
+Name:	Sgt. Hartman
+RoomDesc:$
+Gunnery Sergeant Hartman is here glaring at you. 
+
+~
+LookDesc:$
+Sgt. Hartman must be 50 years old but looks like he can, will, and has torn
+younger men to pieces. His high and tight haircut has gone grey and his
+gunmetal grey eyes cut through you like lasers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000001000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	8
+	Cha:	5
+	Int:	6
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	130
+	Ballistic:	8
+	Impact:	6
+	Cash:	1000
+	Bank:	2000
+[SKILLS]
+	firearms:	11
+	brawling:	8
+	armed combat:	10
+BREAK
+#19613
+Keywords:	troop sick sickly
+Name:	a sickly troop
+RoomDesc:$
+A sickly troop is here. 
+
+~
+LookDesc:$
+The trooper is very pale and looks to be weak. Who knows what's wrong with
+him. Hope it's not contagious. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	3
+	Cha:	2
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	168
+	Weight:	95
+[SKILLS]
+	brawling:	3
+BREAK
+#19614
+Keywords:	doc doctor
+Name:	a doctor
+RoomDesc:$
+A doctor is looking at a chart. 
+
+~
+LookDesc:$
+The doctor does not ever acknowledge your presence and continues what he was
+doing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	85
+	Cash:	500
+	Bank:	700
+[SKILLS]
+	:	5
+	biotech:	7
+	:	3
+BREAK
+#19615
+Keywords:	pharmacist
+Name:	a pharmacist
+RoomDesc:$
+A pharmacist is here. 
+
+~
+LookDesc:$
+The pharmacist stands behind his counter and is ready to dispence
+perscriptions. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	300
+	Bank:	400
+[SKILLS]
+BREAK
+#19616
+Keywords:	Gall Doc Doctor
+Name:	Doctor Gall
+RoomDesc:$
+Doctor Gall grins as you enter. 
+
+~
+LookDesc:$
+The doctor has greying hair and a large beer belly. His eyes have a crazed
+look to them and he hold a scalpal in one hand and looks expectantly at you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	2
+	Str:	4
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	6
+[POINTS]
+	Height:	200
+	Weight:	100
+	Cash:	500
+	Bank:	500
+[SKILLS]
+	sorcery:	5
+BREAK
+#19617
+Keywords:	guard cyber
+Name:	a cybered guard
+RoomDesc:$
+A heavily cybered guard is here. 
+
+~
+LookDesc:$
+The guard is brimming with chrome, more than most shadowrunners. From the full
+red eyes to replacement arms and legs, this guy looks like he could take on a
+small army. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000100000001010
+AffFlags:	1000000100001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	7
+	Str:	10
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	1200
+	Bank:	2000
+[SKILLS]
+	firearms:	10
+	gunnery:	10
+	brawling:	10
+BREAK
+#19618
+Keywords:	troll cyberzombie zombie
+Name:	a troll cyberzombie
+RoomDesc:$
+A huge cybered troll is here. 
+
+~
+LookDesc:$
+The troll is close to 3 meters tall and has more metal in him than the average
+Buick. He looks at you and snarls while cracking his knuckles. The
+cyberzombies eyes are fully chromed but have an empty look like there is no
+soul inside. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000010000000101000
+AffFlags:	1000000100001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	9
+	Str:	12
+	Cha:	1
+	Int:	2
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	210
+	Ballistic:	9
+	Impact:	8
+	Cash:	3000
+	Bank:	5000
+[SKILLS]
+	brawling:	10
+	armed combat:	10
+	:	11
+BREAK
+#19620
+Keywords:	minigun
+Name:	a minigun
+RoomDesc:$
+A remote controlled minigun scans the area. 
+
+~
+LookDesc:$
+The 8 barreled rifle is designed to be rigger controlled and guards the area.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000000000001010
+AffFlags:	1000000100001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	4
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	70
+[SKILLS]
+	brawling:	7
+	machine guns:	7
+BREAK
+#19621
+Keywords:	elemental fire
+Name:	a fire elemental
+RoomDesc:$
+A fire elemental patrols the astral space here. 
+
+~
+LookDesc:$
+The elemental appears to be a ball of flame approx 3 meters in diameter with a
+head and short arms sticking out. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000001001000
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	4
+[POINTS]
+	Height:	300
+	Weight:	0
+[SKILLS]
+	sorcery:	4
+	brawling:	4
+BREAK
+END

@@ -1,0 +1,401 @@
+#70301
+Name:	an angry typewriter
+LongDesc:	An antique typewriter clatters its keys menacingly.
+Description:$
+This bulky metal typewriter is black, with tan keys and a high carriage. Its
+keys are clacking willy-nilly, and its carriage return bell is constantly
+ringing. 
+~
+Rating:	5
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#70302
+Name:	an antique box camera
+LongDesc:	A bulky metal box on a tripod stands here, lens pointed at you.
+Description:$
+A dull wood and metal box with a lens in its center. Its wooden tripod serves
+as crude legs of a sort. As it can't bend them, it moves around by balancing
+its weight on one leg then swivelling sideways in the general direction of its
+destination. 
+~
+Rating:	7
+Type:	^WScout^n
+Subtype:	0
+BREAK
+#70303
+Name:	an oak coatrack
+LongDesc:	An intricately-carved wooden coatrack sways threateningly.
+Description:$
+The detailing on this old-fashioned coatrack is exquisite -- you can see the
+sheen and grain of well cared-for wood and every detail of the
+intricately-carved fantastic beasts that run up and down its surface.  
+~
+Rating:	6
+Type:	^WCrippler^n
+Subtype:	0
+BREAK
+#70304
+Name:	a flying scimitar
+LongDesc:	A huge curved blade glimmers menacingly.
+Description:$
+A huge scimitar with a razor-sharp blade skims gracefully through the air, the
+red-and-gold tassels attached to its hilt trailing in its wake. 
+~
+Rating:	7
+Type:	^WKiller^n
+Subtype:	0
+BREAK
+#70310
+Name:	^RRED^n IC
+LongDesc:	^RA splash of color floats here.^n
+Description:$
+^RRed^n like poppies and pollution-screened sunsets, like blood and just-used
+blades, like ripe apples and succulent strawberries. It circles you curiously,
+extruding the occasional pseudopod in your direction. 
+~
+Rating:	6
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#70311
+Name:	^LGREY^n IC
+LongDesc:	^LA splash of color floats here.^n
+Description:$
+^LGrey^n like a stormy beachfront sunrise, like industrial concrete and factory
+smoke, like the sky on midwest midwinter days. It's dark, and heavy, and looks
+like it wants to sleaze itself around you. 
+~
+Rating:	7
+Type:	^WTar Baby^n
+Subtype:	0
+BREAK
+#70312
+Name:	^WWHITE^n IC
+LongDesc:	^WThe absence of color floats here^n.
+Description:$
+White like fluffy sheep and fluffier clouds, like wedding dresses and the
+pages of old-fashioned paper books, like...the bright light at the end of the
+tunnel. Its sharp nothingness seems to be trying to wrap itself around you,
+erase you from the host. 
+~
+Rating:	7
+Type:	^WKiller^n
+Subtype:	0
+BREAK
+#70313
+Name:	a sea lamprey
+LongDesc:	A sleek, snakelike creature darts around.
+Description:$
+This long, brown, eel-like creature has sleek black fins and a huge, suctorial
+mouth filled with razor-sharp teeth arranged in concentric circles.  It swims
+about hungrily, looking for something - or someone - to attach itself to. 
+~
+Rating:	5
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#70314
+Name:	a giant squid
+LongDesc:	A very large squid regards you balefully.
+Description:$
+Its mottled pink-and white cylindrical body ends in a tapered point at one end
+and with 10 long tentacles - two longer than the rest - in the other. It
+glances coldly around with a pair of golden, dinner-plate-sized eyes. 
+~
+Rating:	6
+Type:	^WScramble^n
+Subtype:	0
+BREAK
+#70315
+Name:	a school of fish
+LongDesc:	A school of colorful fish dart to and fro.
+Description:$
+A large group of tiny, translucent fish form a shifting, quickly-moving living
+cloud. They dart quickly here and there, moving as one, concealing whatever
+they choose to surround. 
+~
+Rating:	5
+Type:	^WTar Baby^n
+Subtype:	0
+BREAK
+#70316
+Name:	a shark
+LongDesc:	A large grey shark swims around, looking for prey.
+Description:$
+Sleek, grey and ferocious-looking, with the classic raised fin, merciless
+black eyes and a huge mouth full of very, very sharp teeth. 
+~
+Rating:	7
+Type:	^WKiller^n
+Subtype:	0
+BREAK
+#70317
+Name:	a pair of tap shoes
+LongDesc:	A pair of dancing shoes click noisily on the floor.
+Description:$
+At first glance, these shoes appear to be normal leather evening shoes. But,
+as they step and slide around the dance floor, you catch glimpses of steel
+taps attached to the heels and toes of their soles. No wonder they're so
+noisy. 
+~
+Rating:	5
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#70318
+Name:	a pair of combat boots
+LongDesc:	A pair of shiny black combat boots stomps around.
+Description:$
+This pair of thick-soled, metal-toed, spit-shined black combat boots looks
+ready for a fight. Even the tightly-tied laces seem to quiver with whatever
+passes for adrenalin in sentient footwear. 
+~
+Rating:	7
+Type:	^WCrippler^n
+Subtype:	0
+BREAK
+#70319
+Name:	a puddle of shoe polish
+LongDesc:	A black puddle of shoe polish spreads across the floor.
+Description:$
+A gleaming black puddle oozes along on the dance floor, seeming less to follow
+the laws of liquidity and gravity and more a malevolent sentience that guides
+it towards any unauthorized entrants. 
+~
+Rating:	7
+Type:	^WTar Baby^n
+Subtype:	0
+BREAK
+#70320
+Name:	a nosy old woman
+LongDesc:	A bespectacled old woman peers around suspiciously.
+Description:$
+A tiny, hunched-over woman stands here, glancing at everything and everyone
+over the silver rims of her old-fashioned pince-nez glasses. She's dressed in
+a faded housedress and supporting herself with a steel walker. 
+~
+Rating:	6
+Type:	Trace
+Subtype:	0
+BREAK
+#70321
+Name:	a crying toddler
+LongDesc:	An overalls-clad toddler bawls here.
+Description:$
+A little kid of indeterminate gender and age, with a sticky, chocolate-covered
+face and stained overalls, wanders around, bawling for its mommy at the top of
+its lungs. 
+~
+Rating:	5
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#70322
+Name:	a security guard
+LongDesc:	A uniformed security guard stands here.
+Description:$
+Looks like a generic kind of guy from your local Rent-a-Guard, complete with
+uniform, nightstick and pistol. 
+~
+Rating:	7
+Type:	^WCrippler^n
+Subtype:	0
+BREAK
+#70323
+Name:	a heavily-armed security guard
+LongDesc:	A heavily-armed man glares around him.
+Description:$
+Looks like your generic guy from the local Rent-a-Cop, but with much better
+gear: heavy security armor, a small machine gun and what looks like one really
+mean stun baton. 
+~
+Rating:	7
+Type:	Sparky
+Subtype:	0
+BREAK
+#70324
+Name:	a hulking security guard
+LongDesc:	A huge security guard looms here.
+Description:$
+Looks like your standard guy from your local Rent-a-Cop agency, but huge.
+Really huge. And rippling with muscle. And cyber. And nasty-looking hand
+razors. 
+~
+Rating:	7
+Type:	Ripper
+Subtype:	3
+BREAK
+#70325
+Name:	a man in a suit
+LongDesc:	A besuited man stands here.
+Description:$
+Dressed somewhat flashily in an expensive suit, Italian shoes and way too much
+chunky gold jewelry, this rather pasty man's also got enough gel in his
+slicked-back hair to fill a bathtub. 
+~
+Rating:	9
+Type:	Sparky
+Subtype:	0
+BREAK
+#70326
+Name:	a customer service rep
+LongDesc:	A customer service rep chatters happily about interest rates.
+Description:$
+This bland-looking bank employee is dressed in standard corporate attire.
+Armed with a handful of leaflets and some complimentary Post-It(TM) pads, he
+cheerfully accosts passers-by and waxes rhapsodic about VS&I in a very loud,
+somewhat piercing voice. 
+~
+Rating:	10
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#70327
+Name:	a nosy security guard
+LongDesc:	A nosy security guard peers around suspiciously.
+Description:$
+Dressed in standard rent-a-cop colors but unarmed, this security guard seems
+to be more an information-gathering than an enforcement type. Armed with a
+clipboard and a much-chewed pencil stub, he approaches people, seemingly at
+random, and begins asking questions about the purpose of their visit. 
+~
+Rating:	9
+Type:	Trace
+Subtype:	0
+BREAK
+#70328
+Name:	a confused employee
+LongDesc:	A confused-looking employee runs around.
+Description:$
+Clad in a standard grey suit and low-heeled pumps, this ordinary-looking young
+woman seems to be a few cards short of a full deck. She runs busily to and
+fro, picking up papers and datadisks, leaving them somewhere, grabbing them
+again, rearranging them, then going back to where she'd originally taken them
+from and repeating the entire process again. 
+~
+Rating:	11
+Type:	^WScramble^n
+Subtype:	0
+BREAK
+#70329
+Name:	a clumsy employee
+LongDesc:	A clumsy employee tries to hold on to his coffee, donut and papers.
+Description:$
+This unassuming young man in his grey business suit and leather loafers walks
+up and down the hall, delivering snacks, documents and disks to his
+co-workers. Unfortunately, he's not very coordinated, and ends up spilling
+things all over himself, his deliveries, and the other employees. 
+~
+Rating:	11
+Type:	Tar Pit
+Subtype:	0
+BREAK
+#70330
+Name:	a human security guard
+LongDesc:	A human in a guard's uniform stands here.
+Description:$
+Looks like a standard, albeit rather angry guy in a typical security guard
+uniform. He's got a big shotgun in his arms, and looks like he knows how to
+use it. 
+~
+Rating:	11
+Type:	Blaster
+Subtype:	0
+BREAK
+#70331
+Name:	an elven security guard
+LongDesc:	A male elf in a guard uniform stands here.
+Description:$
+This grumpy-looking security guard sports a wicked-looking taser. 
+~
+Rating:	11
+Type:	Sparky
+Subtype:	0
+BREAK
+#70332
+Name:	an orkish security guard
+LongDesc:	An ork in a security guard's uniform stands here.
+Description:$
+A chromed-up, obviously augmented male ork whose uniform barely manages to
+contain his bulging bulk. The unnatural speed and grace of his movements makes
+it obvious that he's also wired. 
+~
+Rating:	14
+Type:	^LNon-Lethal Black^n
+Subtype:	0
+BREAK
+#70333
+Name:	a troll security guard
+LongDesc:	A massive troll in a guard's outfit is here.
+Description:$
+This huge, heavily-cybered troll's face is almost wholly covered by dermal
+deposits, making him look like some sort of modern-day Elephant Man. Despite
+this, he moves quickly, fluidly and with deadly grace. 
+~
+Rating:	15
+Type:	^LLethal Black^n
+Subtype:	0
+BREAK
+#70334
+Name:	a crow
+LongDesc:	A large black crow caws loudly at you.
+Description:$
+This glossy black bird is the size of a large housecat. It waddles somewhat
+comically along the floor, investigating passers-by and cawing loudly whenever
+someone attracts its interest. 
+~
+Rating:	8
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#70335
+Name:	a hummingbird
+LongDesc:	A tiny hummingbird hovers here.
+Description:$
+A small, quick bird with a needle-shaped beak flies around, alternately
+hovering in the air and dashing to and fro with mad abandon. It regards its
+surroundings curiously through a pair of black, beady eyes. 
+~
+Rating:	8
+Type:	Trace
+Subtype:	0
+BREAK
+#70336
+Name:	a paper airplane
+LongDesc:	A paper airplane zips around the area.
+Description:$
+Someone's folded what seems to be a spreadsheet into the shape of a small
+airplane. Bits of bar graphs and numbers are still visible along its wings and
+body. 
+~
+Rating:	7
+Type:	^WScout^n
+Subtype:	0
+BREAK
+#70337
+Name:	a nosy reporter
+LongDesc:	A nosy reporter looks around curiously.
+Description:$
+This nondescript human's wearing a "Seattle Voice" press pass around his neck
+and clutching a pocket secretary in his hand. He alternates between following
+people around, asking them a series of increasingly intrusive questions, and
+taking notes. 
+~
+Rating:	7
+Type:	Trace
+Subtype:	0
+BREAK
+#70338
+Name:	a photographer
+LongDesc:	A young woman with a camera stands here.
+Description:$
+This ordinary-looking woman is wearing a "Seattle Voice" press pass around her
+neck and clutching a state-of-the-art digital camera in one hand. She wanders
+around the room, taking pictures of visitors and random bits of scenery. 
+~
+Rating:	7
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+END

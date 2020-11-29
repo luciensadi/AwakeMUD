@@ -1,0 +1,137 @@
+#22900
+Keywords:	general plan zonelist roomlist moblist
+Name:	general plan
+RoomDesc:$
+a plan that mortals really shouldn't see lies here (REPORT IT!)~
+LookDesc:$
+Ok, ideas :
+ ^W*^n - ^W3^n types of guard: ^B1^n/ Shop guard - sentinel, stays in the one shop. Normal
+mall guard attribs (maybe stronger as these days all chars start with more
+attrib points - so stronger newbies, hopefully only newbies will attack). ^R2^n/
+Mall Gaurd - These will again be like shop guards, only wandering but still
+Stay_zone. ^G3^n/ Guard Seargeant - Better attribs, wanders around, bit more
+uniform, but again not impossible to newbies or those hovering around the 16
+rep mark).
+ ^W*^n - Back rooms for shops. Not easily accessible - maybe keycard on a cleaner
+(will HAVE TO HAVE cleaners, this is meant to be a well-maintained mall - so
+plenty of cleaners polishing the floors etc.) which you then get to from a
+cleaners room accessible from the underground carpark. Will be VERY
+convoluted.
+ ^W*^n - Maybe only one level. Current ideas - some trendy fashion company, Pawn
+shop, Pharmacy (patches and stuff), Oxfam (it's traditional but more stuff),
+Sport supply store (I don't THINK there's anywhere else to get the remington
+5-bullet magazines outside the newbie guild - or the guns themselves), Army
+Bargains (canteens, ration bars, combat trousers, boots etc), knacker-tracker
+sports store (sorry, just a home thing - sells stuff like trainers, adidas
+(will rename) tracksuits etc), a music store (not jilted), Cyberstore (maybe
+subchain on the one in Aztech?), a Cafe (maybe 2), a Modern Magick (overpriced
+given what it'll sell - not unexpected for Tacoma), Survival shop (like army
+bargains except more expensive, and might offer more equipment - like knives
+and stuff), Trixshack (like a sorta Net cafe), kevlar armor, plus a guarded
+ATM and a security center (which might be raided for equipment) - also will be
+cornershops. Plus also, just suggested, bakers and jewelers. 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22901
+Keywords:	wollipop lollipop lollypop pop stick disc
+Name:	a lollipop
+RoomDesc:$
+A round disc on a stick lies here, childless.~
+LookDesc:$
+A big red disc of hard candy attached to a paper disc, normally used as a
+reward for kids. 
+~
+Type:	Patch
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	6
+BREAK
+#22902
+Keywords:	book decking dummies dummy manual yellow big
+Name:	a Decking for Dummies book
+RoomDesc:$
+A big yellow book with the words "Decking for Dummies" lies here.~
+LookDesc:$
+You see cover page, but thumb quickly to the contents:
+ * ^W0x001h^n - ^WIntroduction^n
+ * ^W0x002h^n - ^WBasic Theory^n
+ * ^W0x003h^n -
+^WFirst Timers^n
+ * ^W0x004h^n - ^WTips and Tricks^n
+ * ^W0x005h^n - ^WGlossary^n
+ * ^W0x006h^n - ^WProgram QuickReference^n
+~
+Type:	Decking Accessory
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	0x001h x001h 001h 01h 1h Introduction
+	Desc:$
+Test - introduction 
+~
+BREAK
+#22909
+Keywords:	wollipop lollipop lollypop pop stick disc
+Name:	a lollipop
+RoomDesc:$
+A round disc on a stick lies here, childless.~
+LookDesc:$
+A big red disc of hard candy attached to a paper disc, normally used as a
+reward for kids. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+END

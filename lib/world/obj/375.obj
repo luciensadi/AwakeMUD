@@ -1,0 +1,1366 @@
+#37500
+Keywords:	turbine t25 turbocharger
+Name:	a T25 turbocharger
+RoomDesc:$
+A small turbine has been discarded here.~
+LookDesc:$
+It's a small turbine, designed to compress the air before it travels into the
+vehicle's carburetor, giving it an extra speed boost, but making the car stand
+out more. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	6
+	Cost:	1800
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val2:	1
+	Val5:	56
+	Val6:	1
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	15
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	-1
+BREAK
+#37501
+Keywords:	drive-by-wire wire system
+Name:	a drive-by-wire system Mk I
+RoomDesc:$
+A large box has been left here.~
+LookDesc:$
+It's a large box, with the words "Drive-By-Wire Mk I" on the top. You shake
+it, and it rattles. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	7000
+	AvailTN:	8
+	AvailDay:	16.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	20
+	Val2:	1
+	Val6:	8
+[AFFECT 0]
+	Location:	Body
+	Modifier:	-1
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 2]
+	Location:	Quickness
+	Modifier:	10
+[AFFECT 3]
+	Location:	Age
+	Modifier:	10
+BREAK
+#37502
+Keywords:	drive-by-wire wire system
+Name:	a drive-by-wire system Mk II
+RoomDesc:$
+A large box has been left here.~
+LookDesc:$
+It's a large box, with the words "Drive-By-Wire Mk II" on the top. You shake
+it, and it rattles.  
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	14000
+	AvailTN:	8
+	AvailDay:	16.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	20
+	Val2:	2
+	Val6:	8
+[AFFECT 0]
+	Location:	Body
+	Modifier:	-2
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 2]
+	Location:	Quickness
+	Modifier:	10
+[AFFECT 3]
+	Location:	Age
+	Modifier:	10
+BREAK
+#37503
+Keywords:	drive-by-wire wire system
+Name:	a drive-by-wire system Mk III
+RoomDesc:$
+A large box has been left here.~
+LookDesc:$
+It's a large box, with the words "Drive-By-Wire Mk III" on the top. You shake
+it, and it rattles.  
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	28000
+	AvailTN:	8
+	AvailDay:	16.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	20
+	Val2:	3
+	Val6:	8
+[AFFECT 0]
+	Location:	Body
+	Modifier:	-3
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 2]
+	Location:	Quickness
+	Modifier:	10
+[AFFECT 3]
+	Location:	Age
+	Modifier:	10
+BREAK
+#37504
+Keywords:	suspension toolkit
+Name:	a set of Whiteline Shocks
+RoomDesc:$
+A set of shock absorbers have been left here.~
+LookDesc:$
+It's 4 shock absorbers with included springs, they'll be alot better than what
+the vehicle shipped from the factory with. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val2:	1
+	Val6:	8
+[AFFECT 0]
+	Location:	Body
+	Modifier:	-1
+BREAK
+#37505
+Keywords:	tein coilover suspension
+Name:	a set of Tein coilovers
+RoomDesc:$
+A set of suspension for a vehicle have been left here.~
+LookDesc:$
+It's 4 coilover type shock absorbers from Tein. These give you ultimate
+responsiveness and feedback. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val2:	2
+	Val6:	8
+[AFFECT 0]
+	Location:	Body
+	Modifier:	-2
+BREAK
+#37506
+Keywords:	sensor upgrade large case
+Name:	a sensor upgrade mk I
+RoomDesc:$
+A large case has been left here.~
+LookDesc:$
+It's a large case with the words "Sensor Upgrade Mk I" stencilled on the top
+and sides. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	12.00
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	12
+	Val2:	1
+	Val4:	2
+	Val6:	23
+[AFFECT 0]
+	Location:	Age
+	Modifier:	1
+BREAK
+#37507
+Keywords:	sensor upgrade large case
+Name:	a sensor upgrade mk II
+RoomDesc:$
+A large case has been left here.~
+LookDesc:$
+It's a large case with the words "Sensor Upgrade Mk II" stencilled on the top
+and sides.  
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	7500
+	AvailTN:	4
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	20
+	Val2:	2
+	Val4:	2
+	Val6:	23
+[AFFECT 0]
+	Location:	Weight
+	Modifier:	2
+BREAK
+#37508
+Keywords:	sensor upgrade large case
+Name:	a sensor upgrade Mk III
+RoomDesc:$
+A large case has been left here.~
+LookDesc:$
+It's a large case with the words "Sensor Upgrade Mk III" stencilled on the top
+and sides.  
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	25.00
+	Barrier:	6
+	Cost:	10000
+	AvailTN:	5
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	25
+	Val2:	3
+	Val4:	2
+	Val6:	23
+[AFFECT 0]
+	Location:	Weight
+	Modifier:	3
+BREAK
+#37509
+Keywords:	sensor upgrade large case
+Name:	a sensor upgrade Mk IV
+RoomDesc:$
+A large case has been left here.~
+LookDesc:$
+It's a large case with the words "Sensor Upgrade Mk IV" stencilled on the top
+and sides.  
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	35.00
+	Barrier:	6
+	Cost:	12500
+	AvailTN:	6
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	35
+	Val2:	4
+	Val4:	2
+	Val6:	23
+[AFFECT 0]
+	Location:	Age
+	Modifier:	4
+BREAK
+#37510
+Keywords:	sports exhaust system box
+Name:	a sports exhaust system
+RoomDesc:$
+A case with a picture of a fast car on it lies here.~
+LookDesc:$
+Inside the case is the tools neccesary for installing a sports exhaust system
+into a vehicle. While it gives you an increase in performance, it makes your
+car quite a bit louder, drawing more attention. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	6
+	Cost:	4000
+	AvailTN:	2
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	10
+	Val5:	56
+	Val6:	5
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	15
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	-2
+BREAK
+#37511
+Keywords:	muffler improved system case
+Name:	an improved muffler system
+RoomDesc:$
+A black case has been left here.~
+LookDesc:$
+On the side of the case the words "^RImproved Muffler System^n" have been
+stencilled. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	3750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	20
+	Val5:	56
+	Val6:	5
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	1
+BREAK
+#37512
+Keywords:	racing slicks tires wheels
+Name:	a set of racing slicks
+RoomDesc:$
+A set of 4 tires has been left here.~
+LookDesc:$
+It's a set of racing slicks. They will give your car a much better chance in
+all those drag races you seem to get into these days. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	8.00
+	Barrier:	4
+	Cost:	9000
+	AvailTN:	5
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	8
+	Val2:	1
+	Val6:	10
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	10
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+BREAK
+#37513
+Keywords:	set tires wheels off road off-road
+Name:	a set of off-road tires
+RoomDesc:$
+A set of 4 tires has been left here.~
+LookDesc:$
+They look like they would give your vehicle extra grip on or off the road. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	8.00
+	Barrier:	6
+	Cost:	6000
+	AvailTN:	2
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	8
+	Val6:	10
+[AFFECT 0]
+	Location:	Body
+	Modifier:	-1
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	-1
+BREAK
+#37514
+Keywords:	armored armoured tires set
+Name:	a set of armoured tires
+RoomDesc:$
+A set of large shiny tires rolls through the room.~
+LookDesc:$
+This set of armoured tires will deflect all but the most deadly of bullets and
+blasts, guaranteeing you a lifetime of solid service. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	16.00
+	Barrier:	8
+	Cost:	11000
+	AvailTN:	6
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	16
+	Val6:	10
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	-20
+[AFFECT 1]
+	Location:	Body
+	Modifier:	-1
+[AFFECT 3]
+	Location:	Strength
+	Modifier:	-1
+BREAK
+#37515
+Keywords:	foot tall chrome spoiler aerodynamic metal chunk
+Name:	A foot tall chrome spoiler
+RoomDesc:$
+Someone has left a big, partially aerodynamic chunk of metal here.~
+LookDesc:$
+It seems to be a spoiler, you could fit it onto nearly any car. It would make
+it look much cooler. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	10
+	Val6:	17
+BREAK
+#37516
+Keywords:	molded plastic spoiler chunk
+Name:	a molded plastic spoiler
+RoomDesc:$
+A large chunk of plastic has been left here.~
+LookDesc:$
+It is a large chunk of plastic for sticking onto the back of your car. It
+should stop you from flipping while going 300mph 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	8.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	1
+	AvailDay:	0.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	2
+	Val6:	17
+BREAK
+#37517
+Keywords:	inch exhaust chrome pipe
+Name:	a 5 inch chrome exhaust pipe
+RoomDesc:$
+A large exhaust pipe has been left here.~
+LookDesc:$
+This exhaust pipe just sticks onto the back of your existing exhaust system,
+making your ride seem all that much more cooler. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.00
+	Barrier:	6
+	Cost:	900
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val5:	56
+	Val6:	5
+BREAK
+#37518
+Keywords:	inch exhaust chrome pipe
+Name:	a 3 inch chrome exhaust pipe
+RoomDesc:$
+A large exhaust pipe has been left here.~
+LookDesc:$
+This exhaust pipe just sticks onto the back of your existing exhaust system,
+making your ride seem all that much more cooler. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.00
+	Barrier:	6
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	6
+	Val5:	56
+	Val6:	5
+BREAK
+#37519
+Keywords:	inch exhaust chrome pipe
+Name:	a 7 inch chrome exhaust pipe
+RoomDesc:$
+A large exhaust pipe has been left here.~
+LookDesc:$
+This exhaust pipe just sticks onto the back of your existing exhaust system,
+making your ride seem all that much more cooler. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.00
+	Barrier:	6
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	3
+	Val5:	56
+	Val6:	5
+BREAK
+#37520
+Keywords:	decal ford sign
+Name:	a large ^BFORD^n decal
+RoomDesc:$
+Someone has left a sign here.~
+LookDesc:$
+You stick this decal across your cars windscreen, it helps people know you are
+really cool and also helps them know who made your car. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val6:	18
+BREAK
+#37521
+Keywords:	decal large honda sign
+Name:	a large HONDA decal
+RoomDesc:$
+Someone has left a sign here.~
+LookDesc:$
+You stick this decal across your cars windscreen, it helps people know you are
+really cool and also helps them know who made your car. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val6:	18
+BREAK
+#37522
+Keywords:	decal saab large sign
+Name:	a large SAAB decal
+RoomDesc:$
+Someone has left a sign here.~
+LookDesc:$
+You stick this decal across your cars windscreen, it helps people know you are
+really cool and also helps them know who made your car. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val6:	18
+BREAK
+#37523
+Keywords:	tinting windows tinted
+Name:	tinted windows
+RoomDesc:$
+Someone has left some window tinting here.~
+LookDesc:$
+This is used to stick over your windows and make it harder for people to see
+in. This is "Black Hole" grade tinting, meaning you need a flashlight to see
+while inside your car. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	800
+	AvailTN:	2
+	AvailDay:	5.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val2:	1
+	Val6:	19
+BREAK
+#37524
+Keywords:	tinted headlights tinting
+Name:	tinted headlights
+RoomDesc:$
+Someone has left some headlight tinting here.~
+LookDesc:$
+You put it over your headlight covers to change the colour of your headlights.
+This has the dual effect of making you not able to see at night and of looking
+really really cool during the day. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	1
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val6:	15
+BREAK
+#37525
+Keywords:	firmpoint firm point internal fixed mount
+Name:	an internal firmpoint weapons mount
+RoomDesc:$
+an internal mount for light weapons rests here~
+LookDesc:$
+An internal mounting system for light weapons. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	1500
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
+[VALUES]
+	Val0:	15
+	Val2:	1
+	Val4:	2
+	Val6:	27
+BREAK
+#37526
+Keywords:	hardpoint mount internal
+Name:	an internal hardpoint weapons mount
+RoomDesc:$
+a weapons mount designed for heavy weapons sits here~
+LookDesc:$
+It's an internal weapons mount, this one can hold heavier weapons than the
+firmpoint. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
+[VALUES]
+	Val0:	15
+	Val1:	2
+	Val4:	2
+	Val6:	27
+BREAK
+#37527
+Keywords:	firmpoint external weapons mount
+Name:	an external firmpoint weapons mount
+RoomDesc:$
+An external mount for light weapons lies here.~
+LookDesc:$
+A simple external firmpoint that is bolted into the target vehicle's chassis.
+It is sturdy, but obvious. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	16
+	Cost:	750
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
+[VALUES]
+	Val0:	15
+	Val1:	1
+	Val4:	2
+	Val6:	27
+BREAK
+#37528
+Keywords:	hardpoint external weapons mount
+Name:	an external hardpoint weapons mount
+RoomDesc:$
+A mount for externally attaching vehicle weapons sits here.~
+LookDesc:$
+A rugged mount for attaching high powered weapons such as heavy machineguns,
+autocannons, and other artificial means of destructive force. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	16
+	Cost:	2000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val2:	1
+	Val4:	2
+	Val6:	27
+BREAK
+#37529
+Keywords:	external turret mount
+Name:	an external turret mount
+RoomDesc:$
+An external turret weapons mount lies here.~
+LookDesc:$
+A turret, with the ability to swivel and target to accuracy, designed for
+mounting externally.  It is an obvious thing that is like asking Lone Star to
+pull you over and ask annoying questions like "put your hands on your head"
+and such, but it is popular amongst gangs who want lots of power for their
+money. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	24
+	Cost:	7500
+	AvailTN:	18
+	AvailDay:	41.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	4
+	Val2:	1
+	Val4:	2
+	Val6:	27
+[AFFECT 0]
+	Location:	Age
+	Modifier:	-100
+BREAK
+#37530
+Keywords:	extra seat
+Name:	an extra seat
+RoomDesc:$
+A vehicle seat is here.~
+LookDesc:$
+When installed in a vehicle, this increases the number of people it can seat.
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	20.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	6
+	Val6:	21
+[AFFECT 0]
+	Location:	Magic
+	Modifier:	1
+BREAK
+#37531
+Keywords:	pimp tinted windows material
+Name:	pimp tinted windows
+RoomDesc:$
+Some material on the ground seems to be sucking light into it.~
+LookDesc:$
+This tint is so dark that if you put it on your car you would need a
+flashlight to see. It'll give you more street cred than anything else you ever
+do to your Jackrabbit. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	3500
+	AvailTN:	6
+	AvailDay:	24.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val2:	2
+	Val6:	19
+BREAK
+#37532
+Keywords:	widebody guards panels
+Name:	a set of widebody guards
+RoomDesc:$
+Somebody has left a set of car panels here.~
+LookDesc:$
+These guards are designed to make your car appear wider than it is, perfect
+for fitting those deeply dished wheels in. The set contains guards for both
+the front and the back. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	6
+	Cost:	900
+	AvailTN:	3
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val6:	12
+BREAK
+#37533
+Keywords:	vented bonnet large
+Name:	a vented bonnet
+RoomDesc:$
+A large vented bonnet has been left here.~
+LookDesc:$
+It's a bonnet for a car, designed not only to vent heat but to deliver cool
+air to the intake. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	4
+	Cost:	1200
+	AvailTN:	2
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val6:	15
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	5
+BREAK
+#37534
+Keywords:	aerodynamic front bar fibreglass panel
+Name:	an aerodynamic front bar
+RoomDesc:$
+A large fibreglass car panel is here.~
+LookDesc:$
+This custom moulded front bar gives your car a very aggressive look, even if
+it's a Mitsubishi Runabout. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	15.00
+	Barrier:	4
+	Cost:	800
+	AvailTN:	4
+	AvailDay:	5.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val6:	11
+BREAK
+#37535
+Keywords:	crashcage system
+Name:	a crashcage system
+RoomDesc:$
+Someone has left an unassembled crashcage system here.~
+LookDesc:$
+Crash cages are padded, hydraulically cushioned passenger cabin and seating
+systems designed to protect passengers in a crash. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	8
+	Cost:	3500
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	10
+	Val2:	1
+	Val5:	62
+	Val6:	16
+BREAK
+#37536
+Keywords:	cams racing cam shafts short rods
+Name:	a set of racing cam shafts
+RoomDesc:$
+Two short rods have been left here.~
+LookDesc:$
+These cam shafts replace the ones already in an internal combustion engine and
+let more air and fuel in at each rotation, providing extra power. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	8000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val2:	1
+	Val5:	56
+	Val6:	3
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	30
+BREAK
+#37537
+Keywords:	armoured plates metal
+Name:	a set of armoured plates
+RoomDesc:$
+Someone has left some plates of metal here.~
+LookDesc:$
+This set of armoured plating is designed to give a vehicle more protection
+from gunfire. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	40.00
+	Barrier:	24
+	Cost:	1250
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val2:	1
+	Val6:	20
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+BREAK
+#37538
+Keywords:	t3 turbocharger
+Name:	a T3 Turbocharger
+RoomDesc:$
+Someone has left a medium sized turbocharger here.~
+LookDesc:$
+It's a medium sized turbine designed to compress the air going into the
+engine, allowing more fuel to be added. This gives the vehicle greater speed
+and acceleration, but also increases heat and emissions. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	6
+	Cost:	3600
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val2:	2
+	Val5:	56
+	Val6:	1
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	30
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	-2
+BREAK
+#37539
+Keywords:	electric engine superconductor
+Name:	a S2 Superconductor
+RoomDesc:$
+Someone has left a small electric engine here.~
+LookDesc:$
+Superconductive devices are designed to increase power levels to electric
+engines. They increase speed and acceleration, but also produce alot of heat.
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	12.00
+	Barrier:	4
+	Cost:	3000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val2:	1
+	Val5:	2
+	Val6:	3
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	15
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	-1
+BREAK
+#37597
+Keywords:	vehicle toolkit toolbox
+Name:	a vehicle toolkit
+RoomDesc:$
+Someone has forgotten to take their toolbox with them, instead leaving it here.~
+LookDesc:$
+It's full of a load of tools, a hammer, socket wrench set, and a couple of
+screw drivers. It would be of help if you were working on a vehicle. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	1
+BREAK
+#37598
+Keywords:	toolbox large blue
+Name:	a large toolbox
+RoomDesc:$
+A large blue toolbox has been lost by some hapless soul.~
+LookDesc:$
+Inside the toolbox is a plethora of tools and parts. How someone managed to
+fit this much goodness into such a a petite box you do not know, It contains
+almost everything you would need to work on a vehicle. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	1
+BREAK
+#37599
+Keywords:	vehicle workshop tools
+Name:	a vehicle workshop
+RoomDesc:$
+A large amount of tools for working on vehicles are here.~
+LookDesc:$
+This contains almost everything you could want or need to do any sort of work
+on a vehicle, short of building your own. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	15000
+	AvailTN:	8
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+BREAK
+END

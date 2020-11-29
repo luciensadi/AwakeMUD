@@ -1,0 +1,108 @@
+#7800
+Keywords:	Red Girl Human
+Name:	Glashia
+RoomDesc:$
+Glashia 
+
+~
+LookDesc:$
+A human female, or so it seems stands here, eyes of the blackest depths of the
+void, hair as red as the dying flames of hell. The leather she wears tight and
+almost nill against her body. A smile that could melt the hearts of men all
+around her is seen as she beckons you to become her next meal.   
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001001010
+AffFlags:	1000000000001000000000
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	15
+	Str:	15
+	Cha:	20
+	Int:	16
+	Wil:	16
+	Mag:	10
+[POINTS]
+	Height:	180
+	Weight:	60
+	Level:	1
+	Ballistic:	13
+	Impact:	15
+	Cash:	15346
+	Bank:	25000
+	Karma:	1
+[SKILLS]
+	edged weapons:	12
+	brawling:	12
+	athletics:	12
+	stealth:	12
+	sorcery:	12
+BREAK
+#7801
+Keywords:	Hellsfire
+Name:	Hellsfire
+RoomDesc:$
+Only a voice heard and a faint glow of silver from what would be eyes is seen
+in the shadows 
+
+~
+LookDesc:$
+Dawn Hellsfire Ryseri stands 5'9" tall. Chromed wings protrude from her back,
+wingspan of 10ft when fully out-stretched. From the tips and edges of those
+wings hang very long mono-flail whips, barely touching the ground with the
+wings folded against her back. Waist length red and brown hair, from the
+position of the light it changes between the two colors, always worn in a
+ponytail. Her skin patched with chrome, her build muscular. Her facial
+features show compassion and love, humor and guilt. But still show some of the
+ill emotion, of her time as a cyberzombie. Her once brown eyes flaked with
+gold only show silver hues of the past transformation. But just under her
+right eye you see 4 tears that have been tattooed on her cheek. Each tear a
+different color for each emotion behind the kills she made. Black, half shaded
+with dark purple and dark blue, dark blue and red. By looking at her it's
+really hard to tell if she is Shaman or Street Sam. A Ruby and Opal wedding
+band is now wore on her left ring finger. A facemask of a strange manner is
+usually seen on her face. Standing with a Black robe, crafted with the skin of
+the dead that is worn about her body, the robe clasped together only by one
+button, just over the breasts.  She holds a Walther Sniper Rifle on one
+shoulder. A Military Grade Ares CC Sniper Rifle on the other. A set of Piasma
+Claws are strapped to her thighs on the front of her latex pants. A pair of
+combat boots are her wear for her feet. A bag carried in hand with the other
+on her back. But one item seems to stand out. A Gold and Orichalcum Collar
+that is melted into her throat. When she speaks, you hear a voice that is
+quiet and almost sarcastic in tone. Just by the look of this woman....she is
+/not/ one to mess with. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000001000
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	10
+	Str:	10
+	Cha:	7
+	Int:	6
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	174
+	Weight:	61
+	Ballistic:	10
+	Impact:	13
+	Cash:	100000
+[SKILLS]
+	rifles:	20
+	pistols:	9
+	cyber implants:	6
+	brawling:	9
+	edged weapons:	12
+BREAK
+END

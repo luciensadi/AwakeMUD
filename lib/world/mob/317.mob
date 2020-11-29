@@ -1,0 +1,238 @@
+#31700
+Keywords:	jose gonzales dwarf shopkeeper dwarven
+Name:	Jose Gonzales
+RoomDesc:$
+A dwarven shopkeeper stand behind the counter. 
+
+~
+LookDesc:$
+This somewhat cybered dwarf looks like he retired from the shadowrunning life
+to pursue the safer path as a shopkeeper for the MIDG supply store. His black
+hair is gelled back and he wears high quality clothing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	50
+[SKILLS]
+BREAK
+#31701
+Keywords:	carl steward human man male
+Name:	Carl Steward
+RoomDesc:$
+A sharply dressed man schmoozes with the clientele. 
+
+~
+LookDesc:$
+Sharply dressed in retro-classic fashions, the Matchsticks Manager, Carl
+Steward, stands around here schmoozing with the Matchsticks' clientele. If
+he's not talking to customers, he's dealing with representatives of the many
+different bands he books to the club. He's also the man to talk to about
+Matchstick Club Membership. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	12
+	Str:	8
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	7
+[POINTS]
+	Height:	172
+	Weight:	75
+[SKILLS]
+	brawling:	12
+BREAK
+#31702
+Keywords:	bartender human man male friendly Al
+Name:	a friendly, human bartender
+RoomDesc:$
+A friendly, human bartender named Al stands behind the bar. 
+
+~
+LookDesc:$
+Neither tall nor short, this man stands behind the bar waiting to take your
+order. The products from years of perpetual smiles, dimples show through his
+well-trimmed, chestnut brown beard. His eyes, a deep, understanding brown,
+suggest he's a man to be trusted with anything from important business, to
+that unfortunate 'issue' you may be having in bed. In typical bartender
+fashion, the man looks like one who'll listen when no one else will. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	175
+	Weight:	81
+	Ballistic:	6
+	Impact:	6
+[SKILLS]
+BREAK
+#31703
+Keywords:	patches hell hound hellhound
+Name:	Patches, MIDG's pet hellhound
+RoomDesc:$
+A hellhound, with patches of white in its fur, prowls around here 
+
+~
+LookDesc:$
+This, rather large, hellhound seems too friendly to deserve the name. He looks
+at you with the age old curious puppy expression and comes over to sniff your
+hand. He gives your hand a small lick then goes off to explore more of this
+place. You figure this must be Kremlin's pet, as the name tag reads 'Patches'
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	20
+	Str:	12
+	Cha:	0
+	Int:	4
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	150
+	Weight:	150
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	brawling:	12
+BREAK
+#31704
+Keywords:	troll bouncer large
+Name:	a large troll bouncer
+RoomDesc:$
+A large troll stands by the door, watching everyone who enters. 
+
+~
+LookDesc:$
+This huge troll, dressed in a sharp tailored suit, stands, arms folded, by the
+door to Matchsticks. He inspects everyone as they enter making sure they pass
+the dress code and aren't looking to cause trouble. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Troll
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	3
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#31705
+Keywords:	The Keymaster
+Name:	The Keymaster
+RoomDesc:$
+The MIDG Keymaster stands here making keys. 
+
+~
+LookDesc:$
+It's a keymaster. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+BREAK
+#31706
+Keywords:	hobo bum crazy guy
+Name:	A crazy hobo
+RoomDesc:$
+A guy that only has one shoe on is slumped over here. 
+
+~
+LookDesc:$
+This is an old, unkempt, smelly ass bum who reeks of cheap liquor, pot, and
+stale urine. He's wearing really dirty clothes that probably weren't even cool
+when they were made, and only has a shoe (no sock) on his left foot. His right
+foot, however, is not without protection: it has a brown paper bag over it,
+kept in place with a rubber band around the ankle. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	4
+	Cha:	1
+	Int:	2
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+END

@@ -1,0 +1,563 @@
+#35200
+Keywords:	toga
+Name:	a semi-long white toga
+RoomDesc:$
+a toga is lying here.~
+LookDesc:$
+The toga is made out of a sheet-like material. Colored red from some ancient
+berries, the arm holes are kinda of fadeing. There is also a built in belt
+across the waist of the toga. Thinking this is ancient it is actually fairly
+new with platic compartments on the inside. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	101110000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	2000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	5
+BREAK
+#35202
+Keywords:	schnapps bottle drinking mint peppermint leaf
+Name:	a bottle of peppermint Schnapps
+RoomDesc:$
+A short, square drinking bottle marked with a mint leaf lies here.~
+LookDesc:$
+The bottle is short and squat, made to be drank from. The liquid inside is
+very sweet and deceptively strong, flavored almost like a candy cane but with
+a hidden kick like good vodka. Peppermint Schnapps is more for flavor than
+alcohol, but with the drunkenness comes a mighty pain if you do drink that
+much. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	18
+BREAK
+#35203
+Keywords:	sign
+Name:	a painted sign
+RoomDesc:$
+a sign is hanging here~
+LookDesc:$
+Looking the sign over you see that is says "^R The Nucleus^w" 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35204
+Keywords:	Fan
+Name:	a Ceiling Fan
+RoomDesc:$
+a ceiling fan is pushing wind here.~
+LookDesc:$
+The fan blades are rotating around, bra's and panties hanging from them,
+pushing wind into the building. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35206
+Keywords:	Jukebox
+Name:	jukebox
+RoomDesc:$
+a jukebox is here playing some songs.~
+LookDesc:$
+When you peer at this jukebox you see there is quite a few selections to pick
+from. Mostly there are Maria Mercurial hits. Now you see why the dwarfs fight
+over what to play! This is the greatest music you have ever heard. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10000.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35207
+Keywords:	2.bar
+Name:	Heavily used bar
+RoomDesc:$
+There is a heavily used bar here along the left wall.~
+LookDesc:$
+Looking at the bar you see the wood has a lot splinters, and worn out areas. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35212
+Keywords:	wand
+Name:	Wand of Shape
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Other
+WearFlags:	10000000000001
+ExtraFlags:	1000011
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	30000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	500
+	Val2:	500
+	Val3:	41
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	1
+BREAK
+#35214
+Keywords:	cloak
+Name:	A ^RRed^w cloak
+RoomDesc:$
+There is a red cloak laying here.~
+LookDesc:$
+This cloak is made of a dark red orichalcum. Glowing very brightly you wonder
+if it is magical or if it is glowing from radiation. The cloak is waveing as
+if its original owner was still walking around in it. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100100000001001001001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	2
+[AFFECT 1]
+	Location:	Astral Pool
+	Modifier:	2
+BREAK
+#35218
+Keywords:	gun
+Name:	SIG Pro
+RoomDesc:$
+~
+LookDesc:$
+ 
+~
+Type:	Weapon
+WearFlags:	10000000000000
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val6:	12
+	Val8:	-1
+BREAK
+#35220
+Keywords:	desk
+Name:	a desk that you guess is for infomation
+RoomDesc:$
+a desk that is for infomation and has a guard behind it~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3000.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	200
+	Val1:	12
+	Val2:	-1
+BREAK
+#35221
+Keywords:	MAD
+Name:	MAD
+RoomDesc:$
+A Hard Object Scanner is fixed into the cieling.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Other
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	600000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35222
+Keywords:	Novatech Slimcase Nova
+Name:	A Novatech Slimcase-10
+RoomDesc:$
+A sleek Novatech cyberdeck is laying here.~
+LookDesc:$
+This cyberdeck is top of the line from Novatech. 
+~
+Type:	Cyberdeck
+WearFlags:	1000000000000000001
+ExtraFlags:	1000
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	960000
+	AvailTN:	18
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	5
+	Val2:	2000
+	Val3:	2500
+	Val4:	480
+	Val6:	2
+BREAK
+#35283
+Keywords:	battlegear combat pants armor red
+Name:	A pair of ^Rred^n Battlegear(TM) combat pants
+RoomDesc:$
+A pair of armored pants lie here~
+LookDesc:$
+This is a pair of Battlegear(TM) armored combat pants for the fashion
+conscious runner who doesn't want to sacrifice style at the cost of
+protection. It has side pockets that are designed so that they can double as
+pistol holsters, along with two handy thigh pockets to store all the
+ammunition any sensible runner would need.  
+~
+Type:	Container
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	5
+	Val2:	-1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#35284
+Keywords:	battlegear combat boots red
+Name:	A pair of ^Rred^n Battlegear(TM) combat boots
+RoomDesc:$
+A pair of study boots stand here.~
+LookDesc:$
+This is a pair of Battlegear(TM) combat boots for the fashion conscious runner
+who doesn't want to sacrifice style at the cost of protection. Each combat
+boot has a convenient sheath to contain a boot knife or a small sidearm for
+when those unwelcome, but seemingly ever-present, surprises occur. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val7:	-1
+BREAK
+#35286
+Keywords:	battlegear combat vest armor red
+Name:	A ^Rred^n Battlegear(TM) combat vest
+RoomDesc:$
+An armored vest lies here.~
+LookDesc:$
+This is a Battlegear(TM) armored combat vest for the fashion conscious runner
+who doesn't want to sacrifice style at the cost of protection. This combat
+vest offers the ultimate combination of protection with utility. Multiple
+compartments, from the breast pockets to the pouch in the small of the back,
+allows for storage of various items while the ballistic weave and polymer
+plates safeguard the user from the hazards of everyday life on the streets. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	10.00
+	Barrier:	6
+	Cost:	6500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	4
+	Val2:	4
+	Val3:	4
+	Val4:	4
+	Val5:	4
+	Val6:	3
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#35287
+Keywords:	battlegear armor combat shirt red
+Name:	A ^Rred^n Battlegear(TM) armored combat shirt
+RoomDesc:$
+An armored long sleeved shirt lies here.~
+LookDesc:$
+This is a Battlegear(TM) armored combat shirt for the fashion conscious runner
+who doesn't want to sacrifice style at the cost of protection. This long
+sleeved armored shirt is made from a ballistic weave over flexible polymer
+plates does not inhibit movement while reinforced rigid plates cover the vital
+areas, which makes the Battlegear(TM) armored shirt as strong as some of the
+bulkier armored vests on the market.  
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	3500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	4
+	Val3:	2
+	Val4:	3
+	Val5:	4
+	Val6:	3
+BREAK
+#35288
+Keywords:	battlegear armor combat hat red
+Name:	a ^Rred ^nBattlegear(TM) hat
+RoomDesc:$
+An armored hat lies here.~
+LookDesc:$
+This is a Battlegear(TM) armored combat hat for the fashion conscious runner
+who doesn't want to sacrifice style at the cost of protection. This sleek,
+lightweight, open faced combat hat protects not only the skull but also the
+neck without restricting movement or vision. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	2200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#35290
+Keywords:	butt plug buttplug
+Name:	A giant beige butt plug
+RoomDesc:$
+It's a giant beige butt plug. You think to yourself, "How could anyone fit this in their ass?"~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	99
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	99
+[AFFECT 2]
+	Location:	Quickness
+	Modifier:	99
+BREAK
+#35299
+Keywords:	sign
+Name:	A sign
+RoomDesc:$
+A sign hangs here.~
+LookDesc:$
+A sign that points left to the mens room and right for the women. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

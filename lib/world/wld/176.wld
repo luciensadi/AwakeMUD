@@ -1,0 +1,890 @@
+#17600
+Name:	Entrance to Rocky Horror Picture Show
+Desc:$
+   This old theater looks rather dark and dingy, there are old, torn movie
+posters hanging in a plastic case. The porch is tiled in the most hideous
+green, most of which are broken.  "Welcome to RHPS, You're just in time for
+the show" says the ticket vendor. 
+~
+Flags:	10000000000010000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	5396
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door 
+	Desc:$
+A large ceramic door 
+~
+	ToVnum:	17601
+	Flags:	2
+	Material:	ceramic
+	Barrier:	4
+	KeyVnum:	17600
+	LockRating:	2
+[EXTRADESC 0]
+	Keywords:	(null)
+	Desc:$
+
+~
+BREAK
+#17601
+Name:	The theater concession area
+Desc:$
+   there are lots of goodies and thing to throw at people to buy for the show
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	Keywords:	door
+	Desc:$
+This doorway leads to the realms of normality 
+~
+	ToVnum:	17600
+	Flags:	0
+	Material:	ceramic
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+this way leads into the theater proper 
+~
+	ToVnum:	17602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17602
+Name:	Hall behind the back row
+Desc:$
+   You are standing in the walkway behind the back row of the theater. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Desc:$
+This is the way out to the concession area 
+~
+	ToVnum:	17601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The darker part of the hallway 
+~
+	ToVnum:	17603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17603
+Name:	Behind the back row
+Desc:$
+   You are in the darkest part of walkway behind the back row. As you look
+around you notice the projection room above you. 
+~
+Flags:	1000000000000001001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+ the main aisle 
+~
+	ToVnum:	17605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Behind the back row 
+~
+	ToVnum:	17602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17698
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	door projection
+	Desc:$
+Up to the projection room 
+~
+	ToVnum:	17604
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	4
+BREAK
+#17604
+Name:	The projection room
+Desc:$
+   You are in the projection room, there are movie reels strewn about
+everywhere. 
+~
+Flags:	1000000000000101000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17631
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	door projection
+	Desc:$
+To behind the back row 
+~
+	ToVnum:	17603
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17605
+Name:	The main aisle
+Desc:$
+   You are standing amongst lots of seats in the back row. The aisle leads all
+the way to the stage 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	17610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+To behind the back row 
+~
+	ToVnum:	17603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17606
+Name:	Left side of the aisle.
+Desc:$
+   You are standing in a row of theater seats.  EWWWW! you stepped in
+something sticky! 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17607
+Name:	End of the row
+Desc:$
+   You are in the corner of the theater.   It looks like many disgusting acts
+have been performed here. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17608
+Name:	Right side of the aisle
+Desc:$
+   You are standing amongst a couple of theater go-ers who are awaiting the
+show. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17609
+Name:	End of the row
+Desc:$
+   You are standing in what looks to be some squatters new home 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	17608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17610
+Name:	The main aisle
+Desc:$
+   You are standing in the main aisle of the theater. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	17615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17611
+Name:	The center row
+Desc:$
+   You are standing in the center row of the theater. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17612
+Name:	End of the row
+Desc:$
+   You are standing at the end of the center row. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17613
+Name:	The Center Row
+Desc:$
+   You are standing in the center row amongst a bunch of young Rhps fans. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17614
+Name:	End of the Row
+Desc:$
+   You are standing at the end of the row of seats. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	17613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17615
+Name:	The main aisle
+Desc:$
+   You are standing at the end of the main aisle. Ahead of you is the stage
+and the screen. My it's dirty in here. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17616
+Name:	The front row.
+Desc:$
+   You are standing in the front row of the theater. I hope you've been here
+before....other wise they might drag you on stage. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17617
+Name:	Next to the stage.
+Desc:$
+   You are standing close to the stage. You think you see the door to
+backstage. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door backstage
+	Desc:$
+Backstage door 
+~
+	ToVnum:	17620
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	17602
+	LockRating:	3
+[EXIT west]
+	ToVnum:	17616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17618
+Name:	The front row
+Desc:$
+   You are standing in the front row of the theater. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17619
+Name:	Next to the emergency exit.
+Desc:$
+   You are standing next to the emergency exit. It looks like it's been welded
+shut. Now THAT'S safe! 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17620
+Name:	Backstage Entryway
+Desc:$
+   You are standing in the entryway for backstage. I hope you have access to
+back here. 
+~
+Flags:	1000000000000001100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	17621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door backstage
+	Desc:$
+A big metal door 
+~
+	ToVnum:	17617
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	17602
+	LockRating:	3
+[EXIT west]
+	ToVnum:	17626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17621
+Name:	The Prop Room
+Desc:$
+   You are standing in a room full of garish costumes and cheesy props. It
+looks like no one has dusted in here since the 1920's! 
+~
+Flags:	1000000000000101000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	17620
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17622
+Name:	The Dressing Room
+Desc:$
+   You are standing in what appears to be a dressing room. It looks like
+squatters live here more than anything. 
+~
+Flags:	1000000000000101000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17623
+Name:	Stage Entrance
+Desc:$
+   You are standing in the area where the actors enter the stage. There really
+isn't much here except the cords for the curtains. 
+~
+Flags:	1000000000000101001
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17624
+Name:	Back stage Right
+Desc:$
+   You are standing in the back right of the stage. If you don't move much no
+one will notice you. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	17623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17625
+Name:	Back Center Stage
+Desc:$
+   You are standing in the center of the limelight now! The show must go on!
+Oops! You're in the way of the Cabaret. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	17630
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17626
+Name:	Back stage left
+Desc:$
+   You are standing in the left side of backstage. My there are a lot of
+people in the audience. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17620
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17627
+Name:	Front stage left
+Desc:$
+   As you step into the full light of the stage. You see lots of adolescent
+children and adults patiently waiting for you to perform there favorite movie.
+~
+Flags:	1000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	17626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17628
+Name:	Front center stage
+Desc:$
+   Now is your big chance, Dazzle the audience you! Oh, wait....your not part
+of the cabaret. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	17625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17629
+Name:	Front right stage
+Desc:$
+   This is where the cabaret gathers the rhps "virgins" to embarass them
+profusely. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	17624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17630
+Name:	The Screen
+Desc:$
+   You are standing at the projection screen, the movie looks so real from
+here! You Almost feel like you can walk through it 
+~
+Flags:	10000000000000000011010100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	17625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17631
+Name:	The Lighting Room
+Desc:$
+   You are standing in a room that looks like and obvious fire hazard there
+are open wires everywhere!  This seems to be where the lighting director does
+his job.  As you look at the table you notice a large pile of nude mags, He
+must be a perv. 
+~
+Flags:	1010000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	17604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17698
+Name:	The Bathroom
+Desc:$
+   You are standing in the middle of the most disgusting bathroom you have
+ever seen. It looks like no one has cleaned it since 1990. 
+~
+Flags:	1000000000000101000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17699
+Name:	Grang's Temple of Eddie
+Desc:$
+   As you look around this room you feel like you are in a shrine to Meatloaf
+~
+Flags:	10000000000000000000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[EXIT down]
+	Keywords:	grate
+	Desc:$
+a sewer grate 
+~
+	ToVnum:	17600
+	Flags:	1
+	Material:	metal
+	Barrier:	16
+	KeyVnum:	0
+BREAK
+END

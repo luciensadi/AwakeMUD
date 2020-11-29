@@ -1,0 +1,155 @@
+#38261
+Keywords:	UCAS Border Patrol Guard
+Name:	UCAS Border Guard
+RoomDesc:$
+A UCAS Border Patrol Guard stands here, waiting for a problem. 
+
+~
+LookDesc:$
+These North Border Patrol Guards look pretty cold.  There is absolutely no
+concern for your life in their eyes.  They are decked out in dark UCAS wear,
+hoping someone will make a wrong move. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Shotgun
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	6
+[POINTS]
+	Height:	170
+	Weight:	70
+	Level:	8
+	Ballistic:	8
+	Impact:	8
+	Karma:	1
+[SKILLS]
+	shotguns:	8
+BREAK
+#38262
+Keywords:	conductor
+Name:	The Border Conductor
+RoomDesc:$
+A UCAS Border Patrol Conductor stands here, piercing everyone with his eyes. 
+
+~
+LookDesc:$
+The UCAS are supposed to be here to make things safer, but this guy gives you
+the creeps.  Those have got to be cyber eyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	12
+	Cha:	10
+	Int:	8
+	Wil:	8
+	Mag:	4
+[POINTS]
+	Height:	180
+	Weight:	80
+	Level:	9
+	Ballistic:	8
+	Impact:	8
+	Cash:	1000
+	Bank:	3000
+[SKILLS]
+	interrogation:	6
+	corporate etiquette:	6
+	BR/Bike:	4
+	leadership:	6
+BREAK
+#38264
+Keywords:	salish sidhe guardian
+Name:	Salish-Sidhe Guardian
+RoomDesc:$
+A Native American Soldier of the Salish-Sidhe stands here, watching closely. 
+
+~
+LookDesc:$
+The Salish-Sidhe guard is wearing an emblem of the Crow tribes.  He must be
+guarding his own home, just North of here.  They seem to be pleasent company
+as long as you're clean. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	8
+	Mag:	7
+[POINTS]
+	Height:	140
+	Weight:	65
+	Level:	8
+	Ballistic:	5
+	Impact:	8
+	Cash:	200
+	Bank:	500
+	Karma:	1
+[SKILLS]
+	machine guns:	8
+BREAK
+#38279
+Keywords:	waitress shirley
+Name:	Shirley
+RoomDesc:$
+Shirley beats you to the take-out counter to take your order! 
+
+~
+LookDesc:$
+Shirley is the only staff you see, running around taking care of things here.
+She's wearing a classic waitress outfit.  It reminds you of a classic diner in
+the modern age (1980). 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	5
+	Cash:	54
+	Bank:	800
+[SKILLS]
+BREAK
+END

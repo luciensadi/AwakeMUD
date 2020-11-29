@@ -1,0 +1,159 @@
+#29200
+Keywords:	helmet psi-tek special forces tek black kevlar
+Name:	a black kevlar helmet
+RoomDesc:$
+A black special forces helmet awaits its owner here.~
+LookDesc:$
+Thick kevlar covered in a black polymer coating with a small logo engraved on
+the back, this helmet offers great protection. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	3.00
+	Barrier:	24
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	logo
+	Desc:$
+The word Psi-Tek is engraved in back of the helmet with a ^gdark green^n finish. 
+~
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#29201
+Keywords:	goggles psi-tek tek special forces nightvision vision
+Name:	a pair of nightvision goggles
+RoomDesc:$
+A pair of nightvision goggles await their owner here.~
+LookDesc:$
+Sensitive electronics placed in a heavy plastic casing, these night vision
+goggles come with a built in magnification function.  A small logo is embeded
+on the nylon strap of the goggles. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	1
+AffFlags:	100010000000000000
+Material:	electronics
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	2000
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	logo
+	Desc:$
+The word Psi-Tek is stitched into the nylon of the goggles in a ^gdark green^n. 
+~
+BREAK
+#29202
+Keywords:	black special forces psi-tek tek kevlar jacket
+Name:	a black jacket
+RoomDesc:$
+A heavy black jacket awaits its owner here.~
+LookDesc:$
+Upon examination of the jacket you find it laced with two internal coatings of
+very strong, yet thin, kevlar.  The jacket seems comfortable yet offers strong
+protection from ballistics.  Over the breast of the jacket is a lightly
+stitched logo. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	7.00
+	Barrier:	24
+	Cost:	12500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	6
+	Val6:	1
+[EXTRADESC 0]
+	Keywords:	logo
+	Desc:$
+The word Psi-Tek is stitched into the jackets breast in ^gdark green^n. 
+~
+BREAK
+#29203
+Keywords:	black special forces pants psi-tek tek padded kevlar
+Name:	a pair of black pants
+RoomDesc:$
+A pair of black pants await their owner here.~
+LookDesc:$
+These pants seem to have ceramic padding between the layers of cloth, which is
+also quite thick.  A small patch is stitched on the pants, over the knees. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	3.00
+	Barrier:	16
+	Cost:	12500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	2
+[EXTRADESC 0]
+	Keywords:	patch
+	Desc:$
+The word Psi-Tek is stitched over the knee of each leg of the pants in ^gdark
+green^n. 
+~
+BREAK
+#29204
+Keywords:	big cardboard box
+Name:	a big cardboard box
+RoomDesc:$
+A big cardboard box has been left on the table~
+LookDesc:$
+Seems pretty spacious. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10000
+	Val2:	-1
+BREAK
+END

@@ -4,7 +4,7 @@ Desc:$
    What... oh no.... you're not dead are you? Better take one last grab at
 life while you still can.  
 ~
-Flags:	1000000000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -22,7 +22,7 @@ RoomType:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
 [EXIT up]
-	ToVnum:	35500
+	ToVnum:	16295
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -64,7 +64,7 @@ what its all about is schoolgirls being seduced by tentacled beasts.  There's
 also a shrine to Jerry Garcia on the far end of the room, with a copy of the
 Koran on the altar. 
 ~
-Flags:	100000000000000000001000001100
+Flags:	1000001100
 SecType:	Inside
 MatrixExit:	1100
 IO:	0
@@ -1376,52 +1376,6 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#36
-Name:	Lucien's Test Chamber
-Desc:$
-   A simple laboratory, perfect for testing the latest world-breaking changes.
-~
-Flags:	100000000000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	50
-Y:	50
-Z:	50.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
-BREAK
-#37
-Name:	Finster's Laboratory
-Desc:$
-   Just what you would expect. An evil genius's lab, filled with stuff. 
-~
-Flags:	100000000000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
-BREAK
 #40
 Name:	Hualpa's Cavern
 Desc:$
@@ -1817,7 +1771,7 @@ carrots, peas, onions, garlic, and herbs are all very neatly in their
 sections.  A simple faucet with a simple garden hose with a spray nozzle sits
 at the edge of the garden, for the use of watering the garden. 
 ~
-Flags:	100000000000000110000
+Flags:	10000100000000000000110000
 SecType:	Field
 MatrixExit:	0
 Crowd:	0
@@ -1859,11 +1813,5 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
-[EXIT north]
-	ToVnum:	35500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
 BREAK
 END

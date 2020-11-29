@@ -1,0 +1,63 @@
+#14500
+Keeper:	14517
+ProfitBuy:	2.00
+ProfitSell:	0.10
+Random:	0
+Open:	6
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Don't mess me around mate, do you see that kinda stuff?
+NoSuchItemPlayer:	Get lost!
+NoNuyen:	Get back to me when you're serious.
+DoesntBuy:	Why would I want something like that?
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Name:	unnamed shop
+Flags:	1100
+Races:	0
+Buytypes:	1000000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	931
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	937
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	943
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	947
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	946
+		Type:	Avail
+		Stock:	0
+BREAK
+#14501
+Keeper:	-1
+ProfitBuy:	3.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	I don't have anything else man.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	I don't want that!
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+BREAK
+END

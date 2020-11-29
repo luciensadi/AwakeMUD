@@ -1,0 +1,1197 @@
+#28400
+Keywords:	big heavy personal rocket launcher croc aprl
+Name:	A Croc APRL
+RoomDesc:$
+A big, heavy, anti-personal rocket launcher lies here.~
+LookDesc:$
+This is the anti-personal model of the Croc rocket launchers. It is very big,
+made of hard steel and reinforced with kevlar to prevent damage in combat. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	16
+	Cost:	800000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	4
+	Val3:	21
+	Val4:	20
+	Val5:	1
+	Val6:	1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	-2
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	-1
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	-2
+BREAK
+#28402
+Keywords:	big heavy machine gun hmg croc
+Name:	A Croc HMG
+RoomDesc:$
+A big heavy machine gun lies here.~
+LookDesc:$
+It is the Croc special model of heavy machine guns. Reinforced with kevlar
+lacings to resist eventual combat damage. It comes with a strapbelt to allow
+the wielder to carry it around the neck. 
+~
+Type:	Weapon
+WearFlags:	10000000000101
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	18.00
+	Barrier:	16
+	Cost:	320000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	17
+	Val4:	19
+	Val5:	80
+	Val6:	80
+	Val10:	16
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	-2
+BREAK
+#28404
+Keywords:	croc lmg light machine gun
+Name:	A Croc LMG
+RoomDesc:$
+A Croc model light machine gun lies here.~
+LookDesc:$
+This is a light model of the Croc assault machine guns. It is reinforced with
+kevlar lacing to support combat damage and comes standardly with an attached
+strapbelt for being able to be carried around neck. 
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	12.00
+	Barrier:	16
+	Cost:	150000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val3:	15
+	Val4:	19
+	Val5:	64
+	Val6:	64
+BREAK
+#28406
+Keywords:	modified crock hmg heavy machine gun
+Name:	A modified Croc HMG
+RoomDesc:$
+A home modified version of the Croc heavy machine gun lies here.~
+LookDesc:$
+This is a modified, slightly more powerful and deadly version of the allready
+lethal Croc heavy machine gun. It has some attachments to improve the
+wielder's combat capabilities. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	1000000000000
+AffFlags:	100000000000000
+Material:	metal
+[POINTS]
+	Weight:	31.00
+	Barrier:	1
+	Cost:	400000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	3
+	Val3:	17
+	Val4:	19
+	Val5:	64
+	Val6:	64
+	Val10:	16
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	-2
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	-1
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	-1
+BREAK
+#28410
+Keywords:	oriental orichalcum katana ancient hand
+Name:	An oriental orichalcum katana
+RoomDesc:$
+An ancient-looking hand made oriental katana lies here.~
+LookDesc:$
+This is a very finely hand crafted katana, made of the legendary material
+called orichalcum, found only in the lost city of Atlantis. Its blade is
+extremelly sharp, and seems to hum slightly at the touch. There are some
+inscriptions in a runic language, engraved in the blade. 
+~
+Type:	Weapon
+WearFlags:	110000000000000
+ExtraFlags:	1000001000010
+AffFlags:	100000
+Material:	orichalcum
+[POINTS]
+	Weight:	8.00
+	Barrier:	16
+	Cost:	200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-1
+BREAK
+#28411
+Keywords:	orichalcum ninja to hand
+Name:	A hand-made orichalcum ninja-to
+RoomDesc:$
+A finely crafted, hand made orichalcum ninja-to lies here.~
+LookDesc:$
+This is a very finely crafted ninja-to, made by hand by the most experienced
+and skilled oriental bladesmiths, forged into a very rare and magical material
+called orichalcum. Its blade is very sharp. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	90000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	1
+BREAK
+#28412
+Keywords:	silver shuriken
+Name:	A silver shuriken
+RoomDesc:$
+A silver shuriken lies here.~
+LookDesc:$
+This is a finely craft, hand-made silver shuriken. It has monofilament edges,
+and is forged from a very resistant and powerful metal lacing. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	315
+	Val4:	28
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#28413
+Keywords:	ninja fighting suit black
+Name:	A black ninja-style fighting suit
+RoomDesc:$
+A black fighting suit lies here.~
+LookDesc:$
+This is a finely tailored black fighting suit. It is resistant enough to
+support most common melee punches and kicks, and can even resist to some cuts.
+~
+Type:	Worn
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	1000000000000000
+Material:	fabric
+[POINTS]
+	Weight:	8.00
+	Barrier:	4
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	6
+	Val5:	1
+	Val6:	4
+	Val7:	2
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	1
+BREAK
+#28414
+Keywords:	black jewelled scabbard
+Name:	A black jewelled scabbard
+RoomDesc:$
+A black jewelled scabbard lies here.~
+LookDesc:$
+This is a very finely crafted and expensive looking black scabbard, due to the
+jewels attached to it, making it very beautiful at look. 
+~
+Type:	Container
+WearFlags:	100110000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val2:	-1
+BREAK
+#28415
+Keywords:	opal deep green weapon focus
+Name:	A deep green opal
+RoomDesc:$
+A deep green opal is lying here.~
+LookDesc:$
+This is an opal of a deep dark green color. Its size is slightly smaller than
+a golf ball. It seems it was designed to be attached to a sword's hilt. 
+~
+Type:	Focus
+WearFlags:	1
+ExtraFlags:	101000011
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	24
+	Cost:	5000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	3
+BREAK
+#28420
+Keywords:	small black medical kit
+Name:	A small, black medical kit
+RoomDesc:$
+There is a small, black medical kit lying here.~
+LookDesc:$
+It is a small kit, designed for use in combat ground. It is of a black color,
+and has many tools, drugs, remedies and bandages inside. 
+~
+Type:	Workshop
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+BREAK
+#28421
+Keywords:	hi tech hi-tech earbud radio
+Name:	A hi-tech earbud radio
+RoomDesc:$
+A very expensive looking and modern earbud radio lies here.~
+LookDesc:$
+This is the last word in earbud radios around the world. It combines the best
+range and an extraordinaire encryption/decryption level, result of the high
+quality technology. It is a radio made of metal that is attached to the back
+of the user's ear, and has a small phone that alongates to the user's mouth,
+to allow easier transmission. 
+~
+Type:	Radio
+WearFlags:	10100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	6
+BREAK
+#28422
+Keywords:	hi tech hi-tech electronic kit
+Name:	A hi-tech electronic kit
+RoomDesc:$
+A hi-tech electronic kit lies here.~
+LookDesc:$
+This is a very modern and complete electronic kit full of useful tools for
+manuevering electronic parts. It comes standard with many tools, but has space
+for more. 
+~
+Type:	Workshop
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+BREAK
+#28423
+Keywords:	wrist phone crystal screen
+Name:	A wrist phone with crystal screen
+RoomDesc:$
+A wrist phone with crystal screen lies here.~
+LookDesc:$
+This is a very good and expensive-looking wrist phone that comes with a
+liquid-crystal screen, allowing the user to see his talking partner's face. 
+~
+Type:	Phone
+WearFlags:	101000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28430
+Keywords:	bottle big mass red augmentation
+Name:	A mass augmentation I
+RoomDesc:$
+A big bottle containing a thick red mass lies here.~
+LookDesc:$
+This is a bottle containing the mass used to augmentate the user's body,
+making it capable of sustaining more damage than he is normally allowed to.
+There is a plaque attached to the bottle that reads: Rating 1 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	6.00
+	Barrier:	1
+	Cost:	16000000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	200
+	Val2:	10
+	Val4:	6000
+[AFFECT 0]
+	Location:	Max Physical
+	Modifier:	1
+[AFFECT 1]
+	Location:	Body
+	Modifier:	1
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 3]
+	Location:	Quickness
+	Modifier:	-1
+BREAK
+#28431
+Keywords:	bottle big mass red augmentation
+Name:	A mass augmentation II
+RoomDesc:$
+A big bottle containing a thick red mass lies here.~
+LookDesc:$
+This is a bottle containing the mass used to augmentate the user's body,
+making it capable of sustaining more damage than he is normally allowed to.
+There is a plaque attached to the bottle that reads: Rating 2 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	6.00
+	Barrier:	1
+	Cost:	32000000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	400
+	Val2:	10
+	Val4:	12000
+[AFFECT 0]
+	Location:	Max Physical
+	Modifier:	1
+[AFFECT 1]
+	Location:	Body
+	Modifier:	2
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	1
+BREAK
+#28432
+Keywords:	pump adrenal
+Name:	An adrenal pump I
+RoomDesc:$
+A delicate organ pulses softly.~
+LookDesc:$
+Adrenal pump, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	400000
+	AvailTN:	12
+	AvailDay:	80.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	125
+	Val2:	4
+	Val4:	11718
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	1
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	2
+BREAK
+#28433
+Keywords:	pump adrenal
+Name:	An adrenal pump II
+RoomDesc:$
+A delicate organ pulses softly.~
+LookDesc:$
+Adrenal pump, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	400000
+	AvailTN:	12
+	AvailDay:	80.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	250
+	Val2:	4
+	Val4:	23437
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	2
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	4
+BREAK
+#28434
+Keywords:	gland suprathyroid
+Name:	A suprathyroid gland
+RoomDesc:$
+A throbbing gland sits here.~
+LookDesc:$
+Suprathyroid gland.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	10
+	AvailDay:	60.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	140
+	Val2:	5
+	Val4:	105
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	1
+BREAK
+#28435
+Keywords:	booster cerebral
+Name:	A cerebral booster I
+RoomDesc:$
+A strange brain-looking thang is here.~
+LookDesc:$
+Cerebral booster, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	110000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	40
+	Val2:	6
+	Val4:	1600
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+BREAK
+#28436
+Keywords:	booster cerebral
+Name:	A cerebral booster II
+RoomDesc:$
+A brainish-looking creature stares you in the face.~
+LookDesc:$
+Cerebral booster, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	110000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	80
+	Val2:	6
+	Val4:	3200
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	2
+[AFFECT 1]
+	Location:	Task Pool (Int)
+	Modifier:	1
+BREAK
+#28437
+Keywords:	articulation enhanced
+Name:	An enhanced articulation
+RoomDesc:$
+Small ligaments seem to move on their own.~
+LookDesc:$
+Enhanced articulation.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	160000
+	AvailTN:	7
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	60
+	Val2:	9
+	Val4:	45
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	1
+BREAK
+#28440
+Keywords:	diet assis miraculous recipe
+Name:	Assis' miraculous diet
+RoomDesc:$
+A recipe for Assis' miraculous diet lies here.~
+LookDesc:$
+This is Assis' recipe for getting a lighter body. Breakfast: 1 cup of lemon
+juice, Lunch: 1 cup of orange juice and a cracker, Dinner: 1 cup of banana
+vitamin. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	10
+	Val2:	7
+	Val4:	60
+[AFFECT 0]
+	Location:	Weight
+	Modifier:	-10
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	1
+BREAK
+#28441
+Keywords:	enlargement assis bottle muscle mass
+Name:	Assis' enlargement
+RoomDesc:$
+A bottle filled with muscle's mass lies here.~
+LookDesc:$
+This is a bottle containing muscles' mass for enlargening one's body. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	10
+	Val2:	7
+	Val4:	60
+[AFFECT 0]
+	Location:	Height
+	Modifier:	20
+[AFFECT 1]
+	Location:	Weight
+	Modifier:	20
+BREAK
+#28442
+Keywords:	enshortment bottle assis mass fluids
+Name:	Assis' enshortment
+RoomDesc:$
+A bottle containing mass fluids lies here.~
+LookDesc:$
+This bottle contains mass fluids that are used to enshort an individual. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	10
+	Val2:	7
+	Val4:	60
+[AFFECT 0]
+	Location:	Weight
+	Modifier:	-20
+[AFFECT 1]
+	Location:	Height
+	Modifier:	-30
+BREAK
+#28450
+Keywords:	croc sting sr long heavy sniper rifle
+Name:	A Croc Sting SR
+RoomDesc:$
+A long and heavy lookin sniper rifle lies here.~
+LookDesc:$
+This is the best of the Croc's sniper rifles models. It comes standardly with
+a smartlink and a vision magnification. 
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	1000000001000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	19.00
+	Barrier:	12
+	Cost:	400000
+	AvailTN:	12
+	AvailDay:	7.00
+	LegalNum:	2
+	LegalCode:	9
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val3:	12
+	Val4:	12
+	Val5:	6
+	Val6:	6
+	Val7:	28702
+	Val9:	670
+	Val10:	4
+BREAK
+#28451
+Keywords:	deadly submachinegun smg assassin croc
+Name:	A Croc Assassin SMG
+RoomDesc:$
+A deadly looking submachinegun lies here.~
+LookDesc:$
+This is one of the most deadly Croc submachinegun models. It combines
+lightweight with excellent power and ammo magazine capacity. 
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.75
+	Barrier:	6
+	Cost:	30000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	26
+	Val6:	26
+	Val10:	28
+BREAK
+#28452
+Keywords:	croc 46 big heavy revolver
+Name:	A Croc .46
+RoomDesc:$
+A big and heavy revolver lies here.~
+LookDesc:$
+This is the biggest, heaviest and most powerful of the Croc revolvers models.
+It has an amusing power, able to penetrate most armor's blindage. It lacks,
+though, ammunition capacity and rate of fire. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	16
+	Cost:	1800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val6:	6
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#28456
+Keywords:	helmet assault croc heavy
+Name:	A Croc assault helmet
+RoomDesc:$
+A heavy assault helmet lies here.~
+LookDesc:$
+This is an assault helmet designed for combining lightweight and protection.
+It has the Croc logo on it, which lets you know that the helmet uses the
+lastest armor technology. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	1000000010001000000000
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	260000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#28457
+Keywords:	jacket croc armored heavy
+Name:	A Croc armored jacket
+RoomDesc:$
+A heavy looking Croc armored jacket lies here.~
+LookDesc:$
+This is a rather heavy and big black jacket with the Croc logo on it. The
+jacket is armored with a kevlar and titanium lacing that provides the best
+protection to the wearer. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	12.00
+	Barrier:	12
+	Cost:	380000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	5
+	Val6:	4
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#28458
+Keywords:	armor assault heavy croc suit
+Name:	A Croc heavy assault armor
+RoomDesc:$
+A suit of Croc's heavy assault armor lies here.~
+LookDesc:$
+This is the last word in Croc's models of assault armor. Expensive, but
+extremelly protective, the heavy versions of the Croc assault armor can
+withstand even attacks with heavy pistols without being scratched. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	36.00
+	Barrier:	16
+	Cost:	770000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	7
+	Val6:	6
+BREAK
+#28459
+Keywords:	armor assault light croc
+Name:	A Croc light assault armor
+RoomDesc:$
+A light version of the Croc's assault armor lies here.~
+LookDesc:$
+This is the lighter version of the Croc's assault armors. It is designed
+mainly for allowing speed and fast-movement of tactical operations, rather
+than sustaining massive damage. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	30.00
+	Barrier:	16
+	Cost:	490000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	5
+	Val6:	5
+BREAK
+#28460
+Keywords:	pants croc pair camouflaged dark green
+Name:	A pair of Croc camouflaged pants
+RoomDesc:$
+A pair of dark green camouflaged pants.~
+LookDesc:$
+These camouflaged pants are made of a good quality cloth and contain multiple
+pockets for storaging miscellaneous things and two bigger pockets aside,
+specially designed for holstering Crocs .46. 
+~
+Type:	Container
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	900
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val2:	-1
+BREAK
+#28461
+Keywords:	jeans spiked pair ragged
+Name:	A spiked pair of jeans
+RoomDesc:$
+A pair of ragged jeans with many spikes attached to it lies here.~
+LookDesc:$
+This looks more like a common pair of blue jeans, except for the fact that it
+is slightly ragged, there are many small spikes attached to it's ends. It has
+two back pockets and four pockets in the front, to store small items, tools or
+even a concealed weapon. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	180
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	1
+	Val3:	1
+	Val4:	2
+BREAK
+#28462
+Keywords:	t-shirt jeans button up t shirt
+Name:	A button-up jeans t-shirt
+RoomDesc:$
+A button-up jeans t-shirt lies here.~
+LookDesc:$
+This is a very finely made button-up t-shirt, made from hard jeans. It is
+slightly ragged, but that seems to make it even more nice looking. It has some
+pockets on the front, to store small items and such. 
+~
+Type:	Container
+WearFlags:	100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	90
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	5
+	Val2:	-1
+BREAK
+#28463
+Keywords:	jacket spiked ragged jeans
+Name:	A spiked, ragged jeans jacket
+RoomDesc:$
+A jacket made of ragged jeans and with many spikes lies here.~
+LookDesc:$
+This is a very fine and expensive-looking jacket. It has many spikes attached
+to it and is slightly ragged, seemingly to look cooler. It has some small
+inner pockets, to conceal some weapons or small items. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	390
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val4:	2
+	Val7:	8
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+END
