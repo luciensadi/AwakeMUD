@@ -585,7 +585,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) > 0)
   {
     // Don't let people re-try repeatedly.
-    for (int q = 0; q <= SHOP_LAST_IDNUM_LIST_SIZE; q++) {
+    for (int q = 0; q < SHOP_LAST_IDNUM_LIST_SIZE; q++) {
       if (sell->lastidnum[q] == GET_IDNUM(ch)) {
         sprintf(buf, "%s Sorry, I couldn't get that in for you.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -635,7 +635,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       
       // Add them to the forbidden list.
-      for (int q = SHOP_LAST_IDNUM_LIST_SIZE; q >= 1; q--)
+      for (int q = SHOP_LAST_IDNUM_LIST_SIZE - 1; q >= 1; q--)
         sell->lastidnum[q] = sell->lastidnum[q-1];
       sell->lastidnum[0] = GET_IDNUM(ch);
       
@@ -936,8 +936,14 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       obj = read_object(sell->vnum, VIRTUAL);
       if (!obj || GET_OBJ_COST(obj) < 1) {
         i--;
-        if (obj)
+        if (obj) {
+          sprintf(buf2, "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
+          mudlog(buf2, ch, LOG_SYSLOG, TRUE);
           extract_obj(obj);
+        } else {
+          sprintf(buf2, "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_nr, GET_NAME(keeper));
+          mudlog(buf2, ch, LOG_SYSLOG, TRUE);
+        }
         continue;
       }
       sprintf(ENDOF(buf), " %2d)  ", i);
@@ -961,8 +967,10 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         sprintf(ENDOF(buf), "%-48s^n %6d\r\n", GET_OBJ_NAME(obj),
                   buy_price(obj, shop_nr));
       }
-      if (strlen(buf) >= MAX_STRING_LENGTH - 200)
+      if (strlen(buf) >= MAX_STRING_LENGTH - 200) {
+        sprintf(buf2, "Shop %ld ('%s'): Aborting string composition due to length constraints.", shop_nr, GET_NAME(keeper));
         break;
+      }
       extract_obj(obj);
     }
   }
