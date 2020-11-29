@@ -2715,7 +2715,10 @@ ACMD(do_create)
   else if (is_abbrev(buf1, "ammo") || is_abbrev(buf1, "ammunition"))
     create_ammo(ch);
   else if (is_abbrev(buf1, "spell")) {
-    struct obj_data *library = ch->in_room->contents;
+    if (!(GET_SKILL(ch, SKILL_SPELLDESIGN) || GET_SKILL(ch, SKILL_SORCERY)))
+      send_to_char("You must learn Spell Design or Sorcery to create a spell.\r\n", ch);
+      
+    struct obj_data *library = ch->in_room ? ch->in_room->contents : ch->in_veh->contents;
     for (;library; library = library->next_content)
       if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL &&
           ((GET_TRADITION(ch) == TRAD_SHAMANIC
@@ -2724,8 +2727,6 @@ ACMD(do_create)
         break;
     if (!library)
       send_to_char("You don't have the right tools here to create a spell.\r\n", ch);
-    else if (!(GET_SKILL(ch, SKILL_SPELLDESIGN) || GET_SKILL(ch, SKILL_SORCERY)))
-      send_to_char("You must learn Spell Design or Sorcery to create a spell.\r\n", ch);
     else {
       ch->desc->edit_number2 = GET_OBJ_VAL(library, 1);
       create_spell(ch);
