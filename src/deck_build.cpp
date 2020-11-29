@@ -473,51 +473,72 @@ ACMD(do_build) {
     half_chop(argument, arg1, buf);
     half_chop(buf, arg2, arg3);
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-        if (!(obj = get_obj_in_list_vis(ch, arg1, ch->in_room->contents))) {
-            if (!str_cmp(arg1, "circle")) {
-                for (obj = ch->in_room->contents; obj; obj = obj->next_content)
-                    if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE)) {
-                        send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
-                        return;
-                    }
-                if (!*arg2 || !*arg3)
-                    send_to_char("Draw the circle at what force and to what element?\r\n", ch);
-                else
-                    circle_build(ch, arg3, atoi(arg2));
-                return;
-            } else if (!str_cmp(arg1, "lodge")) {
-                for (obj = ch->in_room->contents; obj; obj = obj->next_content)
-                    if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE)) {
-                        send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
-                        return;
-                    }
-                if (!*arg2)
-                    send_to_char("What force do you wish that lodge to be?\r\n", ch);
-                else
-                    lodge_build(ch, atoi(arg2));
-                return;
+      if (ch->in_room)
+        obj = get_obj_in_list_vis(ch, arg1, ch->in_room->contents);
+      else
+        obj = get_obj_in_list_vis(ch, arg1, ch->in_veh->contents);
+      
+      // They're building a new thing.
+      if (!obj) {          
+        // Building a new circle or lodge?
+        if (!str_cmp(arg1, "circle") || !str_cmp(arg1, "lodge")) {
+          if (ch->in_veh) {
+            send_to_char(ch, "You can't build circles or lodges in vehicles.\r\n");
+            return;
+          }
+          
+          for (obj = ch->in_room->contents; obj; obj = obj->next_content) {
+            if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE)) {
+              send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
+              return;
             }
-            send_to_char(ch, "You don't seem to have that part.\r\n");
-        } else if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
-            if (!GET_OBJ_VAL(obj, 9))
-                send_to_char("It has already been completed!\r\n", ch);
-            else if (GET_OBJ_VAL(obj, 3) != GET_IDNUM(ch))
-                send_to_char("That's not yours!\r\n", ch);
-            else if (GET_OBJ_VAL(obj, 0) == TYPE_LODGE) {
-                AFF_FLAGS(ch).SetBit(AFF_LODGE);
-                GET_BUILDING(ch) = obj;
-                send_to_char(ch, "You continue working on your lodge.\r\n");
-                act("$n continues to build $s lodge.", FALSE, ch, 0, 0, TO_ROOM);
-            } else if (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE) {
-                AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
-                GET_BUILDING(ch) = obj;
-                send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
-                act("$n continues to draw the hermetic circle.", FALSE, ch, 0, 0, TO_ROOM);
-            } else
-                send_to_char("You can't build that!\r\n", ch);
-        } else
-            send_to_char("You can't build that!\r\n", ch);
+          }
+          
+          // Circle-specific code.
+          if (!str_cmp(arg1, "circle")) {
+            if (!*arg2 || !*arg3)
+              send_to_char("Draw the circle at what force and to what element?\r\n", ch);
+            else
+              circle_build(ch, arg3, atoi(arg2));
+            return;
+          }
+          
+          // Lodge-specific code.
+          if (!str_cmp(arg1, "lodge")) {
+            if (!*arg2)
+              send_to_char("What force do you wish that lodge to be?\r\n", ch);
+            else
+              lodge_build(ch, atoi(arg2));
+            return;
+          }
+        }
+        
+        // Whatever they're building isn't supported, so they must have typod a part.
+        send_to_char(ch, "You don't seem to have that part.\r\n");
         return;
+      }
+      
+      // We know obj exists.  
+      if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
+          if (!GET_OBJ_VAL(obj, 9))
+              send_to_char("It has already been completed!\r\n", ch);
+          else if (GET_OBJ_VAL(obj, 3) != GET_IDNUM(ch))
+              send_to_char("That's not yours!\r\n", ch);
+          else if (GET_OBJ_VAL(obj, 0) == TYPE_LODGE) {
+              AFF_FLAGS(ch).SetBit(AFF_LODGE);
+              GET_BUILDING(ch) = obj;
+              send_to_char(ch, "You continue working on your lodge.\r\n");
+              act("$n continues to build $s lodge.", FALSE, ch, 0, 0, TO_ROOM);
+          } else if (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE) {
+              AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
+              GET_BUILDING(ch) = obj;
+              send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
+              act("$n continues to draw the hermetic circle.", FALSE, ch, 0, 0, TO_ROOM);
+          } else
+              send_to_char("You can't build that!\r\n", ch);
+      } else
+          send_to_char("You can't build that!\r\n", ch);
+      return;
 
     } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
       ammo_build(ch, obj);

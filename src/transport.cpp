@@ -874,7 +874,7 @@ static void init_elevators(void)
             make_elevator_door(rnum, shaft_rnum, elevator[i].floor[j].doors);
             make_elevator_door(shaft_rnum, rnum, rev_dir[elevator[i].floor[j].doors]);
             // Flag the shaft appropriately.
-            ROOM_FLAGS(&world[shaft_rnum]).SetBits(ROOM_NOMOB, ROOM_NOBIKE, ROOM_ELEVATOR_SHAFT, ROOM_FALL, ENDBIT);
+            ROOM_FLAGS(&world[shaft_rnum]).SetBits(ROOM_NOMOB, ROOM_INDOORS, ROOM_NOBIKE, ROOM_ELEVATOR_SHAFT, ROOM_FALL, ENDBIT);
             world[shaft_rnum].rating = ELEVATOR_SHAFT_FALL_RATING;
           } else {
             sprintf(buf, "Fatal error: Nonexistent elevator shaft vnum %ld.", elevator[i].floor[j].shaft_vnum);

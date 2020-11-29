@@ -1649,7 +1649,7 @@ void circle_build(struct char_data *ch, char *type, int force)
     return;
   }
   if (ch->in_veh) {
-    send_to_char("You can't build a lodge in a vehicle.\r\n", ch);
+    send_to_char("You can't build a circle in a vehicle.\r\n", ch);
      return;
   }
   if (GET_NUYEN(ch) < force * force)
