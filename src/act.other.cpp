@@ -1589,6 +1589,7 @@ ACMD(do_reload)
     return;
   }
 
+  bool printed_something = FALSE;
   if (gun->contains) {
     struct obj_data *old = gun->contains;
     obj_from_obj(old);
@@ -1597,8 +1598,9 @@ ACMD(do_reload)
       old->vfront = ch->vfront;
     } else
       obj_to_room(old, ch->in_room);
-    act("$n ejects a magazine from $p.", FALSE, ch, gun, NULL, TO_ROOM);
+    act("$n reloads $p, discarding the old magazine.", FALSE, ch, gun, NULL, TO_ROOM);
     act("You eject a magazine from $p.", FALSE, ch, gun, NULL, TO_CHAR);
+    printed_something = TRUE;
   }
   if (i->carried_by)
     obj_from_char(i);
@@ -1615,6 +1617,9 @@ ACMD(do_reload)
     act("Reloaded $p.", FALSE, ch, gun, 0, TO_CHAR);
   else
     send_to_char("Reloaded.\r\n", ch);
+    
+  if (!printed_something)
+    act("$n reloads $p.", FALSE, ch, gun, NULL, TO_ROOM);
   return;
 }
 
