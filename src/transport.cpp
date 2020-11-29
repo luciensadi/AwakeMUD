@@ -1069,6 +1069,7 @@ SPECIAL(call_elevator)
           return TRUE;
         }
       send_to_char("You press the call button, and the small light turns on.\r\n", ch);
+      act("$n presses the call button.", FALSE, ch, 0, 0, TO_ROOM);
       elevator[index].destination = ch->in_room->number;
     }
     return TRUE;

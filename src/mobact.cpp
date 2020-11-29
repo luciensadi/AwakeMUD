@@ -43,6 +43,7 @@ extern bool ranged_response(struct char_data *ch, struct char_data *vict);
 extern struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i);
 
 SPECIAL(elevator_spec);
+SPECIAL(call_elevator);
 extern int num_elevators;
 extern struct elevator_data *elevator;
 extern int process_elevator(struct room_data *room, struct char_data *ch, int cmd, char *argument);
@@ -648,6 +649,14 @@ bool mobact_process_movement(struct char_data *ch) {
     // Skip NOWHERE-located NPCs since they'll break things.
     if (!ch->in_room)
       return FALSE;
+      
+    // NPC standing outside an elevator? Maybe they want to call it.
+    if (ch->in_room->func == call_elevator && number(0, 6) == 0) {
+      char argument[500];
+      strcpy(argument, "button");
+      ch->in_room->func(ch, ch->in_room, find_command("push"), argument);
+      return TRUE;
+    }
       
     // NPC in an elevator? Maybe they feel like pressing buttons.
     if (ch->in_room->func == elevator_spec && number(0, 6) == 0) {

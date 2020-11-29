@@ -4043,6 +4043,10 @@ ACMD(do_set)
     GET_SKILL_POINTS(vict) = value;
     break;
   case 47:
+    if (GET_TRADITION(vict) != TRAD_SHAMANIC) {
+      send_to_char("They're not a Shaman.\r\n", ch);
+      return;
+    }
     RANGE(0, 53);
     GET_TOTEM(vict) = value;
     break;
