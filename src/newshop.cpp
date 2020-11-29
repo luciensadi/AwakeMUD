@@ -234,6 +234,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return FALSE;
       }
+      
       int enhancers = 0;
       for (check = ch->cyberware; check != NULL; check = check->next_content) {
         if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(obj))) {
@@ -261,10 +262,16 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         esscost *= 2;
       if (ch->real_abils.esshole < esscost) {
         esscost = esscost - ch->real_abils.esshole;
-        ch->real_abils.esshole = 0;
-        ch->real_abils.ess -= esscost;
-        if (GET_TRADITION(ch) != TRAD_MUNDANE)
+        if (GET_TRADITION(ch) != TRAD_MUNDANE) {
+          if (GET_REAL_MAG(ch) - esscost < 100) {
+            sprintf(ENDOF(buf), " That would take away the last of your magic!");
+            do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+            return FALSE;
+          }
+          ch->real_abils.esshole = 0;
+          ch->real_abils.ess -= esscost;
           magic_loss(ch, esscost, TRUE);
+        }
       } else ch->real_abils.esshole -= esscost;
       obj_to_cyberware(obj, ch);
     } else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
@@ -274,6 +281,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return FALSE;
       }
+      
       if ((GET_OBJ_VAL(obj, 0) == BIO_PATHOGENICDEFENSE || GET_OBJ_VAL(obj, 0) == BIO_TOXINEXTRACTOR) && 
           GET_OBJ_VAL(obj, 1) > GET_REAL_BOD(ch) / 2) {
         send_to_char("Your body cannot support pathogenic defense of that level.\r\n", ch);
@@ -296,6 +304,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         if (GET_TRADITION(ch) != TRAD_MUNDANE) {
           int change = GET_INDEX(ch) - ch->real_abils.highestindex;
           change /= 2;
+          if (GET_REAL_MAG(ch) - change < 100) {
+            sprintf(ENDOF(buf), " That would take away the last of your magic!");
+            do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+            GET_INDEX(ch) -= esscost;
+            return FALSE;
+          }
           magic_loss(ch, change, TRUE);
         }
         ch->real_abils.highestindex = GET_INDEX(ch);
