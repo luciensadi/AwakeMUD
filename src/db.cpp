@@ -369,13 +369,13 @@ void boot_world(void)
   log("Loading IC.");
   index_boot(DB_BOOT_IC);
 
-  log("Renumbering rooms.");
+  log("Converting exit vnums to rnums.");
   renum_world();
 
-  log("Renumbering zone table.");
+  log("Converting zone table vnums to rnums.");
   renum_zone_table();
   
-  log("Creating Help Indexes.");
+  // log("Creating Help Indexes.");
   // TODO: Is this supposed to actually do anything?
   
   log("Performing final validation checks.");
@@ -858,6 +858,15 @@ void parse_veh(File &fl, long virtual_nr)
 
 void parse_host(File &fl, long nr)
 {
+  static long last_seen = -1;
+  if (last_seen == -1) {
+    last_seen = nr;
+  } else if (last_seen >= nr) {
+    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    log(buf);
+    exit(1);
+  }
+  
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
@@ -971,6 +980,15 @@ void parse_host(File &fl, long nr)
 }
 void parse_ic(File &fl, long nr)
 {
+  static long last_seen = -1;
+  if (last_seen == -1) {
+    last_seen = nr;
+  } else if (last_seen >= nr) {
+    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    log(buf);
+    exit(1);
+  }
+  
   static DBIndex::rnum_t rnum = 0, zone = 0;
   ic_index[rnum].vnum = nr;
   ic_index[rnum].number = 0;
@@ -1009,6 +1027,15 @@ void parse_ic(File &fl, long nr)
 /* load the rooms */
 void parse_room(File &fl, long nr)
 {
+  static long last_seen = -1;
+  if (last_seen == -1) {
+    last_seen = nr;
+  } else if (last_seen >= nr) {
+    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    log(buf);
+    exit(1);
+  }
+  
   static DBIndex::rnum_t rnum = 0, zone = 0;
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
@@ -1283,58 +1310,62 @@ void renum_zone_table(void)
 {
   int zone, cmd_no;
   long a, b;
+  long arg1, arg2, arg3;
 
   for (zone = 0; zone <= top_of_zone_table; zone++)
     for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
       a = b = 0;
+      arg1 = ZCMD.arg1; arg2 = ZCMD.arg2; arg3 = ZCMD.arg3;
       switch (ZCMD.command) {
-      case 'M':
-        a = ZCMD.arg1 = real_mobile(ZCMD.arg1);
-        b = ZCMD.arg3 = real_room(ZCMD.arg3);
-        break;
-      case 'H':
-        a = ZCMD.arg1 = real_object(ZCMD.arg1);
-        if (ZCMD.arg3 != NOWHERE)
-          b = ZCMD.arg3 = real_host(ZCMD.arg3);
-        break;
-      case 'O':
-        a = ZCMD.arg1 = real_object(ZCMD.arg1);
-        if (ZCMD.arg3 != NOWHERE)
+        case 'M':
+          a = ZCMD.arg1 = real_mobile(ZCMD.arg1);
           b = ZCMD.arg3 = real_room(ZCMD.arg3);
-        break;
-      case 'V': /* Vehicles */
-        a = ZCMD.arg1 = real_vehicle(ZCMD.arg1);
-        b = ZCMD.arg3 = real_room(ZCMD.arg3);
-        break;
-      case 'S':
-        a = ZCMD.arg1 = real_mobile(ZCMD.arg1);
-        break;
-      case 'G':
-      case 'C':
-      case 'U':
-      case 'I':
-        a = ZCMD.arg1 = real_object(ZCMD.arg1);
-        break;
-      case 'E':
-        a = ZCMD.arg1 = real_object(ZCMD.arg1);
-        break;
-      case 'P':
-        a = ZCMD.arg1 = real_object(ZCMD.arg1);
-        b = ZCMD.arg3 = real_object(ZCMD.arg3);
-        break;
-      case 'D':
-        a = ZCMD.arg1 = real_room(ZCMD.arg1);
-        break;
-      case 'R': /* rem obj from room */
-        a = ZCMD.arg1 = real_room(ZCMD.arg1);
-        b = ZCMD.arg2 = real_object(ZCMD.arg2);
-        break;
-      case 'N':
-        a = ZCMD.arg1 = real_object(ZCMD.arg1);
-        break;
+          break;
+        case 'H':
+          a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          if (ZCMD.arg3 != NOWHERE)
+            b = ZCMD.arg3 = real_host(ZCMD.arg3);
+          break;
+        case 'O':
+          a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          if (ZCMD.arg3 != NOWHERE)
+            b = ZCMD.arg3 = real_room(ZCMD.arg3);
+          break;
+        case 'V': /* Vehicles */
+          a = ZCMD.arg1 = real_vehicle(ZCMD.arg1);
+          b = ZCMD.arg3 = real_room(ZCMD.arg3);
+          break;
+        case 'S':
+          a = ZCMD.arg1 = real_mobile(ZCMD.arg1);
+          break;
+        case 'G':
+        case 'C':
+        case 'U':
+        case 'I':
+          a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          break;
+        case 'E':
+          a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          break;
+        case 'P':
+          a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          b = ZCMD.arg3 = real_object(ZCMD.arg3);
+          break;
+        case 'D':
+          a = ZCMD.arg1 = real_room(ZCMD.arg1);
+          break;
+        case 'R': /* rem obj from room */
+          a = ZCMD.arg1 = real_room(ZCMD.arg1);
+          b = ZCMD.arg2 = real_object(ZCMD.arg2);
+          break;
+        case 'N':
+          a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          break;
       }
       if (a < 0 || b < 0) {
-        log_zone_error(zone, cmd_no, "Invalid vnum, cmd disabled");
+        sprintf(buf, "Invalid vnum in command. Args were: %ld %ld %ld, which resolved to a=%ld and b=%ld.",
+                arg1, arg2, arg3, a, b);
+        log_zone_error(zone, cmd_no, buf);
         ZCMD.command = '*';
       }
     }
@@ -1342,6 +1373,15 @@ void renum_zone_table(void)
 
 void parse_mobile(File &in, long nr)
 {
+  static long last_seen = -1;
+  if (last_seen == -1) {
+    last_seen = nr;
+  } else if (last_seen >= nr) {
+    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    log(buf);
+    exit(1);
+  }
+  
   static DBIndex::rnum_t rnum = 0;
 
   char_data *mob = mob_proto+rnum;
@@ -1469,6 +1509,15 @@ void parse_mobile(File &in, long nr)
 
 void parse_object(File &fl, long nr)
 {
+  static long last_seen = -1;
+  if (last_seen == -1) {
+    last_seen = nr;
+  } else if (last_seen >= nr) {
+    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    log(buf);
+    exit(1);
+  }
+  
   static DBIndex::rnum_t rnum = 0;
 
   OBJ_VNUM_RNUM(rnum) = nr;
@@ -1895,6 +1944,15 @@ void parse_quest(File &fl, long virtual_nr)
 
 void parse_shop(File &fl, long virtual_nr)
 {
+  static long last_seen = -1;
+  if (last_seen == -1) {
+    last_seen = virtual_nr;
+  } else if (last_seen >= virtual_nr) {
+    sprintf(buf, "FATAL ERROR: last_seen %ld >= virtual_nr %ld.", last_seen, virtual_nr);
+    log(buf);
+    exit(1);
+  }
+  
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (virtual_nr <= (zone ? zone_table[zone - 1].top : -1)) {
@@ -3410,7 +3468,9 @@ void reset_zone(int zone, int reboot)
       last_cmd = 1;
       break;
     default:
-      ZONE_ERROR("unknown cmd in reset table; cmd disabled");
+      sprintf(buf, "Unknown cmd '%c' in reset table; cmd disabled. Args were %ld %ld %ld.",
+              ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
+      ZONE_ERROR(buf);
       ZCMD.command = '*';
       break;
     }
@@ -4014,14 +4074,18 @@ long real_room(long virt)
   for (;;) {
     mid = (bot + top) >> 1;
 
-    if ((world + mid)->number == virt)
+    if (world[mid].number == virt) {
       return mid;
-    if (bot >= top)
+    }
+    if (bot >= top) {
       return -1;
-    if ((world + mid)->number > virt)
+    }
+    if (world[mid].number > virt) {
       top = mid - 1;
-    else
+    }
+    else {
       bot = mid + 1;
+    }
   }
 }
 

@@ -787,7 +787,9 @@ void assign_objects(void)
   ASSIGNOBJ(9826, locker);
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
+  #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(70605, desktop);
+  #endif
   
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
   ASSIGNOBJ(OBJ_PORTLAND_TAXI_SIGN, taxi_sign);
@@ -881,8 +883,8 @@ void assign_rooms(void)
   ASSIGNROOM(1937, escalator);
 
   /* Crime Mall */
-  ASSIGNROOM(10075, crime_mall_blockade);
-  ASSIGNROOM(10077, crime_mall_blockade);
+  ASSIGNROOM(100075, crime_mall_blockade);
+  ASSIGNROOM(100077, crime_mall_blockade);
 
 
   ASSIGNROOM(1399, car_dealer);
@@ -925,8 +927,12 @@ void assign_rooms(void)
   // Junkyard
   ASSIGNROOM(70504, floor_has_glass_shards);
 
- 
+  log("Assigning traffic messages...");
   for (long x = 0; x <= top_of_world; x++)
-    if (ROOM_FLAGGED(&world[x], ROOM_ROAD) && !ROOM_FLAGGED(&world[x], ROOM_NO_TRAFFIC) && !ROOM_FLAGGED(&world[x], ROOM_GARAGE) && !world[x].func && SECT(&world[x]) == SPIRIT_CITY)
+    if (ROOM_FLAGGED(&world[x], ROOM_ROAD) 
+        && !ROOM_FLAGGED(&world[x], ROOM_NO_TRAFFIC) 
+        && !ROOM_FLAGGED(&world[x], ROOM_GARAGE) 
+        && !world[x].func 
+        && SECT(&world[x]) == SPIRIT_CITY)
       ASSIGNROOM(world[x].number, traffic);
 }
