@@ -876,6 +876,11 @@ static void init_elevators(void)
             // Flag the shaft appropriately.
             ROOM_FLAGS(&world[shaft_rnum]).SetBits(ROOM_NOMOB, ROOM_INDOORS, ROOM_NOBIKE, ROOM_ELEVATOR_SHAFT, ROOM_FALL, ENDBIT);
             world[shaft_rnum].rating = ELEVATOR_SHAFT_FALL_RATING;
+            
+            // Set up the combat options.
+            world[shaft_rnum].x = MAX(2, world[shaft_rnum].x);
+            world[shaft_rnum].y = MAX(2, world[shaft_rnum].y);
+            world[shaft_rnum].z = MAX(5.0, world[shaft_rnum].z);
           } else {
             sprintf(buf, "Fatal error: Nonexistent elevator shaft vnum %ld.", elevator[i].floor[j].shaft_vnum);
             log(buf);
