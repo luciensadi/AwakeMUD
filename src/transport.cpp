@@ -893,6 +893,57 @@ static void init_elevators(void)
         }
       }
       
+      // Now make sure the shaft rooms are connected.
+      long last_shaft_vnum = -1;
+      for (j = 0; j < elevator[i].num_floors; j++) {        
+        // No error recovery here- if the shaft is invalid, bail tf out.
+        if (real_room(elevator[i].floor[j].shaft_vnum) == -1) {
+          sprintf(buf, "SYSERR: Shaft vnum %ld for floor %d of elevator %d is invalid.",
+                  elevator[i].floor[j].shaft_vnum, j, i);
+          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+          break;
+        }
+        
+        // First shaft room? Nothing to do-- we didn't verify the kosherness of the next one yet.
+        if (last_shaft_vnum == -1) {
+          last_shaft_vnum = elevator[i].floor[j].shaft_vnum;
+          continue;
+        }
+        
+#define DOOR(index, dir) world[real_room(elevator[i].floor[index].shaft_vnum)].dir_option[dir]
+        // Does the exit already exist?
+        if (DOOR(j, UP)) {
+          // Purge it.
+          DELETE_ARRAY_IF_EXTANT(DOOR(j, UP)->keyword);
+          DELETE_ARRAY_IF_EXTANT(DOOR(j, UP)->general_description);
+          DELETE_ARRAY_IF_EXTANT(DOOR(j, UP)->go_into_thirdperson);
+          DELETE_ARRAY_IF_EXTANT(DOOR(j, UP)->go_into_secondperson);
+          DELETE_ARRAY_IF_EXTANT(DOOR(j, UP)->come_out_of_thirdperson);
+          DELETE_AND_NULL(DOOR(j, UP));
+        }
+          
+        // Does its mirror already exist?
+        if (DOOR(j - 1, DOWN)) {
+          // Purge it.
+          DELETE_ARRAY_IF_EXTANT(DOOR(j - 1, DOWN)->keyword);
+          DELETE_ARRAY_IF_EXTANT(DOOR(j - 1, DOWN)->general_description);
+          DELETE_ARRAY_IF_EXTANT(DOOR(j - 1, DOWN)->go_into_thirdperson);
+          DELETE_ARRAY_IF_EXTANT(DOOR(j - 1, DOWN)->go_into_secondperson);
+          DELETE_ARRAY_IF_EXTANT(DOOR(j - 1, DOWN)->come_out_of_thirdperson);
+          DELETE_AND_NULL(DOOR(j - 1, DOWN));
+        }
+          
+        // Create the exit in both directions.
+        DOOR(j - 1, DOWN) = new room_direction_data;
+        memset((char *) DOOR(j - 1, DOWN), 0, sizeof(struct room_direction_data));
+        DOOR(j - 1, DOWN)->to_room = &world[real_room(elevator[i].floor[j].shaft_vnum)];
+        
+        DOOR(j, UP) = new room_direction_data;
+        memset((char *) DOOR(j, UP), 0, sizeof(struct room_direction_data));
+        DOOR(j, UP)->to_room = &world[real_room(elevator[i].floor[j - 1].shaft_vnum)];
+#undef DOOR
+      }
+      
       // Ensure an exit from car -> landing and vice/versa exists. Store the shaft's exit.
       struct room_data *car = &world[real_room(elevator[i].room)];
       struct room_data *landing = &world[real_room(elevator[i].floor[car->rating].vnum)];
@@ -1355,11 +1406,11 @@ int process_elevator(struct room_data *room,
       send_to_char(ch, "You push the button for %s, and it lights up.\r\n", floorstring);
     }
     return TRUE;
-  } else if (CMD_IS("look") || CMD_IS("examine"))
+  } else if (CMD_IS("look") || CMD_IS("examine") || CMD_IS("read"))
   {
     one_argument(argument, arg);
     if (!*arg || !(!strn_cmp("panel", arg, strlen(arg)) || !strn_cmp("elevator", arg, strlen(arg))
-                   || !strn_cmp("buttons", arg, strlen(arg)) || !strn_cmp("control", arg, strlen(arg))))
+                   || !strn_cmp("buttons", arg, strlen(arg)) || !strn_cmp("controls", arg, strlen(arg))))
       return FALSE;
 
     strcpy(buf, "The elevator panel displays the following buttons:\r\n");
