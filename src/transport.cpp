@@ -393,6 +393,12 @@ ACMD(do_hail)
   int cab, first, last;
   bool found = FALSE, empty = FALSE, portland = FALSE;
   SPECIAL(taxi);
+  
+  if (!ch->in_room) {
+    send_to_char("You can't do that here.\r\n", ch);
+    mudlog("SYSERR: Attempt to hail a vehicle from non-room location.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
 
   for (int dir = NORTH; dir < UP; dir++)
     if (!ch->in_room->dir_option[dir])
@@ -402,14 +408,22 @@ ACMD(do_hail)
     send_to_char("Magically active cab drivers...now I've heard everything...\n\r",ch);
     return;
   }
+  
+  // Special condition: Hailing from Imm HQ's central room.
+  if (ch->in_room->number == 10000) {
+    if (str_str(argument, "portland")) {
+      portland = TRUE;
+    } else {
+      portland = FALSE;
+    }
+  } else {
+    if (ch->in_room->sector_type != SPIRIT_CITY
+        || !empty 
+        || ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
+      send_to_char("There don't seem to be any cabs in the area.\r\n", ch);
+      return;
+    }
 
-  if (ch->in_room->sector_type != SPIRIT_CITY || !empty ||
-      ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-    send_to_char("There don't seem to be any cabs in the area.\r\n", ch);
-    return;
-  }
-
-  if (ch->in_room) {
     switch (zone_table[ch->in_room->zone].number) {
     case 13:
     case 15:
@@ -453,14 +467,14 @@ ACMD(do_hail)
       send_to_char("There don't seem to be any cabs in the area.\r\n",ch);
       return;
     }
-  }
 
-  if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
-      || GET_INVIS_LEV(ch) > 0)  {
-    send_to_char("A cab almost stops, but guns it at the last second, splashing you...\r\n",ch);
-    send_to_char("(OOC: You can't hail taxis while invisible.)\r\n", ch);
-    return;
-  }
+    if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
+        || GET_INVIS_LEV(ch) > 0)  {
+      send_to_char("A cab almost stops, but guns it at the last second, splashing you...\r\n",ch);
+      send_to_char("(OOC: You can't hail taxis while invisible.)\r\n", ch);
+      return;
+    }
+}
 
   first = real_room(portland ? FIRST_PORTCAB : FIRST_CAB);
   last = real_room(portland ? LAST_PORTCAB : LAST_CAB);
