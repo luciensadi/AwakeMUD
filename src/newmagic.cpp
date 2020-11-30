@@ -2300,11 +2300,11 @@ ACMD(do_conjure)
       send_to_char(ch, "You have too many elementals summoned.\r\n");
       return;
     }
-    for (; spirit < NUM_ELEMENTS; spirit++)
+    for (spirit = 0; spirit < NUM_ELEMENTS; spirit++)
       if (is_abbrev(buf1, elements[spirit].name))
         break;
     if (spirit == NUM_ELEMENTS) {
-      send_to_char("What elemental do you wish to conjure?\r\n", ch);
+      send_to_char("You must specify one of Earth, Air, Fire, or Water.\r\n", ch);
       return;
     }
     if ((GET_ASPECT(ch) == ASPECT_ELEMFIRE && spirit != ELEM_FIRE) ||
@@ -2368,11 +2368,18 @@ ACMD(do_conjure)
       send_to_char("You already have summoned a nature spirit.\r\n", ch);
       return;
     }
-    for (; spirit < NUM_SPIRITS; spirit++)
+    for (spirit = 0; spirit < NUM_SPIRITS; spirit++)
       if (is_abbrev(buf1, spirits[spirit].name))
         break;
     if (spirit == NUM_SPIRITS) {
-      send_to_char("Which spirit do you wish to conjure?\r\n", ch);
+      strcpy(buf, "Which spirit do you wish to conjure? In your current domain, you can conjure");
+      bool have_sent_text = FALSE;
+      for (spirit = 0; spirit < NUM_SPIRITS; spirit++)
+        if (GET_DOMAIN(ch) == ((spirit == SPIRIT_MIST || spirit == SPIRIT_STORM || spirit == SPIRIT_WIND) ? SPIRIT_SKY : spirit)) {
+          sprintf(ENDOF(buf), "%s %s", have_sent_text ? "," : "", spirits[spirit].name);
+          have_sent_text = TRUE;
+        }
+      send_to_char(ch, buf);
       return;
     }
     if (GET_DOMAIN(ch) != ((spirit == SPIRIT_MIST || spirit == SPIRIT_STORM || spirit == SPIRIT_WIND) ? SPIRIT_SKY : spirit)) {
