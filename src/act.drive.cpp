@@ -1026,8 +1026,8 @@ ACMD(do_repair)
     target += 4;
   }
 
-  if ((success = (GET_LEVEL(ch) > LVL_MORTAL ? 20 : success_test(skill, target))) < 1) {
-    send_to_char(ch, "It seems to be beyond your skill.\r\n");
+  if ((success = (GET_LEVEL(ch) > LVL_MORTAL ? 50 : success_test(skill, target))) < 1) {
+    send_to_char(ch, "You tinker with it a bit, but don't make much headway.\r\n");
     return;
   }
   veh->damage -= (success + 1) / 2;

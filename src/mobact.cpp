@@ -307,6 +307,10 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
   
+  // Conjured spirits and elementals are never aggressive.
+  if ((IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
+    return FALSE;
+  
   // Vehicle code is separate.
   if (ch->in_veh && ch->in_veh->in_room->number == room->number)
     return mobact_process_in_vehicle_aggro(ch);
@@ -472,42 +476,42 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
   
+  // Conjured spirits and elementals are never aggressive.
+  if ((IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
+    return FALSE;
+  
   // Vehicle code is separate.
   if (ch->in_veh && ch->in_veh->in_room == room)
     return mobact_process_in_vehicle_guard(ch);
   
-  int i = 0;
+  // Check vehicles, but only if they're in the same room as the guard.
+  if (ch->in_room == room) {
+    for (veh = room->vehicles; veh; veh = veh->next_veh) {
+      // If the room we're in is neither a road nor a garage, attack any vehicles we see.
+      if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM)) {
+        stop_fighting(ch);
+        set_fighting(ch, veh);
+        return TRUE;
+      }
+    }
+  }
   
-  /* Guard NPCs. */
-  if (MOB_FLAGGED(ch, MOB_GUARD)) {
-    // Check vehicles, but only if they're in the same room as the guard.
-    if (ch->in_room == room) {
-      for (veh = room->vehicles; veh; veh = veh->next_veh) {
-        // If the room we're in is neither a road nor a garage, attack any vehicles we see.
-        if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM)) {
-          stop_fighting(ch);
-          set_fighting(ch, veh);
-          return TRUE;
-        }
-      }
-    }
+  // Check players.
+  for (vict = room->people; vict; vict = vict->next_in_room) {
+    // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
+    if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE(ch, vict) || GET_PHYSICAL(vict) <= 0)
+      continue;
     
-    // Check players.
-    for (vict = room->people; vict; vict = vict->next_in_room) {
-      // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
-      if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE(ch, vict) || GET_PHYSICAL(vict) <= 0)
-        continue;
-      
-      for (i = 0; i < NUM_WEARS; i++) {
-        // If victim's equipment is illegal here, blast them.
-        if (GET_EQ(vict, i) && violates_zsp(GET_SECURITY_LEVEL(room), vict, i, ch)) {
-          stop_fighting(ch);
-          set_fighting(ch, vict);
-          return true;
-        }
+    for (int i = 0; i < NUM_WEARS; i++) {
+      // If victim's equipment is illegal here, blast them.
+      if (GET_EQ(vict, i) && violates_zsp(GET_SECURITY_LEVEL(room), vict, i, ch)) {
+        stop_fighting(ch);
+        set_fighting(ch, vict);
+        return true;
       }
     }
-  } /* End Guard NPC section. */
+  }
+  
   return false;
 }
 
@@ -731,8 +735,10 @@ void mobile_activity(void)
   for (ch = character_list; ch; ch = next_ch) {
     next_ch = ch->next;
     
+    current_room = get_ch_in_room(ch);
+    
     // Skip them if they're a player character, are being possessed, are sleeping, or have no current room.
-    if (!IS_MOB(ch) || !AWAKE(ch) || ch->desc || !get_ch_in_room(ch))
+    if (!IS_MOB(ch) || !AWAKE(ch) || ch->desc || !current_room)
       continue;
 
     // Skip NPCs that are currently fighting someone in their room, or are fighting a vehicle.
@@ -759,14 +765,14 @@ void mobile_activity(void)
       continue;
     
     // All these aggressive checks require the character to not be in a peaceful room.
-    if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_PEACEFUL)) {
+    if (!ROOM_FLAGGED(current_room, ROOM_PEACEFUL)) {
       // Handle aggressive mobs.
-      if (mobact_process_aggro(ch, get_ch_in_room(ch))) {
+      if (mobact_process_aggro(ch, current_room)) {
         continue;
       }
       
       // Guard NPCs.
-      if (mobact_process_guard(ch, get_ch_in_room(ch))) {
+      if (MOB_FLAGGED(ch, MOB_GUARD) && mobact_process_guard(ch, current_room)) {
         continue;
       }
       
@@ -788,9 +794,7 @@ void mobile_activity(void)
           // Calculate their maximum firing range (lesser of vision range and weapon range).
           int max_distance = MIN(find_sight(ch), find_weapon_range(ch, GET_EQ(ch, WEAR_WIELD)));
           
-          for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {
-            current_room = ch->in_room;
-            
+          for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {            
             // Check each room in a straight line until we are either out of range or cannot go further.
             for (distance = 1; !has_acted && distance <= max_distance; distance++) {
               // Exit must be valid, and room must belong to same zone as character's room.
@@ -819,6 +823,9 @@ void mobile_activity(void)
               }
             }
           }
+          
+          if (has_acted)
+            continue;
         }
       }
     } /* End NPC-is-not-in-a-vehicle section. */

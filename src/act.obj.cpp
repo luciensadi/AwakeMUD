@@ -59,7 +59,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   if (GET_OBJ_TYPE(cont) == ITEM_WORN)
   {
     if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA || GET_OBJ_TYPE(obj) == ITEM_DESIGN || GET_OBJ_TYPE(obj) == ITEM_PART)  {
-      act("$p won't fit in $P.", FALSE, ch, obj, cont, TO_CHAR);
+      act("You can't store spell formulas, designs, or parts in $P.", FALSE, ch, obj, cont, TO_CHAR);
       return;
     }
     

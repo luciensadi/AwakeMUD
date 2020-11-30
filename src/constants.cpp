@@ -1022,7 +1022,7 @@ struct program_data programs[] =
     {"Evaluate", 2 },
     {"Validate", 4 },
     {"Swerve", 3 },
-    {"Suite", 15 },
+    {"Programming Suite", 15 },
     {"Commlink", 1 },
     {"Cloak", 3 },
     {"Lock-On", 3  },

@@ -421,7 +421,7 @@ void end_spirit_existance(struct char_data *ch, bool message)
         }
       GET_NUM_SPIRITS(tempc)--;
       if (message && d->character)
-        send_to_char(d->character, "%s returns to the metaplanes, its existance in this world finished.\r\n", CAP(GET_NAME(ch)));
+        send_to_char(d->character, "%s returns to the metaplanes, its existence in this world finished.\r\n", CAP(GET_NAME(ch)));
       break;
     }
   }
@@ -3326,7 +3326,7 @@ ACMD(do_order)
     struct char_data *mob = find_spirit_by_id(spirit->id, GET_IDNUM(ch));
     
     if (!mob) {
-      send_to_char(ch, "That %s has been ensnared by forces you cannot control.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+      send_to_char(ch, "That %s has been ensnared by forces you cannot control. Your only option is to release it.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       sprintf(buf, "SYSERR: %s belonging to %s (%ld) has disappeared unexpectedly-- did someone purge it?", GET_TRADITION(ch) == TRAD_HERMETIC ? "Elemental" : "Spirit",
               GET_CHAR_NAME(ch), GET_IDNUM(ch));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);

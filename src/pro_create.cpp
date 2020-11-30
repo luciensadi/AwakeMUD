@@ -42,15 +42,20 @@ void pedit_disp_menu(struct descriptor_data *d)
 void pedit_disp_program_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int counter = 1; counter < NUM_PROGRAMS; counter += 3)
+  bool screenreader_mode = PRF_FLAGGED(d->character, PRF_SCREENREADER);
+  for (int counter = 1; counter < NUM_PROGRAMS; counter++)
   {
-    send_to_char(CH, "  %2d) %-15s %2d) %-15s %2d) %-15s\r\n",
-                 counter, programs[counter].name,
-                 counter + 1, counter + 1 < NUM_PROGRAMS ?
-                 programs[counter + 1].name : "", counter + 2, counter + 2 < NUM_PROGRAMS ?
-                 programs[counter + 2].name : "");
+    if (screenreader_mode)
+      send_to_char(d->character, "%d) %s", counter, programs[counter].name);
+    else {
+      sprintf(buf, "%s%d) %-20s%s", 
+              counter % 3 == 1 ? "  " : "", 
+              counter, 
+              programs[counter].name,
+              counter % 3 == 0 ? "\r\n" : "");
+    }
   }
-  send_to_char("Program type: ", d->character);
+  send_to_char(d->character, "%s\r\nSelect program type: ", buf);
   d->edit_mode = PEDIT_TYPE;
 }
 void pedit_parse(struct descriptor_data *d, const char *arg)
@@ -190,6 +195,8 @@ struct obj_data *can_program(struct char_data *ch)
 
 ACMD(do_design)
 {
+  ACMD_DECLARE(do_program);
+  
   struct obj_data *comp, *prog;
   if (!*argument) {
     if (AFF_FLAGS(ch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, AFF_SPELLDESIGN, ENDBIT)) {
@@ -225,7 +232,8 @@ ACMD(do_design)
     return;
   }
   if (GET_OBJ_VAL(prog, 3) || GET_OBJ_VAL(prog, 5)) {
-    send_to_char(ch, "You can no longer make a design on that project.\r\n");
+    send_to_char(ch, "There's no more design work to be done on %s, so you decide to try programming it instead.\r\n", GET_OBJ_NAME(prog));
+    do_program(ch, argument, 0, 0);
     return;
   }
   if (GET_OBJ_VAL(prog, 9) && GET_OBJ_VAL(prog, 9) != GET_IDNUM(ch)) {
@@ -604,4 +612,3 @@ void update_buildrepair(void)
   }
 
 }
-
