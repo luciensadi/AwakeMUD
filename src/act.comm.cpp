@@ -236,14 +236,14 @@ ACMD(do_exclaim)
 void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
 {
   sprintf(buf, "^r$n tells you, '%s^r'^n", arg);
-  store_message_to_history(vict->desc, COMM_CHANNEL_TELLS, str_dup(act(buf, FALSE, ch, 0, vict, TO_VICT)));
+  store_message_to_history(vict->desc, COMM_CHANNEL_TELLS, str_dup(act(buf, FALSE, ch, 0, vict, TO_VICT & TO_SLEEP)));
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else
   {
     sprintf(buf, "^rYou tell $n, '%s'^n", arg);
-    store_message_to_history(ch->desc, COMM_CHANNEL_TELLS, str_dup(act(buf, FALSE, vict, 0, ch, TO_VICT)));
+    store_message_to_history(ch->desc, COMM_CHANNEL_TELLS, str_dup(act(buf, FALSE, vict, 0, ch, TO_VICT & TO_SLEEP)));
   }
 
   if (!IS_NPC(ch))

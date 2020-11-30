@@ -1581,27 +1581,41 @@ ACMD(do_gridguide)
       send_to_char("You don't have control over the vehicle.\r\n", ch);
       return;
     }
+    
     for (grid = veh->grid; grid; grid = grid->next)
       if (is_abbrev(arg, grid->name))
         break;
-    if (!grid)
+        
+    if (!grid) {
       send_to_char("That destination doesn't seem to be in the system.\r\n", ch);
-    else if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0)
-      send_to_char("That destination is currently unavailable.\r\n", ch);
-    else {
-      veh->dest = &world[real_room(grid->room)];
-      veh->cspeed = SPEED_CRUISING;
-      if (AFF_FLAGGED(ch, AFF_PILOT))
-        AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
-      if (PLR_FLAGGED(ch, PLR_REMOTE)) {
-        send_to_veh("The autonav beeps and the vehicle starts to move towards its destination.\r\n", veh, 0, FALSE);
-        send_to_char("Gridguide activates and kicks you out of the system.\r\n", ch);
-        PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
-        ch->char_specials.rigging = FALSE;
-        veh->rigger = NULL;
-      } else send_to_veh("The autonav beeps and the vehicle starts to move towards its destination.\r\n", veh, 0, TRUE);
-
+      return;
     }
+    
+    if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0) {
+      send_to_char("That destination is currently unavailable.\r\n", ch);
+      return;
+    }
+    
+    if (!veh->people) {
+      send_to_char("Safety regulations prevent you from dispatching an empty vehicle through Gridguide.\r\n", ch);
+      return;
+    }
+    
+    veh->dest = &world[real_room(grid->room)];
+    veh->cspeed = SPEED_CRUISING;
+    
+    if (AFF_FLAGGED(ch, AFF_PILOT))
+      AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+      
+    if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+      send_to_veh("The autonav beeps and the vehicle starts to move towards its destination.\r\n", veh, 0, FALSE);
+      send_to_char("Gridguide activates and kicks you out of the system.\r\n", ch);
+      PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
+      ch->char_specials.rigging = FALSE;
+      veh->rigger = NULL;
+    } else 
+      send_to_veh("The autonav beeps and the vehicle starts to move towards its destination.\r\n", veh, 0, TRUE);
+
     return;
   } 
   
@@ -1680,13 +1694,11 @@ void process_autonav(void)
       if (!(ch = veh->rigger))
         ch = veh->people;
       
-      // Stop empty vehicles -- except don't, riggers are allowed to gridguide remotely.
-      /*
       if (!ch) {
         veh->dest = NULL;
         veh->cspeed = SPEED_OFF;
         return;
-      */
+      }
       
       int dir = 0;
       for (int x = MAX((int)get_speed(veh) / 10, 1); x && dir >= 0 && veh->dest; x--) {
