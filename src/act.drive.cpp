@@ -1366,8 +1366,10 @@ ACMD(do_target)
 void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *tveh, struct char_data *vict, bool modeall, struct obj_data *obj) {  
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
+    
+  // Modeall: fire everything at them.
   if (modeall) {
-    for (obj = veh->mount; obj; obj = obj->next_content)
+    for (obj = veh->mount; obj; obj = obj->next_content) {
       if (obj->contains && !obj->worn_by) {
         if (vict) {
           set_fighting(ch, vict);
@@ -1388,6 +1390,7 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
           mudlog("SYSERR: Reached end of do_raw_target (mode all) with no valid target.", ch, LOG_SYSLOG, TRUE);
         }
       }
+    }
     return;
   }
   if (vict) {
@@ -1562,12 +1565,18 @@ ACMD(do_gridguide)
       send_to_char(buf, ch);
     }
     send_to_char(ch, "%d Entries remaining.\r\n", (veh->autonav * 5) - i);
-  } else if (!str_cmp(arg, "stop")) {
+    return;
+  } 
+  
+  if (!str_cmp(arg, "stop")) {
     veh->dest = 0;
     send_to_veh("The autonav disengages.\r\n", veh, 0, TRUE);
     if (!AFF_FLAGGED(ch, AFF_PILOT))
       veh->cspeed = SPEED_OFF;
-  } else if (!*buf2) {
+    return;
+  } 
+  
+  if (!*buf2) {
     if (veh->cspeed > SPEED_IDLE && !(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
       send_to_char("You don't have control over the vehicle.\r\n", ch);
       return;
@@ -1593,7 +1602,10 @@ ACMD(do_gridguide)
       } else send_to_veh("The autonav beeps and the vehicle starts to move towards its destination.\r\n", veh, 0, TRUE);
 
     }
-  } else if (!str_cmp(arg, "del")) {
+    return;
+  } 
+  
+  if (!str_cmp(arg, "del")) {
     struct grid_data *temp;
     for (grid = veh->grid; grid; grid = grid->next)
       if (!str_cmp(buf2, grid->name))
@@ -1668,12 +1680,13 @@ void process_autonav(void)
       if (!(ch = veh->rigger))
         ch = veh->people;
       
-      // Stop empty vehicles
+      // Stop empty vehicles -- except don't, riggers are allowed to gridguide remotely.
+      /*
       if (!ch) {
         veh->dest = NULL;
         veh->cspeed = SPEED_OFF;
         return;
-      }
+      */
       
       int dir = 0;
       for (int x = MAX((int)get_speed(veh) / 10, 1); x && dir >= 0 && veh->dest; x--) {

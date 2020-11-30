@@ -206,7 +206,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
           act(buf2, TRUE, ch, 0, tch, TO_VICT);
           
       if (tveh->rigger && (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tveh->rigger), 4)))
-        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+        act(buf2, TRUE, ch, 0, tch, TO_VICT_INCLUDE_RIGGER);
     }
     if (ch->in_room->watching)
       for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)

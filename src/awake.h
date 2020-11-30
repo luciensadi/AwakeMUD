@@ -1923,15 +1923,19 @@ enum {
 #define DB_BOOT_IC      8
 /* Defines for sending text */
 
-#define TO_ROOM         1
-#define TO_VICT         2
-#define TO_NOTVICT      3
-#define TO_CHAR         4
-#define TO_ROLLS        5
-#define TO_VEH		      6
-#define TO_DECK		      7
-#define TO_VEH_ROOM     8
-#define TO_SLEEP        128     /* to char, even if sleeping */
+#define TO_ROOM                1
+#define TO_VICT                2
+#define TO_NOTVICT             3
+#define TO_CHAR                4
+#define TO_ROLLS               5
+#define TO_VEH		             6
+#define TO_DECK		             7
+#define TO_VEH_ROOM            8
+#define TO_CHAR_INCLUDE_RIGGER 9
+#define TO_CHAR_FORCE          10
+#define TO_VICT_INCLUDE_RIGGER 11
+#define TO_VICT_FORCE          12
+#define TO_SLEEP               128     /* to char, even if sleeping */
 
 /* Boards */
 
