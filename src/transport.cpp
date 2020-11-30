@@ -1268,7 +1268,7 @@ int process_elevator(struct room_data *room,
         base_target = 6 + modify_target(vict);
         dice = get_skill(vict, SKILL_ATHLETICS, base_target);
         if (success_test(dice, base_target) > 0) {
-          // No message on success (would be spammy)
+          act("$n squeezes $mself against the shaft wall, avoiding the passing car.", TRUE, vict, 0, 0, TO_ROOM);
           continue;
         }
         
