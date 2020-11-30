@@ -1231,7 +1231,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     return;
   }
   
-  if (ch->in_veh && (!ch->in_room || PLR_FLAGGED(ch, PLR_REMOTE))) {
+  if ((ch->in_veh && !ch->in_room) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     look_in_veh(ch);
     return;
   }

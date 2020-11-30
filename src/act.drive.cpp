@@ -1295,11 +1295,17 @@ ACMD(do_target)
     send_to_char("There is nothing to target.\r\n", ch);
     return;
   }
+  if (veh->in_veh) {
+    send_to_char("It'd be a bad idea to start firing in such an enclosed space.\r\n", ch);
+    return;
+  }
+  
   two_arguments(argument, arg, buf2);
   if (!*arg) {
     send_to_char("Target what at who?\r\n", ch);
     return;
   }
+  
   if (*arg && *buf2) {
     if (!(AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))) {
       send_to_char("But you aren't piloting this vehicle.\r\n", ch);
@@ -1342,11 +1348,6 @@ ACMD(do_target)
       }
       modeall = TRUE;
     }
-  }
-  
-  if (veh->in_veh) {
-    send_to_char("It'd be a bad idea to start firing in such an enclosed space.\r\n", ch);
-    return;
   }
   
   if (!(vict = get_char_room(arg, veh->in_room)) &&
@@ -1823,7 +1824,7 @@ ACMD(do_tow)
     return;
   }
   if (tveh->type == VEH_TRUCK)
-    send_to_char("That is too heavy for you to tow.\r\n", ch);
+    send_to_char("Trucks are too heavy to tow.\r\n", ch);
   else if (tveh->type == VEH_BIKE)
     send_to_char("Try as you might, you can't seem to balance it.\r\n", ch);
   else if (tveh->locked && tveh->type != VEH_DRONE)

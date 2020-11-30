@@ -4854,8 +4854,8 @@ void perform_violence(void)
         struct veh_data *veh = NULL;
         RIG_VEH(ch, veh);
         if ((veh && veh->in_room)
-            || (FIGHTING(ch) && veh->in_room != FIGHTING(ch)->in_room)
-            || (FIGHTING_VEH(ch) && veh->in_room != FIGHTING_VEH(ch)->in_room)) {
+            && ((FIGHTING(ch) && veh->in_room != FIGHTING(ch)->in_room)
+                 || (FIGHTING_VEH(ch) && veh->in_room != FIGHTING_VEH(ch)->in_room))) {
           send_to_char("Your target has left your line of sight.\r\n", ch);
           stop_fighting(ch);
           continue;
