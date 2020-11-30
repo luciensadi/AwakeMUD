@@ -2757,28 +2757,26 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if ( type == TO_ROLLS )
     sleep = 1;
   
-  if (type == TO_CHAR || type == TO_CHAR_INCLUDE_RIGGER || type == TO_CHAR_FORCE)
+  if (type == TO_CHAR)
   {
-    if (ch && (TO_CHAR_FORCE
-               || (SENDOK(ch) 
-                   && !((!TO_CHAR_INCLUDE_RIGGER && PLR_FLAGGED(ch, PLR_REMOTE))
-                        || PLR_FLAGGED(ch, PLR_MATRIX)))))
+    if (ch && SENDOK(ch) && !(PLR_FLAGGED(ch, PLR_REMOTE) || PLR_FLAGGED(ch, PLR_MATRIX)))
       return perform_act(str, ch, obj, vict_obj, ch);
     return NULL;
   }
-  if (type == TO_VICT || type == TO_VICT_INCLUDE_RIGGER || type == TO_VICT_FORCE)
+  if (type == TO_VICT)
   {
     to = (struct char_data *) vict_obj;
-    if (!to)
+    
+    if (!to || !SENDOK(to))
+      return NULL;
+    
+    if ((PLR_FLAGGED(to, PLR_REMOTE) || PLR_FLAGGED(to, PLR_MATRIX)) && !sleep)
       return NULL;
       
-    if (SENDOK(to) 
-        && !(((!TO_VICT_INCLUDE_RIGGER && PLR_FLAGGED(to, PLR_REMOTE))
-               || PLR_FLAGGED(to, PLR_MATRIX)) 
-        && !sleep) 
-        && !(hide_invisible && ch && !CAN_SEE(to, ch)))
-      return perform_act(str, ch, obj, vict_obj, to);
-    return NULL;
+    if (hide_invisible && ch && !CAN_SEE(to, ch))
+      return NULL;
+    
+    return perform_act(str, ch, obj, vict_obj, to);
   }
   if (type == TO_DECK)
   {
