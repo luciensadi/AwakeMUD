@@ -43,6 +43,9 @@ extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
 extern vnum_t newbie_start_room;
 
+extern int num_elevators;
+extern struct elevator_data *elevator;
+
 /* can_move determines if a character can move in the given direction, and
    generates the appropriate message if not */
 int can_move(struct char_data *ch, int dir, int extra)
@@ -810,6 +813,35 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.", EXIT(ch, dir)->to_room->staff_level_lock);
     }
     return 0;
+  }
+  
+  // Don't let people move past elevator cars.
+  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_ELEVATOR_SHAFT)) {
+    bool to_room_found = FALSE, in_room_found = FALSE;
+    for (int index = 0; !(to_room_found && in_room_found) && index < num_elevators; index++) {
+      int car_rating = world[real_room(elevator[index].room)].rating;
+      // Check to see if they're leaving a moving elevator car's room.
+      if (!in_room_found && elevator[index].floor[car_rating].shaft_vnum == ch->in_room->number) {
+        if (elevator[index].is_moving) {
+          send_to_char("All you can do is cling to the shaft and hope for the best!\r\n", ch); // giggity
+          return 0;
+        } else {
+          // We found the shaft room and it's okay.
+          in_room_found = TRUE;
+        }
+      } 
+      // Check to see if they're moving into a moving elevator car's room.
+      if (!to_room_found && elevator[index].floor[car_rating].shaft_vnum == EXIT(ch, dir)->to_room->number) {
+        // Check for the car being at this floor.
+        if (elevator[index].is_moving) {
+          send_to_char("Are you crazy? There's a moving elevator car there!\r\n", ch);
+          return 0;
+        } else {
+          // We found the shaft room and it's okay.
+          to_room_found = TRUE;
+        }
+      }
+    }
   }
 
   int total = 0;

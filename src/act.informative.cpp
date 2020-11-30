@@ -1351,20 +1351,18 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   
   // Is there an elevator car here?
   if (ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT)) {
-    bool match = FALSE;
     // Iterate through elevators to find one that contains this shaft.
-    for (int index = 0; !match && index < num_elevators; index++) {
-      // Iterate through floors to see if a given floor matches the shaft's vnum.
-      for (int floor = 0; !match && floor < elevator[index].num_floors; floor++) {
-        // Check for a match.
-        if (elevator[index].floor[floor].shaft_vnum == ch->in_room->number) {
-          // Check for the car being at this floor.
-          if (world[real_room(elevator[index].room)].rating == floor) {
-            send_to_char(ch, "^RThe massive bulk of an elevator car fills the hoistway%s.^n\r\n",
-                    IS_ASTRAL(ch) ? "" : ", squeezing you aside");
-          }
-          match = TRUE;
+    for (int index = 0; index < num_elevators; index++) {
+      int car_rating = world[real_room(elevator[index].room)].rating;
+      if (elevator[index].floor[car_rating].shaft_vnum == ch->in_room->number) {
+        // Check for the car being at this floor.
+        if (IS_ASTRAL(ch)) {
+          send_to_char("^yThe massive bulk of an elevator car fills the hoistway.^n\r\n", ch);
+        } else {
+          send_to_char("^RThe massive bulk of an elevator car fills the hoistway, squeezing you aside.^n\r\n", ch);
         }
+        
+        break;
       }
     }
   }
