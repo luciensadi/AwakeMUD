@@ -1779,7 +1779,7 @@ ACMD(do_pop)
 
 ACMD(do_tow)
 {
-  struct veh_data *veh, *tveh;
+  struct veh_data *veh = NULL, *tveh = NULL;
   if (!(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
     send_to_char("You have to be controlling a vehicle to do that.\r\n", ch);
     return;
@@ -1797,6 +1797,7 @@ ACMD(do_tow)
     // Compose our release message, which is emitted if the release processes successfully.
     strcpy(buf3, GET_VEH_NAME(veh));
     sprintf(buf, "%s releases %s from its towing equipment.\r\n", buf3, GET_VEH_NAME(veh->towing));
+    send_to_char(ch, "You release %s from your towing equipment.\r\n", GET_VEH_NAME(veh->towing));
     
     if (ch->in_veh->in_room) {
       act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
@@ -1812,8 +1813,7 @@ ACMD(do_tow)
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return;
     }
-
-    send_to_char(ch, "You release %s from your towing equipment.\r\n", GET_VEH_NAME(veh->towing));
+    
     veh->towing = NULL;
     return;
   }
