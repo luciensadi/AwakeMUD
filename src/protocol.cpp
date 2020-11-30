@@ -882,10 +882,10 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                pCopyFrom = ColourRGB(apDescriptor, "F550");
                break;
             case 'b': /* dark blue */
-               pCopyFrom = ColourRGB(apDescriptor, "F003");
+               pCopyFrom = ColourRGB(apDescriptor, "F025");
                break;
             case 'B': /* light blue */
-               pCopyFrom = ColourRGB(apDescriptor, "F005");
+               pCopyFrom = ColourRGB(apDescriptor, "F035");
                break;
             case 'm': /* dark magenta */
                pCopyFrom = ColourRGB(apDescriptor, "F303");
