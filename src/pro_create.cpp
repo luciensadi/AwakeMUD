@@ -46,16 +46,17 @@ void pedit_disp_program_menu(struct descriptor_data *d)
   for (int counter = 1; counter < NUM_PROGRAMS; counter++)
   {
     if (screenreader_mode)
-      send_to_char(d->character, "%d) %s", counter, programs[counter].name);
+      send_to_char(d->character, "%d) %s\r\n", counter, programs[counter].name);
     else {
-      sprintf(buf, "%s%d) %-20s%s", 
+      sprintf(ENDOF(buf), "%s%d) %-20s%s", 
               counter % 3 == 1 ? "  " : "", 
               counter, 
               programs[counter].name,
               counter % 3 == 0 ? "\r\n" : "");
     }
   }
-  send_to_char(d->character, "%s\r\nSelect program type: ", buf);
+  if (!screenreader_mode)
+    send_to_char(d->character, "%s\r\nSelect program type: ", buf);
   d->edit_mode = PEDIT_TYPE;
 }
 void pedit_parse(struct descriptor_data *d, const char *arg)
