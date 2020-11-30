@@ -1978,9 +1978,10 @@ bool char_can_make_noise(struct char_data *ch, const char *message) {
 }
 
 struct char_data *get_driver(struct veh_data *veh) {
-  struct char_data *i;
+  if (veh->rigger)
+    return veh->rigger;
     
-  for (i = veh->people; i; i = i->next_in_veh)
+  for (struct char_data *i = veh->people; i; i = i->next_in_veh)
     if (AFF_FLAGGED(i, AFF_PILOT))
       return i;
   

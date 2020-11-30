@@ -200,10 +200,14 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     for (tch = ch->in_room->people; tch; tch = tch->next_in_room)
       if (tch != ch && !PRF_FLAGGED(tch, PRF_MOVEGAG))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh)
+    for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
       for (tch = tveh->people; tch; tch = tch->next_in_veh)
         if (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tch), 4))
           act(buf2, TRUE, ch, 0, tch, TO_VICT);
+          
+      if (tveh->rigger && (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tveh->rigger), 4)))
+        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+    }
     if (ch->in_room->watching)
       for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
           act(buf2, TRUE, ch, 0, tch, TO_VICT);

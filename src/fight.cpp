@@ -4989,22 +4989,14 @@ void chkdmg(struct veh_data * veh)
     
     
     if (veh->cspeed >= SPEED_IDLE) {
-      send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, TRUE);
+      send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
       sprintf(buf, "%s careens off the road, its occupants hurled to the street!\r\n", GET_VEH_NAME(veh));
       send_to_room(buf, veh->in_room);
-      
-      if (veh->rigger) {
-        send_to_char("Your mind is blasted with pain as your vehicle is wrecked.\r\n", veh->rigger);
-        damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL);
-        veh->rigger->char_specials.rigging = NULL;
-        PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
-        veh->rigger = NULL;
-      }
       
       damage_rating = SERIOUS;
       damage_tn = 8;
     } else {
-      send_to_veh("You scramble into the street as your ride is wrecked!\r\n", veh, NULL, TRUE);
+      send_to_veh("You scramble into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
       
       if (veh->people) {
         sprintf(buf, "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
@@ -5013,6 +5005,14 @@ void chkdmg(struct veh_data * veh)
       
       damage_rating = MODERATE;
       damage_tn = 4;
+    }
+    
+    if (veh->rigger) {
+      send_to_char("Your mind is blasted with pain as your vehicle is wrecked.\r\n", veh->rigger);
+      damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL);
+      veh->rigger->char_specials.rigging = NULL;
+      PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+      veh->rigger = NULL;
     }
     
     // Turn down various settings on the vehicle.
@@ -5031,6 +5031,7 @@ void chkdmg(struct veh_data * veh)
       stop_manning_weapon_mounts(i, FALSE);
       char_from_room(i);
       char_to_room(i, veh->in_room);
+      // TODO: What about the other flags for people who are sitting in the back working on something?
       AFF_FLAGS(i).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
       
       // Deal damage.

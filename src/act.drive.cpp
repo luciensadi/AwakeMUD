@@ -846,7 +846,7 @@ ACMD(do_control)
     sprintf(buf, "$n slides ones end of the cable into $s datajack and the other into $s remote control deck.");
   else sprintf(buf, "$n's eye opens up as $e slides $s remote control deck cable into $s eye datajack.");
   act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
-  PLR_FLAGS(ch).ToggleBit(PLR_REMOTE);
+  PLR_FLAGS(ch).SetBit(PLR_REMOTE);
   sprintf(buf, "You take control of %s.\r\n", GET_VEH_NAME(veh));
   send_to_char(buf, ch);
 }
