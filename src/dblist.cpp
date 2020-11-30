@@ -18,6 +18,7 @@
 #include "handler.h"
 #include "file.h"
 #include "newdb.h"
+#include "perfmon.h"
 
 // extern vars
 extern class helpList Help;
@@ -158,6 +159,7 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
 // object, extracting them if their timers hit 0
 void objList::UpdateCounters(void)
 {
+  PERF_PROF_SCOPE(updatecounters_, __func__);
   SPECIAL(trideo);
   MYSQL_RES *res;
   MYSQL_ROW row;

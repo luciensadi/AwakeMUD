@@ -573,14 +573,18 @@ void point_update(void)
       
       AFF_FLAGS(i).RemoveBit(AFF_DAMAGED);
       
+#ifdef ENABLE_HUNGER
       if (!GET_POWER(i, ADEPT_SUSTENANCE) || !(time_info.hours % 3)) {
         // Leave this so that people's stomachs empty over time (can eat/drink more if they want to).
         gain_condition(i, COND_FULL, -1);
         gain_condition(i, COND_THIRST, -1);
       }
       gain_condition(i, COND_DRUNK, -1);
+#endif
+
       if (GET_TEMP_ESSLOSS(i) > 0)
         GET_TEMP_ESSLOSS(i) = MAX(0, GET_TEMP_ESSLOSS(i) - 100);
+        
       if (SHOTS_FIRED(i) >= 10000 && !SHOTS_TRIGGERED(i) && !number(0, 3)) {
         SHOTS_TRIGGERED(i)++;
         send_to_char("You feel you could benefit with some time at a shooting range.\r\n", i);
