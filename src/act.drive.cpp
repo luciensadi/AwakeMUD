@@ -1110,22 +1110,31 @@ ACMD(do_driveby)
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   }
 
+  bool has_people = FALSE;
   for (pass = ch->in_veh->people; pass; pass = pass->next_in_veh) {
-    if (pass != ch && PLR_FLAGGED(pass, PLR_DRIVEBY) && AWAKE(pass) && GET_EQ(pass, WEAR_WIELD) &&
-        GET_OBJ_VAL(GET_EQ(pass, WEAR_WIELD),4) >= SKILL_FIREARMS) {
-      if (!IS_NPC(vict) && !PRF_FLAGGED(pass, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER))
-        continue;
-      sprintf(buf, "You follow %s lead and take aim.\r\n", HSHR(ch));
-      send_to_char(pass, buf);
-      PLR_FLAGS(pass).RemoveBit(PLR_DRIVEBY);
-      pass->next_fighting = list;
-      list = pass;
-      roll_individual_initiative(pass);
-      GET_INIT_ROLL(pass) += 20;
+    if (pass != ch) {
+      has_people = TRUE;
+      
+      if (PLR_FLAGGED(pass, PLR_DRIVEBY) && AWAKE(pass) && GET_EQ(pass, WEAR_WIELD) &&
+          GET_OBJ_VAL(GET_EQ(pass, WEAR_WIELD),4) >= SKILL_FIREARMS) {
+        if (!IS_NPC(vict) && !PRF_FLAGGED(pass, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER))
+          continue;
+        sprintf(buf, "You follow %s lead and take aim.\r\n", HSHR(ch));
+        send_to_char(pass, buf);
+        PLR_FLAGS(pass).RemoveBit(PLR_DRIVEBY);
+        pass->next_fighting = list;
+        list = pass;
+        roll_individual_initiative(pass);
+        GET_INIT_ROLL(pass) += 20;
+      }
     }
   }
   if (!list) {
-    send_to_char(ch, "But no one is in the car to hear you.\r\n");
+    if (pass) {
+      send_to_char(ch, "But your passengers aren't ready to do drivebys...\r\n");
+    } else {
+      send_to_char(ch, "But no one is in the car to hear you.\r\n");
+    }
     return;
   }
   order_list(list);
