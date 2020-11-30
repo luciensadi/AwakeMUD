@@ -491,7 +491,7 @@ ACMD(do_upgrade)
     return;
   }
   if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see a vehicle called '%s' here.", buf1);
     return;
   }
 
@@ -499,11 +499,11 @@ ACMD(do_upgrade)
     send_to_char("You have to upgrade it with something!\r\n", ch);
     return;
   } else if (!(mod = get_obj_in_list_vis(ch, buf2, ch->carrying))) {
-    send_to_char("You don't seem to have that item.\r\n", ch);
+    send_to_char(ch, "You don't seem to have an item called '%s'.\r\n", buf2);
     return;
   }
   if (GET_OBJ_TYPE(mod) != ITEM_MOD) {
-    send_to_char(ch, "That is not a vehicle modification.\r\n");
+    send_to_char(ch, "%s is not a vehicle modification.\r\n", capitalize(GET_OBJ_NAME(mod)));
     return;
   }
   if (!IS_NPC(ch)) {
@@ -710,11 +710,16 @@ ACMD(do_upgrade)
 
 void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
 {
-  send_to_char(ch, "\r\nMounts:\r\n");
-  for (struct obj_data *mount = veh->mount; mount; mount = mount->next_content)
-    if (GET_OBJ_VAL(mount, 1) != 0 && GET_OBJ_VAL(mount, 1) != 2 && mount->contains)
+  send_to_char("\r\nMounts:\r\n", ch);
+  struct obj_data *mounted_weapon = NULL;
+  for (struct obj_data *mount = veh->mount; mount; mount = mount->next_content) {
+    if ((mounted_weapon = get_mount_weapon(mount))) {
       send_to_char(ch, "%s mounted on %s.\r\n", CAP(GET_OBJ_NAME(mount->contains)), GET_OBJ_NAME(mount));
-  send_to_char(ch, "Modifications:\r\n");
+    } else if (GET_OBJ_VAL(mount, 1) != 0 && GET_OBJ_VAL(mount, 1) != 2 && mount->contains) {
+      send_to_char(ch, "%s attached to %s.\r\n", CAP(GET_OBJ_NAME(mount->contains)), GET_OBJ_NAME(mount));
+    }
+  }
+  send_to_char("Modifications:\r\n", ch);
   for (int x = 0; x < NUM_MODS; x++) {
     if (!GET_MOD(veh, x))
       continue;

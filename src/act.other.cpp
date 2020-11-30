@@ -1759,7 +1759,7 @@ ACMD(do_unattach)
       send_to_char("There aren't that many mounts.\r\n", ch);
     else if (item->worn_by)
       send_to_char(ch, "Someone is manning that mount.\r\n");
-    else if (!(gun = get_mount_weapon(item)))
+    else if (!((gun = get_mount_weapon(item)) || (gun = item->contains)))
       send_to_char("There isn't anything mounted on it.\r\n", ch);
     else {
       if (can_take_obj(ch, gun)) {
@@ -1768,6 +1768,7 @@ ACMD(do_unattach)
         sprintf(buf, "You remove %s from %s.\r\n", GET_OBJ_NAME(gun), GET_OBJ_NAME(item));
         send_to_char(buf, ch);
         act("$n removes $p from $P.", FALSE, ch, gun, item, TO_ROOM);
+        // TODO: Will this cause the vehicle load to go negative in the case of a gun ammo box?
         veh->usedload -= GET_OBJ_WEIGHT(gun);
       } else
         send_to_char(ch, "You can't seem to hold it.\r\n");

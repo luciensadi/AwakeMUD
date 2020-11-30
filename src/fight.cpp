@@ -2941,9 +2941,9 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   }
   ch_room = get_ch_in_room(ch);
   vict_room = get_ch_in_room(victim);
-  if (ch_room == vict_room) {
+  if (ch->in_room == victim->in_room) {
     // Same-room messaging.
-    static char vehicle_message[50];
+    static char vehicle_message[1000];
     
     if (ch->in_veh)
       sprintf(vehicle_message, "From inside %s, ", decapitalize_a_an(GET_VEH_NAME(ch->in_veh)));
@@ -3570,22 +3570,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->modifiers[COMBAT_MOD_MOVEMENT] += (int) (get_speed(att->veh) / 30);
       
       // Penalty for damaged veh.
-      switch ((att->veh)->damage) {
-        case 1:
-        case 2:
+      if ((att->veh)->damage > 0) {
+        if ((att->veh)->damage <= 2)
           att->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 1;
-          break;
-        case 3:
-        case 4:
-        case 5:
+        else if ((att->veh)->damage <= 5)
           att->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 2;
-          break;
-        case 6:
-        case 7:
-        case 8:
-        case 9:
+        else
           att->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 3;
-          break;
       }
     }
     
@@ -3607,7 +3598,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->modifiers[COMBAT_MOD_POSITION]--; */
     
     // Setup: Determine distance penalties.
-    if (att->ch->in_room != def->ch->in_room && !att->veh) {
+    if (!att->veh && att->ch->in_room != def->ch->in_room) {
       struct char_data *vict;
       bool vict_found = FALSE;
       struct room_data *room = NULL, *nextroom = NULL;
@@ -3704,7 +3695,6 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       damage(att->ch, def->ch, -1, att->dam_type, 0);
       return;
     }
-    
     // But wait-- there's more! Next we jump down to dealing damage.
   }
   // Melee combat.
@@ -3966,7 +3956,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
   att->successes -= bod_success;
   
-  int staged_damage;
+  int staged_damage = 0;
   
   // Adjust messaging for unkillable entities.
   if (can_hurt(att->ch, def->ch, att->dam_type))
@@ -3982,8 +3972,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
           wound_name[MIN(DEADLY, MAX(0, damage_total))],
           damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+  
   if (!melee)
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->burst_count);
+  
   damage(att->ch, def->ch, damage_total, att->dam_type, att->is_physical);
   
   if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
@@ -3991,8 +3983,14 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
   // If you're firing a heavy weapon without a gyro, you need to test against the damage of the recoil.
-  if (att->weapon && !IS_NPC(att->ch) && !att->gyro && GET_WEAPON_SKILL(att->weapon) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL(att->weapon) <= SKILL_ASSAULT_CANNON
-      && !(PLR_FLAGGED(att->ch, PLR_REMOTE) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_MANNING)))
+  if (att->weapon 
+      && !IS_NPC(att->ch) 
+      && !att->gyro 
+      && GET_WEAPON_SKILL(att->weapon) >= SKILL_MACHINE_GUNS 
+      && GET_WEAPON_SKILL(att->weapon) <= SKILL_ASSAULT_CANNON
+      && !(PLR_FLAGGED(att->ch, PLR_REMOTE) 
+           || AFF_FLAGGED(att->ch, AFF_RIG) 
+           || AFF_FLAGGED(att->ch, AFF_MANNING)))
   {
     int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), GET_WEAPON_POWER(att->weapon) / 2 + modify_target(att->ch));
     int staged_dam = stage(-recoil_successes, LIGHT);
@@ -4679,7 +4677,7 @@ void roll_initiative(void)
 void perform_violence(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  struct char_data *ch;
+  struct char_data *ch = NULL;
   extern struct index_data *mob_index;
   if (combat_list) {
     if (GET_INIT_ROLL(combat_list) <= 0) {
@@ -4690,212 +4688,277 @@ void perform_violence(void)
   for (ch = combat_list; ch; ch = next_combat_list) {
     bool engulfed = FALSE;
     next_combat_list = ch->next_fighting;
-    if (!CH_IN_COMBAT(ch) || !AWAKE(ch))
+    
+    // You're not in combat or not awake.
+    if (!CH_IN_COMBAT(ch) || !AWAKE(ch)) {
       stop_fighting(ch);
-    else if (GET_INIT_ROLL(ch) > 0) {
-      GET_INIT_ROLL(ch) -= 10;
-      for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next)
-        if (ssust->type == ENGULF) {
-          if (ssust->caster) {
-            int dam;
-            if (IS_SPIRIT(ch) || (IS_ELEMENTAL(ch) && GET_SPARE1(ch) == ELEM_WATER)) {
-              dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) + GET_EXTRA(ssust->target)), MODERATE));
-              act("$n can contorts in pain as the water engulfs $m!", TRUE, ssust->target, 0, 0, TO_ROOM);
-              send_to_char("The water crushes you and leaves you unable to breath!\r\n", ssust->target);
-              if (dam > 0)
-                damage(ch, ssust->target, dam, TYPE_FUMES, MENTAL);
-              GET_EXTRA(ssust->target)++;
-            } else
-              switch (GET_SPARE1(ch)) {
-                case ELEM_FIRE:
-                  dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) - GET_IMPACT(ssust->target) + (MOB_FLAGGED(ch, MOB_FLAMEAURA) ? 2 : 0)), MODERATE));
-                  act("$n can be heard screaming from inside $s prison of flames!", TRUE, ssust->target, 0, 0, TO_ROOM);
-                  send_to_char("The flames continue to burn you, causing horrendous pain!\r\n", ssust->target);
-                  if (dam > 0)
-                    damage(ch, ssust->target, dam, TYPE_FUMES, PHYSICAL);
-                  break;
-                case ELEM_EARTH:
-                  dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) - GET_IMPACT(ssust->target)), SERIOUS));
-                  act("$n can be heard screaming from inside $s earthen prison.", TRUE, ssust->target, 0, 0, TO_ROOM);
-                  send_to_char("The earth around you compresses against you, causing you great pain.\r\n", ssust->target);
-                  if (dam > 0)
-                    damage(ch, ssust->target, dam, TYPE_FUMES, PHYSICAL);
-                  break;
-                case ELEM_AIR:
-                  dam = convert_damage(stage(-success_test(MAX(GET_WIL(ssust->target), GET_BOD(ssust->target)), GET_SPARE2(ch)), SERIOUS));
-                  act("$n chokes and coughs.", TRUE, ssust->target, 0, 0, TO_ROOM);
-                  send_to_char("Noxious fumes fill your throat and lungs, causing your vision to swim.\r\n", ssust->target);
-                  if (dam > 0)
-                    damage(ch, ssust->target, dam, TYPE_FUMES, MENTAL);
-                  break;
-              }
-          } else {
-            if (success_test(GET_STR(ch), GET_LEVEL(ssust->target)) - success_test(GET_LEVEL(ssust->target), GET_STR(ch)) > 0)
-              stop_spirit_power(ssust->target, ENGULF);
-            else {
-              act("$n struggles against the spirit engulfing $m!", FALSE, ch, 0, 0, TO_ROOM);
-              act("You struggle against $n's engulfment!", FALSE, ssust->target, 0, ch, TO_VICT);
+      continue;
+    }
+  
+    // You get no action if you're out of init.
+    if (GET_INIT_ROLL(ch) <= 0)
+      continue;
+    
+    // Knock down their init.
+    GET_INIT_ROLL(ch) -= 10;
+    
+    // Process spirit attacks.
+    for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next) {
+      if (ssust->type == ENGULF) {
+        if (ssust->caster) {
+          int dam;
+          if (IS_SPIRIT(ch) || (IS_ELEMENTAL(ch) && GET_SPARE1(ch) == ELEM_WATER)) {
+            dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) + GET_EXTRA(ssust->target)), MODERATE));
+            act("$n can contorts in pain as the water engulfs $m!", TRUE, ssust->target, 0, 0, TO_ROOM);
+            send_to_char("The water crushes you and leaves you unable to breath!\r\n", ssust->target);
+            if (dam > 0)
+              damage(ch, ssust->target, dam, TYPE_FUMES, MENTAL);
+            GET_EXTRA(ssust->target)++;
+          } else
+            switch (GET_SPARE1(ch)) {
+              case ELEM_FIRE:
+                dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) - GET_IMPACT(ssust->target) + (MOB_FLAGGED(ch, MOB_FLAMEAURA) ? 2 : 0)), MODERATE));
+                act("$n can be heard screaming from inside $s prison of flames!", TRUE, ssust->target, 0, 0, TO_ROOM);
+                send_to_char("The flames continue to burn you, causing horrendous pain!\r\n", ssust->target);
+                if (dam > 0)
+                  damage(ch, ssust->target, dam, TYPE_FUMES, PHYSICAL);
+                break;
+              case ELEM_EARTH:
+                dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) - GET_IMPACT(ssust->target)), SERIOUS));
+                act("$n can be heard screaming from inside $s earthen prison.", TRUE, ssust->target, 0, 0, TO_ROOM);
+                send_to_char("The earth around you compresses against you, causing you great pain.\r\n", ssust->target);
+                if (dam > 0)
+                  damage(ch, ssust->target, dam, TYPE_FUMES, PHYSICAL);
+                break;
+              case ELEM_AIR:
+                dam = convert_damage(stage(-success_test(MAX(GET_WIL(ssust->target), GET_BOD(ssust->target)), GET_SPARE2(ch)), SERIOUS));
+                act("$n chokes and coughs.", TRUE, ssust->target, 0, 0, TO_ROOM);
+                send_to_char("Noxious fumes fill your throat and lungs, causing your vision to swim.\r\n", ssust->target);
+                if (dam > 0)
+                  damage(ch, ssust->target, dam, TYPE_FUMES, MENTAL);
+                break;
             }
+        } else {
+          if (success_test(GET_STR(ch), GET_LEVEL(ssust->target)) - success_test(GET_LEVEL(ssust->target), GET_STR(ch)) > 0)
+            stop_spirit_power(ssust->target, ENGULF);
+          else {
+            act("$n struggles against the spirit engulfing $m!", FALSE, ch, 0, 0, TO_ROOM);
+            act("You struggle against $n's engulfment!", FALSE, ssust->target, 0, ch, TO_VICT);
           }
-          engulfed = TRUE;
+        }
+        engulfed = TRUE;
+        break;
+      }
+    }
+    
+    // On fire and panicking, or engulfed? Lose your action.
+    if ((ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6) < 0) 
+        || engulfed)
+      continue;
+      
+    // Process banishment actions.
+    if (IS_AFFECTED(ch, AFF_BANISH) 
+        && FIGHTING(ch) 
+        && (IS_ELEMENTAL(FIGHTING(ch)) 
+            || IS_SPIRIT(FIGHTING(ch)))) {
+      struct char_data *spirit, *mage;
+      if (IS_NPC(ch)) {
+        spirit = ch;
+        mage = FIGHTING(ch);
+      } else {
+        spirit = FIGHTING(ch);
+        mage = ch;
+      }
+      int skill = GET_SKILL(mage, SKILL_CONJURING);
+      for (int i = 0; i < NUM_WEARS; i++)
+        if (GET_EQ(mage, i) && GET_OBJ_TYPE(GET_EQ(mage, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(mage, i), 0) == FOCI_SPIRIT
+            && GET_OBJ_VAL(GET_EQ(mage, i), 2) == GET_IDNUM(mage) && GET_OBJ_VAL(GET_EQ(mage, i), 3) == GET_SPARE1(spirit)
+            && GET_OBJ_VAL(GET_EQ(mage, i), 4)) {
+          skill += GET_OBJ_VAL(GET_EQ(mage, i), 1);
           break;
         }
-      if ((ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6) < 0) || engulfed)
-        continue;
-      if (IS_AFFECTED(ch, AFF_BANISH) && FIGHTING(ch) && (IS_ELEMENTAL(FIGHTING(ch)) || IS_SPIRIT(FIGHTING(ch)))) {
-        struct char_data *spirit, *mage;
-        if (IS_NPC(ch)) {
-          spirit = ch;
-          mage = FIGHTING(ch);
-        } else {
-          spirit = FIGHTING(ch);
-          mage = ch;
-        }
-        int skill = GET_SKILL(mage, SKILL_CONJURING);
-        for (int i = 0; i < NUM_WEARS; i++)
-          if (GET_EQ(mage, i) && GET_OBJ_TYPE(GET_EQ(mage, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(mage, i), 0) == FOCI_SPIRIT
-              && GET_OBJ_VAL(GET_EQ(mage, i), 2) == GET_IDNUM(mage) && GET_OBJ_VAL(GET_EQ(mage, i), 3) == GET_SPARE1(spirit)
-              && GET_OBJ_VAL(GET_EQ(mage, i), 4)) {
-            skill += GET_OBJ_VAL(GET_EQ(mage, i), 1);
-            break;
-          }
-        if (GET_ACTIVE(spirit) == GET_IDNUM(mage))
-          skill += GET_CHA(mage);
-        int success = resisted_test(skill, GET_LEVEL(spirit), GET_LEVEL(spirit), GET_MAG(mage) / 100);
-        if (success < 0) {
-          GET_EXTRA(mage) = 0;
-          GET_EXTRA(spirit) = 1;
-          GET_TEMP_MAGIC_LOSS(mage) -= success;
-          send_to_char(mage, "You lock minds with %s but are beaten back by its force!\r\n", GET_NAME(spirit));
-        } else if (success == 0) {
-          send_to_char(mage, "You lock minds with %s but fail to gain any ground.\r\n",
-                       GET_NAME(spirit));
-        } else {
-          GET_EXTRA(mage) = 1;
-          GET_EXTRA(spirit) = 0;
-          send_to_char(mage, "You lock minds with %s and succeed in weakening it!\r\n", GET_NAME(spirit));
-          GET_LEVEL(spirit) -= success;
-        }
-        affect_total(mage);
-        affect_total(spirit);
-        if (GET_LEVEL(spirit) < 1) {
-          send_to_char(mage, "You drain %s off the last of its magical force, banishing it to the metaplanes!\r\n", GET_NAME(spirit));
-          act("$N is banished to the metaplanes as $n drains the last of its magical force.", FALSE, mage, 0, spirit, TO_ROOM);
-          stop_fighting(spirit);
-          stop_fighting(mage);
-          end_spirit_existance(spirit, TRUE);
-          AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
-        } else if (GET_MAG(mage) < 1) {
-          send_to_char(mage, "Your magic spent from your battle with %s, you fall unconscious.\r\n", GET_NAME(spirit));
-          act("$n falls unconscious, drained by magical combat.", FALSE, mage, 0, 0, TO_ROOM);
-          damage(mage, spirit, TYPE_DRAIN, DEADLY, MENTAL);
-          stop_fighting(spirit);
-          stop_fighting(mage);
-          update_pos(mage);
-          AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
-          AFF_FLAGS(spirit).RemoveBit(AFF_BANISH);
-        }
-        continue;
-      }
-      if (FIGHTING(ch)) {
-        if (IS_NPC(ch) && !ch->desc && GET_SKILL(ch, SKILL_SORCERY) > 0 && GET_MENTAL(ch) > 400 && ch->in_room == FIGHTING(ch)->in_room && success_test(1, 8 - GET_SKILL(ch, SKILL_SORCERY))) {
-          mob_magic(ch);
-          continue;
-        }
-        if (ch->squeue) {
-          cast_spell(ch, ch->squeue->spell, ch->squeue->sub, ch->squeue->force, ch->squeue->arg);
-          DELETE_ARRAY_IF_EXTANT(ch->squeue->arg);
-          DELETE_AND_NULL(ch->squeue);
-          continue;
-        }
-      }
-      if (IS_AFFECTED(ch, AFF_APPROACH)) {
-        if (IS_AFFECTED(FIGHTING(ch), AFF_APPROACH) || GET_POS(FIGHTING(ch)) < POS_FIGHTING ||
-            (GET_EQ(ch, WEAR_WIELD) && (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)) ||
-                                        GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3) == TYPE_ARROW)) ||
-            (GET_EQ(ch, WEAR_HOLD) && (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3)) ||
-                                       GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3) == TYPE_ARROW)) ||
-            (GET_EQ(FIGHTING(ch), WEAR_WIELD) && !(IS_GUN(GET_OBJ_VAL(GET_EQ(FIGHTING(ch), WEAR_WIELD), 3)))) ||
-            (GET_EQ(FIGHTING(ch), WEAR_HOLD) && !(IS_GUN(GET_OBJ_VAL(GET_EQ(FIGHTING(ch), WEAR_HOLD), 3)))) ||
-            ch->in_room != FIGHTING(ch)->in_room) {
-          AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
-          AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
-        } else {
-          int target = 8, quickness = GET_QUI(ch);
-          bool footanchor = FALSE;
-          if (GET_TOTALBAL(ch) > GET_QUI(ch))
-            quickness -= GET_TOTALBAL(ch) - GET_QUI(ch);
-          if (GET_TOTALIMP(ch) > GET_QUI(ch))
-            quickness -= GET_TOTALIMP(ch) - GET_QUI(ch);
-          if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_DISTANCE_STRIKE) && !(GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)))
-            target -= (int)GET_REAL_MAG(ch) / 150;
-          for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-            if (GET_OBJ_VAL(cyber, 0) == CYB_HYDRAULICJACK)
-              quickness += GET_OBJ_VAL(cyber, 1);
-            else if (GET_OBJ_VAL(cyber, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(cyber, 9))
-              footanchor = TRUE;
-          for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next)
-            if (ssust->type == MOVEMENTUP && ssust->caster == FALSE && GET_LEVEL(ssust->target))
-              quickness *= GET_LEVEL(ssust->target);
-            else if (ssust->type == MOVEMENTDOWN && ssust->caster == FALSE && GET_LEVEL(ssust->target))
-              quickness /= GET_LEVEL(ssust->target);
-          if (AFF_FLAGGED(ch, AFF_BINDING))
-            quickness = 0;
-          if (footanchor)
-            quickness /= 2;
-          if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) > ch->in_room->z*100) {
-            if (GET_HEIGHT(ch) > ch->in_room->z * 200)
-              quickness = 0;
-            else quickness /= 2;
-          }
-          if (quickness > 0 && success_test(quickness, target) > 1) {
-            send_to_char(ch, "You close the distance and strike!\r\n");
-            act("$n closes the distance and strikes.", FALSE, ch, 0, 0, TO_ROOM);
-            AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
-          } else {
-            send_to_char(ch, "You attempt to close the distance!\r\n");
-            act("$n charges towards $N.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
-            GET_INIT_ROLL(ch) -= 10;
-            continue;
-          }
-        }
-      }
-      if (AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
-        struct veh_data *veh = NULL;
-        RIG_VEH(ch, veh);
-        if ((veh && veh->in_room)
-            && ((FIGHTING(ch) && veh->in_room != FIGHTING(ch)->in_room)
-                 || (FIGHTING_VEH(ch) && veh->in_room != FIGHTING_VEH(ch)->in_room))) {
-          send_to_char("Your target has left your line of sight.\r\n", ch);
-          stop_fighting(ch);
-          continue;
-        }
-        mount_fire(ch);
-      }
-      else if (FIGHTING_VEH(ch)) {
-        if (ch->in_room != FIGHTING_VEH(ch)->in_room)
-          stop_fighting(ch);
-        else
-          vcombat(ch, FIGHTING_VEH(ch));
+      if (GET_ACTIVE(spirit) == GET_IDNUM(mage))
+        skill += GET_CHA(mage);
+      int success = resisted_test(skill, GET_LEVEL(spirit), GET_LEVEL(spirit), GET_MAG(mage) / 100);
+      if (success < 0) {
+        GET_EXTRA(mage) = 0;
+        GET_EXTRA(spirit) = 1;
+        GET_TEMP_MAGIC_LOSS(mage) -= success;
+        send_to_char(mage, "You lock minds with %s but are beaten back by its force!\r\n", GET_NAME(spirit));
+      } else if (success == 0) {
+        send_to_char(mage, "You lock minds with %s but fail to gain any ground.\r\n",
+                     GET_NAME(spirit));
       } else {
-        hit(ch,
-            FIGHTING(ch),
-            GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD),
-            GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD)
-            );
-        if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) && FIGHTING(ch))
-          hit(ch,
-              FIGHTING(ch),
-              GET_EQ(ch, WEAR_HOLD),
-              GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD)
-              );
+        GET_EXTRA(mage) = 1;
+        GET_EXTRA(spirit) = 0;
+        send_to_char(mage, "You lock minds with %s and succeed in weakening it!\r\n", GET_NAME(spirit));
+        GET_LEVEL(spirit) -= success;
+      }
+      affect_total(mage);
+      affect_total(spirit);
+      if (GET_LEVEL(spirit) < 1) {
+        send_to_char(mage, "You drain %s off the last of its magical force, banishing it to the metaplanes!\r\n", GET_NAME(spirit));
+        act("$N is banished to the metaplanes as $n drains the last of its magical force.", FALSE, mage, 0, spirit, TO_ROOM);
+        stop_fighting(spirit);
+        stop_fighting(mage);
+        end_spirit_existance(spirit, TRUE);
+        AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
+      } else if (GET_MAG(mage) < 1) {
+        send_to_char(mage, "Your magic spent from your battle with %s, you fall unconscious.\r\n", GET_NAME(spirit));
+        act("$n falls unconscious, drained by magical combat.", FALSE, mage, 0, 0, TO_ROOM);
+        damage(mage, spirit, TYPE_DRAIN, DEADLY, MENTAL);
+        stop_fighting(spirit);
+        stop_fighting(mage);
+        update_pos(mage);
+        AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
+        AFF_FLAGS(spirit).RemoveBit(AFF_BANISH);
+      }
+      continue;
+    }
+    
+    // Process mage actions.
+    if (FIGHTING(ch)) {
+      if (IS_NPC(ch) 
+          && !ch->desc 
+          && GET_SKILL(ch, SKILL_SORCERY) > 0 
+          && GET_MENTAL(ch) > 400 
+          && ch->in_room == FIGHTING(ch)->in_room 
+          && success_test(1, 8 - GET_SKILL(ch, SKILL_SORCERY))) {
+        mob_magic(ch);
+        continue;
       }
       
-      if (MOB_FLAGGED(ch, MOB_SPEC) &&
-          mob_index[GET_MOB_RNUM(ch)].func != NULL) {
-        char empty_argument = '\0';
-        (mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, &empty_argument);
+      if (ch->squeue) {
+        cast_spell(ch, ch->squeue->spell, ch->squeue->sub, ch->squeue->force, ch->squeue->arg);
+        DELETE_ARRAY_IF_EXTANT(ch->squeue->arg);
+        DELETE_AND_NULL(ch->squeue);
+        continue;
       }
+    }
+    
+    // Process melee charging.
+    if (IS_AFFECTED(ch, AFF_APPROACH)) {
+      // Many failure conditions for charging at someone.
+      if (IS_AFFECTED(FIGHTING(ch), AFF_APPROACH) 
+          || GET_POS(FIGHTING(ch)) < POS_FIGHTING 
+          || (GET_EQ(ch, WEAR_WIELD) 
+              && (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)) 
+                  || GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3) == TYPE_ARROW)) 
+          || (GET_EQ(ch, WEAR_HOLD) 
+              && (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3)) 
+                  || GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3) == TYPE_ARROW))
+          || (GET_EQ(FIGHTING(ch), WEAR_WIELD) 
+              && !(IS_GUN(GET_OBJ_VAL(GET_EQ(FIGHTING(ch), WEAR_WIELD), 3)))) 
+          || (GET_EQ(FIGHTING(ch), WEAR_HOLD) 
+              && !(IS_GUN(GET_OBJ_VAL(GET_EQ(FIGHTING(ch), WEAR_HOLD), 3)))) 
+          || ch->in_room != FIGHTING(ch)->in_room) {
+        AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
+        AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
+      } 
+      
+      // Otherwise, process the charge.
+      else {
+        int target = 8, quickness = GET_QUI(ch);
+        bool footanchor = FALSE;
+        
+        // Armor penalties.
+        if (GET_TOTALBAL(ch) > GET_QUI(ch))
+          quickness -= GET_TOTALBAL(ch) - GET_QUI(ch);
+        if (GET_TOTALIMP(ch) > GET_QUI(ch))
+          quickness -= GET_TOTALIMP(ch) - GET_QUI(ch);
+          
+        // Distance Strike (only works unarmed)
+        if (GET_TRADITION(ch) == TRAD_ADEPT 
+            && GET_POWER(ch, ADEPT_DISTANCE_STRIKE) 
+            && !(GET_EQ(ch, WEAR_WIELD) 
+                 || GET_EQ(ch, WEAR_HOLD)))
+          target -= (int)GET_REAL_MAG(ch) / 150;
+        
+        // Hydraulic jack and foot anchor.
+        for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+          if (GET_OBJ_VAL(cyber, 0) == CYB_HYDRAULICJACK)
+            quickness += GET_OBJ_VAL(cyber, 1);
+          else if (GET_OBJ_VAL(cyber, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(cyber, 9))
+            footanchor = TRUE;
+        }
+            
+        // Movement modifications via spells.
+        for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next)
+          if (ssust->type == MOVEMENTUP && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+            quickness *= GET_LEVEL(ssust->target);
+          else if (ssust->type == MOVEMENTDOWN && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+            quickness /= GET_LEVEL(ssust->target);
+            
+        // Movement reset: Can't move if binding.
+        if (AFF_FLAGGED(ch, AFF_BINDING))
+          quickness = 0;
+          
+        // Penalty from footanchor.
+        if (footanchor)
+          quickness /= 2;
+          
+        // Penalty from too-tall.
+        if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) > ch->in_room->z*100) {
+          if (GET_HEIGHT(ch) > ch->in_room->z * 200)
+            quickness = 0;
+          else quickness /= 2;
+        }
+        
+        // Strike.
+        if (quickness > 0 && success_test(quickness, target) > 1) {
+          send_to_char(ch, "You close the distance and strike!\r\n");
+          act("$n closes the distance and strikes.", FALSE, ch, 0, 0, TO_ROOM);
+          AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
+        } else {
+          send_to_char(ch, "You attempt to close the distance!\r\n");
+          act("$n charges towards $N.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
+          // TODO: Is it really supposed to cost an extra init pass?
+          // GET_INIT_ROLL(ch) -= 10;
+          continue;
+        }
+      }
+    }
+    
+    // Manning weaponry.
+    if (AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+      struct veh_data *veh = NULL;
+      RIG_VEH(ch, veh);
+      
+      // Require that the target is reachable.
+      if ((veh && veh->in_room)
+          && ((FIGHTING(ch) && veh->in_room != FIGHTING(ch)->in_room)
+               || (FIGHTING_VEH(ch) && veh->in_room != FIGHTING_VEH(ch)->in_room))) {
+        send_to_char("Your target has left your line of sight.\r\n", ch);
+        stop_fighting(ch);
+        continue;
+      }
+      mount_fire(ch);
+    }
+    
+    // Attacking a vehicle. Stopped here.
+    else if (FIGHTING_VEH(ch)) {
+      if (ch->in_room != FIGHTING_VEH(ch)->in_room)
+        stop_fighting(ch);
+      else
+        vcombat(ch, FIGHTING_VEH(ch));
+    } else {
+      hit(ch,
+          FIGHTING(ch),
+          GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD),
+          GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD)
+          );
+      if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) && FIGHTING(ch))
+        hit(ch,
+            FIGHTING(ch),
+            GET_EQ(ch, WEAR_HOLD),
+            GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD)
+            );
+    }
+    
+    if (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_SPEC) &&
+        mob_index[GET_MOB_RNUM(ch)].func != NULL) {
+      char empty_argument = '\0';
+      (mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, &empty_argument);
     }
   }
 }
@@ -5453,34 +5516,37 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
 
 void mount_fire(struct char_data *ch)
 {
-  struct veh_data *veh;
-  struct obj_data *mount, *gun;
+  struct veh_data *veh = NULL;
+  struct obj_data *mount = NULL, *gun = NULL;
   RIG_VEH(ch, veh);
+  
+  // Hands-on firing.
   if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    mount = get_mount_manned_by_ch(ch);
-    
-    if (!mount)
+    // No mount or mount is empty? Failure.
+    if (!(mount = get_mount_manned_by_ch(ch)) || !(gun = get_mount_weapon(mount)))
       return;
     
-    gun = get_mount_weapon(mount);
-    
-    if (!(mount->targ || mount->tveh))
+    // No target? Failure.
+    if (!mount->targ && !mount->tveh)
       return;
     
-    if (mount->targ)
+    // Got a target and a gun? Fire.
+    if (mount->targ && (gun = get_mount_weapon(mount)))
       hit(ch, mount->targ, gun, NULL);
     else
       vcombat(ch, mount->tveh);
+    
+    return;
   }
-  else if (ch->char_specials.rigging || AFF_FLAGGED(ch, AFF_RIG)) {
-    for (mount = veh->mount; mount; mount = mount->next_content) {
-      for (gun = mount->contains; gun; gun = gun->next_content)
-        if (GET_OBJ_TYPE(gun) == ITEM_WEAPON)
-          break;
-      if (!mount->worn_by && gun && ((mount->targ && FIGHTING(ch) == mount->targ) || (mount->tveh && FIGHTING_VEH(ch) == mount->tveh))) {
+  
+  if (ch->char_specials.rigging || AFF_FLAGGED(ch, AFF_RIG)) {
+    for (mount = veh->mount; mount; mount = mount->next_content) {          
+      // If nobody's manning it and it has a gun...
+      if (!mount->worn_by && (gun = get_mount_weapon(mount))) {
+        // Fire at the enemy, assuming we're fighting it.
         if (mount->targ && FIGHTING(ch) == mount->targ)
           hit(ch, mount->targ, gun, NULL);
-        else
+        else if (mount->tveh && FIGHTING_VEH(ch) == mount->tveh)
           vcombat(ch, mount->tveh);
       }
     }

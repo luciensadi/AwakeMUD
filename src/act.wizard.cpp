@@ -1712,6 +1712,9 @@ ACMD(do_return)
         char_to_room(ch, GET_WAS_IN(ch));
         GET_WAS_IN(ch) = NULL;
       }
+    } else if (AFF_FLAGGED(ch, AFF_RIG)) {
+      ACMD_DECLARE(do_rig);
+      do_rig(ch, NULL, 0, 0);
     } else {
       send_to_char("But there's nothing for you to return from...\r\n", ch);
     }

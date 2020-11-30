@@ -1080,7 +1080,7 @@ struct ammo_data
 struct combat_data
 {
   // Generic combat data.
-  char modifiers[NUM_COMBAT_MODIFIERS];
+  int modifiers[NUM_COMBAT_MODIFIERS];
   bool too_tall;
   int skill;
   int tn;
@@ -1100,15 +1100,15 @@ struct combat_data
   int recoil_comp;
   
   // Cyberware data.
-  unsigned char climbingclaws;
-  unsigned char fins;
-  unsigned char handblades;
-  unsigned char handrazors;
-  unsigned char improved_handrazors;
-  unsigned char handspurs;
-  unsigned char footanchors;
-  unsigned char bone_lacing_power;
-  unsigned char num_cyberweapons;
+  int climbingclaws;
+  int fins;
+  int handblades;
+  int handrazors;
+  int improved_handrazors;
+  int handspurs;
+  int footanchors;
+  int bone_lacing_power;
+  int num_cyberweapons;
   
   // Pointers.
   struct char_data *ch;
@@ -1123,7 +1123,8 @@ struct combat_data
     handblades(0), handrazors(0), improved_handrazors(0), handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
     ch(NULL), veh(NULL), weapon(NULL), magazine(NULL), gyro(NULL)
   {
-    memset(modifiers, 0, sizeof(modifiers));
+    for (int i = 0; i < NUM_COMBAT_MODIFIERS; i++)
+      modifiers[i] = 0;
     
     ch = character;
     weapon = weap;
