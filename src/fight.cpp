@@ -2530,6 +2530,10 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       // NPCs don't care about ammo in their mounts. No deduction needed here.
       if (IS_NPC(ch))
         return TRUE;
+        
+      // Is it one of the unlimited-ammo weapons?
+      if (GET_WEAPON_MAX_AMMO(wielded) < 0)
+        return TRUE;
       
       // It's a player. Look through their gun and locate any ammo boxes in there.
       for (struct obj_data *obj = wielded->in_obj->contains; obj; obj = obj->next_content) {
