@@ -373,7 +373,7 @@ ACMD(do_group)
   }
 
   if (ch->master) {
-    act("You can not enroll group members without being head of a group.",
+    act("You can not enroll group members without being head of the group.",
         FALSE, ch, 0, 0, TO_CHAR);
     return;
   }
@@ -392,9 +392,10 @@ ACMD(do_group)
   else if ((vict->master != ch) && (vict != ch))
     act("$N must follow you to enter your group.", FALSE, ch, 0, vict, TO_CHAR);
   else {
-    if (!IS_AFFECTED(vict, AFF_GROUP))
+    if (!IS_AFFECTED(vict, AFF_GROUP)) {
+      perform_group(ch, ch);
       perform_group(ch, vict);
-    else {
+    } else {
       if (ch != vict)
         act("$N is no longer a member of your group.", FALSE, ch, 0, vict, TO_CHAR);
       act("You have been kicked out of $n's group!", FALSE, ch, 0, vict, TO_VICT);
