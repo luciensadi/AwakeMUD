@@ -1025,11 +1025,24 @@ ACMD(do_locate)
 }
 
 ACMD(do_matrix_look)
-{
+{      
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
   }
+  
+  // Did they supply a target? Look at that instead.
+  skip_spaces(&argument);
+  if (*argument) {
+    for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
+      if ((isname(argument, icon->name) || isname(argument, icon->look_desc)) && has_spotted(PERSONA, icon)) {
+        send_to_icon(PERSONA, icon->long_desc);
+        return;
+      }
+    send_to_icon(PERSONA, "You can't see that icon in this host.\r\n");
+    return;
+  }
+  
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     sprintf(buf, "^C[%ld]^n %s^n\r\n%s", matrix[PERSONA->in_host].vnum, matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
   } else {

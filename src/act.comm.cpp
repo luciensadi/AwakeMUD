@@ -68,7 +68,7 @@ ACMD(do_say)
         
         // Send the message to the rest of the host. Store it to the recipients' says history.
         sprintf(buf, "%s says, \"%s^n\"\r\n", ch->persona->name, argument);
-        send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
+        // send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
         for (struct matrix_icon *i = matrix[ch->persona->in_host].icons; i; i = i->next_in_host) {
           if (ch->persona != i && i->decker && has_spotted(i, ch->persona)) {
             send_to_icon(i, buf);
