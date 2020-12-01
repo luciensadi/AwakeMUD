@@ -581,7 +581,7 @@ void game_loop(int mother_desc)
   while (!circle_shutdown) {
     
     /* Reset the timer on our alarm. If this amount of time in seconds elapses without this being called again, invoke alarm_handler() and die. */
-    alarm(10);
+    alarm(SECONDS_TO_WAIT_FOR_HUNG_MUD_TO_RECOVER_BEFORE_KILLING_IT);
     
     /* Sleep if we don't have any connections */
     if (descriptor_list == NULL) {

@@ -2402,7 +2402,7 @@ ACMD(do_examine)
           strcpy(buf, "Custom Components:\r\n");
           for (struct obj_data *soft = tmp_object->contains; soft; soft = soft->next_content)
             if (GET_OBJ_TYPE(soft) == ITEM_PART)
-              sprintf(ENDOF(buf), "%-30s Type: %-15s Rating: %d\r\n",
+              sprintf(ENDOF(buf), "%-30s Type: %-24s Rating: %d\r\n",
                       GET_OBJ_NAME(soft),
                       parts[GET_OBJ_VAL(soft, 0)].name,
                       GET_PART_RATING(soft));
@@ -4609,4 +4609,75 @@ ACMD(do_mort_show)
 ACMD(do_tke){
   sprintf(buf, "Your current TKE is %d.\r\n", GET_TKE(ch));
   send_to_char(buf, ch);
+}
+
+#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <tke|reputation|notoriety|nuyen|syspoints>\r\n"
+ACMD(do_leaderboard) {
+  // leaderboard <tke|rep|notor|nuyen|sysp>
+  skip_spaces(&argument);
+  if (!*argument) {
+    send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
+    return;
+  }
+  
+  const char *display_string = NULL, *query_string = NULL;
+  
+  if (!strncmp(argument, "tke", strlen(argument))) {
+    display_string = "TKE";
+    query_string = "tke";
+  }
+  
+  else if (!strncmp(argument, "reputation", strlen(argument))) {
+    display_string = "reputation";
+    query_string = "rep";
+  }
+  
+  else if (!strncmp(argument, "notoriety", strlen(argument))) {
+    display_string = "notoriety";
+    query_string = "notor";
+  }
+  
+  else if (!strncmp(argument, "nuyen", strlen(argument))) {
+    display_string = "nuyen";
+    query_string = "bank + cash";
+  }
+  
+  else if (!strncmp(argument, "syspoints", strlen(argument))) {
+    display_string = "syspoints";
+    query_string = "syspoints";
+  }
+  
+  else {
+    send_to_char(LEADERBOARD_SYNTAX_STRING, ch);
+    return;
+  }
+  
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  
+  // Sanitization not required here-- they're constant strings.
+  sprintf(buf, "SELECT name, %s FROM pfiles "
+               "  WHERE name != 'deleted' "
+               "  AND %s > 0 "
+               "  AND rank = 1 "
+               "ORDER BY %s DESC LIMIT 10;", 
+               query_string, query_string, query_string);
+  
+  mysql_wrapper(mysql, buf);
+  if (!(res = mysql_use_result(mysql))) {
+    sprintf(buf, "SYSERR: Failed to access %s leaderboard data!", display_string);
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
+    return;
+  }
+  
+  send_to_char(ch, "^CTop 10 characters by %s:^n\r\n", display_string);
+  int counter = 1;
+  while ((row = mysql_fetch_row(res))) {
+    sprintf(buf, "%s:", row[0]);
+    send_to_char(ch, "%d) %-15s %-15s\r\n", counter++, buf, row[1]);
+  }
+  if (counter == 1)
+    send_to_char(ch, "...Nobody! Looks like a great place to make your mark.\r\n");
+  mysql_free_result(res);
 }

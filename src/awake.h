@@ -2261,6 +2261,12 @@ struct ban_list_element
 #define VEH_DAM_THRESHOLD_DESTROYED 10
 #define VEH_DAMAGE_NEEDS_WORKSHOP   7
 
-#define SYSP_RESTRING_COST          2
+// How many syspoints should someone spend to restring an item?
+#define SYSP_RESTRING_COST                                        2
+
+// How long should the MUD wait for recovery before killing itself? Note that it
+// considers itself to be stuck during copyover too, so if you have a large world,
+// you should increase this value.
+#define SECONDS_TO_WAIT_FOR_HUNG_MUD_TO_RECOVER_BEFORE_KILLING_IT 20
 
 #endif

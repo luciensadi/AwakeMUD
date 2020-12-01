@@ -633,8 +633,10 @@ ACMD(do_build) {
                             && GET_OBJ_VAL(soft, 1) == GET_OBJ_VAL(obj, 1))
                             break;
                     if (!soft) {
-                        send_to_char(ch, "You need to program and cook the required software (rating %d %s) for that first.\r\n",
-                                     GET_OBJ_VAL(obj, 1), programs[parts[GET_OBJ_VAL(obj, 0)].software]);
+                        send_to_char(ch, 
+                                     "You need to program and cook the required software (rating %d %s) for that first.\r\n",
+                                     GET_OBJ_VAL(obj, 1), 
+                                     programs[parts[GET_OBJ_VAL(obj, 0)].software].name);
                         return;
                     }
                 }
