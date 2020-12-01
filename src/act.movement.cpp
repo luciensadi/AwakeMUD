@@ -1796,7 +1796,7 @@ ACMD(do_sleep)
     send_to_char("You are already sound asleep.\r\n", ch);
     break;
   case POS_FIGHTING:
-    send_to_char("Sleep while fighting?  Are you MAD?\r\n", ch);
+    send_to_char("Sleep while fighting? Are you MAD?\r\n", ch);
     break;
   default:
     act("You stop floating around, and lie down to sleep.",

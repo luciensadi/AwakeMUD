@@ -1155,7 +1155,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
   if (i <= total)
   { // hits a victim
     for (vict = victim->in_room->people; vict; vict = vict->next_in_room)
-      if (vict != victim && !IS_ASTRAL(vict) && GET_POS(vict) > POS_SLEEPING &&
+      if (vict != victim && !IS_ASTRAL(vict) && GET_POS(vict) >= POS_MORTALLYW &&
           !number(0, total - 1))
         break;
     
@@ -2835,8 +2835,10 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   if (attack_success < 1)
   {
     if (!AFF_FLAGGED(ch, AFF_COUNTER_ATT)) {
-      if ((GET_ASTRAL(vict) > 0) && (attack_success < 0)
-          && FIGHTING(vict) == ch && GET_POS(vict) <= POS_SLEEPING) {
+      if ((GET_ASTRAL(vict) > 0) 
+          && (attack_success < 0)
+          && FIGHTING(vict) == ch 
+          && GET_POS(vict) > POS_SLEEPING) {
         send_to_char(ch, "%s counters your attack!\r\n", GET_NAME(vict));
         send_to_char(vict, "You counter %s's attack!\r\n", GET_NAME(ch));
         AFF_FLAGS(vict).SetBit(AFF_COUNTER_ATT);
