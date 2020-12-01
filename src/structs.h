@@ -512,6 +512,8 @@ struct player_special_data_saved
   unsigned char force_points;
   unsigned char restring_points;
   int zonenum;
+  
+  int system_points;
 };
 
 struct player_special_data
@@ -534,8 +536,8 @@ struct player_special_data
   struct remem *ignored;
 
   player_special_data() :
-      aliases(NULL), remem(NULL), last_tell(0),
-      questnum(0), obj_complete(NULL), mob_complete(NULL), watching(NULL), ignored(NULL)
+      aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL), 
+      mob_complete(NULL), watching(NULL), ignored(NULL)
   {
     for (int i = 0; i < NUM_DRUGS+1; i++)
       for (int j = 0; j < 7; j++)

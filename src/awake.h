@@ -1402,9 +1402,9 @@ enum {
 #define PART_SIGNAL_AMP		25
 #define NUM_PARTS		26
 
-#define TYPE_KIT		1
-#define TYPE_SHOP		2
-#define TYPE_FACILITY		3
+#define TYPE_KIT        1
+#define TYPE_WORKSHOP   2
+#define TYPE_FACILITY   3
 
 // Kit/Workshop/Facility types.
 #define TYPE_GENERAL		0
@@ -2260,4 +2260,7 @@ struct ban_list_element
 #define VEH_DAM_THRESHOLD_SEVERE    6
 #define VEH_DAM_THRESHOLD_DESTROYED 10
 #define VEH_DAMAGE_NEEDS_WORKSHOP   7
+
+#define SYSP_RESTRING_COST          2
+
 #endif

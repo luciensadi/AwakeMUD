@@ -561,11 +561,11 @@ ACMD(do_upgrade)
       send_to_char(ch, "You don't have the right tools for that job.\r\n");
       return;
     } else if (mod_types[GET_OBJ_VAL(mod, 0)].tools == TYPE_KIT) {
-      if (kit == TYPE_SHOP)
+      if (kit == TYPE_WORKSHOP)
         target--;
       else if (kit == TYPE_FACILITY)
         target -= 3;
-    } else if (mod_types[GET_OBJ_VAL(mod, 0)].tools == TYPE_SHOP && kit == TYPE_FACILITY)
+    } else if (mod_types[GET_OBJ_VAL(mod, 0)].tools == TYPE_WORKSHOP && kit == TYPE_FACILITY)
       target--;
 
     if ((skill = success_test(skill, target)) == -1) {
@@ -1119,8 +1119,7 @@ ACMD(do_driveby)
           GET_OBJ_VAL(GET_EQ(pass, WEAR_WIELD),4) >= SKILL_FIREARMS) {
         if (!IS_NPC(vict) && !PRF_FLAGGED(pass, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER))
           continue;
-        sprintf(buf, "You follow %s lead and take aim.\r\n", HSHR(ch));
-        send_to_char(pass, buf);
+        send_to_char(pass, "You follow %s lead and take aim.\r\n", HSHR(ch));
         PLR_FLAGS(pass).RemoveBit(PLR_DRIVEBY);
         pass->next_fighting = list;
         list = pass;
@@ -1140,10 +1139,9 @@ ACMD(do_driveby)
   order_list(list);
   roll_individual_initiative(vict);
   if (GET_INIT_ROLL(vict) < 12)
-    sprintf(buf, "You suddenly feel a cap busted in your ass as %s zooms past!\r\n", GET_VEH_NAME(ch->in_veh));
+    send_to_char(vict, "You suddenly feel a cap busted in your ass as %s zooms past!\r\n", GET_VEH_NAME(ch->in_veh));
   else
-    sprintf(buf, "A hail of bullets flies from %s as it zooms past!\r\n", GET_VEH_NAME(ch->in_veh));
-  send_to_char(vict, buf);
+    send_to_char(vict, "A hail of bullets flies from %s as it zooms past!\r\n", GET_VEH_NAME(ch->in_veh));
 
   for (int i = 2; i > 0; i--) {
     for (pass = list; pass && vict->in_room == ch->in_veh->in_room; pass = pass->next_fighting) {
@@ -1161,8 +1159,7 @@ ACMD(do_driveby)
 
   if (GET_INIT_ROLL(vict) >= 12) {
     if (GET_EQ(vict, WEAR_WIELD) && GET_OBJ_VAL(GET_EQ(vict, WEAR_WIELD),4) >= SKILL_FIREARMS) {
-      sprintf(buf, "You swing around and take aim at %s.\r\n", GET_VEH_NAME(ch->in_veh));
-      send_to_char(vict, buf);
+      send_to_char(vict, "You swing around and take aim at %s.\r\n", GET_VEH_NAME(ch->in_veh));
       sprintf(buf, "%s swings around and takes aim at your ride.\r\n", GET_NAME(vict));
       send_to_veh(buf, ch->in_veh, NULL, TRUE);
       vcombat(vict, ch->in_veh);

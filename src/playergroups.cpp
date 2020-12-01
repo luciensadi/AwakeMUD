@@ -1373,7 +1373,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Save the character.
   if (vict_is_logged_in) {
     // Online characters are saved to the DB without unloading.
-    send_to_char(vict, buf);
+    send_to_char(buf, vict);
     playerDB.SaveChar(vict, GET_LOADROOM(vict));
   } else {
     // Loaded characters are unloaded (saving happens during extract_char).

@@ -677,7 +677,7 @@ void point_update(void)
                   break;
                 }
               }
-              send_to_char(i, buf);
+              send_to_char(buf, i);
             }
           }
         }

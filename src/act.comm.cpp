@@ -81,12 +81,12 @@ ACMD(do_say)
           if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX)) {
             // Send and store.
             sprintf(buf, "Your hitcher says, \"%s^n\"\r\n", argument);
-            send_to_char(targ, buf);
+            send_to_char(buf, targ);
             store_message_to_history(targ->desc, COMM_CHANNEL_SAYS, str_dup(buf));
           }
         // Send and store.
         sprintf(buf, "You send, down the line, \"%s^n\"\r\n", argument);
-        send_to_char(ch, buf);
+        send_to_char(buf, ch);
         store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
       }
       return;
@@ -180,14 +180,14 @@ ACMD(do_say)
       delete_doubledollar(argument);
       if(subcmd == SCMD_OSAY) {
         sprintf(buf, "You say ^mOOCly^n, \"%s^n\"\r\n", argument);
-        send_to_char(ch, buf);
+        send_to_char(buf, ch);
         store_message_to_history(ch->desc, COMM_CHANNEL_OSAYS, str_dup(buf));
       } else {
         if (to)
           sprintf(buf2, " to %s", CAN_SEE(ch, to) ? (found_mem(GET_MEMORY(ch), to) ?
                                                      CAP(found_mem(GET_MEMORY(ch), to)->mem) : GET_NAME(to)) : "someone");
         sprintf(buf, "You say%s, \"%s^n\"\r\n", (to ? buf2 : ""), argument);
-        send_to_char(ch, buf);
+        send_to_char(buf, ch);
         store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
       }
     }
@@ -228,7 +228,7 @@ ACMD(do_exclaim)
     send_to_char(OK, ch);
   else {
     sprintf(buf, "You exclaim, \"%s!^n\"\r\n", argument);
-    send_to_char(ch, buf);
+    send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
   }
 }
@@ -349,7 +349,7 @@ ACMD(do_ask)
   else {
     // TODO
     sprintf(buf, "You ask, \"%s?^n\"\r\n", argument);
-    send_to_char(ch, buf);
+    send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
   }
 }
@@ -1322,7 +1322,7 @@ ACMD(do_phone)
       sprintf(buf2, "$z mumbles incoherently into $s phone.\r\n");
     }
     sprintf(buf3, "^YYou say, \"%s\"\r\n", argument);
-    send_to_char(ch, buf3);
+    send_to_char(buf3, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, str_dup(buf3));
     if (phone->dest->persona && phone->dest->persona->decker && phone->dest->persona->decker->ch)
       store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, str_dup(act(buf, FALSE, ch, 0, phone->dest->persona->decker->ch, TO_DECK)));

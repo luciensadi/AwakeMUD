@@ -148,7 +148,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
   
   if (!*arg) {
     sprintf(buf, "%s what?\r\n", cmdname);
-    send_to_char(ch, CAP(buf));
+    send_to_char(CAP(buf), ch);
     return TRUE;
   }
   

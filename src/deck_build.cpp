@@ -365,13 +365,13 @@ ACMD(do_cook) {
             if ((chip = get_obj_in_list_vis(ch, argument, comp->contains)))
                 break;
     if (!chip)
-        send_to_char(ch, "You need to install that chip on a computer.\r\n");
+        send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
     else if (GET_OBJ_TYPE(chip) != ITEM_PROGRAM)
-        send_to_char(ch, "You must finish programming it first.\r\n");
+        send_to_char(ch, "You must finish programming %s first.\r\n", GET_OBJ_NAME(chip));
     else if (GET_OBJ_TIMER(chip))
         send_to_char("This chip has already been encoded.\r\n", ch);
     else if (GET_OBJ_VAL(chip, 0) == SOFT_SUITE)
-      send_to_char("You don't need to encode this to an optical chip.\r\n", ch);
+      send_to_char("Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.\r\n", ch);
     else {
         for (cooker = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; cooker; cooker = cooker->next_content)
             if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
@@ -399,7 +399,7 @@ ACMD(do_cook) {
                     break;
                 }
         if (!paid) {
-            send_to_char(ch, "You don't have a large enough optical chip to encode that onto.\r\n");
+            send_to_char(ch, "You need at least %d nuyen worth of optical chips to encode %s.\r\n", cost, GET_OBJ_NAME(chip));
             return;
         }
         GET_OBJ_VAL(chip->in_obj, 3) -= GET_OBJ_VAL(chip, 2);
@@ -581,14 +581,17 @@ ACMD(do_build) {
         if ((workshop = find_workshop(ch, TYPE_MICROTRONIC)) && GET_OBJ_VAL(workshop, 0) > kit_rating)
             kit_rating = GET_WORKSHOP_TYPE(workshop);
         if (kit_rating < parts[GET_PART_TYPE(obj)].tools) {
-            send_to_char(ch, "You don't have the right tools for that job.\r\n");
+            send_to_char(ch, "You don't have the right tools for that job. You need to %s %s %s.\r\n",
+                         parts[GET_PART_TYPE(obj)].tools == TYPE_WORKSHOP ? "have an unpacked" : "have a",
+                         workshops[TYPE_MICROTRONIC],
+                         kit_workshop_facility[parts[GET_PART_TYPE(obj)].tools]);
             return;
         } else if (parts[GET_OBJ_VAL(obj, 0)].tools == TYPE_KIT) {
-            if (kit_rating == TYPE_SHOP)
+            if (kit_rating == TYPE_WORKSHOP)
                 target--;
             else if (kit_rating == TYPE_FACILITY)
                 target -= 3;
-        } else if (parts[GET_OBJ_VAL(obj, 0)].tools == TYPE_SHOP && kit_rating == TYPE_FACILITY)
+        } else if (parts[GET_OBJ_VAL(obj, 0)].tools == TYPE_WORKSHOP && kit_rating == TYPE_FACILITY)
             target--;
         if (GET_PART_TYPE(obj) == PART_BOD || GET_PART_TYPE(obj) == PART_SENSOR || GET_PART_TYPE(obj) == PART_MASKING || GET_PART_TYPE(obj) == PART_EVASION) {
             int total = GET_PART_RATING(obj);
@@ -625,10 +628,13 @@ ACMD(do_build) {
                 struct obj_data *soft = NULL;
                 if (parts[GET_OBJ_VAL(obj, 0)].software) {
                     for (soft = ch->carrying; soft; soft = soft->next_content)
-                        if (GET_OBJ_VAL(soft, 0) == parts[GET_OBJ_VAL(obj, 0)].software && GET_OBJ_TIMER(soft) == 1 && GET_OBJ_VAL(soft, 1) == GET_OBJ_VAL(obj, 1))
+                        if (GET_OBJ_VAL(soft, 0) == parts[GET_OBJ_VAL(obj, 0)].software 
+                            && GET_OBJ_TIMER(soft) == 1 
+                            && GET_OBJ_VAL(soft, 1) == GET_OBJ_VAL(obj, 1))
                             break;
                     if (!soft) {
-                        send_to_char(ch, "You need to program and cook the required software for that first.\r\n");
+                        send_to_char(ch, "You need to program and cook the required software (rating %d %s) for that first.\r\n",
+                                     GET_OBJ_VAL(obj, 1), programs[parts[GET_OBJ_VAL(obj, 0)].software]);
                         return;
                     }
                 }

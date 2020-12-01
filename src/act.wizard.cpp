@@ -2113,6 +2113,11 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
       send_to_char("Yeah, right.\r\n", ch);
       return;
     }
+    
+    if (ch == victim) {
+      send_to_char("You can't advance yourself.\r\n", ch);
+      return;
+    }
   }
   
   send_to_char(OK, ch);
@@ -3611,6 +3616,7 @@ ACMD(do_set)
                { "blacklist",       LVL_VICEPRES, PC, BINARY },
                { "noidle", LVL_VICEPRES, PC, BINARY },
                { "tke", LVL_VICEPRES, PC, NUMBER }, //70
+               { "sysp", LVL_VICEPRES, PC, NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4137,6 +4143,9 @@ ACMD(do_set)
     RANGE(0, 10000);
     GET_TKE(vict) = value;
     break;
+  case 71:
+    RANGE(-10000, 10000);
+    GET_SYSTEM_POINTS(vict) = value;
   default:
     sprintf(buf, "Can't set that!");
     break;
@@ -4987,8 +4996,12 @@ ACMD(do_tail)
   return;
 }
 
+// Disabled due to potential for abuse: photos etc have system-generated restrings.
+// This can be re-enabled when we have a tracker for who wrote the restring.
 ACMD(do_destring)
 {
+  return;
+  /*
   struct obj_data *obj;
 
   one_argument(argument, arg);
@@ -5007,57 +5020,75 @@ ACMD(do_destring)
   }
   GET_KARMA(ch) += 125;
   DELETE_AND_NULL_ARRAY(obj->restring);
-  sprintf(buf2, "%s successfully destrung.\r\n", obj->text.name);
-  send_to_char(ch, buf2);
+  send_to_char(ch, "%s successfully destrung.\r\n", obj->text.name);
+  */
 }
 
-ACMD(do_restring)
-{
+bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   struct obj_data *obj;
-
   half_chop(argument, arg, buf);
 
   if (!*arg) {
     send_to_char("You have to restring something!\r\n", ch);
-    return;
+    return FALSE;
   }
+  
   if (!*buf) {
     send_to_char("Restring to what?\r\n", ch);
-    return;
+    return FALSE;
   }
+  
   if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
     send_to_char("You don't have that item.\r\n", ch);
-    return;
+    return FALSE;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_MOD) {
     send_to_char("Sorry, gun attachments and vehicle mods can't be restrung.\r\n", ch);
-    return;
+    return FALSE;
   }
   if (strlen(buf) >= LINE_LENGTH) {
     send_to_char("That restring is too long, please shorten it.\r\n", ch);
-    return;
+    return FALSE;
   }
+  
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     if (!GET_RESTRING_POINTS(ch)) {
       send_to_char("You don't have enough restring points left to restring that.\r\n", ch);
-      return;
+      return FALSE;
     }
     GET_RESTRING_POINTS(ch)--;
-  } else {
-    if (GET_KARMA(ch) < 250) {
-      send_to_char(ch, "You don't have enough karma to restring that.\r\n");
-      return;
+  } 
+  
+  else {
+    if (using_sysp) {
+      if (GET_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
+        send_to_char(ch, "It costs %d system points to restring something, and you only have %d.\r\n",
+                     SYSP_RESTRING_COST,
+                     GET_SYSTEM_POINTS(ch));
+        return FALSE;
+      }
+      GET_SYSTEM_POINTS(ch) -= SYSP_RESTRING_COST;
+    } else {
+      if (GET_KARMA(ch) < 250) {
+        send_to_char(ch, "You don't have enough karma to restring that.\r\n");
+        return FALSE;
+      }
+      GET_KARMA(ch) -= 250;
     }
-    GET_KARMA(ch) -= 250;
   }
+  
   sprintf(buf2, "%s restrung '%s' to '%s'", GET_CHAR_NAME(ch), obj->text.name, buf);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
   
   DELETE_ARRAY_IF_EXTANT(obj->restring);
   obj->restring = strdup(buf);
-  sprintf(buf2, "%s successfully restrung.\r\n", obj->text.name);
-  send_to_char(ch, buf2);
+  send_to_char(ch, "%s successfully restrung.\r\n", obj->text.name);
+  
+  return TRUE;
+}
 
+ACMD(do_restring) {
+  restring_with_args(ch, argument, FALSE);
 }
 
 ACMD(do_incognito)

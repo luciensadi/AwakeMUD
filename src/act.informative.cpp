@@ -189,7 +189,7 @@ void get_obj_condition(struct char_data *ch, struct obj_data *obj)
   else
     strcat(buf2, "almost completely destroyed.");
   strcat(buf2, "\r\n");
-  send_to_char(ch, buf2);
+  send_to_char(buf2, ch);
 }
 
 void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
@@ -1160,7 +1160,7 @@ void look_in_veh(struct char_data * ch)
       return;
     }
     send_to_char(ch, "^CInside %s^n\r\n", GET_VEH_NAME(ch->in_veh), ch);
-    send_to_char(ch, ch->vfront ? ch->in_veh->inside_description : ch->in_veh->rear_description);
+    send_to_char(ch->vfront ? ch->in_veh->inside_description : ch->in_veh->rear_description, ch);
     CCHAR = "^g";
     CGLOB = KGRN;
     list_obj_to_char(ch->in_veh->contents, ch, 0, FALSE, FALSE);
@@ -1187,7 +1187,7 @@ void look_in_veh(struct char_data * ch)
       int ov = ch->vfront;
       ch->vfront = FALSE;
       send_to_char(ch, "^CInside %s^n\r\n", GET_VEH_NAME(veh->in_veh), ch);
-      send_to_char(ch, veh->in_veh->rear_description);
+      send_to_char(veh->in_veh->rear_description, ch);
       CCHAR = "^g";
       CGLOB = KGRN;
       list_obj_to_char(veh->in_veh->contents, ch, 0, FALSE, FALSE);
@@ -1200,9 +1200,9 @@ void look_in_veh(struct char_data * ch)
       send_to_char(ch, "\r\n^CAround you is %s\r\n", veh->in_room->name);
       if (get_speed(veh) <= 200) {
         if (veh->in_room->night_desc && weather_info.sunlight == SUN_DARK)
-          send_to_char(ch, veh->in_room->night_desc);
+          send_to_char(veh->in_room->night_desc, ch);
         else
-          send_to_char(ch, veh->in_room->description);
+          send_to_char(veh->in_room->description, ch);
       }
       if (PLR_FLAGGED(ch, PLR_REMOTE))
         was_in = ch->in_room;
@@ -3900,7 +3900,7 @@ ACMD(do_gen_ps)
       page_string(ch->desc, info, 0);
       break;
     case SCMD_IMMLIST:
-      send_to_char(ch, immlist);
+      send_to_char(immlist, ch);
       break;
     case SCMD_HANDBOOK:
       page_string(ch->desc, handbook, 0);

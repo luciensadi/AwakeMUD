@@ -301,8 +301,14 @@ ACMD(do_design)
     return;
   }
   if (GET_OBJ_TIMER(prog) == GET_OBJ_VAL(prog, 4)) {
-    send_to_char(ch, "You begin designing %s.\r\n", prog->restring);
-    GET_OBJ_VAL(prog, 8) = success_test(skill, target);
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char(ch, "You use your admin powers to greatly accelerate the design time of %s.\r\n", prog->restring);
+      GET_OBJ_TIMER(prog) = 0;
+      GET_OBJ_VAL(prog, 8) = 10;
+    } else {
+      send_to_char(ch, "You begin designing %s.\r\n", prog->restring);
+      GET_OBJ_VAL(prog, 8) = success_test(skill, target);
+    }
   } else
     send_to_char(ch, "You continue to design %s.\r\n", prog->restring);
   AFF_FLAGS(ch).SetBit(AFF_DESIGN);

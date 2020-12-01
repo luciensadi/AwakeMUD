@@ -2379,7 +2379,7 @@ ACMD(do_conjure)
           sprintf(ENDOF(buf), "%s %s", have_sent_text ? "," : "", spirits[spirit].name);
           have_sent_text = TRUE;
         }
-      send_to_char(ch, buf);
+      send_to_char(buf, ch);
       return;
     }
     if (GET_DOMAIN(ch) != ((spirit == SPIRIT_MIST || spirit == SPIRIT_STORM || spirit == SPIRIT_WIND) ? SPIRIT_SKY : spirit)) {

@@ -4643,7 +4643,7 @@ SPECIAL(weapon_dominator) {
       const char *mode_string = "You must specify a valid mode from one of the following: Deactivated, Paralyzer, Eliminator, Decomposer.\r\n";
       // Override the current mode.
       if (!*argument) {
-        send_to_char(ch, mode_string);
+        send_to_char(mode_string, ch);
         return TRUE;
       }
       
@@ -4667,7 +4667,7 @@ SPECIAL(weapon_dominator) {
       } else if (is_abbrev(buf, "deactivated")) {
         mode = DOMINATOR_MODE_DEACTIVATED;
       } else {
-        send_to_char(ch, mode_string);
+        send_to_char(mode_string, ch);
         return TRUE;
       }
       

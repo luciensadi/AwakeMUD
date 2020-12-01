@@ -75,6 +75,7 @@ CREATE TABLE `pfiles` (
   `CostTime` tinyint(1) unsigned default '0',
   `AvailOffset` tinyint(1) unsigned default '0',
   `Inveh` int(8) unsigned default '0',
+  `SysPoints` int(8) default 0,
   PRIMARY KEY (`idnum`), 
   KEY (`name`) 
 ); 

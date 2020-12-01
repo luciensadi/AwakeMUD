@@ -940,7 +940,7 @@ ACMD(do_locate)
     if (!success || !i)
       send_to_icon(PERSONA, "You don't notice any other deckers in the host.\r\n");
     else
-      send_to_icon(PERSONA, "You notice %d other decker%c in the host.\r\n", i, (i > 1 ? "s":""));
+      send_to_icon(PERSONA, "You notice %d other decker%s in the host.\r\n", i, (i > 1 ? "s":""));
     return;
   } else if (is_abbrev(buf, "paydata")) {
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_EVALUATE, 0);
@@ -1244,7 +1244,7 @@ ACMD(do_analyze)
       if ((isname(arg, ic->look_desc) || isname(arg, ic->name)) && has_spotted(PERSONA, ic)) {
         int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
         if (success > 0 ) {
-          send_to_icon(PERSONA, "%s", ic->long_desc);
+          show_icon_to_persona(PERSONA, ic);
           if (ic->number) {
             send_to_icon(PERSONA, "%s is a %s-%d\r\n", CAP(ic->name), ic_type[ic->ic.type],
                          matrix[PERSONA->in_host].shutdown ? ic->ic.rating - 2 : ic->ic.rating);
@@ -1583,7 +1583,7 @@ ACMD(do_connect)
   icon_list = PERSONA;
   icon_to_host(PERSONA, host);
   if (DECKER->bod + DECKER->sensor + DECKER->evasion + DECKER->masking > DECKER->mpcp * 3) {
-    send_to_char("Your deck overloads on persona programs and crashes.\r\n", ch);
+    send_to_char(ch, "Your deck overloads on persona programs and crashes. You'll have to keep the combined bod, sensor, evasion, and masking rating below %d.\r\n", DECKER->mpcp * 3);
     extract_icon(PERSONA);
     PERSONA = NULL;
     return;
@@ -2775,13 +2775,14 @@ ACMD(do_create)
            (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL)))
         break;
     if (!library)
-      send_to_char("You don't have the right tools here to create a spell.\r\n", ch);
+      send_to_char(ch, "You don't have the right tools here to create a spell. You'll need to %s.\r\n",
+                   GET_TRADITION(ch) == TRAD_SHAMANIC ? "build a lodge" : "get a library");
     else {
       ch->desc->edit_number2 = GET_OBJ_VAL(library, 1);
       create_spell(ch);
     }
   } else {
-    send_to_char("You can't create that.\r\n", ch);
+    send_to_char("You can only create programs, parts, decks, ammunition, and spells.\r\n", ch);
     return;
   }
 }

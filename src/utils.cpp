@@ -1625,7 +1625,7 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
       if (GET_WORKSHOP_GRADE(o) == TYPE_FACILITY) {
         // Jackpot! Facilities are the best option, so we can terminate early and return this item.
         return o;
-      } else if (GET_WORKSHOP_GRADE(o) == TYPE_SHOP && GET_WORKSHOP_IS_SETUP(o))
+      } else if (GET_WORKSHOP_GRADE(o) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(o))
         workshop = o;
     }
   }
@@ -1653,7 +1653,7 @@ bool _is_workshop_valid(struct obj_data *obj) {
   }
   
   // Precondition: The item must be a deployed workshop or a facility.
-  if (!(GET_WORKSHOP_GRADE(obj) == TYPE_SHOP && GET_WORKSHOP_IS_SETUP(obj)) && GET_WORKSHOP_GRADE(obj) != TYPE_FACILITY) {
+  if (!(GET_WORKSHOP_GRADE(obj) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(obj)) && GET_WORKSHOP_GRADE(obj) != TYPE_FACILITY) {
     // For this to be true, the item is a kit. We're not going to throw an error over that, but it's not a valid workshop.
     return FALSE;
   }
@@ -1698,7 +1698,7 @@ void remove_workshop_from_room(struct obj_data *obj) {
           // This is the best possible outcome; set room val to this and return.
           obj->in_room->best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
           return;
-        case TYPE_SHOP:
+        case TYPE_WORKSHOP:
           // The value of best_workshop is either a workshop or null, so no harm in setting it to another workshop.
           obj->in_room->best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
           break;

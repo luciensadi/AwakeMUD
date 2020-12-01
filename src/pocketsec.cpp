@@ -274,7 +274,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (file = folder->contains; file && i > 1; file = file->next_content)
         i--;
       if (file) {
-        send_to_char(CH, file->photo);
+        send_to_char(file->photo, CH);
         GET_OBJ_VAL(file, 0) = 1;
         d->edit_mode = SEC_NOTEREAD2;
         send_to_char("Press [^cENTER^n] to continue.\r\n", CH);
@@ -403,7 +403,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (file = folder->contains; file && i > 1; file = file->next_content)
         i--;
       if (file) {
-        send_to_char(CH, file->photo);
+        send_to_char(file->photo, CH);
         GET_OBJ_VAL(file, 0) = 1;
         d->edit_mode = SEC_READMAIL2;
         send_to_char("Press [^cENTER^n] to continue.\r\n", CH);

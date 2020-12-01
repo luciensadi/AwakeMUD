@@ -201,11 +201,11 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
   if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)
   {
     if (GET_OBJ_VAL(cont, 0) != 2)
-      send_to_char(ch, "You can't install anything into that.\r\n");
+      send_to_char(ch, "You can't install anything into %s.\r\n", GET_OBJ_NAME(cont));
     else if (cont->carried_by)
       send_to_char(ch, "It doesn't seem to be switched on.\r\n");
     else if (GET_OBJ_TYPE(obj) != ITEM_DESIGN && GET_OBJ_TYPE(obj) != ITEM_PROGRAM && !(GET_OBJ_TYPE(obj) == ITEM_PROGRAM && GET_OBJ_TIMER(obj)))
-      send_to_char(ch, "You can't install that onto a personal computer.\r\n");
+      send_to_char(ch, "You can't install %s onto a personal computer.\r\n", GET_OBJ_NAME(obj));
     else if ((GET_OBJ_TYPE(obj) == ITEM_PROGRAM && (GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(cont, 2) - GET_OBJ_VAL(cont, 3))) ||
              (GET_OBJ_TYPE(obj) == ITEM_DESIGN && (GET_OBJ_VAL(obj, 6) + (GET_OBJ_VAL(obj, 6) / 10) > GET_OBJ_VAL(cont, 2) - GET_OBJ_VAL(cont, 3))))
       send_to_char(ch, "It doesn't seem to fit.\r\n");
@@ -234,7 +234,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
         return;
       case TYPE_UPGRADE:
         if (GET_OBJ_VAL(obj, 1) != 3) {
-          send_to_char(ch, "You can't seem to fit this in.\r\n");
+          send_to_char(ch, "You can't seem to fit %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
           return;
         }
         obj_from_char(obj);
@@ -242,7 +242,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
         act("You fit $p into a FUP in $P.", FALSE, ch, obj, cont, TO_CHAR);
         return;
       default:
-        send_to_char(ch, "You can't seem to fit this in.\r\n");
+        send_to_char(ch, "You can't seem to fit %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
         return;
     }
   }
@@ -301,7 +301,7 @@ ACMD(do_put)
     return;
   }
   if (IS_ASTRAL(ch)) {
-    send_to_char("You can't!\r\n", ch);
+    send_to_char("Astral beings can't touch things!\r\n", ch);
     return;
   }
 
@@ -485,9 +485,9 @@ ACMD(do_put)
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)))
       send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
     else if (obj == cont)
-      send_to_char(ch, "You cannot combine an item with itself.\r\n");
+      send_to_char(ch, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
     else if (GET_OBJ_TYPE(cont) != GET_OBJ_TYPE(obj) || GET_OBJ_VAL(obj, 0) != GET_OBJ_VAL(cont, 0))
-      send_to_char(ch, "You cannot combine those two items.\r\n");
+      send_to_char(ch, "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
     else {
       GET_OBJ_COST(cont) += GET_OBJ_COST(obj);
       send_to_char(ch, "You combine %s and %s.\r\n", GET_OBJ_NAME(cont), GET_OBJ_NAME(obj));
@@ -534,7 +534,7 @@ ACMD(do_put)
       
       // You can only install programs, parts, and designs.
       if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM && GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(obj) != ITEM_DESIGN) {
-        send_to_char("You can't install that in a cyberdeck!\r\n", ch);
+        send_to_char(ch, "You can't install %s into a cyberdeck.\r\n", GET_OBJ_NAME(obj));
         return;
       }
       
@@ -708,7 +708,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         if (ch->in_room) {
           for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room) {
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
-              send_to_char(ch, "You can't uninstall that while someone is working on it.\r\n");
+              send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
               return;
             } else if (vict == ch && vict->char_specials.programming == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
@@ -719,7 +719,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         } else {
           for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh) {
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
-              send_to_char(ch, "You can't uninstall that while someone is working on it.\r\n");
+              send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
               return;
             } else if (vict == ch && vict->char_specials.programming == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
@@ -1186,16 +1186,16 @@ ACMD(do_get)
               send_to_char(ch, "You don't have the right tools for that job.\r\n");
               return;
             } else if (mod_types[GET_OBJ_VAL(cont, 0)].tools == TYPE_KIT) {
-              if (kit == TYPE_SHOP)
+              if (kit == TYPE_WORKSHOP)
                 target--;
               else if (kit == TYPE_FACILITY)
                 target -= 3;
-            } else if (mod_types[GET_OBJ_VAL(cont, 0)].tools == TYPE_SHOP && kit == TYPE_FACILITY)
+            } else if (mod_types[GET_OBJ_VAL(cont, 0)].tools == TYPE_WORKSHOP && kit == TYPE_FACILITY)
               target--;
             if (GET_OBJ_VAL(cont, 0) == TYPE_ENGINECUST)
               veh->engine = 0;
             if (success_test(skill, target) < 1) {
-              send_to_char(ch, "You can't figure out how to uninstall it. \r\n");
+              send_to_char(ch, "You can't figure out how to uninstall %s. \r\n", GET_OBJ_NAME(cont));
               return;
             }
           }
@@ -1324,7 +1324,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
     return;
   } else if (amount < 1)
   {
-    send_to_char("How does that work?\r\n", ch);
+    send_to_char("You can't drop less than one nuyen.\r\n", ch);
     return;
   } else if (amount > GET_NUYEN(ch))
   {
@@ -1460,7 +1460,7 @@ ACMD(do_drop)
 
 
   if (IS_ASTRAL(ch)) {
-    send_to_char("You can't!\r\n", ch);
+    send_to_char("Astral projections can't touch things!\r\n", ch);
     return;
   }
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
@@ -1719,8 +1719,12 @@ ACMD(do_give)
 
   argument = one_argument(argument, arg);
 
-  if (IS_ASTRAL(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    send_to_char("You can't!\r\n", ch);
+  if (IS_ASTRAL(ch)) {
+    send_to_char("Astral projections can't touch anything.\r\n", ch);
+    return;
+  }
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    send_to_char("Sorry, you can't do that during character generation.\r\n", ch);
     return;
   }
   if (IS_WORKING(ch)) {
@@ -1895,11 +1899,11 @@ ACMD(do_drink)
   }
   if ((GET_OBJ_TYPE(temp) != ITEM_DRINKCON) &&
       (GET_OBJ_TYPE(temp) != ITEM_FOUNTAIN)) {
-    send_to_char("You can't drink from that!\r\n", ch);
+    send_to_char(ch, "You can't drink from %s.\r\n", GET_OBJ_NAME(temp));
     return;
   }
   if (on_ground && (GET_OBJ_TYPE(temp) == ITEM_DRINKCON)) {
-    send_to_char("You have to be holding that to drink from it.\r\n", ch);
+    send_to_char(ch, "You have to be holding %s to drink from it.\r\n", GET_OBJ_NAME(temp));
     return;
   }
   if ((GET_COND(ch, COND_DRUNK) > MAX_DRUNK)) {
@@ -1996,7 +2000,7 @@ ACMD(do_eat)
     return;
   }
   if ((GET_OBJ_TYPE(food) != ITEM_FOOD) && !access_level(ch, LVL_ADMIN)) {
-    send_to_char("You can't eat THAT!\r\n", ch);
+    send_to_char(ch, "You can't eat %s!\r\n", GET_OBJ_NAME(food));
     return;
   }
   if (GET_COND(ch, COND_FULL) > MAX_FULLNESS) {/* Stomach full */
@@ -2055,7 +2059,7 @@ ACMD(do_pour)
       return;
     }
     if (GET_OBJ_TYPE(from_obj) != ITEM_DRINKCON) {
-      act("You can't pour from that!", FALSE, ch, 0, 0, TO_CHAR);
+      act("You can't pour from $p.", FALSE, ch, from_obj, 0, TO_CHAR);
       return;
     }
   }
@@ -2114,7 +2118,7 @@ ACMD(do_pour)
     }
     if ((GET_OBJ_TYPE(to_obj) != ITEM_DRINKCON) &&
         (GET_OBJ_TYPE(to_obj) != ITEM_FOUNTAIN)) {
-      act("You can't pour anything into that.", FALSE, ch, 0, 0, TO_CHAR);
+      act("You can't pour anything into $p.", FALSE, ch, to_obj, 0, TO_CHAR);
       return;
     }
   }
@@ -2390,7 +2394,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   case RACE_ELF:
   case RACE_NIGHTONE:
     if (IS_OBJ_STAT(obj, ITEM_NOELF)) {
-      send_to_char(ch, "You can't wear that.\r\n");
+      send_to_char(ch, "%s isn't sized right for elves.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
@@ -2399,7 +2403,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   case RACE_GNOME:
   case RACE_KOBOROKURU:
     if (IS_OBJ_STAT(obj, ITEM_NODWARF)) {
-      send_to_char(ch, "You can't wear that.\r\n");
+      send_to_char(ch, "%s isn't sized right for dwarfs.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
@@ -2409,13 +2413,13 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   case RACE_FOMORI:
   case RACE_CYCLOPS:
     if (IS_OBJ_STAT(obj, ITEM_NOTROLL)) {
-      send_to_char(ch, "You can't wear that.\r\n");
+      send_to_char(ch, "%s isn't sized right for trolls.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
   case RACE_HUMAN:
     if (IS_OBJ_STAT(obj, ITEM_NOHUMAN)) {
-      send_to_char(ch, "You can't wear that.\r\n");
+      send_to_char(ch, "%s isn't sized right for humans.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
@@ -2424,7 +2428,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   case RACE_OGRE:
   case RACE_HOBGOBLIN:
     if (IS_OBJ_STAT(obj, ITEM_NOORK)) {
-      send_to_char(ch, "You can't wear that.\r\n");
+      send_to_char(ch, "%s isn't sized right for orks.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
@@ -2532,13 +2536,13 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   else if (GET_TOTALIMP(ch) > GET_QUI(ch))
     total += GET_TOTALIMP(ch) - GET_QUI(ch);
   if (total >= GET_QUI(ch))
-    send_to_char("You are wearing so much armour that you can't move!\r\n", ch);
+    send_to_char("You are wearing so much armor that you can't move!\r\n", ch);
   else if (total >= (float) GET_QUI(ch) * 3/4)
-    send_to_char("Your movement is severely restricted by your armour.\r\n", ch);
+    send_to_char("Your movement is severely restricted by your armor.\r\n", ch);
   else if (total >= (float) GET_QUI(ch) / 2)
-    send_to_char("Your movement is restricted by your armour.\r\n", ch);
+    send_to_char("Your movement is restricted by your armor.\r\n", ch);
   else if (total)
-    send_to_char("Your movement is mildly restricted by your armour.\r\n", ch);
+    send_to_char("Your movement is mildly restricted by your armor.\r\n", ch);
 }
 
 int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
@@ -2723,7 +2727,7 @@ ACMD(do_wield)
     send_to_char(buf, ch);
   } else {
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
-      send_to_char("You can't wield that.\r\n", ch);
+      send_to_char(ch, "You can't wield %s.\r\n", GET_OBJ_NAME(obj));
     else if (GET_OBJ_VAL(obj, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(obj, 4) <= SKILL_ASSAULT_CANNON &&
              (GET_STR(ch) < 8 || GET_BOD(ch) < 8)) {
       bool found = FALSE;
@@ -2985,10 +2989,10 @@ ACMD(do_activate)
     affect_total(ch);
     return;
   } else if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1)) {
-    send_to_char("You can't activate that.\r\n", ch);
+    send_to_char(ch, "You can't activate %s.\r\n", GET_OBJ_NAME(obj));
     return;
   } else if (GET_OBJ_VAL(obj, 4) != 0) {
-    send_to_char("But that has already been activated!\r\n", ch);
+    send_to_char(ch, "But %s has already been activated!\r\n", GET_OBJ_NAME(obj));
     return;
   }
 
@@ -3035,7 +3039,7 @@ ACMD(do_type)
     }
 
   if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1) || GET_OBJ_VAL(obj, 2) != 1) {
-    send_to_char("You can't type a code into that!\r\n", ch);
+    send_to_char(ch, "You can't type a code into %s.\r\n", GET_OBJ_NAME(obj));
     return;
   }
 
@@ -3189,7 +3193,7 @@ ACMD(do_holster)
   int dontfit = 0;
 
   if (IS_ASTRAL(ch)) {
-    send_to_char("You can't!\r\n", ch);
+    send_to_char("Astral projections can't touch things.\r\n", ch);
     return;
   }
   two_arguments(argument, buf, buf1);

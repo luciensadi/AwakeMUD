@@ -453,6 +453,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_COST_BREAKUP(ch) = atoi(row[73]);
   GET_AVAIL_OFFSET(ch) = atoi(row[74]);
   ch->player_specials->saved.last_veh = atol(row[75]);
+  // note that pgroup is 76
+  GET_SYSTEM_POINTS(ch) = atoi(row[77]);
   mysql_free_result(res);
 
   if (GET_LEVEL(ch) > 0) {
@@ -1063,7 +1065,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
-               "Inveh=%ld, rank=%d, gender=%d WHERE idnum=%ld;",
+               "Inveh=%ld, rank=%d, gender=%d, SysPoints=%d WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
                GET_REAL_STR(player), GET_REAL_CHA(player), GET_REAL_INT(player), GET_REAL_WIL(player),
@@ -1076,7 +1078,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),
                GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
                SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
-               inveh, GET_LEVEL(player), GET_SEX(player), GET_IDNUM(player));
+               inveh, GET_LEVEL(player), GET_SEX(player), GET_SYSTEM_POINTS(player), GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;

@@ -3217,7 +3217,7 @@ void reset_zone(int zone, int reboot)
         
         act("You blink and realize that $p must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
         
-        if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_SHOP) {
+        if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_WORKSHOP) {
           if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
             // Warn the builder that they're breaking the game's rules (let it continue since it doesn't harm anything though).
             ZONE_ERROR("Zoneloading a pre-set-up vehicle workshop in a non-GARAGE room violates game convention about vehicle workshop locations. Flag the room as GARAGE.");

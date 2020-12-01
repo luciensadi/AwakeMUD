@@ -39,13 +39,6 @@
 
 /* extern variables */
 extern const char *ctypes[];
-extern char *short_object(int virt, int where);
-extern bool read_extratext(struct char_data * ch);
-extern int return_general(int skill_num);
-extern int belongs_to(struct char_data *ch, struct obj_data *obj);
-extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an);
-extern void weight_change_object(struct obj_data * obj, float weight);
-
 extern int ident;
 extern class memoryClass *Mem;
 
@@ -58,6 +51,14 @@ extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern void obj_magic(struct char_data * ch, struct obj_data * obj, char *argument);
 extern void end_quest(struct char_data *ch);
 extern bool can_take_obj(struct char_data *ch, struct obj_data *obj);
+extern char *short_object(int virt, int where);
+extern bool read_extratext(struct char_data * ch);
+extern int return_general(int skill_num);
+extern int belongs_to(struct char_data *ch, struct obj_data *obj);
+extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an);
+extern void weight_change_object(struct obj_data * obj, float weight);
+
+extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
 ACMD(do_quit)
 {
@@ -3342,7 +3343,7 @@ ACMD(do_unpack)
     }
   }
   for (shop = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; shop; shop = shop->next_content)
-    if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_SHOP) {
+    if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_WORKSHOP) {
       if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
         send_to_char("There is already a workshop set up here.\r\n", ch);
         return;
@@ -4039,4 +4040,140 @@ ACMD(do_ammo) {
   if (!sent_a_message) {
     send_to_char(ch, "You're not wielding anything.\r\n");
   }
+}
+
+ACMD(do_syspoints) {
+  struct char_data *vict;
+  char target[MAX_STRING_LENGTH];
+  char amt[MAX_STRING_LENGTH];
+  char reason[MAX_STRING_LENGTH];
+  
+  if (IS_NPC(ch)) {
+    send_to_char(ch, "NPCs don't get system points, go away.\r\n");
+    return;
+  }
+  
+  // Morts can only view their own system points.
+  if (!access_level(ch, LVL_ADMIN)) {
+    if (!*argument) {
+      send_to_char(ch, "You have %d system points.\r\n", GET_SYSTEM_POINTS(ch));
+      return;
+    }
+    
+    half_chop(argument, arg, buf);
+    
+    if (!*arg) {
+      send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+      return;
+    }
+    
+    // Restring mode.
+    if (is_abbrev(arg, "restring")) {
+      restring_with_args(ch, buf, TRUE);
+      return;
+    }
+    
+    send_to_char("Syntax: syspoints restring <item> <string>\r\n", ch);
+    return;
+  }
+  
+  // Viable modes: award penalize show
+  half_chop(argument, arg, buf);
+  
+  if (!*arg) {
+    send_to_char("Syntax: syspoints <award|penalize|show> <target>\r\n", ch);
+    return;
+  }
+  
+  if (is_abbrev(arg, "show")) {
+    // No target? Show your own.
+    if (!*buf) {
+      send_to_char(ch, "You have %d system points.\r\n", GET_SYSTEM_POINTS(ch));
+      return;
+    }
+    
+    // Target specified?
+    if (!(vict = get_char_vis(ch, buf))) {
+      send_to_char(ch, "You don't see '%s' here.\r\n", buf);
+      return;
+    }
+    
+    // Target cannot be NPC.
+    if (IS_NPC(vict)) {
+      send_to_char(ch, "Not on NPCs.\r\n");
+      return;
+    }
+    
+    send_to_char(ch, "%s has %d system points.\r\n", GET_CHAR_NAME(vict), GET_SYSTEM_POINTS(vict));
+    return;
+  }
+  
+  // Penalize and award modes.
+  half_chop(buf, target, buf2); 
+  half_chop(buf2, amt, reason);
+
+  int k = atoi(amt);
+
+  // Require all arguments.
+  if (!*arg || !*target || !*amt || !*reason || k <= 0 ) {
+    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> <Reason for award>.\r\n", ch);
+    return;
+  }
+  
+  // Check mode.
+  bool award_mode;
+  if (!str_cmp(arg, "award")) {
+    award_mode = TRUE;
+  } else if (!str_cmp(arg, "penalize")) {
+    award_mode = FALSE;
+    k *= -1;
+  } else {
+    send_to_char("Syntax: syspoints <award|penalize> <player> <amount> <Reason for award>.\r\n", ch);
+    return;
+  }
+  
+  // Find the target.
+  if (!(vict = get_char_vis(ch, target))) {
+    send_to_char(ch, "You don't see '%s' here.\r\n", target);
+    return;
+  }
+  
+  // Perform the awarding / penalizing.
+  if (vict->desc && vict->desc->original)
+    vict = vict->desc->original;
+    
+  if (IS_NPC(vict)) {
+    send_to_char("Not on NPCs.", ch);
+    return;
+  }
+
+  // Penalizing? It was inverted earlier, so no worries.
+  GET_SYSTEM_POINTS(vict) += k;
+
+  sprintf(buf, "You have been %s %d system points for %s.\r\n",
+          (award_mode ? "awarded" : "penalized"),
+          k, 
+          reason);
+  send_to_char(buf, vict);
+
+  sprintf(buf, "You %s %d system points %s %s for %s.\r\n", 
+          (award_mode ? "awarded" : "penalized"),
+          k, 
+          (award_mode ? "to" : "from"),
+          GET_CHAR_NAME(vict), 
+          reason);
+  send_to_char(buf, ch);
+
+  sprintf(buf, "%s %s %d system points %s %s for %s (%d to %d).",
+          GET_CHAR_NAME(ch), 
+          (award_mode ? "awarded" : "penalized"),
+          k,
+          (award_mode ? "to" : "from"),
+          GET_CHAR_NAME(vict), 
+          reason, 
+          GET_SYSTEM_POINTS(vict) - k, 
+          GET_SYSTEM_POINTS(vict));
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
+  
+  playerDB.SaveChar(vict);
 }
