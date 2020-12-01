@@ -1981,8 +1981,8 @@ ACMD(do_software)
     }
     
     if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_CYBERDECK_IS_INCOMPLETE(cyberdeck)) {
-      display_cyberdeck_issues(ch, cyberdeck);
-      return;
+      if (!display_cyberdeck_issues(ch, cyberdeck))
+        return;
     }
     
     const char *format_string;
@@ -2693,27 +2693,32 @@ ACMD(do_default)
   for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
       cyberdeck = GET_EQ(ch, i);
-  if (!cyberdeck)
+      
+  if (!cyberdeck) {
     send_to_char(ch, "You have no cyberdeck to check the software on!\r\n");
-  else if (GET_CYBERDECK_MPCP(cyberdeck) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cyberdeck))
-    display_cyberdeck_issues(ch, cyberdeck);
-  else {
-    for (soft = cyberdeck->contains; soft; soft = soft->next_content)
-      if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VAL(soft, 0) > SOFT_SENSOR && (isname(argument, soft->text.keywords)
-          || isname(argument, GET_OBJ_NAME(soft))))
-        break;
-    if (!soft) {
-      send_to_char(ch, "You don't have that program installed.\r\n");
+    return;
+  }
+  
+  if (GET_CYBERDECK_MPCP(cyberdeck) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cyberdeck)) {
+    // returns TRUE if it fixed it, FALSE otherwise.
+    if (!display_cyberdeck_issues(ch, cyberdeck))
       return;
-    }
-    if (GET_OBJ_VAL(soft, 4)) {
-      GET_OBJ_VAL(soft, 4)--;
-      send_to_char(ch, "%s will no longer load upon connection.\r\n", CAP(GET_OBJ_NAME(soft)));
-    } else {
-      GET_OBJ_VAL(soft, 4)++;
-      send_to_char(ch, "%s will now load upon connection.\r\n", CAP(GET_OBJ_NAME(soft)));
-    }
-
+  }
+  
+  for (soft = cyberdeck->contains; soft; soft = soft->next_content)
+    if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VAL(soft, 0) > SOFT_SENSOR && (isname(argument, soft->text.keywords)
+        || isname(argument, GET_OBJ_NAME(soft))))
+      break;
+  if (!soft) {
+    send_to_char(ch, "You don't have that program installed.\r\n");
+    return;
+  }
+  if (GET_OBJ_VAL(soft, 4)) {
+    GET_OBJ_VAL(soft, 4)--;
+    send_to_char(ch, "%s will no longer load upon connection.\r\n", CAP(GET_OBJ_NAME(soft)));
+  } else {
+    GET_OBJ_VAL(soft, 4)++;
+    send_to_char(ch, "%s will now load upon connection.\r\n", CAP(GET_OBJ_NAME(soft)));
   }
 }
 
@@ -2874,7 +2879,12 @@ ACMD(do_compact)
 }
 
 // Formats and prints a message to the user about why their custom deck won't work.
-void display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) {
+bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) {
+  if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {
+    send_to_char(ch, "The faint smell of burned MPCP tells you that %s is going to need some repairs first.\r\n", GET_OBJ_NAME(cyberdeck));
+    return FALSE;
+  }
+  
   if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_CYBERDECK_IS_INCOMPLETE(cyberdeck)) {
     bool has_mpcp = FALSE, has_active = FALSE, has_bod = FALSE, has_sensor = FALSE, has_io = FALSE, has_interface = FALSE;
     for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
@@ -2914,19 +2924,17 @@ void display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) 
     
     // If we get here and haven't sent anything, something is wrong.
     if (first) {
-      sprintf(buf2, "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts.",
+      sprintf(buf2, "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts. Autofixing.",
               GET_OBJ_NAME(cyberdeck), GET_CHAR_NAME(ch));
       mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-      sprintf(ENDOF(buf), "bugfixing -- please ask a member of the staff for assistance");
+      GET_CYBERDECK_IS_INCOMPLETE(cyberdeck) = 1;
+      send_to_char(ch, "You smack the side of %s a few times. It sparks, then powers on.\r\n", GET_OBJ_NAME(cyberdeck));
+      return TRUE;
     }
     
     strcat(buf, ".\r\n");
     send_to_char(buf, ch);
-    return;
   }
   
-  if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {
-    send_to_char(ch, "The faint smell of burned MPCP tells you that %s is going to need some repairs first.\r\n", GET_OBJ_NAME(cyberdeck));
-    return;
-  }
+  return FALSE;
 }

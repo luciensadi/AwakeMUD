@@ -167,6 +167,6 @@ struct matrix_icon {
 
 extern bool has_spotted(struct matrix_icon *icons, struct matrix_icon *targ);
 
-void display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck);
+bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck);
 
 #endif

@@ -494,7 +494,7 @@ void update_buildrepair(void)
                     x++;
                   }
               if (x == 6)
-                GET_OBJ_VAL(PROG->in_obj, 9) = 0;
+                GET_CYBERDECK_IS_INCOMPLETE(PROG->in_obj) = 0;
             }
           }
           STOP_WORKING(desc->character);
