@@ -4675,7 +4675,7 @@ ACMD(do_leaderboard) {
   int counter = 1;
   while ((row = mysql_fetch_row(res))) {
     sprintf(buf, "%s:", row[0]);
-    send_to_char(ch, "%d) %-15s %-15s\r\n", counter++, buf, row[1]);
+    send_to_char(ch, "%2d) %-21s %-15s\r\n", counter++, buf, row[1]);
   }
   if (counter == 1)
     send_to_char(ch, "...Nobody! Looks like a great place to make your mark.\r\n");
