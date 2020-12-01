@@ -48,7 +48,7 @@ void pedit_disp_program_menu(struct descriptor_data *d)
     if (screenreader_mode)
       send_to_char(d->character, "%d) %s\r\n", counter, programs[counter].name);
     else {
-      sprintf(ENDOF(buf), "%s%d) %-20s%s", 
+      sprintf(ENDOF(buf), "%s%2d) %-22s%s", 
               counter % 3 == 1 ? "  " : "", 
               counter, 
               programs[counter].name,

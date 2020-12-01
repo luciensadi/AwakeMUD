@@ -268,10 +268,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
             do_say(keeper, buf, cmd_say, SCMD_SAYTO);
             return FALSE;
           }
-          ch->real_abils.esshole = 0;
-          ch->real_abils.ess -= esscost;
           magic_loss(ch, esscost, TRUE);
         }
+        ch->real_abils.esshole = 0;
+        ch->real_abils.ess -= esscost;
       } else ch->real_abils.esshole -= esscost;
       obj_to_cyberware(obj, ch);
     } else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {

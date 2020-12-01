@@ -3194,7 +3194,7 @@ ACMD(do_holster)
   }
   two_arguments(argument, buf, buf1);
   if (!generic_find(buf, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &obj)) {
-    send_to_char("You need to holster a weapon into a holster.\r\n", ch);
+    send_to_char(ch, "You're not carrying a '%s'.\r\n", buf);
     return;
   }
   if (!generic_find(buf1, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &cont)) {
@@ -3212,11 +3212,11 @@ ACMD(do_holster)
     }
   }
   if (!cont) {
-    send_to_char("You need to holster a weapon into a holster.\r\n", ch);
+    send_to_char(ch, "You don't have any empty holsters that will fit %s.\r\n", GET_OBJ_NAME(obj));
     return;
   }
   if (GET_OBJ_TYPE(obj) != ITEM_WEAPON || GET_OBJ_TYPE(cont) != ITEM_HOLSTER) {
-    send_to_char("You need to holster a weapon into a holster.\r\n", ch);
+    send_to_char(ch, "You don't have any empty holsters that will fit %s.\r\n", GET_OBJ_NAME(obj));
     return;
   }
   if (cont->contains) {
@@ -3243,7 +3243,7 @@ ACMD(do_holster)
     break;
   }
   if (dontfit) {
-    send_to_char("It doesn't seem to fit.\r\n", ch);
+    send_to_char(ch, "%s doesn't seem to fit in %s.\r\n", capitalize(GET_OBJ_NAME(obj)), GET_OBJ_NAME(cont));
     return;
   }
   if (obj->worn_by)
@@ -3276,11 +3276,11 @@ ACMD(do_ready)
     return;
   }
   if (GET_OBJ_TYPE(obj) != ITEM_HOLSTER) {
-    send_to_char(ch, "That is not a weapons holster.\r\n");
+    send_to_char(ch, "%s is not a weapons holster.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return;
   }
   if (!obj->contains) {
-    send_to_char(ch, "There is nothing in it.\r\n");
+    send_to_char(ch, "There is nothing in %s.\r\n", GET_OBJ_NAME(obj));
     return;
   }
   if (GET_HOLSTER_READY_STATUS(obj) > 0) {
