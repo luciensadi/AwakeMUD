@@ -1032,10 +1032,10 @@ ACMD(do_matrix_look)
   }
   
   // Did they supply a target? Look at that instead.
-  skip_spaces(&argument);
   if (*argument) {
+    one_argument(argument, arg);
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
-      if ((isname(argument, icon->name) || isname(argument, icon->look_desc)) && has_spotted(PERSONA, icon)) {
+      if ((isname(arg, icon->name) || isname(arg, icon->look_desc)) && has_spotted(PERSONA, icon)) {
         send_to_icon(PERSONA, icon->long_desc);
         return;
       }
