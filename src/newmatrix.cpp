@@ -1024,6 +1024,31 @@ ACMD(do_locate)
 
 }
 
+void show_icon_to_persona(struct matrix_icon *ch, struct matrix_icon *icon) {
+  if (!ch || !icon) {
+    mudlog("SYSERR: Missing ch or icon in show_icon_to_persona!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Start with description.
+  sprintf(buf, "%s\r\n%s is ", icon->long_desc, icon->name);
+  
+  // Generate condition.
+  if (icon->condition < 2) {
+    strcat(buf, "in terrible shape!");
+  } else if (icon->condition < 5) {
+    strcat(buf, "looking pretty beat-up.");
+  } else if (icon->condition < 8) {
+    strcat(buf, "damaged.");
+  } else if (icon->condition < 10) {
+    strcat(buf, "minorly damaged.");
+  } else {
+    strcat(buf, "intact.");
+  }
+  
+  send_to_icon(ch, "%s\r\n", buf);
+}
+
 ACMD(do_matrix_look)
 {      
   if (!PERSONA) {
@@ -1034,11 +1059,22 @@ ACMD(do_matrix_look)
   // Did they supply a target? Look at that instead.
   if (argument && *argument) {
     one_argument(argument, arg);
-    for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
-      if ((isname(arg, icon->name) || isname(arg, icon->look_desc)) && has_spotted(PERSONA, icon)) {
-        send_to_icon(PERSONA, icon->long_desc);
+    
+    // Looking at self? Ezpz.
+    if (!str_cmp(arg, "self") || !str_cmp(arg, "me") || !str_cmp(arg, "myself")) {
+      show_icon_to_persona(PERSONA, PERSONA);
+      return;
+    }
+    
+    // Find the icon they're looking at.
+    for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host) {
+      if (!has_spotted(PERSONA, icon))
+        continue;
+      if (isname(arg, icon->name) || isname(arg, icon->look_desc)) {
+        show_icon_to_persona(PERSONA, icon);
         return;
       }
+    }
     send_to_icon(PERSONA, "You can't see that icon in this host.\r\n");
     return;
   }
