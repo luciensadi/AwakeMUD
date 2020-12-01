@@ -699,9 +699,14 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   
   if (!vict || !IS_NPC(vict))
     return 0;
+    
   if (ch && IS_PROJECT(ch))
     ch = ch->desc->original;
-  if (ch && (GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_ELEMENTAL) && GET_IDNUM(ch) == GET_ACTIVE(vict))
+    
+  if (!ch || IS_NPC(ch))
+    return 0;
+    
+  if ((GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_ELEMENTAL) && GET_IDNUM(ch) == GET_ACTIVE(vict))
     return 0;
   
   base = (int)((1.2 * (GET_REAL_BOD(vict) + GET_BALLISTIC(vict) + GET_IMPACT(vict))) +
@@ -719,24 +724,16 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
         base += (int)(1.4 * GET_SKILL(vict, i));
     }
   
-  if (IS_NPC(vict) && (GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_ELEMENTAL))
+  if (GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_ELEMENTAL)
     base = (int)(base * 1.15);
   
-  if (IS_NPC(vict))
-    bonus_karma = GET_KARMA(vict);
-  else
-    bonus_karma = 0;
-  
-  bonus_karma = MIN( bonus_karma, base );
+  bonus_karma = MIN( GET_KARMA(vict), base );
   base += bonus_karma;
   
-  if (ch && !IS_NPC(ch))
-  {
-    if (PLR_FLAGGED(ch, PLR_NEWBIE))
-      base -= (int)(GET_TKE(ch) / 5);
-    else
-      base -= (int)(GET_TKE(ch) / 3);
-  }
+  if (PLR_FLAGGED(ch, PLR_NEWBIE))
+    base -= (int)(GET_TKE(ch) / 5);
+  else
+    base -= (int)(GET_TKE(ch) / 3);
   
   //now to randomize it a bit
   base += (!ch ? 0 : (!number(0,2) ? number(0,5) :
@@ -745,9 +742,8 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   base = (ch ? MIN(max_exp_gain, base) : base);
   base = MAX(base, 1);
   
-  if (ch && !IS_NPC(ch) && !IS_SENATOR(ch) && IS_NPC(vict))
-    if (vnum_from_non_connected_zone(GET_MOB_VNUM(vict)))
-      base = 0;
+  if (!IS_SENATOR(ch) && vnum_from_non_connected_zone(GET_MOB_VNUM(vict)))
+    base = 0;
   
   
   return base;
@@ -3532,8 +3528,6 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     else if (IS_AUTO(att->weapon))
       att->burst_count = GET_OBJ_TIMER(att->weapon);
     
-    // Why was this designed to save a bullet every time it fired in burst mode? ans: because it must subtract another round elsewhere
-    
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
     if (att->burst_count) {
       if (att->magazine) {
@@ -3637,7 +3631,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
     if (AFF_FLAGGED(def->ch, AFF_APPROACH))
-      att->modifiers[COMBAT_MOD_MOVEMENT] += 2;
+      att->modifiers[COMBAT_MOD_DEFENDER_MOVING] += 2;
     
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
     if (att->gyro && !(AFF_FLAGGED(att->ch, AFF_MANNING) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_PILOT)))
@@ -3738,7 +3732,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // -------------------------------------------------------------------------------------------------------
     // Calculate and display pre-success-test information.
     
-    sprintf( rbuf, "Attacker dice %s", GET_CHAR_NAME( att->ch ) );
+    sprintf(rbuf, "Attacker dice %s", GET_CHAR_NAME( att->ch ) );
     rbuf[3] = 0;
     att->tn += modify_target_rbuf_raw(att->ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]) - MAX(net_reach, 0);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
@@ -3746,7 +3740,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->tn += att->modifiers[mod_index];
     }
     
-    sprintf( rbuf+strlen(rbuf), "\r\nDefender dice %s%s", GET_CHAR_NAME( def->ch ),
+    sprintf(ENDOF(rbuf), "\r\nDefender dice %s%s", GET_CHAR_NAME( def->ch ),
             (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
     rbuf[7] = 0;
     def->tn += modify_target_rbuf_raw(att->ch, NULL, def->modifiers[COMBAT_MOD_VISIBILITY]);
@@ -3790,9 +3784,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       act("You successfully counter $N's attack!", FALSE, def->ch, 0, att->ch, TO_CHAR);
       act("$n deflects your attack and counterstrikes!", FALSE, def->ch, 0, att->ch, TO_VICT);
       act("$n deflects $N's attack and counterstrikes!", FALSE, def->ch, 0, att->ch, TO_NOTVICT);
-      struct combat_data *temp_cd = att;
+      struct combat_data *temp_att = att;
       att = def;
-      def = temp_cd;
+      def = temp_att;
       
       att->successes = -1 * net_successes;
     } else

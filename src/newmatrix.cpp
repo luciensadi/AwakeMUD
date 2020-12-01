@@ -843,7 +843,7 @@ ACMD(do_locate)
   }
   two_arguments(argument, buf, arg);
   int success, i = 0;
-  if (is_abbrev(buf, "host")) {
+  if (is_abbrev(buf, "hosts")) {
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_BROWSE, 0);
     int x = 0;
     char *name = arg;
@@ -867,7 +867,7 @@ ACMD(do_locate)
     if (!success || !i)
       send_to_icon(PERSONA, "You fail to return any data on that search.\r\n");
     return;
-  } else if (is_abbrev(buf, "ic")) {
+  } else if (is_abbrev(buf, "ics")) {
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_ANALYZE, 0);
     if (success > 0) {
       for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
@@ -883,7 +883,7 @@ ACMD(do_locate)
     else
       send_to_icon(PERSONA, "You notice %d IC in the host.\r\n", i);
     return;
-  } else if (is_abbrev(buf, "file")) {
+  } else if (is_abbrev(buf, "files")) {
     int x = 0;
     char *name = arg;
     while (*name) {
@@ -915,7 +915,7 @@ ACMD(do_locate)
         send_to_icon(PERSONA, "Your search returns %d match%s.\r\n", i, i > 1 ? "es" : "");
     }
     return;
-  } else if (is_abbrev(buf, "decker")) {
+  } else if (is_abbrev(buf, "deckers")) {
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_SCANNER, 0);
     if (success > 0) {
       int sensor = 0;
@@ -1020,7 +1020,7 @@ ACMD(do_locate)
       send_to_icon(PERSONA, "You find %d piece%sof paydata.\r\n", i, i > 1 ? "s ": " ");
     return;
   }
-  send_to_icon(PERSONA, "Locate what?\r\n");
+  send_to_icon(PERSONA, "You can locate hosts, ICs, files, deckers, or paydata.\r\n");
 
 }
 
@@ -1269,7 +1269,7 @@ ACMD(do_logon)
       return;
     }
   }
-  send_to_icon(PERSONA, "That host doesn't seem to be connected to the network.\r\n");
+  send_to_icon(PERSONA, "You haven't located any hosts with that address.\r\n");
 }
 
 ACMD(do_logoff)

@@ -2275,7 +2275,8 @@ const char *combat_modifiers[] =
   "Position",
   "Gyro",
   "Reach",
-  "VehDamaged"
+  "VehDamaged",
+  "DefMoving"
 };
 
 const char *pgroup_privileges[] =
