@@ -2116,6 +2116,7 @@ enum {
 #define OBJ_SEATTLE_TAXI_SIGN       600
 #define OBJ_PORTLAND_TAXI_SIGN      699
 
+#define BOTTOM_OF_TEMPLATE_ITEMS    106
 #define OBJ_BLANK_OPTICAL_CHIP      106
 #define OBJ_BLANK_PROGRAM_DESIGN    107
 #define OBJ_BLANK_PROGRAM           108
@@ -2132,6 +2133,9 @@ enum {
 #define OBJ_NEOPHYTE_SUBSIDY_CARD   119
 #define OBJ_GRAFFITI                120
 #define OBJ_BLANK_AMMOBOX           121
+#define TOP_OF_TEMPLATE_ITEMS       121
+
+#define OBJ_BLANK_MAGAZINE          127
 
 /* ban struct */
 struct ban_list_element

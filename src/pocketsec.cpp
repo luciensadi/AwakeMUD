@@ -119,7 +119,7 @@ void pocketsec_mailmenu(struct descriptor_data *d)
     if (!strcmp(folder->restring, "Mail"))
       break;
   while (amount_of_mail_waiting(CH) > 0) {
-    mail = read_object(111, VIRTUAL);
+    mail = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL);
     mail->photo = str_dup(get_and_delete_one_message(CH, sender));
     
     if (*sender)
@@ -222,7 +222,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, "Phonebook"))
           break;
-      file = read_object(118, VIRTUAL);       
+      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);       
       obj_to_obj(file, folder);
       file->restring = str_dup(arg);
       send_to_char("Enter Number: ", CH);
@@ -291,7 +291,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, "Notes"))
           break;
-      file = read_object(118, VIRTUAL);       
+      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);       
       obj_to_obj(file, folder);
       file->restring = str_dup(arg);
       send_to_char("Write note body. Use @ on a new line to finish.\r\n", CH);
@@ -418,16 +418,16 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_INIT:
       if (LOWER(*arg) == 'y') {
-        folder = read_object(118, VIRTUAL);
+        folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
         folder->restring = str_dup("Mail");
         obj_to_obj(folder, SEC);
-        folder = read_object(118, VIRTUAL);
+        folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
         folder->restring = str_dup("Notes");
         obj_to_obj(folder, SEC);
-        folder = read_object(118, VIRTUAL);
+        folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
         folder->restring = str_dup("Phonebook");
         obj_to_obj(folder, SEC);
-        folder = read_object(118, VIRTUAL);
+        folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
         folder->restring = str_dup("Files");
         obj_to_obj(folder, SEC);
         send_to_char("Pocket Secretary Initialised.\r\n", CH);

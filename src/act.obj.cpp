@@ -1332,7 +1332,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
     return;
   }
 
-  obj = read_object(110, VIRTUAL);
+  obj = read_object(OBJ_ROLL_OF_NUYEN, VIRTUAL);
   GET_OBJ_VAL(obj, 0) = amount;
 
   if ( !IS_NPC(ch) && (access_level(ch, LVL_BUILDER)

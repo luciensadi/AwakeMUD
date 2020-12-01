@@ -1667,7 +1667,7 @@ void circle_build(struct char_data *ch, char *type, int force)
     return;
   }
   GET_NUYEN(ch) -= force * force;
-  struct obj_data *obj = read_object(115, VIRTUAL);
+  struct obj_data *obj = read_object(OBJ_HERMETIC_CIRCLE, VIRTUAL);
   GET_OBJ_VAL(obj, 1) = force;
   GET_OBJ_VAL(obj, 2) = element;
   GET_OBJ_VAL(obj, 3) = GET_IDNUM(ch);
@@ -1706,7 +1706,7 @@ void lodge_build(struct char_data *ch, int force)
     return;
   }
   GET_NUYEN(ch) -= force * 500;
-  struct obj_data *obj = read_object(114, VIRTUAL);
+  struct obj_data *obj = read_object(OBJ_SHAMANIC_LODGE, VIRTUAL);
   GET_OBJ_VAL(obj, 1) = force;
   GET_OBJ_VAL(obj, 2) = GET_TOTEM(ch);
   GET_OBJ_VAL(obj, 3) = GET_IDNUM(ch);

@@ -1070,7 +1070,7 @@ SPECIAL(spell_trainer)
             if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING)
               break;
           if (!obj) {
-            obj = read_object(116, VIRTUAL);
+            obj = read_object(OBJ_CONJURING_MATERIALS, VIRTUAL);
             obj_to_char(obj, ch);
           }
           GET_OBJ_COST(obj) += i * 1000;

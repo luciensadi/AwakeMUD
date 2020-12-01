@@ -1007,7 +1007,7 @@ bool attempt_reload(struct char_data *mob, int pos)
   }
   
   // With the coming ammo rework, I can't be assed to give all NPCs blank mags in resets. -- LS
-  magazine = read_object(127, VIRTUAL);
+  magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
   GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(gun);
   GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(gun);
   sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);

@@ -1576,6 +1576,12 @@ void parse_object(File &fl, long nr)
     GET_OBJ_VAL(obj, i) = data.GetInt(field, 0);
   }
   
+  // Set the do-not-touch flags for known templated items.
+  if ((BOTTOM_OF_TEMPLATE_ITEMS <= nr && nr <= TOP_OF_TEMPLATE_ITEMS)
+      || nr == OBJ_BLANK_MAGAZINE) {
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_DONT_TOUCH);
+  }
+  
   { // Per-type modifications and settings.
     int mult;
     const char *type_as_string = NULL;
@@ -1740,53 +1746,66 @@ void parse_object(File &fl, long nr)
         break;
       case ITEM_WEAPON:
         // Attempt to automatically rectify broken weapons.
-        if (GET_OBJ_VAL(obj, 3) > MAX_WEAP)
-          switch (GET_OBJ_VAL(obj, 4)) {
+        bool is_melee = FALSE;
+        if (GET_WEAPON_ATTACK_TYPE(obj) > MAX_WEAP)
+          switch (GET_WEAPON_SKILL(obj)) {
             case SKILL_EDGED_WEAPONS:
-              GET_OBJ_VAL(obj, 3) = WEAP_EDGED;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_EDGED;
+              is_melee = TRUE;
               break;
             case SKILL_POLE_ARMS:
-              GET_OBJ_VAL(obj, 3) = WEAP_POLEARM;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_POLEARM;
+              is_melee = TRUE;
               break;
             case SKILL_WHIPS_FLAILS:
-              GET_OBJ_VAL(obj, 3) = WEAP_WHIP;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_WHIP;
+              is_melee = TRUE;
               break;
             case SKILL_CLUBS:
-              GET_OBJ_VAL(obj, 3) = WEAP_CLUB;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CLUB;
+              is_melee = TRUE;
+              break;
+            case SKILL_UNARMED_COMBAT:
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_GLOVE;
+              is_melee = TRUE;
               break;
             case SKILL_PISTOLS:
-              GET_OBJ_VAL(obj, 3) = WEAP_HEAVY_PISTOL;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_HEAVY_PISTOL;
               break;
             case SKILL_RIFLES:
-              GET_OBJ_VAL(obj, 3) = WEAP_SPORT_RIFLE;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SPORT_RIFLE;
               break;
             case SKILL_SHOTGUNS:
-              GET_OBJ_VAL(obj, 3) = WEAP_SHOTGUN;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SHOTGUN;
               break;
             case SKILL_ASSAULT_RIFLES:
-              GET_OBJ_VAL(obj, 3) = WEAP_ASSAULT_RIFLE;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_ASSAULT_RIFLE;
               break;
             case SKILL_SMG:
-              GET_OBJ_VAL(obj, 3) = WEAP_SMG;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SMG;
               break;
             case SKILL_GRENADE_LAUNCHERS:
-              GET_OBJ_VAL(obj, 3) = WEAP_GREN_LAUNCHER;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_GREN_LAUNCHER;
               break;
             case SKILL_MISSILE_LAUNCHERS:
-              GET_OBJ_VAL(obj, 3) = WEAP_MISS_LAUNCHER;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_MISS_LAUNCHER;
               break;
             case SKILL_TASERS:
-              GET_OBJ_VAL(obj, 3) = WEAP_TASER;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_TASER;
               break;
             case SKILL_MACHINE_GUNS:
-              GET_OBJ_VAL(obj, 3) = WEAP_LMG;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_LMG;
               break;
             case SKILL_ASSAULT_CANNON:
-              GET_OBJ_VAL(obj, 3) = WEAP_CANNON;
+              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CANNON;
               break;
           }
-        if (GET_OBJ_VAL(obj, 4) > 100)
-          GET_OBJ_VAL(obj, 4) -= 100;
+        if (GET_WEAPON_SKILL(obj) > 100)
+          GET_WEAPON_SKILL(obj) -= 100;
+          
+        if (is_melee)
+          GET_WEAPON_REACH(obj) = MAX(0, GET_WEAPON_REACH(obj));
+          
         break;
     }
   } // End per-type modifications.
@@ -3278,7 +3297,7 @@ void reset_zone(int zone, int reboot)
                 && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
                 && GET_WEAPON_MAX_AMMO(obj) != -1) {
                 // Load it with a magazine.
-                struct obj_data *magazine = read_object(127, VIRTUAL);
+                struct obj_data *magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
                 GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(obj);
                 GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(obj);
                 sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);

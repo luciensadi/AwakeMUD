@@ -1249,7 +1249,7 @@ void iedit_disp_menu(struct descriptor_data * d)
 {
   CLS(CH);
   if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
-    send_to_char(CH, "^RWARNING: THIS IS A TEMPLATE OBJECT. CHANGING IT BREAKS THINGS.\r\n");
+    send_to_char(CH, "^RThis is a templated object. You are unable to edit it while the game is running.\r\n");
   }
   send_to_char(CH, "Item number: ^c%d^n\r\n", d->edit_number);
   send_to_char(CH, "1) Item keywords: ^c%s^n\r\n", d->edit_obj->text.keywords);
@@ -1305,17 +1305,14 @@ void iedit_disp_menu(struct descriptor_data * d)
                "i) Item extra descriptions:\r\n"
                "j) Source book: ^c%s^n\r\n"
                "k) Street index: ^c%.2f\r\n^n",  d->edit_obj->source_info ? d->edit_obj->source_info : "<none>", GET_OBJ_STREET_INDEX(d->edit_obj));
-  if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
-    send_to_char(CH, "^Rq) Quit and save (WARNING: TEMPLATED OBJECT)^n\r\n");
-  } else {
+  if (!IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
     send_to_char(CH, "q) Quit and save\r\n");
   }
-  send_to_char(CH, "q) Quit and save\r\n"
-               "x) Exit and abort\r\n"
+  send_to_char(CH, "x) Exit and abort\r\n"
                "Enter your choice:\r\n");
   d->edit_mode = IEDIT_MAIN_MENU;
   if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
-    send_to_char(CH, "^RWARNING: THIS IS A TEMPLATE OBJECT. CHANGING IT BREAKS THINGS.\r\n");
+    send_to_char(CH, "^RThis is a templated object. You are unable to edit it while the game is running.\r\n");
   }
 }
 
@@ -1559,6 +1556,10 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       switch (*arg) {
         case 'q':
         case 'Q':
+          if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
+            send_to_char("You can't save this object! Edit it directly in the world files.", d->character);
+            break;
+          }
           d->edit_mode = IEDIT_CONFIRM_SAVESTRING;
           iedit_parse(d, "y");
           break;
@@ -1760,6 +1761,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       if ((number < 0) || (number > ITEM_EXTRA_MAX)) {
         send_to_char("That's not a valid choice!\r\n", d->character);
+        iedit_disp_extra_menu(d);
+      } else if (number == ITEM_DONT_TOUCH + 1) {
+        send_to_char("You can't set the Don't Touch flag here. Do it in the world files.\r\n", d->character);
         iedit_disp_extra_menu(d);
       } else {
         /* if 0, quit */

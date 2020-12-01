@@ -158,7 +158,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
 
 void create_program(struct char_data *ch)
 {
-  struct obj_data *design = read_object(107, VIRTUAL);
+  struct obj_data *design = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL);
   STATE(ch->desc) = CON_PRO_CREATE;
   design->restring = str_dup("A blank program");
   ch->desc->edit_obj = design;
@@ -419,7 +419,7 @@ ACMD(do_copy)
     }
 
     GET_OBJ_VAL(comp, 3) += GET_OBJ_VAL(prog, 2);
-    struct obj_data *newp = read_object(108, VIRTUAL);
+    struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
     newp->restring = str_dup(GET_OBJ_NAME(prog));
     GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(prog, 0);
     GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(prog, 1);
@@ -511,7 +511,7 @@ void update_buildrepair(void)
             send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
           else {
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_OBJ_NAME(PROG));
-            struct obj_data *newp = read_object(108, VIRTUAL);
+            struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
             newp->restring = str_dup(GET_OBJ_NAME(PROG));
             GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(PROG, 0);
             GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(PROG, 1);

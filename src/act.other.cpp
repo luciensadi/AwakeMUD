@@ -3968,7 +3968,7 @@ ACMD(do_spray)
         send_to_char("There isn't that much paint in there.\r\n", ch);
         return;
       }
-      struct obj_data *paint = read_object(120, VIRTUAL);
+      struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
       sprintf(buf, "Someone has sprayed \"%s^g\" here.", argument);
       paint->restring = strdup(buf);
       paint->graffiti = strdup(buf);

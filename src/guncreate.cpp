@@ -30,7 +30,7 @@ void aedit_disp_menu(struct descriptor_data *d)
 
 void create_ammo(struct char_data *ch)
 {
-  struct obj_data *ammo = read_object(121, VIRTUAL);
+  struct obj_data *ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
   STATE(ch->desc) = CON_AMMO_CREATE;
   GET_AMMOBOX_WEAPON(ammo) = WEAP_HOLDOUT;
   GET_AMMOBOX_INTENDED_QUANTITY(ammo) = 10;
