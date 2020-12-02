@@ -610,12 +610,14 @@ SPECIAL(teacher)
   if (teachers[ind].vnum != GET_MOB_VNUM(master))
     return FALSE;
 
+  /*
   if (teachers[ind].type != NEWBIE && PLR_FLAGGED(ch, PLR_NEWBIE)) {
     sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
     do_say(master, arg, 0, SCMD_SAYTO);
     send_to_char(ch, "(^mOOC^n: You can't raise your skills until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
     return TRUE;
   }
+  */
 
   if (!PLR_FLAGGED(ch, PLR_NEWBIE))
     GET_SKILL_POINTS(ch) = 0;
@@ -921,12 +923,14 @@ SPECIAL(trainer)
   if (trainers[ind].vnum != GET_MOB_VNUM(trainer))
     return FALSE;
 
+  /*
   if (!trainers[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
     sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
     send_to_char(ch, "(^mOOC^n: You can't raise your stats until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
     return TRUE;
   }
+  */
 
   if (!access_level(ch, LVL_BUILDER) && !PLR_FLAGGED(ch, PLR_NEWBIE) && GET_ATT_POINTS(ch) != 0) {
     sprintf(buf, "SYSERR: %s graduated from newbie status while still having %d attribute point%s left. How?",
@@ -1209,12 +1213,16 @@ SPECIAL(adept_trainer)
     sprintf(buf, "Error: Character %s is not a newbie but is attempting to train in Chargen.", GET_CHAR_NAME(ch));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return TRUE;
-  } else if (!adepts[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
+  } 
+  
+  /*
+  if (!adepts[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
     sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
     send_to_char(ch, "(^mOOC^n: You can't train until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
     return TRUE;
   }
+  */
   
   // Exploit prevention: You're not allowed to train before allocating attributes to avoid discounted training of improved-attribute powers.
   if (GET_ATT_POINTS(ch) > 0) {

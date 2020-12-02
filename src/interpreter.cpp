@@ -784,6 +784,7 @@ struct command_info cmd_info[] =
     { "unpractice", POS_RESTING , do_practice, 1, SCMD_UNPRACTICE },
     { "unsubscribe",POS_RESTING, do_subscribe, 0, SCMD_UNSUB },
     { "untrain"  , POS_RESTING , do_train    , 1, SCMD_UNTRAIN },
+    { "unlearn"  , POS_DEAD    , do_forget   , 0, 0 },
     { "upgrade"  , POS_SITTING , do_upgrade  , 0 , 0 },
     { "uptime"   , POS_DEAD    , do_date     , LVL_BUILDER, SCMD_UPTIME },
     { "use"      , POS_SITTING , do_use      , 1, SCMD_USE },

@@ -2664,8 +2664,7 @@ ACMD(do_photo)
                 continue;
             }
             
-            strcat(buf, where[j]);
-            sprintf(buf + strlen(buf), "\t%s\r\n", GET_OBJ_NAME(GET_EQ(i, j)));
+            sprintf(ENDOF(buf), "%s%s\r\n", where[j], GET_OBJ_NAME(GET_EQ(i, j)));
           }
         found = TRUE;
       } else if (found_obj && GET_OBJ_VNUM(found_obj) != OBJ_BLANK_PHOTO) {
