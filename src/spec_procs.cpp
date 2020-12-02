@@ -5378,3 +5378,14 @@ SPECIAL(airport_guard)
   }
   return FALSE;
 }
+
+// Give to morts for testing combat so staff don't have to restore them all the time.
+SPECIAL(restoration_button) {
+  ACMD_DECLARE(do_restore);
+  if (cmd && CMD_IS("restore")) {  
+    strcpy(buf, "self");
+    do_restore(ch, buf, 0, 0);
+    return TRUE;
+  }
+  return FALSE;
+}
