@@ -79,6 +79,7 @@ extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
 
 extern const char *pgroup_print_privileges(Bitfield privileges);
+extern void nonsensical_reply(struct char_data *ch);
 
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
@@ -2333,6 +2334,12 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
 ACMD(do_restore)
 {
   struct char_data *vict;
+  
+  // Shifted here from interpreter to allow morts to use the restore command for the testing obj.
+  if (!access_level(ch, LVL_CONSPIRATOR)) {
+    nonsensical_reply(ch);
+    return;
+  }
 
   one_argument(argument, buf);
   

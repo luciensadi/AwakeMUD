@@ -49,6 +49,7 @@ extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern int find_sight(struct char_data *ch);
 extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
 extern void wire_nuyen(struct char_data *ch, struct char_data *target, int amount, bool isfile);
+extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
 
 extern struct command_info cmd_info[];
@@ -5380,11 +5381,11 @@ SPECIAL(airport_guard)
 }
 
 // Give to morts for testing combat so staff don't have to restore them all the time.
-SPECIAL(restoration_button) {
-  ACMD_DECLARE(do_restore);
-  if (cmd && CMD_IS("restore")) {  
-    strcpy(buf, "self");
-    do_restore(ch, buf, 0, 0);
+SPECIAL(restoration_button) {  
+  if (cmd && CMD_IS("restore")) {
+    restore_character(ch, FALSE);
+    send_to_char("You use the cheat button to self-restore, enabling further testing.\r\n", ch);
+    mudlog("Self-restore button used.", ch, LOG_CHEATLOG, TRUE);
     return TRUE;
   }
   return FALSE;

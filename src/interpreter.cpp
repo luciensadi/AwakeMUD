@@ -691,7 +691,7 @@ struct command_info cmd_info[] =
     { "remember" , POS_LYING   , do_remember , 0, 0 },
     { "report"   , POS_LYING   , do_report   , 0, 0 },
     { "repair"   , POS_SITTING , do_repair   , 0, 0 },
-    { "restore"  , POS_DEAD    , do_restore  , LVL_CONSPIRATOR, 0 },
+    { "restore"  , POS_DEAD    , do_restore  , 1, 0 },
     { "restring" , POS_DEAD    , do_restring , 0, 0 },
     { "retract"  , POS_SITTING , do_retract  , 0, 0 },
     { "return"   , POS_DEAD    , do_return   , 0, 0 },
