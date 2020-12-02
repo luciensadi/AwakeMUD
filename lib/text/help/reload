@@ -1,8 +1,8 @@
 RELOAD
 
-Usage: ^gRELOAD <gun> <magazine>^n
+Usage: ^gRELOAD <gun> <clip>^n
 
 This searches your primary weapon, secondary weapon, equipment, and inventory
 (in that order) for a gun which is out of ammunition.  Then it will reload
-that weapon with the proper magazine (if available). The magazine field is optional.
+that weapon with the proper clip (if available). The clip field is optional.
 

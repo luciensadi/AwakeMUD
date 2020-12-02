@@ -7,7 +7,7 @@ Usage: ^gRELEASE <elemental/spirit> <number>^n
 This command is used by mages and shamans to release conjured
 spirits or elementals from their control. They can specify wether
 to release an elemental or spirit and then the number of the spirit,
-which can be garned from looking at the spirit or elemental command.
+which can be garnered from looking at the spirit or elemental command.
 Using this command forfeits all remaining services the spirit or
 elemental owes you, and it will vanish from the physical and astral
 planes for good.

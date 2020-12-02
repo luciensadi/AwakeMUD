@@ -1,0 +1,11 @@
+"INCREASE ATTRIBUTE"
+
+Category: ^gHEALTH^n
+Duration: ^gSUSTAINED^n
+
+This spell affects its particularly aligned attribute, this varient 
+only affects non-cyberware modified attributes. The TN is the targetted
+stat which is increased by 1 for every two successes, with a maximum 
+increase up to the force it is cast at.
+
+^WSee Also: CAST, DECREASE ATTRIBUTE, INCREASE CYBERED ATTRIBUTE, DECREASE CYBERED ATTRIBUTE^n

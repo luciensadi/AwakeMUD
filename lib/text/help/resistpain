@@ -1,0 +1,10 @@
+"RESIST PAIN"
+
+Category: ^gHEALTH^n
+Duration: ^gSUSTAINED^n
+
+Resist Pain eliminates the negative modifiers from injuries equal to
+successes when casting the spell, at a maximum of the force the spell
+is cast at.
+
+^WSee Also: CAST^n

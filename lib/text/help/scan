@@ -17,7 +17,7 @@ Test: SPECIAL
 Utility: SCANNER
 Usage: ^gSCAN <decker>^n
 
-This command reveals extra information about a decker than just using
+This command reveals more information about a decker than just using
 the analyze icon command. The target for this test is the opposing 
 decker's masking and sleaze minus your scanner utility rating. This does not
 add to your security tally. The more successes scored the more information

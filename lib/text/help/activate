@@ -6,7 +6,8 @@ Usage: ^gACTIVATE <item>
        ACTIVATE VOICE MODULATOR
        DEACTIVATE PAIN EDITOR
        DEACTIVATE VOICE MODULATOR
-       DEACTIVATE <focus/power>^n
+       DEACTIVATE <focus/power>
+       DEACTIVATE <credstick>^n
 
 Activate is used to either activate a focus, adept power or pain editor
 or personalize a credstick that has no current owner. Only awakened beings 

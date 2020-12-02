@@ -1,6 +1,6 @@
 DESTROY
 
-Usage: ^gDESTORY <object>^n
+Usage: ^gDESTROY <object>^n
 
 Destroy is used to dismantle lodges and erase hermetic circles, so either
 another lodge or circle can be built, or just to get rid of it.

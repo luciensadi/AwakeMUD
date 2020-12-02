@@ -8,7 +8,7 @@ reading of this help file is recommended.
 
 Force is the force you wish to cash the spell at, this is optional.
 Leaving this value out will mean you cast the spell at the maximum
-force you know. You cannot cast a spell at a force high than you know
+force you know. You cannot cast a spell at a force higher than you know
 it.
 
 The spell name can either be typed as one word on its own, or as multiple

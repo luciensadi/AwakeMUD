@@ -18,7 +18,7 @@ Most armor will offer both types of protection, though some will offer only
 one type.  
 
 When wearing more than one piece of armour a process known as layering takes
-places. The rating of the highest rated piece of armour will be applied in
+place. The rating of the highest rated piece of armour will be applied in
 full, then half the value of all the other pieces are applied. The total of
 all armour at its full rating is used to calculate penalties though.
 
@@ -29,3 +29,13 @@ time using quickness linked skills such as stealth or ranged combat.
 Form fitting armour is not included in the total used to calculate penalties.
 
 ^WSee Also: SCORE^n
+
+Also
+
+Category: ^gMANIPULATION^n
+Duration: ^gSUSTAINED^n
+
+The armour spell increases the targets ballistic and impact armour by
+the force of the spell.
+
+^WSee Also: CAST^n

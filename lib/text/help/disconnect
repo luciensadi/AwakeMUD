@@ -1,6 +1,11 @@
 DISCONNECT
 
-This command disconnects you from the Matrix.
+Usage: ^gDISCONNECT^n
+This command causes you to perform a hard disconnect from the matrix. By
+forcably disconnecting the datajack you leave yourself at risk of dumpshock,
+which can cause considerable mental damage.
 
-^WSee Also: MATRIX, DECKERS^n
+The more secure the host the worse dumpshock is.
+
+^WSee Also: MATRIX, LOGOFF, DECKERS, DUMPSHOCK^n
 

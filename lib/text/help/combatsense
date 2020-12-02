@@ -3,3 +3,11 @@
 Adds a number of dice equal to its rating to the adept's combat pool.
 
 ^WSee Also: ABILITIES, COMBAT POOL^n
+
+Category: ^gDETECTION^n
+Duration: ^gSUSTAINED^n
+
+This spell increases the combat pool of the target by half of the
+successes made when casting up to a maximum of the force.
+
+^WSee Also: CAST^n

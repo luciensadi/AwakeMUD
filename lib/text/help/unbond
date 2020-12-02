@@ -2,9 +2,9 @@ UNBOND
 
 Usage: ^gUNBOND <focus>^n
 
-This command is used to severe a foci's bond to it's owner. This
-is used where you want a foci to no longer server its present owner
+This command is used to severe a focus's bond to it's owner. This
+is used where you want a focus to no longer server its present owner
 but don't have the karma to rebond it, or you want to rebond one
-of your own foci.
+of your own focus.
 
-^WSee Also: BOND, FOCI^n
+^WSee Also: BOND, FOCUS^n

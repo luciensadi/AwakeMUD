@@ -1,0 +1,14 @@
+STABILIZE
+
+Category: ^gHEALTH^n
+Duration: ^gPERMANENT^n
+
+Brings the target from mortally wounded to a stabilized condition.
+This does not heal any damage, it only prevents further bleeding out 
+of the subject that is mortally wounded. 
+
+The maximum negative health it can stabilize is determined by the force
+the spell is cast at.
+
+
+^WSee Also: CAST, TREAT^n

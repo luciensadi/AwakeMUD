@@ -1,7 +1,9 @@
-THINK MINDLINK
+THINK
 
 Usage: ^gTHINK <message>^n
 
 This command is used to communicate with someone you have
 a mindlink established with. The message will appear in your
 own voice.
+
+^WSee also: MINDLINK^n

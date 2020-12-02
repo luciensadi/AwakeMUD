@@ -1,0 +1,10 @@
+"INCREASED REACTION"
+
+Category: ^gHEALTH^n
+Duration: ^gSUSTAINED^n
+
+This spell increases reaction by half of its successes, up 
+to its force. TN is the current reaction attribute.
+
+
+^WSee Also: CAST^n

@@ -1,0 +1,14 @@
+MANABOLT
+
+Category: ^gCOMBAT^n
+Duration: ^gINSTANT^n
+
+Manabolt deals physical damage directly to a target and is mana
+based. The higher the force the harder it is to resist the damage,
+and the difficulty to cast depends on the Willpower attribute of
+the target.
+
+Unlike elemental manipulation spells it cannot be dodged.
+
+^WSee Also: CAST, POWERBOLT, STUNBOLT^n
+
