@@ -4429,6 +4429,7 @@ SPECIAL(chargen_hopper)
         send_to_char(ch, "You reach into the hopper and retrieve %s.\r\n", GET_OBJ_NAME(modulator));
         obj_from_obj(modulator);
         obj_to_char(modulator, ch);
+        GET_OBJ_COST(modulator) = 0;
       }
       
       return TRUE;

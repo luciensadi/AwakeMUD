@@ -661,7 +661,7 @@ void game_loop(int mother_desc)
         }
       
       // Reset our alarm timer.
-      alarm(10);
+      alarm(SECONDS_TO_WAIT_FOR_HUNG_MUD_TO_RECOVER_BEFORE_KILLING_IT);
     } while (errno);
 #endif
     

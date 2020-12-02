@@ -918,17 +918,6 @@ void create_parse(struct descriptor_data *d, const char *arg)
     GET_EQ(d->character, WEAR_BODY) = read_object(shirts[number(0, 4)], VIRTUAL);
     GET_EQ(d->character, WEAR_LEGS) = read_object(pants[number(0, 4)], VIRTUAL);
     GET_EQ(d->character, WEAR_FEET) = read_object(shoes[number(0, 4)], VIRTUAL);
-    // Check to see if the radio exists (real_object() returns -1 if it can't find an object with this vnum).
-    if (real_object(OBJ_NEWBIE_RADIO) > -1) {
-      // Read the radio into a temporary object pointer so we can reference it.
-      struct obj_data *radio = read_object(OBJ_NEWBIE_RADIO, VIRTUAL);
-        
-      // Set the channel to 8 MHz.
-      GET_OBJ_VAL(radio, 0) = 8;
-        
-      // Give the radio to the character via the radio pointer.
-      obj_to_char(radio, d->character);
-    }
     ccr_type_menu(d);
     break;
   case CCR_TOTEM:
