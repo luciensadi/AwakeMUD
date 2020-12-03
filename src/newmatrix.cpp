@@ -863,9 +863,11 @@ ACMD(do_locate)
           send_to_icon(PERSONA, "Your search returns the address %s.\r\n", fname_allchars(exit->addresses));
           i++;
         }
+      if (!i)
+        send_to_icon(PERSONA, "This host isn't hooked up to any connections with that keyword.\r\n");
+    } else {
+      send_to_icon(PERSONA, "You fumble your attempt to locate that host.\r\n");
     }
-    if (!success || !i)
-      send_to_icon(PERSONA, "You fail to return any data on that search.\r\n");
     return;
   } else if (is_abbrev(buf, "ics")) {
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_ANALYZE, 0);
@@ -877,11 +879,14 @@ ACMD(do_locate)
           make_seen(PERSONA, icon->idnum);
           i++;
         }
+      
+      if (!i)
+        send_to_icon(PERSONA, "There aren't any ICs in the host right now.\r\n");
+      else
+        send_to_icon(PERSONA, "You notice %d IC in the host.\r\n", i);
+    } else {
+      send_to_icon(PERSONA, "You don't notice any ICs in the host.\r\n");
     }
-    if (!success || !i)
-      send_to_icon(PERSONA, "You don't notice any IC in the host.\r\n");
-    else
-      send_to_icon(PERSONA, "You notice %d IC in the host.\r\n", i);
     return;
   } else if (is_abbrev(buf, "files")) {
     int x = 0;
@@ -895,24 +900,28 @@ ACMD(do_locate)
       return;
     }
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_BROWSE, 0);
-    if (PERSONA) {
-      for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj && success > 0; obj = obj->next_content)
-        if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-          if (!GET_OBJ_VAL(obj, 7) && isname(arg, GET_OBJ_NAME(obj))) {
-            GET_OBJ_VAL(obj, 7) = GET_IDNUM(ch);
-            GET_OBJ_VAL(obj, 9) = 0;
-            success--;
-            i++;
-          } else if (GET_OBJ_VAL(obj, 7) == GET_IDNUM(ch) && GET_OBJ_VAL(obj, 9) && isname(arg, GET_OBJ_NAME(obj))) {
-            GET_OBJ_VAL(obj, 9) = 0;
-            success--;
-            i++;
+    if (success <= 0)
+      send_to_icon(PERSONA, "You fumble your attempt to locate files.\r\n");
+    else {
+      if (PERSONA) {
+        for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj && success > 0; obj = obj->next_content)
+          if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
+            if (!GET_OBJ_VAL(obj, 7) && isname(arg, GET_OBJ_NAME(obj))) {
+              GET_OBJ_VAL(obj, 7) = GET_IDNUM(ch);
+              GET_OBJ_VAL(obj, 9) = 0;
+              success--;
+              i++;
+            } else if (GET_OBJ_VAL(obj, 7) == GET_IDNUM(ch) && GET_OBJ_VAL(obj, 9) && isname(arg, GET_OBJ_NAME(obj))) {
+              GET_OBJ_VAL(obj, 9) = 0;
+              success--;
+              i++;
+            }
           }
-        }
-      if (!i)
-        send_to_icon(PERSONA, "You fail to return any data on that search.\r\n");
-      else
-        send_to_icon(PERSONA, "Your search returns %d match%s.\r\n", i, i > 1 ? "es" : "");
+        if (!i)
+          send_to_icon(PERSONA, "You fail to return any data on that search.\r\n");
+        else
+          send_to_icon(PERSONA, "Your search returns %d match%s.\r\n", i, i > 1 ? "es" : "");
+      }
     }
     return;
   } else if (is_abbrev(buf, "deckers")) {
@@ -936,15 +945,22 @@ ACMD(do_locate)
             i++;
           }
         }
+      if (!i)
+        send_to_icon(PERSONA, "You don't notice any other deckers in the host.\r\n");
+      else
+        send_to_icon(PERSONA, "You notice %d other decker%s in the host.\r\n", i, (i > 1 ? "s":""));
+    } else {
+      send_to_icon(PERSONA, "You fumble your attempt to locate other deckers.\r\n");
     }
-    if (!success || !i)
-      send_to_icon(PERSONA, "You don't notice any other deckers in the host.\r\n");
-    else
-      send_to_icon(PERSONA, "You notice %d other decker%s in the host.\r\n", i, (i > 1 ? "s":""));
     return;
   } else if (is_abbrev(buf, "paydata")) {
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_EVALUATE, 0);
-    if (success > 0 && !matrix[PERSONA->in_host].type && matrix[PERSONA->in_host].found)
+    if (success <= 0) {
+      send_to_icon(PERSONA, "You fumble your attempt to locate paydata.\r\n");
+      return;
+    }
+    
+    if (!matrix[PERSONA->in_host].type && matrix[PERSONA->in_host].found)
       while (success && matrix[PERSONA->in_host].found) {
         matrix[PERSONA->in_host].found--;
         success--;

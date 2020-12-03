@@ -1115,7 +1115,7 @@ ACMD_CONST(do_gen_door) {
   do_gen_door(ch, not_const, cmd, subcmd);
 }
 
-#define GET_DOOR_NAME(ch, door) (*(fname(EXIT(ch, (door))->keyword)) ? fname(EXIT(ch, (door))->keyword) : "door")
+#define GET_DOOR_NAME(ch, door) (EXIT(ch, (door))->keyword ? (*(fname(EXIT(ch, (door))->keyword)) ? fname(EXIT(ch, (door))->keyword) : "door") : "door")
 ACMD(do_gen_door)
 {
   int door = -1, keynum, num = 0;;
@@ -1209,6 +1209,18 @@ ACMD(do_gen_door)
   if ((obj) || (door >= 0)) {
     keynum = DOOR_KEY(ch, obj, door);
     
+    // Trying to do some fuckery with a door that doesn't exist?
+    // TODO: This is information disclosure.
+    if (door >= 0 
+        && (!IS_SET(EXIT(ch, door)->exit_info, EX_ISDOOR)
+            || (IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) 
+                && !success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, door)->hidden))
+           )
+      ) {
+      send_to_char(ch, "You don't see a %s to %s.\r\n", type, thedirs[door]);
+      return;
+    }
+    
     // Can't open it? Give a proper message.
     if (!(DOOR_IS_OPENABLE(ch, obj, door))) {
       char temp[50];
@@ -1229,25 +1241,6 @@ ACMD(do_gen_door)
         send_to_char(ch, "The %s to %s is already closed!\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
       return;
     }
-    
-    /*
-    const char *cmd_door[] = {
-                         "open",
-                         "unlock",
-                         "lock",
-                         "bypass",
-                         "knock"
-                       };
-
-    const int flags_door[] =
-      {
-        NEED_CLOSED | NEED_UNLOCKED,
-        NEED_CLOSED | NEED_LOCKED,
-        NEED_CLOSED | NEED_UNLOCKED,
-        NEED_CLOSED,
-        NEED_CLOSED
-      };
-      */
     
     // Almost anything you can do to a door (except close it) fails if it's open.
     if (!DOOR_IS_CLOSED(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_CLOSED)) {

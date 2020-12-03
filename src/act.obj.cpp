@@ -1653,7 +1653,7 @@ struct char_data *give_find_vict(struct char_data * ch, char *arg)
     return NULL;
   } else if (!(vict = get_char_room_vis(ch, arg)))
   {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
     return NULL;
   } else if (vict == ch)
   {
@@ -1744,7 +1744,7 @@ ACMD(do_give)
           perform_give_gold(ch, vict, amount);
           return;
         }
-        send_to_char(NOPERSON, ch);
+        send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
         return;
       }
       if ((vict = give_find_vict(ch, arg)))
@@ -1760,7 +1760,7 @@ ACMD(do_give)
     if (ch->in_veh) {
       vict = get_char_veh(ch, buf1, ch->in_veh);
       if (!vict) {
-        send_to_char(NOPERSON, ch);
+        send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
         return;
       }
     } else if (!(vict = give_find_vict(ch, buf1)))
