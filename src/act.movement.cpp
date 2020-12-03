@@ -1012,12 +1012,20 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
 {
   struct room_data *other_room = NULL;
   struct room_direction_data *back = NULL;
+  
 
   sprintf(buf, "$n %ss ", cmd_door[scmd]);
   if (!obj && ((other_room = EXIT(ch, door)->to_room)))
     if ((back = other_room->dir_option[rev_dir[door]]))
       if (back->to_room != ch->in_room)
         back = 0;
+        
+  // Hidden value goes away if it's a door. Hard to keep it hidden when shit's happening.
+  if (door >= 0) {
+    REMOVE_BIT(EXITN(ch->in_room, door)->exit_info, EX_HIDDEN);
+    if (back)
+      REMOVE_BIT(EXITN(other_room, rev_dir[door])->exit_info, EX_HIDDEN);
+  }
 
   switch (scmd)
   {
@@ -1210,15 +1218,28 @@ ACMD(do_gen_door)
     keynum = DOOR_KEY(ch, obj, door);
     
     // Trying to do some fuckery with a door that doesn't exist?
-    // TODO: This is information disclosure.
-    if (door >= 0 
-        && (!IS_SET(EXIT(ch, door)->exit_info, EX_ISDOOR)
-            || (IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) 
-                && !success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, door)->hidden))
-           )
-      ) {
-      send_to_char(ch, "You don't see a %s to %s.\r\n", type, thedirs[door]);
-      return;
+    if (door >= 0) {
+      if (!IS_SET(EXIT(ch, door)->exit_info, EX_ISDOOR)) {
+        if (!*dir) {
+          send_to_char(ch, "There doesn't seem to be a %s here.\r\n", type);
+          return;
+        } else {
+          send_to_char(ch, "You don't see a %s to %s.\r\n", type, thedirs[door]);
+          return;
+        }
+      }
+      
+      if (IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)) {
+        if (!(access_level(ch, LVL_BUILDER) || success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, door)->hidden))) {
+          if (!*dir) {
+            send_to_char(ch, "There doesn't seem to be a %s here.\r\n", type);
+            return;
+          } else {
+            send_to_char(ch, "You don't see a %s to %s.\r\n", type, thedirs[door]);
+            return;
+          }
+        }
+      }
     }
     
     // Can't open it? Give a proper message.

@@ -4690,3 +4690,28 @@ ACMD(do_leaderboard) {
     send_to_char(ch, "...Nobody! Looks like a great place to make your mark.\r\n");
   mysql_free_result(res);
 }
+
+ACMD(do_search) {
+  bool found_something = FALSE;
+  bool has_secrets = FALSE;
+  
+  for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+    if (EXIT(ch, dir) && IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN)) {
+      has_secrets = TRUE;
+      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, dir)->hidden) > 0) {
+        if (!found_something)
+          send_to_char("You begin searching the area for secrets...\r\n", ch);
+        REMOVE_BIT(EXIT(ch, dir)->exit_info, EX_HIDDEN);
+        send_to_char(ch, "You discover an exit to %s.\r\n", thedirs[dir]);
+        found_something = TRUE;
+      }
+    }
+  }
+  
+  if (!found_something) {
+    send_to_char("You search the area for secrets, but fail to turn anything up.\r\n", ch);
+    
+    if (has_secrets && success_test(GET_INT(ch), 4))
+      send_to_char("You feel like there's something to uncover here.\r\n", ch);
+  }
+}

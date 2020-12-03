@@ -876,7 +876,7 @@ SPECIAL(johnson)
       
       // Reject low-rep characters.
       if (rep_too_low(ch, GET_SPARE2(johnson))) {
-        do_say(johnson, "And just who are you?", 0, 0);
+        do_say(johnson, "You don't have a good enough rep for this one.", 0, 0);
         GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch))
           forget(johnson, ch);

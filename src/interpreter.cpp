@@ -269,6 +269,7 @@ ACMD_DECLARE(do_say);
 ACMD_DECLARE(do_scan);
 ACMD_DECLARE(do_score);
 ACMD_DECLARE(do_self_advance);
+ACMD_DECLARE(do_search);
 ACMD_DECLARE(do_send);
 ACMD_DECLARE(do_set);
 ACMD_DECLARE(do_settime);
@@ -708,6 +709,7 @@ struct command_info cmd_info[] =
     { "\""  , POS_LYING   , do_say      , 0, SCMD_SAYTO },
     { "score"    , POS_DEAD    , do_score    , 0, 0 },
     { "scan"     , POS_RESTING , do_scan     , 0, 0 },
+    { "search"   , POS_STANDING, do_search   , 0, 0 },
     { "send"     , POS_SLEEPING, do_send     , LVL_FIXER, 0 },
     { "sedit"    , POS_DEAD    , do_shedit   , LVL_BUILDER, 0 },
     { "set"      , POS_DEAD    , do_set      , LVL_DEVELOPER, 0 },

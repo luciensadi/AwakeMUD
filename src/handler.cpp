@@ -52,6 +52,12 @@ char *fname(char *namelist)
   static char holder[50];
   char *point;
   
+  if (!namelist || !*namelist) {
+    mudlog("SYSERR: fname received null namelist!", NULL, LOG_SYSLOG, TRUE);
+    strcpy(holder, "error-report-this-to-staff");
+    return holder;
+  }
+  
   for (point = holder; isalpha(*namelist); namelist++, point++)
     *point = *namelist;
   
