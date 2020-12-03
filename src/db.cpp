@@ -1289,6 +1289,21 @@ void renum_world(void)
 
 #define ZCMD zone_table[zone].cmd[cmd_no]
 
+bool can_load_this_thing_in_zone_commands(DBIndex::rnum_t rnum, int zone, int cmd_no) {
+  if (GET_OBJ_TYPE(&obj_proto[rnum]) == ITEM_MONEY) {
+    // Zoneloading money is forbidden.
+    log_zone_error(zone, cmd_no, "Money cannot be loaded in zone commands.");
+    return FALSE;
+  }
+  return TRUE;
+}
+
+#define ENSURE_OBJECT_IS_KOSHER(rnum)                              \
+if (!can_load_this_thing_in_zone_commands((rnum), zone, cmd_no)) { \
+  ZCMD.command = '*';                                              \
+  continue;                                                        \
+}
+
 /* resulve vnums into rnums in the zone reset tables */
 void renum_zone_table(void)
 {
@@ -1307,11 +1322,13 @@ void renum_zone_table(void)
           break;
         case 'H':
           a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          ENSURE_OBJECT_IS_KOSHER(a);
           if (ZCMD.arg3 != NOWHERE)
             b = ZCMD.arg3 = real_host(ZCMD.arg3);
           break;
         case 'O':
           a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          ENSURE_OBJECT_IS_KOSHER(a);
           if (ZCMD.arg3 != NOWHERE)
             b = ZCMD.arg3 = real_room(ZCMD.arg3);
           break;
@@ -1327,13 +1344,17 @@ void renum_zone_table(void)
         case 'U':
         case 'I':
           a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          ENSURE_OBJECT_IS_KOSHER(a);
           break;
         case 'E':
           a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          ENSURE_OBJECT_IS_KOSHER(a);
           break;
         case 'P':
           a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          ENSURE_OBJECT_IS_KOSHER(a);
           b = ZCMD.arg3 = real_object(ZCMD.arg3);
+          ENSURE_OBJECT_IS_KOSHER(b);
           break;
         case 'D':
           a = ZCMD.arg1 = real_room(ZCMD.arg1);
@@ -1341,9 +1362,11 @@ void renum_zone_table(void)
         case 'R': /* rem obj from room */
           a = ZCMD.arg1 = real_room(ZCMD.arg1);
           b = ZCMD.arg2 = real_object(ZCMD.arg2);
+          ENSURE_OBJECT_IS_KOSHER(b);
           break;
         case 'N':
           a = ZCMD.arg1 = real_object(ZCMD.arg1);
+          ENSURE_OBJECT_IS_KOSHER(a);
           break;
       }
       if (a < 0 || b < 0) {

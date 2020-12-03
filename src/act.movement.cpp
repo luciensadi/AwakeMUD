@@ -1008,7 +1008,7 @@ const int flags_door[] =
 #define DOOR_KEY(ch, obj, door)         ((obj) ? (GET_OBJ_VAL(obj, 2)) : (EXIT(ch, door)->key))
 #define DOOR_LOCK(ch, obj, door)        ((obj) ? (GET_OBJ_VAL(obj, 1)) : (EXIT(ch, door)->exit_info))
 
-void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd)
+void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, bool print_message)
 {
   struct room_data *other_room = NULL;
   struct room_direction_data *back = NULL;
@@ -1022,11 +1022,19 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd)
   switch (scmd)
   {
   case SCMD_OPEN:
+    // Forcibly unlock it when we open it.
+    if (DOOR_IS_LOCKED(ch, obj, door)) {
+      LOCK_DOOR(ch->in_room, obj, door);
+      if (back)
+        LOCK_DOOR(other_room, obj, rev_dir[door]);
+    }
+    // fallthrough
   case SCMD_CLOSE:
     OPEN_DOOR(ch->in_room, obj, door);
     if (back)
       OPEN_DOOR(other_room, obj, rev_dir[door]);
-    send_to_char(OK, ch);
+    if (print_message)
+      send_to_char(OK, ch);
     break;
   case SCMD_UNLOCK:
   case SCMD_LOCK:
@@ -1107,6 +1115,7 @@ ACMD_CONST(do_gen_door) {
   do_gen_door(ch, not_const, cmd, subcmd);
 }
 
+#define GET_DOOR_NAME(ch, door) (*(fname(EXIT(ch, (door))->keyword)) ? fname(EXIT(ch, (door))->keyword) : "door")
 ACMD(do_gen_door)
 {
   int door = -1, keynum, num = 0;;
@@ -1199,24 +1208,101 @@ ACMD(do_gen_door)
 
   if ((obj) || (door >= 0)) {
     keynum = DOOR_KEY(ch, obj, door);
+    
+    // Can't open it? Give a proper message.
     if (!(DOOR_IS_OPENABLE(ch, obj, door))) {
       char temp[50];
-      sprintf(temp, "You can't %s that!", cmd_door[subcmd]);
-      act(temp, FALSE, ch, 0, 0, TO_CHAR);
+      if (obj) {
+        sprintf(temp, "You can't %s $p.", cmd_door[subcmd]);
+      } else {
+        sprintf(temp, "You can't %s the %s to %s.", cmd_door[subcmd], GET_DOOR_NAME(ch, door), thedirs[door]);
+      }
+      act(temp, FALSE, ch, obj, 0, TO_CHAR);
+      return;
     }
-    else if (!DOOR_IS_OPEN(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_OPEN))
-      send_to_char("But it's already closed!\r\n", ch);
-    else if (!DOOR_IS_CLOSED(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_CLOSED))
-      send_to_char("But it's currently open!\r\n", ch);
-    else if (!(DOOR_IS_LOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_LOCKED))
-      send_to_char("Oh.. it wasn't locked, after all..\r\n", ch);
-    else if (!(DOOR_IS_UNLOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_UNLOCKED))
-      send_to_char("It seems to be locked.\r\n", ch);
-    else if (!has_key(ch, keynum) && !access_level(ch, LVL_ADMIN)
-             && ((subcmd == SCMD_LOCK) || (subcmd == SCMD_UNLOCK)))
+    
+    // Trying to close it when it's already closed.
+    if (!DOOR_IS_OPEN(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_OPEN)) {
+      if (obj)
+        send_to_char(ch, "%s is already closed!\r\n", capitalize(GET_OBJ_NAME(obj)));
+      else
+        send_to_char(ch, "The %s to %s is already closed!\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
+      return;
+    }
+    
+    /*
+    const char *cmd_door[] = {
+                         "open",
+                         "unlock",
+                         "lock",
+                         "bypass",
+                         "knock"
+                       };
+
+    const int flags_door[] =
+      {
+        NEED_CLOSED | NEED_UNLOCKED,
+        NEED_CLOSED | NEED_LOCKED,
+        NEED_CLOSED | NEED_UNLOCKED,
+        NEED_CLOSED,
+        NEED_CLOSED
+      };
+      */
+    
+    // Almost anything you can do to a door (except close it) fails if it's open.
+    if (!DOOR_IS_CLOSED(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_CLOSED)) {
+      if (obj)
+        send_to_char(ch, "%s is already open!\r\n", capitalize(GET_OBJ_NAME(obj)));
+      else
+        send_to_char(ch, "But the %s to %s is already open...\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
+      return;
+    }
+    
+    if (!(DOOR_IS_LOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_LOCKED)) {
+      if (obj)
+        send_to_char(ch, "%s isn't locked.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      else
+        send_to_char(ch, "The %s to %s isn't locked.\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
+      return;
+    }
+    
+    if (!(DOOR_IS_UNLOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_UNLOCKED)) {
+      if (subcmd == SCMD_OPEN) {
+        // Trying to open a locked thing without the key.
+        if (!(has_key(ch, keynum) || access_level(ch, LVL_ADMIN))) {
+          if (obj)
+            send_to_char(ch, "You can't open %s-- it's locked and you don't have the proper key.\r\n", GET_OBJ_NAME(obj));
+          else
+            send_to_char(ch, "You can't open the %s to %s-- it's locked and you don't have the proper key.\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
+          return;
+        }
+        // They're trying to open a locked thing with the key.
+        else {
+          if (obj)
+            send_to_char(ch, "You unlock and open %s.\r\n", GET_OBJ_NAME(obj));
+          else
+            send_to_char(ch, "You unlock and open the %s to %s.\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
+          do_doorcmd(ch, obj, door, subcmd, FALSE);
+          return;
+        }
+      } else {
+        // They're trying to lock it.
+        if (obj)
+          send_to_char(ch, "%s is already locked.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        else
+          send_to_char(ch, "The %s to %s is already locked.\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
+        return;
+      }
+    }
+    
+    if (!has_key(ch, keynum) && !access_level(ch, LVL_ADMIN)
+             && ((subcmd == SCMD_LOCK) || (subcmd == SCMD_UNLOCK))) {
       send_to_char("You don't seem to have the proper key.\r\n", ch);
-    else if (ok_pick(ch, keynum, DOOR_IS_PICKPROOF(ch, obj, door), subcmd, LOCK_LEVEL(ch, obj, door)))
-      do_doorcmd(ch, obj, door, subcmd);
+      return;
+    }
+    
+    if (ok_pick(ch, keynum, DOOR_IS_PICKPROOF(ch, obj, door), subcmd, LOCK_LEVEL(ch, obj, door)))
+      do_doorcmd(ch, obj, door, subcmd, TRUE);
   }
   return;
 }

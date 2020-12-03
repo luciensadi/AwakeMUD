@@ -89,11 +89,13 @@ void medit_disp_menu(struct descriptor_data *d)
                (int)(GET_MAX_PHYSICAL(MOB) / 100), CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
                (int)(GET_MAX_MENTAL(MOB) / 100), CCNRM(CH, C_CMP));
   sprinttype(GET_POS(MOB), position_types, buf1);
-  send_to_char(CH, "g) Position: %s%s%s, ", CCCYN(CH, C_CMP), buf1,
+  send_to_char(CH, "g) Default Position: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
   sprinttype(GET_DEFAULT_POS(MOB), position_types, buf1);
+  /*
   send_to_char(CH, "h) Default Position: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
+               */
   sprinttype(GET_SEX(MOB), genders, buf1);
   //  strcpy(buf1, genders[GET_SEX(d->edit_mob)]);
   send_to_char(CH, "i) Gender: %s%s%s, ", CCCYN(CH, C_CMP), buf1,
@@ -1107,23 +1109,25 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case MEDIT_POSITION:
+  /*
     number = atoi(arg);
     if ((number < POS_MORTALLYW) || (number > POS_STANDING)) {
       send_to_char("Invalid choice.\r\nEnter position: ", CH);
       medit_disp_pos_menu(d);
     } else {
-      GET_POS(MOB) = number;
+      GET_POS(MOB) = GET_DEFAULT_POS(MOB) = number;
       medit_disp_menu(d);
     }
     break;
-
+*/
+  // Fallthrough.
   case MEDIT_DEFAULT_POSITION:
     number = atoi(arg);
     if ((number < POS_MORTALLYW) || (number > POS_STANDING)) {
-      send_to_char("Invalid choice.\r\nEnter default position: ", CH);
+      send_to_char("Invalid choice.\r\nEnter position: ", CH);
       medit_disp_pos_menu(d);
     } else {
-      GET_DEFAULT_POS(MOB) = number;
+      GET_DEFAULT_POS(MOB) = GET_POS(MOB) = number;
       medit_disp_menu(d);
     }
     break;
@@ -1273,4 +1277,3 @@ void write_mobs_to_disk(int zone)
 
   write_index_file("mob");
 }
-

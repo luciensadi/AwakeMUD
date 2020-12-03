@@ -2205,8 +2205,8 @@ SPECIAL(hacker)
       send_to_char(buf, ch);
       return(TRUE);
     }
-    if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1) || GET_OBJ_VAL(obj, 0) <= 0 ||
-        !GET_OBJ_VAL(obj, 4) || belongs_to(ch, obj)) {
+    if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1) || GET_ITEM_MONEY_VALUE(obj) <= 0 ||
+        !GET_ITEM_MONEY_CREDSTICK_ACTIVATED(obj) || belongs_to(ch, obj)) {
       sprintf(arg, "%s Why are you bringing this to me?", GET_CHAR_NAME(ch));
       do_say(hacker, arg, 0, SCMD_SAYTO);
       return TRUE;

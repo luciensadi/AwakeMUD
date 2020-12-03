@@ -825,6 +825,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_FOOD convenience defines
 
 // ITEM_MONEY convenience defines
+#define GET_ITEM_MONEY_VALUE(money)               (GET_OBJ_VAL((money), 0))
+#define GET_ITEM_MONEY_CREDSTICK_ACTIVATED(money) (GET_OBJ_VAL((money), 4))
 
 // ITEM_PHONE convenience defines
 

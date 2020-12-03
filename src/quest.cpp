@@ -666,8 +666,13 @@ SPECIAL(johnson)
       if (!temp) {
         new_quest(johnson);
         GET_SPARE1(johnson) = -1;
-      } else if (GET_QUEST(temp))
+      } else if (GET_QUEST(temp)) {
         handle_info(johnson);
+      } else {
+        do_say(ch, "Ah, you're not listening anymore, are you.", 0, 0);
+        new_quest(johnson);
+        GET_SPARE1(johnson) = -1;
+      }
     } else if (time_info.minute > 0 && time_info.minute <= 5)
       new_quest(johnson);
     return FALSE;
