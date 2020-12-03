@@ -2179,7 +2179,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   }
   
   if (strcmp(GET_OBJ_EXTRA(j).ToString(), "0") != 0) {
+    // We remove the DONT_TOUCH bit here so it doesn't print.
+    bool is_dont_touch = IS_OBJ_STAT(j, ITEM_DONT_TOUCH);
+    if (is_dont_touch)
+      GET_OBJ_EXTRA(j).RemoveBit(ITEM_DONT_TOUCH);
     GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);
+    if (is_dont_touch)
+      GET_OBJ_EXTRA(j).SetBit(ITEM_DONT_TOUCH);
+      
     sprintf(ENDOF(buf), "This object has the following extra features: ^c%s^n\r\n", buf2);
   }
   
