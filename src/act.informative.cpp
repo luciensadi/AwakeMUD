@@ -4695,6 +4695,8 @@ ACMD(do_search) {
   bool found_something = FALSE;
   bool has_secrets = FALSE;
   
+  act("$n searches the area.", TRUE, ch, 0, 0, TO_ROOM);
+  
   for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
     if (EXIT(ch, dir) && IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN)) {
       has_secrets = TRUE;
