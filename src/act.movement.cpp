@@ -1318,6 +1318,11 @@ ACMD(do_gen_door)
     if (ok_pick(ch, keynum, DOOR_IS_PICKPROOF(ch, obj, door), subcmd, LOCK_LEVEL(ch, obj, door)))
       do_doorcmd(ch, obj, door, subcmd, TRUE);
   }
+  
+  else {
+    send_to_char(ch, "There doesn't seem to be a %s here.\r\n", type);
+    return;
+  }
   return;
 }
 

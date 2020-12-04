@@ -669,7 +669,11 @@ SPECIAL(johnson)
       } else if (GET_QUEST(temp)) {
         handle_info(johnson);
       } else {
-        do_say(ch, "Ah, you're not listening anymore, are you.", 0, 0);
+        // do_say(johnson, "Ah, you're not listening anymore, are you.", 0, 0);
+        sprintf(buf, "Questgiver speech logic failure. Debug: spare1=%ld, spare2=%ld, %s is on quest #%d right now.",
+                GET_SPARE1(johnson), GET_SPARE2(johnson), GET_CHAR_NAME(ch), GET_QUEST(temp));
+        do_say(johnson, buf, 0, 0);
+        mudlog(buf, johnson, LOG_SYSLOG, TRUE);
         new_quest(johnson);
         GET_SPARE1(johnson) = -1;
       }
