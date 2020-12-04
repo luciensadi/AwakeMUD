@@ -2699,7 +2699,7 @@ int vnum_object_affects(struct char_data *ch) {
                 obj_proto[nr].text.name,
                 xbuf,
                 obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
-        send_to_char(buf, ch);
+        page_string(ch->desc, buf, 1);
         break;
       }
     }
@@ -3064,7 +3064,11 @@ void reset_zone(int zone, int reboot)
           (ZCMD.arg2 == 0 && reboot)) {
         mob = read_mobile(ZCMD.arg1, REAL);
         
-        if (!veh->people) {
+        bool is_driver = !(veh->people);
+        
+        char_to_veh(veh, mob);
+        
+        if (is_driver) {
           // If the vehicle is empty, make the mob the driver.
           AFF_FLAGS(mob).SetBit(AFF_PILOT);
           mob->vfront = TRUE;
@@ -3087,7 +3091,7 @@ void reset_zone(int zone, int reboot)
           // Mount-users are all back of the bus.
           mob->vfront = FALSE;
         }
-        char_to_veh(veh, mob);
+        
         last_cmd = 1;
       } else {
         if (ZCMD.arg2 == 0 && !reboot)

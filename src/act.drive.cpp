@@ -190,8 +190,7 @@ void crash_test(struct char_data *ch)
 
 ACMD(do_drive)
 {
-  struct char_data *temp;
-
+  struct char_data *temp = NULL;
   if (IS_ASTRAL(ch)) {
     send_to_char("You cannot seem to touch physical objects.\r\n", ch);
     return;
@@ -224,17 +223,16 @@ ACMD(do_drive)
     send_to_char("You can't seem to take control!\r\n", ch);
     return;
   }
-  for(temp = VEH->people; temp; temp= temp->next_in_veh)
-    if(ch != temp && AFF_FLAGGED(temp, AFF_PILOT)) {
-      send_to_char("Someone is already in charge!\r\n", ch);
-      return;
-    }
+  if ((temp = get_driver(VEH)) && temp != ch) {
+    send_to_char("Someone is already in charge!\r\n", ch);
+    return;
+  }
   if (VEH->type == VEH_BIKE && VEH->locked && GET_IDNUM(ch) != VEH->owner) {
     send_to_char("You can't seem to start it.\r\n", ch);
     return;
   }
   if (VEH->cspeed == SPEED_OFF || VEH->dest) {
-    AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
+    AFF_FLAGS(ch).SetBit(AFF_PILOT);
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
     send_to_veh(buf1, VEH, ch, FALSE);
@@ -242,7 +240,7 @@ ACMD(do_drive)
     send_to_char("The wheel is in your hands.\r\n", ch);
     sprintf(buf1, "%s takes the wheel.\r\n", GET_NAME(ch));
   } else {
-    AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
+    AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
     send_to_char("You relinquish the driver's seat.\r\n", ch);
     sprintf(buf1, "%s relinquishes the driver's seat.\r\n", GET_NAME(ch));
     stop_chase(VEH);
@@ -318,7 +316,7 @@ ACMD(do_rig)
       send_to_char("You jack in and nothing happens.\r\n", ch);
       return;
     } 
-    AFF_FLAGS(ch).ToggleBits(AFF_PILOT, AFF_RIG, ENDBIT);
+    AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG, ENDBIT);
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
     send_to_veh(buf1, VEH, ch, TRUE);
@@ -330,7 +328,7 @@ ACMD(do_rig)
       send_to_char("But you're not rigging.\r\n", ch);
       return;
     }
-    AFF_FLAGS(ch).ToggleBits(AFF_PILOT, AFF_RIG, ENDBIT);
+    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
     if (!VEH->dest)
       VEH->cspeed = SPEED_OFF;
     stop_chase(VEH);

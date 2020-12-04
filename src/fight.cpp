@@ -5286,7 +5286,7 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
 void vcombat(struct char_data * ch, struct veh_data * veh)
 {
   char ammo_type[20];
-  static struct obj_data *wielded;
+  static struct obj_data *wielded = NULL;
   static int base_target, power, damage_total;
   
   int attack_success = 0, attack_resist=0, skill_total = 1;
@@ -5304,7 +5304,23 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     return;
   }
   
-  wielded = GET_EQ(ch, WEAR_WIELD);
+  // Manning a mount, let's use that.
+  if (ch->in_veh && AFF_FLAGGED(ch, AFF_MANNING)) {
+    struct obj_data *mount = get_mount_manned_by_ch(ch);
+    if (!mount) {
+      // Flagged mount, with no mount, inside a vehicle, performing vcombat... idk, hitting a car inside a car?
+      wielded = GET_EQ(ch, WEAR_WIELD);
+    } else {
+      wielded = get_mount_weapon(mount);
+      if (!wielded) {
+        // uhhhhhhhhhhhhhhhhhhhh. manning a valid turret with no weapon and attacking a vehicle... idk how we got here.
+        mudlog("SYSERR: Manning a mount with no weapon in vcombat!", ch, LOG_SYSLOG, TRUE);
+        wielded = GET_EQ(ch, WEAR_WIELD);
+      }
+    }
+  } else {
+    wielded = GET_EQ(ch, WEAR_WIELD);
+  }
   
   if (get_speed(veh) > 10 && !AFF_FLAGGED(ch, AFF_COUNTER_ATT) && ((!wielded || !IS_GUN(GET_OBJ_VAL(wielded, 3)))))
   {
@@ -5495,7 +5511,10 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     sprintf(buf2, "A %s completely destroys your ride.\r\n", ammo_type);
   }
   
-  act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
+  if (ch->in_veh && veh->in_veh != ch->in_veh)
+    act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
+  else
+    act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
   act(buf1, FALSE, ch, NULL, NULL, TO_CHAR);
   send_to_veh(buf2, veh, 0, TRUE);
   

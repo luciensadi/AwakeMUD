@@ -1981,7 +1981,7 @@ struct char_data *get_driver(struct veh_data *veh) {
     return veh->rigger;
     
   for (struct char_data *i = veh->people; i; i = i->next_in_veh)
-    if (AFF_FLAGGED(i, AFF_PILOT))
+    if (AFF_FLAGGED(i, AFF_PILOT) || AFF_FLAGGED(i, AFF_RIG))
       return i;
   
   return NULL;

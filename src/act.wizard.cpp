@@ -2349,22 +2349,23 @@ ACMD(do_restore)
     return;
   }
   
-  // We require that the argument is either '*' for all PCs, or a specific target.
-  if (*buf != '*' && !(vict = get_char_vis(ch, buf))) {
-    send_to_char(NOPERSON, ch);
-  }
-  
   // Restore-all mode.
   if (*buf == '*') {
     for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
       restore_character(d->character, FALSE);
-      act("You have been fully healed by $N!", FALSE, vict, 0, ch, TO_CHAR);
+      act("You have been fully healed by $N!", FALSE, d->character, 0, ch, TO_CHAR);
     }
     sprintf(buf2, "%s restored all players.", GET_CHAR_NAME(ch));
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);
     send_to_char(OK, ch);
     return;
   } 
+  
+  // Not restore all mode-- find their target.
+  if (!(vict = get_char_vis(ch, buf))) {
+    send_to_char(NOPERSON, ch);
+    return;
+  }
   
   // Restore-single-target mode.
   restore_character(vict, TRUE);
@@ -2681,11 +2682,15 @@ ACMD(do_force)
 
   half_chop(argument, arg, to_force);
 
-  sprintf(buf1, "$n has forced you to '%s'.", to_force);
+  sprintf(buf1, "%s has forced you to '%s'.", GET_CHAR_NAME(ch), to_force);
 
-  if (!*arg || !*to_force)
+  if (!*arg || !*to_force) {
     send_to_char("Whom do you wish to force do what?\r\n", ch);
-  else if ((!access_level(ch, LVL_ADMIN)) || (str_cmp("all", arg) && str_cmp("room", arg))) {
+    return;
+  }
+  
+  // Single-person force.
+  if (!access_level(ch, LVL_ADMIN) || (str_cmp("all", arg) && str_cmp("room", arg))) {
     if (!(vict = get_char_vis(ch, arg)))
       send_to_char(NOPERSON, ch);
     else if (PLR_FLAGGED(ch, PLR_WRITING) || PLR_FLAGGED(ch, PLR_EDITING) ||
@@ -2696,13 +2701,16 @@ ACMD(do_force)
       send_to_char("No, no, no!\r\n", ch);
     else {
       send_to_char(OK, ch);
-      act(buf1, TRUE, ch, NULL, vict, TO_VICT);
+      send_to_char(buf1, vict);
       sprintf(buf, "%s forced %s to %s",
               GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), to_force);
       mudlog(buf, ch, LOG_WIZLOG, TRUE);
       command_interpreter(vict, to_force, GET_CHAR_NAME(ch));
     }
-  } else if (!str_cmp("room", arg)) {
+    return;
+  } 
+  
+  if (!str_cmp("room", arg)) {
     send_to_char(OK, ch);
     sprintf(buf, "%s forced room %ld to %s",
             GET_CHAR_NAME(ch), ch->in_room->number, to_force);
@@ -2712,22 +2720,24 @@ ACMD(do_force)
       next_force = vict->next_in_room;
       if (GET_LEVEL(vict) >= GET_LEVEL(ch))
         continue;
-      act(buf1, TRUE, ch, NULL, vict, TO_VICT);
+      send_to_char(buf1, vict);
       command_interpreter(vict, to_force, GET_CHAR_NAME(ch));
     }
-  } else { /* force all */
-    send_to_char(OK, ch);
-    sprintf(buf, "%s forced all to %s", GET_CHAR_NAME(ch), to_force);
-    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    return;
+  } 
+  
+  /* force all */
+  send_to_char(OK, ch);
+  sprintf(buf, "%s forced all to %s", GET_CHAR_NAME(ch), to_force);
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
-    for (i = descriptor_list; i; i = next_desc) {
-      next_desc = i->next;
+  for (i = descriptor_list; i; i = next_desc) {
+    next_desc = i->next;
 
-      if (i->connected || !(vict = i->character) || GET_LEVEL(vict) >= GET_LEVEL(ch))
-        continue;
-      act(buf1, TRUE, ch, NULL, vict, TO_VICT);
-      command_interpreter(vict, to_force, GET_CHAR_NAME(ch));
-    }
+    if (i->connected || !(vict = i->character) || GET_LEVEL(vict) >= GET_LEVEL(ch))
+      continue;
+    send_to_char(buf1, vict);
+    command_interpreter(vict, to_force, GET_CHAR_NAME(ch));
   }
 }
 
