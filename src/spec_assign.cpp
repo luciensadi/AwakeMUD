@@ -174,8 +174,8 @@ teach_t teachers[] = {
   
 #ifdef USE_PRIVATE_CE_WORLD
   // Jessie (SPLAT! Paintballer)
-  { 70604, { SKILL_PISTOLS, SKILL_BR_PISTOL, SKILL_STEALTH, SKILL_CLIMBING, SKILL_ATHLETICS,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 70604, { SKILL_PISTOLS, SKILL_BR_PISTOL, SKILL_STEALTH, SKILL_ATHLETICS,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
   "You learn a few things from the surprisingly-knowledgeable kid.\r\n", AMATEUR },
 #endif
   

@@ -1301,7 +1301,6 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_DIVING:
         case SKILL_PARACHUTING:
         case SKILL_STEALTH:
-        case SKILL_CLIMBING:
         case SKILL_STEAL:
         case SKILL_DANCING:
         case SKILL_INSTRUMENT:

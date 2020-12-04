@@ -436,6 +436,7 @@ SPECIAL(nerp_skills_teacher) {
   can_teach_skill[0] = FALSE; // OMGWTFBBQ is not a valid skill
   can_teach_skill[SKILL_ARMED_COMBAT] = FALSE; // NPC-only skill
   can_teach_skill[SKILL_UNUSED_WAS_PILOT_FIXED_WING] = FALSE; // what it says on the tin
+  can_teach_skill[SKILL_UNUSED_WAS_CLIMBING] = FALSE;
   
   if (!CMD_IS("practice"))
     return FALSE;

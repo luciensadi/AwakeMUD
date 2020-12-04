@@ -699,12 +699,11 @@ ACMD(do_skillset)
           skills[skill].name,
           GET_SKILL(vict, skill), value);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+
+  sprintf(buf2, "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), skills[skill].name, GET_SKILL(vict, skill), value);
   
   send_to_char(vict, "Your skill in %s has been altered by the game's administration.\r\n", skills[skill].name);
-  
   set_character_skill(vict, skill, value, TRUE);
-
-  sprintf(buf2, "You change %s's %s to %d.\r\n", GET_NAME(vict), skills[skill].name, value);
   send_to_char(buf2, ch);
 }
 
