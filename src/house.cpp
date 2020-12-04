@@ -32,8 +32,6 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
 
-void House_delete_file(vnum_t vnum, char *name);
-
 struct life_data
 {
   const char *name;
@@ -58,16 +56,6 @@ bool House_get_filename(vnum_t vnum, char *filename)
     return FALSE;
 
   sprintf(filename, "house/%ld.house", vnum);
-  return TRUE;
-}
-
-// Same, but for storage.
-bool Storage_get_filename(vnum_t vnum, char *filename)
-{
-  if (vnum == NOWHERE) 
-    return FALSE;
-
-  sprintf(filename, "storage/%ld", vnum);
   return TRUE;
 }
 
@@ -166,55 +154,36 @@ void House_save(struct house_control_rec *house, FILE *fl, long rnum)
 {
   int level = 0, o = 0;
   struct obj_data *obj = NULL;
-  
-#define FILEBUF_SIZE 8192
-  char print_buffer[FILEBUF_SIZE];
-  setvbuf(fl, print_buffer, _IOFBF, FILEBUF_SIZE);
-#undef FILEBUF_SIZE
-  
-  // Are we saving an apartment? If so, store guest list.
-  if (house) {    
+  if (house)
+  {
+    obj = world[real_room(house->vnum)].contents;
     fprintf(fl, "[GUESTS]\n");
-    for (o = 0; o < MAX_GUESTS; o++) {
-      // Don't write out empty guest slots.
-      if (house->guests[o])
-        fprintf(fl, "\tGuest%d:\t%ld\n", o, house->guests[o]);
-    }
-  } 
-
-  obj = world[rnum].contents;
-  
+    for (;o < MAX_GUESTS; o++)
+      fprintf(fl, "\tGuest%d:\t%ld\n", o, house->guests[o]);
+  } else
+  {
+    obj = world[rnum].contents;
+  }
   fprintf(fl, "[HOUSE]\n");
   o = 0;
-  
-#define PRINT_TO_FILE_IF_UNCHANGED(sectname, obj_val, proto_val) { \
-  if (obj_val != proto_val)                                        \
-    fprintf(fl, (sectname), (obj_val));                            \
-}
-  
-  struct obj_data *prototype = NULL;
   for (;obj;)
   {
-    prototype = &obj_proto[real_object(GET_OBJ_VNUM(obj))];
     if (!IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_KEY) {
       fprintf(fl, "\t[Object %d]\n", o);
       o++;
       fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(obj));
       fprintf(fl, "\t\tInside:\t%d\n", level);
-      if (GET_OBJ_TYPE(obj) == ITEM_PHONE) {
+      if (GET_OBJ_TYPE(obj) == ITEM_PHONE)
         for (int x = 0; x < 4; x++)
-          if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
-            fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
-      }
+          fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
       else if (GET_OBJ_TYPE(obj) != ITEM_WORN)
         for (int x = 0; x < NUM_VALUES; x++)
-          if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
-            fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj), 0);
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tCost:\t%d\n", GET_OBJ_COST(obj), GET_OBJ_COST(prototype));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
+          fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
+      fprintf(fl, "\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj));
+      fprintf(fl, "\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj));
+      fprintf(fl, "\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj));
+      fprintf(fl, "\t\tCost:\t%d\n", GET_OBJ_COST(obj));
+      fprintf(fl, "\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString());
       if (obj->restring)
         fprintf(fl, "\t\tName:\t%s\n", obj->restring);
       if (obj->photo)
@@ -255,70 +224,28 @@ void House_crashsave(vnum_t vnum)
   int rnum;
   char buf[MAX_STRING_LENGTH];
   FILE *fp;
-  struct house_control_rec *house = NULL;
-  struct obj_data *obj = NULL;
 
-  // House does not exist? Skip.
   if ((rnum = real_room(vnum)) == NOWHERE)
     return;
-    
-  // Calculate whether or not we should keep this house.
-  bool should_we_keep_this_file = FALSE;
-  house = find_house(vnum);
-  
-  // Figure out if the house has any guests/items.
-  if (house) {
-    obj = world[real_room(house->vnum)].contents;
-    
-    for (int o = 0; o < MAX_GUESTS; o++) {
-      // Don't write out empty guest slots.
-      if (house->guests[o]) {
-        should_we_keep_this_file = TRUE;
-        break;
-      }
-    }
-  } else {
-    // Storage room- just check for items.
-    obj = world[rnum].contents;
-  }
-  
-  // Finalize decision for keeping.
-  should_we_keep_this_file |= (obj != NULL);
-  
-  // House filename is not kosher? Skip. Otherwise, populate buf with filename.
-  if (house) {
-    if (!House_get_filename(vnum, buf))
-      return;
-  } else
-    if (!Storage_get_filename(vnum, buf))
-      return;
-  
-  // If it has no guests and no objects, why save it?
-  if (!should_we_keep_this_file) {
-    House_delete_file(vnum, buf);
+  if (!House_get_filename(vnum, buf))
     return;
-  }
-    
-  // Can't open the house file? Oof.
   if (!(fp = fopen(buf, "wb"))) {
     perror("SYSERR: Error saving house file");
     return;
   }
-  
-  // Save it.
-  House_save(find_house(vnum), fp, rnum);
+  House_save(find_house(vnum), fp, 0);
   fclose(fp);
 }
 
 /* Delete a house save file */
-void House_delete_file(vnum_t vnum, char *name)
+void House_delete_file(vnum_t vnum)
 {
-  char buf[MAX_INPUT_LENGTH];
+  char buf[MAX_INPUT_LENGTH], fname[MAX_INPUT_LENGTH];
   FILE *fl;
 
-  if (!name || !*name)
+  if (!House_get_filename(vnum, fname))
     return;
-  if (!(fl = fopen(name, "rb"))) {
+  if (!(fl = fopen(fname, "rb"))) {
     if (errno != ENOENT) {
       sprintf(buf, "SYSERR: Error deleting house file #%ld. (1)", vnum);
       perror(buf);
@@ -326,7 +253,7 @@ void House_delete_file(vnum_t vnum, char *name)
     return;
   }
   fclose(fl);
-  if (unlink(name) < 0) {
+  if (unlink(fname) < 0) {
     sprintf(buf, "SYSERR: Error deleting house file #%ld. (2)", vnum);
     perror(buf);
   }
@@ -537,8 +464,7 @@ SPECIAL(landlord_spec)
       ROOM_FLAGS(&world[real_room(room_record->vnum)]).RemoveBit(ROOM_HOUSE);
       ROOM_FLAGS(&world[room_record->atrium]).RemoveBit(ROOM_ATRIUM);
       House_save_control();
-      House_get_filename(room_record->vnum, buf2);
-      House_delete_file(room_record->vnum, buf2);
+      House_delete_file(room_record->vnum);
       do_say(recep, "I hope you enjoyed your time here.", 0, 0);
     }
     return TRUE;
@@ -681,8 +607,7 @@ void House_boot(void)
           House_load(temp);
         else {
           temp->owner = 0;
-          House_get_filename(temp->vnum, buf2);
-          House_delete_file(temp->vnum, buf2);
+          House_delete_file(temp->vnum);
           
           // Move all vehicles from this apartment to a public garage.
           struct veh_data *veh = NULL;
@@ -775,8 +700,7 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
   {
     ROOM_FLAGS(&world[real_house]).RemoveBit(ROOM_HOUSE);
 
-    House_get_filename(i->vnum, buf2);
-    House_delete_file(i->vnum, buf2);
+    House_delete_file(i->vnum);
     i->owner = 0;
     send_to_char("House deleted.\r\n", ch);
     House_save_control();
@@ -887,11 +811,18 @@ void House_save_all(void)
       if ((real_house = real_room(room->vnum)) != NOWHERE)
         if (room->owner)
           House_crashsave(room->vnum);
+  FILE *fl;
 
   for (int x = 0; x <= top_of_world; x++)
     if (ROOM_FLAGGED(&world[x], ROOM_STORAGE)) {
-      // TODO: This is kinda inefficient (a bunch of binary searches instead of passing through)
-      House_crashsave(world[x].number);
+      sprintf(buf, "storage/%ld", world[x].number);
+      if (!(fl = fopen(buf, "wb"))) {
+        sprintf(buf2, "Cannot open %s. Aborting Storage Saving.", buf);
+        mudlog(buf2, NULL, LOG_WIZLOG, TRUE);
+        return;
+      }
+      House_save(NULL, fl, x);
+      fclose(fl);
     }
 }
 
