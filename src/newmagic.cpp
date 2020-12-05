@@ -1118,7 +1118,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         target += GET_WIL(vict);
       else
         target += GET_INT(vict);
-      if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
+      if (!IS_NPC(ch) && !IS_NPC(vict) && PLR_FLAGGED(ch, PLR_KILLER))
         success = -1;
       else
         success = success_test(skill, target);

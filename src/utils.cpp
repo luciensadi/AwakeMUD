@@ -2008,12 +2008,17 @@ struct obj_data *find_matching_obj_in_container(struct obj_data *container, vnum
   return NULL;
 }
 
-bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch) {
+bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch, int location) {
   if (!attachment || !weapon) {
     if (ch)
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
     mudlog("SYSERR: NULL weapon or attachment passed to attach_attachment_to_weapon().", NULL, LOG_SYSLOG, TRUE);
     return FALSE;
+  }
+  
+  if (location < ACCESS_LOCATION_TOP || location > ACCESS_LOCATION_UNDER) {
+    sprintf(buf, "SYSERR: Invalid access location %d passed to attach_attachment_to_weapon when attaching %s (%ld) to %s (%ld).",
+            location, GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(attachment));
   }
   
   if (GET_OBJ_TYPE(attachment) != ITEM_GUN_ACCESSORY) {
@@ -2104,7 +2109,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
       if (ch) {
         send_to_char(ch, "%ss can't use silencers or suppressors.\r\n", CAP(weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)]));
       } else {
-        sprintf(buf, "SYSERR: Attempting to attach silencer '%s' (%ld) to %s '%s' (%ld).",
+        sprintf(buf, "SYSERR: Attempting to attach silencer/suppressor '%s' (%ld) to %s '%s' (%ld).",
                 GET_OBJ_NAME(attachment),
                 GET_OBJ_VNUM(attachment),
                 weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)],
@@ -2122,7 +2127,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
         if (ch) {
           send_to_char(ch, "%s would tear your silencer apart-- it needs a sound suppressor.\r\n", CAP(GET_OBJ_NAME(weapon)));
         } else {
-          sprintf(buf, "SYSERR: Attempting to attach silencer '%s' (%ld) to BF/FA weapon '%s' (%ld).",
+          sprintf(buf, "SYSERR: Attempting to attach pistol silencer '%s' (%ld) to BF/FA weapon '%s' (%ld).",
                   GET_OBJ_NAME(attachment),
                   GET_OBJ_VNUM(attachment),
                   GET_OBJ_NAME(weapon),
@@ -2140,7 +2145,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
         if (ch) {
           send_to_char(ch, "Sound suppressors are too heavy-duty for %s-- it needs a silencer.\r\n", CAP(GET_OBJ_NAME(weapon)));
         } else {
-          sprintf(buf, "SYSERR: Attempting to attach suppressor '%s' (%ld) to non-BF/FA weapon '%s' (%ld).",
+          sprintf(buf, "SYSERR: Attempting to attach rifle suppressor '%s' (%ld) to non-BF/FA weapon '%s' (%ld).",
                   GET_OBJ_NAME(attachment),
                   GET_OBJ_VNUM(attachment),
                   GET_OBJ_NAME(weapon),
@@ -2184,11 +2189,13 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     }
   }
   
-  // Add the attachment's weight to the weapon's weight.
-  weight_change_object(weapon, GET_OBJ_WEIGHT(attachment));
+  // Add the attachment's weight to the weapon's weight, but only if a player attached it.
+  if (ch)
+    weight_change_object(weapon, GET_OBJ_WEIGHT(attachment));
   
-  // Add the attachment's cost to the weapon's cost.
-  GET_OBJ_COST(weapon) = MAX(0, GET_OBJ_COST(weapon) + GET_OBJ_COST(attachment));
+  // Add the attachment's cost to the weapon's cost, but only if a player attached it.
+  if (ch)
+    GET_OBJ_COST(weapon) = MAX(0, GET_OBJ_COST(weapon) + GET_OBJ_COST(attachment));
   
   // Update the weapon's aff flags.
   for (int waff_index = 0; acceptable_weapon_attachment_affects[waff_index] != -1; waff_index++) {
@@ -2917,3 +2924,154 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
   // Everything succeeded.
   return TRUE;
 }
+
+// Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
+// Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
+#define PAIR(classic, current) case (classic): return (current);
+vnum_t get_authoritative_vnum_for_item(vnum_t vnum) {
+  switch (vnum) {
+    // Cyberdecks.
+    PAIR(1820,   80001);
+    PAIR(1116,   80002);
+    PAIR(1916,   80003);
+    PAIR(29005,  80004);
+    PAIR(7418,   80005);
+    
+    // Melee weapons.
+    PAIR(632, 80100);
+    PAIR(652, 80101);
+    // More to do here, it's just difficult to sort through the wall of items.
+    
+    // Ranged weapons.
+    PAIR(728,   80200);
+    PAIR(731,   80201);
+    PAIR(618,   80202);
+    PAIR(734,   80203);
+    PAIR(60501, 80203);
+    PAIR(2035,  80204);
+    PAIR(619,   80205);
+    PAIR(739,   80206);
+    PAIR(668,   80207);
+    PAIR(19892, 80208);
+    PAIR(758,   80209);
+    PAIR(623,   80210);
+    PAIR(39202, 80210);
+    PAIR(747,   80211);
+    PAIR(776,   80212);
+    PAIR(837,   80217);
+    PAIR(779,   80213);
+    PAIR(39203, 80213);
+    PAIR(60273, 80213);
+    PAIR(781,   80215);
+    PAIR(785,   80215);
+    PAIR(841,   80218);
+    PAIR(20004, 80218);
+    PAIR(826,   80219);
+    PAIR(827,   80219);
+    PAIR(832,   80221);
+    PAIR(631,   80222);
+    PAIR(676,   80223);
+    PAIR(878,   80224);
+    PAIR(881,   80225);
+    PAIR(880,   80226);
+    PAIR(883,   80227);
+    
+    // TODO: Pair things before this with mismatched names, have pairing only overwrite stats.
+    
+    // Weapon attachable accessories.
+    PAIR(654,   80400);
+    PAIR(650,   80401);
+    PAIR(7218,  80401);
+    PAIR(14844, 80401);
+    PAIR(60551, 80401);
+    PAIR(653,   80402);
+    PAIR(30153, 80402);
+    PAIR(691,   80403);
+    PAIR(2319,  80403);
+    PAIR(18981, 80404);
+    PAIR(35038, 80404);
+    PAIR(38030, 80404);
+    PAIR(697,   80405);
+    PAIR(698,   80406);
+    PAIR(28704, 80406);
+    PAIR(10007, 80407);
+    PAIR(28640, 80407);
+    PAIR(28703, 80407);
+    PAIR(30152, 80407);
+    PAIR(651,   80408);
+    PAIR(32229, 80408);
+    PAIR(9154,  80411); // Note that the 409-411 range is electronic scopes, we don't have optical scopes implemented.
+    PAIR(27812, 80411);
+    PAIR(30136, 80411);
+    PAIR(60553, 80411);
+    PAIR(2325,  80413);
+    PAIR(28702, 80415);
+    
+    // Weapon other accessories (holsters, gyros, etc)
+    PAIR(64963, 80502);
+    PAIR(64964, 80501);
+    
+    // Armor (80700-80799) TODO, I don't have the patience to deal with this right now.
+    
+    // Cyberware. All 125 items of it, hand-compared with other cyberware. I hope y'all realize just how much dedication this takes.
+    PAIR(325,   85000);
+    PAIR(487,   85001);
+    PAIR(488,   85002);
+    PAIR(489,   85003);
+    PAIR(503,   85004);
+    PAIR(531,   85200);
+    PAIR(530,   85201);
+    PAIR(529,   85202);
+    PAIR(528,   85203);
+    PAIR(514,   85007);
+    PAIR(515,   85008);
+    PAIR(516,   85009);
+    PAIR(517,   85010);
+    PAIR(521,   85209);
+    PAIR(522,   85208);
+    PAIR(523,   85207);
+    PAIR(33220, 85210);
+    PAIR(33221, 85410);
+    PAIR(304,   80512);
+    PAIR(444,   85212);
+    PAIR(486,   85015);
+    PAIR(511,   85045);
+    PAIR(32234, 85612);
+    PAIR(39370, 85245);
+    PAIR(39337, 85215);
+    PAIR(1106,  85013);
+    PAIR(1107,  85014);
+    PAIR(23371, 85613);
+    PAIR(23382, 85614);
+    PAIR(29027, 85013);
+    PAIR(39380, 85213);
+    PAIR(39381, 85214);
+    PAIR(491,   85016);
+    PAIR(526,   85216);
+    PAIR(33202, 85416);
+    PAIR(533,   85017);
+    PAIR(1108,  85017);
+    PAIR(1109,  85018);
+    PAIR(1110,  85019);
+    PAIR(23369, 85617);
+    PAIR(22370, 85618);
+    PAIR(23379, 85619);
+    PAIR(25498, 85419);
+    PAIR(39378, 85218);
+    PAIR(39379, 85219);
+    PAIR(505,   85022);
+    PAIR(1918,  85021);
+    PAIR(371,   85023);
+    PAIR(25496, 85623);
+    PAIR(33249, 85223);
+    PAIR(50306, 85623);
+    PAIR(373,   85024);
+    PAIR(33248, 85224);
+    PAIR(502,   85025);
+    
+  }
+  
+  // No match.
+  return vnum;
+}
+#undef PAIR

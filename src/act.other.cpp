@@ -1728,7 +1728,7 @@ ACMD(do_attach)
   }
 
   // If we failed to attach it, don't destroy the attachment.
-  if (!attach_attachment_to_weapon(item, item2, ch))
+  if (!attach_attachment_to_weapon(item, item2, ch, GET_ACCESSORY_ATTACH_LOCATION(item)))
     return;
   
   // Trash the actual accessory object-- the game will look it up by vnum if it's ever needed.

@@ -80,7 +80,7 @@ void    terminate_mud_process_with_message(const char *message, int error_code);
 bool    char_can_make_noise(struct char_data *ch, const char *message = NULL);
 struct  char_data *get_driver(struct veh_data *veh);
 struct  obj_data *find_matching_obj_in_container(struct obj_data *container, vnum_t vnum);
-bool    attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch);
+bool    attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch, int location);
 struct  obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch);
 void    copy_over_necessary_info(struct char_data *original, struct char_data *clone);
 void    clear_editing_data(struct descriptor_data *d);

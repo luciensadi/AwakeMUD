@@ -342,8 +342,8 @@ void advance_level(struct char_data * ch)
 
   playerDB.SaveChar(ch);
 
-  sprintf(buf, "%s advanced to %s.",
-          GET_CHAR_NAME(ch), status_ratings[(int)GET_LEVEL(ch)]);
+  sprintf(buf, "%s [%s] advanced to %s.",
+          GET_CHAR_NAME(ch), ch->desc->host, status_ratings[(int)GET_LEVEL(ch)]);
   mudlog(buf, ch, LOG_MISCLOG, TRUE);
 }
 
@@ -729,9 +729,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
                (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
               // Zero out the attachment so that we don't get attaching-overtop errors.
               GET_OBJ_VAL(obj, q) = 0;
-              attach_attachment_to_weapon(attach, obj, NULL);
-              // Cost was already added to the object when it was attached in the first place, then saved, so we need to not re-add the cost.
-              GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
+              attach_attachment_to_weapon(attach, obj, NULL, q);
             }
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[19]);
@@ -796,9 +794,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
                (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
               // Zero out the attachment so that we don't get attaching-overtop errors.
               GET_OBJ_VAL(obj, q) = 0;
-              attach_attachment_to_weapon(attach, obj, NULL);
-              // Fix for ever-increasing cost.
-              GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
+              attach_attachment_to_weapon(attach, obj, NULL, q);
             }
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[18]);

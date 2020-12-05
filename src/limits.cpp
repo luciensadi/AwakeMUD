@@ -1086,10 +1086,10 @@ void misc_update(void)
             send_to_char("Lovely weather today.\r\n", ch);
             break;
           case 1:
-            send_to_char("Is that who I think it is? Nah, my mistake.\r\n", ch);
+            send_to_char("Is that who I think it is? ...Nah, my mistake.\r\n", ch);
             break;
           case 2:
-            send_to_char("Now where did I leave my car keys.\r\n", ch);
+            send_to_char("Now, where did I leave my car keys...\r\n", ch);
             break;
           case 3:
             send_to_char("Over There!\r\n", ch);

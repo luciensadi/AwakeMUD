@@ -468,7 +468,7 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
       break;
     case ITEM_GUN_ACCESSORY:
       send_to_char("  1) Smartlink\r\n  2) Scope\r\n  3) Gas vent\r\n  4) Shock pad\r\n"
-                   "  5) Pistol Silencer\r\n  6) Rifle/AR/SMG Sound Suppressor\r\n  7) Smart Goggles\r\n  8) Bipod\r\n  9) Tripod"
+                   "  5) Pistol Silencer\r\n  6) Rifle/AR/SMG Sound Suppressor\r\n  7) Smart Goggles\r\n  8) Bipod\r\n  9) Tripod\r\n"
                    " 10) Bayonet\r\nAccessory type: ", CH);
       break;
     case  ITEM_FOCUS:
