@@ -2016,9 +2016,14 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     return FALSE;
   }
   
-  if (location < ACCESS_LOCATION_TOP || location > ACCESS_LOCATION_UNDER) {
-    sprintf(buf, "SYSERR: Invalid access location %d passed to attach_attachment_to_weapon when attaching %s (%ld) to %s (%ld).",
-            location, GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(attachment));
+  if (location < ACCESS_ACCESSORY_LOCATION_TOP
+      || location > ACCESS_ACCESSORY_LOCATION_UNDER) {
+    if (ch)
+      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
+    sprintf(buf, "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).",
+            location, GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return FALSE;
   }
   
   if (GET_OBJ_TYPE(attachment) != ITEM_GUN_ACCESSORY) {
@@ -2089,16 +2094,6 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
               GET_OBJ_VNUM(weapon));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
-    return FALSE;
-  }
-  
-  if (location < ACCESS_ACCESSORY_LOCATION_TOP
-      || location > ACCESS_ACCESSORY_LOCATION_UNDER) {
-    if (ch)
-      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
-    sprintf(buf, "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).",
-            location, GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
@@ -2205,7 +2200,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
   }
   
   // Update the weapon's attach location to reflect this item.
-  GET_OBJ_VAL(weapon, location + 7) = GET_OBJ_VNUM(attachment);
+  GET_OBJ_VAL(weapon, location + ACCESS_ACCESSORY_LOCATION_DELTA) = GET_OBJ_VNUM(attachment);
   
   // Send the success message, assuming there's a character.
   if (ch) {
@@ -2267,7 +2262,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
     if (ch)
       send_to_char("You accidentally break it as you remove it!\r\n", ch);
     sprintf(buf, "SYSERR: Attempting to unattach invalid vnum %d from %s of weapon '%s' (%ld).",
-            GET_WEAPON_ATTACH_LOC(weapon, location), gun_accessory_locations[location - 7], GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+            GET_WEAPON_ATTACH_LOC(weapon, location), gun_accessory_locations[location - ACCESS_ACCESSORY_LOCATION_DELTA], GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     
     // We use a raw get_obj_val here so we can set it.
