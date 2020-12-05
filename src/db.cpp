@@ -4459,6 +4459,7 @@ void load_saved_veh()
       veh = read_vehicle(vnum, VIRTUAL);
     else
       continue;
+      
     veh->damage = data.GetInt("VEHICLE/Damage", 0);
     veh->owner = owner;
     veh->idnum = data.GetLong("VEHICLE/Idnum", number(0, INT_MAX));

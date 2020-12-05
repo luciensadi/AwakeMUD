@@ -579,8 +579,8 @@ void point_update(void)
         gain_condition(i, COND_FULL, -1);
         gain_condition(i, COND_THIRST, -1);
       }
-      gain_condition(i, COND_DRUNK, -1);
 #endif
+      gain_condition(i, COND_DRUNK, -1);
 
       if (GET_TEMP_ESSLOSS(i) > 0)
         GET_TEMP_ESSLOSS(i) = MAX(0, GET_TEMP_ESSLOSS(i) - 100);
@@ -589,6 +589,7 @@ void point_update(void)
         SHOTS_TRIGGERED(i)++;
         send_to_char("You feel you could benefit with some time at a shooting range.\r\n", i);
       }
+      
       if (GET_MAG(i) > 0) {
         int force = 0, total = 0;
         for (int x = 0; x < NUM_WEARS; x++)
@@ -609,13 +610,16 @@ void point_update(void)
           }
         }
       }
+      
       if (HUNTING(i) && !AFF_FLAGGED(i, AFF_TRACKING) && ++HOURS_SINCE_TRACK(i) > 8)
         HUNTING(i) = NULL;
+        
       if (i->bioware)
         check_bioware(i);
+        
       for (int x = 0; x < NUM_DRUGS; x++) {
-        int tsl = (time(0) - GET_DRUG_LASTFIX(i, x)) / SECS_PER_MUD_DAY;
         if (GET_DRUG_ADDICT(i, x) > 0) {
+          int tsl = (time(0) - GET_DRUG_LASTFIX(i, x)) / SECS_PER_MUD_DAY;
           GET_DRUG_ADDTIME(i, x)++;
           if (!(GET_DRUG_ADDTIME(i ,x) % 168) && GET_REAL_BOD(i) == 1) {
             switch (number(0, 1)) {
@@ -721,14 +725,18 @@ void point_update(void)
         remove_patch(i);
     }
   }
+  
+  /* save shop order updates */
   {
     float totaltime = 0;
     for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
       sprintf(buf, "order/%ld", shop_table[shop_nr].vnum);
       unlink(buf);
       if (shop_table[shop_nr].order) {
-        if (!(fl = fopen(buf, "w")))
-          return;
+        if (!(fl = fopen(buf, "w"))) {
+          perror("SYSERR: Error saving order file");
+          continue;
+        }
         int i = 0;
         fprintf(fl, "[ORDERS]\n");
         for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next, i++) {
@@ -751,6 +759,8 @@ void point_update(void)
       }
     }
   }
+  
+  /* update object counters */
   ObjList.UpdateCounters();
 }
 
@@ -985,6 +995,8 @@ void save_vehicles(void)
     }
     fclose(fl);
   }
+  
+  // Update paydata markets. Why this is here, IDK.
   if (!(fl = fopen("etc/consist", "w"))) {
     mudlog("SYSERR: Can't Open Consistency File For Write.", NULL, LOG_SYSLOG, FALSE);
     return;
