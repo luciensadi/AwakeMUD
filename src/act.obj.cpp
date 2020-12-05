@@ -1264,7 +1264,7 @@ ACMD(do_get)
       } else if (!cont) {
         sprintf(buf, "You don't have %s %s.\r\n", AN(arg2), arg2);
         send_to_char(buf, ch);
-      } else if ((!cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) ==
+      } else if ((!cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING || GET_OBJ_TYPE(cont) ==
                                   ITEM_QUIVER || GET_OBJ_TYPE(cont) == ITEM_HOLSTER || GET_OBJ_TYPE(cont) ==
                                   ITEM_WORN)) || (cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK ||
                                                                  GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK ||
@@ -1282,7 +1282,7 @@ ACMD(do_get)
       for (cont = ch->carrying; cont; cont = cont->next_content)
         if (CAN_SEE_OBJ(ch, cont) &&
             (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
-          if ((!cyberdeck && GET_OBJ_TYPE(cont) == ITEM_CONTAINER) ||
+          if ((!cyberdeck && (GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING)) ||
               (cyberdeck && (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK))) {
             found = 1;
             get_from_container(ch, cont, arg1, FIND_OBJ_INV);
@@ -1295,7 +1295,7 @@ ACMD(do_get)
       for (cont = ch->in_room->contents; cont; cont = cont->next_content)
         if (CAN_SEE_OBJ(ch, cont) &&
             (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
-          if (GET_OBJ_TYPE(cont) == ITEM_CONTAINER) {
+          if (GET_OBJ_TYPE(cont) == (ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING)) {
             get_from_container(ch, cont, arg1, FIND_OBJ_ROOM);
             found = 1;
           } else if (cont_dotmode == FIND_ALLDOT) {

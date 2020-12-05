@@ -2054,18 +2054,18 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     return FALSE;
   }
   
-  if (   ((GET_ACCESSORY_ATTACH_LOCATION(attachment) == ACCESS_ACCESSORY_LOCATION_TOP) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    > 0))
-      || ((GET_ACCESSORY_ATTACH_LOCATION(attachment) == ACCESS_ACCESSORY_LOCATION_BARREL) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) > 0))
-      || ((GET_ACCESSORY_ATTACH_LOCATION(attachment) == ACCESS_ACCESSORY_LOCATION_UNDER) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  > 0))) {
+  if (   ((location == ACCESS_ACCESSORY_LOCATION_TOP) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    > 0))
+      || ((location == ACCESS_ACCESSORY_LOCATION_BARREL) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) > 0))
+      || ((location == ACCESS_ACCESSORY_LOCATION_UNDER) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  > 0))) {
     if (ch) {
       send_to_char(ch, "You cannot mount more than one attachment to the %s of %s.\r\n",
-                   gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(attachment)],
+                   gun_accessory_locations[location],
                    GET_OBJ_NAME(weapon));
     } else {
       sprintf(buf, "SYSERR: Attempting to attach '%s' (%ld) to already-filled %s location on '%s' (%ld).",
               GET_OBJ_NAME(attachment),
               GET_OBJ_VNUM(attachment),
-              gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(attachment)],
+              gun_accessory_locations[location],
               GET_OBJ_NAME(weapon),
               GET_OBJ_VNUM(weapon));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
@@ -2073,18 +2073,18 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     return FALSE;
   }
   
-  if (   ((GET_ACCESSORY_ATTACH_LOCATION(attachment) == ACCESS_ACCESSORY_LOCATION_TOP) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    < 0))
-      || ((GET_ACCESSORY_ATTACH_LOCATION(attachment) == ACCESS_ACCESSORY_LOCATION_BARREL) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) < 0))
-      || ((GET_ACCESSORY_ATTACH_LOCATION(attachment) == ACCESS_ACCESSORY_LOCATION_UNDER) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  < 0))) {
+  if (   ((location == ACCESS_ACCESSORY_LOCATION_TOP) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    < 0))
+      || ((location == ACCESS_ACCESSORY_LOCATION_BARREL) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) < 0))
+      || ((location == ACCESS_ACCESSORY_LOCATION_UNDER) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  < 0))) {
     if (ch) {
       send_to_char(ch, "%s isn't compatible with %s-mounted attachments.\r\n",
                    CAP(GET_OBJ_NAME(weapon)),
-                   gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(attachment)]);
+                   gun_accessory_locations[location]);
     } else {
       sprintf(buf, "SYSERR: Attempting to attach '%s' (%ld) to unacceptable %s location on '%s' (%ld).",
               GET_OBJ_NAME(attachment),
               GET_OBJ_VNUM(attachment),
-              gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(attachment)],
+              gun_accessory_locations[location],
               GET_OBJ_NAME(weapon),
               GET_OBJ_VNUM(weapon));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
@@ -2092,12 +2092,12 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     return FALSE;
   }
   
-  if (GET_ACCESSORY_ATTACH_LOCATION(attachment) < ACCESS_ACCESSORY_LOCATION_TOP
-      || GET_ACCESSORY_ATTACH_LOCATION(attachment) > ACCESS_ACCESSORY_LOCATION_UNDER) {
+  if (location < ACCESS_ACCESSORY_LOCATION_TOP
+      || location > ACCESS_ACCESSORY_LOCATION_UNDER) {
     if (ch)
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
     sprintf(buf, "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).",
-            GET_ACCESSORY_ATTACH_LOCATION(attachment), GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
+            location, GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -2205,11 +2205,11 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
   }
   
   // Update the weapon's attach location to reflect this item.
-  GET_OBJ_VAL(weapon, GET_ACCESSORY_ATTACH_LOCATION(attachment) + 7) = GET_OBJ_VNUM(attachment);
+  GET_OBJ_VAL(weapon, location + 7) = GET_OBJ_VNUM(attachment);
   
   // Send the success message, assuming there's a character.
   if (ch) {
-    int where = GET_ACCESSORY_ATTACH_LOCATION(attachment);
+    int where = location;
     
     sprintf(buf, "You attach $p to the %s of $P.",
             (where == 0 ? "top" : (where == 1 ? "barrel" : "underside")));
@@ -2272,16 +2272,6 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
     
     // We use a raw get_obj_val here so we can set it.
     GET_OBJ_VAL(weapon, location) = 0;
-    return NULL;
-  }
-  
-  if (   GET_ACCESSORY_ATTACH_LOCATION(attachment) < ACCESS_ACCESSORY_LOCATION_TOP
-      || GET_ACCESSORY_ATTACH_LOCATION(attachment) > ACCESS_ACCESSORY_LOCATION_UNDER) {
-    if (ch)
-      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
-    sprintf(buf, "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).",
-            GET_ACCESSORY_ATTACH_LOCATION(attachment), GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return NULL;
   }
   
