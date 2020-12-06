@@ -27,6 +27,7 @@ Tested on:
 - Clone this repository to your machine. (`git clone https://github.com/luciensadi/AwakeMUD.git`)
 - Change to the repository's SQL directory (`cd AwakeMUD/SQL`)
 - Run `./gensql.sh` (or do the steps manually if it doesn't support your OS). If you plan on running this with MariaDB, use the `--skip-checks` command-line flag.
+- Install the houses file (`mv ../lib/etc/houses.template ../lib/etc/houses`).
 - Change to the repository's SRC directory (`cd ../src`).
 - Edit `Makefile` and uncomment the OS that looks closest to yours by removing the # marks in front of it. Comment out the others by ensuring they have a # in front of their lines. The default is Mac OS X; you'll probably want to switch it to Linux. You probably also want to remove the `-DGITHUB_INTEGRATION` flag from the Makefile at this time.
 - From that same src directory, run `make clean && make`.
