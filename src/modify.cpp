@@ -105,7 +105,7 @@ void format_string(struct descriptor_data *d, int indent)
     }
   
   char *format = new char[d->max_str];
-  snprintf(format, sizeof(format), "%s%s\r\n", indent ? "   " : "", *d->str);
+  snprintf(format, d->max_str, "%s%s\r\n", indent ? "   " : "", *d->str);
   int q = 0;
   for (k = 0; strlen(format) > (u_int) k && q < 1023; q++)
   {
