@@ -22,6 +22,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door wooden wrought iron storm
 	Desc:$
@@ -64,6 +65,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	26202
 	Flags:	0
@@ -123,6 +125,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	26206
 	Flags:	0
@@ -171,6 +174,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	26204
 	Flags:	0
@@ -210,6 +214,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door wooden
 	Desc:$
@@ -263,6 +268,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door wood artificial
 	Desc:$
@@ -298,6 +304,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	26202
 	Flags:	0
@@ -345,6 +352,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door
 	Desc:$
@@ -409,6 +417,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door
 	Desc:$
@@ -448,6 +457,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door
 	Desc:$
@@ -458,28 +468,6 @@ A door
 	Material:	metal
 	Barrier:	32
 	KeyVnum:	26211
-BREAK
-#26210
-Name:	A Wrought Iron Spiral Staircase
-Desc:$
-   Where the frag are you? 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #26211
 Name:	A Dormitory-style Bedroom
@@ -506,6 +494,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	Keywords:	door wooden
 	Desc:$
@@ -541,6 +530,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	26216
 	Flags:	0
@@ -613,6 +603,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door wooden
 	Desc:$
@@ -650,6 +641,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door wooden
 	Desc:$
@@ -686,6 +678,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	Keywords:	door wooden
 	Desc:$
@@ -721,6 +714,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	26212
 	Flags:	0
@@ -755,6 +749,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	26210
 	Flags:	0
@@ -794,6 +789,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	26219
 	Flags:	0
@@ -835,6 +831,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	26218
 	Flags:	0
@@ -866,6 +863,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	Steel
 	Desc:$
@@ -910,6 +908,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	26222
 	Flags:	0
@@ -946,6 +945,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	Steel
 	Desc:$
@@ -1016,6 +1016,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	26221
 	Flags:	0
@@ -1047,6 +1048,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door sturdy maglock wood artificial
 	Desc:$

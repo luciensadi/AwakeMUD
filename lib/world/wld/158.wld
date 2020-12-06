@@ -26,6 +26,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	glass door
 	Desc:$
@@ -85,6 +86,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	gate
 	Desc:$
@@ -147,6 +149,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	garage door
 	Desc:$
@@ -196,6 +199,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	glass door
 	Desc:$
@@ -235,6 +239,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXTRADESC 0]
 	Keywords:	sign
 	Desc:$
@@ -275,6 +280,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	15892
 	Flags:	0
@@ -342,6 +348,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	15818
 	Flags:	0
@@ -404,6 +411,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	15824
 	Flags:	0
@@ -450,6 +458,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	15831
 	Flags:	0
@@ -484,6 +493,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	wooden door
 	Desc:$
@@ -523,6 +533,7 @@ RoomType:	1
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	glass door bulletproof
 	Desc:$
@@ -589,6 +600,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	office door wooden
 	Desc:$
@@ -649,6 +661,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	11
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	examination door wooden white
 	Desc:$
@@ -686,6 +699,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door wooden office
 	Desc:$
@@ -724,6 +738,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	15805
 	Flags:	0
@@ -759,6 +774,7 @@ RoomType:	4
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door
 	Desc:$
@@ -795,6 +811,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door
 	Desc:$
@@ -832,6 +849,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	glass airlock door
 	Desc:$
@@ -870,6 +888,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	15806
 	Flags:	0
@@ -908,6 +927,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	15806
 	Flags:	0
@@ -946,6 +966,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	15806
 	Flags:	0
@@ -980,6 +1001,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	15806
 	Flags:	0
@@ -1014,38 +1036,13 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	15819
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#15823
-Name:	NULL ROOM/closet
-Desc:$
-   This luxurious walk-in closet was large enough to hold enough uniforms for
-small countries, and still have comfortable walking space. Lined along the
-walls are cabinets, shelves, clothes racks and other various containers for
-storage, while the center 'walk-way' travels all the way back to the opposite
-end of the room. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	10
-Y:	4
-Z:	5.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #15824
 Name:	Lets get Tacti-cool!
@@ -1073,6 +1070,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	15825
 	Flags:	0
@@ -1113,6 +1111,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	15824
 	Flags:	0
@@ -1145,6 +1144,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	15807
 	Flags:	0
@@ -1183,6 +1183,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	15826
 	Flags:	0
@@ -1215,6 +1216,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	15829
 	Flags:	0
@@ -1261,6 +1263,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	15828
 	Flags:	0
@@ -1294,6 +1297,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	15828
 	Flags:	0
@@ -1330,6 +1334,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	15832
 	Flags:	0
@@ -1376,6 +1381,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	15831
 	Flags:	0
@@ -1404,6 +1410,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	15831
 	Flags:	0
@@ -1440,6 +1447,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	15831
 	Flags:	0
@@ -1471,6 +1479,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	Keywords:	door
 	Desc:$
@@ -1507,6 +1516,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	airlock door
 	Desc:$
@@ -1583,6 +1593,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	15836
 	Flags:	0
@@ -1620,6 +1631,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	15836
 	Flags:	0
@@ -1650,6 +1662,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	15836
 	Flags:	0
@@ -1680,6 +1693,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	15836
 	Flags:	0
@@ -1710,6 +1724,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	15836
 	Flags:	0
@@ -1740,6 +1755,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	15836
 	Flags:	0
@@ -1770,6 +1786,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	15836
 	Flags:	0
@@ -1805,6 +1822,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	elevator door
 	Desc:$
@@ -1870,6 +1888,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	wall slab stone hidden panel
 	Desc:$
@@ -1923,6 +1942,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	15800
 	Flags:	0
@@ -1930,13 +1950,13 @@ RoomType:	3
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	oleander
+	Keywords:	larkspur
 	Desc:$
-This beautiful, white flowered oleander is very fragrant, but beware, as with
-all of the other plants around here it is extremely deadly. Almost every
-single part of this plant contains enough toxins to kill even the sturdiest of
-men. Symptoms of Oleander poisoning include: Drowsiness, muscle tremors,
-seizures, cardiac arrest, comatose state and of course, death. 
+This soft pink flower belongs to the buttercup family, but don't be fooled by
+its appearance, as this plant is quite deadly to most animals, and border-line
+intoxicating to (meta)humans when ingested. An old cowboy adage goes, "If you
+rode the range all day, and were tired of riding, eat a fistful of larkspur,
+and you won't be tired anymore." 
 ~
 [EXTRADESC 1]
 	Keywords:	belladonna
@@ -1948,13 +1968,13 @@ a few berries can be toxic, while the leaves themselves have been known to
 kill large men when consumed. 
 ~
 [EXTRADESC 2]
-	Keywords:	larkspur
+	Keywords:	oleander
 	Desc:$
-This soft pink flower belongs to the buttercup family, but don't be fooled by
-its appearance, as this plant is quite deadly to most animals, and border-line
-intoxicating to (meta)humans when ingested. An old cowboy adage goes, "If you
-rode the range all day, and were tired of riding, eat a fistful of larkspur,
-and you won't be tired anymore." 
+This beautiful, white flowered oleander is very fragrant, but beware, as with
+all of the other plants around here it is extremely deadly. Almost every
+single part of this plant contains enough toxins to kill even the sturdiest of
+men. Symptoms of Oleander poisoning include: Drowsiness, muscle tremors,
+seizures, cardiac arrest, comatose state and of course, death. 
 ~
 BREAK
 #15847
@@ -1987,6 +2007,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door steel reinforced
 	Desc:$
@@ -2069,6 +2090,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door reinforced steel
 	Desc:$
@@ -2124,6 +2146,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door orichalcum wards
 	Desc:$
@@ -2178,6 +2201,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door reinforced steel
 	Desc:$
@@ -2189,17 +2213,16 @@ A large steel reinforced security door is latched and sealed tightly.
 	Barrier:	32
 	KeyVnum:	15890
 [EXTRADESC 0]
-	Keywords:	southern
+	Keywords:	western
 	Desc:$
-The largest of the cages here, also seem to have the thickest bars, as well as
-magical wards to keep whatever is inside of them there. A huge chimera is
-housed in one of them, looking extremely pissed off, as if looking like a
-wingless dragon already wasn't frightening enough. A lumbering firedrake
-occupied another one of the cages, while an icedrake seems to be making its
-home right next door to it. Aside from a few large lizards the rest of the
-cages housed what seems to be a few ghouls, vampires, a loup-garou and other
-HMHVV infected humanoids, most of whom seemed well fed, but still quite
-unhappy about their living arrangements. 
+These lightly reinforced steel cages are the smallest outta the pack, big
+enough to house large dogs, while most of them seem to be empty, a couple are
+very much occupied. A large hellhound occupies one of the cages, very well-fed
+and rather content looking, even though they are notoriously aggressive most
+of the time. An Aardwolf occupies another cage in this set, with its frayed
+dark brown coat and hyena like proportioning, a bite from one of these would
+prove rather painful. Other creatures in this section range from small blood
+kite hawks to large fenrir wolves captured for study. 
 ~
 [EXTRADESC 1]
 	Keywords:	eastern
@@ -2217,16 +2240,17 @@ manta rays), as well a few free water elementals and fideal (awakened
 jellyfish). 
 ~
 [EXTRADESC 2]
-	Keywords:	western
+	Keywords:	southern
 	Desc:$
-These lightly reinforced steel cages are the smallest outta the pack, big
-enough to house large dogs, while most of them seem to be empty, a couple are
-very much occupied. A large hellhound occupies one of the cages, very well-fed
-and rather content looking, even though they are notoriously aggressive most
-of the time. An Aardwolf occupies another cage in this set, with its frayed
-dark brown coat and hyena like proportioning, a bite from one of these would
-prove rather painful. Other creatures in this section range from small blood
-kite hawks to large fenrir wolves captured for study. 
+The largest of the cages here, also seem to have the thickest bars, as well as
+magical wards to keep whatever is inside of them there. A huge chimera is
+housed in one of them, looking extremely pissed off, as if looking like a
+wingless dragon already wasn't frightening enough. A lumbering firedrake
+occupied another one of the cages, while an icedrake seems to be making its
+home right next door to it. Aside from a few large lizards the rest of the
+cages housed what seems to be a few ghouls, vampires, a loup-garou and other
+HMHVV infected humanoids, most of whom seemed well fed, but still quite
+unhappy about their living arrangements. 
 ~
 BREAK
 #15851
@@ -2263,6 +2287,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door orichalcum wards
 	Desc:$
@@ -2305,6 +2330,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door reinforced steel
 	Desc:$
@@ -2342,6 +2368,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	vault door panel
 	Desc:$
@@ -2409,6 +2436,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	vault door panel slab stone
 	Desc:$
@@ -2471,6 +2499,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	vault door panel
 	Desc:$
@@ -2507,6 +2536,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	vault door panel
 	Desc:$
@@ -2568,6 +2598,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	vault door panel slab stone
 	Desc:$
@@ -2617,6 +2648,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	vault door massive
 	Desc:$
@@ -2667,6 +2699,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	Keywords:	vault door panel
 	Desc:$
@@ -2707,6 +2740,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	vault door panel
 	Desc:$
@@ -2747,6 +2781,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	Keywords:	vault door panel
 	Desc:$
@@ -2785,6 +2820,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	Keywords:	hidden vault door panel
 	Desc:$
@@ -2827,6 +2863,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	vault door panel
 	Desc:$
@@ -2867,6 +2904,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	vault door panel
 	Desc:$
@@ -2877,282 +2915,6 @@ A small vault door leads back out to the west.
 	Material:	stone
 	Barrier:	32
 	KeyVnum:	15890
-BREAK
-#15865
-Name:	NULL ROOM/apartment
-Desc:$
-   Enter desc. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	1
-Cover:	2
-X:	15
-Y:	15
-Z:	13.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15866
-Name:	NULL ROOM/apartment
-Desc:$
-   Enter desc. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	1
-Cover:	2
-X:	15
-Y:	15
-Z:	13.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15867
-Name:	NULL ROOM/apartment
-Desc:$
-   Enter desc. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	1
-Cover:	2
-X:	15
-Y:	15
-Z:	13.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15868
-Name:	NULL ROOM/apartment
-Desc:$
-   Enter desc. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	1
-Cover:	2
-X:	15
-Y:	15
-Z:	13.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15869
-Name:	NULL ROOM/apartment
-Desc:$
-   Enter desc. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	1
-Cover:	2
-X:	15
-Y:	15
-Z:	13.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15870
-Name:	NULL ROOM/apartment
-Desc:$
-   Enter desc. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	1
-Cover:	2
-X:	15
-Y:	15
-Z:	13.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15871
-Name:	NULL ROOM/apartment
-Desc:$
-   Enter desc. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	1
-Cover:	2
-X:	15
-Y:	15
-Z:	13.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15872
-Name:	NULL ROOM/apartment
-Desc:$
-   Enter desc. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	1
-Cover:	2
-X:	15
-Y:	15
-Z:	13.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15873
-Name:	NULL ROOM
-Desc:$
-   Around you is a steel-reinforced room, buzzing with activity.  The heavy
-scent of gunmetal and bore oil hang heavily in the air, creating a feeling of
-tense wariness inside the room.  An arena has been built off to the west,
-giving you the opportunity to engage in some stress relief. 
-~
-Flags:	100000000000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15874
-Name:	NULL ROOM
-Desc:$
-   You are standing in the basement, a place you really shouldn't be, amidst
-crowding pipes and hissing vents.  Crates and boxes are stacked up everywhere
-here, creating a labrynthial maze of haphazard piles.  The stairwell out of
-here leads up to a trapdoor in the ground floor. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	1
-	Smoke:	6
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15875
-Name:	NULL ROOM
-Desc:$
-   You are standing next to a massive boiling vat, which apparently is one of
-the ways the Serenity Corporation manages to get such pure water in its
-fountains.  The air here is stiflingly hot, and a heavy blanket of steam
-hovers over the area, making it difficult to see. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	7
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15876
-Name:	NULL ROOM
-Desc:$
-   The field around you is slightly overgrown, as if it hasn't been trimmed
-very recently.  However, this seems to be deliberate, for there are all sorts
-of beautiful flowers, plants and saplings planted throughout the grass, just
-waiting to explode into full bloom. 
-~
-Flags:	10000000000000000100
-SecType:	Field
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	30.00
-RoomType:	3
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #15877
 Name:	The Seattle Free Clinic garage
@@ -3179,6 +2941,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	garage
 	Desc:$
@@ -3215,6 +2978,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	15888
 	Flags:	0
@@ -3250,6 +3014,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	wall slab stone hidden panel
 	Desc:$
@@ -3261,81 +3026,6 @@ Something about the wall just doesn't seem right..
 	Barrier:	32
 	KeyVnum:	15890
 	HiddenRating:	32
-BREAK
-#15880
-Name:	NULL ROOM
-Desc:$
-   Around you is a well-lit auditorium, filled with thirty-odd chairs all
-lined up before a large stage and attached podium.  Faint aisle lights
-illuminate pathways through the seating, casting a soft light on the faces of
-those currently in the room.  The stage is made from a dark wood, polished to
-a mirror-like sheen.  A faint thrum of white noise fills the room, ensuring
-that all conversations held here will be at least partially private. 
-~
-Flags:	101000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	3
-Cover:	4
-X:	30
-Y:	30
-Z:	20.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15881
-Name:	NULL ROOM/studio apartment
-Desc:$
-   Enter desc. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	10
-Y:	10
-Z:	4.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#15882
-Name:	NULL ROOM
-Desc:$
-   Around you is a small six-foot cube, solidly constructed of heavy steel.  A
-well-made armored doorway to the north both blocks sound from entering and
-stops you from leaving, keeping you in a solid world of isolation.  Roaches
-skitter in and around the cell, squeezing in and out through cracks you didn't
-even know existed. 
-~
-Flags:	11000000000000101100
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #15883
 Name:	Private tailor shop
@@ -3365,6 +3055,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	15845
 	Flags:	0
@@ -3401,6 +3092,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door steel reinforced
 	Desc:$
@@ -3443,6 +3135,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door glass
 	Desc:$
@@ -3479,6 +3172,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door
 	Desc:$
@@ -3518,6 +3212,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door
 	ToVnum:	15890
@@ -3552,6 +3247,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	15878
 	Flags:	0
@@ -3599,6 +3295,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #15890
 Name:	A massive studio apartment
@@ -3632,6 +3329,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door
 	Desc:$
@@ -3688,6 +3386,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	15800
 	Flags:	0
@@ -3695,19 +3394,19 @@ RoomType:	3
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	foxglove
+	Keywords:	aconite
 	Desc:$
-Digitalis purpurea, better known as purple foxglove, blooms into open bell
-like petals and is quite beautiful, however.. The entire plant is a poison
-(including the roots and seeds), although the leaves of the upper stem are
-particularly potent, with just a nibble being enough to potentially cause
-death. Early symptoms of ingestion include nausea, vomiting, anorexia,
-diarrhea, abdominal pain, wild hallucinations, delirium, and severe headache.
-Depending on the severity of the toxicosis the victim may later suffer
-irregular and slow pulse, tremors, various cerebral disturbances, especially
-of a visual nature (unusual color visions with objects appearing yellowish to
-green, and blue halos around lights), convulsions, and deadly disturbances of
-the heart. 
+Aconitum, known as aconite, monkshood, or wolfsbane, is a genus of flowering
+plant belonging to the buttercup family. These are handsome plants, the tall,
+erect stem being crowned by racemes of large and eye-catching blue. Aconite
+has been ascribed with supernatural powers relating to werewolves and other
+lycanthropes, either to repel them, relating to aconite's use in poisoning
+wolves and other animals, or in some way induce their lycanthropic condition,
+as aconite was often an important ingredient in witches' magic ointments. In
+folklore, Aconite was also said to make a person into a werewolf if it is
+worn, smelled, or eaten. They are also said to kill werewolves if they wear,
+smell, or eat aconite. Reguardless of legends, if ingested in large enough
+quantity, it can cause death. 
 ~
 [EXTRADESC 1]
 	Keywords:	hemlock
@@ -3723,19 +3422,19 @@ paralysis with eventually paralysis of the respiratory muscles which results
 in death due to lack of oxygen to the heart and brain. 
 ~
 [EXTRADESC 2]
-	Keywords:	aconite
+	Keywords:	foxglove
 	Desc:$
-Aconitum, known as aconite, monkshood, or wolfsbane, is a genus of flowering
-plant belonging to the buttercup family. These are handsome plants, the tall,
-erect stem being crowned by racemes of large and eye-catching blue. Aconite
-has been ascribed with supernatural powers relating to werewolves and other
-lycanthropes, either to repel them, relating to aconite's use in poisoning
-wolves and other animals, or in some way induce their lycanthropic condition,
-as aconite was often an important ingredient in witches' magic ointments. In
-folklore, Aconite was also said to make a person into a werewolf if it is
-worn, smelled, or eaten. They are also said to kill werewolves if they wear,
-smell, or eat aconite. Reguardless of legends, if ingested in large enough
-quantity, it can cause death. 
+Digitalis purpurea, better known as purple foxglove, blooms into open bell
+like petals and is quite beautiful, however.. The entire plant is a poison
+(including the roots and seeds), although the leaves of the upper stem are
+particularly potent, with just a nibble being enough to potentially cause
+death. Early symptoms of ingestion include nausea, vomiting, anorexia,
+diarrhea, abdominal pain, wild hallucinations, delirium, and severe headache.
+Depending on the severity of the toxicosis the victim may later suffer
+irregular and slow pulse, tremors, various cerebral disturbances, especially
+of a visual nature (unusual color visions with objects appearing yellowish to
+green, and blue halos around lights), convulsions, and deadly disturbances of
+the heart. 
 ~
 BREAK
 #15892
@@ -3766,6 +3465,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	15805
 	Flags:	0
@@ -3798,6 +3498,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	15805
 	Flags:	0

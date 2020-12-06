@@ -23,6 +23,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62002
 	Flags:	0
@@ -65,6 +66,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	Keywords:	lift
 	Desc:$
@@ -100,6 +102,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	62000
 	Flags:	0
@@ -135,6 +138,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	62004
 	Flags:	0
@@ -177,6 +181,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62003
 	Flags:	0
@@ -221,6 +226,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62006
 	Flags:	0
@@ -257,6 +263,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	62007
 	Flags:	0
@@ -293,6 +300,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62026
 	Flags:	0
@@ -365,6 +373,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62009
 	Flags:	0
@@ -437,6 +446,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62010
 	Flags:	0
@@ -509,6 +519,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62027
 	Flags:	0
@@ -581,6 +592,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62012
 	Flags:	0
@@ -653,6 +665,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62013
 	Flags:	0
@@ -725,6 +738,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62064
 	Flags:	0
@@ -797,6 +811,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62015
 	Flags:	0
@@ -869,6 +884,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62062
 	Flags:	0
@@ -941,6 +957,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62061
 	Flags:	0
@@ -1013,6 +1030,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62018
 	Flags:	0
@@ -1085,6 +1103,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62065
 	Flags:	0
@@ -1157,6 +1176,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62020
 	Flags:	0
@@ -1229,6 +1249,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62021
 	Flags:	0
@@ -1301,6 +1322,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62068
 	Flags:	0
@@ -1373,6 +1395,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62023
 	Flags:	0
@@ -1445,6 +1468,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62012
 	Flags:	0
@@ -1517,6 +1541,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62025
 	Flags:	0
@@ -1589,6 +1614,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62082
 	Flags:	0
@@ -1672,6 +1698,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62028
 	Flags:	0
@@ -1744,6 +1771,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62007
 	Flags:	0
@@ -1816,6 +1844,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62008
 	Flags:	0
@@ -1888,6 +1917,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62008
 	Flags:	0
@@ -1960,6 +1990,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62030
 	Flags:	0
@@ -2032,6 +2063,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62031
 	Flags:	0
@@ -2104,6 +2136,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62032
 	Flags:	0
@@ -2176,6 +2209,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62033
 	Flags:	0
@@ -2225,30 +2259,6 @@ RoomType:	9
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#62034
-Name:	Tunnel Clones begin not used
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
 #62035
 Name:	A space station
 Desc:$
@@ -2270,510 +2280,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	99
 	BackgroundType:	7
-BREAK
-#62036
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62037
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62038
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62039
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62040
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62041
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62042
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62043
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62044
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62045
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62046
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62047
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62048
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62049
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62050
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62051
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62052
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62053
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62054
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62055
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#62056
-Name:	A Tunnel
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #62057
 Name:	Hell of One Thousand Fags
@@ -2804,6 +2311,7 @@ RoomType:	4
 	Smoke:	0
 	Background:	5
 	BackgroundType:	1
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62057
 	Flags:	0
@@ -2853,30 +2361,6 @@ RoomType:	4
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#62058
-Name:	Last unused tunnel clone.
-Desc:$
-   All around you are vines. They seem to throb and almost move as you walk by
-them. The room is bright and humid, the air heavy with the smell of growth and
-life. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	2
-Y:	2
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
 #62059
 Name:	A Tunnel
 Desc:$
@@ -2900,6 +2384,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62059
 	Flags:	0
@@ -2972,6 +2457,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62060
 	Flags:	0
@@ -3044,6 +2530,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62061
 	Flags:	0
@@ -3116,6 +2603,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62062
 	Flags:	0
@@ -3188,6 +2676,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62063
 	Flags:	0
@@ -3260,6 +2749,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62064
 	Flags:	0
@@ -3332,6 +2822,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62065
 	Flags:	0
@@ -3404,6 +2895,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62066
 	Flags:	0
@@ -3476,6 +2968,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62067
 	Flags:	0
@@ -3548,6 +3041,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62068
 	Flags:	0
@@ -3620,6 +3114,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62078
 	Flags:	0
@@ -3692,6 +3187,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62080
 	Flags:	0
@@ -3764,6 +3260,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62076
 	Flags:	0
@@ -3836,6 +3333,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62077
 	Flags:	0
@@ -3902,6 +3400,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62081
 	Flags:	0
@@ -3968,6 +3467,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62079
 	Flags:	0
@@ -4034,6 +3534,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	62082
 	Flags:	0
@@ -4100,6 +3601,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62071
 	Flags:	0
@@ -4172,6 +3674,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62072
 	Flags:	0
@@ -4244,6 +3747,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62069
 	Flags:	0
@@ -4316,6 +3820,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62074
 	Flags:	0
@@ -4388,6 +3893,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62070
 	Flags:	0
@@ -4460,6 +3966,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62073
 	Flags:	0
@@ -4532,6 +4039,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	62075
 	Flags:	0
@@ -4602,6 +4110,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door
 	Desc:$
@@ -4643,6 +4152,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door
 	Desc:$
@@ -4704,6 +4214,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	sheet
 	Desc:$
@@ -4744,6 +4255,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	sheet
 	Desc:$
@@ -4802,6 +4314,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	1
 	BackgroundType:	7
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	hatch
 	Desc:$
@@ -4845,6 +4358,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	62095
 	Flags:	0

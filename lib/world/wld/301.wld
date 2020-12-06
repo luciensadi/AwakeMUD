@@ -22,6 +22,7 @@ RoomType:	0
 	Smoke:	7
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	30130
 	Flags:	0
@@ -52,6 +53,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 Further down the sewer pipe. 
@@ -94,6 +96,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30103
 	Flags:	0
@@ -130,6 +133,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	
 	ToVnum:	30157
@@ -169,6 +173,7 @@ RoomType:	4
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	
 	ToVnum:	30105
@@ -207,6 +212,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30106
 	Flags:	0
@@ -251,6 +257,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	30105
 	Flags:	0
@@ -284,6 +291,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	1
 	BackgroundType:	10
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	30108
 	Flags:	0
@@ -317,6 +325,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	2
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30107
 	Flags:	0
@@ -365,6 +374,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	2
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	trees bushes
 	Desc:$
@@ -403,6 +413,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	
 	ToVnum:	30111
@@ -444,6 +455,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30112
 	Flags:	0
@@ -484,6 +496,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	
 	ToVnum:	30113
@@ -525,6 +538,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30126
 	Flags:	0
@@ -572,6 +586,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door north entrance front
 	Desc:$
@@ -616,6 +631,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door north lobby
 	Desc:$
@@ -661,6 +677,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30128
 	Flags:	0
@@ -698,6 +715,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30116
 	Flags:	0
@@ -743,6 +761,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	30117
 	Flags:	0
@@ -774,6 +793,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	
 	ToVnum:	30117
@@ -805,6 +825,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door north press
 	Desc:$
@@ -852,6 +873,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	30160
 	Flags:	0
@@ -895,6 +917,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	
 	ToVnum:	30170
@@ -934,6 +957,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door glass plexiglass foyer academy north
 	Desc:$
@@ -982,6 +1006,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30122
 	Flags:	0
@@ -1031,6 +1056,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door glass plexiglass north academy
 	Desc:$
@@ -1075,6 +1101,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30132
 	Flags:	0
@@ -1116,6 +1143,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	gates iron wrought
 	Desc:$
@@ -1171,6 +1199,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30140
 	Flags:	0
@@ -1215,6 +1244,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door shack
 	Desc:$
@@ -1264,6 +1294,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30129
 	Flags:	0
@@ -1309,6 +1340,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30129
 	Flags:	0
@@ -1347,6 +1379,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30104
 	Flags:	0
@@ -1383,6 +1416,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	30134
 	Flags:	0
@@ -1415,6 +1449,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30133
 	Flags:	0
@@ -1451,6 +1486,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30131
 	Flags:	0
@@ -1497,6 +1533,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30134
 	Flags:	0
@@ -1552,6 +1589,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30136
 	Flags:	0
@@ -1590,6 +1628,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30137
 	Flags:	0
@@ -1638,6 +1677,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30138
 	Flags:	0
@@ -1679,6 +1719,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30187
 	Flags:	0
@@ -1722,6 +1763,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door wooden south women~~~~~~~~
 	Desc:$
@@ -1758,6 +1800,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door wooden north mens~~~~~~~~
 	Desc:$
@@ -1792,6 +1835,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door wooden north women
 	Desc:$
@@ -1844,6 +1888,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door north lounge~~~~~
 	ToVnum:	30147
@@ -1878,6 +1923,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	30147
 	Flags:	0
@@ -1912,6 +1958,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30147
 	Flags:	0
@@ -1946,6 +1993,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30148
 	Flags:	0
@@ -1998,6 +2046,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door glass north
 	ToVnum:	30149
@@ -2039,6 +2088,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	1
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door north murdered mime
 	ToVnum:	30150
@@ -2096,6 +2146,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30151
 	Flags:	0
@@ -2148,6 +2199,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	1
 	BackgroundType:	12
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30156
 	Flags:	0
@@ -2198,6 +2250,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30154
 	Flags:	0
@@ -2235,6 +2288,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30155
 	Flags:	0
@@ -2271,6 +2325,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30143
 	Flags:	0
@@ -2321,6 +2376,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	30156
 	Flags:	0
@@ -2364,6 +2420,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	Keywords:	0~~~~~~~~~~
 	ToVnum:	30154
@@ -2407,6 +2464,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	30158
 	Flags:	0
@@ -2445,6 +2503,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door east sturdy metal
 	Desc:$
@@ -2493,6 +2552,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30161
 	Flags:	0
@@ -2553,6 +2613,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	
 	ToVnum:	30121
@@ -2602,6 +2663,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	blue painted north door
 	Desc:$
@@ -2665,6 +2727,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30159
 	Flags:	0
@@ -2726,6 +2789,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door steel west
 	Desc:$
@@ -2760,6 +2824,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door wood wooden east
 	Desc:$
@@ -2794,6 +2859,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door blue wood wooden
 	Desc:$
@@ -2828,6 +2894,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door steel reinforced north
 	Desc:$
@@ -2864,6 +2931,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	30158
 	Flags:	0
@@ -2895,6 +2963,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	30160
 	Flags:	0
@@ -2925,6 +2994,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door wood wooden east
 	Desc:$
@@ -2963,6 +3033,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30171
 	Flags:	0
@@ -3001,6 +3072,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30173
 	Flags:	0
@@ -3048,6 +3120,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door wooden west hallway
 	Desc:$
@@ -3085,6 +3158,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door mahogany north
 	Desc:$
@@ -3146,6 +3220,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door east steel hallway
 	Desc:$
@@ -3181,6 +3256,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door shack
 	Desc:$
@@ -3217,6 +3293,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door south mahogany hallway
 	Desc:$
@@ -3252,6 +3329,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door wooden hallway west
 	Desc:$
@@ -3290,6 +3368,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door steel north range
 	Desc:$
@@ -3337,6 +3416,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30185
 	Flags:	0
@@ -3378,6 +3458,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30181
 	Flags:	0
@@ -3417,6 +3498,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30182
 	Flags:	0
@@ -3454,6 +3536,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door wooden gym gymnasium east
 	Desc:$
@@ -3497,6 +3580,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30184
 	Flags:	0
@@ -3537,6 +3621,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	1
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	30183
 	Flags:	0
@@ -3567,6 +3652,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30186
 	Flags:	0
@@ -3603,6 +3689,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	30185
 	Flags:	0
@@ -3635,6 +3722,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30188
 	Flags:	0
@@ -3674,6 +3762,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	30187
 	Flags:	0
@@ -3703,6 +3792,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door south painted blue
 	Desc:$
@@ -3741,36 +3831,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-BREAK
-#30191
-Name:	The corpse disposal pit.
-Desc:$
-                                     ^RSPLAT^n
-   The corpse pit is filled with corpses, hideously mangled from the impact of
-their falls. Of course, most of them were dead ^Wbefore^n they fell. 
-~
-Flags:	1000000000000001010
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT up]
-	ToVnum:	30192
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
+	StaffLockLevel:	0
 BREAK
 #30192
 Name:	And faster...
@@ -3794,6 +3855,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	30193
 	Flags:	0
@@ -3828,6 +3890,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	30194
 	Flags:	0
@@ -3863,6 +3926,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	Keywords:	trapdoor door up
 	Desc:$
@@ -3903,6 +3967,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	panel sliding north
 	Desc:$
@@ -3947,6 +4012,7 @@ RoomType:	6
 	Smoke:	7
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	doors north arched ivory oak
 	Desc:$
@@ -4013,6 +4079,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30198
 	Flags:	0
@@ -4053,6 +4120,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30199
 	Flags:	0
@@ -4089,6 +4157,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	30101
 	Flags:	0

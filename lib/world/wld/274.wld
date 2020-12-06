@@ -22,6 +22,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #27401
 Name:	Entrance to an Abandoned Building
@@ -45,6 +48,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 This way leads to the reception desk. 
@@ -110,6 +116,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	27401
 	Flags:	0
@@ -145,6 +154,9 @@ RoomType:	0
 	Rating:	4
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	Desc:$
 Stuck half-open, these doors lead to the Second Floor. 
@@ -194,6 +206,9 @@ RoomType:	0
 	Rating:	4
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	Desc:$
 The door here has been slashed off of its hinges by something very, very
@@ -236,6 +251,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 Doorway to a Trashed Hotel Room. The door is nowhere to be found. 
@@ -317,6 +335,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	Desc:$
 The Elevator Shaft. 
@@ -368,6 +389,9 @@ RoomType:	0
 	Rating:	4
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	Keywords:	door elevator~
 	Desc:$
@@ -411,6 +435,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Desc:$
 This way leads to the Reception Desk. 
@@ -467,6 +494,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Desc:$
 South leads back to the entrance. 
@@ -507,6 +537,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	27408
 	Flags:	0
@@ -564,6 +597,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 This door leads to a hallway in an abandoned hotel. 
@@ -605,6 +641,9 @@ RoomType:	0
 	Rating:	6
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door~
 	Desc:$
@@ -646,6 +685,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Desc:$
 Back to the Hotel Lobby. 
@@ -695,6 +737,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	Desc:$
 Back to Second Floor Landing 
@@ -737,6 +782,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Desc:$
 A little alcove, partially walled-off by rubble. 
@@ -776,6 +824,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	stall door~
 	Desc:$
@@ -811,6 +862,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	27415
 	Flags:	0
@@ -841,6 +895,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	27405
 	Flags:	0
@@ -867,6 +924,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door closet~
 	Desc:$
@@ -901,6 +961,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	Keywords:	door~
 	Desc:$
@@ -935,6 +998,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Desc:$
 Second Floor Landing. The door has been torn off its hinges. 
@@ -943,37 +1009,6 @@ Second Floor Landing. The door has been torn off its hinges.
 	Flags:	0
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
-BREAK
-#27422
-Name:	Unstable Stairway
-Desc:$
-   You manage to clear the rubble out of your way and walk down the stairs.
-Unfortunately, this portion of the building is unstable, and promptly
-collapses around you, burying you under a pile of stone and steel. 
-~
-Flags:	1110
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-[EXIT up]
-	Desc:$
-A pile of rubble. 
-~
-	ToVnum:	27413
-	Flags:	0
-	Material:	concrete
-	Barrier:	32
 	KeyVnum:	0
 BREAK
 #27423
@@ -996,6 +1031,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	27406
 	Flags:	0
@@ -1035,6 +1073,9 @@ RoomType:	0
 	Rating:	10
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	27414
 	Flags:	0
@@ -1063,6 +1104,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	Keywords:	door employees~
 	Desc:$
@@ -1106,6 +1150,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	27406
 	Flags:	0
@@ -1135,6 +1182,9 @@ RoomType:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	27406
 	Flags:	0

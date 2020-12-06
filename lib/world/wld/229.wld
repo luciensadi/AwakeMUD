@@ -5,19 +5,27 @@ Desc:$
 ~
 Flags:	10000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22901
 Name:	Repository
@@ -26,19 +34,27 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22902
 Name:	Mortal IC Board
@@ -47,19 +63,27 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22903
 Name:	Admin Board
@@ -68,19 +92,27 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22904
 Name:	Mortal OOC Board
@@ -89,19 +121,27 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22905
 Name:	Bug Report Board
@@ -110,19 +150,27 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22906
 Name:	Questor Board
@@ -131,19 +179,27 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22907
 Name:	Matrix IC Board
@@ -152,19 +208,27 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22908
 Name:	Builders Board
@@ -173,19 +237,27 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22909
 Name:	Post Office
@@ -194,19 +266,27 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	23
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22910
 Name:	Path to Mall Entrance
@@ -224,19 +304,27 @@ dark streets.
 ~
 Flags:	10000000000
 SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22909
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22911
 Name:	The Ground concourse
@@ -246,9 +334,21 @@ corner shop
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22905
 	Flags:	0
@@ -261,10 +361,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22912
 Name:	The ground concourse
@@ -274,9 +370,21 @@ central plaza
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22914
 	Flags:	0
@@ -289,10 +397,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22913
 Name:	The Ground Concourse
@@ -301,9 +405,21 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22911
 	Flags:	0
@@ -316,10 +432,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22914
 Name:	The Ground Concourse
@@ -328,9 +440,21 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22916
 	Flags:	0
@@ -343,10 +467,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22915
 Name:	The ground concourse
@@ -355,19 +475,27 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22913
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22916
 Name:	The Ground Concourse
@@ -376,19 +504,27 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	22914
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22917
 Name:	Stairs down to carpark
@@ -397,19 +533,27 @@ You are in an unfinished room.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	22901
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22918
 Name:	Stairs down to carpark
@@ -418,19 +562,27 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	22909
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22919
 Name:	An upward escalator
@@ -439,19 +591,27 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	22924
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22920
 Name:	A downward escalator
@@ -460,19 +620,27 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	22905
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22921
 Name:	An upward escalator
@@ -481,19 +649,27 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	22923
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22922
 Name:	A downward escalator
@@ -502,19 +678,27 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	22905
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22923
 Name:	"It's'a Bagel"
@@ -523,19 +707,27 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	22922
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22924
 Name:	"Taco Hell"
@@ -544,531 +736,27 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	22920
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22961
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22962
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22963
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22964
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22965
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22966
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22967
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22968
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22971
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22972
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22973
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22974
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22975
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22976
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22977
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22978
-Name:	Bedroom - Apartment 610
-Desc:$
-   A small bedroom containing a bed, and with a small closet and bathroom
-connected to it. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22981
-Name:	Bedroom - Apartment 810
-Desc:$
-   A huge bedroom with a large window overlooking the sprawl. There is a
-walk-in closet and an emaculate bathroom connected. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22982
-Name:	Bedroom - Apartment 810
-Desc:$
-   A huge bedroom with a large window overlooking the sprawl. There is a
-walk-in closet and an emaculate bathroom connected. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22983
-Name:	Bedroom - Apartment 810
-Desc:$
-   A huge bedroom with a large window overlooking the sprawl. There is a
-walk-in closet and an emaculate bathroom connected. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22984
-Name:	Bedroom - Apartment 810
-Desc:$
-   A huge bedroom with a large window overlooking the sprawl. There is a
-walk-in closet and an emaculate bathroom connected. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22985
-Name:	Bedroom - Apartment 810
-Desc:$
-   A huge bedroom with a large window overlooking the sprawl. There is a
-walk-in closet and an emaculate bathroom connected. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22986
-Name:	Bedroom - Apartment 810
-Desc:$
-   A huge bedroom with a large window overlooking the sprawl. There is a
-walk-in closet and an emaculate bathroom connected. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22987
-Name:	Bedroom - Apartment 810
-Desc:$
-   A huge bedroom with a large window overlooking the sprawl. There is a
-walk-in closet and an emaculate bathroom connected. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22988
-Name:	Bedroom - Apartment 810
-Desc:$
-   A huge bedroom with a large window overlooking the sprawl. There is a
-walk-in closet and an emaculate bathroom connected. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22991
-Name:	Kitchen - Apartment 810
-Desc:$
-   A roomy kitchen with all the latest cooking appliances built into the
-cabinets. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22992
-Name:	Kitchen - Apartment 810
-Desc:$
-   A roomy kitchen with all the latest cooking appliances built into the
-cabinets. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22993
-Name:	Kitchen - Apartment 810
-Desc:$
-   A roomy kitchen with all the latest cooking appliances built into the
-cabinets. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22994
-Name:	Kitchen - Apartment 810
-Desc:$
-   A roomy kitchen with all the latest cooking appliances built into the
-cabinets. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22995
-Name:	Kitchen - Apartment 810
-Desc:$
-   A roomy kitchen with all the latest cooking appliances built into the
-cabinets. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22996
-Name:	Kitchen - Apartment 810
-Desc:$
-   A roomy kitchen with all the latest cooking appliances built into the
-cabinets. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22997
-Name:	Kitchen - Apartment 810
-Desc:$
-   A roomy kitchen with all the latest cooking appliances built into the
-cabinets. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#22998
-Name:	Kitchen - Apartment 810
-Desc:$
-   A roomy kitchen with all the latest cooking appliances built into the
-cabinets. 
-~
-Flags:	1001000001000
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22999
 Name:	Custom Gear Spawning Room
@@ -1077,12 +765,20 @@ Desc:$
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 END

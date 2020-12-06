@@ -9,9 +9,20 @@ their calls can clearly be heard.
 Flags:	10000000000000000000100
 SecType:	Forest
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31601
 	Flags:	0
@@ -24,10 +35,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31601
 Name:	A clearing in the jungle
@@ -41,9 +48,20 @@ back towards civilisation.
 Flags:	10000000000000000000000
 SecType:	Forest
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	vegetation thick barrier
 	Desc:$
@@ -74,10 +92,6 @@ A door carved into a tree
 	KeyVnum:	31601
 	LockRating:	5
 	HiddenRating:	1
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31602
 Name:	A small room inside a hollowed out tree.
@@ -91,9 +105,20 @@ twist up into the heights of the tree.
 Flags:	100000000000000000000000011100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	Keywords:	door wooden tree
 	Desc:$
@@ -113,27 +138,6 @@ A wooden rail spiralling upwards
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#31603
-Name:	Horrible painful death
-Desc:$
-   As you enter this room you begin to fall upwards, there is no escape. All
-hail Sloth. 
-~
-Flags:	1000000000000000000000
-SecType:	Inside
-MatrixExit:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31604
 Name:	A dark section of rainforest
@@ -143,19 +147,26 @@ You are in an unfinished room.
 Flags:	10000000000000100
 SecType:	Forest
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	31601
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31610
 Name:	An old rusted section of ladder
@@ -169,11 +180,22 @@ structure. With any luck a boat will be down there, waiting to take you back
 to shore. 
 ~
 Flags:	1000000000000000000000
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	Desc:$
 The top of the ladder 
@@ -192,10 +214,6 @@ Falling to a horrible watery death.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31611
 Name:	The top of the ladder
@@ -211,11 +229,22 @@ and west an intermittantly railed walkway extends around the edge of the
 structure, dotted with holes and abandoned equipment. 
 ~
 Flags:	10000000000000000
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door metal
 	Desc:$
@@ -248,10 +277,6 @@ Climbing down the ladder
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31612
 Name:	A dark corridor inside the oil rig
@@ -266,9 +291,20 @@ no-one has been here in a long time.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31614
 	Flags:	0
@@ -282,30 +318,6 @@ MatrixExit:	0
 	Material:	metal
 	Barrier:	24
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#31613
-Name:	A horrible watery death
-Desc:$
-   The ocean smashes your body repeatedly against the supports of the rig
-which now towers above you. You can feel the incredible cold entering your
-body for a while before you begin to lose feeling in your limbs. Finally as
-you struggle to keep your head above water, blackness sweeps in and you lose
-consciousness. 
-~
-Flags:	10000000000000010
-SecType:	Water (Swim)
-MatrixExit:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	20
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31614
 Name:	A junction between two corridors
@@ -319,9 +331,20 @@ inside.
 Flags:	1001
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31615
 	Flags:	0
@@ -346,10 +369,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31615
 Name:	A dark storage room
@@ -359,9 +378,20 @@ You are in an unfinished room.
 Flags:	1001
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	boards
 	ToVnum:	31618
@@ -376,10 +406,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31616
 Name:	Further into the rig
@@ -389,9 +415,20 @@ You are in an unfinished room.
 Flags:	1001
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31634
 	Flags:	0
@@ -405,10 +442,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31617
 Name:	Further into the rig
@@ -418,9 +451,20 @@ You are in an unfinished room.
 Flags:	1001
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31614
 	Flags:	0
@@ -433,10 +477,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31619
 Name:	A railed walkway
@@ -447,11 +487,22 @@ be secure, several stretches of railing are missing. It would probably be wise
 to stay closer to the inside of the path. 
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31621
 	Flags:	0
@@ -464,10 +515,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31620
 Name:	A railed walkway
@@ -475,11 +522,22 @@ Desc:$
 You are in an unfinished room.
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31611
 	Flags:	0
@@ -492,10 +550,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31621
 Name:	A turn in the walkway
@@ -506,11 +560,22 @@ of rust. The wind is stronger here, forcing the bitter salty air into your
 lungs. 
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31622
 	Flags:	0
@@ -523,10 +588,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31622
 Name:	A railed walkway near the helipad
@@ -537,11 +598,22 @@ the ocean spray. In the distance you can see a large hulking shape, obscured
 by fog. 
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31624
 	Flags:	0
@@ -560,10 +632,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31623
 Name:	Helipad
@@ -576,11 +644,22 @@ crashing into the immense legs that anchor the rig to the sea bed, each impact
 sending shudders through it. 
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	31622
 	Flags:	0
@@ -593,10 +672,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31624
 Name:	A railed walkway near the helipad
@@ -607,11 +682,22 @@ the ocean spray. In the distance you can see a large hulking shape, obscured
 by fog. 
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31625
 	Flags:	0
@@ -630,10 +716,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31625
 Name:	Corner
@@ -641,11 +723,22 @@ Desc:$
 You are in an unfinished room.
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	31624
 	Flags:	0
@@ -658,10 +751,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31626
 Name:	An un-railed walkway
@@ -671,11 +760,22 @@ the sea. You should still be able to navigate the walkway safely, just stay
 away from the edge. 
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31633
 	Flags:	0
@@ -694,10 +794,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31627
 Name:	A railed walkway
@@ -705,11 +801,22 @@ Desc:$
 You are in an unfinished room.
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31626
 	Flags:	0
@@ -722,10 +829,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31628
 Name:	A small platform on the edge of the rig
@@ -736,11 +839,22 @@ rusted cables would be difficult, but possible for one sufficiently skilled.
 An old rusted locker hangs open on the wall behind you. 
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31627
 	Flags:	0
@@ -753,10 +867,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31629
 Name:	Walkway
@@ -764,11 +874,22 @@ Desc:$
 You are in an unfinished room.
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31628
 	Flags:	0
@@ -781,10 +902,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31630
 Name:	Walkway
@@ -792,11 +909,22 @@ Desc:$
 You are in an unfinished room.
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31629
 	Flags:	0
@@ -809,10 +937,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31631
 Name:	Corner
@@ -820,11 +944,22 @@ Desc:$
 You are in an unfinished room.
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31630
 	Flags:	0
@@ -837,10 +972,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31632
 Name:	Walkway
@@ -848,11 +979,22 @@ Desc:$
 You are in an unfinished room.
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31620
 	Flags:	0
@@ -865,26 +1007,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#31633
-Name:	Falling off the side of the oil rig
-Desc:$
-   You jumped from the rig, not a smart move. 
-~
-Flags:	10
-SecType:	Water (No Swim)
-MatrixExit:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31635
 Name:	A rusted, yet sturdy elevator
@@ -899,13 +1021,20 @@ unwelcome exploration.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #31637
 Name:	porthole
@@ -915,9 +1044,20 @@ You are in an unfinished room.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31639
 	Flags:	0
@@ -930,10 +1070,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31638
 Name:	A small yet comfortable bedroom
@@ -943,19 +1079,26 @@ You are in an unfinished room.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31637
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31653
 Name:	Near the elevators
@@ -970,19 +1113,26 @@ recessed into the ceiling.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	31654
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31654
 Name:	Standing before the airlock
@@ -996,9 +1146,20 @@ lighting provides dim illumination.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31653
 	Flags:	0
@@ -1012,10 +1173,6 @@ MatrixExit:	0
 	Material:	metal
 	Barrier:	32
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31655
 Name:	The research facility
@@ -1027,9 +1184,20 @@ airlock you had to pass through to enter the facility.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31656
 	Flags:	0
@@ -1042,10 +1210,6 @@ MatrixExit:	0
 	Material:	metal
 	Barrier:	32
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31656
 Name:	A branch in the corridor
@@ -1060,9 +1224,20 @@ nearby, but it's hard to pinpoint.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31662
 	Flags:	0
@@ -1087,10 +1262,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31657
 Name:	Laboratories
@@ -1103,9 +1274,20 @@ that a small amount of main power is online.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31658
 	Flags:	0
@@ -1124,10 +1306,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31658
 Name:	A cluttered laboratory
@@ -1142,19 +1320,26 @@ room seems to suggest some kind of genetic research. But into what?
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	31657
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31659
 Name:	A scorched laboratory
@@ -1170,19 +1355,26 @@ out.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31657
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31660
 Name:	A heavily reinforced door
@@ -1199,9 +1391,20 @@ operating table, many you do not recognise.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31656
 	Flags:	0
@@ -1216,10 +1419,6 @@ MatrixExit:	0
 	Barrier:	32
 	KeyVnum:	0
 	LockRating:	10
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31661
 Name:	The clean room
@@ -1234,19 +1433,26 @@ broken.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31660
 	Flags:	0
 	Material:	brick
 	Barrier:	32
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31662
 Name:	Holding cells
@@ -1261,9 +1467,20 @@ the corridor splits off east and west to different parts of the facility.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	31664
 	Flags:	0
@@ -1284,10 +1501,6 @@ MatrixExit:	0
 	Barrier:	24
 	KeyVnum:	0
 	LockRating:	6
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31663
 Name:	A dark holding cell
@@ -1300,19 +1513,26 @@ flows from the grate in the ceiling to clear the acrid stench.
 Flags:	1000000000000101001
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31662
 	Flags:	0
 	Material:	metal
 	Barrier:	24
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31664
 Name:	The end of the corridor
@@ -1327,9 +1547,20 @@ might be able to hear a faint scratching as you put your head to the door.
 Flags:	10000000000001000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door metal huge dented
 	ToVnum:	31666
@@ -1352,10 +1583,6 @@ MatrixExit:	0
 	Barrier:	24
 	KeyVnum:	0
 	LockRating:	6
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31665
 Name:	A dark holding cell
@@ -1368,19 +1595,26 @@ flows from the grate in the ceiling to clear the acrid stench.
 Flags:	1000000000000101001
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	31664
 	Flags:	0
 	Material:	metal
 	Barrier:	24
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #31666
 Name:	A dark holding cell
@@ -1396,18 +1630,25 @@ Whatever is kept in here obviously didn't like it.
 Flags:	1000000000000101001
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	31664
 	Flags:	0
 	Material:	metal
 	Barrier:	32
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 END

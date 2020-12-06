@@ -12,9 +12,21 @@ learning place for those new to the area.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8001
 	Flags:	0
@@ -27,10 +39,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8001
 Name:	Combat Training - Non-Ballistic
@@ -43,9 +51,21 @@ fighting.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8002
 	Flags:	0
@@ -64,10 +84,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8002
 Name:	Combat Training - Ballistic
@@ -78,9 +94,21 @@ litter the room, and countless people train to survive the world of 2050.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8009
 	Flags:	0
@@ -105,10 +133,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8003
 Name:	Hall of Magic
@@ -121,9 +145,21 @@ perceive.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8004
 	Flags:	0
@@ -136,10 +172,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8004
 Name:	Training room
@@ -153,9 +185,21 @@ practice mats and both physical and mental development stations.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8014
 	Flags:	0
@@ -180,10 +224,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8005
 Name:	Hall of Technology
@@ -197,9 +237,21 @@ north, the familiar glow of computer displays is visible.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8006
 	Flags:	0
@@ -212,10 +264,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8006
 Name:	Training room
@@ -227,9 +275,21 @@ few students are practicing the aim with various sorts of firearms.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8019
 	Flags:	0
@@ -254,10 +314,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8007
 Name:	Hall of Nature
@@ -270,9 +326,21 @@ train and practice necessary skills for survival in 2050.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8008
 	Flags:	0
@@ -285,10 +353,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8008
 Name:	Training room
@@ -300,9 +364,21 @@ taught, as well, such as unarmed combat and firearms.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8024
 	Flags:	0
@@ -327,10 +403,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8009
 Name:	Runner Skills Training
@@ -341,9 +413,21 @@ under the watchful eyes of the teachers.
 ~
 Flags:	10011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8029
 	Flags:	0
@@ -368,10 +452,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8010
 Name:	Basic equipment
@@ -381,9 +461,21 @@ equipment that beginning runners need to survive.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8073
 	Flags:	0
@@ -402,10 +494,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8011
 Name:	Magical Skills Training
@@ -416,9 +504,21 @@ equipment to be taught.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8010
 	Flags:	0
@@ -443,10 +543,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8012
 Name:	Adept Ability Development
@@ -456,9 +552,21 @@ their talent in the easiest way possible.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8013
 	Flags:	0
@@ -477,10 +585,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8013
 Name:	Attribute Development
@@ -491,9 +595,21 @@ machines are just a few of the many tools the trainers use.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8009
 	Flags:	0
@@ -506,10 +622,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8014
 Name:	Exit
@@ -520,9 +632,21 @@ under the watchful eyes of the teachers.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8029
 	Flags:	0
@@ -547,10 +671,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8015
 Name:	Basic equipment
@@ -560,9 +680,21 @@ that runners may have.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	8017
 	Flags:	0
@@ -575,10 +707,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8016
 Name:	Spell experimentation area
@@ -588,9 +716,21 @@ spells and not worry about the possible effects of a miscast.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8018
 	Flags:	0
@@ -603,10 +743,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8017
 Name:	Practice area
@@ -617,9 +753,21 @@ equipment to be taught.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8015
 	Flags:	0
@@ -632,10 +780,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8018
 Name:	Development area
@@ -646,9 +790,21 @@ machines are just a few of the many tools the trainers use.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8014
 	Flags:	0
@@ -661,10 +817,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8019
 Name:	Exit
@@ -675,9 +827,21 @@ under the watchful eyes of the teachers.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8029
 	Flags:	0
@@ -702,10 +866,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8020
 Name:	Basic equipment
@@ -715,9 +875,21 @@ that runners may have.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	8022
 	Flags:	0
@@ -730,10 +902,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8021
 Name:	Matrix terminal
@@ -743,9 +911,21 @@ deckers to practice on.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8023
 	Flags:	0
@@ -758,16 +938,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT matrix]
-	ToVnum:	8033
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8022
 Name:	Practice area
@@ -778,9 +948,21 @@ equipment to be taught.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8020
 	Flags:	0
@@ -793,10 +975,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8023
 Name:	Development area
@@ -807,9 +985,21 @@ machines are just a few of the many tools the trainers use.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8019
 	Flags:	0
@@ -822,10 +1012,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8024
 Name:	Exit
@@ -836,9 +1022,21 @@ under the watchful eyes of the teachers.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8029
 	Flags:	0
@@ -863,10 +1061,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8025
 Name:	Basic equipment
@@ -876,9 +1070,21 @@ that runners may have.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	8027
 	Flags:	0
@@ -891,10 +1097,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8026
 Name:	Spell experimentation area
@@ -904,9 +1106,21 @@ spells and not worry about the possible effects of a miscast.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8028
 	Flags:	0
@@ -919,10 +1133,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8027
 Name:	Practice area
@@ -933,9 +1143,21 @@ equipment to be taught.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8025
 	Flags:	0
@@ -948,10 +1170,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8028
 Name:	Development area
@@ -962,9 +1180,21 @@ machines are just a few of the many tools the trainers use.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8024
 	Flags:	0
@@ -977,10 +1207,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8029
 Name:	Lobby
@@ -993,9 +1219,21 @@ few.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8038
 	Flags:	0
@@ -1029,10 +1267,6 @@ A small stairwell leads to the postal room.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8030
 Name:	Postal station
@@ -1043,9 +1277,21 @@ day.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	Desc:$
 The stairway leads back up to the lobby.
@@ -1055,10 +1301,6 @@ The stairway leads back up to the lobby.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8031
 Name:	Entrance to the Neophytic Guild
@@ -1070,9 +1312,21 @@ building.
 ~
 Flags:	100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	~~~
 	ToVnum:	32679
@@ -1092,10 +1346,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8032
 Name:	CommNet terminal
@@ -1105,9 +1355,21 @@ CommNet.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8047
 	Flags:	0
@@ -1120,10 +1382,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8033
 Name:	Pyramid
@@ -1142,19 +1400,27 @@ difficult and interesting, so beware of it!).
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	1
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8034
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8034
 Name:	Communications chamber
@@ -1170,9 +1436,21 @@ ic").  Deception or Sleaze programs can also work.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	3
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8037
 	Flags:	0
@@ -1191,10 +1469,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8035
 Name:	Octagonal room
@@ -1207,9 +1481,21 @@ connected to the CPU, but not all.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	5
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8034
 	Flags:	0
@@ -1222,10 +1508,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8036
 Name:	Cubical room
@@ -1237,19 +1519,27 @@ anywhere from nothing to millions of nuyen.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8035
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8037
 Name:	Rectangular room
@@ -1261,19 +1551,27 @@ one is useless.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	8034
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8038
 Name:	Reception area
@@ -1284,9 +1582,21 @@ be kept in good shape.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Desc:$
 A hallway leads to the lobby.
@@ -1296,10 +1606,6 @@ A hallway leads to the lobby.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8039
 Name:	A small room
@@ -1309,9 +1615,21 @@ but it's comfortable enough.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	Desc:$
 A spiral staircase leads down to the reception.
@@ -1321,10 +1639,6 @@ A spiral staircase leads down to the reception.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8040
 Name:	Hall of Combat
@@ -1336,9 +1650,21 @@ adept.  The hall leads to the north, and expands into a large training room.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8041
 	Flags:	0
@@ -1351,10 +1677,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8041
 Name:	Training Room
@@ -1365,9 +1687,21 @@ room, and numerous other adepts learn to use their special abilities.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8042
 	Flags:	0
@@ -1392,10 +1726,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8042
 Name:	Exit
@@ -1406,9 +1736,21 @@ under the watchful eyes of the teachers.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8029
 	Flags:	0
@@ -1433,10 +1775,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8043
 Name:	Basic equipment
@@ -1446,9 +1784,21 @@ that runners may have.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	8044
 	Flags:	0
@@ -1461,10 +1811,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8044
 Name:	Practice area
@@ -1475,9 +1821,21 @@ equipment to be taught.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8043
 	Flags:	0
@@ -1490,10 +1848,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8045
 Name:	Ability development area
@@ -1503,9 +1857,21 @@ their talent in the easiest way possible.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8046
 	Flags:	0
@@ -1518,10 +1884,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8046
 Name:	Development area
@@ -1532,9 +1894,21 @@ machines are just a few of the many tools the trainers use.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8042
 	Flags:	0
@@ -1547,10 +1921,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8047
 Name:	^RSalvation ^WArmy^n
@@ -1563,9 +1933,21 @@ various things of all types, donated by the community for the less fortunate.
 ~
 Flags:	10011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8048
 	Flags:	0
@@ -1590,10 +1972,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8048
 Name:	^RSalvation ^WArmy^n
@@ -1606,9 +1984,21 @@ various things of all types, donated by the community for the less fortunate.
 ~
 Flags:	10011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8049
 	Flags:	0
@@ -1627,10 +2017,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8049
 Name:	^RSalvation ^WArmy^n
@@ -1643,9 +2029,21 @@ various things of all types, donated by the community for the less fortunate.
 ~
 Flags:	10011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	8050
 	Flags:	0
@@ -1658,10 +2056,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8050
 Name:	^RSalvation ^WArmy^n
@@ -1674,9 +2068,21 @@ various things of all types, donated by the community for the less fortunate.
 ~
 Flags:	10011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8049
 	Flags:	0
@@ -1689,10 +2095,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8051
 Name:	Salvation Army Back Room
@@ -1703,9 +2105,21 @@ As Is Store.
 ~
 Flags:	10011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8052
 	Flags:	0
@@ -1718,10 +2132,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8052
 Name:	Salvation Army Back Room
@@ -1732,9 +2142,21 @@ As Is Store.
 ~
 Flags:	10011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8048
 	Flags:	0
@@ -1747,10 +2169,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8053
 Name:	Hall of Speed
@@ -1765,13 +2183,27 @@ rigger's nervous system.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	8054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #8054
 Name:	Training Room
@@ -1784,9 +2216,21 @@ various workbenches.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8058
 	Flags:	0
@@ -1811,10 +2255,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8055
 Name:	Drivers Education
@@ -1826,9 +2266,21 @@ learn the ropes of their trade.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8011
 	Flags:	0
@@ -1841,10 +2293,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8056
 Name:	Information
@@ -1857,9 +2305,21 @@ terminal.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8057
 	Flags:	0
@@ -1872,10 +2332,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8057
 Name:	Development area
@@ -1886,9 +2342,21 @@ machines are just a few of the many tools the trainers use.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	8058
 	Flags:	0
@@ -1901,10 +2369,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8058
 Name:	Exit
@@ -1915,9 +2379,21 @@ under the watchful eyes of the teachers.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8029
 	Flags:	0
@@ -1942,10 +2418,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8059
 Name:	Basic equipment
@@ -1955,9 +2427,21 @@ that runners may have.
 ~
 Flags:	1000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	8055
 	Flags:	0
@@ -1970,10 +2454,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8060
 Name:	The void
@@ -1983,19 +2463,27 @@ body, with only blackness to comfort you.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	2000
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8065
 Name:	The Neophytic Guild Parking Garage
@@ -2009,9 +2497,21 @@ GUILD, THEY ARE ON THE OUTSIDE FOR GOOD.  YOU HAVE BEEN WARNED.
 ~
 Flags:	100000000000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	32680
 	Flags:	0
@@ -2024,10 +2524,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8070
 Name:	Shaman training
@@ -2037,19 +2533,27 @@ spells and not worry about the possible effects of a miscast.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	8071
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8071
 Name:	Mage training
@@ -2059,9 +2563,21 @@ spells and not worry about the possible effects of a miscast.
 ~
 Flags:	11100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	8070
 	Flags:	0
@@ -2074,10 +2590,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8072
 Name:	Linguistic Skills Training
@@ -2092,19 +2604,27 @@ Awake.
 ~
 Flags:	11000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	8011
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #8073
 Name:	A shady corner
@@ -2116,18 +2636,26 @@ together by the side.  A man stands here, smoking a cigarette.
 ~
 Flags:	11000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	8010
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 END

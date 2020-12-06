@@ -8,15 +8,20 @@ ranging from squatters to corporate types. You can enter the bar to the north.
 Flags:	100
 SecType:	City
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4701
 	Flags:	0
@@ -35,10 +40,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4701
 Name:	Entrance to the Reaper
@@ -52,15 +53,20 @@ north is a long bar. The exit is to the south.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4702
 	Flags:	0
@@ -79,10 +85,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4702
 Name:	The Bar
@@ -96,15 +98,20 @@ at tables.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4709
 	Flags:	0
@@ -123,10 +130,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4703
 Name:	By a Table
@@ -139,15 +142,20 @@ fling themselves into what seems to be a large pit full of moving bodies.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4711
 	Flags:	0
@@ -166,10 +174,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4704
 Name:	By The Pit
@@ -181,15 +185,20 @@ stand, drinking themselves into unconsciousness.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4712
 	Flags:	0
@@ -208,10 +217,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4705
 Name:	The Mosh Pit
@@ -222,15 +227,20 @@ actively beating each other up. The stage is to the west.
 Flags:	1000000000000001000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	4706
 	Flags:	0
@@ -243,10 +253,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4706
 Name:	The Mosh Pit
@@ -260,15 +266,20 @@ as you may not even be safe from your own friends, if the music gets to them.
 Flags:	1000000000000001000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	4705
 	Flags:	0
@@ -281,10 +292,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4707
 Name:	By The Stage
@@ -297,15 +304,20 @@ speakers.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4713
 	Flags:	0
@@ -326,10 +338,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4708
 Name:	The Stage
@@ -343,15 +351,20 @@ You notice a large scorch mark on the floor.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	gate~
 	ToVnum:	4707
@@ -367,10 +380,6 @@ JackID:	0
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4709
 Name:	Along The Bar
@@ -384,15 +393,20 @@ only you buy them a beer..
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	steel door~
 	ToVnum:	4710
@@ -407,10 +421,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4710
 Name:	A Back Room
@@ -424,15 +434,20 @@ shoot you.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4720
 	Flags:	0
@@ -447,10 +462,6 @@ JackID:	0
 	Barrier:	4
 	KeyVnum:	0
 	LockRating:	5
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4711
 Name:	Among Some Tables
@@ -462,15 +473,20 @@ bar is to your east, and a large booth is to your north.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4718
 	Flags:	0
@@ -495,10 +511,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4712
 Name:	By Some Tables
@@ -510,15 +522,20 @@ small booth is north of you, and you see some people dancing to your west.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4717
 	Flags:	0
@@ -543,10 +560,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4713
 Name:	The Dance Floor
@@ -559,15 +572,20 @@ light in the ceiling bathe the area in a flashing, multicolored glow.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4716
 	Flags:	0
@@ -592,10 +610,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4714
 Name:	The Dance Floor
@@ -608,15 +622,20 @@ majority seems to be here just to get closer to the stage.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4715
 	Flags:	0
@@ -629,10 +648,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4715
 Name:	The Corner Of The Bar
@@ -645,15 +660,20 @@ except for a large painting on the northern wall.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	4716
 	Flags:	0
@@ -666,10 +686,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4716
 Name:	The Back Wall of The Bar
@@ -681,15 +697,20 @@ Others sit around idly, waiting for an opening at the table.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	4713
 	Flags:	0
@@ -702,10 +723,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4717
 Name:	A Booth
@@ -718,25 +735,26 @@ light.
 Flags:	1000101100
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	4712
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4718
 Name:	A Booth
@@ -749,25 +767,26 @@ peace in the bar.
 Flags:	101100
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	4711
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4719
 Name:	Backstage
@@ -780,15 +799,20 @@ onto the stage.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door~
 	ToVnum:	4708
@@ -796,10 +820,6 @@ JackID:	0
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4720
 Name:	A Stairwell
@@ -811,15 +831,20 @@ Frog.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door black~
 	ToVnum:	4710
@@ -834,10 +859,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4721
 Name:	A Hallway
@@ -849,15 +870,20 @@ the walls.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	4722
 	Flags:	0
@@ -870,10 +896,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4722
 Name:	A Hallway
@@ -885,15 +907,20 @@ The hallway leads northeast and south.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	4721
 	Flags:	0
@@ -906,10 +933,6 @@ JackID:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4723
 Name:	A Hallway
@@ -921,15 +944,20 @@ set of large double doors lead south, and the hallway continues to the north.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	4722
 	Flags:	0
@@ -944,10 +972,6 @@ JackID:	0
 	Barrier:	32
 	KeyVnum:	4707
 	LockRating:	15
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #4724
 Name:	Mac MacLaury's Office
@@ -961,15 +985,20 @@ some other places you dont recognize.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door double~
 	ToVnum:	4723
@@ -978,87 +1007,5 @@ JackID:	0
 	Barrier:	32
 	KeyVnum:	4707
 	LockRating:	15
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#4725
-Name:	An unfinished room
-Desc:$
-   You are in an unfinished room. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#4726
-Name:	An unfinished room
-Desc:$
-   You are in an unfinished room. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT east]
-	ToVnum:	4723
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#4727
-Name:	An unfinished room
-Desc:$
-   You are in an unfinished room. 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT west]
-	ToVnum:	4723
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 END

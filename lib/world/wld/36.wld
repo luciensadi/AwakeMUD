@@ -24,6 +24,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	3627
 	Flags:	0
@@ -68,6 +69,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3602
 	Flags:	0
@@ -117,6 +119,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door furnace
 	Desc:$
@@ -135,53 +138,6 @@ The furnace door.
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	3609
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#3603
-Name:	Furnace
-Desc:$
-   Poor you, as you climb inside the furnace you're blinded by the heat and
-flame. As the fluid inside your eyes comes to a boil and explodes you can feel
-the flame that you are inhaling start to burn your lungs.  Your heart begins
-to beat faster, carrying the now boiling blood to all your major organs.
-Right before you pass out from the excruciating pain of your skin melting off
-and the muscle beneath it separating from the bone you can hear the sounds of
-your own brain beginning to boil. 
-~
-Flags:	1110
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT south]
-	Keywords:	door furnace
-	Desc:$
-The furnace door
-~
-	ToVnum:	3602
-	Flags:	0
-	Material:	metal
-	Barrier:	4
-	KeyVnum:	0
-[EXIT up]
-	Desc:$
-A chimmny leads up.
-~
-	ToVnum:	3600
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -220,6 +176,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3609
 	Flags:	0
@@ -259,6 +216,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	3607
 	Flags:	0
@@ -297,6 +255,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3608
 	Flags:	0
@@ -326,6 +285,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	3605
 	Flags:	0
@@ -366,6 +326,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3610
 	Flags:	0
@@ -413,6 +374,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	3602
 	Flags:	0
@@ -451,34 +413,13 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	3608
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#3611
-Name:	An unnamed room
-Desc:$
-Unused
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #3612
 Name:	End of hallway
@@ -501,6 +442,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	3615
 	Flags:	0
@@ -549,6 +491,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	3618
 	Flags:	0
@@ -580,6 +523,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	3612
 	Flags:	0
@@ -610,6 +554,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	Keywords:	door hidden
 	Desc:$
@@ -627,28 +572,6 @@ You find a hidden door.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#3616
-Name:	An unnamed room
-Desc:$
-Unused
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #3617
 Name:	An unnamed room
@@ -671,6 +594,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	3618
 	Flags:	0
@@ -702,6 +626,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3623
 	Flags:	0
@@ -766,6 +691,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #3620
 Name:	Tip of the Claw
@@ -788,50 +714,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-BREAK
-#3621
-Name:	An unnamed room
-Desc:$
-Unused
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#3622
-Name:	An unnamed room
-Desc:$
-Unused
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #3623
 Name:	Hall of mirrors
@@ -857,6 +740,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3625
 	Flags:	0
@@ -924,6 +808,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	Door
 	Desc:$
@@ -1007,6 +892,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3623
 	Flags:	0
@@ -1077,6 +963,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	1
 	BackgroundType:	9
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3612
 	Flags:	0
@@ -1108,6 +995,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3600
 	Flags:	0

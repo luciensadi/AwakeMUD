@@ -6,13 +6,21 @@ of licking goes on in this room.  NOT IN A DIRTY WAY, you sicko.
 ~
 Flags:	10000000000000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	20
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #22201
 Name:	Inside Starbuck's
@@ -25,9 +33,21 @@ that one!  Oof... that musta hurt.
 ~
 Flags:	10000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22202
 	Flags:	0
@@ -40,10 +60,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22202
 Name:	Starbuck's Counter
@@ -54,9 +70,21 @@ those two employees are doing is VERY dirty!  Don't look!
 ~
 Flags:	10000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	Keywords:	door
 	ToVnum:	22203
@@ -70,10 +98,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22203
 Name:	Unisex Bathroom
@@ -86,9 +110,21 @@ likely never worked to begin with.
 ~
 Flags:	10000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	Keywords:	door
 	ToVnum:	22202
@@ -96,10 +132,6 @@ SecType:	Inside
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22204
 Name:	Ivy Bushes
@@ -110,9 +142,21 @@ through poison ivy.  You begin to itch.
 ~
 Flags:	10000000000000000
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22205
 	Flags:	0
@@ -125,10 +169,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22205
 Name:	Dark Crossroads
@@ -140,9 +180,21 @@ creating an unpleasant atmosphere.
 ~
 Flags:	1
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22207
 	Flags:	0
@@ -161,10 +213,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22206
 Name:	Small Pond
@@ -175,9 +223,21 @@ to go near it much less touch it, or dive in...
 ~
 Flags:	101
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	22208
 	Flags:	0
@@ -197,10 +257,6 @@ SecType:	Forest
 	Barrier:	4
 	KeyVnum:	0
 	HiddenRating:	15
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22207
 Name:	Trees
@@ -212,9 +268,21 @@ blood.
 ~
 Flags:	1
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	22205
 	Flags:	0
@@ -227,10 +295,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22208
 Name:	Grabby Undergrowth!
@@ -241,9 +305,21 @@ grown here in the muck, and seem to squeal when you place your foot near them.
 ~
 Flags:	1
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22210
 	Flags:	0
@@ -256,10 +332,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22209
 Name:	On the Barely-Visible Path
@@ -273,9 +345,21 @@ you.
 ~
 Flags:	1
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22211
 	Flags:	0
@@ -288,10 +372,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22210
 Name:	Forest
@@ -305,9 +385,21 @@ better to move on.
 ~
 Flags:	10000000000000000
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22214
 	Flags:	0
@@ -332,10 +424,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22211
 Name:	Rocky Road
@@ -347,9 +435,21 @@ tree and throws it at your face, hitting you in the eye.
 ~
 Flags:	10000000000000000
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	22213
 	Flags:	0
@@ -368,10 +468,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22212
 Name:	Turn in the Path
@@ -384,9 +480,21 @@ feet.
 ~
 Flags:	1
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22223
 	Flags:	0
@@ -399,10 +507,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22213
 Name:	Forest
@@ -416,9 +520,21 @@ but that's nonsense.  Trees can't project emotions... can they?
 ~
 Flags:	10000000000000000
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	22211
 	Flags:	0
@@ -431,10 +547,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22214
 Name:	Forested Path
@@ -448,9 +560,21 @@ you.
 ~
 Flags:	1
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	22215
 	Flags:	0
@@ -463,10 +587,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22215
 Name:	Forest
@@ -483,9 +603,21 @@ Chalk this one up to the continuing weirdness of this forest.
 ~
 Flags:	10000000000000000
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22216
 	Flags:	0
@@ -504,10 +636,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22216
 Name:	Bottom of the Mountain
@@ -518,10 +646,22 @@ cave entrance, but it may also be a raven perched on the hillside.  You can
 smell rock and trees, and the sunlight is warming and pleasant.  
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	22215
 	Flags:	0
@@ -534,10 +674,6 @@ SecType:	Mountains
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22217
 Name:	Bottom of the Mountain
@@ -548,10 +684,22 @@ cave entrance, but it may also be a raven perched on the hillside.  You can
 smell rock and trees, and the sunlight is warming and pleasant. 
 ~
 Flags:	100
-SecType:	Mountains
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	22222
 	Flags:	0
@@ -564,10 +712,6 @@ SecType:	Mountains
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22218
 Name:	About Twenty Feet Off the Ground
@@ -579,10 +723,22 @@ get a grip on the cliff face as some disturbed rock powder blows into your
 eyes. 
 ~
 Flags:	1000000000000000000000
-SecType:	Mountains
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	3
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	22219
 	Flags:	0
@@ -595,10 +751,6 @@ SecType:	Mountains
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22219
 Name:	About 100 Feet Above the Ground
@@ -609,10 +761,22 @@ somewhere out of your sight.  A glance back over your shoulder reveals a still
 very thick forest, with redwood trees still reaching higher than you.  
 ~
 Flags:	1000000000000000000100
-SecType:	Mountains
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	22242
 	Flags:	0
@@ -625,10 +789,6 @@ SecType:	Mountains
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22220
 Name:	About 100 Feet Above the Ground
@@ -639,10 +799,22 @@ somewhere out of your sight.  A glance back over your shoulder reveals a still
 very thick forest, with redwood trees still reaching higher than you. 
 ~
 Flags:	1000000000000000000100
-SecType:	Mountains
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	7
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	22221
 	Flags:	0
@@ -655,10 +827,6 @@ SecType:	Mountains
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22221
 Name:	150 Feet Above the Ground
@@ -670,10 +838,22 @@ rest.  The bad thing is that you cannot reach it from here, and will have to
 climb further up the treacherous cliff and then drop down. 
 ~
 Flags:	1000000000000000000000
-SecType:	Mountains
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	7
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	22243
 	Flags:	0
@@ -686,10 +866,6 @@ SecType:	Mountains
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22222
 Name:	Forest
@@ -702,9 +878,21 @@ in these woods.
 ~
 Flags:	10000000000000000
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22217
 	Flags:	0
@@ -723,10 +911,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22223
 Name:	Forest
@@ -740,9 +924,21 @@ as dinner.
 ~
 Flags:	10000000000000000
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22222
 	Flags:	0
@@ -761,10 +957,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22224
 Name:	Path
@@ -778,9 +970,21 @@ attention.
 ~
 Flags:	1
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	22222
 	Flags:	0
@@ -793,10 +997,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22225
 Name:	Forest
@@ -813,9 +1013,21 @@ a little nervous about standing here.
 ~
 Flags:	10000000000000000
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22226
 	Flags:	0
@@ -828,10 +1040,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22226
 Name:	Squishy Squish!
@@ -845,9 +1053,21 @@ you.
 ~
 Flags:	1
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22224
 	Flags:	0
@@ -860,10 +1080,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22227
 Name:	Underneath the Surface
@@ -873,10 +1089,22 @@ here, leading you away from the pond.  It's a tunnel, slightly worrying you,
 but hopefully it'll end before you run out of air, eh? 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	10
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22228
 	Flags:	0
@@ -889,10 +1117,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22228
 Name:	Dark Tunnel
@@ -902,10 +1126,22 @@ is mostly cold, but every once in a while, you swim through a warm area of
 water with an upward current, implying hot springs somewhere beneath you. 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	13
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	22227
 	Flags:	0
@@ -918,10 +1154,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22229
 Name:	Continuing Through the Tunnels
@@ -931,10 +1163,22 @@ your limbs, as if they were trying to drag you down.  You struggle and push to
 get through. 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	15
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22228
 	Flags:	0
@@ -947,10 +1191,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22230
 Name:	Muck, muck and more muck.
@@ -960,10 +1200,22 @@ close your eyes and swim that way so as to not get mud in your peepers, but
 who knows what might pop out at you in the dark. 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	8
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22229
 	Flags:	0
@@ -976,10 +1228,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22231
 Name:	Through the Tunnels
@@ -989,10 +1237,22 @@ and scream for a rest, but you can't honestly rest underwater, now can you?
 You raise your weary limbs and propel yourself forward.  
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	13
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22230
 	Flags:	0
@@ -1005,10 +1265,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22232
 Name:	Darkness
@@ -1017,10 +1273,22 @@ Desc:$
 it's 2 inches from your nose. 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	5
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22233
 	Flags:	0
@@ -1033,10 +1301,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22233
 Name:	Curve in the Tunnels
@@ -1045,10 +1309,22 @@ Desc:$
 I guess you need to turn now, eh chummer? 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22234
 	Flags:	0
@@ -1061,10 +1337,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22234
 Name:	Water Tunnel
@@ -1074,10 +1346,22 @@ wonder if this tunnel is ever going to end.  Pull your arms and kick those
 legs. 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	11
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22235
 	Flags:	0
@@ -1090,10 +1374,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22235
 Name:	A Small Island
@@ -1104,9 +1384,21 @@ possibly going back. A small sliver of light peaks in through the roof.
 ~
 Flags:	10000000000011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22236
 	Flags:	0
@@ -1119,10 +1411,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22236
 Name:	Yummy Water
@@ -1132,10 +1420,22 @@ disgusting water and gag at the thickness of the muck.  You fear what may have
 just entered your mouth, and you bite down on something crunchy.  Ewww... 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	22235
 	Flags:	0
@@ -1148,10 +1448,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22237
 Name:	Tangled Up
@@ -1162,10 +1458,22 @@ further underwater.  Then, a small fish comes and chews through the plant,
 setting you free. 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	13
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22236
 	Flags:	0
@@ -1178,10 +1486,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22238
 Name:	Pitch Dark
@@ -1192,10 +1496,22 @@ tastes horribly gross, and you'll pray to the immortals that you'll never have
 to swim through here again. 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	5
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22237
 	Flags:	0
@@ -1208,10 +1524,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22239
 Name:	Another Corner
@@ -1221,10 +1533,22 @@ Ouch. That bruise on your head is a little more sore.  I guess you need to
 turn now again, eh chummer? You'll get the hang of it... hopefully. 
 ~
 Flags:	1001
-SecType:	Water (Swim)
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	13
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22238
 	Flags:	0
@@ -1237,10 +1561,6 @@ SecType:	Water (Swim)
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22240
 Name:	On Land Once Again!
@@ -1252,9 +1572,21 @@ from your body and make your decision.
 ~
 Flags:	10000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22239
 	Flags:	0
@@ -1267,10 +1599,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22241
 Name:	Nickoli's Lair
@@ -1282,19 +1610,27 @@ dragon heads are mounted onto the walls, putting off a leather-like scent.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	22240
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22242
 Name:	150 Feet Above the Ground
@@ -1306,10 +1642,22 @@ rest.  The bad thing is that you cannot reach it from here, and will have to
 climb further up the treacherous cliff and then drop down. 
 ~
 Flags:	1000000000000000000000
-SecType:	Mountains
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	9
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	22243
 	Flags:	0
@@ -1322,10 +1670,6 @@ SecType:	Mountains
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22243
 Name:	Top of the Cliff
@@ -1336,10 +1680,22 @@ peculiar tree, which leads to into the unknown.  So, both choices lead down.
 Hmm.  Whatever are you going  to do? 
 ~
 Flags:	0
-SecType:	Mountains
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22149
 	Flags:	0
@@ -1364,10 +1720,6 @@ SecType:	Mountains
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22244
 Name:	Small Ledge
@@ -1378,14 +1730,25 @@ you and threatens to push you from your newly-found perch.  The smell of
 chemicals emits from the rockface behind you.  
 ~
 Flags:	1000000000000000000100
-SecType:	Mountains
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	15
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	cliff wall
 	Desc:$
-
 ~
 	ToVnum:	22245
 	Flags:	1
@@ -1399,10 +1762,6 @@ SecType:	Mountains
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22245
 Name:	Entrance to Secret Ares Military Outpost
@@ -1414,9 +1773,21 @@ place is thick metal, and  a glass room stands alone in the middle.
 ~
 Flags:	11001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22246
 	Flags:	0
@@ -1430,10 +1801,6 @@ SecType:	Inside
 	Material:	stone
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22246
 Name:	Top of the Staircase
@@ -1445,9 +1812,21 @@ smell chemicals, sweat and blood.
 ~
 Flags:	1100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	22245
 	Flags:	0
@@ -1460,10 +1839,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22247
 Name:	Middle of the Staircase
@@ -1475,9 +1850,21 @@ to their work.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	22246
 	Flags:	0
@@ -1490,10 +1877,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22248
 Name:	Bottom of the Staircase
@@ -1505,9 +1888,21 @@ dust anywhere around you, almost as if the place was cleaned obsessively.
 ~
 Flags:	1100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	22249
 	Flags:	0
@@ -1520,10 +1915,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22249
 Name:	Almost in the Room
@@ -1534,9 +1925,21 @@ A peculiar glass room is in the middle, heavily guarded.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22250
 	Flags:	0
@@ -1549,10 +1952,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22250
 Name:	Entering the Main Room
@@ -1564,9 +1963,21 @@ of guards outside, there must be something in there.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22260
 	Flags:	0
@@ -1597,10 +2008,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22251
 Name:	A Computer Station
@@ -1610,19 +2017,27 @@ of maps, files and secret, military crap.  It looks pretty important.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	22250
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22252
 Name:	Behind the Chart
@@ -1633,9 +2048,21 @@ worth it!
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	chart map
 	ToVnum:	22262
@@ -1650,10 +2077,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22253
 Name:	Hallway
@@ -1664,9 +2087,21 @@ chemicals haunts your senses.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22263
 	Flags:	0
@@ -1679,10 +2114,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22254
 Name:	Open Room
@@ -1693,9 +2124,21 @@ due north there's a clear glass room, heavily guarded; to the east, computers.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22259
 	Flags:	0
@@ -1733,10 +2176,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22255
 Name:	Open Room
@@ -1748,9 +2187,21 @@ and then in the center is the intriguing glass room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22258
 	Flags:	0
@@ -1776,10 +2227,6 @@ SecType:	Inside
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22256
 Name:	Sleeping Chambers
@@ -1791,9 +2238,21 @@ west.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door
 	ToVnum:	22255
@@ -1807,10 +2266,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22257
 Name:	Open Room
@@ -1821,9 +2276,21 @@ heavily guarded.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22264
 	Flags:	0
@@ -1849,10 +2316,6 @@ SecType:	Inside
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22258
 Name:	Open Room
@@ -1863,9 +2326,21 @@ flat on your ass.  A peculiar glass room stands solitary to the northeast.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22265
 	Flags:	0
@@ -1902,10 +2377,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22259
 Name:	Outside the Glass Room
@@ -1916,9 +2387,21 @@ important.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22266
 	Flags:	0
@@ -1955,10 +2438,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22260
 Name:	Open Floor
@@ -1968,9 +2447,21 @@ glassed in room to the northwest, and a computer station to the east.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22267
 	Flags:	0
@@ -2001,10 +2492,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22261
 Name:	A Computer Station
@@ -2014,19 +2501,27 @@ of maps, files and secret, military crap.  It looks pretty important.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	22260
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22262
 Name:	End of the Hallway
@@ -2037,9 +2532,21 @@ tacks stuck in specific locations with coded labels.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22269
 	Flags:	0
@@ -2054,10 +2561,6 @@ SecType:	Inside
 	Barrier:	4
 	KeyVnum:	0
 	HiddenRating:	20
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22263
 Name:	Hallway
@@ -2068,9 +2571,21 @@ chemicals haunts your senses.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22270
 	Flags:	0
@@ -2083,10 +2598,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22264
 Name:	Open Room
@@ -2097,9 +2608,21 @@ guarded.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22271
 	Flags:	0
@@ -2137,10 +2660,6 @@ SecType:	Inside
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22265
 Name:	Outside the Glass Room
@@ -2151,9 +2670,21 @@ important.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22272
 	Flags:	0
@@ -2190,10 +2721,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22266
 Name:	A Glass Room
@@ -2203,9 +2730,21 @@ west.  A simple trapdoor is beneath you.
 ~
 Flags:	11001100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	metal door
 	ToVnum:	22273
@@ -2248,10 +2787,6 @@ You slide through the trapdoor with ease.
 	Material:	metal
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22267
 Name:	Outside the Glass Room
@@ -2262,9 +2797,21 @@ important.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22274
 	Flags:	0
@@ -2289,10 +2836,6 @@ SecType:	Inside
 	Material:	metal
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22268
 Name:	A Computer Station
@@ -2303,19 +2846,27 @@ poke the mouse, and smoke issues from the monitor.  What have you done?!?
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	22267
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22269
 Name:	Hallway
@@ -2326,9 +2877,21 @@ chemicals haunts your senses.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22276
 	Flags:	0
@@ -2341,10 +2904,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22270
 Name:	Hallway
@@ -2355,9 +2914,21 @@ chemicals haunts your senses.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22277
 	Flags:	0
@@ -2370,10 +2941,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22271
 Name:	Open Room
@@ -2384,9 +2951,21 @@ heavily guarded.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22278
 	Flags:	0
@@ -2424,10 +3003,6 @@ SecType:	Inside
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22272
 Name:	Open Room
@@ -2439,9 +3014,21 @@ ass. To the southeast is the glass room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22279
 	Flags:	0
@@ -2484,10 +3071,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22273
 Name:	Outside the Glass Room
@@ -2498,9 +3081,21 @@ important.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22280
 	Flags:	0
@@ -2537,10 +3132,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22274
 Name:	Open Room
@@ -2552,9 +3143,21 @@ To the southewest is the glass room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22281
 	Flags:	0
@@ -2585,10 +3188,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22275
 Name:	A Computer Station
@@ -2598,19 +3197,27 @@ of maps, files and secret, military crap.  It looks pretty important.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	22274
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22276
 Name:	Hallway
@@ -2621,9 +3228,21 @@ chemicals haunts your senses.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door
 	ToVnum:	22283
@@ -2637,10 +3256,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22277
 Name:	Hallway
@@ -2651,9 +3266,21 @@ has a sign on it.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door steel
 	ToVnum:	22284
@@ -2668,10 +3295,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22278
 Name:	Northwest Corner
@@ -2683,9 +3306,21 @@ locked steel door.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	steel door
 	ToVnum:	22285
@@ -2719,10 +3354,6 @@ SecType:	Inside
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22279
 Name:	Open Room
@@ -2734,9 +3365,21 @@ operation.  To the west are a couple doors and computer stations.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22280
 	Flags:	0
@@ -2767,10 +3410,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22280
 Name:	North End
@@ -2782,9 +3421,21 @@ this operation.  To the west are a couple doors and computer stations.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22281
 	Flags:	0
@@ -2815,10 +3466,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22281
 Name:	North End
@@ -2830,9 +3477,21 @@ stations.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22282
 	Flags:	0
@@ -2857,10 +3516,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22282
 Name:	Out of the Room
@@ -2870,9 +3525,21 @@ much to see here, move along!
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22283
 	Flags:	0
@@ -2885,10 +3552,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22283
 Name:	Hallway
@@ -2899,9 +3562,21 @@ wisely, grasshopper.
 ~
 Flags:	1100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22290
 	Flags:	0
@@ -2921,10 +3596,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22284
 Name:	Chip Installation
@@ -2938,9 +3609,21 @@ chips into the skulls of soldiers.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door steel
 	ToVnum:	22277
@@ -2949,10 +3632,6 @@ SecType:	Inside
 	Barrier:	4
 	KeyVnum:	22501
 	LockRating:	3
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22285
 Name:	Library
@@ -2964,9 +3643,21 @@ library.
 ~
 Flags:	10000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	bookcase book shelf shelves
 	ToVnum:	22286
@@ -2981,10 +3672,6 @@ SecType:	Inside
 	Material:	metal
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22286
 Name:	Behind the Bookcase
@@ -2997,9 +3684,21 @@ horrific looking monsters.
 ~
 Flags:	1001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22288
 	Flags:	0
@@ -3020,10 +3719,6 @@ SecType:	Inside
 	Barrier:	4
 	KeyVnum:	0
 	HiddenRating:	5
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22287
 Name:	Parts Storage
@@ -3038,9 +3733,21 @@ odor of rotting flesh.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22289
 	Flags:	0
@@ -3053,10 +3760,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22288
 Name:	Downslot
@@ -3069,9 +3772,21 @@ off.  Ewwww *shudder*
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22289
 	Flags:	0
@@ -3084,10 +3799,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22289
 Name:	Surgery (Kind of)
@@ -3099,9 +3810,21 @@ look, they still appear to be formidable opponents.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	22287
 	Flags:	0
@@ -3114,10 +3837,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22290
 Name:	Cafeteria
@@ -3129,9 +3848,21 @@ but you can see that the cafeteria continues to the north.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22291
 	Flags:	0
@@ -3144,10 +3875,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22291
 Name:	Cafeteria
@@ -3158,9 +3885,21 @@ receiving the smelly, so-called food, the people shuffle south.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22292
 	Flags:	0
@@ -3173,10 +3912,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22292
 Name:	Kitchen
@@ -3189,19 +3924,27 @@ labels.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	22291
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22293
 Name:	Sleeping Chambers
@@ -3211,19 +3954,27 @@ east.   Nothing interesting, really.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22256
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22294
 Name:	Gymnasium
@@ -3234,9 +3985,21 @@ loud, and you cover your nose with your shirt to block the stench of sweat.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22295
 	Flags:	0
@@ -3249,10 +4012,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22295
 Name:	Gymnasium
@@ -3264,9 +4023,21 @@ good place to practice.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door
 	ToVnum:	22254
@@ -3280,10 +4051,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22296
 Name:	Showers
@@ -3295,19 +4062,27 @@ chummer?  Don't drop the soap.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22294
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22297
 Name:	Private Office
@@ -3321,9 +4096,21 @@ unseen.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door
 	ToVnum:	22271
@@ -3331,10 +4118,6 @@ SecType:	Inside
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22298
 Name:	Private Office
@@ -3348,9 +4131,21 @@ unseen.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door
 	ToVnum:	22278
@@ -3358,10 +4153,6 @@ SecType:	Inside
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #22299
 Name:	Savina's Meat Locker
@@ -3371,12 +4162,26 @@ credit!
 ~
 Flags:	11000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT southwest]
+	ToVnum:	21702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 END

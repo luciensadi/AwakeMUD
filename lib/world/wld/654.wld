@@ -22,6 +22,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	65401
 	Flags:	0
@@ -59,6 +60,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	65402
 	Flags:	0
@@ -101,6 +103,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	65406
 	Flags:	0
@@ -113,28 +116,6 @@ RoomType:	7
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#65403
-Name:	unused.
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #65404
 Name:	Airsoft Shop
@@ -161,6 +142,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	15
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	65407
 	Flags:	0
@@ -198,6 +180,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	65406
 	Flags:	0
@@ -235,6 +218,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	65405
 	Flags:	0
@@ -272,6 +256,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	65404
 	Flags:	0

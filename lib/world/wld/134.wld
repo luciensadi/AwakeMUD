@@ -6,10 +6,22 @@ wonder what the building could be but as you look around you see a sign off to
 your right. 
 ~
 Flags:	10000000000000000000000
-SecType:	Hills
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 Half-way to the restraunt. 
@@ -25,10 +37,6 @@ Half-way to the restraunt.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13401
 Name:	Half-way up the hill to the restaurant
@@ -41,9 +49,21 @@ gun away thinking you'll get em later...
 ~
 Flags:	10000000000000000000000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 The entrance to La'Charve' 
@@ -62,10 +82,6 @@ A private road.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13402
 Name:	The entrance to the La' Charne Restraunt.
@@ -77,9 +93,21 @@ vehicle....oh look its that Nightsky from earlier....heh...
 ~
 Flags:	100000000000000000000000
 SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door glass~~
 	Desc:$
@@ -99,10 +127,6 @@ Half-way up the hill.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13403
 Name:	The Front lobby.
@@ -117,9 +141,21 @@ least there corpse.
 ~
 Flags:	1100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13404
 	Flags:	0
@@ -142,10 +178,6 @@ Entrance...
 	Material:	glass
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13404
 Name:	The front of the dining room.
@@ -156,9 +188,21 @@ next, bus boys and waiter are running about the whole restrant...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13409
 	Flags:	0
@@ -195,10 +239,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13405
 Name:	Coat check area
@@ -211,19 +251,27 @@ body armor...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	13403
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13406
 Name:	On of the corner tables.
@@ -233,9 +281,21 @@ never know ehh....damn mages....
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13408
 	Flags:	0
@@ -254,10 +314,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13407
 Name:	Shadowrunners Corner...
@@ -268,9 +324,21 @@ Shadows and asks you to sit...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13410
 	Flags:	0
@@ -289,10 +357,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13408
 Name:	Table after table
@@ -302,9 +366,21 @@ wall providing a private booth.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13411
 	Flags:	0
@@ -335,10 +411,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13409
 Name:	The Center of the Dining room
@@ -349,9 +421,21 @@ Spenders.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13412
 	Flags:	0
@@ -400,10 +484,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13410
 Name:	Deckers Hangout.
@@ -414,9 +494,21 @@ Decker, Brian sits here....
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13413
 	Flags:	0
@@ -447,10 +539,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13411
 Name:	Back Corner.
@@ -460,9 +548,21 @@ dining room....
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	13408
 	Flags:	0
@@ -481,10 +581,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13412
 Name:	The Back of the dining room.
@@ -495,9 +591,21 @@ the waiters and waitresses come in and out of...must be the kitchen.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	Double Door~~
 	ToVnum:	13414
@@ -535,10 +643,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13413
 Name:	The Bar.
@@ -548,9 +652,21 @@ bartender stands behind it dressed in a tuxedo, he must double as the bouncer.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	13412
 	Flags:	0
@@ -569,10 +685,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13414
 Name:	Entrance to the Kitchen
@@ -584,9 +696,21 @@ do what else....cook.....
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13415
 	Flags:	0
@@ -600,10 +724,6 @@ SecType:	Inside
 	Material:	metal
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13415
 Name:	Food Pick up counter.
@@ -614,9 +734,21 @@ because you see multiple waiters here picking up orders and droping more off.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	13416
 	Flags:	0
@@ -635,10 +767,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13416
 Name:	Moving around the right side of the pick-up counter.
@@ -649,9 +777,21 @@ you haven't already that is...
 ~
 Flags:	1100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13418
 	Flags:	0
@@ -664,10 +804,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13417
 Name:	Moving around the left side of the pick-up counter.
@@ -678,9 +814,21 @@ you haven't already that is...
 ~
 Flags:	1100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13419
 	Flags:	0
@@ -693,10 +841,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13418
 Name:	Around the right side of the counter.
@@ -707,9 +851,21 @@ a someone yelling at the top of his lungs...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	13416
 	Flags:	0
@@ -722,10 +878,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13419
 Name:	Around the left side of the counter.
@@ -736,9 +888,21 @@ a someone yelling at the top of his lungs...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	13420
 	Flags:	0
@@ -751,10 +915,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13420
 Name:	On the other side of the pick-up counter.
@@ -764,9 +924,21 @@ too much attention you hope...  You notice a Food Prep area up ahead of you.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13421
 	Flags:	0
@@ -785,10 +957,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13421
 Name:	Food Prep area.
@@ -800,9 +968,21 @@ frightened.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	13422
 	Flags:	0
@@ -815,10 +995,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13422
 Name:	Cooks Area
@@ -829,9 +1005,21 @@ fear the wrath of these...cooks...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	13423
 	Flags:	0
@@ -844,10 +1032,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13423
 Name:	The Chefs area
@@ -860,9 +1044,21 @@ mad.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	13424
 	Flags:	0
@@ -875,10 +1071,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13424
 Name:	A small hallway.
@@ -887,9 +1079,21 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	wooden door~~
 	ToVnum:	13425
@@ -903,10 +1107,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13425
 Name:	The Owners room.
@@ -918,9 +1118,21 @@ desk...its the owner of the restraunt....
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	Secret~~
 	ToVnum:	13428
@@ -944,10 +1156,6 @@ SecType:	Inside
 	KeyVnum:	13426
 	LockRating:	1
 	HiddenRating:	1
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13426
 Name:	Falling through a trapdoor.
@@ -956,34 +1164,27 @@ Desc:$
 ~
 Flags:	1000000000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	5
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	13427
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#13427
-Name:	A rotating floor with spikes...
-Desc:$
-   DEATH!!!!!!!!!!!!!!!!!! 
-~
-Flags:	1000000000000000001010
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	20
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13428
 Name:	Entrance to the back rooms.
@@ -993,9 +1194,21 @@ then meets the eye.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	Secret~~
 	ToVnum:	13425
@@ -1009,10 +1222,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13429
 Name:	Down some stairs.
@@ -1022,9 +1231,21 @@ a few torchs on the wall...you hear a crack of a whip in the distance...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	13428
 	Flags:	0
@@ -1037,10 +1258,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13430
 Name:	Bottom of the stairs.
@@ -1052,9 +1269,21 @@ with chains. You wonder what kind of restaurant this is.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13431
 	Flags:	0
@@ -1067,10 +1296,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13431
 Name:	Tables with people tied to them.
@@ -1081,9 +1306,21 @@ almost nothing, and getting whiped by a female in a leather and chain suit.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13433
 	Flags:	0
@@ -1108,10 +1345,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13432
 Name:	Just another Chain in the wall.
@@ -1122,19 +1355,27 @@ females in dominatrix costumes.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	13431
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13433
 Name:	An english horse.
@@ -1144,19 +1385,27 @@ more weights to her ankles.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	13431
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13434
 Name:	A Dark hallway.
@@ -1167,9 +1416,21 @@ hear....whats going on...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	Secret~~
 	ToVnum:	13435
@@ -1185,10 +1446,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13435
 Name:	The other side of the door.
@@ -1200,9 +1457,21 @@ over look....what the frag is going on here...?!?
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13436
 	Flags:	0
@@ -1218,10 +1487,6 @@ SecType:	Inside
 	KeyVnum:	13434
 	LockRating:	9
 	HiddenRating:	9
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13436
 Name:	An over look.
@@ -1232,9 +1497,21 @@ weapons...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	13435
 	Flags:	0
@@ -1247,10 +1524,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13437
 Name:	The bottom of some stairs.
@@ -1261,9 +1534,21 @@ few guards here as it apears that the rest are probably on a break.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Desc:$
 Along some crates. 
@@ -1282,10 +1567,6 @@ Up some Stairs...
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13438
 Name:	Along a stack of crates.
@@ -1297,9 +1578,21 @@ unhappy looking troll...
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Desc:$
 To some stairs. 
@@ -1315,10 +1608,6 @@ To some stairs.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13439
 Name:	Around the Corner
@@ -1328,9 +1617,21 @@ day....
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13438
 	Flags:	0
@@ -1343,10 +1644,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13440
 Name:	A Garage Door.
@@ -1356,9 +1653,21 @@ loading of all the weapons takes place.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door~~
 	Desc:$
@@ -1377,10 +1686,6 @@ It's a hidden door.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13441
 Name:	Outside an unusually flat sided hill.
@@ -1391,9 +1696,21 @@ night.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	flat garage camoflauged door~~
 	ToVnum:	13440
@@ -1403,10 +1720,6 @@ SecType:	Inside
 	KeyVnum:	13440
 	LockRating:	15
 	HiddenRating:	12
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #13498
 Name:	Shadowens Load room
@@ -1415,38 +1728,26 @@ Desc:$
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	13499
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#13499
-Name:	Shadowen's Garden
-Desc:$
-   Here the shadows swirl around you and all things that live.  The garden of
-shadows its called, before you could never understand why...now you can.
-Flowers of all the differn't night blooming plants grow here, thriving on the
-shadows this room is made of. A small dark river runs through to what appears
-to be a reflecting pool, at first looking like water, upon closer examination
-you realize that it is really pure darkness that flows soothinly to the pool.
-~
-Flags:	10000000000000000000
-SecType:	Field
-[POINTS]
-	SpecIdx:	0
-	Rating:	20
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 END

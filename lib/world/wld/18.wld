@@ -22,6 +22,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1805
 	Flags:	0
@@ -74,6 +75,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1804
 	Flags:	0
@@ -116,6 +118,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1803
 	Flags:	0
@@ -159,6 +162,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1802
 	Flags:	0
@@ -195,6 +199,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1803
 	Flags:	0
@@ -236,6 +241,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1804
 	Flags:	0
@@ -271,6 +277,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1807
 	Flags:	0
@@ -300,6 +307,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1806
 	Flags:	0
@@ -335,6 +343,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1809
 	Flags:	0
@@ -371,6 +380,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1808
 	Flags:	0
@@ -401,6 +411,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1812
 	Flags:	0
@@ -442,6 +453,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1812
 	Flags:	0
@@ -482,6 +494,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1810
 	Flags:	0
@@ -516,6 +529,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1814
 	Flags:	0
@@ -550,6 +564,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1811
 	Flags:	0
@@ -584,6 +599,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1811
 	Flags:	0
@@ -625,6 +641,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1817
 	Flags:	0
@@ -667,6 +684,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1816
 	Flags:	0
@@ -696,6 +714,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door employee~~~
 	ToVnum:	1820
@@ -738,6 +757,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door bathroom wooden~~~
 	ToVnum:	1818
@@ -767,6 +787,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1821
 	Flags:	0
@@ -802,6 +823,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1820
 	Flags:	0
@@ -837,6 +859,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1823
 	Flags:	0
@@ -872,6 +895,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1822
 	Flags:	0
@@ -902,6 +926,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	2
 	BackgroundType:	10
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	2531
 	Flags:	0
@@ -939,6 +964,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	2
 	BackgroundType:	10
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1824
 	Flags:	0
@@ -969,6 +995,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1831
 	Flags:	0
@@ -1013,6 +1040,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1831
 	Flags:	0
@@ -1057,6 +1085,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1832
 	Flags:	0
@@ -1098,6 +1127,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	3
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1833
 	Flags:	0
@@ -1140,6 +1170,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1838
 	Flags:	0
@@ -1182,6 +1213,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1832
 	Flags:	0
@@ -1223,6 +1255,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1833
 	Flags:	0
@@ -1265,6 +1298,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1830
 	Flags:	0
@@ -1306,6 +1340,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1826
 	Flags:	0
@@ -1341,6 +1376,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1837
 	Flags:	0
@@ -1383,6 +1419,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	1837
 	Flags:	0
@@ -1426,6 +1463,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	1838
 	Flags:	0
@@ -1467,6 +1505,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	4
 	BackgroundType:	3
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	1837
 	Flags:	0
@@ -1504,6 +1543,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	2059
 	Flags:	0
@@ -1541,6 +1581,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1842
 	Flags:	0
@@ -1588,6 +1629,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1841
 	Flags:	0
@@ -1623,6 +1665,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1841
 	Flags:	0
@@ -1660,6 +1703,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1845
 	Flags:	0
@@ -1703,6 +1747,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1848
 	Flags:	0
@@ -1746,6 +1791,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1844
 	Flags:	0
@@ -1788,6 +1834,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1846
 	Flags:	0
@@ -1817,6 +1864,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door wooden~~~
 	Desc:$
@@ -1871,6 +1919,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door wooden~~~
 	ToVnum:	1848
@@ -1902,6 +1951,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door wooden~~~
 	ToVnum:	1848
@@ -1932,6 +1982,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door wooden~~~
 	ToVnum:	1848
@@ -1970,6 +2021,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door stone~~~
 	ToVnum:	1851
@@ -2013,6 +2065,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1852
 	Flags:	0
@@ -2048,6 +2101,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1855
 	Flags:	0
@@ -2084,6 +2138,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1856
 	Flags:	0
@@ -2125,6 +2180,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1855
 	Flags:	0
@@ -2155,6 +2211,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1861
 	Flags:	0
@@ -2191,6 +2248,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1860
 	Flags:	0
@@ -2229,6 +2287,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	2092
 	Flags:	0
@@ -2266,6 +2325,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1900
 	Flags:	0
@@ -2321,6 +2381,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1901
 	Flags:	0
@@ -2351,6 +2412,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	1901
 	Flags:	0
@@ -2379,6 +2441,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	1922
 	Flags:	0
@@ -2411,6 +2474,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1901
 	Flags:	0
@@ -2459,6 +2523,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	1905
 	Flags:	0
@@ -2490,6 +2555,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1905
 	Flags:	0
@@ -2520,6 +2586,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1905
 	Flags:	0
@@ -2568,6 +2635,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	1908
 	Flags:	0
@@ -2598,6 +2666,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1908
 	Flags:	0
@@ -2631,6 +2700,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1908
 	Flags:	0
@@ -2680,6 +2750,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #1913
 Name:	Western Entrance
@@ -2706,6 +2777,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #1914
 Name:	Zappa-Tech
@@ -2732,6 +2804,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	1911
 	Flags:	0
@@ -2762,6 +2835,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1911
 	Flags:	0
@@ -2800,6 +2874,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1917
 	Flags:	0
@@ -2831,6 +2906,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1911
 	Flags:	0
@@ -2886,6 +2962,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	1917
 	Flags:	0
@@ -2918,6 +2995,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1917
 	Flags:	0
@@ -2952,6 +3030,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	1934
 	Flags:	0
@@ -2981,6 +3060,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	41021
 	Flags:	0
@@ -3033,6 +3113,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	1901
 	Flags:	0
@@ -3063,6 +3144,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	1922
 	Flags:	0
@@ -3094,6 +3176,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1922
 	Flags:	0
@@ -3123,6 +3206,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1922
 	Flags:	0
@@ -3171,6 +3255,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	1926
 	Flags:	0
@@ -3201,6 +3286,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1926
 	Flags:	0
@@ -3230,6 +3316,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1926
 	Flags:	0
@@ -3274,6 +3361,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1931
 	Flags:	0
@@ -3304,6 +3392,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1929
 	Flags:	0
@@ -3352,6 +3441,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	1931
 	Flags:	0
@@ -3382,6 +3472,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1934
 	Flags:	0
@@ -3412,6 +3503,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1931
 	Flags:	0
@@ -3460,6 +3552,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	1934
 	Flags:	0
@@ -3490,6 +3583,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #1937
 Name:	Escalator
@@ -3512,6 +3606,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	1917
 	Flags:	0
@@ -3544,6 +3639,13 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT up]
+	ToVnum:	1940
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #1940
 Name:	A Hotel Room
@@ -3568,6 +3670,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	1939
 	Flags:	0
@@ -3598,6 +3701,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1952
 	Flags:	0
@@ -3646,6 +3750,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1950
 	Flags:	0
@@ -3687,6 +3792,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	1962
 	Flags:	0
@@ -3726,6 +3832,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1950
 	Flags:	0
@@ -3786,6 +3893,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1956
 	Flags:	0
@@ -3828,6 +3936,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1951
 	Flags:	0
@@ -3870,6 +3979,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1954
 	Flags:	0
@@ -3912,6 +4022,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1953
 	Flags:	0
@@ -3947,6 +4058,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1957
 	Flags:	0
@@ -3995,6 +4107,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1958
 	Flags:	0
@@ -4043,6 +4156,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1966
 	Flags:	0
@@ -4080,6 +4194,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1959
 	Flags:	0
@@ -4116,6 +4231,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1963
 	Flags:	0
@@ -4151,6 +4267,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1962
 	Flags:	0
@@ -4181,6 +4298,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1961
 	Flags:	0
@@ -4217,6 +4335,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1959
 	Flags:	0
@@ -4251,6 +4370,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1960
 	Flags:	0
@@ -4286,6 +4406,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1965
 	Flags:	0
@@ -4339,6 +4460,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1971
 	Flags:	0
@@ -4380,6 +4502,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1967
 	Flags:	0
@@ -4421,6 +4544,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	1969
 	Flags:	0
@@ -4457,6 +4581,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	1975
 	Flags:	0
@@ -4492,6 +4617,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1970
 	Flags:	0
@@ -4523,6 +4649,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1969
 	Flags:	0
@@ -4555,6 +4682,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1968
 	Flags:	0
@@ -4587,6 +4715,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	1971
 	Flags:	0

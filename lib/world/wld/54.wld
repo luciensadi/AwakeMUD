@@ -21,6 +21,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	17547
 	Flags:	0
@@ -57,6 +58,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	5400
 	Flags:	0
@@ -94,6 +96,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5403
 	Flags:	0
@@ -137,6 +140,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5404
 	Flags:	0
@@ -174,6 +178,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	5405
 	Flags:	0
@@ -210,6 +215,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	5404
 	Flags:	0
@@ -243,6 +249,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5408
 	Flags:	0
@@ -277,6 +284,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #5408
 Name:	East 33rd Street and Buena Vista Boulevard
@@ -303,6 +311,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5409
 	Flags:	0
@@ -345,6 +354,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5410
 	Flags:	0
@@ -381,6 +391,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	5409
 	Flags:	0
@@ -418,6 +429,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	5408
 	Flags:	0
@@ -454,6 +466,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5416
 	Flags:	0
@@ -496,6 +509,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5412
 	Flags:	0
@@ -532,6 +546,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5431
 	Flags:	0
@@ -576,6 +591,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	5414
 	Flags:	0
@@ -621,6 +637,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5415
 	Flags:	0
@@ -633,314 +650,6 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#5417
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5418
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5419
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5420
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5421
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5422
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5423
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5424
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5425
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5426
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5427
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5428
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5429
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#5430
-Name:	Blank Road
-Desc:$
-   Its a street.  Describe it. 
-~
-Flags:	10000000000010000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #5431
 Name:	Vancouver Center Parking Lot
@@ -966,6 +675,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	glass doors
 	Desc:$
@@ -1008,6 +718,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5436
 	Flags:	0
@@ -1066,6 +777,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5434
 	Flags:	0
@@ -1103,6 +815,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	5433
 	Flags:	0
@@ -1136,6 +849,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	5432
 	Flags:	0
@@ -1168,6 +882,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	5438
 	Flags:	0
@@ -1213,6 +928,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	5436
 	Flags:	0
@@ -1245,6 +961,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	5436
 	Flags:	0
@@ -1277,6 +994,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	5440
 	Flags:	0
@@ -1315,6 +1033,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	5439
 	Flags:	0
@@ -1354,6 +1073,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	5440
 	Flags:	0
@@ -1391,6 +1111,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	5443
 	Flags:	0
@@ -1431,6 +1152,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	2
 	BackgroundType:	13
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	5442
 	Flags:	0

@@ -1,25 +1,3 @@
-#39200
-Name:	FREE ROOM
-Desc:$
-   Fill this description in later, its for Everett, you dummy. 
-~
-Flags:	0
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
 #39201
 Name:	At Front Street and Mukilteo Speedway
 Desc:$
@@ -47,6 +25,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39202
 	Flags:	0
@@ -86,6 +65,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39201
 	Flags:	0
@@ -126,6 +106,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39202
 	Flags:	0
@@ -166,6 +147,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39201
 	Flags:	0
@@ -206,6 +188,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39203
 	Flags:	0
@@ -251,6 +234,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39208
 	Flags:	0
@@ -290,6 +274,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39325
 	Flags:	0
@@ -329,6 +314,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39206
 	Flags:	0
@@ -373,6 +359,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39210
 	Flags:	0
@@ -413,6 +400,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39241
 	Flags:	0
@@ -460,6 +448,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39220
 	Flags:	0
@@ -498,6 +487,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39208
 	Flags:	0
@@ -544,6 +534,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39214
 	Flags:	0
@@ -587,6 +578,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39215
 	Flags:	0
@@ -634,6 +626,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39216
 	Flags:	0
@@ -675,6 +668,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39210
 	Flags:	0
@@ -714,6 +708,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39214
 	Flags:	0
@@ -755,6 +750,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39243
 	Flags:	0
@@ -790,6 +786,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39217
 	Flags:	0
@@ -832,6 +829,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39219
 	Flags:	0
@@ -878,6 +876,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39279
 	Flags:	0
@@ -926,6 +925,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39223
 	Flags:	0
@@ -967,6 +967,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39224
 	Flags:	0
@@ -1006,6 +1007,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39225
 	Flags:	0
@@ -1052,6 +1054,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39226
 	Flags:	0
@@ -1098,6 +1101,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	16
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39227
 	Flags:	0
@@ -1139,6 +1143,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39230
 	Flags:	0
@@ -1183,6 +1188,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	16
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39229
 	Flags:	0
@@ -1230,6 +1236,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	16
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39272
 	Flags:	0
@@ -1280,6 +1287,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	16
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39232
 	Flags:	0
@@ -1325,6 +1333,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	16
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39229
 	Flags:	0
@@ -1365,6 +1374,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	16
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39231
 	Flags:	0
@@ -1410,6 +1420,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39232
 	Flags:	0
@@ -1456,6 +1467,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39233
 	Flags:	0
@@ -1495,6 +1507,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39237
 	Flags:	0
@@ -1537,6 +1550,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39248
 	Flags:	0
@@ -1577,6 +1591,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39283
 	Flags:	0
@@ -1623,6 +1638,7 @@ RoomType:	2
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39242
 	Flags:	0
@@ -1670,6 +1686,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39238
 	Flags:	0
@@ -1711,6 +1728,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39239
 	Flags:	0
@@ -1750,6 +1768,7 @@ RoomType:	2
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39240
 	Flags:	0
@@ -1792,6 +1811,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39243
 	Flags:	0
@@ -1833,6 +1853,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	15
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39218
 	Flags:	0
@@ -1879,6 +1900,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	22830
 	Flags:	0
@@ -1919,6 +1941,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39246
 	Flags:	0
@@ -1959,6 +1982,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39247
 	Flags:	0
@@ -1998,6 +2022,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39250
 	Flags:	0
@@ -2042,6 +2067,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39250
 	Flags:	0
@@ -2088,6 +2114,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39248
 	Flags:	0
@@ -2129,6 +2156,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39251
 	Flags:	0
@@ -2175,6 +2203,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39252
 	Flags:	0
@@ -2216,6 +2245,7 @@ RoomType:	2
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	45211
 	Flags:	0
@@ -2261,6 +2291,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39376
 	Flags:	0
@@ -2305,6 +2336,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39249
 	Flags:	0
@@ -2363,6 +2395,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39256
 	Flags:	0
@@ -2403,6 +2436,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	39255
 	Flags:	0
@@ -2437,6 +2471,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39254
 	Flags:	0
@@ -2477,6 +2512,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39259
 	Flags:	0
@@ -2525,6 +2561,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39336
 	Flags:	0
@@ -2566,6 +2603,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39254
 	Flags:	0
@@ -2607,6 +2645,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39260
 	Flags:	0
@@ -2648,6 +2687,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39261
 	Flags:	0
@@ -2687,6 +2727,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39262
 	Flags:	0
@@ -2733,6 +2774,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39263
 	Flags:	0
@@ -2773,6 +2815,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39264
 	Flags:	0
@@ -2819,6 +2862,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39265
 	Flags:	0
@@ -2859,6 +2903,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39266
 	Flags:	0
@@ -2900,6 +2945,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39267
 	Flags:	0
@@ -2942,6 +2988,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39268
 	Flags:	0
@@ -2989,6 +3036,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	22886
 	Flags:	0
@@ -3035,6 +3083,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39265
 	Flags:	0
@@ -3077,6 +3126,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	16
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39271
 	Flags:	0
@@ -3122,6 +3172,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39274
 	Flags:	0
@@ -3163,6 +3214,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	16
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39275
 	Flags:	0
@@ -3204,6 +3256,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39244
 	Flags:	0
@@ -3250,6 +3303,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	16
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39277
 	Flags:	0
@@ -3296,6 +3350,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39278
 	Flags:	0
@@ -3343,6 +3398,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39252
 	Flags:	0
@@ -3382,6 +3438,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39286
 	Flags:	0
@@ -3426,6 +3483,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39281
 	Flags:	0
@@ -3467,6 +3525,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39282
 	Flags:	0
@@ -3507,6 +3566,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39299
 	Flags:	0
@@ -3552,6 +3612,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39238
 	Flags:	0
@@ -3593,6 +3654,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39269
 	Flags:	0
@@ -3633,6 +3695,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39228
 	Flags:	0
@@ -3678,6 +3741,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39279
 	Flags:	0
@@ -3709,6 +3773,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39230
 	Flags:	0
@@ -3739,6 +3804,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	Desc:$
 Down to the main lobby. 
@@ -3748,160 +3814,6 @@ Down to the main lobby.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#39289
-Name:	Everett Room Space
-Desc:$
-   Fill this description in later, its for Everett, you dummy. 
-~
-Flags:	10000000000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#39290
-Name:	Everett Room Space
-Desc:$
-   Fill this description in later, its for Everett, you dummy. 
-~
-Flags:	10000000000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#39291
-Name:	Everett Room Space
-Desc:$
-   Fill this description in later, its for Everett, you dummy. 
-~
-Flags:	10000000000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#39292
-Name:	FREE ROOM
-Desc:$
-   Fill this description in later, its for Everett, you dummy. 
-~
-Flags:	10000000000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#39293
-Name:	FREE ROOM
-Desc:$
-   Fill this description in later, its for Everett, you dummy. 
-~
-Flags:	10000000000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#39294
-Name:	FREE ROOM
-Desc:$
-   Fill this description in later, its for Everett, you dummy. 
-~
-Flags:	10000000000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#39295
-Name:	FREE ROOM
-Desc:$
-   Fill this description in later, its for Everett, you dummy. 
-~
-Flags:	10000000000000000000000
-SecType:	City
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #39296
 Name:	Everett Vehicle Load Room #1
@@ -3925,6 +3837,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #39297
 Name:	Beverly Park Automotives
@@ -3952,6 +3865,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	39224
 	Flags:	0
@@ -3981,6 +3895,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #39299
 Name:	Casino Road Limousine Retailer
@@ -4007,6 +3922,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39282
 	Flags:	0
@@ -4039,6 +3955,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39204
 	Flags:	0
@@ -4084,6 +4001,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39300
 	Flags:	0
@@ -4124,6 +4042,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39303
 	Flags:	0
@@ -4164,6 +4083,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39300
 	Flags:	0
@@ -4217,6 +4137,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39303
 	Flags:	0
@@ -4256,6 +4177,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	15
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39304
 	Flags:	0
@@ -4306,6 +4228,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39305
 	Flags:	0
@@ -4339,6 +4262,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39305
 	Flags:	0
@@ -4383,6 +4307,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39307
 	Flags:	0
@@ -4415,6 +4340,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39307
 	Flags:	0
@@ -4459,6 +4385,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39309
 	Flags:	0
@@ -4512,6 +4439,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39310
 	Flags:	0
@@ -4556,6 +4484,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39311
 	Flags:	0
@@ -4589,6 +4518,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39315
 	Flags:	0
@@ -4627,6 +4557,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	15
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39315
 	Flags:	0
@@ -4671,6 +4602,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39314
 	Flags:	0
@@ -4710,6 +4642,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door
 	Desc:$
@@ -4758,6 +4691,7 @@ RoomType:	5
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door wooden
 	Desc:$
@@ -4800,6 +4734,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door wooden
 	Desc:$
@@ -4845,6 +4780,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39320
 	Flags:	0
@@ -4891,6 +4827,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	39321
 	Flags:	0
@@ -4930,6 +4867,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39319
 	Flags:	0
@@ -4992,6 +4930,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	partition door
 	Desc:$
@@ -5031,6 +4970,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	partition door
 	Desc:$
@@ -5069,6 +5009,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39326
 	Flags:	0
@@ -5115,6 +5056,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39325
 	Flags:	0
@@ -5160,6 +5102,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39329
 	Flags:	0
@@ -5204,6 +5147,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39329
 	Flags:	0
@@ -5242,6 +5186,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39330
 	Flags:	0
@@ -5305,6 +5250,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39329
 	Flags:	0
@@ -5346,6 +5292,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	39329
 	Flags:	0
@@ -5379,6 +5326,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39329
 	Flags:	0
@@ -5413,6 +5361,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	39334
 	Flags:	0
@@ -5452,6 +5401,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39333
 	Flags:	0
@@ -5492,6 +5442,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39334
 	Flags:	0
@@ -5527,6 +5478,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39337
 	Flags:	0
@@ -5568,6 +5520,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39350
 	Flags:	0
@@ -5622,6 +5575,7 @@ RoomType:	7
 	Smoke:	7
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39340
 	Flags:	0
@@ -5678,6 +5632,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	private door
 	Desc:$
@@ -5714,6 +5669,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39342
 	Flags:	0
@@ -5779,6 +5735,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	private door
 	Desc:$
@@ -5819,6 +5776,7 @@ RoomType:	7
 	Smoke:	7
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	private door
 	Desc:$
@@ -5875,6 +5833,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	private door
 	Desc:$
@@ -5915,6 +5874,7 @@ RoomType:	7
 	Smoke:	7
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39346
 	Flags:	0
@@ -5971,6 +5931,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door private
 	Desc:$
@@ -6007,6 +5968,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39348
 	Flags:	0
@@ -6072,6 +6034,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	private door
 	Desc:$
@@ -6112,6 +6075,7 @@ RoomType:	7
 	Smoke:	7
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39351
 	Flags:	0
@@ -6168,6 +6132,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	private door
 	Desc:$
@@ -6205,6 +6170,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39351
 	Flags:	0
@@ -6280,6 +6246,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39352
 	Flags:	0
@@ -6333,6 +6300,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39353
 	Flags:	0
@@ -6378,6 +6346,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	39352
 	Flags:	0
@@ -6417,6 +6386,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39355
 	Flags:	0
@@ -6456,6 +6426,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door shoji
 	Desc:$
@@ -6505,6 +6476,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door shoji
 	Desc:$
@@ -6543,6 +6515,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39253
 	Flags:	0
@@ -6584,6 +6557,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39362
 	Flags:	0
@@ -6630,6 +6604,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39363
 	Flags:	0
@@ -6670,6 +6645,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39364
 	Flags:	0
@@ -6712,6 +6688,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39363
 	Flags:	0
@@ -6763,6 +6740,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door stairs garage
 	Desc:$
@@ -6805,6 +6783,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39367
 	Flags:	0
@@ -6845,6 +6824,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39368
 	Flags:	0
@@ -6895,6 +6875,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39367
 	Flags:	0
@@ -6933,6 +6914,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39370
 	Flags:	0
@@ -6971,6 +6953,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39369
 	Flags:	0
@@ -7021,6 +7004,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39375
 	Flags:	0
@@ -7079,6 +7063,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39373
 	Flags:	0
@@ -7129,6 +7114,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39377
 	Flags:	0
@@ -7182,6 +7168,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39377
 	Flags:	0
@@ -7246,6 +7233,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39376
 	Flags:	0
@@ -7291,6 +7279,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39379
 	Flags:	0
@@ -7355,6 +7344,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39378
 	Flags:	0
@@ -7405,6 +7395,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39377
 	Flags:	0
@@ -7438,6 +7429,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39376
 	Flags:	0
@@ -7471,6 +7463,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39376
 	Flags:	0
@@ -7504,6 +7497,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39371
 	Flags:	0
@@ -7537,6 +7531,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39371
 	Flags:	0
@@ -7569,6 +7564,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39372
 	Flags:	0
@@ -7603,6 +7599,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39386
 	Flags:	0
@@ -7661,6 +7658,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39388
 	Flags:	0
@@ -7713,6 +7711,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39389
 	Flags:	0
@@ -7760,6 +7759,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	39390
 	Flags:	0
@@ -7823,6 +7823,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39390
 	Flags:	0
@@ -7874,6 +7875,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39392
 	Flags:	0
@@ -7931,6 +7933,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39391
 	Flags:	0
@@ -7981,6 +7984,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39390
 	Flags:	0
@@ -8013,6 +8017,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	39389
 	Flags:	0
@@ -8047,6 +8052,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39389
 	Flags:	0
@@ -8080,6 +8086,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	39384
 	Flags:	0
@@ -8114,6 +8121,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39384
 	Flags:	0
@@ -8149,6 +8157,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	39385
 	Flags:	0
@@ -8191,6 +8200,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	39367
 	Flags:	0
@@ -8225,6 +8235,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door office
 	Desc:$
@@ -8263,5 +8274,6 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 END

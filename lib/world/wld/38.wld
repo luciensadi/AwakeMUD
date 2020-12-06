@@ -11,9 +11,21 @@ perspiring.
 ~
 Flags:	10000000000001100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	Keywords:	manhole
 	Desc:$
@@ -30,10 +42,6 @@ Below you, the manhole appears to be steaming uncharacteristically.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3802
 Name:	Continuing down the stairs
@@ -45,9 +53,21 @@ immaleable metal walls,  moist with your condensed breath.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	3801
 	Flags:	0
@@ -60,10 +80,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3803
 Name:	The bottom of the stairwell
@@ -76,9 +92,21 @@ of the entire area.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3804
 	Flags:	0
@@ -91,10 +119,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3804
 Name:	Southern end of the Boiler room
@@ -108,9 +132,21 @@ has been replaced by a dischordant
 ~
 Flags:	1011000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3805
 	Flags:	0
@@ -135,10 +171,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3805
 Name:	Middle of the Boiler room
@@ -157,9 +189,21 @@ because of all the nasty-looking rats, scurrying about.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3820
 	Flags:	0
@@ -184,10 +228,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3806
 Name:	The boiler room.
@@ -200,9 +240,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3818
 	Flags:	0
@@ -227,10 +279,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3807
 Name:	The boiler room.
@@ -243,9 +291,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3809
 	Flags:	0
@@ -258,10 +318,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3808
 Name:	The boiler room.
@@ -274,9 +330,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3816
 	Flags:	0
@@ -301,10 +369,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3809
 Name:	The boiler room.
@@ -317,9 +381,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3811
 	Flags:	0
@@ -338,10 +414,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3810
 Name:	The boiler room.
@@ -354,9 +426,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3821
 	Flags:	0
@@ -375,10 +459,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3811
 Name:	The boiler room.
@@ -391,9 +471,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3822
 	Flags:	0
@@ -412,10 +504,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3812
 Name:	The boiler room.
@@ -428,9 +516,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3807
 	Flags:	0
@@ -443,10 +543,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3813
 Name:	The boiler room.
@@ -459,9 +555,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3806
 	Flags:	0
@@ -480,10 +588,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3814
 Name:	The boiler room.
@@ -496,9 +600,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3809
 	Flags:	0
@@ -517,10 +633,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3815
 Name:	The boiler room.
@@ -533,9 +645,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3808
 	Flags:	0
@@ -554,10 +678,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3816
 Name:	The boiler room.
@@ -570,9 +690,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3818
 	Flags:	0
@@ -591,10 +723,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3817
 Name:	The boiler room.
@@ -607,9 +735,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3822
 	Flags:	0
@@ -628,10 +768,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3818
 Name:	The boiler room.
@@ -644,9 +780,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3820
 	Flags:	0
@@ -665,10 +813,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3819
 Name:	The boiler room.
@@ -681,9 +825,21 @@ but you think you'd better keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3817
 	Flags:	0
@@ -702,10 +858,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3820
 Name:	Northern end of the Boiler room
@@ -719,9 +871,21 @@ enough to allow for a  humanoid to pass.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3834
 	Flags:	0
@@ -746,10 +910,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3821
 Name:	Northwest corner of the Boiler room
@@ -764,9 +924,21 @@ compelled to keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3816
 	Flags:	0
@@ -779,10 +951,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3822
 Name:	Northeast corner of the Boiler room
@@ -797,9 +965,21 @@ compelled to keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	3811
 	Flags:	0
@@ -812,10 +992,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3823
 Name:	Southeast corner of the Boiler room
@@ -830,9 +1006,21 @@ compelled to keep on moving.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3811
 	Flags:	0
@@ -845,10 +1033,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3824
 Name:	Southwest corner of the Boiler room
@@ -862,9 +1046,21 @@ metal and rock constituting what was once a solid wall.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3810
 	Flags:	0
@@ -877,10 +1073,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3825
 Name:	A crawlspace
@@ -893,9 +1085,21 @@ activity in the area.
 ~
 Flags:	1100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3824
 	Flags:	0
@@ -908,10 +1112,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3826
 Name:	A crawlspace
@@ -922,9 +1122,21 @@ smoke fills your lungs and makes you want to get out of here soon.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3825
 	Flags:	0
@@ -937,10 +1149,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3827
 Name:	A small cavity
@@ -953,9 +1161,21 @@ oddly out of place where they lean against the wall to the  north-west here.
 ~
 Flags:	10000000100001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3829
 	Flags:	0
@@ -980,10 +1200,6 @@ Some ancient planks are here. Graven on one is are the faint words:
 	Barrier:	4
 	KeyVnum:	0
 	HiddenRating:	2
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3828
 Name:	Hideaway
@@ -997,19 +1213,27 @@ this room which seems isolated from the world of Seattle 2050.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	3827
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3829
 Name:	The entrance to the Mint
@@ -1025,9 +1249,21 @@ reprobates can be found here...
 ~
 Flags:	1001100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3830
 	Flags:	0
@@ -1046,10 +1282,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3830
 Name:	The mint
@@ -1063,9 +1295,21 @@ the crawlspace you were just in.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3832
 	Flags:	0
@@ -1084,10 +1328,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3831
 Name:	The mint
@@ -1101,9 +1341,21 @@ the crawlspace you were just in.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3833
 	Flags:	0
@@ -1122,10 +1374,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3832
 Name:	The mint
@@ -1139,9 +1387,21 @@ the crawlspace you were just in.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3833
 	Flags:	0
@@ -1154,10 +1414,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3833
 Name:	A bar in the Mint
@@ -1170,9 +1426,21 @@ games take place, and people, inasmuch as a criminal can be happy, are jovial.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	3831
 	Flags:	0
@@ -1185,10 +1453,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3834
 Name:	Entrance to a dank tunnel
@@ -1203,9 +1467,21 @@ fesces and dirt, not too pleasant.
 ~
 Flags:	10000000000001100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3835
 	Flags:	0
@@ -1218,10 +1494,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3835
 Name:	Rat Tunnel
@@ -1233,9 +1505,21 @@ north, the tunnel continues.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3836
 	Flags:	0
@@ -1248,10 +1532,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3836
 Name:	Further down the Rat Tunnel
@@ -1264,9 +1544,21 @@ the tunnel walls drives you onward, in search of an exit.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3837
 	Flags:	0
@@ -1279,10 +1571,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3837
 Name:	Further down the Rat Tunnel
@@ -1295,9 +1583,21 @@ the tunnel walls drives you onward, in search of an exit.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3838
 	Flags:	0
@@ -1310,10 +1610,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3838
 Name:	Main Rat Tunnel
@@ -1324,9 +1620,21 @@ the north is more of the same.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3839
 	Flags:	0
@@ -1339,10 +1647,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3839
 Name:	On down the Rat Tunnel
@@ -1355,9 +1659,21 @@ junction in the tunnel.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3840
 	Flags:	0
@@ -1370,10 +1686,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3840
 Name:	An intersection in the Rat Tunnel
@@ -1385,9 +1697,21 @@ course, and branches off here to the east and west.
 ~
 Flags:	101001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3844
 	Flags:	0
@@ -1406,10 +1730,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3841
 Name:	Subsidiary tunnel
@@ -1422,9 +1742,21 @@ west you can perceive a glow of some sort, possibly an exit.
 ~
 Flags:	10000000000001100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3840
 	Flags:	0
@@ -1437,10 +1769,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3842
 Name:	Death Incarnis
@@ -1449,9 +1777,21 @@ Desc:$
 ~
 Flags:	1000000000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3841
 	Flags:	0
@@ -1467,25 +1807,6 @@ A greased slide to certain oblivion.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#3843
-Name:	You just fell
-Desc:$
-   You just fell. Ha, you die a trillion deaths. Soon. 
-~
-Flags:	10
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3844
 Name:	Rat Tunnel Pass
@@ -1497,9 +1818,21 @@ north and south.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3845
 	Flags:	0
@@ -1512,10 +1845,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3845
 Name:	Rat Tunnel Pass
@@ -1527,9 +1856,21 @@ north and south.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3846
 	Flags:	0
@@ -1542,10 +1883,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3846
 Name:	Rat Tunnel Pass
@@ -1558,9 +1895,21 @@ hangs about disseminating through the pass.
 ~
 Flags:	1000001001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3847
 	Flags:	0
@@ -1573,10 +1922,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3847
 Name:	Rat Tunnel Pass
@@ -1588,9 +1933,21 @@ your skin. The pass continues north and south.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3848
 	Flags:	0
@@ -1603,10 +1960,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3848
 Name:	Rat Tunnel Pass
@@ -1618,9 +1971,21 @@ your skin. The pass continues north and south.
 ~
 Flags:	1001
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3849
 	Flags:	0
@@ -1633,10 +1998,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3849
 Name:	Rat Tunnel Pass
@@ -1646,9 +2007,21 @@ the north.
 ~
 Flags:	10000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3850
 	Flags:	0
@@ -1661,10 +2034,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3850
 Name:	CryoCo. Skinlab entrance
@@ -1676,9 +2045,21 @@ to the main reception area.
 ~
 Flags:	1000000
 SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	metal door
 	Desc:$
@@ -1694,10 +2075,6 @@ O~
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3851
 Name:	Main Foyer
@@ -1709,9 +2086,21 @@ northeast is the reception and to the south is the entrance to the building.
 ~
 Flags:	11000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	3852
 	Flags:	0
@@ -1725,10 +2114,6 @@ SecType:	Inside
 	Material:	metal
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3852
 Name:	CryoCo. Reception area
@@ -1740,9 +2125,21 @@ sterility.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3853
 	Flags:	0
@@ -1755,10 +2152,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3853
 Name:	Stairway-level 1
@@ -1768,9 +2161,21 @@ several storeys. To the south is the reception area.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	3852
 	Flags:	0
@@ -1783,10 +2188,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3854
 Name:	Stairway landing-level 2
@@ -1796,9 +2197,21 @@ east is a door opening onto CryoCo. minicomplex level 2.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3855
 	Flags:	0
@@ -1817,10 +2230,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3855
 Name:	Red Hallway
@@ -1831,9 +2240,21 @@ to the east and south.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3856
 	Flags:	0
@@ -1852,10 +2273,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3856
 Name:	Red hallway continued
@@ -1867,9 +2284,21 @@ hear some Synapse Wave enhancing muzak.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3858
 	Flags:	0
@@ -1882,10 +2311,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3857
 Name:	Red Lobby and Tea Room
@@ -1898,9 +2323,21 @@ beautiful country scenes.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3855
 	Flags:	0
@@ -1919,10 +2356,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3858
 Name:	Red hallway junction
@@ -1935,9 +2368,21 @@ south.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	3860
 	Flags:	0
@@ -1950,10 +2395,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3859
 Name:	Red Smoke Shield Room
@@ -1969,19 +2410,27 @@ All smokers at CryoCo. are shunned and...deaf.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3857
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3860
 Name:	Red Corridor
@@ -1993,9 +2442,21 @@ CryoCo. skinlabs.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3858
 	Flags:	0
@@ -2020,10 +2481,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3861
 Name:	Red Hallway South
@@ -2034,9 +2491,21 @@ room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3863
 	Flags:	0
@@ -2049,10 +2518,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3862
 Name:	Regional Manager. Hatsuomoka's office
@@ -2065,19 +2530,27 @@ kimonos.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3860
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3863
 Name:	Red Hallway South junction
@@ -2089,9 +2562,21 @@ corridor leads off north.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3865
 	Flags:	0
@@ -2104,10 +2589,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3864
 Name:	Supervisor. Staalstom's office
@@ -2119,19 +2600,27 @@ as various machanical gadgets lie strewn about the room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	3860
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3865
 Name:	Red Corridor south
@@ -2142,9 +2631,21 @@ and intersects the Red Hallway to the south.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3866
 	Flags:	0
@@ -2169,10 +2670,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3866
 Name:	Red center Corridor
@@ -2184,9 +2681,21 @@ north and south.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3860
 	Flags:	0
@@ -2211,10 +2720,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3867
 Name:	Head Coordinator. Cagliani
@@ -2225,19 +2730,27 @@ comfort without abdicating style.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3865
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3868
 Name:	Assn.Manager. Stellinger's office
@@ -2249,19 +2762,27 @@ here, lending a romantic atmoshpere.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3866
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3869
 Name:	Ombudsman. Vidal
@@ -2274,19 +2795,27 @@ ombudsman?
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	3865
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3870
 Name:	Head Accountant. Brulle's office
@@ -2298,19 +2827,27 @@ contraptions.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	3866
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3871
 Name:	Stairway landing-level 3
@@ -2321,9 +2858,21 @@ secured door with warning signs and Japanese characters inscribed thereupon.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	heavy large black metallic
 	Desc:$
@@ -2342,10 +2891,6 @@ stands here, precluding an easy exit.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3872
 Name:	An unnamed room
@@ -2357,9 +2902,21 @@ wall. Its also soberingly cold here.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3873
 	Flags:	0
@@ -2374,10 +2931,6 @@ SecType:	Inside
 	Barrier:	4
 	KeyVnum:	3815
 	LockRating:	3
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3873
 Name:	Blue Main
@@ -2388,9 +2941,21 @@ hallway, but are locked tight. Blue Main continues east and west.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3874
 	Flags:	0
@@ -2403,10 +2968,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3874
 Name:	Blue Security Lock
@@ -2418,9 +2979,21 @@ forebodingly. The sign has but piqued your interest.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	lock security door
 	ToVnum:	3875
@@ -2435,10 +3008,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3875
 Name:	Blue Quarantine Chamber
@@ -2451,9 +3020,21 @@ air-locked, precluding the possibility of an easy exit.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	Keywords:	booth door
 	ToVnum:	3876
@@ -2468,10 +3049,6 @@ SecType:	Inside
 	Material:	metal
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3876
 Name:	Skinlab 1
@@ -2483,9 +3060,21 @@ in from the south.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	Keywords:	booth door
 	Desc:$
@@ -2508,10 +3097,6 @@ You see your own fat face reflected in the glass, and behind that you see...
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3877
 Name:	Skinlab 1 control room
@@ -2524,19 +3109,27 @@ possibility of human error.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	3876
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3878
 Name:	Security Hall
@@ -2548,9 +3141,21 @@ the complex, but, no doubt, CryoCo. has some secret to protect...
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	3879
 	Flags:	0
@@ -2569,10 +3174,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3879
 Name:	Skinlab 2
@@ -2585,9 +3186,21 @@ The cold and grim scenery make you loathe to linger.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	3878
 	Flags:	0
@@ -2600,10 +3213,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3880
 Name:	Skinlab 2 control room
@@ -2615,19 +3224,27 @@ human presence is still needed in the control room, to oversee the machines.
 ~
 Flags:	101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	3879
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3881
 Name:	Observation Booth
@@ -2640,9 +3257,21 @@ CryoCo.'s part to keep their observing execs comfortable.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3878
 	Flags:	0
@@ -2667,10 +3296,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3882
 Name:	Skinlab Operating Theatre
@@ -2683,9 +3308,21 @@ and connected to statues displaying computers.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	3886
 	Flags:	0
@@ -2698,10 +3335,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3883
 Name:	Executive lounge
@@ -2713,19 +3346,27 @@ table sits in the middle of the room.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	3881
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3884
 Name:	Executive Communications Room
@@ -2736,9 +3377,21 @@ communicate outside of the confines of the Skinlabs complex.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	3885
 	Flags:	0
@@ -2751,10 +3404,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3885
 Name:	Executive Meeting Hall
@@ -2767,19 +3416,27 @@ pristine aesthetic.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	3884
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3886
 Name:	Skinchamber Control Deck
@@ -2790,9 +3447,21 @@ confidential technology.
 ~
 Flags:	1111000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	3882
 	Flags:	0
@@ -2805,10 +3474,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3887
 Name:	Skinchamber
@@ -2821,9 +3486,21 @@ based torso of some humanoid.
 ~
 Flags:	10000000000101100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3888
 	Flags:	0
@@ -2836,10 +3513,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3888
 Name:	Skinchamber
@@ -2852,9 +3525,21 @@ here fusing some fiberorganic thews onto a pre-manufacture skeletal frame.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3889
 	Flags:	0
@@ -2867,10 +3552,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3889
 Name:	Skinchamber
@@ -2883,9 +3564,21 @@ human co-workers.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3890
 	Flags:	0
@@ -2898,10 +3591,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3890
 Name:	Cryonic Storage Room
@@ -2913,9 +3602,21 @@ of tissue and genetic code is shelved.
 ~
 Flags:	1011011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3891
 	Flags:	0
@@ -2928,10 +3629,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3891
 Name:	Skinchamber
@@ -2944,9 +3641,21 @@ and cutting away sequences of DNA.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3892
 	Flags:	0
@@ -2959,10 +3668,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3892
 Name:	Skinchamber
@@ -2976,9 +3681,21 @@ urations.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3893
 	Flags:	0
@@ -2991,10 +3708,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3893
 Name:	Skinlab
@@ -3007,9 +3720,21 @@ using these as a reference for the creation of a proto human.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3894
 	Flags:	0
@@ -3022,10 +3747,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3894
 Name:	Projectile Barracade
@@ -3037,9 +3758,21 @@ You are starting to wonder...
 ~
 Flags:	10101000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3895
 	Flags:	0
@@ -3052,10 +3785,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3895
 Name:	Fusion Core Reactor
@@ -3069,9 +3798,21 @@ nuclear furnace.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3896
 	Flags:	0
@@ -3084,10 +3825,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3896
 Name:	Skinchamber
@@ -3101,9 +3838,21 @@ they are inculcating life force.
 ~
 Flags:	0
 SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3897
 	Flags:	0
@@ -3116,10 +3865,6 @@ SecType:	Forest
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3897
 Name:	Skinchamber
@@ -3132,9 +3877,21 @@ humans, to provide the biomechanoids with new life.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3898
 	Flags:	0
@@ -3147,10 +3904,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3898
 Name:	Biomechanoid Research Center
@@ -3163,9 +3916,21 @@ out.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	3899
 	Flags:	0
@@ -3178,10 +3943,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3899
 Name:	Biowaste Disposal Chute
@@ -3192,19 +3953,27 @@ later.
 ~
 Flags:	1000000000000000001100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	10
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	3850
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3900
 Name:	Entrance to Glenville Mental Hospital
@@ -3216,19 +3985,27 @@ painted white to fir the antisceptic aesthetic of the asylum itself.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3901
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3901
 Name:	Entry Way in the Hospital
@@ -3242,9 +4019,21 @@ infirm.
 ~
 Flags:	11000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3902
 	Flags:	0
@@ -3257,10 +4046,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3902
 Name:	A Hallway
@@ -3269,9 +4054,21 @@ Desc:$
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	3903
 	Flags:	0
@@ -3284,10 +4081,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #3903
 Name:	naknak
@@ -3301,13 +4094,27 @@ agents all relate to its function.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT west]
+	ToVnum:	3902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #3904
 Name:	The Waiting Room
@@ -3320,42 +4127,20 @@ passing by on a various mindless missions.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#3905
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT west]
-	Desc:$
-Your eyes are growing tired from trying to trace the paths of the nurses and
-tidy-up-boys and a strong smell of urine wafts in from the east, despite the
-liberal application of deodorizers and antiseptics.  The general effect of
-this all is to make you loath to linger, but to the north you can see a
-possible
-enclave of calm--stencilled in broad lettering on the door is the name:
-                                        Dr. Harold M. Spivey
-~
-	ToVnum:	0
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[DIMENSIONS]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 END

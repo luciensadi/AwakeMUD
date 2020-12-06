@@ -25,6 +25,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	Keywords:	door
 	ToVnum:	35611
@@ -56,6 +57,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #64902
 Name:	An OfficeWorks Furniture Outlet
@@ -81,6 +83,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29300
 	Flags:	0
@@ -113,6 +116,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #64911
 Name:	A Dark Storage room.
@@ -139,6 +143,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #64915
 Name:	Bob's Workroom
@@ -167,48 +172,9 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	64916
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#64916
-Name:	A bottomless pit
-Desc:$
-   When you read 'a bottomless pit', exactly how long did it take you to reach
-the conclusion that stepping into it was a good idea?
-   The depths of the pit are obscured by moving fields of energy, reaching up
-toward the surface. Veins of gold and coal, iron and silver twist together up
-the sheer rock face and glint in the darkness as if somehow polished to a
-sheen. Off to one side, someone has helpfully installed a nice set of rosewood
-shelves, bolting them roughly into a vein of orichalcum. 
-~
-Flags:	100000000000000000000000001010
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT up]
-	ToVnum:	64915
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT down]
-	ToVnum:	1004
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -241,6 +207,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door
 	ToVnum:	9955
@@ -282,6 +249,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	64952
 	Flags:	0
@@ -318,6 +286,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	64953
 	Flags:	0
@@ -355,6 +324,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	64952
 	Flags:	0
@@ -390,6 +360,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	64986
 	Flags:	0
@@ -433,6 +404,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	64987
 	Flags:	0
@@ -486,6 +458,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	64986
 	Flags:	0
@@ -521,6 +494,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	64986
 	Flags:	0
@@ -556,6 +530,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	64986
 	Flags:	0
@@ -591,6 +566,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	grate metal
 	ToVnum:	7228
@@ -631,6 +607,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	64990
 	Flags:	0
@@ -669,6 +646,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	64991
 	Flags:	0
@@ -710,6 +688,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	64994
 	Flags:	0
@@ -747,6 +726,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	64993
 	Flags:	0
@@ -785,6 +765,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	64994
 	Flags:	0
@@ -822,6 +803,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	64995
 	Flags:	0

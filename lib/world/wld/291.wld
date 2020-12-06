@@ -9,9 +9,20 @@ the gates.
 Flags:	100
 SecType:	City
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door gate~
 	ToVnum:	29101
@@ -20,10 +31,6 @@ MatrixExit:	0
 	Barrier:	16
 	KeyVnum:	29198
 	LockRating:	4
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29101
 Name:	Inside the Caryards
@@ -35,9 +42,20 @@ original hideout for common thieves and muggers.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door gate~
 	ToVnum:	29100
@@ -60,10 +78,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29102
 Name:	Inside the Caryards
@@ -74,9 +88,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29101
 	Flags:	0
@@ -89,10 +114,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29103
 Name:	Inside the Caryards
@@ -103,9 +124,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29102
 	Flags:	0
@@ -118,10 +150,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29104
 Name:	Inside the Caryards
@@ -132,9 +160,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	29105
 	Flags:	0
@@ -147,10 +186,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29105
 Name:	Inside the Caryards
@@ -161,9 +196,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29104
 	Flags:	0
@@ -176,10 +222,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29106
 Name:	Inside the Caryards
@@ -190,9 +232,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29105
 	Flags:	0
@@ -205,10 +258,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29107
 Name:	Inside the Caryards
@@ -219,9 +268,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29103
 	Flags:	0
@@ -234,10 +294,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29108
 Name:	Inside the Caryards
@@ -248,9 +304,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29106
 	Flags:	0
@@ -269,10 +336,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29109
 Name:	Inside the Caryards
@@ -283,9 +346,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29108
 	Flags:	0
@@ -298,10 +372,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29110
 Name:	Inside the Caryards
@@ -312,9 +382,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29109
 	Flags:	0
@@ -339,10 +420,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29111
 Name:	Ye Old Smithy
@@ -355,19 +432,26 @@ mortal destruction.
 Flags:	10000000000000000000010100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29110
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29112
 Name:	Under a large overhang
@@ -379,9 +463,20 @@ the east, and has made an actual building out of cars and other junk.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29113
 	Flags:	0
@@ -394,10 +489,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29113
 Name:	Damage Inc.
@@ -409,19 +500,26 @@ shelves.
 Flags:	10000000000000000010011100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	29112
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29114
 Name:	Inside the Caryards
@@ -432,9 +530,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29110
 	Flags:	0
@@ -447,10 +556,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29115
 Name:	Inside the Caryards
@@ -461,9 +566,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29114
 	Flags:	0
@@ -476,10 +592,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29116
 Name:	Inside the Caryards
@@ -490,9 +602,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29115
 	Flags:	0
@@ -505,10 +628,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29117
 Name:	Inside the Caryards
@@ -519,9 +638,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29116
 	Flags:	0
@@ -534,10 +664,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29118
 Name:	Inside the Caryards
@@ -548,9 +674,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29117
 	Flags:	0
@@ -563,10 +700,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29119
 Name:	Inside the Caryards
@@ -577,9 +710,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29118
 	Flags:	0
@@ -592,10 +736,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29120
 Name:	Inside the Caryards
@@ -606,9 +746,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29119
 	Flags:	0
@@ -627,10 +778,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29121
 Name:	Inside the Caryards
@@ -641,9 +788,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29120
 	Flags:	0
@@ -656,10 +814,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29122
 Name:	Inside the Caryards
@@ -670,9 +824,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	29123
 	Flags:	0
@@ -685,10 +850,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29123
 Name:	Inside the Caryards
@@ -699,9 +860,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29122
 	Flags:	0
@@ -714,10 +886,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29124
 Name:	Inside the Caryards
@@ -728,9 +896,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29121
 	Flags:	0
@@ -743,10 +922,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29125
 Name:	Inside the Caryards
@@ -757,9 +932,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29124
 	Flags:	0
@@ -772,10 +958,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29126
 Name:	Inside the Caryards
@@ -786,9 +968,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29125
 	Flags:	0
@@ -801,10 +994,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29127
 Name:	Inside the Caryards
@@ -815,9 +1004,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29126
 	Flags:	0
@@ -830,10 +1030,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29128
 Name:	Inside the Caryards
@@ -844,9 +1040,20 @@ components of old defunct cars.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29127
 	Flags:	0
@@ -859,10 +1066,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29129
 Name:	The Chemical Gangers hide-out
@@ -873,9 +1076,20 @@ pictures of green clad men clutter the walls.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door~
 	Desc:$
@@ -885,10 +1099,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29130
 Name:	Entrance to the Arena
@@ -902,9 +1112,20 @@ inside this ring of death.
 Flags:	100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29150
 	Flags:	0
@@ -923,10 +1144,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29131
 Name:	Inside the Arena 
@@ -937,9 +1154,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29136
 	Flags:	0
@@ -958,10 +1186,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29132
 Name:	Inside the Arena 
@@ -972,9 +1196,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29131
 	Flags:	0
@@ -1005,10 +1240,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29133
 Name:	Inside the Arena 
@@ -1019,9 +1250,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29132
 	Flags:	0
@@ -1058,10 +1300,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29134
 Name:	Inside the Arena 
@@ -1072,9 +1310,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29133
 	Flags:	0
@@ -1105,10 +1354,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29135
 Name:	Inside the Arena 
@@ -1119,9 +1364,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29134
 	Flags:	0
@@ -1140,10 +1396,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29136
 Name:	Inside the Arena 
@@ -1154,9 +1406,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29141
 	Flags:	0
@@ -1187,10 +1450,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29137
 Name:	Inside the Arena 
@@ -1201,9 +1460,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29136
 	Flags:	0
@@ -1252,10 +1522,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29138
 Name:	Center of The Arena
@@ -1268,9 +1534,20 @@ that has seeped into the ground around the drain and into the pipes below.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29137
 	Flags:	0
@@ -1325,10 +1602,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29139
 Name:	Inside the Arena 
@@ -1339,9 +1612,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29138
 	Flags:	0
@@ -1390,10 +1674,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29140
 Name:	Inside the Arena 
@@ -1404,9 +1684,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29139
 	Flags:	0
@@ -1437,10 +1728,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29141
 Name:	Inside the Arena 
@@ -1451,9 +1738,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	29142
 	Flags:	0
@@ -1472,10 +1770,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29142
 Name:	Inside the Arena 
@@ -1486,9 +1780,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29141
 	Flags:	0
@@ -1519,10 +1824,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29143
 Name:	Inside the Arena 
@@ -1533,9 +1834,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29142
 	Flags:	0
@@ -1572,10 +1884,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29144
 Name:	Inside the Arena 
@@ -1586,9 +1894,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29143
 	Flags:	0
@@ -1619,10 +1938,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29145
 Name:	Inside the Arena 
@@ -1633,9 +1948,20 @@ you is blood, gore and killing.
 Flags:	10000000000000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29144
 	Flags:	0
@@ -1654,10 +1980,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29146
 Name:	Inside the Arena 
@@ -1667,13 +1989,20 @@ You are in an unfinished room.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #29147
 Name:	Inside the Arena 
@@ -1683,13 +2012,20 @@ You are in an unfinished room.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #29148
 Name:	Inside the Arena 
@@ -1699,13 +2035,20 @@ You are in an unfinished room.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #29149
 Name:	Inside the Arena 
@@ -1715,13 +2058,20 @@ You are in an unfinished room.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #29150
 Name:	Stairs to The Arena spectator stands
@@ -1732,9 +2082,20 @@ of The Arena.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	29130
 	Flags:	0
@@ -1747,10 +2108,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29151
 Name:	Arena seats
@@ -1761,9 +2118,20 @@ arena below.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29152
 	Flags:	0
@@ -1782,10 +2150,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29152
 Name:	Arena Seats
@@ -1796,9 +2160,20 @@ arena below.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29153
 	Flags:	0
@@ -1817,10 +2192,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29153
 Name:	A closet
@@ -1831,19 +2202,26 @@ Nothing special here.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	29152
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29154
 Name:	Arena Seats
@@ -1854,9 +2232,20 @@ arena below.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29155
 	Flags:	0
@@ -1869,10 +2258,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29155
 Name:	Arena Seats
@@ -1883,9 +2268,20 @@ arena below.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	29156
 	Flags:	0
@@ -1898,10 +2294,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29156
 Name:	Arena Seats
@@ -1912,9 +2304,20 @@ arena below.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29155
 	Flags:	0
@@ -1927,10 +2330,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29157
 Name:	Arena Seats
@@ -1941,9 +2340,20 @@ arena below.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29156
 	Flags:	0
@@ -1956,10 +2366,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29158
 Name:	Arena Seats
@@ -1970,9 +2376,20 @@ arena below.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29157
 	Flags:	0
@@ -1985,10 +2402,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29159
 Name:	Arena Seats
@@ -1999,9 +2412,20 @@ arena below.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29158
 	Flags:	0
@@ -2014,10 +2438,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29160
 Name:	Arena Seats
@@ -2028,9 +2448,20 @@ arena below.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29159
 	Flags:	0
@@ -2043,10 +2474,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29161
 Name:	A dark tunnel
@@ -2058,9 +2485,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29162
 	Flags:	0
@@ -2073,10 +2511,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29162
 Name:	A dark tunnel
@@ -2088,9 +2522,20 @@ feels like it's 10 degrees in here.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29163
 	Flags:	0
@@ -2111,10 +2556,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29163
 Name:	A dark tunnel
@@ -2126,9 +2567,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29165
 	Flags:	0
@@ -2141,10 +2593,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29164
 Name:	A dark tunnel
@@ -2156,9 +2604,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29162
 	Flags:	0
@@ -2183,10 +2642,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29165
 Name:	A dark tunnel
@@ -2198,9 +2653,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29166
 	Flags:	0
@@ -2213,10 +2679,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29166
 Name:	A dark tunnel
@@ -2228,9 +2690,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000100
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	29165
 	Flags:	0
@@ -2243,10 +2716,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29167
 Name:	The Pit
@@ -2257,9 +2726,20 @@ everywhere, blood cakes the walls, bits of flesh rotting all over the place.
 Flags:	1
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29168
 	Flags:	0
@@ -2290,55 +2770,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#29168
-Name:	Crunch.
-Desc:$
-   A cow falls on you from nowhere, killing you and Patsy. 
-~
-Flags:	11
-SecType:	Inside
-MatrixExit:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT south]
-	ToVnum:	29167
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#29169
-Name:	Splat.
-Desc:$
-   A rather large foot falls from the ceiling and splats you, making a funny
-little flatulent noise. 
-~
-Flags:	11
-SecType:	Inside
-MatrixExit:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT north]
-	ToVnum:	29167
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29170
 Name:	Galloping Death.
@@ -2349,41 +2780,26 @@ his sword.
 Flags:	1
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29167
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#29171
-Name:	Always Look On The Bright Side Of Death.
-Desc:$
-   You have been crucified, Good Bye. 
-~
-Flags:	11
-SecType:	Inside
-MatrixExit:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT west]
-	ToVnum:	29167
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29172
 Name:	A dark tunnel
@@ -2395,9 +2811,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29164
 	Flags:	0
@@ -2412,10 +2839,6 @@ MatrixExit:	0
 	Barrier:	32
 	KeyVnum:	0
 	HiddenRating:	50
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29173
 Name:	A dark tunnel
@@ -2427,9 +2850,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	29164
 	Flags:	0
@@ -2442,10 +2876,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29174
 Name:	A dark tunnel
@@ -2457,9 +2887,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29164
 	Flags:	0
@@ -2472,10 +2913,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29175
 Name:	A dark tunnel
@@ -2487,9 +2924,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29178
 	Flags:	0
@@ -2502,10 +2950,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29176
 Name:	A dark tunnel
@@ -2517,9 +2961,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	29178
 	Flags:	0
@@ -2532,10 +2987,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29177
 Name:	A dark tunnel
@@ -2547,9 +2998,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29178
 	Flags:	0
@@ -2562,10 +3024,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	32
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29178
 Name:	A dark tunnel
@@ -2577,9 +3035,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29179
 	Flags:	0
@@ -2604,10 +3073,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29179
 Name:	A dark tunnel
@@ -2619,9 +3084,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29180
 	Flags:	0
@@ -2634,10 +3110,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29180
 Name:	A dark tunnel
@@ -2649,9 +3121,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	29179
 	Flags:	0
@@ -2664,10 +3147,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29181
 Name:	A dark tunnel
@@ -2679,9 +3158,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29180
 	Flags:	0
@@ -2694,10 +3184,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29182
 Name:	A dark tunnel
@@ -2709,9 +3195,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29181
 	Flags:	0
@@ -2726,10 +3223,6 @@ MatrixExit:	0
 	Barrier:	32
 	KeyVnum:	0
 	HiddenRating:	50
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29183
 Name:	The ladder
@@ -2741,9 +3234,20 @@ Down.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	29182
 	Flags:	0
@@ -2756,10 +3260,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29184
 Name:	A dark tunnel
@@ -2771,9 +3271,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29185
 	Flags:	0
@@ -2786,10 +3297,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29185
 Name:	A dark tunnel
@@ -2801,9 +3308,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29186
 	Flags:	0
@@ -2816,10 +3334,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29186
 Name:	A dark tunnel
@@ -2831,9 +3345,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29187
 	Flags:	0
@@ -2846,10 +3371,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29187
 Name:	A dark tunnel
@@ -2861,9 +3382,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29188
 	Flags:	0
@@ -2876,10 +3408,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29188
 Name:	A dark tunnel
@@ -2891,9 +3419,20 @@ feels like it's 10 degrees in here.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29191
 	Flags:	0
@@ -2918,10 +3457,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29189
 Name:	A dark alcove
@@ -2932,19 +3467,26 @@ small terminal sticking out of the wall with a jackport in it.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29188
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29190
 Name:	A dark alcove
@@ -2955,19 +3497,26 @@ small terminal sticking out of the wall with a jackport in it.
 Flags:	10000000000000000
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	29188
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29191
 Name:	Entrance to The Digital Underground
@@ -2979,9 +3528,20 @@ concert advertisements from the 40's.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29192
 	Flags:	0
@@ -3006,10 +3566,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29192
 Name:	Browsing the shelves
@@ -3022,9 +3578,20 @@ You glimpse an "AFI" band poster hiding on the wall in plain sight.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29195
 	Flags:	0
@@ -3043,10 +3610,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29193
 Name:	The Software Desk
@@ -3057,9 +3620,20 @@ directly from a clerk.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29196
 	Flags:	0
@@ -3072,10 +3646,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29194
 Name:	The Hardware Desk
@@ -3086,9 +3656,20 @@ hardware directly from a clerk.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	29195
 	Flags:	0
@@ -3101,10 +3682,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29195
 Name:	Browsing the shelves
@@ -3117,9 +3694,20 @@ You glimpse a "Nine Inch Nails" band poster hiding on the wall in plain sight.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	29194
 	Flags:	0
@@ -3132,10 +3720,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29196
 Name:	Browsing the shelves
@@ -3149,9 +3733,20 @@ sight.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	29192
 	Flags:	0
@@ -3164,10 +3759,6 @@ MatrixExit:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #29197
 Name:	A bloody sewer
@@ -3178,50 +3769,25 @@ through a tube that you can feel, sucking at your feet.
 Flags:	0
 SecType:	Inside
 MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	29138
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#29198
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#29199
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 END

@@ -13,19 +13,27 @@ detects and admits all comers.
 ~
 Flags:	10000000000000100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	40401
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40401
 Name:	The Common Room of The Void
@@ -41,9 +49,21 @@ making the abyssal setting all the more surreal.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	40404
 	Flags:	0
@@ -68,10 +88,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40402
 Name:	Public Terminal Kiosk
@@ -86,9 +102,21 @@ material, its every edge outlined in a thin bar of white lights.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	40401
 	Flags:	0
@@ -101,10 +129,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40403
 Name:	A Wrinkle in the Space-Time Continuum
@@ -119,19 +143,27 @@ everything is right again...
 ~
 Flags:	10011100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	40402
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40404
 Name:	The Dance Floor
@@ -146,9 +178,21 @@ pinpoint. To the regulars, it doesn't seem to matter.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	wall panel space
 	Desc:$
@@ -166,10 +210,6 @@ A panel of starlit wall seems to be loose.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40405
 Name:	The Bar
@@ -184,9 +224,21 @@ possibly be legal.
 ~
 Flags:	10000000000001000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	40401
 	Flags:	0
@@ -201,10 +253,6 @@ SecType:	Inside
 	Barrier:	4
 	KeyVnum:	0
 	HiddenRating:	6
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40406
 Name:	The Owner's Room
@@ -226,9 +274,21 @@ case.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door heavy wood wooden
 	Desc:$
@@ -240,10 +300,6 @@ A heavy wooden door stands shut.
 	Barrier:	4
 	KeyVnum:	40401
 	LockRating:	10
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40407
 Name:	Storeroom
@@ -256,9 +312,21 @@ The smell of alcohol and spiders hangs heavily in the air.
 ~
 Flags:	1101
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	Keywords:	ceiling panel
 	ToVnum:	40405
@@ -266,10 +334,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40410
 Name:	Entrance to the Beaverton Max Station.
@@ -278,19 +342,27 @@ You are in an unfinished room.
 ~
 Flags:	1100
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	40411
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40411
 Name:	Lobby
@@ -299,9 +371,21 @@ You are in an unfinished room.
 ~
 Flags:	1000
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	40423
 	Flags:	0
@@ -320,423 +404,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40412
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT north]
-	ToVnum:	40413
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northeast]
-	ToVnum:	40415
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	40416
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southeast]
-	ToVnum:	40417
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	40414
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	40411
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40413
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT north]
-	ToVnum:	40421
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	40415
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southeast]
-	ToVnum:	40416
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	40412
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40414
-Name:	An unfinished room
-Desc:$
-   NOTE: locked door s q 
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT north]
-	ToVnum:	40412
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northeast]
-	ToVnum:	40416
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	40417
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	Keywords:	reinforced metal door
-	ToVnum:	40426
-	Flags:	2
-	Material:	metal
-	Barrier:	4
-	KeyVnum:	0
-	LockRating:	10
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40415
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT east]
-	ToVnum:	40420
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southeast]
-	ToVnum:	40419
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	40416
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southwest]
-	ToVnum:	40412
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	40413
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40416
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT north]
-	ToVnum:	40415
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northeast]
-	ToVnum:	40420
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	40419
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southeast]
-	ToVnum:	40418
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	40417
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southwest]
-	ToVnum:	40414
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	40412
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northwest]
-	ToVnum:	40413
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40417
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT north]
-	ToVnum:	40416
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northeast]
-	ToVnum:	40419
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	40418
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	40414
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northwest]
-	ToVnum:	40412
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40418
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT north]
-	ToVnum:	40419
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southeast]
-	ToVnum:	40429
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	40417
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northwest]
-	ToVnum:	40416
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40419
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT north]
-	ToVnum:	40420
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	40431
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	40418
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southwest]
-	ToVnum:	40417
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	40416
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northwest]
-	ToVnum:	40415
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40420
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT northeast]
-	ToVnum:	40427
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	40419
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southwest]
-	ToVnum:	40416
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	40415
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40421
 Name:	Food Court
@@ -745,9 +412,21 @@ You are in an unfinished room.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	40422
 	Flags:	0
@@ -760,10 +439,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40422
 Name:	Dining Area
@@ -772,9 +447,21 @@ You are in an unfinished room.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	40424
 	Flags:	0
@@ -793,10 +480,6 @@ SecType:	Inside
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40423
 Name:	Ticket Office
@@ -805,19 +488,27 @@ You are in an unfinished room.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	40411
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40424
 Name:	Men's Restroom
@@ -826,19 +517,27 @@ You are in an unfinished room.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	40422
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40425
 Name:	Women's Restroom
@@ -847,19 +546,27 @@ You are in an unfinished room.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	40422
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40426
 Name:	Abandoned Store
@@ -868,46 +575,27 @@ Desc:$
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	40414
 	Flags:	0
 	Material:	metal
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40427
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT east]
-	ToVnum:	40428
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT southwest]
-	ToVnum:	40420
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #40428
 Name:	The Bar
@@ -916,235 +604,26 @@ You are in an unfinished room.
 ~
 Flags:	0
 SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	40427
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40429
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT east]
-	ToVnum:	40430
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northwest]
-	ToVnum:	40418
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40430
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT west]
-	ToVnum:	40429
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40431
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT east]
-	Keywords:	door wooden wood
-	ToVnum:	40432
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	40419
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40432
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[EXIT west]
-	ToVnum:	40431
-	Flags:	0
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40433
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40434
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40435
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40436
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40437
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40438
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40439
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
-BREAK
-#40440
-Name:	An unfinished room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 END

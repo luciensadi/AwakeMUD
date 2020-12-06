@@ -30,6 +30,7 @@ RoomType:	4
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	70301
 	Flags:	0
@@ -77,6 +78,7 @@ RoomType:	4
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	doors glass sliding door
 	Desc:$
@@ -136,6 +138,18 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	998
+	LockRating:	8
 [EXIT east]
 	Keywords:	gate steel parking private
 	Desc:$
@@ -174,6 +188,7 @@ RoomType:	7
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	70305
 	Flags:	0
@@ -224,6 +239,7 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	70369
 	Flags:	0
@@ -262,6 +278,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	70306
 	Flags:	0
@@ -301,6 +318,7 @@ RoomType:	8
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	70305
 	Flags:	0
@@ -333,6 +351,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #70308
 Name:	A well-lit hallway
@@ -365,6 +384,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	70309
 	Flags:	0
@@ -409,6 +429,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -473,6 +494,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -537,6 +559,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -601,6 +624,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -659,6 +683,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -723,6 +748,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -787,6 +813,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -851,6 +878,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -912,6 +940,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	70335
 	Flags:	0
@@ -928,34 +957,13 @@ A sturdy mahogany door stands to the south.
 	Material:	metal
 	Barrier:	32
 	KeyVnum:	70319
+	LockRating:	8
 [EXIT west]
 	ToVnum:	70341
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#70318
-Name:	Empty Room
-Desc:$
-   This room is empty, fill it in? 
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	8
-Y:	8
-Z:	3.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #70319
 Name:	A comfortable room
@@ -982,6 +990,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1018,6 +1027,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1054,6 +1064,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1090,6 +1101,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1126,6 +1138,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1162,6 +1175,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1198,6 +1212,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1234,6 +1249,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1270,6 +1286,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1306,6 +1323,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1342,6 +1360,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1378,6 +1397,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1398,22 +1418,23 @@ in a deep blue weave and painted a warm, rich cream, this room seems to
 radiate a sense of comfort and home. A long picture window in the south wall
 gives an excellent view of the city outside. 
 ~
-Flags:	100000000000000000000000001000
+Flags:	10100000001010000000000000001100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
 Cover:	0
 X:	8
 Y:	8
-Z:	3.00
+Z:	5.00
 RoomType:	9
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	6
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1450,6 +1471,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1486,6 +1508,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1522,6 +1545,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -1568,6 +1592,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong mahogany
 	Desc:$
@@ -1634,6 +1659,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door
 	Desc:$
@@ -1681,6 +1707,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door strong mahogany
 	Desc:$
@@ -1719,6 +1746,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong mahogany
 	Desc:$
@@ -1756,6 +1784,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door reinforced steel
 	Desc:$
@@ -1792,6 +1821,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door steel reinforced
 	Desc:$
@@ -1838,6 +1868,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong mahogany
 	Desc:$
@@ -1893,6 +1924,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong mahogany
 	Desc:$
@@ -1938,6 +1970,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door strong mahogany
 	Desc:$
@@ -1980,6 +2013,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	70357
 	Flags:	0
@@ -2024,6 +2058,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2088,6 +2123,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2152,6 +2188,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2216,6 +2253,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2268,6 +2306,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2304,6 +2343,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2340,6 +2380,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2376,6 +2417,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2412,6 +2454,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2448,6 +2491,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2484,6 +2528,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2520,6 +2565,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door oaken strong
 	Desc:$
@@ -2562,6 +2608,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -2626,6 +2673,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -2690,6 +2738,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -2754,6 +2803,7 @@ RoomType:	9
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -2806,6 +2856,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -2842,6 +2893,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -2878,6 +2930,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -2914,6 +2967,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door strong oaken
 	Desc:$
@@ -2950,6 +3004,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -2986,6 +3041,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -3022,6 +3078,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -3058,6 +3115,7 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door strong oaken
 	Desc:$
@@ -3094,6 +3152,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	70371
 	Flags:	0
@@ -3138,6 +3197,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door garage steel
 	Desc:$
@@ -3222,6 +3282,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door garage steel
 	Desc:$
@@ -3307,6 +3368,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door garage steel
 	Desc:$
@@ -3344,6 +3406,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	Keywords:	door garage steel
 	Desc:$
@@ -3381,6 +3444,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	Keywords:	door garage steel
 	Desc:$
@@ -3418,6 +3482,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	Keywords:	door garage steel
 	Desc:$
@@ -3455,6 +3520,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door garage steel
 	Desc:$
@@ -3492,6 +3558,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	door garage steel
 	Desc:$
@@ -3529,6 +3596,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	Keywords:	door garage steel
 	Desc:$
@@ -3566,6 +3634,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door garage steel
 	Desc:$
@@ -3603,6 +3672,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	Keywords:	door garage steel
 	Desc:$
@@ -3640,6 +3710,7 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	door garage steel
 	Desc:$

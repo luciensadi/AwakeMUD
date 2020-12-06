@@ -1306,10 +1306,6 @@ ACMD(do_gen_door)
       do_doorcmd(ch, obj, door, subcmd, TRUE);
   }
   
-  else {
-    send_to_char(ch, "There doesn't seem to be a %s here.\r\n", type);
-    return;
-  }
   return;
 }
 

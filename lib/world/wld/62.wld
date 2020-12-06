@@ -19,6 +19,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	6201
 	Flags:	0
@@ -47,6 +48,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	6200
 	Flags:	0
@@ -87,6 +89,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6201
 	Flags:	0
@@ -121,6 +124,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6202
 	Flags:	0
@@ -155,6 +159,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6203
 	Flags:	0
@@ -189,6 +194,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6204
 	Flags:	0
@@ -229,6 +235,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6205
 	Flags:	0
@@ -257,6 +264,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6205
 	Flags:	0
@@ -297,6 +305,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6207
 	Flags:	0
@@ -331,6 +340,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6208
 	Flags:	0
@@ -365,6 +375,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6209
 	Flags:	0
@@ -399,6 +410,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6210
 	Flags:	0
@@ -433,6 +445,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6211
 	Flags:	0
@@ -461,6 +474,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6209
 	Flags:	0
@@ -489,6 +503,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6209
 	Flags:	0
@@ -517,6 +532,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6216
 	Flags:	0
@@ -551,6 +567,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6218
 	Flags:	0
@@ -591,6 +608,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6216
 	Flags:	0
@@ -625,6 +643,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6219
 	Flags:	0
@@ -659,6 +678,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	6222
 	Flags:	0
@@ -693,6 +713,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6217
 	Flags:	0
@@ -733,6 +754,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6220
 	Flags:	0
@@ -773,6 +795,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6219
 	Flags:	0
@@ -807,6 +830,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6222
 	Flags:	0
@@ -841,6 +865,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6223
 	Flags:	0
@@ -875,6 +900,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	6226
 	Flags:	0
@@ -909,6 +935,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	6227
 	Flags:	0
@@ -946,6 +973,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6226
 	Flags:	0
@@ -1004,6 +1032,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6227
 	Flags:	0
@@ -1032,6 +1061,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	6227
 	Flags:	0
@@ -1060,6 +1090,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6227
 	Flags:	0
@@ -1100,6 +1131,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	6227
 	Flags:	0
@@ -1134,6 +1166,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	6230
 	Flags:	0
@@ -1168,6 +1201,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6221
 	Flags:	0
@@ -1202,6 +1236,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6233
 	Flags:	0
@@ -1243,6 +1278,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6234
 	Flags:	0
@@ -1277,6 +1313,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	6237
 	Flags:	0
@@ -1311,276 +1348,13 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	6236
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#6238
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6239
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6240
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6241
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6242
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6243
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6244
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6245
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6246
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6247
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6248
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6249
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #6250
 Name:	A Quiet City Street
@@ -1603,6 +1377,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6252
 	Flags:	0
@@ -1643,6 +1418,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6250
 	Flags:	0
@@ -1671,6 +1447,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6256
 	Flags:	0
@@ -1705,6 +1482,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6250
 	Flags:	0
@@ -1739,6 +1517,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6253
 	Flags:	0
@@ -1773,6 +1552,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6254
 	Flags:	0
@@ -1801,6 +1581,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6257
 	Flags:	0
@@ -1841,6 +1622,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6258
 	Flags:	0
@@ -1875,6 +1657,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	6257
 	Flags:	0
@@ -1909,6 +1692,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6258
 	Flags:	0
@@ -1943,6 +1727,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6259
 	Flags:	0
@@ -1983,6 +1768,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6260
 	Flags:	0
@@ -2017,6 +1803,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6260
 	Flags:	0
@@ -2051,6 +1838,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6256
 	Flags:	0
@@ -2085,6 +1873,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6262
 	Flags:	0
@@ -2131,6 +1920,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6264
 	Flags:	0
@@ -2165,6 +1955,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6268
 	Flags:	0
@@ -2205,6 +1996,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6261
 	Flags:	0
@@ -2239,6 +2031,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6267
 	Flags:	0
@@ -2273,6 +2066,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6264
 	Flags:	0
@@ -2307,6 +2101,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6269
 	Flags:	0
@@ -2341,6 +2136,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6266
 	Flags:	0
@@ -2375,6 +2171,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	6270
 	Flags:	0
@@ -2409,6 +2206,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	6271
 	Flags:	0
@@ -2421,534 +2219,6 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#6274
-Name:	A Quiet City Street
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6275
-Name:	A Quiet City Street
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6276
-Name:	A Quiet City Street
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6277
-Name:	A Quiet City Street
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6278
-Name:	A Quiet City Street
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6279
-Name:	A Quiet City Street
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6280
-Name:	A Quiet City Street
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6281
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6282
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6283
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6284
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6285
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6286
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6287
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6288
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6289
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6290
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6291
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6292
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6293
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6294
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6295
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6296
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-BREAK
-#6297
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #6298
 Name:	Building Prefab
@@ -2971,6 +2241,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #6299
 Name:	Road Prefab
@@ -2993,27 +2264,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-BREAK
-#6300
-Name:	the blank room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 END

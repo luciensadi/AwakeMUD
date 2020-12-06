@@ -8,28 +8,29 @@ Army, and so on.
    Arranged on the floor are a series of mortician's gurneys. Each of them has
 a body on it, frozen solid. 
 ~
-Flags:	10000000010101010
+Flags:	10000000010101000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	0
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	5601
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #5601
 Name:	Tirulian's Storage - A KSAF Newsroom
@@ -43,25 +44,26 @@ mulit-band radio and trideo transmitter.
 Flags:	101000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	0
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	5600
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 #5699
 Name:	The O.A.C. Main Office
@@ -83,15 +85,20 @@ you've died and gone to heaven.
 Flags:	110000000001001011000
 SecType:	Inside
 MatrixExit:	0
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	archway large~~~
 	Desc:$
@@ -113,9 +120,5 @@ An adobe archway stands here, with the vast blue skies beyond it.
 	Material:	stone
 	Barrier:	4
 	KeyVnum:	0
-[COORDINATES]
-	X:	0
-	Y:	0
-	Z:	0
 BREAK
 END
