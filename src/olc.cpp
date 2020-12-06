@@ -83,11 +83,11 @@ void write_index_file(const char *suffix)
   int i, found, j;
 
   if (*suffix == 'h')
-    sprintf(buf, "world/mtx/index");
+    snprintf(buf, sizeof(buf), "world/mtx/index");
   else if ( *suffix == 'i')
-    sprintf(buf, "world/mtx/index.ic");
+    snprintf(buf, sizeof(buf), "world/mtx/index.ic");
   else
-    sprintf(buf, "world/%s/index", suffix);
+    snprintf(buf, sizeof(buf), "world/%s/index", suffix);
   fp = fopen(buf, "w+");
 
   for (i = 0; i <= top_of_zone_table; i++) {
@@ -520,7 +520,7 @@ ACMD(do_dig)
       // Sanity check: Is the room now kosher?
       if (room == -1) {
         send_to_char("Sorry, we encountered an error while creating your room.\r\n", ch);
-        sprintf(buf, "ERROR: Failed to create room %d with dig!", atoi_buf);
+        snprintf(buf, sizeof(buf), "ERROR: Failed to create room %d with dig!", atoi_buf);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         return;
       }
@@ -1209,13 +1209,13 @@ ACMD(do_idelete)
   }
   
   // Wipe it from saved database tables.
-  sprintf(buf, "DELETE FROM pfiles_cyberware WHERE Vnum=%ld", obj_proto[num].item_number);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE Vnum=%ld", obj_proto[num].item_number);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_bioware WHERE Vnum=%ld", obj_proto[num].item_number);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_bioware WHERE Vnum=%ld", obj_proto[num].item_number);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_inv WHERE Vnum=%ld", obj_proto[num].item_number);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE Vnum=%ld", obj_proto[num].item_number);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_worn WHERE Vnum=%ld", obj_proto[num].item_number);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE Vnum=%ld", obj_proto[num].item_number);
   mysql_wrapper(mysql, buf);
 
   // Wipe the object from the game.
@@ -1246,7 +1246,7 @@ ACMD(do_idelete)
         case 'I':
         case 'H':
           if (ZCMD.arg1 == num) {
-            sprintf(buf, "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
+            snprintf(buf, sizeof(buf), "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
                     cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
             ZCMD.command = '*';
@@ -1260,7 +1260,7 @@ ACMD(do_idelete)
           break;
         case 'R':
           if (ZCMD.arg2 == num) {
-            sprintf(buf, "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
+            snprintf(buf, sizeof(buf), "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
                     cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
             ZCMD.command = '*';
@@ -1274,7 +1274,7 @@ ACMD(do_idelete)
           break;
         case 'P':
           if (ZCMD.arg3 == num || ZCMD.arg1 == num) {
-            sprintf(buf, "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
+            snprintf(buf, sizeof(buf), "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
                     cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
             ZCMD.command = '*';
@@ -1587,7 +1587,7 @@ ACMD(do_mdelete)
     send_to_char("No such mob.\r\n", ch);
     return;
   } else {
-    sprintf(buf3, "NPC '%s' (%ld) deleted.\r\n", GET_NAME(&mob_proto[num]), GET_MOB_VNUM(&mob_proto[num]));
+    snprintf(buf3, sizeof(buf3), "NPC '%s' (%ld) deleted.\r\n", GET_NAME(&mob_proto[num]), GET_MOB_VNUM(&mob_proto[num]));
   }
 
   struct char_data *j, *temp, *next_char;

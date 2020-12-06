@@ -265,7 +265,7 @@ void initialize_and_connect_to_mysql() {
   
   // Perform the actual connection.
   if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
-    sprintf(buf, "FATAL ERROR: %s\r\n", mysql_error(mysql));
+    snprintf(buf, sizeof(buf), "FATAL ERROR: %s\r\n", mysql_error(mysql));
     log(buf);
     log("Suggestion: Make sure your DB is running and that you've specified your connection info in src/mysql_config.cpp.\r\n");
     exit(ERROR_MYSQL_DATABASE_NOT_FOUND);
@@ -282,7 +282,7 @@ void check_for_common_fuckups() {
       break;
     
     if (real_room(taxi_destinations[i].vnum) == NOWHERE) {
-      sprintf(buf, "ERROR: Taxi destination '%s' (%ld) does not exist.", taxi_destinations[i].keyword, taxi_destinations[i].vnum);
+      snprintf(buf, sizeof(buf), "ERROR: Taxi destination '%s' (%ld) does not exist.", taxi_destinations[i].keyword, taxi_destinations[i].vnum);
       log(buf);
       taxi_destinations[i].enabled = FALSE;
     }
@@ -293,7 +293,7 @@ void check_for_common_fuckups() {
       break;
     
     if (real_room(port_destinations[i].vnum) == NOWHERE) {
-      sprintf(buf, "ERROR: Portland taxi destination '%s' (%ld) does not exist.", port_destinations[i].keyword, port_destinations[i].vnum);
+      snprintf(buf, sizeof(buf), "ERROR: Portland taxi destination '%s' (%ld) does not exist.", port_destinations[i].keyword, port_destinations[i].vnum);
       log(buf);
       port_destinations[i].enabled = FALSE;
     }
@@ -592,19 +592,19 @@ void index_boot(int mode)
   else
     index_filename = INDEX_FILE;
 
-  sprintf(buf2, "%s/%s", prefix, index_filename);
+  snprintf(buf2, sizeof(buf2), "%s/%s", prefix, index_filename);
 
   if (!(index = fopen(buf2, "r"))) {
-    sprintf(buf1, "Error opening index file '%s'", buf2);
+    snprintf(buf1, sizeof(buf1), "Error opening index file '%s'", buf2);
     perror(buf1);
     exit(ERROR_OPENING_INDEX_FILE);
   }
   /* first, count the number of records in the file so we can calloc */
   fscanf(index, "%s\n", buf1);
   while (*buf1 != '$') {
-    sprintf(buf2, "%s/%s", prefix, buf1);
+    snprintf(buf2, sizeof(buf2), "%s/%s", prefix, buf1);
     if (!(db_file = fopen(buf2, "r"))) {
-      sprintf(buf, "Unable to find file %s.", buf2);
+      snprintf(buf, sizeof(buf), "Unable to find file %s.", buf2);
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     } else {
       if (mode == DB_BOOT_ZON)
@@ -702,11 +702,11 @@ void index_boot(int mode)
   rewind(index);
   fscanf(index, "%s\n", buf1);
   while (*buf1 != '$') {
-    sprintf(buf2, "%s/%s", prefix, buf1);
+    snprintf(buf2, sizeof(buf2), "%s/%s", prefix, buf1);
     File in_file(buf2, "r");
 
     if (!in_file.IsOpen()) {
-      sprintf(buf, "Unable to find file %s.", buf2);
+      snprintf(buf, sizeof(buf), "Unable to find file %s.", buf2);
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     } else {
       switch (mode) {
@@ -855,7 +855,7 @@ void parse_host(File &fl, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
     shutdown();
   }
@@ -912,17 +912,17 @@ void parse_host(File &fl, long nr)
     const char *name = data.GetIndexSection("EXITS", x);
     exit_data *exit = new exit_data;
     memset(exit, 0, sizeof(exit_data));
-    sprintf(field, "%s/Exit", name);
+    snprintf(field, sizeof(field), "%s/Exit", name);
     exit->host = data.GetLong(field, 0);
-    sprintf(field, "%s/Number", name);
+    snprintf(field, sizeof(field), "%s/Number", name);
     exit->addresses = str_dup(data.GetString(field, "000"));
-    sprintf(field, "%s/RoomString", name);
+    snprintf(field, sizeof(field), "%s/RoomString", name);
     if (*(data.GetString(field, ""))) {
       exit->roomstring = str_dup(data.GetString(field, ""));
     } else {
       exit->roomstring = NULL;
     }
-    sprintf(field, "%s/Hidden", name);
+    snprintf(field, sizeof(field), "%s/Hidden", name);
     exit->hidden = (bool) data.GetInt(field, 1);
     if (host->exit)
       exit->next = host->exit;
@@ -933,11 +933,11 @@ void parse_host(File &fl, long nr)
     const char *name = data.GetIndexSection("TRIGGERS", x);
     trigger_step *trigger = new trigger_step;
     memset(trigger, 0, sizeof(trigger_step));
-    sprintf(field, "%s/Step", name);
+    snprintf(field, sizeof(field), "%s/Step", name);
     trigger->step = data.GetInt(field, 0);
-    sprintf(field, "%s/Alert", name);
+    snprintf(field, sizeof(field), "%s/Alert", name);
     trigger->alert = data.LookupInt(field, alerts, 0);
-    sprintf(field, "%s/IC", name);
+    snprintf(field, sizeof(field), "%s/IC", name);
     trigger->ic = data.GetLong(field, 0);
     if (host->trigger) {
       struct trigger_step *last = NULL, *temp;
@@ -975,7 +975,7 @@ void parse_ic(File &fl, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
     shutdown();
   }
@@ -1020,7 +1020,7 @@ void parse_room(File &fl, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
     shutdown();
   }
@@ -1090,14 +1090,14 @@ void parse_room(File &fl, long nr)
   int i;
   for (i = 0; *fulldirs[i] != '\n'; i++) {
     char sect[16];
-    sprintf(sect, "EXIT %s", fulldirs[i]);
+    snprintf(sect, sizeof(sect), "EXIT %s", fulldirs[i]);
 
     room->dir_option[i] = NULL;
 
     if (data.DoesSectionExist(sect)) {
       char field[64];
 
-      sprintf(field, "%s/ToVnum", sect);
+      snprintf(field, sizeof(field), "%s/ToVnum", sect);
       int to_vnum = data.GetInt(field, -1);
 
       if (to_vnum < 0) {
@@ -1113,13 +1113,13 @@ void parse_room(File &fl, long nr)
       dir->to_room = &world[0];
       dir->to_room_vnum = to_vnum;
 
-      sprintf(field, "%s/Keywords", sect);
+      snprintf(field, sizeof(field), "%s/Keywords", sect);
       dir->keyword = str_dup(data.GetString(field, NULL));
 
-      sprintf(field, "%s/Desc", sect);
+      snprintf(field, sizeof(field), "%s/Desc", sect);
       dir->general_description = str_dup(data.GetString(field, NULL));
 
-      sprintf(field, "%s/Flags", sect);
+      snprintf(field, sizeof(field), "%s/Flags", sect);
       int flags = data.GetInt(field, 0);
 
       if (flags == 1)
@@ -1133,29 +1133,29 @@ void parse_room(File &fl, long nr)
       else
         dir->exit_info = 0;
 
-      sprintf(field, "%s/Material", sect);
+      snprintf(field, sizeof(field), "%s/Material", sect);
       dir->material = data.LookupInt(field, material_names, 5);
 
-      sprintf(field, "%s/Barrier", sect);
+      snprintf(field, sizeof(field), "%s/Barrier", sect);
       dir->barrier = data.GetInt(field, 4);
       dir->condition = dir->barrier;
 
-      sprintf(field, "%s/KeyVnum", sect);
+      snprintf(field, sizeof(field), "%s/KeyVnum", sect);
       dir->key = data.GetInt(field, -1);
 
-      sprintf(field, "%s/LockRating", sect);
+      snprintf(field, sizeof(field), "%s/LockRating", sect);
       dir->key_level = data.GetInt(field, 0);
 
-      sprintf(field, "%s/HiddenRating", sect);
+      snprintf(field, sizeof(field), "%s/HiddenRating", sect);
       dir->hidden = data.GetInt(field, 0);
       
-      sprintf(field, "%s/GoIntoSecondPerson", sect);
+      snprintf(field, sizeof(field), "%s/GoIntoSecondPerson", sect);
       dir->go_into_secondperson = str_dup(data.GetString(field, NULL));
       
-      sprintf(field, "%s/GoIntoThirdPerson", sect);
+      snprintf(field, sizeof(field), "%s/GoIntoThirdPerson", sect);
       dir->go_into_thirdperson = str_dup(data.GetString(field, NULL));
       
-      sprintf(field, "%s/ComeOutOfThirdPerson", sect);
+      snprintf(field, sizeof(field), "%s/ComeOutOfThirdPerson", sect);
       dir->come_out_of_thirdperson = str_dup(data.GetString(field, NULL));
       
 #ifdef USE_DEBUG_CANARIES
@@ -1169,12 +1169,12 @@ void parse_room(File &fl, long nr)
   // finally, read in extra descriptions
   for (i = 0; true; i++) {
     char sect[16];
-    sprintf(sect, "EXTRADESC %d", i);
+    snprintf(sect, sizeof(sect), "EXTRADESC %d", i);
 
     if (data.NumFields(sect) > 0) {
       char field[64];
 
-      sprintf(field, "%s/Keywords", sect);
+      snprintf(field, sizeof(field), "%s/Keywords", sect);
       char *keywords = str_dup(data.GetString(field, NULL));
 
       if (!*keywords) {
@@ -1187,7 +1187,7 @@ void parse_room(File &fl, long nr)
       extra_descr_data *desc = new extra_descr_data;
       memset(desc, 0, sizeof(extra_descr_data));
       desc->keyword = keywords;
-      sprintf(field, "%s/Desc", sect);
+      snprintf(field, sizeof(field), "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
       desc->next = room->ex_description;
       room->ex_description = desc;
@@ -1197,7 +1197,7 @@ void parse_room(File &fl, long nr)
 
   top_of_world = rnum++;
   if (top_of_world >= top_of_world_array) {
-    sprintf(buf, "WARNING: top_of_world >= top_of_world_array at %ld / %d.", top_of_world, top_of_world_array);
+    snprintf(buf, sizeof(buf), "WARNING: top_of_world >= top_of_world_array at %ld / %d.", top_of_world, top_of_world_array);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   }
 }
@@ -1209,7 +1209,7 @@ void setup_dir(FILE * fl, int room, int dir)
   char line[256];
   int retval;
 
-  sprintf(buf2, "room #%ld, direction D%d", world[room].number, dir);
+  snprintf(buf2, sizeof(buf2), "room #%ld, direction D%d", world[room].number, dir);
 
   world[room].dir_option[dir] = new room_direction_data;
   memset(world[room].dir_option[dir], 0, sizeof(room_direction_data));
@@ -1370,7 +1370,7 @@ void renum_zone_table(void)
           break;
       }
       if (a < 0 || b < 0) {
-        sprintf(buf, "Invalid vnum in command. Args were: %ld %ld %ld, which resolved to a=%ld and b=%ld.",
+        snprintf(buf, sizeof(buf), "Invalid vnum in command. Args were: %ld %ld %ld, which resolved to a=%ld and b=%ld.",
                 arg1, arg2, arg3, a, b);
         log_zone_error(zone, cmd_no, buf);
         ZCMD.command = '*';
@@ -1384,7 +1384,7 @@ void parse_mobile(File &in, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
     shutdown();
   }
@@ -1520,7 +1520,7 @@ void parse_object(File &fl, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    sprintf(buf, "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
     log(buf);
     shutdown();
   }
@@ -1578,7 +1578,7 @@ void parse_object(File &fl, long nr)
   int i;
   for (i = 0; i < NUM_VALUES; i++) {
     char field[32];
-    sprintf(field, "VALUES/Val%d", i);
+    snprintf(field, sizeof(field), "VALUES/Val%d", i);
 
     GET_OBJ_VAL(obj, i) = data.GetInt(field, 0);
   }
@@ -1717,7 +1717,7 @@ void parse_object(File &fl, long nr)
             break;
         }
         
-        sprintf(buf, "metal ammo ammunition box %s %s %d-%s %s%s",
+        snprintf(buf, sizeof(buf), "metal ammo ammunition box %s %s %d-%s %s%s",
                 GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
                 weapon_type[GET_AMMOBOX_WEAPON(obj)],
                 GET_AMMOBOX_QUANTITY(obj),
@@ -1728,7 +1728,7 @@ void parse_object(File &fl, long nr)
         DELETE_ARRAY_IF_EXTANT(obj->text.keywords);
         obj->text.keywords = str_dup(buf);
         
-        sprintf(buf, "a %d-%s box of %s %s ammunition",
+        snprintf(buf, sizeof(buf), "a %d-%s box of %s %s ammunition",
                 GET_AMMOBOX_QUANTITY(obj),
                 type_as_string,
                 GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
@@ -1737,7 +1737,7 @@ void parse_object(File &fl, long nr)
         DELETE_ARRAY_IF_EXTANT(obj->text.name);
         obj->text.name = str_dup(buf);
         
-        sprintf(buf, "A metal box of %s %s %s%s has been left here.",
+        snprintf(buf, sizeof(buf), "A metal box of %s %s %s%s has been left here.",
                 GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
                 weapon_type[GET_AMMOBOX_WEAPON(obj)],
                 type_as_string,
@@ -1820,14 +1820,14 @@ void parse_object(File &fl, long nr)
   // read in affects
   for (i = 0; i < MAX_OBJ_AFFECT; i++) {
     char sect[16];
-    sprintf(sect, "AFFECT %d", i);
+    snprintf(sect, sizeof(sect), "AFFECT %d", i);
 
     obj->affected[i].location = APPLY_NONE;
     obj->affected[i].modifier = 0;
 
     if (data.NumFields(sect) > 1) {
       char field[64];
-      sprintf(field, "%s/Location", sect);
+      snprintf(field, sizeof(field), "%s/Location", sect);
 
       int loc = data.LookupInt(field, apply_types, APPLY_NONE);
 
@@ -1838,7 +1838,7 @@ void parse_object(File &fl, long nr)
 
       obj->affected[i].location = loc;
 
-      sprintf(field, "%s/Modifier", sect);
+      snprintf(field, sizeof(field), "%s/Modifier", sect);
       obj->affected[i].modifier = data.GetInt(field, 0);
     }
   }
@@ -1851,12 +1851,12 @@ void parse_object(File &fl, long nr)
   // finally, read in extra descriptions
   for (i = 0; true; i++) {
     char sect[16];
-    sprintf(sect, "EXTRADESC %d", i);
+    snprintf(sect, sizeof(sect), "EXTRADESC %d", i);
 
     if (data.NumFields(sect) > 0) {
       char field[64];
 
-      sprintf(field, "%s/Keywords", sect);
+      snprintf(field, sizeof(field), "%s/Keywords", sect);
       char *keywords = str_dup(data.GetString(field, NULL));
 
       if (!keywords) {
@@ -1868,7 +1868,7 @@ void parse_object(File &fl, long nr)
       extra_descr_data *desc = new extra_descr_data;
       memset(desc, 0, sizeof(extra_descr_data));
       desc->keyword = keywords;
-      sprintf(field, "%s/Desc", sect);
+      snprintf(field, sizeof(field), "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
 
       desc->next = obj->ex_description;
@@ -1971,7 +1971,7 @@ void parse_shop(File &fl, long virtual_nr)
   if (last_seen == -1) {
     last_seen = virtual_nr;
   } else if (last_seen >= virtual_nr) {
-    sprintf(buf, "FATAL ERROR: last_seen %ld >= virtual_nr %ld.", last_seen, virtual_nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= virtual_nr %ld.", last_seen, virtual_nr);
     log(buf);
     shutdown();
   }
@@ -2012,22 +2012,22 @@ void parse_shop(File &fl, long virtual_nr)
   shop->ettiquete = data.GetInt("Etiquette", SKILL_STREET_ETIQUETTE);
   int num_fields = data.NumSubsections("SELLING"), vnum;
   struct shop_sell_data *templist = NULL;
-  // sprintf(buf3, "Parsing shop items for shop %ld (%d found).", virtual_nr, num_fields);
+  // snprintf(buf3, sizeof(buf3), "Parsing shop items for shop %ld (%d found).", virtual_nr, num_fields);
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("SELLING", x);
-    sprintf(field, "%s/Vnum", name);
+    snprintf(field, sizeof(field), "%s/Vnum", name);
     vnum = data.GetLong(field, 0);
-    // sprintf(ENDOF(buf3), "\r\n - %s (%d)", name, vnum);
+    // snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\n - %s (%d)", name, vnum);
     if (real_object(vnum) < 1) {
-      // sprintf(ENDOF(buf3), " - nonexistant! Skipping.");
+      // snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " - nonexistant! Skipping.");
       continue;
     }
     shop_sell_data *sell = new shop_sell_data;
     memset(sell, 0, sizeof(shop_sell_data));
     sell->vnum = vnum;
-    sprintf(field, "%s/Type", name);
+    snprintf(field, sizeof(field), "%s/Type", name);
     sell->type = data.LookupInt(field, selling_type, SELL_ALWAYS);
-    sprintf(field, "%s/Stock", name);
+    snprintf(field, sizeof(field), "%s/Stock", name);
     sell->stock = data.GetInt(field, 0);
     if (!templist)
       templist = sell;
@@ -2037,7 +2037,7 @@ void parse_shop(File &fl, long virtual_nr)
           temp->next = sell;
           break;
         }
-    // sprintf(ENDOF(buf3), ": type %d, stock %d.", sell->type, sell->stock);
+    // snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), ": type %d, stock %d.", sell->type, sell->stock);
   }
   // mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
   shop->selling = templist;
@@ -2174,7 +2174,7 @@ int vnum_mobile_karma(char *searchname, struct char_data * ch)
       if (vnum_from_non_connected_zone(MOB_VNUM_RNUM(nr)))
         continue;
       ++found;
-      sprintf(buf, "[%5ld] %4.2f (%4.2f) %4dx %6.2f %s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld] %4.2f (%4.2f) %4dx %6.2f %s\r\n",
               MOB_VNUM_RNUM(nr),
               (float)karma/100.0,
               (float)(GET_KARMA(&mob_proto[nr]))/100.0,
@@ -2214,7 +2214,7 @@ int vnum_mobile_bonuskarma(char *searchname, struct char_data * ch)
         continue;
       karma = calc_karma(NULL, &mob_proto[nr]);
       ++found;
-      sprintf(buf, "[%5ld] %4.2f (%4.2f)%4dx %6.2f %s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld] %4.2f (%4.2f)%4dx %6.2f %s\r\n",
               MOB_VNUM_RNUM(nr),
               (float)karma/100.0,
               (float)(GET_KARMA(&mob_proto[nr]))/100.0,
@@ -2256,7 +2256,7 @@ int vnum_mobile_nuyen(char *searchname, struct char_data * ch)
         continue;
       karma = calc_karma(NULL, &mob_proto[nr]);
       ++found;
-      sprintf(buf, "[%5ld] %4.2f (%4.2f)%4dx [%6d] %s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld] %4.2f (%4.2f)%4dx [%6d] %s\r\n",
               MOB_VNUM_RNUM(nr),
               (float)karma/100.0,
               (float)(GET_KARMA(&mob_proto[nr]))/100.0,
@@ -2295,7 +2295,7 @@ int vnum_mobile_valuedeathkarma(char *searchname, struct char_data * ch)
         continue;
       karma = calc_karma(NULL, &mob_proto[nr]);
       ++found;
-      sprintf(buf, "[%5ld] %4.2f (%4.2f)%4dx %6.2f %s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld] %4.2f (%4.2f)%4dx %6.2f %s\r\n",
               MOB_VNUM_RNUM(nr),
               (float)karma/100.0,
               (float)(GET_KARMA(&mob_proto[nr]))/100.0,
@@ -2337,7 +2337,7 @@ int vnum_mobile_valuedeath(char *searchname, struct char_data * ch)
         continue;
       karma = calc_karma(NULL, &mob_proto[nr]);
       ++found;
-      sprintf(buf, "[%5ld] (%4.2f %4.2f)%4dx [%7d %7d] %s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld] (%4.2f %4.2f)%4dx [%7d %7d] %s\r\n",
               MOB_VNUM_RNUM(nr),
               (float)karma/100.0,
               (float)(GET_KARMA(&mob_proto[nr]))/100.0,
@@ -2377,7 +2377,7 @@ int vnum_mobile_valuedeathnuyen(char *searchname, struct char_data * ch)
         continue;
       karma = calc_karma(NULL, &mob_proto[nr]);
       ++found;
-      sprintf(buf, "[%5ld] (%4.2f %4.2f) [%7d %7d] %s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld] (%4.2f %4.2f) [%7d %7d] %s\r\n",
               MOB_VNUM_RNUM(nr),
               (float)karma/100.0,
               (float)(GET_KARMA(&mob_proto[nr]))/100.0,
@@ -2395,7 +2395,7 @@ int vnum_mobile_affflag(int i, struct char_data * ch)
   for (nr = 0; nr <= top_of_mobt; nr++)
     if (mob_proto[nr].char_specials.saved.affected_by.IsSet(i))
     {
-      sprintf(buf, "[%5ld] %s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld] %s\r\n",
               MOB_VNUM_RNUM(nr),
               mob_proto[nr].player.physical_text.name);
       send_to_char(buf, ch);
@@ -2411,7 +2411,7 @@ int vnum_vehicles(char *searchname, struct char_data * ch)
   {
     if (isname(searchname, veh_proto[nr].name)
         ||isname(searchname, veh_proto[nr].short_description)) {
-      sprintf(buf, "%3d. [%5ld] %s\r\n", ++found,
+      snprintf(buf, sizeof(buf), "%3d. [%5ld] %s\r\n", ++found,
               veh_index[nr].vnum,
               veh_proto[nr].short_description == NULL ? "(BUG)" :
               veh_proto[nr].short_description );
@@ -2447,7 +2447,7 @@ int vnum_mobile(char *searchname, struct char_data * ch)
   {
     if (isname(searchname, mob_proto[nr].player.physical_text.keywords) ||
         isname(searchname, mob_proto[nr].player.physical_text.name)) {
-      sprintf(buf, "%3d. [%5ld] %s\r\n", ++found,
+      snprintf(buf, sizeof(buf), "%3d. [%5ld] %s\r\n", ++found,
               MOB_VNUM_RNUM(nr),
               mob_proto[nr].player.physical_text.name == NULL ? "(BUG)" :
               mob_proto[nr].player.physical_text.name);
@@ -2493,7 +2493,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
             continue;
 
           ++found;
-          sprintf(ENDOF(buf), "[%5ld -%2d] %2d%s +%d %s %s %d%s\r\n",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %2d%s +%d %s %s %d%s\r\n",
                   OBJ_VNUM_RNUM(nr),
                   ObjList.CountObj(nr),
                   GET_OBJ_VAL(&obj_proto[nr], 0),
@@ -2524,7 +2524,7 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
     sprint_obj_mods( &obj_proto[nr], xbuf );
     
     ++found;
-    sprintf(buf, "[%5ld -%2d] %2d %d %s%s%s\r\n",
+    snprintf(buf, sizeof(buf), "[%5ld -%2d] %2d %d %s%s%s\r\n",
             OBJ_VNUM_RNUM(nr),
             ObjList.CountObj(nr),
             GET_OBJ_VAL(&obj_proto[nr], 0),
@@ -2546,7 +2546,7 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
       sprint_obj_mods( &obj_proto[nr], xbuf );
       
       ++found;
-      sprintf(buf, "[%5ld -%2d] %2d %d %s%s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld -%2d] %2d %d %s%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
               GET_OBJ_VAL(&obj_proto[nr], 0),
@@ -2586,7 +2586,7 @@ int vnum_object_magazines(char *searchname, struct char_data * ch)
           continue;
 
         ++found;
-        sprintf(ENDOF(buf), "[%5ld -%2d wt %f] %2d %3d %s%s\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d wt %f] %2d %3d %s%s\r\n",
                 OBJ_VNUM_RNUM(nr),
                 ObjList.CountObj(nr),
                 GET_OBJ_WEIGHT(&obj_proto[nr]),
@@ -2608,7 +2608,7 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
   {
     if (GET_OBJ_TYPE(&obj_proto[nr]) == ITEM_FOCUS
         && !vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr))) {
-      sprintf(buf, "%3d. [%5ld -%2d] %s %s +%2d %s%s\r\n", ++found,
+      snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s +%2d %s%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
               vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
@@ -2630,7 +2630,7 @@ int vnum_object_type(int type, struct char_data * ch)
   {
     if (GET_OBJ_TYPE(&obj_proto[nr]) == type) {
       ++found;
-      sprintf(buf, "[%5ld -%2d] %s %s%s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld -%2d] %s %s%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
               vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
@@ -2665,7 +2665,7 @@ int vnum_object_affectloc(int type, struct char_data * ch)
           sprint_obj_mods( &obj_proto[nr], xbuf );
 
           ++found;
-          sprintf(buf, "[%5ld -%2d] %s%s%s\r\n",
+          snprintf(buf, sizeof(buf), "[%5ld -%2d] %s%s%s\r\n",
                   OBJ_VNUM_RNUM(nr),
                   ObjList.CountObj(nr),
                   obj_proto[nr].text.name,
@@ -2693,7 +2693,7 @@ int vnum_object_affects(struct char_data *ch) {
         sprint_obj_mods( &obj_proto[nr], xbuf );
         
         ++found;
-        sprintf(buf, "[%5ld -%2d] %s%s%s\r\n",
+        snprintf(buf, sizeof(buf), "[%5ld -%2d] %s%s%s\r\n",
                 OBJ_VNUM_RNUM(nr),
                 ObjList.CountObj(nr),
                 obj_proto[nr].text.name,
@@ -2714,7 +2714,7 @@ int vnum_object_affflag(int type, struct char_data * ch)
   for (nr = 0; nr <= top_of_objt; nr++)
     if (obj_proto[nr].obj_flags.bitvector.IsSet(type))
     {
-      sprintf(buf, "[%5ld -%2d] %s%s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld -%2d] %s%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
               obj_proto[nr].text.name,
@@ -2761,7 +2761,7 @@ int vnum_object(char *searchname, struct char_data * ch)
   {
     if (isname(searchname, obj_proto[nr].text.keywords) ||
         isname(searchname, obj_proto[nr].text.name)) {
-      sprintf(buf, "%3d. [%5ld -%2d] %s %s%s\r\n", ++found,
+      snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
               vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
@@ -2782,7 +2782,7 @@ struct veh_data *read_vehicle(int nr, int type)
   if (type == VIRTUAL)
   {
     if ((i = real_vehicle(nr)) < 0) {
-      sprintf(buf, "Vehicle (V) %d does not exist in database.", nr);
+      snprintf(buf, sizeof(buf), "Vehicle (V) %d does not exist in database.", nr);
       return (0);
     }
   } else
@@ -2806,7 +2806,7 @@ struct char_data *read_mobile(int nr, int type)
   if (type == VIRTUAL)
   {
     if ((i = real_mobile(nr)) < 0) {
-      sprintf(buf, "Mobile (V) %d does not exist in database.", nr);
+      snprintf(buf, sizeof(buf), "Mobile (V) %d does not exist in database.", nr);
       return (0);
     }
   } else
@@ -2844,7 +2844,7 @@ struct matrix_icon *read_ic(int nr, int type)
   if (type == VIRTUAL)
   {
     if ((i = real_ic(nr)) < 0) {
-      sprintf(buf, "IC (V) %d does not exist in database.", nr);
+      snprintf(buf, sizeof(buf), "IC (V) %d does not exist in database.", nr);
       return (0);
     }
   } else
@@ -2885,7 +2885,7 @@ struct obj_data *read_object(int nr, int type)
   if (type == VIRTUAL)
   {
     if ((i = real_object(nr)) < 0) {
-      sprintf(buf, "Object (V) %d does not exist in database.", nr);
+      snprintf(buf, sizeof(buf), "Object (V) %d does not exist in database.", nr);
       return NULL;
     }
   } else
@@ -2900,15 +2900,15 @@ struct obj_data *read_object(int nr, int type)
     switch (GET_OBJ_VAL(obj, 0)) {
     case 0:
       GET_OBJ_VAL(obj, 8) = 1102;
-      sprintf(buf, "%d206", number(0, 9));
+      snprintf(buf, sizeof(buf), "%d206", number(0, 9));
       break;
     case 1:
       GET_OBJ_VAL(obj, 8) = 1102;
-      sprintf(buf, "%d321", number(0, 9));
+      snprintf(buf, sizeof(buf), "%d321", number(0, 9));
       break;
     case 2:
       GET_OBJ_VAL(obj, 8) = 1103;
-      sprintf(buf, "%d503", number(0, 9));
+      snprintf(buf, sizeof(buf), "%d503", number(0, 9));
       break;
     }
     GET_OBJ_VAL(obj, 0) = atoi(buf);
@@ -2918,15 +2918,15 @@ struct obj_data *read_object(int nr, int type)
     switch (GET_OBJ_VAL(obj, 3)) {
     case 0:
       GET_OBJ_VAL(obj, 8) = 1102;
-      sprintf(buf, "%d206", number(0, 9));
+      snprintf(buf, sizeof(buf), "%d206", number(0, 9));
       break;
     case 1:
       GET_OBJ_VAL(obj, 8) = 1102;
-      sprintf(buf, "%d321", number(0, 9));
+      snprintf(buf, sizeof(buf), "%d321", number(0, 9));
       break;
     case 2:
       GET_OBJ_VAL(obj, 8) = 1103;
-      sprintf(buf, "%d503", number(0, 9));
+      snprintf(buf, sizeof(buf), "%d503", number(0, 9));
       break;
     }
     GET_OBJ_VAL(obj, 3) = atoi(buf);
@@ -3004,10 +3004,10 @@ void log_zone_error(int zone, int cmd_no, const char *message)
 {
   char buf[256];
 
-  sprintf(buf, "error in zone file: %s", message);
+  snprintf(buf, sizeof(buf), "error in zone file: %s", message);
   mudlog(buf, NULL, LOG_ZONELOG, TRUE);
 
-  sprintf(buf, " ...offending cmd: '%c' cmd in zone #%d, line %d, cmd %d",
+  snprintf(buf, sizeof(buf), " ...offending cmd: '%c' cmd in zone #%d, line %d, cmd %d",
           ZCMD.command, zone_table[zone].number, ZCMD.line, cmd_no);
   mudlog(buf, NULL, LOG_ZONELOG, TRUE);
 }
@@ -3027,7 +3027,7 @@ void reset_zone(int zone, int reboot)
 
   for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
     /*
-     sprintf(buf, "Processing ZCMD %d (zone %d): %c %s %ld %ld %ld",
+     snprintf(buf, sizeof(buf), "Processing ZCMD %d (zone %d): %c %s %ld %ld %ld",
             cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.if_flag ? "(if last)" : "(always)", ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
      */
@@ -3197,7 +3197,7 @@ void reset_zone(int zone, int reboot)
       if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {        
         veh = read_vehicle(ZCMD.arg1, REAL);
         veh_to_room(veh, &world[ZCMD.arg3]);
-        sprintf(buf, "%s has arrived.\r\n", capitalize(GET_VEH_NAME(veh)));
+        snprintf(buf, sizeof(buf), "%s has arrived.\r\n", capitalize(GET_VEH_NAME(veh)));
         send_to_room(buf, veh->in_room);
         last_cmd = 1;
       } else
@@ -3303,7 +3303,7 @@ void reset_zone(int zone, int reboot)
                 struct obj_data *magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
                 GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(obj);
                 GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(obj);
-                sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
+                snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
                 DELETE_ARRAY_IF_EXTANT(magazine->restring);
                 magazine->restring = strdup(buf);
                 obj_to_obj(magazine, obj);
@@ -3395,7 +3395,7 @@ void reset_zone(int zone, int reboot)
         struct room_data *opposite_room = world[ZCMD.arg1].dir_option[ZCMD.arg2]->to_room;
         if (!opposite_room->dir_option[rev_dir[ZCMD.arg2]]
             || (&world[ZCMD.arg1] != opposite_room->dir_option[rev_dir[ZCMD.arg2]]->to_room)) {
-          sprintf(buf, "Note: Exits from %ld to %ld do not coincide (zone %d, line %d, cmd %d)",
+          snprintf(buf, sizeof(buf), "Note: Exits from %ld to %ld do not coincide (zone %d, line %d, cmd %d)",
                   opposite_room->number, world[ZCMD.arg1].number, zone_table[zone].number,
                   ZCMD.line, cmd_no);
           ZCMD.command = '*';
@@ -3422,7 +3422,7 @@ void reset_zone(int zone, int reboot)
         case 0:
             if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
                 && IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
-              sprintf(buf, "The %s to the %s swings open.\r\n",
+              snprintf(buf, sizeof(buf), "The %s to the %s swings open.\r\n",
                       world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword ? fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword) : "door",
                       fulldirs[ZCMD.arg2]);
               send_to_room(buf, &world[ZCMD.arg1]);
@@ -3432,7 +3432,7 @@ void reset_zone(int zone, int reboot)
           if (ok) {
             if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
                 && IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
-              sprintf(buf, "The %s to the %s swings open.\r\n",
+              snprintf(buf, sizeof(buf), "The %s to the %s swings open.\r\n",
                       opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword ? fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword) : "door",
                       fulldirs[rev_dir[ZCMD.arg2]]);
               send_to_room(buf, opposite_room);
@@ -3444,7 +3444,7 @@ void reset_zone(int zone, int reboot)
         case 1:
             if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
                 && !IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
-              sprintf(buf, "The %s to the %s swings closed.\r\n",
+              snprintf(buf, sizeof(buf), "The %s to the %s swings closed.\r\n",
                       world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword ? fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword) : "door",
                       fulldirs[ZCMD.arg2]);
               send_to_room(buf, &world[ZCMD.arg1]);
@@ -3454,7 +3454,7 @@ void reset_zone(int zone, int reboot)
           if (ok) {
             if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
                 && !IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
-              sprintf(buf, "The %s to the %s swings closed.\r\n",
+              snprintf(buf, sizeof(buf), "The %s to the %s swings closed.\r\n",
                       opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword ? fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword) : "door",
               fulldirs[rev_dir[ZCMD.arg2]]);
               send_to_room(buf, opposite_room);
@@ -3466,7 +3466,7 @@ void reset_zone(int zone, int reboot)
         case 2:
             if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
                 && !IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
-              sprintf(buf, "The %s to the %s swings closed.\r\n",
+              snprintf(buf, sizeof(buf), "The %s to the %s swings closed.\r\n",
                       world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword ? fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword) : "door",
                       fulldirs[ZCMD.arg2]);
               send_to_room(buf, &world[ZCMD.arg1]);
@@ -3476,7 +3476,7 @@ void reset_zone(int zone, int reboot)
           if (ok) {
             if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
                 && !IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
-              sprintf(buf, "The %s to the %s swings closed.\r\n",
+              snprintf(buf, sizeof(buf), "The %s to the %s swings closed.\r\n",
                       opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword ? fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword) : "door",
                       fulldirs[rev_dir[ZCMD.arg2]]);
               send_to_room(buf, opposite_room);
@@ -3490,7 +3490,7 @@ void reset_zone(int zone, int reboot)
       last_cmd = 1;
       break;
     default:
-      sprintf(buf, "Unknown cmd '%c' in reset table; cmd disabled. Args were %ld %ld %ld.",
+      snprintf(buf, sizeof(buf), "Unknown cmd '%c' in reset table; cmd disabled. Args were %ld %ld %ld.",
               ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
       ZONE_ERROR(buf);
       ZCMD.command = '*';
@@ -3561,7 +3561,7 @@ bool resize_world_array()
   DELETE_ARRAY_IF_EXTANT(world);
   world = new_world;
 
-  sprintf(buf, "World array resized to %d.", top_of_world_array);
+  snprintf(buf, sizeof(buf), "World array resized to %d.", top_of_world_array);
   mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   return TRUE;
 }
@@ -3589,7 +3589,7 @@ bool resize_qst_array(void)
   DELETE_ARRAY_IF_EXTANT(quest_table);
   quest_table = new_qst;
 
-  sprintf(buf, "Quest array resized to %d", top_of_quest_array);
+  snprintf(buf, sizeof(buf), "Quest array resized to %d", top_of_quest_array);
   mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   return TRUE;
 }
@@ -3992,7 +3992,7 @@ int file_to_string(const char *name, char *buf)
   *buf = '\0';
 
   if (!(fl = fopen(name, "r"))) {
-    sprintf(tmp, "Error reading %s", name);
+    snprintf(tmp, sizeof(tmp), "Error reading %s", name);
     perror(tmp);
     return (-1);
   }
@@ -4337,12 +4337,12 @@ void purge_unowned_vehs() {
   int counter = 0;
   for (struct veh_data *tmp = veh_list; tmp; tmp = tmp->next) {
     if (tmp->owner != 0) {
-      sprintf(buf, "'%s' (%ld) owned by %ld", tmp->short_description, tmp->idnum, tmp->owner);
+      snprintf(buf, sizeof(buf), "'%s' (%ld) owned by %ld", tmp->short_description, tmp->idnum, tmp->owner);
       log(buf);
       counter++;
     }
   }
-  sprintf(buf, "End of veh list. %d player-owned vehicles counted.", counter);
+  snprintf(buf, sizeof(buf), "End of veh list. %d player-owned vehicles counted.", counter);
   log(buf);
   */
   
@@ -4356,7 +4356,7 @@ void purge_unowned_vehs() {
     
     // This vehicle is owned by an NPC (zoneloaded): Do not delete.
     if (veh->owner == 0) {
-      // sprintf(buf, "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
+      // snprintf(buf, sizeof(buf), "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
       // log(buf);
       
       if (!prior_veh) {
@@ -4369,7 +4369,7 @@ void purge_unowned_vehs() {
     
     // This vehicle is owned by a valid player: Do not delete.
     if (does_player_exist(veh->owner)) {
-      //sprintf(buf, "Skipping vehicle '%s' (%ld) since its owner is a valid player.", veh->short_description, veh->idnum);
+      //snprintf(buf, sizeof(buf), "Skipping vehicle '%s' (%ld) since its owner is a valid player.", veh->short_description, veh->idnum);
       //log(buf);
       
       if (!prior_veh) {
@@ -4383,15 +4383,15 @@ void purge_unowned_vehs() {
     // This vehicle is owned by an invalid player. Delete.
     
     // Step 1: Dump its contents.
-    sprintf(buf, "Purging contents of vehicle '%s' (%ld), owner %ld (nonexistant).", veh->short_description, veh->idnum, veh->owner);
+    snprintf(buf, sizeof(buf), "Purging contents of vehicle '%s' (%ld), owner %ld (nonexistant).", veh->short_description, veh->idnum, veh->owner);
     log(buf);
     
     while ((vict_veh = veh->carriedvehs)) {
-      sprintf(buf, "- Found '%s' (%ld) owned by %ld.", vict_veh->short_description, vict_veh->idnum, vict_veh->owner);
+      snprintf(buf, sizeof(buf), "- Found '%s' (%ld) owned by %ld.", vict_veh->short_description, vict_veh->idnum, vict_veh->owner);
       
       // If the vehicle is in a room, disgorge there.
       if (veh->in_room) {
-        sprintf(ENDOF(buf), " Transferring to room %ld.", veh->in_room->number);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Transferring to room %ld.", veh->in_room->number);
         log(buf);
         veh_from_room(vict_veh);
         veh_to_room(vict_veh, veh->in_room);
@@ -4399,7 +4399,7 @@ void purge_unowned_vehs() {
       
       // If the vehicle is in another vehicle instead, disgorge there.
       else if (veh->in_veh) {
-        sprintf(ENDOF(buf), " Transferring to vehicle '%s' (%ld).",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Transferring to vehicle '%s' (%ld).",
                 veh->in_veh->short_description, veh->in_veh->idnum);
         log(buf);
         veh_to_veh(vict_veh, veh->in_veh);
@@ -4408,7 +4408,7 @@ void purge_unowned_vehs() {
       // Failure case: Vehicle was in neither a room nor another vehicle.
       else {
         log(buf);
-        sprintf(buf, "SYSERR: Attempting to disgorge '%s' (%ld) from '%s' (%ld), but the latter has no containing vehicle (%ld) or location (%ld). Putting in Dante's.",
+        snprintf(buf, sizeof(buf), "SYSERR: Attempting to disgorge '%s' (%ld) from '%s' (%ld), but the latter has no containing vehicle (%ld) or location (%ld). Putting in Dante's.",
                 vict_veh->short_description, vict_veh->idnum,
                 veh->short_description, veh->idnum,
                 veh->in_veh ? veh->in_veh->idnum : -1,
@@ -4445,7 +4445,7 @@ void load_saved_veh()
   int num_veh = atoi(buf);
   for (int i = 0; i < num_veh; i++) {
     File file;
-    sprintf(buf, "veh/%07d", i);
+    snprintf(buf, sizeof(buf), "veh/%07d", i);
     if (!(file.Open(buf, "r")))
       continue;
 
@@ -4476,17 +4476,17 @@ void load_saved_veh()
     int num_objs = data.NumSubsections("CONTENTS");
     for (int i = 0; i < num_objs; i++) {
       const char *sect_name = data.GetIndexSection("CONTENTS", i);
-      sprintf(buf, "%s/Vnum", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
       vnum = data.GetLong(buf, 0);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
-        sprintf(buf, "%s/Name", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Name", sect_name);
         obj->restring = str_dup(data.GetString(buf, NULL));
-        sprintf(buf, "%s/Cost", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
         GET_OBJ_COST(obj) = data.GetInt(buf, 0);
-        sprintf(buf, "%s/Photo", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
         obj->photo = str_dup(data.GetString(buf, NULL));
         for (int x = 0; x < NUM_VALUES; x++) {
-          sprintf(buf, "%s/Value %d", sect_name, x);
+          snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
         }
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
@@ -4500,13 +4500,13 @@ void load_saved_veh()
               GET_OBJ_VAL(obj, i) = 0;
               attach_attachment_to_weapon(attach, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
             }
-        sprintf(buf, "%s/Condition", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
         GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
-        sprintf(buf, "%s/Inside", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
         inside = data.GetInt(buf, 0);
-        sprintf(buf, "%s/Front", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Front", sect_name);
         obj->vfront = data.GetInt(buf, TRUE);
-        sprintf(buf, "%s/Timer", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
         GET_OBJ_TIMER(obj) = data.GetInt(buf, TRUE);
         if (inside > 0) {
           if (inside == last_in)
@@ -4526,7 +4526,7 @@ void load_saved_veh()
     }
     int num_mods = data.NumFields("MODIS");
     for (int i = 0; i < num_mods; i++) {
-      sprintf(buf, "MODIS/Mod%d", i);
+      snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
       obj = read_object(data.GetLong(buf, 0), VIRTUAL);
       GET_MOD(veh, GET_OBJ_VAL(obj, 6)) = obj;
       if (GET_OBJ_VAL(obj, 0) == TYPE_ENGINECUST)
@@ -4540,9 +4540,9 @@ void load_saved_veh()
       struct grid_data *grid = new grid_data;
       memset(grid, 0, sizeof(grid_data));
       const char *sect_name = data.GetIndexSection("GRIDGUIDE", i);
-      sprintf(buf, "%s/Name", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Name", sect_name);
       grid->name = str_dup(data.GetString(buf, NULL));
-      sprintf(buf, "%s/Room", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Room", sect_name);
       grid->room = data.GetLong(buf, 0);
       grid->next = veh->grid;
       veh->grid = grid;
@@ -4550,20 +4550,20 @@ void load_saved_veh()
     num_mods = data.NumSubsections("MOUNTS");
     for (int i = 0; i < num_mods; i++) {
       const char *sect_name = data.GetIndexSection("MOUNTS", i);
-      sprintf(buf, "%s/MountNum", sect_name);
+      snprintf(buf, sizeof(buf), "%s/MountNum", sect_name);
       obj = read_object(data.GetLong(buf, 0), VIRTUAL);
-      sprintf(buf, "%s/Ammo", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Ammo", sect_name);
       GET_OBJ_VAL(obj, 9) = data.GetInt(buf, 0);
-      sprintf(buf, "%s/Vnum", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
       int gun = data.GetLong(buf, 0);
       struct obj_data *weapon;
       if (gun && (weapon = read_object(gun, VIRTUAL))) {
-        sprintf(buf, "%s/Condition", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
         GET_OBJ_CONDITION(weapon) = data.GetInt(buf, GET_OBJ_CONDITION(weapon));
-        sprintf(buf, "%s/Name", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Name", sect_name);
         weapon->restring = str_dup(data.GetString(buf, NULL));
         for (int x = 0; x < NUM_VALUES; x++) {
-          sprintf(buf, "%s/Value %d", sect_name, x);
+          snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
         }
         obj_to_obj(weapon, obj);
@@ -4610,11 +4610,11 @@ void load_saved_veh()
       if (!veh->in_veh) {
         // Failure case: The containing vehicle did not exist.
         if (veh_room > 0 && real_room(veh_room) > 0) {
-          sprintf(buf, "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier! Dumping to room %ld.\r\n",
+          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier! Dumping to room %ld.\r\n",
                   veh->name, veh->veh_number, veh_room);
         } else {
           veh_room = RM_SEATTLE_PARKING_GARAGE;
-          sprintf(buf, "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no room was found! Dumping to Seattle Garage (%ld).\r\n",
+          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no room was found! Dumping to Seattle Garage (%ld).\r\n",
                   veh->name, veh->veh_number, veh_room);
         }
         veh->spare2 = 0;
@@ -4643,7 +4643,7 @@ void load_consist(void)
   market[4] = paydata.GetInt("MARKET/Black", 5000);
   for (int nr = 0; nr <= top_of_world; nr++)
     if (ROOM_FLAGGED(&world[nr], ROOM_STORAGE)) {
-      sprintf(buf, "storage/%ld", world[nr].number);
+      snprintf(buf, sizeof(buf), "storage/%ld", world[nr].number);
       if (!(file.Open(buf, "r")))
         continue;
       VTable data;
@@ -4654,28 +4654,28 @@ void load_consist(void)
       long vnum;
       for (int i = 0; i < num_objs; i++) {
         const char *sect_name = data.GetIndexSection("HOUSE", i);
-        sprintf(buf, "%s/Vnum", sect_name);
+        snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
         vnum = data.GetLong(buf, 0);
         if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
-          sprintf(buf, "%s/Name", sect_name);
+          snprintf(buf, sizeof(buf), "%s/Name", sect_name);
           obj->restring = str_dup(data.GetString(buf, NULL));
-          sprintf(buf, "%s/Photo", sect_name);
+          snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
           obj->photo = str_dup(data.GetString(buf, NULL));
           for (int x = 0; x < NUM_VALUES; x++) {
-            sprintf(buf, "%s/Value %d", sect_name, x);
+            snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
             GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
           }
           if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
             add_phone_to_list(obj);
-          sprintf(buf, "%s/Condition", sect_name);
+          snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
           GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
-          sprintf(buf, "%s/Timer", sect_name);
+          snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
           GET_OBJ_TIMER(obj) = data.GetInt(buf, GET_OBJ_TIMER(obj));
-          sprintf(buf, "%s/Attempt", sect_name);
+          snprintf(buf, sizeof(buf), "%s/Attempt", sect_name);
           GET_OBJ_ATTEMPT(obj) = data.GetInt(buf, 0);
-          sprintf(buf, "%s/Cost", sect_name);
+          snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
           GET_OBJ_COST(obj) = data.GetInt(buf, GET_OBJ_COST(obj));
-          sprintf(buf, "%s/Inside", sect_name);
+          snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
           
           // Handle weapon attachments.
           if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
@@ -4713,7 +4713,7 @@ void boot_shop_orders(void)
   File file;
   vnum_t vnum, player;
   for (int i = 0; i <= top_of_shopt; i++) {
-    sprintf(buf, "order/%ld", shop_table[i].vnum);
+    snprintf(buf, sizeof(buf), "order/%ld", shop_table[i].vnum);
     if (!(file.Open(buf, "r")))
       continue;
     VTable data;
@@ -4724,9 +4724,9 @@ void boot_shop_orders(void)
 
     for (int x = 0; x < num_ord; x++) {
       const char *sect_name = data.GetIndexSection("ORDERS", x);
-      sprintf(buf, "%s/Item", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Item", sect_name);
       vnum = data.GetLong(buf, 0);
-      sprintf(buf, "%s/Player", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Player", sect_name);
       player = data.GetLong(buf, 0);
       if (real_object(vnum) < 0 || !does_player_exist(player))
         continue;
@@ -4734,13 +4734,13 @@ void boot_shop_orders(void)
       memset(order, 0, sizeof(shop_order_data));
       order->item = vnum;
       order->player = player;
-      sprintf(buf, "%s/Time", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Time", sect_name);
       order->timeavail = data.GetInt(buf, 0);
-      sprintf(buf, "%s/Price", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Price", sect_name);
       order->price = data.GetInt(buf, 0);
-      sprintf(buf, "%s/Number", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Number", sect_name);
       order->number = data.GetInt(buf, 0);
-      sprintf(buf, "%s/Sent", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Sent", sect_name);
       order->sent = data.GetInt(buf, 0);
 
       if (order->item && order->player && order->timeavail && order->price && order->number) {

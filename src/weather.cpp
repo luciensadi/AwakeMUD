@@ -48,7 +48,7 @@ void another_hour(void)
       temp = "^y";
     else
       temp = "^L";
-    sprintf(buf, "%sThe sun rises in the east.^n\r\n", temp);
+    snprintf(buf, sizeof(buf), "%sThe sun rises in the east.^n\r\n", temp);
     send_to_outdoor(buf);
     for (ch = character_list; ch; ch = next) {
       next = ch->next;
@@ -75,7 +75,7 @@ void another_hour(void)
       temp = "^Y";
       break;
     }
-    sprintf(buf, "%sThe day has begun.^n\r\n", temp);
+    snprintf(buf, sizeof(buf), "%sThe day has begun.^n\r\n", temp);
     send_to_outdoor(buf);
     break;
   case 18:
@@ -97,7 +97,7 @@ void another_hour(void)
       temp = "^r";
       break;
     }
-    sprintf(buf, "%sThe sun slowly disappears in the west.^n\r\n", temp);
+    snprintf(buf, sizeof(buf), "%sThe sun slowly disappears in the west.^n\r\n", temp);
     send_to_outdoor(buf);
     for (ch = character_list; ch; ch = next) {
       next = ch->next;
@@ -110,9 +110,9 @@ void another_hour(void)
   case 21:
     weather_info.sunlight = SUN_DARK;
     if (weather_info.sky == SKY_CLOUDLESS)
-      sprintf(buf, "^bThe night has begun. The moon is %s.^n\r\n",moon[weather_info.moonphase]);
+      snprintf(buf, sizeof(buf), "^bThe night has begun. The moon is %s.^n\r\n",moon[weather_info.moonphase]);
     else
-      sprintf(buf, "^LThe night has begun.^n\r\n");
+      snprintf(buf, sizeof(buf), "^LThe night has begun.^n\r\n");
 
     send_to_outdoor(buf);
     break;
