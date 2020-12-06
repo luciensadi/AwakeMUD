@@ -130,7 +130,7 @@ void medit_disp_skills(struct descriptor_data *d)
     if ((line % 3) == 1)
       snprintf(buf, sizeof(buf), "%2d) %-20s ", c, skills[c].name);
     else
-      snprintf(buf, sizeof(buf), "%s%2d) %-20s ", buf, c, skills[c].name);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) %-20s ", c, skills[c].name);
     if (!(line % 3)) {
       snprintf(buf, sizeof(buf), "%s\r\n", buf);
       send_to_char(buf, CH);

@@ -1170,27 +1170,27 @@ ACMD(do_analyze)
         else
           snprintf(buf, sizeof(buf), "?-");
         if (found[1])
-          snprintf(buf, sizeof(buf), "%s%d ", buf, matrix[PERSONA->in_host].security);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d ", matrix[PERSONA->in_host].security);
         else
           strcat(buf, "? ");
         if (found[2])
-          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[ACCESS][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[ACCESS][0]);
         else
           strcat(buf, "0/");
         if (found[3])
-          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[CONTROL][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[CONTROL][0]);
         else
           strcat(buf, "0/");
         if (found[4])
-          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[INDEX][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[INDEX][0]);
         else
           strcat(buf, "0/");
         if (found[5])
-          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[FILES][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[FILES][0]);
         else
           strcat(buf, "0/");
         if (found[6])
-          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[SLAVE][0]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[SLAVE][0]);
         else
           strcat(buf, "0");
         strcat(buf, "\r\n");

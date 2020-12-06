@@ -948,7 +948,7 @@ ACMD(do_gen_comm)
           else
             snprintf(buf, sizeof(buf), "%s$z shouts in a language you don't understand.", com_msgs[subcmd][3]);
         } else
-          snprintf(buf, sizeof(buf), "$z shouts incoherently.");
+          strncpy(buf, "$z shouts incoherently.", sizeof(buf));
         if (IS_NPC(ch))
           snprintf(buf, sizeof(buf), "%s$z shouts, \"%s%s\"^n", com_msgs[subcmd][3], argument, com_msgs[subcmd][3]);
         
@@ -998,7 +998,7 @@ ACMD(do_gen_comm)
               else
                 snprintf(buf, sizeof(buf), "%s$z shouts in a language you don't understand.", com_msgs[subcmd][3]);
             } else
-              snprintf(buf, sizeof(buf), "$z shouts incoherently.");
+              strncpy(buf, "$z shouts incoherently.", sizeof(buf));
             if (IS_NPC(ch))
               snprintf(buf, sizeof(buf), "%s$z shouts, \"%s%s\"^n", com_msgs[subcmd][3], argument, com_msgs[subcmd][3]);
             

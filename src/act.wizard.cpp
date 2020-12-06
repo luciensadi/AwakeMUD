@@ -3171,7 +3171,7 @@ ACMD(do_show)
     strcpy(buf, "Show options:\r\n");
     for (j = 0, i = 1; fields[i].level; i++)
       if (access_level(ch, fields[i].level))
-        snprintf(buf, sizeof(buf), "%s%-15s%s", buf, fields[i].cmd, (!(++j % 5) ? "\r\n" : ""));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-15s%s", fields[i].cmd, (!(++j % 5) ? "\r\n" : ""));
     strcat(buf, "\r\n");
     send_to_char(buf, ch);
     return;
@@ -3235,12 +3235,11 @@ ACMD(do_show)
      
       snprintf(buf, sizeof(buf), "Player: %-12s (%s) [%2d]\r\n", GET_NAME(vict),
               genders[(int) GET_SEX(vict)], GET_LEVEL(vict));
-      snprintf(buf, sizeof(buf), "%sY: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
-              buf, GET_NUYEN(vict), GET_BANK(vict), GET_KARMA(vict));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Y: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
+              GET_NUYEN(vict), GET_BANK(vict), GET_KARMA(vict));
       strcpy(birth, ctime(&vict->player.time.birth));
-      snprintf(buf, sizeof(buf),
-              "%sStarted: %-20.16s  Last: %-20.16s  Played: %3dh %2dm\r\n",
-              buf, birth, ctime(&vict->player.time.lastdisc),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Started: %-20.16s  Last: %-20.16s  Played: %3dh %2dm\r\n",
+              birth, ctime(&vict->player.time.lastdisc),
               (int) (vict->player.time.played / 3600),
               (int) (vict->player.time.played / 60 % 60));
       send_to_char(buf, ch);
@@ -3268,25 +3267,24 @@ ACMD(do_show)
       v++;
 
     snprintf(buf, sizeof(buf), "Current stats:\r\n");
-    snprintf(buf, sizeof(buf), "%s  Players in game: ^C%-5d^n  Connected: ^g%-5d^n\r\n", buf, i, con);
-    snprintf(buf, sizeof(buf), "%s  Registered players: ^c%-5d^n\r\n",
-            buf, playerDB.NumPlayers());
-    snprintf(buf, sizeof(buf), "%s  Mobiles: ^c%-5d^n          Prototypes: ^y%-5ld^n Available: ^L%-5ld^n\r\n",
-            buf, j, top_of_mobt + 1, top_of_mob_array - top_of_mobt + 1);
-    snprintf(buf, sizeof(buf), "%s  Objects: ^c%-5d^n          Prototypes: ^y%-5ld^n Available: ^L%-5ld^n\r\n",
-            buf, ObjList.NumItems(), top_of_objt + 1, top_of_obj_array - top_of_objt + 1);
-    snprintf(buf, sizeof(buf), "%s  Vehicles: ^c%-5d^n         Prototypes: ^y%-5d^n\r\n", buf, v, top_of_veht + 1);
-    snprintf(buf, sizeof(buf), "%s  Rooms:   ^c%-5ld^n          Available: ^L%-5ld^n\r\n  Zones: %-5ld\r\n",
-            buf, top_of_world + 1, top_of_world_array - top_of_world + 1,
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Players in game: ^C%-5d^n  Connected: ^g%-5d^n\r\n", i, con);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Registered players: ^c%-5d^n\r\n", playerDB.NumPlayers());
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Mobiles: ^c%-5d^n          Prototypes: ^y%-5ld^n Available: ^L%-5ld^n\r\n",
+            j, top_of_mobt + 1, top_of_mob_array - top_of_mobt + 1);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Objects: ^c%-5d^n          Prototypes: ^y%-5ld^n Available: ^L%-5ld^n\r\n",
+            ObjList.NumItems(), top_of_objt + 1, top_of_obj_array - top_of_objt + 1);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Vehicles: ^c%-5d^n         Prototypes: ^y%-5d^n\r\n", v, top_of_veht + 1);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Rooms:   ^c%-5ld^n          Available: ^L%-5ld^n\r\n  Zones: %-5ld\r\n",
+            top_of_world + 1, top_of_world_array - top_of_world + 1,
             top_of_zone_table + 1);
-    snprintf(buf, sizeof(buf), "%s  World chunk: ^c%-5d^n      Mob chunk: ^c%-5d^n  Obj chunk: ^c%-5d^n\r\n",
-            buf, world_chunk_size, mob_chunk_size, obj_chunk_size);
-    snprintf(buf, sizeof(buf), "%s  Large bufs: ^c%-5d^n       Buf switches: ^C%-5d^n Overflows: ^r%-5d^n\r\n",
-            buf, buf_largecount, buf_switches, buf_overflows);
-    snprintf(buf, sizeof(buf), "%s  ObjStackSize: %d(%d), ChStackSize: %d(%d), RmStackSize: %d(%d)\r\n",
-            buf, Mem->ObjSize(), Mem->ObjMaxSize(), Mem->ChSize(), Mem->ChMaxSize(),
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  World chunk: ^c%-5d^n      Mob chunk: ^c%-5d^n  Obj chunk: ^c%-5d^n\r\n",
+            world_chunk_size, mob_chunk_size, obj_chunk_size);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Large bufs: ^c%-5d^n       Buf switches: ^C%-5d^n Overflows: ^r%-5d^n\r\n",
+            buf_largecount, buf_switches, buf_overflows);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ObjStackSize: %d(%d), ChStackSize: %d(%d), RmStackSize: %d(%d)\r\n",
+            Mem->ObjSize(), Mem->ObjMaxSize(), Mem->ChSize(), Mem->ChMaxSize(),
             Mem->RoomSize(), Mem->RoomMaxSize());
-    snprintf(buf, sizeof(buf), "%s  OLC is %s\r\n", buf,
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  OLC is %s\r\n",
             (olc_state ? "^GAvailable.^n" : "^RUnavailable.^n"));
     send_to_char(buf, ch);
     break;
@@ -3295,7 +3293,7 @@ ACMD(do_show)
     for (i = 0, k = 0; i <= top_of_world; i++)
       for (j = 0; j < NUM_OF_DIRS; j++)
         if (world[i].dir_option[j] && !world[i].dir_option[j]->to_room && i != last) {
-          snprintf(buf, sizeof(buf), "%s%2d: [%5ld] %s\r\n", buf, ++k, world[i].number, world[i].name);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%5ld] %s\r\n", ++k, world[i].number, world[i].name);
           last = i;
         }
     send_to_char(buf, ch);
@@ -3304,7 +3302,7 @@ ACMD(do_show)
     strcpy(buf, "Death Traps\r\n-----------\r\n");
     for (i = 0, j = 0; i <= top_of_world; i++)
       if (ROOM_FLAGGED(&world[i], ROOM_DEATH))
-        snprintf(buf, sizeof(buf), "%s%2d: [%5ld] %s %s\r\n", buf, ++j,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%5ld] %s %s\r\n", ++j,
                 world[i].number,
                 vnum_from_non_connected_zone(world[i].number) ? " " : "*",
                 world[i].name);
@@ -3316,7 +3314,7 @@ ACMD(do_show)
     strcpy(buf, "Godrooms\r\n--------------------------\r\n");
     for (i = 0, j = 0; i <= zone_table[real_zone(GOD_ROOMS_ZONE)].top; i++)
       if (world[i].zone == GOD_ROOMS_ZONE && i > 1 && !(i >= 8 && i <= 12))
-        snprintf(buf, sizeof(buf), "%s%2d: [%5ld] %s %s\r\n", buf, j++, world[i].number,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%5ld] %s %s\r\n", j++, world[i].number,
                 vnum_from_non_connected_zone(world[i].number) ? " " : "*",
                 world[i].name);
     send_to_char(buf, ch);
@@ -3337,7 +3335,7 @@ ACMD(do_show)
     snprintf(buf, sizeof(buf), "\r\n");
     for (i = MIN_SKILLS; i < MAX_SKILLS; i++)
       if (GET_SKILL(vict, i) > 0) {
-        snprintf(buf, sizeof(buf), "%s[%-20s%4d]", buf, skills[i].name, GET_SKILL(vict, i));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%-20s%4d]", skills[i].name, GET_SKILL(vict, i));
         j++;
         if (!(j % 3))
           strcat(buf, "\r\n");
@@ -3365,11 +3363,11 @@ ACMD(do_show)
       i += strlen(temp->name) + 4 + (int)(temp->force / 10);
       if (i < 79) {
         if (temp->next)
-          snprintf(buf, sizeof(buf), "%s%s (%d), ", buf, temp->name, temp->force);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s (%d), ", temp->name, temp->force);
         else
-          snprintf(buf, sizeof(buf), "%s%s (%d).\r\n", buf, temp->name, temp->force);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s (%d).\r\n", temp->name, temp->force);
       } else {
-        send_to_char(strcat(buf, "\r\n"), ch);
+        send_to_char(ch, "%s\r\n", buf);
         if (temp->next)
           snprintf(buf, sizeof(buf), "%s (%d), ", temp->name, temp->force);
         else

@@ -306,8 +306,7 @@ ACMD(do_title)
     skip_spaces(&argument);
     strcat(argument, "^n");
     set_title(ch, argument);
-    snprintf(buf, sizeof(buf), "Okay, you're now %s %s.\r\n", GET_CHAR_NAME(ch), GET_TITLE(ch));
-    send_to_char(buf, ch);
+    send_to_char(ch, "Okay, you're now %s %s.\r\n", GET_CHAR_NAME(ch), GET_TITLE(ch));
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_TITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
   }
@@ -3726,8 +3725,8 @@ ACMD(do_survey)
   struct room_data *room = get_ch_in_room(ch);
 
   if (ROOM_FLAGGED(room, ROOM_INDOORS))
-    snprintf(buf, sizeof(buf), "The room is ");
-  else snprintf(buf, sizeof(buf), "The area is ");
+    strcpy(buf, "The room is ");
+  else strcpy(buf, "The area is ");
   if (!room->x)
     strcat(buf, "pretty big. ");
   else {
