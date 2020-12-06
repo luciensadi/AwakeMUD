@@ -49,7 +49,7 @@ void adept_release_spell(struct char_data *ch)
   strcpy(buf, spells[spell->spell].name);
   if (spell->spell == SPELL_INCATTR || spell->spell == SPELL_INCCYATTR ||
       spell->spell == SPELL_DECATTR || spell->spell == SPELL_DECCYATTR)
-        sprintf(ENDOF(buf), " (%s)", attributes[spell->subtype]);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[spell->subtype]);
   send_to_char(ch, "You stop sustaining %s.\r\n", buf);
   send_to_char(spell->other, "You suddenly feel the burden of your %s spell fall back on to you.\r\n", buf);
 }
@@ -520,10 +520,10 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
   else if (type)
     damage += spells[type].draindamage + 3;
   magic_perception(ch, force, type);
-  sprintf(buf, "Drain Test: F:%d%s T:%d Sk: %d", force, wound_name[damage], target, GET_WIL(ch) + GET_DRAIN(ch)); 
+  snprintf(buf, sizeof(buf), "Drain Test: F:%d%s T:%d Sk: %d", force, wound_name[damage], target, GET_WIL(ch) + GET_DRAIN(ch)); 
   success = success_test(GET_WIL(ch) + GET_DRAIN(ch), target);
   damage = convert_damage(stage(-success, damage));
-  sprintf(ENDOF(buf), " S:%d S:%d", success, damage);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " S:%d S:%d", success, damage);
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS); 
   if (force > GET_MAG(ch) / 100 || IS_PROJECT(ch)) {
     GET_PHYSICAL(ch) -= damage *100;
@@ -1063,13 +1063,13 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
               break;
             }
         if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
-          sprintf(buf, "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+          snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
           act(buf, TRUE, ch, 0, vict, TO_CHAR);
           return;
         }
       }
       if ((spell == SPELL_DECCYATTR || spell == SPELL_INCCYATTR) && (!cyber || GET_ATT(vict, sub) == GET_REAL_ATT(vict, sub))) {
-        sprintf(buf, "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+        snprintf(buf, sizeof(buf), "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
         act(buf, TRUE, ch, 0, vict, TO_CHAR);
         return;
       }
@@ -1617,7 +1617,7 @@ void mob_magic(struct char_data *ch)
     case SPELL_ACIDSTREAM:
     case SPELL_LIGHTNINGBOLT:
     case SPELL_CLOUT:
-      sprintf(buf, "%s %s", wound_name[number(1, 4)], GET_CHAR_NAME(FIGHTING(ch)));
+      snprintf(buf, sizeof(buf), "%s %s", wound_name[number(1, 4)], GET_CHAR_NAME(FIGHTING(ch)));
       break;
     default:
       strcpy(buf, GET_CHAR_NAME(FIGHTING(ch)));
@@ -1878,7 +1878,7 @@ ACMD(do_contest)
     conjuring_drain(ch, GET_LEVEL(mob));
   } else if (chsuc > casuc) {
     send_to_char(ch, "You steal control of %s!\r\n", GET_NAME(mob));
-    sprintf(buf, "$n steals control of %s!", GET_NAME(mob));
+    snprintf(buf, sizeof(buf), "$n steals control of %s!", GET_NAME(mob));
     act(buf, FALSE, ch, 0, caster, TO_VICT);
     for (struct spirit_data *sdata = GET_SPIRIT(caster); sdata; sdata = sdata->next)
       if (sdata->id == GET_GRADE(mob)) {
@@ -1895,7 +1895,7 @@ ACMD(do_contest)
     conjuring_drain(ch, GET_LEVEL(mob));
   } else {
     send_to_char("You fail to gain control!\r\n", ch);
-    sprintf(buf, "$n tries to steal control of %s.", GET_NAME(mob));
+    snprintf(buf, sizeof(buf), "$n tries to steal control of %s.", GET_NAME(mob));
     act(buf, FALSE, ch, 0, caster, TO_VICT);
     conjuring_drain(ch, GET_LEVEL(mob));
   }
@@ -1998,7 +1998,7 @@ ACMD(do_bond)
     // Assign the magazine's values to the correct values supplied by the weapon.
     GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(weapon);
     GET_MAGAZINE_AMMO_TYPE(magazine) = GET_WEAPON_ATTACK_TYPE(weapon);
-    sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_AMMO_TYPE(magazine)]);
+    snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_AMMO_TYPE(magazine)]);
     if (magazine->restring)
       delete [] magazine->restring;
     magazine->restring = strdup(buf);
@@ -2012,7 +2012,7 @@ ACMD(do_bond)
         if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(i, 0)) {
           GET_OBJ_VAL(i, 0) = GET_OBJ_VAL(obj, 5);
           GET_OBJ_VAL(i, 1) = GET_OBJ_VAL(obj, 3);
-          sprintf(buf, "a %d-round %s magazine", GET_OBJ_VAL(i, 0), weapon_type[GET_OBJ_VAL(i, 1)]);
+          snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_OBJ_VAL(i, 0), weapon_type[GET_OBJ_VAL(i, 1)]);
           if (i->restring)
             delete [] i->restring;
           i->restring = strdup(buf);
@@ -2376,7 +2376,7 @@ ACMD(do_conjure)
       bool have_sent_text = FALSE;
       for (spirit = 0; spirit < NUM_SPIRITS; spirit++)
         if (GET_DOMAIN(ch) == ((spirit == SPIRIT_MIST || spirit == SPIRIT_STORM || spirit == SPIRIT_WIND) ? SPIRIT_SKY : spirit)) {
-          sprintf(ENDOF(buf), "%s %s", have_sent_text ? "," : "", spirits[spirit].name);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", have_sent_text ? "," : "", spirits[spirit].name);
           have_sent_text = TRUE;
         }
       send_to_char(buf, ch);
@@ -2605,7 +2605,7 @@ ACMD(do_learn)
   if (GET_OBJ_VAL(obj, 1) == SPELL_INCATTR || GET_OBJ_VAL(obj, 1) == SPELL_INCCYATTR ||
       GET_OBJ_VAL(obj, 1) == SPELL_DECATTR || GET_OBJ_VAL(obj, 1) == SPELL_DECCYATTR) {
     strcpy(buf, spells[GET_OBJ_VAL(obj, 1)].name);
-    sprintf(ENDOF(buf), " (%s)", attributes[GET_OBJ_VAL(obj, 3)]);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[GET_OBJ_VAL(obj, 3)]);
     spell->name = str_dup(buf);
   } else
     spell->name = str_dup(spells[GET_OBJ_VAL(obj, 1)].name);
@@ -2629,12 +2629,12 @@ ACMD(do_elemental)
     return;
   }
   int i = 1;
-  sprintf(buf, "You currently have the following %s bound:\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
+  snprintf(buf, sizeof(buf), "You currently have the following %s bound:\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
   for (struct spirit_data *elem = GET_SPIRIT(ch); elem; elem = elem->next, i++) {
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-      sprintf(ENDOF(buf), "%d) %-30s (Force %d) Services %d\r\n", i, GET_NAME(&mob_proto[real_mobile(spirits[elem->type].vnum)]), elem->force, elem->services);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services %d\r\n", i, GET_NAME(&mob_proto[real_mobile(spirits[elem->type].vnum)]), elem->force, elem->services);
     else
-      sprintf(ENDOF(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n", i, GET_NAME(&mob_proto[real_mobile(elements[elem->type].vnum)]),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n", i, GET_NAME(&mob_proto[real_mobile(elements[elem->type].vnum)]),
               elem->force, elem->services, elem->called ? " Present" : " ");
   }
   send_to_char(buf, ch);
@@ -2917,7 +2917,7 @@ POWER(spirit_accident)
       send_to_char(tch, "You trip and stumble!");
       GET_INIT_ROLL(tch) -= 10;
     } else {
-      sprintf(buf, "%s fails to cause $N to have an accident.", CAP(GET_NAME(spirit)));
+      snprintf(buf, sizeof(buf), "%s fails to cause $N to have an accident.", CAP(GET_NAME(spirit)));
       act(buf, TRUE, ch, 0, tch, TO_CHAR);
     }
     spiritdata->services--;
@@ -3041,12 +3041,12 @@ POWER(spirit_fear)
     int success = success_test(GET_SPARE2(spirit), GET_WIL(tch)) - success_test(GET_WIL(tch), GET_SPARE2(spirit));
     if (success < 1) {
       send_to_char("A dark shadow passes over your mind, but is quickly gone.\r\n", tch);
-      sprintf(buf, "%s fails to instill fear in $N.", CAP(GET_NAME(spirit)));
+      snprintf(buf, sizeof(buf), "%s fails to instill fear in $N.", CAP(GET_NAME(spirit)));
       act(buf, FALSE, ch, 0, tch, TO_CHAR);
     } else {
       AFF_FLAGS(tch).SetBit(AFF_FEAR);
       send_to_char("An all consuming terror overcomes you!\r\n", tch);
-      sprintf(buf, "%s succeeds in instilling fear in $N.", CAP(GET_NAME(spirit)));
+      snprintf(buf, sizeof(buf), "%s succeeds in instilling fear in $N.", CAP(GET_NAME(spirit)));
       act(buf, FALSE, ch, 0, tch, TO_CHAR);
       extern ACMD_CONST(do_flee);
       do_flee(tch, "", 0, 0);
@@ -3075,7 +3075,7 @@ POWER(spirit_flamethrower)
   else if (tch == spirit)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
-    sprintf(buf, "moderate %s", arg);
+    snprintf(buf, sizeof(buf), "moderate %s", arg);
     cast_spell(spirit, SPELL_FLAMETHROWER, 0, GET_LEVEL(spirit), buf);
   }
 }
@@ -3327,7 +3327,7 @@ ACMD(do_order)
     
     if (!mob) {
       send_to_char(ch, "That %s has been ensnared by forces you cannot control. Your only option is to release it.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-      sprintf(buf, "SYSERR: %s belonging to %s (%ld) has disappeared unexpectedly-- did someone purge it?", GET_TRADITION(ch) == TRAD_HERMETIC ? "Elemental" : "Spirit",
+      snprintf(buf, sizeof(buf), "SYSERR: %s belonging to %s (%ld) has disappeared unexpectedly-- did someone purge it?", GET_TRADITION(ch) == TRAD_HERMETIC ? "Elemental" : "Spirit",
               GET_CHAR_NAME(ch), GET_IDNUM(ch));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return;
@@ -3717,7 +3717,7 @@ ACMD(do_dispell)
   }
   int success = success_test(GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), sust->force);
   int type = sust->spell, force = sust->force;
-  sprintf(buf, "Dispell $N's %s (force %d) using skill %d vs TN %d: %d successes.",
+  snprintf(buf, sizeof(buf), "Dispell $N's %s (force %d) using skill %d vs TN %d: %d successes.",
           spells[sust->spell].name,
           sust->force,
           GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)),
@@ -3727,7 +3727,7 @@ ACMD(do_dispell)
   if (success > 0) {
     spell_modify(vict, sust, FALSE);
     sust->success = MAX(sust->success - success, 0); // Since it's unsigned, we have to do shit like this.
-    sprintf(buf, "Remaining successes on spell: %d.", sust->success);
+    snprintf(buf, sizeof(buf), "Remaining successes on spell: %d.", sust->success);
     act(buf, 0, ch, 0, vict, TO_ROLLS);
     if (sust->success < 1) {
       send_to_char("You succeed in completely dispelling that spell.\r\n", ch);
@@ -3972,7 +3972,7 @@ ACMD(do_initiate)
     }
     
     if (ch->points.extrapp > (int)(GET_REP(ch) / 50)) {
-      sprintf(buf, "You do not have enough reputation to purchase a powerpoint. You need %d.\r\n", 50 * (ch->points.extrapp - (int)(GET_REP(ch) / 50)));
+      snprintf(buf, sizeof(buf), "You do not have enough reputation to purchase a powerpoint. You need %d.\r\n", 50 * (ch->points.extrapp - (int)(GET_REP(ch) / 50)));
       send_to_char(buf, ch);
       return;
     }
@@ -4135,7 +4135,7 @@ ACMD(do_focus)
     strcpy(buf, spells[spell->spell].name);                                                                                      
     if (spell->spell == SPELL_INCATTR || spell->spell == SPELL_INCCYATTR ||
         spell->spell == SPELL_DECATTR || spell->spell == SPELL_DECCYATTR)
-          sprintf(ENDOF(buf), " (%s)", attributes[spell->subtype]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[spell->subtype]);
     send_to_char(ch, "You begin to concentrate on sustaining %s.\r\n", buf);
     send_to_char(spell->other, "You feel a weight lifted from you as someone takes over sustaining your %s spell.\r\n", buf);
   } else if (!str_cmp(argument, "release")) {
@@ -4158,7 +4158,7 @@ ACMD(do_metamagic)
   for (int x = 0; x < META_MAX; x++)
     if (GET_METAMAGIC(ch, x)) {
       i++;
-      sprintf(ENDOF(buf), "  %s%s^n\r\n", GET_METAMAGIC(ch, x) == 2 ? "" : "^r", metamagic[x]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s%s^n\r\n", GET_METAMAGIC(ch, x) == 2 ? "" : "^r", metamagic[x]);
     }
   if (i > 0)
     send_to_char(ch, "You know the following metamagic techniques:\r\n%s", buf);
@@ -4192,10 +4192,10 @@ ACMD(do_cleanse)
       GET_SETTABLE_BACKGROUND_COUNT(ch->in_room) = MAX(0, GET_BACKGROUND_COUNT(ch->in_room) - success);
       if (!GET_BACKGROUND_COUNT(ch->in_room)) {
         send_to_char("You successfully remove all astral disturbances from the area.\r\n", ch);
-        sprintf(buf, "The astral disturbances in this area completely vanish.\r\n");
+        snprintf(buf, sizeof(buf), "The astral disturbances in this area completely vanish.\r\n");
       } else {
         send_to_char("You succeed in lowering the astral disturbances in the area.\r\n", ch);
-        sprintf(buf, "The astral disturbances in the are seem to diminish slightly.\r\n");
+        snprintf(buf, sizeof(buf), "The astral disturbances in the are seem to diminish slightly.\r\n");
       }
       for (struct char_data *targ = ch->in_room->people; targ; targ = targ->next_in_room)
         if (ch != targ && (IS_ASTRAL(targ) || IS_DUAL(targ)))
@@ -4216,7 +4216,7 @@ ACMD(do_think)
     return;
   }
   skip_spaces(&argument);
-  sprintf(buf, "^rYou hear $v in your mind say, \"%s\"", argument);
+  snprintf(buf, sizeof(buf), "^rYou hear $v in your mind say, \"%s\"", argument);
   act(buf, FALSE, ch, 0, ch->char_specials.mindlink, TO_VICT);
   send_to_char(ch, "You think, \"%s\"\r\n", argument);
 }

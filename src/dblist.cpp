@@ -203,7 +203,7 @@ void objList::UpdateCounters(void)
 
     // Send out the trideo messages. We assume anything that is a trideo box is not anything else.
     if (GET_OBJ_SPEC(OBJ) == trideo && GET_OBJ_VAL(OBJ, 0)) {
-      sprintf(buf, "$p broadcasts, \"%s\"", trid);
+      snprintf(buf, sizeof(buf), "$p broadcasts, \"%s\"", trid);
       act(buf, TRUE, 0, OBJ, 0, TO_ROOM);
       continue;
     }
@@ -246,7 +246,7 @@ void objList::UpdateCounters(void)
       
       // If there were no characters in the room working on it, clear its pack/unpack counter.
       if (!ch) {
-        sprintf(buf, "A passerby rolls %s eyes and quickly re-%spacks the half-packed $P.",
+        snprintf(buf, sizeof(buf), "A passerby rolls %s eyes and quickly re-%spacks the half-packed $P.",
                 number(0, 1) == 0 ? "his" : "her",
                 GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "");
         act(buf, FALSE, NULL, NULL, OBJ, TO_ROOM);

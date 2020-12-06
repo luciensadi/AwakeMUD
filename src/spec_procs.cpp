@@ -482,17 +482,17 @@ SPECIAL(nerp_skills_teacher) {
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
-            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          sprintf(buf, "%s  %s\r\n", buf, skills[skill].name);
+          snprintf(buf, sizeof(buf), "%s  %s\r\n", buf, skills[skill].name);
         }
         else if (GET_SKILL(ch, skill) < max && !ch->char_specials.saved.skills[skill][1]) {
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
-            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          sprintf(buf, "%s  %-24s (%d karma %d nuyen)\r\n", buf, skills[skill].name, get_skill_price(ch, skill),
+          snprintf(buf, sizeof(buf), "%s  %-24s (%d karma %d nuyen)\r\n", buf, skills[skill].name, get_skill_price(ch, skill),
                   MAX(1000, (GET_SKILL(ch, skill) * 5000)));
         }
       }
@@ -504,10 +504,10 @@ SPECIAL(nerp_skills_teacher) {
     }
     
     if (GET_SKILL_POINTS(ch) > 0)
-      sprintf(buf, "%s\r\nYou have %d point%s to use for skills.\r\n", buf,
+      snprintf(buf, sizeof(buf), "%s\r\nYou have %d point%s to use for skills.\r\n", buf,
               GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
     else
-      sprintf(buf, "%s\r\nYou have %0.2f karma to use for skills.\r\n", buf,
+      snprintf(buf, sizeof(buf), "%s\r\nYou have %0.2f karma to use for skills.\r\n", buf,
               ((float)GET_KARMA(ch) / 100));
     send_to_char(buf, ch);
     return TRUE;
@@ -543,7 +543,7 @@ SPECIAL(nerp_skills_teacher) {
   }
   
   if (GET_SKILL(ch, skill_num) >= max) {
-    sprintf(arg, "%s You already know more than I can teach you in that area.", GET_CHAR_NAME(ch));
+    snprintf(arg, sizeof(arg), "%s You already know more than I can teach you in that area.", GET_CHAR_NAME(ch));
     do_say(master, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
@@ -614,7 +614,7 @@ SPECIAL(teacher)
 
   /*
   if (teachers[ind].type != NEWBIE && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
+    snprintf(arg, sizeof(arg), "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
     do_say(master, arg, 0, SCMD_SAYTO);
     send_to_char(ch, "(^mOOC^n: You can't raise your skills until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
     return TRUE;
@@ -668,17 +668,17 @@ SPECIAL(teacher)
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
-            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          sprintf(buf, "%s  %s\r\n", buf, skills[teachers[ind].s[i]].name);
+          snprintf(buf, sizeof(buf), "%s  %s\r\n", buf, skills[teachers[ind].s[i]].name);
         }
         else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1]) {
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
-            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          sprintf(buf, "%s  %-24s (%d karma %d nuyen)\r\n", buf, skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
+          snprintf(buf, sizeof(buf), "%s  %-24s (%d karma %d nuyen)\r\n", buf, skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
                   MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
         }
       }
@@ -690,10 +690,10 @@ SPECIAL(teacher)
     }
     
     if (GET_SKILL_POINTS(ch) > 0)
-      sprintf(buf, "%s\r\nYou have %d point%s to use for skills.\r\n", buf,
+      snprintf(buf, sizeof(buf), "%s\r\nYou have %d point%s to use for skills.\r\n", buf,
               GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
     else
-      sprintf(buf, "%s\r\nYou have %0.2f karma to use for skills.\r\n", buf,
+      snprintf(buf, sizeof(buf), "%s\r\nYou have %0.2f karma to use for skills.\r\n", buf,
               ((float)GET_KARMA(ch) / 100));
     send_to_char(buf, ch);
     return TRUE;
@@ -761,7 +761,7 @@ SPECIAL(teacher)
     if (max == LIBRARY_SKILL)
       send_to_char("You can't find any books that tell you things you don't already know.\r\n", ch);
     else {
-      sprintf(arg, "%s You already know more than I can teach you in that area.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s You already know more than I can teach you in that area.", GET_CHAR_NAME(ch));
       do_say(master, arg, 0, SCMD_SAYTO);
     }
     return TRUE;
@@ -864,7 +864,7 @@ void train_attribute(struct char_data *ch, struct char_data *trainer, int ind, i
   // Check for nuyen cost, if applicable.
   if (!trainers[ind].is_newbie) {
     if (GET_NUYEN(ch) < nuyen_cost) {
-      sprintf(arg, "%s The charge for that is %d nuyen, which you don't seem to be carrying.", GET_CHAR_NAME(ch), nuyen_cost);
+      snprintf(arg, sizeof(arg), "%s The charge for that is %d nuyen, which you don't seem to be carrying.", GET_CHAR_NAME(ch), nuyen_cost);
       do_say(trainer, arg, 0, SCMD_SAYTO);
       return;
     }
@@ -927,7 +927,7 @@ SPECIAL(trainer)
 
   /*
   if (!trainers[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
+    snprintf(arg, sizeof(arg), "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
     send_to_char(ch, "(^mOOC^n: You can't raise your stats until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
     return TRUE;
@@ -935,7 +935,7 @@ SPECIAL(trainer)
   */
 
   if (!access_level(ch, LVL_BUILDER) && !PLR_FLAGGED(ch, PLR_NEWBIE) && GET_ATT_POINTS(ch) != 0) {
-    sprintf(buf, "SYSERR: %s graduated from newbie status while still having %d attribute point%s left. How?",
+    snprintf(buf, sizeof(buf), "SYSERR: %s graduated from newbie status while still having %d attribute point%s left. How?",
             GET_CHAR_NAME(ch), GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     GET_ATT_POINTS(ch) = 0;
@@ -1013,7 +1013,7 @@ SPECIAL(spell_trainer)
   }
   
   if (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_TRADITION(ch) != TRAD_HERMETIC) {
-    sprintf(arg, "%s You don't have the talent.", GET_CHAR_NAME(ch));
+    snprintf(arg, sizeof(arg), "%s You don't have the talent.", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
@@ -1192,7 +1192,7 @@ SPECIAL(adept_trainer)
   }
 
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    sprintf(arg, "%s You do not have the talent.", GET_CHAR_NAME(ch));
+    snprintf(arg, sizeof(arg), "%s You do not have the talent.", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
@@ -1210,16 +1210,16 @@ SPECIAL(adept_trainer)
 
   // Sanity checks: Newbie trainers only train newbies; newbies cannot train at non-newbie trainers.
   if (adepts[ind].is_newbie && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(arg, "%s You do not belong here.", GET_CHAR_NAME(ch));
+    snprintf(arg, sizeof(arg), "%s You do not belong here.", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
-    sprintf(buf, "Error: Character %s is not a newbie but is attempting to train in Chargen.", GET_CHAR_NAME(ch));
+    snprintf(buf, sizeof(buf), "Error: Character %s is not a newbie but is attempting to train in Chargen.", GET_CHAR_NAME(ch));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return TRUE;
   } 
   
   /*
   if (!adepts[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
+    snprintf(arg, sizeof(arg), "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
     send_to_char(ch, "(^mOOC^n: You can't train until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
     return TRUE;
@@ -1228,7 +1228,7 @@ SPECIAL(adept_trainer)
   
   // Exploit prevention: You're not allowed to train before allocating attributes to avoid discounted training of improved-attribute powers.
   if (GET_ATT_POINTS(ch) > 0) {
-    sprintf(arg, "%s You must go train your attributes fully before you see me.", GET_CHAR_NAME(ch));
+    snprintf(arg, sizeof(arg), "%s You must go train your attributes fully before you see me.", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
@@ -1239,12 +1239,12 @@ SPECIAL(adept_trainer)
     for (i = 1; i < ADEPT_NUMPOWER; i++)
       if (adepts[ind].skills[i])
         num++;
-    sprintf(buf, "You can learn the following abilit%s:\r\n", num == 1 ? "y" : "ies");
+    snprintf(buf, sizeof(buf), "You can learn the following abilit%s:\r\n", num == 1 ? "y" : "ies");
     for (i = 1; i < ADEPT_NUMPOWER; i++)
       if (adepts[ind].skills[i] && GET_POWER_TOTAL(ch, i) < max_ability(i))
-        sprintf(buf + strlen(buf), "%30s (%0.2f points)\r\n", adept_powers[i],
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%30s (%0.2f points)\r\n", adept_powers[i],
                 ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1)/ 100));
-    sprintf(buf + strlen(buf), "\r\nYou have %0.2f power point%s to "
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f power point%s to "
             "distribute to your abilities.\r\n", ((float)GET_PP(ch) / 100),
             ((GET_PP(ch) != 100) ? "s" : ""));
     send_to_char(buf, ch);
@@ -1468,7 +1468,7 @@ SPECIAL(car_dealer)
   if (CMD_IS("list")) {
     send_to_char("Available vehicles are:\r\n", ch);
     for (veh = world[car_room].vehicles; veh; veh = veh->next_veh) {
-      sprintf(buf, "%8d - %s\r\n", veh->cost, capitalize(GET_VEH_NAME(veh)));
+      snprintf(buf, sizeof(buf), "%8d - %s\r\n", veh->cost, capitalize(GET_VEH_NAME(veh)));
       send_to_char(buf, ch);
     }
     return TRUE;
@@ -1488,9 +1488,9 @@ SPECIAL(car_dealer)
     newveh->owner = GET_IDNUM(ch);
     newveh->idnum = number(0, 1000000);
     if (veh->type == VEH_DRONE)
-      sprintf(buf, "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
+      snprintf(buf, sizeof(buf), "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
     else
-      sprintf(buf, "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
+      snprintf(buf, sizeof(buf), "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
     send_to_char(buf, ch);
     save_vehicles();
     return TRUE;
@@ -2202,13 +2202,13 @@ SPECIAL(hacker)
 
     skip_spaces(&argument);
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-      sprintf(buf, "You don't seem to have %s %s.\r\n", AN(argument), argument);
+      snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(argument), argument);
       send_to_char(buf, ch);
       return(TRUE);
     }
     if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1) || GET_ITEM_MONEY_VALUE(obj) <= 0 ||
         !GET_ITEM_MONEY_CREDSTICK_ACTIVATED(obj) || belongs_to(ch, obj)) {
-      sprintf(arg, "%s Why are you bringing this to me?", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Why are you bringing this to me?", GET_CHAR_NAME(ch));
       do_say(hacker, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
@@ -2218,7 +2218,7 @@ SPECIAL(hacker)
       amount = (int)(GET_OBJ_VAL(obj, 0) / 5);
     else
       amount = (int)(GET_OBJ_VAL(obj, 0) / 3);
-    sprintf(arg, "%s I'd charge about %d nuyen for that.", GET_CHAR_NAME(ch), amount);
+    snprintf(arg, sizeof(arg), "%s I'd charge about %d nuyen for that.", GET_CHAR_NAME(ch), amount);
     do_say(hacker, arg, 0, SCMD_SAYTO);
     return TRUE;
   } else if (CMD_IS("give")) {
@@ -2229,7 +2229,7 @@ SPECIAL(hacker)
     any_one_arg(any_one_arg(argument, buf), buf1);
 
     if (!(obj = get_obj_in_list_vis(ch, buf, ch->carrying))) {
-      sprintf(arg, "You don't seem to have %s %s.\r\n", AN(buf), buf);
+      snprintf(arg, sizeof(arg), "You don't seem to have %s %s.\r\n", AN(buf), buf);
       send_to_char(arg, ch);
       return(TRUE);
     } else if (!(vict = give_find_vict(ch, buf1)))
@@ -2247,7 +2247,7 @@ SPECIAL(hacker)
         || GET_OBJ_VAL(obj, 0) <= 0
         || !GET_OBJ_VAL(obj, 4)
         || belongs_to(ch, obj)) {
-      sprintf(arg, "%s Why are you bringing this to me?", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Why are you bringing this to me?", GET_CHAR_NAME(ch));
       do_say(hacker, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
@@ -2265,7 +2265,7 @@ SPECIAL(hacker)
     nuyen = GET_OBJ_VAL(obj, 0) - amount;
     GET_BANK(hacker) += amount;
     GET_BANK(ch) += nuyen;
-    sprintf(buf1, "%s Updated.  %d nuyen transferred to your bank account.",
+    snprintf(buf1, sizeof(buf1), "%s Updated.  %d nuyen transferred to your bank account.",
             GET_CHAR_NAME(ch), nuyen);
     do_say(hacker, buf1, 0, SCMD_SAYTO);
     extract_obj(obj);
@@ -2297,7 +2297,7 @@ SPECIAL(fence)
 
     skip_spaces(&argument);
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-      sprintf(buf, "You don't seem to have %s %s.\r\n", AN(argument), argument);
+      snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(argument), argument);
       send_to_char(buf, ch);
       return(TRUE);
     }
@@ -2316,7 +2316,7 @@ SPECIAL(fence)
       market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] = 100;
     obj_from_char(obj);
     extract_obj(obj);
-    sprintf(buf, "%s says, \"Here's your %d creds.\"\r\n",
+    snprintf(buf, sizeof(buf), "%s says, \"Here's your %d creds.\"\r\n",
             GET_NAME(fence), value);
     send_to_char(buf, ch);
     act("You grab the chip and pay $M for it.", TRUE, fence, 0, ch, TO_CHAR);
@@ -2351,36 +2351,36 @@ SPECIAL(fixer)
       skip_spaces(&argument);
       cash = 1;
     } else if (!(credstick = get_first_credstick(ch, "credstick"))) {
-      sprintf(arg, "%s You need a credstick to do that!", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s You need a credstick to do that!", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-      sprintf(buf, "You don't seem to have %s %s.\r\n", AN(argument), argument);
+      snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(argument), argument);
       send_to_char(buf, ch);
       return TRUE;
     }
     if (IS_OBJ_STAT(obj, ITEM_CORPSE) || IS_OBJ_STAT(obj, ITEM_IMMLOAD) || IS_OBJ_STAT(obj, ITEM_WIZLOAD)) {
-      sprintf(arg, "%s I can't repair that.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s I can't repair that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj)) {
-      sprintf(arg, "%s %s doesn't need to be repaired!",
+      snprintf(arg, sizeof(arg), "%s %s doesn't need to be repaired!",
               GET_CHAR_NAME(ch), CAP(obj->text.name));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     if ((IS_CARRYING_N(fixer) >= CAN_CARRY_N(fixer)) ||
         ((GET_OBJ_WEIGHT(obj) + IS_CARRYING_W(fixer)) > CAN_CARRY_W(fixer))) {
-      sprintf(arg, "%s I've got my hands full...come back later.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s I've got my hands full...come back later.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     cost = (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) != 0 ? GET_OBJ_BARRIER(obj) : 1)) *
                  (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
     if ((cash ? GET_NUYEN(ch) : GET_OBJ_VAL(credstick, 0)) < cost) {
-      sprintf(arg, "%s You can't afford to repair that!", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s You can't afford to repair that!", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
@@ -2399,7 +2399,7 @@ SPECIAL(fixer)
       pm = ((time_info.hours + extra) >= 12);
     hour = ((time_info.hours + extra) % 12 == 0 ? 12 :
             (time_info.hours + extra) % 12);
-    sprintf(arg, "%s That'll be %d nuyen.  Should be ready by about %d %s%s.",
+    snprintf(arg, sizeof(arg), "%s That'll be %d nuyen.  Should be ready by about %d %s%s.",
             GET_CHAR_NAME(ch), cost, hour, pm ? "PM" : "AM", day ? " tomorrow" : "");
     do_say(fixer, arg, 0, SCMD_SAYTO);
     GET_OBJ_TIMER(obj) = GET_IDNUM(ch);
@@ -2410,7 +2410,7 @@ SPECIAL(fixer)
     for (obj = fixer->carrying; obj; obj = obj->next_content)
       if (GET_OBJ_TIMER(obj) == GET_IDNUM(ch)) {
         if (!found) {
-          sprintf(arg, "%s I currently am in possession of the following:", GET_CHAR_NAME(ch));
+          snprintf(arg, sizeof(arg), "%s I currently am in possession of the following:", GET_CHAR_NAME(ch));
           do_say(fixer, arg, 0, SCMD_SAYTO);
           found = TRUE;
         }
@@ -2425,7 +2425,7 @@ SPECIAL(fixer)
                        obj->text.name);
       }
     if (!found) {
-      sprintf(arg, "%s I don't have anything of yours.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s I don't have anything of yours.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
     }
     return TRUE;
@@ -2435,12 +2435,12 @@ SPECIAL(fixer)
     any_one_arg(argument, temp);
 
     if (!*temp) {
-      sprintf(arg, "%s What do you want to retrieve?", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s What do you want to retrieve?", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     if (!(extra = get_number(&temp))) {
-      sprintf(arg, "%s I don't have anything like that.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s I don't have anything like that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
@@ -2450,23 +2450,23 @@ SPECIAL(fixer)
         if (++j == extra)
           break;
     if (!obj) {
-      sprintf(arg, "%s I don't have anything like that.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s I don't have anything like that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     if (GET_OBJ_CONDITION(obj) < GET_OBJ_BARRIER(obj)) {
-      sprintf(arg, "%s %s isn't ready yet.", GET_CHAR_NAME(ch), CAP(obj->text.name));
+      snprintf(arg, sizeof(arg), "%s %s isn't ready yet.", GET_CHAR_NAME(ch), CAP(obj->text.name));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     if ((IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) ||
         ((GET_OBJ_WEIGHT(obj) + IS_CARRYING_W(ch)) > CAN_CARRY_W(ch))) {
-      sprintf(arg, "%s You can't carry it right now.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s You can't carry it right now.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     if (!perform_give(fixer, ch, obj)) {
-      sprintf(arg, "%s That's odd...I can't let go of it.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s That's odd...I can't let go of it.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
@@ -2699,7 +2699,7 @@ SPECIAL(vending_machine)
         act("You now have $p.", FALSE, ch, temp, 0, TO_CHAR);
         return TRUE;
       }
-    sprintf(buf, "%s doesn't sell '%s'.\r\n", obj->text.name, arg);
+    snprintf(buf, sizeof(buf), "%s doesn't sell '%s'.\r\n", obj->text.name, arg);
     send_to_char(buf, ch);
     return TRUE;
   }
@@ -2834,9 +2834,9 @@ SPECIAL(bank)
 
   if (CMD_IS("balance")) {
     if (GET_BANK(ch) > 0)
-      sprintf(buf, "Your current balance is %ld nuyen.\r\n", GET_BANK(ch));
+      snprintf(buf, sizeof(buf), "Your current balance is %ld nuyen.\r\n", GET_BANK(ch));
     else
-      sprintf(buf, "Your account is empty!\r\n");
+      snprintf(buf, sizeof(buf), "Your account is empty!\r\n");
     send_to_char(buf, ch);
     return 1;
   } else if (CMD_IS("deposit")) {
@@ -2852,7 +2852,7 @@ SPECIAL(bank)
     }
     GET_NUYEN(ch) -= amount;
     GET_BANK(ch) += amount;
-    sprintf(buf, "You deposit %d nuyen.\r\n", amount);
+    snprintf(buf, sizeof(buf), "You deposit %d nuyen.\r\n", amount);
     send_to_char(buf, ch);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
@@ -2869,7 +2869,7 @@ SPECIAL(bank)
     }
     GET_NUYEN(ch) += amount;
     GET_BANK(ch) -= amount;
-    sprintf(buf, "The ATM ejects %d nuyen and updates your bank account.\r\n", amount);
+    snprintf(buf, sizeof(buf), "The ATM ejects %d nuyen and updates your bank account.\r\n", amount);
     send_to_char(buf, ch);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
@@ -2893,7 +2893,7 @@ SPECIAL(bank)
       }
       GET_OBJ_VAL(credstick, 0) -= amount;
       GET_BANK(ch) += amount;
-      sprintf(buf, "%d nuyen transferred from $p to your account.", amount);
+      snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to your account.", amount);
     } else if (!str_cmp(buf1, "credstick")) {
       if (!str_cmp(buf,"all")) {
         amount = GET_BANK(ch);
@@ -2904,7 +2904,7 @@ SPECIAL(bank)
       }
       GET_OBJ_VAL(credstick, 0) += amount;
       GET_BANK(ch) -= amount;
-      sprintf(buf, "%d nuyen transferred from your account to $p.", amount);
+      snprintf(buf, sizeof(buf), "%d nuyen transferred from your account to $p.", amount);
     } else {
       send_to_char("Transfer to what? (Type out \"credstick\" or \"account\", please.)\r\n", ch);
       return TRUE;
@@ -3133,7 +3133,7 @@ SPECIAL(circulation_fan)
           FALSE, ch, 0, 0, TO_ROOM);
 
       // Deathlog Addendum
-      sprintf(buf,"%s got chopped up into tiny bits. {%s (%ld)}",
+      snprintf(buf, sizeof(buf),"%s got chopped up into tiny bits. {%s (%ld)}",
               GET_CHAR_NAME(ch),
               ch->in_room->name, ch->in_room->number );
       mudlog(buf, ch, LOG_DEATHLOG, TRUE);
@@ -3217,7 +3217,7 @@ SPECIAL(newbie_car)
     veh_to_room(veh, ch->in_room);
     veh->idnum = number(0, 1000000);  // TODO: why is this not unique
     veh->flags.SetBit(VFLAG_NEWBIE);
-    sprintf(buf, "%s is wheeled out into the garage.\r\n", veh->short_description);
+    snprintf(buf, sizeof(buf), "%s is wheeled out into the garage.\r\n", veh->short_description);
     send_to_room(buf, ch->in_room);
     obj_from_char(obj);
     extract_obj(obj);
@@ -3237,9 +3237,9 @@ void Crash_rent_deadline(struct char_data * ch, struct char_data * recep,
 
   rent_deadline = ((GET_NUYEN(ch) + GET_BANK(ch)) / cost);
   if (rent_deadline >= 50)
-    sprintf(buf, "$n tells you, \"You can rent forever with the nuyen you have.\"");
+    snprintf(buf, sizeof(buf), "$n tells you, \"You can rent forever with the nuyen you have.\"");
   else
-    sprintf(buf, "$n tells you, \"You can rent for %ld night%s with the nuyen you have.\r\n",
+    snprintf(buf, sizeof(buf), "$n tells you, \"You can rent for %ld night%s with the nuyen you have.\r\n",
             rent_deadline, (rent_deadline > 1) ? "s" : "");
   act(buf, FALSE, recep, 0, ch, TO_VICT);
 }
@@ -3280,7 +3280,7 @@ int find_hotel_cost(struct char_data *ch)
       cost = 6.0;
       break;
     default:
-      sprintf(buf, "SYSERR: Invalid loadroom %ld specified to find_hotel_cost. Defaulting to 6.0.", GET_LOADROOM(ch));
+      snprintf(buf, sizeof(buf), "SYSERR: Invalid loadroom %ld specified to find_hotel_cost. Defaulting to 6.0.", GET_LOADROOM(ch));
       mudlog(buf, NULL, LOG_SYSLOG, FALSE);
       cost = 6.0;
       break;
@@ -3325,9 +3325,9 @@ int Crash_offer_rent(struct char_data * ch, struct char_data * receptionist,
 
   if (display)
   {
-    sprintf(buf, "$n tells you, \"Plus, my %d credit fee..\"", 50 * factor);
+    snprintf(buf, sizeof(buf), "$n tells you, \"Plus, my %d credit fee..\"", 50 * factor);
     act(buf, FALSE, receptionist, 0, ch, TO_VICT);
-    sprintf(buf, "$n tells you, \"For a total of %ld nuyen%s.\"",
+    snprintf(buf, sizeof(buf), "$n tells you, \"For a total of %ld nuyen%s.\"",
             totalcost, (factor == RENT_FACTOR ? " per day" : ""));
     act(buf, FALSE, receptionist, 0, ch, TO_VICT);
     if (totalcost > GET_NUYEN(ch)) {
@@ -3374,12 +3374,12 @@ int gen_receptionist(struct char_data * ch, struct char_data * recep,
     cost = 5;
   if (CMD_IS("offer"))
   {
-    sprintf(buf, "$n tells you, \"Rooms here are %d nuyen per night.\"", cost);
+    snprintf(buf, sizeof(buf), "$n tells you, \"Rooms here are %d nuyen per night.\"", cost);
     act(buf, FALSE, recep, 0, ch, TO_VICT);
     return TRUE;
   }
   if (mode == RENT_FACTOR)
-    sprintf(buf, "$n tells you, \"Rooms are %d nuyen per night.\"", cost);
+    snprintf(buf, sizeof(buf), "$n tells you, \"Rooms are %d nuyen per night.\"", cost);
   act(buf, FALSE, recep, 0, ch, TO_VICT);
   if (cost > GET_NUYEN(ch))
   {
@@ -3395,7 +3395,7 @@ int gen_receptionist(struct char_data * ch, struct char_data * recep,
   if (mode == RENT_FACTOR)
   {
     act("$n gives you a key and shows you to your room.", FALSE, recep, 0, ch, TO_VICT);
-    sprintf(buf, "%s has rented at %ld", GET_CHAR_NAME(ch), ch->in_room->number);
+    snprintf(buf, sizeof(buf), "%s has rented at %ld", GET_CHAR_NAME(ch), ch->in_room->number);
     mudlog(buf, ch, LOG_CONNLOG, TRUE);
     act("$n helps $N into $S room.", FALSE, recep, 0, ch, TO_NOTVICT);
   }
@@ -3480,7 +3480,7 @@ SPECIAL(auth_room)
         obj_to_char(radio, ch);
         send_to_char(ch, "You have been given a radio.^n\r\n");
       }
-      sprintf(buf, "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
+      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       
       playerDB.SaveChar(ch);
@@ -3693,19 +3693,19 @@ SPECIAL(quest_debug_scanner)
         return TRUE;
       }
       
-      sprintf(buf, "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
-      sprintf(ENDOF(buf), "SPARE1: %ld, SPARE2: %ld (corresponds to quest vnum %ld)\r\n",
+      snprintf(buf, sizeof(buf), "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SPARE1: %ld, SPARE2: %ld (corresponds to quest vnum %ld)\r\n",
               GET_SPARE1(to), GET_SPARE2(to), GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
       strcat(buf, "NPC's memory records hold the following character IDs: \r\n");
       for (memory_rec *tmp = MEMORY(to); tmp; tmp = tmp->next)
-        sprintf(ENDOF(buf), " %ld\r\n", tmp->id);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %ld\r\n", tmp->id);
       send_to_char(buf, ch);
       return TRUE;
     }
     
-    sprintf(buf, "Player %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+    snprintf(buf, sizeof(buf), "Player %s's quest-related information:\r\n", GET_CHAR_NAME(to));
     if (GET_QUEST(to)) {
-      sprintf(ENDOF(buf), "Current quest: %ld (given by %s [%ld])\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current quest: %ld (given by %s [%ld])\r\n",
               quest_table[GET_QUEST(to)].vnum, mob_proto[real_mobile(quest_table[GET_QUEST(to)].johnson)].player.physical_text.name, quest_table[GET_QUEST(to)].johnson);
     } else {
       strcat(buf, "Not currently on a quest.\r\n");
@@ -3769,7 +3769,7 @@ SPECIAL(painter)
       veh_to_room(veh, &world[real_room(RM_PAINTER_LOT)]);
       veh->spare = 0;
       if (world[real_room(RM_PAINTER_LOT)].people) {
-        sprintf(buf, "%s is wheeled out into the parking lot.", GET_VEH_NAME(veh));
+        snprintf(buf, sizeof(buf), "%s is wheeled out into the parking lot.", GET_VEH_NAME(veh));
         act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_ROOM);
         act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_CHAR);
         save_vehicles();
@@ -3798,7 +3798,7 @@ SPECIAL(painter)
     veh_from_room(veh);
     veh_to_room(veh, &world[real_painter_storage]);
     GET_NUYEN(ch) -= 20000;
-    sprintf(buf, "%s is wheeled into the painting booth.", GET_VEH_NAME(veh));
+    snprintf(buf, sizeof(buf), "%s is wheeled into the painting booth.", GET_VEH_NAME(veh));
     act(buf, FALSE, painter, 0, 0, TO_ROOM);
     if (!veh->restring)
       veh->restring = str_dup(veh->short_description);
@@ -3833,7 +3833,7 @@ SPECIAL(multnomah_gate)
     }
     send_to_char("The gate slides open just enough for you to pass through.\r\n", ch);
     if (ch->in_veh) {
-      sprintf(buf, "The gate slides open allowing %s to pass through.\r\n", GET_VEH_NAME(ch->in_veh));
+      snprintf(buf, sizeof(buf), "The gate slides open allowing %s to pass through.\r\n", GET_VEH_NAME(ch->in_veh));
       send_to_room(buf, ch->in_veh->in_room);
       for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
         PLR_FLAGS(vict).RemoveBit(PLR_VISA);
@@ -3861,10 +3861,10 @@ SPECIAL(multnomah_guard)
     if (visa && GET_OBJ_VNUM(visa) == OBJ_MULTNOMAH_VISA) {
       if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
         PLR_FLAGS(ch).SetBit(PLR_VISA);
-        sprintf(arg, "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
         do_say(guard, arg, 0, SCMD_SAYTO);
       } else {
-        sprintf(arg, "%s Get out of here, before we arrest you.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s Get out of here, before we arrest you.", GET_CHAR_NAME(ch));
         extract_obj(visa);
         do_say(guard, arg, 0, SCMD_SAYTO);
       }
@@ -4103,7 +4103,7 @@ SPECIAL(locker)
     num = atoi(argument);
     for (locker = ch->in_room->contents; locker; locker = locker->next_content)
       if (GET_OBJ_VNUM(locker) == 9826 && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
-        sprintf(buf, "%d%d%d%d%d%d%d", number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9));
+        snprintf(buf, sizeof(buf), "%d%d%d%d%d%d%d", number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9));
         GET_OBJ_VAL(locker, 8) = time(0);
         GET_OBJ_VAL(locker, 9) = atoi(buf);
         send_to_char(ch, "The locker clicks closed and the screen reads 'TYPE %d TO OPEN'.\r\n", GET_OBJ_VAL(locker, 9));
@@ -4376,7 +4376,7 @@ SPECIAL(chargen_hopper)
     
     // Cutout: If the modulator doesn't exist, fail.
     if (modulator_rnum == NOWHERE) {
-      sprintf(buf, "SYSERR: Attempting to reference docwagon modulator at item %d, but that item does not exist.", OBJ_DOCWAGON_BASIC_MOD);
+      snprintf(buf, sizeof(buf), "SYSERR: Attempting to reference docwagon modulator at item %d, but that item does not exist.", OBJ_DOCWAGON_BASIC_MOD);
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
       return FALSE;
     }
@@ -4518,17 +4518,17 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
       // This is a bit of a hack, but we know what the previous mode was based on its type and attack type.
       if (GET_OBJ_TYPE(obj) == ITEM_OTHER) {
         // It was deactivated. Light it up.
-        sprintf(buf, "The red lights on %s begin to glow with cerulean blue power.", GET_OBJ_NAME(obj));
+        snprintf(buf, sizeof(buf), "The red lights on %s begin to glow with cerulean blue power.", GET_OBJ_NAME(obj));
         act(buf, FALSE, ch, 0, ch, TO_CHAR);
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_HEAVY_PISTOL) {
         // It was in Lethal mode. Collapse it.
-        sprintf(buf, "%s retracts and folds down into its standard heavy-pistol format, its status lights glowing blue.", GET_OBJ_NAME(obj));
+        snprintf(buf, sizeof(buf), "%s retracts and folds down into its standard heavy-pistol format, its status lights glowing blue.", GET_OBJ_NAME(obj));
         act(buf, FALSE, ch, 0, ch, TO_CHAR);
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_CANNON) {
         // It was in Destroyer mode. Collapse it.
-        sprintf(buf, "%s vents energy with a sharp snap of power, collapsing with uncanny speed into its standard heavy-pistol format.", GET_OBJ_NAME(obj));
+        snprintf(buf, sizeof(buf), "%s vents energy with a sharp snap of power, collapsing with uncanny speed into its standard heavy-pistol format.", GET_OBJ_NAME(obj));
         act(buf, FALSE, ch, 0, ch, TO_CHAR);
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       }
@@ -4542,12 +4542,12 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
     case DOMINATOR_MODE_ELIMINATOR:
       if (GET_OBJ_TYPE(obj) == ITEM_OTHER || GET_WEAPON_ATTACK_TYPE(obj) == WEAP_TASER) {
         // It was in a lesser power state. Light it up.
-        sprintf(buf, "%s splits and morphs, cerulean energy pulsing through its rotating circuitry as it deploys into a jaw-like configuration.", GET_OBJ_NAME(obj));
+        snprintf(buf, sizeof(buf), "%s splits and morphs, cerulean energy pulsing through its rotating circuitry as it deploys into a jaw-like configuration.", GET_OBJ_NAME(obj));
         act(buf, FALSE, ch, 0, ch, TO_CHAR);
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_CANNON) {
         // It was in Decomposer mode. Collapse it.
-        sprintf(buf, "%s collapses in on itself, its raging energies focusing down as it retracts into a jaw-like configuration.", GET_OBJ_NAME(obj));
+        snprintf(buf, sizeof(buf), "%s collapses in on itself, its raging energies focusing down as it retracts into a jaw-like configuration.", GET_OBJ_NAME(obj));
         act(buf, FALSE, ch, 0, ch, TO_CHAR);
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       }
@@ -4561,9 +4561,9 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
     case DOMINATOR_MODE_DECOMPOSER:
       if (GET_OBJ_TYPE(obj) == ITEM_OTHER || GET_WEAPON_ATTACK_TYPE(obj) == WEAP_TASER || GET_WEAPON_ATTACK_TYPE(obj) == WEAP_HEAVY_PISTOL) {
         // It will either print this message or print nothing (this is the end state of the gun-- either it reaches it or was already there.)
-        sprintf(buf, "%s deploys in a flicker of whirling components, gripping your wrist and hissing with barely-contained destructive energies.", GET_OBJ_NAME(obj));
+        snprintf(buf, sizeof(buf), "%s deploys in a flicker of whirling components, gripping your wrist and hissing with barely-contained destructive energies.", GET_OBJ_NAME(obj));
         act(buf, FALSE, ch, 0, ch, TO_CHAR);
-        sprintf(buf, "%s deploys in a flicker of whirling components, gripping $n's wrist and hissing with barely-contained destructive energies.", GET_OBJ_NAME(obj));
+        snprintf(buf, sizeof(buf), "%s deploys in a flicker of whirling components, gripping $n's wrist and hissing with barely-contained destructive energies.", GET_OBJ_NAME(obj));
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       }
       
@@ -4579,17 +4579,17 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
         // It was deployed.
         if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_TASER) {
           // Paralyzer mode-- lights go red.
-          sprintf(buf, "%s's status lights flicker, then turn red.", GET_OBJ_NAME(obj));
+          snprintf(buf, sizeof(buf), "%s's status lights flicker, then turn red.", GET_OBJ_NAME(obj));
           act(buf, FALSE, ch, 0, ch, TO_CHAR);
           act(buf, FALSE, ch, 0, 0, TO_ROOM);
         } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_HEAVY_PISTOL) {
           // It was in Lethal mode. Collapse it.
-          sprintf(buf, "%s retracts and folds down into its standard heavy-pistol format, its status lights glowing red.", GET_OBJ_NAME(obj));
+          snprintf(buf, sizeof(buf), "%s retracts and folds down into its standard heavy-pistol format, its status lights glowing red.", GET_OBJ_NAME(obj));
           act(buf, FALSE, ch, 0, ch, TO_CHAR);
           act(buf, FALSE, ch, 0, 0, TO_ROOM);
         } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_CANNON) {
           // It was in Destroyer mode. Collapse it.
-          sprintf(buf, "%s vents energy with a sharp snap of power, collapsing with uncanny speed into its standard heavy-pistol format, its status lights glowing red.", GET_OBJ_NAME(obj));
+          snprintf(buf, sizeof(buf), "%s vents energy with a sharp snap of power, collapsing with uncanny speed into its standard heavy-pistol format, its status lights glowing red.", GET_OBJ_NAME(obj));
           act(buf, FALSE, ch, 0, ch, TO_CHAR);
           act(buf, FALSE, ch, 0, 0, TO_ROOM);
         }
@@ -4931,19 +4931,19 @@ SPECIAL(mageskill_hermes)
       return FALSE;
     if (!str_cmp(argument, "recommendation") && recom && GET_OBJ_VAL(recom, 0) == GET_IDNUM(ch)) {
       if (GET_OBJ_VAL(recom, 1) && GET_OBJ_VAL(recom, 2) >= 3 && GET_OBJ_VAL(recom, 3) && GET_OBJ_VAL(recom, 4) >= 2) {
-        sprintf(arg, "%s So you have the recommendation from the other four. I guess that only leaves me. You put in the effort to get the other recommendations so you have mine.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s So you have the recommendation from the other four. I guess that only leaves me. You put in the effort to get the other recommendations so you have mine.", GET_CHAR_NAME(ch));
         do_say(mage, arg, 0, SCMD_SAYTO);
         extract_obj(recom);
         recom = read_object(5734, VIRTUAL);
         obj_to_char(recom, ch);
         GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
-        sprintf(arg, "%s Congratulations, You are now a member of our group. Seek our master at the old Masonic Lodge on Swan Street in Tarislar for training.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s Congratulations, You are now a member of our group. Seek our master at the old Masonic Lodge on Swan Street in Tarislar for training.", GET_CHAR_NAME(ch));
       } else
-        sprintf(arg, "%s Why do you want my recommendation?", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s Why do you want my recommendation?", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     } else if (!str_cmp(argument, "chain")) {
       if (recom && GET_OBJ_VAL(recom, 0) == GET_IDNUM(ch)) {
-        sprintf(arg, "%s You already have your letter, come back when you have all the recommendations.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s You already have your letter, come back when you have all the recommendations.", GET_CHAR_NAME(ch));
         do_say(mage, arg, 0, SCMD_SAYTO);
       } else {
         bool dq = FALSE;
@@ -4952,17 +4952,17 @@ SPECIAL(mageskill_hermes)
           if (GET_LQUEST(ch, i) == 5743)
             dq = TRUE;
         if (dq) {
-          sprintf(arg, "%s So Harold has sent another one my way has he? Sometimes I don't trust his better judgement, but business is business.", GET_CHAR_NAME(ch));
+          snprintf(arg, sizeof(arg), "%s So Harold has sent another one my way has he? Sometimes I don't trust his better judgement, but business is business.", GET_CHAR_NAME(ch));
           do_say(mage, arg, 0, SCMD_SAYTO);          
-          sprintf(arg, "%s We are part of an order dedicated to higher learning in the field of magic. We are widespread around the metroplex and have our hands in more business than you would like to believe.", GET_CHAR_NAME(ch));
+          snprintf(arg, sizeof(arg), "%s We are part of an order dedicated to higher learning in the field of magic. We are widespread around the metroplex and have our hands in more business than you would like to believe.", GET_CHAR_NAME(ch));
           do_say(mage, arg, 0, SCMD_SAYTO);          
-          sprintf(arg, "%s There are 5 senior members that you must seek out and get the recommendation of to join us. Take this letter, once you have all 5 recommendations return to me.", GET_CHAR_NAME(ch));
+          snprintf(arg, sizeof(arg), "%s There are 5 senior members that you must seek out and get the recommendation of to join us. Take this letter, once you have all 5 recommendations return to me.", GET_CHAR_NAME(ch));
           do_say(mage, arg, 0, SCMD_SAYTO);
           recom = read_object(5735, VIRTUAL);
           GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
           obj_to_char(recom, ch);
         } else {
-          sprintf(arg, "%s Why would you want to know about that?", GET_CHAR_NAME(ch));
+          snprintf(arg, sizeof(arg), "%s Why would you want to know about that?", GET_CHAR_NAME(ch));
           do_say(mage, arg, 0, SCMD_SAYTO);
         }
       }
@@ -4994,14 +4994,14 @@ SPECIAL(mageskill_moore)
     if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
       return FALSE;
     if (GET_OBJ_VAL(recom, 1)) {
-      sprintf(arg, "%s I have already passed on my recommendation for you.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s I have already passed on my recommendation for you.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     } else if (GET_REP(ch) >= 150) {
-      sprintf(arg, "%s I feel you will be a welcome asset to our order.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s I feel you will be a welcome asset to our order.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       GET_OBJ_VAL(recom, 1) = 1;
     } else {
-      sprintf(arg, "%s Why would we want someone as fresh faced as you? Come back when you have spent more time in the shadows.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Why would we want someone as fresh faced as you? Come back when you have spent more time in the shadows.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     }
     return TRUE;
@@ -5023,10 +5023,10 @@ SPECIAL(mageskill_herbie)
     if (!*argument || str_cmp(argument, "recommendation"))
       return(FALSE);
     if (GET_OBJ_VAL(recom, 2) >= 3) {
-      sprintf(arg, "%s You have my recommendation, I can help you no further.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s You have my recommendation, I can help you no further.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     } else if (!GET_OBJ_VAL(recom, 2)) {
-      sprintf(arg, "%s Excellent, you have come. I need someone to create a spell for me to sell on, two of them actually. Any spell is fine, just aslong as it is force 4 or above.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Excellent, you have come. I need someone to create a spell for me to sell on, two of them actually. Any spell is fine, just aslong as it is force 4 or above.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       GET_OBJ_VAL(recom, 2)++;
     }
@@ -5036,23 +5036,23 @@ SPECIAL(mageskill_herbie)
     if (!GET_OBJ_VAL(recom, 2)) {
       return FALSE;
     } else if (GET_OBJ_VAL(recom, 2) >= 3) {
-      sprintf(arg, "%s You have my recommendation, I can help you no further.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s You have my recommendation, I can help you no further.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-      sprintf(arg, "You don't seem to have %s %s.\r\n", AN(argument), argument);
+      snprintf(arg, sizeof(arg), "You don't seem to have %s %s.\r\n", AN(argument), argument);
       send_to_char(arg, ch);
       return TRUE;
     } 
     if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA && GET_OBJ_TIMER(obj) == 0 && GET_OBJ_VAL(obj, 0) >= 4 && GET_OBJ_VAL(obj, 8) == GET_IDNUM(ch)) {
-      sprintf(arg, "%s Thank you, this will go towards providing for the order.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Thank you, this will go towards providing for the order.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       GET_OBJ_VAL(recom, 2)++;
       extract_obj(obj);
       return TRUE;
     } else {
-      sprintf(arg, "%s I have no need for that.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s I have no need for that.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
@@ -5074,14 +5074,14 @@ SPECIAL(mageskill_anatoly)
     if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
       return FALSE;
     if (GET_OBJ_VAL(recom, 3)) {
-      sprintf(arg, "%s Ih hahf ahlreahdhee gihffehn yhou mhy blehzzehng.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Ih hahf ahlreahdhee gihffehn yhou mhy blehzzehng.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     } else if (GET_GRADE(ch) >= 3) {
-      sprintf(arg, "%s Yhou vihl bhe ah vehlkohm ahddihzhuhn tuh ouhr ohrdehr.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Yhou vihl bhe ah vehlkohm ahddihzhuhn tuh ouhr ohrdehr.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       GET_OBJ_VAL(recom, 3) = 1;
     } else {
-      sprintf(arg, "%s Vhe ahr luuhkhehng vohr peohpl klohzehr tuh the ahztrahl plahyn.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Vhe ahr luuhkhehng vohr peohpl klohzehr tuh the ahztrahl plahyn.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     }
     return TRUE;
@@ -5134,20 +5134,20 @@ SPECIAL(mageskill_nightwing)
     if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
       return FALSE;
     if (GET_OBJ_VAL(recom, 4) >= 2) {
-      sprintf(arg, "%s Bat given you recommendation, now fly.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Bat given you recommendation, now fly.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     } else if (time_info.hours > 7 && time_info.hours < 19) {
-      sprintf(arg, "%s Bat must hide now, light blinding her.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Bat must hide now, light blinding her.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     } else if (GET_OBJ_VAL(recom, 5) == ch->in_room->number) {
-      sprintf(arg, "%s Bat busy, Bat must leave, You come find Bat somewhere else.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Bat busy, Bat must leave, You come find Bat somewhere else.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
     } else if (GET_OBJ_VAL(recom, 4) == 1) {
-      sprintf(arg, "%s Bat thinks you worthy, Bat gives you blessing.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Bat thinks you worthy, Bat gives you blessing.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       GET_OBJ_VAL(recom, 4)++;
     } else {
-      sprintf(arg, "%s Bat see you, Bat no give blessing now, you find Bat again.", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Bat see you, Bat no give blessing now, you find Bat again.", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       GET_OBJ_VAL(recom, 4)++;
       GET_OBJ_VAL(recom, 5) = ch->in_room->number;
@@ -5171,13 +5171,13 @@ SPECIAL(mageskill_trainer)
     if (!chain)
       return FALSE;
     if (GET_OBJ_VAL(chain, 0) != GET_IDNUM(ch)) {
-      sprintf(arg, "%s What are you doing with this!? This is not yours!", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s What are you doing with this!? This is not yours!", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       send_to_char(ch, "%s reaches out and snatches the chain from around your neck.\r\n", GET_NAME(mage));
       act("$n reaches out and snatches the chain from around $N's neck.", FALSE, mage, 0, ch, TO_NOTVICT);
       extract_obj(chain);
     } else {
-      sprintf(arg, "%s Welcome %s, the Master awaits.", GET_SEX(ch) == SEX_FEMALE ? "Sister" : "Brother", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Welcome %s, the Master awaits.", GET_SEX(ch) == SEX_FEMALE ? "Sister" : "Brother", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
       send_to_char(ch, "%s beckons you to pass through the field to the north, and you do.\r\n", GET_NAME(mage));
       act("$n passes through the field to the north.", TRUE, ch, 0, 0, TO_ROOM);
@@ -5250,12 +5250,12 @@ SPECIAL(sombrero_bridge)
       if (!world[target].dir_option[dir]) {
         open_taxi_door(&world[target], dir, welcome);
         if (world[target].people) {
-          sprintf(buf, "A large sombrero shaped object descends from the sky, a walkway extends and touches ground to the %s.", fulldirs[dir]);
+          snprintf(buf, sizeof(buf), "A large sombrero shaped object descends from the sky, a walkway extends and touches ground to the %s.", fulldirs[dir]);
           act(buf, FALSE, world[target].people, 0, 0, TO_ROOM);
           act(buf, FALSE, world[target].people, 0, 0, TO_CHAR);
         }
         if (welcome->people) {
-          sprintf(buf, "There is a small rumble as the El Sombrero lands, the bay doors opening to the %s.", fulldirs[dir]);
+          snprintf(buf, sizeof(buf), "There is a small rumble as the El Sombrero lands, the bay doors opening to the %s.", fulldirs[dir]);
           act(buf, FALSE, welcome->people, 0, 0, TO_ROOM);
           act(buf, FALSE, welcome->people, 0, 0, TO_CHAR);
         }
@@ -5267,12 +5267,12 @@ SPECIAL(sombrero_bridge)
         struct room_data *to = welcome->dir_option[dir]->to_room;
         close_taxi_door(to, rev_dir[dir], welcome);  
         if (to->people) {
-          sprintf(buf, "The walkway retracts back into the sombrero shaped object and it silently shoots off into the sky.");
+          snprintf(buf, sizeof(buf), "The walkway retracts back into the sombrero shaped object and it silently shoots off into the sky.");
           act(buf, FALSE, to->people, 0, 0, TO_ROOM);
           act(buf, FALSE, to->people, 0, 0, TO_CHAR);
         }
         if (welcome->people) {
-          sprintf(buf, "The bay doors close and you feel a slight rumble as the El Sombrero blasts off into space.");
+          snprintf(buf, sizeof(buf), "The bay doors close and you feel a slight rumble as the El Sombrero blasts off into space.");
           act(buf, FALSE, welcome->people, 0, 0, TO_ROOM);
           act(buf, FALSE, welcome->people, 0, 0, TO_CHAR);
         }
@@ -5370,10 +5370,10 @@ SPECIAL(airport_guard)
     if (visa && GET_OBJ_VNUM(visa) == 62100) {
       if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
         PLR_FLAGS(ch).SetBit(PLR_VISA);
-        sprintf(arg, "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
         do_say(guard, arg, 0, SCMD_SAYTO);
       } else {
-        sprintf(arg, "%s Get out of here, before we arrest you.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s Get out of here, before we arrest you.", GET_CHAR_NAME(ch));
         extract_obj(visa);
         do_say(guard, arg, 0, SCMD_SAYTO);
       }

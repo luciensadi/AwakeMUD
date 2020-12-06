@@ -1399,7 +1399,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     }
     else {
       if (ch->persona && ch->persona->decker->hitcher) {
-        sprintf(buf, "^y<OUTGOING> %s^n\r\n", argument);
+        snprintf(buf, sizeof(buf), "^y<OUTGOING> %s^n\r\n", argument);
         send_to_char(buf, ch->persona->decker->hitcher);
       }
       if (!special(ch, cmd, line))
@@ -1549,7 +1549,7 @@ ACMD(do_alias)
       send_to_char(" None.\r\n", ch);
     else {
       while (a != NULL) {
-        sprintf(buf, "%-15s %s\r\n", a->command, a->replacement);
+        snprintf(buf, sizeof(buf), "%-15s %s\r\n", a->command, a->replacement);
         send_to_char(buf, ch);
         a = a->next;
       }
@@ -1882,7 +1882,7 @@ int is_abbrev(const char *arg1, const char *arg2)
 {
   if (!arg1 || !arg2) {
     char temp_buf[500];
-    sprintf(temp_buf, "SYSERR: Received null arg in is_abbrev (arg1 = %s, arg2 = %s)", arg1, arg2);
+    snprintf(temp_buf, sizeof(temp_buf), "SYSERR: Received null arg in is_abbrev (arg1 = %s, arg2 = %s)", arg1, arg2);
     mudlog(temp_buf, NULL, LOG_SYSLOG, TRUE);
     return 0;
   }
@@ -2122,7 +2122,7 @@ int perform_dupe_check(struct descriptor_data *d)
   case RECON:
     SEND_TO_Q("Reconnecting.\r\n", d);
     act("$n has reconnected.", TRUE, d->character, 0, 0, TO_ROOM);
-    sprintf(buf, "%s [%s] has reconnected.",
+    snprintf(buf, sizeof(buf), "%s [%s] has reconnected.",
             GET_CHAR_NAME(d->character), d->host);
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     break;
@@ -2130,12 +2130,12 @@ int perform_dupe_check(struct descriptor_data *d)
     SEND_TO_Q("You take over your own body, already in use!\r\n", d);
     act("$n shakes $s head to clear it.",
         TRUE, d->character, 0, 0, TO_ROOM);
-    sprintf(buf, "%s has re-logged in ... disconnecting old socket.",
+    snprintf(buf, sizeof(buf), "%s has re-logged in ... disconnecting old socket.",
             GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     if (d->character->persona)
     {
-      sprintf(buf, "%s depixelizes and vanishes from the host.\r\n", d->character->persona->name);
+      snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", d->character->persona->name);
       send_to_host(d->character->persona->in_host, buf, d->character->persona, TRUE);
       extract_icon(d->character->persona);
       d->character->persona = NULL;
@@ -2180,7 +2180,7 @@ int perform_dupe_check(struct descriptor_data *d)
     break;
   case UNSWITCH:
     SEND_TO_Q("Reconnecting to unswitched char.", d);
-    sprintf(buf, "%s [%s] has reconnected.",
+    snprintf(buf, sizeof(buf), "%s [%s] has reconnected.",
             GET_CHAR_NAME(d->character), d->host);
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     break;
@@ -2312,7 +2312,7 @@ void nanny(struct descriptor_data * d, char *arg)
           return;
         }
 
-        sprintf(buf, "Welcome back. Enter your password. Not %s? Enter 'abort' to try a different name. ", CAP(tmp_name));
+        snprintf(buf, sizeof(buf), "Welcome back. Enter your password. Not %s? Enter 'abort' to try a different name. ", CAP(tmp_name));
         SEND_TO_Q(buf, d);
         echo_off(d);
 
@@ -2338,7 +2338,7 @@ void nanny(struct descriptor_data * d, char *arg)
         d->character->player.char_name = new char[strlen(tmp_name) + 1];
         strcpy(d->character->player.char_name, CAP(tmp_name));
 
-        sprintf(buf, "Did I get that right, %s (Y/N)? ", tmp_name);
+        snprintf(buf, sizeof(buf), "Did I get that right, %s (Y/N)? ", tmp_name);
         SEND_TO_Q(buf, d);
         STATE(d) = CON_NAME_CNFRM;
       }
@@ -2347,7 +2347,7 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_NAME_CNFRM:          /* wait for conf. of new name    */
     if (UPPER(*arg) == 'Y') {
       if (isbanned(d->host) >= BAN_NEW) {
-        sprintf(buf, "Request for new char %s denied from [%s] (siteban)",
+        snprintf(buf, sizeof(buf), "Request for new char %s denied from [%s] (siteban)",
                 GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_BANLOG, TRUE);
         SEND_TO_Q("Sorry, new characters are not allowed from your site.\r\n", d);
@@ -2359,14 +2359,14 @@ void nanny(struct descriptor_data * d, char *arg)
           SEND_TO_Q("The mud is being reconfigured.  Try again a bit later.\r\n", d);
         else
           SEND_TO_Q("Sorry, new players can't be created at the moment.\r\n", d);
-        sprintf(buf, "Request for new char %s denied from %s (wizlock)",
+        snprintf(buf, sizeof(buf), "Request for new char %s denied from %s (wizlock)",
                 GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         STATE(d) = CON_CLOSE;
         return;
       }
       SEND_TO_Q("New character.\r\n", d);
-      sprintf(buf, "Give me a password for %s: ",
+      snprintf(buf, sizeof(buf), "Give me a password for %s: ",
               GET_CHAR_NAME(d->character));
       SEND_TO_Q(buf, d);
       echo_off(d);
@@ -2403,7 +2403,7 @@ void nanny(struct descriptor_data * d, char *arg)
       STATE(d) = CON_GET_NAME;
     } else {
       if (!validate_and_update_password(arg, GET_PASSWD(d->character))) {
-        sprintf(buf, "Bad PW: %s [%s]",
+        snprintf(buf, sizeof(buf), "Bad PW: %s [%s]",
                 GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         GET_BAD_PWS(d->character)++;
@@ -2425,11 +2425,11 @@ void nanny(struct descriptor_data * d, char *arg)
       char query_buf[2048];
 #ifdef NOCRYPT
       char prepare_quotes_buf[2048];
-      sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
+      snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
               prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character), sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])),
               GET_IDNUM(d->character));
 #else
-      sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
+      snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
 #endif
       mysql_wrapper(mysql, query_buf);
       
@@ -2442,7 +2442,7 @@ void nanny(struct descriptor_data * d, char *arg)
           !PLR_FLAGGED(d->character, PLR_SITEOK)) {
         SEND_TO_Q("Sorry, this char has not been cleared for login from your site!\r\n", d);
         STATE(d) = CON_CLOSE;
-        sprintf(buf, "Connection attempt for %s denied from %s",
+        snprintf(buf, sizeof(buf), "Connection attempt for %s denied from %s",
                 GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_BANLOG, TRUE);
         return;
@@ -2453,7 +2453,7 @@ void nanny(struct descriptor_data * d, char *arg)
         else
           SEND_TO_Q("The game is temporarily restricted.. try again later.\r\n", d);
         STATE(d) = CON_CLOSE;
-        sprintf(buf, "Request for login denied for %s [%s] (wizlock)",
+        snprintf(buf, sizeof(buf), "Request for login denied for %s [%s] (wizlock)",
                 GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         return;
@@ -2474,17 +2474,17 @@ void nanny(struct descriptor_data * d, char *arg)
         SEND_TO_Q(motd, d);
 
       if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED))
-        sprintf(buf, "%s [%s] has connected (UNAUTHORIZED).",
+        snprintf(buf, sizeof(buf), "%s [%s] has connected (UNAUTHORIZED).",
                 GET_CHAR_NAME(d->character), d->host);
       else
-        sprintf(buf, "%s [%s] has connected.",
+        snprintf(buf, sizeof(buf), "%s [%s] has connected.",
                 GET_CHAR_NAME(d->character), d->host);
       DELETE_ARRAY_IF_EXTANT(d->character->player.host);
       d->character->player.host = str_dup(d->host);
       playerDB.SaveChar(d->character);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
       if (load_result) {
-        sprintf(buf, "\r\n\r\n\007\007\007"
+        snprintf(buf, sizeof(buf), "\r\n\r\n\007\007\007"
                 "%s%d LOGIN FAILURE%s SINCE LAST SUCCESSFUL LOGIN.%s\r\n",
                 CCRED(d->character, C_SPR), load_result,
                 (load_result > 1) ? "S" : "", CCNRM(d->character, C_SPR));
@@ -2549,11 +2549,11 @@ void nanny(struct descriptor_data * d, char *arg)
         char query_buf[2048];
 #ifdef NOCRYPT
         char prepare_quotes_buf[2048];
-        sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
+        snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
                 prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character), sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])),
                 GET_IDNUM(d->character));
 #else
-        sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
+        snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
 #endif
         mysql_wrapper(mysql, query_buf);
         SEND_TO_Q(MENU, d);
@@ -2619,7 +2619,7 @@ void nanny(struct descriptor_data * d, char *arg)
         load_room = real_room(GET_LOADROOM(d->character));
         
       if (load_room < 0) {
-        sprintf(buf, "SYSERR: Character %s is loading in with invalid load room %ld (%ld). Changing to Grog's place (35500).",
+        snprintf(buf, sizeof(buf), "SYSERR: Character %s is loading in with invalid load room %ld (%ld). Changing to Grog's place (35500).",
                      GET_CHAR_NAME(d->character), GET_LOADROOM(d->character), load_room);
         mudlog(buf, d->character, LOG_SYSLOG, TRUE);
         load_room = real_room(RM_ENTRANCE_TO_DANTES);
@@ -2662,7 +2662,7 @@ void nanny(struct descriptor_data * d, char *arg)
       if (!d->character->in_veh)
         char_to_room(d->character, &world[load_room]);
       act("$n has entered the game.", TRUE, d->character, 0, 0, TO_ROOM);
-      sprintf(buf, "%s has entered the game.", GET_CHAR_NAME(d->character));
+      snprintf(buf, sizeof(buf), "%s has entered the game.", GET_CHAR_NAME(d->character));
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
 
       STATE(d) = CON_PLAYING;
@@ -2758,10 +2758,10 @@ void nanny(struct descriptor_data * d, char *arg)
       }
 
       DeleteChar(GET_IDNUM(d->character));
-      sprintf(buf, "Character '%s' deleted!\r\nGoodbye.\r\n",
+      snprintf(buf, sizeof(buf), "Character '%s' deleted!\r\nGoodbye.\r\n",
               GET_CHAR_NAME(d->character));
       SEND_TO_Q(buf, d);
-      sprintf(buf, "%s (lev %d) has self-deleted.",
+      snprintf(buf, sizeof(buf), "%s (lev %d) has self-deleted.",
               GET_CHAR_NAME(d->character), GET_LEVEL(d->character));
       mudlog(buf, d->character, LOG_MISCLOG, TRUE);
 

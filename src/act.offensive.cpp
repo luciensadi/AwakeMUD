@@ -147,7 +147,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
   }
   
   if (!*arg) {
-    sprintf(buf, "%s what?\r\n", cmdname);
+    snprintf(buf, sizeof(buf), "%s what?\r\n", cmdname);
     send_to_char(CAP(buf), ch);
     return TRUE;
   }
@@ -197,9 +197,9 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
           return TRUE;
         WAIT_STATE(ch, PULSE_VIOLENCE * 2);
         if (EXIT(ch, dir)->keyword) {
-          sprintf(buf, "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
+          snprintf(buf, sizeof(buf), "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
           act(buf, TRUE, ch, 0, 0, TO_ROOM);
-          sprintf(buf, "You aim $p at the %s!", fname(EXIT(ch, dir)->keyword));
+          snprintf(buf, sizeof(buf), "You aim $p at the %s!", fname(EXIT(ch, dir)->keyword));
           act(buf, FALSE, ch, wielded, 0, TO_CHAR);
         } else {
           act("$n attacks the door.", TRUE, ch, 0, 0, TO_ROOM);
@@ -212,9 +212,9 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
           return TRUE;
         WAIT_STATE(ch, PULSE_VIOLENCE * 2);
         if (EXIT(ch, dir)->keyword) {
-          sprintf(buf, "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
+          snprintf(buf, sizeof(buf), "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
           act(buf, TRUE, ch, 0, 0, TO_ROOM);
-          sprintf(buf, "You aim $p at the %s!", fname(EXIT(ch, dir)->keyword));
+          snprintf(buf, sizeof(buf), "You aim $p at the %s!", fname(EXIT(ch, dir)->keyword));
           act(buf, FALSE, ch, wielded, 0, TO_CHAR);
         } else {
           act("$n attacks the door.", TRUE, ch, 0, 0, TO_ROOM);
@@ -234,7 +234,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
             break;
         default:
           if (EXIT(ch, dir)->keyword) {
-            sprintf(buf, "You can't damage the %s with $p!",
+            snprintf(buf, sizeof(buf), "You can't damage the %s with $p!",
                     fname(EXIT(ch, dir)->keyword));
             act(buf, FALSE, ch, wielded, 0, TO_CHAR);
           } else
@@ -244,9 +244,9 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         }
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
       if (EXIT(ch, dir)->keyword) {
-        sprintf(buf, "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
+        snprintf(buf, sizeof(buf), "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
         act(buf, TRUE, ch, 0, 0, TO_ROOM);
-        sprintf(buf, "You aim $p at the %s!", fname(EXIT(ch, dir)->keyword));
+        snprintf(buf, sizeof(buf), "You aim $p at the %s!", fname(EXIT(ch, dir)->keyword));
         act(buf, FALSE, ch, wielded, 0, TO_CHAR);
       } else {
         act("$n attacks the door.", TRUE, ch, 0, 0, TO_ROOM);
@@ -259,7 +259,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       if (EXIT(ch, dir)->keyword) {
         send_to_char(ch, "You take a swing at the %s!\r\n",
                      fname(EXIT(ch, dir)->keyword));
-        sprintf(buf, "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
+        snprintf(buf, sizeof(buf), "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
         act(buf, TRUE, ch, 0, 0, TO_ROOM);
       } else {
         act("You take a swing at the door!", FALSE, ch, 0, 0, TO_CHAR);
@@ -297,18 +297,18 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       
       if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
         send_to_char(ch, "You aim %s at %s!\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)), GET_VEH_NAME(veh));
-        sprintf(buf, "%s aims %s right at your ride!\r\n", GET_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
+        snprintf(buf, sizeof(buf), "%s aims %s right at your ride!\r\n", GET_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
         send_to_veh(buf, veh, NULL, TRUE);
       } else if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) {
         send_to_char(ch, "You aim %s at %s!\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_HOLD)), GET_VEH_NAME(veh));
-        sprintf(buf, "%s aims %s right at your ride!\r\n", GET_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_HOLD)));
+        snprintf(buf, sizeof(buf), "%s aims %s right at your ride!\r\n", GET_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_HOLD)));
         send_to_veh(buf, veh, NULL, TRUE);
       } else {
         send_to_char(ch, "You prepare to take a swing at %s!\r\n", GET_VEH_NAME(veh));
         if (get_speed(veh) > 10)
-          sprintf(buf, "%s throws %sself out in front of you!\r\n", GET_NAME(ch), thrdgenders[(int)GET_SEX(ch)]);
+          snprintf(buf, sizeof(buf), "%s throws %sself out in front of you!\r\n", GET_NAME(ch), thrdgenders[(int)GET_SEX(ch)]);
         else
-          sprintf(buf, "%s winds up to take a swing at your ride!\r\n", GET_NAME(ch));
+          snprintf(buf, sizeof(buf), "%s winds up to take a swing at your ride!\r\n", GET_NAME(ch));
         send_to_veh(buf, veh, NULL, TRUE);
       }
       
@@ -363,10 +363,10 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       if (!CH_IN_COMBAT(vict) && AWAKE(vict))
         set_fighting(vict, ch);
       WAIT_STATE(ch, PULSE_VIOLENCE + 2);
-      sprintf(buf, "$n stops fighting %s and attacks $N!", name);
+      snprintf(buf, sizeof(buf), "$n stops fighting %s and attacks $N!", name);
       act(buf, TRUE, ch, 0, vict, TO_NOTVICT);
       act("You focus on attacking $N.", FALSE, ch, 0, vict, TO_CHAR);
-      sprintf(buf, "$n stops fighting %s and aims at you!", name);
+      snprintf(buf, sizeof(buf), "$n stops fighting %s and aims at you!", name);
       act(buf, TRUE, ch, 0, vict, TO_VICT);
     } else
       send_to_char("You do the best you can!\r\n", ch);
@@ -408,7 +408,7 @@ ACMD(do_kill)
       act("$N chops you to pieces!", FALSE, vict, 0, ch, TO_CHAR);
       act("$n brutally slays $N!", FALSE, ch, 0, vict, TO_NOTVICT);
       if (!IS_NPC(vict)) {
-        sprintf(buf2, "%s raw killed by %s. {%s (%ld)}", GET_CHAR_NAME(vict),
+        snprintf(buf2, sizeof(buf2), "%s raw killed by %s. {%s (%ld)}", GET_CHAR_NAME(vict),
                 GET_NAME(ch), vict->in_room->name,
                 vict->in_room->number);
 
@@ -638,7 +638,7 @@ ACMD(do_kick)
       send_to_char(ch, "You show the %s the bottom of %s!\r\n",
                    fname(EXIT(ch, dir)->keyword), GET_EQ(ch, WEAR_FEET) ?
                    GET_OBJ_NAME(GET_EQ(ch, WEAR_FEET)) : "your foot");
-      sprintf(buf, "$n kicks the %s.", fname(EXIT(ch, dir)->keyword));
+      snprintf(buf, sizeof(buf), "$n kicks the %s.", fname(EXIT(ch, dir)->keyword));
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
     } else {
       send_to_char(ch, "You show the door the bottom of %s!\r\n",
@@ -683,12 +683,12 @@ ACMD(do_retract)
   else {
     if (GET_CYBERWARE_IS_DISABLED(cyber)) {
       GET_CYBERWARE_IS_DISABLED(cyber) = FALSE;
-      sprintf(buf, "$n extends %s.", GET_OBJ_NAME(cyber));
+      snprintf(buf, sizeof(buf), "$n extends %s.", GET_OBJ_NAME(cyber));
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
       send_to_char(ch, "You extend %s.\r\n", GET_OBJ_NAME(cyber));
     } else {
       GET_CYBERWARE_IS_DISABLED(cyber) = TRUE;
-      sprintf(buf, "$n retracts %s.", GET_OBJ_NAME(cyber));
+      snprintf(buf, sizeof(buf), "$n retracts %s.", GET_OBJ_NAME(cyber));
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
       send_to_char(ch, "You retract %s.\r\n", GET_OBJ_NAME(cyber));
     }
