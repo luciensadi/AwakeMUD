@@ -137,8 +137,7 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
 bool Playergroup::set_name(const char *newname, struct char_data *ch) {
   // Check for length.
   if (strlen(newname) > MAX_PGROUP_NAME_LENGTH) {
-    snprintf(buf, sizeof(buf), "Sorry, playergroup names can't be longer than %d characters.\r\n", MAX_PGROUP_NAME_LENGTH);
-    send_to_char(buf, ch);
+    send_to_char(ch, "Sorry, playergroup names can't be longer than %d characters.\r\n", MAX_PGROUP_NAME_LENGTH);
     return FALSE;
   }
   
@@ -150,8 +149,7 @@ bool Playergroup::set_name(const char *newname, struct char_data *ch) {
 bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
   // Check for length.
   if (strlen(newalias) > MAX_PGROUP_ALIAS_LENGTH) {
-    snprintf(buf, sizeof(buf), "Sorry, aliases can't be longer than %d characters.\r\n", MAX_PGROUP_ALIAS_LENGTH);
-    send_to_char(buf, ch);
+    send_to_char(ch, "Sorry, aliases can't be longer than %d characters.\r\n", MAX_PGROUP_ALIAS_LENGTH);
     return FALSE;
   }
   

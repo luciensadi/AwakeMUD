@@ -1116,8 +1116,7 @@ void do_auto_exits(struct char_data * ch)
           }
         }
       }
-    snprintf(buf2, sizeof(buf2), "^c[ Exits: %s]^n\r\n", *buf ? buf : "None! ");
-    send_to_char(buf2, ch);
+    send_to_char(ch, "^c[ Exits: %s]^n\r\n", *buf ? buf : "None! ");
   }
 }
 
@@ -1247,8 +1246,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    snprintf(buf2, sizeof(buf2), "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
-    send_to_char(buf2, ch);
+    send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
   } else
     send_to_char(ch, "^C%s^n\r\n", GET_ROOM_NAME(ch->in_room), ch);
   
@@ -1455,8 +1453,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   }
   
   if (!bits && !veh) {
-    snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
-    send_to_char(buf, ch);
+    send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
     return;
   }
   
@@ -1622,8 +1619,7 @@ void look_at_target(struct char_data * ch, char *arg)
       look_at_char(found_char, ch);
       if (ch != found_char) {
         if (CAN_SEE(found_char, ch)) {
-          snprintf(buf, sizeof(buf), "%s looks at you.\r\n", GET_NAME(ch));
-          send_to_char(buf, found_char);
+          send_to_char(found_char, "%s looks at you.\r\n", GET_NAME(ch));
         }
         snprintf(buf, sizeof(buf), "%s looks at %s.\r\n", GET_NAME(ch), GET_NAME(found_char));
         send_to_veh(buf, ch->in_veh, ch, found_char, FALSE);
@@ -2498,8 +2494,7 @@ ACMD(do_gold)
   else if (GET_NUYEN(ch) == 1)
     send_to_char("You have one miserable nuyen.\r\n", ch);
   else {
-    snprintf(buf, sizeof(buf), "You have %ld nuyen.\r\n", GET_NUYEN(ch));
-    send_to_char(buf, ch);
+    send_to_char(ch, "You have %ld nuyen.\r\n", GET_NUYEN(ch));
   }
 }
 
@@ -3892,8 +3887,7 @@ ACMD(do_users)
     }
   }
   
-  snprintf(line, sizeof(line), "\r\n%d visible sockets connected.\r\n", num_can_see);
-  send_to_char(line, ch);
+  send_to_char(ch, "\r\n%d visible sockets connected.\r\n", num_can_see);
 }
 
 /* Generic page_string function for displaying text */
@@ -4618,8 +4612,7 @@ ACMD(do_mort_show)
 }
 
 ACMD(do_tke){
-  snprintf(buf, sizeof(buf), "Your current TKE is %d.\r\n", GET_TKE(ch));
-  send_to_char(buf, ch);
+  send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
 }
 
 #define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <tke|reputation|notoriety|nuyen|syspoints>\r\n"
@@ -4685,8 +4678,7 @@ ACMD(do_leaderboard) {
   send_to_char(ch, "^CTop 10 characters by %s:^n\r\n", display_string);
   int counter = 1;
   while ((row = mysql_fetch_row(res))) {
-    snprintf(buf, sizeof(buf), "%s:", row[0]);
-    send_to_char(ch, "%2d) %-21s %-15s\r\n", counter++, buf, row[1]);
+    send_to_char(ch, "%2d) %-20s: %-15s\r\n", counter++, row[0], row[1]);
   }
   if (counter == 1)
     send_to_char(ch, "...Nobody! Looks like a great place to make your mark.\r\n");

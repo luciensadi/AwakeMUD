@@ -672,8 +672,7 @@ ACMD(do_use)
 
   half_chop(argument, arg, buf);
   if (!*arg) {
-    snprintf(buf2, sizeof(buf2), "What do you want to %s?\r\n", CMD_NAME);
-    send_to_char(buf2, ch);
+    send_to_char(ch, "What do you want to %s?\r\n", CMD_NAME);
     return;
   }
 
@@ -1705,8 +1704,7 @@ ACMD(do_attach)
     veh->usedload += GET_OBJ_WEIGHT(item);
     obj_from_char(item);
     obj_to_obj(item, item2);
-    snprintf(buf, sizeof(buf), "You mount %s on %s.\r\n", GET_OBJ_NAME(item), GET_OBJ_NAME(item2));
-    send_to_char(buf, ch);
+    send_to_char(ch, "You mount %s on %s.\r\n", GET_OBJ_NAME(item), GET_OBJ_NAME(item2));
     act("$n mounts $p on $P.", FALSE, ch, item, item2, TO_ROOM);
     return;
   } // End of vehicle weapon attachment.
@@ -1766,8 +1764,7 @@ ACMD(do_unattach)
       if (can_take_obj(ch, gun)) {
         obj_from_obj(gun);
         obj_to_char(gun, ch);
-        snprintf(buf, sizeof(buf), "You remove %s from %s.\r\n", GET_OBJ_NAME(gun), GET_OBJ_NAME(item));
-        send_to_char(buf, ch);
+        send_to_char(ch, "You remove %s from %s.\r\n", GET_OBJ_NAME(gun), GET_OBJ_NAME(item));
         act("$n removes $p from $P.", FALSE, ch, gun, item, TO_ROOM);
         // TODO: Will this cause the vehicle load to go negative in the case of a gun ammo box?
         veh->usedload -= GET_OBJ_WEIGHT(gun);
@@ -2508,8 +2505,7 @@ ACMD(do_remember)
       if (GET_IDNUM(vict) == temp->idnum) {
         DELETE_AND_NULL_ARRAY(temp->mem);
         temp->mem = str_dup(buf2);
-        snprintf(buf, sizeof(buf), "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
-        send_to_char(buf, ch);
+        send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
         return;
       }
 
@@ -2518,8 +2514,7 @@ ACMD(do_remember)
     m->idnum = GET_IDNUM(vict);
     m->next = GET_MEMORY(ch);
     GET_MEMORY(ch) = m;
-    snprintf(buf, sizeof(buf), "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
-    send_to_char(buf, ch);
+    send_to_char(ch, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
   }
 }
 

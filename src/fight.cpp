@@ -4584,8 +4584,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     return;
   }
   
-  snprintf(buf, sizeof(buf), "You can't see any %s there.\r\n", target);
-  send_to_char(buf, ch);
+  send_to_char(ch, "You can't see any %s there.\r\n", target);
   return;
 }
 

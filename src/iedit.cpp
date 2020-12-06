@@ -2155,8 +2155,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_WEAPON:
         case ITEM_FIREWEAPON:
           if (number < -WEAPON_MAXIMUM_STRENGTH_BONUS || number > WEAPON_MAXIMUM_STRENGTH_BONUS) {
-            snprintf(buf, sizeof(buf), "Value must be between %d and %d.\r\n", -WEAPON_MAXIMUM_STRENGTH_BONUS, WEAPON_MAXIMUM_STRENGTH_BONUS);
-            send_to_char(buf, CH);
+            send_to_char(CH, "Value must be between %d and %d.\r\n", -WEAPON_MAXIMUM_STRENGTH_BONUS, WEAPON_MAXIMUM_STRENGTH_BONUS);
             iedit_disp_val3_menu(d);
             return;
           }

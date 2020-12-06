@@ -454,8 +454,7 @@ ACMD(do_send)
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char("Sent.\r\n", ch);
   else {
-    snprintf(buf2, sizeof(buf2), "You send '%s' to %s.\r\n", buf, GET_CHAR_NAME(vict));
-    send_to_char(buf2, ch);
+    send_to_char(ch, "You send '%s' to %s.\r\n", buf, GET_CHAR_NAME(vict));
     snprintf(buf2, sizeof(buf2), "%s sent %s to %s", GET_CHAR_NAME(ch), buf, GET_CHAR_NAME(vict));
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);
   }
@@ -795,8 +794,7 @@ void do_stat_room(struct char_data * ch)
   struct obj_data *j = 0;
   struct char_data *k = 0;
 
-  snprintf(buf, sizeof(buf), "Room name: ^c%s\r\n", rm->name);
-  send_to_char(buf, ch);
+  send_to_char(ch, "Room name: ^c%s\r\n", rm->name);
 
   sprinttype(rm->sector_type, spirit_name, buf2);
   snprintf(buf, sizeof(buf), "Zone: [%3d], VNum: [^g%8ld^n], RNum: [%5ld], Rating: [%2d], Type: %s\r\n",
@@ -1449,8 +1447,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
 
   /* Showing the bitvector */
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "AFF: ^y%s\r\n", buf2);
-  send_to_char(buf, ch);
+  send_to_char(ch, "%sAFF: ^y%s\r\n", buf, buf2);
 }
 
 ACMD(do_stat)
@@ -2101,16 +2098,14 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     return;
   }
   if (newlevel > LVL_MAX) {
-    snprintf(buf, sizeof(buf), "%d is the highest possible level.\r\n", LVL_MAX);
-    send_to_char(buf, ch);
+    send_to_char(ch, "%d is the highest possible level.\r\n", LVL_MAX);
     return;
   }
   if (can_self_advance) {
     // You can only advance to level 9 unless you're the President.
     int max_ch_can_advance_to = GET_LEVEL(ch) < LVL_MAX ? LVL_MAX - 1 : LVL_MAX;
     if (newlevel > max_ch_can_advance_to) {
-      snprintf(buf, sizeof(buf), "%d is the highest possible level you can advance someone to.\r\n", max_ch_can_advance_to);
-      send_to_char(buf, ch);
+      send_to_char(ch, "%d is the highest possible level you can advance someone to.\r\n", max_ch_can_advance_to);
       return;
     }
   } else {
@@ -2218,12 +2213,9 @@ ACMD(do_award)
   else
     gain_exp_regardless(vict, k);
 
-  snprintf(buf, sizeof(buf), "You have been awarded %0.2f karma for %s.\r\n", (float)k*0.01, reason);
-  send_to_char(buf, vict);
+  send_to_char(vict, "You have been awarded %0.2f karma for %s.\r\n", (float)k*0.01, reason);
 
-  snprintf(buf2, sizeof(buf2), "You awarded %0.2f karma to %s for %s.\r\n", (float)k*0.01,
-          GET_CHAR_NAME(vict), reason);
-  send_to_char(buf2, ch);
+  send_to_char(ch, "You awarded %0.2f karma to %s for %s.\r\n", (float)k*0.01, GET_CHAR_NAME(vict), reason);
 
   snprintf(buf2, sizeof(buf2), "%s awarded %0.2f karma to %s for %s (%d to %d).",
           GET_CHAR_NAME(ch), (float)k*0.01,
@@ -2257,12 +2249,10 @@ ACMD(do_penalize)
   else
     gain_exp_regardless(vict, k * -1);
 
-  snprintf(buf, sizeof(buf), "You have been penalized %0.2f karma for %s.\r\n", (float)k*0.01, reason);
-  send_to_char(buf, vict);
+  send_to_char(vict, "You have been penalized %0.2f karma for %s.\r\n", (float)k*0.01, reason);
 
-  snprintf(buf2, sizeof(buf2), "You penalized %0.2f karma from %s for %s.\r\n", (float)k*0.01,
+  send_to_char(ch, "You penalized %0.2f karma from %s for %s.\r\n", (float)k*0.01,
           GET_NAME(vict), reason);
-  send_to_char(buf2, ch);
 
   snprintf(buf2, sizeof(buf2), "%s penalized %0.2f karma from %s for %s (%d to %d).",
           GET_CHAR_NAME(ch), (float)k*0.01,
@@ -2413,8 +2403,7 @@ void perform_immort_invis(struct char_data *ch, int level)
             FALSE, ch, 0, tch, TO_VICT);
     }
 
-    snprintf(buf, sizeof(buf), "Your invisibility level is %d.\r\n", level);
-    send_to_char(buf, ch);
+    send_to_char(ch, "Your invisibility level is %d.\r\n", level);
   }
 
   GET_INVIS_LEV(ch) = level;
@@ -2478,10 +2467,9 @@ ACMD(do_poofset)
       POOFOUT(ch) = str_dup(DEFAULT_POOFOUT_STRING);
   
     if (subcmd == SCMD_POOFIN)
-      snprintf(buf, sizeof(buf), "Your current poofin is: ^m%s^n\r\n", POOFIN(ch));
+      send_to_char(ch, "Your current poofin is: ^m%s^n\r\n", POOFIN(ch));
     else
-      snprintf(buf, sizeof(buf), "Your current poofout is: ^m%s^n\r\n", POOFOUT(ch));
-    send_to_char(buf, ch);
+      send_to_char(ch, "Your current poofout is: ^m%s^n\r\n", POOFOUT(ch));
     return;
   } else if (strlen(argument) >= LINE_LENGTH) {
     send_to_char(ch, "Line too long (max %d characters); function aborted.\r\n",
@@ -2534,8 +2522,7 @@ ACMD(do_dc)
     return;
   }
 
-  snprintf(buf, sizeof(buf), "%s's connection closed.\r\n", GET_NAME(vict));
-  send_to_char(buf, ch);
+  send_to_char(ch, "%s's connection closed.\r\n", GET_NAME(vict));
   snprintf(buf, sizeof(buf), "%s's connection closed by %s.", GET_NAME(vict),
           GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
@@ -2822,8 +2809,7 @@ ACMD(do_wizwho)
       immos++;
     }
   }
-  snprintf(buf, sizeof(buf), "\r\nTotal : %d\r\n", immos);
-  send_to_char(buf, ch);
+  send_to_char(ch, "\r\nTotal : %d\r\n", immos);
 }
 
 ACMD(do_zreset)
@@ -2882,12 +2868,10 @@ ACMD(do_wiztitle)
     if (strstr((const char *)argument, "^"))
       send_to_char("Whotitles can't contain the ^ character.\r\n", ch);
     else if (strlen(argument) > MAX_WHOTITLE_LENGTH) {
-      snprintf(buf, sizeof(buf), "Sorry, whotitles can't be longer than %d characters.\r\n", MAX_WHOTITLE_LENGTH);
-      send_to_char(buf, ch);
+      send_to_char(ch, "Sorry, whotitles can't be longer than %d characters.\r\n", MAX_WHOTITLE_LENGTH);
     } else {
       set_whotitle(ch, argument);
-      snprintf(buf, sizeof(buf), "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
-      send_to_char(buf, ch);
+      send_to_char(ch, "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
       snprintf(buf, sizeof(buf), "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }
@@ -2902,8 +2886,7 @@ ACMD(do_wiztitle)
     if (strstr((const char *)argument, "^l")) {
       send_to_char("Whotitles can't contain pure black.\r\n", ch);
     } else if (strlen(argument) > (MAX_TITLE_LENGTH -2)) {
-      snprintf(buf, sizeof(buf), "Sorry, pretitles can't be longer than %d characters.\r\n", MAX_TITLE_LENGTH - 2);
-      send_to_char(buf, ch);
+      send_to_char(ch, "Sorry, pretitles can't be longer than %d characters.\r\n", MAX_TITLE_LENGTH - 2);
     } else {
       set_pretitle(ch, argument);
       snprintf(buf, sizeof(buf), "Okay, you're now %s %s %s.\r\n",
@@ -3474,8 +3457,7 @@ ACMD(do_show)
       send_to_char(" None.\r\n", ch);
     else
       while (a != NULL) {
-        snprintf(buf, sizeof(buf), "%-15s %s\r\n", a->command, a->replacement);
-        send_to_char(buf, ch);
+        send_to_char(ch, "%-15s %s\r\n", a->command, a->replacement);
         a = a->next;
       }
     break;
@@ -3493,8 +3475,7 @@ ACMD(do_show)
     snprintf(buf, sizeof(buf), "\r\n");
     for (i = 0; i < META_MAX; i++)
       if (GET_METAMAGIC(vict, i))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s%s^n\r\n", GET_METAMAGIC(vict, i) == 2 ? "" : "^r", metamagic[i]);
-    send_to_char(buf, ch);
+        send_to_char(ch, "  %s%s^n\r\n", GET_METAMAGIC(vict, i) == 2 ? "" : "^r", metamagic[i]);
     send_to_char("\r\n", ch);
     break;
   case 17:
@@ -5059,9 +5040,7 @@ ACMD(do_tail)
     }
     arg[index] = '\0';
 
-    snprintf(buf, sizeof(buf), "tail -%d ../log/%s", lines, arg );
-    send_to_char( buf, ch );
-    send_to_char( "\r\n", ch );
+    send_to_char(ch, "tail -%d ../log/%s\r\n", lines, arg );
   }
   snprintf(arg, sizeof(arg), "%s", buf );
 
@@ -5193,8 +5172,7 @@ ACMD(do_incognito)
       send_to_char("You are no longer incognito.\r\n", ch);
     } else {
       GET_INCOG_LEV(ch) = i;
-      snprintf(buf, sizeof(buf), "Your incognito is level %d.\r\n", i);
-      send_to_char(buf, ch);
+      send_to_char(ch, "Your incognito is level %d.\r\n", i);
     }
   }
 }

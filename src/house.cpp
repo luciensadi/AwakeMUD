@@ -404,7 +404,7 @@ void display_room_list_to_character(struct char_data *ch, struct landlord *lord)
   if (!on_first_entry_in_column)
     strcat(buf, "\r\n\n");
   else
-    snprintf(buf, sizeof(buf), "\r\n");
+    strcpy(buf, "\r\n");
   send_to_char(buf, ch);
 }
 

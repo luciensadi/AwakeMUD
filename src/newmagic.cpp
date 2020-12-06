@@ -3972,8 +3972,7 @@ ACMD(do_initiate)
     }
     
     if (ch->points.extrapp > (int)(GET_REP(ch) / 50)) {
-      snprintf(buf, sizeof(buf), "You do not have enough reputation to purchase a powerpoint. You need %d.\r\n", 50 * (ch->points.extrapp - (int)(GET_REP(ch) / 50)));
-      send_to_char(buf, ch);
+      send_to_char(ch, "You do not have enough reputation to purchase a powerpoint. You need %d.\r\n", 50 * (ch->points.extrapp - (int)(GET_REP(ch) / 50)));
       return;
     }
     

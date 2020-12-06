@@ -209,8 +209,7 @@ ACMD(do_wizfeel)
 
   if (emote) {
     if (!*buf1) {
-      snprintf(text1, sizeof(text1), "^c[]: Yes, but what?!^n\r\n");
-      send_to_char(text1, ch);
+      send_to_char(ch, "^c[]: Yes, but what?!^n\r\n");
       return;
     }
 
@@ -241,9 +240,7 @@ ACMD(do_wizfeel)
             CAN_SEE(ch, d->character))
           vict = d->character;
       if (!vict) {
-        snprintf(text1, sizeof(text1), "^c[]: %s^n", (action->not_found ? action->not_found : ""));
-        send_to_char(text1, ch);
-        send_to_char("\r\n", ch);
+        send_to_char(ch, "^c[]: %s^n\r\n", (action->not_found ? action->not_found : ""));
         return;
       } else if (vict == ch) {
         snprintf(text1, sizeof(text1), "^c[]: %s^n", (action->char_auto ? action->char_auto : ""));
@@ -282,26 +279,10 @@ ACMD(do_insult)
       send_to_char("Can't hear you!\r\n", ch);
     else {
       if (victim != ch) {
-        snprintf(buf, sizeof(buf), "You insult %s.\r\n", GET_NAME(victim));
-        send_to_char(buf, ch);
+        send_to_char(ch, "You insult %s.\r\n", GET_NAME(victim));
 
-        switch (number(0, 2)) {
+        switch (number(0, 1)) {
         case 0:
-          if (GET_SEX(ch) == SEX_MALE) {
-            if (GET_SEX(victim) == SEX_MALE)
-              act("$n accuses you of fighting like a woman!", FALSE, ch, 0, victim, TO_VICT);
-            else
-              act("$n says that women can't fight.", FALSE, ch, 0, victim, TO_VICT);
-          } else {              /* Ch == Woman */
-            if (GET_SEX(victim) == SEX_MALE)
-              act("$n accuses you of having the smallest... (brain?)",
-                  FALSE, ch, 0, victim, TO_VICT);
-            else
-              act("$n tells you that you'd lose a beauty contest against a troll.",
-                  FALSE, ch, 0, victim, TO_VICT);
-          }
-          break;
-        case 1:
           act("$n calls your mother a bitch!", FALSE, ch, 0, victim, TO_VICT);
           break;
         default:

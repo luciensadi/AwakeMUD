@@ -567,8 +567,7 @@ ACMD(do_upgrade)
       target--;
 
     if ((skill = success_test(skill, target)) == -1) {
-      snprintf(buf, sizeof(buf), "You botch up the upgrade completely, destroying %s.\r\n", GET_OBJ_NAME(mod));
-      send_to_char(buf, ch);
+      send_to_char(ch, "You botch up the upgrade completely, destroying %s.\r\n", GET_OBJ_NAME(mod));
       extract_obj(mod);
       return;
     } else if (skill < 1) {
@@ -702,8 +701,7 @@ ACMD(do_upgrade)
 
   snprintf(buf, sizeof(buf), "$n goes to work on %s.\r\n", GET_VEH_NAME(veh));
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
-  snprintf(buf, sizeof(buf), "You go to work on %s.\r\n", GET_VEH_NAME(veh));
-  send_to_char(buf, ch);
+  send_to_char(ch, "You go to work on %s.\r\n", GET_VEH_NAME(veh));
 }
 
 void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
@@ -850,8 +848,7 @@ ACMD(do_control)
   else snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides $s remote control deck cable into $s eye datajack.");
   act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
   PLR_FLAGS(ch).SetBit(PLR_REMOTE);
-  snprintf(buf, sizeof(buf), "You take control of %s.\r\n", GET_VEH_NAME(veh));
-  send_to_char(buf, ch);
+  send_to_char(ch, "You take control of %s.\r\n", GET_VEH_NAME(veh));
 }
 
 
@@ -902,8 +899,7 @@ ACMD(do_subscribe)
     veh->sub = FALSE;
     veh->next_sub = NULL;
     veh->prev_sub = NULL;
-    snprintf(buf, sizeof(buf), "You remove %s from your subscriber list.\r\n", GET_VEH_NAME(veh));
-    send_to_char(buf, ch);
+    send_to_char(ch, "You remove %s from your subscriber list.\r\n", GET_VEH_NAME(veh));
     return;
   }
 
@@ -949,8 +945,7 @@ ACMD(do_subscribe)
   if (ch->char_specials.subscribe)
     ch->char_specials.subscribe->prev_sub = veh;
   ch->char_specials.subscribe = veh;
-  snprintf(buf, sizeof(buf), "You add %s to your subscriber list.\r\n", GET_VEH_NAME(veh));
-  send_to_char(buf, ch);
+  send_to_char(ch, "You add %s to your subscriber list.\r\n", GET_VEH_NAME(veh));
 }
 
 ACMD(do_repair)
@@ -1094,16 +1089,14 @@ ACMD(do_driveby)
       send_to_char(ch, "You have to be flagged PK to attack another player.\r\n");
       return;
     }
-    snprintf(buf, sizeof(buf), "You point %s towards %s and open fire!\r\n", GET_OBJ_NAME(wielded), GET_NAME(vict));
-    send_to_char(buf, ch);
+    send_to_char(ch, "You point %s towards %s and open fire!\r\n", GET_OBJ_NAME(wielded), GET_NAME(vict));
     snprintf(buf, sizeof(buf), "%s aims %s towards %s and opens fire!\r\n", GET_NAME(ch), GET_OBJ_NAME(wielded), GET_NAME(vict));
     send_to_veh(buf, ch->in_veh, ch, FALSE);
     list = ch;
     roll_individual_initiative(ch);
     GET_INIT_ROLL(ch) += 20;
   } else {
-    snprintf(buf, sizeof(buf), "You point towards %s and shout, \"Light 'em Up!\".\r\n", GET_NAME(vict));
-    send_to_char(buf, ch);
+    send_to_char(ch, "You point towards %s and shout, \"Light 'em Up!\".\r\n", GET_NAME(vict));
     snprintf(buf, sizeof(buf), "%s points towards %s and shouts, \"Light 'em Up!\".!\r\n", GET_NAME(ch), GET_NAME(vict));
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   }
@@ -1271,8 +1264,7 @@ ACMD(do_chase)
     return;
   }
   if (tveh) {
-    snprintf(buf, sizeof(buf), "You start chasing %s.\r\n", GET_VEH_NAME(tveh));
-    send_to_char(buf, ch);
+    send_to_char(ch, "You start chasing %s.\r\n", GET_VEH_NAME(tveh));
     veh->following = tveh;
     veh->dest = NULL;
     k = new veh_follow;
@@ -1386,15 +1378,13 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
             obj->tveh = NULL;
           obj->targ = vict;
           set_fighting(vict, veh);
-          snprintf(buf, sizeof(buf), "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), PERS(vict, ch));
-          send_to_char(buf, ch);
+          send_to_char(ch, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), PERS(vict, ch));
         } else if (tveh) {
           set_fighting(ch, tveh);
           if (obj->targ)
             obj->targ = NULL;
           obj->tveh = tveh;
-          snprintf(buf, sizeof(buf), "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), GET_VEH_NAME(tveh));
-          send_to_char(buf, ch);
+          send_to_char(ch, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), GET_VEH_NAME(tveh));
         } else {
           mudlog("SYSERR: Reached end of do_raw_target (mode all) with no valid target.", ch, LOG_SYSLOG, TRUE);
         }
@@ -1425,8 +1415,7 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
     if (obj->targ)
       obj->targ = NULL;
     obj->tveh = tveh;
-    snprintf(buf, sizeof(buf), "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), GET_VEH_NAME(tveh));
-    send_to_char(buf, ch);
+    send_to_char(ch, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), GET_VEH_NAME(tveh));
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       snprintf(buf, sizeof(buf), "%s's %s swivels towards your ride.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
       send_to_veh(buf, tveh, 0, TRUE);
@@ -1454,8 +1443,7 @@ ACMD(do_mount)
     return;
   }
 
-  snprintf(buf, sizeof(buf), "%s is mounting the following:\r\n", CAP(GET_VEH_NAME(veh)));
-  send_to_char(buf, ch);
+  send_to_char(ch, "%s is mounting the following:\r\n", CAP(GET_VEH_NAME(veh)));
   for (obj = veh->mount; obj; obj = obj->next_content) {
     for (struct obj_data *x = obj->contains; x; x = x->next_content)
       if (GET_OBJ_TYPE(x) == ITEM_GUN_AMMO)

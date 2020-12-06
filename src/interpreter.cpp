@@ -1399,8 +1399,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     }
     else {
       if (ch->persona && ch->persona->decker->hitcher) {
-        snprintf(buf, sizeof(buf), "^y<OUTGOING> %s^n\r\n", argument);
-        send_to_char(buf, ch->persona->decker->hitcher);
+        send_to_char(ch->persona->decker->hitcher, "^y<OUTGOING> %s^n\r\n", argument);
       }
       if (!special(ch, cmd, line))
         ((*mtx_info[cmd].command_pointer) (ch, line, cmd, mtx_info[cmd].subcmd));
@@ -1549,8 +1548,7 @@ ACMD(do_alias)
       send_to_char(" None.\r\n", ch);
     else {
       while (a != NULL) {
-        snprintf(buf, sizeof(buf), "%-15s %s\r\n", a->command, a->replacement);
-        send_to_char(buf, ch);
+        send_to_char(ch, "%-15s %s\r\n", a->command, a->replacement);
         a = a->next;
       }
     }

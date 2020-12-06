@@ -147,8 +147,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
   }
   
   if (!*arg) {
-    snprintf(buf, sizeof(buf), "%s what?\r\n", cmdname);
-    send_to_char(CAP(buf), ch);
+    send_to_char(ch, "%s what?\r\n", capitalize(cmdname));
     return TRUE;
   }
   

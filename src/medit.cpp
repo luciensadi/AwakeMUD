@@ -132,14 +132,12 @@ void medit_disp_skills(struct descriptor_data *d)
     else
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) %-20s ", c, skills[c].name);
     if (!(line % 3)) {
-      snprintf(buf, sizeof(buf), "%s\r\n", buf);
-      send_to_char(buf, CH);
+      send_to_char(CH, "%s\r\n", buf);
     }
   }
   if ((line % 3) != 0)
   {
-    snprintf(buf, sizeof(buf), "%s\r\nEnter a skill (0 to quit): ", buf);
-    send_to_char(buf, CH);
+    send_to_char(CH, "%s\r\nEnter a skill (0 to quit): ", buf);
   }
 }
 

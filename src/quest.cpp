@@ -556,8 +556,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
   act("You give some nuyen to $N.", TRUE, johnson, 0, ch, TO_CHAR);
   snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", nuyen);
   act(buf, FALSE, johnson, 0, ch, TO_VICT);
-  snprintf(buf, sizeof(buf), "You gain %.2f karma.\r\n", ((float) karma / 100));
-  send_to_char(buf, ch);
+  send_to_char(ch, "You gain %.2f karma.\r\n", ((float) karma / 100));
   end_quest(ch);
 }
 

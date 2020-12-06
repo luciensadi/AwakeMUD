@@ -377,8 +377,7 @@ ACMD(do_spec_comm)
     return;
   
   if (!*buf || !*buf2) {
-    snprintf(buf, sizeof(buf), "Whom do you want to %s... and what??\r\n", action_sing);
-    send_to_char(buf, ch);
+    send_to_char(ch, "Whom do you want to %s... and what??\r\n", action_sing);
   } else if (ch->in_veh) {
     if (ch->in_veh->cspeed > SPEED_IDLE) {
       send_to_char("You're going to hit your head on a lamppost if you try that.\r\n", ch);
@@ -928,8 +927,7 @@ ACMD(do_gen_comm)
 
   /* make sure that there is something there to say! */
   if (!*argument) {
-    snprintf(buf1, MAX_STRING_LENGTH,  "Yes, %s, fine, %s we must, but WHAT???\r\n", com_msgs[subcmd][1], com_msgs[subcmd][1]);
-    send_to_char(buf1, ch);
+    send_to_char(ch, "Yes, %s, fine, %s we must, but WHAT???\r\n", com_msgs[subcmd][1], com_msgs[subcmd][1]);
     return;
   }
 
@@ -1107,8 +1105,7 @@ ACMD(do_language)
   if ((lannum = find_skill_num(arg)) && (lannum >= SKILL_ENGLISH && lannum <= SKILL_FRENCH))
     if (GET_SKILL(ch, lannum) > 0) {
       GET_LANGUAGE(ch) = lannum;
-      snprintf(buf, sizeof(buf), "You will now speak %s.\r\n", skills[lannum].name);
-      send_to_char(buf, ch);
+      send_to_char(ch, "You will now speak %s.\r\n", skills[lannum].name);
     } else
       send_to_char("You don't know how to speak that language.\r\n", ch);
   else

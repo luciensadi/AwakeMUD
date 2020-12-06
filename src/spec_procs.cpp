@@ -1467,10 +1467,8 @@ SPECIAL(car_dealer)
 
   if (CMD_IS("list")) {
     send_to_char("Available vehicles are:\r\n", ch);
-    for (veh = world[car_room].vehicles; veh; veh = veh->next_veh) {
-      snprintf(buf, sizeof(buf), "%8d - %s\r\n", veh->cost, capitalize(GET_VEH_NAME(veh)));
-      send_to_char(buf, ch);
-    }
+    for (veh = world[car_room].vehicles; veh; veh = veh->next_veh)
+      send_to_char(ch, "%8d - %s\r\n", veh->cost, capitalize(GET_VEH_NAME(veh)));
     return TRUE;
   } else if (CMD_IS("buy")) {
     argument = one_argument(argument, buf);
@@ -1488,10 +1486,9 @@ SPECIAL(car_dealer)
     newveh->owner = GET_IDNUM(ch);
     newveh->idnum = number(0, 1000000);
     if (veh->type == VEH_DRONE)
-      snprintf(buf, sizeof(buf), "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
+      send_to_char(ch, "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
     else
-      snprintf(buf, sizeof(buf), "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
-    send_to_char(buf, ch);
+      send_to_char(ch, "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
     save_vehicles();
     return TRUE;
   }
@@ -2202,8 +2199,7 @@ SPECIAL(hacker)
 
     skip_spaces(&argument);
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-      snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(argument), argument);
-      send_to_char(buf, ch);
+      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return(TRUE);
     }
     if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1) || GET_ITEM_MONEY_VALUE(obj) <= 0 ||
@@ -2229,8 +2225,7 @@ SPECIAL(hacker)
     any_one_arg(any_one_arg(argument, buf), buf1);
 
     if (!(obj = get_obj_in_list_vis(ch, buf, ch->carrying))) {
-      snprintf(arg, sizeof(arg), "You don't seem to have %s %s.\r\n", AN(buf), buf);
-      send_to_char(arg, ch);
+      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(buf), buf);
       return(TRUE);
     } else if (!(vict = give_find_vict(ch, buf1)))
       return TRUE;
@@ -2297,8 +2292,7 @@ SPECIAL(fence)
 
     skip_spaces(&argument);
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-      snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(argument), argument);
-      send_to_char(buf, ch);
+      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return(TRUE);
     }
     if (!(GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY 
@@ -2356,8 +2350,7 @@ SPECIAL(fixer)
       return TRUE;
     }
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-      snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(argument), argument);
-      send_to_char(buf, ch);
+      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return TRUE;
     }
     if (IS_OBJ_STAT(obj, ITEM_CORPSE) || IS_OBJ_STAT(obj, ITEM_IMMLOAD) || IS_OBJ_STAT(obj, ITEM_WIZLOAD)) {
@@ -2699,8 +2692,7 @@ SPECIAL(vending_machine)
         act("You now have $p.", FALSE, ch, temp, 0, TO_CHAR);
         return TRUE;
       }
-    snprintf(buf, sizeof(buf), "%s doesn't sell '%s'.\r\n", obj->text.name, arg);
-    send_to_char(buf, ch);
+    send_to_char(ch, "%s doesn't sell '%s'.\r\n", obj->text.name, arg);
     return TRUE;
   }
 }
@@ -2834,10 +2826,9 @@ SPECIAL(bank)
 
   if (CMD_IS("balance")) {
     if (GET_BANK(ch) > 0)
-      snprintf(buf, sizeof(buf), "Your current balance is %ld nuyen.\r\n", GET_BANK(ch));
+      send_to_char(ch, "Your current balance is %ld nuyen.\r\n", GET_BANK(ch));
     else
-      snprintf(buf, sizeof(buf), "Your account is empty!\r\n");
-    send_to_char(buf, ch);
+      send_to_char("Your account is empty!\r\n", ch);
     return 1;
   } else if (CMD_IS("deposit")) {
     if ((amount = atoi(argument)) <= 0) {
@@ -2852,8 +2843,7 @@ SPECIAL(bank)
     }
     GET_NUYEN(ch) -= amount;
     GET_BANK(ch) += amount;
-    snprintf(buf, sizeof(buf), "You deposit %d nuyen.\r\n", amount);
-    send_to_char(buf, ch);
+    send_to_char(ch, "You deposit %d nuyen.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
   } else if (CMD_IS("withdraw")) {
@@ -2869,8 +2859,7 @@ SPECIAL(bank)
     }
     GET_NUYEN(ch) += amount;
     GET_BANK(ch) -= amount;
-    snprintf(buf, sizeof(buf), "The ATM ejects %d nuyen and updates your bank account.\r\n", amount);
-    send_to_char(buf, ch);
+    send_to_char(ch, "The ATM ejects %d nuyen and updates your bank account.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
   } else if (CMD_IS("transfer")) {
@@ -5041,8 +5030,7 @@ SPECIAL(mageskill_herbie)
       return TRUE;
     }
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-      snprintf(arg, sizeof(arg), "You don't seem to have %s %s.\r\n", AN(argument), argument);
-      send_to_char(arg, ch);
+      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return TRUE;
     } 
     if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA && GET_OBJ_TIMER(obj) == 0 && GET_OBJ_VAL(obj, 0) >= 4 && GET_OBJ_VAL(obj, 8) == GET_IDNUM(ch)) {

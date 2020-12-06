@@ -466,7 +466,7 @@ void MSDPSetString( descriptor_t *apDescriptor, variable_t aMSDP, const char *ap
  *
  * You must add the MSDP_VAR and MSDP_VAL manually, for example:
  *
- * snprintf( Buffer, "%c%s%c%s", (char)MSDP_VAR, Name, (char)MSDP_VAL, Value );
+ * snprintf( Buffer, sizeof(Buffer), "%c%s%c%s", (char)MSDP_VAR, Name, (char)MSDP_VAL, Value );
  * MSDPSetTable( d, eMSDP_TEST, Buffer );
  */
 void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apValue );
@@ -477,7 +477,7 @@ void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
  *
  * You must add the MSDP_VAR before each element manually, for example:
  *
- * snprintf( Buffer, "%c%s%c%s", (char)MSDP_VAL, Val1, (char)MSDP_VAL, Val2 );
+ * snprintf( Buffer, sizeof(Buffer), "%c%s%c%s", (char)MSDP_VAL, Val1, (char)MSDP_VAL, Val2 );
  * MSDPSetArray( d, eMSDP_TEST, Buffer );
  */
 void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apValue );

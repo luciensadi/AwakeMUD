@@ -317,8 +317,7 @@ ACMD(do_put)
     cyberdeck = TRUE;
 
   if (!*arg1) {
-    snprintf(buf, sizeof(buf), "%s what in what?\r\n", (cyberdeck ? "Install" : "Put"));
-    send_to_char(buf, ch);
+    send_to_char(ch, "%s what in what?\r\n", (cyberdeck ? "Install" : "Put"));
     return;
   }
   
@@ -425,8 +424,7 @@ ACMD(do_put)
   
   generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
   if (!cont) {
-    snprintf(buf, sizeof(buf), "You don't see %s %s here.\r\n", AN(arg2), arg2);
-    send_to_char(buf, ch);
+    send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
     return;
   }
   
@@ -518,8 +516,7 @@ ACMD(do_put)
   
   if (obj_dotmode == FIND_INDIV) {  /* put <obj> <container> */
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      snprintf(buf, sizeof(buf), "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
-      send_to_char(buf, ch);
+      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
       return;
     }
     
@@ -583,11 +580,9 @@ ACMD(do_put)
     }
     if (!found) {
       if (obj_dotmode == FIND_ALL) {
-        snprintf(buf, sizeof(buf), "You don't seem to have anything to %s in it.\r\n", (cyberdeck ? "install" : "put"));
-        send_to_char(buf, ch);
+        send_to_char(ch, "You don't seem to have anything to %s in it.\r\n", (cyberdeck ? "install" : "put"));
       } else {
-        snprintf(buf, sizeof(buf), "You don't seem to have any %ss.\r\n", arg1);
-        send_to_char(buf, ch);
+        send_to_char(ch, "You don't seem to have any %ss.\r\n", arg1);
       }
     }
   }
@@ -972,8 +967,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
     else
       obj = get_obj_in_list_vis(ch, arg, ch->in_room->contents);
     if (!obj) {
-      snprintf(buf, sizeof(buf), "You don't see %s %s here.\r\n", AN(arg), arg);
-      send_to_char(buf, ch);
+      send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg), arg);
     } else {
       if ( CAN_SEE_OBJ(ch, obj) ) {
         if ( IS_OBJ_STAT(obj, ITEM_CORPSE) && GET_OBJ_VAL(obj, 4) == 1
@@ -1016,8 +1010,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
       if (dotmode == FIND_ALL)
         send_to_char("There doesn't seem to be anything here.\r\n", ch);
       else {
-        snprintf(buf, sizeof(buf), "You don't see any %ss here.\r\n", arg);
-        send_to_char(buf, ch);
+        send_to_char(ch, "You don't see any %ss here.\r\n", arg);
       }
     }
   }
@@ -1047,8 +1040,7 @@ ACMD(do_get)
   if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
     send_to_char("Your arms are already full!\r\n", ch);
   else if (!*arg1) {
-    snprintf(buf, sizeof(buf), "%s what?\r\n", (cyberdeck ? "Uninstall" : (download ? "Download" : "Get")));
-    send_to_char(buf, ch);
+    send_to_char(ch, "%s what?\r\n", (cyberdeck ? "Uninstall" : (download ? "Download" : "Get")));
   } else if (!str_cmp(arg1, "tooth")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
       if (GET_OBJ_VAL(cont, 0) == CYB_TOOTHCOMPARTMENT)
@@ -1130,8 +1122,7 @@ ACMD(do_get)
               break;
             }
         if (!cont) {
-          snprintf(buf, sizeof(buf), "There doesn't seem to be a %s installed on %s.\r\n", arg1, GET_VEH_NAME(veh));
-          send_to_char(buf, ch);
+          send_to_char(ch, "There doesn't seem to be a %s installed on %s.\r\n", arg1, GET_VEH_NAME(veh));
           return;
         } else {
           if (!IS_NPC(ch)) {
@@ -1210,8 +1201,7 @@ ACMD(do_get)
             }
           }
           snprintf(buf, sizeof(buf), "$n goes to work on %s.", GET_VEH_NAME(veh));
-          snprintf(buf2, sizeof(buf2), "You go to work on %s and remove %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(cont));
-          send_to_char(buf2, ch);
+          send_to_char(ch, "You go to work on %s and remove %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(cont));
           act(buf, TRUE, ch, 0, 0, TO_ROOM);
           if (found == MOD_SEAT && cont->affected[0].modifier > 1) {
             cont->affected[0].modifier--;
@@ -1262,8 +1252,7 @@ ACMD(do_get)
           return;
         }
       } else if (!cont) {
-        snprintf(buf, sizeof(buf), "You don't have %s %s.\r\n", AN(arg2), arg2);
-        send_to_char(buf, ch);
+        send_to_char(ch, "You don't have %s %s.\r\n", AN(arg2), arg2);
       } else if ((!cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING || GET_OBJ_TYPE(cont) ==
                                   ITEM_QUIVER || GET_OBJ_TYPE(cont) == ITEM_HOLSTER || GET_OBJ_TYPE(cont) ==
                                   ITEM_WORN)) || (cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK ||
@@ -1306,11 +1295,9 @@ ACMD(do_get)
         }
       if (!found) {
         if (cont_dotmode == FIND_ALL) {
-          snprintf(buf, sizeof(buf), "You can't seem to find any %s.\r\n", (!cyberdeck ? "containers" : "cyberdeck"));
-          send_to_char(buf, ch);
+          send_to_char(ch, "You can't seem to find any %s.\r\n", (!cyberdeck ? "containers" : "cyberdeck"));
         } else {
-          snprintf(buf, sizeof(buf), "You can't seem to find any %ss here.\r\n", arg2);
-          send_to_char(buf, ch);
+          send_to_char(ch, "You can't seem to find any %ss here.\r\n", arg2);
         }
       }
     }
@@ -1523,8 +1510,7 @@ ACMD(do_drop)
   argument = one_argument(argument, arg);
 
   if (!*arg) {
-    snprintf(buf, sizeof(buf), "What do you want to %s?\r\n", sname);
-    send_to_char(buf, ch);
+    send_to_char(ch, "What do you want to %s?\r\n", sname);
     return;
   } else if (is_number(arg)) {
     amount = atoi(arg);
@@ -1557,13 +1543,11 @@ ACMD(do_drop)
         }
     } else if (dotmode == FIND_ALLDOT) {
       if (!*arg) {
-        snprintf(buf, sizeof(buf), "What do you want to %s all of?\r\n", sname);
-        send_to_char(buf, ch);
+        send_to_char(ch, "What do you want to %s all of?\r\n", sname);
         return;
       }
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        snprintf(buf, sizeof(buf), "You don't seem to have any %ss.\r\n", arg);
-        send_to_char(buf, ch);
+        send_to_char(ch, "You don't seem to have any %ss.\r\n", arg);
       }
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg, obj->next_content);
@@ -1572,8 +1556,7 @@ ACMD(do_drop)
       }
     } else {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
-        send_to_char(buf, ch);
+        send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
       } else
         amount += perform_drop(ch, obj, mode, sname, random_donation_room);
     }
@@ -1771,8 +1754,7 @@ ACMD(do_give)
     dotmode = find_all_dots(arg);
     if (dotmode == FIND_INDIV) {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
-        send_to_char(buf, ch);
+        send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
       } else
         perform_give(ch, vict, obj);
     } else {
@@ -1928,13 +1910,11 @@ ACMD(do_drink)
     snprintf(buf, sizeof(buf), "$n drinks %s from $p.", drinknames[GET_OBJ_VAL(temp, 2)]);
     act(buf, TRUE, ch, temp, 0, TO_ROOM);
 
-    snprintf(buf, sizeof(buf), "You drink the %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
-    send_to_char(buf, ch);
+    send_to_char(ch, "You drink the %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
     amount = number(3, 10);
   } else {
     act("$n sips from $p.", TRUE, ch, temp, 0, TO_ROOM);
-    snprintf(buf, sizeof(buf), "It tastes like %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
-    send_to_char(buf, ch);
+    send_to_char(ch, "It tastes like %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
     amount = 1;
   }
 
@@ -1993,8 +1973,7 @@ ACMD(do_eat)
     return;
   }
   if (!(food = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
-    send_to_char(buf, ch);
+    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
     return;
   }
   if (subcmd == SCMD_TASTE && ((GET_OBJ_TYPE(food) == ITEM_DRINKCON) ||
@@ -2084,8 +2063,7 @@ ACMD(do_pour)
       return;
     }
     if (!(from_obj = get_obj_in_list_vis(ch, arg2, ch->in_room->contents))) {
-      snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s here.\r\n", AN(arg2), arg2);
-      send_to_char(buf, ch);
+      send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg2), arg2);
       return;
     }
     if (GET_OBJ_TYPE(from_obj) != ITEM_FOUNTAIN) {
@@ -2645,8 +2623,7 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
   } else
   {
     if ((where = search_block(arg, keywords, FALSE)) < 0) {
-      snprintf(buf, sizeof(buf), "'%s'?  What part of your body is THAT?\r\n", arg);
-      send_to_char(buf, ch);
+      send_to_char(ch, "'%s'?  What part of your body is THAT?\r\n", arg);
     }
   }
 
@@ -2693,8 +2670,7 @@ ACMD(do_wear)
       return;
     }
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      snprintf(buf, sizeof(buf), "You don't seem to have any %ss.\r\n", arg1);
-      send_to_char(buf, ch);
+      send_to_char(ch, "You don't seem to have any %ss.\r\n", arg1);
     } else
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg1, obj->next_content);
@@ -2706,8 +2682,7 @@ ACMD(do_wear)
       }
   } else {
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg1), arg1);
-      send_to_char(buf, ch);
+      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg1), arg1);
     } else {
       if ((where = find_eq_pos(ch, obj, arg2)) >= 0)
         perform_wear(ch, obj, where);
@@ -2726,8 +2701,7 @@ ACMD(do_wield)
   if (!*arg)
     send_to_char("Wield what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
-    send_to_char(buf, ch);
+    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
   } else {
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
       send_to_char(ch, "You can't wield %s.\r\n", GET_OBJ_NAME(obj));
@@ -2758,8 +2732,7 @@ ACMD(do_grab)
   if (!*arg)
     send_to_char("Hold what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
-    send_to_char(buf, ch);
+    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
   } else {
     if (GET_OBJ_TYPE(obj) == ITEM_LIGHT)
       perform_wear(ch, obj, WEAR_LIGHT);
@@ -2846,14 +2819,12 @@ ACMD(do_remove)
           found = 1;
         }
       if (!found) {
-        snprintf(buf, sizeof(buf), "You don't seem to be using any %ss.\r\n", arg);
-        send_to_char(buf, ch);
+        send_to_char(ch, "You don't seem to be using any %ss.\r\n", arg);
       }
     }
   } else {
     if (!(obj = get_object_in_equip_vis(ch, arg, ch->equipment, &i))) {
-      snprintf(buf, sizeof(buf), "You don't seem to be using %s %s.\r\n", AN(arg), arg);
-      send_to_char(buf, ch);
+      send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(arg), arg);
     } else {
       if (GET_OBJ_TYPE(obj) == ITEM_GYRO) {
         if (GET_EQ(ch, WEAR_WIELD))
@@ -3258,8 +3229,7 @@ ACMD(do_holster)
   else
     obj_from_char(obj);
   obj_to_obj(obj, cont);
-  snprintf(buf2, sizeof(buf2), "You slip %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-  send_to_char(buf2, ch);
+  send_to_char(ch, "You slip %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
   act("$n slips $p into $P.", FALSE, ch, obj, cont, TO_ROOM);
   return;
 }
@@ -3278,8 +3248,7 @@ ACMD(do_ready)
   }
 
   if (!(generic_find(buf, FIND_OBJ_EQUIP, ch, &tmp_char, &obj))) {
-    snprintf(buf, sizeof(buf), "You don't seem to be using %s %s.\r\n", AN(argument), argument);
-    send_to_char(buf, ch);
+    send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(argument), argument);
     return;
   }
   if (GET_OBJ_TYPE(obj) != ITEM_HOLSTER) {
