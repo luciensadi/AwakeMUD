@@ -2141,6 +2141,8 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   {
     dam =-1;
     buf_mod(rbuf,"NoKill",dam);
+    if (ch)
+      send_to_char(ch, "^m(OOC Notice: %s has been made unkillable by the game's administration.)^n\r\n", GET_CHAR_NAME(victim));
   }
   
   if (victim != ch)
