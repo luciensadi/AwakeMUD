@@ -3670,7 +3670,7 @@ ACMD(do_who)
   else if (num_can_see == 1)
     strcat(buf, "One lonely chummer displayed.\r\n");
   else
-    snprintf(buf, sizeof(buf), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
   if (subcmd) {
     FILE *fl;
     static char buffer[MAX_STRING_LENGTH*4];
