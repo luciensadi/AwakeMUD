@@ -2187,7 +2187,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     
   if (strcmp(GET_OBJ_EXTRA(j).ToString(), "0") != 0) {
     GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);      
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object has the following extra features: ^c%s^n\r\n", GET_OBJ_EXTRA(j).ToString());
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object has the following extra features: ^c%s^n\r\n", buf2);
   }
   
   // Restore the dont_touch bit.
