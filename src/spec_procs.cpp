@@ -1278,7 +1278,7 @@ SPECIAL(adept_trainer)
   // Check to see if they can afford the cost of training the selected power.
   int cost = train_ability_cost(ch, power, GET_POWER_TOTAL(ch, power) + 1);
   if (GET_PP(ch) < cost) {
-    send_to_char("You do not have enough magic to raise that ability.\r\n", ch);
+    send_to_char("You don't have enough power points to raise that ability.\r\n", ch);
     return TRUE;
   }
 
@@ -3482,6 +3482,8 @@ SPECIAL(auth_room)
       }
       sprintf(buf, "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
+      
+      playerDB.SaveChar(ch);
     }
   }
   return FALSE;

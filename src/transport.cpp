@@ -664,7 +664,7 @@ SPECIAL(taxi)
       if (str_str(argument, "yes") || str_str(argument, "sure") || str_str(argument, "alright") ||
           str_str(argument, "yeah") || str_str(argument, "okay") || str_str(argument, "yup")) {
         comm = CMD_TAXI_YES;
-      } else if (strstr(argument, "no") || str_str(argument, "nah")) {
+      } else if (str_str(argument, "no") || str_str(argument, "nah") || str_str(argument, "negative")) {
         comm = CMD_TAXI_NO;
       }
     }

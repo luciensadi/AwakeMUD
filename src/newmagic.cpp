@@ -3961,16 +3961,26 @@ ACMD(do_initiate)
     PLR_FLAGS(ch).SetBit(PLR_INITIATE);  
     disp_init_menu(ch->desc);
   } else if (subcmd == SCMD_POWERPOINT) {
-    if (GET_TRADITION(ch) != TRAD_ADEPT)
+    if (GET_TRADITION(ch) != TRAD_ADEPT) {
       nonsensical_reply(ch);
-    else if (GET_KARMA(ch) < 2000 || ch->points.extrapp > (int)(GET_REP(ch) / 50))
-      send_to_char("You do not have enough karma to purchase a powerpoint.\r\n", ch);
-    else {
-      GET_KARMA(ch) -= 2000;
-      GET_PP(ch) += 100;
-      ch->points.extrapp++;
-      send_to_char(ch, "You have purchased an additional powerpoint.\r\n");
+      return;
     }
+    
+    if (GET_KARMA(ch) < 2000) {
+      send_to_char("You do not have enough karma to purchase a powerpoint. It costs 20 karma.\r\n", ch);
+      return;
+    }
+    
+    if (ch->points.extrapp > (int)(GET_REP(ch) / 50)) {
+      sprintf(buf, "You do not have enough reputation to purchase a powerpoint. You need %d.\r\n", 50 * (ch->points.extrapp - (int)(GET_REP(ch) / 50)));
+      send_to_char(buf, ch);
+      return;
+    }
+    
+    GET_KARMA(ch) -= 2000;
+    GET_PP(ch) += 100;
+    ch->points.extrapp++;
+    send_to_char(ch, "You have purchased an additional powerpoint.\r\n");
   }
 }
 void init_parse(struct descriptor_data *d, char *arg)

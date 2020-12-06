@@ -272,7 +272,11 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         }
         ch->real_abils.esshole = 0;
         ch->real_abils.ess -= esscost;
-      } else ch->real_abils.esshole -= esscost;
+        ch->real_abils.ess = MAX(ch->real_abils.ess, 0);
+      } else {
+        ch->real_abils.esshole -= esscost;
+        ch->real_abils.esshole = MAX(ch->real_abils.esshole, 0);
+      }
       obj_to_cyberware(obj, ch);
     } else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
       int esscost = GET_OBJ_VAL(obj, 4); 
@@ -736,6 +740,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
       obj_from_bioware(obj);
       GET_INDEX(ch) -= GET_OBJ_VAL(obj, 4);
+      GET_INDEX(ch) = MAX(0, GET_INDEX(ch));
     } else {
       obj_from_cyberware(obj);
       ch->real_abils.esshole += GET_OBJ_VAL(obj, 4);
