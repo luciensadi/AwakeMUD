@@ -292,7 +292,7 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
   
   else {
     if (vehicle->type == VEH_BIKE && vehicle->people && CAN_SEE(ch, vehicle->people))
-      snprintf(buf, sizeof(buf), "%s%s sitting on ", buf, CAP(found_mem(GET_MEMORY(ch), vehicle->people) ?
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s sitting on ", CAP(found_mem(GET_MEMORY(ch), vehicle->people) ?
                                                 found_mem(GET_MEMORY(ch), vehicle->people)->mem :
                                                 GET_NAME(vehicle->people)));
     switch (vehicle->cspeed) {
@@ -913,7 +913,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     else
       strcat(buf, " is sitting in the drivers seat.");
   } else if ((obj = get_mount_manned_by_ch(i))) {
-      snprintf(buf, sizeof(buf), "%s is manning %s.", buf, GET_OBJ_NAME(obj));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is manning %s.", GET_OBJ_NAME(obj));
   } else if (GET_POS(i) != POS_FIGHTING)
   {
     strcat(buf, positions[(int) GET_POS(i)]);
@@ -2385,21 +2385,21 @@ ACMD(do_examine)
       snprintf(buf, sizeof(buf), "The card contains %d nuyen.\r\n", GET_OBJ_VAL(tmp_object, 1));
     else if (GET_OBJ_TYPE(tmp_object) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(tmp_object, 0) == TYPE_COOKER) {
       if (!tmp_object->contains)
-        snprintf(buf, sizeof(buf), "The small LED is currently off.\r\n");
+        strncpy(buf, "The small LED is currently off.\r\n", sizeof(buf));
       else if (GET_OBJ_VAL(tmp_object, 9))
-        snprintf(buf, sizeof(buf), "The small LED is currently orange, indicating activity.\r\n");
+        strncpy(buf, "The small LED is currently orange, indicating activity.\r\n", sizeof(buf));
       else if (GET_OBJ_TIMER(tmp_object->contains) == -1)
-        snprintf(buf, sizeof(buf), "The small LED is currently flashed red, indicating a failed encode.\r\n");
+        strncpy(buf, "The small LED is currently flashed red, indicating a failed encode.\r\n", sizeof(buf));
       else
-        snprintf(buf, sizeof(buf), "The small LED is currently green, indicating a successful encode.\r\n");
+        strncpy(buf, "The small LED is currently green, indicating a successful encode.\r\n", sizeof(buf));
       send_to_char(buf, ch);
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_PROGRAM && (GET_OBJ_VAL(tmp_object, 0) >= SOFT_ASIST_COLD || GET_OBJ_VAL(tmp_object, 0) < SOFT_SENSOR)) {
       if (GET_OBJ_TIMER(tmp_object) < 0)
-        snprintf(buf, sizeof(buf), "This chip has been ruined.\r\n");
+        strncpy(buf, "This chip has been ruined.\r\n", sizeof(buf));
       else if (!GET_OBJ_TIMER(tmp_object))
-        snprintf(buf, sizeof(buf), "This program still needs to be encoded to a chip.\r\n");
+        strncpy(buf, "This program still needs to be encoded to a chip.\r\n", sizeof(buf));
       else if (GET_OBJ_TIMER(tmp_object) > 0)
-        snprintf(buf, sizeof(buf), "This program has been encoded onto an optical chip.\r\n");
+        strncpy(buf, "This program has been encoded onto an optical chip.\r\n", sizeof(buf));
       send_to_char(buf, ch);
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(tmp_object, 0) == TYPE_PARTS)
       send_to_char(ch, "There seems to be about %d nuyen worth of %s there.\r\n", GET_OBJ_COST(tmp_object), GET_OBJ_VAL(tmp_object, 1) ? "chips" : "parts");
@@ -2891,9 +2891,9 @@ ACMD(do_score)
       return;
     }
     
-    snprintf(buf, sizeof(buf), "^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
+    strncpy(buf, "^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
                  "^b//^L//^b//^L//^b//^L//^b//^L^L//^b//^L//^b//^L//^b//^L//^b//^L/\r\n"
-                 "^b/^L/  ^L \\_\\                                 ^rcondition monitor           ^L/^b/\r\n");
+                 "^b/^L/  ^L \\_\\                                 ^rcondition monitor           ^L/^b/\r\n", sizeof(buf));
     
     snprintf(screenreader_buf, sizeof(screenreader_buf), "Score sheet for %s:\r\n", GET_CHAR_NAME(ch));
     

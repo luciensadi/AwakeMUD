@@ -484,7 +484,7 @@ SPECIAL(nerp_skills_teacher) {
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(buf, sizeof(buf), "%s  %s\r\n", buf, skills[skill].name);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s\r\n", skills[skill].name);
         }
         else if (GET_SKILL(ch, skill) < max && !ch->char_specials.saved.skills[skill][1]) {
           // Add conditional messaging.
@@ -492,7 +492,7 @@ SPECIAL(nerp_skills_teacher) {
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(buf, sizeof(buf), "%s  %-24s (%d karma %d nuyen)\r\n", buf, skills[skill].name, get_skill_price(ch, skill),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma %d nuyen)\r\n", skills[skill].name, get_skill_price(ch, skill),
                   MAX(1000, (GET_SKILL(ch, skill) * 5000)));
         }
       }
@@ -504,10 +504,10 @@ SPECIAL(nerp_skills_teacher) {
     }
     
     if (GET_SKILL_POINTS(ch) > 0)
-      snprintf(buf, sizeof(buf), "%s\r\nYou have %d point%s to use for skills.\r\n", buf,
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %d point%s to use for skills.\r\n",
               GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
     else
-      snprintf(buf, sizeof(buf), "%s\r\nYou have %0.2f karma to use for skills.\r\n", buf,
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f karma to use for skills.\r\n",
               ((float)GET_KARMA(ch) / 100));
     send_to_char(buf, ch);
     return TRUE;
@@ -670,7 +670,7 @@ SPECIAL(teacher)
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(buf, sizeof(buf), "%s  %s\r\n", buf, skills[teachers[ind].s[i]].name);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s\r\n", skills[teachers[ind].s[i]].name);
         }
         else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1]) {
           // Add conditional messaging.
@@ -678,7 +678,7 @@ SPECIAL(teacher)
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(buf, sizeof(buf), "%s  %-24s (%d karma %d nuyen)\r\n", buf, skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma %d nuyen)\r\n", skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
                   MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
         }
       }
@@ -690,10 +690,10 @@ SPECIAL(teacher)
     }
     
     if (GET_SKILL_POINTS(ch) > 0)
-      snprintf(buf, sizeof(buf), "%s\r\nYou have %d point%s to use for skills.\r\n", buf,
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %d point%s to use for skills.\r\n",
               GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
     else
-      snprintf(buf, sizeof(buf), "%s\r\nYou have %0.2f karma to use for skills.\r\n", buf,
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %0.2f karma to use for skills.\r\n",
               ((float)GET_KARMA(ch) / 100));
     send_to_char(buf, ch);
     return TRUE;

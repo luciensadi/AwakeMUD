@@ -667,8 +667,7 @@ void move_vehicle(struct char_data *ch, int dir)
     r--;
     if (!found || v->follower->cspeed <= SPEED_IDLE) {
       stop_chase(v->follower);
-      snprintf(buf, sizeof(buf), "You seem to have lost the %s.\r\n", GET_VEH_NAME(veh));
-      send_to_char(buf, pilot);
+      send_to_char(pilot, "You seem to have lost the %s.\r\n", GET_VEH_NAME(veh));
       continue;
     }
     int target = get_speed(v->follower) - get_speed(veh), target2 = 0;
@@ -678,8 +677,7 @@ void move_vehicle(struct char_data *ch, int dir)
     int success = resisted_test(veh_skill(pilot, v->follower), target, veh_skill(ch, veh), target2);
     if (success > 0) {
       send_to_char(pilot, "You gain ground.\r\n");
-      snprintf(buf, sizeof(buf), "A %s seems to catch up.\r\n", GET_VEH_NAME(v->follower));
-      send_to_char(buf, ch);
+      send_to_char(ch, "%s seems to catch up.\r\n", capitalize(GET_VEH_NAME(v->follower)));
       for (int x = 0; r >= 0 && x < 2; r-- && x++) {
         for (door = 0; door < NUM_OF_DIRS; door++)
           if (EXIT(v->follower, door))
@@ -688,10 +686,8 @@ void move_vehicle(struct char_data *ch, int dir)
         perform_move(pilot, door, LEADER, NULL);
       }
     } else if (success == 0) {
-      snprintf(buf, sizeof(buf), "You chase a %s.\r\n", GET_VEH_NAME(veh));
-      send_to_char(buf, pilot);
-      snprintf(buf, sizeof(buf), "A %s maintains it's distance.\r\n", GET_VEH_NAME(v->follower));
-      send_to_char(buf, ch);
+      send_to_char(pilot, "You chase a %s.\r\n", GET_VEH_NAME(veh));
+      send_to_char(ch, "A %s maintains it's distance.\r\n", GET_VEH_NAME(v->follower));
       for (door = 0; door < NUM_OF_DIRS; door++)
         if (EXIT(v->follower, door))
           if (EXIT(v->follower, door)->to_room == veh->lastin[r])
@@ -699,8 +695,7 @@ void move_vehicle(struct char_data *ch, int dir)
       perform_move(pilot, door, LEADER, NULL);
     } else {
       send_to_char(pilot, "You lose ground.\r\n");
-      snprintf(buf, sizeof(buf), "A %s falls behind.\r\n", GET_VEH_NAME(v->follower));
-      send_to_char(buf, ch);
+      send_to_char(ch, "A %s falls behind.\r\n", GET_VEH_NAME(v->follower));
     }
     if ((get_speed(v->follower) > 80 && SECT(v->follower->in_room) == SPIRIT_CITY) || v->follower->in_room->icesheet[0] || SECT(v->follower->in_room) == SPIRIT_HEARTH)
     {
@@ -866,10 +861,9 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   }
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
     if (EXIT(ch, dir)->keyword)
-      snprintf(buf2, sizeof(buf2), "You pass through the closed %s.\r\n", fname(EXIT(ch, dir)->keyword));
+      send_to_char(ch, "You pass through the closed %s.\r\n", fname(EXIT(ch, dir)->keyword));
     else
-      snprintf(buf2, sizeof(buf2), "You pass through the closed door.\r\n");
-    send_to_char(buf2, ch);
+      send_to_char("You pass through the closed door.\r\n", ch);
   }
   if (!IS_SET(extra, LEADER))
     return (do_simple_move(ch, dir, extra, NULL));
@@ -929,8 +923,7 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
   } else
   {                      /* try to locate the keyword */
     if (!*type) {
-      snprintf(buf2, sizeof(buf2), "What is it you want to %s?\r\n", cmdname);
-      send_to_char(buf2, ch);
+      send_to_char(ch, "What is it you want to %s?\r\n", cmdname);
       return -1;
     }
 
@@ -941,8 +934,7 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
               !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
             return door;
 
-    snprintf(buf2, sizeof(buf2), "There doesn't seem to be %s %s here.\r\n", AN(type), type);
-    send_to_char(buf2, ch);
+    send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(type), type);
     return -1;
   }
 }
@@ -1090,8 +1082,7 @@ int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_
   {
     if (keynum <= 0) {
       if (access_level(ch, LVL_BUILDER)) {
-        snprintf(buf, sizeof(buf), "That door can't be bypassed since its key vnum is %d. Give it a key vnum to make it bypassable.\r\n", keynum);
-        send_to_char(buf, ch);
+        send_to_char(ch, "That door can't be bypassed since its key vnum is %d. Give it a key vnum to make it bypassable.\r\n", keynum);
       } else {
         send_to_char("Odd - you can't seem to find an electronic lock.\r\n", ch);
       }
@@ -1138,8 +1129,7 @@ ACMD(do_gen_door)
   }
 
   if (!*arg) {
-    snprintf(buf, sizeof(buf), "%s what?\r\n", cmd_door[subcmd]);
-    send_to_char(CAP(buf), ch);
+    send_to_char(ch, "%s what?\r\n", capitalize(cmd_door[subcmd]));
     return;
   }
   if (!LIGHT_OK(ch)) {
@@ -1174,15 +1164,13 @@ ACMD(do_gen_door)
       if (access_level(ch, LVL_ADMIN)) {
         send_to_char("You use your staff powers to summon the key.\r\n", ch);
       } else {
-        snprintf(buf, sizeof(buf), "You don't have the key for %s.\r\n", GET_VEH_NAME(veh));
-        send_to_char(buf, ch);
+        send_to_char(ch, "You don't have the key for %s.\r\n", GET_VEH_NAME(veh));
         return;
       }
     }
     if (subcmd == SCMD_UNLOCK) {
       if (!veh->locked) {
-        snprintf(buf, sizeof(buf), "%s is already unlocked.\r\n", GET_VEH_NAME(veh));
-        send_to_char(buf, ch);
+        send_to_char(ch, "%s is already unlocked.\r\n", GET_VEH_NAME(veh));
         return;
       }
       veh->locked = FALSE;
@@ -1197,8 +1185,7 @@ ACMD(do_gen_door)
       return;
     } else if (subcmd == SCMD_LOCK) {
       if (veh->locked) {
-        snprintf(buf, sizeof(buf), "%s is already locked.\r\n", GET_VEH_NAME(veh));
-        send_to_char(buf, ch);
+        send_to_char(ch, "%s is already locked.\r\n", GET_VEH_NAME(veh));
         return;
       }
       veh->locked = TRUE;
@@ -1428,8 +1415,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     act("$n is dragged in.", FALSE, ch, 0, 0, TO_VEH);
   else {
     act("$n climbs in.", FALSE, ch, 0, 0, TO_VEH);
-    snprintf(buf2, sizeof(buf2), "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
-    send_to_char(buf2, ch);
+    send_to_char(ch, "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
     GET_POS(ch) = POS_SITTING;
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
@@ -1562,8 +1548,7 @@ ACMD(do_enter)
           }
 
 
-    snprintf(buf2, sizeof(buf2), "There is no %s here.\r\n", buf);
-    send_to_char(buf2, ch);
+    send_to_char(ch, "There is no %s here.\r\n", buf);
   } else if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))
     send_to_char("You are already indoors.\r\n", ch);
   else {
