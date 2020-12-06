@@ -125,13 +125,13 @@ ACMD(do_ban)
       return;
     }
     strcpy(format, "%-25.25s  %-8.8s  %-10.10s  %-16.16s\r\n");
-    sprintf(buf, format,
+    snprintf(buf, sizeof(buf), format,
             "Banned Site Name",
             "Ban Type",
             "Banned On",
             "Banned By");
     send_to_char(buf, ch);
-    sprintf(buf, format,
+    snprintf(buf, sizeof(buf), format,
             "---------------------------------",
             "---------------------------------",
             "---------------------------------",
@@ -145,7 +145,7 @@ ACMD(do_ban)
         strcpy(site, timestr);
       } else
         strcpy(site, "Unknown");
-      sprintf(buf, format, ban_node->site, ban_types[ban_node->type], site,
+      snprintf(buf, sizeof(buf), format, ban_node->site, ban_types[ban_node->type], site,
               ban_node->name);
       send_to_char(buf, ch);
     }
@@ -183,7 +183,7 @@ ACMD(do_ban)
   ban_node->next = ban_list;
   ban_list = ban_node;
 
-  sprintf(buf, "%s has banned %s for %s players.", GET_CHAR_NAME(ch), site,
+  snprintf(buf, sizeof(buf), "%s has banned %s for %s players.", GET_CHAR_NAME(ch), site,
           ban_types[ban_node->type]);
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
   send_to_char("Site banned.\r\n", ch);
@@ -192,7 +192,7 @@ ACMD(do_ban)
 
 ACMD(do_unban)
 {
-  char site[80];
+  char site[MAX_INPUT_LENGTH];
   struct ban_list_element *ban_node, *temp;
   int found = 0;
 
@@ -215,11 +215,10 @@ ACMD(do_unban)
   }
   REMOVE_FROM_LIST(ban_node, ban_list, next);
   send_to_char("Site unbanned.\r\n", ch);
-  sprintf(buf, "%s removed the %s-player ban on %s.",
+  snprintf(buf, sizeof(buf), "%s removed the %s-player ban on %s.",
           GET_CHAR_NAME(ch), ban_types[ban_node->type], ban_node->site);
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
   DELETE_AND_NULL(ban_node);
   write_ban_list();
 }
-

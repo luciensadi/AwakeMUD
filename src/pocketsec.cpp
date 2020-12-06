@@ -42,15 +42,15 @@ void wire_nuyen(struct char_data *ch, struct char_data *targ, int amount, long i
 {
   GET_BANK(ch) -= amount;
   if (isfile) {
-    sprintf(buf, "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, isfile);
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, isfile);
     mysql_wrapper(mysql, buf);
     GET_EXTRA(ch) = 0;
   } else
     GET_BANK(targ) += amount;
-  sprintf(buf, "%s has wired %d nuyen to your account.\r\n", GET_CHAR_NAME(ch), amount);
+  snprintf(buf, sizeof(buf), "%s has wired %d nuyen to your account.\r\n", GET_CHAR_NAME(ch), amount);
   store_mail(targ ? GET_IDNUM(targ) : isfile, ch, buf);
   char *player_name = NULL;
-  sprintf(buf, "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : (player_name = get_player_name(isfile)));
+  snprintf(buf, sizeof(buf), "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : (player_name = get_player_name(isfile)));
   DELETE_ARRAY_IF_EXTANT(player_name);
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 }

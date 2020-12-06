@@ -21,7 +21,7 @@
 
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
-extern void display_help(char *help, const char *arg, struct char_data *ch);
+extern void display_help(char *help, int help_len, const char *arg, struct char_data *ch);
 
 int get_minimum_attribute_points_for_race(int race);
 
@@ -170,58 +170,58 @@ int parse_race(struct descriptor_data *d, const char *arg)
   case '?':
     switch (LOWER(*(arg+1))) {
     case '1':
-      display_help(buf2, "human", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "human", d->character);
       break;
     case '2':
-      display_help(buf2, "dwarf", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "dwarf", d->character);
       break;
     case '3':
-      display_help(buf2, "elf", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "elf", d->character);
       break;
     case '4':
-      display_help(buf2, "ork", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "ork", d->character);
       break;
     case '5':
-      display_help(buf2, "troll", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "troll", d->character);
       break;
     case '6':
-      display_help(buf2, "cyclops", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "cyclops", d->character);
       break;
     case '7':
-      display_help(buf2, "koborokuru", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "koborokuru", d->character);
       break;
     case '8':
-      display_help(buf2, "fomori", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "fomori", d->character);
       break;
     case '9':
-      display_help(buf2, "menehune", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "menehune", d->character);
       break;
     case 'a':
-      display_help(buf2, "hobgoblin", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "hobgoblin", d->character);
       break;
     case 'b':
-      display_help(buf2, "giant", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "giant", d->character);
       break;
     case 'c':
-      display_help(buf2, "gnome", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "gnome", d->character);
       break;
     case 'd':
-      display_help(buf2, "oni", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "oni", d->character);
       break;
     case 'e':
-      display_help(buf2, "wakyambi", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "wakyambi", d->character);
       break;
     case 'f':
-      display_help(buf2, "ogre", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "ogre", d->character);
       break;
     case 'g':
-      display_help(buf2, "minotaur", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "minotaur", d->character);
       break;
     case 'h':
-      display_help(buf2, "satyr", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "satyr", d->character);
       break;
     case 'i':
-      display_help(buf2, "night one", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "night one", d->character);
       break;
     default:
       return RACE_UNDEFINED;
@@ -257,7 +257,7 @@ int parse_totem(struct descriptor_data *d, const char *arg)
   if (*temp == '?')
   {
     i = atoi(++temp);
-    display_help(buf2, totem_types[i], d->character);
+    display_help(buf2, MAX_STRING_LENGTH, totem_types[i], d->character);
     strcat(buf2, "\r\n Press [return] to continue ");
     SEND_TO_Q(buf2, d);
     d->ccr.temp = CCR_TOTEM;
@@ -281,7 +281,7 @@ int parse_assign(struct descriptor_data *d, const char *arg)
   
   if (*arg == '2' && (d->ccr.temp > 1 && d->ccr.temp != lowest_kosher_magic_slot)) {
     char kosher_slot = 'A' + lowest_kosher_magic_slot;
-    sprintf(buf2, "Magic can only fit in slots A, B, or %c for %s characters.", 
+    snprintf(buf2, sizeof(buf2), "Magic can only fit in slots A, B, or %c for %s characters.", 
             kosher_slot, 
             pc_race_types[(int)GET_RACE(d->character)]);
     SEND_TO_Q(buf2, d);
@@ -346,10 +346,10 @@ void priority_menu(struct descriptor_data *d)
   SEND_TO_Q("\r\nPriority  Setting     Attributes   Skills Resources\r\n", d);
   for (i = 0; i < NUM_CCR_PR_POINTS - 1; i++)
   {
-    sprintf(buf2, "%-10c", 'A' + i);
+    snprintf(buf2, sizeof(buf2), "%-10c", 'A' + i);
     switch (d->ccr.pr[i]) {
     case PR_NONE:
-      sprintf(buf2, "%s?           %-2d           %-2d        %d nuyen / %d\r\n",
+      snprintf(buf2, sizeof(buf2), "%s?           %-2d           %-2d        %d nuyen / %d\r\n",
               buf2, attrib_vals[i], skill_vals[i], nuyen_vals[i], force_vals[i]);
       break;
     case PR_RACE:
@@ -401,15 +401,15 @@ void priority_menu(struct descriptor_data *d)
         strcat(buf2, "Mundane     -            -         -\r\n");
       break;
     case PR_ATTRIB:
-      sprintf(buf2, "%sAttributes  %-2d           -         -\r\n", buf2,
+      snprintf(buf2, sizeof(buf2), "%sAttributes  %-2d           -         -\r\n", buf2,
               attrib_vals[i]);
       break;
     case PR_SKILL:
-      sprintf(buf2, "%sSkills      -            %-2d        -\r\n", buf2,
+      snprintf(buf2, sizeof(buf2), "%sSkills      -            %-2d        -\r\n", buf2,
               skill_vals[i]);
       break;
     case PR_RESOURCE:
-      sprintf(buf2, "%sResources   -            -         %d nuyen / %d\r\n",
+      snprintf(buf2, sizeof(buf2), "%sResources   -            -         %d nuyen / %d\r\n",
               buf2, nuyen_vals[i], force_vals[i]);
       break;
     }
@@ -421,7 +421,7 @@ void priority_menu(struct descriptor_data *d)
 void init_char_sql(struct char_data *ch)
 {
   char buf2[MAX_STRING_LENGTH];
-  sprintf(buf, "INSERT INTO pfiles (idnum, name, password, race, gender, Rank, Voice,"\
+  snprintf(buf, sizeof(buf), "INSERT INTO pfiles (idnum, name, password, race, gender, Rank, Voice,"\
                "Physical_Keywords, Physical_Name, Whotitle, Height, Weight, Host,"\
                "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD) VALUES ('%ld', '%s', '%s', %d, '%d',"\
                "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld);", GET_IDNUM(ch),
@@ -431,19 +431,19 @@ void init_char_sql(struct char_data *ch)
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    sprintf(buf, "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints) VALUES"\
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints) VALUES"\
                "('%ld', '%d', '%d', '%d');", GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch));
     mysql_wrapper(mysql, buf);
   }
   if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-    sprintf(buf, "INSERT INTO pfiles_magic (idnum, Totem, TotemSpirit, Aspect) VALUES"\
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_magic (idnum, Totem, TotemSpirit, Aspect) VALUES"\
                "('%ld', '%d', '%d', '%d');", GET_IDNUM(ch), GET_TOTEM(ch), GET_TOTEMSPIRIT(ch), GET_ASPECT(ch));
     mysql_wrapper(mysql, buf);
   }
-  sprintf(buf, "INSERT INTO pfiles_drugdata (idnum) VALUES (%ld)", GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "INSERT INTO pfiles_drugdata (idnum) VALUES (%ld)", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   if (GET_LEVEL(ch) > 0) {
-    sprintf(buf, "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber, Poofin, Poofout) VALUES ("\
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber, Poofin, Poofout) VALUES ("\
                  "%ld, %d, %d, %d, '%s', '%s');",
                  GET_IDNUM(ch), GET_INVIS_LEV(ch), GET_INCOG_LEV(ch), ch->player_specials->saved.zonenum,
                 (POOFIN(ch) ? POOFIN(ch) : DEFAULT_POOFIN_STRING),
@@ -464,7 +464,7 @@ static void start_game(descriptor_data *d)
 
   init_char_sql(d->character);
   if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
-    sprintf(buf, "%s [%s] new player.",
+    snprintf(buf, sizeof(buf), "%s [%s] new player.",
             GET_CHAR_NAME(d->character), d->host);
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     SEND_TO_Q(motd, d);
@@ -479,7 +479,7 @@ static void start_game(descriptor_data *d)
 
     init_create_vars(d);
 
-    sprintf(buf, "%s [%s] new player.",
+    snprintf(buf, sizeof(buf), "%s [%s] new player.",
             GET_CHAR_NAME(d->character), d->host);
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
   }
@@ -487,13 +487,13 @@ static void start_game(descriptor_data *d)
 
 void ccr_totem_menu(struct descriptor_data *d)
 {
-  sprintf(buf, "Select your totem: ");
+  snprintf(buf, sizeof(buf), "Select your totem: ");
   for (int i = 1; i < NUM_TOTEMS; i++) {
-    sprintf(ENDOF(buf), "\r\n  %s[%2d] %-20s^n", valid_totem(CH, i) ? "" : "^R", i, totem_types[i]);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n  %s[%2d] %-20s^n", valid_totem(CH, i) ? "" : "^R", i, totem_types[i]);
     if (++i < NUM_TOTEMS)
-      sprintf(ENDOF(buf), "%s[%2d] %-20s^n", valid_totem(CH, i) ? "" : "^R", i, totem_types[i]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s[%2d] %-20s^n", valid_totem(CH, i) ? "" : "^R", i, totem_types[i]);
     if (++i < NUM_TOTEMS)
-      sprintf(ENDOF(buf), "%s[%2d] %-20s^n", valid_totem(CH, i) ? "" : "^R", i, totem_types[i]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s[%2d] %-20s^n", valid_totem(CH, i) ? "" : "^R", i, totem_types[i]);
   }
   strcat(buf, "\r\n");
   SEND_TO_Q(buf, d);
@@ -503,7 +503,7 @@ void ccr_totem_menu(struct descriptor_data *d)
 
 void ccr_totem_spirit_menu(struct descriptor_data *d)
 {
-  sprintf(buf, "Select your totem spirit bonus: \r\n");
+  snprintf(buf, sizeof(buf), "Select your totem spirit bonus: \r\n");
   switch (GET_TOTEM(CH))
   {
   case TOTEM_GATOR:
@@ -549,17 +549,17 @@ void ccr_totem_spirit_menu(struct descriptor_data *d)
 
 void ccr_aspect_menu(struct descriptor_data *d)
 {
-  sprintf(buf, "Select your aspect: \r\n");
-  sprintf(ENDOF(buf), "  [1] Conjurer\r\n"
+  snprintf(buf, sizeof(buf), "Select your aspect: \r\n");
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  [1] Conjurer\r\n"
           "  [2] Sorcerer\r\n");
   if (GET_TRADITION(d->character) == TRAD_SHAMANIC)
-    sprintf(ENDOF(buf), "  [3] Shamanist\r\n");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  [3] Shamanist\r\n");
   else
-    sprintf(ENDOF(buf), "  [3] Elementalist (Earth)\r\n"
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  [3] Elementalist (Earth)\r\n"
             "  [4] Elementalist (Air)\r\n"
             "  [5] Elementalist (Fire)\r\n"
             "  [6] Elementalist (water)\r\n");
-  sprintf(ENDOF(buf), "\r\nAspect: ");
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nAspect: ");
   SEND_TO_Q(buf, d);
   d->ccr.mode = CCR_ASPECT;
 }
@@ -576,7 +576,7 @@ void ccr_type_menu(struct descriptor_data *d)
 void points_menu(struct descriptor_data *d)
 {
   d->ccr.mode = CCR_POINTS;
-  sprintf(buf, "  1) Attributes : ^c%8d^n (^c%2d^n Points)\r\n"
+  snprintf(buf, sizeof(buf), "  1) Attributes : ^c%8d^n (^c%2d^n Points)\r\n"
                "  2) Skills     : ^c%8d^n (^c%2d^n Points)\r\n"
                "  3) Resources  : ^c%8d^n (^c%2d^n Points)\r\n"
                "  4) Magic      : ^c%8s^n (^c%2d^n Points)\r\n"
@@ -707,18 +707,18 @@ void create_parse(struct descriptor_data *d, const char *arg)
         break;
       case '3':
         d->ccr.points += resource_table[1][d->ccr.pr[PO_RESOURCES]];
-        sprintf(buf, " ");
+        snprintf(buf, sizeof(buf), " ");
         for (int x = 0; x < 8; x++)
-          sprintf(ENDOF(buf), " %d) %8d nuyen   (%2d points)\r\n ", x+1, resource_table[0][x], resource_table[1][x]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %8d nuyen   (%2d points)\r\n ", x+1, resource_table[0][x], resource_table[1][x]);
         SEND_TO_Q(buf, d);
         send_to_char(CH, "Enter desired amount of nuyen points (^c%d^n available): ", d->ccr.points);
         d->ccr.mode = CCR_PO_RESOURCES;
         break;
       case '4':
         d->ccr.points += magic_cost[d->ccr.pr[PO_MAGIC]];
-        sprintf(buf, " ");
+        snprintf(buf, sizeof(buf), " ");
         for (int x = 0; x < 4; x++)
-          sprintf(ENDOF(buf), " %d) %18s (%2d points)\r\n ", x+1, magic_table[x], magic_cost[x]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %18s (%2d points)\r\n ", x+1, magic_table[x], magic_cost[x]);
         SEND_TO_Q(buf, d);
         send_to_char(CH, "Enter desired magic level (^c%d^n available): ", d->ccr.points);
         d->ccr.mode = CCR_PO_MAGIC;
@@ -735,7 +735,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         // Defense: You can't continue if you have negative points.
         if (d->ccr.points < 0) {
           send_to_char("You cannot finish creation with a negative point balance. Please lower one of your selections first.\r\n\r\n", CH);
-          sprintf(buf, "SYSERR: Character %s attained negative point balance %d during creation.", GET_NAME(CH), d->ccr.points);
+          snprintf(buf, sizeof(buf), "SYSERR: Character %s attained negative point balance %d during creation.", GET_NAME(CH), d->ccr.points);
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           points_menu(d);
           break;
@@ -1197,7 +1197,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         priority_menu(d);
       break;
     case '?':
-      display_help(buf2, "priorities", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "priorities", d->character);
       strcat(buf2, "\r\n Press [return] to continue ");
       SEND_TO_Q(buf2, d);
       d->ccr.temp = CCR_PRIORITY;

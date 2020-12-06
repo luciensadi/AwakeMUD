@@ -1227,7 +1227,7 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
   }
   
   // Pre-compose our message header.
-  sprintf(buf3, "ERROR: check_obj_to_x_preconditions() failure for %s (%ld): ", GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
+  snprintf(buf3, sizeof(buf3), "ERROR: check_obj_to_x_preconditions() failure for %s (%ld): ", GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
   
   // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
   if (object->next_content) {
@@ -1238,21 +1238,21 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
 
   // We can't give an object away that's already someone else's possession.
   if (object->carried_by) {
-    sprintf(ENDOF(buf3), "Object already belongs to %s.", GET_CHAR_NAME(object->carried_by));
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Object already belongs to %s.", GET_CHAR_NAME(object->carried_by));
     mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
   // We can't give an object away if it's sitting in a room.
   if (object->in_room) {
-    sprintf(ENDOF(buf3), "Object is already in room %ld.", object->in_room->number);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Object is already in room %ld.", object->in_room->number);
     mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
   // We can't give an object away if it's in a vehicle.
   if (object->in_veh) {
-    sprintf(ENDOF(buf3), "Object is already in vehicle %s.", GET_VEH_NAME(object->in_veh));
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Object is already in vehicle %s.", GET_VEH_NAME(object->in_veh));
     mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -1287,7 +1287,7 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
     
     // If their inventory list has turned into an infinite loop due to a bug, warn about it and bail out here instead of hanging the MUD.
     if (i == i->next_content) {
-      sprintf(buf3, "ERROR: Infinite loop detected in obj_to_char. Looping object is %s (%ld). Bailing out, %s is not getting %s %s (%ld).",
+      snprintf(buf3, sizeof(buf3), "ERROR: Infinite loop detected in obj_to_char. Looping object is %s (%ld). Bailing out, %s is not getting %s %s (%ld).",
               GET_OBJ_NAME(i), GET_OBJ_VNUM(i),
               GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), HSHR(ch),
               GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
@@ -1431,7 +1431,7 @@ void obj_from_char(struct obj_data * object)
   }
   if (object->in_obj)
   {
-    sprintf(buf, "DEBUG: %s removed from char (%s), also in obj (%s). Removing.", object->text.name,
+    snprintf(buf, sizeof(buf), "DEBUG: %s removed from char (%s), also in obj (%s). Removing.", object->text.name,
             GET_CHAR_NAME(object->carried_by) ? GET_CHAR_NAME(object->carried_by) :
             GET_NAME(object->carried_by), object->in_obj->text.name);
     mudlog(buf, object->carried_by, LOG_SYSLOG, TRUE);
@@ -1905,7 +1905,7 @@ void extract_icon(struct matrix_icon * icon)
             else if (k->dest->phone->in_obj && k->dest->phone->in_obj->carried_by)
               send_to_char("Your phone stops ringing.\r\n", k->dest->phone->in_obj->carried_by);
             else {
-              sprintf(buf, "%s stops ringing.\r\n", k->dest->phone->text.name);
+              snprintf(buf, sizeof(buf), "%s stops ringing.\r\n", k->dest->phone->text.name);
               act(buf, FALSE, 0, k->dest->phone, 0, TO_ROOM);
             }
           }
@@ -1961,7 +1961,7 @@ void extract_veh(struct veh_data * veh)
 {
   if (veh->in_room == NULL && veh->in_veh == NULL) {
     if (veh->carriedvehs || veh->people) {
-      sprintf(buf, "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh! The game will likely now shit itself and die; GLHF.");
+      snprintf(buf, sizeof(buf), "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh! The game will likely now shit itself and die; GLHF.");
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     }
   }
@@ -1989,8 +1989,8 @@ void extract_veh(struct veh_data * veh)
   // If any vehicles are inside, drop them where the vehicle is.
   struct veh_data *temp = NULL;
   while ((temp = veh->carriedvehs)) {
-    sprintf(buf, "As %s disintegrates, %s falls out!\r\n", veh->short_description, temp->short_description);
-    sprintf(buf2, "You feel the sickening sensation of falling as %s disintegrates around your vehicle.\r\n", veh->short_description);
+    snprintf(buf, sizeof(buf), "As %s disintegrates, %s falls out!\r\n", veh->short_description, temp->short_description);
+    snprintf(buf2, sizeof(buf2), "You feel the sickening sensation of falling as %s disintegrates around your vehicle.\r\n", veh->short_description);
     send_to_veh(buf2, temp, NULL, FALSE);
     if (veh->in_room) {
       send_to_room(buf, veh->in_room);
@@ -2010,7 +2010,7 @@ void extract_veh(struct veh_data * veh)
     if (veh->in_room) {
       char_from_room(ch);
       char_to_room(ch, veh->in_room);
-      sprintf(buf, "As %s disintegrates, $n falls out!", veh->short_description);
+      snprintf(buf, sizeof(buf), "As %s disintegrates, $n falls out!", veh->short_description);
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
     } else if (veh->in_veh) {
       char_to_veh(veh->in_veh, ch);
@@ -2023,7 +2023,7 @@ void extract_veh(struct veh_data * veh)
   // Unhitch its tows.
   if (veh->towing) {
     strcpy(buf3, GET_VEH_NAME(veh));
-    sprintf(buf, "%s falls from %s's towing equipment.\r\n", GET_VEH_NAME(veh->towing), buf3);
+    snprintf(buf, sizeof(buf), "%s falls from %s's towing equipment.\r\n", GET_VEH_NAME(veh->towing), buf3);
     if (ch->in_veh->in_room) {
       act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
       act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
@@ -2032,7 +2032,7 @@ void extract_veh(struct veh_data * veh)
       send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
       veh_to_veh(veh->towing, veh->in_veh);
     } else {
-      sprintf(buf, "SYSERR: Veh %s (%ld) has neither in_room nor in_veh! Dropping towed veh in Dante's Garage.", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh! Dropping towed veh in Dante's Garage.", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       // Can't stop, we're already blowing up the vehicle. Drop it in Dante's garage.
       veh_to_room(veh->towing, &world[real_room(RM_DANTES_GARAGE)]);
@@ -2076,7 +2076,7 @@ void extract_obj(struct obj_data * obj)
                 else if (phone->dest->phone->in_obj && phone->dest->phone->in_obj->carried_by)
                   send_to_char("Your phone stops ringing.\r\n", phone->dest->phone->in_obj->carried_by);
                 else {
-                  sprintf(buf, "%s stops ringing.\r\n", phone->dest->phone->text.name);
+                  snprintf(buf, sizeof(buf), "%s stops ringing.\r\n", phone->dest->phone->text.name);
                   act(buf, FALSE, 0, phone->dest->phone, 0, TO_ROOM);
                 }
               }
@@ -2275,7 +2275,7 @@ void extract_char(struct char_data * ch)
   /* wipe out matrix info */
   if (ch->persona)
   {
-    sprintf(buf, "%s depixelizes and vanishes from the host.\r\n", ch->persona->name);
+    snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", ch->persona->name);
     send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
     extract_icon(ch->persona);
     ch->persona = NULL;
