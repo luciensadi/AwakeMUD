@@ -3666,17 +3666,17 @@ ACMD(do_who)
   }
   
   if (num_can_see == 0)
-    strcat(buf, "No-one at all!\r\n");
+    snprintf(buf2, sizeof(buf2), "%s\r\nNo-one at all!\r\n", buf);
   else if (num_can_see == 1)
-    strcat(buf, "One lonely chummer displayed.\r\n");
+    snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed.\r\n", buf);
   else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
+    snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
   if (subcmd) {
     FILE *fl;
     static char buffer[MAX_STRING_LENGTH*4];
     char *temp = &buffer[0];
     const char *color;
-    char *str = str_dup(buf);
+    char *str = str_dup(buf2);
     char *ptr = str;
     while(*str) {
       if (*str == '^') {
@@ -3761,7 +3761,7 @@ ACMD(do_who)
     }
     fprintf(fl, "<HTML><BODY bgcolor=#41494C><PRE>%s</PRE></BODY></HTML>\r\n", &buffer[0]);
     fclose(fl);
-  } else page_string(ch->desc, buf, 1);
+  } else page_string(ch->desc, buf2, 1);
 }
 
 #define USERS_FORMAT "format: users [-n name] [-h host] [-o] [-p]\r\n"
