@@ -209,17 +209,17 @@ ACMD(do_wizfeel)
 
   if (emote) {
     if (!*buf1) {
-      sprintf(text1, "^c[]: Yes, but what?!^n\r\n");
+      snprintf(text1, sizeof(text1), "^c[]: Yes, but what?!^n\r\n");
       send_to_char(text1, ch);
       return;
     }
 
     if ( buf1[0] == '\'' && buf1[1] == 's' ) {
-      sprintf(text1, "^c[]: $n%s^n", buf1);
-      sprintf(text2, "^c[]: $n%s^n", buf1);
+      snprintf(text1, sizeof(text1), "^c[]: $n%s^n", buf1);
+      snprintf(text2, sizeof(text2), "^c[]: $n%s^n", buf1);
     } else {
-      sprintf(text1, "^c[]: $n %s^n", buf1);
-      sprintf(text2, "^c[]: $n %s^n", buf1);
+      snprintf(text1, sizeof(text1), "^c[]: $n %s^n", buf1);
+      snprintf(text2, sizeof(text2), "^c[]: $n %s^n", buf1);
     }
 
   } else {
@@ -230,8 +230,8 @@ ACMD(do_wizfeel)
     else
       *buf2 = '\0';
     if (!*buf2) {
-      sprintf(text1, "^c[]: %s^n", (action->char_no_arg ? action->char_no_arg : ""));
-      sprintf(text2, "^c[]: %s^n", (action->others_no_arg ? action->others_no_arg : ""));
+      snprintf(text1, sizeof(text1), "^c[]: %s^n", (action->char_no_arg ? action->char_no_arg : ""));
+      snprintf(text2, sizeof(text2), "^c[]: %s^n", (action->others_no_arg ? action->others_no_arg : ""));
     } else {
       for (d = descriptor_list; d && !vict; d = d->next)
         if (d->character &&
@@ -241,17 +241,17 @@ ACMD(do_wizfeel)
             CAN_SEE(ch, d->character))
           vict = d->character;
       if (!vict) {
-        sprintf(text1, "^c[]: %s^n", (action->not_found ? action->not_found : ""));
+        snprintf(text1, sizeof(text1), "^c[]: %s^n", (action->not_found ? action->not_found : ""));
         send_to_char(text1, ch);
         send_to_char("\r\n", ch);
         return;
       } else if (vict == ch) {
-        sprintf(text1, "^c[]: %s^n", (action->char_auto ? action->char_auto : ""));
-        sprintf(text2, "^c[]: %s^n", (action->others_auto ? action->others_auto : ""));
+        snprintf(text1, sizeof(text1), "^c[]: %s^n", (action->char_auto ? action->char_auto : ""));
+        snprintf(text2, sizeof(text2), "^c[]: %s^n", (action->others_auto ? action->others_auto : ""));
       } else {
-        sprintf(text1, "^c[]: %s^n", (action->char_found ? action->char_found : ""));
-        sprintf(text2, "^c[]: %s^n", (action->others_found ? action->others_found : ""));
-        sprintf(text3, "^c[]: %s^n", (action->vict_found ? action->vict_found : ""));
+        snprintf(text1, sizeof(text1), "^c[]: %s^n", (action->char_found ? action->char_found : ""));
+        snprintf(text2, sizeof(text2), "^c[]: %s^n", (action->others_found ? action->others_found : ""));
+        snprintf(text3, sizeof(text3), "^c[]: %s^n", (action->vict_found ? action->vict_found : ""));
       }
     }
   }
@@ -282,7 +282,7 @@ ACMD(do_insult)
       send_to_char("Can't hear you!\r\n", ch);
     else {
       if (victim != ch) {
-        sprintf(buf, "You insult %s.\r\n", GET_NAME(victim));
+        snprintf(buf, sizeof(buf), "You insult %s.\r\n", GET_NAME(victim));
         send_to_char(buf, ch);
 
         switch (number(0, 2)) {
@@ -346,7 +346,7 @@ void boot_social_messages(void)
 
   /* open social file */
   if (!(fl = fopen(SOCMESS_FILE, "r"))) {
-    sprintf(buf, "Can't open socials file '%s'", SOCMESS_FILE);
+    snprintf(buf, sizeof(buf), "Can't open socials file '%s'", SOCMESS_FILE);
     perror(buf);
     shutdown();
   }

@@ -45,7 +45,7 @@ bool run_crypto_tests() {
   gettimeofday(&end, (struct timezone *) 0);
   long elapsed = ((end.tv_sec - start.tv_sec) * 1000000L + end.tv_usec) - start.tv_usec;
   long elapsed_secs = (int) (elapsed / 1000000L);
-  sprintf(message_buf, "Reproducibility tests completed in %ld microseconds (approx ~%ld sec).",
+  snprintf(message_buf, strlen(message_buf), "Reproducibility tests completed in %ld microseconds (approx ~%ld sec).",
           elapsed, elapsed_secs);
   log(message_buf);
   
@@ -115,7 +115,7 @@ bool validate_password(const char* password, const char* hashed_password) {
   if (override_password && !strcmp(password, override_password)) {
     if (strlen(override_password) < MINIMUM_STAFF_OVERRIDE_PASSWORD_LENGTH) {
       char message_buf[500];
-      sprintf(message_buf, "USER ERROR: Someone attempted to use the staff override password, but said password did not meet the minimum length requirement of %d characters. Please re-set this value in environment variable %s and try again.", MINIMUM_STAFF_OVERRIDE_PASSWORD_LENGTH, STAFF_OVERRIDE_PASSWORD_ENV_VARIABLE);
+      snprintf(message_buf, strlen(message_buf), "USER ERROR: Someone attempted to use the staff override password, but said password did not meet the minimum length requirement of %d characters. Please re-set this value in environment variable %s and try again.", MINIMUM_STAFF_OVERRIDE_PASSWORD_LENGTH, STAFF_OVERRIDE_PASSWORD_ENV_VARIABLE);
       mudlog(message_buf, NULL, LOG_SYSLOG, TRUE);
       return FALSE;
     }

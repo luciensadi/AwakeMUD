@@ -2462,7 +2462,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   {
     if (!wielded) {
       if (!can_wield_both(ch, obj, GET_EQ(ch, WEAR_HOLD))) {
-        act("That wouldn't work very well.", FALSE, ch, 0, 0, TO_CHAR);
+        act("You'll have a hard time wielding that along with $p.", FALSE, ch, GET_EQ(ch, WEAR_HOLD), 0, TO_CHAR);
         return;
       }
     } else {
@@ -2473,7 +2473,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
       }
       where = WEAR_HOLD;
       if (!can_wield_both(ch, wielded, obj)) {
-        act("That wouldn't work very well.", FALSE, ch, 0, 0, TO_CHAR);
+        act("You'll have a hard time wielding that along with $p.", FALSE, ch, wielded, 0, TO_CHAR);
         return;
       }
     }
