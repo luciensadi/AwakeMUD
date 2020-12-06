@@ -1961,7 +1961,7 @@ void extract_veh(struct veh_data * veh)
 {
   if (veh->in_room == NULL && veh->in_veh == NULL) {
     if (veh->carriedvehs || veh->people) {
-      snprintf(buf, sizeof(buf), "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh! The game will likely now shit itself and die; GLHF.");
+      strncpy(buf, "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh! The game will likely now shit itself and die; GLHF.", sizeof(buf));
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     }
   }

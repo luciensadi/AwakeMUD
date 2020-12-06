@@ -1284,7 +1284,7 @@ ACMD(do_get)
       for (cont = ch->in_room->contents; cont; cont = cont->next_content)
         if (CAN_SEE_OBJ(ch, cont) &&
             (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
-          if (GET_OBJ_TYPE(cont) == (ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING)) {
+          if (GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING) {
             get_from_container(ch, cont, arg1, FIND_OBJ_ROOM);
             found = 1;
           } else if (cont_dotmode == FIND_ALLDOT) {

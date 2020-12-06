@@ -692,7 +692,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
           continue;
         if ((IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG1) || IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG2) ||
              IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG3)) && success_test(GET_INT(ch), 9) > 0)
-          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Optical Magnification\r\n");
+          strncat(buf2, "Optical Magnification\r\n", sizeof(buf2) - strlen(buf2) - 1);
         if (IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_COSMETIC))
           snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
         break;
@@ -920,7 +920,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (GET_DEFPOS(i))
       snprintf(buf2, sizeof(buf2), ", %s.", GET_DEFPOS(i));
     else
-      snprintf(buf2, sizeof(buf2), ".");
+      strncpy(buf2, ".", sizeof(buf2));
     strcat(buf, buf2);
   } else
   {
@@ -1290,7 +1290,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
           break;
       }
     } else if (GET_BACKGROUND_COUNT(ch->in_room) < 6) {
-      snprintf(buf, sizeof(buf), "^cA");
+      strncpy(buf, "^cA", sizeof(buf));
       switch (GET_BACKGROUND_COUNT(ch->in_room)) {
         case 1:
           strcat(buf, " distracting");
@@ -1781,14 +1781,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH, wear_bits, NUM_WEARS);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can be worn or equipped at the following wear location(s):\r\n  ^c%s^n\r\n", buf2);
   } else {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This item cannot be worn or equipped.\r\n");
+    strncat(buf, "This item cannot be worn or equipped.\r\n", sizeof(buf) - strlen(buf) - 1);
   }
   
   switch (GET_OBJ_TYPE(j))
   {
     case ITEM_LIGHT:
       if (GET_OBJ_VAL(j, 2) == -1) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is an ^cinfinite^n light source.");
+        strncat(buf, "It is an ^cinfinite^n light source.", sizeof(buf) - strlen(buf) - 1);
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n hours of light left.", GET_OBJ_VAL(j, 2));
       }
@@ -1929,13 +1929,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_MISSILE:
       if (GET_OBJ_VAL(j, 0) == 0) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is an ^carrow^n suitable for use in a bow.");
+        strncat(buf, "It is an ^carrow^n suitable for use in a bow.", sizeof(buf) - strlen(buf) - 1);
       } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cbolt^n suitable for use in a crossbow.");
+        strncat(buf, "It is a ^cbolt^n suitable for use in a crossbow.", sizeof(buf) - strlen(buf) - 1);
       }
       break;
     case ITEM_WORN:
-      snprintf(buf1, sizeof(buf1), "It has space for ");
+      strncpy(buf1, "It has space for ", sizeof(buf1));
       
       if (GET_OBJ_VAL(j, 0) > 0) {
         snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) > 1 ? "s":"");
@@ -1980,7 +1980,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 (GET_OBJ_VAL(j, 2) == 1 ? "6-digit PIN" : (GET_OBJ_VAL(j, 2) == 2 ? "thumbprint" : "retina")), GET_OBJ_VAL(j, 0));
       break;
     case ITEM_KEY:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "No OOC information is available about this key.");
+      strncat(buf, "No OOC information is available about this key.", sizeof(buf) - strlen(buf) - 1);
       break;
     case ITEM_FOOD:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n units of nutrition when eaten.", GET_OBJ_VAL(j, 0));
@@ -2157,15 +2157,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_QUEST:
     case ITEM_CAMERA:
     case ITEM_PHONE:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Nothing stands out about this item's OOC values. Try EXAMINE it instead.");
+      strncat(buf, "Nothing stands out about this item's OOC values. Try EXAMINE it instead.", sizeof(buf) - strlen(buf) - 1);
       break;
     default:
-      strcat(buf, "This item type has no probe string. Contact the staff to request one.");
+      strncpy(buf, "This item type has no probe string. Contact the staff to request one.", sizeof(buf) - strlen(buf));
       break;
   }
   
   if (GET_OBJ_AFFECT(j).IsSet(AFF_LASER_SIGHT) && has_smartlink) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.");
+    strncat(buf, "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.", sizeof(buf) - strlen(buf) - 1);
   }
   
   strcat(buf, "^n\r\n\r\n");
@@ -2190,7 +2190,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   if (is_dont_touch)
     GET_OBJ_EXTRA(j).SetBit(ITEM_DONT_TOUCH);
   
-  snprintf(buf1, sizeof(buf1), "This object modifies your character in the following ways when used:\r\n  ^c");
+  strncpy(buf1, "This object modifies your character in the following ways when used:\r\n  ^c", sizeof(buf1));
   for (i = 0; i < MAX_OBJ_AFFECT; i++)
     if (j->affected[i].modifier)
     {
@@ -2202,8 +2202,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               j->affected[i].modifier, buf2);
     }
   if (found) {
-    strcat(buf, buf1);
-    strcat(buf, "^n\r\n");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", buf1);
   }
   
   if (IS_OBJ_STAT(j, ITEM_NERPS)) {
@@ -2504,7 +2503,7 @@ ACMD(do_pool)
   if (GET_POWER(ch, ADEPT_SIDESTEP) && GET_DEFENSE(ch))
     snprintf(buf, sizeof(buf), "^R+%d^n", GET_POWER(ch, ADEPT_SIDESTEP));
   else
-    snprintf(buf, sizeof(buf), "  ");
+    strncpy(buf, "  ", sizeof(buf));
   
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     snprintf(pools, sizeof(pools), "  Dodge: %d%s\r\n  Body: %d\r\n  Offense: %d\r\n  Total Combat Dice: %d\r\n",
