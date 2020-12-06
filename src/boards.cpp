@@ -261,10 +261,10 @@ void Board_write_message(int board_type, struct obj_data *terminal,
   *(tmstr + strlen(tmstr) - 1) = '\0';
 
   if (IS_NPC(ch))
-    sprintf(buf2, "(%s)", GET_NAME(ch));
+    snprintf(buf2, sizeof(buf2), "(%s)", GET_NAME(ch));
   else
-    sprintf(buf2, "(%s)", GET_CHAR_NAME(ch));
-  sprintf(buf, "%6.10s %-12s :: %s", tmstr, buf2, arg);
+    snprintf(buf2, sizeof(buf2), "(%s)", GET_CHAR_NAME(ch));
+  snprintf(buf, sizeof(buf), "%6.10s %-12s :: %s", tmstr, buf2, arg);
   len = strlen(buf) + 1;
   if (!(NEW_MSG_INDEX(board_type).heading = new char[len]))
   {
@@ -278,7 +278,7 @@ void Board_write_message(int board_type, struct obj_data *terminal,
   NEW_MSG_INDEX(board_type).level = GET_LEVEL(ch);
 
   send_to_char("Type your message.  Terminate with a @ on a new line.\r\n\r\n", ch);
-  sprintf(buf2, "$n starts to type a file into the %s.",
+  snprintf(buf2, sizeof(buf2), "$n starts to type a file into the %s.",
           fname(terminal->text.keywords));
   act(buf2, TRUE, ch, 0, 0, TO_ROOM);
 
@@ -382,9 +382,9 @@ int Board_reply_message(int board_type, struct obj_data *terminal,
   *(tmstr + strlen(tmstr) - 1) = '\0';
 
   if (IS_NPC(ch))
-    sprintf(buf2, "(%s)", GET_NAME(ch));
+    snprintf(buf2, sizeof(buf2), "(%s)", GET_NAME(ch));
   else
-    sprintf(buf2, "(%s)", GET_CHAR_NAME(ch));
+    snprintf(buf2, sizeof(buf2), "(%s)", GET_CHAR_NAME(ch));
 
   for (i = 0; *(MSG_HEADING(board_type, msg)+i) &&
        *(MSG_HEADING(board_type, msg)+i) != ':'; i++)
@@ -392,9 +392,9 @@ int Board_reply_message(int board_type, struct obj_data *terminal,
   i += 3;
   heading = (MSG_HEADING(board_type, msg) + i);
   if (strstr(heading, "Re: "))
-    sprintf(buf, "%6.10s %-12s :: %s", tmstr, buf2, heading);
+    snprintf(buf, sizeof(buf), "%6.10s %-12s :: %s", tmstr, buf2, heading);
   else
-    sprintf(buf, "%6.10s %-12s :: Re: %s", tmstr, buf2, heading);
+    snprintf(buf, sizeof(buf), "%6.10s %-12s :: Re: %s", tmstr, buf2, heading);
   len = strlen(buf) + 1;
   if (!(NEW_MSG_INDEX(board_type).heading = new char[len]))
   {
@@ -408,7 +408,7 @@ int Board_reply_message(int board_type, struct obj_data *terminal,
   NEW_MSG_INDEX(board_type).level = GET_LEVEL(ch);
 
   send_to_char("Type your message.  Terminate with a @ on a new line.\r\n\r\n", ch);
-  sprintf(buf2, "$n starts to type a file into the %s.",
+  snprintf(buf2, sizeof(buf2), "$n starts to type a file into the %s.",
           fname(terminal->text.keywords));
   act(buf2, TRUE, ch, 0, 0, TO_ROOM);
 
@@ -468,7 +468,7 @@ int Board_list_board(int board_type, struct obj_data *terminal,
     return 1;
   }
 
-  sprintf(buf, "$n accesses the %s.", fname(terminal->text.keywords));
+  snprintf(buf, sizeof(buf), "$n accesses the %s.", fname(terminal->text.keywords));
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
 
   if (!num_of_msgs[board_type])
@@ -480,16 +480,16 @@ int Board_list_board(int board_type, struct obj_data *terminal,
   if (all)
   {
     if (num_of_msgs[board_type] == 1) {
-      sprintf(buf, "There is 1 file on the %s.\r\n",
+      snprintf(buf, sizeof(buf), "There is 1 file on the %s.\r\n",
               fname(terminal->text.keywords));
     } else {
-      sprintf(buf, "There are %d files on the %s.\r\n",
+      snprintf(buf, sizeof(buf), "There are %d files on the %s.\r\n",
               num_of_msgs[board_type],
               fname(terminal->text.keywords));
     }
     for (i = 0; i < num_of_msgs[board_type]; i++) {
       if (MSG_HEADING(board_type, i))
-        sprintf(buf + strlen(buf), "%-3d: %s^n\r\n", i + 1, MSG_HEADING(board_type, i));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d: %s^n\r\n", i + 1, MSG_HEADING(board_type, i));
       else {
         log("SYSERR: The terminal is fubar'd.");
         send_to_char(ch, "Sorry, the %s isn't working.\r\n",
@@ -500,16 +500,16 @@ int Board_list_board(int board_type, struct obj_data *terminal,
   } else
   {
     if (MAX(second - first + 1, 0) == 1) {
-      sprintf(buf, "There is 1 file on the %s in the specified range.\r\n",
+      snprintf(buf, sizeof(buf), "There is 1 file on the %s in the specified range.\r\n",
               fname(terminal->text.keywords));
     } else {
-      sprintf(buf, "There are %d files on the %s in the specified range.\r\n",
+      snprintf(buf, sizeof(buf), "There are %d files on the %s in the specified range.\r\n",
               MAX(second - first + 1, 0),
               fname(terminal->text.keywords));
     }
     for (i = first; i <= second; i++) {
       if (MSG_HEADING(board_type, i))
-        sprintf(buf + strlen(buf), "%-3d: %s\r\n", i + 1, MSG_HEADING(board_type, i));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d: %s\r\n", i + 1, MSG_HEADING(board_type, i));
       else {
         log("SYSERR: The terminal is fubar'd.");
         send_to_char(ch, "Sorry, the %s isn't working.\r\n",
@@ -541,22 +541,22 @@ int Board_show_board(int board_type, struct obj_data *terminal,
     send_to_char("You try but fail to understand the encrypted words.\r\n", ch);
     return 1;
   }
-  sprintf(buf, "$n accesses the %s.", fname(terminal->text.keywords));
+  snprintf(buf, sizeof(buf), "$n accesses the %s.", fname(terminal->text.keywords));
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
 
-  sprintf(buf, "This is a computer bulletin board system.\r\n"
+  snprintf(buf, sizeof(buf), "This is a computer bulletin board system.\r\n"
           "Usage: LIST, LIST <+# | # #>, READ/REMOVE/REPLY #, WRITE <header>.\r\n"
           "You will need to look at the %s to save your file.\r\n",
           fname(terminal->text.keywords));
 
   if (!num_of_msgs[board_type]) {
-    sprintf(ENDOF(buf), "The %s has no files.\r\n", fname(terminal->text.keywords));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "The %s has no files.\r\n", fname(terminal->text.keywords));
   } else {
     if (num_of_msgs[board_type] == 1) {
-      sprintf(ENDOF(buf), "There is 1 file on the %s.\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "There is 1 file on the %s.\r\n",
               fname(terminal->text.keywords));
     } else {
-      sprintf(ENDOF(buf), "There are %d files on the %s.\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "There are %d files on the %s.\r\n",
               num_of_msgs[board_type], fname(terminal->text.keywords));
     }
   }
@@ -621,7 +621,7 @@ int Board_display_msg(int board_type, struct obj_data *terminal,
     send_to_char("That file seems to be empty.\r\n", ch);
     return 1;
   }
-  sprintf(buffer, "File %d : %s\r\n\r\n%s^n\r\n", msg,
+  snprintf(buffer, sizeof(buffer), "File %d : %s\r\n\r\n%s^n\r\n", msg,
           MSG_HEADING(board_type, ind), msg_storage[MSG_SLOTNUM(board_type, ind)]);
 
   page_string(ch->desc, buffer, 1);
@@ -691,7 +691,7 @@ int Board_remove_msg(int board_type, struct obj_data *terminal,
     send_to_char("That file appears to be screwed up.\r\n", ch);
     return 1;
   }
-  sprintf(buf, "(%s)", GET_CHAR_NAME(ch));
+  snprintf(buf, sizeof(buf), "(%s)", GET_CHAR_NAME(ch));
   if (!access_level(ch, REMOVE_LVL(board_type))
       && !(strstr((const char *)MSG_HEADING(board_type, ind), buf)))
   {
@@ -721,7 +721,7 @@ int Board_remove_msg(int board_type, struct obj_data *terminal,
   Board_delete_msg(board_type, ind);
 
   send_to_char("File deleted.\r\n", ch);
-  sprintf(buf, "$n just deleted file %d.", msg);
+  snprintf(buf, sizeof(buf), "$n just deleted file %d.", msg);
   act(buf, FALSE, ch, 0, 0, TO_ROOM);
 
   return 1;
@@ -773,7 +773,7 @@ void Board_load_board(int board_type)
   char *tmp1 = NULL, *tmp2 = NULL;
 
   if (!(fl = fopen(FILENAME(board_type), "rb"))) {
-    sprintf(buf, "Error reading board file %s", FILENAME(board_type));
+    snprintf(buf, sizeof(buf), "Error reading board file %s", FILENAME(board_type));
     perror(buf);
     return;
   }

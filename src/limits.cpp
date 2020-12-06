@@ -403,14 +403,14 @@ void check_idling(void)
           if (ch->desc)
             close_socket(ch->desc);
           ch->desc = NULL;
-          sprintf(buf, "%s force-rented and extracted (idle).",
+          snprintf(buf, sizeof(buf), "%s force-rented and extracted (idle).",
                   GET_CHAR_NAME(ch));
           mudlog(buf, ch, LOG_CONNLOG, TRUE);
           extract_char(ch);
         }
         */
       } else if (!ch->desc && ch->char_specials.timer > 15) {
-        sprintf(buf, "%s removed from game (no link).", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
       } else if (IS_SENATOR(ch) && ch->char_specials.timer > 15 &&
@@ -659,7 +659,7 @@ void point_update(void)
             if (drug_types[x].mental_addiction ? success_test(GET_WIL(i), drug_types[x].mental_addiction + GET_DRUG_EDGE(i, x)) : 1 < 1 ||
                 drug_types[x].physical_addiction ? success_test(GET_REAL_BOD(i), drug_types[x].physical_addiction + GET_DRUG_EDGE(i, x)) : 1 < 1) {
               if (AFF_FLAGGED(i, AFF_WITHDRAWAL_FORCE)) {
-                sprintf(buf, "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[x].name);
+                snprintf(buf, sizeof(buf), "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[x].name);
                 if (tsl > GET_DRUG_LASTWITH(i, x)) {
                   GET_DRUG_LASTWITH(i ,x)++;
                   GET_DRUG_EDGE(i, x)--;
@@ -670,14 +670,14 @@ void point_update(void)
                   }
                 }
               } else
-                sprintf(buf, "You crave some %s.\r\n", drug_types[x].name);
+                snprintf(buf, sizeof(buf), "You crave some %s.\r\n", drug_types[x].name);
               for (struct obj_data *obj = i->carrying; obj; obj = obj->next_content) {
                 if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_VAL(obj, 0) == x) {
                   do_use(i, obj->text.keywords, 0, 0);
                   if (GET_DRUG_DOSE(i) > GET_DRUG_TOLERANT(i, x))
-                    sprintf(buf, "You satisfy your craving for %s.\r\n", drug_types[x].name);
+                    snprintf(buf, sizeof(buf), "You satisfy your craving for %s.\r\n", drug_types[x].name);
                   else
-                    sprintf(buf, "You attempt to satisfy your craving for %s.\r\n", drug_types[x].name);
+                    snprintf(buf, sizeof(buf), "You attempt to satisfy your craving for %s.\r\n", drug_types[x].name);
                   break;
                 }
               }
@@ -730,7 +730,7 @@ void point_update(void)
   {
     float totaltime = 0;
     for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
-      sprintf(buf, "order/%ld", shop_table[shop_nr].vnum);
+      snprintf(buf, sizeof(buf), "order/%ld", shop_table[shop_nr].vnum);
       unlink(buf);
       if (shop_table[shop_nr].order) {
         if (!(fl = fopen(buf, "w"))) {
@@ -742,7 +742,7 @@ void point_update(void)
         for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next, i++) {
           totaltime = order->timeavail - time(0);
           if (!order->sent && totaltime < 0) {
-            sprintf(buf2, "%s has arrived at %s and is ready for pickup.\r\n", CAP(obj_proto[real_object(order->item)].text.name),
+            snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup.\r\n", CAP(obj_proto[real_object(order->item)].text.name),
                     shop_table[shop_nr].shopname);
             raw_store_mail(order->player, 0, mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name, (const char *) buf2);
             order->sent = TRUE;
@@ -829,7 +829,7 @@ void save_vehicles(void)
     }
      */
     
-    sprintf(buf, "veh/%07ld", v);
+    snprintf(buf, sizeof(buf), "veh/%07ld", v);
     v++;
     if (!(fl = fopen(buf, "w"))) {
       mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
@@ -1047,7 +1047,7 @@ void misc_update(void)
       for (struct sustain_data *sus = GET_SUSTAINED(ch); sus; sus = next) {
         next = sus->next;
         if (sus->spell > SPELL_SHADOW) {
-          sprintf(buf, "COWS GO MOO %s %d", GET_CHAR_NAME(ch), sus->spell);
+          snprintf(buf, sizeof(buf), "COWS GO MOO %s %d", GET_CHAR_NAME(ch), sus->spell);
           log(buf);
           continue;
         }
@@ -1134,50 +1134,50 @@ void misc_update(void)
         GET_DRUG_LASTFIX(ch, GET_DRUG_AFFECT(ch)) = time(0);
         switch (GET_DRUG_AFFECT(ch)) {
           case DRUG_ACTH:
-            sprintf(buf, "You feel a brief moment of vertigo.\r\n");
+            snprintf(buf, sizeof(buf), "You feel a brief moment of vertigo.\r\n");
             extern void check_adrenaline(struct char_data *ch, int mode);
             check_adrenaline(ch, 1);
             GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
             break;
           case DRUG_HYPER:
-            sprintf(buf, "The world seems to swirl around you as your mind is bombarded with feedback.\r\n");
+            snprintf(buf, sizeof(buf), "The world seems to swirl around you as your mind is bombarded with feedback.\r\n");
             GET_DRUG_DURATION(ch) = dam * 100;
             break;
           case DRUG_JAZZ:
-            sprintf(buf, "The world slows down around you.\r\n");
+            snprintf(buf, sizeof(buf), "The world slows down around you.\r\n");
             GET_DRUG_DURATION(ch) = 100 * srdice();
             break;
           case DRUG_KAMIKAZE:
-            sprintf(buf, "Your body feels alive with energy and the desire to fight.\r\n");
+            snprintf(buf, sizeof(buf), "Your body feels alive with energy and the desire to fight.\r\n");
             GET_DRUG_DURATION(ch) = 100 * srdice();
             break;
           case DRUG_PSYCHE:
-            sprintf(buf, "Your feel your mind racing.\r\n");
+            snprintf(buf, sizeof(buf), "Your feel your mind racing.\r\n");
             GET_DRUG_DURATION(ch) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
             break;
           case DRUG_BLISS:
-            sprintf(buf, "The world fades into bliss as your body becomes sluggish.\r\n");
+            snprintf(buf, sizeof(buf), "The world fades into bliss as your body becomes sluggish.\r\n");
             GET_DRUG_DURATION(ch) = MAX(1, 6 - GET_REAL_BOD(ch)) * 600;
             break;
           case DRUG_BURN:
-            sprintf(buf, "You suddenly feel very intoxicated.\r\n");
+            snprintf(buf, sizeof(buf), "You suddenly feel very intoxicated.\r\n");
             GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
             GET_COND(ch, COND_DRUNK) = FOOD_DRINK_MAX;
             break;
           case DRUG_CRAM:
-            sprintf(buf, "Your body feels alive with energy.\r\n");
+            snprintf(buf, sizeof(buf), "Your body feels alive with energy.\r\n");
             GET_DRUG_DURATION(ch) = MAX(1, 12 - GET_REAL_BOD(ch)) * 600;
             break;
           case DRUG_NITRO:
-            sprintf(buf, "You lose sense of yourself as your entire body comes alive with energy.\r\n");
+            snprintf(buf, sizeof(buf), "You lose sense of yourself as your entire body comes alive with energy.\r\n");
             GET_DRUG_DURATION(ch) = 100 * srdice();
             break;
           case DRUG_NOVACOKE:
-            sprintf(buf, "You feel euphoric and alert.\r\n");
+            snprintf(buf, sizeof(buf), "You feel euphoric and alert.\r\n");
             GET_DRUG_DURATION(ch) = MAX(1, 10 - GET_REAL_BOD(ch)) * 600;
             break;
           case DRUG_ZEN:
-            sprintf(buf, "You start to loose your sense of reality as your sight fills with hallucinations.\r\n");
+            snprintf(buf, sizeof(buf), "You start to loose your sense of reality as your sight fills with hallucinations.\r\n");
             GET_DRUG_DURATION(ch) = 100 * srdice();
             break;
         }

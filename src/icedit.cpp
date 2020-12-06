@@ -41,7 +41,7 @@ void write_ic_to_disk(int vnum)
   int zone = real_zone(vnum);
   FILE *fl;
 
-  sprintf(buf, "%s/%d.ic", MTX_PREFIX, vnum);
+  snprintf(buf, sizeof(buf), "%s/%d.ic", MTX_PREFIX, vnum);
   fl = fopen(buf, "w+");
   for (counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top;
@@ -165,7 +165,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
           new_ic_index = new struct index_data[top_of_ic + 2];
           new_ic_proto = new struct matrix_icon[top_of_ic + 2];
 
-          sprintf(buf,"%s wrote new IC #%ld", GET_CHAR_NAME(CH), d->edit_number);
+          snprintf(buf, sizeof(buf),"%s wrote new IC #%ld", GET_CHAR_NAME(CH), d->edit_number);
           mudlog(buf, CH, LOG_WIZLOG, TRUE);
           for (counter = 0; counter <= top_of_ic; counter++) {
             if (!found) {

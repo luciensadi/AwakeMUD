@@ -80,7 +80,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
       send_to_char(CH, "Ammo design saved!\r\n");
-      sprintf(buf, "a box of %s %s ammunition", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name, weapon_type[GET_AMMOBOX_WEAPON(OBJ)]);
+      snprintf(buf, sizeof(buf), "a box of %s %s ammunition", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name, weapon_type[GET_AMMOBOX_WEAPON(OBJ)]);
       OBJ->restring = str_dup(buf);
       GET_AMMOBOX_CREATOR(OBJ) = GET_IDNUM(CH);
       obj_to_char(OBJ, CH);
@@ -155,7 +155,7 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
   int csuccess = MIN((int)(success * ((float)GET_COST_BREAKUP(ch) / 100)), 10);
   if (csuccess == success)
     csuccess--;
-  sprintf(buf, "AmmoTest: Skill %d, Target %d, Success %d(c%d/t%d)", skill, target, success, csuccess, success - csuccess);
+  snprintf(buf, sizeof(buf), "AmmoTest: Skill %d, Target %d, Success %d(c%d/t%d)", skill, target, success, csuccess, success - csuccess);
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
   if (success > 0)
     GET_AMMOBOX_TIME_TO_COMPLETION(obj) = (int)((ammo_type[GET_AMMOBOX_TYPE(obj)].time / MAX(success - csuccess, 1)) * 60);

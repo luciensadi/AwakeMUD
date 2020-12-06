@@ -260,7 +260,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         obj_to_char(obj, johnson);
         if (!perform_give(johnson, ch, obj)) {
           char buf[512];
-          sprintf(buf, "Looks like your hands are full. You'll need %s for the run.", decapitalize_a_an(obj->text.name));
+          snprintf(buf, sizeof(buf), "Looks like your hands are full. You'll need %s for the run.", decapitalize_a_an(obj->text.name));
           do_say(johnson, buf, 0, 0);
           perform_drop(johnson, obj, SCMD_DROP, "drop", NULL);
         }
@@ -554,9 +554,9 @@ void reward(struct char_data *ch, struct char_data *johnson)
   GET_TKE(ch) += (int)(GET_KARMA(ch) / 100) - old;
   act("$n gives some nuyen to $N.", TRUE, johnson, 0, ch, TO_NOTVICT);
   act("You give some nuyen to $N.", TRUE, johnson, 0, ch, TO_CHAR);
-  sprintf(buf, "$n gives you %d nuyen.", nuyen);
+  snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", nuyen);
   act(buf, FALSE, johnson, 0, ch, TO_VICT);
-  sprintf(buf, "You gain %.2f karma.\r\n", ((float) karma / 100));
+  snprintf(buf, sizeof(buf), "You gain %.2f karma.\r\n", ((float) karma / 100));
   send_to_char(buf, ch);
   end_quest(ch);
 }
@@ -575,7 +575,7 @@ void new_quest(struct char_data *mob, bool force_assignation=FALSE)
     if (mob_index[mob->nr].func == johnson)
       mob_index[mob->nr].func = mob_index[mob->nr].sfunc;
     mob_index[mob->nr].sfunc = NULL;
-    sprintf(buf, "Stripping Johnson status from %s (%ld) due to mob not having any quests to assign.",
+    snprintf(buf, sizeof(buf), "Stripping Johnson status from %s (%ld) due to mob not having any quests to assign.",
             GET_NAME(mob), GET_MOB_VNUM(mob));
     mudlog(buf, NULL, LOG_SYSLOG, true);
     return;
@@ -695,7 +695,7 @@ SPECIAL(johnson)
     else if (strstr(argument, "no"))
       comm = CMD_JOB_NO;
     else {
-      sprintf(buf, "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
+      snprintf(buf, sizeof(buf), "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return FALSE;
     }
@@ -739,7 +739,7 @@ SPECIAL(johnson)
   
   if (AFF_FLAGGED(johnson, AFF_GROUP) && ch->master) {
     send_to_char("I don't know how you ended up leading this Johnson around, but you can't take quests from your charmies.\r\n", ch);
-    sprintf(buf, "WARNING: %s somehow managed to start leading Johnson %s.", GET_CHAR_NAME(ch), GET_NAME(johnson));
+    snprintf(buf, sizeof(buf), "WARNING: %s somehow managed to start leading Johnson %s.", GET_CHAR_NAME(ch), GET_NAME(johnson));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -946,7 +946,7 @@ SPECIAL(johnson)
       return TRUE;
     default:
       do_say(johnson, "Ugh, drank too much last night. Talk to me later when I've sobered up.", 0, 0);
-      sprintf(buf, "WARNING: Failed to evaluate Johnson tree and return successful message for Johnson '%s' (%ld). Values: comm = %d, spare1 = %ld, spare2 = %ld (maps to %ld)",
+      snprintf(buf, sizeof(buf), "WARNING: Failed to evaluate Johnson tree and return successful message for Johnson '%s' (%ld). Values: comm = %d, spare1 = %ld, spare2 = %ld (maps to %ld)",
               GET_NAME(johnson), GET_MOB_VNUM(johnson), comm, GET_SPARE1(johnson), GET_SPARE2(johnson), quest_table[GET_SPARE2(johnson)].vnum);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       break;
@@ -1039,7 +1039,7 @@ void list_detailed_quest(struct char_data *ch, long rnum)
   {
     int johnson = real_mobile(quest_table[rnum].johnson);
 
-    sprintf(buf, "Vnum: [%5ld], Rnum: [%ld], Johnson: [%s (%ld)]\r\n",
+    snprintf(buf, sizeof(buf), "Vnum: [%5ld], Rnum: [%ld], Johnson: [%s (%ld)]\r\n",
             quest_table[rnum].vnum, rnum,
             johnson < 0 ? "none" : GET_NAME(mob_proto+johnson),
             quest_table[rnum].johnson);
@@ -1050,33 +1050,35 @@ void list_detailed_quest(struct char_data *ch, long rnum)
     send_to_char(buf, ch);
     return;
   }
-
-  sprintf(buf + strlen(buf), "Time allowed: [%d], Minimum reputation: [%d], "
+  
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Time allowed: [%d], Minimum reputation: [%d], "
           "Maximum reputation: [%d]\r\n", quest_table[rnum].time,
           quest_table[rnum].min_rep, quest_table[rnum].max_rep);
 
-  sprintf(buf + strlen(buf), "Bonus nuyen: [%d], Bonus Karma: [%0.2f], "
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bonus nuyen: [%d], Bonus Karma: [%0.2f], "
           "Reward: [%d]\r\n", quest_table[rnum].nuyen,
           ((float)quest_table[rnum].karma / 100), quest_table[rnum].reward);
 
-  for (i = 0; i < quest_table[rnum].num_mobs; i++)
-    sprintf(buf + strlen(buf), "M%2d) %d nuyen/%0.2f: V%ld; %s (%d); %s (%d)\r\n",
+  for (i = 0; i < quest_table[rnum].num_mobs; i++) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "M%2d) %d nuyen/%0.2f: V%ld; %s (%d); %s (%d)\r\n",
             i, quest_table[rnum].mob[i].nuyen,
             ((float)quest_table[rnum].mob[i].karma / 100),
             quest_table[rnum].mob[i].vnum, sml[(int)quest_table[rnum].mob[i].load],
             quest_table[rnum].mob[i].l_data,
             smo[(int)quest_table[rnum].mob[i].objective],
             quest_table[rnum].mob[i].o_data);
+  }
 
 
-  for (i = 0; i < quest_table[rnum].num_objs; i++)
-    sprintf(buf + strlen(buf), "O%2d) %d nuyen/%0.2f: V%ld; %s (%d/%d); %s (%d)\r\n",
+  for (i = 0; i < quest_table[rnum].num_objs; i++) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "O%2d) %d nuyen/%0.2f: V%ld; %s (%d/%d); %s (%d)\r\n",
             i, quest_table[rnum].obj[i].nuyen,
             ((float)quest_table[rnum].obj[i].karma / 100),
             quest_table[rnum].obj[i].vnum, sol[(int)quest_table[rnum].obj[i].load],
             quest_table[rnum].obj[i].l_data, quest_table[rnum].obj[i].l_data2,
             soo[(int)quest_table[rnum].obj[i].objective],
             quest_table[rnum].obj[i].o_data);
+  }
 
   page_string(ch->desc, buf, 1);
 }
@@ -1246,7 +1248,7 @@ int write_quests_to_disk(int zone)
   FILE *fp;
   zone = real_zone(zone);
 
-  sprintf(buf, "world/qst/%d.qst", zone_table[zone].number);
+  snprintf(buf, sizeof(buf), "world/qst/%d.qst", zone_table[zone].number);
 
   if (!(fp = fopen(buf, "w+"))) {
     log_vfprintf("SYSERR: could not open file %d.qst", zone_table[zone].number);
@@ -1322,61 +1324,63 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
 
   for (i = 0; i < QUEST->num_objs; i++)
   {
-    sprintf(buf + strlen(buf), "%2d) ", i);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
     switch (QUEST->obj[i].load) {
     case QUEST_NONE:
       strcat(buf, "Not set");
       break;
     case QOL_JOHNSON:
-      sprintf(buf + strlen(buf), "Give %ld to Johnson", QUEST->obj[i].vnum);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Give %ld to Johnson", QUEST->obj[i].vnum);
       break;
     case QOL_TARMOB_I:
-      sprintf(buf + strlen(buf), "Give %ld to M%d ", QUEST->obj[i].vnum,
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Give %ld to M%d ", QUEST->obj[i].vnum,
               QUEST->obj[i].l_data);
       if (QUEST->obj[i].l_data >= 0 &&
           QUEST->obj[i].l_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) > -1)
-        sprintf(buf + strlen(buf), "(%s)",
-                GET_NAME(mob_proto+rnum));
+          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) > -1) {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)", GET_NAME(mob_proto+rnum));
+      }
       else
         strcat(buf, "(null)");
       break;
 
     case QOL_TARMOB_E:
-      sprintf(buf + strlen(buf), "Equip M%d ", QUEST->obj[i].l_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Equip M%d ", QUEST->obj[i].l_data);
 
       if (QUEST->obj[i].l_data >= 0 &&
           QUEST->obj[i].l_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) > -1)
-        sprintf(buf + strlen(buf), "(%s) ",
+          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) > -1) {
+                    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s) ",
                 GET_NAME(mob_proto+rnum));
+      }
 
       strcat(buf, "(null) ");
-      sprintf(buf + strlen(buf), "with %ld at %s", QUEST->obj[i].vnum,
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "with %ld at %s", QUEST->obj[i].vnum,
               wear_bits[QUEST->obj[i].l_data2]);
       break;
 
     case QOL_TARMOB_C:
-      sprintf(buf + strlen(buf), "Install %ld in M%d ", QUEST->obj[i].vnum,
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Install %ld in M%d ", QUEST->obj[i].vnum,
               QUEST->obj[i].l_data);
 
       if (QUEST->obj[i].l_data >= 0 &&
           QUEST->obj[i].l_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) > -1)
-        sprintf(buf + strlen(buf), "(%s)", GET_NAME(mob_proto+rnum));
+          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) > -1) {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)", GET_NAME(mob_proto+rnum));
+      }
       else
         strcat(buf, "(null)");
 
       break;
     case QOL_HOST:
-      sprintf(buf + strlen(buf), "Load %ld in host %d", QUEST->obj[i].vnum, QUEST->obj[i].l_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld in host %d", QUEST->obj[i].vnum, QUEST->obj[i].l_data);
       break;
     case QOL_LOCATION:
-      sprintf(buf + strlen(buf), "Load %ld in room %d", QUEST->obj[i].vnum,
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld in room %d", QUEST->obj[i].vnum,
               QUEST->obj[i].l_data);
       break;
     }
-    sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for ",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for ",
             QUEST->obj[i].nuyen, ((float)QUEST->obj[i].karma / 100));
     switch (QUEST->obj[i].objective) {
     case QUEST_NONE:
@@ -1386,17 +1390,18 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
       strcat(buf, "returning item to Johnson\r\n");
       break;
     case QOO_TAR_MOB:
-      sprintf(buf + strlen(buf), "delivering item to M%d ",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item to M%d ",
               QUEST->obj[i].o_data);
       if (QUEST->obj[i].o_data >= 0 &&
           QUEST->obj[i].o_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].o_data].vnum)) > -1)
-        sprintf(buf + strlen(buf), "(%s)\r\n", GET_NAME(mob_proto+rnum));
+          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].o_data].vnum)) > -1) {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)\r\n", GET_NAME(mob_proto+rnum));
+      }
       else
         strcat(buf, "(null)\r\n");
       break;
     case QOO_LOCATION:
-      sprintf(buf + strlen(buf), "delivering item to room %d\r\n",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item to room %d\r\n",
               QUEST->obj[i].o_data);
       break;
     case QOO_DSTRY_ONE:
@@ -1406,10 +1411,10 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
       strcat(buf, "each item destroyed\r\n");
       break;
     case QOO_UPLOAD:
-      sprintf(buf + strlen(buf), "uploading to host %d\n\n", QUEST->obj[i].o_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "uploading to host %d\n\n", QUEST->obj[i].o_data);
       break;
     case QOO_RETURN_PAY:
-      sprintf(buf + strlen(buf), "returning paydata from host %d\r\n",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "returning paydata from host %d\r\n",
               QUEST->obj[i].o_data);
     }
   }
@@ -1419,27 +1424,27 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
 void qedit_list_mob_objectives(struct descriptor_data *d)
 {
   int i, rnum = 0;
-
+  
   CLS(CH);
 
   *buf = '\0';
 
   for (i = 0; i < QUEST->num_mobs; i++)
   {
-    sprintf(buf + strlen(buf), "%2d) ", i);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
     switch (QUEST->mob[i].load) {
     case QUEST_NONE:
       strcat(buf, "Not set");
       break;
     case QML_LOCATION:
-      sprintf(buf + strlen(buf), "Load %ld (%s) at room %d",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) at room %d",
               QUEST->mob[i].vnum,
               (rnum = real_mobile(QUEST->mob[i].vnum)) > -1 ?
               GET_NAME(mob_proto+rnum) : "null",
               QUEST->mob[i].l_data);
       break;
     case QML_FOLQUESTER:
-      sprintf(buf + strlen(buf), "Load %ld (%s) at and follow quester",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) at and follow quester",
               QUEST->mob[i].vnum,
               (rnum = real_mobile(QUEST->mob[i].vnum)) > -1 ?
               GET_NAME(mob_proto+rnum) : "null");
@@ -1447,33 +1452,33 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
     }
     switch (QUEST->mob[i].objective) {
     case QUEST_NONE:
-      sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
               "nothing\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100));
       break;
     case QMO_LOCATION:
-      sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
               "escorting target to room %d\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100), QUEST->mob[i].o_data);
       break;
     case QMO_KILL_ONE:
-      sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
               "killing target\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100));
       break;
     case QMO_KILL_MANY:
-      sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
               "each target killed\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100));
       break;
     case QMO_KILL_ESCORTEE:
-      sprintf(buf + strlen(buf), "Target hunts M%d \r\n",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Target hunts M%d \r\n",
               QUEST->mob[i].o_data);
       if (QUEST->mob[i].o_data >= 0 &&
           QUEST->mob[i].o_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->mob[i].o_data].vnum)) > -1)
-        sprintf(buf + strlen(buf), "(%s)\r\n", GET_NAME(mob_proto+rnum));
-      else
+          (rnum = real_mobile(QUEST->mob[QUEST->mob[i].o_data].vnum)) > -1) {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)\r\n", GET_NAME(mob_proto+rnum));
+      } else
         strcat(buf, "(null)\r\n");
       break;
     }
@@ -1624,8 +1629,8 @@ void qedit_disp_menu(struct descriptor_data *d)
     e_time[0] = '\0';
   } else
   {
-    sprintf(s_time,"%d - ", QUEST->s_time);
-    sprintf(e_time,"%d", QUEST->e_time);
+    snprintf(s_time, sizeof(s_time), "%d - ", QUEST->s_time);
+    snprintf(e_time, sizeof(e_time), "%d", QUEST->e_time);
   }
   send_to_char(CH, "d) Johnson hours: %s%s%s%s\r\n", CCCYN(CH, C_CMP),
                s_time, e_time, CCNRM(CH, C_CMP));

@@ -161,23 +161,23 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   if (real_room(ch->in_room->dir_option[dir]->to_room->number) >= real_room(FIRST_CAB) &&
       real_room(ch->in_room->dir_option[dir]->to_room->number) <= real_room(LAST_CAB))
-    sprintf(buf2, "$n gets into the taxi.");
+    snprintf(buf2, sizeof(buf2), "$n gets into the taxi.");
   else if (vict)
   {
-    sprintf(buf1, "$n drag $N %s.", fulldirs[dir]);
-    sprintf(buf2, "$n drags %s %s.", GET_NAME(vict), fulldirs[dir]);
+    snprintf(buf1, sizeof(buf1), "$n drag $N %s.", fulldirs[dir]);
+    snprintf(buf2, sizeof(buf2), "$n drags %s %s.", GET_NAME(vict), fulldirs[dir]);
     act(buf1, FALSE, ch, 0, vict, TO_CHAR);
   }
   else if (ch->in_room->dir_option[dir]->go_into_thirdperson)
     strcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson);
   else if (ch->char_specials.leave)
-    sprintf(buf2, "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
+    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
   else if (IS_WATER(ch->in_room) && !IS_WATER(EXIT(ch, dir)->to_room))
-    sprintf(buf2, "$n climbs out of the water to the %s.", fulldirs[dir]);
+    snprintf(buf2, sizeof(buf2), "$n climbs out of the water to the %s.", fulldirs[dir]);
   else if (!IS_WATER(ch->in_room) && IS_WATER(EXIT(ch, dir)->to_room))
-    sprintf(buf2, "$n jumps into the water to the %s.", fulldirs[dir]);
+    snprintf(buf2, sizeof(buf2), "$n jumps into the water to the %s.", fulldirs[dir]);
   else
-    sprintf(buf2, "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
+    snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
   
   if (ch->in_room->dir_option[dir]->go_into_secondperson)
     send_to_char(ch, "%s\r\n", ch->in_room->dir_option[dir]->go_into_secondperson);
@@ -235,9 +235,9 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
                                    "Rain falls around you.\r\n",
                                    "Lightning flickers as the rain falls.\r\n"
                                  };
-    sprintf(buf, "You step out into the %s. ", time_of_day[weather_info.sunlight]);
+    snprintf(buf, sizeof(buf), "You step out into the %s. ", time_of_day[weather_info.sunlight]);
     if (weather_info.sunlight == SUN_DARK && weather_info.sky == SKY_CLOUDLESS)
-      sprintf(ENDOF(buf), "You see the %s moon in the cloudless sky.\r\n", moon[weather_info.moonphase]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You see the %s moon in the cloudless sky.\r\n", moon[weather_info.moonphase]);
     else
       strcat(buf, weather_line[weather_info.sky]);
     send_to_char(buf, ch);
@@ -247,19 +247,19 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   if (ch->desc != NULL)
     look_at_room(ch, 0);
   if (was_in->number >= FIRST_CAB && was_in->number <= LAST_CAB)
-    sprintf(buf2, "$n gets out of the taxi.");
+    snprintf(buf2, sizeof(buf2), "$n gets out of the taxi.");
   else if (vict)
-    sprintf(buf2, "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
+    snprintf(buf2, sizeof(buf2), "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
   else if (ch->in_room->dir_option[rev_dir[dir]] && ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson)
     strcpy(buf2, ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson);
   else if (ch->char_specials.arrive)
-    sprintf(buf2, "$n %s %s.", ch->char_specials.arrive, thedirs[rev_dir[dir]]);
+    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.arrive, thedirs[rev_dir[dir]]);
   else if (IS_WATER(was_in) && !IS_WATER(ch->in_room))
-    sprintf(buf2, "$n climbs out of the water from %s.", thedirs[rev_dir[dir]]);
+    snprintf(buf2, sizeof(buf2), "$n climbs out of the water from %s.", thedirs[rev_dir[dir]]);
   else if (!IS_WATER(was_in) && IS_WATER(ch->in_room))
-    sprintf(buf2, "$n jumps into the water from %s.", thedirs[rev_dir[dir]]);
+    snprintf(buf2, sizeof(buf2), "$n jumps into the water from %s.", thedirs[rev_dir[dir]]);
   else
-    sprintf(buf2, "$n %s %s.", (IS_WATER(ch->in_room) ?
+    snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ?
                                 "swims in from" : "arrives from"), thedirs[rev_dir[dir]]);
 
   if (IS_AFFECTED(ch, AFF_SNEAK))
@@ -417,7 +417,7 @@ void perform_fall(struct char_data *ch)
   char splat_msg[150];
   char long_fall_message[150];
   
-  sprintf(long_fall_message, "\r\n^RYour fingers slip, sending your stomach rising into your throat as you plummet towards the %s!^n\r\n\r\n",
+  snprintf(long_fall_message, sizeof(long_fall_message), "\r\n^RYour fingers slip, sending your stomach rising into your throat as you plummet towards the %s!^n\r\n\r\n",
           ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT) ? "bottom of the shaft" : (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) ? "floor" : "ground"));
 
   // run a loop and drop them through each room
@@ -440,11 +440,11 @@ void perform_fall(struct char_data *ch)
     levels++;
     meters += ch->in_room->z;
     was_in = ch->in_room;
-    sprintf(buf, "^R$n %s away from you%s!^n", levels > 1 ? "plummets" : "falls", levels > 1 ? " with a horrified scream" : "");
+    snprintf(buf, sizeof(buf), "^R$n %s away from you%s!^n", levels > 1 ? "plummets" : "falls", levels > 1 ? " with a horrified scream" : "");
     act(buf, TRUE, ch, 0, 0, TO_ROOM);
     char_from_room(ch);
     char_to_room(ch, was_in->dir_option[DOWN]->to_room);
-    sprintf(buf, "^R$n %s in from above!^n", levels > 1 ? "plummets" : "falls");
+    snprintf(buf, sizeof(buf), "^R$n %s in from above!^n", levels > 1 ? "plummets" : "falls");
     act(buf, TRUE, ch, 0, 0, TO_ROOM);
 #ifdef DEATH_FLAGS
     if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) &&
@@ -468,7 +468,7 @@ void perform_fall(struct char_data *ch)
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
       if (CH_IN_COMBAT(ch))
         stop_fighting(ch);
-      sprintf(buf, "%s ran into DeathTrap at %ld",
+      snprintf(buf, sizeof(buf), "%s ran into DeathTrap at %ld",
               GET_CHAR_NAME(ch), ch->in_room->number);
       mudlog(buf, ch, LOG_DEATHLOG, TRUE);
       char_from_room(ch);
@@ -542,7 +542,7 @@ void perform_fall(struct char_data *ch)
           strcpy(impact_noise, "crunching ");
         }
       }
-      sprintf(splat_msg, "^rA %sthud %s from below.^n\r\n", impact_noise, tmp_room->room_flags.IsSet(ROOM_ELEVATOR_SHAFT) ? "echoes" : "emanates");
+      snprintf(splat_msg, sizeof(splat_msg), "^rA %sthud %s from below.^n\r\n", impact_noise, tmp_room->room_flags.IsSet(ROOM_ELEVATOR_SHAFT) ? "echoes" : "emanates");
       
       while (in_room) {
         if (in_room != ch->in_room)
@@ -617,8 +617,8 @@ void move_vehicle(struct char_data *ch, int dir)
     }
   }
 
-  sprintf(buf2, "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
-  sprintf(buf1, "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
+  snprintf(buf2, sizeof(buf2), "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
+  snprintf(buf1, sizeof(buf1), "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
   
   if (veh->in_room->people)
   {
@@ -667,7 +667,7 @@ void move_vehicle(struct char_data *ch, int dir)
     r--;
     if (!found || v->follower->cspeed <= SPEED_IDLE) {
       stop_chase(v->follower);
-      sprintf(buf, "You seem to have lost the %s.\r\n", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You seem to have lost the %s.\r\n", GET_VEH_NAME(veh));
       send_to_char(buf, pilot);
       continue;
     }
@@ -678,7 +678,7 @@ void move_vehicle(struct char_data *ch, int dir)
     int success = resisted_test(veh_skill(pilot, v->follower), target, veh_skill(ch, veh), target2);
     if (success > 0) {
       send_to_char(pilot, "You gain ground.\r\n");
-      sprintf(buf, "A %s seems to catch up.\r\n", GET_VEH_NAME(v->follower));
+      snprintf(buf, sizeof(buf), "A %s seems to catch up.\r\n", GET_VEH_NAME(v->follower));
       send_to_char(buf, ch);
       for (int x = 0; r >= 0 && x < 2; r-- && x++) {
         for (door = 0; door < NUM_OF_DIRS; door++)
@@ -688,9 +688,9 @@ void move_vehicle(struct char_data *ch, int dir)
         perform_move(pilot, door, LEADER, NULL);
       }
     } else if (success == 0) {
-      sprintf(buf, "You chase a %s.\r\n", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You chase a %s.\r\n", GET_VEH_NAME(veh));
       send_to_char(buf, pilot);
-      sprintf(buf, "A %s maintains it's distance.\r\n", GET_VEH_NAME(v->follower));
+      snprintf(buf, sizeof(buf), "A %s maintains it's distance.\r\n", GET_VEH_NAME(v->follower));
       send_to_char(buf, ch);
       for (door = 0; door < NUM_OF_DIRS; door++)
         if (EXIT(v->follower, door))
@@ -699,7 +699,7 @@ void move_vehicle(struct char_data *ch, int dir)
       perform_move(pilot, door, LEADER, NULL);
     } else {
       send_to_char(pilot, "You lose ground.\r\n");
-      sprintf(buf, "A %s falls behind.\r\n", GET_VEH_NAME(v->follower));
+      snprintf(buf, sizeof(buf), "A %s falls behind.\r\n", GET_VEH_NAME(v->follower));
       send_to_char(buf, ch);
     }
     if ((get_speed(v->follower) > 80 && SECT(v->follower->in_room) == SPIRIT_CITY) || v->follower->in_room->icesheet[0] || SECT(v->follower->in_room) == SPIRIT_HEARTH)
@@ -866,9 +866,9 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   }
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
     if (EXIT(ch, dir)->keyword)
-      sprintf(buf2, "You pass through the closed %s.\r\n", fname(EXIT(ch, dir)->keyword));
+      snprintf(buf2, sizeof(buf2), "You pass through the closed %s.\r\n", fname(EXIT(ch, dir)->keyword));
     else
-      sprintf(buf2, "You pass through the closed door.\r\n");
+      snprintf(buf2, sizeof(buf2), "You pass through the closed door.\r\n");
     send_to_char(buf2, ch);
   }
   if (!IS_SET(extra, LEADER))
@@ -929,7 +929,7 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
   } else
   {                      /* try to locate the keyword */
     if (!*type) {
-      sprintf(buf2, "What is it you want to %s?\r\n", cmdname);
+      snprintf(buf2, sizeof(buf2), "What is it you want to %s?\r\n", cmdname);
       send_to_char(buf2, ch);
       return -1;
     }
@@ -941,7 +941,7 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
               !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
             return door;
 
-    sprintf(buf2, "There doesn't seem to be %s %s here.\r\n", AN(type), type);
+    snprintf(buf2, sizeof(buf2), "There doesn't seem to be %s %s here.\r\n", AN(type), type);
     send_to_char(buf2, ch);
     return -1;
   }
@@ -1014,7 +1014,7 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
   struct room_direction_data *back = NULL;
   
 
-  sprintf(buf, "$n %ss ", cmd_door[scmd]);
+  snprintf(buf, sizeof(buf), "$n %ss ", cmd_door[scmd]);
   if (!obj && ((other_room = EXIT(ch, door)->to_room)))
     if ((back = other_room->dir_option[rev_dir[door]]))
       if (back->to_room != ch->in_room)
@@ -1069,7 +1069,7 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
   }
 
   /* Notify the room */
-  sprintf(buf + strlen(buf), "%s%s.", ((obj) ? "" : "the "), (obj) ? "$p" :
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s.", ((obj) ? "" : "the "), (obj) ? "$p" :
           (EXIT(ch, door)->keyword ? "$F" : "door"));
   if (!(obj) || (obj->in_room))
     act(buf, FALSE, ch, obj, obj ? 0 : EXIT(ch, door)->keyword, TO_ROOM);
@@ -1077,7 +1077,7 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
   /* Notify the other room */
   if (((scmd == SCMD_OPEN) || (scmd == SCMD_CLOSE) || (scmd == SCMD_KNOCK)) && (back))
   {
-    sprintf(buf, "The %s is %s%s from the other side.\r\n",
+    snprintf(buf, sizeof(buf), "The %s is %s%s from the other side.\r\n",
             (back->keyword ? fname(back->keyword) : "door"), cmd_door[scmd],
             (scmd == SCMD_CLOSE) ? "d" : "ed");
     send_to_room(buf, EXIT(ch, door)->to_room);
@@ -1090,7 +1090,7 @@ int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_
   {
     if (keynum <= 0) {
       if (access_level(ch, LVL_BUILDER)) {
-        sprintf(buf, "That door can't be bypassed since its key vnum is %d. Give it a key vnum to make it bypassable.\r\n", keynum);
+        snprintf(buf, sizeof(buf), "That door can't be bypassed since its key vnum is %d. Give it a key vnum to make it bypassable.\r\n", keynum);
         send_to_char(buf, ch);
       } else {
         send_to_char("Odd - you can't seem to find an electronic lock.\r\n", ch);
@@ -1138,7 +1138,7 @@ ACMD(do_gen_door)
   }
 
   if (!*arg) {
-    sprintf(buf, "%s what?\r\n", cmd_door[subcmd]);
+    snprintf(buf, sizeof(buf), "%s what?\r\n", cmd_door[subcmd]);
     send_to_char(CAP(buf), ch);
     return;
   }
@@ -1174,19 +1174,19 @@ ACMD(do_gen_door)
       if (access_level(ch, LVL_ADMIN)) {
         send_to_char("You use your staff powers to summon the key.\r\n", ch);
       } else {
-        sprintf(buf, "You don't have the key for %s.\r\n", GET_VEH_NAME(veh));
+        snprintf(buf, sizeof(buf), "You don't have the key for %s.\r\n", GET_VEH_NAME(veh));
         send_to_char(buf, ch);
         return;
       }
     }
     if (subcmd == SCMD_UNLOCK) {
       if (!veh->locked) {
-        sprintf(buf, "%s is already unlocked.\r\n", GET_VEH_NAME(veh));
+        snprintf(buf, sizeof(buf), "%s is already unlocked.\r\n", GET_VEH_NAME(veh));
         send_to_char(buf, ch);
         return;
       }
       veh->locked = FALSE;
-      sprintf(buf, "You unlock %s.\r\n", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You unlock %s.\r\n", GET_VEH_NAME(veh));
       if (veh->type == VEH_BIKE)
         send_to_veh("The ignition clicks.\r\n", veh, NULL, FALSE);
       else if (veh->type == VEH_DRONE)
@@ -1197,12 +1197,12 @@ ACMD(do_gen_door)
       return;
     } else if (subcmd == SCMD_LOCK) {
       if (veh->locked) {
-        sprintf(buf, "%s is already locked.\r\n", GET_VEH_NAME(veh));
+        snprintf(buf, sizeof(buf), "%s is already locked.\r\n", GET_VEH_NAME(veh));
         send_to_char(buf, ch);
         return;
       }
       veh->locked = TRUE;
-      sprintf(buf, "You lock %s.\r\n", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You lock %s.\r\n", GET_VEH_NAME(veh));
       if (veh->type == VEH_BIKE)
         send_to_veh("The ignition clicks.\r\n", veh , NULL, FALSE);
       else if (veh->type == VEH_DRONE)
@@ -1246,9 +1246,9 @@ ACMD(do_gen_door)
     if (!(DOOR_IS_OPENABLE(ch, obj, door))) {
       char temp[50];
       if (obj) {
-        sprintf(temp, "You can't %s $p.", cmd_door[subcmd]);
+        snprintf(temp, sizeof(temp), "You can't %s $p.", cmd_door[subcmd]);
       } else {
-        sprintf(temp, "You can't %s the %s to %s.", cmd_door[subcmd], GET_DOOR_NAME(ch, door), thedirs[door]);
+        snprintf(temp, sizeof(temp), "You can't %s the %s to %s.", cmd_door[subcmd], GET_DOOR_NAME(ch, door), thedirs[door]);
       }
       act(temp, FALSE, ch, obj, 0, TO_CHAR);
       return;
@@ -1392,8 +1392,8 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       send_to_char("There is not enough room in there for that.\r\n", ch);
     else {
       strcpy(buf3, GET_VEH_NAME(inveh));
-      sprintf(buf, "%s drives into the back of %s.", buf3, GET_VEH_NAME(found_veh));
-      sprintf(buf2, "You drive into the back of %s.\r\n", GET_VEH_NAME(found_veh));
+      snprintf(buf, sizeof(buf), "%s drives into the back of %s.", buf3, GET_VEH_NAME(found_veh));
+      snprintf(buf2, sizeof(buf2), "You drive into the back of %s.\r\n", GET_VEH_NAME(found_veh));
       if (inveh->in_room->people)
         act(buf, 0, inveh->in_room->people, 0, 0, TO_ROOM);
       send_to_veh(buf2, inveh, NULL, TRUE);
@@ -1418,9 +1418,9 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   }
   door = ch->in_room;
   if (drag)
-    sprintf(buf2, "$n is dragged into %s.\r\n", GET_VEH_NAME(found_veh));
+    snprintf(buf2, sizeof(buf2), "$n is dragged into %s.\r\n", GET_VEH_NAME(found_veh));
   else
-    sprintf(buf2, "$n climbs into %s.\r\n", GET_VEH_NAME(found_veh));
+    snprintf(buf2, sizeof(buf2), "$n climbs into %s.\r\n", GET_VEH_NAME(found_veh));
   act(buf2, FALSE, ch, 0, 0, TO_ROOM);
   ch->vfront = front;
   char_to_veh(found_veh, ch);
@@ -1428,7 +1428,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     act("$n is dragged in.", FALSE, ch, 0, 0, TO_VEH);
   else {
     act("$n climbs in.", FALSE, ch, 0, 0, TO_VEH);
-    sprintf(buf2, "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
+    snprintf(buf2, sizeof(buf2), "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
     send_to_char(buf2, ch);
     GET_POS(ch) = POS_SITTING;
   }
@@ -1562,7 +1562,7 @@ ACMD(do_enter)
           }
 
 
-    sprintf(buf2, "There is no %s here.\r\n", buf);
+    snprintf(buf2, sizeof(buf2), "There is no %s here.\r\n", buf);
     send_to_char(buf2, ch);
   } else if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))
     send_to_char("You are already indoors.\r\n", ch);
@@ -1599,12 +1599,12 @@ void leave_veh(struct char_data *ch)
       send_to_char("There is not enough room to drive out of here.\r\n", ch);
       return;
     }
-    sprintf(buf, "You drive out of the back of %s.\r\n", GET_VEH_NAME(veh->in_veh));
-    sprintf(buf2, "%s drives out of the back.", GET_VEH_NAME(veh));
+    snprintf(buf, sizeof(buf), "You drive out of the back of %s.\r\n", GET_VEH_NAME(veh->in_veh));
+    snprintf(buf2, sizeof(buf2), "%s drives out of the back.", GET_VEH_NAME(veh));
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf2, veh->in_veh, NULL, FALSE);
     strcpy(buf3, GET_VEH_NAME(veh));
-    sprintf(buf, "%s drives out of the back of %s.", buf3, GET_VEH_NAME(veh->in_veh));
+    snprintf(buf, sizeof(buf), "%s drives out of the back of %s.", buf3, GET_VEH_NAME(veh->in_veh));
     // get_veh_in_room not needed here since the if-check guarantees that veh->in_veh->in_room is valid.
     struct room_data *room = veh->in_veh->in_room;
     veh_to_room(veh, room);
@@ -1650,7 +1650,7 @@ void leave_veh(struct char_data *ch)
     char_to_room(ch, door);
     GET_POS(ch) = POS_STANDING;
   }
-  sprintf(buf1, "$n climbs out of %s.", GET_VEH_NAME(veh));
+  snprintf(buf1, sizeof(buf1), "$n climbs out of %s.", GET_VEH_NAME(veh));
   act(buf1, FALSE, ch, 0, 0, TO_ROOM);
   for (k = ch->followers; k; k = next)
   {
@@ -1749,7 +1749,7 @@ ACMD(do_sit)
   case POS_RESTING:
     act("You stop resting, and sit up.", FALSE, ch, 0, 0, TO_CHAR);
     if (ch->in_veh) {
-      sprintf(buf, "%s stops resting.\r\n", GET_NAME(ch));
+      snprintf(buf, sizeof(buf), "%s stops resting.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
     } else
       act("$n stops resting.", TRUE, ch, 0, 0, TO_ROOM);
@@ -1795,7 +1795,7 @@ ACMD(do_rest)
   case POS_LYING:
     act("You rest your tired bones.", FALSE, ch, 0, 0, TO_CHAR);
     if (ch->in_veh) {
-      sprintf(buf, "%s rests.\r\n", GET_NAME(ch));
+      snprintf(buf, sizeof(buf), "%s rests.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
     } else
       act("$n rests.", TRUE, ch, 0, 0, TO_ROOM);
@@ -1843,7 +1843,7 @@ ACMD(do_lay)
   case POS_SITTING:
     act("You lean back until you're flat on the ground.", FALSE, ch, 0, 0, TO_CHAR);
     if (ch->in_veh) {
-      sprintf(buf, "%s puts the seat back.\r\n", GET_NAME(ch));
+      snprintf(buf, sizeof(buf), "%s puts the seat back.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
     } else
       act("$n lays on the ground.", TRUE, ch, 0, 0, TO_ROOM);
@@ -1891,7 +1891,7 @@ ACMD(do_sleep)
   case POS_LYING:
     send_to_char("You go to sleep.\r\n", ch);
     if (ch->in_veh) {
-      sprintf(buf, "%s lies down and falls asleep.\r\n", GET_NAME(ch));
+      snprintf(buf, sizeof(buf), "%s lies down and falls asleep.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
     } else
       act("$n lies down and falls asleep.", TRUE, ch, 0, 0, TO_ROOM);
@@ -1952,7 +1952,7 @@ ACMD(do_wake)
   else {
     send_to_char("You awaken, and sit up.\r\n", ch);
     if (ch->in_veh) {
-      sprintf(buf, "%s awakens.\r\n", GET_NAME(ch));
+      snprintf(buf, sizeof(buf), "%s awakens.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
     } else
       act("$n awakens.", TRUE, ch, 0, 0, TO_ROOM);

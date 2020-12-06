@@ -52,22 +52,22 @@ struct life_data lifestyle[] =
 /* First, the basics: finding the filename; loading/saving objects */
 
 /* Return a filename given a house vnum */
-bool House_get_filename(vnum_t vnum, char *filename)
+bool House_get_filename(vnum_t vnum, char *filename, int filename_size)
 {
   if (vnum == NOWHERE)
     return FALSE;
 
-  sprintf(filename, "house/%ld.house", vnum);
+  snprintf(filename, filename_size, "house/%ld.house", vnum);
   return TRUE;
 }
 
 // Same, but for storage.
-bool Storage_get_filename(vnum_t vnum, char *filename)
+bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size)
 {
   if (vnum == NOWHERE) 
     return FALSE;
 
-  sprintf(filename, "storage/%ld", vnum);
+  snprintf(filename, filename_size, "storage/%ld", vnum);
   return TRUE;
 }
 
@@ -85,7 +85,7 @@ bool House_load(struct house_control_rec *house)
   room = house->vnum;
   if ((rnum = real_room(room)) == NOWHERE)
     return FALSE;
-  if (!House_get_filename(room, fname))
+  if (!House_get_filename(room, fname, sizeof(fname)))
     return FALSE;
   if (!(fl.Open(fname, "r+b"))) /* no file found */
     return FALSE;
@@ -94,7 +94,7 @@ bool House_load(struct house_control_rec *house)
   fl.Close();
   for (int i = 0; i < MAX_GUESTS; i++)
   {
-    sprintf(buf, "GUESTS/Guest%d", i);
+    snprintf(buf, sizeof(buf), "GUESTS/Guest%d", i);
     long p = data.GetLong(buf, 0);
     if (!p || !(does_player_exist(p)))
       p = 0;
@@ -105,18 +105,18 @@ bool House_load(struct house_control_rec *house)
   for (int i = 0; i < num_objs; i++)
   {
     const char *sect_name = data.GetIndexSection("HOUSE", i);
-    sprintf(buf, "%s/Vnum", sect_name);
+    snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
     vnum = data.GetLong(buf, 0);
     if ((obj = read_object(vnum, VIRTUAL))) {
       // Wipe its cost-- we're restoring from the saved value.
       GET_OBJ_COST(obj) = 0;
       
-      sprintf(buf, "%s/Name", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Name", sect_name);
       obj->restring = str_dup(data.GetString(buf, NULL));
-      sprintf(buf, "%s/Photo", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
       obj->photo = str_dup(data.GetString(buf, NULL));
       for (x = 0; x < NUM_VALUES; x++) {
-        sprintf(buf, "%s/Value %d", sect_name, x);
+        snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
       }
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
@@ -129,16 +129,16 @@ bool House_load(struct house_control_rec *house)
             GET_OBJ_VAL(obj, i) = 0;
             attach_attachment_to_weapon(attach, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
           }
-      sprintf(buf, "%s/Condition", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
       GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
-      sprintf(buf, "%s/Timer", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
       GET_OBJ_TIMER(obj) = data.GetInt(buf, GET_OBJ_TIMER(obj));
-      sprintf(buf, "%s/Attempt", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Attempt", sect_name);
       GET_OBJ_ATTEMPT(obj) = data.GetInt(buf, 0);
-      sprintf(buf, "%s/Cost", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
       // At this point, the cost is restored to a positive value. MAX() guards against edge case of attachment being edited after it was attached.
       GET_OBJ_COST(obj) += MAX(0, data.GetInt(buf, GET_OBJ_COST(obj)));
-      sprintf(buf, "%s/Inside", sect_name);
+      snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
       inside = data.GetInt(buf, 0);
       if (inside > 0) {
         if (inside == last_in)
@@ -285,10 +285,10 @@ void House_crashsave(vnum_t vnum)
   
   // House filename is not kosher? Skip. Otherwise, populate buf with filename.
   if (house) {
-    if (!House_get_filename(vnum, buf))
+    if (!House_get_filename(vnum, buf, sizeof(buf)))
       return;
   } else
-    if (!Storage_get_filename(vnum, buf))
+    if (!Storage_get_filename(vnum, buf, sizeof(buf)))
       return;
   
   // If it has no guests and no objects, why save it?
@@ -318,14 +318,14 @@ void House_delete_file(vnum_t vnum, char *name)
     return;
   if (!(fl = fopen(name, "rb"))) {
     if (errno != ENOENT) {
-      sprintf(buf, "SYSERR: Error deleting house file #%ld. (1)", vnum);
+      snprintf(buf, sizeof(buf), "SYSERR: Error deleting house file #%ld. (1)", vnum);
       perror(buf);
     }
     return;
   }
   fclose(fl);
   if (unlink(name) < 0) {
-    sprintf(buf, "SYSERR: Error deleting house file #%ld. (2)", vnum);
+    snprintf(buf, sizeof(buf), "SYSERR: Error deleting house file #%ld. (2)", vnum);
     perror(buf);
   }
 }
@@ -385,13 +385,13 @@ void display_room_list_to_character(struct char_data *ch, struct landlord *lord)
   for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
     if (!room_record->owner) {
       if (on_first_entry_in_column) {
-        sprintf(buf, "%-5s    %-6s    %-8d",
+        snprintf(buf, sizeof(buf), "%-5s    %-6s    %-8d",
                 room_record->name,
                 lifestyle[room_record->mode].name,
                 lord->basecost * lifestyle[room_record->mode].cost);
         on_first_entry_in_column = FALSE;
       } else {
-        sprintf(buf2, "   %-5s    %-6s    %-8d\r\n",
+        snprintf(buf2, sizeof(buf2), "   %-5s    %-6s    %-8d\r\n",
                 room_record->name,
                 lifestyle[room_record->mode].name,
                 lord->basecost * lifestyle[room_record->mode].cost);
@@ -404,7 +404,7 @@ void display_room_list_to_character(struct char_data *ch, struct landlord *lord)
   if (!on_first_entry_in_column)
     strcat(buf, "\r\n\n");
   else
-    sprintf(buf, "\r\n");
+    snprintf(buf, sizeof(buf), "\r\n");
   send_to_char(buf, ch);
 }
 
@@ -471,7 +471,7 @@ SPECIAL(landlord_spec)
     }
     int cost = lord->basecost * lifestyle[room_record->mode].cost, origcost = cost;
 
-    sprintf(buf3, "That will be %d nuyen.", cost);
+    snprintf(buf3, sizeof(buf3), "That will be %d nuyen.", cost);
     do_say(recep, buf3, 0, 0);
     for (obj = ch->carrying; obj; obj = obj->next_content)
       if (GET_OBJ_VNUM(obj) == 119 && GET_OBJ_VAL(obj, 0) == GET_IDNUM(ch)) {
@@ -504,7 +504,7 @@ SPECIAL(landlord_spec)
     }
     struct obj_data *key = read_object(room_record->key, VIRTUAL);
     if (!key) {
-      sprintf(buf, "SYSERR: Room record for %ld specifies key vnum %ld, but it does not exist! '%s' (%ld) can't access %s apartment.",
+      snprintf(buf, sizeof(buf), "SYSERR: Room record for %ld specifies key vnum %ld, but it does not exist! '%s' (%ld) can't access %s apartment.",
               room_record->vnum, room_record->key, GET_CHAR_NAME(ch), GET_IDNUM(ch), HSHR(ch));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       do_say(recep, "I seem to have misplaced your key. I've refunded you the nuyen in cash.", 0, 0);
@@ -535,7 +535,7 @@ SPECIAL(landlord_spec)
       ROOM_FLAGS(&world[real_room(room_record->vnum)]).RemoveBit(ROOM_HOUSE);
       ROOM_FLAGS(&world[room_record->atrium]).RemoveBit(ROOM_ATRIUM);
       House_save_control();
-      House_get_filename(room_record->vnum, buf2);
+      House_get_filename(room_record->vnum, buf2, MAX_STRING_LENGTH);
       House_delete_file(room_record->vnum, buf2);
       do_say(recep, "I hope you enjoyed your time here.", 0, 0);
     }
@@ -552,7 +552,7 @@ SPECIAL(landlord_spec)
       do_say(recep, "But that isn't your room.", 0, 0);
     else {
       int cost = lord->basecost * lifestyle[room_record->mode].cost, origcost = cost;
-      sprintf(buf3, "That will be %d nuyen.", cost);
+      snprintf(buf3, sizeof(buf3), "That will be %d nuyen.", cost);
       do_say(recep, buf3, 0, 0);
       for (obj = ch->carrying; obj; obj = obj->next_content)
         if (GET_OBJ_VNUM(obj) == 119 && GET_OBJ_VAL(obj, 0) == GET_IDNUM(ch)) {
@@ -603,7 +603,7 @@ SPECIAL(landlord_spec)
     else {
       if (room_record->date - time(0) < 0)
         strcpy(buf2, "Your rent has expired on that apartment.");
-      else sprintf(buf2, "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
+      else snprintf(buf2, sizeof(buf2), "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
       do_say(recep, buf2, 0, 0);
     }
     return TRUE;
@@ -679,7 +679,7 @@ void House_boot(void)
           House_load(temp);
         else {
           temp->owner = 0;
-          House_get_filename(temp->vnum, buf2);
+          House_get_filename(temp->vnum, buf2, MAX_STRING_LENGTH);
           House_delete_file(temp->vnum, buf2);
           
           // Move all vehicles from this apartment to a public garage.
@@ -687,7 +687,7 @@ void House_boot(void)
           while (world[real_room(temp->vnum)].vehicles) {
             veh = world[real_room(temp->vnum)].vehicles;
 #ifdef DEBUG
-            sprintf(buf, "debug: Shifting vehicle '%s' (%ld) from '%s' (%ld) to '%s' (%ld).",
+            snprintf(buf, sizeof(buf), "debug: Shifting vehicle '%s' (%ld) from '%s' (%ld) to '%s' (%ld).",
                     veh->description, veh->idnum,
                     world[real_room(temp->vnum)].name,
                     world[real_room(temp->vnum)].number,
@@ -740,7 +740,7 @@ void hcontrol_list_houses(struct char_data *ch)
         own_name = get_player_name(house->owner);
         if (!own_name)
           own_name = str_dup("<UNDEF>");
-        sprintf(buf, "%7ld %7ld    0     %-12s\r\n",
+        snprintf(buf, sizeof(buf), "%7ld %7ld    0     %-12s\r\n",
                 house->vnum, world[house->atrium].number, CAP(own_name));
         send_to_char(buf, ch);
         DELETE_ARRAY_IF_EXTANT(own_name);
@@ -773,7 +773,7 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
   {
     ROOM_FLAGS(&world[real_house]).RemoveBit(ROOM_HOUSE);
 
-    House_get_filename(i->vnum, buf2);
+    House_get_filename(i->vnum, buf2, MAX_STRING_LENGTH);
     House_delete_file(i->vnum, buf2);
     i->owner = 0;
     send_to_char("House deleted.\r\n", ch);
@@ -944,7 +944,7 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
     if (!temp)
       continue;
 
-    sprintf(buf2, "%s, ", temp);
+    snprintf(buf2, sizeof(buf2), "%s, ", temp);
     strcat(buf, CAP(buf2));
     x++;
     DELETE_ARRAY_IF_EXTANT(temp);

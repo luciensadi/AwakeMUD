@@ -174,7 +174,7 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
       // Check for our usual conditions.
       if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM)) {
         // Found a target, stop processing vehicles.
-        sprintf(buf, "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
+        snprintf(buf, sizeof(buf), "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
         MOBACT_DEBUG(ch, buf);
         break;
       }
@@ -186,7 +186,7 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
     for (vict = ch->in_veh->in_room->people; vict; vict = vict->next_in_room) {
       // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
       if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->in_room) || GET_PHYSICAL(vict) <= 0) {
-        sprintf(buf, "m_p_i_v_g: Skipping target %s due to precondition failure.", GET_CHAR_NAME(vict));
+        snprintf(buf, sizeof(buf), "m_p_i_v_g: Skipping target %s due to precondition failure.", GET_CHAR_NAME(vict));
         MOBACT_DEBUG(ch, buf);
         continue;
       }
@@ -195,13 +195,13 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
         // If victim's equipment is illegal here, blast them.
         if (GET_EQ(vict, i) && violates_zsp(GET_SECURITY_LEVEL(ch->in_veh->in_room), vict, i, ch)) {
           // Target found, stop processing.
-          sprintf(buf, "m_p_i_v_g: Target found, attacking %s.", GET_CHAR_NAME(vict));
+          snprintf(buf, sizeof(buf), "m_p_i_v_g: Target found, attacking %s.", GET_CHAR_NAME(vict));
           MOBACT_DEBUG(ch, buf);
           break;
         }
       }
       
-      sprintf(buf, "m_p_i_v_g: Skipping target %s since their gear is OK.", GET_CHAR_NAME(vict));
+      snprintf(buf, sizeof(buf), "m_p_i_v_g: Skipping target %s since their gear is OK.", GET_CHAR_NAME(vict));
       MOBACT_DEBUG(ch, buf);
     }
   }
@@ -212,7 +212,7 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
     return FALSE;
   }
   
-  sprintf(buf, "guard %s: ch = %s, tveh = %s, vict = %s", AFF_FLAGGED(ch, AFF_PILOT) ? "driver" : "gunner",
+  snprintf(buf, sizeof(buf), "guard %s: ch = %s, tveh = %s, vict = %s", AFF_FLAGGED(ch, AFF_PILOT) ? "driver" : "gunner",
           GET_NAME(ch), tveh ? tveh->name : "none", vict ? GET_NAME(vict) : "none");
   mudlog(buf, ch, LOG_SYSLOG, TRUE);
   
@@ -270,7 +270,7 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
       
     if (vehicle_is_valid_mob_target(tveh, TRUE)) {
       // Found a valid target, stop looking.
-      sprintf(buf, "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
+      snprintf(buf, sizeof(buf), "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
       MOBACT_DEBUG(ch, buf);
       break;
     }
@@ -282,14 +282,14 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
     for (vict = ch->in_veh->in_room->people; vict; vict = vict->next_in_room) {
       // Skip conditions: Invisible, no-hassle, already downed, or is an NPC who is neither a player's astral body nor a player's escortee.
       if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->in_room) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0) {
-        sprintf(buf, "m_p_i_v_a: Skipping %s - precondition failure.", GET_CHAR_NAME(vict));
+        snprintf(buf, sizeof(buf), "m_p_i_v_a: Skipping %s - precondition failure.", GET_CHAR_NAME(vict));
         MOBACT_DEBUG(ch, buf);
         continue;
       }
       
       // Attack the escortee if we're hunting it specifically.
       if (hunting_escortee(ch, vict)) {
-        sprintf(buf, "m_p_i_v_a: Target found (escortee), attacking %s.", GET_CHAR_NAME(vict));
+        snprintf(buf, sizeof(buf), "m_p_i_v_a: Target found (escortee), attacking %s.", GET_CHAR_NAME(vict));
         MOBACT_DEBUG(ch, buf);
         break;
       }
@@ -313,7 +313,7 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
            (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))
         // Kick their ass.
       {
-        sprintf(buf, "m_p_i_v_a: Target found (racism / aggro / alarm): %s.", GET_CHAR_NAME(vict));
+        snprintf(buf, sizeof(buf), "m_p_i_v_a: Target found (racism / aggro / alarm): %s.", GET_CHAR_NAME(vict));
         MOBACT_DEBUG(ch, buf);
         break;
       }
@@ -325,7 +325,7 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
     return FALSE;
   }
   
-  sprintf(buf, "aggro %s: ch = %s, tveh = %s, vict = %s", AFF_FLAGGED(ch, AFF_PILOT) ? "driver" : "gunner",
+  snprintf(buf, sizeof(buf), "aggro %s: ch = %s, tveh = %s, vict = %s", AFF_FLAGGED(ch, AFF_PILOT) ? "driver" : "gunner",
           GET_NAME(ch), tveh ? tveh->name : "none", vict ? GET_NAME(vict) : "none");
   mudlog(buf, ch, LOG_SYSLOG, TRUE);
   
@@ -690,9 +690,9 @@ bool mobact_process_movement(struct char_data *ch) {
       if (EXIT(ch->in_veh, door) &&
           ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
           !ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
-        // sprintf(buf3, "Driver %s attempted to move %s from %s [%ld].", GET_NAME(ch), fulldirs[door], GET_ROOM_NAME(ch->in_veh->in_room), GET_ROOM_VNUM(ch->in_veh->in_room));
+        // snprintf(buf3, sizeof(buf3), "Driver %s attempted to move %s from %s [%ld].", GET_NAME(ch), fulldirs[door], GET_ROOM_NAME(ch->in_veh->in_room), GET_ROOM_VNUM(ch->in_veh->in_room));
         perform_move(ch, door, LEADER, NULL);
-        // sprintf(ENDOF(buf3), "  After move, driver now in %s [%ld].", GET_ROOM_NAME(ch->in_veh->in_room), GET_ROOM_VNUM(ch->in_veh->in_room));
+        // spnrintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "  After move, driver now in %s [%ld].", GET_ROOM_NAME(ch->in_veh->in_room), GET_ROOM_VNUM(ch->in_veh->in_room));
         // mudlog(buf3, ch, LOG_SYSLOG, TRUE);
         return TRUE;
       }
@@ -743,9 +743,9 @@ bool mobact_process_movement(struct char_data *ch) {
           if (target_floor == 0)
             strcpy(push_arg, "g");
           else if (target_floor < 0)
-            sprintf(push_arg, "b%d", -target_floor);
+            snprintf(push_arg, sizeof(push_arg), "b%d", -target_floor);
           else
-            sprintf(push_arg, "%d", target_floor);
+            snprintf(push_arg, sizeof(push_arg), "%d", target_floor);
           
           process_elevator(ch->in_room, ch, get_push_command_index(), push_arg);
           return TRUE;
@@ -1042,7 +1042,7 @@ bool attempt_reload(struct char_data *mob, int pos)
   bool found = FALSE;
   
   if (!(gun = GET_EQ(mob, pos))) {
-    sprintf(buf, "SYSERR: attempt_reload received invalid wield position %d for %s.", pos, GET_CHAR_NAME(mob));
+    snprintf(buf, sizeof(buf), "SYSERR: attempt_reload received invalid wield position %d for %s.", pos, GET_CHAR_NAME(mob));
     mudlog(buf, mob, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -1061,7 +1061,7 @@ bool attempt_reload(struct char_data *mob, int pos)
   magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
   GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(gun);
   GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(gun);
-  sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
+  snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
   DELETE_ARRAY_IF_EXTANT(magazine->restring);
   magazine->restring = strdup(buf);
   found = TRUE;
@@ -1075,7 +1075,7 @@ bool attempt_reload(struct char_data *mob, int pos)
       if (!GET_MAGAZINE_BONDED_MAXAMMO(magazine)) {
         GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(gun);
         GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(gun);
-        sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
+        snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
         DELETE_ARRAY_IF_EXTANT(magazine->restring);
         magazine->restring = strdup(buf);
         found = TRUE;

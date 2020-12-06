@@ -52,16 +52,16 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
 {
   char buf[MAX_STRING_LENGTH];
 #ifdef QUERY_DEBUG
-  sprintf(buf, "Executing query: %s", query);
+  snprintf(buf, sizeof(buf), "Executing query: %s", query);
   log(buf);
 #endif
   
   int result = mysql_query(mysql, query);
   
   if (mysql_errno(mysql)) {
-    sprintf(buf, "MYSQLERROR: %s", mysql_error(mysql));
+    snprintf(buf, sizeof(buf), "MYSQLERROR: %s", mysql_error(mysql));
     log(buf);
-    sprintf(buf, "Offending query: %s", query);
+    snprintf(buf, sizeof(buf), "Offending query: %s", query);
     log(buf);
   }
   return result;
@@ -164,10 +164,10 @@ static void init_char_strings(char_data *ch)
   {
     char temp[256];
 
-    sprintf(temp, "A %s %s", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
+    snprintf(temp, sizeof(temp), "A %s %s", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
     ch->player.physical_text.name = str_dup(temp);
 
-    sprintf(temp, "A %s %s voice", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
+    snprintf(temp, sizeof(temp), "A %s %s voice", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
     ch->player.physical_text.room_desc = str_dup(temp);
 
     ch->player.physical_text.look_desc = str_dup("A fairly nondescript thing.\n");    
@@ -342,7 +342,7 @@ void advance_level(struct char_data * ch)
 
   playerDB.SaveChar(ch);
 
-  sprintf(buf, "%s [%s] advanced to %s.",
+  snprintf(buf, sizeof(buf), "%s [%s] advanced to %s.",
           GET_CHAR_NAME(ch), ch->desc->host, status_ratings[(int)GET_LEVEL(ch)]);
   mudlog(buf, ch, LOG_MISCLOG, TRUE);
 }
@@ -363,7 +363,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   MYSQL_RES *res;
   MYSQL_ROW row;
   // TODO: Sanitize this. It shouldn't be exploitable to begin with, but better safe than sorry.
-  sprintf(buf, "SELECT * FROM pfiles WHERE Name='%s';", name);
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", name);
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
     return FALSE;
@@ -458,7 +458,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   mysql_free_result(res);
 
   if (GET_LEVEL(ch) > 0) {
-    sprintf(buf, "SELECT * FROM pfiles_immortdata WHERE idnum=%ld;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_immortdata WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     if ((row = mysql_fetch_row(res))) {
@@ -469,7 +469,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
       POOFOUT(ch) = str_dup((strcmp(row[5], "(null)") == 0 ? DEFAULT_POOFOUT_STRING : row[5]));
     }
   } else {
-    sprintf(buf, "SELECT * FROM pfiles_drugs WHERE idnum=%ld;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_drugs WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     int x = 0;
@@ -488,7 +488,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
 
 
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    sprintf(buf, "SELECT * FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     if ((row = mysql_fetch_row(res))) {
@@ -501,7 +501,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
 
   if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-    sprintf(buf, "SELECT * FROM pfiles_magic WHERE idnum=%ld;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_magic WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     if ((row = mysql_fetch_row(res))) {
@@ -521,7 +521,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
     mysql_free_result(res);
     if (GET_TRADITION(ch) == TRAD_ADEPT) {
-      sprintf(buf, "SELECT * FROM pfiles_adeptpowers WHERE idnum=%ld;", GET_IDNUM(ch));
+      snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_adeptpowers WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       res = mysql_use_result(mysql);
       while ((row = mysql_fetch_row(res)))
@@ -529,7 +529,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
       mysql_free_result(res);
     }
     if (GET_GRADE(ch) > 0) {
-      sprintf(buf, "SELECT * FROM pfiles_metamagic WHERE idnum=%ld;", GET_IDNUM(ch));
+      snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_metamagic WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       res = mysql_use_result(mysql);
       while ((row = mysql_fetch_row(res)))
@@ -537,7 +537,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
       mysql_free_result(res);
     }
     if (GET_TRADITION(ch) != TRAD_ADEPT) {
-      sprintf(buf, "SELECT * FROM pfiles_spells WHERE idnum=%ld ORDER BY Category DESC, Name DESC;", GET_IDNUM(ch));
+      snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_spells WHERE idnum=%ld ORDER BY Category DESC, Name DESC;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       res = mysql_use_result(mysql);
       while ((row = mysql_fetch_row(res))) {
@@ -553,7 +553,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
   
     if (GET_TRADITION(ch) == TRAD_HERMETIC) {
-      sprintf(buf, "SELECT * FROM pfiles_spirits WHERE idnum=%ld;", GET_IDNUM(ch));
+      snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_spirits WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       res = mysql_use_result(mysql);
       struct spirit_data *last = NULL;
@@ -573,7 +573,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
       mysql_free_result(res);
     }
   }
-  sprintf(buf, "SELECT * FROM pfiles_skills WHERE idnum=%ld;", GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_skills WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res)))
@@ -581,7 +581,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   mysql_free_result(res);
 
 
-  sprintf(buf, "SELECT * FROM pfiles_alias WHERE idnum=%ld;", GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_alias WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res))) {
@@ -600,7 +600,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
   mysql_free_result(res);
 
-  sprintf(buf, "SELECT * FROM pfiles_memory WHERE idnum=%ld;", GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_memory WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res))) {
@@ -612,7 +612,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
   mysql_free_result(res);
 
-  sprintf(buf, "SELECT * FROM pfiles_ignore WHERE idnum=%ld;", GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_ignore WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res))) {
@@ -623,14 +623,14 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
   mysql_free_result(res);
 
-  sprintf(buf, "SELECT * FROM pfiles_quests WHERE idnum=%ld;", GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_quests WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res)))
     GET_LQUEST(ch, atoi(row[1])) = atoi(row[2]);
   mysql_free_result(res);
 
-  sprintf(buf, "SELECT * FROM pfiles_drugdata WHERE idnum=%ld;", GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_drugdata WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   if ((row = mysql_fetch_row(res))) {
@@ -644,7 +644,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   {
     struct obj_data *obj, *last_obj = NULL;
     int vnum = 0, last_in = 0, inside = 0;
-    sprintf(buf, "SELECT * FROM pfiles_cyberware WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_cyberware WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
@@ -682,7 +682,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   {
     struct obj_data *obj;
     int vnum = 0;
-    sprintf(buf, "SELECT * FROM pfiles_bioware WHERE idnum=%ld;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_bioware WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
@@ -702,7 +702,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     struct obj_data *obj = NULL, *last_obj = NULL, *attach = NULL;
     long vnum;
     int inside = 0, last_in = 0;
-    sprintf(buf, "SELECT * FROM pfiles_worn WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_worn WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
@@ -767,7 +767,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     struct obj_data *last_obj = NULL, *obj, *attach = NULL;
     int vnum = 0;
     int inside = 0, last_in = 0;
-    sprintf(buf, "SELECT * FROM pfiles_inv WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_inv WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
@@ -829,7 +829,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
   
   // Load pgroup membership data.
-  sprintf(buf, "SELECT * FROM pfiles_playergroups WHERE idnum=%ld;", GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_playergroups WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   if (res && (row = mysql_fetch_row(res))) {
@@ -865,7 +865,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
   
   // Load pgroup invitation data.
-  sprintf(buf, "SELECT * FROM `playergroup_invitations` WHERE `idnum`=%ld;", GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "SELECT * FROM `playergroup_invitations` WHERE `idnum`=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   Pgroup_invitation *pgi;
@@ -985,7 +985,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
 
   MYSQL_RES *res;
   MYSQL_ROW row;
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld;", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE idnum=%ld;", GET_IDNUM(player));
   if (!mysql_wrapper(mysql, buf)) {
     res = mysql_use_result(mysql);
     row = mysql_fetch_row(res);
@@ -1029,7 +1029,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       if (player->was_in_room) {
         if (player->was_in_room->number <= 1) {
           // Their was_in_room is invalid; put them at Dante's.
-          sprintf(buf, "SYSERR: save_char(): %s is at %ld and has was_in_room (world array index) %ld.",
+          snprintf(buf, sizeof(buf), "SYSERR: save_char(): %s is at %ld and has was_in_room (world array index) %ld.",
                   GET_CHAR_NAME(player), player->in_room->number, player->was_in_room->number);
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           GET_LAST_IN(player) = RM_ENTRANCE_TO_DANTES;
@@ -1054,7 +1054,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   if (GET_PGROUP_MEMBER_DATA(player) && GET_PGROUP(player))
     pgroup_num = GET_PGROUP(player)->get_idnum();
   
-  sprintf(buf, "UPDATE pfiles SET AffFlags='%s', PlrFlags='%s', PrfFlags='%s', Bod=%d, "\
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET AffFlags='%s', PlrFlags='%s', PrfFlags='%s', Bod=%d, "\
                "Qui=%d, Str=%d, Cha=%d, Intel=%d, Wil=%d, EssenceTotal=%d, EssenceHole=%d, "\
                "BiowareIndex=%d, HighestIndex=%d, Pool_MaxHacking=%d, Pool_Body=%d, "\
                "Pool_Dodge=%d, Cash=%ld, Bank=%ld, Karma=%d, Rep=%d, Notor=%d, TKE=%d, "\
@@ -1096,20 +1096,20 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   }
   affect_total(player);
   if (PLR_FLAGGED(player, PLR_NOT_YET_AUTHED)) {
-    sprintf(buf, "UPDATE pfiles_chargendata SET AttPoints=%d, SkillPoints=%d, ForcePoints=%d, RestringPoints=%d WHERE idnum=%ld;",
+    snprintf(buf, sizeof(buf), "UPDATE pfiles_chargendata SET AttPoints=%d, SkillPoints=%d, ForcePoints=%d, RestringPoints=%d WHERE idnum=%ld;",
                  GET_ATT_POINTS(player), GET_SKILL_POINTS(player), GET_FORCE_POINTS(player), GET_RESTRING_POINTS(player),
                  GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
   }
   if (GET_SKILL_DIRTY_BIT(player)) {
-    sprintf(buf, "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
     strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, rank) VALUES (");
     for (i = MIN_SKILLS; i < MAX_SKILLS; i++)
       if (GET_SKILL(player, i)) {
         if (q)
           strcat(buf, "), (");
-        sprintf(ENDOF(buf), "%ld, %d, %d", GET_IDNUM(player), i, REAL_SKILL(player, i));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, REAL_SKILL(player, i));
         q = 1;
       }
     if (q) {
@@ -1118,12 +1118,12 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     }
     GET_SKILL_DIRTY_BIT(player) = FALSE;
   }
-  sprintf(buf, "UPDATE pfiles_drugdata SET Affect=%d, Stage=%d, Duration=%d, Dose=%d WHERE idnum=%ld;", 
+  snprintf(buf, sizeof(buf), "UPDATE pfiles_drugdata SET Affect=%d, Stage=%d, Duration=%d, Dose=%d WHERE idnum=%ld;", 
                GET_DRUG_AFFECT(player), GET_DRUG_STAGE(player), GET_DRUG_DURATION(player), GET_DRUG_DOSE(player),
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   
-  sprintf(buf, "DELETE FROM pfiles_drugs WHERE idnum=%ld", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_drugs WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_drugs (idnum, DrugType, Addict, Doses, Edge, LastFix, Addtime, Tolerant, LastWith) VALUES (");
   for (i = 1, q = 0; i < NUM_DRUGS; i++) {    
@@ -1131,7 +1131,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
         GET_DRUG_ADDTIME(player, i) || GET_DRUG_TOLERANT(player, i) || GET_DRUG_LASTWITH(player, i)) {
       if (q)
         strcat(buf, "), (");
-      sprintf(ENDOF(buf), "%ld, %d, %d, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i), 
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d, %d, %d, %d, %d", GET_IDNUM(player), i, GET_DRUG_ADDICT(player, i), 
                           GET_DRUG_DOSES(player, i), GET_DRUG_EDGE(player, i), GET_DRUG_LASTFIX(player, i),
                           GET_DRUG_ADDTIME(player, i), GET_DRUG_TOLERANT(player, i), GET_DRUG_LASTWITH(player, i));
       q = 1;
@@ -1142,20 +1142,20 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_wrapper(mysql, buf);
   }
   if (GET_TRADITION(player) != TRAD_MUNDANE) {
-    sprintf(buf, "UPDATE pfiles_magic SET Mag=%d, Pool_Casting=%d, Pool_SpellDefense=%d, Pool_Drain=%d, Pool_Reflecting=%d,"\
+    snprintf(buf, sizeof(buf), "UPDATE pfiles_magic SET Mag=%d, Pool_Casting=%d, Pool_SpellDefense=%d, Pool_Drain=%d, Pool_Reflecting=%d,"\
                  "UsedGrade=%d, ExtraPower=%d, PowerPoints=%d, Sig=%d, Masking=%d WHERE idnum=%ld;", GET_REAL_MAG(player), GET_CASTING(player),
                  GET_SDEFENSE(player), GET_DRAIN(player), GET_REFLECT(player), GET_GRADE(player), player->points.extrapp, 
                  GET_PP(player), GET_SIG(player), GET_MASKING(player), GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
     if (GET_TRADITION(player) == TRAD_ADEPT) {
-      sprintf(buf, "DELETE FROM pfiles_adeptpowers WHERE idnum=%ld", GET_IDNUM(player));
+      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_adeptpowers WHERE idnum=%ld", GET_IDNUM(player));
       mysql_wrapper(mysql, buf);
       strcpy(buf, "INSERT INTO pfiles_adeptpowers (idnum, powernum, rank) VALUES (");
       for (i = 0, q = 0; i < ADEPT_NUMPOWER; i++)
         if (GET_POWER_TOTAL(player, i)) {
           if (q)
             strcat(buf, "), (");
-          sprintf(ENDOF(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_POWER_TOTAL(player, i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_POWER_TOTAL(player, i));
           q = 1;
         }
       if (q) {
@@ -1165,14 +1165,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     }
 
     if (player->spells) {
-      sprintf(buf, "DELETE FROM pfiles_spells WHERE idnum=%ld", GET_IDNUM(player));
+      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spells WHERE idnum=%ld", GET_IDNUM(player));
       mysql_wrapper(mysql, buf);
       strcpy(buf, "INSERT INTO pfiles_spells (idnum, Name, Type, SubType, Rating, Category) VALUES (");
       q = 0;
       for (struct spell_data *temp = player->spells; temp; temp = temp->next) {
         if (q)
           strcat(buf, "), (");
-        sprintf(ENDOF(buf), "%ld, '%s', %d, %d, %d, %d", GET_IDNUM(player), temp->name, temp->type, temp->subtype, temp->force, spells[temp->type].category);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', %d, %d, %d, %d", GET_IDNUM(player), temp->name, temp->type, temp->subtype, temp->force, spells[temp->type].category);
         q = 1;
       }
       if (q) {
@@ -1182,14 +1182,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     }
 
     if (GET_GRADE(player) > 0) {
-      sprintf(buf, "DELETE FROM pfiles_metamagic WHERE idnum=%ld", GET_IDNUM(player));
+      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_metamagic WHERE idnum=%ld", GET_IDNUM(player));
       mysql_wrapper(mysql, buf);
       strcpy(buf, "INSERT INTO pfiles_metamagic (idnum, metamagicnum, rank) VALUES (");
       for (i = 0, q = 0; i < META_MAX; i++)
         if (GET_METAMAGIC(player, i)) {
           if (q)
             strcat(buf, "), (");
-          sprintf(ENDOF(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_METAMAGIC(player, i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_METAMAGIC(player, i));
           q = 1;
        }
       if (q) {
@@ -1198,14 +1198,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       }
     }
     if (GET_SPIRIT(player) && GET_TRADITION(player) == TRAD_HERMETIC) {
-      sprintf(buf, "DELETE FROM pfiles_spirits WHERE idnum=%ld", GET_IDNUM(player));
+      snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spirits WHERE idnum=%ld", GET_IDNUM(player));
       mysql_wrapper(mysql, buf);
       strcpy(buf, "INSERT INTO pfiles_spirits (idnum, Type, Rating, Services, SpiritID) VALUES (");
       q = 0;
       for (struct spirit_data *spirit = GET_SPIRIT(player); spirit; spirit = spirit->next, q++) {
         if (q)
           strcat(buf, "), (");
-        sprintf(ENDOF(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d, %d, %d", GET_IDNUM(player), spirit->type, spirit->force, spirit->services, spirit->id);
         q = 1;
       }
       if (q) {
@@ -1214,14 +1214,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       }
     }
   }
-  sprintf(buf, "DELETE FROM pfiles_quests WHERE idnum=%ld", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_quests WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_quests (idnum, number, questnum) VALUES (");
   for (i = 0, q = 0; i <= QUEST_TIMER - 1; i++) {
     if (GET_LQUEST(player ,i)) {
       if (q)
         strcat(buf, "), (");
-      sprintf(ENDOF(buf), "%ld, %d, %ld", GET_IDNUM(player), i, GET_LQUEST(player, i));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %ld", GET_IDNUM(player), i, GET_LQUEST(player, i));
       q = 1;
     }
   }
@@ -1230,14 +1230,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_wrapper(mysql, buf);
   }
 
-  sprintf(buf, "DELETE FROM pfiles_memory WHERE idnum=%ld", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_memory WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_memory (idnum, remembered, asname) VALUES (");
   q = 0;
   for (struct remem *b = GET_MEMORY(player); b; b = b->next) {
     if (q)
       strcat(buf, "), (");
-    sprintf(ENDOF(buf), "%ld, %ld, '%s'", GET_IDNUM(player), b->idnum, prepare_quotes(buf3, b->mem, sizeof(buf3) / sizeof(buf3[0])));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, '%s'", GET_IDNUM(player), b->idnum, prepare_quotes(buf3, b->mem, sizeof(buf3) / sizeof(buf3[0])));
     q = 1;
   }
   if (q) {
@@ -1245,14 +1245,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_wrapper(mysql, buf);
   }
 
-  sprintf(buf, "DELETE FROM pfiles_ignore WHERE idnum=%ld", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_ignore WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_ignore (idnum, remembered) VALUES (");
   q = 0;
   for (struct remem *b = GET_IGNORE(player); b; b = b->next) {
     if (q)
       strcat(buf, "), (");
-    sprintf(ENDOF(buf), "%ld, %ld", GET_IDNUM(player), b->idnum);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld", GET_IDNUM(player), b->idnum);
     q = 1;
   }
   if (q) {
@@ -1260,14 +1260,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_wrapper(mysql, buf);
   }
 
-  sprintf(buf, "DELETE FROM pfiles_alias WHERE idnum=%ld", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_alias WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_alias (idnum, command, replacement) VALUES (");
   q = 0;
   for (struct alias *a = GET_ALIASES(player); a; a = a->next) {
     if (q)
       strcat(buf, "), (");
-    sprintf(ENDOF(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
     q = 1;
   }
   if (q) {
@@ -1275,7 +1275,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_wrapper(mysql, buf);
   }
 
-  sprintf(buf, "DELETE FROM pfiles_bioware WHERE idnum=%ld", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_bioware WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   if (player->bioware) {
     strcpy(buf, "INSERT INTO pfiles_bioware (idnum, Vnum, Cost, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
@@ -1285,10 +1285,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
         if (q)
           strcat(buf, "), (");
-        sprintf(ENDOF(buf), "%ld, %ld, %d", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));
 
         for (int x = 0; x < NUM_VALUES; x++)
-          sprintf(ENDOF(buf), ", %d", GET_OBJ_VAL(obj, x));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
         q = 1;;
       }
     }
@@ -1298,7 +1298,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     }
   }
 
-  sprintf(buf, "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   int level = 0, posi = 0;
   q = 0;
@@ -1307,19 +1307,19 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
            "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES ");
     bool first_pass = TRUE;
     for (struct obj_data *obj = player->cyberware; obj;) {
-      sprintf(ENDOF(buf), "%s(%ld, %ld, %d, '%s', '%s'", first_pass ? "" : ", ", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s(%ld, %ld, %d, '%s', '%s'", first_pass ? "" : ", ", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
                           obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
                           obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
       first_pass = FALSE;
       q = 1;
       
       if (GET_OBJ_VAL(obj, 2) == 4) {
-        sprintf(ENDOF(buf), "0, 0, 0, %d, 0, 0, %d, %d, %d, 0, 0, 0", GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 6), 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "0, 0, 0, %d, 0, 0, %d, %d, %d, 0, 0, 0", GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 6), 
                            GET_OBJ_VAL(obj, 7), GET_OBJ_VAL(obj, 8));
       } else
         for (int x = 0; x < NUM_VALUES; x++)
-          sprintf(ENDOF(buf), ", %d", GET_OBJ_VAL(obj, x));
-      sprintf(ENDOF(buf), ", %d, %d)", level, posi++);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d)", level, posi++);
       
       
       if (obj->contains) {
@@ -1342,7 +1342,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     }
   }
 
-  sprintf(buf, "DELETE FROM pfiles_worn WHERE idnum=%ld", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   struct obj_data *obj = NULL;
   level = posi = 0;
@@ -1353,12 +1353,12 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
       strcpy(buf, "INSERT INTO pfiles_worn (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
               "Value7, Value8, Value9, Value10, Value11, Inside, Position, Timer, ExtraFlags, Attempt, Cond, posi) VALUES (");
-      sprintf(ENDOF(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
                           obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
                           obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
       for (int x = 0; x < NUM_VALUES; x++)
-        sprintf(ENDOF(buf), ", %d", GET_OBJ_VAL(obj, x));
-      sprintf(ENDOF(buf), ", %d, %d, %d, '%s', %d, %d, %d);", level, i, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(), 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, %d, '%s', %d, %d, %d);", level, i, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(), 
                           GET_OBJ_ATTEMPT(obj), GET_OBJ_CONDITION(obj), posi++);
       mysql_wrapper(mysql, buf);
     }
@@ -1384,19 +1384,19 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     else
       obj = obj->next_content;
   }
-  sprintf(buf, "DELETE FROM pfiles_inv WHERE idnum=%ld", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   level = posi = 0;
   for (obj = player->carrying; obj;) {
     if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
       strcpy(buf, "INSERT INTO pfiles_inv (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
               "Value7, Value8, Value9, Value10, Value11, Inside, Timer, ExtraFlags, Attempt, Cond, posi) VALUES (");
-      sprintf(ENDOF(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
                           obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
                           obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
       for (int x = 0; x < NUM_VALUES; x++)
-        sprintf(ENDOF(buf), ", %d", GET_OBJ_VAL(obj, x));
-      sprintf(ENDOF(buf), ", %d, %d, '%s', %d, %d, %d);", level, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(), 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, '%s', %d, %d, %d);", level, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(), 
                           GET_OBJ_ATTEMPT(obj), GET_OBJ_CONDITION(obj), posi++);
       mysql_wrapper(mysql, buf);
     }
@@ -1415,7 +1415,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       obj = obj->next_content;
   }
   if (GET_LEVEL(player) > 1) {
-    sprintf(buf,  "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber) VALUES (%ld, %d, %d, %d)"
+    snprintf(buf, sizeof(buf),  "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber) VALUES (%ld, %d, %d, %d)"
                   " ON DUPLICATE KEY UPDATE"
                   "   `InvisLevel` = VALUES(`InvisLevel`),"
                   "   `IncogLevel` = VALUES(`IncogLevel`),"
@@ -1426,7 +1426,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   
   // Save pgroup membership data.
   if (GET_PGROUP_MEMBER_DATA(player) && GET_PGROUP(player)) {
-    sprintf(buf, "INSERT INTO pfiles_playergroups (`idnum`, `group`, `Rank`, `Privileges`) VALUES ('%ld', '%ld', '%d', '%s')"
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_playergroups (`idnum`, `group`, `Rank`, `Privileges`) VALUES ('%ld', '%ld', '%d', '%s')"
                  " ON DUPLICATE KEY UPDATE"
                  "   `group` = VALUES(`group`),"
                  "   `Rank` = VALUES(`Rank`),"
@@ -1438,7 +1438,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_wrapper(mysql, buf);
   } else {
     // Wipe any existing pgroup membership data.
-    sprintf(buf, "DELETE FROM pfiles_playergroups WHERE idnum=%ld", GET_IDNUM(player));
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_playergroups WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
   }
 
@@ -1788,7 +1788,7 @@ bool does_player_exist(char *name)
   char prepare_quotes_buf[250];
   if (!name || !*name || !str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL))
     return FALSE;
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE Name='%s';", prepare_quotes(prepare_quotes_buf, name, 250));
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE Name='%s';", prepare_quotes(prepare_quotes_buf, name, 250));
   if (mysql_wrapper(mysql, buf))
     return FALSE;
   MYSQL_RES *res = mysql_use_result(mysql);
@@ -1804,7 +1804,7 @@ bool does_player_exist(char *name)
 bool does_player_exist(long id)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld AND name != '%s';", id, CHARACTER_DELETED_NAME_FOR_SQL);
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE idnum=%ld AND name != '%s';", id, CHARACTER_DELETED_NAME_FOR_SQL);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -1819,7 +1819,7 @@ bool does_player_exist(long id)
 vnum_t get_player_id(char *name)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE name=\"%s\";", name);
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE name=\"%s\";", name);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -1835,7 +1835,7 @@ vnum_t get_player_id(char *name)
 char *get_player_name(vnum_t id)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT Name FROM pfiles WHERE idnum=%ld;", id);
+  snprintf(buf, sizeof(buf), "SELECT Name FROM pfiles WHERE idnum=%ld;", id);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -1850,64 +1850,64 @@ char *get_player_name(vnum_t id)
 
 void DeleteChar(long idx)
 {
-  sprintf(buf, "DELETE FROM pfiles_immortdata WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_immortdata WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_chargendata WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_chargendata WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_magic WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_magic WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_drugdata WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_drugdata WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_drugs WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_drugs WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_skills WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_skills WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_adeptpowers WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_adeptpowers WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_metamagic WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_metamagic WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_quests WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_quests WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_spirits WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spirits WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_bioware WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_bioware WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_cyberware WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_inv WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_worn WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_spells WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spells WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_memory WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_memory WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_alias WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_alias WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
-  sprintf(buf, "DELETE FROM pfiles_memory WHERE remembered=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_memory WHERE remembered=%ld", idx);
   mysql_wrapper(mysql, buf);
   
   // Update playergroup info.
-  sprintf(buf, "SELECT `group` FROM pfiles_playergroups WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "SELECT `group` FROM pfiles_playergroups WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
   if ((row = mysql_fetch_row(res))) {
     mysql_free_result(res);
     char *cname = get_player_name(idx);
-    sprintf(buf, "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), cname);
+    snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), cname);
     delete [] cname;
     mysql_wrapper(mysql, buf);
-    sprintf(buf, "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
     mysql_wrapper(mysql, buf);
   } else {
     mysql_free_result(res);
   }
-  sprintf(buf, "DELETE FROM playergroup_invitations WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "DELETE FROM playergroup_invitations WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   
-  sprintf(buf, "UPDATE pfiles SET Name='%s', Password='', NoDelete=TRUE WHERE idnum=%ld", CHARACTER_DELETED_NAME_FOR_SQL, idx); 
-//  sprintf(buf, "DELETE FROM pfiles WHERE idnum=%ld", idx);
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET Name='%s', Password='', NoDelete=TRUE WHERE idnum=%ld", CHARACTER_DELETED_NAME_FOR_SQL, idx); 
+//  snprintf(buf, sizeof(buf), "DELETE FROM pfiles WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
 }
 
@@ -1921,7 +1921,7 @@ void idle_delete()
     log("IDLEDELETE- Could not open extra socket, aborting");
     return;
   }
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE lastd <= %ld AND nodelete = 0 ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50));
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE lastd <= %ld AND nodelete = 0 ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50));
   mysql_wrapper(mysqlextra, buf);
   MYSQL_RES *res = mysql_use_result(mysqlextra);
   MYSQL_ROW row;
@@ -1936,7 +1936,7 @@ void idle_delete()
   }
   mysql_free_result(res);
   mysql_close(mysqlextra);
-  sprintf(buf, "IDLEDELETE- %d Deleted.", deleted);
+  snprintf(buf, sizeof(buf), "IDLEDELETE- %d Deleted.", deleted);
   log(buf);
 }
 
@@ -1970,7 +1970,7 @@ void auto_repair_obj(struct obj_data *obj) {
         GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
       }
       if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
-        sprintf(buf, "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
+        snprintf(buf, sizeof(buf), "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
                 GET_OBJ_NAME(obj),
                 old_storage,
                 GET_CYBERDECK_USED_STORAGE(obj)

@@ -242,7 +242,7 @@ void redit_disp_sector_menu(struct descriptor_data * d)
   CLS(CH);
   for (counter = 0; counter < NUM_SPIRITS; counter += 2)
   {
-    sprintf(buf, "%2d) %-10s     %2d) %-10s\r\n",
+    snprintf(buf, sizeof(buf), "%2d) %-10s     %2d) %-10s\r\n",
             counter, spirits[counter].name,
             counter + 1, counter + 1 < NUM_SPIRITS ?
             spirits[counter + 1].name : "");
@@ -398,7 +398,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case 'Y': {
         int counter2;
         if (!vnum_from_non_connected_zone(d->edit_number)) {
-          sprintf(buf,"%s wrote new room #%ld",
+          snprintf(buf, sizeof(buf),"%s wrote new room #%ld",
                   GET_CHAR_NAME(d->character), d->edit_number);
           mudlog(buf, d->character, LOG_WIZLOG, TRUE);
         }
@@ -419,7 +419,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           else if (world_room_peaceful && !edit_room_peaceful) {
             d->edit_room->peaceful -= 1;
             if (d->edit_room->peaceful < 0) {
-              sprintf(buf, "SYSERR: Changing PEACEFUL flag of room caused world[room_num].peaceful to be %d.",
+              snprintf(buf, sizeof(buf), "SYSERR: Changing PEACEFUL flag of room caused world[room_num].peaceful to be %d.",
                       d->edit_room->peaceful);
               mudlog(buf, NULL, LOG_SYSLOG, TRUE);
               d->edit_room->peaceful = 0;
@@ -1292,7 +1292,7 @@ void write_world_to_disk(int vnum)
 
   // ideally, this would just fill a VTable with vals...maybe one day
 
-  sprintf(buf, "%s/%d.wld", WLD_PREFIX,
+  snprintf(buf, sizeof(buf), "%s/%d.wld", WLD_PREFIX,
           zone_table[znum].number);
   fp = fopen(buf, "w+");
   for (counter = zone_table[znum].number * 100;

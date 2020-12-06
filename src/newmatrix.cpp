@@ -85,7 +85,7 @@ void check_trigger(rnum_t host, struct char_data *ch)
         struct matrix_icon *ic;
         ic = read_ic(trig->ic, VIRTUAL);
         if (!ic) {
-          sprintf(buf, "SYSERR: Attempted to process trigger for non-existent IC. Read failure caused on host %ld, trigger step %d, IC %ld.", host, trig->step, trig->ic);
+          snprintf(buf, sizeof(buf), "SYSERR: Attempted to process trigger for non-existent IC. Read failure caused on host %ld, trigger step %d, IC %ld.", host, trig->step, trig->ic);
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
         }
         ic->ic.target = PERSONA->idnum;
@@ -143,18 +143,18 @@ void dumpshock(struct matrix_icon *icon)
   if (icon->decker && icon->decker->ch)
   {
     send_to_char(icon->decker->ch, "You are dumped from the matrix!\r\n");
-    sprintf(buf, "%s depixelizes and vanishes from the host.\r\n", icon->name);
+    snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", icon->name);
     send_to_host(icon->in_host, buf, icon, FALSE);
     int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security);
     int dam = convert_damage(stage(resist, matrix[icon->in_host].colour));
     for (struct obj_data *cyber = icon->decker->ch->cyberware; cyber; cyber = cyber->next_content)
       if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK) {
         if (GET_OBJ_VAL(cyber, 3) == DATA_INDUCTION)
-          sprintf(buf, "$n's hand suddenly recoils from $s induction pad, electricity arcing between the two surfaces!");
-        else sprintf(buf, "$n suddenly jerks forward and rips the jack out of $s head!");
+          snprintf(buf, sizeof(buf), "$n's hand suddenly recoils from $s induction pad, electricity arcing between the two surfaces!");
+        else snprintf(buf, sizeof(buf), "$n suddenly jerks forward and rips the jack out of $s head!");
         break;
       } else if (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK)) {
-        sprintf(buf, "$n suddenly jerks forward and rips the jack out of $s eye!");
+        snprintf(buf, sizeof(buf), "$n suddenly jerks forward and rips the jack out of $s eye!");
         break;
       }
     act(buf, FALSE, icon->decker->ch, NULL, NULL, TO_ROOM);
@@ -237,7 +237,7 @@ void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
 {
   if (success >= 2 && targ->decker->deck)
   {
-    sprintf(buf, "%s uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
+    snprintf(buf, sizeof(buf), "%s uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
     send_to_icon(targ, buf);
     while (success >= 2 && targ->decker->mpcp > 0) {
       success -= 2;
@@ -721,7 +721,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       icon->decker->tally += iconrating;
       if (icon->decker->located)
         icon->decker->tally++;
-      sprintf(buf, "%s shatters into a million pieces and vanishes from the node.\r\n", CAP(targ->name));
+      snprintf(buf, sizeof(buf), "%s shatters into a million pieces and vanishes from the node.\r\n", CAP(targ->name));
       send_to_host(icon->in_host, buf, targ, TRUE);
       if (targ->ic.options.IsSet(IC_TRAP) && real_ic(targ->ic.trap) > 0) {
         struct matrix_icon *trap = read_ic(targ->ic.trap, VIRTUAL);
@@ -736,29 +736,29 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 }
 
 const char *get_plaintext_matrix_score_health(struct char_data *ch) {
-  sprintf(buf2, "Persona Condition: %d\r\n", PERSONA->condition);
-  sprintf(ENDOF(buf2), "Your Physical Condition: %d / %d\r\n", (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
+  snprintf(buf2, sizeof(buf2), "Persona Condition: %d\r\n", PERSONA->condition);
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Your Physical Condition: %d / %d\r\n", (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
   return buf2;
 }
 
 const char *get_plaintext_matrix_score_stats(struct char_data *ch, int detect) {
-  sprintf(buf2, "TN to detect you: %d\r\n", detect);
-  sprintf(ENDOF(buf2), "Hacking Pool: %d / %d\r\n", MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch));
-  sprintf(ENDOF(buf2), "Max %d hacking dice usable per action.\r\n", GET_MAX_HACKING(ch));
-  sprintf(ENDOF(buf2), "Persona Programs:\r\nBod: %d\r\nEvasion: %d\r\nMasking: %d\r\nSensors: %d\r\n",
+  snprintf(buf2, sizeof(buf2), "TN to detect you: %d\r\n", detect);
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Hacking Pool: %d / %d\r\n", MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Max %d hacking dice usable per action.\r\n", GET_MAX_HACKING(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Persona Programs:\r\nBod: %d\r\nEvasion: %d\r\nMasking: %d\r\nSensors: %d\r\n",
           DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor);
   return buf2;
 }
 
 const char *get_plaintext_matrix_score_deck(struct char_data *ch) {
-  sprintf(buf2, "Deck Status:\r\nHardening: %d\r\nMPCP: %d\r\nI/O Speed: %d\r\nResponse Increase: %d\r\n",
+  snprintf(buf2, sizeof(buf2), "Deck Status:\r\nHardening: %d\r\nMPCP: %d\r\nI/O Speed: %d\r\nResponse Increase: %d\r\n",
           DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_OBJ_VAL(DECKER->deck, 4) : 0, DECKER->response);
   return buf2;
 }
 
 const char *get_plaintext_matrix_score_memory(struct char_data *ch) {
-  sprintf(buf2, "Active Memory: %d\r\n", GET_CYBERDECK_ACTIVE_MEMORY(DECKER->deck));
-  sprintf(ENDOF(buf2), "Storage Memory: %d / %d total\r\n",
+  snprintf(buf2, sizeof(buf2), "Active Memory: %d\r\n", GET_CYBERDECK_ACTIVE_MEMORY(DECKER->deck));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Storage Memory: %d / %d total\r\n",
           GET_CYBERDECK_FREE_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck));
   return buf2;
 }
@@ -806,19 +806,19 @@ ACMD(do_matrix_score)
       return;
     }
     
-    sprintf(buf, "Sorry, that's not a valid score subsheet. Your options are HEALTH, STATS, DECK, and MEMORY.\r\n");
+    snprintf(buf, sizeof(buf), "Sorry, that's not a valid score subsheet. Your options are HEALTH, STATS, DECK, and MEMORY.\r\n");
     send_to_icon(PERSONA, buf);
     return;
   }
   
-  sprintf(buf, "You are connected to the matrix.\r\n");
+  snprintf(buf, sizeof(buf), "You are connected to the matrix.\r\n");
   
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     strcat(buf, get_plaintext_matrix_score_health(ch));
     strcat(buf, get_plaintext_matrix_score_stats(ch, detect));
     strcat(buf, get_plaintext_matrix_score_deck(ch));
   } else {
-    sprintf(ENDOF(buf), "  Condition:^B%3d^n       Physical:^R%3d(%2d)^n\r\n"
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Condition:^B%3d^n       Physical:^R%3d(%2d)^n\r\n"
             "  Detection:^r%3d^n       Hacking Pool:^g%3d/%3d (%2d)^n\r\n"
             "Persona Programs:\r\n"
             "       Bod:^g%3d^n       Evasion:^g%3d^n\r\n"
@@ -972,7 +972,7 @@ ACMD(do_locate)
         GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) = matrix[PERSONA->in_host].vnum;
         GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj) = matrix[PERSONA->in_host].colour;
         GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = PERSONA->idnum;
-        sprintf(buf, "Paydata %s - %dMp", matrix[PERSONA->in_host].name, GET_DECK_ACCESSORY_FILE_SIZE(obj));
+        snprintf(buf, sizeof(buf), "Paydata %s - %dMp", matrix[PERSONA->in_host].name, GET_DECK_ACCESSORY_FILE_SIZE(obj));
         obj->restring = str_dup(buf);
         int defense[5][6] = {{ 0, 0, 0, 1, 1, 1 },
                              { 0, 0, 1, 1, 2, 2 },
@@ -1047,7 +1047,7 @@ void show_icon_to_persona(struct matrix_icon *ch, struct matrix_icon *icon) {
   }
   
   // Start with description.
-  sprintf(buf, "%s\r\n%s is ", icon->long_desc, icon->name);
+  snprintf(buf, sizeof(buf), "%s\r\n%s is ", icon->long_desc, icon->name);
   
   // Generate condition.
   if (icon->condition < 2) {
@@ -1096,9 +1096,9 @@ ACMD(do_matrix_look)
   }
   
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
-    sprintf(buf, "^C[%ld]^n %s^n\r\n%s", matrix[PERSONA->in_host].vnum, matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
+    snprintf(buf, sizeof(buf), "^C[%ld]^n %s^n\r\n%s", matrix[PERSONA->in_host].vnum, matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
   } else {
-    sprintf(buf, "^C%s^n\r\n%s", matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
+    snprintf(buf, sizeof(buf), "^C%s^n\r\n%s", matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
   }
   send_to_icon(PERSONA, buf);
   
@@ -1114,9 +1114,9 @@ ACMD(do_matrix_look)
     
     // We're sending something. If they don't have a valid roomstring (legacy exits), craft a generic one.
     if (!exit->roomstring || !*(exit->roomstring))
-      sprintf(buf, "^cA plain-looking icon with the address %s floats here.^n\r\n", fname_allchars(exit->addresses));
+      snprintf(buf, sizeof(buf), "^cA plain-looking icon with the address %s floats here.^n\r\n", fname_allchars(exit->addresses));
     else
-      sprintf(buf, "^c%s^n\r\n", exit->roomstring);
+      snprintf(buf, sizeof(buf), "^c%s^n\r\n", exit->roomstring);
     
     // Send our composed string and indicate that we've sent something.
     send_to_icon(PERSONA, buf);
@@ -1166,36 +1166,36 @@ ACMD(do_analyze)
           found[current] = 1;
         }
         if (found[0])
-          sprintf(buf, "%s-", host_sec[matrix[PERSONA->in_host].colour]);
+          snprintf(buf, sizeof(buf), "%s-", host_sec[matrix[PERSONA->in_host].colour]);
         else
-          sprintf(buf, "?-");
+          snprintf(buf, sizeof(buf), "?-");
         if (found[1])
-          sprintf(buf, "%s%d ", buf, matrix[PERSONA->in_host].security);
+          snprintf(buf, sizeof(buf), "%s%d ", buf, matrix[PERSONA->in_host].security);
         else
           strcat(buf, "? ");
         if (found[2])
-          sprintf(buf, "%s%ld/", buf, matrix[PERSONA->in_host].stats[ACCESS][0]);
+          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[ACCESS][0]);
         else
           strcat(buf, "0/");
         if (found[3])
-          sprintf(buf, "%s%ld/", buf, matrix[PERSONA->in_host].stats[CONTROL][0]);
+          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[CONTROL][0]);
         else
           strcat(buf, "0/");
         if (found[4])
-          sprintf(buf, "%s%ld/", buf, matrix[PERSONA->in_host].stats[INDEX][0]);
+          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[INDEX][0]);
         else
           strcat(buf, "0/");
         if (found[5])
-          sprintf(buf, "%s%ld/", buf, matrix[PERSONA->in_host].stats[FILES][0]);
+          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[FILES][0]);
         else
           strcat(buf, "0/");
         if (found[6])
-          sprintf(buf, "%s%ld/", buf, matrix[PERSONA->in_host].stats[SLAVE][0]);
+          snprintf(buf, sizeof(buf), "%s%ld/", buf, matrix[PERSONA->in_host].stats[SLAVE][0]);
         else
           strcat(buf, "0");
         strcat(buf, "\r\n");
       } else
-        sprintf(buf, "%s-%d %ld/%ld/%ld/%ld/%ld\r\n", host_sec[matrix[PERSONA->in_host].colour],
+        snprintf(buf, sizeof(buf), "%s-%d %ld/%ld/%ld/%ld/%ld\r\n", host_sec[matrix[PERSONA->in_host].colour],
                 matrix[PERSONA->in_host].security, matrix[PERSONA->in_host].stats[ACCESS][0],
                 matrix[PERSONA->in_host].stats[CONTROL][0], matrix[PERSONA->in_host].stats[INDEX][0],
                 matrix[PERSONA->in_host].stats[FILES][0], matrix[PERSONA->in_host].stats[SLAVE][0]);
@@ -1207,7 +1207,7 @@ ACMD(do_analyze)
     success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
     if (success > 0) {
       send_to_icon(PERSONA, "You analyze the security of the host.\r\n");
-      sprintf(buf, "%s-%d Tally: %d Alert: %s\r\n", host_sec[matrix[PERSONA->in_host].colour],
+      snprintf(buf, sizeof(buf), "%s-%d Tally: %d Alert: %s\r\n", host_sec[matrix[PERSONA->in_host].colour],
               matrix[PERSONA->in_host].security, DECKER->tally,
               alerts[matrix[PERSONA->in_host].alert]);
       send_to_icon(PERSONA, buf);
@@ -1322,7 +1322,7 @@ ACMD(do_logon)
         DECKER->tally = 0;
       DECKER->last_trigger = 0;
       DECKER->located = FALSE;
-      sprintf(buf, "%s connects to a different host and vanishes from this one.\r\n", PERSONA->name);
+      snprintf(buf, sizeof(buf), "%s connects to a different host and vanishes from this one.\r\n", PERSONA->name);
       send_to_host(PERSONA->in_host, buf, PERSONA, TRUE);
       send_to_icon(PERSONA, "You connect to %s.\r\n", matrix[target_host].name);
       icon_from_host(PERSONA);
@@ -1372,7 +1372,7 @@ ACMD(do_logoff)
     }
     send_to_icon(PERSONA, "You gracefully log off from the matrix and return to the real world.\r\n");
   }
-  sprintf(buf, "%s depixelates and vanishes from the host.\r\n", PERSONA->name);
+  snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", PERSONA->name);
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
   extract_icon(PERSONA);
   PERSONA = NULL;
@@ -1605,10 +1605,10 @@ ACMD(do_connect)
     return;
   }
   if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK && GET_OBJ_VAL(jack, 3) == DATA_INDUCTION)
-    sprintf(buf, "$n places $s hand over $s induction pad as $e connects to $s cyberdeck.");
+    snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to $s cyberdeck.");
   else if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK)
-    sprintf(buf, "$n slides one end of the cable into $s datajack and the other into $s cyberdeck.");
-  else sprintf(buf, "$n's eye opens up as $e slides $s cyberdeck cable into $s eye datajack.");
+    snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into $s cyberdeck.");
+  else snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides $s cyberdeck cable into $s eye datajack.");
   act(buf, FALSE, ch, 0, 0, TO_ROOM);
   act("You jack into the matrix.", FALSE, ch, 0, 0, TO_CHAR);
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);
@@ -2066,12 +2066,12 @@ ACMD(do_software)
       strcpy(buf2, "Custom Components:\r\n");
     for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
       if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
-        sprintf(buf + strlen(buf), "%-30s^n Rating: %2d %c\r\n", GET_OBJ_NAME(soft),
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-30s^n Rating: %2d %c\r\n", GET_OBJ_NAME(soft),
                 GET_OBJ_VAL(soft, 1), GET_OBJ_VAL(soft, 4) ? '*' : ' ');
       } else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE)
-        sprintf(buf + strlen(buf), "%s^n\r\n", GET_OBJ_NAME(soft));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", GET_OBJ_NAME(soft));
       else if (GET_OBJ_TYPE(soft) == ITEM_PART)
-        sprintf(buf2 + strlen(buf2), "%-30s^n Type: %-15s Rating: %d\r\n",
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%-30s^n Type: %-15s Rating: %d\r\n",
                 GET_OBJ_NAME(soft), parts[GET_OBJ_VAL(soft, 0)].name, GET_PART_RATING(soft));
     send_to_char(buf, ch);
     if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK)
@@ -2219,7 +2219,7 @@ void matrix_update()
                 if (!--icon->ic.subtype) {
                   icon2->decker->located = TRUE;
                   send_to_icon(icon2, "Alarms start to ring in your head as %s finds your location.\r\n", icon->name);
-                  sprintf(buf, "%s located by Trace IC in host %ld (%s).", GET_CHAR_NAME(icon2->decker->ch), matrix[icon->in_host].vnum, matrix[icon->in_host].name);
+                  snprintf(buf, sizeof(buf), "%s located by Trace IC in host %ld (%s).", GET_CHAR_NAME(icon2->decker->ch), matrix[icon->in_host].vnum, matrix[icon->in_host].name);
                   mudlog(buf, icon2->decker->ch, LOG_GRIDLOG, TRUE);
                 }
               } else if (icon->ic.type != 6 || (icon->ic.type == 6 && !icon2->decker->located)) {
@@ -2388,40 +2388,40 @@ ACMD(do_matrix_scan)
           }
           found[current] = 1;
         }
-        sprintf(buf, "MPCP-");
+        snprintf(buf, sizeof(buf), "MPCP-");
         if (found[0])
-          sprintf(buf + strlen(buf), "%d", ic->decker->mpcp);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d", ic->decker->mpcp);
         else
-          sprintf(buf, "0");
+          snprintf(buf, sizeof(buf), "0");
         if (found[1])
-          sprintf(buf + strlen(buf), " %d/", ic->decker->bod);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d/", ic->decker->bod);
         else
           strcat(buf, " 0/");
         if (found[2])
-          sprintf(buf + strlen(buf), "%d/", ic->decker->evasion);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d/", ic->decker->evasion);
         else
           strcat(buf, "0/");
         if (found[3])
-          sprintf(buf + strlen(buf), "%d/", ic->decker->masking);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d/", ic->decker->masking);
         else
           strcat(buf, "0/");
         if (found[4])
-          sprintf(buf + strlen(buf), "%d", ic->decker->sensor);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d", ic->decker->sensor);
         else
           strcat(buf, "0");
         strcat(buf, " Response: ");
         if (found[5])
-          sprintf(buf + strlen(buf), "%d", ic->decker->response);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d", ic->decker->response);
         else
           strcat(buf, "0");
         strcat(buf, " Condition: ");
         if (found[6])
-          sprintf(buf + strlen(buf), "%d", ic->condition);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d", ic->condition);
         else
           strcat(buf, "0");
         strcat(buf, " Privileges: None MXP: \r\n");
         if (found[7])
-          sprintf(buf + strlen(buf), "%ld", ic->decker->mxp);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld", ic->decker->mxp);
         else
           strcat(buf, "Not Found");
         strcat(buf, "\r\n");
@@ -2470,8 +2470,8 @@ ACMD(do_talk)
     send_to_icon(PERSONA, "Say what?\r\n");
   else {
     struct char_data *tch = NULL;
-    sprintf(buf, "^Y$v on the other end of the line says, \"%s\"", argument);
-    sprintf(buf2, "^YYou say, \"%s\"\r\n", argument);
+    snprintf(buf, sizeof(buf), "^Y$v on the other end of the line says, \"%s\"", argument);
+    snprintf(buf2, sizeof(buf2), "^YYou say, \"%s\"\r\n", argument);
     send_to_char(buf2, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, str_dup(buf2));
     if (DECKER->phone->dest->persona && DECKER->phone->dest->persona->decker) {
@@ -2608,7 +2608,7 @@ ACMD(do_comcall)
                 send_to_char("You feel your phone ring.\r\n", tch);
             }
           } else {
-            sprintf(buf, "%s rings.", GET_OBJ_NAME(k->phone));
+            snprintf(buf, sizeof(buf), "%s rings.", GET_OBJ_NAME(k->phone));
             send_to_room(buf, k->phone->in_room);
           }
         }
@@ -2677,10 +2677,10 @@ ACMD(do_trace)
       for (struct matrix_icon *icon = icon_list; icon; icon = icon->next)
         if (icon->decker && icon->decker->mxp == addr) {
           if (matrix[PERSONA->in_host].vnum == icon->decker->phone->rtg)
-            sprintf(buf, "Your search returns:\r\nOriginating Grid: %s\r\nSerial number: %ld\r\n",
+            snprintf(buf, sizeof(buf), "Your search returns:\r\nOriginating Grid: %s\r\nSerial number: %ld\r\n",
                     matrix[real_host(icon->decker->phone->rtg)].name, icon->decker->phone->rtg * icon->decker->phone->number);
           else
-            sprintf(buf, "Your search returns:\r\nJackpoint Location: %s\r\n", icon->decker->ch->in_room->address);
+            snprintf(buf, sizeof(buf), "Your search returns:\r\nJackpoint Location: %s\r\n", icon->decker->ch->in_room->address);
           send_to_icon(PERSONA, buf);
           return;
         }
@@ -2912,35 +2912,35 @@ bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) 
       has_interface |= (GET_PART_TYPE(part) == PART_MATRIX_INTERFACE);
     }
     bool first = TRUE;
-    sprintf(buf, "%s isn't in working condition, so it won't power on. It needs ", capitalize(GET_OBJ_NAME(cyberdeck)));
+    snprintf(buf, sizeof(buf), "%s isn't in working condition, so it won't power on. It needs ", capitalize(GET_OBJ_NAME(cyberdeck)));
     if (!has_mpcp) {
       strcat(buf, "an MPCP chip");
       first = FALSE;
     }
     if (!has_active) {
-      sprintf(ENDOF(buf), "%san active memory module", first ? "" : (has_bod && has_sensor && has_io && has_interface) ? " and " : ", ");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%san active memory module", first ? "" : (has_bod && has_sensor && has_io && has_interface) ? " and " : ", ");
       first = FALSE;
     }
     if (!has_bod) {
-      sprintf(ENDOF(buf), "%sa bod chip", first ? "" : (has_sensor && has_io && has_interface) ? " and " : ", ");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%sa bod chip", first ? "" : (has_sensor && has_io && has_interface) ? " and " : ", ");
       first = FALSE;
     }
     if (!has_sensor) {
-      sprintf(ENDOF(buf), "%sa sensor chip", first ? "" : (has_io && has_interface) ? " and " : ", ");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%sa sensor chip", first ? "" : (has_io && has_interface) ? " and " : ", ");
       first = FALSE;
     }
     if (!has_io) {
-      sprintf(ENDOF(buf), "%san I/O module", first ? "" : (has_interface) ? " and " : ", ");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%san I/O module", first ? "" : (has_interface) ? " and " : ", ");
       first = FALSE;
     }
     if (!has_interface) {
-      sprintf(ENDOF(buf), "%sa Matrix interface", first ? "" : " and ");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%sa Matrix interface", first ? "" : " and ");
       first = FALSE;
     }
     
     // If we get here and haven't sent anything, something is wrong.
     if (first) {
-      sprintf(buf2, "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts. Autofixing.",
+      snprintf(buf2, sizeof(buf2), "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts. Autofixing.",
               GET_OBJ_NAME(cyberdeck), GET_CHAR_NAME(ch));
       mudlog(buf2, ch, LOG_SYSLOG, TRUE);
       GET_CYBERDECK_IS_INCOMPLETE(cyberdeck) = 1;

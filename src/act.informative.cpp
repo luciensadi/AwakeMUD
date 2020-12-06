@@ -105,7 +105,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
     (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0) +
     (GET_EQ(i, WEAR_UNDER) ? GET_OBJ_VAL(GET_EQ(i, WEAR_UNDER), 7) : 0);
     conceal = act == 2 ? 4 : success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), conceal);
-    sprintf(buf, "%s", dont_capitalize_a_an ? "a" : "A");
+    snprintf(buf, sizeof(buf), "%s", dont_capitalize_a_an ? "a" : "A");
     if (conceal > 0) {
       if (GET_HEIGHT(i) < 130)
         strcat(buf, " tiny");
@@ -119,26 +119,26 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
         strcat(buf, " huge");
     }
     if (conceal > 2)
-      sprintf(buf + strlen(buf), " %s", genders[(int)GET_SEX(i)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", genders[(int)GET_SEX(i)]);
     if (conceal > 3)
-      sprintf(buf + strlen(buf), " %s", pc_race_types[(int)GET_RACE(i)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", pc_race_types[(int)GET_RACE(i)]);
     else
       strcat(buf, " person");
     if (GET_EQ(i, WEAR_ABOUT))
-      sprintf(buf + strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_ABOUT))));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_ABOUT))));
     else if (GET_EQ(i, WEAR_BODY))
-      sprintf(buf + strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_BODY))));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_BODY))));
     else if (GET_EQ(i, WEAR_UNDER))
-      sprintf(buf + strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_UNDER))));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_UNDER))));
   } else
   {
     struct remem *mem;
     if (!act) {
       strcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)));
       if (IS_SENATOR(ch) && !IS_NPC(i))
-        sprintf(ENDOF(buf), " (%s)", CAP(GET_CHAR_NAME(i)));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", CAP(GET_CHAR_NAME(i)));
       else if ((mem = found_mem(GET_MEMORY(ch), i)))
-        sprintf(ENDOF(buf), " (%s)", CAP(mem->mem));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", CAP(mem->mem));
     } else if ((mem = found_mem(GET_MEMORY(ch), i)) && act != 2)
       strcpy(buf, CAP(mem->mem));
     else
@@ -154,11 +154,11 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   }
   
   if (!IS_NPC(i) && PRF_FLAGGED(ch, PRF_LONGWEAPON) && GET_EQ(i, WEAR_WIELD))
-    sprintf(ENDOF(buf), ", wielding %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", wielding %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
   
   if (AFF_FLAGGED(i, AFF_MANIFEST) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
-    sprintf(buf2, "The ghostly image of %s", buf);
+    snprintf(buf2, sizeof(buf2), "The ghostly image of %s", buf);
     strcpy(buf, buf2);
   }
   return buf;
@@ -173,7 +173,7 @@ void get_obj_condition(struct char_data *ch, struct obj_data *obj)
   }
   
   int condition = GET_OBJ_CONDITION(obj) * 100 / MAX(1, GET_OBJ_BARRIER(obj));
-  sprintf(buf2, "%s is ", CAP(GET_OBJ_NAME(obj)));
+  snprintf(buf2, sizeof(buf2), "%s is ", CAP(GET_OBJ_NAME(obj)));
   if (condition >= 100)
     strcat(buf2, "in excellent condition.");
   else if (condition >= 90)
@@ -203,7 +203,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     else {
       // Gun magazines get special consideration.
       if (GET_OBJ_TYPE(object) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_MAXAMMO(object)) {
-        sprintf(buf, "A%s %d-round %s %s magazine has been left here.",
+        snprintf(buf, sizeof(buf), "A%s %d-round %s %s magazine has been left here.",
           GET_MAGAZINE_AMMO_COUNT(object) <= 0 ? "n empty" : "",
           GET_MAGAZINE_BONDED_MAXAMMO(object),
           ammo_type[GET_MAGAZINE_AMMO_TYPE(object)].name,
@@ -217,11 +217,11 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
   {
     strcpy(buf, GET_OBJ_NAME(object));
     if (GET_OBJ_TYPE(object) == ITEM_DESIGN)
-      sprintf(ENDOF(buf), " (Plan)");
+      strcat(buf, " (Plan)");
     if (GET_OBJ_VNUM(object) == 108 && !GET_OBJ_TIMER(object))
-      sprintf(ENDOF(buf), " (Uncooked)");
+      strcat(buf, " (Uncooked)");
     if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
-      sprintf(ENDOF(buf), " ^Y(Geas)^n");
+      strcat(buf, " ^Y(Geas)^n");
   } else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7)))
     strcpy(buf, GET_OBJ_NAME(object));
   else if (mode == 5)
@@ -231,12 +231,12 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     else
       strcpy(buf, "You see nothing special..");
   } else if (mode == 8)
-    sprintf(buf, "\t\t\t\t%s", GET_OBJ_NAME(object));
+    snprintf(buf, sizeof(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
   if (mode == 7 || mode == 8) {
     if (GET_OBJ_TYPE(object) == ITEM_HOLSTER)
     {
       if (object->contains)
-        sprintf(ENDOF(buf), " (Holding %s)", GET_OBJ_NAME(object->contains));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s)", GET_OBJ_NAME(object->contains));
       if (GET_OBJ_VAL(object, 3) == 1 && ((object->worn_by && object->worn_by == ch) ||
                                           (object->in_obj && object->in_obj->worn_by && object->in_obj->worn_by == ch)))
         strcat(buf, " ^Y(Ready)");
@@ -287,38 +287,40 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
   
   if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED)
   {
-    sprintf(ENDOF(buf), "%s lies here wrecked.", GET_VEH_NAME(vehicle));
-  } else
-  {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s lies here wrecked.", GET_VEH_NAME(vehicle));
+  } 
+  
+  else {
     if (vehicle->type == VEH_BIKE && vehicle->people && CAN_SEE(ch, vehicle->people))
-      sprintf(buf, "%s%s sitting on ", buf, CAP(found_mem(GET_MEMORY(ch), vehicle->people) ?
+      snprintf(buf, sizeof(buf), "%s%s sitting on ", buf, CAP(found_mem(GET_MEMORY(ch), vehicle->people) ?
                                                 found_mem(GET_MEMORY(ch), vehicle->people)->mem :
                                                 GET_NAME(vehicle->people)));
     switch (vehicle->cspeed) {
       case SPEED_OFF:
         if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring)
-          sprintf(ENDOF(buf), "%s waits here", GET_VEH_NAME(vehicle));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", GET_VEH_NAME(vehicle));
         else
           strcat(buf, vehicle->description);
         break;
       case SPEED_IDLE:
-        sprintf(ENDOF(buf), "%s idles here", GET_VEH_NAME(vehicle));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s idles here", GET_VEH_NAME(vehicle));
         break;
       case SPEED_CRUISING:
-        sprintf(ENDOF(buf), "%s cruises through here", GET_VEH_NAME(vehicle));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s cruises through here", GET_VEH_NAME(vehicle));
         break;
       case SPEED_SPEEDING:
-        sprintf(ENDOF(buf), "%s speeds past you", GET_VEH_NAME(vehicle));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s speeds past you", GET_VEH_NAME(vehicle));
         break;
       case SPEED_MAX:
-        sprintf(ENDOF(buf), "%s zooms by you", GET_VEH_NAME(vehicle));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s zooms by you", GET_VEH_NAME(vehicle));
         break;
     }
     if (vehicle->towing) {
-      sprintf(ENDOF(buf), ", towing %s", GET_VEH_NAME(vehicle->towing));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", towing %s", GET_VEH_NAME(vehicle->towing));
     }
     strcat(buf, ".");
   }
+  
   if (vehicle->owner && GET_IDNUM(ch) == vehicle->owner)
     strcat(buf, " ^Y(Yours)");
   strcat(buf, "^N\r\n");
@@ -551,11 +553,11 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         weight = GET_WEIGHT(i) - (GET_WEIGHT(i) % 10) + 10;
       
       if (weight > 4) {
-        sprintf(buf, "$e looks to be about %0.1f meters tall and "
+        snprintf(buf, sizeof(buf), "$e looks to be about %0.1f meters tall and "
                 "appears to weigh about %d kg.", height, weight);
         act(buf, FALSE, i, 0, ch, TO_VICT);
       } else {
-        sprintf(buf, "$e looks to be about %0.1f meters tall and "
+        snprintf(buf, sizeof(buf), "$e looks to be about %0.1f meters tall and "
                 "appears to barely weigh anything.", height);
         act(buf, FALSE, i, 0, ch, TO_VICT);
       }
@@ -574,7 +576,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
           }
         }
         if (init) {
-          sprintf(buf, "%s aura is ", CAP(HSHR(i)));
+          snprintf(buf, sizeof(buf), "%s aura is ", CAP(HSHR(i)));
           if (GET_GRADE(i) > 6)
             strcat(buf, "^Wblindingly bright^n.");
           else if (GET_GRADE(i) > 2)
@@ -659,23 +661,23 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       case CYB_CLIMBINGCLAWS:
         if (GET_OBJ_VAL(tmp_obj, 9)) {
           found = TRUE;
-          sprintf(ENDOF(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        } else sprintf(ENDOF(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         break;
       case CYB_TORSO:
       case CYB_SKULL:
         if (GET_OBJ_VAL(tmp_obj, 3)) {
           found = TRUE;
-          sprintf(ENDOF(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        } else sprintf(ENDOF(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         break;
       case CYB_DATAJACK:
         if (GET_EQ(i, WEAR_HEAD))
           continue;
         if (GET_OBJ_VAL(tmp_obj, 3)) {
           found = TRUE;
-          sprintf(ENDOF(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
-        } else sprintf(ENDOF(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        } else snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         break;
       case CYB_CHIPJACK:
         if (GET_EQ(i, WEAR_HEAD))
@@ -683,20 +685,20 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         // fall through.
       case CYB_DERMALPLATING:
       case CYB_BALANCETAIL:
-        sprintf(ENDOF(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
         break;
       case CYB_EYES:
         if (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1))
           continue;
         if ((IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG1) || IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG2) ||
              IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG3)) && success_test(GET_INT(ch), 9) > 0)
-          sprintf(ENDOF(buf2), "Optical Magnification\r\n");
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Optical Magnification\r\n");
         if (IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_COSMETIC))
-          sprintf(ENDOF(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
         break;
       default:
         found = TRUE;
-        sprintf(ENDOF(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
         break;
     }
   if (*buf2)
@@ -763,67 +765,67 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
       if (mob_index[GET_MOB_RNUM(i)].func) {
         if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
-          sprintf(ENDOF(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
-          sprintf(ENDOF(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE)
-            sprintf(ENDOF(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT)
-            sprintf(ENDOF(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-            sprintf(ENDOF(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
-          sprintf(ENDOF(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper) {
-          sprintf(ENDOF(buf), "^y...%s has a few things for sale.^n\r\n", HSSH(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s has a few things for sale.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec) {
-          sprintf(ENDOF(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
         }
       }
       
       if (mob_index[GET_MOB_RNUM(i)].sfunc && mob_index[GET_MOB_RNUM(i)].sfunc != mob_index[GET_MOB_RNUM(i)].func) {
         if (mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
-          sprintf(ENDOF(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
-          sprintf(ENDOF(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE)
-            sprintf(ENDOF(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT)
-            sprintf(ENDOF(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-            sprintf(ENDOF(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
-          sprintf(ENDOF(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper) {
-          sprintf(ENDOF(buf), "^y...%s%s has a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
-          sprintf(ENDOF(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
         }
       }
     }
@@ -911,14 +913,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     else
       strcat(buf, " is sitting in the drivers seat.");
   } else if ((obj = get_mount_manned_by_ch(i))) {
-      sprintf(buf, "%s is manning %s.", buf, GET_OBJ_NAME(obj));
+      snprintf(buf, sizeof(buf), "%s is manning %s.", buf, GET_OBJ_NAME(obj));
   } else if (GET_POS(i) != POS_FIGHTING)
   {
     strcat(buf, positions[(int) GET_POS(i)]);
     if (GET_DEFPOS(i))
-      sprintf(buf2, ", %s.", GET_DEFPOS(i));
+      snprintf(buf2, sizeof(buf2), ", %s.", GET_DEFPOS(i));
     else
-      sprintf(buf2, ".");
+      snprintf(buf2, sizeof(buf2), ".");
     strcat(buf, buf2);
   } else
   {
@@ -1031,7 +1033,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
   {
     if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
-        sprintf(buf2, "%-5s - [%5ld] %s%s\r\n", dirs[door],
+        snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s\r\n", dirs[door],
                 EXIT(ch, door)->to_room->number,
                 EXIT(ch, door)->to_room->name,
                 (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) ? " (closed)" : ""));
@@ -1039,7 +1041,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
           strcat(buf, "^c");
         strcat(buf, CAP(buf2));
       } else if (!IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)) {
-        sprintf(buf2, "%-5s - ", dirs[door]);
+        snprintf(buf2, sizeof(buf2), "%-5s - ", dirs[door]);
         if (!IS_ASTRAL(ch) &&
             !LIGHT_OK(ch))
           strcat(buf2, "Too dark to tell.\r\n");
@@ -1057,7 +1059,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
                 strcat(buf2, "A pair of closed elevator doors");
             }
             else
-              sprintf(ENDOF(buf2), "A closed %s", *(fname(EXIT(ch, door)->keyword)) ? fname(EXIT(ch, door)->keyword) : "door");
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "A closed %s", *(fname(EXIT(ch, door)->keyword)) ? fname(EXIT(ch, door)->keyword) : "door");
           } else
             strcat(buf2, EXIT(ch, door)->to_room->name);
           strcat(buf2, "\r\n");
@@ -1100,21 +1102,21 @@ void do_auto_exits(struct char_data * ch)
           if (!ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_ROAD) &&
               !ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_GARAGE) &&
               !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
-            sprintf(ENDOF(buf), "(%s) ", exitdirs[door]);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s) ", exitdirs[door]);
           else if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED | EX_HIDDEN))
-            sprintf(ENDOF(buf), "%s ", exitdirs[door]);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ", exitdirs[door]);
         } else {
           if (!IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) || GET_LEVEL(ch) > LVL_MORTAL) {
             if (IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED))
-              sprintf(ENDOF(buf), "%s(L) ", exitdirs[door]);
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s(L) ", exitdirs[door]);
             else if (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
-              sprintf(ENDOF(buf), "%s(C) ", exitdirs[door]);
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s(C) ", exitdirs[door]);
             else
-              sprintf(ENDOF(buf), "%s ", exitdirs[door]);
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ", exitdirs[door]);
           }
         }
       }
-    sprintf(buf2, "^c[ Exits: %s]^n\r\n", *buf ? buf : "None! ");
+    snprintf(buf2, sizeof(buf2), "^c[ Exits: %s]^n\r\n", *buf ? buf : "None! ");
     send_to_char(buf2, ch);
   }
 }
@@ -1136,11 +1138,11 @@ void update_blood(void)
       if (!ROOM_FLAGGED(&world[i], ROOM_INDOORS)) {
         if (weather_info.sky == SKY_RAINING) {
           world[i].blood--;
-          sprintf(buf, "%s the blood staining this area washes away in the rain.", world[i].blood > 3 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
+          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away in the rain.", world[i].blood > 3 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
           send_to_room(buf, &world[i]);
         } else if (weather_info.sky == SKY_LIGHTNING) {
           world[i].blood -= 2;
-          sprintf(buf, "%s the blood staining this area washes away in the pounding rain.", world[i].blood > 4 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
+          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away in the pounding rain.", world[i].blood > 4 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
           send_to_room(buf, &world[i]);
         }
       }
@@ -1154,7 +1156,7 @@ void look_in_veh(struct char_data * ch)
   if (!(AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)))
   {
     if (!ch->in_veh->in_room && !ch->in_veh->in_veh) {
-      sprintf(buf, "SYSERR: Character %s is not in a room or vehicle.", GET_CHAR_NAME(ch));
+      snprintf(buf, sizeof(buf), "SYSERR: Character %s is not in a room or vehicle.", GET_CHAR_NAME(ch));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       send_to_char("ALERT AN IMM!!\r\n", ch);
       return;
@@ -1178,7 +1180,7 @@ void look_in_veh(struct char_data * ch)
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     if (!veh->in_room && !veh->in_veh) {
-      sprintf(buf, "SYSERR: Vehicle %s is not in a room or vehicle.", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "SYSERR: Vehicle %s is not in a room or vehicle.", GET_VEH_NAME(veh));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       send_to_char("ALERT AN IMM!!\r\n", ch);
       return;
@@ -1238,14 +1240,14 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   
   if (!ch->in_room) {
     send_to_char("Your mind is blasted by the eldritch horrors of the unknown void you're drifting in.\r\n", ch);
-    sprintf(buf, "SYSERR: %s tried to look at their room but is nowhere!", GET_CHAR_NAME(ch));
+    snprintf(buf, sizeof(buf), "SYSERR: %s tried to look at their room but is nowhere!", GET_CHAR_NAME(ch));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return;
   }
   
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    sprintf(buf2, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
+    snprintf(buf2, sizeof(buf2), "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
     send_to_char(buf2, ch);
   } else
     send_to_char(ch, "^C%s^n\r\n", GET_ROOM_NAME(ch->in_room), ch);
@@ -1284,13 +1286,13 @@ void look_at_room(struct char_data * ch, int ignore_brief)
           break;
         default:
           send_to_char("^RA horrific quantity of astral energy tears at your senses.^n\r\n", ch);
-          sprintf(buf, "SYSERR: '%s' (%ld) has powersite background count %d, which is greater than displayable max of 5.",
+          snprintf(buf, sizeof(buf), "SYSERR: '%s' (%ld) has powersite background count %d, which is greater than displayable max of 5.",
                   ch->in_room->name, ch->in_room->number, GET_BACKGROUND_COUNT(ch->in_room));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
           break;
       }
     } else if (GET_BACKGROUND_COUNT(ch->in_room) < 6) {
-      sprintf(buf, "^cA");
+      snprintf(buf, sizeof(buf), "^cA");
       switch (GET_BACKGROUND_COUNT(ch->in_room)) {
         case 1:
           strcat(buf, " distracting");
@@ -1308,7 +1310,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
           strcat(buf, "n overwhelming");
           break;
       }
-      sprintf(ENDOF(buf), " aura of %s pervades the area.^n\r\n", background_types[GET_BACKGROUND_AURA(ch->in_room)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " aura of %s pervades the area.^n\r\n", background_types[GET_BACKGROUND_AURA(ch->in_room)]);
       send_to_char(buf, ch);
     } else {
       send_to_char("^RThe mana is warping here!^n\r\n", ch);
@@ -1453,7 +1455,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   }
   
   if (!bits && !veh) {
-    sprintf(buf, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
+    snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
     send_to_char(buf, ch);
     return;
   }
@@ -1534,7 +1536,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
         send_to_char("It is empty.\r\n", ch);
       else {
         amt = ((GET_OBJ_VAL(obj, 1) * 3) / MAX(1, GET_OBJ_VAL(obj, 0)));
-        sprintf(buf, "It's %sfull of a %s liquid.\r\n", fullness[amt],
+        snprintf(buf, sizeof(buf), "It's %sfull of a %s liquid.\r\n", fullness[amt],
                 color_liquid[GET_OBJ_VAL(obj, 2)]);
         send_to_char(buf, ch);
       }
@@ -1620,10 +1622,10 @@ void look_at_target(struct char_data * ch, char *arg)
       look_at_char(found_char, ch);
       if (ch != found_char) {
         if (CAN_SEE(found_char, ch)) {
-          sprintf(buf, "%s looks at you.\r\n", GET_NAME(ch));
+          snprintf(buf, sizeof(buf), "%s looks at you.\r\n", GET_NAME(ch));
           send_to_char(buf, found_char);
         }
-        sprintf(buf, "%s looks at %s.\r\n", GET_NAME(ch), GET_NAME(found_char));
+        snprintf(buf, sizeof(buf), "%s looks at %s.\r\n", GET_NAME(ch), GET_NAME(found_char));
         send_to_veh(buf, ch->in_veh, ch, found_char, FALSE);
       }
       ch->in_room = was_in;
@@ -1751,15 +1753,15 @@ void look_at_veh(struct char_data *ch, struct veh_data *veh, int success)
 
 void do_probe_veh(struct char_data *ch, struct veh_data * k)
 {
-  sprintf(buf, "Name: '^y%s^n', Aliases: %s\r\n",
+  snprintf(buf, sizeof(buf), "Name: '^y%s^n', Aliases: %s\r\n",
           k->short_description, k->name);
-  sprintf(ENDOF(buf), "It is a ^c%s^n with handling ^c%d^n, a top speed of ^c%d^n, and raw acceleration of ^c%d^n.\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n with handling ^c%d^n, a top speed of ^c%d^n, and raw acceleration of ^c%d^n.\r\n",
           veh_type[k->type], k->handling, k->speed, k->accel);
-  sprintf(ENDOF(buf), "It has a body rating of ^c%d^n and rating-^c%d^n vehicular armor. It seats ^c%d^n up front and ^c%d^n in the back.\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a body rating of ^c%d^n and rating-^c%d^n vehicular armor. It seats ^c%d^n up front and ^c%d^n in the back.\r\n",
           k->body, k->armor, k->seating[1], k->seating[0]);
-  sprintf(ENDOF(buf), "Its signature rating is ^c%d^n, and its NERP pilot rating is ^c%d^n.\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its signature rating is ^c%d^n, and its NERP pilot rating is ^c%d^n.\r\n",
           k->sig, k->pilot);
-  sprintf(ENDOF(buf), "It has ^c%d^n slots in its autonav and carrying capacity of ^c%d^n (%d in use).\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n slots in its autonav and carrying capacity of ^c%d^n (%d in use).\r\n",
           k->autonav, (int)k->load, (int)k->usedload);
   send_to_char(buf, ch);
 }
@@ -1770,57 +1772,57 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   struct obj_data *access = NULL;
   
   if (j->restring) {
-    sprintf(buf, "^MOOC^n statistics for '^y%s^n' (restrung from %s):\r\n", GET_OBJ_NAME(j), j->text.name);
+    snprintf(buf, sizeof(buf), "^MOOC^n statistics for '^y%s^n' (restrung from %s):\r\n", GET_OBJ_NAME(j), j->text.name);
   } else {
-    sprintf(buf, "^MOOC^n statistics for '^y%s^n':\r\n", (GET_OBJ_NAME(j) ? GET_OBJ_NAME(j) : "<None>"));
+    snprintf(buf, sizeof(buf), "^MOOC^n statistics for '^y%s^n':\r\n", (GET_OBJ_NAME(j) ? GET_OBJ_NAME(j) : "<None>"));
   }
   
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1);
-  sprintf(ENDOF(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
           AN(buf1), buf1, GET_OBJ_WEIGHT(j), material_names[(int)GET_OBJ_MATERIAL(j)], GET_OBJ_BARRIER(j));
   
   if (strcmp(j->obj_flags.wear_flags.ToString(), "0") != 0) {
     j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH, wear_bits, NUM_WEARS);
-    sprintf(ENDOF(buf), "It can be worn or equipped at the following wear location(s):\r\n  ^c%s^n\r\n", buf2);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can be worn or equipped at the following wear location(s):\r\n  ^c%s^n\r\n", buf2);
   } else {
-    sprintf(ENDOF(buf), "This item cannot be worn or equipped.\r\n");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This item cannot be worn or equipped.\r\n");
   }
   
   switch (GET_OBJ_TYPE(j))
   {
     case ITEM_LIGHT:
       if (GET_OBJ_VAL(j, 2) == -1) {
-        sprintf(ENDOF(buf), "It is an ^cinfinite^n light source.");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is an ^cinfinite^n light source.");
       } else {
-        sprintf(ENDOF(buf), "It has ^c%d^n hours of light left.", GET_OBJ_VAL(j, 2));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n hours of light left.", GET_OBJ_VAL(j, 2));
       }
       break;
     case ITEM_FIREWEAPON:
-      sprintf(ENDOF(buf), "It is a ^c%s^n that requires ^c%d^n strength to use in combat.\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that requires ^c%d^n strength to use in combat.\r\n",
               GET_OBJ_VAL(j, 5) == 0 ? "Bow" : "Crossbow", GET_OBJ_VAL(j, 6));
       if (GET_OBJ_VAL(j, 2)) {
-        sprintf(ENDOF(buf), "It has a damage code of ^c(STR+%d)%s%s^n", GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)],
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a damage code of ^c(STR+%d)%s%s^n", GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)],
                 !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? "( stun)" : "");
       } else {
-        sprintf(ENDOF(buf), "It has a damage code of ^c(STR)%s%s^n", wound_arr[GET_OBJ_VAL(j, 1)],
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a damage code of ^c(STR)%s%s^n", wound_arr[GET_OBJ_VAL(j, 1)],
                 !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
       }
-      sprintf(ENDOF(buf), "and requires the ^c%s^n skill to use.", skills[GET_OBJ_VAL(j, 4)].name);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and requires the ^c%s^n skill to use.", skills[GET_OBJ_VAL(j, 4)].name);
       break;
     case ITEM_WEAPON:
       // Ranged weapons first.
       if (IS_GUN(GET_OBJ_VAL((j), 3))) {
         if (GET_OBJ_VAL(j, 5) > 0) {
-          sprintf(ENDOF(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
                   GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
-          sprintf(ENDOF(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
                   AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
-          sprintf(ENDOF(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 1 ? "s" : "");
         }
@@ -1843,68 +1845,68 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             switch (GET_OBJ_VAL(access, 1)) {
               case ACCESS_SMARTLINK:
                 has_smartlink = TRUE;
-                sprintf(ENDOF(buf), "\r\nA Smartlink%s attached to the %s provides ^c%d^n to target numbers.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA Smartlink%s attached to the %s provides ^c%d^n to target numbers.",
                         GET_OBJ_VAL(access, 2) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
                         (GET_OBJ_VAL(j, 1) == 1 || GET_OBJ_VAL(access, 2) < 2) ? -2 : -4);
                 break;
               case ACCESS_SCOPE:
                 if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
-                  sprintf(ENDOF(buf), "\r\nA laser sight attached to the %s provides ^c-1^n to target numbers.",
+                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA laser sight attached to the %s provides ^c-1^n to target numbers.",
                           gun_accessory_locations[mount_location]);
                 } else {
-                  sprintf(ENDOF(buf), "\r\nA scope has been attached to the %s.",
+                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA scope has been attached to the %s.",
                           gun_accessory_locations[mount_location]);
                 }
                 break;
               case ACCESS_GASVENT:
-                sprintf(ENDOF(buf), "\r\nA gas vent installed in the %s provides ^c%d^n round%s worth of recoil compensation.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA gas vent installed in the %s provides ^c%d^n round%s worth of recoil compensation.",
                         gun_accessory_locations[mount_location], -GET_OBJ_VAL(access, 2), -GET_OBJ_VAL(access, 2) > 1 ? "s'" : "'s");
                 break;
               case ACCESS_SHOCKPAD:
-                sprintf(ENDOF(buf), "\r\nA shock pad installed on the %s provides ^c1^n round's worth of recoil compensation.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA shock pad installed on the %s provides ^c1^n round's worth of recoil compensation.",
                         gun_accessory_locations[mount_location]);
                 break;
               case ACCESS_SILENCER:
-                sprintf(ENDOF(buf), "\r\nThe silencer installed on the %s will muffle this weapon's report.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe silencer installed on the %s will muffle this weapon's report.",
                         gun_accessory_locations[mount_location]);
                 break;
               case ACCESS_SOUNDSUPP:
-                sprintf(ENDOF(buf), "\r\nThe suppressor installed on the %s will muffle this weapon's report.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe suppressor installed on the %s will muffle this weapon's report.",
                         gun_accessory_locations[mount_location]);
                 break;
               case ACCESS_SMARTGOGGLE:
                 strcat(buf, "\r\n^RYou should never see this-- alert an imm.^n");
                 break;
               case ACCESS_BIPOD:
-                sprintf(ENDOF(buf), "\r\nA bipod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA bipod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
                         gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_BIPOD, RECOIL_COMP_VALUE_BIPOD > 1 ? "s'" : "'s");
                 break;
               case ACCESS_TRIPOD:
-                sprintf(ENDOF(buf), "\r\nA tripod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA tripod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
                         gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_TRIPOD, RECOIL_COMP_VALUE_TRIPOD > 1 ? "s'" : "'s");
                 break;
               case ACCESS_BAYONET:
                 if (mount_location != ACCESS_LOCATION_UNDER) {
                   strcat(buf, "\r\n^RYour bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.");
                 } else {
-                  sprintf(ENDOF(buf), "\r\nA bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
+                  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
                           gun_accessory_locations[mount_location]);
                 }
                 break;
               default:
-                sprintf(buf1, "SYSERR: Unknown accessory type %d passed to do_probe_object()", GET_OBJ_VAL(access, 1));
+                snprintf(buf1, sizeof(buf1), "SYSERR: Unknown accessory type %d passed to do_probe_object()", GET_OBJ_VAL(access, 1));
                 log(buf1);
                 break;
             }
             // Tack on affect and extra flags to the attachment.
             if (strcmp(GET_OBJ_AFFECT(access).ToString(), "0") != 0) {
               GET_OBJ_AFFECT(access).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
-              sprintf(ENDOF(buf), "\r\n ^- It provides the following flags: ^c%s^n", buf2);
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following flags: ^c%s^n", buf2);
             }
             
             if (strcmp(GET_OBJ_EXTRA(access).ToString(), "0") != 0) {
               GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);
-              sprintf(ENDOF(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
             }
           }
         }
@@ -1912,7 +1914,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       // Melee weapons.
       else {
         if (GET_OBJ_VAL(j, 2) != 0) {
-          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR%s%d)%s%s^n.",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR%s%d)%s%s^n.",
                   weapon_type[GET_OBJ_VAL(j, 3)],
                   skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 2) < 0 ? "" : "+",
@@ -1920,139 +1922,139 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                   wound_arr[GET_OBJ_VAL(j, 1)],
                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
-          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s%s^n.",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s%s^n.",
                   weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)],
                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
         if (GET_WEAPON_REACH(j)) {
-          sprintf(ENDOF(buf), "\r\nIt grants %d meters of reach when wielded.", GET_WEAPON_REACH(j));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt grants %d meters of reach when wielded.", GET_WEAPON_REACH(j));
         }
       }
       break;
     case ITEM_MISSILE:
       if (GET_OBJ_VAL(j, 0) == 0) {
-        sprintf(ENDOF(buf), "It is an ^carrow^n suitable for use in a bow.");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is an ^carrow^n suitable for use in a bow.");
       } else {
-        sprintf(ENDOF(buf), "It is a ^cbolt^n suitable for use in a crossbow.");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cbolt^n suitable for use in a crossbow.");
       }
       break;
     case ITEM_WORN:
-      sprintf(buf1, "It has space for ");
+      snprintf(buf1, sizeof(buf1), "It has space for ");
       
       if (GET_OBJ_VAL(j, 0) > 0) {
-        sprintf(ENDOF(buf1), "%s^c%d^n holster%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) > 1 ? "s":"");
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) > 1 ? "s":"");
         has_pockets = TRUE;
       }
       if (GET_OBJ_VAL(j, 1) > 0) {
-        sprintf(ENDOF(buf1), "%s^c%d^n magazine%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n magazine%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
         has_pockets = TRUE;
       }
       if (GET_OBJ_VAL(j, 4) > 0) {
-        sprintf(ENDOF(buf1), "%s^c%d^n miscellaneous small item%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 4), GET_OBJ_VAL(j, 4) > 1 ? "s":"");
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n miscellaneous small item%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 4), GET_OBJ_VAL(j, 4) > 1 ? "s":"");
         has_pockets = TRUE;
       }
       
       if (has_pockets) {
-        sprintf(ENDOF(buf), "%s.\r\n", buf1);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s.\r\n", buf1);
       } else {
         strcat(buf, "It has no pockets.\r\n");
       }
-      sprintf(ENDOF(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. Its concealability rating is ^c%d^n.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. Its concealability rating is ^c%d^n.",
               GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6), GET_OBJ_VAL(j, 7));
       break;
     case ITEM_DOCWAGON:
-      sprintf(ENDOF(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
               docwagon_contract_types[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1) ? "is" : "has not been",
               GET_OBJ_VAL(j, 1) ? (GET_OBJ_VAL(j, 1) == GET_IDNUM(ch) ? " to you" : " to someone else") : " to anyone yet");
       break;
     case ITEM_CONTAINER:
-      sprintf(ENDOF(buf), "It can hold a maximum of ^c%d^n kilograms.", GET_OBJ_VAL(j, 0));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold a maximum of ^c%d^n kilograms.", GET_OBJ_VAL(j, 0));
       break;
     case ITEM_DRINKCON:
     case ITEM_FOUNTAIN:
       sprinttype(GET_OBJ_VAL(j, 2), drinks, buf2);
-      sprintf(ENDOF(buf), "It currently contains ^c%d/%d^n units of ^c%s^n.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It currently contains ^c%d/%d^n units of ^c%s^n.",
               GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1), buf2);
       break;
     case ITEM_MONEY:
       if (!GET_OBJ_VAL(j, 1))
-        sprintf(ENDOF(buf), "It is a stack of cash worth ^c%d^n nuyen.", GET_OBJ_VAL(j, 0));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a stack of cash worth ^c%d^n nuyen.", GET_OBJ_VAL(j, 0));
       else
-        sprintf(ENDOF(buf), "It is a ^c%s^n-secured ^ccredstick^n loaded with ^c%d^n nuyen.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n-secured ^ccredstick^n loaded with ^c%d^n nuyen.",
                 (GET_OBJ_VAL(j, 2) == 1 ? "6-digit PIN" : (GET_OBJ_VAL(j, 2) == 2 ? "thumbprint" : "retina")), GET_OBJ_VAL(j, 0));
       break;
     case ITEM_KEY:
-      sprintf(ENDOF(buf), "No OOC information is available about this key.");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "No OOC information is available about this key.");
       break;
     case ITEM_FOOD:
-      sprintf(ENDOF(buf), "It provides ^c%d^n units of nutrition when eaten.", GET_OBJ_VAL(j, 0));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n units of nutrition when eaten.", GET_OBJ_VAL(j, 0));
       break;
     case ITEM_QUIVER:
       if (GET_OBJ_VAL(j, 1) >= 0 && GET_OBJ_VAL(j, 1) <= 3) {
-        sprintf(ENDOF(buf), "It can hold up to ^c%d^n ^c%s%s^n.", GET_OBJ_VAL(j, 0), projectile_ammo_types[GET_OBJ_VAL(j, 1)],
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold up to ^c%d^n ^c%s%s^n.", GET_OBJ_VAL(j, 0), projectile_ammo_types[GET_OBJ_VAL(j, 1)],
                 GET_OBJ_VAL(j, 0) > 1 ? "s" : "");
       } else {
-        sprintf(ENDOF(buf), "It can hold up to ^c%d^n ^cundefined projectiles^n.", GET_OBJ_VAL(j, 0));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can hold up to ^c%d^n ^cundefined projectiles^n.", GET_OBJ_VAL(j, 0));
       }
       break;
     case ITEM_PATCH:
-      sprintf(ENDOF(buf), "It is a ^crating-%d %s^n patch.", GET_OBJ_VAL(j, 1), patch_names[GET_OBJ_VAL(j, 0)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n patch.", GET_OBJ_VAL(j, 1), patch_names[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_CYBERDECK:
-      sprintf(ENDOF(buf), "MPCP: ^c%d^n, Hardening: ^c%d^n, Active: ^c%d^n, Storage: ^c%d^n, Load: ^c%d^n.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "MPCP: ^c%d^n, Hardening: ^c%d^n, Active: ^c%d^n, Storage: ^c%d^n, Load: ^c%d^n.",
               GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2),
               GET_OBJ_VAL(j, 3), GET_OBJ_VAL(j, 4));
       break;
     case ITEM_PROGRAM:
-      sprintf(ENDOF(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
               GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
       if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
-        sprintf(ENDOF(buf), " Its damage code is ^c%s^n.", wound_name[GET_OBJ_VAL(j, 3)]);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", wound_name[GET_OBJ_VAL(j, 3)]);
       break;
     case ITEM_BIOWARE:
-      sprintf(ENDOF(buf), "It is a ^crating-%d %s%s^n that uses ^c%.2f^n index when installed.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s%s^n that uses ^c%.2f^n index when installed.",
               GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2) || GET_OBJ_VAL(j, 0) >= BIO_CEREBRALBOOSTER ? "cultured " : "",
               decap_bio_types[GET_OBJ_VAL(j, 0)], ((float) GET_OBJ_VAL(j, 4) / 100));
       break;
     case ITEM_CYBERWARE:
-      sprintf(ENDOF(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%.2f^n essence when installed.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%.2f^n essence when installed.",
               GET_OBJ_VAL(j, 1), decap_cyber_grades[GET_OBJ_VAL(j, 2)], decap_cyber_types[GET_OBJ_VAL(j, 0)],
               ((float) GET_OBJ_VAL(j, 4) / 100));
       break;
     case ITEM_WORKSHOP:
-      sprintf(ENDOF(buf), "It is a ^c%s^n designed for ^c%s^n.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n designed for ^c%s^n.",
               GET_OBJ_VAL(j, 1) ? GET_OBJ_VAL(j, 1) == 3 ? "Facility": "Workshop" : "Kit", workshops[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_FOCUS:
-      sprintf(ENDOF(buf), "It is a ^c%s^n focus of force ^c%d^n.", foci_type[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n focus of force ^c%d^n.", foci_type[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1));
       break;
     case ITEM_SPELL_FORMULA:
-      sprintf(ENDOF(buf), "It is a ^cforce-%d %s^n designed for ^c%s^n mages.", GET_OBJ_VAL(j, 0),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cforce-%d %s^n designed for ^c%s^n mages.", GET_OBJ_VAL(j, 0),
               spells[GET_OBJ_VAL(j, 1)].name, GET_OBJ_VAL(j, 2) ? "Shamanic" : "Hermetic");
       break;
     case ITEM_PART:
-      sprintf(ENDOF(buf), "It is %s ^c%s^n designed for MPCP ^c%d^n decks.", AN(parts[GET_OBJ_VAL(j, 0)].name),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n designed for MPCP ^c%d^n decks.", AN(parts[GET_OBJ_VAL(j, 0)].name),
               parts[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
       break;
     case ITEM_CUSTOM_DECK:
-      sprintf(ENDOF(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");
       break;
     case ITEM_DRUG:
-      sprintf(ENDOF(buf), "It is a dose of ^c%s^n.", drug_types[GET_OBJ_VAL(j, 0)].name);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a dose of ^c%s^n.", drug_types[GET_OBJ_VAL(j, 0)].name);
       break;
     case ITEM_MAGIC_TOOL:
-      sprintf(ENDOF(buf), "It is a ^crating-^c%d %s^n.", GET_OBJ_VAL(j, 1), magic_tool_types[GET_OBJ_VAL(j, 0)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-^c%d %s^n.", GET_OBJ_VAL(j, 1), magic_tool_types[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_RADIO:
-      sprintf(ENDOF(buf), "It has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
               GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2));
       break;
     case ITEM_GUN_ACCESSORY:
       if (GET_OBJ_VAL(j, 1) == ACCESS_SMARTLINK || GET_OBJ_VAL(j, 1) == ACCESS_GASVENT) {
-        sprintf(ENDOF(buf), "It is a ^crating-%d %s^n that attaches to the ^c%s^n.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n that attaches to the ^c%s^n.",
                 GET_OBJ_VAL(j, 2), gun_accessory_types[GET_OBJ_VAL(j, 1)], gun_accessory_locations[GET_OBJ_VAL(j, 0)]);
       } else {
-        sprintf(ENDOF(buf), "It is %s ^c%s^n that attaches to the ^c%s^n.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that attaches to the ^c%s^n.",
                 AN(gun_accessory_types[GET_OBJ_VAL(j, 1)]), gun_accessory_types[GET_OBJ_VAL(j, 1)]
                 , gun_accessory_locations[GET_OBJ_VAL(j, 0)]);
       }
@@ -2061,93 +2063,93 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_GYRO:
     case ITEM_CLIMBING:
     case ITEM_RCDECK:
-      sprintf(ENDOF(buf), "Its rating is ^c%d^n.", GET_OBJ_VAL(j, 0));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its rating is ^c%d^n.", GET_OBJ_VAL(j, 0));
       break;
     case ITEM_CHIP:
-      sprintf(ENDOF(buf), "It grants the skill ^c%s^n at rating ^c%d^n.", skills[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 1));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It grants the skill ^c%s^n at rating ^c%d^n.", skills[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 1));
       break;
     case ITEM_HOLSTER:
-      sprintf(ENDOF(buf), "It is designed for a ^c%s^n.", holster_types[GET_OBJ_VAL(j, 0)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is designed for a ^c%s^n.", holster_types[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_DECK_ACCESSORY:
       if (GET_OBJ_VAL(j, 0) == TYPE_FILE) {
-        sprintf(ENDOF(buf), "This file requires ^c%d^n units of space.", GET_DECK_ACCESSORY_FILE_SIZE(j));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This file requires ^c%d^n units of space.", GET_DECK_ACCESSORY_FILE_SIZE(j));
       } else if (GET_OBJ_VAL(j, 0) == TYPE_UPGRADE) {
         if (GET_OBJ_VAL(j, 1) == 3) {
-          sprintf(ENDOF(buf), "This cyberdeck upgrade affects ^c%s^n with a rating of ^c%d^n.",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This cyberdeck upgrade affects ^c%s^n with a rating of ^c%d^n.",
                   deck_accessory_upgrade_types[GET_OBJ_VAL(j, 1)], GET_OBJ_VAL(j, 2));
           if (GET_OBJ_VAL(j, 1) == 5) {
-            sprintf(ENDOF(buf), "\r\nIt is designed for MPCP rating ^c%d^n.", GET_OBJ_VAL(j, 3));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is designed for MPCP rating ^c%d^n.", GET_OBJ_VAL(j, 3));
           }
         } else {
           strcat(buf, "This cyberdeck upgrade adds a ^chitcher jack^n.");
         }
       } else if (GET_OBJ_VAL(j, 0) == TYPE_COMPUTER) {
-        sprintf(ENDOF(buf), "This computer has ^c%d^n units of active memory and ^c%d^n units of storage memory.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This computer has ^c%d^n units of active memory and ^c%d^n units of storage memory.",
                 GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2));
       } else if (GET_OBJ_VAL(j, 0) == TYPE_PARTS) {
-        sprintf(ENDOF(buf), "This pack of parts contains ^c%d^n units of ^c%s^n.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This pack of parts contains ^c%d^n units of ^c%s^n.",
                 GET_OBJ_COST(j), GET_OBJ_VAL(j, 1) == 0 ? "general parts" : "memory chips");
       } else {
-        sprintf(buf2, "Error: Unknown ITEM_DECK_ACCESSORY type %d passed to probe command.", GET_OBJ_VAL(j, 0));
+        snprintf(buf2, sizeof(buf2), "Error: Unknown ITEM_DECK_ACCESSORY type %d passed to probe command.", GET_OBJ_VAL(j, 0));
         log(buf2);
       }
       break;
     case ITEM_MOD:
-      sprintf(ENDOF(buf), "It is %s ^c%s^n upgrade", AN(mod_types[GET_OBJ_VAL(j, 0)].name), mod_types[GET_OBJ_VAL(j, 0)].name);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n upgrade", AN(mod_types[GET_OBJ_VAL(j, 0)].name), mod_types[GET_OBJ_VAL(j, 0)].name);
       
       // Val 1
       if (GET_OBJ_VAL(j, 0) == TYPE_MOUNT) {
-        sprintf(ENDOF(buf), " that adds %s ^c%s^n.", AN(mount_types[GET_OBJ_VAL(j, 1)]), mount_types[GET_OBJ_VAL(j, 1)]);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " that adds %s ^c%s^n.", AN(mount_types[GET_OBJ_VAL(j, 1)]), mount_types[GET_OBJ_VAL(j, 1)]);
       } else {
-        sprintf(ENDOF(buf), " that takes up ^c%d^n load space.", GET_OBJ_VAL(j, 1));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " that takes up ^c%d^n load space.", GET_OBJ_VAL(j, 1));
       }
       
       // Val 2
       if (GET_OBJ_VAL(j, 0) == MOD_ENGINE) {
         // engine type
-        sprintf(ENDOF(buf), "\r\nIt is %s ^c%s^n engine.", AN(engine_type[GET_OBJ_VAL(j, 2)]), engine_type[GET_OBJ_VAL(j, 2)]);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is %s ^c%s^n engine.", AN(engine_type[GET_OBJ_VAL(j, 2)]), engine_type[GET_OBJ_VAL(j, 2)]);
       } else if (GET_OBJ_VAL(j, 0) == MOD_RADIO) {
         // radio range 0-5
-        sprintf(ENDOF(buf), "\r\nIt has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
                 GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
       } else {
-        sprintf(ENDOF(buf), "\r\nIt functions at rating ^c%d^n.", GET_OBJ_VAL(j, 2));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt functions at rating ^c%d^n.", GET_OBJ_VAL(j, 2));
       }
       
       // Val 5
       sprintbit(GET_OBJ_VAL(j, 5), engine_type, buf2);
-      sprintf(ENDOF(buf), "\r\nIt is compatible with the following engine types:\r\n^c  %s^n", buf2);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is compatible with the following engine types:\r\n^c  %s^n", buf2);
       
       // Vals 4 and 6
-      sprintf(ENDOF(buf), "\r\nIt has been designed to fit ^c%s^n, and installs to the ^c%s^n.",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has been designed to fit ^c%s^n, and installs to the ^c%s^n.",
               GET_OBJ_VAL(j, 4) == 0 ? "vehicles" : GET_OBJ_VAL(j, 4) == 1 ? "drones" : "all types of vehicles",
               mod_name[GET_OBJ_VAL(j, 6)]);
       break;
     case ITEM_DESIGN:
       if (GET_OBJ_VAL(j, 0) == 5) {
-        sprintf(ENDOF(buf), "This design is for a ^crating-%d %s (%s)^n program. It requires ^c%d^n units of storage.\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s (%s)^n program. It requires ^c%d^n units of storage.\r\n",
                 GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, wound_name[GET_OBJ_VAL(j, 2)],
                 (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * attack_multiplier[GET_OBJ_VAL(j, 2)]);
       } else {
-        sprintf(ENDOF(buf), "This design is for a ^crating-%d %s^n program. It requires ^c%d^n units of storage.\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This design is for a ^crating-%d %s^n program. It requires ^c%d^n units of storage.\r\n",
                 GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name,
                 (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * programs[GET_OBJ_VAL(j, 0)].multiplier);
       }
       break;
     case ITEM_GUN_AMMO:
       if (GET_OBJ_VAL(j, 3))
-        sprintf(ENDOF(buf), "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) +
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) +
                      GET_OBJ_VAL(j, 3), ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
                      weapon_type[GET_OBJ_VAL(j, 1)]);
       else
-        sprintf(ENDOF(buf), "It has %d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0),
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has %d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0),
                      ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
                      weapon_type[GET_OBJ_VAL(j, 1)]);
       break;
     case ITEM_OTHER:
       if (GET_OBJ_VNUM(j) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
-        sprintf(ENDOF(buf), "It is bonded to %s and has %d nuyen remaining on it.\r\n", 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is bonded to %s and has %d nuyen remaining on it.\r\n", 
                 GET_IDNUM(ch) == GET_OBJ_VAL(j, 0) ? "you" : "someone else",
                 GET_OBJ_VAL(j, 1));
         break;
@@ -2159,7 +2161,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_QUEST:
     case ITEM_CAMERA:
     case ITEM_PHONE:
-      sprintf(ENDOF(buf), "Nothing stands out about this item's OOC values. Try EXAMINE it instead.");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Nothing stands out about this item's OOC values. Try EXAMINE it instead.");
       break;
     default:
       strcat(buf, "This item type has no probe string. Contact the staff to request one.");
@@ -2167,7 +2169,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   }
   
   if (GET_OBJ_AFFECT(j).IsSet(AFF_LASER_SIGHT) && has_smartlink) {
-    sprintf(ENDOF(buf), "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.");
   }
   
   strcat(buf, "^n\r\n\r\n");
@@ -2175,7 +2177,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   
   if (strcmp(j->obj_flags.bitvector.ToString(), "0") != 0) {
     j->obj_flags.bitvector.PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
-    sprintf(ENDOF(buf), "This object provides the following flags when used: ^c%s^n\r\n", buf2);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object provides the following flags when used: ^c%s^n\r\n", buf2);
   }
   
   // Remove the dont_touch bit for probe printing.
@@ -2185,14 +2187,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     
   if (strcmp(GET_OBJ_EXTRA(j).ToString(), "0") != 0) {
     GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);      
-    sprintf(ENDOF(buf), "This object has the following extra features: ^c%s^n\r\n", GET_OBJ_EXTRA(j).ToString());
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object has the following extra features: ^c%s^n\r\n", GET_OBJ_EXTRA(j).ToString());
   }
   
   // Restore the dont_touch bit.
   if (is_dont_touch)
     GET_OBJ_EXTRA(j).SetBit(ITEM_DONT_TOUCH);
   
-  sprintf(buf1, "This object modifies your character in the following ways when used:\r\n  ^c");
+  snprintf(buf1, sizeof(buf1), "This object modifies your character in the following ways when used:\r\n  ^c");
   for (i = 0; i < MAX_OBJ_AFFECT; i++)
     if (j->affected[i].modifier)
     {
@@ -2200,7 +2202,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         sprinttype(j->affected[i].location, veh_aff, buf2);
       else
         sprinttype(j->affected[i].location, apply_types, buf2);
-      sprintf(ENDOF(buf1), "%s %+d to %s", found++ ? "," : "",
+      snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s %+d to %s", found++ ? "," : "",
               j->affected[i].modifier, buf2);
     }
   if (found) {
@@ -2213,7 +2215,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   }
   
   if (j->source_info) {
-    sprintf(ENDOF(buf), "\r\nIt references data from the following source book(s): %s^n\r\n", j->source_info);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt references data from the following source book(s): %s^n\r\n", j->source_info);
   }
   
   send_to_char(buf, ch);
@@ -2337,18 +2339,18 @@ ACMD(do_examine)
                (IS_GUN(GET_OBJ_VAL(tmp_object, 3)))) {
       for (i = 7; i < 10; ++i)
         if (GET_OBJ_VAL(tmp_object, i) >= 0) {
-          sprintf(buf1, "There is %s attached to the %s of it.\r\n",
+          snprintf(buf1, sizeof(buf1), "There is %s attached to the %s of it.\r\n",
                   GET_OBJ_VAL(tmp_object, i) > 0 ? short_object(GET_OBJ_VAL(tmp_object, i), 2) : "nothing",
                   (i == 7 ? "top" : (i == 8 ? "barrel" : "bottom")));
           send_to_char(buf1, ch);
         }
       if (tmp_object->contains)
-        sprintf(buf, "It contains %d round%s of %s ammunition, and can hold %d round%s.\r\n",
+        snprintf(buf, sizeof(buf), "It contains %d round%s of %s ammunition, and can hold %d round%s.\r\n",
                 MIN(GET_OBJ_VAL(tmp_object->contains, 9), GET_OBJ_VAL(tmp_object, 5)),
                 (GET_OBJ_VAL(tmp_object->contains, 9) != 1 ? "s" : ""), ammo_type[GET_OBJ_VAL(tmp_object->contains, 2)].name,
                 GET_OBJ_VAL(tmp_object, 5), (GET_OBJ_VAL(tmp_object, 5) != 1 ? "s" : ""));
       else
-        sprintf(buf, "It does not contain any ammunition, but looks to hold %d round%s.\r\n",
+        snprintf(buf, sizeof(buf), "It does not contain any ammunition, but looks to hold %d round%s.\r\n",
                 GET_OBJ_VAL(tmp_object, 5), (GET_OBJ_VAL(tmp_object, 5) != 1 ? "s" : ""));
       if (GET_OBJ_VAL(tmp_object, 5) > 0)
         send_to_char(buf, ch);
@@ -2380,24 +2382,24 @@ ACMD(do_examine)
                      ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "",
                      weapon_type[GET_OBJ_VAL(tmp_object, 1)]);
     } else if (GET_OBJ_VNUM(tmp_object) == 119 && GET_OBJ_VAL(tmp_object, 0) == GET_IDNUM(ch))
-      sprintf(buf, "The card contains %d nuyen.\r\n", GET_OBJ_VAL(tmp_object, 1));
+      snprintf(buf, sizeof(buf), "The card contains %d nuyen.\r\n", GET_OBJ_VAL(tmp_object, 1));
     else if (GET_OBJ_TYPE(tmp_object) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(tmp_object, 0) == TYPE_COOKER) {
       if (!tmp_object->contains)
-        sprintf(buf, "The small LED is currently off.\r\n");
+        snprintf(buf, sizeof(buf), "The small LED is currently off.\r\n");
       else if (GET_OBJ_VAL(tmp_object, 9))
-        sprintf(buf, "The small LED is currently orange, indicating activity.\r\n");
+        snprintf(buf, sizeof(buf), "The small LED is currently orange, indicating activity.\r\n");
       else if (GET_OBJ_TIMER(tmp_object->contains) == -1)
-        sprintf(buf, "The small LED is currently flashed red, indicating a failed encode.\r\n");
+        snprintf(buf, sizeof(buf), "The small LED is currently flashed red, indicating a failed encode.\r\n");
       else
-        sprintf(buf, "The small LED is currently green, indicating a successful encode.\r\n");
+        snprintf(buf, sizeof(buf), "The small LED is currently green, indicating a successful encode.\r\n");
       send_to_char(buf, ch);
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_PROGRAM && (GET_OBJ_VAL(tmp_object, 0) >= SOFT_ASIST_COLD || GET_OBJ_VAL(tmp_object, 0) < SOFT_SENSOR)) {
       if (GET_OBJ_TIMER(tmp_object) < 0)
-        sprintf(buf, "This chip has been ruined.\r\n");
+        snprintf(buf, sizeof(buf), "This chip has been ruined.\r\n");
       else if (!GET_OBJ_TIMER(tmp_object))
-        sprintf(buf, "This program still needs to be encoded to a chip.\r\n");
+        snprintf(buf, sizeof(buf), "This program still needs to be encoded to a chip.\r\n");
       else if (GET_OBJ_TIMER(tmp_object) > 0)
-        sprintf(buf, "This program has been encoded onto an optical chip.\r\n");
+        snprintf(buf, sizeof(buf), "This program has been encoded onto an optical chip.\r\n");
       send_to_char(buf, ch);
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(tmp_object, 0) == TYPE_PARTS)
       send_to_char(ch, "There seems to be about %d nuyen worth of %s there.\r\n", GET_OBJ_COST(tmp_object), GET_OBJ_VAL(tmp_object, 1) ? "chips" : "parts");
@@ -2411,7 +2413,7 @@ ACMD(do_examine)
           strcpy(buf, "Custom Components:\r\n");
           for (struct obj_data *soft = tmp_object->contains; soft; soft = soft->next_content)
             if (GET_OBJ_TYPE(soft) == ITEM_PART)
-              sprintf(ENDOF(buf), "%-30s Type: %-24s Rating: %d\r\n",
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-30s Type: %-24s Rating: %d\r\n",
                       GET_OBJ_NAME(soft),
                       parts[GET_OBJ_VAL(soft, 0)].name,
                       GET_PART_RATING(soft));
@@ -2467,7 +2469,7 @@ ACMD(do_examine)
       }
     }
     if (GET_OBJ_VNUM(tmp_object) > 1) {
-      sprintf(buf, "You think that %s ", GET_OBJ_NAME(tmp_object));
+      snprintf(buf, sizeof(buf), "You think that %s ", GET_OBJ_NAME(tmp_object));
       int targ = GET_LEGAL_NUM(tmp_object);
       if (targ <= 0)
         strcat(buf, "is completely legal");
@@ -2496,7 +2498,7 @@ ACMD(do_gold)
   else if (GET_NUYEN(ch) == 1)
     send_to_char("You have one miserable nuyen.\r\n", ch);
   else {
-    sprintf(buf, "You have %ld nuyen.\r\n", GET_NUYEN(ch));
+    snprintf(buf, sizeof(buf), "You have %ld nuyen.\r\n", GET_NUYEN(ch));
     send_to_char(buf, ch);
   }
 }
@@ -2505,38 +2507,38 @@ ACMD(do_pool)
 {
   char pools[MAX_INPUT_LENGTH];
   if (GET_POWER(ch, ADEPT_SIDESTEP) && GET_DEFENSE(ch))
-    sprintf(buf, "^R+%d^n", GET_POWER(ch, ADEPT_SIDESTEP));
+    snprintf(buf, sizeof(buf), "^R+%d^n", GET_POWER(ch, ADEPT_SIDESTEP));
   else
-    sprintf(buf, "  ");
+    snprintf(buf, sizeof(buf), "  ");
   
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-    sprintf(pools, "  Dodge: %d%s\r\n  Body: %d\r\n  Offense: %d\r\n  Total Combat Dice: %d\r\n",
+    snprintf(pools, sizeof(pools), "  Dodge: %d%s\r\n  Body: %d\r\n  Offense: %d\r\n  Total Combat Dice: %d\r\n",
             GET_DEFENSE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch), GET_COMBAT(ch));
   } else {
-    sprintf(pools, "  Combat: %d     (Dodge: %d%s      Body: %d     Offense: %d)\r\n",
+    snprintf(pools, sizeof(pools), "  Combat: %d     (Dodge: %d%s      Body: %d     Offense: %d)\r\n",
             GET_COMBAT(ch), GET_DEFENSE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch));
   }
   if (GET_ASTRAL(ch) > 0)
-    sprintf(ENDOF(pools), "  Astral: %d\r\n", GET_ASTRAL(ch));
+    snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Astral: %d\r\n", GET_ASTRAL(ch));
   if (GET_HACKING(ch) > 0)
-    sprintf(ENDOF(pools), "  Hacking: %d\r\n", GET_HACKING(ch));
+    snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Hacking: %d\r\n", GET_HACKING(ch));
   if (GET_MAGIC(ch) > 0) {
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-      sprintf(ENDOF(pools), "  Spell: %d\r\n  Casting: %d\r\n  Drain: %d\r\n  Defense: %d\r\n", GET_MAGIC(ch), GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
+      snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Spell: %d\r\n  Casting: %d\r\n  Drain: %d\r\n  Defense: %d\r\n", GET_MAGIC(ch), GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
       if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
-        sprintf(ENDOF(pools), "  Reflecting: %d\r\n", GET_REFLECT(ch));
+        snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Reflecting: %d\r\n", GET_REFLECT(ch));
     } else {
-      sprintf(ENDOF(pools), "  Spell: %d      (Casting: %d    Drain: %d    Defense: %d", GET_MAGIC(ch), GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
+      snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Spell: %d      (Casting: %d    Drain: %d    Defense: %d", GET_MAGIC(ch), GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
       if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
-        sprintf(ENDOF(pools), "    Reflecting: %d", GET_REFLECT(ch));
+        snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "    Reflecting: %d", GET_REFLECT(ch));
       strcat(pools, ")\r\n");
     }
   }
   if (GET_CONTROL(ch) > 0)
-    sprintf(ENDOF(pools), "  Control: %d\r\n", GET_CONTROL(ch));
+    snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Control: %d\r\n", GET_CONTROL(ch));
   for (int x = 0; x < 7; x++)
     if (GET_TASK_POOL(ch, x) > 0)
-      sprintf(ENDOF(pools), "  %s Task Pool: %d\r\n", attributes[x], GET_TASK_POOL(ch, x));
+      snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  %s Task Pool: %d\r\n", attributes[x], GET_TASK_POOL(ch, x));
   send_to_char(pools, ch);
 }
 
@@ -2566,9 +2568,9 @@ const char *get_position_string(struct char_data *ch) {
       break;
     case POS_FIGHTING:
       if (FIGHTING(ch))
-        sprintf(position_string, "fighting %s.",PERS(FIGHTING(ch), ch));
+        snprintf(position_string, sizeof(position_string), "fighting %s.",PERS(FIGHTING(ch), ch));
       else if (FIGHTING_VEH(ch))
-        sprintf(position_string, "fighting %s.", GET_VEH_NAME(FIGHTING_VEH(ch)));
+        snprintf(position_string, sizeof(position_string), "fighting %s.", GET_VEH_NAME(FIGHTING_VEH(ch)));
       else
         strcpy(position_string, "fighting thin air.");
       break;
@@ -2643,103 +2645,103 @@ const char *get_plaintext_score_health(struct char_data *ch) {
   if (pain_editor)
     return "Your physical and mental status is masked by your pain editor.\r\n";
   
-  sprintf(buf2, "Mental condition: %d / %d\r\n", (int)(mental / 100), (int)(GET_MAX_MENTAL(ch) / 100));
+  snprintf(buf2, sizeof(buf2), "Mental condition: %d / %d\r\n", (int)(mental / 100), (int)(GET_MAX_MENTAL(ch) / 100));
   
-  sprintf(ENDOF(buf2), "Physical condition: %d / %d\r\n", MAX((int)(physical / 100), 0), (int)(GET_MAX_PHYSICAL(ch) / 100));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Physical condition: %d / %d\r\n", MAX((int)(physical / 100), 0), (int)(GET_MAX_PHYSICAL(ch) / 100));
   
   if (physical < 0)
-    sprintf(ENDOF(buf2), "Physical damage overflow: %d\r\n", (int)(physical / 100) * -1);
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Physical damage overflow: %d\r\n", (int)(physical / 100) * -1);
   
   return buf2;
 }
 
 const char *get_plaintext_score_stats(struct char_data *ch) {
   if (GET_BOD(ch) != GET_REAL_BOD(ch))
-    sprintf(buf2, "Body: %d (base body %d)\r\n", GET_BOD(ch), GET_REAL_BOD(ch));
+    snprintf(buf2, sizeof(buf2), "Body: %d (base body %d)\r\n", GET_BOD(ch), GET_REAL_BOD(ch));
   else
-    sprintf(buf2, "Body: %d\r\n", GET_BOD(ch));
+    snprintf(buf2, sizeof(buf2), "Body: %d\r\n", GET_BOD(ch));
   
   if (GET_QUI(ch) != GET_REAL_QUI(ch))
-    sprintf(ENDOF(buf2), "Quickness: %d (base quickness %d)\r\n", GET_QUI(ch), GET_REAL_QUI(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Quickness: %d (base quickness %d)\r\n", GET_QUI(ch), GET_REAL_QUI(ch));
   else
-    sprintf(ENDOF(buf2), "Quickness: %d\r\n", GET_QUI(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Quickness: %d\r\n", GET_QUI(ch));
   
   if (GET_STR(ch) != GET_REAL_STR(ch))
-    sprintf(ENDOF(buf2), "Strength: %d (base strength %d)\r\n", GET_STR(ch), GET_REAL_STR(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Strength: %d (base strength %d)\r\n", GET_STR(ch), GET_REAL_STR(ch));
   else
-    sprintf(ENDOF(buf2), "Strength: %d\r\n", GET_STR(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Strength: %d\r\n", GET_STR(ch));
   
   if (GET_CHA(ch) != GET_REAL_CHA(ch))
-    sprintf(ENDOF(buf2), "Charisma: %d (base charisma %d)\r\n", GET_CHA(ch), GET_REAL_CHA(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Charisma: %d (base charisma %d)\r\n", GET_CHA(ch), GET_REAL_CHA(ch));
   else
-    sprintf(ENDOF(buf2), "Charisma: %d\r\n", GET_CHA(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Charisma: %d\r\n", GET_CHA(ch));
   
   if (GET_INT(ch) != GET_REAL_INT(ch))
-    sprintf(ENDOF(buf2), "Intelligence: %d (base intelligence %d)\r\n", GET_INT(ch), GET_REAL_INT(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Intelligence: %d (base intelligence %d)\r\n", GET_INT(ch), GET_REAL_INT(ch));
   else
-    sprintf(ENDOF(buf2), "Intelligence: %d\r\n", GET_INT(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Intelligence: %d\r\n", GET_INT(ch));
   
   if (GET_WIL(ch) != GET_REAL_WIL(ch))
-    sprintf(ENDOF(buf2), "Willpower: %d (base willpower %d)\r\n", GET_WIL(ch), GET_REAL_WIL(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Willpower: %d (base willpower %d)\r\n", GET_WIL(ch), GET_REAL_WIL(ch));
   else
-    sprintf(ENDOF(buf2), "Willpower: %d\r\n", GET_WIL(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Willpower: %d\r\n", GET_WIL(ch));
   
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
     strcat(ENDOF(buf2), "As a Mundane, you have no magic.\r\n");
   else {
     if (GET_MAG(ch) != ch->real_abils.mag)
-      sprintf(ENDOF(buf2), "Magic: %d (base magic %d)\r\n", (int)(GET_MAG(ch) / 100), MAX(0, (int)(ch->real_abils.mag / 100)));
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Magic: %d (base magic %d)\r\n", (int)(GET_MAG(ch) / 100), MAX(0, (int)(ch->real_abils.mag / 100)));
     else
-      sprintf(ENDOF(buf2), "Magic: %d\r\n", (int)(GET_MAG(ch) / 100));
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Magic: %d\r\n", (int)(GET_MAG(ch) / 100));
     
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-      sprintf(ENDOF(buf2), "You follow %s.\r\n", totem_types[GET_TOTEM(ch)]);
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You follow %s.\r\n", totem_types[GET_TOTEM(ch)]);
     
-    sprintf(ENDOF(buf2), "Initiation grade: %d\r\n", GET_GRADE(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Initiation grade: %d\r\n", GET_GRADE(ch));
   }
   
   if (GET_REAL_REA(ch) != GET_REA(ch))
-    sprintf(ENDOF(buf2), "Effective reaction: %d (real reaction %d)\r\n", GET_REA(ch), GET_REAL_REA(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Effective reaction: %d (real reaction %d)\r\n", GET_REA(ch), GET_REAL_REA(ch));
   else
-    sprintf(ENDOF(buf2), "Reaction: %d\r\n", GET_REA(ch));
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Reaction: %d\r\n", GET_REA(ch));
   
-  sprintf(ENDOF(buf2), "Initiative: %d + %dd6\r\n", GET_REA(ch), 1 + GET_INIT_DICE(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Initiative: %d + %dd6\r\n", GET_REA(ch), 1 + GET_INIT_DICE(ch));
   
   return buf2;
 }
 
 const char *get_plaintext_score_essence(struct char_data *ch) {
-  sprintf(buf2, "Essence: %.2f\r\n", ((float)GET_ESS(ch) / 100));
-  sprintf(ENDOF(buf2), "Bioware Index: %.2f\r\n", ((float)GET_INDEX(ch) / 100));
-  sprintf(ENDOF(buf2), "Essence Index: %.2f\r\n", ((float)GET_ESS(ch) / 100) + 3);
+  snprintf(buf2, sizeof(buf2), "Essence: %.2f\r\n", ((float)GET_ESS(ch) / 100));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Bioware Index: %.2f\r\n", ((float)GET_INDEX(ch) / 100));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Essence Index: %.2f\r\n", ((float)GET_ESS(ch) / 100) + 3);
   return buf2;
 }
 
 const char *get_plaintext_score_equipment(struct char_data *ch) {
-  sprintf(buf2, "Armor: %d ballistic, %d impact\r\n", GET_BALLISTIC(ch), GET_IMPACT(ch));
-  sprintf(ENDOF(buf2), "Nuyen: %ld\r\n", GET_NUYEN(ch));
-  sprintf(ENDOF(buf2), "You are carrying %.2f kilos. Your maximum carry weight is %d.\r\n", IS_CARRYING_W(ch), CAN_CARRY_W(ch));
+  snprintf(buf2, sizeof(buf2), "Armor: %d ballistic, %d impact\r\n", GET_BALLISTIC(ch), GET_IMPACT(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Nuyen: %ld\r\n", GET_NUYEN(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are carrying %.2f kilos. Your maximum carry weight is %d.\r\n", IS_CARRYING_W(ch), CAN_CARRY_W(ch));
   return buf2;
 }
 
 const char *get_plaintext_score_karma(struct char_data *ch) {
-  sprintf(buf2, "Current karma: %.2f\r\n", ((float)GET_KARMA(ch) / 100));
-  sprintf(ENDOF(buf2), "Total karma earned: %.2f\r\n", ((float)GET_TKE(ch)));
-  sprintf(ENDOF(buf2), "Reputation: %d\r\n", GET_REP(ch));
-  sprintf(ENDOF(buf2), "Notoriety: %d\r\n", GET_NOT(ch));
+  snprintf(buf2, sizeof(buf2), "Current karma: %.2f\r\n", ((float)GET_KARMA(ch) / 100));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Total karma earned: %.2f\r\n", ((float)GET_TKE(ch)));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Reputation: %d\r\n", GET_REP(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Notoriety: %d\r\n", GET_NOT(ch));
   return buf2;
 }
 
 const char *get_plaintext_score_misc(struct char_data *ch) {
-  sprintf(buf2, "You are %s\r\n", get_position_string(ch));
+  snprintf(buf2, sizeof(buf2), "You are %s\r\n", get_position_string(ch));
   
   if (ch->desc != NULL && ch->desc->original != NULL ) {
     if (PLR_FLAGGED(ch->desc->original, PLR_MATRIX))
-      sprintf(ENDOF(buf2), "You are connected to the Matrix.\r\n");
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are connected to the Matrix.\r\n");
     else if (IS_PROJECT(ch))
-      sprintf(ENDOF(buf2), "You are astrally projecting.\r\n");
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are astrally projecting.\r\n");
     else
-      sprintf(ENDOF(buf2), "You are occupying the body of %s.\r\n", GET_NAME(ch));
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are occupying the body of %s.\r\n", GET_NAME(ch));
   }
   
   strcpy(ENDOF(buf2), get_vision_string(ch));
@@ -2759,18 +2761,18 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
     strcpy(ENDOF(buf2), "You are intoxicated.\r\n");
   
   if (AFF_FLAGGED(ch, AFF_SNEAK))
-    sprintf(ENDOF(buf2), "You are sneaking.\r\n");
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are sneaking.\r\n");
   
   // Physical and misc attributes.
-  sprintf(ENDOF(buf2), "Height: %.2f meters\r\n", ((float)GET_HEIGHT(ch) / 100));
-  sprintf(ENDOF(buf2), "Weight: %d kilos\r\n", GET_WEIGHT(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Height: %.2f meters\r\n", ((float)GET_HEIGHT(ch) / 100));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Weight: %d kilos\r\n", GET_WEIGHT(ch));
   
   
   struct time_info_data playing_time;
   struct time_info_data real_time_passed(time_t t2, time_t t1);
   playing_time = real_time_passed(time(0) + ch->player.time.played, ch->player.time.logon);
   
-  sprintf(ENDOF(buf2), "Current session length: %d days, %d hours.\r\n", playing_time.day, playing_time.hours);
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Current session length: %d days, %d hours.\r\n", playing_time.day, playing_time.hours);
   
   return buf2;
 }
@@ -2778,13 +2780,13 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
 const char *get_plaintext_score_combat(struct char_data *ch) {
   strcpy(buf3, get_plaintext_score_health(ch));
   
-  sprintf(ENDOF(buf3), "Initiative: %d + %dd6\r\n", GET_REA(ch), 1 + GET_INIT_DICE(ch));
+  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Initiative: %d + %dd6\r\n", GET_REA(ch), 1 + GET_INIT_DICE(ch));
   
-  sprintf(ENDOF(buf3), "Armor: %d ballistic, %d impact\r\n", GET_BALLISTIC(ch), GET_IMPACT(ch));
+  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Armor: %d ballistic, %d impact\r\n", GET_BALLISTIC(ch), GET_IMPACT(ch));
   
   strcat(buf3, get_vision_string(ch));
   
-  sprintf(ENDOF(buf3), "You are %s\r\n", get_position_string(ch));
+  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "You are %s\r\n", get_position_string(ch));
   
   return buf3;
 }
@@ -2828,7 +2830,7 @@ ACMD(do_score)
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-      sprintf(screenreader_buf,
+      snprintf(screenreader_buf, sizeof(screenreader_buf),
               "You are rigging %s.\r\n"
               "Damage:^R%3d/10^n\r\n"
               "Mental:^B%3d(%2d)^n\r\n"
@@ -2849,8 +2851,8 @@ ACMD(do_score)
               veh->handling, veh->speed, veh->accel, veh->sig,
               veh->sensor);
     } else {
-      sprintf(buf, "You are rigging %s.\r\n", GET_VEH_NAME(veh));
-      sprintf(ENDOF(buf), "Damage:^R%3d/10^n      Mental:^B%3d(%2d)^n\r\n"
+      snprintf(buf, sizeof(buf), "You are rigging %s.\r\n", GET_VEH_NAME(veh));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Damage:^R%3d/10^n      Mental:^B%3d(%2d)^n\r\n"
               "  Reaction:%3d      Int:%3d\r\n"
               "       Wil:%3d      Bod:%3d\r\n"
               "     Armor:%3d  Autonav:%3d\r\n"
@@ -2889,11 +2891,11 @@ ACMD(do_score)
       return;
     }
     
-    sprintf(buf, "^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
+    snprintf(buf, sizeof(buf), "^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
                  "^b//^L//^b//^L//^b//^L//^b//^L^L//^b//^L//^b//^L//^b//^L//^b//^L/\r\n"
                  "^b/^L/  ^L \\_\\                                 ^rcondition monitor           ^L/^b/\r\n");
     
-    sprintf(screenreader_buf, "Score sheet for %s:\r\n", GET_CHAR_NAME(ch));
+    snprintf(screenreader_buf, sizeof(screenreader_buf), "Score sheet for %s:\r\n", GET_CHAR_NAME(ch));
     
     strcat(buf, "^L/^b/^L `//-\\\\                      ^gMent: ");
     int mental = GET_MENTAL(ch), physical = GET_PHYSICAL(ch);
@@ -3006,7 +3008,7 @@ ACMD(do_score)
     } else {
       strcat(buf, "^L/^b/  ^L///-\\  ^wcharacter sheet           ^LPhysical Damage Overflow: ");
       if (physical < 0)
-        sprintf(ENDOF(buf), "^R[%2d]  ^b/^L/\r\n", (int)(physical / 100) * -1);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^R[%2d]  ^b/^L/\r\n", (int)(physical / 100) * -1);
       else
         strcat(buf, "^R[ 0]  ^b/^L/\r\n");
     }
@@ -3015,14 +3017,14 @@ ACMD(do_score)
     
     playing_time = real_time_passed(time(0) + ch->player.time.played, ch->player.time.logon);
     
-    static char out_of_body_string[200];
+    char out_of_body_string[200];
     if (ch->desc != NULL && ch->desc->original != NULL ) {
       if (PLR_FLAGGED(ch->desc->original, PLR_MATRIX))
-        sprintf(out_of_body_string, "You are connected to the Matrix.");
+        snprintf(out_of_body_string, sizeof(out_of_body_string), "You are connected to the Matrix.");
       else if (IS_PROJECT(ch))
-        sprintf(out_of_body_string, "You are astrally projecting.");
+        snprintf(out_of_body_string, sizeof(out_of_body_string), "You are astrally projecting.");
       else
-        sprintf(out_of_body_string, "You are occupying the body of %s.", GET_NAME(ch));
+        snprintf(out_of_body_string, sizeof(out_of_body_string), "You are occupying the body of %s.", GET_NAME(ch));
     } else {
       strcpy(out_of_body_string, "");
     }
@@ -3034,55 +3036,55 @@ ACMD(do_score)
       strcpy(invisibility_string, "");
     
     
-    static char shaman_string[50];
+    char shaman_string[50];
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-      sprintf(shaman_string, "You follow %s.", totem_types[GET_TOTEM(ch)]);
+      snprintf(shaman_string, sizeof(shaman_string), "You follow %s.", totem_types[GET_TOTEM(ch)]);
     else
       strcpy(shaman_string, "");
     
     static char grade_string[50];
     if (GET_TRADITION(ch) != TRAD_MUNDANE)
-      sprintf(grade_string, "^nGrade: ^w[^W%2d^w]", GET_GRADE(ch));
+      snprintf(grade_string, sizeof(grade_string), "^nGrade: ^w[^W%2d^w]", GET_GRADE(ch));
     else
       strcpy(grade_string, "");
     
-    sprintf(ENDOF(buf), "^b/^L/  ^L\\\\@//                                                            ^L/^b/\r\n");
-    sprintf(ENDOF(buf), "^L/^b/   ^L`^                                                              ^b/^L/\r\n");
-    sprintf(ENDOF(buf), "^b/^L/                                                                   ^L/^b/\r\n");
-    sprintf(ENDOF(buf), "^L/^b/ ^nBody          ^w%2d (^W%2d^w)    Height: ^W%0.2f^w meters   Weight: ^W%3d^w kilos  ^b/^L/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/  ^L\\\\@//                                                            ^L/^b/\r\n");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/   ^L`^                                                              ^b/^L/\r\n");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/                                                                   ^L/^b/\r\n");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nBody          ^w%2d (^W%2d^w)    Height: ^W%0.2f^w meters   Weight: ^W%3d^w kilos  ^b/^L/\r\n",
                           GET_REAL_BOD(ch), GET_BOD(ch), ((float)GET_HEIGHT(ch) / 100), GET_WEIGHT(ch));
-    sprintf(ENDOF(buf), "^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)    Encumbrance: ^W%3.2f^w kilos carried, ^W%3d^w max ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)    Encumbrance: ^W%3.2f^w kilos carried, ^W%3d^w max ^L/^b/\r\n",
                           GET_REAL_QUI(ch), GET_QUI(ch), IS_CARRYING_W(ch) ,CAN_CARRY_W(ch));
-    sprintf(ENDOF(buf), "^L/^b/ ^nStrength      ^w%2d (^W%2d^w)    Current session length ^W%2d^w days, ^W%2d^w hours.^b/^L/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nStrength      ^w%2d (^W%2d^w)    Current session length ^W%2d^w days, ^W%2d^w hours.^b/^L/\r\n",
                           GET_REAL_STR(ch), GET_STR(ch), playing_time.day, playing_time.hours);
-    sprintf(ENDOF(buf), "^b/^L/ ^nCharisma      ^w%2d (^W%2d^w)    ^wKarma ^B[^W%7.2f^B] ^wRep ^B[^W%4d^B] ^rNotor ^r[^R%4d^r]  ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nCharisma      ^w%2d (^W%2d^w)    ^wKarma ^B[^W%7.2f^B] ^wRep ^B[^W%4d^B] ^rNotor ^r[^R%4d^r]  ^L/^b/\r\n",
                           GET_REAL_CHA(ch), GET_CHA(ch), ((float)GET_KARMA(ch) / 100), GET_REP(ch), GET_NOT(ch));
-    sprintf(ENDOF(buf), "^L/^b/ ^nIntelligence  ^w%2d (^W%2d^w)    ^r%-41s^b/^L/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nIntelligence  ^w%2d (^W%2d^w)    ^r%-41s^b/^L/\r\n",
                           GET_REAL_INT(ch), GET_INT(ch), get_vision_string(ch, TRUE));
-    sprintf(ENDOF(buf), "^b/^L/ ^nWillpower     ^w%2d (^W%2d^w)    ^nYou are %-33s^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nWillpower     ^w%2d (^W%2d^w)    ^nYou are %-33s^L/^b/\r\n",
                           GET_REAL_WIL(ch), GET_WIL(ch), get_position_string(ch));
-    sprintf(ENDOF(buf), "^L/^b/ ^nEssence       ^g[^w%5.2f^g]    ^W%-18s                       ^b/^L/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nEssence       ^g[^w%5.2f^g]    ^W%-18s                       ^b/^L/\r\n",
                           ((float)GET_ESS(ch) / 100), invisibility_string);
 #ifdef ENABLE_HUNGER
-    sprintf(ENDOF(buf), "^b/^L/ ^nBioware Index ^B[^w%5.2f^B]    ^n%-15s                          ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nBioware Index ^B[^w%5.2f^B]    ^n%-15s                          ^L/^b/\r\n",
                           ((float)GET_INDEX(ch) / 100), GET_COND(ch, COND_FULL) == 0 ? "You are hungry." : "");
-    sprintf(ENDOF(buf), "^L/^b/ ^nEssence Index ^W[^w%5.2f^W]    ^n%-16s                         ^b/^L/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nEssence Index ^W[^w%5.2f^W]    ^n%-16s                         ^b/^L/\r\n",
                           (((float)GET_ESS(ch) / 100) + 3), GET_COND(ch, COND_THIRST) == 0 ? "You are thirsty." : "");
 #else
-    sprintf(ENDOF(buf), "^b/^L/ ^nBioware Index ^B[^w%5.2f^B]    ^n%-15s                          ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nBioware Index ^B[^w%5.2f^B]    ^n%-15s                          ^L/^b/\r\n",
                           ((float)GET_INDEX(ch) / 100), "");
-    sprintf(ENDOF(buf), "^L/^b/ ^nEssence Index ^W[^w%5.2f^W]    ^n%-16s                         ^b/^L/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nEssence Index ^W[^w%5.2f^W]    ^n%-16s                         ^b/^L/\r\n",
                           (((float)GET_ESS(ch) / 100) + 3), "");
 #endif
-    sprintf(ENDOF(buf), "^b/^L/ ^nMagic         ^w%2d (^W%2d^w)    ^g%-20s                     ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nMagic         ^w%2d (^W%2d^w)    ^g%-20s                     ^L/^b/\r\n",
                           MAX(0, ((int)ch->real_abils.mag / 100)), ((int)GET_MAG(ch) / 100), GET_COND(ch, COND_DRUNK) > 10 ? "You are intoxicated." : "");
-    sprintf(ENDOF(buf), "^L/^b/ ^nReaction      ^w%2d (^W%2d^w)    ^c%-41s^b/^L/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nReaction      ^w%2d (^W%2d^w)    ^c%-41s^b/^L/\r\n",
                           GET_REAL_REA(ch), GET_REA(ch), out_of_body_string);
-    sprintf(ENDOF(buf), "^b/^L/ ^nInitiative^w   [^W%2d^w+^W%d^rd6^n]    ^n%-32s         ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nInitiative^w   [^W%2d^w+^W%d^rd6^n]    ^n%-32s         ^L/^b/\r\n",
                           GET_REA(ch), 1 + GET_INIT_DICE(ch), shaman_string);
-    sprintf(ENDOF(buf), "^L/^b/ ^nArmor     ^w[ ^W%2d^rB^w/ ^W%2d^rI^w]    ^L%-17s^n                        ^b/^L/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nArmor     ^w[ ^W%2d^rB^w/ ^W%2d^rI^w]    ^L%-17s^n                        ^b/^L/\r\n",
                           GET_BALLISTIC(ch), GET_IMPACT(ch), AFF_FLAGGED(ch, AFF_SNEAK) ? "You are sneaking." : "");
-    sprintf(ENDOF(buf), "^b/^L/ ^nNuyen     ^w[^W%'9ld^w]    %11s                              ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nNuyen     ^w[^W%'9ld^w]    %11s                              ^L/^b/\r\n",
                           GET_NUYEN(ch), grade_string);
     strcat(buf, "^L/^b/                                                                   ^b/^L/\r\n"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//"
@@ -3132,7 +3134,7 @@ ACMD(do_cyberware)
   
   send_to_char("You have the following cyberware:\r\n", ch);
   for (obj = ch->cyberware; obj != NULL; obj = obj->next_content) {
-    sprintf(buf, "%-30s Essence: %0.2f\r\n",
+    snprintf(buf, sizeof(buf), "%-30s Essence: %0.2f\r\n",
             GET_OBJ_NAME(obj), ((float)GET_OBJ_VAL(obj, 4) / 100));
     send_to_char(buf, ch);
   }
@@ -3149,7 +3151,7 @@ ACMD(do_bioware)
   
   send_to_char("You have the following bioware:\r\n", ch);
   for (obj = ch->bioware; obj != NULL; obj = obj->next_content) {
-    sprintf(buf, "%-30s Rating: %-2d     Body Index: %0.2f\r\n",
+    snprintf(buf, sizeof(buf), "%-30s Rating: %-2d     Body Index: %0.2f\r\n",
             GET_OBJ_NAME(obj),
             GET_OBJ_VAL(obj, 1), ((float)GET_OBJ_VAL(obj, 4) / 100));
     send_to_char(buf, ch);
@@ -3220,10 +3222,10 @@ ACMD(do_time)
   pm = (time_info.hours >= 12);
   
   if (subcmd == SCMD_NORMAL)
-    sprintf(buf, "%d o'clock %s, %s, %s %d, %d.\r\n", hour, pm ? "PM" : "AM",
+    snprintf(buf, sizeof(buf), "%d o'clock %s, %s, %s %d, %d.\r\n", hour, pm ? "PM" : "AM",
             weekdays[(int)time_info.weekday], month_name[month - 1], day, time_info.year);
   else
-    sprintf(buf, "%d:%s%d %s, %s, %s%d/%s%d/%d.\r\n", hour,
+    snprintf(buf, sizeof(buf), "%d:%s%d %s, %s, %s%d/%s%d/%d.\r\n", hour,
             minute < 10 ? "0" : "", minute, pm ? "PM" : "AM",
             weekdays[(int)time_info.weekday], month < 10 ? "0" : "", month,
             day < 10 ? "0" : "", day, year);
@@ -3243,7 +3245,7 @@ ACMD(do_weather)
   };
   
   if (OUTSIDE(ch)) {
-    sprintf(buf, "The sky is %s and %s.\r\n", sky_look[weather_info.sky],
+    snprintf(buf, sizeof(buf), "The sky is %s and %s.\r\n", sky_look[weather_info.sky],
             (weather_info.change >= 0 ? "you feel a warm wind from south" :
              "your foot tells you bad weather is due"));
     send_to_char(buf, ch);
@@ -3264,7 +3266,7 @@ ACMD(do_index)
   skip_spaces(&temp);
   
   if (!*temp) {
-    sprintf(query, "SELECT name FROM help_topic ORDER BY name ASC");
+    snprintf(query, sizeof(query), "SELECT name FROM help_topic ORDER BY name ASC");
   } else {
     char letter = *temp;
     if (!isalpha(letter)) {
@@ -3275,7 +3277,7 @@ ACMD(do_index)
     letter = tolower(letter);
     
     // No prepare_quotes since this is guaranteed to be a single alphanumeric character.
-    sprintf(query, "SELECT name FROM help_topic WHERE name LIKE '%c%%'", letter);
+    snprintf(query, sizeof(query), "SELECT name FROM help_topic WHERE name LIKE '%c%%'", letter);
   }
   
   // Execute the query and check for errors.
@@ -3298,7 +3300,7 @@ ACMD(do_index)
   mysql_free_result(res);
 }
 
-void display_help(char *help, const char *arg, struct char_data *ch) {
+void display_help(char *help, int help_len, const char *arg, struct char_data *ch) {
   char query[MAX_STRING_LENGTH];
   MYSQL_RES *res;
   MYSQL_ROW row;
@@ -3308,18 +3310,18 @@ void display_help(char *help, const char *arg, struct char_data *ch) {
   prepare_quotes(buf, arg, sizeof(buf) / sizeof(buf[0]));
   
   // First strategy: Look for an exact match.
-  sprintf(query, "SELECT * FROM help_topic WHERE name='%s'", buf);
+  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name='%s'", buf);
   if (mysql_wrapper(mysql, query)) {
     // We got a SQL error-- bail.
-    sprintf(help, "The help system is temporarily unavailable.\r\n");
-    sprintf(buf3, "WARNING: Failed to return help topic about %s. See server log for MYSQL error.", arg);
+    snprintf(help, help_len, "The help system is temporarily unavailable.\r\n");
+    snprintf(buf3, sizeof(buf3), "WARNING: Failed to return help topic about %s. See server log for MYSQL error.", arg);
     mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return;
   } else {
     res = mysql_store_result(mysql);
     if ((row = mysql_fetch_row(res))) {
       // Found it-- send it back and have done with it.
-      sprintf(help, "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
+      snprintf(help, help_len, "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
       mysql_free_result(res);
       return;
     } else {
@@ -3329,10 +3331,10 @@ void display_help(char *help, const char *arg, struct char_data *ch) {
   }
   
   // Second strategy: Search for possible like-matches.
-  sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", buf);
+  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", buf);
   if (mysql_wrapper(mysql, query)) {
     // If we don't find it here either, we know the file doesn't exist-- failure condition.
-    sprintf(help, "No such help file exists.\r\n");
+    snprintf(help, help_len, "No such help file exists.\r\n");
     return;
   }
   res = mysql_store_result(mysql);
@@ -3340,8 +3342,8 @@ void display_help(char *help, const char *arg, struct char_data *ch) {
   
   // If we have no rows, fail.
   if (x < 1) {
-    sprintf(help, "No such help file exists.\r\n");
-    sprintf(buf3, "Failed helpfile search: %s.", arg);
+    snprintf(help, help_len, "No such help file exists.\r\n");
+    snprintf(buf3, sizeof(buf3), "Failed helpfile search: %s.", arg);
     mudlog(buf3, ch, LOG_HELPLOG, TRUE);
     mysql_free_result(res);
     return;
@@ -3350,17 +3352,17 @@ void display_help(char *help, const char *arg, struct char_data *ch) {
   // If we have too many rows, try to refine the search to just files starting with the search string.
   else if (x > 5) {
     // Prepare a just-in-case response with the topics that were found in the overbroad search.
-    sprintf(help, "%d articles returned, please narrow your search. The topics found were:\r\n", x);
+    snprintf(help, help_len, "%d articles returned, please narrow your search. The topics found were:\r\n", x);
     while ((row = mysql_fetch_row(res))) {
-      sprintf(ENDOF(help), "^W%s^n\r\n", row[0]);
+      snprintf(ENDOF(help), help_len - strlen(help), "^W%s^n\r\n", row[0]);
     }
     mysql_free_result(res);
     
     // Try a lookup with just files that have the search string at the start of their title.
-    sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", buf);
+    snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", buf);
     if (mysql_wrapper(mysql, query)) {
       // We hit an error with this followup search, so we just return our pre-prepared string with the search that succeeded.
-      sprintf(buf3, "Overbroad helpfile search combined with follow-up lookup failure (%d articles): %s.", x, arg);
+      snprintf(buf3, sizeof(buf3), "Overbroad helpfile search combined with follow-up lookup failure (%d articles): %s.", x, arg);
       mudlog(buf3, ch, LOG_HELPLOG, TRUE);
       return;
     }
@@ -3368,10 +3370,10 @@ void display_help(char *help, const char *arg, struct char_data *ch) {
     row = mysql_fetch_row(res);
     if (mysql_num_rows(res) == 1) {
       // We found a single candidate row-- send that back.
-      sprintf(help, "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
+      snprintf(help, help_len, "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
     } else {
       // We didn't find any candidate rows, or we found too many. They'll get the pre-prepared string, and we'll log this one.
-      sprintf(buf3, "Overbroad helpfile search (%d articles): %s.", x, arg);
+      snprintf(buf3, sizeof(buf3), "Overbroad helpfile search (%d articles): %s.", x, arg);
       mudlog(buf3, ch, LOG_HELPLOG, TRUE);
     }
     mysql_free_result(res);
@@ -3381,7 +3383,7 @@ void display_help(char *help, const char *arg, struct char_data *ch) {
   // We found 1-5 results. Chunk 'em together and return them.
   else {
     while ((row = mysql_fetch_row(res))) {
-      sprintf(ENDOF(help), "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
+      snprintf(ENDOF(help), help_len - strlen(help), "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
     }
     mysql_free_result(res);
     return;
@@ -3399,7 +3401,7 @@ ACMD(do_help)
     return;
   }
   
-  display_help(buf, argument, ch);
+  display_help(buf, MAX_STRING_LENGTH*2, argument, ch);
   send_to_char(buf, ch);
 }
 
@@ -3417,14 +3419,14 @@ ACMD(do_wizhelp)
                      access_level(vict, LVL_BUILDER))) {
     if (!vict)
       vict = ch;
-    sprintf(buf, "The following privileged commands are available to %s:\r\n",
+    snprintf(buf, sizeof(buf), "The following privileged commands are available to %s:\r\n",
             vict == ch ? "you" : GET_CHAR_NAME(vict));
     
     /* cmd_num starts at 1, not 0, to remove 'RESERVED' */
     for (no = 1, cmd_num = 1; *cmd_info[cmd_num].command != '\n'; cmd_num++)
       if (cmd_info[cmd_num].minimum_level >= LVL_BUILDER
           && GET_LEVEL(vict) >= cmd_info[cmd_num].minimum_level) {
-        sprintf(buf + strlen(buf), "%-13s", cmd_info[cmd_num].command);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-13s", cmd_info[cmd_num].command);
         if (!(no % 6))
           strcat(buf, "\r\n");
         no++;
@@ -3448,13 +3450,13 @@ ACMD(do_wizhelp)
    access_level(vict, LVL_BUILDER))) {
    if (!vict)
    vict = ch;
-   sprintf(buf, "The following privileged commands are available to %s:\r\n",
+   snprintf(buf, sizeof(buf), "The following privileged commands are available to %s:\r\n",
    vict == ch ? "you" : GET_CHAR_NAME(vict));
    
    for (no = 1, cmd_num = 1; *cmd_info[cmd_num].command != '\n'; cmd_num++)
    if (cmd_info[cmd_num].minimum_level >= LVL_BUILDER
    && GET_LEVEL(vict) >= cmd_info[cmd_num].minimum_level) {
-   sprintf(buf + strlen(buf), "%-13s", cmd_info[cmd_num].command);
+   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-13s", cmd_info[cmd_num].command);
    if (!(no % 6))
    strcat(buf, "\r\n");
    no++;
@@ -3562,31 +3564,31 @@ ACMD(do_who)
       switch (GET_LEVEL(tch)) {
         case LVL_BUILDER:
         case LVL_ARCHITECT:
-          sprintf(buf1, "^G");
+          snprintf(buf1, sizeof(buf1), "^G");
           break;
         case LVL_FIXER:
         case LVL_CONSPIRATOR:
-          sprintf(buf1, "^m");
+          snprintf(buf1, sizeof(buf1), "^m");
           break;
         case LVL_EXECUTIVE:
-          sprintf(buf1, "^c");
+          snprintf(buf1, sizeof(buf1), "^c");
           break;
         case LVL_DEVELOPER:
-          sprintf(buf1, "^r");
+          snprintf(buf1, sizeof(buf1), "^r");
           break;
         case LVL_VICEPRES:
         case LVL_ADMIN:
-          sprintf(buf1, "^b");
+          snprintf(buf1, sizeof(buf1), "^b");
           break;
         case LVL_PRESIDENT:
-          sprintf(buf1, "^B");
+          snprintf(buf1, sizeof(buf1), "^B");
           break;
         default:
-          sprintf(buf1, "^L");
+          snprintf(buf1, sizeof(buf1), "^L");
           break;
       }
       if (PRF_FLAGGED(tch, PRF_SHOWGROUPTAG) && GET_PGROUP_MEMBER_DATA(tch) && GET_PGROUP(tch)) {
-        sprintf(buf2, "%10s :^N %s%s^N%s%s%s %s^n",
+        snprintf(buf2, sizeof(buf2), "%10s :^N %s%s^N%s%s%s %s^n",
                 (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
                 (GET_PGROUP(tch)->get_tag()),
                 (strlen(GET_PGROUP(tch)->get_tag()) ? " " : ""),
@@ -3595,7 +3597,7 @@ ACMD(do_who)
                 GET_CHAR_NAME(tch),
                 GET_TITLE(tch));
       } else {
-        sprintf(buf2, "%10s :^N %s%s%s %s^n",
+        snprintf(buf2, sizeof(buf2), "%10s :^N %s%s%s %s^n",
                 (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
                 (GET_PRETITLE(tch) ? GET_PRETITLE(tch) : ""),
                 (GET_PRETITLE(tch) && strlen(GET_PRETITLE(tch)) ? " " : ""),
@@ -3607,7 +3609,7 @@ ACMD(do_who)
       if (GET_PGROUP_MEMBER_DATA(tch) && GET_PGROUP(tch) && !(GET_PGROUP(tch)->is_secret())
           && GET_PGROUP_MEMBER_DATA(ch)
           && GET_PGROUP(ch) == GET_PGROUP(tch)) {
-        sprintf(buf2, " ^G(^g%s^G)^n", GET_PGROUP(tch)->get_alias());
+        snprintf(buf2, sizeof(buf2), " ^G(^g%s^G)^n", GET_PGROUP(tch)->get_alias());
         strcat(buf1, buf2);
       }
       
@@ -3621,9 +3623,9 @@ ACMD(do_who)
       
       if (level > LVL_MORTAL) {
         if (GET_INVIS_LEV(tch) && level >= GET_INVIS_LEV(tch))
-          sprintf(ENDOF(buf1), " (i%d)", GET_INVIS_LEV(tch));
+          snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), " (i%d)", GET_INVIS_LEV(tch));
         if (GET_INCOG_LEV(tch))
-          sprintf(ENDOF(buf1), " (c%d)", GET_INCOG_LEV(tch));
+          snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), " (c%d)", GET_INCOG_LEV(tch));
         if (PLR_FLAGGED(tch, PLR_MAILING))
           strcat(buf1, " (mailing)");
         else if (PLR_FLAGGED(tch, PLR_WRITING))
@@ -3668,7 +3670,7 @@ ACMD(do_who)
   else if (num_can_see == 1)
     strcat(buf, "One lonely chummer displayed.\r\n");
   else
-    sprintf(buf, "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
+    snprintf(buf, sizeof(buf), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
   if (subcmd) {
     FILE *fl;
     static char buffer[MAX_STRING_LENGTH*4];
@@ -3858,7 +3860,7 @@ ACMD(do_users)
       strcpy(state, connected_types[d->connected]);
     
     if (d->character && !d->connected)
-      sprintf(idletime, "%4d", d->character->char_specials.timer);
+      snprintf(idletime, sizeof(idletime), "%4d", d->character->char_specials.timer);
     else
       strcpy(idletime, "");
     
@@ -3866,22 +3868,22 @@ ACMD(do_users)
     
     if (d->character && GET_CHAR_NAME(d->character)) {
       if (d->original)
-        sprintf(line, format, d->desc_num, GET_CHAR_NAME(d->original),
+        snprintf(line, sizeof(line), format, d->desc_num, GET_CHAR_NAME(d->original),
                 state, idletime, timeptr);
       else
-        sprintf(line, format, d->desc_num, GET_CHAR_NAME(d->character),
+        snprintf(line, sizeof(line), format, d->desc_num, GET_CHAR_NAME(d->character),
                 state, idletime, timeptr);
     } else
-      sprintf(line, format, d->desc_num, "UNDEFINED",
+      snprintf(line, sizeof(line), format, d->desc_num, "UNDEFINED",
               state, idletime, timeptr);
     
     if (*d->host && GET_DESC_LEVEL(d) <= GET_LEVEL(ch))
-      sprintf(line + strlen(line), "[%s]\r\n", d->host);
+      snprintf(ENDOF(line), sizeof(line) - strlen(line), "[%s]\r\n", d->host);
     else
-      strcat(line, "[Hostname unknown]\r\n");
+      snprintf(line, sizeof(line), "[Hostname unknown]\r\n");
     
     if (d->connected) {
-      sprintf(line2, "^g%s^n", line);
+      snprintf(line2, sizeof(line2), "^g%s^n", line);
       strcpy(line, line2);
     }
     if ((d->connected && !d->character) || CAN_SEE(ch, d->character)) {
@@ -3890,7 +3892,7 @@ ACMD(do_users)
     }
   }
   
-  sprintf(line, "\r\n%d visible sockets connected.\r\n", num_can_see);
+  snprintf(line, sizeof(line), "\r\n%d visible sockets connected.\r\n", num_can_see);
   send_to_char(line, ch);
 }
 
@@ -3952,25 +3954,25 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
   if (strlen(buf) >= 7500)
     return;
   if (num > 0)
-    sprintf(buf + strlen(buf), "O%3d. %-25s - ", num,
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "O%3d. %-25s - ", num,
             GET_OBJ_NAME(obj));
   else
-    sprintf(buf + strlen(buf), "%33s", " - ");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%33s", " - ");
   
   if (obj->in_room)
-    sprintf(buf + strlen(buf), "[%5ld] %s\r\n", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld] %s\r\n", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
   else if (obj->carried_by)
-    sprintf(buf + strlen(buf), "carried by %s\r\n", PERS(obj->carried_by, ch));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "carried by %s\r\n", PERS(obj->carried_by, ch));
   else if (obj->worn_by)
-    sprintf(buf + strlen(buf), "worn by %s\r\n", PERS(obj->worn_by, ch));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "worn by %s\r\n", PERS(obj->worn_by, ch));
   else if (obj->in_obj)
   {
-    sprintf(buf + strlen(buf), "inside %s%s\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "inside %s%s\r\n",
             GET_OBJ_NAME(obj->in_obj), (recur ? ", which is" : " "));
     if (recur)
       print_object_location(0, obj->in_obj, ch, recur);
   } else
-    sprintf(buf + strlen(buf), "in an unknown location\r\n");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in an unknown location\r\n");
 }
 
 void perform_immort_where(struct char_data * ch, char *arg)
@@ -3989,14 +3991,14 @@ void perform_immort_where(struct char_data * ch, char *arg)
         if (i && CAN_SEE(ch, i) && (i->in_room || i->in_veh)) {
           if (d->original)
             if (d->character->in_veh)
-              sprintf(buf + strlen(buf), "%-20s - [%6ld] %s^n (switched as %s) (in %s)\r\n",
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (switched as %s) (in %s)\r\n",
                       GET_CHAR_NAME(i),
                       GET_ROOM_VNUM(get_ch_in_room(d->character)),
                       GET_ROOM_NAME(get_ch_in_room(d->character)),
                       GET_NAME(d->character),
                       GET_VEH_NAME(d->character->in_veh));
             else
-              sprintf(buf + strlen(buf), "%-20s - [%6ld] %s^n (in %s)\r\n",
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (in %s)\r\n",
                       GET_CHAR_NAME(i),
                       GET_ROOM_VNUM(get_ch_in_room(d->character)),
                       GET_ROOM_NAME(get_ch_in_room(d->character)),
@@ -4004,13 +4006,13 @@ void perform_immort_where(struct char_data * ch, char *arg)
           
             else
               if (i->in_veh)
-                sprintf(buf + strlen(buf), "%-20s - [%6ld] %s^n (in %s)\r\n",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n (in %s)\r\n",
                         GET_CHAR_NAME(i),
                         GET_ROOM_VNUM(get_ch_in_room(i)),
                         GET_ROOM_NAME(get_ch_in_room(i)),
                         GET_VEH_NAME(i->in_veh));
               else
-                sprintf(buf + strlen(buf), "%-20s - [%6ld] %s^n\r\n",
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - [%6ld] %s^n\r\n",
                         GET_CHAR_NAME(i),
                         GET_ROOM_VNUM(get_ch_in_room(i)),
                         GET_ROOM_NAME(get_ch_in_room(i)));
@@ -4024,12 +4026,12 @@ void perform_immort_where(struct char_data * ch, char *arg)
       if (CAN_SEE(ch, i) && (i->in_room || i->in_veh) &&
           isname(arg, GET_KEYWORDS(i))) {
         found = 1;
-        sprintf(buf + strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
                 GET_NAME(i),
                 GET_ROOM_VNUM(get_ch_in_room(i)),
                 GET_ROOM_NAME(get_ch_in_room(i)));
         if (i->in_veh) {
-          sprintf(ENDOF(buf), " (in %s^n)\r\n", GET_VEH_NAME(i->in_veh));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (in %s^n)\r\n", GET_VEH_NAME(i->in_veh));
         } else {
           strcat(buf, "\r\n");
         }
@@ -4246,11 +4248,11 @@ ACMD(do_commands)
   }
   
   if (*arg && !str_cmp(arg, "all")) {
-    sprintf(buf, "The following %s are available to you:\r\n",
+    snprintf(buf, sizeof(buf), "The following %s are available to you:\r\n",
             socials ? "socials" : "commands");
     mode_all = TRUE;
   } else {
-    sprintf(buf, "The following %s beginning with '%s' are available to you:\r\n",
+    snprintf(buf, sizeof(buf), "The following %s beginning with '%s' are available to you:\r\n",
             socials ? "socials" : "commands", arg);
     mode_all = FALSE;
   }
@@ -4263,7 +4265,7 @@ ACMD(do_commands)
       if (mtx_info[cmd_num].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= mtx_info[cmd_num].minimum_level) ||
            (IS_NPC(vict) && vict->desc->original && GET_REAL_LEVEL(vict->desc->original) >= mtx_info[cmd_num].minimum_level))) {
-            sprintf(buf + strlen(buf), "%-13s", mtx_info[cmd_num].command);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-13s", mtx_info[cmd_num].command);
             if (!(no % 7) || PRF_FLAGGED(ch, PRF_SCREENREADER))
               strcat(buf, "\r\n");
             no++;
@@ -4280,7 +4282,7 @@ ACMD(do_commands)
       if (rig_info[cmd_num].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= rig_info[cmd_num].minimum_level) ||
            (IS_NPC(vict) && vict->desc->original && GET_REAL_LEVEL(vict->desc->original) >= rig_info[cmd_num].minimum_level))) {
-            sprintf(buf + strlen(buf), "%-13s", rig_info[cmd_num].command);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-13s", rig_info[cmd_num].command);
             if (!(no % 7) || PRF_FLAGGED(ch, PRF_SCREENREADER))
               strcat(buf, "\r\n");
             no++;
@@ -4300,7 +4302,7 @@ ACMD(do_commands)
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= cmd_info[i].minimum_level) ||
            (IS_NPC(vict) && vict->desc->original && GET_REAL_LEVEL(vict->desc->original) >= cmd_info[i].minimum_level)) &&
           (socials == cmd_sort_info[i].is_social)) {
-        sprintf(buf + strlen(buf), "%-13s", cmd_info[i].command);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-13s", cmd_info[i].command);
         if (!(no % 7) || PRF_FLAGGED(ch, PRF_SCREENREADER))
           strcat(buf, "\r\n");
         no++;
@@ -4378,7 +4380,7 @@ ACMD(do_scan)
                 }
                 
               }
-              sprintf(ENDOF(buf1), "  %s\r\n", GET_NAME(list));
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s\r\n", GET_NAME(list));
               onethere = TRUE;
               anythere = TRUE;
             }
@@ -4402,13 +4404,13 @@ ACMD(do_scan)
                 }
               }
             }
-            sprintf(ENDOF(buf1), "  %s (%s)\r\n", GET_VEH_NAME(veh), (get_speed(veh) ? "Moving" : "Stationary"));
+            snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s (%s)\r\n", GET_VEH_NAME(veh), (get_speed(veh) ? "Moving" : "Stationary"));
             onethere = TRUE;
             anythere = TRUE;
           }
         }
         if (onethere) {
-          sprintf(buf2, "%s %s:\r\n%s\r\n", dirs[i], dist_name[0], buf1);
+          snprintf(buf2, sizeof(buf2), "%s %s:\r\n%s\r\n", dirs[i], dist_name[0], buf1);
           CAP(buf2);
           send_to_char(buf2, ch);
         }
@@ -4454,7 +4456,7 @@ ACMD(do_scan)
                   }
                 }
               }
-              sprintf(ENDOF(buf1), "  %s\r\n", GET_NAME(list));
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s\r\n", GET_NAME(list));
               onethere = TRUE;
               anythere = TRUE;
             }
@@ -4462,7 +4464,7 @@ ACMD(do_scan)
           ch->in_room = EXIT(ch, i)->to_room;
           
           if (onethere) {
-            sprintf(buf2, "%s %s:\r\n%s\r\n", dirs[i], dist_name[j], buf1);
+            snprintf(buf2, sizeof(buf2), "%s %s:\r\n%s\r\n", dirs[i], dist_name[j], buf1);
             CAP(buf2);
             send_to_char(buf2, ch);
           }
@@ -4556,7 +4558,7 @@ ACMD(do_status)
       strcpy(buf, spells[sust->spell].name);
       if (sust->spell == SPELL_INCATTR || sust->spell == SPELL_INCCYATTR ||
           sust->spell == SPELL_DECATTR || sust->spell == SPELL_DECCYATTR)
-        sprintf(ENDOF(buf), " (%s)", attributes[sust->subtype]);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
       send_to_char(buf, ch);
       send_to_char("\r\n", ch);
     }
@@ -4568,7 +4570,7 @@ ACMD(do_status)
         strcpy(buf, spells[sust->spell].name);
         if (sust->spell == SPELL_INCATTR || sust->spell == SPELL_INCCYATTR ||
             sust->spell == SPELL_DECATTR || sust->spell == SPELL_DECCYATTR)
-          sprintf(ENDOF(buf), " (%s)", attributes[sust->subtype]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
         send_to_char(ch, "%d) %s ", i, buf);
         if (sust->focus)
           send_to_char(ch, "(Sustained by %s)", GET_OBJ_NAME(sust->focus));
@@ -4585,7 +4587,7 @@ ACMD(do_recap)
   if (!GET_QUEST(ch))
     send_to_char(ch, "You're not currently on a run.\r\n");
   else {
-    sprintf(buf, "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
+    snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
             quest_table[GET_QUEST(ch)].info);
     send_to_char(buf, ch);
   }
@@ -4616,7 +4618,7 @@ ACMD(do_mort_show)
 }
 
 ACMD(do_tke){
-  sprintf(buf, "Your current TKE is %d.\r\n", GET_TKE(ch));
+  snprintf(buf, sizeof(buf), "Your current TKE is %d.\r\n", GET_TKE(ch));
   send_to_char(buf, ch);
 }
 
@@ -4665,7 +4667,7 @@ ACMD(do_leaderboard) {
   MYSQL_ROW row;
   
   // Sanitization not required here-- they're constant strings.
-  sprintf(buf, "SELECT name, %s FROM pfiles "
+  snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "
                "  WHERE name != 'deleted' "
                "  AND %s > 0 "
                "  AND rank = 1 "
@@ -4674,7 +4676,7 @@ ACMD(do_leaderboard) {
   
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
-    sprintf(buf, "SYSERR: Failed to access %s leaderboard data!", display_string);
+    snprintf(buf, sizeof(buf), "SYSERR: Failed to access %s leaderboard data!", display_string);
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
     return;
@@ -4683,7 +4685,7 @@ ACMD(do_leaderboard) {
   send_to_char(ch, "^CTop 10 characters by %s:^n\r\n", display_string);
   int counter = 1;
   while ((row = mysql_fetch_row(res))) {
-    sprintf(buf, "%s:", row[0]);
+    snprintf(buf, sizeof(buf), "%s:", row[0]);
     send_to_char(ch, "%2d) %-21s %-15s\r\n", counter++, buf, row[1]);
   }
   if (counter == 1)

@@ -41,7 +41,7 @@ ACMD(do_invitations) {
   // Remove any expired invitations.
   Pgroup_invitation::prune_expired(ch);
   
-  char expiration_string[20];
+  char expiration_string[30];
   Pgroup_invitation *pgi = ch->pgroup_invitations;
   Playergroup *pgr = NULL;
   send_to_char("You have invitations from: \r\n", ch);
@@ -54,8 +54,8 @@ ACMD(do_invitations) {
       continue;
     }
     time_t expiration = pgi->get_expiration();
-    strftime(expiration_string, 20, "%Y-%m-%d %H:%M:%S", localtime(&expiration));
-    sprintf(buf, " '%s' (%s), which expires on %s\r\n", pgr->get_name(), pgr->get_alias(), expiration_string);
+    strftime(expiration_string, sizeof(expiration_string), "%Y-%m-%d %H:%M:%S", localtime(&expiration));
+    snprintf(buf, sizeof(buf), " '%s' (%s), which expires on %s\r\n", pgr->get_name(), pgr->get_alias(), expiration_string);
     pgi = pgi->next;
   }
   send_to_char(buf, ch);
@@ -254,7 +254,7 @@ ACMD(do_pgroup) {
   if (GET_PGROUP_MEMBER_DATA(ch)) {
     // Precondition: Your data structures must be correctly initialized.
     if (!GET_PGROUP(ch)) {
-      sprintf(buf, "SYSERR: Somehow, %s (%ld) is part of an invalid group.",
+      snprintf(buf, sizeof(buf), "SYSERR: Somehow, %s (%ld) is part of an invalid group.",
               GET_CHAR_NAME(ch), GET_IDNUM(ch));
       mudlog(buf, ch, LOG_MISCLOG, TRUE);
       log(buf);
@@ -341,7 +341,7 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   pgr->secret_log("A shadowy figure has abdicated from leadership of the group.");
   
   // Find all group members and add them to a list.
-  sprintf(buf2, "SELECT idnum FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+  snprintf(buf2, sizeof(buf2), "SELECT idnum FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, buf2);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
@@ -362,9 +362,9 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   
   // Compose a mail message.
   if (GET_PGROUP(ch)->is_secret()) {
-    sprintf(buf, "A shadowy figure has abdicated from the leadership of '%s'.", pgr->get_name());
+    snprintf(buf, sizeof(buf), "A shadowy figure has abdicated from the leadership of '%s'.", pgr->get_name());
   } else {
-    sprintf(buf, "%s has abdicated from the leadership of '%s'.", GET_CHAR_NAME(ch), pgr->get_name());
+    snprintf(buf, sizeof(buf), "%s has abdicated from the leadership of '%s'.", GET_CHAR_NAME(ch), pgr->get_name());
   }
   
   // Mail everyone in the list.
@@ -451,7 +451,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   // Read out the people who are getting kicked (in case we want to manually restore later).
-  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
+  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
@@ -468,7 +468,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   mysql_free_result(res);
   
   // Log the results of the above.
-  sprintf(buf, "The following characters are being kicked from '%s' (%s, %ld) due to disbanding by %s: \r\n",
+  snprintf(buf, sizeof(buf), "The following characters are being kicked from '%s' (%s, %ld) due to disbanding by %s: \r\n",
           pgr->get_name(),
           pgr->get_alias(),
           pgr->get_idnum(),
@@ -476,9 +476,9 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   
   while ((ns = results.Head())) {
     if (!strcmp(ns->data->privileges.ToString(), "0"))
-      sprintf(ENDOF(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
     else {
-      sprintf(ENDOF(buf), "%s, rank %d, privs: %s.\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s, rank %d, privs: %s.\r\n",
               get_player_name(ns->data->idnum), ns->data->rank, pgroup_print_privileges(ns->data->privileges));
     }
     delete ns->data;
@@ -487,11 +487,11 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   log(buf);
   
   // Delete pfile pgroup associations.
-  sprintf(query_buf, "DELETE FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+  snprintf(query_buf, sizeof(query_buf), "DELETE FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   
   // Delete pgroup's sent invitations.
-  sprintf(query_buf, "DELETE FROM playergroup_invitations WHERE `Group` = %ld", pgr->get_idnum());
+  snprintf(query_buf, sizeof(query_buf), "DELETE FROM playergroup_invitations WHERE `Group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   
   /* We deliberately do not remove old logfiles. They can be cleaned up by hand if they clutter things up.
@@ -564,7 +564,7 @@ void do_pgroup_donate(struct char_data *ch, char *argument) {
   GET_PGROUP(ch)->secret_log_vfprintf("A shadowy figure donated %ld nuyen. Reason: %s",
                                       amount,
                                       remainder);
-  sprintf(buf, "%s donated %ld nuyen to '%s'. Reason: %s",
+  snprintf(buf, sizeof(buf), "%s donated %ld nuyen to '%s'. Reason: %s",
           GET_CHAR_NAME(ch),
           amount,
           GET_PGROUP(ch)->get_name(),
@@ -674,7 +674,7 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
   "  AND `redacted` = %s"
   " ORDER BY date ASC";
   
-  sprintf(querybuf, query_fmt, GET_PGROUP(ch)->get_idnum(), days, redacted_mode ? "TRUE" : "FALSE");
+  snprintf(querybuf, sizeof(querybuf), query_fmt, GET_PGROUP(ch)->get_idnum(), days, redacted_mode ? "TRUE" : "FALSE");
   mysql_wrapper(mysql, querybuf);
   
   // Process and display the results.
@@ -747,11 +747,11 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   GET_PGROUP_MEMBER_DATA(vict) = NULL;
   
   // Delete pfile pgroup associations.
-  sprintf(buf2, "DELETE FROM pfiles_playergroups WHERE `idnum` = %ld", GET_IDNUM(vict));
+  snprintf(buf2, sizeof(buf2), "DELETE FROM pfiles_playergroups WHERE `idnum` = %ld", GET_IDNUM(vict));
   mysql_wrapper(mysql, buf2);
   
   // Delete any old invitations that could let them come right back.
-  sprintf(buf2, "DELETE FROM playergroup_invitations WHERE `idnum` = %ld", GET_IDNUM(vict));
+  snprintf(buf2, sizeof(buf2), "DELETE FROM playergroup_invitations WHERE `idnum` = %ld", GET_IDNUM(vict));
   mysql_wrapper(mysql, buf2);
   
   // Log the action.
@@ -762,7 +762,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   
   // Notify the character.
   send_to_char(ch, "You outcast %s from '%s'.\r\n", GET_CHAR_NAME(vict), GET_PGROUP(ch)->get_name());
-  sprintf(buf, "You have been outcasted from '%s' (reason: %s).\r\n", GET_PGROUP(ch)->get_name(), reason);
+  snprintf(buf, sizeof(buf), "You have been outcasted from '%s' (reason: %s).\r\n", GET_PGROUP(ch)->get_name(), reason);
   store_mail(GET_IDNUM(vict), ch, buf);
   
   // Save the character.
@@ -815,7 +815,7 @@ void do_pgroup_roster(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   char query_buf[512];
-  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
+  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
@@ -832,12 +832,12 @@ void do_pgroup_roster(struct char_data *ch, char *argument) {
   }
   mysql_free_result(res);
   
-  sprintf(buf, "%s has the following members:\r\n", pgr->get_name());
+  snprintf(buf, sizeof(buf), "%s has the following members:\r\n", pgr->get_name());
   while ((ns = results.Head())) {
     if (!strcmp(ns->data->privileges.ToString(), "0"))
-      sprintf(ENDOF(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
     else {
-      sprintf(ENDOF(buf), "%s, rank %d, with the following privileges: %s.\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s, rank %d, with the following privileges: %s.\r\n",
               get_player_name(ns->data->idnum), ns->data->rank, pgroup_print_privileges(ns->data->privileges));
     }
     delete ns->data;
@@ -877,7 +877,7 @@ void do_pgroup_status(struct char_data *ch, char *argument) {
   // Group is not secret, or member is privileged. Display sensitive information.
   
   // Get membership info.
-  sprintf(query_buf, "SELECT COUNT(*) FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+  snprintf(query_buf, sizeof(query_buf), "SELECT COUNT(*) FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -939,13 +939,13 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
   GET_PGROUP(ch)->set_bank(GET_PGROUP(ch)->get_bank() - amount);
   GET_PGROUP(ch)->save_pgroup_to_db();
   if (isfile) {
-    sprintf(buf, "UPDATE pfiles SET Bank=Bank+%lu WHERE idnum=%ld;", amount, isfile);
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%lu WHERE idnum=%ld;", amount, isfile);
     mysql_wrapper(mysql, buf);
   } else
     GET_BANK(vict) += amount;
   
   // Mail the recipient.
-  sprintf(buf, "'%s' has wired %lu nuyen to your account.\r\n", GET_PGROUP(ch)->get_name(), amount);
+  snprintf(buf, sizeof(buf), "'%s' has wired %lu nuyen to your account.\r\n", GET_PGROUP(ch)->get_name(), amount);
   store_mail(vict ? GET_IDNUM(vict) : isfile, ch, buf);
   
   // Log it.
@@ -958,7 +958,7 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
   GET_PGROUP(ch)->secret_log_vfprintf("A shadowy figure wired %lu nuyen to someone's account. Reason: %s",
                                       amount,
                                       remainder);
-  sprintf(buf, "%s wired %lu nuyen to %s on behalf of '%s'. Reason: %s",
+  snprintf(buf, sizeof(buf), "%s wired %lu nuyen to %s on behalf of '%s'. Reason: %s",
           GET_CHAR_NAME(ch),
           amount,
           vict ? GET_CHAR_NAME(vict) : player_name,
@@ -979,11 +979,11 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
 /* Help messaging for main pgroup command. Specific help on these commands should be written into helpfiles (eg HELP PGROUP FOUND). */
 void display_pgroup_help(struct char_data *ch) {
   int cmds_written = 0;
-  sprintf(buf, "You have access to the following PGROUP commands: \r\n");
+  snprintf(buf, sizeof(buf), "You have access to the following PGROUP commands: \r\n");
   
   // If they're not part of a group, the only command they can do is 'create'.
   if (!GET_PGROUP_MEMBER_DATA(ch)) {
-    sprintf(ENDOF(buf), " %-11s\r\n", "create");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %-11s\r\n", "create");
     send_to_char(buf, ch);
     return;
   }
@@ -1020,10 +1020,10 @@ void display_pgroup_help(struct char_data *ch) {
     }
     
     // If we've gotten here, the command is assumed kosher for this character and group combo-- print it in our list.
-    sprintf(ENDOF(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
   }
   
-  sprintf(ENDOF(buf), "\r\n");
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
   send_to_char(buf, ch);
 }
 
@@ -1171,7 +1171,7 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
       pgedit_disp_menu(d);
       break;
     default:
-      sprintf(buf, "SYSERR: Unknown edit mode %d referenced from pgedit_parse.", d->edit_mode);
+      snprintf(buf, sizeof(buf), "SYSERR: Unknown edit mode %d referenced from pgedit_parse.", d->edit_mode);
       mudlog(buf, CH, LOG_MISCLOG, TRUE);
       log(buf);
       break;
@@ -1244,7 +1244,7 @@ const char *list_privs_char_can_affect(struct char_data *ch) {
     
     // Leaders can hand out anything; otherwise, only return things the char has (except admin, which is leader-assigned-only).
     if (is_leader || (GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(priv) && priv != PRIV_ADMINISTRATOR)) {
-      sprintf(ENDOF(privstring_buf), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
+      snprintf(ENDOF(privstring_buf), sizeof(privstring_buf) - strlen(privstring_buf), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
       is_first = FALSE;
     }
   }
@@ -1347,7 +1347,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     
     // Write to the relevant characters' screens.
     send_to_char(ch, "You revoke from %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
-    sprintf(buf, "Your %s privilege in '%s' has been revoked.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+    snprintf(buf, sizeof(buf), "Your %s privilege in '%s' has been revoked.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
   
   // Grant mode.
@@ -1367,7 +1367,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     
     // Write to the relevant characters' screens.
     send_to_char(ch, "You grant %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
-    sprintf(buf, "You have been granted the %s privilege in '%s'.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+    snprintf(buf, sizeof(buf), "You have been granted the %s privilege in '%s'.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
   
   // Save the character.
@@ -1473,7 +1473,7 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   
   // Notify the character.
   send_to_char(ch, "You %s %s to rank %d.\r\n", promote ? "promote" : "demote", GET_CHAR_NAME(vict), rank);
-  sprintf(buf, "You have been %s to rank %d in '%s'.\r\n", promote ? "promoted" : "demoted", rank, GET_PGROUP(ch)->get_name());
+  snprintf(buf, sizeof(buf), "You have been %s to rank %d in '%s'.\r\n", promote ? "promoted" : "demoted", rank, GET_PGROUP(ch)->get_name());
   
   // Save the character.
   if (vict_is_logged_in) {
@@ -1494,7 +1494,7 @@ const char *pgroup_print_privileges(Bitfield privileges) {
   bool is_first = TRUE;
   for (int priv = PRIV_ADMINISTRATOR; priv < PRIV_MAX; priv++) {
     if (privileges.IsSet(priv)) {
-      sprintf(ENDOF(output), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
+      snprintf(ENDOF(output), sizeof(output) - strlen(output), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
       if (priv == PRIV_LEADER)
         strcat(output, " (grants all other privileges)");
       is_first = FALSE;

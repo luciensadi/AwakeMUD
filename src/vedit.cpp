@@ -687,7 +687,7 @@ void write_vehs_to_disk(int zone)
 
   veh = Mem->GetVehicle();
 
-  sprintf(buf, "%s/%d.veh", VEH_PREFIX, zone_table[zone].number);
+  snprintf(buf, sizeof(buf), "%s/%d.veh", VEH_PREFIX, zone_table[zone].number);
   fp = fopen(buf, "w+");
 
   /* start running through all vehicles in this zone */

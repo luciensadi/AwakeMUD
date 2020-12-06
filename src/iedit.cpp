@@ -358,16 +358,16 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
       for (c = 0; c < MAX_SKILLS; c++) {
         line++;
         if ((line % 3) == 1)
-          sprintf(buf, "%2d) %-20s ", c, skills[c].name);
+          snprintf(buf, sizeof(buf), "%2d) %-20s ", c, skills[c].name);
         else
-          sprintf(buf, "%s%2d) %-20s ", buf, c, skills[c].name);
+          snprintf(buf, sizeof(buf), "%s%2d) %-20s ", buf, c, skills[c].name);
         if (!(line % 3)) {
-          sprintf(buf, "%s\r\n", buf);
+          snprintf(buf, sizeof(buf), "%s\r\n", buf);
           send_to_char(buf, CH);
         }
       }
       if ((line % 3) != 0) {
-        sprintf(buf, "%s\r\nEnter a skill (0 to quit): ", buf);
+        snprintf(buf, sizeof(buf), "%s\r\nEnter a skill (0 to quit): ", buf);
         send_to_char(buf, CH);
       }
       break;
@@ -1360,7 +1360,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case 'Y': {
           /* write to internal tables */
           if (!vnum_from_non_connected_zone(d->edit_number)) {
-            sprintf(buf,"%s wrote new obj #%ld",
+            snprintf(buf, sizeof(buf),"%s wrote new obj #%ld",
                     GET_CHAR_NAME(d->character), d->edit_number);
             mudlog(buf, d->character, LOG_WIZLOG, TRUE);
           }
@@ -2155,7 +2155,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_WEAPON:
         case ITEM_FIREWEAPON:
           if (number < -WEAPON_MAXIMUM_STRENGTH_BONUS || number > WEAPON_MAXIMUM_STRENGTH_BONUS) {
-            sprintf(buf, "Value must be between %d and %d.\r\n", -WEAPON_MAXIMUM_STRENGTH_BONUS, WEAPON_MAXIMUM_STRENGTH_BONUS);
+            snprintf(buf, sizeof(buf), "Value must be between %d and %d.\r\n", -WEAPON_MAXIMUM_STRENGTH_BONUS, WEAPON_MAXIMUM_STRENGTH_BONUS);
             send_to_char(buf, CH);
             iedit_disp_val3_menu(d);
             return;
@@ -2812,7 +2812,7 @@ void write_objs_to_disk(int zone)
   
   // ideally, this would just fill a VTable with vals...maybe one day
   
-  sprintf(buf, "%s/%d.obj", OBJ_PREFIX, zone_table[zone].number);
+  snprintf(buf, sizeof(buf), "%s/%d.obj", OBJ_PREFIX, zone_table[zone].number);
   fp = fopen(buf, "w+");
   
   /* start running through all objects in this zone */

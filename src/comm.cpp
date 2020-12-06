@@ -1092,7 +1092,7 @@ void make_prompt(struct descriptor_data * d)
           prompt++;
           switch(*prompt) {
             case 'a':       // astral pool
-              sprintf(str, "%d", GET_ASTRAL(d->character));
+              snprintf(str, sizeof(str), "%d", GET_ASTRAL(d->character));
               break;
             case 'A':
               if (GET_EQ(d->character, WEAR_WIELD)) {
@@ -1100,19 +1100,19 @@ void make_prompt(struct descriptor_data * d)
                 if (IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
                   switch (GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 11)) {
                     case MODE_SS:
-                      sprintf(str, "SS");
+                      snprintf(str, sizeof(str), "SS");
                       break;
                     case MODE_SA:
-                      sprintf(str, "SA");
+                      snprintf(str, sizeof(str), "SA");
                       break;
                     case MODE_BF:
-                      sprintf(str, "BF");
+                      snprintf(str, sizeof(str), "BF");
                       break;
                     case MODE_FA:
-                      sprintf(str, "FA(%d)", GET_OBJ_TIMER(GET_EQ(d->character, WEAR_WIELD)));
+                      snprintf(str, sizeof(str), "FA(%d)", GET_OBJ_TIMER(GET_EQ(d->character, WEAR_WIELD)));
                       break;
                     default:
-                      sprintf(str, "NA");
+                      snprintf(str, sizeof(str), "NA");
                   }
                 else strcpy(str, "ML");
                 
@@ -1120,79 +1120,79 @@ void make_prompt(struct descriptor_data * d)
                 strcpy(str, "NA");
               break;
             case 'b':       // ballistic
-              sprintf(str, "%d", GET_BALLISTIC(d->character));
+              snprintf(str, sizeof(str), "%d", GET_BALLISTIC(d->character));
               break;
             case 'c':       // combat pool
-              sprintf(str, "%d", GET_COMBAT(d->character));
+              snprintf(str, sizeof(str), "%d", GET_COMBAT(d->character));
               break;
             case 'C':       // persona condition
               if (ch->persona)
-                sprintf(str, "%d", ch->persona->condition);
+                snprintf(str, sizeof(str), "%d", ch->persona->condition);
               else
-                sprintf(str, "NA");
+                snprintf(str, sizeof(str), "NA");
               break;
             case 'd':       // defense pool
-              sprintf(str, "%d", GET_DEFENSE(d->character));
+              snprintf(str, sizeof(str), "%d", GET_DEFENSE(d->character));
               break;
             case 'D':
-              sprintf(str, "%d", GET_BODY(d->character));
+              snprintf(str, sizeof(str), "%d", GET_BODY(d->character));
               break;
             case 'e':
               if (ch->persona)
-                sprintf(str, "%d", ch->persona->decker->active);
+                snprintf(str, sizeof(str), "%d", ch->persona->decker->active);
               else
-                sprintf(str, "0");
+                snprintf(str, sizeof(str), "0");
               break;
             case 'E':
               if (ch->persona && ch->persona->decker->deck)
-                sprintf(str, "%d", GET_OBJ_VAL(ch->persona->decker->deck, 2));
+                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 2));
               else
-                sprintf(str, "0");
+                snprintf(str, sizeof(str), "0");
               break;
             case 'f':
-              sprintf(str, "%d", GET_CASTING(d->character));
+              snprintf(str, sizeof(str), "%d", GET_CASTING(d->character));
               break;
             case 'F':
-              sprintf(str, "%d", GET_DRAIN(d->character));
+              snprintf(str, sizeof(str), "%d", GET_DRAIN(d->character));
               break;
             case 'g':       // current ammo
               if (GET_EQ(d->character, WEAR_WIELD) &&
                   IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
                 if (GET_EQ(d->character, WEAR_WIELD)->contains) {
-                  sprintf(str, "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5),
+                  snprintf(str, sizeof(str), "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5),
                                          GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD)->contains, 9)));
                 } else
-                  sprintf(str, "0");
+                  snprintf(str, sizeof(str), "0");
                 else
-                  sprintf(str, "0");
+                  snprintf(str, sizeof(str), "0");
               break;
             case 'G':       // max ammo
               if (GET_EQ(d->character, WEAR_WIELD) &&
                   IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
-                sprintf(str, "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5));
+                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5));
               else
-                sprintf(str, "0");
+                snprintf(str, sizeof(str), "0");
               break;
             case 'h':       // hacking pool
               if (ch->persona)
-                sprintf(str, "%d", GET_REM_HACKING(d->character));
+                snprintf(str, sizeof(str), "%d", GET_REM_HACKING(d->character));
               else
-                sprintf(str, "%d", GET_HACKING(d->character));
+                snprintf(str, sizeof(str), "%d", GET_HACKING(d->character));
               break;
             case 'H':
-              sprintf(str, "%d%cM", (time_info.hours % 12 == 0 ? 12 : time_info.hours % 12), (time_info.hours >= 12 ? 'P' : 'A'));
+              snprintf(str, sizeof(str), "%d%cM", (time_info.hours % 12 == 0 ? 12 : time_info.hours % 12), (time_info.hours >= 12 ? 'P' : 'A'));
               break;
             case 'i':       // impact
-              sprintf(str, "%d", GET_IMPACT(d->character));
+              snprintf(str, sizeof(str), "%d", GET_IMPACT(d->character));
               break;
             case 'k':       // karma
-              sprintf(str, "%0.2f", ((float)GET_KARMA(ch) / 100));
+              snprintf(str, sizeof(str), "%0.2f", ((float)GET_KARMA(ch) / 100));
               break;
             case 'l':       // current weight
-              sprintf(str, "%.2f", IS_CARRYING_W(d->character));
+              snprintf(str, sizeof(str), "%.2f", IS_CARRYING_W(d->character));
               break;
             case 'L':       // max weight
-              sprintf(str, "%d", CAN_CARRY_W(d->character));
+              snprintf(str, sizeof(str), "%d", CAN_CARRY_W(d->character));
               break;
             case 'm':       // current mental
               physical = (int)(GET_MENTAL(d->character) / 100);
@@ -1203,16 +1203,16 @@ void make_prompt(struct descriptor_data * d)
                   physical = 10;
                   break;
                 }
-              sprintf(str, "%d", physical);
+              snprintf(str, sizeof(str), "%d", physical);
               break;
             case 'M':       // max mental
-              sprintf(str, "%d", (int)(GET_MAX_MENTAL(d->character) / 100));
+              snprintf(str, sizeof(str), "%d", (int)(GET_MAX_MENTAL(d->character) / 100));
               break;
             case 'n':       // nuyen
-              sprintf(str, "%ld", GET_NUYEN(d->character));
+              snprintf(str, sizeof(str), "%ld", GET_NUYEN(d->character));
               break;
             case 'o':       // offense pool
-              sprintf(str, "%d", GET_OFFENSE(d->character));
+              snprintf(str, sizeof(str), "%d", GET_OFFENSE(d->character));
               break;
             case 'p':       // current physical
               physical = (int)(GET_PHYSICAL(d->character) / 100);
@@ -1223,68 +1223,68 @@ void make_prompt(struct descriptor_data * d)
                   physical = 10;
                   break;
                 }
-              sprintf(str, "%d", physical);
+              snprintf(str, sizeof(str), "%d", physical);
               break;
             case 'P':       // max physical
-              sprintf(str, "%d", (int)(GET_MAX_PHYSICAL(d->character) / 100));
+              snprintf(str, sizeof(str), "%d", (int)(GET_MAX_PHYSICAL(d->character) / 100));
               break;
             case 'r':
               if (ch->persona && ch->persona->decker->deck)
-                sprintf(str, "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3) - GET_OBJ_VAL(ch->persona->decker->deck, 5));
+                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3) - GET_OBJ_VAL(ch->persona->decker->deck, 5));
               else
-                sprintf(str, "0");
+                snprintf(str, sizeof(str), "0");
               break;
             case 'R':
               if (ch->persona && ch->persona->decker && ch->persona->decker->deck)
-                sprintf(str, "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3));
+                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3));
               else
-                sprintf(str, "0");
+                snprintf(str, sizeof(str), "0");
               break;
             case 's':       // current ammo
               if (GET_EQ(d->character, WEAR_HOLD) &&
                   IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 3)))
                 if (GET_EQ(d->character, WEAR_HOLD)->contains) {
-                  sprintf(str, "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5),
+                  snprintf(str, sizeof(str), "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5),
                                          GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD)->contains, 9)));
                 } else
-                  sprintf(str, "0");
+                  snprintf(str, sizeof(str), "0");
                 else
-                  sprintf(str, "0");
+                  snprintf(str, sizeof(str), "0");
               break;
             case 'S':       // max ammo
               if (GET_EQ(d->character, WEAR_HOLD) &&
                   IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 3)))
-                sprintf(str, "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5));
+                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5));
               else
-                sprintf(str, "0");
+                snprintf(str, sizeof(str), "0");
               break;
             case 't':       // magic pool
-              sprintf(str, "%d", GET_MAGIC(d->character));
+              snprintf(str, sizeof(str), "%d", GET_MAGIC(d->character));
               break;
             case 'T':
-              sprintf(str, "%d", GET_SUSTAINED_NUM(d->character));
+              snprintf(str, sizeof(str), "%d", GET_SUSTAINED_NUM(d->character));
               break;
             case 'u':
-              sprintf(str, "%d", GET_SDEFENSE(d->character));
+              snprintf(str, sizeof(str), "%d", GET_SDEFENSE(d->character));
               break;
             case 'U':
-              sprintf(str, "%d", GET_REFLECT(d->character));
+              snprintf(str, sizeof(str), "%d", GET_REFLECT(d->character));
               break;
             case 'w':
-              sprintf(str, "%d", GET_INVIS_LEV(d->character));
+              snprintf(str, sizeof(str), "%d", GET_INVIS_LEV(d->character));
               break;
             case 'W':
-              sprintf(str, "%d", GET_INCOG_LEV(d->character));
+              snprintf(str, sizeof(str), "%d", GET_INCOG_LEV(d->character));
               break;
             case 'z':
               if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER)
-                sprintf(str, "%d", d->character->player_specials->saved.zonenum);
+                snprintf(str, sizeof(str), "%d", d->character->player_specials->saved.zonenum);
               else
                 strcpy(str, "@z");
               break;
             case 'v':
               if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER)
-                sprintf(str, "%ld", d->character->in_room->number);
+                snprintf(str, sizeof(str), "%ld", d->character->in_room->number);
               else
                 strcpy(str, "@v");
               break;
@@ -1295,7 +1295,7 @@ void make_prompt(struct descriptor_data * d)
               strcpy(str, "\r\n");
               break;
             default:
-              sprintf(str, "@%c", *prompt);
+              snprintf(str, sizeof(str), "@%c", *prompt);
               break;
           }
           for (j = 0; str[j]; j++, i++)
@@ -1505,7 +1505,7 @@ int new_descriptor(int s)
     if (!nameserver_is_slow)
       perror("gethostbyaddr");
     addr = ntohl(peer.sin_addr.s_addr);
-    sprintf(newd->host, "%03u.%03u.%03u.%03u", (int) ((addr & 0xFF000000) >> 24),
+    snprintf(newd->host, sizeof(newd->host), "%03u.%03u.%03u.%03u", (int) ((addr & 0xFF000000) >> 24),
             (int) ((addr & 0x00FF0000) >> 16), (int) ((addr & 0x0000FF00) >> 8),
             (int) ((addr & 0x000000FF)));
   } else
@@ -1518,7 +1518,7 @@ int new_descriptor(int s)
   if (isbanned(newd->host) == BAN_ALL)
   {
     close(desc);
-    sprintf(buf2, "Connection attempt denied from [%s]", newd->host);
+    snprintf(buf2, sizeof(buf2), "Connection attempt denied from [%s]", newd->host);
     mudlog(buf2, NULL, LOG_BANLOG, TRUE);
     DELETE_AND_NULL(newd);
     return 0;
@@ -1749,7 +1749,7 @@ int process_input(struct descriptor_data *t) {
     if ((space_left <= 0) && (ptr < nl_pos)) {
       char buffer[MAX_INPUT_LENGTH + 64];
       
-      sprintf(buffer, "Line too long.  Truncated to:\r\n%s\r\n", tmp);
+      snprintf(buffer, sizeof(buffer), "Line too long.  Truncated to:\r\n%s\r\n", tmp);
       if (write_to_descriptor(t->descriptor, buffer) < 0)
         return -1;
     }
@@ -1931,7 +1931,7 @@ void close_socket(struct descriptor_data *d)
       }
       playerDB.SaveChar(d->character);
       act("$n has lost $s link.", TRUE, d->character, 0, 0, TO_ROOM);
-      sprintf(buf, "Closing link to: %s. (%s)", GET_CHAR_NAME(d->character), connected_types[d->connected]);
+      snprintf(buf, sizeof(buf), "Closing link to: %s. (%s)", GET_CHAR_NAME(d->character), connected_types[d->connected]);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
       if (d->character->persona) {
         extract_icon(d->character->persona);
@@ -1941,7 +1941,7 @@ void close_socket(struct descriptor_data *d)
       free_editing_structs(d, STATE(d));
       d->character->desc = NULL;
     } else {
-      sprintf(buf, "Losing player: %s.",
+      snprintf(buf, sizeof(buf), "Losing player: %s.",
               GET_CHAR_NAME(d->character) ? GET_CHAR_NAME(d->character) : "<null>");
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
       // we do this because objects can be given to characters in chargen
@@ -2193,7 +2193,7 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
   if (!str || !*str) {
     // Declare our own error buf so we don't clobber anyone's strings.
     char colorize_error_buf[200];
-    sprintf(colorize_error_buf, "SYSERR: Received empty string to colorize() for descriptor %d (orig %s, char %s).",
+    snprintf(colorize_error_buf, sizeof(colorize_error_buf), "SYSERR: Received empty string to colorize() for descriptor %d (orig %s, char %s).",
             d->descriptor, d->original ? GET_NAME(d->original) : "(null)", d->character ? GET_CHAR_NAME(d->character) : "(null)");
     mudlog(colorize_error_buf, NULL, LOG_SYSLOG, TRUE);
     strcpy(buffer, "(null)");
@@ -2357,7 +2357,7 @@ void send_to_char(struct char_data * ch, const char * const messg, ...)
   
   va_list argptr;
   va_start(argptr, messg);
-  vsprintf(internal_buffer, messg, argptr);
+  vsnprintf(internal_buffer, sizeof(internal_buffer), messg, argptr);
   va_end(argptr);
   SEND_TO_Q(internal_buffer, ch->desc);
 }
@@ -2377,7 +2377,7 @@ void send_to_icon(struct matrix_icon * icon, const char * const messg, ...)
   
   va_list argptr;
   va_start(argptr, messg);
-  vsprintf(internal_buffer, messg, argptr);
+  vsnprintf(internal_buffer, sizeof(internal_buffer), messg, argptr);
   va_end(argptr);
   SEND_TO_Q(internal_buffer, icon->decker->ch->desc);
   if (icon->decker->hitcher && icon->decker->hitcher->desc)
@@ -2509,10 +2509,10 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
     return GET_NAME(speaker);
   else {
     if (IS_SENATOR(listener)) {
-      sprintf(voice_buf, "%s(%s)", speaker->player.physical_text.room_desc, GET_CHAR_NAME(speaker));
+      snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, GET_CHAR_NAME(speaker));
       return voice_buf;
     } else if ((mem = found_mem(GET_MEMORY(listener), speaker))) {
-      sprintf(voice_buf, "%s(%s)", speaker->player.physical_text.room_desc, CAP(mem->mem));
+      snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, CAP(mem->mem));
       return voice_buf;
     } else {
       return speaker->player.physical_text.room_desc;
@@ -2676,15 +2676,15 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
                   }
                 }
                 if (masked) {
-                  sprintf(temp, "a masked voice");
+                  snprintf(temp, sizeof(temp), "a masked voice");
                 } else {
                   // Voice is new and must be deleted.
                   char* voice = strip_ending_punctuation_new(ch->player.physical_text.room_desc);
                   
                   if ((mem = found_mem(GET_MEMORY(to), ch)))
-                    sprintf(temp, "%s(%s)", voice, CAP(mem->mem));
+                    snprintf(temp, sizeof(temp), "%s(%s)", voice, CAP(mem->mem));
                   else
-                    sprintf(temp, "%s", voice);
+                    snprintf(temp, sizeof(temp), "%s", voice);
                   
                   i = temp;
                   
@@ -2803,16 +2803,16 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   else
   {
     mudlog("SYSERR: no valid target to act()!", NULL, LOG_SYSLOG, TRUE);
-    sprintf(buf, "Invocation: act('%s', '%d', char_data, obj_data, vict_obj, '%d').", str, hide_invisible, type);
+    snprintf(buf, sizeof(buf), "Invocation: act('%s', '%d', char_data, obj_data, vict_obj, '%d').", str, hide_invisible, type);
     if (ch) {
-      sprintf(ENDOF(buf), "\r\nch: %s, in_room %s, in_veh %s",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nch: %s, in_room %s, in_veh %s",
               GET_CHAR_NAME(ch), ch->in_room ? GET_ROOM_NAME(ch->in_room) : "n/a",
               ch->in_veh ? GET_VEH_NAME(ch->in_veh) : "n/a");
     } else {
       strcat(buf, " ...No character.");
     }
     if (obj) {
-      sprintf(ENDOF(buf), "\r\nobj: %s, in_room %s, in_veh %s",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nobj: %s, in_room %s, in_veh %s",
               GET_OBJ_NAME(obj), obj->in_room ? GET_ROOM_NAME(obj->in_room) : "n/a",
               obj->in_veh ? GET_VEH_NAME(obj->in_veh) : "n/a");
     } else {
@@ -2846,7 +2846,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     else
       next = to->next_in_room;
     if (to == next) {
-      sprintf(buf, "SYSERR: Encountered to=next infinite loop while looping over act string ''%s' for %s. Debug info: %s, type %d",
+      snprintf(buf, sizeof(buf), "SYSERR: Encountered to=next infinite loop while looping over act string ''%s' for %s. Debug info: %s, type %d",
               str, 
               GET_CHAR_NAME(ch), 
               to->in_veh ? "in veh" : "in room",

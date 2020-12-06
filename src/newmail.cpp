@@ -54,7 +54,7 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
   char prepared_quote_buf[2 * strlen(message_pointer) + 1];
   prepare_quotes(prepared_quote_buf, message_pointer, sizeof(prepared_quote_buf) / sizeof(prepared_quote_buf[0]));
   
-  sprintf(mail_query_buf, "INSERT INTO pfiles_mail (sender_id, sender_name, recipient, text) VALUES (%ld, '%s', %ld, '%s');",
+  snprintf(mail_query_buf, sizeof(mail_query_buf), "INSERT INTO pfiles_mail (sender_id, sender_name, recipient, text) VALUES (%ld, '%s', %ld, '%s');",
           from_id,
           from_name,
           to,
@@ -79,7 +79,7 @@ int amount_of_mail_waiting(struct char_data *ch) {
   }
   
   // Grab the character's mail count from DB.
-  sprintf(mail_query_buf, "SELECT COUNT(*) FROM pfiles_mail WHERE recipient = %ld;", GET_IDNUM(ch));
+  snprintf(mail_query_buf, sizeof(mail_query_buf), "SELECT COUNT(*) FROM pfiles_mail WHERE recipient = %ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, mail_query_buf);
   
   res = mysql_use_result(mysql);
@@ -106,7 +106,7 @@ char *get_and_delete_one_message(struct char_data *ch, char *sender) {
   }
   
   // Grab the character's mail from DB.
-  sprintf(mail_query_buf, "SELECT * FROM pfiles_mail WHERE recipient = %ld LIMIT 1;", GET_IDNUM(ch));
+  snprintf(mail_query_buf, sizeof(mail_query_buf), "SELECT * FROM pfiles_mail WHERE recipient = %ld LIMIT 1;", GET_IDNUM(ch));
   mysql_wrapper(mysql, mail_query_buf);
   
   res = mysql_use_result(mysql);
@@ -120,7 +120,7 @@ char *get_and_delete_one_message(struct char_data *ch, char *sender) {
   }
   
   // Write the mail header to buf.
-  sprintf(buf, "^W * * * * Shadowland Mail System * * * *\r\n"
+  snprintf(buf, sizeof(buf), "^W * * * * Shadowland Mail System * * * *\r\n"
           "^B      To: %s^n\r\n"
           "^C    From: %s^n\r\n"
           "^mOOC Date: %s^n\r\n"
@@ -135,7 +135,7 @@ char *get_and_delete_one_message(struct char_data *ch, char *sender) {
   strcpy(sender, row[MAIL_SQL_SENDER_NAME]);
   
   // Prepare the query for deleting the mail. Could have passed as a string, but atoi() guarantees no SQL shenanigans.
-  sprintf(mail_query_buf, "DELETE FROM pfiles_mail WHERE idnum = %d;", atoi(row[MAIL_SQL_IDNUM]));
+  snprintf(mail_query_buf, sizeof(mail_query_buf), "DELETE FROM pfiles_mail WHERE idnum = %d;", atoi(row[MAIL_SQL_IDNUM]));
   
   // Free DB resources so we can execute the deletion query.
   mysql_free_result(res);
@@ -181,7 +181,7 @@ void postmaster_send_mail(struct char_data * ch, struct char_data *mailman, int 
   
   /* Require that the user be of the right level to use the mail system. */
   if (!access_level(ch, MIN_MAIL_LEVEL)) {
-    sprintf(buf, "$n tells you, 'Sorry, you have to be level %d to send mail!'", MIN_MAIL_LEVEL);
+    snprintf(buf, sizeof(buf), "$n tells you, 'Sorry, you have to be level %d to send mail!'", MIN_MAIL_LEVEL);
     act(buf, FALSE, mailman, 0, ch, TO_VICT);
     return;
   }
@@ -207,7 +207,7 @@ void postmaster_send_mail(struct char_data * ch, struct char_data *mailman, int 
   
   /* Put the character in edit mode and inform the room. */
   act("$n starts to write some mail.", TRUE, ch, 0, 0, TO_ROOM);
-  sprintf(buf, "$n tells you, 'Write your message, use @ on a new line when done.'");
+  snprintf(buf, sizeof(buf), "$n tells you, 'Write your message, use @ on a new line when done.'");
   act(buf, FALSE, mailman, 0, ch, TO_VICT);
   PLR_FLAGS(ch).SetBits(PLR_MAILING, PLR_WRITING, ENDBIT);
   
@@ -229,9 +229,9 @@ void postmaster_send_mail(struct char_data * ch, struct char_data *mailman, int 
 void postmaster_check_mail(struct char_data * ch, struct char_data *mailman, int cmd, char *arg) {
   int amount;
   if ((amount = amount_of_mail_waiting(ch)) > 0)
-    sprintf(buf, "$n tells you, 'You have %d piece%s of mail waiting.'", amount, amount > 1 ? "s" : "");
+    snprintf(buf, sizeof(buf), "$n tells you, 'You have %d piece%s of mail waiting.'", amount, amount > 1 ? "s" : "");
   else
-    sprintf(buf, "$n tells you, 'Sorry, you don't have any mail waiting.'");
+    snprintf(buf, sizeof(buf), "$n tells you, 'Sorry, you don't have any mail waiting.'");
   
   act(buf, FALSE, mailman, 0, ch, TO_VICT);
 }
@@ -243,7 +243,7 @@ void postmaster_receive_mail(struct char_data * ch, struct char_data *mailman, i
   
   if (amount_of_mail_waiting(ch) == 0)
   {
-    sprintf(buf, "$n tells you, 'Sorry, you don't have any mail waiting.'");
+    snprintf(buf, sizeof(buf), "$n tells you, 'Sorry, you don't have any mail waiting.'");
     act(buf, FALSE, mailman, 0, ch, TO_VICT);
     return;
   }

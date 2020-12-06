@@ -137,7 +137,7 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
 bool Playergroup::set_name(const char *newname, struct char_data *ch) {
   // Check for length.
   if (strlen(newname) > MAX_PGROUP_NAME_LENGTH) {
-    sprintf(buf, "Sorry, playergroup names can't be longer than %d characters.\r\n", MAX_PGROUP_NAME_LENGTH);
+    snprintf(buf, sizeof(buf), "Sorry, playergroup names can't be longer than %d characters.\r\n", MAX_PGROUP_NAME_LENGTH);
     send_to_char(buf, ch);
     return FALSE;
   }
@@ -150,7 +150,7 @@ bool Playergroup::set_name(const char *newname, struct char_data *ch) {
 bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
   // Check for length.
   if (strlen(newalias) > MAX_PGROUP_ALIAS_LENGTH) {
-    sprintf(buf, "Sorry, aliases can't be longer than %d characters.\r\n", MAX_PGROUP_ALIAS_LENGTH);
+    snprintf(buf, sizeof(buf), "Sorry, aliases can't be longer than %d characters.\r\n", MAX_PGROUP_ALIAS_LENGTH);
     send_to_char(buf, ch);
     return FALSE;
   }
@@ -187,7 +187,7 @@ bool Playergroup::alias_is_in_use(const char *alias) {
   strcpy(local_alias, alias);
   
   // Compose and execute our query.
-  sprintf(querybuf, "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, alias, sizeof(local_alias) / sizeof(local_alias[0])));
+  snprintf(querybuf, sizeof(querybuf), "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, alias, sizeof(local_alias) / sizeof(local_alias[0])));
   mysql_wrapper(mysql, querybuf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
@@ -252,7 +252,7 @@ void Playergroup::audit_log(const char *original_msg, bool is_redacted) {
   time_t ct = time(0);
   char *tmstr = asctime(localtime(&ct));
   *(tmstr + strlen(tmstr) - 1) = '\0';
-  sprintf(msg, "%-15.15s :: %s", tmstr + 4, original_msg);
+  snprintf(msg, sizeof(buf), "%-15.15s :: %s", tmstr + 4, original_msg);
   
   // Quote the message for some pretense of DB safety.
   char quoted_msg[strlen(msg) * 2 + 1];
@@ -261,18 +261,18 @@ void Playergroup::audit_log(const char *original_msg, bool is_redacted) {
   if (is_redacted) {
     // Format the query and execute it.
     const char *query_fmt = "INSERT INTO pgroup_logs (`idnum`, `message`, `date`, `redacted`) VALUES ('%ld', '%s', NOW(), TRUE)";
-    sprintf(query_buf, query_fmt, get_idnum(), quoted_msg);
+    snprintf(query_buf, sizeof(buf), query_fmt, get_idnum(), quoted_msg);
     mysql_wrapper(mysql, query_buf);
     
     // Don't log it-- we only want the unredacted one sent to imms.
   } else {
     // Format the query and execute it.
     const char *query_fmt = "INSERT INTO pgroup_logs (`idnum`, `message`, `date`, `redacted`) VALUES ('%ld', '%s', NOW(), FALSE)";
-    sprintf(query_buf, query_fmt, get_idnum(), quoted_msg);
+    snprintf(query_buf, sizeof(buf), query_fmt, get_idnum(), quoted_msg);
     mysql_wrapper(mysql, query_buf);
   
   // Reuse the query buf to format the message for MUD-level logging.
-    sprintf(query_buf, "[%s (%ld)]: %s", get_alias(), get_idnum(), msg);
+    snprintf(query_buf, sizeof(buf), "[%s (%ld)]: %s", get_alias(), get_idnum(), msg);
     mudlog(query_buf, NULL, LOG_PGROUPLOG, TRUE);
   }
 }
@@ -287,7 +287,7 @@ void Playergroup::audit_log_vfprintf(const char *format, ...)
   va_list args;
   
   va_start(args, format);
-  vsprintf(playergroup_log_buf, format, args);
+  vsnprintf(playergroup_log_buf, sizeof(playergroup_log_buf), format, args);
   va_end(args);
   
   audit_log(playergroup_log_buf, FALSE);
@@ -300,7 +300,7 @@ void Playergroup::secret_log_vfprintf(const char *format, ...)
   va_list args;
   
   va_start(args, format);
-  vsprintf(playergroup_log_buf, format, args);
+  vsnprintf(playergroup_log_buf, sizeof(playergroup_log_buf), format, args);
   va_end(args);
   
   audit_log(playergroup_log_buf, TRUE);
@@ -313,7 +313,8 @@ const char *Playergroup::render_settings() {
   
   for (int index = 0; index < NUM_PGROUP_SETTINGS; index++) {
     if (index != PGROUP_CLONE && settings.IsSet(index)) {
-      sprintf(ENDOF(settings_string), "%s%s", is_first ? "" : ", ", pgroup_settings[index]);
+      int settings_len = strlen(settings_string);
+      snprintf(settings_string + settings_len, 100 - settings_len, "%s%s", is_first ? "" : ", ", pgroup_settings[index]);
     }
   }
   if (is_first)
@@ -344,7 +345,7 @@ bool Playergroup::save_pgroup_to_db() {
     set_idnum(get_new_pgroup_idnum());
   }
   
-  sprintf(querybuf, pgroup_save_query_format,
+  snprintf(querybuf, sizeof(querybuf), pgroup_save_query_format,
           idnum,
           prepare_quotes(quotedname, name, sizeof(quotedname) / sizeof(quotedname[0])),
           prepare_quotes(quotedalias, alias, sizeof(quotedalias) / sizeof(quotedalias[0])),
@@ -369,7 +370,7 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
 #define PGROUP_DB_ROW_SETTINGS 4
 #define PGROUP_DB_ROW_BANK     5
   
-  sprintf(querybuf, pgroup_load_query_format, load_idnum);
+  snprintf(querybuf, sizeof(querybuf), pgroup_load_query_format, load_idnum);
   mysql_wrapper(mysql, querybuf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
@@ -388,7 +389,7 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
     
     return TRUE;
   } else {
-    sprintf(buf, "Error loading playergroup from DB-- group %ld does not seem to exist.", load_idnum);
+    snprintf(buf, MAX_STRING_LENGTH, "Error loading playergroup from DB-- group %ld does not seem to exist.", load_idnum);
     log(buf);
     mysql_free_result(res);
     return FALSE;
@@ -397,7 +398,7 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
 
 int Playergroup::sql_count_members() {
   char query_buf[MAX_STRING_LENGTH];
-  sprintf(query_buf, "SELECT count(idnum) FROM `pfiles_playergroups` WHERE `group` = %ld", get_idnum());
+  snprintf(query_buf, MAX_STRING_LENGTH, "SELECT count(idnum) FROM `pfiles_playergroups` WHERE `group` = %ld", get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   if (res) {
@@ -449,7 +450,7 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     
     strcpy(buf, "You invite $N to join your group.");
     act(buf, FALSE, ch, NULL, target, TO_CHAR);
-    sprintf(buf, "$n has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
+    snprintf(buf, MAX_STRING_LENGTH, "$n has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
     act(buf, FALSE, ch, NULL, target, TO_VICT);
     
     // TODO: What if the group is secret? Is this okay?
@@ -592,11 +593,11 @@ bool Pgroup_invitation::save_invitation_to_db(long ch_idnum) {
   "DELETE FROM `playergroup_invitations` WHERE `idnum` = '%ld' AND `Group` = '%ld'";
   
   // Execute deletion.
-  sprintf(querybuf, pinv_delete_query_format, ch_idnum, pg_idnum);
+  snprintf(querybuf, MAX_STRING_LENGTH, pinv_delete_query_format, ch_idnum, pg_idnum);
   mysql_wrapper(mysql, querybuf);
   
   // Execute save.
-  sprintf(querybuf, pinv_save_query_format, ch_idnum, pg_idnum, expires_on);
+  snprintf(querybuf, MAX_STRING_LENGTH, pinv_save_query_format, ch_idnum, pg_idnum, expires_on);
   mysql_wrapper(mysql, querybuf);
   
   return mysql_errno(mysql) != 0;
@@ -642,7 +643,7 @@ void Pgroup_invitation::delete_invitation_from_db(long ch_idnum) {
 }
 
 void Pgroup_invitation::delete_invitation_from_db(long pgr_idnum, long ch_idnum) {
-  sprintf(buf, "DELETE FROM `playergroup_invitations` WHERE `idnum`='%ld' AND `Group`='%ld'", ch_idnum, pgr_idnum);
+  snprintf(buf, MAX_STRING_LENGTH, "DELETE FROM `playergroup_invitations` WHERE `idnum`='%ld' AND `Group`='%ld'", ch_idnum, pgr_idnum);
   mysql_wrapper(mysql, buf);
 }
 

@@ -56,12 +56,12 @@ bool is_open(struct char_data *keeper, int shop_nr)
   buf[0] = '\0';
   if (shop_table[shop_nr].open > shop_table[shop_nr].close) {
     if (time_info.hours < shop_table[shop_nr].open && time_info.hours > shop_table[shop_nr].close)
-      sprintf(buf, "We're not open yet.");
+      snprintf(buf, sizeof(buf), "We're not open yet.");
   } else {
     if (time_info.hours < shop_table[shop_nr].open)
-      sprintf(buf, "We're not open yet.");
+      snprintf(buf, sizeof(buf), "We're not open yet.");
     else if (time_info.hours > shop_table[shop_nr].close)
-      sprintf(buf, "We've closed for the day.");
+      snprintf(buf, sizeof(buf), "We've closed for the day.");
   }
   if (!*buf)
     return TRUE;
@@ -100,7 +100,7 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
           GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_GIANT ||
           GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_FOMORI)))
   {
-    sprintf(buf, "%s We don't sell to your type here.", GET_CHAR_NAME(ch));
+    snprintf(buf, sizeof(buf), "%s We don't sell to your type here.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return FALSE;
   }
@@ -195,23 +195,23 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   
   if (sell && sell->type == SELL_STOCK && sell->stock < 1)
   {
-    sprintf(ENDOF(buf), " That item isn't currently available.");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That item isn't currently available.");
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return FALSE;
   }
   if ((cred && GET_OBJ_VAL(cred, 0) < price) || (!cred && GET_NUYEN(ch) < price))
   {
-    sprintf(ENDOF(buf), " %s", shop_table[shop_nr].not_enough_nuyen);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].not_enough_nuyen);
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return FALSE;
   }
-  sprintf(buf2, "You now have %s.", GET_OBJ_NAME(obj));
+  snprintf(buf2, sizeof(buf2), "You now have %s.", GET_OBJ_NAME(obj));
 
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
   {
     struct obj_data *check;
     if (buynum != 1) {
-      sprintf(ENDOF(buf), " You can only have one of those installed!");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only have one of those installed!");
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return FALSE;
     }
@@ -230,7 +230,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
       if (ch->real_abils.ess + ch->real_abils.esshole < (GET_TOTEM(ch) == TOTEM_EAGLE ?
                                 GET_OBJ_VAL(obj, 4) << 1 : GET_OBJ_VAL(obj, 4))) {
-        sprintf(ENDOF(buf), " That operation would kill you!");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return FALSE;
       }
@@ -240,19 +240,19 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(obj))) {
           if (GET_OBJ_VAL(check, 0) == CYB_REACTIONENHANCE) {
             if (++enhancers == 6) {
-              sprintf(ENDOF(buf), " You already have the maximum number of reaction enhancers installed.");
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have the maximum number of reaction enhancers installed.");
               do_say(keeper, buf, cmd_say, SCMD_SAYTO);
               return FALSE;
             }
           } else {
-            sprintf(ENDOF(buf), " You already have that installed.");
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have that installed.");
             do_say(keeper, buf, cmd_say, SCMD_SAYTO);
             return FALSE;
           }
         }
         if (GET_OBJ_VAL(obj, 0) != CYB_EYES && GET_OBJ_VAL(obj, 0) != CYB_FILTRATION
             && GET_OBJ_VAL(obj, 0) != CYB_REACTIONENHANCE && GET_OBJ_VAL(check, 0) == GET_OBJ_VAL(obj, 0)) {
-          sprintf(ENDOF(buf), " You already have a similar piece of cyberware.");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have a similar piece of cyberware.");
           do_say(keeper, buf, cmd_say, SCMD_SAYTO);
           return FALSE;
         }
@@ -264,7 +264,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         esscost = esscost - ch->real_abils.esshole;
         if (GET_TRADITION(ch) != TRAD_MUNDANE) {
           if (GET_REAL_MAG(ch) - esscost < 100) {
-            sprintf(ENDOF(buf), " That would take away the last of your magic!");
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would take away the last of your magic!");
             do_say(keeper, buf, cmd_say, SCMD_SAYTO);
             return FALSE;
           }
@@ -281,7 +281,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     } else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
       int esscost = GET_OBJ_VAL(obj, 4); 
       if (GET_INDEX(ch) + esscost > 900) {
-        sprintf(ENDOF(buf), " That operation would kill you!");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return FALSE;
       }
@@ -293,12 +293,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       }
       for (check = ch->bioware; check; check = check->next_content) {
         if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(obj))) {
-          sprintf(ENDOF(buf), " You already have that installed.");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have that installed.");
           do_say(keeper, buf, cmd_say, SCMD_SAYTO);
           return FALSE;
         }
         if (GET_OBJ_VAL(check, 0) == GET_OBJ_VAL(obj, 0)) {
-          sprintf(ENDOF(buf), " You already have a similar piece of bioware.");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have a similar piece of bioware.");
           do_say(keeper, buf, cmd_say, SCMD_SAYTO);
           return FALSE;
         }
@@ -309,7 +309,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           int change = GET_INDEX(ch) - ch->real_abils.highestindex;
           change /= 2;
           if (GET_REAL_MAG(ch) - change < 100) {
-            sprintf(ENDOF(buf), " That would take away the last of your magic!");
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would take away the last of your magic!");
             do_say(keeper, buf, cmd_say, SCMD_SAYTO);
             GET_INDEX(ch) -= esscost;
             return FALSE;
@@ -322,7 +322,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     }
     act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
         FALSE, keeper, 0, ch, TO_NOTVICT);
-    sprintf(buf, "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(ch));
+    snprintf(buf, sizeof(buf), "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     GET_PHYSICAL(ch) = 100;
     GET_MENTAL(ch) = 100;
@@ -397,16 +397,16 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         }
         if (orig) {
           // They were carrying one already. Combine them.
-          sprintf(buf2, "You add the purchased %d rounds", GET_AMMOBOX_QUANTITY(obj));
+          snprintf(buf2, sizeof(buf2), "You add the purchased %d rounds", GET_AMMOBOX_QUANTITY(obj));
           combine_ammo_boxes(ch, obj, orig, FALSE);
-          sprintf(ENDOF(buf2), " into %s.", GET_OBJ_NAME(orig));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " into %s.", GET_OBJ_NAME(orig));
         } else {
           // Just give the purchased thing to them directly. Handle restring if needed.
           if (bought > 1) {
             char new_name_buf[500];
             
             // Compose the new name.
-            sprintf(new_name_buf, "a box of %s %s ammunition", 
+            snprintf(new_name_buf, sizeof(new_name_buf), "a box of %s %s ammunition", 
               ammo_type[GET_AMMOBOX_TYPE(obj)].name,
               weapon_type[GET_AMMOBOX_WEAPON(obj)]
             );
@@ -414,9 +414,9 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
             // Commit the change.
             obj->restring = str_dup(new_name_buf);
             
-            sprintf(buf2, "You now have %s (contains %d rounds).", GET_OBJ_NAME(obj), GET_AMMOBOX_QUANTITY(obj));
+            snprintf(buf2, sizeof(buf2), "You now have %s (contains %d rounds).", GET_OBJ_NAME(obj), GET_AMMOBOX_QUANTITY(obj));
           } else {
-            sprintf(buf2, "You now have %s.", GET_OBJ_NAME(obj));
+            snprintf(buf2, sizeof(buf2), "You now have %s.", GET_OBJ_NAME(obj));
           }
           
           obj_to_char(obj, ch);
@@ -472,27 +472,27 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     if (bought < buynum) {
       strcpy(buf, GET_CHAR_NAME(ch));
       if (cash ? GET_NUYEN(ch) : GET_OBJ_VAL(cred, 0) < price)
-        sprintf(ENDOF(buf), " You can only afford %d.", bought);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only afford %d.", bought);
       else if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
-        sprintf(ENDOF(buf), " You can only carry %d.", bought);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
       else if (GET_OBJ_WEIGHT(ch->carrying) + IS_CARRYING_W(ch) > CAN_CARRY_W(ch))
-        sprintf(ENDOF(buf), " You can only carry %d.", bought);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
   }
   // Write the nuyen cost to buf3 and the current buy-string to arg.
   char price_buf[100];
-  sprintf(price_buf, "%d", bought * price);
+  snprintf(price_buf, sizeof(price_buf), "%d", bought * price);
   strcpy(arg, shop_table[shop_nr].buy);
   
   // Use our new replace_substring() function to swap out all %d's in arg with the nuyen string.
   replace_substring(arg, buf3, "%d", price_buf);
   
   // Compose the sayto string for the keeper.
-  sprintf(buf, "%s %s", GET_CHAR_NAME(ch), buf3);
+  snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), buf3);
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
   if (bought > 1 && print_multiples_at_end)
-    sprintf(ENDOF(buf2), " (x%d)\r\n", bought);
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (x%d)\r\n", bought);
   send_to_char(buf2, ch);
   send_to_char("\r\n", ch);
   return TRUE;
@@ -513,7 +513,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   // Prevent negative transactions.
   if ((buynum = transaction_amt(arg)) < 0)
   {
-    sprintf(buf, "%s A negative amount?  Try selling me something.", GET_CHAR_NAME(ch));
+    snprintf(buf, sizeof(buf), "%s A negative amount?  Try selling me something.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
@@ -524,11 +524,11 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     if (atoi(arg) > 0) {
       // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
       char oopsbuf[strlen(arg) + 2];
-      sprintf(oopsbuf, "#%s", arg);
+      snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
       sell = find_obj_shop(oopsbuf, shop_nr, &obj);
     }
     if (!sell) {
-      sprintf(buf, "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemk);
+      snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemk);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
     }
@@ -540,7 +540,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   if (!str_cmp(buf, "cash"))
   {
     if (shop_table[shop_nr].type == SHOP_LEGAL) {
-      sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+      snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
     }
@@ -554,7 +554,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   else if (!cred)
   {
     if (shop_table[shop_nr].type == SHOP_LEGAL) {
-      sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+      snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
     }
@@ -572,7 +572,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   // You must clarify what you want to buy.
   if (!*arg || !buynum)
   {
-    sprintf(buf, "%s What do you want to buy?", GET_CHAR_NAME(ch));
+    snprintf(buf, sizeof(buf), "%s What do you want to buy?", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
@@ -591,7 +591,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     // Don't let people re-try repeatedly.
     for (int q = 0; q < SHOP_LAST_IDNUM_LIST_SIZE; q++) {
       if (sell->lastidnum[q] == GET_IDNUM(ch)) {
-        sprintf(buf, "%s Sorry, I couldn't get that in for you.", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s Sorry, I couldn't get that in for you.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         extract_obj(obj);
         return;
@@ -601,7 +601,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     // Stop people from buying enormous quantities.
     extern int max_things_you_can_purchase_at_once;
     if (buynum > max_things_you_can_purchase_at_once) {
-      sprintf(buf, "%s I can't get that many in at once. Limit is %d.", GET_CHAR_NAME(ch), max_things_you_can_purchase_at_once);
+      snprintf(buf, sizeof(buf), "%s I can't get that many in at once. Limit is %d.", GET_CHAR_NAME(ch), max_things_you_can_purchase_at_once);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
     
@@ -635,7 +635,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     
     // Failure case.
     if (success < 1) {
-      sprintf(buf, "%s I can't get ahold of that one for a while.", GET_CHAR_NAME(ch));
+      snprintf(buf, sizeof(buf), "%s I can't get ahold of that one for a while.", GET_CHAR_NAME(ch));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       
       // Add them to the forbidden list.
@@ -651,9 +651,9 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     float totaltime = ((GET_OBJ_AVAILDAY(obj) * buynum) / success) + (2 * GET_AVAIL_OFFSET(ch));
     if (totaltime < 1) {
       int hours = MAX(1, (int)(24 * totaltime));
-      sprintf(buf, "%s That will take about %d hour%s to come in.", GET_CHAR_NAME(ch), hours, hours == 1 ? "" : "s");
+      snprintf(buf, sizeof(buf), "%s That will take about %d hour%s to come in.", GET_CHAR_NAME(ch), hours, hours == 1 ? "" : "s");
     } else {
-      sprintf(buf, "%s That will take about %d day%s to come in.", GET_CHAR_NAME(ch), (int) totaltime, totaltime == 1 ? "" : "s");
+      snprintf(buf, sizeof(buf), "%s That will take about %d day%s to come in.", GET_CHAR_NAME(ch), (int) totaltime, totaltime == 1 ? "" : "s");
     }
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     
@@ -708,27 +708,27 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   {
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))
         && !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))) {
-      sprintf(ENDOF(buf), " %s", shop_table[shop_nr].no_such_itemp);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].no_such_itemp);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
     }
   } else
   {
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-      sprintf(ENDOF(buf), " %s", shop_table[shop_nr].no_such_itemp);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].no_such_itemp);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
     }
   }
   if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL) || GET_OBJ_COST(obj) < 1)
   {
-    sprintf(ENDOF(buf), " %s", shop_table[shop_nr].doesnt_buy);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].doesnt_buy);
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
   if (shop_table[shop_nr].type == SHOP_LEGAL && !cred)
   {
-    sprintf(ENDOF(buf), " No cred, no business.");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " No cred, no business.");
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
@@ -747,7 +747,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
     act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
         FALSE, keeper, 0, ch, TO_NOTVICT);
-    sprintf(buf, "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(ch));
+    snprintf(buf, sizeof(buf), "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     act("You delicately remove $p from $N's body.",
         FALSE, keeper, obj, ch, TO_CHAR);
@@ -770,19 +770,19 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     GET_NUYEN(ch) += sellprice;
   else
     GET_OBJ_VAL(cred, 0) += sellprice;
-  sprintf(buf3, "%s sold %s at %s (%ld) for %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
+  snprintf(buf3, sizeof(buf3), "%s sold %s at %s (%ld) for %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
   mudlog(buf3, ch, LOG_GRIDLOG, TRUE);
   
   // Write the nuyen cost to buf3 and the current buy-string to arg.
   char price_buf[100];
-  sprintf(price_buf, "%d", sellprice);
+  snprintf(price_buf, sizeof(price_buf), "%d", sellprice);
   strcpy(arg, shop_table[shop_nr].sell);
   
   // Use our new replace_substring() function to swap out all %d's in arg with the nuyen string.
   replace_substring(arg, buf3, "%d", price_buf);
   
   // Compose the sayto string for the keeper.
-  sprintf(buf, "%s %s", GET_CHAR_NAME(ch), buf3);
+  snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), buf3);
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
   for (;sell; sell = sell->next)
     if (sell->vnum == GET_OBJ_VNUM(obj))
@@ -827,30 +827,30 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   int i = 1;
   
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-    sprintf(buf, "%s has the following items available for sale:\r\n", GET_NAME(keeper));
+    snprintf(buf, sizeof(buf), "%s has the following items available for sale:\r\n", GET_NAME(keeper));
     
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       // Read the object; however, if it's an invalid vnum or has no sale cost, skip it.
       if (!(obj = read_object(sell->vnum, VIRTUAL)) || GET_OBJ_COST(obj) < 1) {
         i--;
         if (obj) {
-          sprintf(buf2, "Shop %ld ('%s'): Removing %s (%ld) from sale due to cost of %d.",
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to cost of %d.",
                   shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
           extract_obj(obj);
         } else {
-          sprintf(buf2, "Shop %ld ('%s'): Removing nonexistant item (%ld) from sale.", shop_nr, GET_NAME(keeper), GET_OBJ_VNUM(obj));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item (%ld) from sale.", shop_nr, GET_NAME(keeper), GET_OBJ_VNUM(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
         }
         continue;
       }
       
       // List the item to the player.
-      sprintf(ENDOF(buf), "Item #%d: %s for %d nuyen", i, GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Item #%d: %s for %d nuyen", i, GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
       
       // Doctorshop? Tack on bioware / cyberware info.
       if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-        sprintf(ENDOF(buf), "; it's %s that costs %.2f %s",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; it's %s that costs %.2f %s",
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "cyberware" : "bioware",
                 ((float)GET_OBJ_VAL(obj, 4) / 100),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "essence" : "bio index");
@@ -862,14 +862,14 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         if (sell->type == SELL_AVAIL) {
           if (GET_OBJ_AVAILDAY(obj) < 1) {
             int hours = 24 * GET_OBJ_AVAILDAY(obj);
-            sprintf(ENDOF(buf), ". It will take %d hour%s to obtain", hours, hours > 1 ? "s" : "");
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It will take %d hour%s to obtain", hours, hours > 1 ? "s" : "");
           } else {
-            sprintf(ENDOF(buf), ". It will take %d day%s to obtain", (int) GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? "s" : "");
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It will take %d day%s to obtain", (int) GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? "s" : "");
           }
         } else if (sell->stock <= 0) {
           strcat(buf, ". It is currently out of stock");
         } else {
-          sprintf(ENDOF(buf), ". Only %d %s in stock", sell->stock, sell->stock > 1 ? "are" : "is");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". Only %d %s in stock", sell->stock, sell->stock > 1 ? "are" : "is");
         }
       }
       
@@ -895,39 +895,39 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (!obj || GET_OBJ_COST(obj) < 1) {
         i--;
         if (obj) {
-          sprintf(buf2, "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
           extract_obj(obj);
         } else {
-          sprintf(buf2, "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_nr, GET_NAME(keeper));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_nr, GET_NAME(keeper));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
         }
         continue;
       }
-      sprintf(ENDOF(buf), " %2d)  ", i);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0))
-        sprintf(ENDOF(buf), "Yes         ");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes         ");
       else if (sell->type == SELL_AVAIL) {
         if (GET_OBJ_AVAILDAY(obj) < 1)
-          sprintf(ENDOF(buf), "~%-2d Hours   ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Hours   ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
         else
-          sprintf(ENDOF(buf), "~%-2d Day%c    ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Day%c    ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
       } else {
         if (sell->stock <= 0)
-          sprintf(ENDOF(buf), "Out Of Stock");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Out Of Stock");
         else
-          sprintf(ENDOF(buf), "%-3d         ", sell->stock);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d         ", sell->stock);
       }
       if (GET_OBJ_VAL(obj, 1) > 0)
-        sprintf(buf2, "%d", GET_OBJ_VAL(obj, 1));
+        snprintf(buf2, sizeof(buf2), "%d", GET_OBJ_VAL(obj, 1));
       else strcpy(buf2, "-");
       
       if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
-        sprintf(ENDOF(buf), "^Y(N)^n %-29s^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^Y(N)^n %-29s^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
       } else {
-        sprintf(ENDOF(buf), "%-33s^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-33s^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
       }
@@ -942,38 +942,38 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (!obj || GET_OBJ_COST(obj) < 1) {
         i--;
         if (obj) {
-          sprintf(buf2, "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
           extract_obj(obj);
         } else {
-          sprintf(buf2, "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_nr, GET_NAME(keeper));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_nr, GET_NAME(keeper));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
         }
         continue;
       }
-      sprintf(ENDOF(buf), " %2d)  ", i);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0))
-        sprintf(ENDOF(buf), "Yes         ");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes         ");
       else if (sell->type == SELL_AVAIL) {
         if (GET_OBJ_AVAILDAY(obj) < 1)
-          sprintf(ENDOF(buf), "~%-2d Hours   ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Hours   ", (int)(24 * GET_OBJ_AVAILDAY(obj)));
         else
-          sprintf(ENDOF(buf), "~%-2d Day%c    ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "~%-2d Day%c    ", (int)GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? 's' : ' ');
       } else {
         if (sell->stock <= 0)
-          sprintf(ENDOF(buf), "Out Of Stock");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Out Of Stock");
         else
-          sprintf(ENDOF(buf), "%-3d         ", sell->stock);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d         ", sell->stock);
       }
       
       if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
-        sprintf(ENDOF(buf), "^Y(N)^n %-44s^n %6d\r\n", GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^Y(N)^n %-44s^n %6d\r\n", GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
       } else {
-        sprintf(ENDOF(buf), "%-48s^n %6d\r\n", GET_OBJ_NAME(obj),
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-48s^n %6d\r\n", GET_OBJ_NAME(obj),
                   buy_price(obj, shop_nr));
       }
       if (strlen(buf) >= MAX_STRING_LENGTH - 200) {
-        sprintf(buf2, "Shop %ld ('%s'): Aborting string composition due to length constraints.", shop_nr, GET_NAME(keeper));
+        snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Aborting string composition due to length constraints.", shop_nr, GET_NAME(keeper));
         break;
       }
       extract_obj(obj);
@@ -1013,7 +1013,7 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   if (!shop_table[shop_nr].buytypes.IsSet(GET_OBJ_TYPE(obj)) || IS_OBJ_STAT(obj, ITEM_NOSELL))
     strcat(buf, " I wouldn't buy that off of you.");
   else
-    sprintf(ENDOF(buf), " I would be able to give you around %d nuyen for that.", sell_price(obj, shop_nr));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I would be able to give you around %d nuyen for that.", sell_price(obj, shop_nr));
 
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
 }
@@ -1036,7 +1036,7 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   if (!sell && atoi(arg) > 0) {
     // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
     char oopsbuf[strlen(arg) + 2];
-    sprintf(oopsbuf, "#%s", arg);
+    snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
     sell = find_obj_shop(oopsbuf, shop_nr, &obj);
   }
   
@@ -1073,16 +1073,16 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     if (atoi(arg) > 0) {
       // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
       char oopsbuf[strlen(arg) + 2];
-      sprintf(oopsbuf, "#%s", arg);
+      snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
       successful = (find_obj_shop(oopsbuf, shop_nr, &obj) != NULL);
     }
     if (!successful) {
-      sprintf(buf, "%s I don't have that item.", GET_CHAR_NAME(ch));
+      snprintf(buf, sizeof(buf), "%s I don't have that item.", GET_CHAR_NAME(ch));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return;
     }
   }
-  sprintf(buf, "%s %s is", GET_CHAR_NAME(ch), CAP(obj->text.name));
+  snprintf(buf, sizeof(buf), "%s %s is", GET_CHAR_NAME(ch), CAP(obj->text.name));
   switch (GET_OBJ_TYPE(obj))
   {
   case ITEM_WEAPON:
@@ -1106,11 +1106,11 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         strcat(buf, " burst-fire");
       else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SA))
         strcat(buf, " semi-automatic");
-      sprintf(ENDOF(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
       if (IS_OBJ_STAT(obj, ITEM_TWOHANDS))
         strcat(buf, " and requires two hands to wield correctly");
       if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
-        sprintf(ENDOF(buf), ". It has %d round%s of built-in recoil compensation",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It has %d round%s of built-in recoil compensation",
                 GET_WEAPON_INTEGRAL_RECOIL_COMP(obj),
                 GET_WEAPON_INTEGRAL_RECOIL_COMP(obj) > 1 ? "s" : "");
       if (GET_OBJ_VAL(obj, 7) > 0 || GET_OBJ_VAL(obj, 8) > 0 || GET_OBJ_VAL(obj, 9) > 0)
@@ -1129,7 +1129,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       }
       if (real_object(GET_OBJ_VAL(obj, 9)) > 0)
         strcat(buf, obj_proto[real_object(GET_OBJ_VAL(obj, 9))].text.name);
-      sprintf(ENDOF(buf), ". It can hold a maximum of %d rounds.", GET_OBJ_VAL(obj, 5));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It can hold a maximum of %d rounds.", GET_OBJ_VAL(obj, 5));
     } else {
       // Map damage value to phrase.
       if (GET_WEAPON_DAMAGE_CODE(obj) == LIGHT) {
@@ -1142,11 +1142,11 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         strcat(buf, " a deadly");
       } else {
         strcat(buf, " an indeterminate-strength");
-        sprintf(buf1, "SYSERR: Unable to map damage value %d for weapon '%s' (%ld) to a damage phrase.",
+        snprintf(buf1, sizeof(buf1), "SYSERR: Unable to map damage value %d for weapon '%s' (%ld) to a damage phrase.",
                 GET_WEAPON_DAMAGE_CODE(obj), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
         mudlog(buf1, NULL, LOG_SYSLOG, TRUE);
       }
-      sprintf(ENDOF(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
       
       // Two-handed weapon?
       if (IS_OBJ_STAT(obj, ITEM_TWOHANDS))
@@ -1156,7 +1156,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       
       // Reach?
       if (GET_WEAPON_REACH(obj)) {
-        sprintf(ENDOF(buf), " As a long weapon, it gives you %d meter%s of extended reach.",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " As a long weapon, it gives you %d meter%s of extended reach.",
                 GET_WEAPON_REACH(obj), GET_WEAPON_REACH(obj) > 1 ? "s" : "");
       }
       
@@ -1172,7 +1172,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
           strcat(buf, " It is masterfully constructed, letting you hit as hard as possible.");
         } else {
           strcat(buf, " It has an indeterminate strength modifier.");
-          sprintf(buf1, "SYSERR: Unable to map strength modifier %d for weapon '%s' (%ld) to a feature phrase.",
+          snprintf(buf1, sizeof(buf1), "SYSERR: Unable to map strength modifier %d for weapon '%s' (%ld) to a feature phrase.",
                   GET_WEAPON_STR_BONUS(obj), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
           mudlog(buf1, NULL, LOG_SYSLOG, TRUE);
         }
@@ -1208,7 +1208,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       strcat(buf, ". It's almost invisible under clothing.");
     break;
   case ITEM_PROGRAM:
-    sprintf(ENDOF(buf), " a rating %d %s program, that is %dMp in size.", GET_OBJ_VAL(obj, 1),
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " a rating %d %s program, that is %dMp in size.", GET_OBJ_VAL(obj, 1),
             programs[GET_OBJ_VAL(obj, 0)].name, GET_OBJ_VAL(obj, 2));
     break;
   case ITEM_CYBERDECK:
@@ -1310,25 +1310,25 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       strcat(buf, " used to allow other people to surf along side you.");
     break;
   case ITEM_SPELL_FORMULA:
-    sprintf(ENDOF(buf), " a rating %d spell formula, describing %s. It is designed for use by a %s mage.", GET_OBJ_VAL(obj, 0),
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " a rating %d spell formula, describing %s. It is designed for use by a %s mage.", GET_OBJ_VAL(obj, 0),
             spells[GET_OBJ_VAL(obj, 1)].name, GET_OBJ_VAL(obj, 2) == 1 ? "shamanic" : "hermetic");
     break;
   case ITEM_GUN_ACCESSORY:
-    sprintf(ENDOF(buf), " a firearm accessory that attaches to the %s of a weapon.", (GET_OBJ_VAL(obj, 0) == 0 ? "top" : 
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " a firearm accessory that attaches to the %s of a weapon.", (GET_OBJ_VAL(obj, 0) == 0 ? "top" : 
                                                                                      (GET_OBJ_VAL(obj, 0) == 1 ? "barrel" : "bottom")));
     break;
   case ITEM_GUN_AMMO:
-    sprintf(ENDOF(buf), " a box of ammunition for reloading %s magazines. It contains %d rounds of %s ammo.",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " a box of ammunition for reloading %s magazines. It contains %d rounds of %s ammo.",
             weapon_type[GET_AMMOBOX_WEAPON(obj)],
             GET_AMMOBOX_QUANTITY(obj),
             ammo_type[GET_AMMOBOX_TYPE(obj)].name);
     break;
   case ITEM_FOCUS:
-    sprintf(ENDOF(buf), " a rating %d %s focus.", GET_OBJ_VAL(obj, 1), foci_type[GET_OBJ_VAL(obj, 0)]);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " a rating %d %s focus.", GET_OBJ_VAL(obj, 1), foci_type[GET_OBJ_VAL(obj, 0)]);
     break;
   case ITEM_MAGIC_TOOL:
     if (GET_OBJ_VAL(obj, 0) == TYPE_LIBRARY_CONJURE || GET_OBJ_VAL(obj, 0) == TYPE_LIBRARY_SPELL) {
-      sprintf(ENDOF(buf), "  is a rating %d ", GET_OBJ_VAL(obj, 1));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  is a rating %d ", GET_OBJ_VAL(obj, 1));
       if (GET_OBJ_VAL(obj, 0) == TYPE_LIBRARY_CONJURE)
         strcat(buf, "conjuring");
       else if (GET_OBJ_VAL(obj, 0) == TYPE_LIBRARY_SPELL)
@@ -1399,13 +1399,13 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     strcat(buf, " engines.");
     break;
   default:
-    sprintf(buf, "%s I don't know anything about that.", GET_CHAR_NAME(ch));
+    snprintf(buf, sizeof(buf), "%s I don't know anything about that.", GET_CHAR_NAME(ch));
   }
   strcat(buf, " It weighs about ");
   if (GET_OBJ_WEIGHT(obj) < 1) {
-    sprintf(ENDOF(buf), "%d grams", (int)(GET_OBJ_WEIGHT(obj) * 1000));
-  } else sprintf(ENDOF(buf), "%.0f kilogram%s", GET_OBJ_WEIGHT(obj), (GET_OBJ_WEIGHT(obj) >= 2 ? "s" : ""));
-  sprintf(ENDOF(buf), " and I couldn't let it go for less than %d nuyen.", buy_price(obj, shop_nr));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d grams", (int)(GET_OBJ_WEIGHT(obj) * 1000));
+  } else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%.0f kilogram%s", GET_OBJ_WEIGHT(obj), (GET_OBJ_WEIGHT(obj) >= 2 ? "s" : ""));
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and I couldn't let it go for less than %d nuyen.", buy_price(obj, shop_nr));
   
   if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
     strcat(buf, " ^Y(OOC: It has no special coded effects.)^n");
@@ -1423,23 +1423,23 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   if (!is_ok_char(keeper, ch, shop_nr))
     return;
   int i = 0;
-  sprintf(buf, "You have the following on order: \r\n");
+  snprintf(buf, sizeof(buf), "You have the following on order: \r\n");
   for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next)
     if (order->player == GET_IDNUM(ch))
     {
       i++;
       float totaltime = order->timeavail - time(0);
       totaltime = totaltime / SECS_PER_MUD_DAY;
-      sprintf(ENDOF(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_object(order->item)]), order->number);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_object(order->item)]), order->number);
       if (totaltime < 0)
         strcat(buf, " AVAILABLE\r\n");
       else
-        sprintf(ENDOF(buf), " %d %s\r\n", totaltime < 1 ? (int)(24 * totaltime) : (int)totaltime,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d %s\r\n", totaltime < 1 ? (int)(24 * totaltime) : (int)totaltime,
                 totaltime < 1 ? "hours" : (totaltime == 1 ? "day" : "days"));
     }
   if (i == 0)
   {
-    sprintf(buf, "%s You don't have anything on order here.", GET_CHAR_NAME(ch));
+    snprintf(buf, sizeof(buf), "%s You don't have anything on order here.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
   } else
     send_to_char(buf, ch);
@@ -1463,7 +1463,7 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     {
       struct obj_data *obj = read_object(order->item, VIRTUAL), *cred = get_first_credstick(ch, "credstick");
       if (!cred && shop_table[shop_nr].type == SHOP_LEGAL) {
-        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return;
       }
@@ -1475,7 +1475,7 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
       }
       return;
     }
-  sprintf(buf, "%s I don't have anything for you.", GET_CHAR_NAME(ch));
+  snprintf(buf, sizeof(buf), "%s I don't have anything for you.", GET_CHAR_NAME(ch));
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
 }
 
@@ -1490,19 +1490,19 @@ void shop_cancel(char *arg, struct char_data *ch, struct char_data *keeper, vnum
   int number;
   strcpy(buf, GET_CHAR_NAME(ch));
   if (!(number = atoi(arg)))
-    sprintf(ENDOF(buf), " What order do you want to cancel?");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " What order do you want to cancel?");
   else
   {
     for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next)
       if (order->player == GET_IDNUM(ch) && !--number) {
         struct shop_order_data *temp;
-        sprintf(ENDOF(buf), " I'll let my contacts know you no longer want %s.", GET_OBJ_NAME(&obj_proto[real_object(order->item)]));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I'll let my contacts know you no longer want %s.", GET_OBJ_NAME(&obj_proto[real_object(order->item)]));
         REMOVE_FROM_LIST(order, shop_table[shop_nr].order, next);
         delete order;
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return;
       }
-    sprintf(ENDOF(buf), " You don't have that many orders with me.");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You don't have that many orders with me.");
   }
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
 
@@ -1516,22 +1516,22 @@ void shop_hours(struct char_data *ch, vnum_t shop_nr)
   else {
     strcat(buf, "open from ");
     if (shop_table[shop_nr].open < 12)
-      sprintf(ENDOF(buf), "%dam", shop_table[shop_nr].open);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%dam", shop_table[shop_nr].open);
     else if (shop_table[shop_nr].open == 12)
       strcat(buf, "noon");
     else if (shop_table[shop_nr].open == 24)
       strcat(buf, "midnight");
     else
-      sprintf(ENDOF(buf), "%dpm", shop_table[shop_nr].open - 12);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%dpm", shop_table[shop_nr].open - 12);
     strcat(buf, " until ");
     if (shop_table[shop_nr].close < 12)
-      sprintf(ENDOF(buf), "%dam", shop_table[shop_nr].close);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%dam", shop_table[shop_nr].close);
     else if (shop_table[shop_nr].close == 12)
       strcat(buf, "noon");
     else if (shop_table[shop_nr].close == 24)
       strcat(buf, "midnight");
     else
-      sprintf(ENDOF(buf), "%dpm", shop_table[shop_nr].close - 12);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%dpm", shop_table[shop_nr].close - 12);
   }
   strcat(buf, ".\r\n");
   send_to_char(buf, ch);
@@ -1608,23 +1608,23 @@ void randomize_shop_prices(void)
 
 void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
 {
-  sprintf(buf, "Vnum:       [%5ld], Rnum: [%5ld]\r\n", shop_table[shop_nr].vnum, shop_nr);
-  sprintf(ENDOF(buf), "Name: %30s Shopkeeper: %s [%5ld]\r\n", shop_table[shop_nr].shopname,
+  snprintf(buf, sizeof(buf), "Vnum:       [%5ld], Rnum: [%5ld]\r\n", shop_table[shop_nr].vnum, shop_nr);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Name: %30s Shopkeeper: %s [%5ld]\r\n", shop_table[shop_nr].shopname,
                        mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name,
           shop_table[shop_nr].keeper);
-  sprintf(ENDOF(buf), "Buy at:     [%1.2f], Sell at: [%1.2f], +/- %%: [%d], Current %%: [%d], Hours [%d-%d]\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Buy at:     [%1.2f], Sell at: [%1.2f], +/- %%: [%d], Current %%: [%d], Hours [%d-%d]\r\n",
           shop_table[shop_nr].profit_buy, shop_table[shop_nr].profit_sell, shop_table[shop_nr].random_amount,
           shop_table[shop_nr].random_current, shop_table[shop_nr].open, shop_table[shop_nr].close);
-  sprintf(ENDOF(buf), "Type:       %s, Etiquette: %s\r\n", shop_type[shop_table[shop_nr].type], skills[shop_table[shop_nr].ettiquete].name);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type:       %s, Etiquette: %s\r\n", shop_type[shop_table[shop_nr].type], skills[shop_table[shop_nr].ettiquete].name);
   shop_table[shop_nr].races.PrintBits(buf2, MAX_STRING_LENGTH, pc_race_types, NUM_RACES);
-  sprintf(ENDOF(buf), "!Serves:     %s\r\n", buf2);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "!Serves:     %s\r\n", buf2);
   shop_table[shop_nr].flags.PrintBits(buf2, MAX_STRING_LENGTH, shop_flags, SHOP_FLAGS);
-  sprintf(ENDOF(buf), "Flags:      %s\r\n", buf2);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Flags:      %s\r\n", buf2);
   shop_table[shop_nr].buytypes.PrintBits(buf2, MAX_STRING_LENGTH, item_types, NUM_ITEMS);
-  sprintf(ENDOF(buf), "Buytypes:   %s\r\n", buf2);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Buytypes:   %s\r\n", buf2);
   strcat(buf, "Selling: \r\n");
   for (struct shop_sell_data *selling = shop_table[shop_nr].selling; selling; selling = selling->next)
-    sprintf(ENDOF(buf), "%-50s (%5ld) Type: %s Amount: %d\r\n", obj_proto[real_object(selling->vnum)].text.name,
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-50s (%5ld) Type: %s Amount: %d\r\n", obj_proto[real_object(selling->vnum)].text.name,
             selling->vnum, selling_type[selling->type], selling->stock);
   page_string(ch->desc, buf, 0);
 }
@@ -1635,7 +1635,7 @@ void write_shops_to_disk(int zone)
   FILE *fp;
   struct shop_data *shop;
   zone = real_zone(zone);
-  sprintf(buf, "%s/%d.shp", SHP_PREFIX, zone_table[zone].number);
+  snprintf(buf, sizeof(buf), "%s/%d.shp", SHP_PREFIX, zone_table[zone].number);
   fp = fopen(buf, "w+");
 
   /* start running through all mobiles in this zone */
@@ -1750,10 +1750,10 @@ void shedit_disp_selling_menu(struct descriptor_data *d)
   for (struct shop_sell_data *sell = SHOP->selling; sell; sell = sell->next, i++)
   {
 
-    sprintf(buf, "%d) ^c%-50s^n (^c%5ld^n) Type: ^c%6s^n", i, GET_OBJ_NAME(&obj_proto[real_object(sell->vnum)]),
+    snprintf(buf, sizeof(buf), "%d) ^c%-50s^n (^c%5ld^n) Type: ^c%6s^n", i, GET_OBJ_NAME(&obj_proto[real_object(sell->vnum)]),
             sell->vnum, selling_type[sell->type]);
     if (sell->type == SELL_STOCK)
-      sprintf(ENDOF(buf), " Stock: ^c%d^n", sell->stock);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Stock: ^c%d^n", sell->stock);
     strcat(buf, "\r\n");
     send_to_char(buf, CH);
   }
@@ -1819,7 +1819,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y':
       if (!vnum_from_non_connected_zone(d->edit_number)) {
-        sprintf(buf,"%s wrote new shop #%ld",
+        snprintf(buf, sizeof(buf),"%s wrote new shop #%ld",
                 GET_CHAR_NAME(d->character), d->edit_number);
         mudlog(buf, d->character, LOG_WIZLOG, TRUE);
       }

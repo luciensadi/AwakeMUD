@@ -47,7 +47,7 @@ ACMD(do_helpedit) {
   }
   
   // Looks like we gotta do a SQL lookup to see if their target file exists.
-  sprintf(buf, "SELECT name, body FROM help_topic WHERE name='%s'", prepare_quotes(buf2, argument, sizeof(buf2)));
+  snprintf(buf, sizeof(buf), "SELECT name, body FROM help_topic WHERE name='%s'", prepare_quotes(buf2, argument, sizeof(buf2)));
   if (mysql_wrapper(mysql, buf)) {
     send_to_char("Sorry, an error occurred. Try again later.\r\n", ch);
     mudlog("SYSERR: A MySQL error occurred while attempting to edit a helpfile. See log for details.", ch, LOG_SYSLOG, TRUE);
@@ -94,7 +94,7 @@ ACMD(do_helpexport) {
   skip_spaces(&argument);
   
   // Looks like we gotta do a SQL lookup to see if their target file exists.
-  sprintf(buf, "SELECT name FROM help_topic WHERE name='%s'", prepare_quotes(buf2, argument, sizeof(buf2)));
+  snprintf(buf, sizeof(buf), "SELECT name FROM help_topic WHERE name='%s'", prepare_quotes(buf2, argument, sizeof(buf2)));
   if (mysql_wrapper(mysql, buf)) {
     send_to_char("Sorry, an error occurred. Try again later.\r\n", ch);
     mudlog("SYSERR: A MySQL error occurred while attempting to export a helpfile. See log for details.", ch, LOG_SYSLOG, TRUE);
@@ -163,7 +163,7 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
       
       // Force no formatting mode by making the first entry into the string buf the special code /**/.
       char str_buf[50];
-      sprintf(str_buf, "/**/");
+      snprintf(str_buf, sizeof(str_buf), "/**/");
       string_add(d, str_buf);
       break;
     case 't':
@@ -177,25 +177,25 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
       char query_buf[MAX_STRING_LENGTH];
       if (HELPFILE->title && HELPFILE->original_title && strcmp(HELPFILE->title, HELPFILE->original_title) != 0) {
         // Updated existing and changed name.
-        sprintf(buf, "%s wrote new helpfile '%s' (renamed from '%s').", GET_CHAR_NAME(CH), HELPFILE->title, HELPFILE->original_title);
+        snprintf(buf, sizeof(buf), "%s wrote new helpfile '%s' (renamed from '%s').", GET_CHAR_NAME(CH), HELPFILE->title, HELPFILE->original_title);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       } else if (HELPFILE->original_title && !HELPFILE->title) {
         // Updated existing.
-        sprintf(buf, "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->original_title);
+        snprintf(buf, sizeof(buf), "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->original_title);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       } else {
         // Created new.
-        sprintf(buf, "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->title ? HELPFILE->title : HELPFILE->original_title);
+        snprintf(buf, sizeof(buf), "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->title ? HELPFILE->title : HELPFILE->original_title);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
       
       if (HELPFILE->original_title) {
-        sprintf(buf, "Query to restore original helpfile: \r\n%s\r\n", generate_sql_for_helpfile_by_name(HELPFILE->original_title));
+        snprintf(buf, sizeof(buf), "Query to restore original helpfile: \r\n%s\r\n", generate_sql_for_helpfile_by_name(HELPFILE->original_title));
         log(buf);
       }
       
       // Delete the original help article (if any).
-      sprintf(query_buf, "DELETE FROM help_topic WHERE `name`='%s'", prepare_quotes(buf3, HELPFILE->original_title, sizeof(buf)));
+      snprintf(query_buf, sizeof(query_buf), "DELETE FROM help_topic WHERE `name`='%s'", prepare_quotes(buf3, HELPFILE->original_title, sizeof(buf)));
       mysql_wrapper(mysql, query_buf);
       
       // Compose and execute the insert-on-duplicate-key-update query.
@@ -242,7 +242,7 @@ void helpedit_parse(struct descriptor_data *d, const char *arg) {
       
       // Check for clobber. Ignore clobber if it's this file's own title.
       if (HELPFILE->original_title && str_cmp(arg, HELPFILE->original_title) != 0) {
-        sprintf(buf, "SELECT name FROM help_topic WHERE `name`='%s'",
+        snprintf(buf, sizeof(buf), "SELECT name FROM help_topic WHERE `name`='%s'",
                 prepare_quotes(buf2, arg, sizeof(buf2)));
         mysql_wrapper(mysql, buf);
         res = mysql_use_result(mysql);
@@ -264,7 +264,7 @@ void helpedit_parse(struct descriptor_data *d, const char *arg) {
       // We should never get here.
       break;
     default:
-      sprintf(buf, "SYSERR: Unknown helpedit edit mode %d encountered in helpedit_parse.", STATE(d));
+      snprintf(buf, sizeof(buf), "SYSERR: Unknown helpedit edit mode %d encountered in helpedit_parse.", STATE(d));
       mudlog(buf, d->original ? d->original : d->character, LOG_SYSLOG, TRUE);
       send_to_char("Sorry, your edit has been corrupted.\r\n", CH);
       helpedit_disp_menu(d);
@@ -283,7 +283,7 @@ const char *generate_sql_for_helpfile(const char *name, const char *body) {
   
   static char output_buf[MAX_STRING_LENGTH];
   
-  sprintf(output_buf, "INSERT INTO help_topic (name, body) VALUES ('%s', '%s')"
+  snprintf(output_buf, sizeof(output_buf), "INSERT INTO help_topic (name, body) VALUES ('%s', '%s')"
           " ON DUPLICATE KEY UPDATE"
           " `name` = VALUES(`name`),"
           " `body` = VALUES(`body`);",
@@ -296,19 +296,19 @@ const char *generate_sql_for_helpfile(const char *name, const char *body) {
 // Given a helpfile's name, generate the SQL to restore it.
 const char *generate_sql_for_helpfile_by_name(const char *name) {
   if (!name || !*name) {
-    sprintf(buf3, "SYSERR: generate_sql_for_helpfile_by_name received name '%s'.", name);
+    snprintf(buf3, sizeof(buf3), "SYSERR: generate_sql_for_helpfile_by_name received name '%s'.", name);
     mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
   
   if (strchr(name, '%')) {
-    sprintf(buf3, "SYSERR: generate_sql_for_helpfile_by_name received name that contained %% '%s'.", name);
+    snprintf(buf3, sizeof(buf3), "SYSERR: generate_sql_for_helpfile_by_name received name that contained %% '%s'.", name);
     mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
   
   char quotebuf[500];
-  sprintf(buf, "SELECT * FROM help_topic WHERE name='%s'", prepare_quotes(quotebuf, name, sizeof(quotebuf)));
+  snprintf(buf, sizeof(buf), "SELECT * FROM help_topic WHERE name='%s'", prepare_quotes(quotebuf, name, sizeof(quotebuf)));
   if (mysql_wrapper(mysql, buf))
     return NULL;
   
@@ -321,7 +321,7 @@ const char *generate_sql_for_helpfile_by_name(const char *name) {
   }
   mysql_free_result(res);
   
-  sprintf(buf3, "SYSERR: Received invalid name '%s' to generate_sql_for_helpfile_by_name, returning no query.", name);
+  snprintf(buf3, sizeof(buf3), "SYSERR: Received invalid name '%s' to generate_sql_for_helpfile_by_name, returning no query.", name);
   mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
   return NULL;
 }

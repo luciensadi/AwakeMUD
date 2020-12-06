@@ -67,7 +67,7 @@ int number(int from, int to)
   
   if (to > RAND_MAX) {
     char errbuf[150];
-    sprintf(errbuf, "WARNING: Attempting to generate random number between %d and %d, but RAND_MAX is %d!", from, to, RAND_MAX);
+    snprintf(errbuf, sizeof(errbuf), "WARNING: Attempting to generate random number between %d and %d, but RAND_MAX is %d!", from, to, RAND_MAX);
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
   }
   
@@ -555,9 +555,9 @@ char *str_dup(const char *source)
   char *New = new char[strlen(source) + 1];
   
   // This shouldn't be needed, but just in case.
-  memset(New, 0, sizeof(char) * (strlen(source) + 1));
+  // memset(New, 0, sizeof(char) * (strlen(source) + 1));
   
-  sprintf(New, "%s", source);
+  strcpy(New, source);
   return New;
 }
 
@@ -683,7 +683,7 @@ void log_death_trap(struct char_data * ch)
   char buf[150];
   extern struct room_data *world;
   
-  sprintf(buf, "%s hit DeathTrap #%ld (%s)", GET_CHAR_NAME(ch),
+  snprintf(buf, sizeof(buf), "%s hit DeathTrap #%ld (%s)", GET_CHAR_NAME(ch),
           ch->in_room->number, ch->in_room->name);
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 }
@@ -736,17 +736,17 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   
   if (ch && (ch->in_room || ch->in_veh)) {
     if (ch->desc)
-      sprintf(buf2, "[%5ld] (%s) ",
+      snprintf(buf2, sizeof(buf2), "[%5ld] (%s) ",
               get_ch_in_room(ch)->number,
               GET_CHAR_NAME(ch));
     else
-      sprintf(buf2, "[%5ld] ", get_ch_in_room(ch)->number);
+      snprintf(buf2, sizeof(buf2), "[%5ld] ", get_ch_in_room(ch)->number);
   }
   
   if (file)
     fprintf(stderr, "%-19.19s :: %s: %s%s\n", tmp, log_types[log], buf2, str);
   
-  sprintf(buf, "^g[%s: %s%s^g]^n\r\n", log_types[log], buf2, str);
+  snprintf(buf, sizeof(buf), "^g[%s: %s%s^g]^n\r\n", log_types[log], buf2, str);
   
   for (i = descriptor_list; i; i = i->next)
     if (!i->connected)
@@ -810,7 +810,7 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
           break;
         default:
           char errbuf[500];
-          sprintf(errbuf, "SYSERR: Attempting to display a message to log type %d, but that log type is not handled in utils.cpp's mudlog() function! Dumping to SYSLOG.", log);
+          snprintf(errbuf, sizeof(errbuf), "SYSERR: Attempting to display a message to log type %d, but that log type is not handled in utils.cpp's mudlog() function! Dumping to SYSLOG.", log);
           mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
           check_log = PRF_SYSLOG;
           break;
@@ -855,7 +855,7 @@ void sprintbit(long vektor, const char *names[], char *result)
 
 void sprinttype(int type, const char *names[], char *result)
 {
-  sprintf(result, "%s", names[type]);
+  snprintf(result, sizeof(result), "%s", names[type]);
   
   if (str_cmp(result, "(null)") == 0) {
     strcpy(result, "UNDEFINED");
@@ -870,7 +870,7 @@ void sprint_obj_mods(struct obj_data *obj, char *result)
     char xbuf[MAX_STRING_LENGTH];
     obj->obj_flags.bitvector.PrintBits(xbuf, MAX_STRING_LENGTH,
                                        affected_bits, AFF_MAX);
-    sprintf(result,"%s %s", result, xbuf);
+    snprintf(result, sizeof(result),"%s %s", result, xbuf);
   }
   
   for (int i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -878,7 +878,7 @@ void sprint_obj_mods(struct obj_data *obj, char *result)
     {
       char xbuf[MAX_STRING_LENGTH];
       sprinttype(obj->affected[i].location, apply_types, xbuf);
-      sprintf(result,"%s (%+d %s)",
+      snprintf(result, sizeof(result),"%s (%+d %s)",
               result, obj->affected[i].modifier, xbuf);
     }
   return;
@@ -1063,9 +1063,9 @@ char * buf_mod(char *rbuf, const char *name, int bonus)
     return rbuf;
   rbuf += strlen(rbuf);
   if ( bonus > 0 )
-    sprintf(rbuf, "%s +%d, ", name, bonus);
+    snprintf(rbuf, sizeof(rbuf), "%s +%d, ", name, bonus);
   else
-    sprintf(rbuf, "%s %d, ", name, bonus);
+    snprintf(rbuf, sizeof(rbuf), "%s %d, ", name, bonus);
   rbuf += strlen(rbuf);
   return rbuf;
 }
@@ -1075,7 +1075,7 @@ char * buf_roll(char *rbuf, const char *name, int bonus)
   if ( !rbuf )
     return rbuf;
   rbuf += strlen(rbuf);
-  sprintf(rbuf, " [%s %d]", name, bonus);
+  snprintf(rbuf, sizeof(rbuf), " [%s %d]", name, bonus);
   return rbuf;
 }
 
@@ -1366,7 +1366,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     if (target >= 8)
       return 0;
     target += 4;
-    sprintf(gskbuf, "$n (%s) %s(%d) = %d(%d): +4 TN", GET_CHAR_NAME(ch), skills[skill].name, skill, GET_SKILL(ch, skill), REAL_SKILL(ch, skill));
+    snprintf(gskbuf, sizeof(gskbuf), "$n (%s) %s(%d) = %d(%d): +4 TN", GET_CHAR_NAME(ch), skills[skill].name, skill, GET_SKILL(ch, skill), REAL_SKILL(ch, skill));
     act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
     return GET_ATT(ch, skills[skill].attribute);
   }
@@ -1568,9 +1568,9 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
     send_to_char(ch, "You feel the last of your magic leave your body.\r\n", ch);
     PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);
     GET_TRADITION(ch) = TRAD_MUNDANE;
-    sprintf(buf, "DELETE FROM pfiles_magic WHERE idnum=%ld;", GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_magic WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
-    sprintf(buf, "UPDATE pfiles SET Tradition=%d WHERE idnum=%ld;", TRAD_MUNDANE, GET_IDNUM(ch));
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Tradition=%d WHERE idnum=%ld;", TRAD_MUNDANE, GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     for (int i = 0; i < NUM_WEARS; i++)
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch))
@@ -1637,7 +1637,7 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
 bool _is_workshop_valid(struct obj_data *obj) {
   // We only allow workshop-type items in this function.
   if (GET_OBJ_TYPE(obj) != ITEM_WORKSHOP) {
-    sprintf(buf, "SYSERR: Non-workshop item '%s' (%ld) passed to workshop functions.",
+    snprintf(buf, sizeof(buf), "SYSERR: Non-workshop item '%s' (%ld) passed to workshop functions.",
             GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -1645,7 +1645,7 @@ bool _is_workshop_valid(struct obj_data *obj) {
   
   // Don't allow it to crash the MUD via out-of-bounds world table access.
   if (!obj->in_room) {
-    sprintf(buf, "SYSERR: Workshop '%s' (%ld) has NULL room.",
+    snprintf(buf, sizeof(buf), "SYSERR: Workshop '%s' (%ld) has NULL room.",
             GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -1704,7 +1704,7 @@ void remove_workshop_from_room(struct obj_data *obj) {
         case TYPE_KIT:
           break;
         default:
-          sprintf(buf, "SYSERR: Invalid workshop type %d found for object '%s' (%ld).", GET_WORKSHOP_GRADE(o), GET_OBJ_NAME(o), GET_OBJ_VNUM(o));
+          snprintf(buf, sizeof(buf), "SYSERR: Invalid workshop type %d found for object '%s' (%ld).", GET_WORKSHOP_GRADE(o), GET_OBJ_NAME(o), GET_OBJ_VNUM(o));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           break;
       }
@@ -1779,7 +1779,7 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
   
   // Require that they be in a vehicle. Error and clear their flag if they're not.
   if (!ch->in_veh) {
-    sprintf(buf, "SYSERR: Attempting to get mount manned by %s, but %s is not in any vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
+    snprintf(buf, sizeof(buf), "SYSERR: Attempting to get mount manned by %s, but %s is not in any vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     
     // Clean up their mount info. We don't use stop_manning..() because it calls this function itself.
@@ -1800,7 +1800,7 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
   }
   
   // No mount? Error and clear their flag.
-  sprintf(buf, "SYSERR: Attempting to get mount manned by %s, but the mount does not exist in %s vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
+  snprintf(buf, sizeof(buf), "SYSERR: Attempting to get mount manned by %s, but the mount does not exist in %s vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
   mudlog(buf, ch, LOG_SYSLOG, TRUE);
   
   // Clean up their mount info.
@@ -1824,7 +1824,7 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
   
   // Precondition: Channel must be a valid index (0 ≤ channel < number of channels defined in awake.h).
   if (channel < 0 || channel >= NUM_COMMUNICATION_CHANNELS) {
-    sprintf(log_message, "SYSERR: Channel %d is not within bounds 0 <= channel < %d.", channel, NUM_COMMUNICATION_CHANNELS);
+    snprintf(log_message, sizeof(log_message), "SYSERR: Channel %d is not within bounds 0 <= channel < %d.", channel, NUM_COMMUNICATION_CHANNELS);
     mudlog(log_message, NULL, LOG_SYSLOG, TRUE);
     return;
   }
@@ -1862,7 +1862,7 @@ void delete_message_history(struct descriptor_data *d) {
 
 // Call this to kill the game while notifying staff etc of what happened.
 void terminate_mud_process_with_message(const char *message, int error_code) {
-  sprintf(buf, "FATAL ERROR: The MUD has encountered a terminal error (code %d) and will now halt. The message given was as follows: %s",
+  snprintf(buf, sizeof(buf), "FATAL ERROR: The MUD has encountered a terminal error (code %d) and will now halt. The message given was as follows: %s",
           error_code, message);
   mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   log(buf);
@@ -1872,7 +1872,7 @@ void terminate_mud_process_with_message(const char *message, int error_code) {
 struct room_data *get_veh_in_room(struct veh_data *veh) {
   char errbuf[500];
   if (!veh) {
-    sprintf(errbuf, "SYSERR: get_veh_in_room was passed a NULL vehicle!");
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: get_veh_in_room was passed a NULL vehicle!");
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
@@ -1882,7 +1882,7 @@ struct room_data *get_veh_in_room(struct veh_data *veh) {
   
   // Error messaging.
   if (!veh->in_room) {
-    sprintf(errbuf, "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
   }
   
@@ -1892,7 +1892,7 @@ struct room_data *get_veh_in_room(struct veh_data *veh) {
 struct room_data *get_ch_in_room(struct char_data *ch) {
   char errbuf[500];
   if (!ch) {
-    sprintf(errbuf, "SYSERR: get_ch_in_room was passed a NULL character!");
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room was passed a NULL character!");
     mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
     return NULL;
   }
@@ -1904,7 +1904,7 @@ struct room_data *get_ch_in_room(struct char_data *ch) {
     return get_veh_in_room(ch->in_veh);
   }
   
-  sprintf(errbuf, "SYSERR: get_ch_in_room called on char %s, but they're not in a room or vehicle!", GET_NAME(ch));
+  snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room called on char %s, but they're not in a room or vehicle!", GET_NAME(ch));
   mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
   
   return NULL;
@@ -1913,7 +1913,7 @@ struct room_data *get_ch_in_room(struct char_data *ch) {
 struct room_data *get_obj_in_room(struct obj_data *obj) {
   char errbuf[500];
   if (!obj) {
-    sprintf(errbuf, "SYSERR: get_obj_in_room was passed a NULL object!");
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: get_obj_in_room was passed a NULL object!");
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
@@ -1935,7 +1935,7 @@ struct room_data *get_obj_in_room(struct obj_data *obj) {
     return get_ch_in_room(obj->carried_by);
   
   // All is lost. The object floats in an endless void.
-  sprintf(errbuf, "SYSERR: get_obj_in_room called on obj %s, but it's not in a room or vehicle!", GET_OBJ_NAME(obj));
+  snprintf(errbuf, sizeof(errbuf), "SYSERR: get_obj_in_room called on obj %s, but it's not in a room or vehicle!", GET_OBJ_NAME(obj));
   mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
   
   return NULL;
@@ -2020,7 +2020,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
       || location > ACCESS_ACCESSORY_LOCATION_UNDER) {
     if (ch)
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
-    sprintf(buf, "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).",
+    snprintf(buf, sizeof(buf), "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).",
             location, GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -2030,7 +2030,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     if (ch)
       send_to_char(ch, "%s is not a gun accessory.\r\n", CAP(GET_OBJ_NAME(attachment)));
     else {
-      sprintf(buf, "SYSERR: Attempting to attach non-attachment '%s' (%ld) to '%s' (%ld).",
+      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach non-attachment '%s' (%ld) to '%s' (%ld).",
               GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
@@ -2041,7 +2041,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     if (ch)
       send_to_char(ch, "%s is not a gun.\r\n", CAP(GET_OBJ_NAME(weapon)));
     else {
-      sprintf(buf, "SYSERR: Attempting to attach '%s' (%ld) to non-gun '%s' (%ld).",
+      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach '%s' (%ld) to non-gun '%s' (%ld).",
               GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
@@ -2052,7 +2052,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     if (ch)
       send_to_char(ch, "%s are for your eyes, not your gun.\r\n", CAP(GET_OBJ_NAME(attachment)));
     else {
-      sprintf(buf, "SYSERR: Attempting to attach smartgoggle '%s' (%ld) to '%s' (%ld).",
+      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach smartgoggle '%s' (%ld) to '%s' (%ld).",
               GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
@@ -2067,7 +2067,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
                    gun_accessory_locations[location],
                    GET_OBJ_NAME(weapon));
     } else {
-      sprintf(buf, "SYSERR: Attempting to attach '%s' (%ld) to already-filled %s location on '%s' (%ld).",
+      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach '%s' (%ld) to already-filled %s location on '%s' (%ld).",
               GET_OBJ_NAME(attachment),
               GET_OBJ_VNUM(attachment),
               gun_accessory_locations[location],
@@ -2086,7 +2086,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
                    CAP(GET_OBJ_NAME(weapon)),
                    gun_accessory_locations[location]);
     } else {
-      sprintf(buf, "SYSERR: Attempting to attach '%s' (%ld) to unacceptable %s location on '%s' (%ld).",
+      snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach '%s' (%ld) to unacceptable %s location on '%s' (%ld).",
               GET_OBJ_NAME(attachment),
               GET_OBJ_VNUM(attachment),
               gun_accessory_locations[location],
@@ -2104,7 +2104,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
       if (ch) {
         send_to_char(ch, "%ss can't use silencers or suppressors.\r\n", CAP(weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)]));
       } else {
-        sprintf(buf, "SYSERR: Attempting to attach silencer/suppressor '%s' (%ld) to %s '%s' (%ld).",
+        snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach silencer/suppressor '%s' (%ld) to %s '%s' (%ld).",
                 GET_OBJ_NAME(attachment),
                 GET_OBJ_VNUM(attachment),
                 weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)],
@@ -2122,7 +2122,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
         if (ch) {
           send_to_char(ch, "%s would tear your silencer apart-- it needs a sound suppressor.\r\n", CAP(GET_OBJ_NAME(weapon)));
         } else {
-          sprintf(buf, "SYSERR: Attempting to attach pistol silencer '%s' (%ld) to BF/FA weapon '%s' (%ld).",
+          snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach pistol silencer '%s' (%ld) to BF/FA weapon '%s' (%ld).",
                   GET_OBJ_NAME(attachment),
                   GET_OBJ_VNUM(attachment),
                   GET_OBJ_NAME(weapon),
@@ -2140,7 +2140,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
         if (ch) {
           send_to_char(ch, "Sound suppressors are too heavy-duty for %s-- it needs a silencer.\r\n", CAP(GET_OBJ_NAME(weapon)));
         } else {
-          sprintf(buf, "SYSERR: Attempting to attach rifle suppressor '%s' (%ld) to non-BF/FA weapon '%s' (%ld).",
+          snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach rifle suppressor '%s' (%ld) to non-BF/FA weapon '%s' (%ld).",
                   GET_OBJ_NAME(attachment),
                   GET_OBJ_VNUM(attachment),
                   GET_OBJ_NAME(weapon),
@@ -2166,12 +2166,12 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     
     if (!successfully_modified) {
       if (ch) {
-        sprintf(buf, "You seem unable to attach %s to %s.\r\n",
+        snprintf(buf, sizeof(buf), "You seem unable to attach %s to %s.\r\n",
                 GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
         send_to_char(buf, ch);
       }
       
-      sprintf(buf, "WARNING: '%s' (%ld) attempted to attach '%s' (%ld) to '%s' (%ld), but the gun was full up on affects. Something needs revising."
+      snprintf(buf, sizeof(buf), "WARNING: '%s' (%ld) attempted to attach '%s' (%ld) to '%s' (%ld), but the gun was full up on affects. Something needs revising."
               " Gun's current top/barrel/bottom attachment vnums are %d / %d / %d.",
               ch ? GET_CHAR_NAME(ch) : "An automated process", ch ? GET_IDNUM(ch) : -1,
               GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment),
@@ -2206,16 +2206,16 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
   if (ch) {
     int where = location;
     
-    sprintf(buf, "You attach $p to the %s of $P.",
+    snprintf(buf, sizeof(buf), "You attach $p to the %s of $P.",
             (where == 0 ? "top" : (where == 1 ? "barrel" : "underside")));
     act(buf, TRUE, ch, attachment, weapon, TO_CHAR);
     
-    sprintf(buf, "$n attaches $p to the %s of $P.",
+    snprintf(buf, sizeof(buf), "$n attaches $p to the %s of $P.",
             (where == 0 ? "top" : (where == 1 ? "barrel" : "underside")));
     act(buf, TRUE, ch, attachment, weapon, TO_ROOM);
   } else {
 #ifdef DEBUG_ATTACHMENTS
-    sprintf(buf, "Successfully attached '%s' (%ld) to the %s of '%s' (%ld).",
+    snprintf(buf, sizeof(buf), "Successfully attached '%s' (%ld) to the %s of '%s' (%ld).",
             GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment),
             gun_accessory_locations[GET_OBJ_VAL(attachment, 0)],
             GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
@@ -2239,7 +2239,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   if (location < ACCESS_LOCATION_TOP || location > ACCESS_LOCATION_UNDER) {
     if (ch)
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
-    sprintf(buf, "SYSERR: Attempt to unattach item from invalid location %d on '%s' (%ld).",
+    snprintf(buf, sizeof(buf), "SYSERR: Attempt to unattach item from invalid location %d on '%s' (%ld).",
             location, GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
   }
   
@@ -2247,7 +2247,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
     if (ch)
       send_to_char("You can only unattach accessories from weapons.\r\n", ch);
     else {
-      sprintf(buf, "SYSERR: Attempting to unattach something from non-weapon '%s' (%ld).",
+      snprintf(buf, sizeof(buf), "SYSERR: Attempting to unattach something from non-weapon '%s' (%ld).",
               GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
@@ -2261,7 +2261,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   if (!attachment) {
     if (ch)
       send_to_char("You accidentally break it as you remove it!\r\n", ch);
-    sprintf(buf, "SYSERR: Attempting to unattach invalid vnum %d from %s of weapon '%s' (%ld).",
+    snprintf(buf, sizeof(buf), "SYSERR: Attempting to unattach invalid vnum %d from %s of weapon '%s' (%ld).",
             GET_WEAPON_ATTACH_LOC(weapon, location), gun_accessory_locations[location - ACCESS_ACCESSORY_LOCATION_DELTA], GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     
@@ -2293,7 +2293,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
     }
     
     if (!successfully_modified) {
-      sprintf(buf, "WARNING: '%s' (%ld) unattached '%s' (%ld) from '%s' (%ld), but the gun was missing the attachment's affect. Something needs revising.",
+      snprintf(buf, sizeof(buf), "WARNING: '%s' (%ld) unattached '%s' (%ld) from '%s' (%ld), but the gun was missing the attachment's affect. Something needs revising.",
               ch ? GET_CHAR_NAME(ch) : "An automated process", ch ? GET_IDNUM(ch) : -1,
               GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment),
               GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
@@ -2418,7 +2418,7 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
 #undef REPLICATE
 }
 
-// Uses static, so don't use it more than once per call (to sprintf, etc)
+// Uses static, so don't use it more than once per call (to snprintf, etc)
 char *double_up_color_codes(const char *string) {
   static char doubledbuf[MAX_STRING_LENGTH];
   
@@ -2470,13 +2470,13 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
   }
   
   if (skill_num < MIN_SKILLS || skill_num >= MAX_SKILLS) {
-    sprintf(msgbuf, "SYSERR: Invalid skill number %d passed to set_character_skill.", skill_num);
+    snprintf(msgbuf, sizeof(msgbuf), "SYSERR: Invalid skill number %d passed to set_character_skill.", skill_num);
     mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
   
   if (new_value < 0 || (!access_level(ch, LVL_BUILDER) && new_value > MAX_SKILL_LEVEL_FOR_MORTS)) {
-    sprintf(msgbuf, "SYSERR: Attempting to assign skill level %d to %s, which exceeds range 0 <= x <= %d.",
+    snprintf(msgbuf, sizeof(msgbuf), "SYSERR: Attempting to assign skill level %d to %s, which exceeds range 0 <= x <= %d.",
             new_value, GET_CHAR_NAME(ch), access_level(ch, LVL_BUILDER) ? MAX_SKILL_LEVEL_FOR_IMMS : MAX_SKILL_LEVEL_FOR_MORTS);
     mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
     return;
@@ -2578,7 +2578,7 @@ const char *skill_rank_name(int rank, bool knowledge) {
 char *how_good(int skill, int rank)
 {
   static char buf[256];
-  sprintf(buf, " (%s)", skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE));
+  snprintf(buf, sizeof(buf), " (%s)", skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE));
   return buf;
 }
 
@@ -2674,19 +2674,19 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
     return str_dup(log_string);
   }
   
-  sprintf(log_string, "(obj %ld) %s%s",
+  snprintf(log_string, sizeof(log_string), "(obj %ld) %s%s",
           GET_OBJ_VNUM(obj),
           obj->text.name,
           IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? " [wizloaded]" : "");
     
   if (obj->restring)
-    sprintf(ENDOF(log_string), " [restring: %s]", obj->restring);
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s]", obj->restring);
   
   if (obj->contains) {
-    sprintf(ENDOF(log_string), ", containing: [");
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
     for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
       char *representation = generate_new_loggable_representation(temp);
-      sprintf(buf3, " %s%s%s",
+      snprintf(buf3, sizeof(buf3), " %s%s%s",
               (!temp->next_content && temp != obj->contains) ? "and " : "",
               representation,
               temp->next_content ? ";" : "");
@@ -2699,23 +2699,23 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
   switch(GET_OBJ_TYPE(obj)) {
     case ITEM_MONEY:
       // The only time we'll ever hit perform_give with money is if it's a credstick.
-      sprintf(ENDOF(log_string), ", containing %d nuyen", GET_OBJ_VAL(obj, 0));
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d nuyen", GET_OBJ_VAL(obj, 0));
       break;
     case ITEM_DECK_ACCESSORY:
       // Computer parts and optical chips.
       if (GET_OBJ_VAL(obj, 0) == TYPE_PARTS) {
-        sprintf(ENDOF(log_string), ", containing %d nuyen worth of %s", GET_OBJ_COST(obj), GET_OBJ_VAL(obj, 1) ? "optical chips" : "parts");
+        snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d nuyen worth of %s", GET_OBJ_COST(obj), GET_OBJ_VAL(obj, 1) ? "optical chips" : "parts");
       }
       break;
     case ITEM_MAGIC_TOOL:
       // Summoning materials.
       if (GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING) {
-        sprintf(ENDOF(log_string), ", containing %d nuyen worth of summoning materials", GET_OBJ_COST(obj));
+        snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d nuyen worth of summoning materials", GET_OBJ_COST(obj));
       }
       break;
     case ITEM_GUN_AMMO:
       // A box of ammunition.
-      sprintf(ENDOF(log_string), ", containing %d units of %s %s ammo", GET_OBJ_VAL(obj, 0),
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d units of %s %s ammo", GET_OBJ_VAL(obj, 0),
               ammo_type[GET_OBJ_VAL(obj, 2)].name, weapon_type[GET_OBJ_VAL(obj, 1)]);
       break;
     default:
@@ -2731,13 +2731,13 @@ void purgelog(struct veh_data *veh) {
   const char *representation = NULL;
   
   // Begin the purgelog entry.
-  sprintf(internal_buffer, "- Writing purgelog for vehicle %s (vnum %ld, idnum %ld, owned by %ld).", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), veh->idnum, veh->owner);
+  snprintf(internal_buffer, sizeof(internal_buffer), "- Writing purgelog for vehicle %s (vnum %ld, idnum %ld, owned by %ld).", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), veh->idnum, veh->owner);
   mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
   
   // Log its mounts.
   for (struct obj_data *mount = veh->mount; mount; mount = mount->next_content) {
     representation = generate_new_loggable_representation(mount);
-    sprintf(internal_buffer, "- Mount: %s", representation);
+    snprintf(internal_buffer, sizeof(internal_buffer), "- Mount: %s", representation);
     mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
     delete [] representation;
   }
@@ -2748,7 +2748,7 @@ void purgelog(struct veh_data *veh) {
       continue;
     
     representation = generate_new_loggable_representation(GET_MOD(veh, x));
-    sprintf(internal_buffer, "- Mod attached to the %s: %s", mod_name[x], representation);
+    snprintf(internal_buffer, sizeof(internal_buffer), "- Mod attached to the %s: %s", mod_name[x], representation);
     mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
     delete [] representation;
   }
@@ -2756,13 +2756,13 @@ void purgelog(struct veh_data *veh) {
   // Log its contained objects.
   for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content) {
     representation = generate_new_loggable_representation(obj);
-    sprintf(internal_buffer, "- Contained object: %s", representation);
+    snprintf(internal_buffer, sizeof(internal_buffer), "- Contained object: %s", representation);
     mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
     delete [] representation;
   }
   
   // End the purgelog entry.
-  sprintf(internal_buffer, "- End purgelog for %s.", GET_VEH_NAME(veh));
+  snprintf(internal_buffer, sizeof(internal_buffer), "- End purgelog for %s.", GET_VEH_NAME(veh));
   mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
 }
 
@@ -2888,13 +2888,13 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     char notification_string_buf[500];
     
     // Compose the new name.
-    sprintf(new_name_buf, "a box of %s %s ammunition", 
+    snprintf(new_name_buf, sizeof(new_name_buf), "a box of %s %s ammunition", 
       ammo_type[GET_AMMOBOX_TYPE(into)].name,
       weapon_type[GET_AMMOBOX_WEAPON(into)]
     );
     
     // Compose the notification string.
-    sprintf(notification_string_buf, "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
+    snprintf(notification_string_buf, sizeof(notification_string_buf), "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
       GET_OBJ_NAME(into),
       new_name_buf
     );

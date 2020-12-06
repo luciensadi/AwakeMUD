@@ -151,7 +151,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
            || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
         char *representation = generate_new_loggable_representation(obj);
-        sprintf(buf, "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
+        snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
                 representation);
         mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
@@ -190,7 +190,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
        || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
     char *representation = generate_new_loggable_representation(obj);
-    sprintf(buf, "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
+    snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
             GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
             representation);
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
@@ -317,13 +317,13 @@ ACMD(do_put)
     cyberdeck = TRUE;
 
   if (!*arg1) {
-    sprintf(buf, "%s what in what?\r\n", (cyberdeck ? "Install" : "Put"));
+    snprintf(buf, sizeof(buf), "%s what in what?\r\n", (cyberdeck ? "Install" : "Put"));
     send_to_char(buf, ch);
     return;
   }
   
   if (obj_dotmode != FIND_INDIV) {
-    sprintf(buf, "You can only %s %s into one %s at a time.\r\n",
+    snprintf(buf, sizeof(buf), "You can only %s %s into one %s at a time.\r\n",
             (cyberdeck ? "install" : "put"), (cyberdeck ? "programs" : "things"),
             (cyberdeck ? "cyberdeck" : "container"));
     send_to_char(buf, ch);
@@ -331,7 +331,7 @@ ACMD(do_put)
   }
   
   if (!*arg2) {
-    sprintf(buf, "What do you want to %s %s in?\r\n", (cyberdeck ? "install" : "put"),
+    snprintf(buf, sizeof(buf), "What do you want to %s %s in?\r\n", (cyberdeck ? "install" : "put"),
             ((obj_dotmode == FIND_INDIV) ? "it" : "them"));
     send_to_char(buf, ch);
     return;
@@ -425,7 +425,7 @@ ACMD(do_put)
   
   generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
   if (!cont) {
-    sprintf(buf, "You don't see %s %s here.\r\n", AN(arg2), arg2);
+    snprintf(buf, sizeof(buf), "You don't see %s %s here.\r\n", AN(arg2), arg2);
     send_to_char(buf, ch);
     return;
   }
@@ -501,12 +501,12 @@ ACMD(do_put)
   
   if (cyberdeck) {
     if (!(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK || GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)) {
-      sprintf(buf, "$p is not a cyberdeck.");
+      snprintf(buf, sizeof(buf), "$p is not a cyberdeck.");
       act(buf, FALSE, ch, cont, 0, TO_CHAR);
       return;
     }
   } else if (GET_OBJ_TYPE(cont) != ITEM_CONTAINER && GET_OBJ_TYPE(cont) != ITEM_QUIVER && GET_OBJ_TYPE(cont) != ITEM_WORN && GET_OBJ_TYPE(cont) != ITEM_KEYRING) {
-    sprintf(buf, "$p is not a container.");
+    snprintf(buf, sizeof(buf), "$p is not a container.");
     act(buf, FALSE, ch, cont, 0, TO_CHAR);
     return;
   }
@@ -518,7 +518,7 @@ ACMD(do_put)
   
   if (obj_dotmode == FIND_INDIV) {  /* put <obj> <container> */
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      sprintf(buf, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
+      snprintf(buf, sizeof(buf), "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
       send_to_char(buf, ch);
       return;
     }
@@ -583,10 +583,10 @@ ACMD(do_put)
     }
     if (!found) {
       if (obj_dotmode == FIND_ALL) {
-        sprintf(buf, "You don't seem to have anything to %s in it.\r\n", (cyberdeck ? "install" : "put"));
+        snprintf(buf, sizeof(buf), "You don't seem to have anything to %s in it.\r\n", (cyberdeck ? "install" : "put"));
         send_to_char(buf, ch);
       } else {
-        sprintf(buf, "You don't seem to have any %ss.\r\n", arg1);
+        snprintf(buf, sizeof(buf), "You don't seem to have any %ss.\r\n", arg1);
         send_to_char(buf, ch);
       }
     }
@@ -695,7 +695,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
            || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
         char *representation = generate_new_loggable_representation(obj);
-        sprintf(buf, "%s gets from (%ld) %s [restring: %s]: %s",
+        snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s",
                 GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
                 representation);
@@ -705,7 +705,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
 
       if (GET_OBJ_TYPE(cont) == ITEM_QUIVER)
         GET_OBJ_VAL(cont, 2) = MAX(0, GET_OBJ_VAL(cont, 2) - 1);
-      sprintf(buf, "You %s $p from $P.", (cyberdeck || computer ? "uninstall" : "get"));
+      snprintf(buf, sizeof(buf), "You %s $p from $P.", (cyberdeck || computer ? "uninstall" : "get"));
       
       if (computer) {
         if (ch->in_room) {
@@ -801,7 +801,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
     }
     obj = get_obj_in_list_vis(ch, arg, cont->contains);
     if (!obj) {
-      sprintf(buf, "There doesn't seem to be %s %s installed in $p.", AN(arg), arg);
+      snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s installed in $p.", AN(arg), arg);
       act(buf, FALSE, ch, cont, 0, TO_CHAR);
       return;
     }
@@ -834,7 +834,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
     } else {
       if (obj_dotmode == FIND_INDIV) {
         if (!(obj = get_obj_in_list_vis(ch, arg, cont->contains))) {
-          sprintf(buf, "There doesn't seem to be %s %s in $p.", AN(arg), arg);
+          snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s in $p.", AN(arg), arg);
           act(buf, FALSE, ch, cont, 0, TO_CHAR);
         } else {
           perform_get_from_container(ch, obj, cont, mode);
@@ -857,7 +857,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
           if (obj_dotmode == FIND_ALL)
             act("$p seems to be empty.", FALSE, ch, cont, 0, TO_CHAR);
           else {
-            sprintf(buf, "You can't seem to find any %ss in $p.", arg);
+            snprintf(buf, sizeof(buf), "You can't seem to find any %ss in $p.", arg);
             act(buf, FALSE, ch, cont, 0, TO_CHAR);
           }
         }
@@ -873,7 +873,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
   else if (obj_dotmode == FIND_INDIV)
   {
     if (!(obj = get_obj_in_list_vis(ch, arg, cont->contains))) {
-      sprintf(buf, "There doesn't seem to be %s %s in $p.", AN(arg), arg);
+      snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s in $p.", AN(arg), arg);
       act(buf, FALSE, ch, cont, 0, TO_CHAR);
     } else
       perform_get_from_container(ch, obj, cont, mode);
@@ -895,7 +895,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       if (obj_dotmode == FIND_ALL)
         act("$p seems to be empty.", FALSE, ch, cont, 0, TO_CHAR);
       else {
-        sprintf(buf, "You can't seem to find any %ss in $p.", arg);
+        snprintf(buf, sizeof(buf), "You can't seem to find any %ss in $p.", arg);
         act(buf, FALSE, ch, cont, 0, TO_CHAR);
       }
     }
@@ -940,7 +940,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
     if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
          || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
       char *representation = generate_new_loggable_representation(obj);
-      sprintf(buf, "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
+      snprintf(buf, sizeof(buf), "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
       mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
       delete [] representation;
     }
@@ -948,7 +948,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
     obj_to_char(obj, ch);
     act("You get $p.", FALSE, ch, obj, 0, TO_CHAR);
     if (ch->in_veh) {
-      sprintf(buf, "%s gets %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj));
+      snprintf(buf, sizeof(buf), "%s gets %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
     } else
       act("$n gets $p.", FALSE, ch, obj, 0, TO_ROOM);
@@ -972,7 +972,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
     else
       obj = get_obj_in_list_vis(ch, arg, ch->in_room->contents);
     if (!obj) {
-      sprintf(buf, "You don't see %s %s here.\r\n", AN(arg), arg);
+      snprintf(buf, sizeof(buf), "You don't see %s %s here.\r\n", AN(arg), arg);
       send_to_char(buf, ch);
     } else {
       if ( CAN_SEE_OBJ(ch, obj) ) {
@@ -1016,7 +1016,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
       if (dotmode == FIND_ALL)
         send_to_char("There doesn't seem to be anything here.\r\n", ch);
       else {
-        sprintf(buf, "You don't see any %ss here.\r\n", arg);
+        snprintf(buf, sizeof(buf), "You don't see any %ss here.\r\n", arg);
         send_to_char(buf, ch);
       }
     }
@@ -1047,7 +1047,7 @@ ACMD(do_get)
   if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
     send_to_char("Your arms are already full!\r\n", ch);
   else if (!*arg1) {
-    sprintf(buf, "%s what?\r\n", (cyberdeck ? "Uninstall" : (download ? "Download" : "Get")));
+    snprintf(buf, sizeof(buf), "%s what?\r\n", (cyberdeck ? "Uninstall" : (download ? "Download" : "Get")));
     send_to_char(buf, ch);
   } else if (!str_cmp(arg1, "tooth")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
@@ -1107,7 +1107,7 @@ ACMD(do_get)
       if (cyberdeck && veh) {
         cont = NULL;
         if (veh->owner != GET_IDNUM(ch) && veh->locked) {
-          sprintf(buf, "%s anti-theft measures beep loudly.\r\n", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s anti-theft measures beep loudly.\r\n", GET_VEH_NAME(veh));
           act(buf, FALSE, ch, 0, 0, TO_ROOM);
           send_to_char(buf, ch);
           return;
@@ -1130,7 +1130,7 @@ ACMD(do_get)
               break;
             }
         if (!cont) {
-          sprintf(buf, "There doesn't seem to be a %s installed on %s.\r\n", arg1, GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "There doesn't seem to be a %s installed on %s.\r\n", arg1, GET_VEH_NAME(veh));
           send_to_char(buf, ch);
           return;
         } else {
@@ -1209,8 +1209,8 @@ ACMD(do_get)
               return;
             }
           }
-          sprintf(buf, "$n goes to work on %s.", GET_VEH_NAME(veh));
-          sprintf(buf2, "You go to work on %s and remove %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(cont));
+          snprintf(buf, sizeof(buf), "$n goes to work on %s.", GET_VEH_NAME(veh));
+          snprintf(buf2, sizeof(buf2), "You go to work on %s and remove %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(cont));
           send_to_char(buf2, ch);
           act(buf, TRUE, ch, 0, 0, TO_ROOM);
           if (found == MOD_SEAT && cont->affected[0].modifier > 1) {
@@ -1262,14 +1262,14 @@ ACMD(do_get)
           return;
         }
       } else if (!cont) {
-        sprintf(buf, "You don't have %s %s.\r\n", AN(arg2), arg2);
+        snprintf(buf, sizeof(buf), "You don't have %s %s.\r\n", AN(arg2), arg2);
         send_to_char(buf, ch);
       } else if ((!cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING || GET_OBJ_TYPE(cont) ==
                                   ITEM_QUIVER || GET_OBJ_TYPE(cont) == ITEM_HOLSTER || GET_OBJ_TYPE(cont) ==
                                   ITEM_WORN)) || (cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK ||
                                                                  GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK ||
                                                                  GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY))) {
-        sprintf(buf, "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
+        snprintf(buf, sizeof(buf), "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
         act(buf, FALSE, ch, cont, 0, TO_CHAR);
       } else {
         get_from_container(ch, cont, arg1, mode);
@@ -1288,7 +1288,7 @@ ACMD(do_get)
             get_from_container(ch, cont, arg1, FIND_OBJ_INV);
           } else if (cont_dotmode == FIND_ALLDOT) {
             found = 1;
-            sprintf(buf, "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
+            snprintf(buf, sizeof(buf), "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
             act(buf, FALSE, ch, cont, 0, TO_CHAR);
           }
         }
@@ -1299,17 +1299,17 @@ ACMD(do_get)
             get_from_container(ch, cont, arg1, FIND_OBJ_ROOM);
             found = 1;
           } else if (cont_dotmode == FIND_ALLDOT) {
-            sprintf(buf, "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
+            snprintf(buf, sizeof(buf), "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
             act(buf, FALSE, ch, cont, 0, TO_CHAR);
             found = 1;
           }
         }
       if (!found) {
         if (cont_dotmode == FIND_ALL) {
-          sprintf(buf, "You can't seem to find any %s.\r\n", (!cyberdeck ? "containers" : "cyberdeck"));
+          snprintf(buf, sizeof(buf), "You can't seem to find any %s.\r\n", (!cyberdeck ? "containers" : "cyberdeck"));
           send_to_char(buf, ch);
         } else {
-          sprintf(buf, "You can't seem to find any %ss here.\r\n", arg2);
+          snprintf(buf, sizeof(buf), "You can't seem to find any %ss here.\r\n", arg2);
           send_to_char(buf, ch);
         }
       }
@@ -1358,7 +1358,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
       || (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)))
   {
 
-    sprintf(buf, "%s drops: %d nuyen *", GET_CHAR_NAME(ch),
+    snprintf(buf, sizeof(buf), "%s drops: %d nuyen *", GET_CHAR_NAME(ch),
             amount);
     mudlog(buf, ch, LOG_CHEATLOG, TRUE);
   }
@@ -1375,7 +1375,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
   if (IS_OBJ_STAT(obj, ITEM_NODROP))
   {
-    sprintf(buf, "You can't %s $p, it must be CURSED!", sname);
+    snprintf(buf, sizeof(buf), "You can't %s $p, it must be CURSED!", sname);
     act(buf, FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
@@ -1394,15 +1394,15 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       send_to_char("There is too much in the front of the vehicle!\r\n", ch);
       return 0;
     }
-    sprintf(buf, "%s %ss %s.%s\r\n", GET_NAME(ch), sname, GET_OBJ_NAME(obj), VANISH(mode));
+    snprintf(buf, sizeof(buf), "%s %ss %s.%s\r\n", GET_NAME(ch), sname, GET_OBJ_NAME(obj), VANISH(mode));
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   } else
   {
-    sprintf(buf, "$n %ss $p.%s", sname, VANISH(mode));
+    snprintf(buf, sizeof(buf), "$n %ss $p.%s", sname, VANISH(mode));
     act(buf, TRUE, ch, obj, 0, TO_ROOM);
   }
 
-  sprintf(buf, "You %s $p.%s", sname, VANISH(mode));
+  snprintf(buf, sizeof(buf), "You %s $p.%s", sname, VANISH(mode));
   act(buf, FALSE, ch, obj, 0, TO_CHAR);
   if (obj->in_obj)
     obj_from_obj(obj);
@@ -1417,7 +1417,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
        || IS_OBJ_STAT( obj, ITEM_WIZLOAD) )
   {
     char *representation = generate_new_loggable_representation(obj);
-    sprintf(buf, "%s %ss: %s", GET_CHAR_NAME(ch),
+    snprintf(buf, sizeof(buf), "%s %ss: %s", GET_CHAR_NAME(ch),
             sname,
             representation);
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
@@ -1523,7 +1523,7 @@ ACMD(do_drop)
   argument = one_argument(argument, arg);
 
   if (!*arg) {
-    sprintf(buf, "What do you want to %s?\r\n", sname);
+    snprintf(buf, sizeof(buf), "What do you want to %s?\r\n", sname);
     send_to_char(buf, ch);
     return;
   } else if (is_number(arg)) {
@@ -1557,12 +1557,12 @@ ACMD(do_drop)
         }
     } else if (dotmode == FIND_ALLDOT) {
       if (!*arg) {
-        sprintf(buf, "What do you want to %s all of?\r\n", sname);
+        snprintf(buf, sizeof(buf), "What do you want to %s all of?\r\n", sname);
         send_to_char(buf, ch);
         return;
       }
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        sprintf(buf, "You don't seem to have any %ss.\r\n", arg);
+        snprintf(buf, sizeof(buf), "You don't seem to have any %ss.\r\n", arg);
         send_to_char(buf, ch);
       }
       while (obj) {
@@ -1572,7 +1572,7 @@ ACMD(do_drop)
       }
     } else {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        sprintf(buf, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+        snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
         send_to_char(buf, ch);
       } else
         amount += perform_drop(ch, obj, mode, sname, random_donation_room);
@@ -1618,7 +1618,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   act("$n gives you $p.", FALSE, ch, obj, vict, TO_VICT);
   if (ch->in_veh)
   {
-    sprintf(buf, "%s gives %s to %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj), GET_NAME(vict));
+    snprintf(buf, sizeof(buf), "%s gives %s to %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj), GET_NAME(vict));
     send_to_veh(buf, ch->in_veh, ch, vict, FALSE);
   }
   act("$n gives $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
@@ -1628,7 +1628,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   {
     // Default/preliminary logging message; this is appended to where necessary.
     char *representation = generate_new_loggable_representation(obj);
-    sprintf(buf, "%s gives %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
+    snprintf(buf, sizeof(buf), "%s gives %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
   }
@@ -1694,22 +1694,22 @@ void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
     return;
   }
   send_to_char(OK, ch);
-  sprintf(buf, "$n gives you %d nuyen.", amount);
+  snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", amount);
   act(buf, FALSE, ch, 0, vict, TO_VICT);
   if (ch->in_veh)
   {
-    sprintf(buf, "%s gives some nuyen to %s.", GET_NAME(ch), GET_NAME(vict));
+    snprintf(buf, sizeof(buf), "%s gives some nuyen to %s.", GET_NAME(ch), GET_NAME(vict));
     send_to_veh(buf, ch->in_veh, ch, vict, FALSE);
   } else
   {
-    sprintf(buf, "$n gives some nuyen to $N.");
+    snprintf(buf, sizeof(buf), "$n gives some nuyen to $N.");
     act(buf, TRUE, ch, 0, vict, TO_NOTVICT);
   }
   if (IS_NPC(ch) || !access_level(ch, LVL_VICEPRES))
     GET_NUYEN(ch) -= amount;
   GET_NUYEN(vict) += amount;
 
-  sprintf(buf, "%s gives %s: %d nuyen *",
+  snprintf(buf, sizeof(buf), "%s gives %s: %d nuyen *",
           GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), amount);
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 }
@@ -1771,7 +1771,7 @@ ACMD(do_give)
     dotmode = find_all_dots(arg);
     if (dotmode == FIND_INDIV) {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        sprintf(buf, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+        snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
         send_to_char(buf, ch);
       } else
         perform_give(ch, vict, obj);
@@ -1867,7 +1867,7 @@ void name_to_drinkcon(struct obj_data *obj, int type)
     return;
 
   new_name = new char[strlen(obj->text.keywords)+strlen(drinknames[type])+2];
-  sprintf(new_name, "%s %s", obj->text.keywords, drinknames[type]);
+  snprintf(new_name, sizeof(new_name), "%s %s", obj->text.keywords, drinknames[type]);
 
   if (GET_OBJ_RNUM(obj) == NOTHING ||
       obj->text.keywords != obj_proto[GET_OBJ_RNUM(obj)].text.keywords)
@@ -1925,15 +1925,15 @@ ACMD(do_drink)
     return;
   }
   if (subcmd == SCMD_DRINK) {
-    sprintf(buf, "$n drinks %s from $p.", drinknames[GET_OBJ_VAL(temp, 2)]);
+    snprintf(buf, sizeof(buf), "$n drinks %s from $p.", drinknames[GET_OBJ_VAL(temp, 2)]);
     act(buf, TRUE, ch, temp, 0, TO_ROOM);
 
-    sprintf(buf, "You drink the %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
+    snprintf(buf, sizeof(buf), "You drink the %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
     send_to_char(buf, ch);
     amount = number(3, 10);
   } else {
     act("$n sips from $p.", TRUE, ch, temp, 0, TO_ROOM);
-    sprintf(buf, "It tastes like %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
+    snprintf(buf, sizeof(buf), "It tastes like %s.\r\n", drinknames[GET_OBJ_VAL(temp, 2)]);
     send_to_char(buf, ch);
     amount = 1;
   }
@@ -1993,7 +1993,7 @@ ACMD(do_eat)
     return;
   }
   if (!(food = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    sprintf(buf, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
     send_to_char(buf, ch);
     return;
   }
@@ -2084,7 +2084,7 @@ ACMD(do_pour)
       return;
     }
     if (!(from_obj = get_obj_in_list_vis(ch, arg2, ch->in_room->contents))) {
-      sprintf(buf, "There doesn't seem to be %s %s here.\r\n", AN(arg2), arg2);
+      snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s here.\r\n", AN(arg2), arg2);
       send_to_char(buf, ch);
       return;
     }
@@ -2139,7 +2139,7 @@ ACMD(do_pour)
     return;
   }
   if (subcmd == SCMD_POUR) {
-    sprintf(buf, "You pour the %s into the %s.",
+    snprintf(buf, sizeof(buf), "You pour the %s into the %s.",
             drinknames[GET_OBJ_VAL(from_obj, 2)], arg2);
     send_to_char(buf, ch);
   }
@@ -2462,7 +2462,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   {
     if (!wielded) {
       if (!can_wield_both(ch, obj, GET_EQ(ch, WEAR_HOLD))) {
-        act("That wouldn't work very well.", FALSE, ch, 0, 0, TO_CHAR);
+        act("You'll have a hard time wielding that along with $p.", FALSE, ch, GET_EQ(ch, WEAR_HOLD), 0, TO_CHAR);
         return;
       }
     } else {
@@ -2473,7 +2473,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
       }
       where = WEAR_HOLD;
       if (!can_wield_both(ch, wielded, obj)) {
-        act("That wouldn't work very well.", FALSE, ch, 0, 0, TO_CHAR);
+        act("You'll have a hard time wielding that along with $p.", FALSE, ch, wielded, 0, TO_CHAR);
         return;
       }
     }
@@ -2645,7 +2645,7 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
   } else
   {
     if ((where = search_block(arg, keywords, FALSE)) < 0) {
-      sprintf(buf, "'%s'?  What part of your body is THAT?\r\n", arg);
+      snprintf(buf, sizeof(buf), "'%s'?  What part of your body is THAT?\r\n", arg);
       send_to_char(buf, ch);
     }
   }
@@ -2693,7 +2693,7 @@ ACMD(do_wear)
       return;
     }
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      sprintf(buf, "You don't seem to have any %ss.\r\n", arg1);
+      snprintf(buf, sizeof(buf), "You don't seem to have any %ss.\r\n", arg1);
       send_to_char(buf, ch);
     } else
       while (obj) {
@@ -2706,7 +2706,7 @@ ACMD(do_wear)
       }
   } else {
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      sprintf(buf, "You don't seem to have %s %s.\r\n", AN(arg1), arg1);
+      snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg1), arg1);
       send_to_char(buf, ch);
     } else {
       if ((where = find_eq_pos(ch, obj, arg2)) >= 0)
@@ -2726,7 +2726,7 @@ ACMD(do_wield)
   if (!*arg)
     send_to_char("Wield what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    sprintf(buf, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
     send_to_char(buf, ch);
   } else {
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
@@ -2758,7 +2758,7 @@ ACMD(do_grab)
   if (!*arg)
     send_to_char("Hold what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    sprintf(buf, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    snprintf(buf, sizeof(buf), "You don't seem to have %s %s.\r\n", AN(arg), arg);
     send_to_char(buf, ch);
   } else {
     if (GET_OBJ_TYPE(obj) == ITEM_LIGHT)
@@ -2846,13 +2846,13 @@ ACMD(do_remove)
           found = 1;
         }
       if (!found) {
-        sprintf(buf, "You don't seem to be using any %ss.\r\n", arg);
+        snprintf(buf, sizeof(buf), "You don't seem to be using any %ss.\r\n", arg);
         send_to_char(buf, ch);
       }
     }
   } else {
     if (!(obj = get_object_in_equip_vis(ch, arg, ch->equipment, &i))) {
-      sprintf(buf, "You don't seem to be using %s %s.\r\n", AN(arg), arg);
+      snprintf(buf, sizeof(buf), "You don't seem to be using %s %s.\r\n", AN(arg), arg);
       send_to_char(buf, ch);
     } else {
       if (GET_OBJ_TYPE(obj) == ITEM_GYRO) {
@@ -3107,7 +3107,7 @@ ACMD(do_crack)
 
   if (1) {
     char rbuf[MAX_STRING_LENGTH];
-    sprintf(rbuf,"Crack: Skill %d, Rating %d, Modify Target %d.\n",
+    snprintf(rbuf, sizeof(rbuf), "Crack: Skill %d, Rating %d, Modify Target %d.\n",
             skill, rating, modify_target(ch));
     act(rbuf, FALSE, ch, NULL, NULL, TO_ROLLS);
   }
@@ -3258,7 +3258,7 @@ ACMD(do_holster)
   else
     obj_from_char(obj);
   obj_to_obj(obj, cont);
-  sprintf(buf2, "You slip %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+  snprintf(buf2, sizeof(buf2), "You slip %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
   send_to_char(buf2, ch);
   act("$n slips $p into $P.", FALSE, ch, obj, cont, TO_ROOM);
   return;
@@ -3278,7 +3278,7 @@ ACMD(do_ready)
   }
 
   if (!(generic_find(buf, FIND_OBJ_EQUIP, ch, &tmp_char, &obj))) {
-    sprintf(buf, "You don't seem to be using %s %s.\r\n", AN(argument), argument);
+    snprintf(buf, sizeof(buf), "You don't seem to be using %s %s.\r\n", AN(argument), argument);
     send_to_char(buf, ch);
     return;
   }

@@ -105,7 +105,7 @@ void format_string(struct descriptor_data *d, int indent)
     }
   
   char *format = new char[d->max_str];
-  sprintf(format, "%s%s\r\n", indent ? "   " : "", *d->str);
+  snprintf(format, sizeof(format), "%s%s\r\n", indent ? "   " : "", *d->str);
   int q = 0;
   for (k = 0; strlen(format) > (u_int) k && q < 1023; q++)
   {
@@ -240,7 +240,7 @@ void string_add(struct descriptor_data *d, char *str)
       vehcust_menu(d); 
     } else if (STATE(d) == CON_TRIDEO) {
       (*d->str)[strlen(*d->str)-2] = '\0';
-      sprintf(buf, "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str, sizeof(buf2) / sizeof(buf2[0])));
+      snprintf(buf, sizeof(buf), "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str, sizeof(buf2) / sizeof(buf2[0])));
       mysql_wrapper(mysql, buf);
       DELETE_D_STR_IF_EXTANT(d);
       STATE(d) = CON_PLAYING;
@@ -430,11 +430,11 @@ void string_add(struct descriptor_data *d, char *str)
       year = atoi(tmp);
 
       if (IS_NPC(d->character))
-        sprintf(tmp, "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
+        snprintf(tmp, sizeof(tmp), "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
                 GET_NAME(d->character), time, month < 10 ? "0" : "", month,
                 day < 10 ? "0" : "", day, year < 10 ? "0" : "", year);
       else
-        sprintf(tmp, "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
+        snprintf(tmp, sizeof(tmp), "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
                 GET_CHAR_NAME(d->character), time, month < 10 ? "0" : "", month,
                 day < 10 ? "0" : "", day, year < 10 ? "0" : "", year);
       char *ptr = new char[strlen(*d->str) + strlen(tmp) + 1];
@@ -479,7 +479,7 @@ ACMD(do_spellset)
     for ( i = 0; i < MAX_SPELLS; i++) {
       if (*spells[i].name == '!')
         continue;
-      sprintf(help + strlen(help), "%18s", spells[i].name);
+      snprintf(ENDOF(help), sizeof(help) - strlen(help), "%18s", spells[i].name);
       if (i % 4 == 3) {
         strcat(help, "\r\n");
         send_to_char(help, ch);
@@ -571,7 +571,7 @@ ACMD(do_spellset)
       if (!strncmp(argument, short_attributes[subtype], strlen(argument))) {
         // The goal here is to find the index number the argument represents.
         //  Once we find it, update the spell's name, then break.
-        sprintf(ENDOF(buf), " (%s)", attributes[subtype]);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[subtype]);
         break;
       }
     }
@@ -609,7 +609,7 @@ ACMD(do_spellset)
   GET_SPELLS(vict) = spell;
   
   send_to_char("OK.\r\n", ch);
-  sprintf(buf, "$n has set your '%s' spell to Force %d.", spells[spelltoset].name, force);
+  snprintf(buf, sizeof(buf), "$n has set your '%s' spell to Force %d.", spells[spelltoset].name, force);
   act(buf, TRUE, ch, NULL, vict, TO_VICT);
 }
 
@@ -632,7 +632,7 @@ ACMD(do_skillset)
     for (i = 0; i < MAX_SKILLS; i++) {
       if (*skills[i].name == '!')
         continue;
-      sprintf(help + strlen(help), "%18s", skills[i].name);
+      snprintf(ENDOF(help), sizeof(help) - strlen(help), "%18s", skills[i].name);
       if (i % 4 == 3 || PRF_FLAGGED(ch, PRF_SCREENREADER)) {
         strcat(help, "\r\n");
         send_to_char(help, ch);
@@ -694,13 +694,13 @@ ACMD(do_skillset)
     send_to_char("You can't set NPC skills.\r\n", ch);
     return;
   }
-  sprintf(buf2, "%s changed %s's %s from %d to %d.",
+  snprintf(buf2, sizeof(buf2), "%s changed %s's %s from %d to %d.",
           GET_CHAR_NAME(ch), GET_NAME(vict),
           skills[skill].name,
           GET_SKILL(vict, skill), value);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 
-  sprintf(buf2, "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), skills[skill].name, GET_SKILL(vict, skill), value);
+  snprintf(buf2, sizeof(buf2), "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), skills[skill].name, GET_SKILL(vict, skill), value);
   
   send_to_char(vict, "Your skill in %s has been altered by the game's administration.\r\n", skills[skill].name);
   set_character_skill(vict, skill, value, TRUE);

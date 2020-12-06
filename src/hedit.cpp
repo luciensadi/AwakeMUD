@@ -29,7 +29,7 @@ void write_host_to_disk(int vnum)
   struct trigger_step *step;
   int i = 0;
 
-  sprintf(buf, "%s/%d.host", MTX_PREFIX, vnum);
+  snprintf(buf, sizeof(buf), "%s/%d.host", MTX_PREFIX, vnum);
   fl = fopen(buf, "w+");
   for (counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top;
@@ -212,7 +212,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y': {
         if (!vnum_from_non_connected_zone(d->edit_number)) {
-          sprintf(buf,"%s wrote new host #%ld",
+          snprintf(buf, sizeof(buf),"%s wrote new host #%ld",
                   GET_CHAR_NAME(d->character), d->edit_number);
           mudlog(buf, d->character, LOG_WIZLOG, TRUE);
         }

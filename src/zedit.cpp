@@ -56,7 +56,7 @@ void write_zone_to_disk(int vnum)
   FILE  *fp;
   int i;
 
-  sprintf(buf, "%s/%d.zon", ZON_PREFIX, vnum);
+  snprintf(buf, sizeof(buf), "%s/%d.zon", ZON_PREFIX, vnum);
   fp = fopen(buf, "w+");
 
   // write it out!
@@ -547,7 +547,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y':
       zone_num = real_zone(ZON->number);
-      sprintf(buf,"%s wrote new zone data for zone %d",
+      snprintf(buf, sizeof(buf),"%s wrote new zone data for zone %d",
               GET_CHAR_NAME(d->character), ZON->number);
       mudlog(buf, d->character, LOG_WIZLOG, TRUE);
       // first we insert into memory
@@ -855,7 +855,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case 'Y':
       zone_num = real_zone(ZONENUM);
       top_of_cmds = zone_table[zone_num].num_cmds;
-      sprintf(buf,"%s wrote new zcmd %ld in zone %d",
+      snprintf(buf, sizeof(buf),"%s wrote new zcmd %ld in zone %d",
               GET_CHAR_NAME(d->character), d->edit_number, zone_table[zone_num].number);
       mudlog(buf, d->character, LOG_WIZLOG, TRUE);
       // first, determine if you are adding or replacing
@@ -1148,7 +1148,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       return;
     }
 
-    sprintf(buf, "%s set zone %d to connected %d (was %d)",
+    snprintf(buf, sizeof(buf), "%s set zone %d to connected %d (was %d)",
             GET_CHAR_NAME( CH ), ZON->number, number, ZON->connected );
     mudlog(buf, CH, LOG_WIZLOG, TRUE);
 

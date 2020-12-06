@@ -141,7 +141,7 @@ void load_messages(void)
   char chk[128];
   
   if (!(fl = fopen(MESS_FILE, "r"))) {
-    sprintf(buf2, "Error reading combat message file %s", MESS_FILE);
+    snprintf(buf2, sizeof(buf2), "Error reading combat message file %s", MESS_FILE);
     perror(buf2);
     shutdown();
   }
@@ -245,7 +245,7 @@ void check_killer(struct char_data * ch, struct char_data * vict)
   {
     PLR_FLAGS(attacker).SetBit(PLR_KILLER);
     
-    sprintf(buf, "PC Killer bit set on %s for initiating attack on %s at %s.",
+    snprintf(buf, sizeof(buf), "PC Killer bit set on %s for initiating attack on %s at %s.",
             GET_CHAR_NAME(attacker),
             GET_CHAR_NAME(vict), vict->in_room->name);
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
@@ -403,14 +403,14 @@ void make_corpse(struct char_data * ch)
   
   if (IS_NPC(ch))
   {
-    sprintf(buf, "corpse %s", ch->player.physical_text.keywords);
-    sprintf(buf1, "^rThe corpse of %s is lying here.^n", GET_NAME(ch));
-    sprintf(buf2, "^rthe corpse of %s^n", GET_NAME(ch));
+    snprintf(buf, sizeof(buf), "corpse %s", ch->player.physical_text.keywords);
+    snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", GET_NAME(ch));
+    snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", GET_NAME(ch));
   } else
   {
-    sprintf(buf, "belongings %s", ch->player.physical_text.keywords);
-    sprintf(buf1, "^rThe belongings of %s are lying here.^n", GET_NAME(ch));
-    sprintf(buf2, "^rthe belongings of %s^n", GET_NAME(ch));
+    snprintf(buf, sizeof(buf), "belongings %s", ch->player.physical_text.keywords);
+    snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", GET_NAME(ch));
+    snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", GET_NAME(ch));
   }
   corpse->text.keywords = str_dup(buf);
   corpse->text.room_desc = str_dup(buf1);
@@ -600,7 +600,7 @@ void raw_kill(struct char_data * ch)
           i = real_room(RM_OCEAN_DOCWAGON);
           break;
         default:
-          sprintf(buf, "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld).",
+          snprintf(buf, sizeof(buf), "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld).",
                   GET_JURISDICTION(ch->in_room),
                   ch->in_room->number,
                   GET_CHAR_NAME(ch), GET_IDNUM(ch));
@@ -634,7 +634,7 @@ void death_penalty(struct char_data *ch)
     } while (attribute == CHA);
     GET_TKE(ch) -= 2*GET_REAL_ATT(ch, attribute);
     GET_REAL_ATT(ch, attribute)--;
-    sprintf(buf,"%s lost a point of attribute %d.  Total Karma Earned from %d to %d.",
+    snprintf(buf, sizeof(buf),"%s lost a point of attribute %d.  Total Karma Earned from %d to %d.",
             GET_CHAR_NAME(ch), attribute, old_rep, GET_TKE( ch ) );
     mudlog(buf, ch, LOG_DEATHLOG, TRUE);
     
@@ -682,7 +682,7 @@ ACMD(do_die)
   send_to_char("You give up the will to live..\n\r",ch);
   
   /* log it */
-  sprintf(buf,"%s gave up the will to live. {%s (%ld)}",
+  snprintf(buf, sizeof(buf),"%s gave up the will to live. {%s (%ld)}",
           GET_CHAR_NAME(ch),
           ch->in_room->name, ch->in_room->number );
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
@@ -769,7 +769,7 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
   
   if ( share >= 100 || access_level(ch, LVL_BUILDER) )
   {
-    sprintf(buf,"%s gains %.2f karma from killing %s.", GET_CHAR_NAME(ch),
+    snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s.", GET_CHAR_NAME(ch),
             (double)share/100.0, GET_CHAR_NAME(victim));
     mudlog(buf, ch, LOG_DEATHLOG, TRUE);
   }
@@ -1127,27 +1127,27 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
   switch(GET_OBJ_VAL(weapon, 3))
   {
     case WEAP_SHOTGUN:
-      sprintf(ammo_type, "horde of pellets");
+      snprintf(ammo_type, sizeof(ammo_type), "horde of pellets");
       break;
     case WEAP_LMG:
     case WEAP_MMG:
     case WEAP_HMG:
-      sprintf(ammo_type, "stream of bullets");
+      snprintf(ammo_type, sizeof(ammo_type), "stream of bullets");
       break;
     case WEAP_CANNON:
-      sprintf(ammo_type, "shell");
+      snprintf(ammo_type, sizeof(ammo_type), "shell");
       break;
     case WEAP_MISS_LAUNCHER:
-      sprintf(ammo_type, "rocket");
+      snprintf(ammo_type, sizeof(ammo_type), "rocket");
       break;
     case WEAP_GREN_LAUNCHER:
-      sprintf(ammo_type, "grenade");
+      snprintf(ammo_type, sizeof(ammo_type), "grenade");
       break;
     case WEAP_TASER:
-      sprintf(ammo_type, "taser dart");
+      snprintf(ammo_type, sizeof(ammo_type), "taser dart");
       break;
     default:
-      sprintf(ammo_type, "bullet");
+      snprintf(ammo_type, sizeof(ammo_type), "bullet");
       break;
   }
   
@@ -1160,9 +1160,9 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
         break;
     
     if (vict && (IS_NPC(vict) || (!IS_NPC(vict) && vict->desc))) {
-      sprintf(buf, "A %s flies in from nowhere, hitting you!", ammo_type);
+      snprintf(buf, sizeof(buf), "A %s flies in from nowhere, hitting you!", ammo_type);
       act(buf, FALSE, vict, 0, 0, TO_CHAR);
-      sprintf(buf, "A %s hums into the room and hits $n!", ammo_type);
+      snprintf(buf, sizeof(buf), "A %s hums into the room and hits $n!", ammo_type);
       act(buf, FALSE, vict, 0, 0, TO_ROOM);
       power = MAX(GET_OBJ_VAL(weapon, 0) - GET_BALLISTIC(vict) - 3, 2);
       damage_total = MAX(1, GET_OBJ_VAL(weapon, 1));
@@ -1178,7 +1178,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
         break;
     
     if (i < 3) {
-      sprintf(buf, "A %s hums into the room and hits the %s!", ammo_type,
+      snprintf(buf, sizeof(buf), "A %s hums into the room and hits the %s!", ammo_type,
               fname(EXIT(victim, dir[i])->keyword));
       act(buf, FALSE, victim, 0, 0, TO_ROOM);
       act(buf, FALSE, victim, 0, 0, TO_CHAR);
@@ -1188,7 +1188,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
   }
   
   // if it's reached this point, it's harmless
-  sprintf(buf, "A %s hums harmlessly through the room.", ammo_type);
+  snprintf(buf, sizeof(buf), "A %s hums harmlessly through the room.", ammo_type);
   act(buf, FALSE, victim, 0, 0, TO_ROOM);
   act(buf, FALSE, victim, 0, 0, TO_CHAR);
 }
@@ -1424,14 +1424,14 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
   if (ch && IS_SET(type, DAMOBJ_CRUSH) && GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_SMASHING_BLOW))
     power += MAX(0, success_test(GET_SKILL(ch, SKILL_UNARMED_COMBAT), 4));
   if (IS_GUN(type))
-    sprintf(buf, "You hear gunshots and the sound of bullets impacting the %s.\r\n", fname(room->dir_option[dir]->keyword));
+    snprintf(buf, sizeof(buf), "You hear gunshots and the sound of bullets impacting the %s.\r\n", fname(room->dir_option[dir]->keyword));
   else
-    sprintf(buf, "Someone bashes on the %s from the other side.\r\n", fname(room->dir_option[dir]->keyword));
+    snprintf(buf, sizeof(buf), "Someone bashes on the %s from the other side.\r\n", fname(room->dir_option[dir]->keyword));
   send_to_room(buf, opposite);
   
   if (power < half)
   {
-    sprintf(buf, "The %s remains undamaged.\r\n", fname(room->dir_option[dir]->keyword));
+    snprintf(buf, sizeof(buf), "The %s remains undamaged.\r\n", fname(room->dir_option[dir]->keyword));
     send_to_room(buf, room);
     if (ch && ch->in_room != room)
       send_to_char(buf, ch);
@@ -1440,10 +1440,10 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
   
   // Compose the damage message, but don't send it-- it can be overwritten by the destruction message if necessary.
   if (power < rating) {
-    sprintf(buf, "The %s has been slightly damaged.\r\n", fname(room->dir_option[dir]->keyword));
+    snprintf(buf, sizeof(buf), "The %s has been slightly damaged.\r\n", fname(room->dir_option[dir]->keyword));
     room->dir_option[dir]->condition--;
   } else {
-    sprintf(buf, "The %s has been damaged!\r\n", fname(room->dir_option[dir]->keyword));
+    snprintf(buf, sizeof(buf), "The %s has been damaged!\r\n", fname(room->dir_option[dir]->keyword));
     room->dir_option[dir]->condition -= 1 + (power - rating) / half;
   }
   
@@ -1451,12 +1451,12 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
     opposite->dir_option[rev]->condition = room->dir_option[dir]->condition;
   
   if (room->dir_option[dir]->condition <= 0) {
-    sprintf(buf, "The %s has been destroyed!\r\n", fname(room->dir_option[dir]->keyword));
+    snprintf(buf, sizeof(buf), "The %s has been destroyed!\r\n", fname(room->dir_option[dir]->keyword));
     REMOVE_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
     REMOVE_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
     SET_BIT(room->dir_option[dir]->exit_info, EX_DESTROYED);
     if (ok) {
-      sprintf(buf2, "The %s is destroyed from the other side!\r\n", fname(room->dir_option[dir]->keyword));
+      snprintf(buf2, sizeof(buf2), "The %s is destroyed from the other side!\r\n", fname(room->dir_option[dir]->keyword));
       send_to_room(buf2, opposite);
       REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_CLOSED);
       REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_LOCKED);
@@ -1562,7 +1562,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
           act("A $p carried by $n is set off by the fire!", FALSE, vict, obj, 0, TO_ROOM);
           explode(NULL, obj, obj->in_room);
         } else if (obj->in_room) {
-          sprintf(buf, "%s is set off by the flames!",
+          snprintf(buf, sizeof(buf), "%s is set off by the flames!",
                   CAP(obj->text.name));
           send_to_room(buf, obj->in_room);
           explode(NULL, obj, obj->in_room);
@@ -1628,21 +1628,21 @@ void docwagon_message(struct char_data *ch)
   switch (SECT(get_ch_in_room(ch)))
   {
     case SPIRIT_HEARTH:
-      sprintf(buf,"A DocWagon employee suddenly appears, transports %s's body to\r\nsafety, and rushes away.", GET_NAME(ch));
+      snprintf(buf, sizeof(buf),"A DocWagon employee suddenly appears, transports %s's body to\r\nsafety, and rushes away.", GET_NAME(ch));
       act(buf,FALSE, ch, 0, 0, TO_ROOM);
-      sprintf(buf,"A DocWagon employee suddenly appears, transports %s's body to\r\nsafety, and rushes away.", GET_CHAR_NAME(ch));
+      snprintf(buf, sizeof(buf),"A DocWagon employee suddenly appears, transports %s's body to\r\nsafety, and rushes away.", GET_CHAR_NAME(ch));
       break;
     case SPIRIT_LAKE:
     case SPIRIT_RIVER:
     case SPIRIT_SEA:
-      sprintf(buf,"A DocWagon armored speedboat arrives, loading %s's body on\r\nboard before leaving.", GET_NAME(ch));
+      snprintf(buf, sizeof(buf),"A DocWagon armored speedboat arrives, loading %s's body on\r\nboard before leaving.", GET_NAME(ch));
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
-      sprintf(buf,"A DocWagon armored speedboat arrives, loading %s's body on\r\nboard before leaving.", GET_CHAR_NAME(ch));
+      snprintf(buf, sizeof(buf),"A DocWagon armored speedboat arrives, loading %s's body on\r\nboard before leaving.", GET_CHAR_NAME(ch));
       break;
     default:
-      sprintf(buf,"A DocWagon helicopter flies in, taking %s's body to safety.", GET_NAME(ch));
+      snprintf(buf, sizeof(buf),"A DocWagon helicopter flies in, taking %s's body to safety.", GET_NAME(ch));
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
-      sprintf(buf,"A DocWagon helicopter flies in, taking %s's body to safety.", GET_CHAR_NAME(ch));
+      snprintf(buf, sizeof(buf),"A DocWagon helicopter flies in, taking %s's body to safety.", GET_CHAR_NAME(ch));
       break;
   }
   
@@ -1682,7 +1682,7 @@ void docwagon(struct char_data *ch)
     }
     if (ch->persona)
     {
-      sprintf(buf, "%s depixelizes and vanishes from the host.\r\n", ch->persona->name);
+      snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", ch->persona->name);
       send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       extract_icon(ch->persona);
       ch->persona = NULL;
@@ -1786,9 +1786,9 @@ void check_adrenaline(struct char_data *ch, int mode)
 }
 
 #define WRITE_DEATH_MESSAGE(format_string) \
-  sprintf(buf2, format_string, GET_CHAR_NAME(vict), GET_ROOM_NAME(vict->in_room), GET_ROOM_VNUM(vict->in_room))
+  snprintf(buf2, sizeof(buf2), format_string, GET_CHAR_NAME(vict), GET_ROOM_NAME(vict->in_room), GET_ROOM_VNUM(vict->in_room))
 #define WRITE_DEATH_MESSAGE_WITH_AGGRESSOR(format_string) \
-  sprintf(buf2, format_string, GET_CHAR_NAME(vict), ch == vict ? "Misadventure(?)" : GET_NAME(ch), GET_ROOM_NAME(vict->in_room), GET_ROOM_VNUM(vict->in_room))
+  snprintf(buf2, sizeof(buf2), format_string, GET_CHAR_NAME(vict), ch == vict ? "Misadventure(?)" : GET_NAME(ch), GET_ROOM_NAME(vict->in_room), GET_ROOM_VNUM(vict->in_room))
 void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
 {
   switch (attacktype)
@@ -1815,7 +1815,7 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
     case TYPE_EXPLOSION:
       switch (number(0, 4)) {
         case 0:
-          sprintf(buf2, "%s blew %s to pieces. {%s (%ld)}",
+          snprintf(buf2, sizeof(buf2), "%s blew %s to pieces. {%s (%ld)}",
                   ch == vict ? "???" : GET_NAME(ch), GET_CHAR_NAME(vict),
                   vict->in_room->name,
                   vict->in_room->number);
@@ -1843,13 +1843,13 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("Shouldn't have been standing there, should you %s? [%s] {%s (%ld)}");
           break;
         case 2:
-          sprintf(buf2, "Oops....%s just blew %s's head off. {%s (%ld)}",
+          snprintf(buf2, sizeof(buf2), "Oops....%s just blew %s's head off. {%s (%ld)}",
                   ch == vict ? "???" : GET_NAME(ch), GET_CHAR_NAME(vict),
                   vict->in_room->name,
                   vict->in_room->number);
           break;
         case 3:
-          sprintf(buf2, "%s's stray bullet caught %s in the heart. What a shame. {%s (%ld)}",
+          snprintf(buf2, sizeof(buf2), "%s's stray bullet caught %s in the heart. What a shame. {%s (%ld)}",
                   ch == vict ? "???" : GET_NAME(ch), GET_CHAR_NAME(vict),
                   vict->in_room->name,
                   vict->in_room->number);
@@ -1900,7 +1900,7 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
     case TYPE_BIOWARE:
       switch (number(0, 4)) {
         case 0:
-          sprintf(buf2, "%s just hasn't been taking %s medication.  Oops. "
+          snprintf(buf2, sizeof(buf2), "%s just hasn't been taking %s medication.  Oops. "
                   "{%s (%ld)}", GET_CHAR_NAME(vict), GET_SEX(vict) == SEX_MALE ?
                   "his" : (GET_SEX(vict) == SEX_FEMALE ? "her" : "its"),
                   vict->in_room->name, vict->in_room->number);
@@ -1925,7 +1925,7 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           WRITE_DEATH_MESSAGE("You're meant to hit *other* people with that whip, %s. {%s (%ld)}");
           break;
         case 1:
-          sprintf(buf2, "%s lopped off %s own head.  Oops. {%s (%ld)}",
+          snprintf(buf2, sizeof(buf2), "%s lopped off %s own head.  Oops. {%s (%ld)}",
                   GET_CHAR_NAME(vict), HSHR(vict),
                   vict->in_room->name, vict->in_room->number);
           break;
@@ -1936,7 +1936,7 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           WRITE_DEATH_MESSAGE("THWAP!  Wait.....was that *your* whip, %s?!? {%s (%ld)}");
           break;
         case 4:
-          sprintf(buf2, "%s's whip didn't agree with %s. {%s (%ld)}",
+          snprintf(buf2, sizeof(buf2), "%s's whip didn't agree with %s. {%s (%ld)}",
                   GET_CHAR_NAME(vict), HMHR(vict),
                   vict->in_room->name, vict->in_room->number);
           break;
@@ -1960,7 +1960,7 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
     case TYPE_CRASH:
       switch(number(0, 1)) {
         case 0:
-          sprintf(buf2, "%s forgot to wear %s seatbelt. {%s (%ld)}",
+          snprintf(buf2, sizeof(buf2), "%s forgot to wear %s seatbelt. {%s (%ld)}",
                   GET_CHAR_NAME(vict), HSHR(vict),
                   vict->in_room->name, vict->in_room->number);
           break;
@@ -1971,7 +1971,7 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
       break;
     default:
       if (ch == vict)
-        sprintf(buf2, "%s died (cause uncertain-- damage type %d). {%s (%ld)}",
+        snprintf(buf2, sizeof(buf2), "%s died (cause uncertain-- damage type %d). {%s (%ld)}",
                 GET_CHAR_NAME(vict), attacktype,
                 vict->in_room->name, vict->in_room->number);
       else
@@ -2112,7 +2112,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     return 0;                   /* -je, 7/7/92 */
   }
   
-  sprintf(rbuf,"Damage (%s vs %s, %s %d): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
+  snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %d): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
           wound_name[MIN(DEADLY, MAX(0, dam))], attacktype);
   if (( (!IS_NPC(ch)
          && IS_SENATOR(ch)
@@ -2331,11 +2331,11 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     if (dam > 5) {
       send_to_char(victim, "^RYou slam into the %s at speed, the impact reshaping your body in ways you do not appreciate.^n\r\n",
                    ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
-      sprintf(buf3, "^R$n slams into the %s at speed, the impact reshaping $s body in horrific ways.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
+      snprintf(buf3, sizeof(buf3), "^R$n slams into the %s at speed, the impact reshaping $s body in horrific ways.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
       act(buf3, FALSE, victim, 0, 0, TO_ROOM);
     } else {
       send_to_char(victim, "^rYou hit the %s with brusing force.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
-      sprintf(buf3, "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
+      snprintf(buf3, sizeof(buf3), "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
       act(buf3, FALSE, victim, 0, 0, TO_ROOM);
     }
   }
@@ -2439,7 +2439,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
           exp = calc_karma(ch, victim);
           exp = gain_exp(ch, exp, 0);
           if ( exp >= 100 || access_level(ch, LVL_BUILDER) ) {
-            sprintf(buf,"%s gains %.2f karma from killing %s.",
+            snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s.",
                     IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch),
                     (double)exp/100.0, GET_NAME(victim));
             mudlog(buf, ch, LOG_DEATHLOG, TRUE);
@@ -2580,7 +2580,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
     return FALSE;
   }
   
-  // sprintf(buf, "Got to end of process_has_ammo (%s, %s (%ld)) with no result. Returning true.",
+  // snprintf(buf, sizeof(buf), "Got to end of process_has_ammo (%s, %s (%ld)) with no result. Returning true.",
   //         GET_CHAR_NAME(ch), GET_OBJ_NAME(wielded), GET_OBJ_VNUM(wielded));
   // mudlog(buf, ch, LOG_SYSLOG, TRUE);
   
@@ -2708,7 +2708,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
       !PLR_FLAGGED(ch->desc->original, PLR_KILLER))
   {
     PLR_FLAGS(ch->desc->original).SetBit(PLR_KILLER);
-    sprintf(buf, "PC Killer bit set on %s (astral) for initiating attack on %s at %s.",
+    snprintf(buf, sizeof(buf), "PC Killer bit set on %s (astral) for initiating attack on %s at %s.",
             GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), vict->in_room->name);
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
     send_to_char("If you want to be a PLAYER KILLER, so be it...\r\n", ch);
@@ -2944,64 +2944,64 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     static char vehicle_message[1000];
     
     if (ch->in_veh)
-      sprintf(vehicle_message, "From inside %s, ", decapitalize_a_an(GET_VEH_NAME(ch->in_veh)));
+      snprintf(vehicle_message, sizeof(vehicle_message), "From inside %s, ", decapitalize_a_an(GET_VEH_NAME(ch->in_veh)));
     else
       strcpy(vehicle_message, "");
     
     if (damage < 0) {
       switch (number(1, 3)) {
         case 1:
-          sprintf(buf1, "^r%s$n fires a %s^r at you but you manage to dodge.^n", vehicle_message, buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
-          sprintf(buf3, "%s$n fires a %s^n at $N but $E manages to dodge.", vehicle_message, buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you manage to dodge.^n", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E manages to dodge.", vehicle_message, buf);
           break;
         case 2:
-          sprintf(buf1, "^r%s$n fires a %s^r at you but you easily dodge.^n", vehicle_message, buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
-          sprintf(buf3, "%s$n fires a %s^n at $N but $E easily dodges.", vehicle_message, buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you easily dodge.^n", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E easily dodges.", vehicle_message, buf);
           break;
         case 3:
-          sprintf(buf1, "^r%s$n fires a %s^r at you but you move out of the way.^n", vehicle_message, buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
-          sprintf(buf3, "%s$n fires a %s^n at $N but $E moves out of the way.", vehicle_message, buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you move out of the way.^n", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E moves out of the way.", vehicle_message, buf);
           break;
       }
     } else if (damage == 0) {
       switch (number(1, 2)) {
         case 1:
-          sprintf(buf1, "^r%s$n fires a %s^r at you but your armour holds.^n", vehicle_message, buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
-          sprintf(buf3, "%s$n fires a %s^n at $N but it doesn't seem to hurt $M.", vehicle_message, buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but your armour holds.^n", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but it doesn't seem to hurt $M.", vehicle_message, buf);
           break;
         case 2:
-          sprintf(buf1, "^r%s$n fires a %s^r at you but you roll with the impact.^n", vehicle_message, buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
-          sprintf(buf3, "%s$n fires a %s^n at $N but $E rolls with the impact.", vehicle_message, buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you roll with the impact.^n", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E rolls with the impact.", vehicle_message, buf);
           break;
       }
     } else if (damage == LIGHT) {
-      sprintf(buf1, "^r%s$n grazes you with a %s^r.^n", vehicle_message, buf);
-      sprintf(buf2, "^yYou graze $N with a %s^y.^n", buf);
-      sprintf(buf3, "%s$n grazes $N with a %s^n.", vehicle_message, buf);
+      snprintf(buf1, sizeof(buf1), "^r%s$n grazes you with a %s^r.^n", vehicle_message, buf);
+      snprintf(buf2, sizeof(buf2), "^yYou graze $N with a %s^y.^n", buf);
+      snprintf(buf3, sizeof(buf3), "%s$n grazes $N with a %s^n.", vehicle_message, buf);
     } else if (damage == MODERATE) {
-      sprintf(buf1, "^r%s$n hits you with a %s^r.^n", vehicle_message, buf);
-      sprintf(buf2, "^yYou hit $N with a %s^y.^n", buf);
-      sprintf(buf3, "%s$n hits $N with a %s^n.", vehicle_message, buf);
+      snprintf(buf1, sizeof(buf1), "^r%s$n hits you with a %s^r.^n", vehicle_message, buf);
+      snprintf(buf2, sizeof(buf2), "^yYou hit $N with a %s^y.^n", buf);
+      snprintf(buf3, sizeof(buf3), "%s$n hits $N with a %s^n.", vehicle_message, buf);
     } else if (damage == SERIOUS) {
-      sprintf(buf1, "^r%s$n massacres you with a %s^r.^n", vehicle_message, buf);
-      sprintf(buf2, "^yYou massacre $N with a %s^y.^n", buf);
-      sprintf(buf3, "%s$n massacres $N with a %s^n.", vehicle_message, buf);
+      snprintf(buf1, sizeof(buf1), "^r%s$n massacres you with a %s^r.^n", vehicle_message, buf);
+      snprintf(buf2, sizeof(buf2), "^yYou massacre $N with a %s^y.^n", buf);
+      snprintf(buf3, sizeof(buf3), "%s$n massacres $N with a %s^n.", vehicle_message, buf);
     } else if (damage >= DEADLY) {
       switch (number(1, 2)) {
         case 1:
-          sprintf(buf1, "^r%s$n puts you down with a deadly %s^r.^n", vehicle_message, buf);
-          sprintf(buf2, "^yYou put $N down with a deadly %s^y.^n", buf);
-          sprintf(buf3, "%s$n puts $N down with a deadly %s^n.", vehicle_message, buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n puts you down with a deadly %s^r.^n", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou put $N down with a deadly %s^y.^n", buf);
+          snprintf(buf3, sizeof(buf3), "%s$n puts $N down with a deadly %s^n.", vehicle_message, buf);
           break;
         case 2:
-          sprintf(buf1, "^r%s$n sublimates you with a deadly %s^r.^n", vehicle_message, buf);
-          sprintf(buf2, "^yYou sublimate $N with a deadly %s^y.^n", buf);
-          sprintf(buf3, "%s$n sublimates $N with a deadly %s^n.", vehicle_message, buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n sublimates you with a deadly %s^r.^n", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou sublimate $N with a deadly %s^y.^n", buf);
+          snprintf(buf3, sizeof(buf3), "%s$n sublimates $N with a deadly %s^n.", vehicle_message, buf);
           break;
       }
     }
@@ -3014,57 +3014,57 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (damage < 0) {
       switch (number(1, 3)) {
         case 1:
-          sprintf(buf1, "^r$n fires a %s^r at you but you manage to dodge.^n", buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but $E manages to dodge.", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you manage to dodge.^n", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E manages to dodge.", buf);
           break;
         case 2:
-          sprintf(buf1, "^r$n fires a %s^r at you but you easily dodge.^n", buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but $E easily dodges.", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you easily dodge.^n", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E easily dodges.", buf);
           break;
         case 3:
-          sprintf(buf1, "^r$n fires a %s^r at you but you move out of the way.^n", buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but $E moves out of the way.", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you move out of the way.^n", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E moves out of the way.", buf);
           break;
       }
     } else if (damage == 0) {
       switch (number(1, 2)) {
         case 1:
-          sprintf(buf1, "^r$n fires a %s^r at you but your armour holds.^n", buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but it doesn't seem to hurt $M.", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but your armour holds.^n", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but it doesn't seem to hurt $M.", buf);
           break;
         case 2:
-          sprintf(buf1, "^r$n fires a %s^r at you but you roll with the impact.^n", buf);
-          sprintf(buf2, "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but $E rolls with the impact.", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you roll with the impact.^n", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E rolls with the impact.", buf);
           break;
       }
     } else if (damage == LIGHT) {
-      sprintf(buf1, "^r$n grazes you with a %s^r.^n", buf);
-      sprintf(buf2, "^yYou graze $N with a %s^y.^n", buf);
-      sprintf(buf3, "$n grazes $N with a %s^n.", buf);
+      snprintf(buf1, sizeof(buf1), "^r$n grazes you with a %s^r.^n", buf);
+      snprintf(buf2, sizeof(buf2), "^yYou graze $N with a %s^y.^n", buf);
+      snprintf(buf3, sizeof(buf3), "$n grazes $N with a %s^n.", buf);
     } else if (damage == MODERATE) {
-      sprintf(buf1, "^r$n hits you with a %s^r.^n", buf);
-      sprintf(buf2, "^yYou hit $N with a %s^y.^n", buf);
-      sprintf(buf3, "$n hits $N with a %s^n.", buf);
+      snprintf(buf1, sizeof(buf1), "^r$n hits you with a %s^r.^n", buf);
+      snprintf(buf2, sizeof(buf2), "^yYou hit $N with a %s^y.^n", buf);
+      snprintf(buf3, sizeof(buf3), "$n hits $N with a %s^n.", buf);
     } else if (damage == SERIOUS) {
-      sprintf(buf1, "^r$n massacres you with a %s^r.^n", buf);
-      sprintf(buf2, "^yYou massacre $N with a %s^y.^n", buf);
-      sprintf(buf3, "$n massacres $N with a %s^n.", buf);
+      snprintf(buf1, sizeof(buf1), "^r$n massacres you with a %s^r.^n", buf);
+      snprintf(buf2, sizeof(buf2), "^yYou massacre $N with a %s^y.^n", buf);
+      snprintf(buf3, sizeof(buf3), "$n massacres $N with a %s^n.", buf);
     } else if (damage >= DEADLY) {
       switch (number(1, 2)) {
         case 1:
-          sprintf(buf1, "^r$n puts you down with a deadly %s^r.^n", buf);
-          sprintf(buf2, "^yYou put $N down with a deadly %s^y.^n", buf);
-          sprintf(buf3, "$n puts $N down with a deadly %s^n.", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n puts you down with a deadly %s^r.^n", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou put $N down with a deadly %s^y.^n", buf);
+          snprintf(buf3, sizeof(buf3), "$n puts $N down with a deadly %s^n.", buf);
           break;
         case 2:
-          sprintf(buf1, "^r$n sublimates you with a deadly %s^r.^n", buf);
-          sprintf(buf2, "^yYou sublimate $N with a deadly %s^y.^n", buf);
-          sprintf(buf3, "$n sublimates $N with a deadly %s^n.", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n sublimates you with a deadly %s^r.^n", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou sublimate $N with a deadly %s^y.^n", buf);
+          snprintf(buf3, sizeof(buf3), "$n sublimates $N with a deadly %s^n.", buf);
           break;
       }
     }
@@ -3090,7 +3090,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       }
   }
   
-  sprintf(been_heard, ".%ld.", real_room(ch_room->number));
+  snprintf(been_heard, sizeof(been_heard), ".%ld.", real_room(ch_room->number));
   
   // Initialize gunshot queue.
   std::queue<rnum_t> room_queue;
@@ -3101,7 +3101,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   for (int door1 = 0; door1 < NUM_OF_DIRS; door1++) {
     if (ch_room->dir_option[door1] && (room1 = real_room(ch_room->dir_option[door1]->to_room->number)) != NOWHERE && !(world[room1].silence[0])) {
       // If the room is in the heard-it-already list, skip to the next one.
-      sprintf(temp, ".%ld.", room1);
+      snprintf(temp, sizeof(temp), ".%ld.", room1);
       if (strstr(been_heard, temp) != 0)
         continue;
       
@@ -3132,7 +3132,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     room_queue.pop();
     
     // If the room is in the heard-it-already list, skip to the next one.
-    sprintf(temp, ".%ld.", room1);
+    snprintf(temp, sizeof(temp), ".%ld.", room1);
     if (strstr(been_heard, temp) != 0)
       continue;
     
@@ -3152,7 +3152,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     secondary_room_queue.pop();
     
     // If the room is in the heard-it-already list, skip to the next one.
-    sprintf(temp, ".%ld.", room1);
+    snprintf(temp, sizeof(temp), ".%ld.", room1);
     if (strstr(been_heard, temp) != 0)
       continue;
     
@@ -3434,11 +3434,11 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   // Early execution: Nerve strike doesn't require as much setup, so perform it here to save on resources.
   if (melee && IS_NERVE(att->ch) && !(att->weapon) && !(IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch))) {
     // Calculate and display pre-success-test information.
-    sprintf(rbuf, "%s", GET_CHAR_NAME(att->ch));
+    snprintf(rbuf, sizeof(rbuf), "%s", GET_CHAR_NAME(att->ch));
     rbuf[3] = 0;
-    sprintf(rbuf+strlen(rbuf), "|%s", GET_CHAR_NAME(def->ch));
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "|%s", GET_CHAR_NAME(def->ch));
     rbuf[7] = 0;
-    sprintf( rbuf+strlen(rbuf),
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf),
             ">Nerve Targ: Base 4 + impact %d ", GET_IMPACT(def->ch));
     
     att->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]);
@@ -3644,11 +3644,11 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
     
     // Calculate and display pre-success-test information.
-    sprintf( rbuf, "%s", GET_CHAR_NAME( att->ch ) );
+    snprintf(rbuf, sizeof(rbuf), "%s", GET_CHAR_NAME( att->ch ) );
     rbuf[3] = 0;
-    sprintf( rbuf+strlen(rbuf), "|%s", GET_CHAR_NAME( def->ch ) );
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "|%s", GET_CHAR_NAME( def->ch ) );
     rbuf[7] = 0;
-    sprintf( rbuf+strlen(rbuf),
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf),
             ">Targ: (burst/comp %d-%d, Base 4) ",
             att->burst_count, att->recoil_comp);
     
@@ -3669,7 +3669,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     att->successes = success_test(att->dice, att->tn);
     
     // Display post-test information.
-    sprintf(rbuf, "Fight: Ski %d, TN %d, Suc %d", att->dice, att->tn, att->successes);
+    snprintf(rbuf, sizeof(rbuf), "Fight: Ski %d, TN %d, Suc %d", att->dice, att->tn, att->successes);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // Dodge test.
@@ -3680,7 +3680,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       def->successes = MAX(success_test(def->dice, def->tn), 0);
       att->successes -= def->successes;
       
-      sprintf(rbuf, "Dodge: Dice %d, TN %d, Suc %d. NetSuc %d", def->dice, def->tn, def->successes, att->successes);
+      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Suc %d. NetSuc %d", def->dice, def->tn, def->successes, att->successes);
       act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     } else
       att->successes = MAX(att->successes, 1);
@@ -3734,7 +3734,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // -------------------------------------------------------------------------------------------------------
     // Calculate and display pre-success-test information.
     
-    sprintf(rbuf, "Attacker dice %s", GET_CHAR_NAME( att->ch ) );
+    snprintf(rbuf, sizeof(rbuf), "Attacker dice %s", GET_CHAR_NAME( att->ch ) );
     rbuf[3] = 0;
     att->tn += modify_target_rbuf_raw(att->ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]) - MAX(net_reach, 0);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
@@ -3742,7 +3742,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->tn += att->modifiers[mod_index];
     }
     
-    sprintf(ENDOF(rbuf), "\r\nDefender dice %s%s", GET_CHAR_NAME( def->ch ),
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nDefender dice %s%s", GET_CHAR_NAME( def->ch ),
             (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
     rbuf[7] = 0;
     def->tn += modify_target_rbuf_raw(att->ch, NULL, def->modifiers[COMBAT_MOD_VISIBILITY]);
@@ -3774,7 +3774,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     act("$n clashes with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_ROOM);
     act("You clash with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_CHAR);
-    sprintf(rbuf, "%s> sk %d targ %d\r\n"
+    snprintf(rbuf, sizeof(rbuf), "%s> sk %d targ %d\r\n"
             "%s> sk %d targ %d\r\n Reach %c%d NetSucc %d (att %d, def %d)", GET_CHAR_NAME(att->ch), att->dice, att->tn,
             GET_CHAR_NAME(def->ch), def->dice, def->tn, net_reach > 0 ? 'b' : 't', net_reach < 0 ? -net_reach : net_reach, net_successes,
             att->successes, def->successes);
@@ -3898,7 +3898,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         att->is_physical = TRUE;
       }
       else {
-        sprintf(buf, "SYSERR in hit(): num_cyberweapons %d but no weapons found.", att->num_cyberweapons);
+        snprintf(buf, sizeof(buf), "SYSERR in hit(): num_cyberweapons %d but no weapons found.", att->num_cyberweapons);
         log(buf);
       }
     }
@@ -3962,7 +3962,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
   int damage_total = convert_damage(staged_damage);
   
-  sprintf(rbuf, "Bod %d+%d, Pow %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.",
+  snprintf(rbuf, sizeof(rbuf), "Bod %d+%d, Pow %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.",
           GET_BOD(def->ch), bod, att->power, bod_success, att->successes,
           wound_name[MIN(DEADLY, MAX(0, att->damage_level))],
           wound_name[MIN(DEADLY, MAX(0, damage_total))],
@@ -3990,7 +3990,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   {
     int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), GET_WEAPON_POWER(att->weapon) / 2 + modify_target(att->ch));
     int staged_dam = stage(-recoil_successes, LIGHT);
-    sprintf(rbuf, "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
+    snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE);
   }
@@ -4100,7 +4100,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
     for (dir = 0; dir < NUM_OF_DIRS  && !is_responding; dir++) {
       room = vict->in_room;
       if (!room) {
-        sprintf(buf, "SYSERR: Invalid room for %s (%ld) in ranged_response.",
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid room for %s (%ld) in ranged_response.",
                 GET_CHAR_NAME(vict), GET_MOB_VNUM(vict));
         mudlog(buf, vict, LOG_SYSLOG, TRUE);
         break;
@@ -4219,7 +4219,7 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_d
   struct char_data *victim, *next_vict;
   struct obj_data *obj, *next;
   
-  sprintf(buf, "The room is lit by a%s explosion!",
+  snprintf(buf, sizeof(buf), "The room is lit by a%s explosion!",
           (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_ROCKET ? " massive" : "n"));
   
   if (room->people)
@@ -4327,7 +4327,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     temp = MAX(1, GET_SKILL(ch, SKILL_THROWING_WEAPONS));
     
     if (!number(0, 2)) {
-      sprintf(buf, "A defective grenade lands on the floor.\r\n");
+      snprintf(buf, sizeof(buf), "A defective grenade lands on the floor.\r\n");
       send_to_room(buf, nextroom);
       return;
     } else if (!(success_test(temp+GET_OFFENSE(ch), 5) < 2)) {
@@ -4351,11 +4351,11 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         if (scatter[temp2] && !number(0, temp-1)) {
           if (temp2 == 0) {
             act("$p deflects due to $n's poor accuracy, landing at $s feet.", FALSE, ch, weapon, 0, TO_ROOM);
-            sprintf(buf, "Your realize your aim must've been off-target as $p lands at your feet.");
+            snprintf(buf, sizeof(buf), "Your realize your aim must've been off-target as $p lands at your feet.");
           } else if (temp2 == 3)
-            sprintf(buf, "Your aim is slightly off, going past its target.");
+            snprintf(buf, sizeof(buf), "Your aim is slightly off, going past its target.");
           else
-            sprintf(buf, "Your aim is slightly off, and $p veers to the %s.", dirs[temp2 == 1 ? left : right]);
+            snprintf(buf, sizeof(buf), "Your aim is slightly off, and $p veers to the %s.", dirs[temp2 == 1 ? left : right]);
           act(buf, FALSE, ch, weapon, 0, TO_CHAR);
           explode(ch, weapon, scatter[temp2]);
           return;
@@ -4455,7 +4455,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
       
       if (!number(0,49)) {
-        sprintf(buf, "A defective %s lands on the floor.",
+        snprintf(buf, sizeof(buf), "A defective %s lands on the floor.",
                 (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET ? "rocket" : "grenade"));
         act(buf, TRUE, vict, 0, 0, TO_ROOM);
         act(buf, TRUE, vict, 0, 0, TO_CHAR);
@@ -4481,11 +4481,11 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
           if (scatter[temp2] && !number(0, temp-1)) {
             if (temp2 == 0) {
               act("$p's trajectory is slightly off...", FALSE, ch, weapon, 0, TO_ROOM);
-              sprintf(buf, "Your arm jerks just before you fire...");
+              snprintf(buf, sizeof(buf), "Your arm jerks just before you fire...");
             } else if (temp2 == 3)
-              sprintf(buf, "Your aim is slightly off, going past $N.");
+              snprintf(buf, sizeof(buf), "Your aim is slightly off, going past $N.");
             else
-              sprintf(buf, "Your aim is slightly off, the %s veering to the %s.",
+              snprintf(buf, sizeof(buf), "Your aim is slightly off, the %s veering to the %s.",
                       (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET ? "rocket" : "grenade"),
                       dirs[temp2 == 1 ? left : right]);
             act(buf, FALSE, ch, weapon, vict, TO_CHAR);
@@ -4552,12 +4552,12 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     
     if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON) {
       act("$n draws $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
-      sprintf(buf, "You draw $p, aim it at the %s and fire!",
+      snprintf(buf, sizeof(buf), "You draw $p, aim it at the %s and fire!",
               fname(EXIT2(nextroom, dir)->keyword));
       act(buf, FALSE, ch, weapon, vict, TO_CHAR);
     } else {
       act("$n aims $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
-      sprintf(buf, "You aim $p at the %s and fire!",
+      snprintf(buf, sizeof(buf), "You aim $p at the %s and fire!",
               fname(EXIT2(nextroom, dir)->keyword));
       act(buf, FALSE, ch, weapon, vict, TO_CHAR);
       if (IS_GUN(GET_OBJ_VAL(weapon, 3)))
@@ -4582,7 +4582,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     return;
   }
   
-  sprintf(buf, "You can't see any %s there.\r\n", target);
+  snprintf(buf, sizeof(buf), "You can't see any %s there.\r\n", target);
   send_to_char(buf, ch);
   return;
 }
@@ -4619,7 +4619,7 @@ void roll_individual_initiative(struct char_data *ch)
     }
   }
   char rbuf[MAX_STRING_LENGTH];
-  sprintf(rbuf,"Init: %2d %s",
+  snprintf(rbuf, sizeof(rbuf),"Init: %2d %s",
           GET_INIT_ROLL(ch), GET_NAME(ch));
   act(rbuf,TRUE,ch,NULL,NULL,TO_ROLLS);
   if (AFF_FLAGGED(ch, AFF_ACID))
@@ -5059,7 +5059,7 @@ void chkdmg(struct veh_data * veh)
     
     if (veh->cspeed >= SPEED_IDLE) {
       send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
-      sprintf(buf, "%s careens off the road, its occupants hurled to the street!\r\n", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "%s careens off the road, its occupants hurled to the street!\r\n", GET_VEH_NAME(veh));
       send_to_room(buf, veh->in_room);
       
       damage_rating = SERIOUS;
@@ -5068,7 +5068,7 @@ void chkdmg(struct veh_data * veh)
       send_to_veh("You scramble into the street as your ride is wrecked!\r\n", veh, NULL, FALSE);
       
       if (veh->people) {
-        sprintf(buf, "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
+        snprintf(buf, sizeof(buf), "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
         send_to_room(buf, veh->in_room);
       }
       
@@ -5165,28 +5165,28 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     
     if (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_NORAM)) {
       damage_total = -1;
-      sprintf(buf, "You can't seem to get close enough to run %s down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
-      sprintf(buf1, "%s can't seem to get close enough to $n to run $m down!", GET_VEH_NAME(veh));
-      sprintf(buf2, "%s can't even get close to you!", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You can't seem to get close enough to run %s down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
+      snprintf(buf1, sizeof(buf1), "%s can't seem to get close enough to $n to run $m down!", GET_VEH_NAME(veh));
+      snprintf(buf2, sizeof(buf2), "%s can't even get close to you!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);
     } else if (damage_total < LIGHT) {
-      sprintf(buf, "You ram into %s, but %s armor holds!", thrdgenders[(int)GET_SEX(ch)], HSHR(ch));
-      sprintf(buf1, "%s rams into $n, but $s armor holds!", GET_VEH_NAME(veh));
-      sprintf(buf2, "%s rams into you, but your armor holds!", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You ram into %s, but %s armor holds!", thrdgenders[(int)GET_SEX(ch)], HSHR(ch));
+      snprintf(buf1, sizeof(buf1), "%s rams into $n, but $s armor holds!", GET_VEH_NAME(veh));
+      snprintf(buf2, sizeof(buf2), "%s rams into you, but your armor holds!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);
       will_damage_vehicle = TRUE;
     } else if (veh_dam > 0) {
       send_to_veh("THUMP!\r\n", veh, NULL, TRUE);
-      sprintf(buf, "You run %s down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
-      sprintf(buf1, "%s runs $n down!", GET_VEH_NAME(veh));
-      sprintf(buf2, "%s runs you down!", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You run %s down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
+      snprintf(buf1, sizeof(buf1), "%s runs $n down!", GET_VEH_NAME(veh));
+      snprintf(buf2, sizeof(buf2), "%s runs you down!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);
       will_damage_vehicle = TRUE;
     } else {
       send_to_veh("THUTHUMP!\r\n", veh, NULL, TRUE);
-      sprintf(buf, "You roll right over %s!\r\n", thrdgenders[(int)GET_SEX(ch)]);
-      sprintf(buf1, "%s rolls right over $n!", GET_VEH_NAME(veh));
-      sprintf(buf2, "%s runs right over you!", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "You roll right over %s!\r\n", thrdgenders[(int)GET_SEX(ch)]);
+      snprintf(buf1, sizeof(buf1), "%s rolls right over $n!", GET_VEH_NAME(veh));
+      snprintf(buf2, sizeof(buf2), "%s runs right over you!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);
     }
     act(buf1, FALSE, ch, 0, 0, TO_ROOM);
@@ -5227,7 +5227,7 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     damage_total = convert_damage(staged_damage);
     tveh->damage += damage_total;
     
-    sprintf(buf, "A %s rams into you!\r\n", GET_VEH_NAME(veh));
+    snprintf(buf, sizeof(buf), "A %s rams into you!\r\n", GET_VEH_NAME(veh));
     send_to_veh(buf, tveh, NULL, TRUE);
     
     if (tveh->cspeed > SPEED_IDLE)
@@ -5254,10 +5254,10 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     damage_total = convert_damage(staged_damage);
     veh->damage += damage_total;
     
-    sprintf(buf, "You ram a %s!\r\n", GET_VEH_NAME(tveh));
-    sprintf(buf1, "%s rams straight into your ride!\r\n", GET_VEH_NAME(veh));
+    snprintf(buf, sizeof(buf), "You ram a %s!\r\n", GET_VEH_NAME(tveh));
+    snprintf(buf1, sizeof(buf1), "%s rams straight into your ride!\r\n", GET_VEH_NAME(veh));
     strcpy(buf3, GET_VEH_NAME(veh));
-    sprintf(buf2, "%s rams straight into %s!\r\n", buf3, GET_VEH_NAME(tveh));
+    snprintf(buf2, sizeof(buf2), "%s rams straight into %s!\r\n", buf3, GET_VEH_NAME(tveh));
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf1, tveh, NULL, TRUE);
     send_to_room(buf2, veh->in_room);
@@ -5338,24 +5338,24 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     // Set the attack description.
     switch(GET_OBJ_VAL(wielded, 3)) {
       case WEAP_SHOTGUN:
-        sprintf(ammo_type, "horde of pellets");
+        snprintf(ammo_type, sizeof(ammo_type), "horde of pellets");
         break;
       case WEAP_LMG:
       case WEAP_MMG:
       case WEAP_HMG:
-        sprintf(ammo_type, "stream of bullets");
+        snprintf(ammo_type, sizeof(ammo_type), "stream of bullets");
         break;
       case WEAP_CANNON:
-        sprintf(ammo_type, "shell");
+        snprintf(ammo_type, sizeof(ammo_type), "shell");
         break;
       case WEAP_MISS_LAUNCHER:
-        sprintf(ammo_type, "rocket");
+        snprintf(ammo_type, sizeof(ammo_type), "rocket");
         break;
       case WEAP_GREN_LAUNCHER:
-        sprintf(ammo_type, "grenade");
+        snprintf(ammo_type, sizeof(ammo_type), "grenade");
         break;
       default:
-        sprintf(ammo_type, "bullet");
+        snprintf(ammo_type, sizeof(ammo_type), "bullet");
         break;
     }
     
@@ -5406,11 +5406,11 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   damage_total--;
   if (power <= veh->armor || !damage_total)
   {
-    sprintf(buf, "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
-    sprintf(buf2, "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
+    snprintf(buf, sizeof(buf), "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
+    snprintf(buf2, sizeof(buf2), "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
     act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
     act(buf2, FALSE, ch, NULL, NULL, TO_CHAR);
-    sprintf(buf, "A %s ricochets off of your ride.\r\n", ammo_type);
+    snprintf(buf, sizeof(buf), "A %s ricochets off of your ride.\r\n", ammo_type);
     send_to_veh(buf, veh, 0, TRUE);
     return;
   } else
@@ -5464,13 +5464,13 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   if (attack_success < 1)
   {
     if (wielded) {
-      sprintf(buf, "$n fires his $o at %s, but misses.", GET_VEH_NAME(veh));
-      sprintf(buf1, "You fire your $o at %s, but miss.", GET_VEH_NAME(veh));
-      sprintf(buf2, "%s's %s misses you completely.\r\n", GET_NAME(ch), ammo_type);
+      snprintf(buf, sizeof(buf), "$n fires his $o at %s, but misses.", GET_VEH_NAME(veh));
+      snprintf(buf1, sizeof(buf1), "You fire your $o at %s, but miss.", GET_VEH_NAME(veh));
+      snprintf(buf2, sizeof(buf2), "%s's %s misses you completely.\r\n", GET_NAME(ch), ammo_type);
     } else {
-      sprintf(buf, "$n swings at %s, but misses.", GET_VEH_NAME(veh));
-      sprintf(buf1, "You swing at %s, but miss.", GET_VEH_NAME(veh));
-      sprintf(buf2, "%s's %s misses you completely.\r\n", GET_NAME(ch), ammo_type);
+      snprintf(buf, sizeof(buf), "$n swings at %s, but misses.", GET_VEH_NAME(veh));
+      snprintf(buf1, sizeof(buf1), "You swing at %s, but miss.", GET_VEH_NAME(veh));
+      snprintf(buf2, sizeof(buf2), "%s's %s misses you completely.\r\n", GET_NAME(ch), ammo_type);
     }
     act(buf, FALSE, ch, wielded, 0, TO_NOTVICT);
     act(buf1, FALSE, ch, wielded, 0, TO_CHAR);
@@ -5486,29 +5486,29 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   
   if (damage_total < LIGHT)
   {
-    sprintf(buf, "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
-    sprintf(buf1, "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
-    sprintf(buf2, "A %s ricochets off of your ride.\r\n", ammo_type);
+    snprintf(buf, sizeof(buf), "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
+    snprintf(buf1, sizeof(buf1), "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
+    snprintf(buf2, sizeof(buf2), "A %s ricochets off of your ride.\r\n", ammo_type);
   } else if (damage_total == LIGHT)
   {
-    sprintf(buf, "$n's %s causes extensive damage to %s paintwork.", ammo_type, GET_VEH_NAME(veh));
-    sprintf(buf1, "Your attack causes extensive damage to %s paintwork.", GET_VEH_NAME(veh));
-    sprintf(buf2, "A %s scratches your paintjob.\r\n", ammo_type);
+    snprintf(buf, sizeof(buf), "$n's %s causes extensive damage to %s paintwork.", ammo_type, GET_VEH_NAME(veh));
+    snprintf(buf1, sizeof(buf1), "Your attack causes extensive damage to %s paintwork.", GET_VEH_NAME(veh));
+    snprintf(buf2, sizeof(buf2), "A %s scratches your paintjob.\r\n", ammo_type);
   } else if (damage_total == MODERATE)
   {
-    sprintf(buf, "$n's %s leaves %s riddled with holes.", ammo_type, GET_VEH_NAME(veh));
-    sprintf(buf1, "Your attack leave %s riddled with holes.", GET_VEH_NAME(veh));
-    sprintf(buf2, "A %s leaves your ride full of holes.\r\n", ammo_type);
+    snprintf(buf, sizeof(buf), "$n's %s leaves %s riddled with holes.", ammo_type, GET_VEH_NAME(veh));
+    snprintf(buf1, sizeof(buf1), "Your attack leave %s riddled with holes.", GET_VEH_NAME(veh));
+    snprintf(buf2, sizeof(buf2), "A %s leaves your ride full of holes.\r\n", ammo_type);
   } else if (damage_total == SERIOUS)
   {
-    sprintf(buf, "$n's %s obliterates %s.", ammo_type, GET_VEH_NAME(veh));
-    sprintf(buf1, "You obliterate %s with your attack.", GET_VEH_NAME(veh));
-    sprintf(buf2, "A %s obliterates your ride.\r\n", ammo_type);
+    snprintf(buf, sizeof(buf), "$n's %s obliterates %s.", ammo_type, GET_VEH_NAME(veh));
+    snprintf(buf1, sizeof(buf1), "You obliterate %s with your attack.", GET_VEH_NAME(veh));
+    snprintf(buf2, sizeof(buf2), "A %s obliterates your ride.\r\n", ammo_type);
   } else if (damage_total >= DEADLY)
   {
-    sprintf(buf, "$n's %s completely destroys %s.", ammo_type, GET_VEH_NAME(veh));
-    sprintf(buf1, "Your attack completely destroys %s.", GET_VEH_NAME(veh));
-    sprintf(buf2, "A %s completely destroys your ride.\r\n", ammo_type);
+    snprintf(buf, sizeof(buf), "$n's %s completely destroys %s.", ammo_type, GET_VEH_NAME(veh));
+    snprintf(buf1, sizeof(buf1), "Your attack completely destroys %s.", GET_VEH_NAME(veh));
+    snprintf(buf2, sizeof(buf2), "A %s completely destroys your ride.\r\n", ammo_type);
   }
   
   if (ch->in_veh && veh->in_veh != ch->in_veh)
@@ -5522,7 +5522,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   if (veh->owner && !IS_NPC(ch))
   {
     char *cname = get_player_name(veh->owner);
-    sprintf(buf, "%s attacked vehicle (%s) owned by player %s (%ld).", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), cname, veh->owner);
+    snprintf(buf, sizeof(buf), "%s attacked vehicle (%s) owned by player %s (%ld).", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), cname, veh->owner);
     delete [] cname;
     mudlog(buf, ch, LOG_WRECKLOG, TRUE);
   }
