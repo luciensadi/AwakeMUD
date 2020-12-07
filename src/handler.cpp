@@ -918,8 +918,8 @@ void affect_total(struct char_data * ch)
   }
   
   // Restore their max_hacking and rem_hacking, which were wiped out in the earlier aff_abils = real_abils.
-  GET_REM_HACKING(ch) = old_rem_hacking;
-  GET_MAX_HACKING(ch) = MIN(old_max_hacking, (int)(GET_HACKING(ch) / 3));
+  GET_REM_HACKING(ch) = MIN(old_rem_hacking, GET_HACKING(ch));
+  GET_MAX_HACKING(ch) = MIN(old_max_hacking, GET_HACKING(ch));
   
   if (has_mbw) {
     GET_QUI(ch) += has_mbw;
