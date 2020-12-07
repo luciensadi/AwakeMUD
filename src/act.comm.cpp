@@ -28,6 +28,8 @@ using namespace std;
 #include "newdb.h"
 #include "constants.h"
 
+#include "strn_bullshit.h"
+
 /* extern variables */
 extern struct skill_data skills[];
 
@@ -41,7 +43,7 @@ ACMD_DECLARE(do_say);
 
 ACMD_CONST(do_say) {
   static char not_const[MAX_STRING_LENGTH];
-  strcpy(not_const, argument);
+  STRCPY(not_const, argument);
   do_say(ch, not_const, cmd, subcmd);
 }
 
@@ -49,11 +51,17 @@ ACMD(do_say)
 {
   int success, suc;
   struct char_data *tmp, *to = NULL;
+  char speech_buf[MAX_STRING_LENGTH];
   
   skip_spaces(&argument);
-  if (!*argument)
+  if (!*argument) {
     send_to_char(ch, "Yes, but WHAT do you want to say?\r\n");
-  else if (subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !char_can_make_noise(ch))
+    return;
+  }
+    
+  STRCPY(speech_buf, argument);
+  
+  if (subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !char_can_make_noise(ch))
     send_to_char("You can't seem to make any noise.\r\n", ch);
   else {
     if (AFF_FLAGGED(ch, AFF_RIG)) {
@@ -62,12 +70,12 @@ ACMD(do_say)
     } else if (PLR_FLAGGED(ch, PLR_MATRIX)) {
       if (ch->persona) {
         // Send the self-referencing message to the decker and store it in their history.
-        snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", argument);
+        snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", speech_buf);
         send_to_icon(ch->persona, buf);
         store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
         
         // Send the message to the rest of the host. Store it to the recipients' says history.
-        snprintf(buf, sizeof(buf), "%s says, \"%s^n\"\r\n", ch->persona->name, argument);
+        snprintf(buf, sizeof(buf), "%s says, \"%s^n\"\r\n", ch->persona->name, speech_buf);
         // send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
         for (struct matrix_icon *i = matrix[ch->persona->in_host].icons; i; i = i->next_in_host) {
           if (ch->persona != i && i->decker && has_spotted(i, ch->persona)) {
@@ -80,20 +88,19 @@ ACMD(do_say)
         for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room)
           if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX)) {
             // Send and store.
-            snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", argument);
+            snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", speech_buf);
             send_to_char(buf, targ);
             store_message_to_history(targ->desc, COMM_CHANNEL_SAYS, str_dup(buf));
           }
         // Send and store.
-        snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", argument);
+        snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", speech_buf);
         send_to_char(buf, ch);
         store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
       }
       return;
     }
     if (subcmd == SCMD_SAYTO) {
-      half_chop(argument, buf, buf2);
-      strcpy(argument, buf2);
+      half_chop(argument, buf, speech_buf);
       if (ch->in_veh)
         to = get_char_veh(ch, buf, ch->in_veh);
       else
@@ -101,7 +108,7 @@ ACMD(do_say)
     }
     if (ch->in_veh) {
       if(subcmd == SCMD_OSAY) {
-        snprintf(buf, sizeof(buf), "%s says ^mOOCly^n, \"%s^n\"\r\n",GET_NAME(ch), argument);
+        snprintf(buf, sizeof(buf), "%s says ^mOOCly^n, \"%s^n\"\r\n",GET_NAME(ch), speech_buf);
         for (tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh) {
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
@@ -115,7 +122,7 @@ ACMD(do_say)
           if (tmp != ch) {
             if (to) {
               if (to == tmp)
-                snprintf(buf2, MAX_STRING_LENGTH, " to you");
+                STRCPY(buf2, " to you");
               else
                 snprintf(buf2, MAX_STRING_LENGTH, " to %s", CAN_SEE(tmp, to) ? (found_mem(GET_MEMORY(tmp), to) ? CAP(found_mem(GET_MEMORY(tmp), to)->mem)
                         : GET_NAME(to)) : "someone");
@@ -124,13 +131,13 @@ ACMD(do_say)
               suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
               if (suc > 0 || IS_NPC(tmp))
                 snprintf(buf, sizeof(buf), "$z says%s in %s, \"%s^n\"",
-                        (to ? buf2 : ""), skills[GET_LANGUAGE(ch)].name, argument);
+                        (to ? buf2 : ""), skills[GET_LANGUAGE(ch)].name, speech_buf);
               else
                 snprintf(buf, sizeof(buf), "$z speaks%s in a language you don't understand.", (to ? buf2 : ""));
             } else
-              snprintf(buf, sizeof(buf), "$z mumbles incoherently.");
+              STRCPY(buf, "$z mumbles incoherently.");
             if (IS_NPC(ch))
-              snprintf(buf, sizeof(buf), "$z says%s, \"%s^n\"", (to ? buf2 : ""), argument);
+              snprintf(buf, sizeof(buf), "$z says%s, \"%s^n\"", (to ? buf2 : ""), speech_buf);
             // Note: includes act()
             store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
           }
@@ -138,7 +145,7 @@ ACMD(do_say)
     } else {
       /** new code by WASHU **/
       if(subcmd == SCMD_OSAY) {
-        snprintf(buf, sizeof(buf), "$z ^nsays ^mOOCly^n, \"%s^n\"",argument);
+        snprintf(buf, sizeof(buf), "$z ^nsays ^mOOCly^n, \"%s^n\"",speech_buf);
         for (tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
@@ -152,7 +159,7 @@ ACMD(do_say)
           if (tmp != ch && !(IS_ASTRAL(ch) && !CAN_SEE(tmp, ch))) {
             if (to) {
               if (to == tmp)
-                snprintf(buf2, MAX_STRING_LENGTH, " to you");
+                STRCPY(buf2, " to you");
               else
                 snprintf(buf2, MAX_STRING_LENGTH, " to %s", CAN_SEE(tmp, to) ? (found_mem(GET_MEMORY(tmp), to) ? CAP(found_mem(GET_MEMORY(tmp), to)->mem)
                         : GET_NAME(to)) : "someone");
@@ -161,13 +168,13 @@ ACMD(do_say)
               suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
               if (suc > 0 || IS_NPC(tmp))
                 snprintf(buf, sizeof(buf), "$z says%s in %s, \"%s^n\"",
-                        (to ? buf2 : ""), skills[GET_LANGUAGE(ch)].name, argument);
+                        (to ? buf2 : ""), skills[GET_LANGUAGE(ch)].name, speech_buf);
               else
                 snprintf(buf, sizeof(buf), "$z speaks%s in a language you don't understand.", (to ? buf2 : ""));
             } else
-              snprintf(buf, sizeof(buf), "$z mumbles incoherently.");
+              STRCPY(buf, "$z mumbles incoherently.");
             if (IS_NPC(ch))
-              snprintf(buf, sizeof(buf), "$z says%s, \"%s^n\"", (to ? buf2 : ""), argument);
+              snprintf(buf, sizeof(buf), "$z says%s, \"%s^n\"", (to ? buf2 : ""), speech_buf);
             // Invokes act().
             store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
           }
@@ -177,16 +184,16 @@ ACMD(do_say)
     if (PRF_FLAGGED(ch, PRF_NOREPEAT))
       send_to_char(OK, ch);
     else {
-      delete_doubledollar(argument);
+      delete_doubledollar(speech_buf);
       if(subcmd == SCMD_OSAY) {
-        snprintf(buf, sizeof(buf), "You say ^mOOCly^n, \"%s^n\"\r\n", argument);
+        snprintf(buf, sizeof(buf), "You say ^mOOCly^n, \"%s^n\"\r\n", speech_buf);
         send_to_char(buf, ch);
         store_message_to_history(ch->desc, COMM_CHANNEL_OSAYS, str_dup(buf));
       } else {
         if (to)
           snprintf(buf2, MAX_STRING_LENGTH, " to %s", CAN_SEE(ch, to) ? (found_mem(GET_MEMORY(ch), to) ?
                                                      CAP(found_mem(GET_MEMORY(ch), to)->mem) : GET_NAME(to)) : "someone");
-        snprintf(buf, sizeof(buf), "You say%s, \"%s^n\"\r\n", (to ? buf2 : ""), argument);
+        snprintf(buf, sizeof(buf), "You say%s, \"%s^n\"\r\n", (to ? buf2 : ""), speech_buf);
         send_to_char(buf, ch);
         store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
       }
@@ -593,7 +600,7 @@ ACMD(do_broadcast)
   struct obj_data *obj, *radio = NULL;
   struct descriptor_data *d;
   int i, j, frequency, to_room, crypt, decrypt, success, suc;
-  char buf3[MAX_STRING_LENGTH], buf4[MAX_STRING_LENGTH], voice[16] = "$v"; 
+  char buf3[MAX_STRING_LENGTH], buf4[MAX_STRING_LENGTH], speech_buf[MAX_STRING_LENGTH], voice[16] = "$v"; 
   bool cyberware = FALSE, vehicle = FALSE;
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     send_to_char("You must be Authorized to do that.\r\n", ch);
@@ -625,7 +632,7 @@ ACMD(do_broadcast)
       radio = obj;
       cyberware = 1;
     } else if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3))
-      snprintf(voice, sizeof(voice), "A masked voice");
+      STRCPY(voice, "A masked voice");
 
   if (IS_NPC(ch) || IS_SENATOR(ch)) {
     argument = any_one_arg(argument, arg);
@@ -661,6 +668,8 @@ ACMD(do_broadcast)
     send_to_char("What do you want to broadcast?\r\n", ch);
     return;
   }
+  
+  STRCPY(speech_buf, argument);
 
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
@@ -672,7 +681,7 @@ ACMD(do_broadcast)
 
   success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
 
-  strcpy(buf4, argument);
+  STRCPY(buf4, argument);
   // Starting at end of buf, work backwards and fuzz out the message.
   for (int len = strlen(buf4) - 1; len >= 0; len--)
     switch (number(0, 2)) {
@@ -684,32 +693,32 @@ ACMD(do_broadcast)
       break;
     }
   snprintf(buf3, MAX_STRING_LENGTH, "*static* %s", buf4);
-  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NO_RADIO))
-    strcpy(argument, buf3);
+  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NO_RADIO)) 
+    STRCPY(speech_buf, buf3);
 
   
   if ( frequency > 0 ) {
     if(crypt) {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, crypt, argument);
+      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, crypt, speech_buf);
       snprintf(buf2, MAX_STRING_LENGTH, "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***^N", frequency, crypt);
       snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[%d MHz, Unknown](CRYPTO-%d): %s", frequency, crypt, buf3);
       snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown](CRYPTO-%d): (something incoherent...)^N", voice, frequency, crypt);
     } else {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s]: %s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, argument);
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown]: %s^N", voice, frequency, argument);
+      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s]: %s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, speech_buf);
+      snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown]: %s^N", voice, frequency, speech_buf);
       snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[%d MHz, Unknown]: %s", frequency, buf3);
       snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown]: (something incoherent...)^N", voice, frequency);
     }
 
   } else {
     if(crypt) {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[GET_LANGUAGE(ch)].name, crypt, argument);
+      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[GET_LANGUAGE(ch)].name, crypt, speech_buf);
       snprintf(buf2, MAX_STRING_LENGTH, "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***^N", crypt);
       snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown](CRYPTO-%d): %s", crypt, buf3);
       snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown](CRYPTO-%d): (something incoherent...)^N", voice, crypt);
     } else {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[GET_LANGUAGE(ch)].name, argument);
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown]: %s^N", voice, argument);
+      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[GET_LANGUAGE(ch)].name, speech_buf);
+      snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown]: %s^N", voice, speech_buf);
       snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown]: %s", buf3);
       snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown]: (something incoherent...)^N", voice);
     }
@@ -1095,8 +1104,8 @@ ACMD(do_language)
       if ((GET_SKILL(ch, i)) > 0) {
         snprintf(buf, sizeof(buf), "%-20s %-17s", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         if (GET_LANGUAGE(ch) == i)
-          strcat(buf, " ^Y(Speaking)^n");
-        strcat(buf, "\r\n");
+          STRCAT(buf, " ^Y(Speaking)^n");
+        STRCAT(buf, "\r\n");
         send_to_char(buf, ch);
       }
     return;
@@ -1315,14 +1324,14 @@ ACMD(do_phone)
     char voice[VOICE_BUF_SIZE] = "$v";
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
       if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3))
-        snprintf(voice, VOICE_BUF_SIZE, "A masked voice");
+        STRCPY(voice, "A masked voice");
     
     if (success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4) > 0) {
       snprintf(buf, sizeof(buf), "^Y%s on the other end of the line says in %s, \"%s\"", voice, skills[GET_LANGUAGE(ch)].name, argument);
       snprintf(buf2, MAX_STRING_LENGTH, "$z says into $s phone in %s, \"%s\"", skills[GET_LANGUAGE(ch)].name, argument);
     } else {
-      snprintf(buf, sizeof(buf), "^Y$v on the other end of the line mumbles incoherently.");
-      snprintf(buf2, MAX_STRING_LENGTH, "$z mumbles incoherently into $s phone.\r\n");
+      STRCPY(buf, "^Y$v on the other end of the line mumbles incoherently.");
+      STRCPY(buf2, "$z mumbles incoherently into $s phone.\r\n");
     }
     snprintf(buf3, MAX_STRING_LENGTH, "^YYou say, \"%s\"\r\n", argument);
     send_to_char(buf3, ch);

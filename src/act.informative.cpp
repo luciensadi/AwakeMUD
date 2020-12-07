@@ -2731,9 +2731,9 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
   
   if (ch->desc != NULL && ch->desc->original != NULL ) {
     if (PLR_FLAGGED(ch->desc->original, PLR_MATRIX))
-      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are connected to the Matrix.\r\n");
+      strncat(buf2, "You are connected to the Matrix.\r\n", sizeof(buf2) - strlen(buf2) - 1);
     else if (IS_PROJECT(ch))
-      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are astrally projecting.\r\n");
+      strncat(buf2, "You are astrally projecting.\r\n", sizeof(buf2) - strlen(buf2) - 1);
     else
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are occupying the body of %s.\r\n", GET_NAME(ch));
   }
@@ -2755,7 +2755,7 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
     strcpy(ENDOF(buf2), "You are intoxicated.\r\n");
   
   if (AFF_FLAGGED(ch, AFF_SNEAK))
-    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are sneaking.\r\n");
+    strncat(buf2, "You are sneaking.\r\n", sizeof(buf2) - strlen(buf2) - 1);
   
   // Physical and misc attributes.
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Height: %.2f meters\r\n", ((float)GET_HEIGHT(ch) / 100));
@@ -3014,9 +3014,9 @@ ACMD(do_score)
     char out_of_body_string[200];
     if (ch->desc != NULL && ch->desc->original != NULL ) {
       if (PLR_FLAGGED(ch->desc->original, PLR_MATRIX))
-        snprintf(out_of_body_string, sizeof(out_of_body_string), "You are connected to the Matrix.");
+        strncpy(out_of_body_string, "You are connected to the Matrix.", sizeof(out_of_body_string));
       else if (IS_PROJECT(ch))
-        snprintf(out_of_body_string, sizeof(out_of_body_string), "You are astrally projecting.");
+        strncpy(out_of_body_string, "You are astrally projecting.", sizeof(out_of_body_string));
       else
         snprintf(out_of_body_string, sizeof(out_of_body_string), "You are occupying the body of %s.", GET_NAME(ch));
     } else {
@@ -3042,9 +3042,9 @@ ACMD(do_score)
     else
       strcpy(grade_string, "");
     
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/  ^L\\\\@//                                                            ^L/^b/\r\n");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/   ^L`^                                                              ^b/^L/\r\n");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/                                                                   ^L/^b/\r\n");
+    strncat(buf, "^b/^L/  ^L\\\\@//                                                            ^L/^b/\r\n", sizeof(buf) - strlen(buf) - 1);
+    strncat(buf, "^L/^b/   ^L`^                                                              ^b/^L/\r\n", sizeof(buf) - strlen(buf) - 1);
+    strncat(buf, "^b/^L/                                                                   ^L/^b/\r\n", sizeof(buf) - strlen(buf) - 1);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nBody          ^w%2d (^W%2d^w)    Height: ^W%0.2f^w meters   Weight: ^W%3d^w kilos  ^b/^L/\r\n",
                           GET_REAL_BOD(ch), GET_BOD(ch), ((float)GET_HEIGHT(ch) / 100), GET_WEIGHT(ch));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)    Encumbrance: ^W%3.2f^w kilos carried, ^W%3d^w max ^L/^b/\r\n",
@@ -3260,7 +3260,7 @@ ACMD(do_index)
   skip_spaces(&temp);
   
   if (!*temp) {
-    snprintf(query, sizeof(query), "SELECT name FROM help_topic ORDER BY name ASC");
+    strncpy(query, "SELECT name FROM help_topic ORDER BY name ASC", sizeof(query));
   } else {
     char letter = *temp;
     if (!isalpha(letter)) {
@@ -3307,7 +3307,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name='%s'", buf);
   if (mysql_wrapper(mysql, query)) {
     // We got a SQL error-- bail.
-    snprintf(help, help_len, "The help system is temporarily unavailable.\r\n");
+    strncpy(help, "The help system is temporarily unavailable.\r\n", help_len);
     snprintf(buf3, sizeof(buf3), "WARNING: Failed to return help topic about %s. See server log for MYSQL error.", arg);
     mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return;
@@ -3328,7 +3328,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", buf);
   if (mysql_wrapper(mysql, query)) {
     // If we don't find it here either, we know the file doesn't exist-- failure condition.
-    snprintf(help, help_len, "No such help file exists.\r\n");
+    strncpy(help, "No such help file exists.\r\n", help_len);
     return;
   }
   res = mysql_store_result(mysql);
@@ -3336,7 +3336,7 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   
   // If we have no rows, fail.
   if (x < 1) {
-    snprintf(help, help_len, "No such help file exists.\r\n");
+    strncpy(help, "No such help file exists.\r\n", help_len);
     snprintf(buf3, sizeof(buf3), "Failed helpfile search: %s.", arg);
     mudlog(buf3, ch, LOG_HELPLOG, TRUE);
     mysql_free_result(res);
@@ -3558,27 +3558,27 @@ ACMD(do_who)
       switch (GET_LEVEL(tch)) {
         case LVL_BUILDER:
         case LVL_ARCHITECT:
-          snprintf(buf1, sizeof(buf1), "^G");
+          strncpy(buf1, "^G", sizeof(buf1));
           break;
         case LVL_FIXER:
         case LVL_CONSPIRATOR:
-          snprintf(buf1, sizeof(buf1), "^m");
+          strncpy(buf1, "^m", sizeof(buf1));
           break;
         case LVL_EXECUTIVE:
-          snprintf(buf1, sizeof(buf1), "^c");
+          strncpy(buf1, "^c", sizeof(buf1));
           break;
         case LVL_DEVELOPER:
-          snprintf(buf1, sizeof(buf1), "^r");
+          strncpy(buf1, "^r", sizeof(buf1));
           break;
         case LVL_VICEPRES:
         case LVL_ADMIN:
-          snprintf(buf1, sizeof(buf1), "^b");
+          strncpy(buf1, "^b", sizeof(buf1));
           break;
         case LVL_PRESIDENT:
-          snprintf(buf1, sizeof(buf1), "^B");
+          strncpy(buf1, "^B", sizeof(buf1));
           break;
         default:
-          snprintf(buf1, sizeof(buf1), "^L");
+          strncpy(buf1, "^L", sizeof(buf1));
           break;
       }
       if (PRF_FLAGGED(tch, PRF_SHOWGROUPTAG) && GET_PGROUP_MEMBER_DATA(tch) && GET_PGROUP(tch)) {
@@ -3874,7 +3874,7 @@ ACMD(do_users)
     if (*d->host && GET_DESC_LEVEL(d) <= GET_LEVEL(ch))
       snprintf(ENDOF(line), sizeof(line) - strlen(line), "[%s]\r\n", d->host);
     else
-      snprintf(line, sizeof(line), "[Hostname unknown]\r\n");
+      strncpy(line, "[Hostname unknown]\r\n", sizeof(line));
     
     if (d->connected) {
       snprintf(line2, sizeof(line2), "^g%s^n", line);
@@ -3965,7 +3965,7 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
     if (recur)
       print_object_location(0, obj->in_obj, ch, recur);
   } else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in an unknown location\r\n");
+    strncat(ENDOF(buf), "in an unknown location\r\n", sizeof(buf) - strlen(buf) - 1);
 }
 
 void perform_immort_where(struct char_data * ch, char *arg)

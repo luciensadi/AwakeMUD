@@ -948,10 +948,10 @@ ACMD(do_gen_write)
       } else if (ch->in_veh->in_room) {
         snprintf(ENDOF(body), sizeof(body) - strlen(body), ", located in room %ld.", GET_ROOM_VNUM(ch->in_veh->in_room));
       } else {
-        snprintf(ENDOF(body), sizeof(body) - strlen(body), ".");
+        strncat(body, ".", sizeof(body) - strlen(body) - 1);
       }
     } else {
-      snprintf(ENDOF(body), sizeof(body) - strlen(body), ".");
+      strncat(body, ".", sizeof(body) - strlen(body) - 1);
     }
     
     // Compose our post body.
@@ -1295,7 +1295,7 @@ ACMD(do_skills)
     
     // Append languages.
     if (!*arg)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\nYou know the following languages:\r\n");
+      strncat(buf, "\r\n\r\nYou know the following languages:\r\n", sizeof(buf) - strlen(buf) - 1);
     else
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\nYou know the following languages that start with '%s':\r\n", arg);
     

@@ -66,6 +66,7 @@ typedef SOCKET  socket_t;
 #include "limits.h"
 #include "protocol.h"
 #include "perfmon.h"
+#include "strn_bullshit.h"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -106,7 +107,7 @@ int port;
 int ViolencePulse = PULSE_VIOLENCE;
 
 /* functions in this file */
-int get_from_q(struct txt_q * queue, char *dest, int *aliased);
+int get_from_q(struct txt_q * queue, char *dest, int dest_size, int *aliased);
 void init_game(int port);
 void signal_setup(void);
 void game_loop(int mother_desc);
@@ -295,7 +296,7 @@ void copyover_recover()
     memset ((char *) d, 0, sizeof (struct descriptor_data));
     init_descriptor (d,desc); /* set up various stuff */
     
-    strcpy(d->host, host);
+    STRCPY(d->host, host);
     d->next = descriptor_list;
     descriptor_list = d;
     
@@ -719,7 +720,7 @@ void game_loop(int mother_desc)
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
         
-        if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, &aliased)) {
+        if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, sizeof(comm), &aliased)) {
           if (d->character) {
             d->character->char_specials.timer = 0;
             if (d->original)
@@ -746,7 +747,7 @@ void game_loop(int mother_desc)
               d->prompt_mode = 0;
             else {
               if (perform_alias(d, comm)) /* run it through aliasing system */
-                get_from_q(&d->input, comm, &aliased);
+                get_from_q(&d->input, comm, sizeof(comm), &aliased);
             }
             command_interpreter(d->character, comm, GET_CHAR_NAME(d->character)); /* send it to interpreter */
           }
@@ -1092,7 +1093,7 @@ void make_prompt(struct descriptor_data * d)
           prompt++;
           switch(*prompt) {
             case 'a':       // astral pool
-              snprintf(str, sizeof(str), "%d", GET_ASTRAL(d->character));
+              SPRINTF(str, "%d", GET_ASTRAL(d->character));
               break;
             case 'A':
               if (GET_EQ(d->character, WEAR_WIELD)) {
@@ -1100,24 +1101,24 @@ void make_prompt(struct descriptor_data * d)
                 if (IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
                   switch (GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 11)) {
                     case MODE_SS:
-                      snprintf(str, sizeof(str), "SS");
+                      STRCPY(str, "SS");
                       break;
                     case MODE_SA:
-                      snprintf(str, sizeof(str), "SA");
+                      STRCPY(str, "SA");
                       break;
                     case MODE_BF:
-                      snprintf(str, sizeof(str), "BF");
+                      STRCPY(str, "BF");
                       break;
                     case MODE_FA:
-                      snprintf(str, sizeof(str), "FA(%d)", GET_OBJ_TIMER(GET_EQ(d->character, WEAR_WIELD)));
+                      SPRINTF(str, "FA(%d)", GET_OBJ_TIMER(GET_EQ(d->character, WEAR_WIELD)));
                       break;
                     default:
-                      snprintf(str, sizeof(str), "NA");
+                      STRCPY(str, "NA");
                   }
-                else strcpy(str, "ML");
+                else STRCPY(str, "ML");
                 
               } else
-                strcpy(str, "NA");
+                STRCPY(str, "NA");
               break;
             case 'b':       // ballistic
               snprintf(str, sizeof(str), "%d", GET_BALLISTIC(d->character));
@@ -1129,7 +1130,7 @@ void make_prompt(struct descriptor_data * d)
               if (ch->persona)
                 snprintf(str, sizeof(str), "%d", ch->persona->condition);
               else
-                snprintf(str, sizeof(str), "NA");
+                strncpy(str, "NA", sizeof(str));
               break;
             case 'd':       // defense pool
               snprintf(str, sizeof(str), "%d", GET_DEFENSE(d->character));
@@ -1141,13 +1142,13 @@ void make_prompt(struct descriptor_data * d)
               if (ch->persona)
                 snprintf(str, sizeof(str), "%d", ch->persona->decker->active);
               else
-                snprintf(str, sizeof(str), "0");
+                strncpy(str, "0", sizeof(str));
               break;
             case 'E':
               if (ch->persona && ch->persona->decker->deck)
                 snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 2));
               else
-                snprintf(str, sizeof(str), "0");
+                strncpy(str, "0", sizeof(str));
               break;
             case 'f':
               snprintf(str, sizeof(str), "%d", GET_CASTING(d->character));
@@ -1162,16 +1163,16 @@ void make_prompt(struct descriptor_data * d)
                   snprintf(str, sizeof(str), "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5),
                                          GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD)->contains, 9)));
                 } else
-                  snprintf(str, sizeof(str), "0");
+                  strncpy(str, "0", sizeof(str));
                 else
-                  snprintf(str, sizeof(str), "0");
+                  strncpy(str, "0", sizeof(str));
               break;
             case 'G':       // max ammo
               if (GET_EQ(d->character, WEAR_WIELD) &&
                   IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
                 snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5));
               else
-                snprintf(str, sizeof(str), "0");
+                strncpy(str, "0", sizeof(str));
               break;
             case 'h':       // hacking pool
               if (ch->persona)
@@ -1232,13 +1233,13 @@ void make_prompt(struct descriptor_data * d)
               if (ch->persona && ch->persona->decker->deck)
                 snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3) - GET_OBJ_VAL(ch->persona->decker->deck, 5));
               else
-                snprintf(str, sizeof(str), "0");
+                strncpy(str, "0", sizeof(str));
               break;
             case 'R':
               if (ch->persona && ch->persona->decker && ch->persona->decker->deck)
                 snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3));
               else
-                snprintf(str, sizeof(str), "0");
+                strncpy(str, "0", sizeof(str));
               break;
             case 's':       // current ammo
               if (GET_EQ(d->character, WEAR_HOLD) &&
@@ -1247,16 +1248,16 @@ void make_prompt(struct descriptor_data * d)
                   snprintf(str, sizeof(str), "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5),
                                          GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD)->contains, 9)));
                 } else
-                  snprintf(str, sizeof(str), "0");
+                  strncpy(str, "0", sizeof(str));
                 else
-                  snprintf(str, sizeof(str), "0");
+                  strncpy(str, "0", sizeof(str));
               break;
             case 'S':       // max ammo
               if (GET_EQ(d->character, WEAR_HOLD) &&
                   IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 3)))
                 snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5));
               else
-                snprintf(str, sizeof(str), "0");
+                strncpy(str, "0", sizeof(str));
               break;
             case 't':       // magic pool
               snprintf(str, sizeof(str), "%d", GET_MAGIC(d->character));
@@ -1280,19 +1281,19 @@ void make_prompt(struct descriptor_data * d)
               if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER)
                 snprintf(str, sizeof(str), "%d", d->character->player_specials->saved.zonenum);
               else
-                strcpy(str, "@z");
+                STRCPY(str, "@z");
               break;
             case 'v':
               if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER)
                 snprintf(str, sizeof(str), "%ld", d->character->in_room->number);
               else
-                strcpy(str, "@v");
+                STRCPY(str, "@v");
               break;
             case '@':
-              strcpy(str, "@");
+              STRCPY(str, "@");
               break;
             case '!':
-              strcpy(str, "\r\n");
+              STRCPY(str, "\r\n");
               break;
             default:
               snprintf(str, sizeof(str), "@%c", *prompt);
@@ -1316,8 +1317,9 @@ void make_prompt(struct descriptor_data * d)
 void write_to_q(const char *txt, struct txt_q * queue, int aliased)
 {
   struct txt_block *temp = new txt_block;
-  temp->text = new char[strlen(txt) + 1];
-  strcpy(temp->text, txt);
+  int t_t_size = strlen(txt) + 1;
+  temp->text = new char[t_t_size];
+  strncpy(temp->text, txt, t_t_size);
   temp->aliased = aliased;
   
   /* queue empty? */
@@ -1333,7 +1335,7 @@ void write_to_q(const char *txt, struct txt_q * queue, int aliased)
   }
 }
 
-int get_from_q(struct txt_q * queue, char *dest, int *aliased)
+int get_from_q(struct txt_q * queue, char *dest, int dest_size, int *aliased)
 {
   struct txt_block *tmp;
   
@@ -1342,7 +1344,7 @@ int get_from_q(struct txt_q * queue, char *dest, int *aliased)
     return 0;
   
   tmp = queue->head;
-  strcpy(dest, queue->head->text);
+  strncpy(dest, queue->head->text, dest_size);
   *aliased = queue->head->aliased;
   queue->head = queue->head->next;
   
@@ -1364,7 +1366,7 @@ void flush_queues(struct descriptor_data * d)
     d->large_outbuf->next = bufpool;
     bufpool = d->large_outbuf;
   }
-  while (get_from_q(&d->input, buf2, &dummy))
+  while (get_from_q(&d->input, buf2, sizeof(buf2), &dummy))
     ;
 }
 
@@ -1387,7 +1389,7 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   /* if we have enough space, just write to buffer and that's it! */
   if (t->bufspace >= size)
   {
-    strcpy(t->output + t->bufptr, txt);
+    strncpy(t->output + t->bufptr, txt, t->bufspace);
     t->bufspace -= size;
     t->bufptr += size;
     return;
@@ -1419,9 +1421,9 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
     buf_largecount++;
   }
   
-  strcpy(t->large_outbuf->text, t->output);     /* copy to big buffer */
+  strncpy(t->large_outbuf->text, t->output, LARGE_BUFSIZE);     /* copy to big buffer */
   t->output = t->large_outbuf->text;    /* make big buffer primary */
-  strcat(t->output, txt);       /* now add new text */
+  STRCAT(t->output, txt);       /* now add new text */
   
   /* calculate how much space is left in the buffer */
   t->bufspace = LARGE_BUFSIZE - 1 - strlen(t->output);
@@ -1546,18 +1548,18 @@ int process_output(struct descriptor_data *t) {
     return 0;
   
   /* we may need this \r\n for later -- see below */
-  strcpy(i, "\r\n");
+  STRCPY(i, "\r\n");
   
   /* now, append the 'real' output */
-  strcpy(i + 2, t->output);
+  STRCAT(i, t->output);
   
   /* if we're in the overflow state, notify the user */
   if (t->bufptr < 0)
-    strcat(i, "**OVERFLOW**");
+    STRCAT(i, "**OVERFLOW**");
   
   /* add the extra CRLF if the person isn't in compact mode */
   if (!t->connected && t->character)
-    strcat(i + 2, "\r\n");
+    STRCAT(i, "\r\n");
   
   /*
    * now, send the output.  If this is an 'interruption', use the prepended
@@ -1761,12 +1763,12 @@ int process_input(struct descriptor_data *t) {
     failed_subst = 0;
     
     if (*tmp == '!' && t->connected != CON_CNFPASSWD )
-      strcpy(tmp, t->last_input);
+      STRCPY(tmp, t->last_input);
     else if (*tmp == '|' && t->connected != CON_CNFPASSWD ) {
       if (!(failed_subst = perform_subst(t, t->last_input, tmp)))
-        strcpy(t->last_input, tmp);
+        STRCPY(t->last_input, tmp);
     } else
-      strcpy(t->last_input, tmp);
+      STRCPY(t->last_input, tmp);
     
     if (!failed_subst)
       write_to_q(tmp, &t->input, 0);
@@ -1798,7 +1800,8 @@ int process_input(struct descriptor_data *t) {
  */
 int perform_subst(struct descriptor_data *t, char *orig, char *subst)
 {
-  char New[MAX_INPUT_LENGTH + 5];
+  int new_size = MAX_INPUT_LENGTH + 5;
+  char New[new_size];
   
   char *first, *second, *strpos;
   
@@ -1842,7 +1845,7 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst)
   
   /* terminate the string in case of an overflow from strncat */
   New[MAX_INPUT_LENGTH-1] = '\0';
-  strcpy(subst, New);
+  strncpy(subst, New, new_size);
   
   return 0;
 }
@@ -2186,7 +2189,7 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
   //const char *color;
   
   // KaVir's protocol snippet handles this, so...
-  strcpy(buffer, str);
+  STRCPY(buffer, str);
   return &buffer[0];
   /*
   
@@ -2196,7 +2199,7 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
     snprintf(colorize_error_buf, sizeof(colorize_error_buf), "SYSERR: Received empty string to colorize() for descriptor %d (orig %s, char %s).",
             d->descriptor, d->original ? GET_NAME(d->original) : "(null)", d->character ? GET_CHAR_NAME(d->character) : "(null)");
     mudlog(colorize_error_buf, NULL, LOG_SYSLOG, TRUE);
-    strcpy(buffer, "(null)");
+    STRCPY(buffer, "(null)");
     return buffer;
   }
   
@@ -2491,7 +2494,7 @@ char* strip_ending_punctuation_new(const char* orig) {
   int len = strlen(orig);
   char* stripped = new char[len];
   
-  strcpy(stripped, orig);
+  strncpy(stripped, orig, len);
   
   char* c = stripped + len - 1;
   
@@ -2676,7 +2679,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
                   }
                 }
                 if (masked) {
-                  snprintf(temp, sizeof(temp), "a masked voice");
+                  strncpy(temp, "a masked voice", sizeof(temp));
                 } else {
                   // Voice is new and must be deleted.
                   char* voice = strip_ending_punctuation_new(ch->player.physical_text.room_desc);
@@ -2809,14 +2812,14 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
               GET_CHAR_NAME(ch), ch->in_room ? GET_ROOM_NAME(ch->in_room) : "n/a",
               ch->in_veh ? GET_VEH_NAME(ch->in_veh) : "n/a");
     } else {
-      strcat(buf, " ...No character.");
+      STRCAT(buf, " ...No character.");
     }
     if (obj) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nobj: %s, in_room %s, in_veh %s",
               GET_OBJ_NAME(obj), obj->in_room ? GET_ROOM_NAME(obj->in_room) : "n/a",
               obj->in_veh ? GET_VEH_NAME(obj->in_veh) : "n/a");
     } else {
-      strcat(buf, " ...No obj.");
+      STRCAT(buf, " ...No obj.");
     }
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
