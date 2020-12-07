@@ -1880,10 +1880,10 @@ struct room_data *get_veh_in_room(struct veh_data *veh) {
   while (veh->in_veh)
     veh = veh->in_veh;
   
-  // Error messaging.
   if (!veh->in_room) {
-    snprintf(errbuf, sizeof(errbuf), "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
-    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+    // This is not precisely an error case-- it just means the vehicle is being towed. -- LS.
+    /* sprintf(errbuf, "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE); */
   }
   
   return veh->in_room;
