@@ -22,7 +22,7 @@ void ASSIGNMOB(long mob, SPECIAL(fname));
 
 /* order: vnum, attributes, 1 - newbie trainer (else 0)     */
 /* to have multiple attributes, separate them with |      */
-train_t trainers[] = {
+struct train_data trainers[] = {
                        { 2506, TSTR, 0 },
                        { 4255, TBOD, 0 },
                        { 60500, TBOD | TQUI | TSTR | TCHA | TINT | TWIL, 1 },
@@ -34,7 +34,7 @@ train_t trainers[] = {
 /* order: vnum, skill1, skill2, skill3, skill4, skill5, learn message, level  */
 /* if they teach < 5 skills, put a 0 in the remaining skill slots    */
 /* available levels are NEWBIE (4), AMATEUR (6/7), and ADVANCED (10/11)   */
-teach_t metamagict[] = { 
+struct teach_data metamagict[] = { 
                        { 24806, { META_REFLECTING, META_CLEANSING, 0, 0, 0, 0, 0, 0 }, "", 0 },
                          { 4250, { META_ANCHORING, META_QUICKENING, 0, 0, 0, 0, 0, 0 }, "", 0 },
                          { 4251, { META_ANCHORING, META_POSSESSING, 0, 0, 0, 0, 0, 0 }, "", 0 },
@@ -44,7 +44,7 @@ teach_t metamagict[] = {
                          { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "", 0}
                        };
 
-teach_t teachers[] = {
+struct teach_data teachers[] = {
                        { 1001, { SKILL_BR_EDGED, SKILL_BR_POLEARM, SKILL_BR_CLUB, SKILL_BR_THROWINGWEAPONS, SKILL_BR_WHIPS, 
                          SKILL_BR_PROJECTILES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do "
                          "your job safer.\r\n", AMATEUR },
@@ -204,7 +204,7 @@ teach_t teachers[] = {
   { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Report this bug!\r\n", 0 } // this MUST be last
 };
 
-adept_t adepts[] = {
+struct adept_data adepts[] = {
                      { 10011,{ 0, 1, 50, 1, 1, 50, 1, 1, 1, 50, 50, 50, 50, 50, 50, 50, 50, 1, 1, 1, 50, 50, 50, 50, 50, 1, 1, 50, 50, 50, 50, 50, 1, 50, 1, 1, 1, 1, 50, 50, 50, 50}, 0 },
                      { 60507,{ 0, 1, 3, 1, 1, 4, 1, 1, 1, 3, 6, 6, 6, 6, 6, 6, 3, 1, 1, 1, 3, 10, 3, 3, 3, 1, 1, 6, 6, 6, 6, 6, 1, 3, 1, 1, 1, 1, 3, 6, 3, 3}, 1 },
                      { 7223, { 0, 1, 3, 0, 1, 4, 1, 0, 0, 3, 0, 6, 0, 0, 6, 0, 6, 0, 0, 0, 0, 10, 0, 0, 6, 1, 1, 2, 0, 6, 0, 0, 0, 0, 0, 0, 1, 0, 3, 6, 1, 6}, 0 },
@@ -214,7 +214,7 @@ adept_t adepts[] = {
                      { 0, { 0, 0, 0, 0 }, 0 } // this MUST be last
                    };
 
-spell_t spelltrainers[] = {
+struct spell_trainer spelltrainers[] = {
   /*
 //  { 60508, SPELL_DETECTLIFE, "Detect Life", 0, 6},
   { 60508, SPELL_ARMOUR, "Armour", 0, 6},

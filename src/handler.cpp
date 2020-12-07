@@ -522,6 +522,9 @@ void affect_total(struct char_data * ch)
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
+      
+  int old_max_hacking = GET_MAX_HACKING(ch);
+  int old_rem_hacking = GET_REM_HACKING(ch);
   ch->aff_abils = ch->real_abils;
   
   /* calculate reaction before you add eq, cyberware, etc so that things *
@@ -913,6 +916,11 @@ void affect_total(struct char_data * ch)
     if (GET_HACKING(ch) < 0)
       GET_HACKING(ch) = 0;
   }
+  
+  // Restore their max_hacking and rem_hacking, which were wiped out in the earlier aff_abils = real_abils.
+  GET_REM_HACKING(ch) = old_rem_hacking;
+  GET_MAX_HACKING(ch) = MIN(old_max_hacking, (int)(GET_HACKING(ch) / 3));
+  
   if (has_mbw) {
     GET_QUI(ch) += has_mbw;
     GET_REA(ch) += has_mbw * 2;

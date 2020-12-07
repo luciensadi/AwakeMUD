@@ -30,11 +30,11 @@
 extern struct time_info_data time_info;
 extern struct weather_data weather_info;
 extern int return_general(int skill_num);
-extern train_t trainers[];
-extern teach_t teachers[];
-extern teach_t metamagict[];
-extern adept_t adepts[];
-extern spell_t spelltrainers[];
+extern struct train_data trainers[];
+extern struct teach_data teachers[];
+extern struct teach_data metamagict[];
+extern struct adept_data adepts[];
+extern struct spell_trainer spelltrainers[];
 /* extern functions */
 void add_follower(struct char_data * ch, struct char_data * leader);
 extern void docwagon(struct char_data *ch);

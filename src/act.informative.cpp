@@ -67,7 +67,7 @@ extern SPECIAL(landlord_spec);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 
-extern teach_t teachers[];
+extern struct teach_data teachers[];
 
 extern struct elevator_data *elevator;
 extern int num_elevators;

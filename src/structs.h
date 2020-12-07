@@ -260,40 +260,36 @@ struct spell_types
   sh_int draindamage;
 };
 
-typedef struct train_data
+struct train_data
 {
   vnum_t vnum;
   int attribs;
   byte is_newbie;
-}
-train_t;
+};
 
-typedef struct teach_data
+struct teach_data
 {
   vnum_t vnum;
   sh_int s[NUM_TEACHER_SKILLS];
   const char *msg;
   sh_int type;
-}
-teach_t;
+};
 
-typedef struct adept_data
+struct adept_data
 {
   vnum_t vnum;
   sh_int skills[ADEPT_NUMPOWER];
   byte is_newbie;
-}
-adept_t;
+};
 
-typedef struct spell_trainer
+struct spell_trainer
 {
   vnum_t teacher;
   int type;
   char name[120];
   int subtype;
   int force;
-}
-spell_t;
+};
 
 /* memory structure for characters */
 struct memory_rec_struct
