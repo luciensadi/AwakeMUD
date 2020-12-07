@@ -3247,8 +3247,32 @@ void reset_zone(int zone, int reboot)
         }
         if (obj != obj_to)
           obj_to_obj(obj, obj_to);
-        if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER)
-          GET_OBJ_VAL(obj_to, 3) = 1;
+        if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER) {
+          GET_HOLSTER_READY_STATUS(obj_to) = 1;
+          
+          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
+            // Make sure it's loaded.
+            struct obj_data *magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
+            GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(obj);
+            GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(obj);
+            snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
+            DELETE_ARRAY_IF_EXTANT(magazine->restring);
+            magazine->restring = strdup(buf);
+            obj_to_obj(magazine, obj);
+            
+            // Set the firemode.
+            if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF)) {
+              GET_WEAPON_FIREMODE(obj) = MODE_BF;
+            } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_FA)) {
+              GET_WEAPON_FIREMODE(obj) = MODE_FA;
+              GET_OBJ_TIMER(obj) = 10;
+            } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SA)) {
+              GET_WEAPON_FIREMODE(obj) = MODE_SA;
+            } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SS)) {
+              GET_WEAPON_FIREMODE(obj) = MODE_SS;
+            }
+          }
+        }
         if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
           GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
         last_cmd = 1;
