@@ -906,9 +906,10 @@ ACMD(do_subscribe)
   if (!*argument) {
     if (ch->char_specials.subscribe) {
       send_to_char("Your subscriber list contains:\r\n", ch);
+      struct room_data *room;
       for (veh = ch->char_specials.subscribe; veh; veh = veh->next_sub) {
         snprintf(buf, sizeof(buf), "%2d) %-30s (At %s^n) [%2d/10] Damage\r\n", i, GET_VEH_NAME(veh),
-                get_veh_in_room(veh)->name, veh->damage);
+                (room = get_veh_in_room(veh)) ? room->name : "someone's tow rig, probably", veh->damage);
         send_to_char(buf, ch);
         i++;
       }
@@ -1823,8 +1824,10 @@ ACMD(do_tow)
     send_to_char(ch, "You release %s from your towing equipment.\r\n", GET_VEH_NAME(veh->towing));
     
     if (ch->in_veh->in_room) {
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+      if (ch->in_veh->in_room->people) {
+        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
+        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+      }
       veh_to_room(veh->towing, veh->in_room);
       veh->towing = NULL;
     } else if (ch->in_veh->in_veh){
@@ -1864,8 +1867,10 @@ ACMD(do_tow)
     strcpy(buf3, GET_VEH_NAME(veh));
     snprintf(buf, sizeof(buf), "%s picks up %s with its towing equipment.\r\n", buf3, GET_VEH_NAME(tveh));
     if (ch->in_veh->in_room) {
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+      if (ch->in_veh->in_room->people) {
+        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
+        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+      }
     } else if (ch->in_veh->in_veh){
       send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
     } else {

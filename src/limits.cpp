@@ -784,6 +784,29 @@ bool veh_is_in_junkyard(struct veh_data *veh) {
   return FALSE;
 }
 
+bool should_save_this_vehicle(struct veh_data *veh, bool even_if_destroyed) {
+  // Must be a PC vehicle. We specifically don't check for PC exist-- that's handled in LOADING, not saving.
+  if (veh->owner <= 0)
+    return FALSE;
+    
+  // If it's thrashed, it must be in the proper location.
+  if (!even_if_destroyed && veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+    // It was in the Junkyard and nobody came to fix it.
+    if (veh_is_in_junkyard(veh))
+      return FALSE;
+    
+    // It's being taken care of.
+    if (veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))
+      return TRUE;
+      
+    // It's towed.
+    if (!veh->in_veh && !veh->in_room)
+      return TRUE;
+  }
+  
+  return FALSE;
+}
+
 void save_vehicles(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -796,22 +819,24 @@ void save_vehicles(void)
   int num_veh = 0;
   bool found;
   for (veh = veh_list; veh; veh = veh->next)
-    if ((veh->owner > 0 && (veh->damage < VEH_DAM_THRESHOLD_DESTROYED || !veh_is_in_junkyard(veh) || veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))) && (does_player_exist(veh->owner)))
+    if (should_save_this_vehicle(veh, FALSE))
       num_veh++;
   
+  // Write the count of vehicles to the file.
   if (!(fl = fopen("veh/vfile", "w"))) {
     mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
     return;
   }
   fprintf(fl, "%d\n", num_veh);
   fclose(fl);
+  
   for (veh = veh_list, v = 0; veh && v < num_veh; veh = veh->next) {
-    // Skip NPC-owned vehicles and world vehicles.
-    if (veh->owner < 1)
+    // Skip disqualified vehicles.
+    if (!should_save_this_vehicle(veh, TRUE))
       continue;
     
     bool send_veh_to_junkyard = FALSE;
-    if ((veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
+    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
       // If the vehicle is wrecked and is in neither a containing vehicle nor a garage...
       if (veh_is_in_junkyard(veh)) {
         // If it's already in the junkyard, we don't save it-- they should have come and fixed it.
@@ -881,7 +906,13 @@ void save_vehicles(void)
     } else {
       // If veh is not in a garage (or the owner is not allowed to enter the house anymore), send it to a garage.
       temp_room = get_veh_in_room(veh);
-      if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) || (ROOM_FLAGGED(temp_room, ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, temp_room->number))) {
+      
+      // No temp room means it's towed. Yolo it into the Seattle garage.
+      if (!temp_room)
+        temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
+
+      // Otherwise, derive the garage from its location.
+      else if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) || (ROOM_FLAGGED(temp_room, ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, temp_room->number))) {
         switch (GET_JURISDICTION(veh->in_room)) {
           case ZONE_PORTLAND:
             switch (number(0, 2)) {

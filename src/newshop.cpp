@@ -1044,7 +1044,7 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     return FALSE;
   }
   
-  send_to_char(ch, "^yProbing shopkeeper's %s...^n\r\n", GET_OBJ_NAME(obj));
+  send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_OBJ_NAME(obj));
   do_probe_object(ch, obj);
   return TRUE;
   
