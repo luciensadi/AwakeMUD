@@ -770,7 +770,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     GET_NUYEN(ch) += sellprice;
   else
     GET_OBJ_VAL(cred, 0) += sellprice;
-  snprintf(buf3, sizeof(buf3), "%s sold %s at %s (%ld) for %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
+  snprintf(buf3, sizeof(buf3), "%s sold %s^g at %s^g (%ld) for %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
   mudlog(buf3, ch, LOG_GRIDLOG, TRUE);
   
   // Write the nuyen cost to buf3 and the current buy-string to arg.

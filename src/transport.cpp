@@ -413,11 +413,14 @@ ACMD(do_hail)
     } else {
       portland = FALSE;
     }
-  } else {
-    if (ch->in_room->sector_type != SPIRIT_CITY
-        || !empty 
-        || ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-      send_to_char("There don't seem to be any cabs in the area.\r\n", ch);
+  }
+  else {
+    // Cabs can always be caught from the freeway. Realistic? Nah, but keeps people from being stranded.
+    if (!ROOM_FLAGGED(ch->in_room, ROOM_FREEWAY)
+        && (ch->in_room->sector_type != SPIRIT_CITY
+            || !empty 
+            || ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
+      send_to_char("This isn't really the kind of place that cabs frequent.\r\n", ch);
       return;
     }
 
@@ -439,6 +442,7 @@ ACMD(do_hail)
     case 45:
     case 49:
     case 74:
+    case 81:
     case 91:
     case 143:
     case 194:
@@ -460,9 +464,21 @@ ACMD(do_hail)
       portland = TRUE;
       break;
     default:
-      /* Cab doesn't service the area */
-      send_to_char("There don't seem to be any cabs in the area.\r\n",ch);
-      return;
+      // Someone fucked up.
+      if (ROOM_FLAGGED(ch->in_room, ROOM_FREEWAY)) {
+        snprintf(buf, sizeof(buf), "WARNING: Freeway room '%s' (%ld) is not supported in cab switch statement! Defaulting to Seattle.",
+                 GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        portland = FALSE;
+      } else {
+        /* Cab doesn't service the area */
+        send_to_char("There don't seem to be any cabs in the area.\r\n",ch);
+        snprintf(buf, sizeof(buf), "Cab expansion opportunity: Called in '%s' (%ld) of zone '%s' (%d), which is not supported in cab switch.",
+                 GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room),
+                 zone_table[ch->in_room->zone].name, zone_table[ch->in_room->zone].number);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
     }
 
     if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
