@@ -4449,6 +4449,7 @@ void purge_unowned_vehs() {
   }
 }
 
+// aka load_vehs, veh_load, and everything else I keep searching for it by --LS
 void load_saved_veh()
 {
   FILE *fl;
@@ -4470,8 +4471,10 @@ void load_saved_veh()
   for (int i = 0; i < num_veh; i++) {
     File file;
     snprintf(buf, sizeof(buf), "veh/%07d", i);
-    if (!(file.Open(buf, "r")))
+    if (!(file.Open(buf, "r"))) {
+      log_vfprintf("Warning: Unable to open vehfile %s for reading. Skipping.", buf);
       continue;
+    }
 
     VTable data;
     data.Parse(&file);
@@ -4641,6 +4644,7 @@ void load_saved_veh()
           snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no room was found! Dumping to Seattle Garage (%ld).\r\n",
                   veh->name, veh->veh_number, veh_room);
         }
+        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
         veh->spare2 = 0;
         veh_to_room(veh, &world[real_room(veh_room)]);
       }

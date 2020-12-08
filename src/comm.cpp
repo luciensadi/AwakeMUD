@@ -344,6 +344,34 @@ void copyover_recover()
   }
   fclose (fp);
   
+  // Regenerate everyone's subscriber lists.
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+    if (!veh->sub)
+      continue;
+    
+    for (struct char_data *i = character_list; i; i = i->next) {
+      if (GET_IDNUM(i) != veh->owner)
+        continue;
+        
+      struct veh_data *f = NULL;
+      for (f = i->char_specials.subscribe; f; f = f->next_sub)
+        if (f == veh)
+          break;
+          
+      if (!f) {
+        veh->next_sub = i->char_specials.subscribe;
+        
+        // Doubly link it into the list.
+        if (i->char_specials.subscribe)
+          i->char_specials.subscribe->prev_sub = veh;
+          
+        i->char_specials.subscribe = veh;
+      }
+      
+      break;
+    }
+  }
+  
   // Force all player characters to look now that everyone's properly loaded.
   struct char_data *plr = character_list;
   while (plr) {

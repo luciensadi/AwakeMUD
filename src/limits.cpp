@@ -784,13 +784,16 @@ bool veh_is_in_junkyard(struct veh_data *veh) {
   return FALSE;
 }
 
-bool should_save_this_vehicle(struct veh_data *veh, bool even_if_destroyed) {
+bool should_save_this_vehicle(struct veh_data *veh) {
   // Must be a PC vehicle. We specifically don't check for PC exist-- that's handled in LOADING, not saving.
   if (veh->owner <= 0)
     return FALSE;
     
+  /* log_vfprintf("Evaluating save info for PC veh '%s' at '%ld' (damage %d/10)",
+               GET_VEH_NAME(veh), get_veh_in_room(veh) ? get_veh_in_room(veh)->number : -1, veh->damage); */
+    
   // If it's thrashed, it must be in the proper location.
-  if (!even_if_destroyed && veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+  if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     // It was in the Junkyard and nobody came to fix it.
     if (veh_is_in_junkyard(veh))
       return FALSE;
@@ -804,7 +807,7 @@ bool should_save_this_vehicle(struct veh_data *veh, bool even_if_destroyed) {
       return TRUE;
   }
   
-  return FALSE;
+  return TRUE;
 }
 
 void save_vehicles(void)
@@ -813,14 +816,16 @@ void save_vehicles(void)
   struct veh_data *veh;
   FILE *fl;
   struct char_data *i;
-  long v;
+  int v;
   struct room_data *temp_room = NULL;
   struct obj_data *obj;
   int num_veh = 0;
-  bool found;
+  
   for (veh = veh_list; veh; veh = veh->next)
-    if (should_save_this_vehicle(veh, FALSE))
+    if (should_save_this_vehicle(veh))
       num_veh++;
+      
+  // log_vfprintf("We have %d vehicles to save.", num_veh);
   
   // Write the count of vehicles to the file.
   if (!(fl = fopen("veh/vfile", "w"))) {
@@ -830,9 +835,9 @@ void save_vehicles(void)
   fprintf(fl, "%d\n", num_veh);
   fclose(fl);
   
-  for (veh = veh_list, v = 0; veh && v < num_veh; veh = veh->next) {
+  for (veh = veh_list, v = 0; veh; veh = veh->next) {
     // Skip disqualified vehicles.
-    if (!should_save_this_vehicle(veh, TRUE))
+    if (veh->owner <= 0)
       continue;
     
     bool send_veh_to_junkyard = FALSE;
@@ -854,7 +859,7 @@ void save_vehicles(void)
     }
      */
     
-    snprintf(buf, sizeof(buf), "veh/%07ld", v);
+    snprintf(buf, sizeof(buf), "veh/%07d", v);
     v++;
     if (!(fl = fopen(buf, "w"))) {
       mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
@@ -864,11 +869,11 @@ void save_vehicles(void)
     if (veh->sub)
       for (i = character_list; i; i = i->next)
         if (GET_IDNUM(i) == veh->owner) {
-          found = FALSE;
-          for (struct veh_data *f = i->char_specials.subscribe; f; f = f->next_sub)
+          struct veh_data *f = NULL;
+          for (f = i->char_specials.subscribe; f; f = f->next_sub)
             if (f == veh)
-              found = TRUE;
-          if (!found) {
+              break;
+          if (!f) {
             veh->next_sub = i->char_specials.subscribe;
             
             // Doubly link it into the list.
@@ -908,11 +913,20 @@ void save_vehicles(void)
       temp_room = get_veh_in_room(veh);
       
       // No temp room means it's towed. Yolo it into the Seattle garage.
-      if (!temp_room)
+      if (!temp_room) {
+        snprintf(buf, sizeof(buf), "Falling back to Seattle garage for non-veh, non-room veh %s.", GET_VEH_NAME(veh));
+        log(buf);
         temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
+      }
 
       // Otherwise, derive the garage from its location.
-      else if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) || (ROOM_FLAGGED(temp_room, ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, temp_room->number))) {
+      else if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) 
+               || (ROOM_FLAGGED(temp_room, ROOM_HOUSE) 
+                   && !House_can_enter_by_idnum(veh->owner, temp_room->number))) {
+       snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).", 
+                GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room)
+              );
+       log(buf);
         switch (GET_JURISDICTION(veh->in_room)) {
           case ZONE_PORTLAND:
             switch (number(0, 2)) {
@@ -1025,6 +1039,11 @@ void save_vehicles(void)
       fprintf(fl, "\t\tRoom:\t%ld\n", grid->room);
     }
     fclose(fl);
+  }
+  
+  if (v != num_veh) {
+    snprintf(buf, sizeof(buf), "SYSERR: LOST VEHICLES: %d != %d in save_vehicles, so some vehicles ARE NOT SAVED.", v, num_veh);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   }
   
   // Update paydata markets. Why this is here, IDK.

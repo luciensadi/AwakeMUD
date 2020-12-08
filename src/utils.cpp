@@ -1870,21 +1870,22 @@ void terminate_mud_process_with_message(const char *message, int error_code) {
 }
 
 struct room_data *get_veh_in_room(struct veh_data *veh) {
-  char errbuf[500];
   if (!veh) {
-    snprintf(errbuf, sizeof(errbuf), "SYSERR: get_veh_in_room was passed a NULL vehicle!");
-    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+    mudlog("SYSERR: get_veh_in_room was passed a NULL vehicle!", NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
   
   while (veh->in_veh)
     veh = veh->in_veh;
   
+  /*  This is not precisely an error case-- it just means the vehicle is being towed. -- LS. 
   if (!veh->in_room) {
-    // This is not precisely an error case-- it just means the vehicle is being towed. -- LS.
-    /* sprintf(errbuf, "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
-    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE); */
+    char errbuf[500];
+    sprintf(errbuf, "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE); 
+    
   }
+  */
   
   return veh->in_room;
 }
