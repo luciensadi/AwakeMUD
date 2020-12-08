@@ -1808,15 +1808,30 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_WEAPON:
       // Ranged weapons first.
       if (IS_GUN(GET_OBJ_VAL((j), 3))) {
+        int burst_count = 0;
         if (GET_OBJ_VAL(j, 5) > 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
-                  GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
-                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire.",
+                  GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name);
         } else {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
-                  AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
-                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire.",
+                  AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name);
         }
+        // Damage code.
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its base damage code is ^c%d%s%s^n",
+                 GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+        
+        // Burst fire?
+        if (GET_WEAPON_FIREMODE(j) == MODE_BF || GET_WEAPON_FIREMODE(j) == MODE_FA) {
+          burst_count = GET_WEAPON_FIREMODE(j) == MODE_BF ? 3 : GET_WEAPON_FULL_AUTO_COUNT(j);
+          
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", raised to ^c%d%s%s^n by its current fire mode.",
+                   GET_WEAPON_POWER(j) + burst_count,
+                   wound_arr[MIN(DEADLY, GET_WEAPON_DAMAGE_CODE(j) + (int)(burst_count / 3))],
+                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+        } else {
+          strncat(buf, ".", sizeof(buf) - strlen(buf) - 1);
+        }
+        
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
@@ -1824,6 +1839,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         }
         
         // Info about attachments, if any.
+        int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(j);
+        int prone_recoil_comp = 0;
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
           if (GET_OBJ_VAL(j, i) > 0
               && real_object(GET_OBJ_VAL(j, i)) > 0
@@ -1857,10 +1874,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               case ACCESS_GASVENT:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA gas vent installed in the %s provides ^c%d^n round%s worth of recoil compensation.",
                         gun_accessory_locations[mount_location], -GET_OBJ_VAL(access, 2), -GET_OBJ_VAL(access, 2) > 1 ? "s'" : "'s");
+                standing_recoil_comp -= GET_OBJ_VAL(access, 2);
                 break;
               case ACCESS_SHOCKPAD:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA shock pad installed on the %s provides ^c1^n round's worth of recoil compensation.",
                         gun_accessory_locations[mount_location]);
+                standing_recoil_comp++;
                 break;
               case ACCESS_SILENCER:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe silencer installed on the %s will muffle this weapon's report.",
@@ -1876,10 +1895,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               case ACCESS_BIPOD:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA bipod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
                         gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_BIPOD, RECOIL_COMP_VALUE_BIPOD > 1 ? "s'" : "'s");
+                prone_recoil_comp += RECOIL_COMP_VALUE_BIPOD;
                 break;
               case ACCESS_TRIPOD:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA tripod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
                         gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_TRIPOD, RECOIL_COMP_VALUE_TRIPOD > 1 ? "s'" : "'s");
+                prone_recoil_comp += RECOIL_COMP_VALUE_TRIPOD;
                 break;
               case ACCESS_BAYONET:
                 if (mount_location != ACCESS_LOCATION_UNDER) {
@@ -1906,6 +1927,19 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             }
           }
         }
+        
+        // Do we require more recoil comp than is currently attached?
+        if (burst_count > 0 && burst_count - standing_recoil_comp > 0) {
+          strncat(buf, "\r\n\r\n^yIt doesn't have enough recoil compensation", sizeof(buf) - strlen(buf) - 1);
+          if (burst_count - standing_recoil_comp - prone_recoil_comp <= 0) {
+            strncat(buf, " unless fired from prone", sizeof(buf) - strlen(buf) - 1);
+          } else if (prone_recoil_comp > 0){
+            strncat(buf, " even when fired from prone", sizeof(buf) - strlen(buf) - 1);
+          }
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ".^n\r\nStanding recoil penalty: ^c%d^n.  Prone recoil penalty: ^c%d^n.",
+                   burst_count - standing_recoil_comp, MAX(0, burst_count - standing_recoil_comp - prone_recoil_comp));
+        }
+        
       }
       // Melee weapons.
       else {
