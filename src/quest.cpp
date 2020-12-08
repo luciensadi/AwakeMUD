@@ -1326,7 +1326,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
     switch (QUEST->obj[i].load) {
     case QUEST_NONE:
-      strcat(buf, "Not set");
+      strcat(buf, "Load nothing");
       break;
     case QOL_JOHNSON:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Give %ld to Johnson", QUEST->obj[i].vnum);
@@ -1461,14 +1461,20 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
               ((float)QUEST->mob[i].karma / 100), QUEST->mob[i].o_data);
       break;
     case QMO_KILL_ONE:
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
-              "killing target\r\n", QUEST->mob[i].nuyen,
-              ((float)QUEST->mob[i].karma / 100));
+            if (real_mobile(QUEST->mob[i].vnum) >= 0)
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
+                "killing target '%s' (%ld)\r\n", QUEST->mob[i].nuyen,
+                ((float)QUEST->mob[i].karma / 100),
+                GET_CHAR_NAME(&mob_proto[real_mobile(QUEST->mob[i].vnum)]),
+                QUEST->mob[i].vnum);
       break;
     case QMO_KILL_MANY:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
-              "each target killed\r\n", QUEST->mob[i].nuyen,
-              ((float)QUEST->mob[i].karma / 100));
+            if (real_mobile(QUEST->mob[i].vnum) >= 0)
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
+                "each target '%s' (%ld) killed\r\n", QUEST->mob[i].nuyen,
+                ((float)QUEST->mob[i].karma / 100),
+                GET_CHAR_NAME(&mob_proto[real_mobile(QUEST->mob[i].vnum)]),
+                QUEST->mob[i].vnum);
       break;
     case QMO_KILL_ESCORTEE:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Target hunts M%d \r\n",
