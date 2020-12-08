@@ -39,6 +39,9 @@
 #define TAXI_DEST_TYPE_OTHER                      8
 #define NUM_TAXI_DEST_TYPES                       9
 
+// Define to collapse validation logic for destinations. Input is an integer index in the destination list.
+#define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_connected_zone((dest_list)[(destination)].vnum))
+
 struct taxi_dest_type
 {
   const char *title_string;

@@ -205,9 +205,6 @@ int process_elevator(struct room_data *room,
 // Taxi
 // ____________________________________________________________________________
 
-// Define to collapse validation logic for destinations. Input is an integer index in the destination list.
-#define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_connected_zone((dest_list)[(destination)].vnum))
-
 // Taxi sign: If you look at it, it prints a dynamic description instead of the hardcoded one.
 SPECIAL(taxi_sign) {
   struct obj_data *obj = (struct obj_data *) me;

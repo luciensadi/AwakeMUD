@@ -25,8 +25,11 @@
 #include "pocketsec.h"
 #include "limits.h"
 #include "config.h"
+#include "transport.h"
 
 /*   external vars  */
+ACMD_DECLARE(do_goto);
+extern struct dest_data taxi_destinations[];
 extern struct time_info_data time_info;
 extern struct weather_data weather_info;
 extern int return_general(int skill_num);
@@ -5373,11 +5376,31 @@ SPECIAL(airport_guard)
 
 // Give to morts for testing combat so staff don't have to restore them all the time.
 SPECIAL(restoration_button) {  
-  if (cmd && CMD_IS("restore")) {
+  if (!cmd)
+    return FALSE;
+    
+  if (CMD_IS("restore")) {
     restore_character(ch, FALSE);
     send_to_char("You use the cheat button to self-restore, enabling further testing.\r\n", ch);
     mudlog("Self-restore button used.", ch, LOG_CHEATLOG, TRUE);
     return TRUE;
   }
+  
+  if (CMD_IS("jump")) {
+    for (int dest = 0; *(taxi_destinations[dest].keyword) != '\n'; dest++) {
+      // Skip invalid destinations.
+      if (!DEST_IS_VALID(dest, taxi_destinations))
+        continue;
+      
+      if ( str_str((const char *)argument, taxi_destinations[dest].keyword)) {
+        snprintf(buf, sizeof(buf), "%ld", taxi_destinations[dest].vnum);
+        do_goto(ch, buf, 0, 0);
+        return TRUE;
+      }
+    }
+    send_to_char(ch, "'%s' is not a valid location. You can jump to anywhere that has a taxi stop (ex: jump afterlife).\r\n", argument);
+    return TRUE;
+  }
+  
   return FALSE;
 }

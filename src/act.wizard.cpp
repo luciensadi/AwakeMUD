@@ -85,6 +85,11 @@ extern void nonsensical_reply(struct char_data *ch);
 extern struct elevator_data *elevator;
 extern int num_elevators;
 
+
+ACMD_DECLARE(do_goto);
+extern struct dest_data taxi_destinations[];
+extern struct dest_data port_destinations[];
+
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
 
@@ -577,6 +582,32 @@ ACMD(do_goto)
 
   // Look for either a target room or someone standing in a room.
   location = find_target_room(ch, buf);
+  
+  // Look for taxi destinations - Seattle.
+  if (!location) {    
+    // Seattle taxi destinations, including deactivated and invalid ones.
+    for (int dest = 0; *(taxi_destinations[dest].keyword) != '\n'; dest++) {
+      if (str_str((const char*) buf, taxi_destinations[dest].keyword)) {
+        int rnum = real_room(taxi_destinations[dest].vnum);
+        if (rnum >= 0)
+          location = &world[rnum];
+        break;
+      }
+    }
+  }
+  
+  // Look for taxi destinations - Portland.
+  if (!location) {
+    // Portland taxi destinations, including deactivated and invalid ones.
+    for (int dest = 0; *(port_destinations[dest].keyword) != '\n'; dest++) {
+      if (str_str((const char*) buf, port_destinations[dest].keyword)) {
+        int rnum = real_room(port_destinations[dest].vnum);
+        if (rnum >= 0)
+          location = &world[rnum];
+        break;
+      }
+    }
+  }
   
   // We found no target in a room-- look for one in a veh.
   if (!location) {
