@@ -1823,18 +1823,18 @@ ACMD(do_tow)
     snprintf(buf, sizeof(buf), "%s releases %s from its towing equipment.\r\n", buf3, GET_VEH_NAME(veh->towing));
     send_to_char(ch, "You release %s from your towing equipment.\r\n", GET_VEH_NAME(veh->towing));
     
-    if (ch->in_veh->in_room) {
-      if (ch->in_veh->in_room->people) {
-        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
-        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+    if (veh->in_room) {
+      if (veh->in_room->people) {
+        act(buf, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
+        act(buf, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
       }
       veh_to_room(veh->towing, veh->in_room);
       veh->towing = NULL;
-    } else if (ch->in_veh->in_veh){
-      send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+    } else if (veh->in_veh){
+      send_to_veh(buf, veh->in_veh, ch, TRUE);
       veh_to_veh(veh->towing, veh->in_veh);
     } else {
-      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(veh), veh->idnum);
       send_to_char("The game system encountered an error. Tow not released.\r\n", ch);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return;
@@ -1866,15 +1866,15 @@ ACMD(do_tow)
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));
     strcpy(buf3, GET_VEH_NAME(veh));
     snprintf(buf, sizeof(buf), "%s picks up %s with its towing equipment.\r\n", buf3, GET_VEH_NAME(tveh));
-    if (ch->in_veh->in_room) {
-      if (ch->in_veh->in_room->people) {
-        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
-        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+    if (veh->in_room) {
+      if (veh->in_room->people) {
+        act(buf, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
+        act(buf, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
       }
-    } else if (ch->in_veh->in_veh){
-      send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+    } else if (veh->in_veh){
+      send_to_veh(buf, veh->in_veh, ch, TRUE);
     } else {
-      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(veh), veh->idnum);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
     veh->towing = tveh;
