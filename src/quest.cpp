@@ -673,7 +673,6 @@ SPECIAL(johnson)
         new_quest(johnson);
         GET_SPARE1(johnson) = -1;
       } else if (GET_QUEST(temp)) {
-        do_say(johnson, buf, 0, 0);
         handle_info(johnson);
       } else {
         do_say(johnson, buf, 0, 0);
