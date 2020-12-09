@@ -465,10 +465,15 @@ SPECIAL(nerp_skills_teacher) {
   }
   
   // Negate any skill in our array that is taught elsewhere in the game.
-  for (int ind = 0; teachers[ind].vnum != 0; ind++)
+  for (int ind = 0; teachers[ind].vnum != 0; ind++) {
+    // Skip Sombrero teachers-- they have NERP skills.
+    if (teachers[ind].vnum >= 1000 && teachers[ind].vnum <= 1099)
+      continue;
+    
     for (int skill_index = 0; skill_index < NUM_TEACHER_SKILLS; skill_index++)
       if (teachers[ind].s[skill_index] > 0)
         can_teach_skill[teachers[ind].s[skill_index]] = FALSE;
+  }
   
   skip_spaces(&argument);
   
