@@ -351,7 +351,7 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
         break;
       case QOO_RETURN_PAY:
         if (GET_MOB_SPEC(mob) && GET_MOB_SPEC(mob) == johnson && memory(mob, ch)) {
-          if (GET_OBJ_VAL(obj, 3) == quest_table[GET_QUEST(ch)].obj[i].o_data)
+          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].o_data)
             ch->player_specials->obj_complete[i] = 1;
           return TRUE;
         }
@@ -1653,9 +1653,9 @@ void qedit_disp_menu(struct descriptor_data *d)
                QUEST->done, CCNRM(CH, C_CMP));
 
   if (access_level(CH, LVL_VICEPRES))
-    send_to_char(CH, "h) Reward: %s%d%s (%s%s%s)\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "h) Item Reward: %s%d%s (%s%s%s)\r\n", CCCYN(CH, C_CMP),
                  QUEST->reward, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
-                 real_object(QUEST->reward) < 0 ? "null" :
+                 real_object(QUEST->reward) <= 0 ? "no item reward" :
                  obj_proto[real_object(QUEST->reward)].text.name,
                  CCNRM(CH, C_CMP));
   send_to_char("q) Quit and save\r\n", CH);
@@ -1820,7 +1820,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       if (!access_level(CH, LVL_VICEPRES))
         qedit_disp_menu(d);
       else {
-        send_to_char("Enter vnum of reward: ", CH);
+        send_to_char("Enter vnum of reward (-1 for nothing): ", CH);
         d->edit_mode = QEDIT_REWARD;
       }
       break;
@@ -2064,7 +2064,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       if (QUEST->num_objs < QMAX_OBJS) {
         d->edit_number2 = QUEST->num_objs;
         QUEST->num_objs++;
-        send_to_char("Enter vnum of item: ", CH);
+        send_to_char("Enter vnum of item (0 for nothing): ", CH);
         d->edit_mode = QEDIT_O_VNUM;
       } else {
         CLS(CH);
@@ -2089,13 +2089,13 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     } else {
       d->edit_number2 = number;
       d->edit_mode = QEDIT_O_VNUM;
-      send_to_char("Enter vnum of item: ", CH);
+      send_to_char("Enter vnum of item (0 for nothing): ", CH);
     }
     break;
   case QEDIT_O_VNUM:
     number = atoi(arg);
-    if (real_object(number) < 0)
-      send_to_char("No such item.  Enter vnum of item: ", CH);
+    if (number != 0 && real_object(number) < 0)
+      send_to_char("No such item.  Enter vnum of item (0 for nothing): ", CH);
     else {
       QUEST->obj[d->edit_number2].vnum = number;
       d->edit_mode = QEDIT_O_NUYEN;
@@ -2324,8 +2324,8 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     break;               // we should never get here
   case QEDIT_REWARD:
     number = atoi(arg);
-    if (real_object(number) < 0)
-      send_to_char(CH, "Invalid vnum.  Enter vnum of reward: ");
+    if (real_object(number) < -1)
+      send_to_char(CH, "Invalid vnum.  Enter vnum of reward (-1 for nothing): ");
     else {
       QUEST->reward = number;
       qedit_disp_menu(d);

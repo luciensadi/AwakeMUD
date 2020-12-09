@@ -3087,8 +3087,7 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
             zone_table[zone].name);
     for (i = 0; i < color; i++)
       strcat(bufptr, " ");
-    snprintf(bufptr, buf_size - strlen(bufptr), "%s%sAge: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
-            bufptr,
+    snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%sAge: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
             zone_table[zone].connected ? "* " : "  ",
             zone_table[zone].age, zone_table[zone].lifespan,
             zone_table[zone].reset_mode, zone_table[zone].top,
