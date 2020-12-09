@@ -608,6 +608,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER)) || (type) == WEAP_REVOLVER)
 
+// Give this a weapon type straight from the weapon-- ex WEAP_SMG. It will convert it for you.
+#define GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon_type, ammo_type) ((ch)->bullet_pants[(weapon_type) - START_OF_AMMO_USING_WEAPONS][(ammo_type)])
+
 
 /* compound utilities and other macros **********************************/
 
