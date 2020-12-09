@@ -388,6 +388,8 @@ void ASSIGNMOB(long mob, SPECIAL(fname))
   long rnum;
 
   if ((rnum = real_mobile(mob)) >= 0) {
+    if (mob_index[rnum].sfunc)
+      log_vfprintf("SYSERR: Assigning too many specs to mob #%d.", mob);
     mob_index[rnum].sfunc = mob_index[rnum].func;
     mob_index[rnum].func = fname;
   } else

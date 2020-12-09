@@ -334,11 +334,11 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
   int i;
 
   for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
-    if (quest_table[GET_QUEST(ch)].obj[i].vnum == vnum)
+    if (quest_table[GET_QUEST(ch)].obj[i].vnum == vnum) {
       switch (quest_table[GET_QUEST(ch)].obj[i].objective)
       {
       case QOO_JOHNSON:
-        if (GET_MOB_SPEC(mob) && GET_MOB_SPEC(mob) == johnson && memory(mob, ch)) {
+        if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
           ch->player_specials->obj_complete[i] = 1;
           return TRUE;
         }
@@ -350,13 +350,14 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
         }
         break;
       case QOO_RETURN_PAY:
-        if (GET_MOB_SPEC(mob) && GET_MOB_SPEC(mob) == johnson && memory(mob, ch)) {
+        if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
           if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].o_data) {
             ch->player_specials->obj_complete[i] = 1;
             return TRUE;
           }
         }
       }
+    }
   return FALSE;
 }
 
@@ -1030,7 +1031,7 @@ void assign_johnsons(void)
     if ((rnum = real_mobile(quest_table[i].johnson)) < 0)
       log_vfprintf("Johnson #%d does not exist (quest #%d)",
           quest_table[i].johnson, quest_table[i].vnum);
-    else if (mob_index[rnum].func != johnson) {
+    else if (mob_index[rnum].func != johnson && mob_index[rnum].sfunc != johnson) {
       mob_index[rnum].sfunc = mob_index[rnum].func;
       mob_index[rnum].func = johnson;
     }
@@ -1395,8 +1396,8 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
       strcat(buf, "returning item to Johnson\r\n");
       break;
     case QOO_TAR_MOB:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item to M%d ",
-              QUEST->obj[i].o_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item %ld (%s) to M%d ",
+              QUEST->obj[i].vnum, GET_OBJ_NAME(&obj_proto[real_object(QUEST->obj[i].vnum)]), QUEST->obj[i].o_data);
       if (QUEST->obj[i].o_data >= 0 &&
           QUEST->obj[i].o_data < QUEST->num_mobs &&
           (rnum = real_mobile(QUEST->mob[QUEST->obj[i].o_data].vnum)) > -1) {
@@ -2175,6 +2176,8 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char(CH, "Enter vnum of room item must be delivered to: ");
         break;
       case QOO_RETURN_PAY:
+        QUEST->obj[d->edit_number2].vnum = OBJ_BLANK_OPTICAL_CHIP;
+        // Fallthrough.
       case QOO_UPLOAD:
         d->edit_mode = QEDIT_O_ODATA;
         send_to_char(CH, "Enter vnum of host paydata must be retrieved/uploaded from: ");
@@ -2278,7 +2281,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case QOO_LOCATION:
       if (real_room(number) < 0)
-        send_to_char(CH, "Enter vnum of room item must be delivered to: ");
+        send_to_char(CH, "That's not a valid room. Enter vnum of room item must be delivered to: ");
       else {
         QUEST->obj[d->edit_number2].o_data = number;
         CLS(CH);
@@ -2288,9 +2291,10 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     case QOO_UPLOAD:
     case QOO_RETURN_PAY:
       if (real_host(number) < 0)
-        send_to_char(CH, "Enter vnum of host paydata must be retrieved/uploaded from: ");
+        send_to_char(CH, "That's not a valid host. Enter vnum of host paydata must be retrieved/uploaded from: ");
       else {
         QUEST->obj[d->edit_number2].o_data = number;
+          
         CLS(CH);
         qedit_disp_obj_menu(d);
       }

@@ -347,7 +347,7 @@ void taxi_leaves(void)
     // Skip taxis that are occupied or still have a rating cooldown.
     taxi_cant_leave = FALSE;
     for (temp = world[j].people; temp; temp = temp->next_in_room)
-      if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi)) {
+      if (!(GET_MOB_SPEC(temp) && (GET_MOB_SPEC(temp) == taxi || GET_MOB_SPEC2(temp) == taxi))) {
         taxi_cant_leave = TRUE;
         break;
       }
@@ -495,7 +495,7 @@ ACMD(do_hail)
   for (cab = first; cab <= last; cab++) {
     // Skip in-use cabs.
     for (temp = world[cab].people; temp; temp = temp->next_in_room)
-      if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi))
+      if (!(GET_MOB_SPEC(temp) && (GET_MOB_SPEC(temp) == taxi || GET_MOB_SPEC2(temp) == taxi)))
         break;
     if (!temp) {
       found = TRUE;

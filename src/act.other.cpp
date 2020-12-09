@@ -46,6 +46,7 @@ extern class memoryClass *Mem;
 ACMD_CONST(do_say);
 SPECIAL(shop_keeper);
 SPECIAL(spraypaint);
+SPECIAL(johnson);
 extern char *how_good(int skill, int percent);
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern void obj_magic(struct char_data * ch, struct obj_data * obj, char *argument);
@@ -204,7 +205,8 @@ ACMD(do_steal)
     send_to_char("Come on now, that's rather stupid!\r\n", ch);
   else if (!IS_NPC(vict) && GET_LEVEL(ch) < GET_LEVEL(vict))
     send_to_char("You can't steal from someone that powerful.\r\n", ch);
-  else if (!IS_SENATOR(ch) && IS_NPC(vict) && mob_index[GET_MOB_RNUM(vict)].func == shop_keeper)
+  else if (!IS_SENATOR(ch) && IS_NPC(vict) && (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper 
+                                               || mob_index[GET_MOB_RNUM(vict)].sfunc == shop_keeper))
     send_to_char(ch, "%s slaps your hand away.\r\n", CAP(GET_NAME(vict)));
   else if (!IS_SENATOR(ch) && AWAKE(vict))
     send_to_char("That would be quite a feat.\r\n", ch);
@@ -229,6 +231,9 @@ ACMD(do_steal)
       } else {                  /* It is equipment */
         send_to_char(ch, "You unequip %s and steal it.", GET_OBJ_NAME(obj));
         obj_to_char(unequip_char(vict, eq_pos, TRUE), ch);
+        char *representation = generate_new_loggable_representation(obj);
+        snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
+        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
       }
     } else {                    /* obj found in inventory */
       if ((IS_CARRYING_N(ch) + 1 < CAN_CARRY_N(ch))) {
@@ -236,6 +241,10 @@ ACMD(do_steal)
           if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)))
             send_to_char("You can't take that.\r\n", ch);
           else {
+            char *representation = generate_new_loggable_representation(obj);
+            snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
+            mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+            
             obj_from_char(obj);
             obj_to_char(obj, ch);
             send_to_char(ch, "You filch %s from %s!\r\n", GET_OBJ_NAME(obj), GET_NAME(vict));
@@ -504,7 +513,11 @@ ACMD(do_patch)
     act("$N already has a patch applied.", FALSE, ch, 0, vict, TO_CHAR);
     return;
   }
-  if (IS_NPC(vict) && (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper || MOB_FLAGGED(vict,MOB_NOKILL))) {
+  if (IS_NPC(vict) && (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper 
+                       || mob_index[GET_MOB_RNUM(vict)].sfunc == shop_keeper 
+                       || mob_index[GET_MOB_RNUM(vict)].func == johnson 
+                       || mob_index[GET_MOB_RNUM(vict)].sfunc == johnson
+                       || MOB_FLAGGED(vict,MOB_NOKILL))) {
     send_to_char("You can't patch that...\r\n", ch);
     return;
   }
@@ -1810,7 +1823,7 @@ ACMD(do_treat)
   struct obj_data *obj;
   int target = 0, i, found = 0, shop = 0;
 
-  if (subcmd && (!IS_NPC(ch) || !GET_MOB_SPEC(ch)))
+  if (subcmd && (!IS_NPC(ch) || !(GET_MOB_SPEC(ch) || GET_MOB_SPEC2(ch))))
     return;
 
   if (IS_ASTRAL(ch)) {

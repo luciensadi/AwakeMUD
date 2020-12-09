@@ -2829,7 +2829,7 @@ struct char_data *read_mobile(int nr, int type)
 
   affect_total(mob);
 
-  if (GET_MOB_SPEC(mob) && !MOB_FLAGGED(mob, MOB_SPEC))
+  if ((GET_MOB_SPEC(mob) || GET_MOB_SPEC2(mob)) && !MOB_FLAGGED(mob, MOB_SPEC))
     MOB_FLAGS(mob).SetBit(MOB_SPEC);
 
   return mob;

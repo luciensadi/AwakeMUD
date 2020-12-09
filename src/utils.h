@@ -508,7 +508,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_SKILL_DIRTY_BIT(ch)  ((ch)->char_specials.saved.dirty)
 
-#define GET_MOB_SPEC(ch)      (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)
+#define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)
+#define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[(ch->nr)].sfunc) : NULL)
+
 #define GET_MOB_RNUM(mob)       ((mob)->nr)
 #define GET_MOB_VNUM(mob)       (IS_MOB(mob) ? mob_index[GET_MOB_RNUM(mob)].vnum : -1)
 #define MOB_VNUM_RNUM(rnum) ((mob_index[rnum]).vnum)

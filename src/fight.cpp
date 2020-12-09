@@ -56,6 +56,8 @@ void remember(struct char_data * ch, struct char_data * victim);
 void order_list(bool first,...);
 bool can_hurt(struct char_data *ch, struct char_data *victim);
 
+SPECIAL(johnson);
+
 extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
                          int tar_for_vict);
@@ -2048,7 +2050,10 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
 bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype) {
   if (IS_NPC(victim)) {
     // Shopkeeper protection.
-    if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper)
+    if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
+        || mob_index[GET_MOB_RNUM(victim)].func == johnson
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson)
       return false;
     
     // Nokill protection.
@@ -2132,7 +2137,10 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   }
   
   /* shopkeeper protection */
-  if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper)
+  if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+      || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
+      || mob_index[GET_MOB_RNUM(victim)].func == johnson 
+      || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson)
   {
     dam = -1;
     buf_mod(rbuf,"Keeper",dam);
@@ -4392,7 +4400,10 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     } else if (distance > range) {
       act("$N seems to be out of $p's range.", FALSE, ch, weapon, vict, TO_CHAR);
       return;
-    } else if (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper) {
+    } else if (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper 
+               || mob_index[GET_MOB_RNUM(vict)].sfunc == shop_keeper
+               || mob_index[GET_MOB_RNUM(vict)].func == johnson 
+               || mob_index[GET_MOB_RNUM(vict)].sfunc == johnson) {
       send_to_char("Maybe that's not such a good idea.\r\n", ch);
       return;
     }

@@ -1432,7 +1432,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   sprinttype((k->mob_specials.default_pos), position_types, buf2);
   strcat(buf, buf2);
   strcat(buf, "     Mob Spec-Proc: ");
-  if(mob_index[GET_MOB_RNUM(k)].func)
+  if (mob_index[GET_MOB_RNUM(k)].func || mob_index[GET_MOB_RNUM(k)].sfunc)
   {
     int index;
     for (index = 0; index <= top_of_shopt; index++)

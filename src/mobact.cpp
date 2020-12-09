@@ -257,7 +257,7 @@ void mobact_change_firemode(struct char_data *ch) {
 // Check if an NPC successfully fires a spec-proc. Returns TRUE if so, FALSE otherwise.
 bool mobact_evaluate_spec_proc(struct char_data *ch) {
   char empty = '\0';
-  if (mob_index[GET_MOB_RNUM(ch)].func == NULL) {
+  if (mob_index[GET_MOB_RNUM(ch)].func == NULL && mob_index[GET_MOB_RNUM(ch)].sfunc == NULL) {
     log_vfprintf("%s (#%d): Attempting to call non-existing mob func",
                  GET_NAME(ch), GET_MOB_VNUM(ch));
     
