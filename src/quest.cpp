@@ -545,11 +545,11 @@ void reward(struct char_data *ch, struct char_data *johnson)
         GET_KARMA(f->follower) += karma;
         GET_REP(f->follower) += (int)(GET_KARMA(f->follower) / 100) - old;
         GET_TKE(f->follower) += (int)(GET_KARMA(f->follower) / 100) - old;
-        send_to_char(f->follower, "You gain %d karma and %d nuyen for being in %s's group.", nuyen, karma, GET_CHAR_NAME(ch));
+        send_to_char(f->follower, "You gain %d karma and %d nuyen for being in %s's group.\r\n", karma, nuyen, GET_CHAR_NAME(ch));
       } else {
-        send_to_char(ch, "(OOC note: %s didn't meet the qualifications for this run, so %s didn't get a cut of the pay.)",
+        send_to_char(ch, "^y(OOC note: %s didn't meet the qualifications for this run, so %s didn't get a cut of the pay.)^n\r\n",
                      GET_CHAR_NAME(f->follower), HSSH(f->follower));
-        send_to_char("(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)", f->follower);
+        send_to_char("^y(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)^n\r\n", f->follower);
       }
   }
   old = (int)(GET_KARMA(ch) / 100);
