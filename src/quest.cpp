@@ -351,9 +351,10 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
         break;
       case QOO_RETURN_PAY:
         if (GET_MOB_SPEC(mob) && GET_MOB_SPEC(mob) == johnson && memory(mob, ch)) {
-          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].o_data)
+          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].o_data) {
             ch->player_specials->obj_complete[i] = 1;
-          return TRUE;
+            return TRUE;
+          }
         }
       }
   return FALSE;

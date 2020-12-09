@@ -204,7 +204,7 @@ ACMD(do_steal)
     send_to_char("Come on now, that's rather stupid!\r\n", ch);
   else if (!IS_NPC(vict) && GET_LEVEL(ch) < GET_LEVEL(vict))
     send_to_char("You can't steal from someone that powerful.\r\n", ch);
-  else if (IS_NPC(vict) && mob_index[GET_MOB_RNUM(vict)].func == shop_keeper)
+  else if (!IS_SENATOR(ch) && IS_NPC(vict) && mob_index[GET_MOB_RNUM(vict)].func == shop_keeper)
     send_to_char(ch, "%s slaps your hand away.\r\n", CAP(GET_NAME(vict)));
   else if (!IS_SENATOR(ch) && AWAKE(vict))
     send_to_char("That would be quite a feat.\r\n", ch);
