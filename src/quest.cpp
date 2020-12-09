@@ -604,7 +604,7 @@ void new_quest(struct char_data *mob, bool force_assignation=FALSE)
 void handle_info(struct char_data *johnson)
 {
   int allowed, pos, num, i, j;
-  char speech[220];
+  char speech[300];
 
   allowed = (210 - strlen(GET_NAME(johnson))) - 3; // for ellipses
   pos = GET_SPARE1(johnson);
@@ -670,11 +670,16 @@ SPECIAL(johnson)
         if (memory(johnson, temp))
           break;
       if (!temp) {
+        do_say(johnson, "debug: !temp", 0, 0);
         new_quest(johnson);
         GET_SPARE1(johnson) = -1;
       } else if (GET_QUEST(temp)) {
+        snprintf(buf, sizeof(buf), "debug: %s has quest", GET_CHAR_NAME(temp));
+        do_say(johnson, buf, 0, 0);
         handle_info(johnson);
       } else {
+        snprintf(buf, sizeof(buf), "debug: %s has NO quest", GET_CHAR_NAME(temp));
+        do_say(johnson, buf, 0, 0);
         // We're in the gap between someone asking for a job and accepting it. Do nothing.
       }
     } else if (time_info.minute > 0 && time_info.minute <= 5)
