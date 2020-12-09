@@ -225,6 +225,7 @@ ACMD_DECLARE(do_patch);
 ACMD_DECLARE(do_perfmon);
 ACMD_DECLARE(do_pgroup);
 ACMD_DECLARE(do_photo);
+ACMD_DECLARE(do_pockets);
 ACMD_DECLARE(do_poofset);
 ACMD_DECLARE(do_pour);
 ACMD_DECLARE(do_pool);
@@ -644,6 +645,7 @@ struct command_info cmd_info[] =
     { "phone"    , POS_LYING   , do_phone    , 0, 0 },
     { "phonelist", POS_DEAD    , do_phonelist, LVL_BUILDER, 0 },
     { "photo"    , POS_RESTING , do_photo    , 0, 0 },
+    { "pockets"  , POS_RESTING , do_pockets  , 0, 0 },
     { "pop"      , POS_SITTING , do_pop      , 0, 0 },
     { "policy"   , POS_DEAD    , do_gen_ps   , 0, SCMD_POLICIES },
     { "poofin"   , POS_DEAD    , do_poofset  , LVL_BUILDER, SCMD_POOFIN },
