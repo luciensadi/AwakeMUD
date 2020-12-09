@@ -116,9 +116,9 @@ void iedit_disp_prompt_apply_menu(struct descriptor_data * d)
   {
     if (d->edit_obj->affected[counter].modifier) {
       if (GET_OBJ_TYPE(d->edit_obj) == ITEM_MOD)
-        sprinttype(d->edit_obj->affected[counter].location, veh_aff, buf2);
+        sprinttype(d->edit_obj->affected[counter].location, veh_aff, buf2, sizeof(buf2));
       else
-        sprinttype(d->edit_obj->affected[counter].location, apply_types, buf2);
+        sprinttype(d->edit_obj->affected[counter].location, apply_types, buf2, sizeof(buf2));
       send_to_char(CH, " %d) %+d to %s%s%s\r\n", counter + 1,
                    d->edit_obj->affected[counter].modifier, CCCYN(CH, C_CMP), buf2,
                    CCNRM(CH, C_CMP));
@@ -1258,7 +1258,7 @@ void iedit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "4) Look description: \r\n%s\r\n",
                d->edit_obj->text.look_desc ? d->edit_obj->text.look_desc :
                "(not set)");
-  sprinttype(GET_OBJ_TYPE(d->edit_obj), item_types, buf1);
+  sprinttype(GET_OBJ_TYPE(d->edit_obj), item_types, buf1, sizeof(buf1));
   send_to_char(CH, "5) Item type: ^c%s^n\r\n", buf1);
   GET_OBJ_EXTRA(d->edit_obj).PrintBits(buf1, MAX_STRING_LENGTH,
                                        extra_bits, ITEM_EXTRA_MAX);

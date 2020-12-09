@@ -856,7 +856,7 @@ void mobile_activity(void)
     current_room = get_ch_in_room(ch);
     
     // Skip them if they're a player character, are being possessed, are sleeping, or have no current room.
-    if (!IS_MOB(ch) || !AWAKE(ch) || ch->desc || !current_room)
+    if (!IS_NPC(ch) || !AWAKE(ch) || ch->desc || !current_room)
       continue;
 
     // Skip NPCs that are currently fighting someone in their room, or are fighting a vehicle.

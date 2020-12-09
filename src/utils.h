@@ -41,7 +41,7 @@ void    log_death_trap(struct char_data *ch);
 int     number(int from, int to);
 int     dice(int number, int size);
 void    sprintbit(long vektor, const char *names[], char *result);
-void    sprinttype(int type, const char *names[], char *result);
+void    sprinttype(int type, const char *names[], char *result, int result_size);
 void    sprint_obj_mods(struct obj_data *obj, char *result);
 int     get_line(FILE *fl, char *buf);
 struct  time_info_data age(struct char_data *ch);

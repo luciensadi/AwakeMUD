@@ -827,7 +827,7 @@ void do_stat_room(struct char_data * ch)
 
   send_to_char(ch, "Room name: ^c%s\r\n", rm->name);
 
-  sprinttype(rm->sector_type, spirit_name, buf2);
+  sprinttype(rm->sector_type, spirit_name, buf2, sizeof(buf2));
   snprintf(buf, sizeof(buf), "Zone: [%3d], VNum: [^g%8ld^n], RNum: [%5ld], Rating: [%2d], Type: %s\r\n",
           rm->zone, rm->number, real_room(rm->number), rm->rating, buf2);
   send_to_char(buf, ch);
@@ -966,7 +966,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
           j->text.keywords,
           j->source_info ? j->source_info : "<None>");
 
-  sprinttype(GET_OBJ_TYPE(j), item_types, buf1);
+  sprinttype(GET_OBJ_TYPE(j), item_types, buf1, sizeof(buf1));
 
   if (GET_OBJ_RNUM(j) >= 0)
   {
@@ -1071,7 +1071,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     break;
   case ITEM_DRINKCON:
   case ITEM_FOUNTAIN:
-    sprinttype(GET_OBJ_VAL(j, 2), drinks, buf2);
+    sprinttype(GET_OBJ_VAL(j, 2), drinks, buf2, sizeof(buf2));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Max-contains: %d, Contains: %d, Poisoned: %s, Liquid: %s",
             GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1),
             GET_OBJ_VAL(j, 3) ? "Yes" : "No", buf2);
@@ -1160,9 +1160,9 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     if (j->affected[i].modifier)
     {
       if (GET_OBJ_TYPE(j) == ITEM_MOD)
-        sprinttype(j->affected[i].location, veh_aff, buf2);
+        sprinttype(j->affected[i].location, veh_aff, buf2, sizeof(buf2));
       else
-        sprinttype(j->affected[i].location, apply_types, buf2);
+        sprinttype(j->affected[i].location, apply_types, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %+d to %s", found++ ? "," : "",
               j->affected[i].modifier, buf2);
     }
@@ -1226,7 +1226,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Hermetic, Aspect: %s, Grade: %d", aspect_names[GET_ASPECT(k)], GET_GRADE(k));
     break;
   case TRAD_SHAMANIC:
-    sprinttype(GET_TOTEM(k), totem_types, buf2);
+    sprinttype(GET_TOTEM(k), totem_types, buf2, sizeof(buf2));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Shamanic, Aspect: %s, Totem: %s, ", aspect_names[GET_ASPECT(k)], buf2);
     if (GET_TOTEM(k) == TOTEM_GATOR || GET_TOTEM(k) == TOTEM_SNAKE || GET_TOTEM(k) == TOTEM_WOLF)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Spirit Bonus: %s, ", spirits[GET_TOTEMSPIRIT(k)].name);
@@ -1238,7 +1238,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   }
 
   strcat(buf, ", Race: ");
-  sprinttype(k->player.race, pc_race_types, buf2);
+  sprinttype(k->player.race, pc_race_types, buf2, sizeof(buf2));
   strcat(buf, buf2);
 
   if (IS_SENATOR(k))
@@ -1288,21 +1288,21 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Vision: %s Natural Vision: %s\r\n",
           CURRENT_VISION(k) == NORMAL ? "Normal" : CURRENT_VISION(k) == THERMOGRAPHIC ? "Thermo" : "Low-Light",
           NATURAL_VISION(k) == NORMAL ? "Normal" : NATURAL_VISION(k) == THERMOGRAPHIC ? "Thermo" : "Low-Light");
-  sprinttype(GET_POS(k), position_types, buf2);
+  sprinttype(GET_POS(k), position_types, buf2, sizeof(buf2));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Zone: %d, Pos: %s, Fighting: %s",
           k->player_specials->saved.zonenum, buf2,
           (FIGHTING(k) ? GET_CHAR_NAME(FIGHTING(k)) : (FIGHTING_VEH(k) ? GET_VEH_NAME(FIGHTING_VEH(k)) : "Nobody")));
 
   if (k->desc)
   {
-    sprinttype(k->desc->connected, connected_types, buf2);
+    sprinttype(k->desc->connected, connected_types, buf2, sizeof(buf2));
     strcat(buf, ", Connected: ");
     strcat(buf, buf2);
   }
   strcat(buf, "\r\n");
 
   strcat(buf, "Default position: ");
-  sprinttype((k->mob_specials.default_pos), position_types, buf2);
+  sprinttype((k->mob_specials.default_pos), position_types, buf2, sizeof(buf2));
   strcat(buf, buf2);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d]\r\n", k->char_specials.timer);
@@ -1418,7 +1418,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
           GET_BALLISTIC(k), GET_IMPACT(k), GET_INIT_DICE(k), GET_INIT_ROLL(k),
           GET_SUSTAINED_NUM(k), GET_TARGET_MOD(k), GET_REACH(k));
 
-  sprinttype(GET_POS(k), position_types, buf2);
+  sprinttype(GET_POS(k), position_types, buf2, sizeof(buf2));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Position: %s, Fighting: %s", buf2,
           (FIGHTING(k) ? GET_NAME(FIGHTING(k)) : (FIGHTING_VEH(k) ? GET_VEH_NAME(FIGHTING_VEH(k)) : "Nobody")));
 
@@ -1429,7 +1429,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
 
 
   strcat(buf, "Default position: ");
-  sprinttype((k->mob_specials.default_pos), position_types, buf2);
+  sprinttype((k->mob_specials.default_pos), position_types, buf2, sizeof(buf2));
   strcat(buf, buf2);
   strcat(buf, "     Mob Spec-Proc: ");
   if (mob_index[GET_MOB_RNUM(k)].func || mob_index[GET_MOB_RNUM(k)].sfunc)

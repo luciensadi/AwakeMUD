@@ -830,7 +830,6 @@ void game_loop(int mother_desc)
       zone_update();
       phone_check();
       process_autonav();
-      process_boost();
     }
     
     if (!(pulse % PULSE_SPECIAL)) {
@@ -920,6 +919,7 @@ void game_loop(int mother_desc)
       check_idling();
       send_keepalives();
       // johnson_update();
+      process_boost();
     }
     
     // Every IRL day

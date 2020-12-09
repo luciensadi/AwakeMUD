@@ -853,9 +853,9 @@ void sprintbit(long vektor, const char *names[], char *result)
     strcat(result, "None ");
 }
 
-void sprinttype(int type, const char *names[], char *result)
+void sprinttype(int type, const char *names[], char *result, int result_size)
 {
-  snprintf(result, sizeof(result), "%s", names[type]);
+  snprintf(result, result_size, "%s", names[type]);
   
   if (str_cmp(result, "(null)") == 0) {
     strcpy(result, "UNDEFINED");
@@ -877,7 +877,7 @@ void sprint_obj_mods(struct obj_data *obj, char *result)
     if (obj->affected[i].modifier != 0)
     {
       char xbuf[MAX_STRING_LENGTH];
-      sprinttype(obj->affected[i].location, apply_types, xbuf);
+      sprinttype(obj->affected[i].location, apply_types, xbuf, sizeof(xbuf));
       snprintf(result, sizeof(result),"%s (%+d %s)",
               result, obj->affected[i].modifier, xbuf);
     }

@@ -88,15 +88,15 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "e) Max physical points: %s%d%s, f) Max mental points: %s%d%s\r\n", CCCYN(CH, C_CMP),
                (int)(GET_MAX_PHYSICAL(MOB) / 100), CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
                (int)(GET_MAX_MENTAL(MOB) / 100), CCNRM(CH, C_CMP));
-  sprinttype(GET_POS(MOB), position_types, buf1);
+  sprinttype(GET_POS(MOB), position_types, buf1, sizeof(buf1));
   send_to_char(CH, "g) Default Position: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
-  sprinttype(GET_DEFAULT_POS(MOB), position_types, buf1);
+  sprinttype(GET_DEFAULT_POS(MOB), position_types, buf1, sizeof(buf1));
   /*
   send_to_char(CH, "h) Default Position: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
                */
-  sprinttype(GET_SEX(MOB), genders, buf1);
+  sprinttype(GET_SEX(MOB), genders, buf1, sizeof(buf1));
   //  strcpy(buf1, genders[GET_SEX(d->edit_mob)]);
   send_to_char(CH, "i) Gender: %s%s%s, ", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
@@ -107,7 +107,7 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "l) Race: ^c%s^n\r\n", pc_race_types[(int)GET_RACE(MOB)]);
   // gotta subtract TYPE_HIT to make it work properly
   sprinttype(!(MOB->mob_specials.attack_type) ? 0 :
-             (MOB->mob_specials.attack_type - TYPE_HIT), attack_types, buf1);
+             (MOB->mob_specials.attack_type - TYPE_HIT), attack_types, buf1, sizeof(buf1));
   send_to_char(CH, "m) Attack Type: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
   send_to_char("n) Skill menu.\r\n", CH);

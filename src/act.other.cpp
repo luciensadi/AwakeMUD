@@ -2813,7 +2813,11 @@ ACMD(do_boost)
     return;
   }
   skip_spaces(&argument);
-  if (is_abbrev(argument, "strength") && GET_POWER(ch, ADEPT_BOOST_STR)) {
+  if (is_abbrev(argument, "strength")) {
+    if (!GET_POWER(ch, ADEPT_BOOST_STR)) {
+      send_to_char("You don't have that power activated.\r\n", ch);
+      return;
+    }
     if (BOOST(ch)[0][0]) {
       send_to_char(ch, "You are already boosting that attribute.\r\n");
       return;
@@ -2827,7 +2831,11 @@ ACMD(do_boost)
     BOOST(ch)[0][1] = GET_POWER(ch, ADEPT_BOOST_STR);
     send_to_char(ch, "You feel stronger.\r\n");
     affect_total(ch);
-  } else if (is_abbrev(argument, "quickness") && GET_POWER(ch, ADEPT_BOOST_QUI)) {
+  } else if (is_abbrev(argument, "quickness")) {
+    if (!GET_POWER(ch, ADEPT_BOOST_QUI)) {
+      send_to_char("You don't have that power activated.\r\n", ch);
+      return;
+    }
     if (BOOST(ch)[1][0]) {
       send_to_char(ch, "You are already boosting that attribute.\r\n");
       return;
@@ -2841,7 +2849,11 @@ ACMD(do_boost)
     BOOST(ch)[1][1] = GET_POWER(ch, ADEPT_BOOST_QUI);
     send_to_char(ch, "You feel quicker.\r\n");
     affect_total(ch);
-  } else if (is_abbrev(argument, "body") && GET_POWER(ch, ADEPT_BOOST_BOD)) {
+  } else if (is_abbrev(argument, "body")) {
+    if (!GET_POWER(ch, ADEPT_BOOST_BOD)) {
+      send_to_char("You don't have that power activated.\r\n", ch);
+      return;
+    }
     if (BOOST(ch)[2][0]) {
       send_to_char(ch, "You are already boosting that attribute.\r\n");
       return;

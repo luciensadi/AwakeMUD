@@ -1773,7 +1773,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     snprintf(buf, sizeof(buf), "^MOOC^n statistics for '^y%s^n':\r\n", (GET_OBJ_NAME(j) ? GET_OBJ_NAME(j) : "<None>"));
   }
   
-  sprinttype(GET_OBJ_TYPE(j), item_types, buf1);
+  sprinttype(GET_OBJ_TYPE(j), item_types, buf1, sizeof(buf1));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
           AN(buf1), buf1, GET_OBJ_WEIGHT(j), material_names[(int)GET_OBJ_MATERIAL(j)], GET_OBJ_BARRIER(j));
   
@@ -2002,7 +2002,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_DRINKCON:
     case ITEM_FOUNTAIN:
-      sprinttype(GET_OBJ_VAL(j, 2), drinks, buf2);
+      sprinttype(GET_OBJ_VAL(j, 2), drinks, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It currently contains ^c%d/%d^n units of ^c%s^n.",
               GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1), buf2);
       break;
@@ -2229,9 +2229,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     if (j->affected[i].modifier)
     {
       if (GET_OBJ_TYPE(j) == ITEM_MOD)
-        sprinttype(j->affected[i].location, veh_aff, buf2);
+        sprinttype(j->affected[i].location, veh_aff, buf2, sizeof(buf2));
       else
-        sprinttype(j->affected[i].location, apply_types, buf2);
+        sprinttype(j->affected[i].location, apply_types, buf2, sizeof(buf2));
       snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s %+d to %s", found++ ? "," : "",
               j->affected[i].modifier, buf2);
     }

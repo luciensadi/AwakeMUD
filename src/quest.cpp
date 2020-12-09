@@ -670,15 +670,12 @@ SPECIAL(johnson)
         if (memory(johnson, temp))
           break;
       if (!temp) {
-        do_say(johnson, "debug: !temp", 0, 0);
         new_quest(johnson);
         GET_SPARE1(johnson) = -1;
       } else if (GET_QUEST(temp)) {
-        snprintf(buf, sizeof(buf), "debug: %s has quest", GET_CHAR_NAME(temp));
         do_say(johnson, buf, 0, 0);
         handle_info(johnson);
       } else {
-        snprintf(buf, sizeof(buf), "debug: %s has NO quest", GET_CHAR_NAME(temp));
         do_say(johnson, buf, 0, 0);
         // We're in the gap between someone asking for a job and accepting it. Do nothing.
       }
@@ -1166,6 +1163,7 @@ void boot_one_quest(struct quest_data *quest)
   {
     mob_index[i].sfunc = mob_index[i].func;
     mob_index[i].func = johnson;
+    mob_proto[i].real_abils.attributes[QUI] = MAX(1, mob_proto[i].real_abils.attributes[QUI]);
   }
 }
 

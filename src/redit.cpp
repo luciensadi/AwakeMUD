@@ -274,7 +274,7 @@ void redit_disp_menu(struct descriptor_data * d)
                CCCYN(CH, C_CMP),
                buf2, CCNRM(CH,
                            C_CMP));
-  sprinttype(d->edit_room->sector_type, spirit_name, buf2);
+  sprinttype(d->edit_room->sector_type, spirit_name, buf2, sizeof(buf2));
   send_to_char(CH, "5) Domain type: %s%s%s\r\n",CCCYN(CH, C_CMP), buf2, CCNRM(CH, C_CMP));
 
   if (d->edit_room->dir_option[NORTH])
