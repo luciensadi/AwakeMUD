@@ -3083,11 +3083,11 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
     }
 
   if (!detailed) {
-    snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%3d %-30.30s^n ", zone_table[zone].number,
+    snprintf(bufptr, buf_size - strlen(bufptr), "%3d %-30.30s^n ", zone_table[zone].number,
             zone_table[zone].name);
     for (i = 0; i < color; i++)
       strcat(bufptr, " ");
-    snprintf(bufptr, buf_size, "%s%sAge: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
+    snprintf(bufptr, buf_size - strlen(bufptr), "%s%sAge: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
             bufptr,
             zone_table[zone].connected ? "* " : "  ",
             zone_table[zone].age, zone_table[zone].lifespan,
@@ -3245,7 +3245,9 @@ ACMD(do_show)
         print_zone_to_buf(buf, sizeof(buf), ch->in_room->zone, 1);
       else
         print_zone_to_buf(buf, sizeof(buf), ch->in_room->zone, 0);
-    } else if (*value && is_number(value)) {
+    } 
+    
+    else if (*value && is_number(value)) {
       for (j = atoi(value), i = 0; zone_table[i].number != j && i <= top_of_zone_table; i++)
         ;
       if (i <= top_of_zone_table) {
@@ -3257,9 +3259,11 @@ ACMD(do_show)
         send_to_char("That is not a valid zone.\r\n", ch);
         return;
       }
-    } else
+    } 
+    
+    else
       for (i = 0; i <= top_of_zone_table; i++)
-        print_zone_to_buf(buf, sizeof(buf), i, 0);
+        print_zone_to_buf(ENDOF(buf), sizeof(buf) - strlen(buf), i, 0);
     page_string(ch->desc, buf, 1);
     break;
   case 2:                     /* player */
