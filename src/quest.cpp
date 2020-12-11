@@ -603,51 +603,71 @@ void new_quest(struct char_data *mob, bool force_assignation=FALSE)
 
 void handle_info(struct char_data *johnson)
 {
-  int allowed, pos, num, i, j;
-  char speech[300];
+  int allowed, pos, num, i, speech_index = 0;
+  
+  // Want to control how much the Johnson says per tick? Change this magic number.
+  char speech[strlen(GET_NAME(johnson)) + 200];
 
-  allowed = (210 - strlen(GET_NAME(johnson))) - 3; // for ellipses
+  // Calculate how much text we can put into the speech buffer, leaving room for ellipses and \0.
+  allowed = sizeof(speech) - 7;
+  
+  // Spare1 is the position in the info string we last left off at.
   pos = GET_SPARE1(johnson);
+  
+  // If we've continued from earlier, let's go ahead and prepend some '...'.
+  if (pos > 0)
+    for (int ellipses = 0; ellipses < 3; ellipses++)
+      speech[speech_index++] = '.';
+  
+  // Num is the index of the quest the Johnson is reciting from.
   num = GET_SPARE2(johnson);
+  
+  // i is the total length of the info string. We skip any newlines at the end.
   i = strlen(quest_table[num].info);
+  while (quest_table[num].info[i] == '\r' || quest_table[num].info[i] == '\n' || quest_table[num].info[i] == '\0')
+    i--;
 
-  if (allowed < 10)
-    allowed += 79;
-
+  // We assume that all info strings will have ellipses (aka '...') at the end.
   bool will_add_ellipses = TRUE;
-  if ((pos + allowed) < i)
-  {
+  
+  // If the entire string won't fit, find the space or newline closest to the end. We'll write up to that.
+  if ((pos + allowed) < i) {    
     for (i = pos + allowed; i > pos; i--)
       if ((isspace(*(quest_table[num].info + i)) || *(quest_table[num].info + i) == '\r') &&
           isprint(*(quest_table[num].info + i - 1)) &&
           !isspace(*(quest_table[num].info + i - 1)))
         break;
     GET_SPARE1(johnson) = i + 1;
-  } else
-  {
+  } 
+  
+  // Otherwise, we'll be done talking after this call-- wipe out their spare1 data 
+  //  (position in string) and potentially generate a new quest.
+  else {
     if (!number(0, 9))
       new_quest(johnson);
     GET_SPARE1(johnson) = -1;
     will_add_ellipses = FALSE;
   }
 
-  for (j = 0; pos < i; pos++)
+  // Print the string into the speech buff, replacing newlines with spaces.
+  for (; pos < i && speech_index < allowed; pos++)
   {
     if (*(quest_table[num].info + pos) == '\n')
       continue;
     if (*(quest_table[num].info + pos) == '\r')
-      speech[j] = ' ';
+      speech[speech_index++] = ' ';
     else
-      speech[j] = *(quest_table[num].info + pos);
-    j++;
+      speech[speech_index++] = *(quest_table[num].info + pos);
   }
   
+  // Add the final ellipses and cap it off with a '\0'.
   if (will_add_ellipses)
     for (int ellipses = 0; ellipses < 3; ellipses++)
-      speech[j++] = '.';
+      speech[speech_index++] = '.';
 
-  speech[j] = '\0';
+  speech[speech_index] = '\0';
 
+  // Say it.
   do_say(johnson, speech, 0, 0);
 }
 
@@ -675,7 +695,6 @@ SPECIAL(johnson)
       } else if (GET_QUEST(temp)) {
         handle_info(johnson);
       } else {
-        do_say(johnson, buf, 0, 0);
         // We're in the gap between someone asking for a job and accepting it. Do nothing.
       }
     } else if (time_info.minute > 0 && time_info.minute <= 5)
