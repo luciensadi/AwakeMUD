@@ -17,9 +17,12 @@ ACMD(do_pockets) {
   
   char *weapon_buf = NULL;
   
+  int quantity, ammotype;
+  
   *mode_buf = *quantity_buf = *ammotype_buf = '\0';
   /*
   pocket[s]: displays your current bullet pants contents
+  pocket[s] <weapon>: displays your current bullet pants contents for the chosen weapon
   pocket[s] put|store|add <quantity> <weapon> <type>: add ammo from boxes to your bullet pants
   pocket[s] get|remove|retrieve <quantity> <weapon> <type>: create a new ammo box from your bullet pants with the specified amount in it
   */
@@ -32,23 +35,42 @@ ACMD(do_pockets) {
     return;
   }
   
-  // Looks a bit weird, but this pulls one word each for mode, qty, and ammotype, then puts the rest in weapon_buf.
+  // special case: the argument is a weapon alias
+  for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++) {
+    if (!strn_cmp(argument, weapon_type[i], strlen(argument)) 
+        || (*(weapon_type_aliases[i]) && str_cmp(argument, weapon_type_aliases[i]) == 0)) {
+      // TODO
+      if (print_one_weapontypes_ammo_to_string(ch, i, buf, sizeof(buf)))
+        send_to_char(ch, "You have the following %s ammunition secreted about your person:\r\n%s\r\n",
+                     weapon_type[i], buf);
+      else
+        send_to_char(ch, "You don't have any %s ammunition secreted about your person.\r\n", weapon_type[i]);
+      return;
+    }
+  }
+  
+  send_to_char(ch, "^Gdebug: '%s' did not match a weapon name\r\n", argument);
+  
+  // Special case was not tripped. Break out the rest of the arguments.
   weapon_buf = one_argument(one_argument(one_argument(argument, mode_buf), quantity_buf), ammotype_buf);
   
-  if (!*mode_buf || !*quantity_buf || !weapon_buf || !*weapon_buf || !*ammotype_buf) {
+  if (!*mode_buf) {
     send_to_char(POCKETS_USAGE_STRING, ch);
     return;
   }
   
   // Sanity check quantity.
-  int quantity = atoi(quantity_buf);
-  if (quantity <= 0) {
-    send_to_char("The quantity must be greater than zero.", ch);
+  if (!*quantity_buf || (quantity = atoi(quantity_buf)) <= 0) {
+    send_to_char(ch, "The quantity must be greater than zero-- '%s' doesn't work.", quantity_buf);
     return;
   }
   
   // Sanity check ammotype. We run it backwards so 'explosive' does not override 'ex'.
-  int ammotype = -1;
+  if (!*ammotype_buf) {
+    send_to_char(POCKETS_USAGE_STRING, ch);
+    return;
+  }
+  ammotype = -1;
   for (int i = NUM_AMMOTYPES - 1; i >= AMMO_NORMAL ; i--) {
     if (str_str(ammo_type[i].name, ammotype_buf)) {
       ammotype = i;
@@ -67,6 +89,11 @@ ACMD(do_pockets) {
   }
   
   // Sanity check weapon.
+  if (!weapon_buf || !*weapon_buf) {
+    send_to_char(POCKETS_USAGE_STRING, ch);
+    return;
+  }
+  
   int weapon = -1;
   for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++) {
     if (!strn_cmp(weapon_buf, weapon_type[i], strlen(weapon_buf)) 
@@ -120,20 +147,47 @@ ACMD(do_pockets) {
     return;
   }
   
-  if (!*mode_buf || !*quantity_buf || !*weapon_buf || !*ammotype_buf) {
-    send_to_char(POCKETS_USAGE_STRING, ch);
-    return;
-  }
+  send_to_char(POCKETS_USAGE_STRING, ch);
+  return;
 }
 
 /**********************************
 * Helper functions and constants. *
 **********************************/
 
-void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {
-  int amount, wp, am;
-  bool printed_for_this_weapon_yet;
+bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *buf, int bufsize) {
+  int amount;
+  bool printed_anything_yet = FALSE;
   
+  if (!ch || !buf) {
+    mudlog("SYSERR: print_one_weapontypes_ammo_to_string received NULL ch or buf", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // Zero the first char of the buf to prevent adding our good data to garbage.
+  *buf = '\0';
+  
+  // We skip the header and assume the caller will print it. Just print the ammo.
+  for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
+    if ((amount = GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am))) {
+      snprintf(ENDOF(buf), bufsize - strlen(buf), "%s%d %s %s%s",
+               printed_anything_yet ? ", " : "",
+               amount,
+               ammo_type[am].name,
+               get_weapon_ammo_name_as_string(wp),
+               amount != 1 ? "s" : "");
+               
+      printed_anything_yet = TRUE;
+    }
+  }
+  
+  if (printed_anything_yet)
+    strncat(buf, "\r\n", bufsize - strlen(buf) - 1);
+    
+  return printed_anything_yet;
+}
+
+void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {  
   if (!ch || !vict) {
     mudlog("SYSERR: display_pockets_to_char received a null ch or vict.", ch, LOG_SYSLOG, TRUE);
     return;
@@ -146,36 +200,21 @@ void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {
   
   bool have_something_to_print = FALSE;
   
-  for (wp = START_OF_AMMO_USING_WEAPONS; wp < END_OF_AMMO_USING_WEAPONS; wp++) {
-    printed_for_this_weapon_yet = FALSE;
-    snprintf(buf2, sizeof(buf2), "%18s: ", weapon_type[wp]);
-    
-    for (am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
-      if ((amount = GET_BULLETPANTS_AMMO_AMOUNT(vict, wp, am))) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%d %s %s%s",
-                 printed_for_this_weapon_yet ? ", " : buf2,
-                 amount,
-                 ammo_type[am].name,
-                 get_weapon_ammo_name_as_string(wp),
-                 amount != 1 ? "s" : "");          
-                 
-        have_something_to_print = TRUE;
-        printed_for_this_weapon_yet = TRUE;
-      }
+  for (int wp = START_OF_AMMO_USING_WEAPONS; wp < END_OF_AMMO_USING_WEAPONS; wp++) {
+    if (print_one_weapontypes_ammo_to_string(vict, wp, buf2, sizeof(buf2) - 1)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%18s: %s", weapon_type[wp], buf2);
+      have_something_to_print = TRUE;
     }
-    
-    if (printed_for_this_weapon_yet)
-      strncat(buf, "\r\n", sizeof(buf) - strlen(buf) - 1);
   }
   
-  if (have_something_to_print)
-    send_to_char(buf, ch);
-  else {
+  if (!have_something_to_print) {
     snprintf(buf, sizeof(buf), "%s %s no ammunition secreted about %s person.\r\n",
              ch == vict ? "You"  : GET_CHAR_NAME(vict),
              ch == vict ? "have" : "has",
              ch == vict ? "your" : HSHR(vict));
   }
+  
+  send_to_char(buf, ch);
 }
 
 const char *get_weapon_ammo_name_as_string(int weapon_type) {
@@ -235,4 +274,8 @@ const char *weapon_type_aliases[] =
  - weight calculations should take into account PC bullet pants
  - staff bullet pants set command mode
  - staff bullet pants show command mode
+ - write help file
+ - update syntax to include 'pockets <weapon>'
+ - better formatting for 'pockets <weapon>'
+ - do we need to change output to tree style? how will this work with screenreaders?
 */

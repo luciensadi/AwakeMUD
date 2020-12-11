@@ -27,6 +27,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60501
 	Flags:	0
@@ -66,6 +67,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60502
 	Flags:	0
@@ -122,6 +124,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60503
 	Flags:	0
@@ -160,6 +163,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60502
 	Flags:	0
@@ -202,6 +206,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60505
 	Flags:	0
@@ -243,6 +248,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60504
 	Flags:	0
@@ -287,6 +293,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60505
 	Flags:	0
@@ -376,6 +383,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	60506
 	Flags:	0
@@ -416,6 +424,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	60506
 	Flags:	0
@@ -455,6 +464,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	60506
 	Flags:	0
@@ -491,6 +501,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	60506
 	Flags:	0
@@ -524,6 +535,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60506
 	Flags:	0
@@ -564,6 +576,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	60506
 	Flags:	0
@@ -604,6 +617,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60506
 	Flags:	0
@@ -644,6 +658,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60513
 	Flags:	0
@@ -700,6 +715,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60514
 	Flags:	0
@@ -745,6 +761,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60515
 	Flags:	0
@@ -786,6 +803,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60611
 	Flags:	0
@@ -829,18 +847,18 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	datajack~~~~~~~~~~~~~~~~~~
+	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
 	Desc:$
-A DATAJACK is necessary for a decker or a rigger to interface their mind with
-a machine. 
+Wired Reflexes, while costly to the user's essence, enhance their REACTION and
+INITIATIVE, allowing them to attack more often than an un-augmented person.
+Wired Reflexes are known to cause some people to be extra jumpy. 
 ~
 [EXTRADESC 1]
-	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
+	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
 	Desc:$
-The SMARTLINK system allows the user to use a smartlink accessorized firearm,
-granting them greater accuracy in ranged combat. If the weapon is outfitted
-with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
-feature is automatically used. 
+The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
+be able to mentally control a vehicle. An explanation of RIGGING is provided
+later in the guild. 
 ~
 [EXTRADESC 2]
 	Keywords:	spurs razors retractable~~~~~~~~~~~~~~~~~~
@@ -851,18 +869,18 @@ automatically used when the character enters unarmed combat, and success is
 based on the CYBERIMPLANT COMBAT skill. 
 ~
 [EXTRADESC 3]
-	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
+	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
 	Desc:$
-The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
-be able to mentally control a vehicle. An explanation of RIGGING is provided
-later in the guild. 
+The SMARTLINK system allows the user to use a smartlink accessorized firearm,
+granting them greater accuracy in ranged combat. If the weapon is outfitted
+with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
+feature is automatically used. 
 ~
 [EXTRADESC 4]
-	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
+	Keywords:	datajack~~~~~~~~~~~~~~~~~~
 	Desc:$
-Wired Reflexes, while costly to the user's essence, enhance their REACTION and
-INITIATIVE, allowing them to attack more often than an un-augmented person.
-Wired Reflexes are known to cause some people to be extra jumpy. 
+A DATAJACK is necessary for a decker or a rigger to interface their mind with
+a machine. 
 ~
 BREAK
 #60518
@@ -891,6 +909,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60514
 	Flags:	0
@@ -930,6 +949,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60606
 	Flags:	0
@@ -971,6 +991,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60523
 	Flags:	0
@@ -1012,6 +1033,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60524
 	Flags:	0
@@ -1057,6 +1079,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60594
 	Flags:	0
@@ -1100,6 +1123,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60624
 	Flags:	0
@@ -1145,6 +1169,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60522
 	Flags:	0
@@ -1183,6 +1208,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60526
 	Flags:	0
@@ -1233,6 +1259,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60527
 	Flags:	0
@@ -1281,6 +1308,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60528
 	Flags:	0
@@ -1320,6 +1348,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60540
 	Flags:	0
@@ -1371,6 +1400,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60608
 	Flags:	0
@@ -1410,6 +1440,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	doors shaft
 	Desc:$
@@ -1417,8 +1448,8 @@ A pair of elevator doors allows access to the liftway.
 ~
 	ToVnum:	60621
 	Flags:	1
-	Material:	brick
-	Barrier:	4
+	Material:	metal
+	Barrier:	8
 	KeyVnum:	998
 	LockRating:	8
 [EXIT south]
@@ -1453,6 +1484,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	doors shaft
 	Desc:$
@@ -1499,6 +1531,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	Keywords:	doors shaft
 	Desc:$
@@ -1506,8 +1539,8 @@ A pair of elevator doors allows access to the liftway.
 ~
 	ToVnum:	60622
 	Flags:	1
-	Material:	brick
-	Barrier:	4
+	Material:	metal
+	Barrier:	8
 	KeyVnum:	998
 	LockRating:	8
 [EXIT south]
@@ -1543,6 +1576,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60532
 	Flags:	0
@@ -1612,6 +1646,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60533
 	Flags:	0
@@ -1657,6 +1692,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	60533
 	Flags:	0
@@ -1702,6 +1738,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	60533
 	Flags:	0
@@ -1746,6 +1783,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60533
 	Flags:	0
@@ -1776,6 +1814,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60533
 	Flags:	0
@@ -1817,6 +1856,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60541
 	Flags:	0
@@ -1859,6 +1899,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60529
 	Flags:	0
@@ -1907,6 +1948,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60549
 	Flags:	0
@@ -1998,6 +2040,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	60541
 	Flags:	0
@@ -2037,6 +2080,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60541
 	Flags:	0
@@ -2067,6 +2111,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	60541
 	Flags:	0
@@ -2096,6 +2141,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	60541
 	Flags:	0
@@ -2127,6 +2173,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	60541
 	Flags:	0
@@ -2169,6 +2216,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	60541
 	Flags:	0
@@ -2206,6 +2254,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60542
 	Flags:	0
@@ -2240,6 +2289,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60541
 	Flags:	0
@@ -2283,6 +2333,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60551
 	Flags:	0
@@ -2333,6 +2384,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60550
 	Flags:	0
@@ -2378,6 +2430,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60551
 	Flags:	0
@@ -2419,6 +2472,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60552
 	Flags:	0
@@ -2467,6 +2521,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60552
 	Flags:	0
@@ -2504,6 +2559,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60554
 	Flags:	0
@@ -2544,6 +2600,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60557
 	Flags:	0
@@ -2579,6 +2636,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60558
 	Flags:	0
@@ -2616,6 +2674,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60559
 	Flags:	0
@@ -2655,6 +2714,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60560
 	Flags:	0
@@ -2691,6 +2751,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60561
 	Flags:	0
@@ -2726,6 +2787,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60560
 	Flags:	0
@@ -2767,6 +2829,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60561
 	Flags:	0
@@ -2797,6 +2860,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60585
 	Flags:	0
@@ -2866,6 +2930,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60563
 	Flags:	0
@@ -2903,6 +2968,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	60563
 	Flags:	0
@@ -2913,8 +2979,10 @@ BREAK
 #60566
 Name:	Shadowland: In-Character Message Board
 Desc:$
-   A computer terminal has been placed here and is linked to Shadowland, a
-connection in the Matrix that serves at a database for all Shadowrunners. 
+   A computer terminal has been placed here that is linked to Shadowland, a
+connection in the Matrix that serves as a database for all Shadowrunners--
+^WLOOK TERMINAL^n to see how to use it. There's also a branch of the Seattle post
+office here, the use of which is described in ^WHELP MAIL^n. 
 ~
 Flags:	11000
 SecType:	Inside
@@ -2932,12 +3000,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	ToVnum:	60567
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	60563
 	Flags:	0
@@ -2969,6 +3032,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60568
 	Flags:	0
@@ -3005,6 +3069,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60567
 	Flags:	0
@@ -3034,6 +3099,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60563
 	Flags:	0
@@ -3066,6 +3132,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	60563
 	Flags:	0
@@ -3110,6 +3177,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60570
 	Flags:	0
@@ -3142,6 +3210,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	60570
 	Flags:	0
@@ -3180,6 +3249,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60575
 	Flags:	0
@@ -3223,6 +3293,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60573
 	Flags:	0
@@ -3261,6 +3332,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	60573
 	Flags:	0
@@ -3299,6 +3371,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60577
 	Flags:	0
@@ -3343,6 +3416,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60578
 	Flags:	0
@@ -3380,6 +3454,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60579
 	Flags:	0
@@ -3417,6 +3492,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60580
 	Flags:	0
@@ -3454,6 +3530,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60579
 	Flags:	0
@@ -3497,6 +3574,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60580
 	Flags:	0
@@ -3534,6 +3612,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60581
 	Flags:	0
@@ -3571,6 +3650,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60576
 	Flags:	0
@@ -3615,6 +3695,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60580
 	Flags:	0
@@ -3650,6 +3731,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	32679
 	Flags:	0
@@ -3695,6 +3777,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	32680
 	Flags:	0
@@ -3732,6 +3815,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60546
 	Flags:	0
@@ -3766,6 +3850,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60589
 	Flags:	0
@@ -3803,6 +3888,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	60588
 	Flags:	0
@@ -3834,6 +3920,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	60541
 	Flags:	0
@@ -3865,6 +3952,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60511
 	Flags:	0
@@ -3897,6 +3985,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	60512
 	Flags:	0
@@ -3927,6 +4016,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT up]
 	ToVnum:	60506
 	Flags:	0
@@ -3963,6 +4053,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60595
 	Flags:	0
@@ -4008,6 +4099,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60596
 	Flags:	0
@@ -4053,6 +4145,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60597
 	Flags:	0
@@ -4094,6 +4187,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60598
 	Flags:	0
@@ -4133,6 +4227,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60600
 	Flags:	0
@@ -4198,6 +4293,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60565
 	Flags:	0
@@ -4230,6 +4326,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60598
 	Flags:	0
@@ -4261,6 +4358,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southwest]
 	ToVnum:	60598
 	Flags:	0
@@ -4293,6 +4391,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	60598
 	Flags:	0
@@ -4326,6 +4425,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northwest]
 	ToVnum:	60598
 	Flags:	0
@@ -4358,6 +4458,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60598
 	Flags:	0
@@ -4386,6 +4487,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 BREAK
 #60606
 Name:	Purchasing Power Points
@@ -4413,6 +4515,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60607
 	Flags:	0
@@ -4457,6 +4560,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60518
 	Flags:	0
@@ -4503,6 +4607,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60530
 	Flags:	0
@@ -4552,6 +4657,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60534
 	Flags:	0
@@ -4588,6 +4694,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60517
 	Flags:	0
@@ -4629,6 +4736,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60517
 	Flags:	0
@@ -4666,6 +4774,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT southeast]
 	ToVnum:	60517
 	Flags:	0
@@ -4703,6 +4812,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60517
 	Flags:	0
@@ -4740,6 +4850,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	60517
 	Flags:	0
@@ -4783,6 +4894,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60618
 	Flags:	0
@@ -4845,6 +4957,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60615
 	Flags:	0
@@ -4879,6 +4992,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	ToVnum:	60615
 	Flags:	0
@@ -4913,6 +5027,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	ToVnum:	60615
 	Flags:	0
@@ -4943,6 +5058,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT north]
 	ToVnum:	60615
 	Flags:	0
@@ -4976,6 +5092,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT west]
 	Keywords:	door
 	Desc:$
@@ -5000,9 +5117,9 @@ SecType:	Inside
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	0
-Y:	0
-Z:	0.00
+X:	2
+Y:	2
+Z:	5.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -5011,11 +5128,12 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
-	ToVnum:	60622
+	ToVnum:	0
 	Flags:	0
-	Material:	brick
-	Barrier:	4
+	Material:	paper
+	Barrier:	0
 	KeyVnum:	0
 BREAK
 #60622
@@ -5030,9 +5148,9 @@ SecType:	Inside
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	0
-Y:	0
-Z:	0.00
+X:	2
+Y:	2
+Z:	5.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -5041,6 +5159,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT south]
 	Keywords:	doors shaft
 	Desc:$
@@ -5048,15 +5167,15 @@ A pair of elevator doors allows access to the liftway.
 ~
 	ToVnum:	60532
 	Flags:	1
-	Material:	brick
-	Barrier:	4
+	Material:	metal
+	Barrier:	8
 	KeyVnum:	998
 	LockRating:	8
 [EXIT up]
-	ToVnum:	60621
+	ToVnum:	0
 	Flags:	0
-	Material:	brick
-	Barrier:	4
+	Material:	paper
+	Barrier:	0
 	KeyVnum:	0
 BREAK
 #60623
@@ -5087,6 +5206,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60521
 	Flags:	0
@@ -5132,6 +5252,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60625
 	Flags:	0
@@ -5177,6 +5298,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT east]
 	ToVnum:	60594
 	Flags:	0
@@ -5218,6 +5340,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60507
 	Flags:	0
@@ -5251,6 +5374,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60508
 	Flags:	0
@@ -5282,6 +5406,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60506
 	Flags:	0
@@ -5317,6 +5442,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60611
 	Flags:	0
@@ -5350,6 +5476,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60612
 	Flags:	0
@@ -5380,6 +5507,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60613
 	Flags:	0
@@ -5412,6 +5540,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60614
 	Flags:	0
@@ -5444,6 +5573,7 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60610
 	Flags:	0

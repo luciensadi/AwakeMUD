@@ -12,5 +12,6 @@ extern const char *weapon_type_aliases[];
 
 // print vict's bullet pants to ch. ch == vict is allowed.
 void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
+bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *buf, int bufsize);
 
 #endif
