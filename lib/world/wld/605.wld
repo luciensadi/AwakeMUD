@@ -1,15 +1,16 @@
 #60500
 Name:	Welcome to Awakened Worlds!
 Desc:$
-    Welcome to Awake CE. This room stands on the event horizon of a great
-rift, the rift connecting our world to that which lies beyond. You stand now
-at the sole entrance to this realm. As you explore these hallowed halls, you
-will discover everything you need to know to survive in the cruel, cold world
-the Earth has become in what is our present - midway through the 21st century.
+   Welcome to Awake CE. This room stands on the event horizon of a great rift,
+the rift connecting our world to that which lies beyond. You stand now at the
+sole entrance to this realm. As you explore these hallowed halls, you will
+discover everything you need to know to survive in the cruel, cold world the
+Earth has become in what is our present - midway through the 21st century.
 Mind you, here you will only be taught the theory of what you must do. Living
 long enough to learn how to apply it is completely up to you. Welcome, and
 good luck.
- ^n   Type ^WNORTH^n or ^WN^n to continue on your journey. 
+   If you are using a screenreader, you should type ^WTOGGLE SCREENREADER^n now.
+     ^n   Type ^WNORTH^n or ^WN^n to continue on your journey.  
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -80,7 +81,7 @@ RoomType:	0
 A door stands to the east, with a sign on it that reads "You can ^WOPEN DOOR
 EAST^n to enter here." 
 ~
-	ToVnum:	60620
+	ToVnum:	60654
 	Flags:	1
 	Material:	metal
 	Barrier:	32
@@ -343,7 +344,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	60628
+	ToVnum:	60662
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -391,7 +392,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	60626
+	ToVnum:	60660
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -432,7 +433,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	60627
+	ToVnum:	60661
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -441,9 +442,9 @@ BREAK
 #60509
 Name:	Vehicle Skill Training
 Desc:$
-   Vehicle skills are available in this room. Type PRACTICE to see what's
-available. DRIVING type skills are necessary for operation of cars, trucks,
-and other vehicles. BR skills, or Build and Repair skills, determines a
+   Vehicle skills are available in this room. Type ^WPRACTICE^n to see what's
+available. ^WDRIVING^n type skills are necessary for operation of cars, trucks,
+and other vehicles. ^WBR^n skills, or Build and Repair skills, determines a
 character's ability to repair or construct a vehicle. These skills are
 essential for Rigger characters, whose specialties revolve around the
 operation of vehicles and drones. 
@@ -477,13 +478,13 @@ Name:	Magical Skill Training
 Desc:$
    Magical skills are essential for magically attuned characters, but are not
 very useful for the mundane. This room allows you to home your abilities in
-SORCERY and CONJURING, as well as aura reading. SORCERY determines the 
+^WSORCERY^n and ^WCONJURING^n, as well as aura reading. ^WSORCERY^n determines the 
 spellcaster's capabilities with casting spells, and will determine their 
-success with spellcasting. CONJURING allows mages to summon elementals to 
+success with spellcasting. ^WCONJURING^n allows mages to summon elementals to 
 do their bidding, and also allows shamans to conjure spirits to do theirs. 
-AURA READING helps awakened people gain extra information about a person or
+^WAURA READING^n helps awakened people gain extra information about a person or
 items aura.
-   To practice these abilities, type PRACTICE, followed by the skill name.
+   To practice these abilities, type ^WPRACTICE^n, followed by the skill name.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -512,14 +513,14 @@ BREAK
 #60511
 Name:	Decking and Electronics Skill Training
 Desc:$
-   Deckers are the computer hackers of 2062. Connecting their brains directly
+   Deckers are the computer hackers of 2064. Connecting their brains directly
 to the matrix they risk life and limb to break into corporate systems, steal
 files, and provide security overwatch for their chummers in the real world.
-Type PRACTICE to see what the Trainer has to offer. Typing "HELP (Skillname)"
+Type ^WPRACTICE^n to see what the Trainer has to offer. Typing ^WHELP (Skillname)^n
 will provide you with more information on the skill you are trying to learn.
 Skills to help with Programming are to the WEST. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -552,7 +553,7 @@ BREAK
 #60512
 Name:	Language Training
 Desc:$
-   Despite the changing territories and nation boundaries in 2060 that
+   Despite the changing territories and nation boundaries in 2064 that
 incorporated members of various ethnic nationalities into a jumble of
 territories, language barriers still exist in the Shadowrun Universe. While
 all characters start with mastery of the English language, knowing other
@@ -560,7 +561,7 @@ languages is always a useful skill when interacting with others. Sometimes you
 may not be able to understand someone else in a conversation: this is due to a
 failed dice roll based on your language skill. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -601,7 +602,7 @@ player on the professions they want their characters to take, it is
 recommended that you stick to one profession if you are new to the Shadowrun
 system. Proceed SOUTH to continue. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -642,7 +643,7 @@ can learn more about HERMETIC and SHAMANIC magic. Finally, those who are
 ADEPTS, people who use magic to augment their physical capabilities, should
 head SOUTH to learn more about their profession. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -685,7 +686,7 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #60515
-Name:	The Path of the Mundane
+Name:	The Path of the Street Samurai
 Desc:$
    So you weren't born with magical abilities. Who needs 'em? Mundanes can
 augment themselves with cyberware and bioware, artificial enhancements, to
@@ -699,7 +700,7 @@ sickening process. For those who can stomach it, however, the possibilities
 are great. Continue WEST to learn more.
    
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -745,7 +746,7 @@ those of vehicles, effectively controlling vehicles and drones with their
 VEHICLE CONTROL RIGS and REMOTE CONTROL DECKS. Riggers can become quite
 formidable with a legion of machines backing them up. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -778,16 +779,19 @@ BREAK
 #60517
 Name:	Cyberware Central
 Desc:$
-   Cyberware is one of the Sixth World's greatest achievements, blending man
-and machine, working together seamlessly, to bring otherwise mundane metahumans
-up to levels only dreamed of by even the most powerful adept or mage. It is not
-without its drawbacks however, along with costing a lot of nuyen, it also takes
+   Cyberware is one of the sixth worlds greatest achievements, it blends man
+and machine, working together seemless, to bring otherwise mundane metahumans
+up to levels only dreamed of by even the most power adept or mage. It is not
+without its drawbacks however, along with costing alot of nuyen, it also takes
 up essence. Essence is a measurement of how much your spirit binds with your
 body. Everyone starts with 6 essence and it cannot be raised. If your essence
 ever drops to 0, your spirit flees your body and you die. Low essence also
-makes it hard for beneficial spells to bind with your body. 
+makes it hard for beneficial spells to bind with your body.
+   To display a list of available cyberware you type LIST in front of the
+Cyberdoc. To install cyberware use the BUY command. Cyberware can be removed
+with the SELL command. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -847,18 +851,18 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
+	Keywords:	datajack~~~~~~~~~~~~~~~~~~
 	Desc:$
-Wired Reflexes, while costly to the user's essence, enhance their REACTION and
-INITIATIVE, allowing them to attack more often than an un-augmented person.
-Wired Reflexes are known to cause some people to be extra jumpy. 
+A DATAJACK is necessary for a decker or a rigger to interface their mind with
+a machine. 
 ~
 [EXTRADESC 1]
-	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
+	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
 	Desc:$
-The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
-be able to mentally control a vehicle. An explanation of RIGGING is provided
-later in the guild. 
+The SMARTLINK system allows the user to use a smartlink accessorized firearm,
+granting them greater accuracy in ranged combat. If the weapon is outfitted
+with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
+feature is automatically used. 
 ~
 [EXTRADESC 2]
 	Keywords:	spurs razors retractable~~~~~~~~~~~~~~~~~~
@@ -869,18 +873,18 @@ automatically used when the character enters unarmed combat, and success is
 based on the CYBERIMPLANT COMBAT skill. 
 ~
 [EXTRADESC 3]
-	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
+	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
 	Desc:$
-The SMARTLINK system allows the user to use a smartlink accessorized firearm,
-granting them greater accuracy in ranged combat. If the weapon is outfitted
-with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
-feature is automatically used. 
+The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
+be able to mentally control a vehicle. An explanation of RIGGING is provided
+later in the guild. 
 ~
 [EXTRADESC 4]
-	Keywords:	datajack~~~~~~~~~~~~~~~~~~
+	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
 	Desc:$
-A DATAJACK is necessary for a decker or a rigger to interface their mind with
-a machine. 
+Wired Reflexes, while costly to the user's essence, enhance their REACTION and
+INITIATIVE, allowing them to attack more often than an unaugmented person.
+Wired Reflexes are known to cause some people to be extra jumpy. 
 ~
 BREAK
 #60518
@@ -893,7 +897,7 @@ martial arts movies. Adept powers range from straight out killing to healing.
 Like all awakened beings however, their powers are hampered by cyberware and
 bioware, which should be avoided as they cause random ability loss. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -933,7 +937,7 @@ them, so if you require any extra information about then make sure to read
 through them. Typing TRAIN and then the name of the ability you would like to
 learn to advance that ability another level.  
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1041,7 +1045,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	60623
+	ToVnum:	60657
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1125,7 +1129,7 @@ RoomType:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
 [EXIT east]
-	ToVnum:	60624
+	ToVnum:	60658
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1186,13 +1190,13 @@ BREAK
 #60525
 Name:	Introduction to Complex Commands
 Desc:$
-   Awake has developed a large number of complex commands and features unique
-to this MUD. While not all of them can be explained in this area, the basic,
-essential functions will be described in the rooms to come. A staircase leads
-back up to the Career Archetype area in case you'd like to learn more about
-the archetypes. 
+   Awakened Worlds has developed a large number of complex commands and
+features unique to this MUD. While not all of them can be explained in this
+area, the basic, essential functions will be described in the rooms to come. A
+staircase leads back up to the Career Archetype area in case you'd like to
+learn more about the archetypes. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1225,7 +1229,7 @@ BREAK
 #60526
 Name:	Managing Your Bank Account: ATMs and Credsticks
 Desc:$
-   The world of 2060 is all about nuyen (the standard currency in this world).
+   The world of 2064 is all about nuyen (the standard currency in the world).
 Managing your finances is an important aspect of running the shadows. People
 who carry their life savings with them all the time tend to lose it very
 quickly.
@@ -1241,9 +1245,9 @@ the nuyen within. You can use credsticks to make purchases, although some
 illegal street dealers will only accept rolls of nuyen.
    To move funds from a credstick to an ATM, type "TRANSFER <amount> ACCOUNT".
 To transfer funds from an ATM to a credstick, type "TRANSFER <amount>
-CREDSTICK". 
+CREDSTICK".
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1276,13 +1280,13 @@ BREAK
 #60527
 Name:	All About Radio Broadcasting
 Desc:$
-    The radios used by Shadowrunners in 2064 are specialized Matrix terminals
+   The radios used by Shadowrunners in 2064 are specialized Matrix terminals
 linked through the Shadowland network. This allows them heavy security from
 most normal law enforcement agencies, but it is still possible to track
 someone down through it.
-   Radio's are an IN-CHARACTER form of communication: disregard the way you
+   Radios are an IN-CHARACTER form of communication: disregard the way you
 behave and think about how your character would act.
-   To operate a radio use the RADIO command. This will show you it's current
+   To operate a radio use the RADIO command. This will show you its current
 settings. To center the radio at a frequency (the most common is 8mhz), type
 RADIO CENTER <frequency>. To scan through all frequencies type RADIO SCAN.
 Encryption rating can be set by typing RADIO CRYPT <rating>. Only radios with
@@ -1290,9 +1294,8 @@ an encryption rating greater than or equal to what you have it set at can
 receive them.
    To broadcast a message type BROADCAST <message>. Turning the radio off can
 be accomplished with RADIO OFF. 
-   You have been issued a radio for free! Don't buy one later.
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1325,14 +1328,14 @@ BREAK
 #60528
 Name:	E.T. Phone Hoooome.
 Desc:$
-   Phones are a more private form of communication. When you acquire a phone and
+   Phones are a more private form of communation. When you aquire a phone and
 wish to use it, you must first find the eight digit telephone numbers of the
 people you want to call. Type PHONE to see your settings. Type CALL (########)
 to start calling someone. If they answer, use TALK (message) to start talking
 with them. Type HELP PHONE for more information on settings and calls. Head
-NORTH to learn about channels. 
+NORTH to learn about doors and maglocks. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1384,7 +1387,7 @@ installed.
    Awakened Characters also have a Grade, which is how many times they have
 initiated, this is explained later. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1446,7 +1449,7 @@ RoomType:	0
 	Desc:$
 A pair of elevator doors allows access to the liftway.
 ~
-	ToVnum:	60621
+	ToVnum:	60655
 	Flags:	1
 	Material:	metal
 	Barrier:	8
@@ -1537,7 +1540,7 @@ RoomType:	0
 	Desc:$
 A pair of elevator doors allows access to the liftway.
 ~
-	ToVnum:	60622
+	ToVnum:	60656
 	Flags:	1
 	Material:	metal
 	Barrier:	8
@@ -1560,7 +1563,7 @@ are incapable of leaving their bodies through Astral Projection. Type EXITS.
 The rooms in this area explain the details to interacting with these other
 worlds, and will tell you the important commands that are necessary.  
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1590,7 +1593,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	60538
+	ToVnum:	60548
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1630,7 +1633,7 @@ hour. If it falls to 0 you will die. It returns at a rate of 1 every mud hour
 while in your physical body however. There are various actions that can only
 be undertaken while in the astral plane, these are explained to the WEST. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1669,14 +1672,14 @@ there you have a variety of options: You can LOCATE another host, then LOGON
 to it. You can attempt to LOCATE files and DOWNLOAD them.
    But first you need a cyberdeck and four 'persona' programs - body, evasion,
 sensors and masking. You must INSTALL these programs to access even the most
-basic of hosts. Once you get started, you'll realize that a lot of operations
+basic of hosts. Once you get started, you'll realise that a lot of operations
 fail. To improve your chances of succeeding, you can add additional utilities
 to your deck. Use the SOFTWARE command to get the values and names of software
 you have installed.
     See the help files: MATRIX, IC, CYBERDECKS, PROGRAMS, UTILITIES, LOCATE,
 LOGON, ANALYZE, DOWNLOAD, SOFTWARE and RUN for more information. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1703,14 +1706,14 @@ BREAK
 #60536
 Name:	Rigging: Danger! Danger, Will Robinson!
 Desc:$
-   Rigging is a complex task. A rigger must acquire three things before they
+   Rigging is a complex task. A rigger must aquire three things before they
 can even think about rigging: a Vehicle Control Rig, and Datajack, and a
-Remote Control Deck. Once those are acquired, they simply need to purchase a
+Remote Control Deck. Once those are aquired, they simply need to purchase a
 vehicle or a drone. First the rigger must register the vehicle with the
 SUBSCRIBE command to add it to their RC deck. When subscribed, a vehicle will
 be given a control number. To start controlling a vehicle on your SUBSCRIBE
 list, type CONTROL (number of the vehicle). To adjust the speed at which you
-are traveling, type SPEED (idle/cruise/speeding/max). To return back to your
+are travelling, type SPEED (idle/cruise/speeding/max). To return back to your
 physical body, type RETURN. While in control of a vehicle, it is possible to
 attack those who are hostile with the RAM function. Excessive ramming will
 result in damage to the vehicle. If the vehicle is destroyed while the rigger
@@ -1722,7 +1725,7 @@ attack.
 UPGRADE, UNINSTALL, ATTACH, TARGET, and REPAIR.
    
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1756,18 +1759,19 @@ attacking your vehicle, you can RAM him, which will result in damage to your
 vehicle. If your vehicle is destroyed, all passengers will be flung out into
 the street, where they will take heavy crash damage in addition to being in
 the unenviable position of confronting whatever destroyed their vehicle. In
-the world of 2060, the isolated city-state of Seattle is surrounded by
+the world of 2064, the isolated city-state of Seattle is surrounded by
 unfriendly nations, all of which firmly patrol their borders and shoot
 intruders on sight. It is not recommended that you attempt to drive past a
 border fortification.
-   Useful help files: VEHICLES, DRIVER, UPGRADE, UNINSTALL, REPAIR, GRIDGUIDE
+   Useful help files: ^WVEHICLES, DRIVER, UPGRADE, UNINSTALL, REPAIR, GRIDGUIDE^N
    The man in this room also can sell a vehicle to you if you have the money
 for one. He won't give you the actual car itself, but he will give you a TITLE
 that you cash in for a vehicle at the end of the area. Driving isn't
 essential, however, as Seattle boasts an effective cab system: simply type
-HAIL when you're out on the street to flag down a cab. 
+HAIL when you're out on the street to flag down a cab. There is a ^Rsign^N here
+with basic details and information for the vehicles the dealer has for sale.
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1790,6 +1794,13 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign
+	Desc:$
+Vehicle Types: ^r[Bike]^N Yamaha Rapier, Harley Scorpion ^r[Car]^N Eurocar Westwind
+2000, Mitsubishi Runabout, Chrysler-Nissan Jackrabbit-E, Ford Americar
+^r[Truck]^N Ford Bison 
+~
 BREAK
 #60538
 Name:	A Metal Staircase Leading Downward
@@ -1798,7 +1809,7 @@ Desc:$
 next level to continue making your character by outfitting him/her with some
 equipment. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1816,7 +1827,7 @@ RoomType:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
 [EXIT north]
-	ToVnum:	60533
+	ToVnum:	60548
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1831,16 +1842,16 @@ BREAK
 #60539
 Name:	All About Your Equipment
 Desc:$
-   Equipment is essential to survival in the harsh world of 2060. Someone will
+   Equipment is essential to survival in the harsh world of 2064. Someone will
 always be better equipped than you, and if you ever come into conflict, you'll
 want to make the most out of what you have. To wear a piece of equipment, type
 WEAR (equipment). To start using a weapon, type WIELD (weapon). Watch out,
 security forces in sensitive areas like corporate territory will attack
 anything that looks like a threat: be sure you're not wearing illegal
 equipment such as armor or weapons unless you like being shot at. Continue
-NORTH to learn about the types of equipment in 2060. 
+NORTH to learn about the types of equipment in 2064. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1883,7 +1894,7 @@ the BYPASS command. To do this you need an electronics kit however.
 commands. Also, the KNOCK command can be used to alert someone on the other
 side of a closed door. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1922,17 +1933,17 @@ continuing, you lose any money you have left once you leave the guild.
    You buy items from stores using the BUY command, and sell items back using
 the SELL command. VALUE is used to give a rough estimate of how much you will
 get payed for an item. INFO will show a brief explanation of what a item is,
-it's ratings, etc. CHECK and RECEIVE are used along with availablity to see
+it's ratings, etc. CHECK and RECEIVE are used along with availability to see
 how long is remaining until an item arrives and to receive delivery of it.
    If an item has a time listed in the "Availability" column then it is
-subject to an availablity test. The time listed is the least amount time it
-will take, the better you score on the availablity test the less time it will
+subject to an availability test. The time listed is the least amount time it
+will take, the better you score on the availability test the less time it will
 take.
    Once ordered you can go about your business as normal, even log off, it
 will be available in the amount of time the shopkeeper responds. All time
 listed is MUD time. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1986,13 +1997,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	60543
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT northwest]
-	ToVnum:	60542
+	ToVnum:	60620
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2005,26 +2010,23 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #60542
-Name:	Toby's Firearms and Ammunition
+Name:	Firearm Usage
 Desc:$
-       Toby will provide you with firearms, provided you have enough money to
-pay for his services. Remember that a weapon is only as good as its user: if
-you don't have any skill in handling a weapon, it's not going to be of much
-use to you. Type LIST to see what's available. After you make your selection,
-you can head into the storage room ABOVE to accessorize the weapon or purchase
-ammunition. Be careful: ammunition will only work with your weapon if the magazine
-capacity is the same as the maximum ammo of your weapon, and if the magazine is of
-the same weapon type. To reload, type RELOAD when your weapon is out of ammo.
-   Light Pistols: Fichetti Security, Colt American
-   Machine Pistols: Ceska
-Black Scorpion
-   Heavy Pistols: Ares Predator, Colt Manhunter, Ruger Super Warhawk, Colt
-Peacemaker
-   Submachine Guns: Ingram Smartgun, Uzi III
-   Rifles: Remington 950
-   Light Machine Guns: Ingram Valiant
+   There are various options that can affect how a firearm works. The main is
+the type of ammo you currently have loaded, while only normal ammo is
+available here in Chargen there are 5 other types available in the outside
+world. You can find out more about these in  ^WHELP AMMO^N.
+   The firing mode can also be changed on most weapons. Type ^WMODE^N with your
+weapon wielded to see available fire modes and then ^WMODE <SS/SA/BF/FA>^N to
+change it to the desired mode. The more rounds you fire at once the more
+damage and power your attacks have. Firing extra rounds also makes your
+attacks harder to dodge, but at the cost of also making it harder to hit due
+to recoil. 
+   Recoil compensating attachments can help negate this however. A
+word of warning, while very powerful, burst fire shotguns and other heavy
+weapons suffer double the penalty from any recoil not negated by attachments.
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2041,14 +2043,14 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
-[EXIT southeast]
-	ToVnum:	60541
+[EXIT north]
+	ToVnum:	60551
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT up]
-	ToVnum:	60548
+[EXIT south]
+	ToVnum:	60552
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2064,7 +2066,7 @@ Sword
    CLUBS- Stun Baton, Staff, Nightstick
    WHIPS/FLAILS- Nunchaku, Leather Whip
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2081,21 +2083,26 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
-[EXIT east]
-	ToVnum:	60541
+[EXIT north]
+	ToVnum:	60620
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60544
-Name:	Ave's Protective Gear: Armor and Clothing
+Name:	Armour and Clothing
 Desc:$
-   Here protective armor can be purchased to better guard yourself from
-hostile attacks. Security forces frown upon armor, however, so be careful
-where you wear it. 
+   Here you can purchase from either armoured clothing, standard clothing or
+standard armour. All armour is legal in the world of 2064, except for military
+or security armour. Security armour needs a permit, but military armour can
+never be used by civilians.
+   Most clothing comes with pockets, or attachments specially for holsters or
+ammo clips. These are used as standard containers, but if you are wearing the
+article of clothing then you can access what is inside as though it is in your
+inventory. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2118,14 +2125,33 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60638
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60639
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60637
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #60545
-Name:	Gremlin's Gadgets: Electronics and Machines
+Name:	General Gear
 Desc:$
-   Gremlin sells various electronic devices that someone new to the Seattle
-metroplex might need. Type LIST to see what's available. 
+   Everything from phones, to kits, to backpacks can be bought here.
+Everything that doesn't fit in elsewhere. Due to the amount of different gear
+it is recommended that you check out the helpfiles. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2153,13 +2179,27 @@ BREAK
 Name:	Howie's Decks: Cyberdecks and Rigging Decks
 Desc:$
    Here a decker or rigger can purchase the equipment they need to get their
-job done. Glass cases store CYBERDECKS and PROGRAMS, both of which are needed
-to successfully DECK the MATRIX. Rigger equipment is also sold here, and
-various electronic devices are stored in storage lockers. 
+job done. Glass cases store ^WCYBERDECKS^N, ^WPROGRAMS^N, and ^WUTILITIES^N, all of which
+are needed to successfully ^WDECK^N the ^WMATRIX^N. The core of a deck is the ^WMPCP^N,
+as well as knowledge, so reading through these helpfiles will greatly advance
+ones ability to navigate the matrix. The ^WSOFTWARE^N command will offer a view of
+a cyberdecks contents, so keep that in mind. Rigger equipment is also sold
+here, and various electronic devices are stored in storage lockers. A rather
+large ^rshowcase display^N case is also set up here, which offers information on
+the various cyberdecks being sold.
+   An RJ-715 datapoint shines in one of the corners, allowing new deckers to
+^WCONNECT^N and try their hand with their new found skills and hardware. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
-MatrixExit:	0
+MatrixExit:	60500
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	60500
+JackID:	60505555
+Address:	Char-Gen Datapoint
 Crowd:	0
 Cover:	0
 X:	20
@@ -2174,6 +2214,12 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
+[EXIT east]
+	ToVnum:	60642
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60541
 	Flags:	0
@@ -2192,15 +2238,47 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	Avatarspecs
+	Desc:$
+[CMT Avatar] MPCP: 7, Hardening: 4, Active: 700, Storage: 1400, I/O: 300 
+~
+[EXTRADESC 1]
+	Keywords:	Hyperdeckspecs
+	Desc:$
+[Hyperdeck-6] MPCP: 6, Hardening: 4, Active: 500, Storage: 1000, I/O: 240 
+~
+[EXTRADESC 2]
+	Keywords:	Sigmaspecs
+	Desc:$
+[Allegiance Sigma] MPCP: 3, Hardening: 1, Active: 200, Storage: 500, I/O: 100
+~
+[EXTRADESC 3]
+	Keywords:	showcase display
+	Desc:$
+This showcase display is set up with the specs of the various cyberdecks being
+peddled here for interested customers to examine. (^WExamine Sigmaspecs^N, ^cExamine
+Hyperdeckspecs^N, ^RExamine Avatarspecs^N, ^mExamine SonySpecs^N).  
+~
+[EXTRADESC 4]
+	Keywords:	SonySpecs
+	Desc:$
+[Sony CTY-360-D] MPCP: 5, Hardening: 3, Active: 300, Storage: 600, I/O: 200 
+~
 BREAK
 #60547
-Name:	Bowie's Hunting Shop: Survival Gear
+Name:	Docwagon Modulators
 Desc:$
-   Bowie, a long, long, distant descendant of the famous Jim Bowie, stands
-behind the counter selling items that someone might need to survive in a harsh
-environment. 
+   The ambulance service in the Seattle Metroplex is handled by DocWagon. It's
+possible to purchase contracts with DocWagon for them to provide you with a
+premium service. Depending on the complexity of getting access to your
+location, and the level of your contract DocWagon can retreive you and all of
+your gear when you are on the verge of death, negating all penalties for
+mortal wounds. The higher the initial cost of the contract the more of a
+chance they will get to you in time and the cheaper it will be for each
+retreival. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2225,20 +2303,24 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #60548
-Name:	Gun Accessories
+Name:	Apartments and Saving Gear
 Desc:$
-    Here you can purchase gun accessories to outfit your firearm. To attach an
-accessory to a gun, use the ATTACH command. Help ATTACH for more information.
-   A Smartlink accesory adapts a gun to the Smartlink cyberware, allowing
-someone to shoot more accurately if they have a Smartlink installed in their
-bodies.
-   A laser sight can be attached for those who do not have a smartlink for
-increased accuracy.
-   Gas Vents can reduce the recoil of a weapon, reducing the target modifiers
-for firing in burst fire mode.
-   
+   Surplus gear can be stowed in numerous locations. First off are storage
+lockers, available in a few places around the MUD. They can hold a small
+amount of gear and cost 50 nuyen a day for a maximum of 7 days. If you leave
+it for more than 7 days the locker is automatically cleared.
+   Next is vehicles, how much a vehicle can hold varies greatly depending on
+the vehicle. You can store gear in bikes aswell, but a word of warning, anyone
+can take it so it isn't a safe option.
+   Apartments are the best way to store gear. Not only can you store surplus
+gear in them, but you can reload in them if you quit once while inside. Also,
+no one but yourself and anyone you specify with the ^WHOUSE^N command can gain
+entrance. Apartments are also the most expensive.
+   You can purchase credits here to help pay for an apartment in 10,000 credit
+lots using the ^WRECHARGE^N command. These cards are non-transferable and can be
+used towards any apartment in the MUD. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2255,8 +2337,14 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
-[EXIT down]
-	ToVnum:	60542
+[EXIT north]
+	ToVnum:	60533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60538
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2273,7 +2361,7 @@ description. Anyone can do this at any time for the cost of 2.5 Karma,
 however, you have received 5 free restrings that are valid while you are in
 character generation only. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2311,13 +2399,13 @@ have high QUICKNESS, INTELLIGENCE, and REACTION will tend to get more attacks
 than their opponents. To initiate combat, type KILL (target). If you are using
 a weapon that deals stun damage, you will only stun your opponent instead of
 killing them. Killing should only be initiated on MOBs (mobiles, computer
-controlled non-player characters). All your kills with gain you a fraction of 
-a karma point, but also increases your NOTORIETY. And don't even think about trying
-to start a fight with another player unless you both have toggled your
-player-killer flags- you won't do any damage at all, whereas your opponent will
-be able to hurt you. Continue SOUTH to learn more about combat.  
+controlled non-player characters). All your kills with gain you a fraction of
+a karma point, but also increases your NOTORIETY. And don't even think about
+trying to start a fight with another player unless you both have toggled your
+player-killer flags- you won't do any damage at all, whereas your opponent
+will be able to hurt you. Continue SOUTH to learn more about combat. 
 ~
-Flags:	1000000000000000000
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2325,7 +2413,7 @@ Cover:	0
 X:	20
 Y:	20
 Z:	2.50
-RoomType:	0
+RoomType:	6
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -2358,7 +2446,7 @@ at each other. However, if one character is using a melee weapon and their
 opponent has a firearm, they will need to "close the distance" before they can
 try to attack their opponent. It is difficult to attack someone with a sword
 if they happen to be spraying you with full automatic fire. Your success at
-closing the distance between the attackers is dependent on your QUICKNESS
+closing the distance between the attackers is dependant on your QUICKNESS
 rating. As such, attributes like QUICKNESS, INTELLIGENCE, and WILLPOWER are
 all very important for combat. BODY is also important for determining damage
 resistance, and STRENGTH is useful for increasing the power of your attacks if
@@ -2366,9 +2454,11 @@ you're using a melee weapon.
    Combat can also be initiated in other ways: Casting a combat spell on
 someone will start a fight, and casting spells in the middle of combat
 requires intense concentration- the harder the spell, the longer it will take
-to cast it.  
+to cast it.
+   Keep in mind, Mana based spells do not affect inanimate objects such as
+training dummies. They are, however, affected by physical based spells.
 ~
-Flags:	1000000000000000000
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2376,7 +2466,7 @@ Cover:	0
 X:	20
 Y:	20
 Z:	2.50
-RoomType:	0
+RoomType:	6
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -2392,7 +2482,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	60552
+	ToVnum:	60542
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2408,13 +2498,10 @@ Shooting Range. You can hit people in other rooms with the SHOOT command. To
 fire at someone, type SHOOT (target) (direction). Naturally, it is more
 difficult to shoot someone from far away than it is if they're in the same
 room: gun accessories like smartlinks, laser sights, gas vents, and scopes can
-make the task easier. If a mage has a direct line of sight, they can also cast
-a combat spell from a distance. Type syntax is CAST '(spell)' (target)
-(direction). The same can be done from Astral Space against an Astral form.
-Practice ranged combat here if you want, and head SOUTH to learn more about
-combat. 
+make the task easier. Practice ranged combat here if you want, and head SOUTH
+to learn more about combat.  
 ~
-Flags:	1000000000000000000
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2422,7 +2509,7 @@ Cover:	0
 X:	20
 Y:	20
 Z:	2.50
-RoomType:	0
+RoomType:	6
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -2432,7 +2519,7 @@ RoomType:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
 [EXIT north]
-	ToVnum:	60551
+	ToVnum:	60542
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2456,7 +2543,7 @@ Desc:$
    What are you doing out in the middle of the Shooting range? Are you crazy?
 Go back east before you get shot! 
 ~
-Flags:	1000000000000000000
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2464,7 +2551,7 @@ Cover:	0
 X:	20
 Y:	20
 Z:	2.50
-RoomType:	0
+RoomType:	6
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -2489,15 +2576,14 @@ started a fight with someone that you're losing, you can FLEE to try to run
 away. Fleeing will attempt to move your character out of the room through a
 random exit- you may escape the fight, or you may run into more opposition if
 you're not careful. For a more precise, but more difficult method of escaping
-combat, try to RETREAT. You can run away from a specific direction if you try
-to RETREAT (direction). The WIMPY command can be used to set your character to
-automatically flee once they're wounded enough. 
+combat, try to retreat. You can run away from a specific direction if you try
+to move in that direction. The WIMPY command can be used to set your character
+to automatically flee once they're wounded enough. 
    What if you don't want to run away from a fight? To avoid getting hit, you
 have a COMBAT POOL. Your COMBAT POOL is determined by your QUICKNESS,
 INTELLIGENCE, and WILLPOWER attributes. In combat, your COMBAT POOL will add
-dice to either your defense (allowing you to dodge attacks) or offense
-(allowing you do deal more damage, or hit someone) dice rolls. To set your
-combat pool, type DEFENSE.
+dice to either your dodge test, damage resistance test, or offensive dice rolls.
+To set your combat pool use the CPOOL command.
    Wounds: The weapons in Shadowrun all have a set, realistic damage rating:
 Light, Moderate, Serious, and Deadly. Based on the skill of your weapon
 handling, you can increase the amount of damage you deal to an opponent. For
@@ -2505,7 +2591,7 @@ example, someone who is skilled enough with a Light weapon can make it deal
 Moderate, Serious, or even Deadly damage if they're good enough. A weapon is
 only as good as its user. 
 ~
-Flags:	1000000000000000000
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2513,7 +2599,7 @@ Cover:	0
 X:	20
 Y:	20
 Z:	2.50
-RoomType:	0
+RoomType:	6
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -2543,7 +2629,7 @@ know to play here. Once you've passed the next few rooms which discuss the MUD
 policy, rules, and roleplaying, you'll be ready to start playing in the
 Shadowrun Universe. Head DOWN to start. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2584,7 +2670,7 @@ turn will forcibly ruin the enjoyment of the offender with strict punishment,
 and if the situation is serious enough, banning. We are not kidding around,
 and we are dead serious about this. Continue NORTH. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2620,7 +2706,7 @@ Desc:$
    Type ^YINFO^n right now. Read every single bit of it. Once you are done,
 continue north. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2655,10 +2741,10 @@ Name:	Having Fun: Most Important Feature of this MUD
 Desc:$
    The main purpose of this MUD is to have fun, RP if you want, go around and
 kill everything if you feel like it. Only time this doesn't apply is if you
-are deliberately spoiling someone else's fun. Use your common sense and don't be
+are deliberatly spoiling someone elses fun. Use your common sense and don't be
 an arse. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2698,7 +2784,7 @@ descriptions, type CUSTOMIZE. Mages will have to make two descriptions: one
 for their physical body and one for their Astral reflection. The same goes for
 Deckers. For more detail, type HELP CUSTOMIZE and HELP DESCRIPTION.  
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2729,13 +2815,13 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #60560
-Name:	Law Enforcement in 2060
+Name:	Law Enforcement in 2064
 Desc:$
    There are some automated law enforcement systems in place, these will
 trigger if you attack police officers or try and raid corporate installations
 (either physically or through the matrix). 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2753,7 +2839,7 @@ RoomType:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
 [EXIT south]
-	ToVnum:	60561
+	ToVnum:	60640
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2771,7 +2857,7 @@ Desc:$
    Type ^YPOLICY^N right now. Read every single bit of it. Understand all of it.
 Once you're done reading, head SOUTH. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2789,7 +2875,7 @@ RoomType:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
 [EXIT north]
-	ToVnum:	60560
+	ToVnum:	60640
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2813,7 +2899,7 @@ and we'd prefer if you do instead of coming into conflict in the future.
 by them during my stay here.^n"
    
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2891,12 +2977,6 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT west]
-	ToVnum:	60564
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	60565
 	Flags:	0
@@ -2948,8 +3028,8 @@ BREAK
 Name:	The Neophyte Hotel
 Desc:$
    A receptionist stands behind the counter to this coffin motel. The
-accommodations are shoddy, as can be expected from a Coffin Motel, which rents
-out minuscule little rooms for the ever increasing population of Seattle. To
+accomodations are shoddy, as can be expected from a Coffin Motel, which rents
+out miniscule little rooms for the ever increasing population of Seattle. To
 exit the game, you must RENT. 
 ~
 Flags:	11000
@@ -2979,10 +3059,8 @@ BREAK
 #60566
 Name:	Shadowland: In-Character Message Board
 Desc:$
-   A computer terminal has been placed here that is linked to Shadowland, a
-connection in the Matrix that serves as a database for all Shadowrunners--
-^WLOOK TERMINAL^n to see how to use it. There's also a branch of the Seattle post
-office here, the use of which is described in ^WHELP MAIL^n. 
+   A computer terminal has been placed here and is linked to Shadowland, a
+connection in the Matrix that serves at a database for all Shadowrunners. 
 ~
 Flags:	11000
 SecType:	Inside
@@ -3001,6 +3079,12 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60567
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	60563
 	Flags:	0
@@ -3221,7 +3305,7 @@ BREAK
 #60573
 Name:	Ricky's Eatery
 Desc:$
-   In the world of 2060, everyone has something that needs to be done. People
+   In the world of 2064, everyone has something that needs to be done. People
 with money can hire Shadowrunners like you to do their task for them instead
 of getting their own hands dirty. Ricky's Eatery, a fairly dingy fast food
 joint, always has a few people around that need something done.
@@ -3309,12 +3393,9 @@ Autojohnson Shadowruns, a character will earn Karma. Karma can be used to
 increase character attributes and skills, provided the character can find
 appropriate trainers and teachers outside of the Neophyte Guild. Karma is
 divided into two values: Reputation is "good" karma that you earn from jobs
-and events, Notoriety is "bad" karma that you gain by killing people. To
-discourage power gaming, characters with too much notoriety (more than the
-repuation value) will be given a Power Gaming flag on their characters, which
-will significantly reduce their ability to carry out tasks like fighting.
-There are plenty of Autojohnsons out there in the Seattle Metroplex, which
-means there are plenty of job opportunities for characters. 
+and events, Notoriety is "bad" karma that you gain by killing people. There
+are plenty of Autojohnsons out there in the Seattle Metroplex, which means
+there are plently of job opportunities for characters. 
 ~
 Flags:	11100
 SecType:	Inside
@@ -3667,21 +3748,13 @@ BREAK
 #60584
 Name:	Inside a Dusty Storeroom
 Desc:$
-It doesn't look like anyone's been in here for ages. Crate after crate of food
-has been stacked, most of them gnawed through by the ravenous rats in the
-area. Someone has jury-rigged a jackpoint into the matrix line that runs up
-into the building above. 
+   It doesn't look like anyone's been in here for ages. Crate after crate of
+food has been stacked, most of them gnawed through by the ravenous rats in the
+area. 
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	1100
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	2064897
-Address:	The basement of Ricky's Eatery
+MatrixExit:	0
 Crowd:	0
 Cover:	0
 X:	20
@@ -3691,7 +3764,7 @@ RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-	Light:	4
+	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
@@ -3710,12 +3783,12 @@ Desc:$
 opening covered by a slightly-visible field of red light.  The building itself
 is made of a greyish stone, and has no visible windows on this side of the
 building.  
-   Brand new characters should check out the Dante's Inferno nightclub for
+   Brand new characters should check out the Dantes Inferno nightclub for
 quick, simple work to build their reputation in the shadows, and also to
 develop contacts with other characters. To travel around the city, you can
 HAIL a cab outside, get inside, and tell the driver where you want to go. 
 ~
-Flags:	11100
+Flags:	10000000000000011100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -3761,7 +3834,7 @@ in red block letters near the outer gate states plainly: ^R/**/ THIS IS A ONE
 WAY EXIT.  VEHICLES LEAVING PAST THIS POINT WILL NOT RETURN TO THE NEOPHYTE
 GUILD, THEY ARE ON THE OUTSIDE FOR GOOD.  YOU HAVE BEEN WARNED.^N   
 ~
-Flags:	110000000000000000011000
+Flags:	110000000000000000011100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -3794,12 +3867,12 @@ BREAK
 #60587
 Name:	Howie's Decks: Programs and Utilities
 Desc:$
-   Here a decker can purchase the SOFTWARE they need to interact properly in
-the MATRIX with the shiny new CYBERDECK they bought downstairs.  Shelves
-contain all the latest tools in shrink-wrapped boxes, but you notice that the
-authenticity seals are missing.... 
+   Here a decker can purchase the ^WSOFTWARE^N and ^WUTILITIES^N they need to interact
+properly in the ^WMATRIX^N with the shiny new ^WCYBERDECK^N they bought downstairs.
+Shelves contain all the latest tools in shrink-wrapped boxes, but you notice
+that the authenticity seals are missing... 
 ~
-Flags:	1000000000000001000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -3816,6 +3889,12 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
+[EXIT east]
+	ToVnum:	60653
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60546
 	Flags:	0
@@ -3826,15 +3905,15 @@ BREAK
 #60588
 Name:	Howie's Decks: Entry-level Persona Chips
 Desc:$
-     Every decker knows that a CYBERDECK isn't complete without PERSONA chips.
-These chips determine your attributes in the MATRIX, your ability to withstand
-attacks, sense your surroundings, and hide yourself from the IC.  The maximum
-rating of any of these chips is the MPCP of your CYBERDECK, and the combined
-ratings of all the chips cannot exceed MPCP x 3. 
+   Every decker knows that a ^WCYBERDECK^N isn't complete without ^WPERSONA^N chips.
+These chips determine your attributes in the ^WMATRIX^N, your ability to withstand
+attacks, sense your surroundings, and hide yourself from the IC. The maximum
+rating of any of these chips is the ^WMPCP^N of your ^WCYBERDECK^N, and the combined
+ratings of all the chips cannot exceed MPCP x 3.
    Just to the east in the basement you see a much cleaner lab staffed by a
 more professional man, perhaps the higher-quality chips can be had over there.
 ~
-Flags:	1000000000000001000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -3868,11 +3947,11 @@ BREAK
 Name:	Howie's Decks: The Good Stuff
 Desc:$
    Just a glance inside this room you can tell that this is where the good
-stuff is kept.  A young child with a datajack stands behind the counter
-looking at you condescendingly.  Here you see a small selection of quality
-SOFTWARE for your CYBERDECK as well as some high-end PERSONA chips. 
+stuff is kept. A young child with a datajack stands behind the counter looking
+at you condescendly. Here you see a small selection of quality ^WSOFTWARE^N for
+your ^WCYBERDECK^N as well as some high-end ^WPERSONA^N chips. 
 ~
-Flags:	1000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -3897,14 +3976,15 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #60590
-Name:	Jarmine's Talismongery
+Name:	Jarmines Talismongery
 Desc:$
    Here mages of either shamanic or hermetic traditions can buy FOCI to help
 augment their spell casting, conjuring and general magic abilities. If you
 still have force points left over, you can use them now to BOND the FOCI,
 otherwise it will cost you karma depending on the type, and force of the FOCI.
+You would do well to also read through HELP MAGIC LOSS as well while here. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -3936,7 +4016,7 @@ time. Some provide services to other deckers, like building a deck or
 programming novahot utils. The skills here are to help with the program design
 phase of program creation. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -3966,10 +4046,10 @@ Desc:$
    Etiquette skills are a must for anyone trying to buy items illegally. The
 more you score on an etiquette test the quicker the shop keeper will get the
 item in for you. Failure on the test will mean you will have to wait a MUD day
-(48 real minutes) to try again. Negotiation is used separately, and can aid
+(48 real minutes) to try again. Negotiation is used seperately, and can aid
 you with better prices in shops, and better rewards from johnsons. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -3998,9 +4078,9 @@ Name:	Runner Survival Skills Training
 Desc:$
    The skills in here are skills that didn't quite fit into other categories,
 best referred to as runners survival skills. Things that almost everyone has
-at least a couple of ranks in. 
+atleast a couple of ranks in. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4037,7 +4117,7 @@ temporarily lose magic, and if reduced to no magic, they may suffer permanent
 magic loss.
    Any spirit that is banished is gone forever. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4072,7 +4152,7 @@ Name:	Aspected Mages
 Desc:$
    Aspected Mages are people who have not fully awakened, they only have
 access to part of the astral plane. Because of this no Aspected mage can
-project, and they are very limited to what they can do with mage. Conjurers
+project, and they are very limited to what they can do with magic. Conjurers
 can only conjure elementals and Sorcerers can only cast spells.
    Shamanists are a shaman only aspect, and they only have access to spells
 and spirits that their totem gives them a bonus for.
@@ -4083,7 +4163,7 @@ Air is Detection. No elementalist can cast Health spells.
    Aspected magicians can still astrally perceive and banish any spirit or
 elemental. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4120,7 +4200,7 @@ Desc:$
 Projection. The mages leave their body behind and travel purely in spirit
 form. This allows them to access areas they otherwise couldn't. When in astral
 space, they can't interact with the physical plane in anyway, they are
-completely non-corporal. Astral forms may MANIFEST though, which allows them to
+completly non-corporal. Astral forms may MANIFEST though, which allows them to
 be seen by people without astral vision, they can also be heard, though the
 voice is purely in their head and can't be recorded.
    Only Mana based spells can be cast in astral space, and then, they can only
@@ -4129,7 +4209,7 @@ from the astral plane. All drain taken in the astral plane causes physical
 damage, regardless of force. You can also TRACK astral signatures in the
 astral plane. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4168,10 +4248,11 @@ them in more detail. Foci cost karma and time to bond, if you don't have
 enough karma you will be told how much you need. Also, in Character Generation
 you can bond Foci with Force Points.
    If you find a foci bonded by another mage, you can TRACK it back to its
-owner with astral tracking or rebond it, which severs its link with its
-previous owner and makes it usable by you. 
+owner with astral tracking or rebond it, which severes its link with its
+previous owner and makes it usable by you. HELP MAGIC LOSS also details why it
+isn't always a good idea to rely too heavily upon foci. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4204,14 +4285,17 @@ BREAK
 #60598
 Name:	Spells
 Desc:$
-   Now we come to the meat of awakened beings, spells. You have already been
-awarded some Force Points based on wether you are a Full or Aspected Magician.
-You can buy extra force points for the cost of 25000 nuyen by typing LEARN
-FORCE. Also, mages can buy conjuring materials for the cost of 1 force point
-per 1000 nuyen worth by typing LEARN CONJURING. The spells are divided into
-categories. Go DOWN to continue with the tutorial. 
+   Now we come to the meat of awakened beings, spells. HELP SPELLS lists all
+of the currently coded and functional spells. You have already been awarded
+some Force Points based on wether you are a Full or Aspected Magician. You can
+buy extra force points for the cost of 25000 nuyen by typing LEARN FORCE.
+Also, mages can buy conjuring materials for the cost of 1 force point per 1000
+nuyen worth by typing LEARN CONJURING. The spells are divided into categories.
+If you accidently learn the wrong spell you can remove it from your spell list
+and regain your force points with the FORGET command. Go DOWN to continue with
+the tutorial. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4306,11 +4390,11 @@ Name:	Combat Spell Training
 Desc:$
    Combat spells are quick and dirty. They are designed specifically to
 release mana in the most destructive fashion possible. They require little
-concentration to cast, just the ability to channel a lot of mana quickly. Mana
+concentration to cast, just the ability to channel alot of mana quickly. Mana
 and stun spells only affect living targets, where as the others affect all
 targets. Combat spells are represented by the Fire element. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4340,9 +4424,9 @@ Desc:$
    Health spells are designed to heal and manipulate the body. They are often
 gentle spells, requiring intense concentration and physical contact with the
 target of the spell. Health spells range from Healing to detoxifying the body
-and increasing stats. Health spells have no elemental representative. 
+and increasing stats. Health spells have no elemental representitive. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4375,7 +4459,7 @@ concentration, as the caster is absorbing mana from the surrounding area and
 analyzing it to provide the new sense. Detection spells are represented by the
 Air Element. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4409,7 +4493,7 @@ some also affect technological sensors, these are a lot harder to cast and are
 on the border between manipulation and illusion spells. Illusion spells are
 represented by the Water Elemental. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4436,13 +4520,13 @@ BREAK
 #60604
 Name:	Manipulation Spell Training
 Desc:$
-   Manipulation spells are concerned solely with creating solid constructs and
+   Manipulation spells are concerned soley with creating solid constructs and
 changing the laws of physics. They have the most widely varied effects of any
 category of spells and even Earth Elementalists can fulfill a wide range of
-rolls. Manipulation requires intense concentration and channeling of vast
+rolls. Manipulation requires intense concentration and chanelling of vast
 amounts of mana. Manipulation spells are represented by the Earth Element. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4495,11 +4579,10 @@ Desc:$
    To further improve their abilities adepts must gain more power points.
 There are two methods for this, initiation or buying them with karma.
 Powerpoints cost an adept 20 karma, and only 1 can be bought for every 50
-reputation they have. To buy one, ask any Immortal, they all have the ability
-to award them to you. Initiation will be covered later as it affects all
-awakened characters. 
+reputation they have. To buy one, use the ADDPOINT command. Initiation will be
+covered later as it affects all awakened characters. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4538,13 +4621,13 @@ on, the adepts hand-to-hand combat will do no damage, but follow rules for
 Nerve Strike. if the adept is wielding anything Nerve Strike will not be
 triggered.
    To use the Empathic Healing power the HEAL command is used, this requires a
-target that is either lying down or unconscious. Pain relief uses the RELIEVE
-command, and also requires a lying or unconscious target. Boosted attributes
+target that is either lying down or unconcious. Pain relief uses the RELIEVE
+command, and also requires a lying or unconcious target. Boosted attributes
 are boosted by typing BOOST and then the name of the attribute that requires
 boosting. Adepts with the Astral Perception power can also astrally perceiving
 using the PERCEIVE command. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4584,14 +4667,14 @@ moving projectiles like arrows, fists, swords and explosions.
 layering takes place. The highest rating piece of armour is applied in full,
 then half the value of all other pieces is applied. The full total of all
 pieces is used to calculate penalties though.
-   If the un-layered value of your ballistic or impact armour values is greater
+   If the unlayered value of your ballistic or impact armour values is greater
 than your modified quickness you begin to experience penalties due to your
 movement being restricted. You will move slower, lose combat pool, and have a
 harder time using quickness based skills like athletics or ranged combat. Form
 fitting armour is not included in the calculations for layering penalties
 however. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4628,20 +4711,20 @@ Desc:$
 spell or object and discerning otherwise unknown information from it. It can
 be used to find out how much of a persons spirit remains in their body, the
 location of any cyberware, who cast a spell and what force. Anything that is
-magically active has an aura and so can be assensed.
+magically active has an aura and so can be assenssed.
    ASSENSE is the command used to perform this action. People, foci, hermetic
-circles, lodges, spirits and spells can all be assensed for more information.
-In fact you may wish to assense them before taking further action, so you don't
+circles, lodges, spirits and spells can all be assenssed for more information.
+Infact you may wish to assense them before taking further action, so you don't
 end up a big astral stain. The help file contains more information on the use
 of this command.
    Astral Tracking is the process of taking a spell aura, and finding the
-source. It can track anyone, anywhere in the world, as long as you have an
+source. It can track anyone, anywhere in the world, aslong as you have an
 astral link to them, this can be a spell they've cast, foci, a conjured
 spirit, or even a shamanic lodge, anything they've left an astral signature
 on. It takes time to TRACK someone, and if it takes more time than you can
 stay projected due to essence loss you will have to resume again later. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4676,9 +4759,9 @@ Name:	Headware Cyberware
 Desc:$
    Headware is all types of cyberware that go inside your head, but does not
 include eye modifications. Help files can be found for most of the non-self
-explanatory cyberware listed here. 
+explanitory cyberware listed here. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4702,25 +4785,25 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	60633
+	ToVnum:	60648
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60611
-Name:	Eye Modification Cyberware
+Name:	Eye modification Cyberware
 Desc:$
    Eye modification is a booming business in 2064, anything from cosmetic
 modification to retinal duplicators to image magnification. If eye
 modifications are bought in a package, essence reductions apply, so it is
 usually best to do it this way. However, not always can you find your desired
-modification in a package and will have to buy it separately. All vision
+modification in a package and will have to buy it seperatley. All vision
 modifiers given by cyberware is treated as natural vision, and as such, mages
 with electronic magnification cannot cast any spells that require line of
 sight without projecting or perceiving. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4744,7 +4827,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	60629
+	ToVnum:	60652
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -4755,10 +4838,10 @@ Name:	Hand-based Cyberware
 Desc:$
    Cyberware that belongs in your hands is sold here. Retractable cyberweapons
 can be retracted and extended with the RETRACT command. Non-retractable
-cyberweapons, and cyberweapons that are extended may arouse suspicion from law
+cyberweapons, and cyberweapons that are extended may arouse suspision from law
 enforcement and corporate guards, so watch out. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4782,7 +4865,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	60630
+	ToVnum:	60651
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -4791,12 +4874,12 @@ BREAK
 #60613
 Name:	Bodyware Cyberware
 Desc:$
-   The majority of cyberware is classified as bodyware, it has been separated
-into two categories here however so as to avoid information overload. This
+   The majority of cyberware is classified as bodyware, it has been seperated
+into 2 categories here however so as to avoid information overload. This
 section has everything that doesn't completely replace a system, help can be
 found on most items here. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4820,7 +4903,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	60631
+	ToVnum:	60650
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -4834,7 +4917,7 @@ imposing obvious cyberskulls and torsos to the subtle dermal sheathing.
 Obvious cyberware imposes serious social consequences, as even in 2064, most
 people don't like dealing with someone packed full of machines. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4858,7 +4941,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	60632
+	ToVnum:	60649
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -4878,7 +4961,7 @@ characters can have a maximum of 9 Body Index points of Bioware. But once it
 starts to exceed Essence Index (Essence + 3) the severe drawbacks begin to
 kick in. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4941,7 +5024,7 @@ for certain parts of muscles that either increase their strength, or increase
 their speed. Enhanced Articulation makes your joints more flexible, allowing a
 greater freedom of movement. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -4976,7 +5059,7 @@ bioware however has to be cultured to prevent the body from rejecting it. Any
 bioware that is implanted in the brain must be Cultured, it does not however
 receive the normal cultured bonuses as they are already factored in. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -5007,11 +5090,11 @@ Desc:$
 marrow to help defend the body against poisons, disease and damage. Some of
 them have their own drawbacks however. Nephritic Screens don't discriminate
 between beneficial and non-beneficial substances in the blood stream. And
-Platelet Factories can cause brain hemorrhages and heart attacks due to
+Platelet Factories can cause brain hemorrhage's and heart attacts due to
 clotting of the blood. Symbiotes also require you to eat much more food to
 stay healthy. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -5042,7 +5125,7 @@ Desc:$
 modifications to heart upgrades. There is little that Bioware can't
 accomplish. 
 ~
-Flags:	1000000000000011000
+Flags:	11000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -5067,6 +5150,1341 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #60620
+Name:	Weapons
+Desc:$
+   All your weapon needs are located in the areas to the north and south.
+Weapons accessories are located directly to the west. More  information is
+available on the use of each kind of weapon in their respective areas. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60621
+	Flags:	0
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60631
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60621
+Name:	Firearms
+Desc:$
+   Firearms have been divided into their different categories here, so as to
+avoid overloading you with shop lists. Remember: A weapon is only as good as
+the person firing it. Buying a weapon you have no skill in will not be of much
+use to you. Moving UP from any of the rooms will take you to another shop
+where you can buy ammunition.
+   Ammunition only works in weapons of the same type that have the same clip
+capicity. For example, a 12-bullet pistol clip will only work in pistols (not
+machine pistols) that have a 12 bullet capacity. Either examining a weapon
+after you bought it, or using the INFO command in the store will tell you
+about the ammo capacity. 
+~
+Flags:	10000000001010000000000000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	2
+Y:	2
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	60623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	60620
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	998
+	LockRating:	8
+[EXIT west]
+	ToVnum:	60625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	60624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60622
+Name:	Pistols
+Desc:$
+   Pistols are the most common firearm in 2064. From the light Streetline
+Special to the elephant stopping PB-120 there is a pistol to suit almost any
+situation. Pistols are easily concealed and will most of the time be
+overlooked by law enforcement and corporate security, aslong as you aren't
+brandishing them. They can also be drawn quickly in the heat of combat, giving
+you fire power when you need it. 
+~
+Flags:	10000000001010000000000000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	2
+Y:	2
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT south]
+	ToVnum:	60621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60623
+Name:	Sub-machine Guns
+Desc:$
+   Sub-machine guns lies somewhere between pistols and assault rifle in terms
+of power and concealibilty. Most are easily concealed under a coat or jacket.
+Each individual round from a SMG is roughly equal in terms of power to a
+pistol round, but due to the SMGs ability to burst fire SMGs end up hurting
+alot more, along with being harder to dodge. SMGs can be drawn in combat,
+which can be handy when The Star decide they are taking you in for carrying
+one around. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT southwest]
+	ToVnum:	60621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60630
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60624
+Name:	Assault Rifles
+Desc:$
+   Assault Rifles, the last word in personal defence. Commonly used by
+military units and heavy security guards, Shadowrunners also employ them in
+missions where stealth isn't an option. They are almost impossible to conceal,
+but have a very high stopping power. Their ability to burst fire also makes
+them harder to dodge. Assault rifles can be drawn from a rifle strap, but do
+not fit in any sort of holster. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT southeast]
+	ToVnum:	60621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60625
+Name:	Rifles and Shotguns
+Desc:$
+   Rifles are best suited for attacking people at a distance, as when used in
+the same room their long barrel length makes them more difficult to quickly
+aim. They have a very high power and accuracy rate at long distance, alot
+higher than any other single shot weapon, concealing one is out of the
+question however.
+   Shotguns, even though they commonly fire solid slugs in 2064, are best
+suited for close quarters work. The slugs are powerful, but they commonly have
+small magazines. Sawn-off shotguns are easily concealable, however regular
+ones aren't, and will attract the wrath of any security agent that catches you
+with one. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT east]
+	ToVnum:	60621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60626
+Name:	Heavy Weapons
+Desc:$
+   When your main goal is not quiet infiltration, or even hitting the target,
+but simply putting out as much lead in as small amount of time as possible,
+heavy weapons are the key. These weapons are huge, and require alot of
+strength and body to use without help from a gyromount.
+   8 STR and 8 BOD are needed to wield one without a gyromount, but you will
+suffer twice as much recoil as when normally firing a weapon and will face
+light damage every time you pull the trigger. Gyromounts halve your combat
+pool but allow anyone to use a heavy weapon, they also remove most of the
+recoil effects. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT west]
+	ToVnum:	60621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60632
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60627
+Name:	Pistol Ammunition
+Desc:$
+   Here you can find all the pistol ammunition needed for the guns sold
+downstairs. One clip may work in more than one gun, but each gun may only use
+one clip. Clips can be carried in worn items of clothing and be reloaded with
+without manually getting them from the clothing.
+   ^rSpecial Note^n: Please read the helpfiles ^WRELOAD^N and ^WEJECT^N in their
+entirety BEFORE purchasing boxes of ammunition. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60628
+Name:	Assault Rifle Ammunition
+Desc:$
+   Ammunition for the Assault Rifles sold downstairs can be bought here. Clips
+can be carried in worn items of clothing and be reloaded with without manually
+getting them from the clothing.
+   ^rSpecial Note^n: Please read the helpfiles ^WRELOAD^N and ^WEJECT^N in their
+entirety BEFORE purchasing boxes of ammunition. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60629
+Name:	Rifle and Shotgun Ammunition
+Desc:$
+   Ammunition for the guns sold downstairs can be bought here. Make sure to
+note the type of gun the ammunition is for before you buy it. Clips can be
+carried in worn items of clothing and be reloaded with without manually
+getting them from the clothing.
+   ^rSpecial Note^n: Please read the helpfiles ^WRELOAD^N and ^WEJECT^N in their
+entirety BEFORE purchasing boxes of ammunition. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60630
+Name:	Sub-machine Gun Ammunition
+Desc:$
+   Ammunition for the SMGs sold downstairs can be bought here. One clip may
+work in more than one gun, but each gun may only use one clip. Clips can be
+carried in worn items of clothing and be reloaded with without manually
+getting them from the clothing.
+   ^rSpecial Note^n: Please read the helpfiles ^WRELOAD^N and ^WEJECT^N in their
+entirety BEFORE purchasing boxes of ammunition. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60631
+Name:	Weapon Accesories
+Desc:$
+   All sorts of accessories are available here to compliment whatever weapons
+you have picked up. Holsters, rifle straps and sheaths can be used to carry
+weapons somewhat concealed, and allow them to be drawn in combat.  Gas vents,
+shock pads and foregrips can lower recoil, sights and smartlinks give bonuses
+to shooting. Not all guns can take all accessories. Use the ATTACH command to
+put them on guns, the UNATTACH command to remove them (Gas vents cannot be
+removed or upgraded). 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT east]
+	ToVnum:	60620
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60632
+Name:	Heavy Weapon Ammunition
+Desc:$
+   Ammunition for the heavy weapons sold downstairs can be bought here. This
+ammunition is alot heavier and bulkier than that for other weapons so you
+won't be able to carry as much.
+   ^rSpecial Note^n: Please read the helpfiles ^WRELOAD^N and ^WEJECT^N in their
+entirety BEFORE purchasing boxes of ammunition. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60633
+Name:	Melee Weapons
+Desc:$
+   For those situations where you can't help but get upclose and personel,
+melee weapons are there to help delivering just that little be more pain. The
+power of the blow is dependant on your strength, making Troll metatypes
+especially dangerous. Most of them can be sheathed in sheaths attached either
+to belts, clothing or worn on your body. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60620
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60635
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60634
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60636
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60634
+Name:	Edged Weapons
+Desc:$
+   Edged weapons are the most common form of melee weapons, from the everyday
+knife to the razor sharp monosword they are favoured mostly by Street Samurai
+and anyone who likes to get up close and dirty. Most security agents will
+leave you alone if you are only carrying a knife, though a sword or katana
+will quickly draw their ire. They can be holstered and drawn in combat. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60635
+Name:	Whips and Flails
+Desc:$
+   Whips share a common attribute, they can all snare their victim, limiting
+movement. Although most of them deal only mental damage, the deadly
+manriki-gusari can easily severe limbs in the hand of a skilled user. Whips
+cannot be sheathed or drawn in combat due to their design. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT west]
+	ToVnum:	60633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60636
+Name:	Polearms and Clubs
+Desc:$
+   Polearms are large weapons, usually as tall as their user, good for keeping
+targets at a safe distance during combat. Clubs are mean and dirty, usually
+nothing more than a lump of metal. Clubs can be holstered and drawn during
+combat, most polearms however can't be. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT east]
+	ToVnum:	60633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60637
+Name:	Armoured Clothing
+Desc:$
+   Armoured clothing is sold in sets. Within these sets you may wear any
+combination of pieces you want and the layering rules will not come into
+effect. Infact you often get bonuses for wearing an entire set in the area of
+1 or 2 extra points of armour. This is not to say you can't wear one piece of
+armoured clothing with another set, you just won't receive the bonuses. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT east]
+	ToVnum:	60544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60638
+Name:	Standard Armour
+Desc:$
+   Running the Shadows without armour is just asking for death. In the world
+of 2064 even those not in the Shadows will splash out and buy some extra
+personal protections, from wage slaves to executives, soccer moms to the
+struggling artist. Even a ballistic vest can mean the difference between life
+and death. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT west]
+	ToVnum:	60544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60639
+Name:	Clothing
+Desc:$
+   Everyone needs a set of threads, unless they want to get arrested for
+indecency. Most standard clothing offers no armour bonuses but it does keep
+you covered. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60640
+Name:	Hardcore Mode
+Desc:$
+   Hardcore Mode is a form of completely code enforced Permanent Death. It can
+only be toggled on before you leave this area and once toggled on cannot be
+removed. It is designed to give more experienced players a new challenge and
+their chance to leave their mark on the MUD.
+   A current Top Ten and an All Time Top Ten Hardcore Characters will be
+available on the website soon. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60560
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60561
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60641
+Name:	Gunsmithing Skills
+Desc:$
+   With all the firearms floating around in 2065 a gunsmith is always a worthy
+contact. Gunsmithing skills allow you to create various types of ammunition
+cheaply and efficiently.
+   Type PRACTICE to see what the Trainer has to offer. Typing HELP CREATE and
+HELP BUILD will provide you with more information on the use and relevance of
+the skills being offered here. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60642
+Name:	LinguaSofts
+Desc:$
+   Here one can purchase the equipment they need to get the job done, all with
+the satisfaction of having never learned a thing, and having had their skills
+and talents downloaded directly into their brain. Glass display cases are
+lined with ^WSKILLSOFTS^N, which are used in conjunction with ^WSKILLWIRES^N, and are
+utilized either directly through a ^WCHIPJACK^N, or uploaded into ^WHEADWARE
+MEMORY^N, which one can ^WLINK^N for stand alone use without having to keep their
+chip physically plugged into their skulls.
+   The two types of ^WSKILLSOFTS^N available are broken down into LinguaSofts,
+which contain various languages, and ActiveSofts, which utilize the skills
+most are familiar with. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60644
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60643
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60646
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60546
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60643
+Name:	LinguaSofts
+Desc:$
+   Here one can purchase the equipment they need to get the job done, all with
+the satisfaction of having never learned a thing, and having had their skills
+and talents downloaded directly into their brain. Glass display cases are
+lined with ^WSKILLSOFTS^N, which are used in conjunction with ^WSKILLWIRES^N, and are
+utilized either directly through a ^WCHIPJACK^N, or uploaded into ^WHEADWARE
+MEMORY^N, which one can ^WLINK^N for stand alone use without having to keep their
+chip physically plugged into their skulls.
+   The two types of ^WSKILLSOFTS^N available are broken down into LinguaSofts,
+which contain various languages, and ActiveSofts, which utilize the skills
+most are familiar with. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60645
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60647
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60642
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60644
+Name:	ActiveSofts
+Desc:$
+   Here one can purchase the equipment they need to get the job done, all with
+the satisfaction of having never learned a thing, and having had their skills
+and talents downloaded directly into their brain. Glass display cases are
+lined with ^WSKILLSOFTS^N, which are used in conjunction with ^WSKILLWIRES^N, and are
+utilized either directly through a ^WCHIPJACK^N, or uploaded into ^WHEADWARE
+MEMORY^N, which one can ^WLINK^N for stand alone use without having to keep their
+chip physically plugged into their skulls.
+   The two types of ^WSKILLSOFTS^N available are broken down into LinguaSofts,
+which contain various languages, and ActiveSofts, which utilize the skills
+most are familiar with. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT east]
+	ToVnum:	60645
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60642
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60645
+Name:	ActiveSofts
+Desc:$
+   Here one can purchase the equipment they need to get the job done, all with
+the satisfaction of having never learned a thing, and having had their skills
+and talents downloaded directly into their brain. Glass display cases are
+lined with ^WSKILLSOFTS^N, which are used in conjunction with ^WSKILLWIRES^N, and are
+utilized either directly through a ^WCHIPJACK^N, or uploaded into ^WHEADWARE
+MEMORY^N, which one can ^WLINK^N for stand alone use without having to keep their
+chip physically plugged into their skulls.
+   The two types of ^WSKILLSOFTS^N available are broken down into LinguaSofts,
+which contain various languages, and ActiveSofts, which utilize the skills
+most are familiar with. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT south]
+	ToVnum:	60643
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60644
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60646
+Name:	ActiveSofts
+Desc:$
+   Here one can purchase the equipment they need to get the job done, all with
+the satisfaction of having never learned a thing, and having had their skills
+and talents downloaded directly into their brain. Glass display cases are
+lined with ^WSKILLSOFTS^N, which are used in conjunction with ^WSKILLWIRES^N, and are
+utilized either directly through a ^WCHIPJACK^N, or uploaded into ^WHEADWARE
+MEMORY^N, which one can ^WLINK^N for stand alone use without having to keep their
+chip physically plugged into their skulls.
+   The two types of ^WSKILLSOFTS^N available are broken down into LinguaSofts,
+which contain various languages, and ActiveSofts, which utilize the skills
+most are familiar with. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60642
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60647
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60647
+Name:	ActiveSofts
+Desc:$
+   Here one can purchase the equipment they need to get the job done, all with
+the satisfaction of having never learned a thing, and having had their skills
+and talents downloaded directly into their brain. Glass display cases are
+lined with ^WSKILLSOFTS^N, which are used in conjunction with ^WSKILLWIRES^N, and are
+utilized either directly through a ^WCHIPJACK^N, or uploaded into ^WHEADWARE
+MEMORY^N, which one can ^WLINK^N for stand alone use without having to keep their
+chip physically plugged into their skulls.
+   The two types of ^WSKILLSOFTS^N available are broken down into LinguaSofts,
+which contain various languages, and ActiveSofts, which utilize the skills
+most are familiar with. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT north]
+	ToVnum:	60643
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60646
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60648
+Name:	Alphaware Headware Cyberware
+Desc:$
+   Dealing with all things cyberware that are stuffed inside of a persons
+head, not counting eye modifications of course. Alphaware will run you double
+the price of their standard cyberware counterparts, with the benefit of
+reduced essence cost. Help files can be found for the available cyberware
+listed here. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60649
+Name:	Alphaware Systems Replacement Cyberware
+Desc:$
+   The cyberware here is of the alphaware variety, which costs double the
+price of a standard version, but at reduced essence cost. Ranging from
+cyberskulls and torsos to dermal plating and sheathing, the obvious variants
+of which aren't likely to go over well in the social circles of 2064, as being
+made out of chrome tends to make people flighty. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60650
+Name:	Alphaware Bodyware Cyberware
+Desc:$
+   Alphaware versions of bodyware can be found here, which are double the cost
+of standard cyberware with the benefit of reduced essence cost. Helpfiles can
+be found for each type of ware accordingly. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60651
+Name:	Alphaware Hand-based Cyberware
+Desc:$
+   Alphaware versions of cyberware that belongs in your hands is sold here,
+which costs double the standard version at the benefit of reduced essence
+cost. Retractable cyberweapons can be retracted and extended with the RETRACT
+command. Non-retractable cyberweapons, and cyberweapons that are extended may
+arouse suspicions from law enforcement and corporate security, so keep that in
+mind when running the shadows. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60652
+Name:	Alphaware Eye modification Cyberware
+Desc:$
+   Alphaware versions of standard eye modification cyberware is available
+here, which costs double the standard price with the benefit of reduced
+essence cost. Ranging from cosmetic cybereyes to vision modifications and
+image magnification, if it has to do with eyes or vision it can be found here.
+If eye modifications are purchased in a package, essence reductions apply, so
+it is usually best to do it this way. However, that doesn't stop you from
+mixing and matching as you please. All vision modifiers given by cyberware is
+treated as natural vision. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT down]
+	ToVnum:	60611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60653
+Name:	Howie's Decks: Programs and Utilities
+Desc:$
+   Here a decker can purchase the ^WSOFTWARE^N and ^WUTILITIES^N they need to interact
+properly in the ^WMATRIX^N with the shiny new ^WCYBERDECK^N they bought downstairs.
+The room itself is dimly lit, and most of the illumination is thanks to the
+computer in the back, upon which is an overweight otaku. If you don't mind the
+drab scenery, or the funky smell coming from him, you might be able to score
+some SOTA datachips to surf the matrix with. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+	StaffLockLevel:	0
+[EXIT west]
+	ToVnum:	60587
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60654
 Name:	The Room to the East
 Desc:$
    Good work. You should also know that there will sometimes be 'doors' that
@@ -5105,7 +6523,7 @@ open me."
 	Barrier:	32
 	KeyVnum:	0
 BREAK
-#60621
+#60655
 Name:	Chargen Elevator Shaft
 Desc:$
 You found it, you tricky person. The elevator shaft in Chargen. Good work! You
@@ -5136,7 +6554,7 @@ RoomType:	0
 	Barrier:	0
 	KeyVnum:	0
 BREAK
-#60622
+#60656
 Name:	Chargen Elevator Shaft
 Desc:$
 You found it, you tricky person. The elevator shaft in Chargen. Good work! You
@@ -5165,7 +6583,7 @@ RoomType:	0
 	Desc:$
 A pair of elevator doors allows access to the liftway.
 ~
-	ToVnum:	60532
+	ToVnum:	0
 	Flags:	1
 	Material:	metal
 	Barrier:	8
@@ -5178,7 +6596,7 @@ A pair of elevator doors allows access to the liftway.
 	Barrier:	0
 	KeyVnum:	0
 BREAK
-#60623
+#60657
 Name:	The Path of the Magician (Hermetic)
 Desc:$
    Following the Awakening in 2019, the world experienced a surge of magical
@@ -5220,7 +6638,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#60624
+#60658
 Name:	Spellcasting (Shamanic)
 Desc:$
    The two main commands that mages of either type will use the most is
@@ -5254,7 +6672,7 @@ RoomType:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
 [EXIT east]
-	ToVnum:	60625
+	ToVnum:	60659
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -5266,7 +6684,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#60625
+#60659
 Name:	Conjuring (Shamanic)
 Desc:$
    As a Shaman, you possess the unique ability to summon the spirits of your
@@ -5306,13 +6724,13 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	60624
+	ToVnum:	60658
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#60626
+#60660
 Name:	Exotic Melee Skill Training
 Desc:$
    The skills offered in this room are of an exotic and niche nature, and ^Yare
@@ -5348,7 +6766,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#60627
+#60661
 Name:	Ammo Creation Training
 Desc:$
    Gunsmithing in Awake CE is the art of creating ammunition from raw
@@ -5382,7 +6800,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#60628
+#60662
 Name:	Non-Essential Role Playing (NERP) Skills
 Desc:$
    Non-Essential Role Playing (NERP) is a blanket term used to describe
@@ -5409,173 +6827,6 @@ RoomType:	0
 	StaffLockLevel:	0
 [EXIT down]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#60629
-Name:	Eye Modification Alphaware
-Desc:$
-   Alphaware versions of standard eye modification cyberware are available
-here, which cost double the standard price with the benefit of reduced essence
-cost. Ranging from cosmetic cybereyes to vision modifications and image
-magnification, if it has to do with eyes or vision it can be found here. If
-eye modifications are purchased in a package, essence reductions apply, so it
-is usually best to do it this way. However, that doesn't stop you from mixing
-and matching as you please. All vision modifiers given by cyberware are
-treated as natural vision. 
-~
-Flags:	1000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
-[EXIT down]
-	ToVnum:	60611
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#60630
-Name:	Hand-based Alphaware
-Desc:$
-   Alphaware versions of cyberware that belongs in your hands is sold here,
-which costs double the standard version at the benefit of reduced essence
-cost. Retractable cyberweapons can be retracted and extended with the RETRACT
-command. Non-retractable cyberweapons, and cyberweapons that are extended may
-arouse suspicions from law enforcement and corporate security, so keep that in
-mind when running the shadows. 
-~
-Flags:	1000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
-[EXIT down]
-	ToVnum:	60612
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#60631
-Name:	Bodyware Alphaware
-Desc:$
-   Alphaware versions of bodyware can be found here, which are double the cost
-of standard cyberware with the benefit of reduced essence cost. Helpfiles can
-be found for each type of ware accordingly. 
-~
-Flags:	1000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
-[EXIT down]
-	ToVnum:	60613
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#60632
-Name:	Systems Replacement Alphaware
-Desc:$
-   The cyberware here is of the alphaware variety, which costs double the
-price of a standard version, but at reduced essence cost. Ranging from
-cyberskulls and torsos to dermal plating and sheathing, the obvious variants
-of which aren't likely to go over well in the social circles of 2064, as being
-made out of chrome tends to make people flighty. 
-~
-Flags:	1000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
-[EXIT down]
-	ToVnum:	60614
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#60633
-Name:	Headware Alphaware
-Desc:$
-   Dealing with all things cyberware that are stuffed inside of a persons
-head, not counting eye modifications of course. Alphaware will run you double
-the price of their standard cyberware counterparts, with the benefit of
-reduced essence cost. Help files can be found for the available cyberware
-listed here.
-~
-Flags:	1000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-	StaffLockLevel:	0
-[EXIT down]
-	ToVnum:	60610
 	Flags:	0
 	Material:	brick
 	Barrier:	4
