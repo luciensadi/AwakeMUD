@@ -834,6 +834,11 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_ITEM_MONEY_CREDSTICK_ACTIVATED(money) (GET_OBJ_VAL((money), 4))
 
 // ITEM_PHONE convenience defines
+#define GET_ITEM_PHONE_NUMBER_PART_ONE(phone)  (GET_OBJ_VAL((phone), 0))
+#define GET_ITEM_PHONE_NUMBER_PART_TWO(phone)  (GET_OBJ_VAL((phone), 1))
+#define GET_ITEM_PHONE_SWITCHED_ON(phone)      (GET_OBJ_VAL((phone), 2))
+#define GET_ITEM_PHONE_RINGER_ON(phone)        (GET_OBJ_VAL((phone), 3))
+
 
 // ITEM_BIOWARE convenience defines
 

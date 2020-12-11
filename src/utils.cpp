@@ -2808,8 +2808,13 @@ char *replace_substring(char *source, char *dest, const char *replace_target, co
 
 // Adds the amount to the ammobox, then processes its weight etc. 
 void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
-  if (!ammobox || amount == 0) {
-    mudlog("SYSERR: Illegal values passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+  if (!ammobox) {
+    mudlog("SYSERR: Null ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (amount == 0) {
+    mudlog("SYSERR: Zero-quantity ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
     return;
   }
   
@@ -2825,8 +2830,8 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
     GET_AMMOBOX_QUANTITY(ammobox) = 0;
   }
   
-  // Calculate weight as (count / 10) * multiplier (multiplier is per 10 rounds).
-  GET_OBJ_WEIGHT(ammobox) = (((float) GET_AMMOBOX_QUANTITY(ammobox)) / 10) * ammo_type[GET_AMMOBOX_TYPE(ammobox)].weight;
+  // Update the box's weight.
+  weight_change_object(ammobox, ammo_type[GET_AMMOBOX_TYPE(ammobox)].weight * amount);
   
   // Calculate cost as count * multiplier (multiplier is per round)
   GET_OBJ_COST(ammobox) = GET_AMMOBOX_QUANTITY(ammobox) * ammo_type[GET_AMMOBOX_TYPE(ammobox)].cost;
@@ -2858,6 +2863,11 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
   // If the ammo types don't match, no good.
   if (GET_AMMOBOX_TYPE(from) != GET_AMMOBOX_TYPE(into)) {
     mudlog("SYSERR: combine_ammo_boxes received boxes with non-matching ammo types.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if (GET_AMMOBOX_QUANTITY(from) == 0) {
+    send_to_char(ch, "But %s is empty...\r\n", GET_OBJ_NAME(from));
     return FALSE;
   }
   

@@ -68,6 +68,8 @@ extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void weight_change_object(struct obj_data * obj, float weight);
+extern const char *get_weapon_ammo_name_as_string(int weapon_type);
+
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -1672,7 +1674,7 @@ void parse_object(File &fl, long nr)
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 500), 10);
           
           // Set values according to Assault Cannon ammo (SR3 p281).
-          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * 1.25;
+          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) * 1.25) / 10;
           GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * 45;
           GET_OBJ_AVAILDAY(obj) = 3;
           GET_OBJ_AVAILTN(obj) = 5;
@@ -1684,10 +1686,8 @@ void parse_object(File &fl, long nr)
           // Max size 1000-- otherwise it's too heavy to carry.
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
           
-          // Calculate weight as (count / 10) * multiplier (multiplier is per 10 rounds).
-          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
-          
-          // Calculate cost as count * multiplier (multiplier is per round)
+          // Update weight and cost.
+          GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
           GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].cost;
           
           // Set the TNs for this ammo per the default values.
@@ -1699,24 +1699,7 @@ void parse_object(File &fl, long nr)
         }
         
         // Set the strings-- we want all these things to match for simplicity's sake.
-        switch (GET_AMMOBOX_WEAPON(obj)) {
-          case WEAP_SHOTGUN:
-          case WEAP_CANNON:
-            type_as_string = "shell";
-            break;
-          case WEAP_MISS_LAUNCHER:
-            type_as_string = "rocket";
-            break;
-          case WEAP_GREN_LAUNCHER:
-            type_as_string = "grenade";
-            break;
-          case WEAP_TASER:
-            type_as_string = "dart";
-            break;
-          default:
-            type_as_string = "round";
-            break;
-        }
+        type_as_string = get_weapon_ammo_name_as_string(GET_AMMOBOX_WEAPON(obj));
         
         snprintf(buf, sizeof(buf), "metal ammo ammunition box %s %s %d-%s %s%s",
                 GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,

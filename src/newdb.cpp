@@ -780,22 +780,36 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->photo = str_dup(row[4]);
         for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
-        if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
-          add_phone_to_list(obj);
-        else if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
-          GET_OBJ_VAL(obj, 9) = 1;
-        if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED)
-          GET_OBJ_VAL(obj, 4) = 0;
-        if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4))
-          GET_FOCI(ch)++;
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
-          for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-            if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
-               (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
-              // Zero out the attachment so that we don't get attaching-overtop errors.
-              GET_OBJ_VAL(obj, q) = 0;
-              attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
+          
+        switch (GET_OBJ_TYPE(obj)) {
+          case ITEM_PHONE:
+            if (GET_OBJ_VAL(obj, 2))
+              add_phone_to_list(obj);
+            // TODO: What was the purpose of the broken if check to set the phone's value 9 to 1?
+            break;
+          case ITEM_FOCUS:
+            if (GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED)
+              GET_OBJ_VAL(obj, 4) = 0;
+            else if (GET_OBJ_VAL(obj, 4))
+              GET_FOCI(ch)++;
+            break;
+          case ITEM_WEAPON:
+            if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+              // Process attachments.
+              for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
+                if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
+                   (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+                  // Zero out the attachment so that we don't get attaching-overtop errors.
+                  GET_OBJ_VAL(obj, q) = 0;
+                  attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
+                }
             }
+            break;
+          case ITEM_GUN_AMMO:
+            // Process weight.
+            GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
+            break;
+        }
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[18]);
         

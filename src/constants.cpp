@@ -1681,15 +1681,16 @@ const char *ic_option_long[] =
     "Trap  "
   };
 
+// Weight and cost are PER ROUND now.
 struct ammo_data ammo_type[] =
   {
     // name      tn  time  weight  cost    s. index
-    {"normal",    2,    1,    .25,    2,     .75},
-    {"APDS",     14,   14,    .25,    7,     4},
-    {"explosive", 3,  1.5,    .75,    5,     .8},
-    {"EX",        6,    3,    .75,   10,     1.5},
-    {"flechette", 3,  1.5,    .5,    10,     .8},
-    {"gel",       4,    2,    .25,    3,     1}
+    {"normal",    2,    1,    .025,    2,     .75},
+    {"APDS",     14,   14,    .025,    7,     4},
+    {"explosive", 3,  1.5,    .075,    5,     .8},
+    {"EX",        6,    3,    .075,   10,     1.5},
+    {"flechette", 3,  1.5,    .05,    10,     .8},
+    {"gel",       4,    2,    .025,    3,     1}
   };
 
 const char *positions[] =
