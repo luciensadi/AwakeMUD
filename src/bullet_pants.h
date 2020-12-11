@@ -23,5 +23,6 @@ bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *bu
 const char *get_ammo_representation(int weapon, int ammotype, int quantity);
 bool is_valid_pockets_put_command(char *mode_buf);
 bool is_valid_pockets_get_command(char *mode_buf);
+const char *get_ammobox_default_restring(struct obj_data *ammobox);
 
 #endif

@@ -6,6 +6,7 @@
 #include "interpreter.h"
 #include "structs.h"
 #include "utils.h"
+#include "handler.h"
 #include "bullet_pants.h"
 
 extern void calc_weight(struct char_data *ch);
@@ -167,8 +168,8 @@ ACMD(do_pockets) {
     update_ammobox_ammo_quantity(ammobox, -quantity);
     update_ammopants_ammo_quantity(ch, weapon, ammotype, quantity);
     
-    send_to_char(ch, "You secrete %d %s about your person.\r\n", 
-                 quantity, get_ammo_representation(weapon, ammotype, quantity));
+    send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n", 
+                 quantity, get_ammo_representation(weapon, ammotype, quantity), GET_OBJ_NAME(ammobox));
     return;
   }
   
@@ -182,12 +183,30 @@ ACMD(do_pockets) {
       send_to_char(ch, "You only have %d %s, so you package them up and put them into an ammo box.\r\n",
                    quantity, get_ammo_representation(weapon, ammotype, quantity));
     } else {
-      send_to_char(ch, "You package up %d %s and put them into an ammo box.\r\n", 
+      send_to_char(ch, "You package up %d %s and put them into a spare ammo box.\r\n", 
                    quantity, get_ammo_representation(weapon, ammotype, quantity));
     }
                  
-    // TODO: Generate an ammo box.
+    // Generate an ammo box and give it to them.
+    struct obj_data *ammobox = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
+    GET_AMMOBOX_WEAPON(ammobox) = weapon;
+    GET_AMMOBOX_TYPE(ammobox) = ammotype;
+    
+    // Reset the ammobox values in preparation for filling it.
+    GET_OBJ_WEIGHT(ammobox) = 0.0;
+    GET_OBJ_COST(ammobox) = 0;
+    GET_AMMOBOX_QUANTITY(ammobox) = 0;
+    
+    // Fill it.
+    update_ammobox_ammo_quantity(ammobox, quantity);
     update_ammopants_ammo_quantity(ch, weapon, ammotype, -quantity);
+    
+    // Restring the box.
+    ammobox->restring = str_dup(get_ammobox_default_restring(ammobox));
+    
+    // Give it to them.
+    obj_to_char(ammobox, ch);
+    
     return;
   }
   
@@ -326,6 +345,15 @@ void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {
   send_to_char(buf, ch);
 }
 
+const char *get_ammobox_default_restring(struct obj_data *ammobox) {
+  static char restring[500];
+  snprintf(restring, sizeof(restring), "a box of %s %s ammunition", 
+    ammo_type[GET_AMMOBOX_TYPE(ammobox)].name,
+    weapon_type[GET_AMMOBOX_WEAPON(ammobox)]
+  );
+  return restring;
+}
+
 const char *get_weapon_ammo_name_as_string(int weapon_type) {
   switch (weapon_type) {
     case WEAP_SHOTGUN:
@@ -387,4 +415,5 @@ const char *weapon_type_aliases[] =
  - update syntax to include 'pockets <weapon>'
  - better formatting for 'pockets <weapon>'
  - do we need to change output to tree style? how will this work with screenreaders?
+ - add ability to split apart ammo boxes
 */
