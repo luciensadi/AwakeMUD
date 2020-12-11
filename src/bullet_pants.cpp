@@ -1,3 +1,5 @@
+#include <mysql/mysql.h>
+
 #include "types.h"
 #include "awake.h"
 #include "db.h"
@@ -9,6 +11,9 @@
 #include "handler.h"
 #include "bullet_pants.h"
 
+extern MYSQL *mysql;
+
+extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 extern void calc_weight(struct char_data *ch);
 
 #define POCKETS_USAGE_STRING "Syntax: POCKETS (put|get) <quantity> <ammotype> <weapontype>. Ex: pockets get 100 apds pistol\r\n"
@@ -214,9 +219,108 @@ ACMD(do_pockets) {
   return;
 }
 
-/**********************************
-* Helper functions and constants. *
-**********************************/
+/*******************
+* Database helpers *
+********************/
+
+// Checks to see if the BP table is in yet.
+bool have_bullet_pants_table() {  
+  bool have_table = FALSE;
+  
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  
+  mysql_wrapper(mysql, "SHOW TABLES LIKE 'pfiles_ammo';");
+  
+  if (!(res = mysql_use_result(mysql)))
+    return FALSE;
+  
+  // Iterate through all the results and update the respective ammo values.
+  if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql))
+    have_table = TRUE;
+    
+  mysql_free_result(res);
+  
+  return have_table;
+}
+
+// Saves the ch's bullet pants to db.
+void save_bullet_pants(struct char_data *ch) {  
+  if (!ch || IS_NPC(ch)) {
+    mudlog("SYSERR: Null or NPC character passed to save_bullet_pants!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Delete their current entries from the DB.
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_ammo WHERE idnum = %ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+  
+  // table design: idnum weapon normal apds explosive ex flechette gel
+  
+  // For each weapon, write a line to the DB if they have ammo for that weapon.
+  for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++) {
+    for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
+      // Do we need to save data for this particular weapon?
+      if (GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) > 0) {
+        snprintf(buf, sizeof(buf), "INSERT INTO pfiles_ammo (idnum, weapon, normal, apds, explosive, ex, flechette, gel) "
+                                   " VALUES (%ld, %d, %u, %u, %u, %u, %u, %u);", 
+                                   GET_IDNUM(ch),
+                                   wp,
+                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_NORMAL),
+                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_APDS),
+                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_EXPLOSIVE),
+                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_EX),
+                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_FLECHETTE),
+                                   GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, AMMO_GEL));
+        mysql_wrapper(mysql, buf);
+        
+        // Done saving all ammo types for this weapon.
+        break;
+      }
+    }
+  }
+}
+
+// Loads the ch's bullet pants from DB.
+void load_bullet_pants(struct char_data *ch) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  
+  int weapon;
+  
+  if (!ch || IS_NPC(ch)) {
+    mudlog("SYSERR: Null or NPC character passed to load_bullet_pants!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // For each weapon, read their ammo from the DB (if any).
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_ammo WHERE idnum = %ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+  
+  // If they have no ammo at all, bail out.
+  if (!(res = mysql_use_result(mysql))) {
+    return;
+  }
+  
+  // Iterate through all the results and update the respective ammo values.
+  while ((row = mysql_fetch_row(res))) {
+    weapon = atoi(row[1]);
+    GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_NORMAL) = atoi(row[2]);
+    GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_APDS) = atoi(row[3]);
+    GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_EXPLOSIVE) = atoi(row[4]);
+    GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_EX) = atoi(row[5]);
+    GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_FLECHETTE) = atoi(row[6]);
+    GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_GEL) = atoi(row[7]);
+  }
+  
+  mysql_free_result(res);
+  
+  // Note: We don't update their carry weight-- the caller is assumed to do that after all loading is complete.
+}
+
+/*******************
+ * Everything Else *
+ *******************/
 
 // Returns TRUE on success, FALSE otherwise.
 bool update_ammopants_ammo_quantity(struct char_data *ch, int weapon, int ammotype, int quantity) {
@@ -401,18 +505,14 @@ const char *weapon_type_aliases[] =
 /* 
  - room debris counter, its display
  - purging of magazines once ejected (in that case, do we even want to eject the mag, or just keep it there and change its values)
- - saving / loading for PC bullet pants
  - medit of NPC bullet pants
  - resetting of NPC bullet pants
  - reloading from bullet pants (PC / NPC)
  - - handheld weapons
  - - mounted weapons? Or just use boxes?
- - use of ammo boxes with PC bullet pants
- - weight calculations should take into account PC bullet pants
  - staff bullet pants set command mode
  - staff bullet pants show command mode
  - write help file
- - update syntax to include 'pockets <weapon>'
  - better formatting for 'pockets <weapon>'
  - do we need to change output to tree style? how will this work with screenreaders?
  - add ability to split apart ammo boxes

@@ -104,6 +104,11 @@ if [ -f "helpfile_expansion.sql" ]; then
   cat helpfile_expansion.sql >> gen_temp.sql
 fi
 
+if [ -f "bullet_pants.sql" ]; then
+  echo "" >> gen_temp.sql
+  cat bullet_pants.sql >> gen_temp.sql
+fi
+
 echo "You may preview the actions that are about to be taken by viewing gen_temp.sql now."
 echo ""
 echo "WARNING: IF YOUR DATABASE ALREADY EXISTS, THIS WILL PURGE IT."

@@ -34,6 +34,9 @@ extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern Playergroup *loaded_playergroups;
 
+extern void save_bullet_pants(struct char_data *ch);
+extern void load_bullet_pants(struct char_data *ch);
+
 void auto_repair_obj(struct obj_data *obj);
 
 // ____________________________________________________________________________
@@ -842,6 +845,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
     mysql_free_result(res);
   }
   
+  // Load bullet pants.
+  load_bullet_pants(ch);
+  
   // Load pgroup membership data.
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_playergroups WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
@@ -1428,6 +1434,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     if (obj)
       obj = obj->next_content;
   }
+  
+  // Save bullet pants.
+  save_bullet_pants(player);
+  
   if (GET_LEVEL(player) > 1) {
     snprintf(buf, sizeof(buf),  "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber) VALUES (%ld, %d, %d, %d)"
                   " ON DUPLICATE KEY UPDATE"
@@ -1889,6 +1899,8 @@ void DeleteChar(long idx)
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE idnum=%ld", idx);
+  mysql_wrapper(mysql, buf);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_ammo WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);

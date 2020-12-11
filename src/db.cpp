@@ -69,6 +69,7 @@ extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern const char *get_weapon_ammo_name_as_string(int weapon_type);
+extern bool have_bullet_pants_table();
 
 
 /**************************************************************************
@@ -337,6 +338,12 @@ void boot_world(void)
   
   log("Verifying DB compatibility with extended-length passwords.");
   verify_db_password_column_size();
+  
+  log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
+  if (!have_bullet_pants_table()) {
+    log("ERROR: You need to run the bullet_pants.sql migration from the SQL directory. Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < SQL/bullet_pants.sql`.");
+    exit(ERROR_BULLET_PANTS_FAILED);
+  }
   
   log("Handling idle deletion.");
   idle_delete();
