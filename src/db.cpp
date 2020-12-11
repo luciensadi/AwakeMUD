@@ -1712,6 +1712,7 @@ void parse_object(File &fl, long nr)
             break;
           case WEAP_TASER:
             type_as_string = "dart";
+            break;
           default:
             type_as_string = "round";
             break;
