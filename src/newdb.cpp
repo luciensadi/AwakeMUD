@@ -262,7 +262,9 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest)
   while (*str) {
     if ((unsigned long) (temp - dest) >= size_of_dest - 2) {
       // Die to protect memory / database.
-      terminate_mud_process_with_message("prepare_quotes would overflow dest buf", ERROR_ARRAY_OUT_OF_BOUNDS);
+      char error_buf[MAX_STRING_LENGTH];
+      snprintf(error_buf, sizeof(error_buf), "prepare_quotes('%s', '%s', %lu) would overflow dest buf", dest, str, size_of_dest);
+      terminate_mud_process_with_message(error_buf, ERROR_ARRAY_OUT_OF_BOUNDS);
     }
     // Special case handling: Newlines to \r\n.
     if (*str == '\r' || *str == '\n') {
