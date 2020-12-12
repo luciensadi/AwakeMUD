@@ -618,12 +618,10 @@ int npc_ammo_usage_preferences[] = {
 
 // things left to implement:
 /* 
- - resetting of NPC bullet pants (this will be tricky-- how do we do it without iterating over all mobs for every zone reset?)
  - reloading of mounted weapons (this code is probably totes broken right now)
  - staff bullet pants set command mode
  - write help file
  - better formatting for 'pockets <weapon>'
  - do we need to change output to tree style? how will this work with screenreaders?
  - add ability to split apart ammo boxes
- - on zone reset, if an NPC is equipped with a weapon (wielded or in holster) and has no ammo for it, give max * 2 normal.
 */

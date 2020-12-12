@@ -3,6 +3,9 @@
 
 #define MAX_NUMBER_OF_BULLETS_IN_PANTS USHRT_MAX
 
+// Set to the number of mags' worth of normal ammo you want to give to NPCs with weapons but no ammo data set.
+#define NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS 3
+
 // Give this a weapon type straight from the weapon-- ex WEAP_SMG. It will convert it for you.
 #define GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon_type, ammo_type) ((ch)->bullet_pants[(weapon_type) - START_OF_AMMO_USING_WEAPONS][(ammo_type)])
 

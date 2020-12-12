@@ -3267,7 +3267,7 @@ void reset_zone(int zone, int reboot)
                 
                 // If they failed to reload, they have no ammo. Give them some normal and reload with it.
                 if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
-                  GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * 3;
+                  GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
                   reload_weapon_from_bulletpants(temp_ch, obj, AMMO_NORMAL);
                 }
               }
@@ -3347,7 +3347,7 @@ void reset_zone(int zone, int reboot)
               
               // If they failed to reload, they have no ammo. Give them some normal and reload with it.
               if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
-                GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * 3;
+                GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
                 reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
               }
             }

@@ -847,7 +847,7 @@ void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapo
       return;
   
   // If we had none, give them normal.
-  GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * 3;
+  GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
 }
 
 void mobile_activity(void)
