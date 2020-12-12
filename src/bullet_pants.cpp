@@ -32,7 +32,8 @@ ACMD(do_pockets) {
   /*
   pocket[s]: displays your current bullet pants contents
   pocket[s] <weapon>: displays your current bullet pants contents for the chosen weapon
-  pocket[s] put|store|add <quantity> <weapon> <type>: add ammo from boxes to your bullet pants
+  pocket[s] put|store|add <quantity> <weapon> <type>: add ammo from boxes to your bullet pants, junking empties
+  pocket[s] add <box>: dump a box into your pockets and junk it
   pocket[s] get|remove|retrieve <quantity> <weapon> <type>: create a new ammo box from your bullet pants with the specified amount in it
   */
   
@@ -52,7 +53,6 @@ ACMD(do_pockets) {
   for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++) {
     if (!strn_cmp(argument, weapon_type[i], strlen(argument)) 
         || (*(weapon_type_aliases[i]) && str_cmp(argument, weapon_type_aliases[i]) == 0)) {
-      // TODO
       if (print_one_weapontypes_ammo_to_string(ch, i, buf, sizeof(buf)))
         send_to_char(ch, "You have the following %s ammunition secreted about your person:\r\n%s\r\n",
                      weapon_type[i], buf);
@@ -82,6 +82,45 @@ ACMD(do_pockets) {
     return;
   } 
   if ((quantity = atoi(quantity_buf)) <= 0) {
+    // Special case: 'pockets put <ammobox>'. Check for that here.
+    if (is_valid_pockets_put_command(mode_buf)) {
+      struct obj_data *ammobox;
+      int quantity;
+      
+      if ((ammobox = get_obj_in_list_vis(ch, quantity_buf, ch->carrying))) {
+        if (GET_OBJ_TYPE(ammobox) != ITEM_GUN_AMMO) {
+          send_to_char(ch, "%s is not an ammo box.\r\n", capitalize(GET_OBJ_NAME(ammobox)));
+          return;
+        }
+        
+        if ((quantity = GET_AMMOBOX_QUANTITY(ammobox)) <= 0) {
+          send_to_char(ch, "%s is already empty.\r\n", capitalize(GET_OBJ_NAME(ammobox)));
+          return;
+        }
+        
+        int weapontype = GET_AMMOBOX_WEAPON(ammobox);
+        int ammotype = GET_AMMOBOX_TYPE(ammobox);
+        
+        if (quantity + GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype) > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
+          send_to_char(ch, "Your pockets aren't big enough to hold everything in %s.\r\n", GET_OBJ_NAME(ammobox));
+          return;
+        }
+        
+        update_bulletpants_ammo_quantity(ch, weapontype, ammotype, quantity);
+        update_ammobox_ammo_quantity(ammobox, -quantity);
+        
+        if (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0) {
+          send_to_char(ch, "You take %d %s from %s and secrete them about your person, then junk the empty box.\r\n", 
+                       quantity, get_ammo_representation(weapontype, ammotype, quantity), GET_OBJ_NAME(ammobox));
+          extract_obj(ammobox);
+        } else {
+          send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n", 
+                       quantity, get_ammo_representation(weapontype, ammotype, quantity), GET_OBJ_NAME(ammobox));
+        }
+        
+        return;
+      }
+    }
     send_to_char("The quantity must be greater than zero.\r\n", ch);
     return;
   }
@@ -174,9 +213,15 @@ ACMD(do_pockets) {
     update_ammobox_ammo_quantity(ammobox, -quantity);
     update_bulletpants_ammo_quantity(ch, weapon, ammotype, quantity);
     
-    send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n", 
-                 quantity, get_ammo_representation(weapon, ammotype, quantity), GET_OBJ_NAME(ammobox));
-    return;
+    // Message char, and ditch box if it's empty and not customized.
+    if (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0) {
+      send_to_char(ch, "You take %d %s from %s and secrete them about your person, then junk the empty box.\r\n", 
+                   quantity, get_ammo_representation(weapon, ammotype, quantity), GET_OBJ_NAME(ammobox));
+      extract_obj(ammobox);
+    } else {
+      send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n", 
+                   quantity, get_ammo_representation(weapon, ammotype, quantity), GET_OBJ_NAME(ammobox));
+    }
   }
   
   /******************************************************
@@ -419,8 +464,8 @@ bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *bu
   // We skip the header and assume the caller will print it. Just print the ammo.
   for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
     if ((amount = GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am))) {
-      snprintf(ENDOF(buf), bufsize - strlen(buf), "%s%u %s %s%s",
-               printed_anything_yet ? ", " : "",
+      snprintf(ENDOF(buf), bufsize - strlen(buf), "    %u %s %s%s\r\n",
+               // printed_anything_yet ? ", " : "",
                amount,
                ammo_type[am].name,
                get_weapon_ammo_name_as_string(wp),
@@ -429,9 +474,6 @@ bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *bu
       printed_anything_yet = TRUE;
     }
   }
-  
-  if (printed_anything_yet)
-    strncat(buf, "\r\n", bufsize - strlen(buf) - 1);
     
   return printed_anything_yet;
 }
@@ -452,7 +494,7 @@ void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {
   
   for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++) {
     if (print_one_weapontypes_ammo_to_string(vict, wp, buf2, sizeof(buf2) - 1)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%18s: %s", weapon_type[wp], buf2);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^c%s^n:\r\n%s", weapon_type[wp], buf2);
       have_something_to_print = TRUE;
     }
   }
@@ -633,4 +675,5 @@ int npc_ammo_usage_preferences[] = {
  - better formatting for 'pockets <weapon>'
  - do we need to change output to tree style? how will this work with screenreaders?
  - add ability to split apart ammo boxes
+ - pockets add <box>: put box in pockets, then junk box
 */
