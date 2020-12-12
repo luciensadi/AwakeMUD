@@ -3706,7 +3706,7 @@ ACMD(do_set)
                { "loadroom",        LVL_ADMIN, PC,     MISC },
                { "color",           LVL_ADMIN, PC,     BINARY },
                { "idnum",           LVL_VICEPRES,      PC,     NUMBER },
-               { "passwd",  LVL_VICEPRES,      PC,     MISC },
+               { "password",  LVL_VICEPRES,      PC,     MISC },
                { "nodelete",        LVL_VICEPRES,      PC,     BINARY }, // 40
                { "cha",             LVL_ADMIN, BOTH,   NUMBER },
                { "mag",  LVL_ADMIN, BOTH, NUMBER },
