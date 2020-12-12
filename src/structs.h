@@ -828,6 +828,7 @@ struct descriptor_data
   bool edit_convert_color_codes; /* if this is true, display color codes in descs as ^^ for copy-paste */
   long edit_number;              /* virtual num of thing being edited */
   long edit_number2;             /* misc number for editing */
+  long edit_number3;             /* misc number for editing */
   int edit_zone;                /* which zone object is part of      */
   int iedit_limit_edits;        /* Used in iedit to let you cut out of g-menus early. */
   void **misc_data;             /* misc data, usually for extra data crap */

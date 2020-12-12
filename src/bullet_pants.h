@@ -24,5 +24,6 @@ const char *get_ammo_representation(int weapon, int ammotype, int quantity);
 bool is_valid_pockets_put_command(char *mode_buf);
 bool is_valid_pockets_get_command(char *mode_buf);
 const char *get_ammobox_default_restring(struct obj_data *ammobox);
+bool have_bullet_pants_table();
 
 #endif

@@ -55,6 +55,7 @@
 #include "olc.h"
 #include <new>
 #include "transport.h"
+#include "bullet_pants.h"
 
 extern void calc_weight(struct char_data *ch);
 extern void read_spells(struct char_data *ch);
@@ -68,8 +69,6 @@ extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void weight_change_object(struct obj_data * obj, float weight);
-extern const char *get_weapon_ammo_name_as_string(int weapon_type);
-extern bool have_bullet_pants_table();
 
 
 /**************************************************************************
@@ -1519,6 +1518,13 @@ void parse_mobile(File &in, long nr)
 
     GET_KARMA(mob) = MIN(old, calc_karma(NULL, mob));
   }
+  
+  // Load ammo.
+  for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+    for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
+      snprintf(buf, sizeof(buf), "AMMO/%s", get_ammo_representation(wp, am, 0));
+      GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) = data.GetInt(buf, 0);
+    }
 
   top_of_mobt = rnum++;
 }

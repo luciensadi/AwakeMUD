@@ -505,7 +505,6 @@ const char *weapon_type_aliases[] =
 /* 
  - room debris counter, its display
  - purging of magazines once ejected (in that case, do we even want to eject the mag, or just keep it there and change its values)
- - medit of NPC bullet pants
  - resetting of NPC bullet pants
  - reloading from bullet pants (PC / NPC)
  - - handheld weapons

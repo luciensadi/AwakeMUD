@@ -233,8 +233,12 @@ extern void write_index_file(const char *suffix);
 #define MEDIT_SKILL5_VAL                41
 #define MEDIT_ARRIVE_MSG                42
 #define MEDIT_LEAVE_MSG                 43
-#define MEDIT_CLASS                 44
+#define MEDIT_CLASS                     44
 #define MEDIT_CREDSTICK                 45
+#define MEDIT_AMMO                      46
+#define MEDIT_AMMO_SELECT_WEAPON        47
+#define MEDIT_AMMO_SELECT_AMMO          48
+#define MEDIT_AMMO_SELECT_QUANTITY      49
 
 // quest defines
 #define QEDIT_CONFIRM_EDIT                0

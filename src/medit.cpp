@@ -20,6 +20,7 @@
 #include "memory.h"
 #include "handler.h"
 #include "constants.h"
+#include "bullet_pants.h"
 
 void write_mobs_to_disk(int zone);
 
@@ -96,6 +97,8 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "h) Default Position: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
                */
+               
+  send_to_char(CH, "h) Ammunition\r\n");
   sprinttype(GET_SEX(MOB), genders, buf1, sizeof(buf1));
   //  strcpy(buf1, genders[GET_SEX(d->edit_mob)]);
   send_to_char(CH, "i) Gender: %s%s%s, ", CCCYN(CH, C_CMP), buf1,
@@ -139,6 +142,13 @@ void medit_disp_skills(struct descriptor_data *d)
   {
     send_to_char(CH, "%s\r\nEnter a skill (0 to quit): ", buf);
   }
+}
+
+void medit_disp_ammo_menu(struct descriptor_data *d) {
+  send_to_char(CH, "1) Show current ammo\r\n"
+                   "2) Edit current ammo\r\n"
+                   "q) Back\r\n");
+  d->edit_mode = MEDIT_AMMO;
 }
 
 void medit_disp_attack_menu(struct descriptor_data *d)
@@ -549,9 +559,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = MEDIT_POSITION;
       break;
     case 'h':
-      medit_disp_pos_menu(d);
-      send_to_char("Enter default position: ", CH);
-      d->edit_mode = MEDIT_DEFAULT_POSITION;
+      medit_disp_ammo_menu(d);
+      send_to_char("\r\nEnter selection: ", CH);
       break;
     case 'i':
       medit_disp_gender_menu(d);
@@ -1106,20 +1115,62 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
 
-  case MEDIT_POSITION:
-  /*
-    number = atoi(arg);
-    if ((number < POS_MORTALLYW) || (number > POS_STANDING)) {
-      send_to_char("Invalid choice.\r\nEnter position: ", CH);
-      medit_disp_pos_menu(d);
-    } else {
-      GET_POS(MOB) = GET_DEFAULT_POS(MOB) = number;
-      medit_disp_menu(d);
+  case MEDIT_AMMO:
+    switch (*arg) {
+      case 'q':
+      case 'Q':
+        medit_disp_menu(d);
+        break;
+      case '1':
+        display_pockets_to_char(CH, MOB);
+        break;
+      case '2':
+        for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++)
+          send_to_char(CH, "%d) %s\r\n", (i + 1) - START_OF_AMMO_USING_WEAPONS, weapon_type[i]);
+        send_to_char("\r\nSelect the weapon to edit: ", CH);
+        d->edit_mode = MEDIT_AMMO_SELECT_WEAPON;
+        break;
+      default:
+        send_to_char("That's not a choice. Enter a choice (1 to list, 2 to edit, or q to quit): ", CH);
+        break;
     }
     break;
-*/
-  // Fallthrough.
-  case MEDIT_DEFAULT_POSITION:
+  
+  case MEDIT_AMMO_SELECT_WEAPON:
+    number = (atoi(arg) - 1) + START_OF_AMMO_USING_WEAPONS;
+    if (number < START_OF_AMMO_USING_WEAPONS || number > END_OF_AMMO_USING_WEAPONS)
+      send_to_char(CH, "That's not a valid choice. Enter a choice: ");
+    else {
+      d->edit_number2 = number;
+      for (int i = AMMO_NORMAL; i < NUM_AMMOTYPES; i++)
+        send_to_char(CH, "%d) %s\r\n", i + 1, ammo_type[i].name);
+      send_to_char("\r\nSelect the ammo to edit: ", CH);
+      d->edit_mode = MEDIT_AMMO_SELECT_AMMO;
+    }
+    break;
+  
+  case MEDIT_AMMO_SELECT_AMMO:
+    number = atoi(arg) - 1;
+    if (number < AMMO_NORMAL || number >= NUM_AMMOTYPES)
+      send_to_char(CH, "That's not a valid choice. Enter a choice between %d and %d: ", AMMO_NORMAL + 1, NUM_AMMOTYPES);
+    else {
+      d->edit_number3 = number;
+      send_to_char(CH, "How many %s should this NPC have? ", get_ammo_representation(d->edit_number2, d->edit_number3, 0));
+      d->edit_mode = MEDIT_AMMO_SELECT_QUANTITY;
+    }
+    break;
+    
+  case MEDIT_AMMO_SELECT_QUANTITY:
+    number = atoi(arg);
+    if (number < 0 || number > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
+      send_to_char(CH, "Number must be between 0 and %d. How many? ", MAX_NUMBER_OF_BULLETS_IN_PANTS);
+    } else {
+      GET_BULLETPANTS_AMMO_AMOUNT(MOB, d->edit_number2, d->edit_number3) = number;
+      medit_disp_ammo_menu(d);
+    }
+    break;
+      
+  case MEDIT_POSITION:
     number = atoi(arg);
     if ((number < POS_MORTALLYW) || (number > POS_STANDING)) {
       send_to_char("Invalid choice.\r\nEnter position: ", CH);
@@ -1264,8 +1315,15 @@ void write_mobs_to_disk(int zone)
           fprintf(fp, "\t%s:\t%d\n", skills[mob->mob_specials.mob_skills[i]].name,
                   mob->mob_specials.mob_skills[i+1]);
 
-
-
+      // Print the ammo. Format: "APDS heavy pistol:  123"
+      fprintf(fp, "[AMMO]\n");
+      for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+        for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
+          if (GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) > 0)
+            fprintf(fp, "\t%s:\t%u\n", 
+                        get_ammo_representation(wp, am, 0),
+                        GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am));
+            
       fprintf(fp, "BREAK\n");
     } // close if statement
   } // close for loop
