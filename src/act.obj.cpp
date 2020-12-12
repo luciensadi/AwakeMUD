@@ -32,8 +32,10 @@ extern int modify_target(struct char_data *ch);
 extern int return_general(int skill_num);
 extern bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj);
 extern void check_quest_delivery(struct char_data *ch, struct obj_data *obj);
-void calc_weight(struct char_data *ch);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
+extern float get_bulletpants_weight(struct char_data *ch);
+
+void calc_weight(struct char_data *ch);
 
 SPECIAL(weapon_dominator);
 
@@ -642,15 +644,17 @@ void calc_weight(struct char_data *ch)
   int i=0;
   /* first reset the player carry weight*/
   IS_CARRYING_W(ch) = 0;
-  /* Go Through worn eq*/
-
+  
+  // Go through worn equipment.
   for (i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i))
       IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(GET_EQ(ch, i));
 
+  // Go through carried equipment.
   for (obj = ch->carrying; obj; obj = obj->next_content)
     IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(obj);
     
+  // Add cyberware per SR3 p300.
   for (obj = ch->cyberware; obj; obj = obj->next_content)
     if (GET_OBJ_VAL(obj, 0) == CYB_BONELACING)
       switch (GET_OBJ_VAL(obj, 3))
@@ -667,6 +671,9 @@ void calc_weight(struct char_data *ch)
         IS_CARRYING_W(ch) += 15;
         break;
       }
+      
+  // Add bullet pants.
+  IS_CARRYING_W(ch) += get_bulletpants_weight(ch);
 }
 
 void perform_get_from_container(struct char_data * ch, struct obj_data * obj,

@@ -55,6 +55,7 @@
 #include "olc.h"
 #include <new>
 #include "transport.h"
+#include "bullet_pants.h"
 
 extern void calc_weight(struct char_data *ch);
 extern void read_spells(struct char_data *ch);
@@ -68,6 +69,7 @@ extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void weight_change_object(struct obj_data * obj, float weight);
+
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -335,6 +337,12 @@ void boot_world(void)
   
   log("Verifying DB compatibility with extended-length passwords.");
   verify_db_password_column_size();
+  
+  log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
+  if (!have_bullet_pants_table()) {
+    log("ERROR: You need to run the bullet_pants.sql migration from the SQL directory. Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < SQL/bullet_pants.sql`.");
+    exit(ERROR_BULLET_PANTS_FAILED);
+  }
   
   log("Handling idle deletion.");
   idle_delete();
@@ -1510,6 +1518,13 @@ void parse_mobile(File &in, long nr)
 
     GET_KARMA(mob) = MIN(old, calc_karma(NULL, mob));
   }
+  
+  // Load ammo.
+  for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+    for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
+      snprintf(buf, sizeof(buf), "AMMO/%s", get_ammo_representation(wp, am, 0));
+      GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) = data.GetInt(buf, 0);
+    }
 
   top_of_mobt = rnum++;
 }
@@ -1672,7 +1687,7 @@ void parse_object(File &fl, long nr)
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 500), 10);
           
           // Set values according to Assault Cannon ammo (SR3 p281).
-          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * 1.25;
+          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) * 1.25) / 10;
           GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * 45;
           GET_OBJ_AVAILDAY(obj) = 3;
           GET_OBJ_AVAILTN(obj) = 5;
@@ -1684,10 +1699,8 @@ void parse_object(File &fl, long nr)
           // Max size 1000-- otherwise it's too heavy to carry.
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
           
-          // Calculate weight as (count / 10) * multiplier (multiplier is per 10 rounds).
-          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
-          
-          // Calculate cost as count * multiplier (multiplier is per round)
+          // Update weight and cost.
+          GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
           GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].cost;
           
           // Set the TNs for this ammo per the default values.
@@ -1699,23 +1712,7 @@ void parse_object(File &fl, long nr)
         }
         
         // Set the strings-- we want all these things to match for simplicity's sake.
-        switch (GET_AMMOBOX_WEAPON(obj)) {
-          case WEAP_SHOTGUN:
-          case WEAP_CANNON:
-            type_as_string = "shell";
-            break;
-          case WEAP_MISS_LAUNCHER:
-            type_as_string = "rocket";
-            break;
-          case WEAP_GREN_LAUNCHER:
-            type_as_string = "grenade";
-            break;
-          case WEAP_TASER:
-            type_as_string = "dart";
-          default:
-            type_as_string = "round";
-            break;
-        }
+        type_as_string = get_weapon_ammo_name_as_string(GET_AMMOBOX_WEAPON(obj));
         
         snprintf(buf, sizeof(buf), "metal ammo ammunition box %s %s %d-%s %s%s",
                 GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
@@ -3250,15 +3247,34 @@ void reset_zone(int zone, int reboot)
         if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER) {
           GET_HOLSTER_READY_STATUS(obj_to) = 1;
           
-          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
-            // Make sure it's loaded.
-            struct obj_data *magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
-            GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(obj);
-            GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(obj);
-            snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
-            DELETE_ARRAY_IF_EXTANT(magazine->restring);
-            magazine->restring = strdup(buf);
-            obj_to_obj(magazine, obj);
+          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {       
+            // If it's carried by an NPC, make sure it's loaded.     
+            if (GET_WEAPON_MAX_AMMO(obj) > 0) {
+              struct obj_data *outermost = obj;
+              while (outermost && outermost->in_obj) {
+                outermost = outermost->in_obj;
+              }
+                
+              struct char_data *temp_ch = NULL;
+              if ((temp_ch = outermost->carried_by) || (temp_ch = outermost->worn_by)) {
+                // Reload from their ammo.
+                for (int index = 0; index < NUM_AMMOTYPES; index++) {
+                  if (GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                    reload_weapon_from_bulletpants(temp_ch, obj, npc_ammo_usage_preferences[index]);
+                    break;
+                  }
+                }
+                
+                // If they failed to reload, they have no ammo. Give them some normal and reload with it.
+                if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
+                  GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                  reload_weapon_from_bulletpants(temp_ch, obj, AMMO_NORMAL);
+                  
+                  // Decrement their debris-- we want this reload to not create clutter.
+                  get_ch_in_room(temp_ch)->debris--;
+                }
+              }
+            }
             
             // Set the firemode.
             if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF)) {
@@ -3323,14 +3339,23 @@ void reset_zone(int zone, int reboot)
             if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
                 && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
                 && GET_WEAPON_MAX_AMMO(obj) != -1) {
-                // Load it with a magazine.
-                struct obj_data *magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
-                GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(obj);
-                GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(obj);
-                snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
-                DELETE_ARRAY_IF_EXTANT(magazine->restring);
-                magazine->restring = strdup(buf);
-                obj_to_obj(magazine, obj);
+                               
+              // Reload from their ammo.
+              for (int index = 0; index < NUM_AMMOTYPES; index++) {
+                if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                  reload_weapon_from_bulletpants(mob, obj, npc_ammo_usage_preferences[index]);
+                  break;
+                }
+              }
+              
+              // If they failed to reload, they have no ammo. Give them some normal and reload with it.
+              if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
+                GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
+                
+                // Decrement their debris-- we want this reload to not create clutter.
+                get_ch_in_room(mob)->debris--;
+              }
             }
           }
         }

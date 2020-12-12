@@ -22,6 +22,7 @@
 #include "act.drive.h"
 #include "transport.h"
 #include "quest.h"
+#include "bullet_pants.h"
 
 ACMD_DECLARE(do_say);
 
@@ -838,6 +839,17 @@ bool mobact_process_movement(struct char_data *ch) {
   return false;
 }
 
+// Precondition: ch and weapon exist, and weapon is a firearm.
+void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon) {
+  // Check all ammotypes for this weapon. If we have any, return.
+  for (int am = 0; am < NUM_AMMOTYPES; am++)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0)
+      return;
+  
+  // If we had none, give them normal.
+  GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+}
+
 void mobile_activity(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -867,8 +879,32 @@ void mobile_activity(void)
       continue;
 
     // Cool down mob alert status.
-    if (GET_MOBALERT(ch) > MALERT_CALM && --GET_MOBALERTTIME(ch) <= 0)
+    if (GET_MOBALERT(ch) > MALERT_CALM && --GET_MOBALERTTIME(ch) <= 0) {
       GET_MOBALERT(ch) = MALERT_CALM;
+      
+      // If you just entered calm state and have a weapon, you get your ammo back.
+      // check if they have ammo in proto-- if so, paste in proto ammo, if not, give max * 3 normal ammo
+      struct char_data *proto_mob = &mob_proto[real_mobile(GET_MOB_VNUM(ch))];
+      
+      // Copy over their ammo data. We scan the whole thing instead of just their weapon to prevent someone
+      // giving them a holdout pistol so they never regain their ammo stores.
+      for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+        for (int am = 0; am < NUM_AMMOTYPES; am++)
+          GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) = GET_BULLETPANTS_AMMO_AMOUNT(proto_mob, wp, am);
+          
+      // Carried weapons.
+      for (struct obj_data *weapon = ch->carrying; weapon; weapon = weapon->next_content)
+        if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && GET_WEAPON_MAX_AMMO(weapon) > 0)
+          ensure_mob_has_ammo_for_weapon(ch, weapon);
+      
+      // Wielded weapons.  
+      for (int index = 0; index < NUM_WEARS; index++)
+        if (GET_EQ(ch, index) 
+            && GET_OBJ_TYPE(GET_EQ(ch, index)) == ITEM_WEAPON 
+            && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, index)))
+            && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
+          ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
+    }
     
     // Manipulate wielded weapon (reload, set fire mode, etc).
     mobact_change_firemode(ch);
@@ -1110,8 +1146,7 @@ void clearMemory(struct char_data * ch)
 bool attempt_reload(struct char_data *mob, int pos)
 {
   // I would call the reload routine for players, but this is slightly faster
-  struct obj_data *magazine, *gun = NULL;
-  bool found = FALSE;
+  struct obj_data *gun = NULL;
   
   if (!(gun = GET_EQ(mob, pos))) {
     snprintf(buf, sizeof(buf), "SYSERR: attempt_reload received invalid wield position %d for %s.", pos, GET_CHAR_NAME(mob));
@@ -1120,7 +1155,7 @@ bool attempt_reload(struct char_data *mob, int pos)
   }
 
   if (GET_OBJ_TYPE(gun) != ITEM_WEAPON) {
-    act("$n can't reload weapon- $o is not a weapon.", TRUE, mob, gun, NULL, TO_ROLLS);
+    // act("$n can't reload weapon- $o is not a weapon.", TRUE, mob, gun, NULL, TO_ROLLS);
     return FALSE;
   }
   
@@ -1129,60 +1164,16 @@ bool attempt_reload(struct char_data *mob, int pos)
     return TRUE;
   }
   
-  // With the coming ammo rework, I can't be assed to give all NPCs blank mags in resets. -- LS
-  magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
-  GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(gun);
-  GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(gun);
-  snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
-  DELETE_ARRAY_IF_EXTANT(magazine->restring);
-  magazine->restring = strdup(buf);
-  found = TRUE;
-
-/*
-  for (magazine = mob->carrying; magazine && !found; magazine = magazine->next_content)
-  {
-    // Found a magazine. Does it work for us?
-    if (GET_OBJ_TYPE(magazine) == ITEM_GUN_MAGAZINE) {
-      // Carrying an unbonded mag? Sweet, adapt it to this gun and load it up.
-      if (!GET_MAGAZINE_BONDED_MAXAMMO(magazine)) {
-        GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(gun);
-        GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(gun);
-        snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
-        DELETE_ARRAY_IF_EXTANT(magazine->restring);
-        magazine->restring = strdup(buf);
-        found = TRUE;
-        break;
-      } 
+  // Reload with whatever we have on hand.
+  for (int index = 0; index < NUM_AMMOTYPES; index++)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(gun), npc_ammo_usage_preferences[index]) > 0) {
+      // act("$n has ammo, attempting to reload $o.", TRUE, mob, gun, NULL, TO_ROLLS);
+      return reload_weapon_from_bulletpants(mob, gun, npc_ammo_usage_preferences[index]);
+    }
       
-      // Carrying a bonded mag? Use it if it matches our loadout already.
-      else if (GET_MAGAZINE_BONDED_MAXAMMO(magazine) == GET_WEAPON_MAX_AMMO(gun) 
-               && GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) == (GET_WEAPON_ATTACK_TYPE(gun))) {
-        found = TRUE;
-        break;
-      }
-    } 
-  }
-  
-
-  if (!found) {
-    act("$n can't reload weapon- no magazines available for $o.", TRUE, mob, gun, NULL, TO_ROLLS);
-    return FALSE;
-  }
-  */
-
-  if (gun->contains)
-  {
-    struct obj_data *tempobj = gun->contains;
-    obj_from_obj(tempobj);
-    obj_to_room(tempobj, mob->in_room);
-  }
-  // obj_from_char(magazine);
-  obj_to_obj(magazine, gun);
-  // GET_OBJ_VAL(gun, 6) = GET_OBJ_VAL(magazine, 9);
-
-  act("$n reloads $p.", TRUE, mob, gun, 0, TO_ROOM);
-  act("You reload $p.", FALSE, mob, gun, 0, TO_CHAR);
-  return TRUE;
+  // We had nothing.
+  // act("$n can't reload weapon- have no ammo for $o.", TRUE, mob, gun, NULL, TO_ROLLS);
+  return FALSE;
 }
 
 void switch_weapons(struct char_data *mob, int pos)

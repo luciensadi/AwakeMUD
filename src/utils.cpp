@@ -52,6 +52,7 @@ extern long beginning_of_time;
 extern int ability_cost(int abil, int level);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
+extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -2808,8 +2809,13 @@ char *replace_substring(char *source, char *dest, const char *replace_target, co
 
 // Adds the amount to the ammobox, then processes its weight etc. 
 void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
-  if (!ammobox || amount == 0) {
-    mudlog("SYSERR: Illegal values passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+  if (!ammobox) {
+    mudlog("SYSERR: Null ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (amount == 0) {
+    mudlog("SYSERR: Zero-quantity ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
     return;
   }
   
@@ -2825,8 +2831,8 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
     GET_AMMOBOX_QUANTITY(ammobox) = 0;
   }
   
-  // Calculate weight as (count / 10) * multiplier (multiplier is per 10 rounds).
-  GET_OBJ_WEIGHT(ammobox) = (((float) GET_AMMOBOX_QUANTITY(ammobox)) / 10) * ammo_type[GET_AMMOBOX_TYPE(ammobox)].weight;
+  // Update the box's weight.
+  weight_change_object(ammobox, ammo_type[GET_AMMOBOX_TYPE(ammobox)].weight * amount);
   
   // Calculate cost as count * multiplier (multiplier is per round)
   GET_OBJ_COST(ammobox) = GET_AMMOBOX_QUANTITY(ammobox) * ammo_type[GET_AMMOBOX_TYPE(ammobox)].cost;
@@ -2861,16 +2867,19 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     return FALSE;
   }
   
+  if (GET_AMMOBOX_QUANTITY(from) == 0) {
+    if (print_messages)
+      send_to_char(ch, "But %s is empty...\r\n", GET_OBJ_NAME(from));
+    return FALSE;
+  }
+  
   update_ammobox_ammo_quantity(into, GET_AMMOBOX_QUANTITY(from));
   update_ammobox_ammo_quantity(from, -GET_AMMOBOX_QUANTITY(from));
   
   // Notify the owner, then destroy the empty.
-  if (!from->restring) {
+  if (!from->restring || strcmp(from->restring, get_ammobox_default_restring(from)) == 0) {
     if (print_messages) {
-      send_to_char(ch, "You dump the ammo into %s and throw away the now-empty '%s'.\r\n",
-        GET_OBJ_NAME(into),
-        GET_OBJ_NAME(from)
-      );
+      send_to_char(ch, "You dump the ammo into %s and throw away the empty box.\r\n", GET_OBJ_NAME(into) );
     }
     
     extract_obj(from);
@@ -2883,25 +2892,21 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     }
   }
   
-  // Restring it, as long as it's not already restrung.
+  // Restring it, as long as it's not already restrung. Use n_s_b so we don't accidentally donk someone's buf.
   if (!into->restring) {
-    char new_name_buf[500];
     char notification_string_buf[500];
     
     // Compose the new name.
-    snprintf(new_name_buf, sizeof(new_name_buf), "a box of %s %s ammunition", 
-      ammo_type[GET_AMMOBOX_TYPE(into)].name,
-      weapon_type[GET_AMMOBOX_WEAPON(into)]
-    );
+    const char *restring = get_ammobox_default_restring(into);
     
     // Compose the notification string.
     snprintf(notification_string_buf, sizeof(notification_string_buf), "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
       GET_OBJ_NAME(into),
-      new_name_buf
+      restring
     );
     
     // Commit the change and notify the player.
-    into->restring = str_dup(new_name_buf);
+    into->restring = str_dup(restring);
     
     if (print_messages)
       send_to_char(notification_string_buf, ch);

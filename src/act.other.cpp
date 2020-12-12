@@ -31,11 +31,14 @@
 #include "memory.h"
 #include "awake.h"
 #include "constants.h"
+#include "bullet_pants.h"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
 #include "github_config.h"
 #endif
+
+bool is_reloadable_weapon(struct obj_data *weapon);
 
 /* extern variables */
 extern const char *ctypes[];
@@ -1383,9 +1386,8 @@ struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i)
 ACMD(do_reload)
 {
   struct obj_data *i, *gun = NULL, *m = NULL, *ammo = NULL; /* Appears unused:  *bin = NULL; */
-  struct char_data *tmp_char;
   int n, def = 0, mount = 0;
-  struct veh_data *veh;
+  struct veh_data *veh = NULL;
 
   two_arguments(argument, buf, buf1);
 
@@ -1395,259 +1397,196 @@ ACMD(do_reload)
     return;
   }
   
-  // In-vehicle mounted-weapon reloading via 'reload mount [x]'
-  if (ch->in_veh && is_abbrev(buf, "mount")) {
-    veh = ch->in_veh;
-    mount = atoi(buf1);
-  } 
-  
-  // Mounted weapon reloading via 'reload <vehicle> [x]'
-  else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
-    if (veh->type != VEH_DRONE) {
-      send_to_char("You have to be inside a vehicle to reload the mounts.\r\n", ch);
-      return;
-    }
-    mount = atoi(buf1);
-  }
-  
-  // Process mount reloading.
-  if (veh && mount >= 0) {
-    // Find the mount, and give an error if it's not there.
-    for (m = veh->mount; m; m = m->next_content)
-      if (--mount < 0)
-        break;
+  // TODO: I stopped halfway through editing this. It is BROKEN.
+  {
+    // In-vehicle reloading with mounts.
+    if (ch->in_veh) {
+      // In-vehicle mounted-weapon reloading via 'reload mount [x]'
+      if (is_abbrev(buf, "mount")) {
+        veh = ch->in_veh;
+        mount = atoi(buf1);
         
-    if (!m) {
-      send_to_char("There aren't that many mounts.\r\n", ch);
-      return;
-    }
+        for (m = veh->mount; m; m = m->next_content)
+          if (--mount < 0)
+            break;
+            
+        if (!m) {
+          send_to_char("There aren't that many mounts in your vehicle.\r\n", ch);
+          return;
+        }
+      } 
       
-    // Iterate over the mount and look for its weapon and ammo box.
-    for (struct obj_data *search = m->contains; search; search = search->next_content)
-      if (GET_OBJ_TYPE(search) == ITEM_WEAPON)
-        gun = search;
-      else if (GET_OBJ_TYPE(search) == ITEM_GUN_AMMO)
-        ammo = search;
-      /* Code does not appear to be used.
-      else if (GET_OBJ_TYPE(search) == ITEM_MOD)
-        bin = search; */
-        
-    if (!gun) {
-      send_to_char("There is no weapon attached to that mount.\r\n", ch);
-      return;
+      // No argument and manning? Reload the turret.
+      else if (!*buf && (m = get_mount_manned_by_ch(ch))) {
+        veh = ch->in_veh;
+      }
     }
     
-    for (i = ch->carrying; i; i = i->next_content)
-      if (GET_OBJ_TYPE(i) == ITEM_GUN_AMMO &&
-          GET_AMMOBOX_WEAPON(i) == GET_WEAPON_ATTACK_TYPE(gun)) {
-        int max = GET_WEAPON_MAX_AMMO(gun) * 2;   
-        
-        // Reload an ammo box directly.
-        if (ammo) {
-          if (GET_AMMOBOX_WEAPON(i) != GET_AMMOBOX_WEAPON(ammo) || 
-              GET_AMMOBOX_TYPE(i) != GET_AMMOBOX_TYPE(ammo)) {
-            send_to_char("You cannot mix ammunition types in ammunition bins.\r\n", ch);
-            return;
-          }
-          max -= GET_AMMOBOX_QUANTITY(ammo);
-          if (max < 1) {
-            send_to_char("The ammunition bin on that mount is already full.\r\n", ch);
-            return;
+    // Mounted weapon reloading via 'reload <vehicle> [x]'
+    else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+      if (veh->type != VEH_DRONE) {
+        send_to_char("You have to be inside a vehicle to reload the mounts.\r\n", ch);
+        return;
+      }
+      mount = atoi(buf1);
+      
+      for (m = veh->mount; m; m = m->next_content)
+        if (--mount < 0)
+          break;
+          
+      if (!m) {
+        send_to_char(ch, "There aren't that many mounts on %s.\r\n", GET_VEH_NAME(veh));
+        return;
+      }
+    }
+    
+    // Process mount reloading.
+    if (veh && m) {
+      // Iterate over the mount and look for its weapon and ammo box.
+      for (struct obj_data *search = m->contains; search; search = search->next_content)
+        if (GET_OBJ_TYPE(search) == ITEM_WEAPON)
+          gun = search;
+        else if (GET_OBJ_TYPE(search) == ITEM_GUN_AMMO)
+          ammo = search;
+          
+      if (!gun) {
+        send_to_char("There is no weapon attached to that mount.\r\n", ch);
+        return;
+      }
+      
+      for (i = ch->carrying; i; i = i->next_content) {
+        if (GET_OBJ_TYPE(i) == ITEM_GUN_AMMO &&
+            GET_AMMOBOX_WEAPON(i) == GET_WEAPON_ATTACK_TYPE(gun)) {
+          int max = GET_WEAPON_MAX_AMMO(gun) * 2;   
+          
+          // Reload an ammo box directly.
+          if (ammo) {
+            if (GET_AMMOBOX_WEAPON(i) != GET_AMMOBOX_WEAPON(ammo) || 
+                GET_AMMOBOX_TYPE(i) != GET_AMMOBOX_TYPE(ammo)) {
+              send_to_char("You cannot mix ammunition types in ammunition bins.\r\n", ch);
+              return;
+            }
+            max -= GET_AMMOBOX_QUANTITY(ammo);
+            if (max < 1) {
+              send_to_char("The ammunition bin on that mount is already full.\r\n", ch);
+              return;
 
-          } else {
+            } else {
+              max = MIN(max, GET_AMMOBOX_QUANTITY(i));
+              update_ammobox_ammo_quantity(ammo, max);
+              update_ammobox_ammo_quantity(i, -max);
+              send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
+              return;
+            }            
+          } 
+          
+          // No ammo box-- reload the gun itself.
+          else {
             max = MIN(max, GET_AMMOBOX_QUANTITY(i));
+            ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
+            obj_to_obj(ammo, m);
+            GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
+            GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
             update_ammobox_ammo_quantity(ammo, max);
             update_ammobox_ammo_quantity(i, -max);
             send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
             return;
-          }            
-        } 
-        
-        // No ammo box-- reload the gun itself.
-        else {
-          max = MIN(max, GET_AMMOBOX_QUANTITY(i));
-          ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
-          obj_to_obj(ammo, m);
-          GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
-          GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
-          update_ammobox_ammo_quantity(ammo, max);
-          update_ammobox_ammo_quantity(i, -max);
-          send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
-          return;
+          }
         }
       }
 
-    send_to_char("You don't have the right ammunition for that mount.\r\n", ch); 
-    return;
-  } /* End of mount evaluation. */
+      send_to_char("You don't have the right ammunition for that mount.\r\n", ch); 
+      return;
+    } /* End of mount evaluation. */
+  } /* end of mounts */
   
-  // Are they wielding a reloadable gun?
-  /*
-  if (GET_EQ(ch, WEAR_WIELD)
-      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON
-      && IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3))
-      && GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 5) >= 1) {
-        // Is it magless or loaded with an empty mag?
-        if (!GET_EQ(ch, WEAR_WIELD)->contains
-            || (GET_MAGAZINE_AMMO_COUNT(GET_EQ(ch, WEAR_WIELD)->contains) <= 0)) {
-          // TODO: Prioritize reloading the weapon.
-        }
-      }
-  */
-  
-  for (gun = ch->carrying; gun; gun = gun->next_content)
-    /* TODO: Sanity design:
-      - If your weapon is empty, and if you have a loaded magazine, reload your weapon.
-      - If you have specified your weapon as a keyword (reload predator), reload your weapon.
-      - Otherwise, reload a magazine from a box.
-    */
-  
-   if (GET_OBJ_TYPE(gun) == ITEM_GUN_AMMO && GET_OBJ_VAL(gun, 0) > 0) {     
-     if (CH_IN_COMBAT(ch)) {
-       send_to_char("You are too busy fighting!\r\n", ch);
-       return;    
-     }
-     
-     for (i = ch->carrying; i; i = i->next_content)
-       if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_AMMOBOX_CREATOR(gun) &&
-           (GET_OBJ_VAL(i, 1) == GET_AMMOBOX_WEAPON(gun) || (GET_AMMOBOX_WEAPON(gun) == WEAP_LIGHT_PISTOL &&
-           GET_OBJ_VAL(i, 1) == WEAP_MACHINE_PISTOL))
-           && GET_OBJ_VAL(i, 9) < GET_OBJ_VAL(i, 0)) {
-         if (GET_AMMOBOX_TYPE(gun) != GET_OBJ_VAL(i, 2) && GET_OBJ_VAL(i, 9) > 0) {
-           send_to_char("You cannot mix ammunition types in magazines.\r\n", ch);
-           return;
-         }
-         n = MIN((GET_OBJ_VAL(i, 0) - GET_OBJ_VAL(i, 9)), GET_AMMOBOX_QUANTITY(gun));
-         GET_OBJ_VAL(i, 9) += n;
-         update_ammobox_ammo_quantity(gun, -n);
-         GET_OBJ_VAL(i, 2) = GET_AMMOBOX_TYPE(gun);
-         snprintf(buf, sizeof(buf), "You reload %d rounds into $p.", n);
-         act("$n inserts some rounds into $p.", FALSE, ch, i, NULL, TO_ROOM);
-         act(buf, FALSE, ch, i, NULL, TO_CHAR);
-         return;
-       }
-     act("You have no magazines to load rounds from $p into.", FALSE, ch, gun, NULL, TO_CHAR);
-     return;
-   }
-
+  // Reload with no argument.
   if (!*buf) {
-    if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      for (i = ch->in_veh->mount; i; i = i->next_content)
-        if (i->worn_by == ch)
-          break;
-      if (!i) {
-        mudlog("Uh-oh-- tried to access a mount that didn't exist!", ch, LOG_SYSLOG, TRUE);
-        return;
-      }
-      gun = i->contains;
-    } else if ((i = GET_EQ(ch, WEAR_WIELD)) && GET_OBJ_TYPE(i) == ITEM_WEAPON &&
-               GET_OBJ_VAL(i, 5) > 0 && (!i->contains || (i->contains && !GET_OBJ_VAL(i->contains, 9))))
-      gun = i;
-    else if ((i = GET_EQ(ch, WEAR_HOLD)) && GET_OBJ_TYPE(i) == ITEM_WEAPON &&
-             GET_OBJ_VAL(i, 5) > 0 && (!i->contains || (i->contains && !GET_OBJ_VAL(i->contains, 9))))
-      gun = i;
+    // Check wielded weapon.
+    if (is_reloadable_weapon(GET_EQ(ch, WEAR_WIELD)))
+      gun = GET_EQ(ch, WEAR_WIELD);
+    
+    // Check held weapon.
+    else if (is_reloadable_weapon(GET_EQ(ch, WEAR_HOLD)))
+      gun = GET_EQ(ch, WEAR_HOLD);
+      
+    // Start scanning.
     else {
+      // Scan equipped items, excluding light.
       for (n = 0; n < (NUM_WEARS - 1) && !gun; n++)
-        if (GET_EQ(ch, n) && GET_OBJ_TYPE(GET_EQ(ch, n)) == ITEM_WEAPON &&
-            GET_OBJ_VAL(GET_EQ(ch, n), 5) > 0 &&
-            (!GET_EQ(ch, n)->contains || (GET_EQ(ch, n)->contains && !GET_OBJ_VAL(GET_EQ(ch, n), 9))))
+        if (is_reloadable_weapon(GET_EQ(ch, n)))
           gun = GET_EQ(ch, n);
+      
+      // Scan carried items.
       for (i = ch->carrying; i && !gun; i = i->next_content)
-        if (GET_OBJ_TYPE(i) == ITEM_WEAPON && GET_OBJ_VAL(i, 5) > 0 &&
-            (!i->contains || (i->contains && !GET_OBJ_VAL(i->contains, 9))))
+        if (is_reloadable_weapon(i))
           gun = i;
     }
+    
     if (!gun) {
       send_to_char("No weapons in need of reloading found.\r\n", ch);
       return;
     }
     def = 1;
-  } else if (!(gun = get_object_in_equip_vis(ch, buf, ch->equipment, &n)))
+  } 
+  
+  else if (!(gun = get_object_in_equip_vis(ch, buf, ch->equipment, &n)))
     if (!(gun = get_obj_in_list_vis(ch, buf, ch->carrying))) {
       send_to_char(ch, "You don't have a '%s'.\r\n", buf);
       return;
     }
 
   if (GET_OBJ_TYPE(gun) != ITEM_WEAPON
-      || !IS_GUN(GET_OBJ_VAL(gun, 3))
-      || GET_OBJ_VAL(gun, 5) < 1) {
-    send_to_char("That's not a reloadable weapon!\r\n", ch);
+      || !IS_GUN(GET_WEAPON_ATTACK_TYPE(gun))
+      || GET_WEAPON_MAX_AMMO(gun) <= 0) {
+    send_to_char(ch, "%s is not a reloadable weapon!\r\n", capitalize(GET_OBJ_NAME(gun)));
     return;
   }
-
-  if (!*buf1)
-    i = find_magazine(gun, ch->carrying);
-  else if (!generic_find(buf1, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &i)) {
-    send_to_char(ch, "You don't have that magazine.\r\n");
+  
+  // At this point, we know we have a reloadable weapon. All we have to do is parse out the ammotype.
+  
+  // No ammotype? Reload with whatever's in it (normal if nothing).
+  if (!*buf1) {
+    reload_weapon_from_bulletpants(ch, gun, -1);
     return;
   }
-  if (!i)
-    for (int x = 0; x < NUM_WEARS && !i; x++)
-      if (GET_EQ(ch, x))
-        if (GET_EQ(ch, x)->contains && GET_OBJ_TYPE(GET_EQ(ch, x)) != ITEM_WEAPON) {
-          struct obj_data *found;
-          found = find_magazine(gun, GET_EQ(ch, x));
-          if (found)
-            i = found;
-        }
-  if (!i) {
-    act("You can't find a magazine that would work in $p.",
-        FALSE, ch, gun, 0, TO_CHAR);
+  
+  // Compare their buf1 against the valid ammo types.
+  int ammotype = -1;
+  for (int am = NUM_AMMOTYPES - 1; am >= AMMO_NORMAL ; am--) {
+    if (str_str(ammo_type[am].name, buf1)) {
+      ammotype = am;
+      break;
+    }
+  }
+  
+  // They entered something, but it wasn't kosher.
+  if (ammotype == -1) {
+    send_to_char(ch, "'%s' is not a recognized ammo type. Valid types are: ", buf1);
+    bool is_first = TRUE;
+    for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
+      send_to_char(ch, "%s%s", is_first ? "" : ", ", ammo_type[am].name);
+      is_first = FALSE;
+    }
+    send_to_char(".\r\n", ch);
     return;
   }
-  if (!(GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE)
-      || !(GET_OBJ_VAL(i, 0) == GET_OBJ_VAL(gun, 5))
-      || !(GET_OBJ_VAL(i, 1) == GET_OBJ_VAL(gun, 3))) {
-    send_to_char(ch, "That magazine doesn't fit in there.\r\n");
-    return;
-  }
-
-  bool printed_something = FALSE;
-  if (gun->contains) {
-    struct obj_data *old = gun->contains;
-    obj_from_obj(old);
-    if (ch->in_veh) {
-      obj_to_veh(old, ch->in_veh);
-      old->vfront = ch->vfront;
-    } else
-      obj_to_room(old, ch->in_room);
-    act("$n reloads $p, discarding the old magazine.", FALSE, ch, gun, NULL, TO_ROOM);
-    act("You eject a magazine from $p.", FALSE, ch, gun, NULL, TO_CHAR);
-    printed_something = TRUE;
-  }
-  if (i->carried_by)
-    obj_from_char(i);
-  else if (i->in_obj) {
-    if (GET_OBJ_TYPE(i->in_obj) == ITEM_WORN)
-      GET_OBJ_VAL(i->in_obj, GET_OBJ_TIMER(i))++;
-    obj_from_obj(i);
-  }
-  obj_to_obj(i, gun);
-
-  GET_OBJ_VAL(gun, 6) = GET_OBJ_VAL(gun, 5);
-
-  if (def)
-    act("Reloaded $p.", FALSE, ch, gun, 0, TO_CHAR);
-  else
-    send_to_char("Reloaded.\r\n", ch);
-    
-  if (!printed_something)
-    act("$n reloads $p.", FALSE, ch, gun, NULL, TO_ROOM);
-  return;
+  
+  // Good to go.
+  reload_weapon_from_bulletpants(ch, gun, ammotype);
 }
 
 ACMD(do_eject)
 {
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_WIELD)->contains) {
     struct obj_data *magazine = GET_EQ(ch, WEAR_WIELD)->contains;
+    
+    // Strip out the ammo and put it in your bullet pants, then destroy the mag.
+    update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
     obj_from_obj(magazine);
-    if (ch->in_veh) {
-      obj_to_veh(magazine, ch->in_veh);
-      magazine->vfront = ch->vfront;
-    } else
-      obj_to_room(magazine, ch->in_room);
-    act("$n ejects a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-    act("You eject a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+    extract_obj(magazine);
+    act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+    act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
   } else {
     send_to_char(ch, "But it's already empty.\r\n");
   }
@@ -4195,4 +4134,25 @@ ACMD(do_syspoints) {
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
   
   playerDB.SaveChar(vict);
+}
+
+bool is_reloadable_weapon(struct obj_data *weapon) {
+  // It must exist.
+  if (!weapon)
+    return FALSE;
+    
+  // It must be a gun. Bows etc can choke on it.
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
+    return FALSE;
+    
+  // It must take ammo.
+  if (GET_WEAPON_MAX_AMMO(weapon) <= 0)
+    return FALSE;
+    
+  // If it's loaded, the magazine in it must be missing at least one round.
+  if (weapon->contains && GET_MAGAZINE_AMMO_COUNT(weapon->contains) >= GET_MAGAZINE_BONDED_MAXAMMO(weapon->contains))
+    return FALSE;
+    
+  // Good to go.
+  return TRUE;
 }

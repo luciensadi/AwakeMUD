@@ -81,6 +81,7 @@ extern void disp_init_menu(struct descriptor_data *d);
 
 extern const char *pgroup_print_privileges(Bitfield privileges);
 extern void nonsensical_reply(struct char_data *ch);
+extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
 
 extern struct elevator_data *elevator;
 extern int num_elevators;
@@ -2965,6 +2966,19 @@ ACMD(do_wizutil)
           send_to_char("Your victim is already authorized.\r\n", ch);
           return;
         }
+        // Check to see if they're in Chargen still.
+        if (ch->in_room) {
+          for (int counter = 0; counter <= top_of_zone_table; counter++) {
+            if ((GET_ROOM_VNUM(vict->in_room) >= (zone_table[counter].number * 100)) &&
+                (GET_ROOM_VNUM(vict->in_room) <= (zone_table[counter].top))) {
+              if (zone_table[counter].number == 605) {
+                send_to_char("They're still in character generation, that would break them!\r\n", ch);
+                return;
+              }
+            }
+          }
+        }
+        
         PLR_FLAGS(vict).RemoveBit(PLR_NOT_YET_AUTHED);
         send_to_char("Authorized.\r\n", ch);
         send_to_char("Your character has been authorized!\r\n", vict);
@@ -3207,6 +3221,7 @@ ACMD(do_show)
                { "metamagic",      LVL_BUILDER },
                { "noexits",        LVL_BUILDER },
                { "traps",          LVL_BUILDER },
+               { "ammo",           LVL_ADMIN },
                { "\n", 0 }
              };
 
@@ -3543,6 +3558,19 @@ ACMD(do_show)
       }
     }
     send_to_char(buf, ch);
+    break;
+  case 19:
+    if (!*value) {
+      send_to_char("A name would help.\r\n", ch);
+      return;
+    }
+    if (!(vict = get_char_vis(ch, value))) {
+      send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
+      return;
+
+
+    }
+    display_pockets_to_char(ch, vict);
     break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);

@@ -34,6 +34,9 @@ extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern Playergroup *loaded_playergroups;
 
+extern void save_bullet_pants(struct char_data *ch);
+extern void load_bullet_pants(struct char_data *ch);
+
 void auto_repair_obj(struct obj_data *obj);
 
 // ____________________________________________________________________________
@@ -261,6 +264,13 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest)
       // Die to protect memory / database.
       terminate_mud_process_with_message("prepare_quotes would overflow dest buf", ERROR_ARRAY_OUT_OF_BOUNDS);
     }
+    // Special case handling: Newlines to \r\n.
+    if (*str == '\r' || *str == '\n') {
+      *temp++ = '\\';
+      *temp++ = *str == '\r' ? 'r' : 'n';
+      continue;
+    }
+    
     if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\' || *str == '%') {
       *temp++ = '\\';
     }
@@ -780,22 +790,36 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->photo = str_dup(row[4]);
         for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
-        if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
-          add_phone_to_list(obj);
-        else if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
-          GET_OBJ_VAL(obj, 9) = 1;
-        if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED)
-          GET_OBJ_VAL(obj, 4) = 0;
-        if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4))
-          GET_FOCI(ch)++;
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
-          for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-            if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
-               (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
-              // Zero out the attachment so that we don't get attaching-overtop errors.
-              GET_OBJ_VAL(obj, q) = 0;
-              attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
+          
+        switch (GET_OBJ_TYPE(obj)) {
+          case ITEM_PHONE:
+            if (GET_OBJ_VAL(obj, 2))
+              add_phone_to_list(obj);
+            // TODO: What was the purpose of the broken if check to set the phone's value 9 to 1?
+            break;
+          case ITEM_FOCUS:
+            if (GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED)
+              GET_OBJ_VAL(obj, 4) = 0;
+            else if (GET_OBJ_VAL(obj, 4))
+              GET_FOCI(ch)++;
+            break;
+          case ITEM_WEAPON:
+            if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+              // Process attachments.
+              for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
+                if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
+                   (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+                  // Zero out the attachment so that we don't get attaching-overtop errors.
+                  GET_OBJ_VAL(obj, q) = 0;
+                  attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
+                }
             }
+            break;
+          case ITEM_GUN_AMMO:
+            // Process weight.
+            GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
+            break;
+        }
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[18]);
         
@@ -827,6 +851,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
     mysql_free_result(res);
   }
+  
+  // Load bullet pants.
+  load_bullet_pants(ch);
   
   // Load pgroup membership data.
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_playergroups WHERE idnum=%ld;", GET_IDNUM(ch));
@@ -1414,6 +1441,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     if (obj)
       obj = obj->next_content;
   }
+  
+  // Save bullet pants.
+  save_bullet_pants(player);
+  
   if (GET_LEVEL(player) > 1) {
     snprintf(buf, sizeof(buf),  "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber) VALUES (%ld, %d, %d, %d)"
                   " ON DUPLICATE KEY UPDATE"
@@ -1875,6 +1906,8 @@ void DeleteChar(long idx)
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE idnum=%ld", idx);
+  mysql_wrapper(mysql, buf);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_ammo WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);

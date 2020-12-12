@@ -608,6 +608,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER)) || (type) == WEAP_REVOLVER)
 
+// Give this a weapon type straight from the weapon-- ex WEAP_SMG. It will convert it for you.
+#define GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon_type, ammo_type) ((ch)->bullet_pants[(weapon_type) - START_OF_AMMO_USING_WEAPONS][(ammo_type)])
+
 
 /* compound utilities and other macros **********************************/
 
@@ -831,6 +834,11 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_ITEM_MONEY_CREDSTICK_ACTIVATED(money) (GET_OBJ_VAL((money), 4))
 
 // ITEM_PHONE convenience defines
+#define GET_ITEM_PHONE_NUMBER_PART_ONE(phone)  (GET_OBJ_VAL((phone), 0))
+#define GET_ITEM_PHONE_NUMBER_PART_TWO(phone)  (GET_OBJ_VAL((phone), 1))
+#define GET_ITEM_PHONE_SWITCHED_ON(phone)      (GET_OBJ_VAL((phone), 2))
+#define GET_ITEM_PHONE_RINGER_ON(phone)        (GET_OBJ_VAL((phone), 3))
+
 
 // ITEM_BIOWARE convenience defines
 
