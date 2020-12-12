@@ -323,7 +323,7 @@ void load_bullet_pants(struct char_data *ch) {
  * Everything Else *
  *******************/
 
-// Returns TRUE on success, FALSE otherwise.
+// Returns TRUE on success, FALSE otherwise. Add quantity to ch's bullet pants.
 bool update_bulletpants_ammo_quantity(struct char_data *ch, int weapon, int ammotype, int quantity) {
   if (!ch) {
     mudlog("SYSERR: update_bulletpants_ammo_quantity received NULL ch.", ch, LOG_SYSLOG, TRUE);
@@ -353,6 +353,7 @@ bool update_bulletpants_ammo_quantity(struct char_data *ch, int weapon, int ammo
   return TRUE;
 }
 
+// Calculates the BP weight of the character.
 float get_bulletpants_weight(struct char_data *ch) {
   float weight = 0.0;
   
@@ -363,14 +364,15 @@ float get_bulletpants_weight(struct char_data *ch) {
   return weight;
 }
 
+// I went kinda crazy with the aliases for these things, so I put them into functions to avoid code reuse.
 bool is_valid_pockets_put_command(char *mode_buf) {
   return str_str(mode_buf, "put") || str_str(mode_buf, "store") || str_str(mode_buf, "add") || str_str(mode_buf, "stow") || str_str(mode_buf, "load");
 }
-
 bool is_valid_pockets_get_command(char *mode_buf) {
   return str_str(mode_buf, "get") || str_str(mode_buf, "remove") || str_str(mode_buf, "retrieve");
 }
 
+// Returns 'APDS heavy pistol rounds' or equivalent.
 const char *get_ammo_representation(int weapon, int ammotype, int quantity) {
   static char results_buf[500];
   
@@ -401,6 +403,7 @@ const char *get_ammo_representation(int weapon, int ammotype, int quantity) {
   return results_buf;
 }
 
+// Prints to buf all the ammotypes the character has for one weapon.
 bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *buf, int bufsize) {
   unsigned short amount;
   bool printed_anything_yet = FALSE;
@@ -433,6 +436,7 @@ bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *bu
   return printed_anything_yet;
 }
 
+// Show the victim's pockets to the character.
 void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {  
   if (!ch || !vict) {
     mudlog("SYSERR: display_pockets_to_char received a null ch or vict.", ch, LOG_SYSLOG, TRUE);
@@ -468,6 +472,7 @@ void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {
   send_to_char(buf, ch);
 }
 
+// Compose and return the default restring for an ammobox.
 const char *get_ammobox_default_restring(struct obj_data *ammobox) {
   static char restring[500];
   snprintf(restring, sizeof(restring), "a box of %s %s ammunition", 
@@ -477,6 +482,7 @@ const char *get_ammobox_default_restring(struct obj_data *ammobox) {
   return restring;
 }
 
+// Reloads a weapon from a character's ammo stores.
 bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapon, int ammotype) {
   struct obj_data *magazine = NULL;
   
@@ -564,6 +570,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
   return TRUE;
 }
 
+// Shotguns fire shells, launchers fire missiles, etc.
 const char *get_weapon_ammo_name_as_string(int weapon_type) {
   switch (weapon_type) {
     case WEAP_SHOTGUN:
@@ -580,6 +587,7 @@ const char *get_weapon_ammo_name_as_string(int weapon_type) {
   }
 }
 
+// Shorthand for various weapon types. "" for nothing.
 const char *weapon_type_aliases[] =
 {
   "",
@@ -607,6 +615,7 @@ const char *weapon_type_aliases[] =
   ""
 };
 
+// The order in which an NPC will prefer to use ammo types.
 int npc_ammo_usage_preferences[] = {
   AMMO_APDS,
   AMMO_EX,
@@ -620,7 +629,7 @@ int npc_ammo_usage_preferences[] = {
 /* 
  - reloading of mounted weapons (this code is probably totes broken right now)
  - staff bullet pants set command mode
- - write help file
+ - write pockets help file
  - better formatting for 'pockets <weapon>'
  - do we need to change output to tree style? how will this work with screenreaders?
  - add ability to split apart ammo boxes

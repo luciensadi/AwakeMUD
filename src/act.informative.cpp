@@ -66,6 +66,7 @@ extern SPECIAL(shop_keeper);
 extern SPECIAL(landlord_spec);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
+extern float get_bulletpants_weight(struct char_data *ch);
 
 extern struct teach_data teachers[];
 
@@ -3178,6 +3179,12 @@ ACMD(do_inventory)
 {
   send_to_char("You are carrying:\r\n", ch);
   list_obj_to_char(ch->carrying, ch, 1, TRUE, FALSE);
+  
+  float ammo_weight = get_bulletpants_weight(ch);
+  if (ammo_weight > 0)
+    send_to_char(ch, "\r\nAdditionally, you have %.2f kilos of ammo in your pockets.\r\n", ammo_weight);
+  else
+    send_to_char("\r\nYou have no ammo in your pockets.\r\n", ch);
 }
 
 ACMD(do_cyberware)
