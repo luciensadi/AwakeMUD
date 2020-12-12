@@ -625,6 +625,5 @@ int npc_ammo_usage_preferences[] = {
  - better formatting for 'pockets <weapon>'
  - do we need to change output to tree style? how will this work with screenreaders?
  - add ability to split apart ammo boxes
- - eject command should extract the mag and put the rounds into your pockets
  - on zone reset, if an NPC is equipped with a weapon (wielded or in holster) and has no ammo for it, give max * 2 normal.
 */

@@ -839,6 +839,17 @@ bool mobact_process_movement(struct char_data *ch) {
   return false;
 }
 
+// Precondition: ch and weapon exist, and weapon is a firearm.
+void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon) {
+  // Check all ammotypes for this weapon. If we have any, return.
+  for (int am = 0; am < NUM_AMMOTYPES; am++)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0)
+      return;
+  
+  // If we had none, give them normal.
+  GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * 3;
+}
+
 void mobile_activity(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -868,8 +879,32 @@ void mobile_activity(void)
       continue;
 
     // Cool down mob alert status.
-    if (GET_MOBALERT(ch) > MALERT_CALM && --GET_MOBALERTTIME(ch) <= 0)
+    if (GET_MOBALERT(ch) > MALERT_CALM && --GET_MOBALERTTIME(ch) <= 0) {
       GET_MOBALERT(ch) = MALERT_CALM;
+      
+      // If you just entered calm state and have a weapon, you get your ammo back.
+      // check if they have ammo in proto-- if so, paste in proto ammo, if not, give max * 3 normal ammo
+      struct char_data *proto_mob = &mob_proto[real_mobile(GET_MOB_VNUM(ch))];
+      
+      // Copy over their ammo data. We scan the whole thing instead of just their weapon to prevent someone
+      // giving them a holdout pistol so they never regain their ammo stores.
+      for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+        for (int am = 0; am < NUM_AMMOTYPES; am++)
+          GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) = GET_BULLETPANTS_AMMO_AMOUNT(proto_mob, wp, am);
+          
+      // Carried weapons.
+      for (struct obj_data *weapon = ch->carrying; weapon; weapon = weapon->next_content)
+        if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && GET_WEAPON_MAX_AMMO(weapon) > 0)
+          ensure_mob_has_ammo_for_weapon(ch, weapon);
+      
+      // Wielded weapons.  
+      for (int index = 0; index < NUM_WEARS; index++)
+        if (GET_EQ(ch, index) 
+            && GET_OBJ_TYPE(GET_EQ(ch, index)) == ITEM_WEAPON 
+            && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, index)))
+            && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
+          ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
+    }
     
     // Manipulate wielded weapon (reload, set fire mode, etc).
     mobact_change_firemode(ch);
