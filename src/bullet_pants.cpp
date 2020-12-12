@@ -363,7 +363,7 @@ float get_ammopants_weight(struct char_data *ch) {
 }
 
 bool is_valid_pockets_put_command(char *mode_buf) {
-  return str_str(mode_buf, "put") || str_str(mode_buf, "store") || str_str(mode_buf, "add") || str_str(mode_buf, "stow");
+  return str_str(mode_buf, "put") || str_str(mode_buf, "store") || str_str(mode_buf, "add") || str_str(mode_buf, "stow") || str_str(mode_buf, "load");
 }
 
 bool is_valid_pockets_get_command(char *mode_buf) {
@@ -372,6 +372,24 @@ bool is_valid_pockets_get_command(char *mode_buf) {
 
 const char *get_ammo_representation(int weapon, int ammotype, int quantity) {
   static char results_buf[500];
+  
+  if (weapon < START_OF_AMMO_USING_WEAPONS || weapon > END_OF_AMMO_USING_WEAPONS) {
+    snprintf(buf, sizeof(buf), "SYSERR: get_ammo_representation: %d is out of bounds for weapon type.", weapon);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    return "ERROR";
+  }
+  
+  if (ammotype < 0 || ammotype >= NUM_AMMOTYPES) {
+    snprintf(buf, sizeof(buf), "SYSERR: get_ammo_representation: %d is out of bounds for ammo type.", ammotype);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    return "ERROR";
+  }
+  
+  if (quantity < 0 || quantity > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
+    snprintf(buf, sizeof(buf), "SYSERR: get_ammo_representation: %d is out of bounds for quantity.", quantity);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    return "ERROR";
+  }
   
   snprintf(results_buf, sizeof(results_buf), "%s %s %s%s",
            ammo_type[ammotype].name,
@@ -458,6 +476,91 @@ const char *get_ammobox_default_restring(struct obj_data *ammobox) {
   return restring;
 }
 
+bool reload_weapon_from_ammopants(struct char_data *ch, struct obj_data *weapon, int ammotype) {
+  struct obj_data *magazine = NULL;
+  
+  if (!ch) {
+    mudlog("SYSERR: Invalid character in reload_weapon_from_ammopants.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if ((ammotype < AMMO_NORMAL || ammotype >= NUM_AMMOTYPES) && ammotype != -1) {
+    snprintf(buf, sizeof(buf), "SYSERR: Ammotype %d out of bounds in reload_weapon_from_ammopants.", ammotype);
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // TODO: Do prelim checks like 'is it a gun' etc
+  
+  // Ensure it has a magazine.
+  if (!(magazine = weapon->contains)) {
+    magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
+    // Set the max ammo and weapon type here.
+    GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(weapon);
+    GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(weapon);
+    
+    // No specified ammotype means 'reload with whatever's in the gun'. In this case, nothing was there, so we go with normal.
+    GET_MAGAZINE_AMMO_TYPE(magazine) = (ammotype == -1 ? AMMO_NORMAL : ammotype);
+    
+    // Restring it, although I don't think anyone will ever see the restring. Better safe than sorry.
+    snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
+    DELETE_ARRAY_IF_EXTANT(magazine->restring);
+    magazine->restring = strdup(buf);
+    
+    // Load the weapon with the magazine.
+    obj_to_obj(magazine, weapon);
+  }
+  
+  // Rectify ammotype if none was provided.
+  if (ammotype == -1)
+    ammotype = GET_MAGAZINE_AMMO_TYPE(magazine);
+    
+  int weapontype = GET_WEAPON_ATTACK_TYPE(weapon);
+    
+  int have_ammo_quantity = GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype);
+  
+  // No ammo at all...
+  if (have_ammo_quantity == 0) {
+    send_to_char(ch, "You don't have any %s in your pockets to reload %s with.\r\n", get_ammo_representation(weapontype, ammotype, 0), GET_OBJ_NAME(weapon));
+    return FALSE;
+  }
+  
+  // Changing ammotypes? Put the old ammo back in your pants and update the magazine..
+  if (GET_MAGAZINE_AMMO_TYPE(magazine) != ammotype) {
+    if (GET_MAGAZINE_AMMO_COUNT(magazine) > 0) {
+      update_ammopants_ammo_quantity(ch, weapontype, GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
+      send_to_char(ch, "You stow %d %s back into your pockets.\r\n", 
+                   GET_MAGAZINE_AMMO_COUNT(magazine), 
+                   get_ammo_representation(weapontype, GET_MAGAZINE_AMMO_TYPE(magazine), 0));
+    }
+    GET_MAGAZINE_AMMO_TYPE(magazine) = ammotype;
+    GET_MAGAZINE_AMMO_COUNT(magazine) = 0;
+  }
+  
+  int required_ammo_quantity = GET_MAGAZINE_BONDED_MAXAMMO(magazine) - GET_MAGAZINE_AMMO_COUNT(magazine);
+  
+  // Try to fill it back up with bullets from pants.
+  if (have_ammo_quantity >= required_ammo_quantity) {
+    // ezpz, reload it and done.
+    send_to_char(ch, "You reload %s with %s.\r\n", 
+                 GET_OBJ_NAME(weapon), 
+                 get_ammo_representation(weapontype, ammotype, required_ammo_quantity));
+    act("$n reloads $p.", TRUE, ch, weapon, NULL, TO_ROOM);
+    update_ammopants_ammo_quantity(ch, weapontype, ammotype, -required_ammo_quantity);
+    
+    // Does doing it this way mean the amount of ammo we load into the weapon becomes weightless? Yes. Do I care? Ehhhhhhh. TODO
+    GET_MAGAZINE_AMMO_COUNT(magazine) += required_ammo_quantity;
+    return TRUE;
+  }
+  
+  // Just put in whatever you have.
+  send_to_char(ch, "You reload %s with the last of your %s.\r\n", GET_OBJ_NAME(weapon), get_ammo_representation(weapontype, ammotype, 0));
+  act("$n reloads $p.", TRUE, ch, weapon, NULL, TO_ROOM);
+  update_ammopants_ammo_quantity(ch, weapontype, ammotype, -have_ammo_quantity);
+  GET_MAGAZINE_AMMO_COUNT(magazine) += have_ammo_quantity;
+  return TRUE;
+}
+
 const char *get_weapon_ammo_name_as_string(int weapon_type) {
   switch (weapon_type) {
     case WEAP_SHOTGUN:
@@ -501,18 +604,27 @@ const char *weapon_type_aliases[] =
   ""
 };
 
+int npc_ammo_usage_preferences[] = {
+  AMMO_APDS,
+  AMMO_EX,
+  AMMO_EXPLOSIVE,
+  AMMO_NORMAL,
+  AMMO_GEL,
+  AMMO_FLECHETTE
+};
+
 // things left to implement:
 /* 
  - room debris counter, its display
  - purging of magazines once ejected (in that case, do we even want to eject the mag, or just keep it there and change its values)
  - resetting of NPC bullet pants
- - reloading from bullet pants (PC / NPC)
+ - reloading from bullet pants (NPC)
  - - handheld weapons
  - - mounted weapons? Or just use boxes?
  - staff bullet pants set command mode
- - staff bullet pants show command mode
  - write help file
  - better formatting for 'pockets <weapon>'
  - do we need to change output to tree style? how will this work with screenreaders?
  - add ability to split apart ammo boxes
+ - eject command should extract the mag and put the rounds into your pockets
 */

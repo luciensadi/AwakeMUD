@@ -11,6 +11,7 @@ const char *get_weapon_ammo_name_as_string(int weapon_type);
 
 // For pockets command.
 extern const char *weapon_type_aliases[];
+extern int npc_ammo_usage_preferences[];
 
 // print vict's bullet pants to ch. ch == vict is allowed.
 void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
@@ -25,5 +26,6 @@ bool is_valid_pockets_put_command(char *mode_buf);
 bool is_valid_pockets_get_command(char *mode_buf);
 const char *get_ammobox_default_restring(struct obj_data *ammobox);
 bool have_bullet_pants_table();
+bool reload_weapon_from_ammopants(struct char_data *ch, struct obj_data *weapon, int ammotype);
 
 #endif
