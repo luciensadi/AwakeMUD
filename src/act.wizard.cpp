@@ -81,6 +81,7 @@ extern void disp_init_menu(struct descriptor_data *d);
 
 extern const char *pgroup_print_privileges(Bitfield privileges);
 extern void nonsensical_reply(struct char_data *ch);
+extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
 
 extern struct elevator_data *elevator;
 extern int num_elevators;
@@ -3207,6 +3208,7 @@ ACMD(do_show)
                { "metamagic",      LVL_BUILDER },
                { "noexits",        LVL_BUILDER },
                { "traps",          LVL_BUILDER },
+               { "ammo",           LVL_ADMIN },
                { "\n", 0 }
              };
 
@@ -3543,6 +3545,19 @@ ACMD(do_show)
       }
     }
     send_to_char(buf, ch);
+    break;
+  case 19:
+    if (!*value) {
+      send_to_char("A name would help.\r\n", ch);
+      return;
+    }
+    if (!(vict = get_char_vis(ch, value))) {
+      send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
+      return;
+
+
+    }
+    display_pockets_to_char(ch, vict);
     break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);

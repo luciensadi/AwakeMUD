@@ -730,7 +730,7 @@ struct char_data
   Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
   
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */
-  unsigned short bullet_pants[END_OF_AMMO_USING_WEAPONS - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES];
+  unsigned short bullet_pants[(END_OF_AMMO_USING_WEAPONS + 1) - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES];
   
   /* Adding a field here? If it's a pointer, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
