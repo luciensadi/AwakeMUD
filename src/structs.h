@@ -187,6 +187,7 @@ struct room_data
   char *address;
   Bitfield room_flags;     /* DEATH,DARK ... etc                 */
   byte blood;         /* mmmm blood, addded by root        */
+  byte debris;
   int vision[3];
   int background[4];
   byte spec;            // auto-assigns specs

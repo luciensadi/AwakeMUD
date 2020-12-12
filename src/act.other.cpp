@@ -1547,7 +1547,7 @@ ACMD(do_reload)
   
   // No ammotype? Reload with whatever's in it (normal if nothing).
   if (!*buf1) {
-    reload_weapon_from_ammopants(ch, gun, -1);
+    reload_weapon_from_bulletpants(ch, gun, -1);
     return;
   }
   
@@ -1573,21 +1573,20 @@ ACMD(do_reload)
   }
   
   // Good to go.
-  reload_weapon_from_ammopants(ch, gun, ammotype);
+  reload_weapon_from_bulletpants(ch, gun, ammotype);
 }
 
 ACMD(do_eject)
 {
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_WIELD)->contains) {
     struct obj_data *magazine = GET_EQ(ch, WEAR_WIELD)->contains;
+    
+    // Strip out the ammo and put it in your bullet pants, then destroy the mag.
+    update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
     obj_from_obj(magazine);
-    if (ch->in_veh) {
-      obj_to_veh(magazine, ch->in_veh);
-      magazine->vfront = ch->vfront;
-    } else
-      obj_to_room(magazine, ch->in_room);
-    act("$n ejects a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-    act("You eject a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+    extract_obj(magazine);
+    act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+    act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
   } else {
     send_to_char(ch, "But it's already empty.\r\n");
   }

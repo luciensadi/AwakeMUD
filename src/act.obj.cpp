@@ -33,7 +33,7 @@ extern int return_general(int skill_num);
 extern bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj);
 extern void check_quest_delivery(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
-extern float get_ammopants_weight(struct char_data *ch);
+extern float get_bulletpants_weight(struct char_data *ch);
 
 void calc_weight(struct char_data *ch);
 
@@ -673,7 +673,7 @@ void calc_weight(struct char_data *ch)
       }
       
   // Add bullet pants.
-  IS_CARRYING_W(ch) += get_ammopants_weight(ch);
+  IS_CARRYING_W(ch) += get_bulletpants_weight(ch);
 }
 
 void perform_get_from_container(struct char_data * ch, struct obj_data * obj,

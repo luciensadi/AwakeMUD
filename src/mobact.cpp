@@ -1111,8 +1111,7 @@ void clearMemory(struct char_data * ch)
 bool attempt_reload(struct char_data *mob, int pos)
 {
   // I would call the reload routine for players, but this is slightly faster
-  struct obj_data *magazine, *gun = NULL;
-  bool found = FALSE;
+  struct obj_data *gun = NULL;
   
   if (!(gun = GET_EQ(mob, pos))) {
     snprintf(buf, sizeof(buf), "SYSERR: attempt_reload received invalid wield position %d for %s.", pos, GET_CHAR_NAME(mob));
@@ -1121,7 +1120,7 @@ bool attempt_reload(struct char_data *mob, int pos)
   }
 
   if (GET_OBJ_TYPE(gun) != ITEM_WEAPON) {
-    act("$n can't reload weapon- $o is not a weapon.", TRUE, mob, gun, NULL, TO_ROLLS);
+    // act("$n can't reload weapon- $o is not a weapon.", TRUE, mob, gun, NULL, TO_ROLLS);
     return FALSE;
   }
   
@@ -1132,8 +1131,14 @@ bool attempt_reload(struct char_data *mob, int pos)
   
   // Reload with whatever we have on hand.
   for (int index = 0; index < NUM_AMMOTYPES; index++)
-    if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(gun), npc_ammo_usage_preferences[index]) > 0)
-      return reload_weapon_from_ammopants(mob, gun, -1);
+    if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(gun), npc_ammo_usage_preferences[index]) > 0) {
+      // act("$n has ammo, attempting to reload $o.", TRUE, mob, gun, NULL, TO_ROLLS);
+      return reload_weapon_from_bulletpants(mob, gun, npc_ammo_usage_preferences[index]);
+    }
+      
+  // We had nothing.
+  // act("$n can't reload weapon- have no ammo for $o.", TRUE, mob, gun, NULL, TO_ROLLS);
+  return FALSE;
 }
 
 void switch_weapons(struct char_data *mob, int pos)

@@ -225,6 +225,11 @@ void increase_blood(struct room_data *rm)
   rm->blood = MIN(rm->blood + 1, 10);
 }
 
+void increase_debris(struct room_data *rm)
+{
+  rm->debris= MIN(rm->debris + 1, 50);
+}
+
 
 void check_killer(struct char_data * ch, struct char_data * vict)
 {

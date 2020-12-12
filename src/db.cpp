@@ -3247,15 +3247,31 @@ void reset_zone(int zone, int reboot)
         if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER) {
           GET_HOLSTER_READY_STATUS(obj_to) = 1;
           
-          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
-            // Make sure it's loaded.
-            struct obj_data *magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
-            GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(obj);
-            GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(obj);
-            snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
-            DELETE_ARRAY_IF_EXTANT(magazine->restring);
-            magazine->restring = strdup(buf);
-            obj_to_obj(magazine, obj);
+          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {       
+            // If it's carried by an NPC, make sure it's loaded.     
+            if (GET_WEAPON_MAX_AMMO(obj) > 0) {
+              struct obj_data *outermost = obj;
+              while (outermost && outermost->in_obj) {
+                outermost = outermost->in_obj;
+              }
+                
+              struct char_data *temp_ch = NULL;
+              if ((temp_ch = outermost->carried_by) || (temp_ch = outermost->worn_by)) {
+                // Reload from their ammo.
+                for (int index = 0; index < NUM_AMMOTYPES; index++) {
+                  if (GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                    reload_weapon_from_bulletpants(temp_ch, obj, npc_ammo_usage_preferences[index]);
+                    break;
+                  }
+                }
+                
+                // If they failed to reload, they have no ammo. Give them some normal and reload with it.
+                if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
+                  GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * 3;
+                  reload_weapon_from_bulletpants(temp_ch, obj, AMMO_NORMAL);
+                }
+              }
+            }
             
             // Set the firemode.
             if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF)) {
@@ -3320,14 +3336,20 @@ void reset_zone(int zone, int reboot)
             if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
                 && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
                 && GET_WEAPON_MAX_AMMO(obj) != -1) {
-                // Load it with a magazine.
-                struct obj_data *magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
-                GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(obj);
-                GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(obj);
-                snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
-                DELETE_ARRAY_IF_EXTANT(magazine->restring);
-                magazine->restring = strdup(buf);
-                obj_to_obj(magazine, obj);
+                               
+              // Reload from their ammo.
+              for (int index = 0; index < NUM_AMMOTYPES; index++) {
+                if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                  reload_weapon_from_bulletpants(mob, obj, npc_ammo_usage_preferences[index]);
+                  break;
+                }
+              }
+              
+              // If they failed to reload, they have no ammo. Give them some normal and reload with it.
+              if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
+                GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * 3;
+                reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
+              }
             }
           }
         }

@@ -15,6 +15,7 @@ extern MYSQL *mysql;
 
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 extern void calc_weight(struct char_data *ch);
+extern void increase_debris(struct room_data *rm);
 
 #define POCKETS_USAGE_STRING "Syntax: POCKETS (put|get) <quantity> <ammotype> <weapontype>. Ex: pockets get 100 apds pistol\r\n"
 /* The POCKETS command, used to interact with the character's ammo supply. */
@@ -171,7 +172,7 @@ ACMD(do_pockets) {
     
     // Deduct from the ammo box.
     update_ammobox_ammo_quantity(ammobox, -quantity);
-    update_ammopants_ammo_quantity(ch, weapon, ammotype, quantity);
+    update_bulletpants_ammo_quantity(ch, weapon, ammotype, quantity);
     
     send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n", 
                  quantity, get_ammo_representation(weapon, ammotype, quantity), GET_OBJ_NAME(ammobox));
@@ -204,7 +205,7 @@ ACMD(do_pockets) {
     
     // Fill it.
     update_ammobox_ammo_quantity(ammobox, quantity);
-    update_ammopants_ammo_quantity(ch, weapon, ammotype, -quantity);
+    update_bulletpants_ammo_quantity(ch, weapon, ammotype, -quantity);
     
     // Restring the box.
     ammobox->restring = str_dup(get_ammobox_default_restring(ammobox));
@@ -323,26 +324,26 @@ void load_bullet_pants(struct char_data *ch) {
  *******************/
 
 // Returns TRUE on success, FALSE otherwise.
-bool update_ammopants_ammo_quantity(struct char_data *ch, int weapon, int ammotype, int quantity) {
+bool update_bulletpants_ammo_quantity(struct char_data *ch, int weapon, int ammotype, int quantity) {
   if (!ch) {
-    mudlog("SYSERR: update_ammopants_ammo_quantity received NULL ch.", ch, LOG_SYSLOG, TRUE);
+    mudlog("SYSERR: update_bulletpants_ammo_quantity received NULL ch.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
   if (weapon < START_OF_AMMO_USING_WEAPONS || weapon > END_OF_AMMO_USING_WEAPONS) {
-    snprintf(buf, sizeof(buf), "SYSERR: update_ammopants_ammo_quantity received invalid weapon %d.", weapon);
+    snprintf(buf, sizeof(buf), "SYSERR: update_bulletpants_ammo_quantity received invalid weapon %d.", weapon);
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
   if (ammotype < AMMO_NORMAL || ammotype >= NUM_AMMOTYPES) {
-    snprintf(buf, sizeof(buf), "SYSERR: update_ammopants_ammo_quantity received invalid ammotype %d.", ammotype);
+    snprintf(buf, sizeof(buf), "SYSERR: update_bulletpants_ammo_quantity received invalid ammotype %d.", ammotype);
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
   if (quantity > MAX_NUMBER_OF_BULLETS_IN_PANTS || quantity < -MAX_NUMBER_OF_BULLETS_IN_PANTS) {
-    snprintf(buf, sizeof(buf), "SYSERR: update_ammopants_ammo_quantity received invalid quantity %d.", quantity);
+    snprintf(buf, sizeof(buf), "SYSERR: update_bulletpants_ammo_quantity received invalid quantity %d.", quantity);
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -352,7 +353,7 @@ bool update_ammopants_ammo_quantity(struct char_data *ch, int weapon, int ammoty
   return TRUE;
 }
 
-float get_ammopants_weight(struct char_data *ch) {
+float get_bulletpants_weight(struct char_data *ch) {
   float weight = 0.0;
   
   for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
@@ -461,7 +462,7 @@ void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n%s %s carrying %.2f kilos of ammunition.", 
              ch == vict ? "You"  : GET_CHAR_NAME(vict),
              ch == vict ? "are"  : "is",
-             get_ammopants_weight(ch));
+             get_bulletpants_weight(vict));
   }
   
   send_to_char(buf, ch);
@@ -476,16 +477,16 @@ const char *get_ammobox_default_restring(struct obj_data *ammobox) {
   return restring;
 }
 
-bool reload_weapon_from_ammopants(struct char_data *ch, struct obj_data *weapon, int ammotype) {
+bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapon, int ammotype) {
   struct obj_data *magazine = NULL;
   
   if (!ch) {
-    mudlog("SYSERR: Invalid character in reload_weapon_from_ammopants.", ch, LOG_SYSLOG, TRUE);
+    mudlog("SYSERR: Invalid character in reload_weapon_from_bulletpants.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
   if ((ammotype < AMMO_NORMAL || ammotype >= NUM_AMMOTYPES) && ammotype != -1) {
-    snprintf(buf, sizeof(buf), "SYSERR: Ammotype %d out of bounds in reload_weapon_from_ammopants.", ammotype);
+    snprintf(buf, sizeof(buf), "SYSERR: Ammotype %d out of bounds in reload_weapon_from_bulletpants.", ammotype);
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -528,7 +529,7 @@ bool reload_weapon_from_ammopants(struct char_data *ch, struct obj_data *weapon,
   // Changing ammotypes? Put the old ammo back in your pants and update the magazine..
   if (GET_MAGAZINE_AMMO_TYPE(magazine) != ammotype) {
     if (GET_MAGAZINE_AMMO_COUNT(magazine) > 0) {
-      update_ammopants_ammo_quantity(ch, weapontype, GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
+      update_bulletpants_ammo_quantity(ch, weapontype, GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
       send_to_char(ch, "You stow %d %s back into your pockets.\r\n", 
                    GET_MAGAZINE_AMMO_COUNT(magazine), 
                    get_ammo_representation(weapontype, GET_MAGAZINE_AMMO_TYPE(magazine), 0));
@@ -546,18 +547,20 @@ bool reload_weapon_from_ammopants(struct char_data *ch, struct obj_data *weapon,
                  GET_OBJ_NAME(weapon), 
                  get_ammo_representation(weapontype, ammotype, required_ammo_quantity));
     act("$n reloads $p.", TRUE, ch, weapon, NULL, TO_ROOM);
-    update_ammopants_ammo_quantity(ch, weapontype, ammotype, -required_ammo_quantity);
+    update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -required_ammo_quantity);
     
     // Does doing it this way mean the amount of ammo we load into the weapon becomes weightless? Yes. Do I care? Ehhhhhhh. TODO
     GET_MAGAZINE_AMMO_COUNT(magazine) += required_ammo_quantity;
-    return TRUE;
+  } else {
+    // Just put in whatever you have.
+    send_to_char(ch, "You reload %s with the last of your %s.\r\n", GET_OBJ_NAME(weapon), get_ammo_representation(weapontype, ammotype, 0));
+    act("$n reloads $p.", TRUE, ch, weapon, NULL, TO_ROOM);
+    update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -have_ammo_quantity);
+    GET_MAGAZINE_AMMO_COUNT(magazine) += have_ammo_quantity;
   }
   
-  // Just put in whatever you have.
-  send_to_char(ch, "You reload %s with the last of your %s.\r\n", GET_OBJ_NAME(weapon), get_ammo_representation(weapontype, ammotype, 0));
-  act("$n reloads $p.", TRUE, ch, weapon, NULL, TO_ROOM);
-  update_ammopants_ammo_quantity(ch, weapontype, ammotype, -have_ammo_quantity);
-  GET_MAGAZINE_AMMO_COUNT(magazine) += have_ammo_quantity;
+  // Update weapons debris. Presumably they chuck it out the window if they're in a car.
+  increase_debris(get_ch_in_room(ch));
   return TRUE;
 }
 
@@ -615,16 +618,13 @@ int npc_ammo_usage_preferences[] = {
 
 // things left to implement:
 /* 
- - room debris counter, its display
- - purging of magazines once ejected (in that case, do we even want to eject the mag, or just keep it there and change its values)
- - resetting of NPC bullet pants
- - reloading from bullet pants (NPC)
- - - handheld weapons
- - - mounted weapons? Or just use boxes?
+ - resetting of NPC bullet pants (this will be tricky-- how do we do it without iterating over all mobs for every zone reset?)
+ - reloading of mounted weapons (this code is probably totes broken right now)
  - staff bullet pants set command mode
  - write help file
  - better formatting for 'pockets <weapon>'
  - do we need to change output to tree style? how will this work with screenreaders?
  - add ability to split apart ammo boxes
  - eject command should extract the mag and put the rounds into your pockets
+ - on zone reset, if an NPC is equipped with a weapon (wielded or in holster) and has no ammo for it, give max * 2 normal.
 */

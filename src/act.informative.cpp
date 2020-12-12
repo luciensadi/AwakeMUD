@@ -1264,6 +1264,35 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   
   if (ch->in_room->blood > 0)
     send_to_char(blood_messages[(int) ch->in_room->blood], ch);
+    
+  if (ch->in_room->debris > 0) {
+    strncpy(buf, "^y", sizeof(buf));
+    
+    if (ch->in_room->debris < 5) {
+      strncat(buf, "A few spent casings are scattered here.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 10) {
+      strncat(buf, "Spent casings and empty mags are scattered here.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 20) {
+      strncat(buf, "Bullet holes, spent casings, and empty mags litter the area.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 30) {
+      strncat(buf, "This place has been shot up, and weapons debris is everywhere.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 40) {
+      strncat(buf, "The acrid scent of propellant hangs in the air amidst the weapons debris.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 45) {
+      strncat(buf, "Veritable piles of spent casings and empty mags fill the area.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else {
+      strncpy(buf, "^YIt looks like World War III was fought here!", sizeof(buf));
+    }
+    strncat(buf, "^n\r\n", sizeof(buf) - strlen(buf) - 1);
+    send_to_char(buf, ch);
+  }
+  
   if (GET_BACKGROUND_COUNT(ch->in_room) && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
     if (GET_BACKGROUND_AURA(ch->in_room) == AURA_POWERSITE) {
       switch (GET_BACKGROUND_COUNT(ch->in_room)) {

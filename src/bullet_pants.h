@@ -16,8 +16,8 @@ extern int npc_ammo_usage_preferences[];
 // print vict's bullet pants to ch. ch == vict is allowed.
 void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
 
-// Use this to change the ammopants quantity.
-extern bool update_ammopants_ammo_quantity(struct char_data *ch, int weapon, int ammotype, int quantity);
+// Use this to change the bullet pants quantity.
+extern bool update_bulletpants_ammo_quantity(struct char_data *ch, int weapon, int ammotype, int quantity);
 
 // Various helper funcs.
 bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *buf, int bufsize);
@@ -26,6 +26,6 @@ bool is_valid_pockets_put_command(char *mode_buf);
 bool is_valid_pockets_get_command(char *mode_buf);
 const char *get_ammobox_default_restring(struct obj_data *ammobox);
 bool have_bullet_pants_table();
-bool reload_weapon_from_ammopants(struct char_data *ch, struct obj_data *weapon, int ammotype);
+bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapon, int ammotype);
 
 #endif
