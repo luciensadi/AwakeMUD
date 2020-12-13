@@ -1221,7 +1221,9 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   switch (GET_TRADITION(k))
   {
   case TRAD_ADEPT:
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Adept, Grade: %d Extra Power: %d/%d", GET_GRADE(k), k->points.extrapp, (int)(GET_REP(k) / 50) + 1);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Adept, Grade: ^c%d^n AddPoint Used: %d/%d", GET_GRADE(k), k->points.extrapp, (int)(GET_REP(k) / 50) + 1);
+    if (BOOST(ch)[BOD][0] || BOOST(ch)[STR][0] || BOOST(ch)[QUI][0])
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[Boosts: BOD ^c%d^n STR ^c%d^c QUI ^c%d^n]", BOOST(ch)[BOD][1], BOOST(ch)[STR][1], BOOST(ch)[QUI][1]);
     break;
   case TRAD_HERMETIC:
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Hermetic, Aspect: %s, Grade: %d", aspect_names[GET_ASPECT(k)], GET_GRADE(k));
@@ -1283,7 +1285,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
           GET_NUYEN(k), GET_BANK(k), GET_NUYEN(k) + GET_BANK(k),
           ((float)GET_KARMA(k) / 100));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "B: %d (%d), I: %d (%d), I-Dice: %d, I-Roll: %d, Sus: %d, Foci: %d, TargMod: %d, Reach: %d\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Armor: %d (%d) / %d (%d), I-Dice: %d, I-Roll: %d, Sus: %d, Foci: %d, TargMod: %d, Reach: %d\r\n",
           GET_BALLISTIC(k), GET_TOTALBAL(k), GET_IMPACT(k), GET_TOTALIMP(k), GET_INIT_DICE(k), GET_INIT_ROLL(k),
           GET_SUSTAINED_NUM(k), GET_FOCI(k), GET_TARGET_MOD(k), GET_REACH(k));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Vision: %s Natural Vision: %s\r\n",
@@ -3472,22 +3474,29 @@ ACMD(do_show)
     send_to_char(ch, "%s's abilities:", GET_NAME(vict));
     j = 0;
     snprintf(buf, sizeof(buf), "\r\n");
-    for (i = ADEPT_PERCEPTION; i < ADEPT_NUMPOWER; i++)
+    for (i = 1; i <= ADEPT_NUMPOWER; i++) {      
       if (GET_POWER_TOTAL(vict, i) > 0) {
         snprintf(buf2, sizeof(buf2), "%-20s", adept_powers[i]);
         if (max_ability(i) > 1)
           switch (i) {
           case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s\r\n", wound_name[MIN(4, GET_POWER_TOTAL(vict, i))]);
+            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", wound_name[MIN(4, GET_POWER_TOTAL(vict, i))]);
+            if (GET_POWER_ACT(vict, i))
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", wound_name[MIN(4, GET_POWER_ACT(vict, i))]);
+            strcat(buf2, "\r\n");
             break;
           default:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " +%d\r\n", GET_POWER_TOTAL(vict, i));
+            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " +%d", GET_POWER_TOTAL(vict, i));
+            if (GET_POWER_ACT(vict, i))
+              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%d)^n", GET_POWER_ACT(vict, i)); 
+            strcat(buf2, "\r\n");
             break;
           }
         else
           strcat(buf2, "\r\n");
         strcat(buf, buf2);
       }
+    }
     send_to_char(buf, ch);
     send_to_char("\r\n", ch);
     break;
