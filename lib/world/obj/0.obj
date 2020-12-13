@@ -1860,13 +1860,13 @@ structure of a magazine that best fits the selected weapon.
 ~
 Type:	Gun Magazine
 WearFlags:	1
-ExtraFlags:	0
+ExtraFlags:	100
 AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	0.05
 	Barrier:	4
-	Cost:	50
+	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
