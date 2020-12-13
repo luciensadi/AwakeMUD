@@ -1270,7 +1270,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     strncpy(buf, "^y", sizeof(buf));
     
     if (ch->in_room->debris < 5) {
-      strncat(buf, "A few spent casings are scattered here.", sizeof(buf) - strlen(buf) - 1);
+      strncat(buf, "A few spent casings and empty mags are scattered here.", sizeof(buf) - strlen(buf) - 1);
     }
     else if (ch->in_room->debris < 10) {
       strncat(buf, "Spent casings and empty mags are scattered here.", sizeof(buf) - strlen(buf) - 1);
@@ -1483,7 +1483,11 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   }
   
   if (!bits && !veh) {
-    send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
+    if (str_str("pockets", arg)) {
+      send_to_char("Please see ^WHELP POCKETS^n for info on how to use your ammo pockets.\r\n", ch);
+    } else {
+      send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
+    }
     return;
   }
   
@@ -1708,8 +1712,14 @@ void look_at_target(struct char_data * ch, char *arg)
       show_obj_to_char(found_obj, ch, 5);       /* Show no-description */
     else
       show_obj_to_char(found_obj, ch, 6);       /* Find hum, glow etc */
-  } else if (!found)
-    send_to_char(NOOBJECT, ch);
+  } else if (!found) {
+    if (str_str("pockets", arg)) {
+      send_to_char("Please see ^WHELP POCKETS^n for info on how to use your ammo pockets.\r\n", ch);
+    } else {
+      send_to_char(NOOBJECT, ch);
+    }
+  }
+    
   ch->in_room = was_in;
   
 }

@@ -607,8 +607,9 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     GET_MAGAZINE_AMMO_COUNT(magazine) += have_ammo_quantity;
   }
   
-  // Update weapons debris. Presumably they chuck it out the window if they're in a car.
-  increase_debris(get_ch_in_room(ch));
+  // Update weapons debris, but only if in combat. Presumably they chuck it out the window if they're in a car.
+  if (FIGHTING(ch) || FIGHTING_VEH(ch))
+    increase_debris(get_ch_in_room(ch));
   return TRUE;
 }
 
