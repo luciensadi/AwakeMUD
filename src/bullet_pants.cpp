@@ -676,4 +676,5 @@ int npc_ammo_usage_preferences[] = {
  - do we need to change output to tree style? how will this work with screenreaders?
  - add ability to split apart ammo boxes
  - pockets add <box>: put box in pockets, then junk box
+ - shopkeepers sell ammo that goes straight into your pockets
 */

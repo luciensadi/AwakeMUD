@@ -38,7 +38,7 @@
 #include "github_config.h"
 #endif
 
-bool is_reloadable_weapon(struct obj_data *weapon);
+bool is_reloadable_weapon(struct obj_data *weapon, int ammotype);
 
 /* extern variables */
 extern const char *ctypes[];
@@ -1388,6 +1388,7 @@ ACMD(do_reload)
   struct obj_data *i, *gun = NULL, *m = NULL, *ammo = NULL; /* Appears unused:  *bin = NULL; */
   int n, def = 0, mount = 0;
   struct veh_data *veh = NULL;
+  int ammotype = -1;
 
   two_arguments(argument, buf, buf1);
 
@@ -1500,26 +1501,37 @@ ACMD(do_reload)
     } /* End of mount evaluation. */
   } /* end of mounts */
   
+  // Compare their argument with ammo types.
+  if (*buf) {
+    for (int i = NUM_AMMOTYPES - 1; i >= AMMO_NORMAL ; i--) {
+      if (str_str(ammo_type[i].name, buf)) {
+        ammotype = i;
+        *buf = '\0';
+        break;
+      }
+    }
+  }
+  
   // Reload with no argument.
   if (!*buf) {
     // Check wielded weapon.
-    if (is_reloadable_weapon(GET_EQ(ch, WEAR_WIELD)))
+    if (is_reloadable_weapon(GET_EQ(ch, WEAR_WIELD), ammotype))
       gun = GET_EQ(ch, WEAR_WIELD);
     
     // Check held weapon.
-    else if (is_reloadable_weapon(GET_EQ(ch, WEAR_HOLD)))
+    else if (is_reloadable_weapon(GET_EQ(ch, WEAR_HOLD), ammotype))
       gun = GET_EQ(ch, WEAR_HOLD);
       
     // Start scanning.
     else {
       // Scan equipped items, excluding light.
       for (n = 0; n < (NUM_WEARS - 1) && !gun; n++)
-        if (is_reloadable_weapon(GET_EQ(ch, n)))
+        if (is_reloadable_weapon(GET_EQ(ch, n), ammotype))
           gun = GET_EQ(ch, n);
       
       // Scan carried items.
       for (i = ch->carrying; i && !gun; i = i->next_content)
-        if (is_reloadable_weapon(i))
+        if (is_reloadable_weapon(i, ammotype))
           gun = i;
     }
     
@@ -1547,12 +1559,11 @@ ACMD(do_reload)
   
   // No ammotype? Reload with whatever's in it (normal if nothing).
   if (!*buf1) {
-    reload_weapon_from_bulletpants(ch, gun, -1);
+    reload_weapon_from_bulletpants(ch, gun, ammotype);
     return;
   }
   
   // Compare their buf1 against the valid ammo types.
-  int ammotype = -1;
   for (int am = NUM_AMMOTYPES - 1; am >= AMMO_NORMAL ; am--) {
     if (str_str(ammo_type[am].name, buf1)) {
       ammotype = am;
@@ -4136,7 +4147,7 @@ ACMD(do_syspoints) {
   playerDB.SaveChar(vict);
 }
 
-bool is_reloadable_weapon(struct obj_data *weapon) {
+bool is_reloadable_weapon(struct obj_data *weapon, int ammotype) {
   // It must exist.
   if (!weapon)
     return FALSE;
@@ -4149,8 +4160,10 @@ bool is_reloadable_weapon(struct obj_data *weapon) {
   if (GET_WEAPON_MAX_AMMO(weapon) <= 0)
     return FALSE;
     
-  // If it's loaded, the magazine in it must be missing at least one round.
-  if (weapon->contains && GET_MAGAZINE_AMMO_COUNT(weapon->contains) >= GET_MAGAZINE_BONDED_MAXAMMO(weapon->contains))
+  // If it's loaded, the magazine in it must be missing at least one round, or the magazine ammo type can't match.
+  if (weapon->contains 
+      && GET_MAGAZINE_AMMO_COUNT(weapon->contains) >= GET_MAGAZINE_BONDED_MAXAMMO(weapon->contains)
+      && (ammotype == -1 || GET_MAGAZINE_AMMO_TYPE(weapon->contains) == ammotype))
     return FALSE;
     
   // Good to go.
