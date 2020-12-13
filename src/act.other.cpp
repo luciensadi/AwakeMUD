@@ -2768,7 +2768,7 @@ ACMD(do_boost)
       send_to_char("You don't have that power activated.\r\n", ch);
       return;
     }
-    if (BOOST(ch)[0][0]) {
+    if (BOOST(ch)[STR][0]) {
       send_to_char(ch, "You are already boosting that attribute.\r\n");
       return;
     }
@@ -2777,8 +2777,8 @@ ACMD(do_boost)
       send_to_char(ch, "You can't get your power to bond with your lifeforce.\r\n");
       return;
     }
-    BOOST(ch)[0][0] = suc;
-    BOOST(ch)[0][1] = GET_POWER(ch, ADEPT_BOOST_STR);
+    BOOST(ch)[STR][0] = suc;
+    BOOST(ch)[STR][1] = GET_POWER(ch, ADEPT_BOOST_STR);
     send_to_char(ch, "You feel stronger.\r\n");
     affect_total(ch);
   } else if (is_abbrev(argument, "quickness")) {
@@ -2786,7 +2786,7 @@ ACMD(do_boost)
       send_to_char("You don't have that power activated.\r\n", ch);
       return;
     }
-    if (BOOST(ch)[1][0]) {
+    if (BOOST(ch)[QUI][0]) {
       send_to_char(ch, "You are already boosting that attribute.\r\n");
       return;
     }
@@ -2795,8 +2795,8 @@ ACMD(do_boost)
       send_to_char(ch, "You can't get your power to bond with your lifeforce.\r\n");
       return;
     }
-    BOOST(ch)[1][0] = suc;
-    BOOST(ch)[1][1] = GET_POWER(ch, ADEPT_BOOST_QUI);
+    BOOST(ch)[QUI][0] = suc;
+    BOOST(ch)[QUI][1] = GET_POWER(ch, ADEPT_BOOST_QUI);
     send_to_char(ch, "You feel quicker.\r\n");
     affect_total(ch);
   } else if (is_abbrev(argument, "body")) {
@@ -2804,7 +2804,7 @@ ACMD(do_boost)
       send_to_char("You don't have that power activated.\r\n", ch);
       return;
     }
-    if (BOOST(ch)[2][0]) {
+    if (BOOST(ch)[BOD][0]) {
       send_to_char(ch, "You are already boosting that attribute.\r\n");
       return;
     }
@@ -2813,8 +2813,8 @@ ACMD(do_boost)
       send_to_char(ch, "You can't get your power to bond with your lifeforce.\r\n");
       return;
     }
-    BOOST(ch)[2][0] = suc;
-    BOOST(ch)[2][1] = GET_POWER(ch, ADEPT_BOOST_BOD);
+    BOOST(ch)[BOD][0] = suc;
+    BOOST(ch)[BOD][1] = GET_POWER(ch, ADEPT_BOOST_BOD);
     send_to_char(ch, "You feel hardier.\r\n");
     affect_total(ch);
   } else {
@@ -2831,10 +2831,10 @@ void process_boost()
   for (struct char_data *i = character_list; i; i = next) {
     next = i->next;
     if (GET_TRADITION(i) == TRAD_ADEPT) {
-      if (BOOST(i)[0][0] > 0) {
-        BOOST(i)[0][0]--;
-        if (!BOOST(i)[0][0]) {
-          send_to_char(i, "You feel weaker.\r\n");
+      if (BOOST(i)[STR][0] > 0) {
+        BOOST(i)[STR][0]--;
+        if (!BOOST(i)[STR][0]) {
+          send_to_char(i, "You feel weaker as your boost wears off.\r\n");
           power = GET_STR(i);
           if (GET_STR(i) <= racial_limits[(int)GET_RACE(i)][0][2])
             damage = LIGHT;
@@ -2845,10 +2845,10 @@ void process_boost()
           spell_drain(i, 0, power, damage);
         }
       }
-      if (BOOST(i)[1][0] > 0) {
-        BOOST(i)[1][0]--;
-        if (!BOOST(i)[1][0]) {
-          send_to_char(i, "You feel slower.\r\n");
+      if (BOOST(i)[QUI][0] > 0) {
+        BOOST(i)[QUI][0]--;
+        if (!BOOST(i)[QUI][0]) {
+          send_to_char(i, "You feel slower as your boost wears off.\r\n");
           power = GET_QUI(i);
           if (GET_QUI(i) <= racial_limits[(int)GET_RACE(i)][0][1])
             damage = LIGHT;
@@ -2859,10 +2859,10 @@ void process_boost()
           spell_drain(i, 0, power, damage);
         }
       }
-      if (BOOST(i)[2][0] > 0) {
-        BOOST(i)[2][0]--;
-        if (!BOOST(i)[2][0]) {
-          send_to_char(i, "You feel less hardy.\r\n");
+      if (BOOST(i)[BOD][0] > 0) {
+        BOOST(i)[BOD][0]--;
+        if (!BOOST(i)[BOD][0]) {
+          send_to_char(i, "You feel less hardy as your boost wears off.\r\n");
           power = GET_BOD(i);
           if (GET_BOD(i) <= racial_limits[(int)GET_RACE(i)][0][0])
             damage = LIGHT;

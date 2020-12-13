@@ -285,7 +285,7 @@ void copyover_recover()
       break;
     
     /* Write something, and check if it goes error-free */
-    if (write_to_descriptor (desc, "\n\rRestoring from copyover...\n\r") < 0) {
+    if (write_to_descriptor (desc, "\n\rJust kidding. Restoring from copyover...\n\r") < 0) {
       close (desc); /* nope */
       continue;
     }

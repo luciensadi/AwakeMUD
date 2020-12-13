@@ -725,12 +725,12 @@ void affect_total(struct char_data * ch)
     }
     GET_BOD(ch) += GET_POWER(ch, ADEPT_IMPROVED_BOD);
     GET_STR(ch) += GET_POWER(ch, ADEPT_IMPROVED_STR);
-    if (BOOST(ch)[0][0] > 0)
-      GET_STR(ch) += BOOST(ch)[0][1];
-    if (BOOST(ch)[1][0] > 0)
-      GET_QUI(ch) += BOOST(ch)[1][1];
-    if (BOOST(ch)[2][0] > 0)
-      GET_BOD(ch) += BOOST(ch)[2][1];
+    if (BOOST(ch)[STR][0] > 0)
+      GET_STR(ch) += BOOST(ch)[STR][1];
+    if (BOOST(ch)[QUI][0] > 0)
+      GET_QUI(ch) += BOOST(ch)[QUI][1];
+    if (BOOST(ch)[BOD][0] > 0)
+      GET_BOD(ch) += BOOST(ch)[BOD][1];
     GET_COMBAT(ch) += MIN(3, GET_POWER(ch, ADEPT_COMBAT_SENSE));
     if (GET_POWER(ch, ADEPT_LOW_LIGHT))
       NATURAL_VISION(ch) = LOWLIGHT;

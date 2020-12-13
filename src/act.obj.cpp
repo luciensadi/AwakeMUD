@@ -2897,7 +2897,13 @@ ACMD(do_activate)
       else {
         GET_POWER_ACT(ch, i) = x;
         GET_POWER_POINTS(ch) += total;
-        send_to_char(ch, "You activate %s.\r\n", adept_powers[i]);
+        if (i == ADEPT_BOOST_BOD || i == ADEPT_BOOST_QUI || i == ADEPT_BOOST_STR) {
+          send_to_char(ch, "You activate %s. You'll need to use the ^WBOOST^n command to engage it.\r\n", adept_powers[i]);
+        } else if (i == ADEPT_NERVE_STRIKE) {
+          send_to_char(ch, "You activate %s. You'll need to use the ^WNERVESTRIKE^n command to engage it.\r\n", adept_powers[i]);
+        } else {
+          send_to_char(ch, "You activate %s.\r\n", adept_powers[i]);
+        }
         affect_total(ch);
       }
       return;

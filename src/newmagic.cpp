@@ -1044,15 +1044,15 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
           switch (sub) {
           case BOD:
-            if (BOOST(vict)[2][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
+            if (BOOST(vict)[BOD][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
               cyber = false;
             break;
           case QUI:
-            if (BOOST(vict)[1][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
+            if (BOOST(vict)[QUI][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
               cyber = false;
             break;
           case STR:
-            if (BOOST(vict)[0][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
+            if (BOOST(vict)[STR][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
               cyber = false;
             break;
           }
