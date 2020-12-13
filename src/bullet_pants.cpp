@@ -54,8 +54,10 @@ ACMD(do_pockets) {
     if (!strn_cmp(argument, weapon_type[i], strlen(argument)) 
         || (*(weapon_type_aliases[i]) && str_cmp(argument, weapon_type_aliases[i]) == 0)) {
       if (print_one_weapontypes_ammo_to_string(ch, i, buf, sizeof(buf)))
-        send_to_char(ch, "You have the following %s ammunition secreted about your person:\r\n%s\r\n",
-                     weapon_type[i], buf);
+        send_to_char(ch, "You have the following %s ammunition secreted about your person:%s%s\r\n",
+                     weapon_type[i], 
+                     PRF_FLAGGED(ch, PRF_SCREENREADER) ? " " : "\r\n",
+                     buf);
       else
         send_to_char(ch, "You don't have any %s ammunition secreted about your person.\r\n", weapon_type[i]);
       return;
@@ -464,12 +466,13 @@ bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *bu
   // We skip the header and assume the caller will print it. Just print the ammo.
   for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
     if ((amount = GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am))) {
-      snprintf(ENDOF(buf), bufsize - strlen(buf), "    %u %s %s%s\r\n",
-               // printed_anything_yet ? ", " : "",
+      snprintf(ENDOF(buf), bufsize - strlen(buf), "%s%u %s %s%s%s",
+               PRF_FLAGGED(ch, PRF_SCREENREADER) && printed_anything_yet ? ", " : "    ",
                amount,
                ammo_type[am].name,
                get_weapon_ammo_name_as_string(wp),
-               amount != 1 ? "s" : "");
+               amount != 1 ? "s" : "",
+               PRF_FLAGGED(ch, PRF_SCREENREADER) ? "" : "\r\n");
                
       printed_anything_yet = TRUE;
     }
@@ -494,7 +497,10 @@ void display_pockets_to_char(struct char_data *ch, struct char_data *vict) {
   
   for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++) {
     if (print_one_weapontypes_ammo_to_string(vict, wp, buf2, sizeof(buf2) - 1)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^c%s^n:\r\n%s", weapon_type[wp], buf2);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^c%s^n:%s%s\r\n", 
+               weapon_type[wp],
+               PRF_FLAGGED(ch, PRF_SCREENREADER) ? " " : "\r\n",
+               buf2);
       have_something_to_print = TRUE;
     }
   }
@@ -674,7 +680,6 @@ int npc_ammo_usage_preferences[] = {
  - staff bullet pants set command mode
  - write pockets help file
  - better formatting for 'pockets <weapon>'
- - do we need to change output to tree style? how will this work with screenreaders?
  - add ability to split apart ammo boxes
  - pockets add <box>: put box in pockets, then junk box
  - shopkeepers sell ammo that goes straight into your pockets
