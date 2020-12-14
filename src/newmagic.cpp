@@ -1909,7 +1909,7 @@ ACMD(do_unbond)
   struct obj_data *obj = NULL;
   struct char_data *vict;
   if (!generic_find(argument,  FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &vict, &obj)) {
-    send_to_char("You don't have that item.\r\n", ch);
+    send_to_char(ch, "You don't have a '%s'.\r\n", argument);
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 2)) {
@@ -1940,7 +1940,7 @@ ACMD(do_bond)
         
   // No object-- failure case.
   if (!obj) {
-    send_to_char("You don't have that item.\r\n", ch);
+    send_to_char(ch, "You don't have a '%s'.\r\n", buf1);
     return;
   }
   
@@ -2132,7 +2132,7 @@ ACMD(do_bond)
       return;
     }
   } else
-    send_to_char("You cannot bond that item.\r\n", ch);
+    send_to_char(ch, "You cannot bond %s.\r\n", GET_OBJ_NAME(obj));
 }
 
 ACMD(do_release)
@@ -3632,14 +3632,14 @@ ACMD(do_track)
   if (obj) {
     vict = NULL;
     if (GET_OBJ_TYPE(obj) != ITEM_FOCUS && !(GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE))) {
-      send_to_char("There is no astral signature present on that item.\r\n", ch);
+      send_to_char(ch, "There is no astral signature present on %s.\r\n", GET_OBJ_NAME(obj));
       return;
     }
     int num = 3;
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
       num = 2;
     if (!GET_OBJ_VAL(obj, num)) {
-      send_to_char("There is no astral signature present on that item.\r\n", ch);
+      send_to_char(ch, "There is no astral signature present on %s.\r\n", GET_OBJ_NAME(obj));
       return;
     }
     for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next)

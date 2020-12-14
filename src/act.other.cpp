@@ -229,7 +229,8 @@ ACMD(do_steal)
           break;
         }
       if (!obj) {
-        act("$E hasn't got that item.", FALSE, ch, 0, vict, TO_CHAR);
+        snprintf(buf, sizeof(buf), "$E hasn't got %s.", obj_name);
+        act(buf, FALSE, ch, 0, vict, TO_CHAR);
         return;
       } else {                  /* It is equipment */
         send_to_char(ch, "You unequip %s and steal it.", GET_OBJ_NAME(obj));
@@ -525,11 +526,11 @@ ACMD(do_patch)
     return;
   }
   if (GET_OBJ_VAL(patch, 1) < 1) {
-    send_to_char("That patch seems to be defective...\r\n", ch);
+    send_to_char(ch, "%s seems to be defective...\r\n", capitalize(GET_OBJ_NAME(patch)));
     return;
   }
   if (GET_OBJ_TYPE(patch) != ITEM_PATCH) {
-    send_to_char("That item is not a patch.\r\n", ch);
+    send_to_char(ch, "%s is not a patch.\r\n", capitalize(GET_OBJ_NAME(patch)));
     return;
   }  
   switch (GET_OBJ_VAL(patch, 0)) {
@@ -696,7 +697,7 @@ ACMD(do_use)
     if (isname(arg, obj->text.keywords))
       break;
   if (!obj) {
-    send_to_char(ch, "You don't have that item.\r\n");
+    send_to_char(ch, "You don't have a '%s'.\r\n", arg);
     return;
   }
 
@@ -1741,7 +1742,7 @@ ACMD(do_unattach)
     return;
   }
   if (!(gun = get_obj_in_list_vis(ch, buf2, ch->carrying))) {
-    send_to_char("You don't seem to have that item.\r\n", ch);
+    send_to_char(ch, "You don't seem to have a '%s'.\r\n", buf2);
     return;
   }
 
