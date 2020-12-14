@@ -835,11 +835,11 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         i--;
         if (obj) {
           snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to cost of %d.",
-                  shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));
+                  shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
           extract_obj(obj);
         } else {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item (%ld) from sale.", shop_nr, GET_NAME(keeper), GET_OBJ_VNUM(obj));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item (%ld) from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_VNUM(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
         }
         continue;
@@ -895,11 +895,11 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (!obj || GET_OBJ_COST(obj) < 1) {
         i--;
         if (obj) {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
           extract_obj(obj);
         } else {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_nr, GET_NAME(keeper));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
         }
         continue;
@@ -942,11 +942,11 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (!obj || GET_OBJ_COST(obj) < 1) {
         i--;
         if (obj) {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
           extract_obj(obj);
         } else {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_nr, GET_NAME(keeper));
+          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
         }
         continue;
@@ -973,7 +973,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                   buy_price(obj, shop_nr));
       }
       if (strlen(buf) >= MAX_STRING_LENGTH - 200) {
-        snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Aborting string composition due to length constraints.", shop_nr, GET_NAME(keeper));
+        snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Aborting string composition due to length constraints.", shop_table[shop_nr].vnum, GET_NAME(keeper));
         break;
       }
       extract_obj(obj);
