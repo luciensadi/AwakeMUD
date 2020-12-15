@@ -2707,7 +2707,7 @@ ACMD(do_force)
 
   half_chop(argument, arg, to_force);
 
-  snprintf(buf1, sizeof(buf1), "%s has forced you to '%s'.", GET_CHAR_NAME(ch), to_force);
+  snprintf(buf1, sizeof(buf1), "%s has forced you to '%s'.\r\n", GET_CHAR_NAME(ch), to_force);
 
   if (!*arg || !*to_force) {
     send_to_char("Whom do you wish to force do what?\r\n", ch);
