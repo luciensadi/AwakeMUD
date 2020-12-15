@@ -92,7 +92,7 @@ ACMD(do_pockets) {
       struct obj_data *ammobox;
       int quantity;
       
-      // Special special case: 'pockets put all'.
+      // Special special case: 'pockets put all'. Specifically ignores floor boxes.
       if (!str_cmp("all", quantity_buf)) {
         struct obj_data *next_obj;
         bool found_something = FALSE;
@@ -107,7 +107,9 @@ ACMD(do_pockets) {
       }
       
       // Otherwise, check to see if they've specified an item.
-      if ((ammobox = get_obj_in_list_vis(ch, quantity_buf, ch->carrying))) {
+      if ((ammobox = get_obj_in_list_vis(ch, quantity_buf, ch->carrying)) 
+           || (ch->in_room && (ammobox = get_obj_in_list_vis(ch, quantity_buf, ch->in_room->contents)))
+           || (ch->in_veh && (ammobox = get_obj_in_list_vis(ch, quantity_buf, ch->in_veh->contents)))) {
         if (GET_OBJ_TYPE(ammobox) != ITEM_GUN_AMMO) {
           send_to_char(ch, "%s is not an ammo box.\r\n", capitalize(GET_OBJ_NAME(ammobox)));
           return;
@@ -250,6 +252,31 @@ ACMD(do_pockets) {
           && GET_AMMOBOX_QUANTITY(ammobox) >= quantity)
             break;
             
+    // They didn't have one on their person-- check the room.
+    if (!ammobox) {
+      if (ch->in_veh) {
+        for (ammobox = ch->in_veh->contents; ammobox; ammobox = ammobox->next_content)
+          if (GET_OBJ_TYPE(ammobox) == ITEM_GUN_AMMO 
+              && GET_AMMOBOX_WEAPON(ammobox) == weapon
+              && GET_AMMOBOX_TYPE(ammobox) == ammotype
+              && GET_AMMOBOX_QUANTITY(ammobox) >= quantity)
+                break;
+      } else {
+        for (ammobox = ch->in_room->contents; ammobox; ammobox = ammobox->next_content)
+          if (GET_OBJ_TYPE(ammobox) == ITEM_GUN_AMMO 
+              && GET_AMMOBOX_WEAPON(ammobox) == weapon
+              && GET_AMMOBOX_TYPE(ammobox) == ammotype
+              && GET_AMMOBOX_QUANTITY(ammobox) >= quantity)
+                break;
+      }
+      
+      // Make sure they can carry it. We don't do this check for already-carried boxes.
+      if (ammobox && (IS_CARRYING_W(ch) + (quantity * ammo_type[ammotype].weight)) > CAN_CARRY_W(ch)) {
+        send_to_char("You can't carry that much weight.\r\n", ch);
+        return;
+      }
+    }
+            
     if (!ammobox) {
       send_to_char(ch, "You don't have an ammo box containing %d %s.",
                    quantity, get_ammo_representation(weapon, ammotype, quantity));
@@ -261,7 +288,7 @@ ACMD(do_pockets) {
     update_bulletpants_ammo_quantity(ch, weapon, ammotype, quantity);
     
     // Message char, and ditch box if it's empty and not customized.
-    if (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0) {
+    if (GET_AMMOBOX_QUANTITY(ammobox) <= 0 && (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0)) {
       send_to_char(ch, "You take %d %s from %s and secrete them about your person, then junk the empty box.\r\n", 
                    quantity, get_ammo_representation(weapon, ammotype, quantity), GET_OBJ_NAME(ammobox));
       extract_obj(ammobox);
@@ -269,6 +296,7 @@ ACMD(do_pockets) {
       send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n", 
                    quantity, get_ammo_representation(weapon, ammotype, quantity), GET_OBJ_NAME(ammobox));
     }
+    return;
   }
   
   /******************************************************
@@ -291,7 +319,11 @@ ACMD(do_pockets) {
     }
                  
     // Generate an ammo box and give it to them.
-    generate_ammobox_from_pockets(ch, weapon, ammotype, quantity);
+    struct obj_data *ammobox = generate_ammobox_from_pockets(ch, weapon, ammotype, quantity);
+    if (ammobox)
+      obj_to_char(ammobox, ch);
+    else
+      mudlog("SYSERR: generate_ammobox_from_pockets() failed!", ch, LOG_SYSLOG, TRUE);
   
     return;
   }
@@ -780,8 +812,5 @@ int npc_ammo_usage_preferences[] = {
  - staff bullet pants set command mode
  - write pockets help file
  - add ability to split apart ammo boxes
- - shopkeepers sell ammo that goes straight into your pockets
- - enable loading from boxes on ground / in vehicle
- - figure out what happens to pockets on death (transfer to boxes on corpse?)
- - pockets put all / pockets get all
+ - fix weight of assault cannon rounds-- should be much higher
 */
