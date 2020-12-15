@@ -170,12 +170,12 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
   else if (ch->in_room->dir_option[dir]->go_into_thirdperson)
     strcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson);
-  else if (ch->char_specials.leave)
-    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
   else if (IS_WATER(ch->in_room) && !IS_WATER(EXIT(ch, dir)->to_room))
     snprintf(buf2, sizeof(buf2), "$n climbs out of the water to the %s.", fulldirs[dir]);
   else if (!IS_WATER(ch->in_room) && IS_WATER(EXIT(ch, dir)->to_room))
     snprintf(buf2, sizeof(buf2), "$n jumps into the water to the %s.", fulldirs[dir]);
+  else if (ch->char_specials.leave)
+    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
   else
     snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
   

@@ -1135,37 +1135,37 @@ void misc_update(void)
     }
     
     if (affected_by_spell(ch, SPELL_CONFUSION) || affected_by_spell(ch, SPELL_CHAOS) || affected_by_power(ch, CONFUSION)) {
-      if (number(1, 10) >= 5) {
-        switch(number(0, 10)) {
-          case 0:
+      if ((i = number(1, 15)) >= 5) {
+        switch(i) {
+          case 5:
             send_to_char("Lovely weather today.\r\n", ch);
             break;
-          case 1:
+          case 6:
             send_to_char("Is that who I think it is? ...Nah, my mistake.\r\n", ch);
             break;
-          case 2:
+          case 7:
             send_to_char("Now, where did I leave my car keys...\r\n", ch);
             break;
-          case 3:
+          case 8:
             send_to_char("Over There!\r\n", ch);
             break;
-          case 4:
+          case 9:
             send_to_char("x + 2dy divided by 3 is... no wait CARRY THE 1!\r\n", ch);
             break;
-          case 5:
+          case 10:
             send_to_char("A large troll carrying a panther assault cannon arrives from the north.\r\n", ch);
             break;
-          case 6:
+          case 11:
             if (ch->carrying)
               send_to_char(ch, "You complete the bonding ritual for %s.\r\n", GET_OBJ_NAME(ch->carrying));
             break;
-          case 7:
+          case 12:
             send_to_char("You don't have enough karma to do that!\r\n", ch);
             break;
-          case 8:
+          case 13:
             send_to_char("You could do it with a needle!\r\n", ch);
             break;
-          case 9:
+          case 14:
             send_to_char("Nothing seems to happen.\r\n", ch);
             break;
         }

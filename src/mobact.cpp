@@ -23,18 +23,11 @@
 #include "transport.h"
 #include "quest.h"
 #include "bullet_pants.h"
+#include "bitfield.h"
 
 ACMD_DECLARE(do_say);
 
-// Change this to a no-op if you don't want mobact debugging.
-/*
-#define MOBACT_DEBUG(ch, speech) { \
-  char say_buf[500];               \
-  strcpy(say_buf, (speech));       \
-  do_say((ch), say_buf, 0, 0);    \
-}
-*/
-#define MOBACT_DEBUG(ch, speech) //
+// Note: If you want mobact debugging, add -DMOBACT_DEBUG to your makefile.
 
 /* external structs */
 extern void resist_drain(struct char_data *ch, int power, int drain_add, int wound);
@@ -68,7 +61,22 @@ bool attempt_reload(struct char_data *mob, int pos);
 bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed);
 void switch_weapons(struct char_data *mob, int pos);
 
-#define MULTIBIT_MOB_AGGR_TO_RACE MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_ORK, MOB_AGGR_TROLL
+// This takes up a significant amount of processing time, so let's precompute it.
+static int FIRST_OCTET_AGGRESSIVE = 1 << MOB_AGGRESSIVE;
+static int SECOND_OCTET_AGGRESSIVE = 1 << (MOB_AGGR_ELF % BITFIELD_BITS_PER_VAR) | 1 << (MOB_AGGR_DWARF % BITFIELD_BITS_PER_VAR) | 1 << (MOB_AGGR_ORK % BITFIELD_BITS_PER_VAR);
+static int THIRD_OCTET_AGGRESSIVE = 1 << (MOB_AGGR_TROLL % BITFIELD_BITS_PER_VAR) | 1 << (MOB_AGGR_HUMAN % BITFIELD_BITS_PER_VAR);
+bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression) {
+  // Check first octet (MOB_AGGRESSIVE is 5, so it's in there)
+  if (include_base_aggression && MOB_FLAGS(ch).IsSetPrecomputed(0, FIRST_OCTET_AGGRESSIVE))
+    return TRUE;
+  
+  // Check second octet (MOB_AGGR for ork, elf, dwarf)
+  if (MOB_FLAGS(ch).IsSetPrecomputed(1, SECOND_OCTET_AGGRESSIVE))
+    return TRUE;
+  
+  // Check third octet (MOB_AGGR for troll, human)
+  return MOB_FLAGS(ch).IsSetPrecomputed(2, THIRD_OCTET_AGGRESSIVE);
+}
 
 bool mobact_holster_weapon(struct char_data *ch) {
   if (!ch)
@@ -94,22 +102,26 @@ bool mobact_holster_weapon(struct char_data *ch) {
   return FALSE;
 }
 
-bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
+bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {  
   // Missing var? Failure.
   if (!ch || !vict)
     return FALSE;
     
   // Can't see? Failure.
   if (!CAN_SEE_ROOM_SPECIFIED(ch, vict, get_ch_in_room(ch))) {
+#ifdef MOBACT_DEBUG
     snprintf(buf, sizeof(buf), "vict_is_valid_target: Skipping %s - I can't see them.", GET_CHAR_NAME(vict));
-    MOBACT_DEBUG(ch, buf);
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
   
   // Already downed? Failure.
   if (GET_PHYSICAL(vict) <= 0) {
+#ifdef MOBACT_DEBUG
     snprintf(buf, sizeof(buf), "vict_is_valid_target: Skipping %s - they're already mortally wounded.", GET_CHAR_NAME(vict));
-    MOBACT_DEBUG(ch, buf);
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
     
@@ -117,15 +129,19 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
   if (IS_NPC(vict)) {
     // Am I a quest mob hunting this mob?
     if (hunting_escortee(ch, vict)) {
+#ifdef MOBACT_DEBUG
       snprintf(buf, sizeof(buf), "vict_is_valid_target: NPC %s is a valid target (escortee I am hunting).", GET_CHAR_NAME(vict));
-      MOBACT_DEBUG(ch, buf);
+      do_say(ch, buf, 0, 0);
+#endif
       return TRUE;
     }
     
     // Is this an astral projection?
     if (!IS_PROJECT(vict)) {
+#ifdef MOBACT_DEBUG
       snprintf(buf, sizeof(buf), "vict_is_valid_target: Skipping NPC %s - neither hunted escortee nor projection.", GET_CHAR_NAME(vict));
-      MOBACT_DEBUG(ch, buf);
+      do_say(ch, buf, 0, 0);
+#endif
       return FALSE;
     }
   } 
@@ -134,8 +150,10 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
   else {
     // Are they a staff with nohassle? Failure.
     if (PRF_FLAGGED(vict, PRF_NOHASSLE)) {
+#ifdef MOBACT_DEBUG
       snprintf(buf, sizeof(buf), "vict_is_valid_target: Skipping PC %s - nohassle flag is set.", GET_CHAR_NAME(vict));
-      MOBACT_DEBUG(ch, buf);
+      do_say(ch, buf, 0, 0);
+#endif
       return FALSE;
     }
     
@@ -143,8 +161,10 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     if (GET_QUEST(vict)) {
       for (int j = 0; j < quest_table[GET_QUEST(vict)].num_mobs; j++) {
         if (quest_table[GET_QUEST(vict)].mob[j].vnum == GET_MOB_VNUM(ch)) {
+#ifdef MOBACT_DEBUG
           snprintf(buf, sizeof(buf), "vict_is_valid_target: I am a prior escortee of PC %s, skipping.", GET_CHAR_NAME(vict));
-          MOBACT_DEBUG(ch, buf);
+          do_say(ch, buf, 0, 0);
+#endif
           return FALSE;
         }
       }
@@ -152,8 +172,10 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
   }
   
   // They're a valid target, but I don't feel like fighting.
+#ifdef MOBACT_DEBUG
   snprintf(buf, sizeof(buf), "vict_is_valid_target: %s would be valid, but I am not in an aggressive state.", GET_CHAR_NAME(vict));
-  MOBACT_DEBUG(ch, buf);
+  do_say(ch, buf, 0, 0);
+#endif
   return FALSE;
 }
 
@@ -162,7 +184,7 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
     return FALSE;
     
   // If NPC is aggro or alarmed, or...
-  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM || 
+  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM || (mob_is_aggressive(ch, FALSE) && (
       // If NPC is aggro towards elves, and victim is an elf subrace, or...
       (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
        (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
@@ -177,11 +199,13 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
        (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
       // If NPC is aggro towards trolls, and victim is a troll subrace:
       (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
-       (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))
+       (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))))
     // Kick their ass.
   {
+#ifdef MOBACT_DEBUG
     snprintf(buf, sizeof(buf), "vict_is_valid_target: Target found (racism / aggro / alarm): %s.", GET_CHAR_NAME(vict));
-    MOBACT_DEBUG(ch, buf);
+    do_say(ch, buf, 0, 0);
+#endif
     return TRUE;
   }
   
@@ -197,8 +221,10 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
     // If victim's equipment is illegal here, blast them.
     if (GET_EQ(vict, i) && violates_zsp(security_level, vict, i, ch)) {
       // Target found, stop processing.
+#ifdef MOBACT_DEBUG
       snprintf(buf, sizeof(buf), "vict_is_valid_guard_target: %s's equipment violates ZSP.", GET_CHAR_NAME(vict));
-      MOBACT_DEBUG(ch, buf);
+      do_say(ch, buf, 0, 0);
+#endif
       return TRUE;
     }
   }
@@ -285,13 +311,19 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   
   // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
   if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: no veh, or not pilot/manning, or am astral.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_g: no veh, or not pilot/manning, or am astral.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
   
   // Precondition: If our vehicle is nested, just give up.
   if (ch->in_veh->in_veh) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: nested vehicle.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_g: nested vehicle.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
   
@@ -299,7 +331,10 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   
   // Peaceful room, or I'm not actually a guard? Bail out.
   if (ROOM_FLAGGED(in_room, ROOM_PEACEFUL) || !(MOB_FLAGGED(ch, MOB_GUARD))) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: peaceful or not guard.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_g: peaceful or not guard.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
   
@@ -315,8 +350,10 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
       // Check for our usual conditions.
       if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM)) {
         // Found a target, stop processing vehicles.
+#ifdef MOBACT_DEBUG
         snprintf(buf, sizeof(buf), "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
-        MOBACT_DEBUG(ch, buf);
+        do_say(ch, buf, 0, 0);
+#endif
         break;
       }
     }
@@ -330,7 +367,10 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   
   // No targets? Bail out.
   if (!tveh && !vict) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: No targets, stopping.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_g: No targets, stopping.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
   
@@ -340,7 +380,10 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   
   // Driver? It's rammin' time.
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: Ramming.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_g: Ramming.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     do_raw_ram(ch, ch->in_veh, tveh, vict);
     
     return TRUE;
@@ -350,7 +393,10 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
     struct obj_data *mount = get_mount_manned_by_ch(ch);
     if (mount && mount_has_weapon(mount)) {
-      MOBACT_DEBUG(ch, "m_p_i_v_g: Firing.");
+#ifdef MOBACT_DEBUG
+      strncpy(buf, "m_p_i_v_g: Firing.", sizeof(buf));
+      do_say(ch, buf, 0, 0);
+#endif
       do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
       return TRUE;
     }
@@ -369,25 +415,34 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   
   // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
   if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: no veh, not pilot/manning, or am astral.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_a: no veh, not pilot/manning, or am astral.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
   
   // Precondition: If our vehicle is nested, just give up.
   if (ch->in_veh->in_veh) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: nested veh.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_a: nested veh.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
   
   in_room = get_ch_in_room(ch);
   
-  if (ROOM_FLAGGED(in_room, ROOM_PEACEFUL) || !(MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MULTIBIT_MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: Room is peaceful, or aggro failure.");
+  if (ROOM_FLAGGED(in_room, ROOM_PEACEFUL) || !mob_is_aggressive(ch, TRUE) || GET_MOBALERT(ch) == MALERT_ALARM) {
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_a: Room is peaceful, or aggro failure.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
 
   // Attack vehicles (but not for aggr-to-race)
-  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
+  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
     // Target selection. We disallow targeting of unowned vehicles so our guards don't Thunderdome each other before players even show up.
     for (tveh = in_room->vehicles; tveh; tveh = tveh->next_veh) {
       if (tveh == ch->in_veh)
@@ -395,8 +450,10 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
         
       if (vehicle_is_valid_mob_target(tveh, TRUE)) {
         // Found a valid target, stop looking.
+#ifdef MOBACT_DEBUG
         snprintf(buf, sizeof(buf), "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
-        MOBACT_DEBUG(ch, buf);
+        do_say(ch, buf, 0, 0);
+#endif
         break;
       }
     }
@@ -409,7 +466,10 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
         break;
   
   if (!tveh && !vict) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: No target.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_a: No target.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
   
@@ -419,7 +479,10 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   
   // Driver? It's rammin' time.
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: ramming.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_i_v_a: Ramming.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     do_raw_ram(ch, ch->in_veh, tveh, vict);
     
     return TRUE;
@@ -429,7 +492,10 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
     struct obj_data *mount = get_mount_manned_by_ch(ch);
     if (mount && mount_has_weapon(mount)) {
-      MOBACT_DEBUG(ch, "m_p_i_v_a: firing.");
+#ifdef MOBACT_DEBUG
+      strncpy(buf, "m_p_i_v_a: Firing.", sizeof(buf));
+      do_say(ch, buf, 0, 0);
+#endif
       do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
       return TRUE;
     }
@@ -458,13 +524,16 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
       return FALSE;
   }
   
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || !(MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MULTIBIT_MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM)) {
-    MOBACT_DEBUG(ch, "m_p_a: Room is peaceful, or aggro failure.");
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || !mob_is_aggressive(ch, TRUE) || GET_MOBALERT(ch) == MALERT_ALARM) {
+#ifdef MOBACT_DEBUG
+    strncpy(buf, "m_p_a: Room is peaceful, or aggro failure.", sizeof(buf));
+    do_say(ch, buf, 0, 0);
+#endif
     return FALSE;
   }
 
   // Attack vehicles (but not for aggr-to-race)
-  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
+  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
     // If I am not astral, am in the same room, and am willing to attack a vehicle this round (coin flip), pick a fight with a vehicle.
     if (ch->in_room->number == room->number && !IS_ASTRAL(ch) && number(0, 1)) {
       for (veh = room->vehicles; veh; veh = veh->next_veh) {

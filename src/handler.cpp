@@ -966,6 +966,9 @@ void affect_total(struct char_data * ch)
  */
 bool affected_by_spell(struct char_data * ch, int type)
 {
+  if (!GET_SUSTAINED(ch))
+    return FALSE;
+    
   for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next)
     if ((hjp->spell == type) && (hjp->caster == FALSE))
       return TRUE;
