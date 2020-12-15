@@ -82,6 +82,7 @@ extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char
 extern char *get_player_name(vnum_t id);
 
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
+extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
@@ -443,6 +444,14 @@ void make_corpse(struct char_data * ch)
     GET_OBJ_VAL(corpse, 5) = GET_IDNUM(ch);
     /* make 'em bullet proof...(anti-twink measure) */
     GET_OBJ_BARRIER(corpse) = 75;
+    
+    // Drain their pockets of ammo and put it on the corpse.
+    for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+      for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
+        if (GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) > 0
+            && (o = generate_ammobox_from_pockets(ch, wp, am, GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am)))) {
+          obj_to_obj(o, corpse);
+        }
   }
   
   /* transfer character's inventory to the corpse */

@@ -17,6 +17,9 @@ extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 extern void calc_weight(struct char_data *ch);
 extern void increase_debris(struct room_data *rm);
 
+bool ammobox_to_bulletpants(struct char_data *ch, struct obj_data *ammobox);
+struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
+
 #define POCKETS_USAGE_STRING "Syntax: POCKETS (put|get) <quantity> <ammotype> <weapontype>. Ex: pockets get 100 apds pistol\r\n"
 /* The POCKETS command, used to interact with the character's ammo supply. */
 ACMD(do_pockets) {
@@ -52,7 +55,7 @@ ACMD(do_pockets) {
   ***************************************************/
   for (int i = START_OF_AMMO_USING_WEAPONS; i <= END_OF_AMMO_USING_WEAPONS; i++) {
     if (!strn_cmp(argument, weapon_type[i], strlen(argument)) 
-        || (*(weapon_type_aliases[i]) && str_cmp(argument, weapon_type_aliases[i]) == 0)) {
+        || (*(weapon_type_aliases[i]) && !str_cmp(argument, weapon_type_aliases[i]))) {
       if (print_one_weapontypes_ammo_to_string(ch, i, buf, sizeof(buf)))
         send_to_char(ch, "You have the following %s ammunition secreted about your person:%s%s\r\n",
                      weapon_type[i], 
@@ -84,11 +87,26 @@ ACMD(do_pockets) {
     return;
   } 
   if ((quantity = atoi(quantity_buf)) <= 0) {
-    // Special case: 'pockets put <ammobox>'. Check for that here.
+    // Special case: 'pockets put <ammobox>|all'. Check for that here.
     if (is_valid_pockets_put_command(mode_buf)) {
       struct obj_data *ammobox;
       int quantity;
       
+      // Special special case: 'pockets put all'.
+      if (!str_cmp("all", quantity_buf)) {
+        struct obj_data *next_obj;
+        bool found_something = FALSE;
+        for (ammobox = ch->carrying; ammobox; ammobox = next_obj) {
+          next_obj = ammobox->next_content;
+          if (GET_OBJ_TYPE(ammobox) == ITEM_GUN_AMMO && GET_AMMOBOX_QUANTITY(ammobox) > 0)
+            found_something |= ammobox_to_bulletpants(ch, ammobox);
+        }
+        if (!found_something)
+          send_to_char("You don't have any ammoboxes to fill your pockets from.\r\n", ch);
+        return;
+      }
+      
+      // Otherwise, check to see if they've specified an item.
       if ((ammobox = get_obj_in_list_vis(ch, quantity_buf, ch->carrying))) {
         if (GET_OBJ_TYPE(ammobox) != ITEM_GUN_AMMO) {
           send_to_char(ch, "%s is not an ammo box.\r\n", capitalize(GET_OBJ_NAME(ammobox)));
@@ -103,25 +121,52 @@ ACMD(do_pockets) {
         int weapontype = GET_AMMOBOX_WEAPON(ammobox);
         int ammotype = GET_AMMOBOX_TYPE(ammobox);
         
-        if (quantity + GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype) > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
-          send_to_char(ch, "Your pockets aren't big enough to hold everything in %s.\r\n", GET_OBJ_NAME(ammobox));
+        if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype) >= MAX_NUMBER_OF_BULLETS_IN_PANTS) {
+          send_to_char(ch, "Your pockets are already full of %s.", get_ammo_representation(weapontype, ammotype, 0));
           return;
         }
         
-        update_bulletpants_ammo_quantity(ch, weapontype, ammotype, quantity);
-        update_ammobox_ammo_quantity(ammobox, -quantity);
-        
-        if (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0) {
-          send_to_char(ch, "You take %d %s from %s and secrete them about your person, then junk the empty box.\r\n", 
-                       quantity, get_ammo_representation(weapontype, ammotype, quantity), GET_OBJ_NAME(ammobox));
-          extract_obj(ammobox);
-        } else {
-          send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n", 
-                       quantity, get_ammo_representation(weapontype, ammotype, quantity), GET_OBJ_NAME(ammobox));
-        }
-        
+        ammobox_to_bulletpants(ch, ammobox);
         return;
       }
+      
+      // Fallthrough -- no item found. Go to the error message about quantity.
+    }
+    
+    // Special case: 'pockets get all'
+    else if (is_valid_pockets_get_command(mode_buf)) {
+      if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
+        send_to_char("You can't carry any more items.\r\n", ch);
+        return;
+      }
+      
+      // Special special case: 'pockets put all'.
+      if (!str_cmp("all", quantity_buf)) {
+        struct obj_data *ammobox = NULL;
+        int successes = 0;
+        
+        for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS && IS_CARRYING_N(ch) < CAN_CARRY_N(ch); wp++)
+          for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES && IS_CARRYING_N(ch) < CAN_CARRY_N(ch); am++)
+            if (GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) > 0
+                && (ammobox = generate_ammobox_from_pockets(ch, wp, am, GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am)))) {
+              obj_to_char(ammobox, ch);
+              successes++;
+              
+              if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
+                send_to_char(ch, "After packing %s, you run out of room and stop emptying your pockets.\r\n", 
+                             successes > 1 ? "a few ammo boxes" : "an ammo box");
+                return;
+              }
+            }
+              
+        if (successes)
+          send_to_char(ch, "You empty your pockets into %s.\r\n", successes > 1 ? "some ammo boxes" : "an ammo box");
+        else
+          send_to_char("You don't seem to have any ammo in your pockets.\r\n", ch);
+              
+        return;
+      }
+      // Fallthrough -- no item found. Go to the error message about quantity.
     }
     send_to_char("The quantity must be greater than zero.\r\n", ch);
     return;
@@ -134,7 +179,7 @@ ACMD(do_pockets) {
   }
   ammotype = -1;
   for (int i = NUM_AMMOTYPES - 1; i >= AMMO_NORMAL ; i--) {
-    if (str_str(ammo_type[i].name, ammotype_buf)) {
+    if (!str_cmp(ammo_type[i].name, ammotype_buf)) {
       ammotype = i;
       break;
     }
@@ -230,6 +275,11 @@ ACMD(do_pockets) {
   * pockets get: create new ammo box from bullet pants. *
   *******************************************************/
   if (is_valid_pockets_get_command(mode_buf)) {
+    if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
+      send_to_char("You can't carry any more items.\r\n", ch);
+      return;
+    }
+    
     // We must have that much ammo to begin with.
     if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype) < quantity) {
       quantity = GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype);
@@ -241,25 +291,8 @@ ACMD(do_pockets) {
     }
                  
     // Generate an ammo box and give it to them.
-    struct obj_data *ammobox = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
-    GET_AMMOBOX_WEAPON(ammobox) = weapon;
-    GET_AMMOBOX_TYPE(ammobox) = ammotype;
-    
-    // Reset the ammobox values in preparation for filling it.
-    GET_OBJ_WEIGHT(ammobox) = 0.0;
-    GET_OBJ_COST(ammobox) = 0;
-    GET_AMMOBOX_QUANTITY(ammobox) = 0;
-    
-    // Fill it.
-    update_ammobox_ammo_quantity(ammobox, quantity);
-    update_bulletpants_ammo_quantity(ch, weapon, ammotype, -quantity);
-    
-    // Restring the box.
-    ammobox->restring = str_dup(get_ammobox_default_restring(ammobox));
-    
-    // Give it to them.
-    obj_to_char(ammobox, ch);
-    
+    generate_ammobox_from_pockets(ch, weapon, ammotype, quantity);
+  
     return;
   }
   
@@ -413,10 +446,10 @@ float get_bulletpants_weight(struct char_data *ch) {
 
 // I went kinda crazy with the aliases for these things, so I put them into functions to avoid code reuse.
 bool is_valid_pockets_put_command(char *mode_buf) {
-  return str_str(mode_buf, "put") || str_str(mode_buf, "store") || str_str(mode_buf, "add") || str_str(mode_buf, "stow") || str_str(mode_buf, "load");
+  return !str_cmp(mode_buf, "put") || !str_cmp(mode_buf, "store") || !str_cmp(mode_buf, "add") || !str_cmp(mode_buf, "stow") || !str_cmp(mode_buf, "load");
 }
 bool is_valid_pockets_get_command(char *mode_buf) {
-  return str_str(mode_buf, "get") || str_str(mode_buf, "remove") || str_str(mode_buf, "retrieve");
+  return !str_cmp(mode_buf, "get") || !str_cmp(mode_buf, "remove") || !str_cmp(mode_buf, "retrieve");
 }
 
 // Returns 'APDS heavy pistol rounds' or equivalent.
@@ -634,6 +667,73 @@ const char *get_weapon_ammo_name_as_string(int weapon_type) {
     default:
       return "round";
   }
+}
+
+// Puts an ammobox in your pants. Returns FALSE on failure, TRUE on success.
+bool ammobox_to_bulletpants(struct char_data *ch, struct obj_data *ammobox) {
+  int quantity, weapontype, ammotype;
+  
+  if (!ch || !ammobox) {
+    mudlog("SYSERR: Null ch or ammobox to ammobox_to_bulletpants.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if (GET_OBJ_TYPE(ammobox) != ITEM_GUN_AMMO || (quantity = GET_AMMOBOX_QUANTITY(ammobox)) <= 0) {
+    mudlog("SYSERR: Invalid ammobox to ammobox_to_bulletpants.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  weapontype = GET_AMMOBOX_WEAPON(ammobox);
+  ammotype = GET_AMMOBOX_TYPE(ammobox);
+  
+  if (quantity + GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype) > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
+    quantity = MAX_NUMBER_OF_BULLETS_IN_PANTS - GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype);
+    if (quantity == 0)
+      return FALSE;
+  }
+    
+  update_bulletpants_ammo_quantity(ch, weapontype, ammotype, quantity);
+  update_ammobox_ammo_quantity(ammobox, -quantity);
+  
+  if (GET_AMMOBOX_QUANTITY(ammobox) == 0 && (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0)) {
+    send_to_char(ch, "You take %d %s from %s and secrete them about your person, then junk the empty box.\r\n", 
+                 quantity, get_ammo_representation(weapontype, ammotype, quantity), GET_OBJ_NAME(ammobox));
+    extract_obj(ammobox);
+  } else {
+    send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n", 
+                 quantity, get_ammo_representation(weapontype, ammotype, quantity), GET_OBJ_NAME(ammobox));
+  }
+  
+  return TRUE;
+}
+
+struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity) {
+  if (!ch) {
+    mudlog("SYSERR: Null ch to generate_ammobox_from_pockets.", ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
+    return NULL;
+  
+  struct obj_data *ammobox = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
+  GET_AMMOBOX_WEAPON(ammobox) = weapontype;
+  GET_AMMOBOX_TYPE(ammobox) = ammotype;
+  
+  // Reset the ammobox values in preparation for filling it.
+  GET_OBJ_WEIGHT(ammobox) = 0.0;
+  GET_OBJ_COST(ammobox) = 0;
+  GET_AMMOBOX_QUANTITY(ammobox) = 0;
+  
+  // Fill it.
+  update_ammobox_ammo_quantity(ammobox, quantity);
+  update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -quantity);
+  
+  // Restring the box.
+  ammobox->restring = str_dup(get_ammobox_default_restring(ammobox));
+  
+  // Give it to them.
+  return ammobox;
 }
 
 // Shorthand for various weapon types. "" for nothing.
