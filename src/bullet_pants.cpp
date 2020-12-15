@@ -679,11 +679,9 @@ int npc_ammo_usage_preferences[] = {
  - reloading of mounted weapons (this code is probably totes broken right now)
  - staff bullet pants set command mode
  - write pockets help file
- - better formatting for 'pockets <weapon>'
  - add ability to split apart ammo boxes
- - pockets add <box>: put box in pockets, then junk box
  - shopkeepers sell ammo that goes straight into your pockets
  - enable loading from boxes on ground / in vehicle
- - figure out what happens to pockets on death
+ - figure out what happens to pockets on death (transfer to boxes on corpse?)
  - pockets put all / pockets get all
 */
