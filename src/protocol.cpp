@@ -2165,6 +2165,10 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
                /* We know for certain that this client does not have support */
                pProtocol->b256Support = eNO;
             }
+          
+            if (pClientName)
+             delete [] pClientName;
+            pClientName = NULL;
          }
          break;
 

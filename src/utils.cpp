@@ -1813,13 +1813,14 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
   return NULL;
 }
 
-void store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message) {
+void store_message_to_history(struct descriptor_data *d, int channel, const char *newd_message) {
   // We use our very own message buffer to ensure we'll never overwrite whatever buffer the caller is using.
   static char log_message[256];
   
   // Precondition: No screwy pointers. Removed warning since we can be passed NPC descriptors (which we ignore).
-  if (d == NULL || mallocd_message == NULL) {
+  if (d == NULL || newd_message == NULL) {
     // mudlog("SYSERR: Null descriptor or message passed to store_message_to_history.", NULL, LOG_SYSLOG, TRUE);
+    DELETE_ARRAY_IF_EXTANT(newd_message);
     return;
   }
   
@@ -1827,18 +1828,19 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
   if (channel < 0 || channel >= NUM_COMMUNICATION_CHANNELS) {
     snprintf(log_message, sizeof(log_message), "SYSERR: Channel %d is not within bounds 0 <= channel < %d.", channel, NUM_COMMUNICATION_CHANNELS);
     mudlog(log_message, NULL, LOG_SYSLOG, TRUE);
+    DELETE_ARRAY_IF_EXTANT(newd_message);
     return;
   }
   
   // Add the message to the descriptor's channel history.
-  d->message_history[channel].AddItem(NULL, mallocd_message);
+  d->message_history[channel].AddItem(NULL, newd_message);
   
   // Constrain message history to the specified amount.
   if (d->message_history[channel].NumItems() > NUM_MESSAGES_TO_RETAIN) {
     // We're over the amount. Remove the tail, making sure we delete the contents.
     if (d->message_history[channel].Tail()->data)
       delete [] d->message_history[channel].Tail()->data;
-    
+
     d->message_history[channel].RemoveItem(d->message_history[channel].Tail());
   }
 }

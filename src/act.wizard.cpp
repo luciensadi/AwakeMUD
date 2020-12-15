@@ -5210,7 +5210,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
   
   DELETE_ARRAY_IF_EXTANT(obj->restring);
-  obj->restring = strdup(buf);
+  obj->restring = str_dup(buf);
   send_to_char(ch, "%s successfully restrung.\r\n", obj->text.name);
   
   return TRUE;

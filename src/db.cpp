@@ -1188,6 +1188,7 @@ void parse_room(File &fl, long nr)
       if (!*keywords) {
         log_vfprintf("Room #%d's extra description #%d had no keywords -- skipping",
             nr, i);
+        DELETE_ARRAY_IF_EXTANT(keywords);
         continue;
       }
 
@@ -3166,6 +3167,7 @@ void reset_zone(int zone, int reboot)
               GET_OBJ_VAL(obj, 11) = MODE_SS;
           } else {
             ZONE_ERROR("Not enough mounts in target vehicle, cannot mount item");
+            extract_obj(obj);
           }
         }
         else {
@@ -3176,6 +3178,8 @@ void reset_zone(int zone, int reboot)
         }
         
         last_cmd = 1;
+        
+        
       } else
         last_cmd = 0;
       break;
@@ -3389,20 +3393,26 @@ void reset_zone(int zone, int reboot)
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERWARE) {
           ZONE_ERROR("attempt to install non-cyberware to mob");
           ZCMD.command = '*';
+          extract_obj(obj);
           break;
         }
-        if (GET_ESS(mob) < GET_OBJ_VAL(obj, 4))
+        if (GET_ESS(mob) < GET_OBJ_VAL(obj, 4)) {
+          extract_obj(obj);
           break;
+        }
         GET_ESS(mob) -= GET_OBJ_VAL(obj, 4);
         obj_to_cyberware(obj, mob);
       } else {
         if (GET_OBJ_TYPE(obj) != ITEM_BIOWARE) {
           ZONE_ERROR("attempt to install non-bioware to mob");
           ZCMD.command = '*';
+          extract_obj(obj);
           break;
         }
-        if (GET_INDEX(mob) < GET_OBJ_VAL(obj, 4))
+        if (GET_INDEX(mob) < GET_OBJ_VAL(obj, 4)) {
+          extract_obj(obj);
           break;
+        }
         GET_INDEX(mob) -= GET_OBJ_VAL(obj, 4);
         for (check = mob->bioware; check && !found; check = check->next_content) {
           if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(obj)))
@@ -3419,8 +3429,10 @@ void reset_zone(int zone, int reboot)
             if (GET_OBJ_VAL(check, 2) == 20 && GET_OBJ_VAL(obj, 2) == 10)
               found = 1;
           }
-        if (found)
+        if (found) {
+          extract_obj(obj);
           break;
+        }
         if (GET_OBJ_VAL(obj, 2) == 0)
           GET_OBJ_VAL(obj, 5) = 24;
         obj_to_bioware(obj, mob);

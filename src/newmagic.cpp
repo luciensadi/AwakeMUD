@@ -2001,7 +2001,7 @@ ACMD(do_bond)
     snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_AMMO_TYPE(magazine)]);
     if (magazine->restring)
       delete [] magazine->restring;
-    magazine->restring = strdup(buf);
+    magazine->restring = str_dup(buf);
     send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(weapon));
     return;
   }
@@ -2015,7 +2015,7 @@ ACMD(do_bond)
           snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_OBJ_VAL(i, 0), weapon_type[GET_OBJ_VAL(i, 1)]);
           if (i->restring)
             delete [] i->restring;
-          i->restring = strdup(buf);
+          i->restring = str_dup(buf);
           send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(obj));
           return;
         }

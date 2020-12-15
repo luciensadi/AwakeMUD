@@ -2474,7 +2474,7 @@ ACMD(do_remember)
       }
 
     m = new remem;
-    m->mem = strdup(buf2);
+    m->mem = str_dup(buf2);
     m->idnum = GET_IDNUM(vict);
     m->next = GET_MEMORY(ch);
     GET_MEMORY(ch) = m;
@@ -3941,8 +3941,8 @@ ACMD(do_spray)
       }
       struct obj_data *paint = read_object(OBJ_GRAFFITI, VIRTUAL);
       snprintf(buf, sizeof(buf), "Someone has sprayed \"%s^g\" here.", argument);
-      paint->restring = strdup(buf);
-      paint->graffiti = strdup(buf);
+      paint->restring = str_dup(buf);
+      paint->graffiti = str_dup(buf);
       obj_to_room(paint, ch->in_room);
       if (++GET_OBJ_TIMER(obj) == 3) {
         send_to_char("The spray can is now empty, so you throw it away.\r\n", ch);
