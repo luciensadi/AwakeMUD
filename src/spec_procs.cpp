@@ -1470,6 +1470,11 @@ SPECIAL(car_dealer)
 
   if (!cmd || ch->in_veh || !ch->in_room)
     return FALSE;
+    
+  if (IS_NPC(ch)) {
+    send_to_char("You're having a hard time getting the dealer's attention.\r\n", ch);
+    return TRUE;
+  }
 
   int car_room = real_room(ch->in_room->number) - 1;
 
@@ -2169,8 +2174,8 @@ SPECIAL(crime_mall_guard)
 
   struct char_data *guard = (struct char_data *) me;
 
-  if ((guard->in_room->number == 10075 && CMD_IS("east")) ||
-      (guard->in_room->number == 10077 && CMD_IS("west"))) {
+  if ((guard->in_room->number == 100075 && CMD_IS("east")) ||
+      (guard->in_room->number == 100077 && CMD_IS("west"))) {
     if (GET_NUYEN(ch) < 2000000) {
       act("$n shakes $s head as $e stops you.  \"Not this time, chummer.\"",
           FALSE, guard, 0, ch, TO_VICT);
@@ -2578,11 +2583,11 @@ SPECIAL(yukiya_dahoto)
 {
   char_data *yukiya = (char_data *) me;
 
-  if (yukiya != NULL && (CMD_IS("open") || CMD_IS("hit") || CMD_IS("shoot")) && CAN_SEE(yukiya, ch) &&
+  if (yukiya != NULL && (CMD_IS("open") || CMD_IS("hit") || CMD_IS("shoot") || CMD_IS("up")) && CAN_SEE(yukiya, ch) &&
       yukiya->in_room->number == YUKIYA_OFFICE) {
     skip_spaces(&argument);
 
-    if (!str_cmp(argument, "vent")) {
+    if (str_str("vent", argument)) {
       act("$n attacks, saying, \"You will not pass!  YOU WILL DIE!\"",
           FALSE, yukiya, 0, ch, TO_VICT);
       act("$n attacks $N, saying, \"You will not pass!  YOU WILL DIE!\"",
@@ -2629,7 +2634,7 @@ SPECIAL(smiths_bouncer)
       if (GET_OBJ_VNUM(obj) == 38094)
         found = TRUE;
 
-    if (found)
+    if (found || IS_NPC(ch) || access_level(ch, LVL_ADMIN))
       perform_move(ch, EAST, LEADER, NULL);
     else
       do_say(wendigo, "Hey chummer, invitation needed.", 0, 0);
@@ -2829,7 +2834,7 @@ SPECIAL(bank)
   if ((CMD_IS("balance") || CMD_IS("transfer") || CMD_IS("deposit")
        || CMD_IS("withdraw") || CMD_IS("wire")) && IS_NPC(ch)) {
     send_to_char(ch, "What use do you have for a bank account?\r\n", ch);
-    return FALSE;
+    return TRUE;
   }
 
   if (CMD_IS("balance")) {
@@ -2942,7 +2947,7 @@ SPECIAL(toggled_invis)
   if(!CMD_IS("activate") || !obj->worn_by)
     return FALSE;
   else {
-    if(str_cmp(argument, "invis")) {
+    if (!str_cmp(argument, "invis")) {
       if (AFF_FLAGGED(obj->worn_by, AFF_IMP_INVIS)) {
         AFF_FLAGS(obj->worn_by).RemoveBit(AFF_IMP_INVIS);
         send_to_char(ch, "Your suit goes silent as the cloaking device shuts off.\r\n");
@@ -3003,7 +3008,7 @@ SPECIAL(traffic)
 {
   struct room_data *room = (struct room_data *) me;
 
-  if (!cmd && room->people && number(0, 6) == 1)
+  if (!cmd && room->people)
     send_to_room(traffic_messages[number(0, NUM_TRAFFIC_MESSAGES - 1)], room);
   
   return FALSE;
@@ -3068,6 +3073,7 @@ SPECIAL(simulate_bar_fight)
 
   if (!vict)
     return FALSE;
+    
   act("A chair flies across the room, hitting $n square in the head!",
       TRUE, vict, 0, 0, TO_ROOM);
   act("A chair flies across the room, hitting you square in the head!",
@@ -3103,10 +3109,10 @@ SPECIAL(crime_mall_blockade)
   struct char_data *temp;
 
   for (temp = ch->in_room->people; temp && !found; temp = temp->next_in_room)
-    if (IS_NPC(temp) && GET_MOB_VNUM(temp) == 10022)
+    if (IS_NPC(temp) && GET_MOB_VNUM(temp) == 100022)
       found = 1;
   if (!found)
-    if ((ch->in_room->number == 10075 && CMD_IS("east")) || (ch->in_room->number == 10077 &&
+    if ((ch->in_room->number == 100075 && CMD_IS("east")) || (ch->in_room->number == 100077 &&
                                                                    CMD_IS("west"))) {
       act("There seems to be an invisible barrier of some kind...", FALSE, ch, 0, 0, TO_CHAR);
       return TRUE;
@@ -3119,6 +3125,7 @@ SPECIAL(circulation_fan)
   static bool running = true;
   room_data *room = (struct room_data *) me;
 
+  // Override to stop the fan from killing people.
   if (cmd)
     return false;
 
@@ -3637,12 +3644,11 @@ SPECIAL(matchsticks)
         act("$n nods once then digs briefly behind the bar, bringing out a small card and handing it to $N.", TRUE, carl, 0, ch, TO_ROOM);
       else
         act("$n nods once then digs briefly behind the bar, bringing out a small card and handing it to $N, smirking.", TRUE, carl, 0, ch, TO_ROOM);
-      /* -- Removed, this object does not exist. -LS
-      
+
       struct obj_data *obj = read_object(31714, VIRTUAL);
       obj_to_char(obj, ch);
       GET_NUYEN(ch) -= amount;
-      return TRUE; */
+      return TRUE;
     }
   }
   return FALSE;
@@ -3754,6 +3760,7 @@ SPECIAL(portable_gridguide)
   return FALSE;
 }
 
+#define PAINTER_COST 20000
 SPECIAL(painter)
 {
   struct veh_data *veh = NULL;
@@ -3774,27 +3781,32 @@ SPECIAL(painter)
     }
   if (!CMD_IS("paint"))
     return FALSE;
+  if (IS_NPC(ch)) {
+    send_to_char("You're having a hard time getting the painter's attention.\r\n", ch);
+    return TRUE;
+  }
   skip_spaces(&argument);
   if (!*argument) {
-    do_say(painter, "I'll paint any vehicle for 20000 nuyen upfront.", 0, 0);
+    snprintf(buf, sizeof(buf), "I'll paint any vehicle for %d nuyen upfront.", PAINTER_COST);
+    do_say(painter, buf, 0, 0);
     return TRUE;
   }
   if (world[real_painter_storage].vehicles) {
-    do_say(painter, "We're already working on someones ride, bring it back later.", 0, 0);
+    do_say(painter, "We're already working on someone's ride, bring it back later.", 0, 0);
     return TRUE;
   }
   if (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))
     do_say(painter, "What do you want me to paint?", 0, 0);
   else if (veh->owner != GET_IDNUM(ch))
     do_say(painter, "Bring me your own ride and I'll paint it.", 0, 0);
-  else if (GET_NUYEN(ch) < 20000)
+  else if (GET_NUYEN(ch) < PAINTER_COST)
     do_say(painter, "You don't have the nuyen for that.", 0, 0);
   else {
     veh->spare = time(0) + (SECS_PER_MUD_DAY * 3);
     ch->desc->edit_veh = veh;
     veh_from_room(veh);
     veh_to_room(veh, &world[real_painter_storage]);
-    GET_NUYEN(ch) -= 20000;
+    GET_NUYEN(ch) -= PAINTER_COST;
     snprintf(buf, sizeof(buf), "%s is wheeled into the painting booth.", GET_VEH_NAME(veh));
     act(buf, FALSE, painter, 0, 0, TO_ROOM);
     if (!veh->restring)
@@ -3807,6 +3819,7 @@ SPECIAL(painter)
   }
   return TRUE;
 }
+#undef PAINTER_COST
 
 SPECIAL(multnomah_gate)
 {
@@ -3819,7 +3832,7 @@ SPECIAL(multnomah_gate)
 
   if ((world[in_room].number == RM_MULTNOMAH_GATE_NORTH && CMD_IS("south")) || (world[in_room].number == RM_MULTNOMAH_GATE_SOUTH && CMD_IS("north"))) {
     if (!PLR_FLAGGED(ch, PLR_VISA)) {
-      send_to_char("The gate refuses to open for you.\r\n", ch);
+      send_to_char("The gate refuses to open for you. Try showing the guard your visa.\r\n", ch);
       return TRUE;
     } else if (ch->in_veh) {
       for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
@@ -3927,7 +3940,7 @@ SPECIAL(bouncer_gentle)
     return FALSE;
   
   struct char_data *bouncer = (struct char_data *) me;
-  if (!(PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)))
+  if (IS_NPC(ch) || (!PLR_FLAGGED(ch, PLR_KILLER) && !PLR_FLAGGED(ch, PLR_BLACKLIST)))
     return FALSE;
   int toroom = -1, dir_index;
   
@@ -3962,7 +3975,7 @@ SPECIAL(bouncer_troll)
     return FALSE;
 
   struct char_data *troll = (struct char_data *) me;
-  if (!(PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)))
+  if (IS_NPC(ch) || !(PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)))
     return FALSE;
   int toroom = -1;
   char *dir = NULL, *dir2 = str_dup("nothing");

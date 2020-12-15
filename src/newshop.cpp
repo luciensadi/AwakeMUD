@@ -82,10 +82,15 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
     do_say(keeper, "I don't trade with someone I can't see.", cmd_say, 0);
     return FALSE;
   }
-  if (IS_PROJECT(ch))
+  if (IS_PROJECT(ch)) {    
+    send_to_char("You're having a hard time getting the shopkeeper's attention.\r\n", ch);
     return FALSE;
-  if (IS_NPC(ch) || access_level(ch, LVL_BUILDER))
-    return TRUE;
+  }
+    
+  if (IS_NPC(ch) || access_level(ch, LVL_BUILDER)) {
+    return FALSE;
+  }
+  
   if ((shop_table[shop_nr].races.IsSet(RACE_HUMAN) && GET_RACE(ch) == RACE_HUMAN) ||
       (shop_table[shop_nr].races.IsSet(RACE_ELF) && (GET_RACE(ch) == RACE_ELF ||
           GET_RACE(ch) == RACE_WAKYAMBI || GET_RACE(ch) == RACE_NIGHTONE ||
@@ -692,6 +697,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
 void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
 {
   char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
+  
   if (!is_open(keeper, shop_nr))
     return;
   if (!is_ok_char(keeper, ch, shop_nr))

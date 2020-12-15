@@ -2955,14 +2955,18 @@ struct obj_data *read_object(int nr, int type)
   return obj;
 }
 
+SPECIAL(traffic);
 void spec_update(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   int i;
   char empty_argument = '\0';
+  
+  // Instead of calculating the random number for every traffic room, just calc once.
+  bool will_traffic = (number(0, 6) == 1);
 
   for (i = 0; i <= top_of_world; i++)
-    if (world[i].func != NULL)
+    if (world[i].func != NULL && (will_traffic || world[i].func != traffic))
       world[i].func (NULL, world + i, 0, &empty_argument);
 
   ObjList.CallSpec();
@@ -3133,8 +3137,7 @@ void reset_zone(int zone, int reboot)
           veh->usedload += load;
           veh->sig -= sig;
 
-          if (veh->mount)
-            obj->next_content = veh->mount;
+          obj->next_content = veh->mount;
           veh->mount = obj;
         }
         
@@ -4582,6 +4585,8 @@ void load_saved_veh()
             }
           if (last_obj)
             obj_to_obj(obj, last_obj);
+          else
+            obj_to_veh(obj, veh);
         } else
           obj_to_veh(obj, veh);
         last_in = inside;
