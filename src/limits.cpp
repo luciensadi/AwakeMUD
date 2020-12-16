@@ -35,6 +35,7 @@
 #include "newmagic.h"
 #include "newmail.h"
 #include <sys/time.h>
+#include "config.h"
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
@@ -195,37 +196,51 @@ void set_pretitle(struct char_data * ch, const char *title)
   GET_PRETITLE(ch) = get_new_kosherized_title(title, MAX_TITLE_LENGTH);
 }
 
-int gain_exp(struct char_data * ch, int gain, bool rep)
-{
+// The centralized karma gain func. Includes code in support of multipliers.
+int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool multiplier)
+{  
   if (IS_PROJECT(ch))
     ch = ch->desc->original;
-  int max_gain, old = (int)(GET_KARMA(ch) / 100);
+    
+  int old = (int)(GET_KARMA(ch) / 100);
+  
+  // Non-NPC level 0? Not sure how that's a thing. Also, staff get no karma.
   if (!IS_NPC(ch) && ((GET_LEVEL(ch) < 1 || IS_SENATOR(ch))))
     return 0;
   
-  if (IS_NPC(ch))
-  {
+  // NPCs have a standard gain formula, no frills. No multiplier either.
+  if (IS_NPC(ch)) {
     GET_KARMA(ch) += (int)(gain / 10);
     return (int)(gain / 10);
   }
   
-  if ( GET_TKE(ch) >= 0 && GET_TKE(ch) < 100 )
-  {
-    max_gain = 20;
-  } else if ( GET_TKE(ch) >= 100 && GET_TKE(ch) < 500 )
-  {
-    max_gain = 30;
-  } else
-  {
-    max_gain = GET_TKE(ch)/4;
-  }
+  // If we've gotten here, it's a player. Mult it up.
+  if (multiplier)
+    gain *= KARMA_GAIN_MULTIPLIER;
   
-  if (gain > 0)
-  {
-    gain = MIN(max_gain, gain); /* put a cap on the max gain per kill */
+  if (gain != 0) {
+    if (limits) {
+      if (GET_TKE(ch) >= 0 && GET_TKE(ch) < 100) {
+        gain = MIN(MAX_NEWCHAR_GAIN, gain);
+      } else if (GET_TKE(ch) >= 100 && GET_TKE(ch) < 500) {
+        gain = MIN(MAX_MIDCHAR_GAIN, gain);
+      } else {
+        gain = MIN(MAX_OLDCHAR_GAIN, gain);
+      }
+    }
+    
+    if (gain < 0) {
+      char message_buf[500];
+      snprintf(message_buf, sizeof(message_buf), 
+               "Info: gain_karma processing negative karma amount %d for %s.", 
+               gain, GET_CHAR_NAME(ch));
+      mudlog(message_buf, ch, LOG_SYSLOG, TRUE);
+    }
     
     GET_KARMA(ch) += gain;
+    
     GET_TKE(ch) += (int)(GET_KARMA(ch) / 100) - old;
+    
     if (rep)
       GET_REP(ch) += (int)(GET_KARMA(ch) / 100) - old;
     else
@@ -233,27 +248,6 @@ int gain_exp(struct char_data * ch, int gain, bool rep)
   }
   
   return gain;
-}
-
-void gain_exp_regardless(struct char_data * ch, int gain)
-{
-  if (IS_PROJECT(ch))
-    ch = ch->desc->original;
-  int old = (int)(GET_KARMA(ch) / 100);
-  
-  if (!IS_NPC(ch))
-  {
-    GET_KARMA(ch) += gain;
-    if (GET_KARMA(ch) < 0)
-      GET_KARMA(ch) = 0;
-    GET_TKE(ch) += (int)(GET_KARMA(ch) / 100) - old;
-    GET_REP(ch) += (int)(GET_KARMA(ch) / 100) - old;
-  } else
-  {
-    GET_KARMA(ch) += gain;
-    if (GET_KARMA(ch) < 0)
-      GET_KARMA(ch) = 0;
-  }
 }
 
 // only the pcs should need to access this

@@ -42,6 +42,7 @@ using namespace std;
 #include "newmagic.h"
 #include "list.h"
 #include "newdb.h"
+#include "config.h"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;

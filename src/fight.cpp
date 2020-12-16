@@ -781,7 +781,7 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
   if ( !PLR_FLAGGED(ch, PLR_NEWBIE) )
     share /= 2;
   
-  share = gain_exp(ch, share, 0);
+  share = gain_karma(ch, share, FALSE, TRUE, TRUE);
   
   if ( share >= 100 || access_level(ch, LVL_BUILDER) )
   {
@@ -2461,7 +2461,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
           group_gain(ch, victim);
         } else {
           exp = calc_karma(ch, victim);
-          exp = gain_exp(ch, exp, 0);
+          exp = gain_karma(ch, exp, FALSE, TRUE, TRUE);
           if ( exp >= 100 || access_level(ch, LVL_BUILDER) ) {
             snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s.",
                     IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch),

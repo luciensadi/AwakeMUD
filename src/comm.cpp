@@ -66,6 +66,7 @@ typedef SOCKET  socket_t;
 #include "limits.h"
 #include "protocol.h"
 #include "perfmon.h"
+#include "config.h"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -1490,7 +1491,6 @@ int new_descriptor(int s)
   struct descriptor_data *newd;
   struct sockaddr_in peer;
   struct hostent *from;
-  extern char *GREETINGS;
   
   /* accept the new connection */
   i = sizeof(peer);

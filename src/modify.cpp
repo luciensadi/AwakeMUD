@@ -30,6 +30,7 @@
 #include "constants.h"
 #include "newdb.h"
 #include "helpedit.h"
+#include "config.h"
 
 #define DO_FORMAT_INDENT   1
 #define DONT_FORMAT_INDENT 0

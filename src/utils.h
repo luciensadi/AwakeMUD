@@ -149,8 +149,7 @@ void    advance_level(struct char_data *ch);
 void    set_title(struct char_data *ch, const char *title);
 void    set_pretitle(struct char_data *ch, const char *title);
 void    set_whotitle(struct char_data *ch, const char *title);
-int     gain_exp(struct char_data *ch, int gain, bool rep);
-void    gain_exp_regardless(struct char_data *ch, int gain);
+int     gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool multiplier);
 void    gain_condition(struct char_data *ch, int condition, int value);
 void    update_pos(struct char_data *victim);
 

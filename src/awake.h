@@ -2141,26 +2141,11 @@ enum {
 
 #define OBJ_BLANK_MAGAZINE          127
 
-/* ban struct */
-struct ban_list_element
-{
-  char site[BANNED_SITE_LENGTH+1];
-  int  type;
-  time_t date;
-  char name[MAX_NAME_LENGTH+1];
-  struct ban_list_element *next;
-};
-
-// Above this, you will lose the newbie flag.
-#define NEWBIE_KARMA_THRESHOLD     25
-
 // Misc defines from spec_procs.cpp
 #define LIBRARY_SKILL    3
 #define NEWBIE_SKILL    6
 #define NORMAL_MAX_SKILL  8
 #define LEARNED_LEVEL    12
-#define MAX_SKILL_LEVEL_FOR_MORTS  LEARNED_LEVEL
-#define MAX_SKILL_LEVEL_FOR_IMMS   100
 #define RENT_FACTOR 1
 
 // Definitions for message history.
@@ -2265,13 +2250,5 @@ struct ban_list_element
 #define VEH_DAM_THRESHOLD_SEVERE    6
 #define VEH_DAM_THRESHOLD_DESTROYED 10
 #define VEH_DAMAGE_NEEDS_WORKSHOP   7
-
-// How many syspoints should someone spend to restring an item?
-#define SYSP_RESTRING_COST                                        2
-
-// How long should the MUD wait for recovery before killing itself? Note that it
-// considers itself to be stuck during copyover too, so if you have a large world,
-// you should increase this value.
-#define SECONDS_TO_WAIT_FOR_HUNG_MUD_TO_RECOVER_BEFORE_KILLING_IT 20
 
 #endif

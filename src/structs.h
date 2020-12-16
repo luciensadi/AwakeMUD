@@ -1157,4 +1157,14 @@ struct preference_bit_struct {
   bool on_off;      // true for ONOFF, false for YESNO
 };
 
+/* ban struct */
+struct ban_list_element
+{
+  char site[BANNED_SITE_LENGTH+1];
+  int  type;
+  time_t date;
+  char name[MAX_NAME_LENGTH+1];
+  struct ban_list_element *next;
+};
+
 #endif

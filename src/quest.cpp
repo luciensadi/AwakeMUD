@@ -544,9 +544,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
       if (AFF_FLAGGED(f->follower, AFF_GROUP) && !(rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch)))) {
         old = (int)(GET_KARMA(f->follower) / 100);
         GET_NUYEN(f->follower) += nuyen;
-        GET_KARMA(f->follower) += karma;
-        GET_REP(f->follower) += (int)(GET_KARMA(f->follower) / 100) - old;
-        GET_TKE(f->follower) += (int)(GET_KARMA(f->follower) / 100) - old;
+        gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
         send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) karma * 0.01, nuyen, GET_CHAR_NAME(ch));
       } else {
         send_to_char(ch, "^y(OOC note: %s didn't meet the qualifications for this run, so %s didn't get a cut of the pay.)^n\r\n",
@@ -556,9 +554,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
   }
   old = (int)(GET_KARMA(ch) / 100);
   GET_NUYEN(ch) += nuyen;
-  GET_KARMA(ch) += karma;
-  GET_REP(ch) += (int)(GET_KARMA(ch) / 100) - old;
-  GET_TKE(ch) += (int)(GET_KARMA(ch) / 100) - old;
+  gain_karma(ch, karma, TRUE, FALSE, TRUE);
   act("$n gives some nuyen to $N.", TRUE, johnson, 0, ch, TO_NOTVICT);
   act("You give some nuyen to $N.", TRUE, johnson, 0, ch, TO_CHAR);
   snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", nuyen);

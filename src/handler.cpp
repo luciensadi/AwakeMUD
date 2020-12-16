@@ -27,12 +27,7 @@
 #include "newmatrix.h"
 #include "newmagic.h"
 #include "playergroups.h"
-
-// memory object
-
-/* external vars */
-extern char *MENU;
-extern char *QMENU;
+#include "config.h"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
