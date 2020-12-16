@@ -249,21 +249,23 @@ ACMD(do_oocdisable)
 ACMD(do_zecho)
 {
   struct descriptor_data *d;
+  struct room_data *room;
 
   skip_spaces(&argument);
 
   if (!*argument)
     send_to_char(ch, "Yes, but WHAT do you like to zecho?\r\n");
   else {
+    room = get_ch_in_room(ch);
     act(argument, FALSE, ch, 0, 0, TO_CHAR);
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected && d->character && d->character != ch)
-        if (zone_table[d->character->in_room->zone].number == zone_table[ch->in_room->zone].number &&
+        if (zone_table[get_ch_in_room(d->character)->zone].number == zone_table[room->zone].number &&
             !(subcmd == SCMD_AECHO && !(IS_ASTRAL(d->character) || IS_DUAL(d->character))))
           act(argument, FALSE, d->character, 0, 0, TO_CHAR);
     snprintf(buf, sizeof(buf), "%s zechoed %s in zone #%d",
             GET_CHAR_NAME(ch), argument,
-            zone_table[ch->in_room->zone].number);
+            zone_table[room->zone].number);
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
   }
 }
@@ -309,9 +311,15 @@ ACMD(do_echo)
     }
 
     if (subcmd == SCMD_AECHO) {
-      for (vict = ch->in_room->people; vict; vict = vict->next_in_room)
-        if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
-          act(buf, FALSE, ch, 0, vict, TO_VICT);
+      if (ch->in_room) {
+        for (vict = ch->in_room->people; vict; vict = vict->next_in_room)
+          if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
+            act(buf, FALSE, ch, 0, vict, TO_VICT);
+      } else {
+        for (vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
+          if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
+            act(buf, FALSE, ch, 0, vict, TO_VICT);
+      }
     } else {
       if (PLR_FLAGGED(ch, PLR_MATRIX))
         send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
@@ -425,7 +433,7 @@ ACMD(do_echo)
 
     if ( subcmd == SCMD_ECHO || subcmd == SCMD_AECHO) {
       snprintf(buf2, sizeof(buf2), "%s echoed %s at #%ld",
-              GET_CHAR_NAME(ch), buf, GET_ROOM_VNUM(ch->in_room));
+              GET_CHAR_NAME(ch), buf, ch->in_room ? GET_ROOM_VNUM(ch->in_room) : -1);
       mudlog(buf2, ch, LOG_WIZLOG, TRUE);
     }
   }
@@ -751,7 +759,11 @@ ACMD(do_vteleport)
     send_to_char("Where do you wish to send this vehicle?\r\n", ch);
   else if ((target = find_target_room(ch, buf2))) {
     snprintf(buf, sizeof(buf), "%s drives off into the sunset.\r\n", GET_VEH_NAME(veh));
-    send_to_room(buf, veh->in_room);
+    if (veh->in_room) {
+      send_to_room(buf, veh->in_room);
+    } else if (veh->in_veh) {
+      send_to_veh(buf, veh->in_veh, ch, FALSE);
+    }
     veh_from_room(veh);
     veh_to_room(veh, target);
     snprintf(buf, sizeof(buf), "%s screeches suddenly into the area.\r\n", GET_VEH_NAME(veh));
@@ -1971,7 +1983,7 @@ ACMD(do_purge)
   extern void die_follower(struct char_data * ch);
 
   if (!access_level(ch, LVL_EXECUTIVE) &&
-      (ch->in_room && (ch->player_specials->saved.zonenum != zone_table[ch->in_room->zone].number))) {
+      (ch->player_specials->saved.zonenum != zone_table[get_ch_in_room(ch)->zone].number)) {
     send_to_char("You can only purge in your zone.\r\n", ch);
     return;
   }
