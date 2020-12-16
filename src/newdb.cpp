@@ -22,6 +22,7 @@
 #include "constants.h"
 #include "interpreter.h" // for alias
 #include "config.h"
+#include "bullet_pants.h"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -821,7 +822,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
             break;
           case ITEM_GUN_AMMO:
             // Process weight.
-            GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
+            GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
             break;
         }
         inside = atoi(row[17]);

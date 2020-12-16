@@ -31,4 +31,7 @@ const char *get_ammobox_default_restring(struct obj_data *ammobox);
 bool have_bullet_pants_table();
 bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapon, int ammotype);
 
+float get_ammo_weight(int weapontype, int ammotype);
+int get_ammo_cost(int weapontype, int ammotype);
+
 #endif

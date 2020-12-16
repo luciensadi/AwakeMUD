@@ -43,6 +43,7 @@ using namespace std;
 #include "list.h"
 #include "newdb.h"
 #include "config.h"
+#include "bullet_pants.h"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -1734,6 +1735,21 @@ struct obj_data *get_mount_weapon(struct obj_data *mount) {
   return NULL;
 }
 
+// Retrieve the ammobox from a given mount.
+struct obj_data *get_mount_ammo(struct obj_data *mount) {
+  if (mount == NULL) {
+    mudlog("SYSERR: Attempting to retrieve weapon for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  for (struct obj_data *contains = mount->contains; contains; contains = contains->next_content) {
+    if (GET_OBJ_TYPE(contains) == ITEM_GUN_AMMO)
+      return contains;
+  }
+  
+  return NULL;
+}
+
 // Cleans up after a character who was manning a mount.
 struct obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message) {
   if (AFF_FLAGGED(ch, AFF_MANNING)) {
@@ -2838,7 +2854,7 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
   weight_change_object(ammobox, ammo_type[GET_AMMOBOX_TYPE(ammobox)].weight * amount);
   
   // Calculate cost as count * multiplier (multiplier is per round)
-  GET_OBJ_COST(ammobox) = GET_AMMOBOX_QUANTITY(ammobox) * ammo_type[GET_AMMOBOX_TYPE(ammobox)].cost;
+  GET_OBJ_COST(ammobox) = GET_AMMOBOX_QUANTITY(ammobox) * get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox));
   
   // Update the carrier's carry weight.
   if (ammobox->carried_by) {

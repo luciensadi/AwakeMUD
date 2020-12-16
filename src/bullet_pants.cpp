@@ -271,7 +271,7 @@ ACMD(do_pockets) {
       }
       
       // Make sure they can carry it. We don't do this check for already-carried boxes.
-      if (ammobox && (IS_CARRYING_W(ch) + (quantity * ammo_type[ammotype].weight)) > CAN_CARRY_W(ch)) {
+      if (ammobox && (IS_CARRYING_W(ch) + (quantity * get_ammo_weight(weapon, ammotype))) > CAN_CARRY_W(ch)) {
         send_to_char("You can't carry that much weight.\r\n", ch);
         return;
       }
@@ -471,7 +471,7 @@ float get_bulletpants_weight(struct char_data *ch) {
   
   for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
     for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
-      weight += GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) * ammo_type[am].weight;
+      weight += GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) * get_ammo_weight(wp, am);
   
   return weight;
 }
@@ -768,6 +768,24 @@ struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapont
   return ammobox;
 }
 
+float get_ammo_weight(int weapontype, int ammotype) {
+  // SR3 p281
+  if (weapontype == WEAP_CANNON) {
+    return 0.125;
+  }
+  
+  return ammo_type[ammotype].weight;
+}
+
+int get_ammo_cost(int weapontype, int ammotype) {
+  // SR3 p281
+  if (weapontype == WEAP_CANNON) {
+    return 45;
+  }
+  
+  return ammo_type[ammotype].cost;
+}
+
 // Shorthand for various weapon types. "" for nothing.
 const char *weapon_type_aliases[] =
 {
@@ -809,8 +827,7 @@ int npc_ammo_usage_preferences[] = {
 // things left to implement:
 /* 
  - reloading of mounted weapons (this code is probably totes broken right now)
- - staff bullet pants set command mode
+ - staff bullet pants set command mode (just use force)
  - write pockets help file
- - add ability to split apart ammo boxes
- - fix weight of assault cannon rounds-- should be much higher
+ - add ability to split apart ammo boxes (just do it through pockets)
 */

@@ -913,8 +913,8 @@ void save_vehicles(void)
       
       // No temp room means it's towed. Yolo it into the Seattle garage.
       if (!temp_room) {
-        snprintf(buf, sizeof(buf), "Falling back to Seattle garage for non-veh, non-room veh %s.", GET_VEH_NAME(veh));
-        log(buf);
+        // snprintf(buf, sizeof(buf), "Falling back to Seattle garage for non-veh, non-room veh %s.", GET_VEH_NAME(veh));
+        // log(buf);
         temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
       }
 
@@ -1017,17 +1017,23 @@ void save_vehicles(void)
     fprintf(fl, "[MOUNTS]\n");
     int m = 0;
     for (obj = veh->mount; obj; obj = obj->next_content, m++) {
+      struct obj_data *ammo = NULL;
+      struct obj_data *gun = NULL;
+      
       fprintf(fl, "\t[Mount %d]\n", m);
       fprintf(fl, "\t\tMountNum:\t%ld\n", GET_OBJ_VNUM(obj));
-      fprintf(fl, "\t\tAmmo:\t%d\n", GET_OBJ_VAL(obj, 9));
-      if (obj->contains) {
-        fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(obj->contains));
-        fprintf(fl, "\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj->contains));
-        if (obj->restring)
-          fprintf(fl, "\t\tName:\t%s\n", obj->contains->restring);
+      if ((ammo = get_mount_ammo(obj)) && GET_AMMOBOX_QUANTITY(ammo) > 0) {
+        fprintf(fl, "\t\tAmmo:\t%d\n", GET_AMMOBOX_QUANTITY(ammo));
+        fprintf(fl, "\t\tAmmoType:\t%d\n", GET_AMMOBOX_TYPE(ammo));
+        fprintf(fl, "\t\tAmmoWeap:\t%d\n", GET_AMMOBOX_WEAPON(ammo));
+      }
+      if ((gun = get_mount_weapon(obj))) {
+        fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(gun));
+        fprintf(fl, "\t\tCondition:\t%d\n", GET_OBJ_CONDITION(gun));
+        if (gun->restring)
+          fprintf(fl, "\t\tName:\t%s\n", gun->restring);
         for (int x = 0; x < NUM_VALUES; x++)
-          fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj->contains, x));
-        
+          fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(gun, x));
       }
     }
     fprintf(fl, "[GRIDGUIDE]\n");

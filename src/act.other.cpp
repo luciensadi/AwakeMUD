@@ -1446,16 +1446,13 @@ ACMD(do_reload)
     // Process mount reloading.
     if (veh && m) {
       // Iterate over the mount and look for its weapon and ammo box.
-      for (struct obj_data *search = m->contains; search; search = search->next_content)
-        if (GET_OBJ_TYPE(search) == ITEM_WEAPON)
-          gun = search;
-        else if (GET_OBJ_TYPE(search) == ITEM_GUN_AMMO)
-          ammo = search;
           
-      if (!gun) {
+      if (!(gun = get_mount_weapon(m))) {
         send_to_char("There is no weapon attached to that mount.\r\n", ch);
         return;
       }
+      
+      ammo = get_mount_ammo(m);
       
       for (i = ch->carrying; i; i = i->next_content) {
         if (GET_OBJ_TYPE(i) == ITEM_GUN_AMMO &&
@@ -1464,9 +1461,12 @@ ACMD(do_reload)
           
           // Reload an ammo box directly.
           if (ammo) {
-            if (GET_AMMOBOX_WEAPON(i) != GET_AMMOBOX_WEAPON(ammo) || 
-                GET_AMMOBOX_TYPE(i) != GET_AMMOBOX_TYPE(ammo)) {
-              send_to_char("You cannot mix ammunition types in ammunition bins.\r\n", ch);
+            if (GET_AMMOBOX_QUANTITY(ammo) > 0
+                && (GET_AMMOBOX_WEAPON(i) != GET_AMMOBOX_WEAPON(ammo) || 
+                    GET_AMMOBOX_TYPE(i) != GET_AMMOBOX_TYPE(ammo))) {
+              send_to_char(ch, "You cannot mix ammunition types in ammunition bins. The bin is currently loaded with %s, while you're using %s.\r\n", 
+                           get_ammo_representation(GET_AMMOBOX_WEAPON(ammo), GET_AMMOBOX_TYPE(ammo), 0),
+                           get_ammo_representation(GET_AMMOBOX_WEAPON(i), GET_AMMOBOX_TYPE(i), 0));
               return;
             }
             max -= GET_AMMOBOX_QUANTITY(ammo);
@@ -1478,27 +1478,30 @@ ACMD(do_reload)
               max = MIN(max, GET_AMMOBOX_QUANTITY(i));
               update_ammobox_ammo_quantity(ammo, max);
               update_ammobox_ammo_quantity(i, -max);
+              GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
+              GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
               send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
               return;
             }            
           } 
           
-          // No ammo box-- reload the gun itself.
+          // No ammo box-- add a new one.
           else {
             max = MIN(max, GET_AMMOBOX_QUANTITY(i));
             ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
-            obj_to_obj(ammo, m);
             GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
             GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
+            GET_AMMOBOX_QUANTITY(ammo) = 0;
             update_ammobox_ammo_quantity(ammo, max);
             update_ammobox_ammo_quantity(i, -max);
+            obj_to_obj(ammo, m);
             send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
             return;
           }
         }
       }
 
-      send_to_char("You don't have the right ammunition for that mount.\r\n", ch); 
+      send_to_char("You don't have an ammobox containing the right ammunition for that mount.\r\n", ch); 
       return;
     } /* End of mount evaluation. */
   } /* end of mounts */
@@ -1733,6 +1736,13 @@ ACMD(do_unattach)
         act("$n removes $p from $P.", FALSE, ch, gun, item, TO_ROOM);
         // TODO: Will this cause the vehicle load to go negative in the case of a gun ammo box?
         veh->usedload -= GET_OBJ_WEIGHT(gun);
+        
+        while (item->contains) {
+          struct obj_data *removed_thing = item->contains;
+          obj_from_obj(removed_thing);
+          obj_to_char(removed_thing, ch);
+          send_to_char(ch, "You also remove %s from %s.\r\n", GET_OBJ_NAME(removed_thing), GET_OBJ_NAME(item));
+        }
       } else
         send_to_char(ch, "You can't seem to hold it.\r\n");
     }

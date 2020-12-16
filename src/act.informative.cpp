@@ -37,6 +37,7 @@ using namespace std;
 #include "quest.h"
 #include "transport.h"
 #include "newdb.h"
+#include "bullet_pants.h"
 
 const char *CCHAR;
 
@@ -204,12 +205,15 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     else {
       // Gun magazines get special consideration.
       if (GET_OBJ_TYPE(object) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_MAXAMMO(object)) {
-        snprintf(buf, sizeof(buf), "A%s %d-round %s %s magazine has been left here.",
+        snprintf(buf, sizeof(buf), "^gA%s %d-round %s %s magazine has been left here.^n",
           GET_MAGAZINE_AMMO_COUNT(object) <= 0 ? "n empty" : "",
           GET_MAGAZINE_BONDED_MAXAMMO(object),
           ammo_type[GET_MAGAZINE_AMMO_TYPE(object)].name,
           weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(object)]
         );
+      // As do ammo boxes.
+      } else if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO) {
+        snprintf(buf, sizeof(buf), "^gA metal box of %s has been left here.^n", get_ammo_representation(GET_AMMOBOX_WEAPON(object), GET_AMMOBOX_TYPE(object), 0));
       } else {
         strcat(buf, object->text.room_desc);
       }
