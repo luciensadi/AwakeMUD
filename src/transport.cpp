@@ -73,7 +73,7 @@ struct dest_data taxi_destinations[] =
   { "airport", "Seattle-Tacoma Airport", 19410, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "tarislar", "Tarislar", 4965, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "tacoma", "Tacoma", 2000, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
-  { "twe", "Tacoma Weapons Emporium", 2514, TAXI_DEST_TYPE_SHOPPING, TRUE },
+  { "TWE", "Tacoma Weapons Emporium", 2514, TAXI_DEST_TYPE_SHOPPING, TRUE },
   // TODO: Stopped alphabetizing by title here.
     // { "vieux", "Le Cinema Vieux", 32588 },
     { "big", "The Big Rhino", 32635, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
@@ -81,7 +81,7 @@ struct dest_data taxi_destinations[] =
     { "yoshi", "Yoshi's Sushi Bar", 32751, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "garage", "Seattle Parking Garage", 32720, TAXI_DEST_TYPE_OTHER , TRUE },
     { "formal", "Seattle Formal Wear", 32746, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "sda", "The SDA Plaza", 30610, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
+    { "SDA", "The SDA Plaza", 30610, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
     { "dante", "Dante's Inferno", 32661, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "quinns", "Quinn's", 32521, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "shintaru", "Shintaru", 32513, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
@@ -680,6 +680,8 @@ SPECIAL(taxi)
         comm = CMD_TAXI_YES;
       } else if (str_str(argument, "no") || str_str(argument, "nah") || str_str(argument, "negative")) {
         comm = CMD_TAXI_NO;
+      } else if (GET_TKE(ch) < 100){
+        send_to_char("(OOC note: The cabbie didn't recognize that. Try using a keyword from the sign, or 'yes' or 'no' to accept or decline the offer.)\r\n", ch);
       }
     }
     do_say(ch, argument, 0, 0);
