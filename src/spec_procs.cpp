@@ -3000,9 +3000,16 @@ const char *traffic_messages[] = {
   "A few sporadic pops of gunfire sound from somewhere in the distance.\r\n",
   "The stench of garbage wafts from somewhere nearby.\r\n",
   "A harried-looking salaryman hurries by.\r\n",
-  "A backfiring Ford-Canada Bison splutters past.\r\n" // 35
+  "A backfiring Ford-Canada Bison splutters past.\r\n", // 35
+  "A sleek ^rred^n roto-drone zips past.\r\n",
+  "A crumpled-up plastic bag skitters past, carried by the wind.\r\n",
+  "A poised and confident executive strides past, talking on her phone.\r\n",
+  "An annoying-ass teen on a scooter does a drive-by on you with a squirt gun.\r\n",
+  "A billboard nearby flickers with an ad for ^RChernobyl Vodka^n.\r\n", // 40
+  "A billboard nearby displays an ad for ^rBrimstone ^RRed^n Ale^n.\r\n",
+  "The greasy scent of fast food is carried to you on the breeze.\r\n"
 };
-#define NUM_TRAFFIC_MESSAGES 36
+#define NUM_TRAFFIC_MESSAGES 43
 
 SPECIAL(traffic)
 {
