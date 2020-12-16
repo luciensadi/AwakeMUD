@@ -798,6 +798,7 @@ SPECIAL(johnson)
       // Precondition: You must have gotten the quest from me.
       if (!memory(johnson, ch)) {
         do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
+        send_to_char("(OOC note: You can hit RECAP to see who gave you your current job.)\r\n", ch);
         return TRUE;
       }
       
@@ -827,6 +828,7 @@ SPECIAL(johnson)
       // Precondition: You must have gotten the quest from me.
       if (!memory(johnson, ch)) {
         do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
+        send_to_char("(OOC note: You can hit RECAP to see who gave you your current job.)\r\n", ch);
         return TRUE;
       }
       
@@ -869,6 +871,7 @@ SPECIAL(johnson)
       // Precondition: You may not have an active quest.
       if (GET_QUEST(ch)) {
         do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
+        send_to_char("(OOC note: You're currently on another run. You can hit RECAP to see the details for it.)\r\n", ch);
         return TRUE;
       }
       
@@ -930,6 +933,7 @@ SPECIAL(johnson)
       // Precondition: You may not have an active quest.
       if (GET_QUEST(ch)) {
         do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
+        send_to_char("(OOC note: You're currently on another run. You can hit RECAP to see the details for it.)\r\n", ch);
         return TRUE;
       }
       

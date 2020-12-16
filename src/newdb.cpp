@@ -1958,15 +1958,18 @@ void idle_delete()
     log("IDLEDELETE- Could not open extra socket, aborting");
     return;
   }
-  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE lastd <= %ld AND nodelete = 0 ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50));
+  snprintf(buf, sizeof(buf), "SELECT idnum, lastd, tke FROM pfiles WHERE lastd <= %ld AND nodelete = 0 AND name != 'deleted' ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50));
   mysql_wrapper(mysqlextra, buf);
   MYSQL_RES *res = mysql_use_result(mysqlextra);
   MYSQL_ROW row;
   while ((row = mysql_fetch_row(res))) {
 #ifndef IDLEDELETE_DRYRUN
-		// TODO: Wipe out character's vehicles.
-    DeleteChar(atol(row[0]));
-    deleted++;
+		// TODO: Increase idle deletion leniency time by their TKE.
+    int tke = atoi(row[2]);
+    if (lastd < (time(0) - (SECS_PER_REAL_DAY * 50) - (SECS_PER_REAL_DAY * tke / 10))) {
+      DeleteChar(atol(row[0]));
+      deleted++;
+    }
 #else
     log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
 #endif

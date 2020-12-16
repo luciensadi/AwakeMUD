@@ -3874,8 +3874,8 @@ SPECIAL(multnomah_guard)
         snprintf(arg, sizeof(arg), "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
         do_say(guard, arg, 0, SCMD_SAYTO);
       } else {
-        snprintf(arg, sizeof(arg), "%s Get out of here, before we arrest you.", GET_CHAR_NAME(ch));
-        extract_obj(visa);
+        snprintf(arg, sizeof(arg), "%s That's not your visa. Get out of here before we arrest you.", GET_CHAR_NAME(ch));
+        // extract_obj(visa);  -- why do this? Punishing people for having the wrong visa is no bueno.
         do_say(guard, arg, 0, SCMD_SAYTO);
       }
       return TRUE;

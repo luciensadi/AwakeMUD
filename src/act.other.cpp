@@ -663,14 +663,15 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj)
         GET_DRUG_EDGE(ch, drugval)++;
         AFF_FLAGS(ch).RemoveBits(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT);
       }
+      // Drug tick is every 2 seconds (a MUD minute), so most of these were over in a flash. Let's crank it up so that these values are in IRL minutes instead.
       switch (drugval) {
       case DRUG_PSYCHE:
       case DRUG_CRAM:
       case DRUG_BURN:
-        GET_DRUG_DURATION(ch) = 50;
+        GET_DRUG_DURATION(ch) = 50 * (60 / SECS_PER_MUD_MINUTE); 
         break;
       case DRUG_ZEN:
-        GET_DRUG_DURATION(ch) = 25 * srdice();
+        GET_DRUG_DURATION(ch) = 25 * srdice() * (60 / SECS_PER_MUD_MINUTE);
         break;
       default:
         GET_DRUG_DURATION(ch) = 0;

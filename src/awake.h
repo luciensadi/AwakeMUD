@@ -2113,7 +2113,7 @@ enum {
 
 // Objects, to remove the magic numbers from the code.
 #define OBJ_NEWBIE_RADIO            60531
-#define OBJ_MULTNOMAH_VISA          1
+#define OBJ_MULTNOMAH_VISA          17513
 #define OBJ_MAP_OF_SEATTLE          2041
 #define OBJ_ELEVATOR_SHAFT_KEY      998
 #define OBJ_DOCWAGON_BASIC_MOD      16206
