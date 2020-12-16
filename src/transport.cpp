@@ -121,6 +121,7 @@ struct dest_data taxi_destinations[] =
     { "touristville", "Touristville", 25313, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
     { "skeleton", "The Skeleton", 25308, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "junkyard",  "The Tacoma Junkyard", 2070, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
+    { "neophyte",  "The Neophyte Guild", 32679, TAXI_DEST_TYPE_OTHER, TRUE },
 #ifdef USE_PRIVATE_CE_WORLD
     { "planetary", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
 #endif
