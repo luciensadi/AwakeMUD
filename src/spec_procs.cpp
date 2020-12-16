@@ -5292,7 +5292,7 @@ SPECIAL(sombrero_bridge)
     if (!*argument)
       send_to_char("Who do you want to beam?\r\n", ch);
     else if (!(victim = get_char_vis(ch, argument)))
-      send_to_char("You can't see that person.\r\n", ch);
+      send_to_char(ch, "You can't see anyone named '%s'.\r\n", argument);
     else if (GET_ROOM_VNUM(victim->in_room) >= 1000 && GET_ROOM_VNUM(victim->in_room) <= 1099) {
       send_to_char("PZZZAAAAAAATTTT!!!!\r\n", victim);
       act("$n sparkles momentarily then fades from view.", FALSE, victim, 0, 0, TO_ROOM);

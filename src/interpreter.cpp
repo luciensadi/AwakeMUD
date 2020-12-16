@@ -420,6 +420,7 @@ struct command_info cmd_info[] =
     { "aecho"    , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO },
     { "accept"   , POS_LYING   , do_accept   , 0, 0 },
     { "addpoint" , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT },
+    { "affects"  , POS_LYING   , do_status   , 0, 0 },
     { "ammo"     , POS_LYING   , do_ammo     , 0, 0 },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
     { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0 },

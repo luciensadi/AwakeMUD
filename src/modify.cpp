@@ -494,7 +494,7 @@ ACMD(do_spellset)
   }
   
   if (!(vict = get_char_vis(ch, name))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", name);
     return;
   }
   
@@ -646,7 +646,7 @@ ACMD(do_skillset)
     return;
   }
   if (!(vict = get_char_vis(ch, name))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", name);
     return;
   }
   skip_spaces(&argument);

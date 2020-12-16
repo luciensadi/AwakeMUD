@@ -672,10 +672,10 @@ bool find_duplicate_spell(struct char_data *ch, struct char_data *vict, int spel
   return FALSE;
 }
 
-bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell)
+bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell, char *buf)
 {
   if (!vict)
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
   else if (((IS_PROJECT(ch) || IS_ASTRAL(ch)) && !(IS_DUAL(vict) || IS_ASTRAL(vict) || IS_PROJECT(vict))) ||
            ((IS_PROJECT(vict) || IS_ASTRAL(vict)) && !(IS_DUAL(ch) || IS_ASTRAL(ch) || IS_PROJECT(ch))))
     send_to_char("They aren't accessible from this plane.\r\n", ch);
@@ -751,7 +751,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   }
   if (*buf1)
     vict = get_char_room_vis(ch, buf1);
-  if (!check_spell_victim(ch, vict, spell))
+  if (!check_spell_victim(ch, vict, spell, buf1))
     return;
   if (ch == vict) {
     send_to_char("You can't target yourself with a combat spell!\r\n", ch);
@@ -878,7 +878,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
     vict = mob;
   else if (*arg)
     vict = get_char_room_vis(ch, arg);
-  if (!check_spell_victim(ch, vict, spell))
+  if (!check_spell_victim(ch, vict, spell, arg))
     return;
   if (find_duplicate_spell(ch, vict, spell, 0))
     return;
@@ -929,7 +929,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     vict = mob;
   else if (*arg)
     vict = get_char_room_vis(ch, arg);
-  if (!check_spell_victim(ch, vict, spell))
+  if (!check_spell_victim(ch, vict, spell, arg))
     return;
   if (find_duplicate_spell(ch, vict, spell, sub))
     return;
@@ -1111,7 +1111,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     {
     case SPELL_CONFUSION:
     case SPELL_CHAOS:
-      if (!check_spell_victim(ch, vict, spell))
+      if (!check_spell_victim(ch, vict, spell, arg))
         return;
       check_killer(ch, vict);
       if (spell == SPELL_CONFUSION)
@@ -1137,7 +1137,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       break;
     case SPELL_INVIS:
     case SPELL_IMP_INVIS:
-      if (!check_spell_victim(ch, vict, spell))
+      if (!check_spell_victim(ch, vict, spell, arg))
         return;
       success = success_test(skill, target + 4);
       if (success > 0) {
@@ -1149,7 +1149,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_STEALTH:
-      if (!check_spell_victim(ch, vict, spell))
+      if (!check_spell_victim(ch, vict, spell, arg))
         return;
       success = success_test(skill, target + 4);
       if (success > 0) {
@@ -1228,7 +1228,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   switch (spell)
   {
   case SPELL_ARMOUR:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     success = success_test(skill, target + 6);
     if (success > 0) {
@@ -1275,7 +1275,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_IGNITE:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (ch == vict) {
@@ -1317,7 +1317,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_CLOUT:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (!AWAKE(vict))
@@ -1366,7 +1366,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, basedamage);
     break;
   case SPELL_FLAMETHROWER:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (!AWAKE(vict))
@@ -1419,7 +1419,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   case SPELL_ACIDSTREAM:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (!AWAKE(vict))
@@ -1468,7 +1468,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   case SPELL_LIGHTNINGBOLT:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (!AWAKE(vict))
@@ -3594,7 +3594,7 @@ ACMD(do_track)
   two_arguments(argument, buf, buf1);
   if (!generic_find(buf,  FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
                     FIND_CHAR_ROOM, ch, &vict, &obj)) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see anything named '%s' here.", buf);
     return;
   }
   if (vict) {
@@ -3699,7 +3699,7 @@ ACMD(do_dispell)
   struct char_data *vict;
   two_arguments(argument, buf, buf2);
   if (!(vict = get_char_room_vis(ch, buf))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
     return;
   }
   int x = atoi(buf2);
@@ -3761,7 +3761,7 @@ ACMD(do_heal)
   else if (GET_POS(ch) == POS_FIGHTING)
     send_to_char(TOOBUSY, ch);
   else if (!(vict = get_char_room_vis(ch, arg)))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
   else if (GET_PHYSICAL(ch) <= 100)
     send_to_char("Succeeding in that task would surely kill you.\r\n", ch);
   else if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict))
@@ -3808,7 +3808,7 @@ ACMD(do_relieve)
   if (GET_POS(ch) == POS_FIGHTING)
     send_to_char(TOOBUSY, ch);
   else if (!(vict = get_char_room_vis(ch, argument)))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", argument);
   else if (GET_MENTAL(vict) == GET_MAX_MENTAL(vict))
     send_to_char("They don't need your help.\r\n", ch);
   else if (GET_POS(vict) > POS_LYING)
@@ -3941,7 +3941,7 @@ ACMD(do_subpoint)
   struct char_data *vict;
   skip_spaces(&argument);
   if (!(vict = get_char_vis(ch, argument)))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", argument);
   else if (GET_TRADITION(vict) != TRAD_ADEPT)
     send_to_char("You can only use this command on Adepts.\r\n", ch);
   else if (GET_PP(vict) <= 0)

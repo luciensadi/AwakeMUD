@@ -1884,7 +1884,7 @@ ACMD(do_drink)
   }
   if (!(temp = get_obj_in_list_vis(ch, arg, ch->carrying))) {
     if (!(temp = get_obj_in_list_vis(ch, arg, ch->in_room->contents))) {
-      send_to_char(NOOBJECT, ch);
+      send_to_char(ch, "You don't see anything named '%s' here.", arg);
       return;
     } else
       on_ground = 1;
@@ -2044,7 +2044,7 @@ ACMD(do_pour)
       return;
     }
     if (!(from_obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(NOOBJECT, ch);
+      send_to_char(ch, "You don't see anything named '%s' here.", arg1);
       return;
     }
     if (GET_OBJ_TYPE(from_obj) != ITEM_DRINKCON) {
@@ -2058,7 +2058,7 @@ ACMD(do_pour)
       return;
     }
     if (!(to_obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(NOOBJECT, ch);
+      send_to_char(ch, "You don't see anything named '%s' here.", arg1);
       return;
     }
     if (GET_OBJ_TYPE(to_obj) != ITEM_DRINKCON) {
@@ -2101,7 +2101,7 @@ ACMD(do_pour)
       return;
     }
     if (!(to_obj = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
-      send_to_char(NOOBJECT, ch);
+      send_to_char(ch, "You don't see anything named '%s' here.", arg2);
       return;
     }
     if ((GET_OBJ_TYPE(to_obj) != ITEM_DRINKCON) &&

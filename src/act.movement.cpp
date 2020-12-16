@@ -1446,7 +1446,7 @@ ACMD(do_drag)
   }
 
   if (!(vict = get_char_room_vis(ch, buf1))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", buf1);
     return;
   }
   if (AFF_FLAGGED(vict, AFF_BINDING)) {
@@ -1910,7 +1910,7 @@ ACMD(do_wake)
     if (GET_POS(ch) == POS_SLEEPING)
       send_to_char("You can't wake people up if you're asleep yourself!\r\n", ch);
     else if ((vict = get_char_room_vis(ch, arg)) == NULL)
-      send_to_char(NOPERSON, ch);
+      send_to_char(ch, "You don't see anyone named '%s' here.", arg);
     else if (vict == ch)
       self = 1;
     else if (GET_POS(vict) > POS_SLEEPING)
@@ -1963,7 +1963,7 @@ ACMD(do_follow)
 
   if (*buf) {
     if (!(leader = get_char_room_vis(ch, buf))) {
-      send_to_char(NOPERSON, ch);
+      send_to_char(ch, "You don't see anyone named '%s' here.", buf);
       return;
     }
   } else {

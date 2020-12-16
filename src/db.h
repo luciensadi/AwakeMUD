@@ -247,13 +247,9 @@ extern int olc_state;
 
 #ifndef __CONFIG_CC__
 extern const char *OK;
-extern const char *NOPERSON;
 extern const char	*TOOBUSY;
-extern const char	*NOOBJECT;
 #endif
 
 #endif
 
 extern void save_etext(struct char_data *ch);
-
-

@@ -930,7 +930,7 @@ ACMD(do_subscribe)
   } else
     veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch);
   if (!veh) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.", buf);
     return;
   }
   if (veh->owner != GET_IDNUM(ch)) {
@@ -970,7 +970,7 @@ ACMD(do_repair)
   }
 
   if (!(veh = get_veh_list(argument, ch->in_veh ? ch->in_veh->carriedvehs : get_ch_in_room(ch)->vehicles, ch))) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.", argument);
     return;
   }
 
@@ -1063,7 +1063,7 @@ ACMD(do_driveby)
     return;
   }
   if (!(vict = get_char_in_list_vis(ch, arg, ch->in_veh->in_room->people))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
     return;
   }
   if ((dir = search_block(buf2, lookdirs, FALSE)) == -1) {
@@ -1256,7 +1256,7 @@ ACMD(do_chase)
 
   if (!(tveh = get_veh_list(arg, veh->in_room->vehicles, ch)) &&
       !(vict = get_char_room(arg, veh->in_room))) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see anything or anyone named '%s' here.", arg);
     return;
   }
 
@@ -1759,7 +1759,7 @@ ACMD(do_pop)
     return;
   }
   if (!veh && (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.", argument);
     return;
   }
   if (!ch->in_veh && !veh->hood && veh->owner != GET_IDNUM(ch)) {
@@ -1845,7 +1845,7 @@ ACMD(do_tow)
   }
   skip_spaces(&argument);
   if (!(tveh = get_veh_list(argument, veh->in_room->vehicles, ch))) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.", argument);
     return;
   }
   if (tveh->type == VEH_TRUCK)
@@ -2026,7 +2026,7 @@ ACMD(do_transfer)
   else if (veh->owner != GET_IDNUM(ch))
     send_to_char("You can't transfer ownership of a vehicle you don't own.\r\n", ch);
   else if (!(targ = get_char_room_vis(ch, buf2)))
-    send_to_char("You don't see that person here.\r\n", ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf2);
   else {
     snprintf(buf, sizeof(buf), "You transfer ownership of %s to $N.", GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "$n transfers ownership of %s to you.", GET_VEH_NAME(veh));

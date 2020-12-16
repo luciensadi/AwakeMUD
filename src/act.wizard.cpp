@@ -439,7 +439,7 @@ ACMD(do_send)
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
     return;
   }
   if (!IS_NPC(vict) &&
@@ -700,7 +700,7 @@ ACMD(do_trans)
     send_to_char("Whom do you wish to transfer?\r\n", ch);
   else if (str_cmp("all", buf)) {
     if (!(victim = get_char_vis(ch, buf)))
-      send_to_char(NOPERSON, ch);
+      send_to_char(ch, "You don't see anyone named '%s' here.", buf);
     else if (victim == ch)
       send_to_char("That doesn't make much sense, does it?\r\n", ch);
     else {
@@ -743,7 +743,7 @@ ACMD(do_vteleport)
   if (!*buf)
     send_to_char("What vehicle do you wish to teleport?\r\n", ch);
   else if (!(veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.", buf);
   else if (!*buf2)
     send_to_char("Where do you wish to send this vehicle?\r\n", ch);
   else if ((target = find_target_room(ch, buf2))) {
@@ -768,7 +768,7 @@ ACMD(do_teleport)
   if (!*buf)
     send_to_char("Whom do you wish to teleport?\r\n", ch);
   else if (!(victim = get_char_vis(ch, buf)))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
   else if (victim == ch)
     send_to_char("Use 'goto' to teleport yourself.\r\n", ch);
   else if (GET_LEVEL(victim) > GET_LEVEL(ch) &&
@@ -2232,7 +2232,7 @@ ACMD(do_award)
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
     return;
   }
   
@@ -2274,7 +2274,7 @@ ACMD(do_penalize)
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
     return;
   }
 
@@ -2391,7 +2391,7 @@ ACMD(do_restore)
   
   // Not restore all mode-- find their target.
   if (!(vict = get_char_vis(ch, buf))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
     return;
   }
   
@@ -2717,7 +2717,7 @@ ACMD(do_force)
   // Single-person force.
   if (!access_level(ch, LVL_ADMIN) || (str_cmp("all", arg) && str_cmp("room", arg))) {
     if (!(vict = get_char_vis(ch, arg)))
-      send_to_char(NOPERSON, ch);
+      send_to_char(ch, "You don't see anyone named '%s' here.", arg);
     else if (PLR_FLAGGED(ch, PLR_WRITING) || PLR_FLAGGED(ch, PLR_EDITING) ||
              PLR_FLAGGED(ch, PLR_MAILING) || PLR_FLAGGED(ch, PLR_SPELL_CREATE) ||
              PLR_FLAGGED(ch, PLR_CUSTOMIZE))

@@ -400,7 +400,7 @@ ACMD(do_group)
   }
 
   if (!(vict = get_char_room_vis(ch, buf)))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
   else if ((vict->master != ch) && (vict != ch))
     act("$N must follow you to enter your group.", FALSE, ch, 0, vict, TO_CHAR);
   else {
@@ -450,12 +450,12 @@ ACMD(do_ungroup)
     return;
   }
   if (tch->master != ch) {
-    send_to_char("That person is not following you!\r\n", ch);
+    send_to_char(ch, "%s is not following you!\r\n", capitalize(GET_CHAR_NAME(tch)));
     return;
   }
 
   if (!IS_AFFECTED(tch, AFF_GROUP)) {
-    send_to_char("That person isn't in your group.\r\n", ch);
+    send_to_char(ch, "%s isn't in your group.\r\n", capitalize(GET_CHAR_NAME(tch)));
     return;
   }
 
@@ -1624,7 +1624,7 @@ ACMD(do_attach)
   }
   if (*arg) {
     if (ch->in_veh || !(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
-      send_to_char(NOOBJECT, ch);
+      send_to_char(ch, "You don't see any vehicles named '%s' here.", buf1);
       return;
     }
     if (veh->type != VEH_DRONE) {
@@ -2468,9 +2468,9 @@ ACMD(do_remember)
   if (!*buf1 || !*buf2)
     send_to_char(ch, "Remember Who as What?\r\n");
   else if (!(vict = get_char_room_vis(ch, buf1)) || (ch->in_veh && !(vict = get_char_veh(ch, buf1, ch->in_veh))))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.", buf1);
   else if (IS_NPC(vict))
-    send_to_char(ch, "You cannot remember mobs.\r\n");
+    send_to_char(ch, "You cannot remember NPCs.\r\n");
   else if (ch == vict)
     send_to_char(ch, "You should have no problem remembering who you are.\r\n");
   else if (IS_SENATOR(vict))
@@ -2660,7 +2660,7 @@ ACMD(do_photo)
       }
     }
     if (!found) {
-      send_to_char(NOOBJECT, ch);
+      send_to_char(ch, "You don't see anything named '%s' here.", argument);
       return;
     }
   } else {

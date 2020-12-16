@@ -2431,7 +2431,7 @@ ACMD(do_matrix_scan)
         send_to_icon(PERSONA, "You don't find out anything new.\r\n");
       return;
     }
-  send_to_icon(PERSONA, NOPERSON);
+  send_to_icon(PERSONA, "You don't see anything named '%s' here.", argument);
 }
 ACMD(do_abort)
 {
