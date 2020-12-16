@@ -2109,7 +2109,7 @@ ACMD(do_bond)
       }
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         if (GET_FORCE_POINTS(ch) < karma) {
-          send_to_char(ch, "You don't have enough force points to bond that (Need %d).\r\n", karma);
+          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the spell trainers and typing LEARN FORCE.\r\n", karma);
           return;
         }
         GET_FORCE_POINTS(ch) -= karma;

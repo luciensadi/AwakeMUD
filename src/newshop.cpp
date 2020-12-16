@@ -76,9 +76,7 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
 {
   char buf[400];
 
-  if (!access_level(ch, LVL_ADMIN)
-      && !(CAN_SEE(keeper, ch)))
-  {
+  if (!access_level(ch, LVL_ADMIN) && !(CAN_SEE(keeper, ch))) {
     do_say(keeper, "I don't trade with someone I can't see.", cmd_say, 0);
     return FALSE;
   }
@@ -88,7 +86,7 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
   }
     
   if (IS_NPC(ch) || access_level(ch, LVL_BUILDER)) {
-    return FALSE;
+    return TRUE;
   }
   
   if ((shop_table[shop_nr].races.IsSet(RACE_HUMAN) && GET_RACE(ch) == RACE_HUMAN) ||
