@@ -2462,7 +2462,8 @@ ACMD(do_examine)
       if (!tmp_object->contains)
         strncpy(buf, "The small LED is currently off.\r\n", sizeof(buf));
       else if (GET_OBJ_VAL(tmp_object, 9))
-        snprintf(buf, sizeof(buf), "The small LED is currently orange, indicating activity. The progress meter is at %d%%.\r\n",
+        snprintf(buf, sizeof(buf), "The small LED is currently orange, indicating activity. The progress meter for cooking %s is at %d%%.\r\n",
+                 GET_OBJ_NAME(tmp_object->contains),
                  (int)(((float)(GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(tmp_object) - GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(tmp_object)) / GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(tmp_object)) * 100));
       else if (GET_OBJ_TIMER(tmp_object->contains) == -1)
         strncpy(buf, "The small LED is currently flashed red, indicating a failed encode.\r\n", sizeof(buf));

@@ -1399,7 +1399,7 @@ ACMD(do_phone)
       }
       return;
     }
-    snprintf(buf2, MAX_STRING_LENGTH, 
+    snprintf(buf, MAX_STRING_LENGTH, 
             "%s:\r\n"
             "Phone Number: %04d-%04d\r\n"
             "Switched: %s\r\n"
@@ -1413,11 +1413,11 @@ ACMD(do_phone)
     
     if (phone && phone->dest) {
       if (phone->dest->connected && phone->connected)
-        snprintf(buf, sizeof(buf), "%sConnected to: %d\r\n", buf2, phone->dest->number);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Connected to: %d\r\n", phone->dest->number);
       else if (!phone->dest->connected)
-        snprintf(buf, sizeof(buf), "%sCalling: %d\r\n", buf2, phone->dest->number);
-      else snprintf(buf, sizeof(buf), "%sIncoming call from: %08d\r\n", buf2, phone->dest->number);
-    }
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Calling: %d\r\n", phone->dest->number);
+      else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Incoming call from: %08d\r\n", phone->dest->number);
+    } 
     send_to_char(buf, ch);
   }
 }
