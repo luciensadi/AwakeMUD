@@ -128,13 +128,12 @@ ACMD(do_copyover)
     {
       "This copyover has been brought to you by NERPS.  It's more than a lubricant, its a lifestyle!\r\n",
       "Yes, the mud is lagging.  Deal with it.\r\n",
-      "I like copyovers, yes I do!  Eating player corpses in copyover stew!\r\n",
-      "A Haiku while you wait: Copyover time.  Your quests and corpses are fucked.  Ha ha ha ha ha.\r\n",
+      // "I like copyovers, yes I do!  Eating player corpses in a copyover stew!\r\n",
+      // "A Haiku while you wait: Copyover time.  Your quests and corpses are fucked.  Ha ha ha ha ha.\r\n",
       "Ahh drek, Maestra's broke the mud again!  Go bug Che and he might fix it.\r\n",
-      "You can find your car at the Seattle Garage if you were driving when this happened.\r\n",
       "Its a copyover.  Now would be a good time to take out the trash.\r\n",
       "Jerry Garcia told me to type copyover.  He is wise, isn't he?\r\n",
-      "Yes. We did this copyover solely to fuck YOUR character over.\r\n",
+      // "Yes. We did this copyover solely to fuck YOUR character over.\r\n",
       "My dog told me to copyover. Goood dog, good dog.\r\n",
       "It's called a changeover, the movie goes on, and nobody in the audience has any idea.\r\n",
       "Oh shit, I forgot to compile.  I'm gonna have to do this again!\r\n",
@@ -144,7 +143,11 @@ ACMD(do_copyover)
       "Someone says \x1B[0;35mOOCly\x1B[0m, \"I'm going to get fired for this.\"\r\n",
       "Yum Yum Copyover Stew, out with the old code, in with the new!\r\n",
       "Deleting player corpses, please wait...\r\n",
-      "\x1B[0;35m[\x1B[0mSerge\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This porn's taking too long to download, needs more bandwidth. So the Mud'll be back up in a bit.\"\r\n"
+      "\x1B[0;35m[\x1B[0mSerge\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This porn's taking too long to download, needs more bandwidth. So the Mud'll be back up in a bit.\"\r\n",
+      "\x1B[0;35m[\x1B[0mLucien\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"Honestly, I give this new code a 30% chance of crashing outright.\"\r\n",
+      "One moment while we drive up the server cost with heavy CPU usage...\r\n",
+      "You wake up. You're still a lizard sunning on a red rock. It was all a dream. The concept of selling 'feet pics' to pay back 'ripperdocs' is already losing its meaning as you open and lick your own eyeballs to moisten them. Time to eat a bug.\r\n",
+      "For the briefest of moments, you peer beyond the veil, catching a glimpse of the whirling, gleaming machinery that lies at the heart of the world. Your mind begins to break down at the sight...\r\n"
     };
 
   fp = fopen (COPYOVER_FILE, "w");
