@@ -28,7 +28,7 @@ COMMON_FLAGS = -lmysqlclient -lz -lm -lsodium -lstdc++
 
 # OSX? Uncomment these:
 LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
-MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 # Linux / others? Uncomment these:
 #LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lcurl
