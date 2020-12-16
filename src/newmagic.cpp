@@ -2198,7 +2198,7 @@ ACMD(do_release)
     }
     return;
   }
-  send_to_char("Release what?\r\n", ch);
+  send_to_char("You'll want to specify an spell number, an elemental/spirit number, or 'all'. HELP RELEASE for more.\r\n", ch);
 }
 
 ACMD(do_cast)
