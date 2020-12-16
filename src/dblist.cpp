@@ -255,8 +255,11 @@ void objList::UpdateCounters(void)
     }
     
     // Cook chips.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER && OBJ->contains && GET_OBJ_VAL(OBJ, 9) > 0) {
-      if (--GET_OBJ_VAL(OBJ, 9) < 1) {
+    if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY 
+        && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER 
+        && OBJ->contains 
+        && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0) {
+      if (--GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) < 1) {
         struct obj_data *chip = OBJ->contains;
         act("$p beeps loudly, signaling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
         if (GET_OBJ_TIMER(chip) == -1) {

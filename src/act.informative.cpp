@@ -2165,7 +2165,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This pack of parts contains ^c%d^n units of ^c%s^n.",
                 GET_OBJ_COST(j), GET_OBJ_VAL(j, 1) == 0 ? "general parts" : "memory chips");
       } else if (GET_OBJ_VAL(j, 0) == TYPE_COOKER) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This chip cooker is rating ^c%d^n.", GET_OBJ_VAL(j, 0));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This chip cooker is rating ^c%d^n.", GET_OBJ_VAL(j, 1));
       } else {
         snprintf(buf2, sizeof(buf2), "Error: Unknown ITEM_DECK_ACCESSORY type %d passed to probe command.", GET_OBJ_VAL(j, 0));
         log(buf2);

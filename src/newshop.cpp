@@ -1287,11 +1287,13 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   case ITEM_DECK_ACCESSORY:
     if (GET_OBJ_VAL(obj, 0) == TYPE_COOKER) {
       strcat(buf, " a");
-      if (GET_OBJ_VAL(obj, 0) <= 2)
+      if (GET_DECK_ACCESSORY_COOKER_RATING(obj) <= 2)
         strcat(buf, " sluggish");
-      else if (GET_OBJ_VAL(obj, 0) <= 5)
+      else if (GET_DECK_ACCESSORY_COOKER_RATING(obj) <= 4)
+        strcat(buf, " average");
+      else if (GET_DECK_ACCESSORY_COOKER_RATING(obj) <= 6)
         strcat(buf, " quick");
-      else if (GET_OBJ_VAL(obj, 0) <= 8)
+      else if (GET_DECK_ACCESSORY_COOKER_RATING(obj) <= 8)
         strcat(buf, " speedy");
       else
         strcat(buf, " lightning fast");
