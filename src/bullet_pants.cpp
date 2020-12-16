@@ -826,7 +826,6 @@ int npc_ammo_usage_preferences[] = {
 
 // things left to implement:
 /* 
- - reloading of mounted weapons (this code is probably totes broken right now)
  - staff bullet pants set command mode (just use force)
  - write pockets help file
  - add ability to split apart ammo boxes (just do it through pockets)
