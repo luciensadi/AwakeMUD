@@ -222,6 +222,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
       obj_from_char(obj);
       obj_to_obj(obj, cont);
       send_to_char(ch, "You install %s onto %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+      act("$n installs $p on $P.", TRUE, ch, obj, cont, TO_ROOM);
     }
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
@@ -258,7 +259,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
           || GET_OBJ_VAL(obj, 0) == SOFT_MASKING
           || GET_OBJ_VAL(obj, 0) == SOFT_EVASION)) {
     if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
-      send_to_char("That's firmware, you'll have to BUILD it into the deck along with the matching chip.", ch);
+      send_to_char(ch, "%s is firmware, you'll have to BUILD it into the deck along with the matching chip.", GET_OBJ_NAME(obj));
     } else {
       send_to_char(ch, "%s is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.",
                    GET_OBJ_NAME(obj));
@@ -266,7 +267,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     return;
   }
   else if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM)
-    send_to_char("You can't install unburnt programs.\r\n", ch);
+    send_to_char(ch, "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
   else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
     display_cyberdeck_issues(ch, cont);
   else if (GET_OBJ_VAL(cont, 5) + GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(cont, 3))
@@ -356,7 +357,7 @@ ACMD(do_put)
     }
     if ((GET_OBJ_TYPE(obj) != ITEM_PROGRAM && (GET_OBJ_TYPE(obj) == ITEM_DRUG &&
         GET_OBJ_VAL(obj, 0) != DRUG_CRAM && GET_OBJ_VAL(obj, 0) != DRUG_PSYCHE) && GET_OBJ_VNUM(obj) != 660)) {
-      send_to_char("That doesn't fit in there.\r\n", ch);
+      send_to_char(ch, "%s doesn't fit in your fingertip compartment.\r\n", GET_OBJ_NAME(obj));
       return;
     }
     obj_from_char(obj);
@@ -383,7 +384,7 @@ ACMD(do_put)
       return;
     }
     if (GET_OBJ_WEIGHT(obj) > 1) {
-      send_to_char("That doesn't fit in there.\r\n", ch);
+      send_to_char(ch, "%s doesn't fit in your body compartment.\r\n", GET_OBJ_NAME(obj));
       return;
     }
     obj_from_char(obj);
@@ -530,7 +531,7 @@ ACMD(do_put)
     if (cyberdeck) {
       // Better messaging for parts.
       if (GET_OBJ_TYPE(obj) == ITEM_PART) {
-        send_to_char("Parts aren't plug-and-play; you'll have to BUILD that into your deck instead.\r\n", ch);
+        send_to_char(ch, "Parts aren't plug-and-play; you'll have to BUILD %s into your deck instead.\r\n", GET_OBJ_NAME(obj));
         return;
       }
       
@@ -552,13 +553,13 @@ ACMD(do_put)
     
     if (GET_OBJ_TYPE(cont) == ITEM_QUIVER) {
       if (GET_OBJ_VAL(cont, 1) == 0 && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == 0))
-        send_to_char("Only arrows may be placed in that.\r\n", ch);
+        send_to_char(ch, "Only arrows may be placed in %s.\r\n", GET_OBJ_NAME(obj));
       else if (GET_OBJ_VAL(cont, 1) == 1 && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == 1))
-        send_to_char("Only bolts may be placed in that.\r\n", ch);
+        send_to_char(ch, "Only bolts may be placed in %s.\r\n", GET_OBJ_NAME(obj));
       else if (GET_OBJ_VAL(cont, 1) == 2 && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_OBJ_VAL(obj, 3) == TYPE_SHURIKEN))
-        send_to_char("Only shurikens can be stored in that.\r\n", ch);
+        send_to_char(ch, "Only shurikens can be stored in %s.\r\n", GET_OBJ_NAME(obj));
       else if (GET_OBJ_VAL(cont, 1) == 3 && !(GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_OBJ_VAL(obj, 3) == TYPE_THROWING_KNIFE))
-        send_to_char("That is used to hold throwing knives only.\r\n", ch);
+        send_to_char(ch, "%s is used to hold throwing knives only.\r\n", capitalize(GET_OBJ_NAME(obj)));
       else {
         perform_put(ch, obj, cont);
       }
@@ -575,7 +576,7 @@ ACMD(do_put)
         if (!cyberdeck) {
           perform_put(ch, obj, cont);
         } else if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM)
-          send_to_char("That's not a program!\r\n", ch);
+          send_to_char(ch, "%s is not a program!\r\n", GET_OBJ_NAME(obj));
         else
           perform_put_cyberdeck(ch, obj, cont);
       }
@@ -753,7 +754,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
             for (struct obj_data *k = cont->contains; k; k = k->next_content)
               if ((GET_OBJ_TYPE(k) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(k) == TYPE_FILE) ||
                   GET_OBJ_TYPE(k) == ITEM_PROGRAM) {
-                send_to_char("You cannot uninstall that while you have files installed.\r\n", ch);
+                send_to_char(ch, "You cannot uninstall %s while you have files installed.\r\n", GET_OBJ_NAME(obj));
                 return;
               }
             GET_CYBERDECK_USED_STORAGE(cont) = GET_CYBERDECK_TOTAL_STORAGE(cont) = 0;
@@ -913,7 +914,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
       for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
         if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj) {
           if (vict == ch)
-            send_to_char(ch, "You are using that already.\r\n");
+            send_to_char(ch, "You are using %s already.\r\n", GET_OBJ_NAME(obj));
           else
             act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
           return FALSE;
@@ -921,22 +922,22 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
       break;
     case TYPE_COOKER:
       if (GET_OBJ_VAL(obj, 9)) {
-        send_to_char(ch, "It is in the middle of encoding a chip, leave it alone.\r\n");
+        send_to_char(ch, "%s is in the middle of encoding a chip, leave it alone.\r\n", capitalize(GET_OBJ_NAME(obj)));
         return FALSE;
       }
       break;
     }
   if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) > 1 && (GET_OBJ_VAL(obj, 2) || GET_OBJ_VAL(obj, 3)))
-    send_to_char(ch, "You may wish to pack it up first.\r\n");
+    send_to_char(ch, "You may wish to pack %s up first.\r\n", GET_OBJ_NAME(obj));
   else if (can_take_obj(ch, obj))
   {
     if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP)
       for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)
          if (AFF_FLAGGED(tmp, AFF_PACKING)) {
            if (tmp == ch)
-             send_to_char("You're already working on that workshop.\r\n", ch);
+             send_to_char(ch, "You're already working on %s.\r\n", GET_OBJ_NAME(obj));
            else
-             send_to_char("Someone is working on that workshop.\r\n", ch);
+             send_to_char(ch, "Someone is working on %s.\r\n", GET_OBJ_NAME(obj));
            return FALSE;
          }
     if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
@@ -1650,7 +1651,7 @@ struct char_data *give_find_vict(struct char_data * ch, char *arg)
     return NULL;
   } else if (vict == ch)
   {
-    send_to_char("What's the point of that?\r\n", ch);
+    send_to_char("What's the point of giving it to yourself?\r\n", ch);
     return NULL;
   } else if (IS_NPC(vict) && GET_MOB_SPEC(vict) && GET_MOB_SPEC(vict) == fixer)
   {
@@ -2447,7 +2448,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   {
     if (!wielded) {
       if (!can_wield_both(ch, obj, GET_EQ(ch, WEAR_HOLD))) {
-        act("You'll have a hard time wielding that along with $p.", FALSE, ch, GET_EQ(ch, WEAR_HOLD), 0, TO_CHAR);
+        snprintf(buf, sizeof(buf), "You'll have a hard time wielding %s along with $p.", GET_OBJ_NAME(obj));
+        act(buf, FALSE, ch, GET_EQ(ch, WEAR_HOLD), 0, TO_CHAR);
         return;
       }
     } else {
@@ -2458,7 +2460,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
       }
       where = WEAR_HOLD;
       if (!can_wield_both(ch, wielded, obj)) {
-        act("You'll have a hard time wielding that along with $p.", FALSE, ch, wielded, 0, TO_CHAR);
+        snprintf(buf, sizeof(buf), "You'll have a hard time wielding %s along with $p.", GET_OBJ_NAME(obj));
+        act(buf, FALSE, ch, wielded, 0, TO_CHAR);
         return;
       }
     }
@@ -2948,7 +2951,7 @@ ACMD(do_activate)
       return;
     }
     if (GET_OBJ_VAL(obj, 9) > 0) {
-      send_to_char("You haven't finished bonding that yet.\r\n", ch);
+      send_to_char(ch, "You haven't finished bonding %s yet.\r\n", GET_OBJ_NAME(obj));
       return;
     }
     if (GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED) {
@@ -3073,7 +3076,7 @@ ACMD(do_crack)
       || !GET_OBJ_VAL(obj, 1)
       || GET_OBJ_VAL(obj, 2) > 3
       || !GET_OBJ_VAL(obj, 2)) {
-    send_to_char("And how do you plan on doing that?\r\n", ch);
+    send_to_char(ch, "%s isn't someone else's activated credstick, not much cracking to be done there.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return;
   } else if (!GET_OBJ_VAL(obj, 4)) {
     act("But $p's not even activated!", FALSE, ch, obj, 0, TO_CHAR);
@@ -3317,7 +3320,7 @@ ACMD(do_break)
   if (!obj)
     send_to_char("You don't have a breakable tooth compartment.\r\n", ch);
   else if (!(contents = obj->contains))
-    send_to_char("Breaking that now would be a waste.\r\n", ch);
+    send_to_char("Your tooth compartment is empty, so breaking it now would be a waste.\r\n", ch);
   else {
     extern void do_drug_take(struct char_data *ch, struct obj_data *obj);
     send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
