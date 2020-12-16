@@ -142,7 +142,7 @@ ACMD(do_pockets) {
         return;
       }
       
-      // Special special case: 'pockets put all'.
+      // Special special case: 'pockets get all'.
       if (!str_cmp("all", quantity_buf)) {
         struct obj_data *ammobox = NULL;
         int successes = 0;
