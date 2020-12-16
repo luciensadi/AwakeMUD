@@ -2429,15 +2429,28 @@ void perform_immort_invis(struct char_data *ch, int level)
 
   if (STATE(ch->desc) == CON_PLAYING)
   {
-    for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-      if (tch == ch)
-        continue;
-      if (access_level(tch, GET_INVIS_LEV(ch)) && !access_level(tch, level))
-        act("You blink and suddenly realize that $n is gone.",
-            FALSE, ch, 0, tch, TO_VICT);
-      if (!access_level(tch, GET_INVIS_LEV(ch)) && access_level(tch, level))
-        act("You suddenly realize that $n is standing beside you.",
-            FALSE, ch, 0, tch, TO_VICT);
+    if (ch->in_room) {
+      for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
+        if (tch == ch)
+          continue;
+        if (access_level(tch, GET_INVIS_LEV(ch)) && !access_level(tch, level))
+          act("You blink and suddenly realize that $n is gone.",
+              FALSE, ch, 0, tch, TO_VICT);
+        if (!access_level(tch, GET_INVIS_LEV(ch)) && access_level(tch, level))
+          act("You suddenly realize that $n is standing beside you.",
+              FALSE, ch, 0, tch, TO_VICT);
+      }
+    } else {
+      for (tch = ch->in_veh->people; tch; tch = tch->next_in_veh) {
+        if (tch == ch)
+          continue;
+        if (access_level(tch, GET_INVIS_LEV(ch)) && !access_level(tch, level))
+          act("You blink and suddenly realize that $n is gone.",
+              FALSE, ch, 0, tch, TO_VICT);
+        if (!access_level(tch, GET_INVIS_LEV(ch)) && access_level(tch, level))
+          act("You suddenly realize that $n is standing beside you.",
+              FALSE, ch, 0, tch, TO_VICT);
+      }
     }
 
     send_to_char(ch, "Your invisibility level is %d.\r\n", level);
