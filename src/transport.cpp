@@ -33,6 +33,9 @@ SPECIAL(call_elevator);
 SPECIAL(elevator_spec);
 extern int find_first_step(vnum_t src, vnum_t target);
 extern void perform_fall(struct char_data *ch);
+
+ACMD_DECLARE(do_echo);
+
 // ----------------------------------------------------------------------------
 
 // ______________________________
@@ -662,7 +665,7 @@ SPECIAL(taxi)
       return FALSE;
     
     bool found = FALSE;
-    if (GET_ACTIVE(driver) == ACT_AWAIT_CMD)
+    if (GET_ACTIVE(driver) == ACT_AWAIT_CMD) 
       for (dest = 0; (portland ? *port_destinations[dest].keyword : *taxi_destinations[dest].keyword) != '\n'; dest++) {
         // Skip invalid destinations.
         if (!DEST_IS_VALID(dest, portland ? port_destinations : taxi_destinations))
@@ -671,6 +674,9 @@ SPECIAL(taxi)
         if ( str_str((const char *)argument, (portland ? port_destinations[dest].keyword : taxi_destinations[dest].keyword))) {
           comm = CMD_TAXI_DEST;
           found = TRUE;
+          do_say(ch, argument, 0, 0);
+          strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
+          do_echo(driver, buf2, 0, SCMD_EMOTE);
           break;
         }
       }
@@ -680,11 +686,13 @@ SPECIAL(taxi)
         comm = CMD_TAXI_YES;
       } else if (str_str(argument, "no") || str_str(argument, "nah") || str_str(argument, "negative")) {
         comm = CMD_TAXI_NO;
-      } else if (GET_TKE(ch) < 100){
-        send_to_char("(OOC note: The cabbie didn't recognize that. Try using a keyword from the sign, or 'yes' or 'no' to accept or decline the offer.)\r\n", ch);
+      } else {
+        do_say(ch, argument, 0, 0);
+        do_say(driver, "Sorry chummer, rules are rules. You gotta tell me something off of that sign there.", 0, 0);
+        return TRUE;
       }
+      do_say(ch, argument, 0, 0);
     }
-    do_say(ch, argument, 0, 0);
   } else if (CMD_IS("nod") || CMD_IS("agree")) {
     comm = CMD_TAXI_YES;
     do_action(ch, argument, cmd, 0);

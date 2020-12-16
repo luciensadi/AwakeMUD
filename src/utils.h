@@ -901,6 +901,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 // ITEM_DECK_ACCESSORY TYPE_COOKER convenience defines
 #define GET_DECK_ACCESSORY_COOKER_RATING(accessory)         (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(accessory)  (GET_OBJ_VAL((accessory), 8))
 #define GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(accessory) (GET_OBJ_VAL((accessory), 9))
 
 // ITEM_RCDECK convenience defines

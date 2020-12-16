@@ -392,53 +392,54 @@ ACMD(do_cook) {
     else if (GET_OBJ_VAL(chip, 0) == SOFT_SUITE)
       send_to_char("Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.\r\n", ch);
     else {
-        for (cooker = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; cooker; cooker = cooker->next_content)
-            if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
-                break;
-        if (!cooker) {
-            send_to_char(ch, "There isn't a free chip encoder here.\r\n");
-            return;
-        }
-        int cost = GET_OBJ_VAL(chip, 2) / 2, paid = 0;
-        for (struct obj_data *obj = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; obj; obj = obj->next_content)
-            if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
-                GET_OBJ_COST(obj) -= cost;
-                if (!GET_OBJ_COST(obj))
-                    extract_obj(obj);
-                paid = 1;
-                break;
-            }
-        if (!paid)
-            for (struct obj_data *obj = ch->carrying;obj; obj = obj->next_content)
-                if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
-                    GET_OBJ_COST(obj) -= cost;
-                    if (!GET_OBJ_COST(obj))
-                        extract_obj(obj);
-                    paid = 1;
-                    break;
-                }
-        if (!paid) {
-            send_to_char(ch, "You need at least %d nuyen worth of optical chips to encode %s.\r\n", cost, GET_OBJ_NAME(chip));
-            return;
-        }
-        GET_OBJ_VAL(chip->in_obj, 3) -= GET_OBJ_VAL(chip, 2);
-        obj_from_obj(chip);
-        obj_to_obj(chip, cooker);
-        int target = 4;
-        int skill = get_skill(ch, SKILL_BR_COMPUTER, target) + MIN(GET_SKILL(ch, SKILL_BR_COMPUTER), GET_DECK_ACCESSORY_COOKER_RATING(cooker));
-        int success = success_test(skill, target);
-        if (success < 1) {
-            success = srdice() + srdice();
-            GET_OBJ_TIMER(chip) = -1;
-        }
-        GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker) = (GET_OBJ_VAL(chip, 1) * 24) / success;
+      for (cooker = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; cooker; cooker = cooker->next_content)
+          if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
+              break;
+      if (!cooker) {
+          send_to_char(ch, "There isn't a free chip encoder here.\r\n");
+          return;
+      }
+      int cost = GET_OBJ_VAL(chip, 2) / 2, paid = 0;
+      for (struct obj_data *obj = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; obj; obj = obj->next_content)
+          if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
+              GET_OBJ_COST(obj) -= cost;
+              if (!GET_OBJ_COST(obj))
+                  extract_obj(obj);
+              paid = 1;
+              break;
+          }
+      if (!paid)
+          for (struct obj_data *obj = ch->carrying;obj; obj = obj->next_content)
+              if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
+                  GET_OBJ_COST(obj) -= cost;
+                  if (!GET_OBJ_COST(obj))
+                      extract_obj(obj);
+                  paid = 1;
+                  break;
+              }
+      if (!paid) {
+          send_to_char(ch, "You need at least %d nuyen worth of optical chips to encode %s.\r\n", cost, GET_OBJ_NAME(chip));
+          return;
+      }
+      GET_OBJ_VAL(chip->in_obj, 3) -= GET_OBJ_VAL(chip, 2);
+      obj_from_obj(chip);
+      obj_to_obj(chip, cooker);
+      int target = 4;
+      int skill = get_skill(ch, SKILL_BR_COMPUTER, target) + MIN(GET_SKILL(ch, SKILL_BR_COMPUTER), GET_DECK_ACCESSORY_COOKER_RATING(cooker));
+      int success = success_test(skill, target);
+      if (success < 1) {
+          success = srdice() + srdice();
+          GET_OBJ_TIMER(chip) = -1;
+      }
+      GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker) = (GET_OBJ_VAL(chip, 1) * 24) / success;
       if (access_level(ch, LVL_ADMIN)) {
         send_to_char("You use your admin powers to greatly accelerate the cooking time.\r\n", ch);
         GET_OBJ_TIMER(chip) = 0;
         GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker) = 1;
       }
-        act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_ROOM);
-        act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_CHAR);
+      GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(cooker) = GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker);
+      act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_ROOM);
+      act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_CHAR);
     }
 }
 

@@ -216,7 +216,7 @@ int damage_modifier(struct char_data *ch, char *rbuf)
       mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE) * 100;
     }
     
-    if (GET_DRUG_STAGE(ch) == 1)
+    if (ch->player_specials && GET_DRUG_STAGE(ch) == 1)
       switch (GET_DRUG_AFFECT(ch)) {
         case DRUG_NITRO:
           physical += 600;
