@@ -823,10 +823,3 @@ int npc_ammo_usage_preferences[] = {
   AMMO_GEL,
   AMMO_FLECHETTE
 };
-
-// things left to implement:
-/* 
- - staff bullet pants set command mode (just use force)
- - write pockets help file
- - add ability to split apart ammo boxes (just do it through pockets)
-*/
