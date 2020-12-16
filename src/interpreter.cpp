@@ -1362,9 +1362,18 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
    */
   if (!isalpha(*argument))
   {
-    arg[0] = argument[0];
-    arg[1] = '\0';
-    line = argument+1;
+    // Strip out the PennMUSH bullshit.
+    if (*argument == '@' || *argument == '+') {
+      argument[0] = ' ';
+      skip_spaces(&argument);
+      if (!*argument)
+        return;
+      line = any_one_arg(argument, arg);
+    } else {
+      arg[0] = argument[0];
+      arg[1] = '\0';
+      line = argument+1;
+    }
   } else
     line = any_one_arg(argument, arg);
   if (AFF_FLAGGED(ch, AFF_FEAR))
