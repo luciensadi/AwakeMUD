@@ -717,6 +717,7 @@ void assign_objects(void)
   ASSIGNOBJ(26150, gen_board);
   ASSIGNOBJ(11482, gen_board);
   ASSIGNOBJ(70405, gen_board);
+  ASSIGNOBJ(71025, gen_board); // shadow couriers PGHQ
   ASSIGNOBJ(1117, desktop);
   ASSIGNOBJ(1118, desktop);
   ASSIGNOBJ(1119, desktop);

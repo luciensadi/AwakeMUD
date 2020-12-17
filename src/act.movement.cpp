@@ -1058,16 +1058,24 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
   }
 
   /* Notify the room */
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s.", ((obj) ? "" : "the "), (obj) ? "$p" :
-          (EXIT(ch, door)->keyword ? "$F" : "door"));
+  if (obj) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "$p.");
+  } else {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "the %s to %s.", 
+            EXIT(ch, door)->keyword ? "$F" : "door",
+            thedirs[door]);
+  }
+  
   if (!(obj) || (obj->in_room))
     act(buf, FALSE, ch, obj, obj ? 0 : EXIT(ch, door)->keyword, TO_ROOM);
 
   /* Notify the other room */
   if (((scmd == SCMD_OPEN) || (scmd == SCMD_CLOSE) || (scmd == SCMD_KNOCK)) && (back))
   {
-    snprintf(buf, sizeof(buf), "The %s is %s%s from the other side.\r\n",
-            (back->keyword ? fname(back->keyword) : "door"), cmd_door[scmd],
+    snprintf(buf, sizeof(buf), "The %s to %s is %s%s from the other side.\r\n",
+            (back->keyword ? fname(back->keyword) : "door"), 
+            thedirs[rev_dir[door]],
+            cmd_door[scmd],
             (scmd == SCMD_CLOSE) ? "d" : "ed");
     send_to_room(buf, EXIT(ch, door)->to_room);
   }
