@@ -2316,7 +2316,7 @@ ACMD(do_conjure)
     }
     bool library = FALSE, circle = FALSE;
     struct obj_data *obj;
-    for (struct obj_data *obj = ch->in_room->contents; obj; obj = obj->next_content)
+    FOR_ITEMS_AROUND_CH(ch, obj)
       if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
         if (GET_OBJ_VAL(obj, 0) == TYPE_LIBRARY_CONJURE) {
           if (GET_OBJ_VAL(obj, 1) < force) {

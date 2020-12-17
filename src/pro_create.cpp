@@ -180,7 +180,7 @@ struct obj_data *can_program(struct char_data *ch)
         send_to_char(ch, "Someone is already using the computer.\r\n");
         return NULL;
       }
-    for (comp = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; comp; comp = comp->next_content)
+    FOR_ITEMS_AROUND_CH(ch, comp)
       if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == 2)
         break;
     if (ch->in_veh && comp && comp->vfront)

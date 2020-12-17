@@ -1061,4 +1061,6 @@ char    *crypt(const char *key, const char *salt);
   }                                        \
 }                                          \
 
+#define FOR_ITEMS_AROUND_CH(ch, item_ptr) for ((item_ptr) = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; (item_ptr); (item_ptr) = (item_ptr)->next_content)
+
 #endif

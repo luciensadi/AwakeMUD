@@ -1376,7 +1376,7 @@ SPECIAL(janitor)
   if (cmd || FIGHTING(ch) || !AWAKE(ch))
     return 0;
 
-  for (i = jan->in_room->contents; i; i = i->next_content) {
+  FOR_ITEMS_AROUND_CH(jan, i) {
     if (!CAN_WEAR(i, ITEM_WEAR_TAKE) || IS_OBJ_STAT(i, ITEM_CORPSE) || i->obj_flags.quest_id)
       continue;
     switch (GET_MOB_VNUM(jan)) {
@@ -1798,7 +1798,7 @@ SPECIAL(mugger_park)
   }
 
   if (!FIGHTING(ch)) {
-    for (obj = ch->in_room->contents; obj; obj = obj->next_content)
+    FOR_ITEMS_AROUND_CH(ch, obj)
       if (GET_OBJ_TYPE(obj) == ITEM_MONEY) {
         act("$n grins as he picks up $p from the ground.", FALSE, ch, obj, 0, TO_ROOM);
         act("You grin slightly as you pick up $p.", FALSE, ch, obj, 0, TO_CHAR);
@@ -4084,7 +4084,7 @@ SPECIAL(locker)
       send_to_char("No lockers are currently free. Please try again later.\r\n", ch);
     else {
       num = 0;
-      for (locker = ch->in_room->contents; locker; locker = locker->next_content)
+      FOR_ITEMS_AROUND_CH(ch, locker)
         if (GET_OBJ_VNUM(locker) == 9826) {
           num++;
           if (!GET_OBJ_VAL(locker, 9))
@@ -4100,7 +4100,7 @@ SPECIAL(locker)
       send_to_char("The system beeps loudly.\r\n", ch);
     else {
       num = 0;
-      for (locker = ch->in_room->contents; locker; locker = locker->next_content)
+      FOR_ITEMS_AROUND_CH(ch, locker)
         if (GET_OBJ_VNUM(locker) == 9826 && ++num && GET_OBJ_VAL(locker, 9) == free) {
           int cost = (int)((((time(0) - GET_OBJ_VAL(locker, 8)) / SECS_PER_REAL_DAY) + 1) * 50);
           if (GET_NUYEN(ch) < cost)
@@ -4118,7 +4118,7 @@ SPECIAL(locker)
     }
   } else if (CMD_IS("lock")) {
     num = atoi(argument);
-    for (locker = ch->in_room->contents; locker; locker = locker->next_content)
+    FOR_ITEMS_AROUND_CH(ch, locker)
       if (GET_OBJ_VNUM(locker) == 9826 && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
         snprintf(buf, sizeof(buf), "%d%d%d%d%d%d%d", number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9));
         GET_OBJ_VAL(locker, 8) = time(0);

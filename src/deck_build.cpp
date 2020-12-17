@@ -379,10 +379,12 @@ ACMD(do_cook) {
         return;
       }
     }
-    for (struct obj_data *comp = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; comp; comp = comp->next_content)
-        if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == TYPE_COMPUTER && comp->contains)
-            if ((chip = get_obj_in_list_vis(ch, argument, comp->contains)))
-                break;
+    struct obj_data *comp;
+    FOR_ITEMS_AROUND_CH(ch, comp) {
+      if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == TYPE_COMPUTER && comp->contains)
+        if ((chip = get_obj_in_list_vis(ch, argument, comp->contains)))
+          break;
+    }
     if (!chip)
         send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
     else if (GET_OBJ_TYPE(chip) != ITEM_PROGRAM)
@@ -392,15 +394,17 @@ ACMD(do_cook) {
     else if (GET_OBJ_VAL(chip, 0) == SOFT_SUITE)
       send_to_char("Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.\r\n", ch);
     else {
-      for (cooker = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; cooker; cooker = cooker->next_content)
+      FOR_ITEMS_AROUND_CH(ch, cooker) {
           if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
               break;
+      }
       if (!cooker) {
           send_to_char(ch, "There isn't a free chip encoder here.\r\n");
           return;
       }
       int cost = GET_OBJ_VAL(chip, 2) / 2, paid = 0;
-      for (struct obj_data *obj = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; obj; obj = obj->next_content)
+      struct obj_data *obj;
+      FOR_ITEMS_AROUND_CH(ch, obj) {
           if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
               GET_OBJ_COST(obj) -= cost;
               if (!GET_OBJ_COST(obj))
@@ -408,6 +412,7 @@ ACMD(do_cook) {
               paid = 1;
               break;
           }
+      }
       if (!paid)
           for (struct obj_data *obj = ch->carrying;obj; obj = obj->next_content)
               if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
@@ -507,7 +512,7 @@ ACMD(do_build) {
             return;
           }
           
-          for (obj = ch->in_room->contents; obj; obj = obj->next_content) {
+          FOR_ITEMS_AROUND_CH(ch, obj) {
             if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE)) {
               send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
               return;
@@ -660,14 +665,15 @@ ACMD(do_build) {
                         return;
                     }
                 }
-                struct obj_data *chips = NULL, *part = NULL;
-                for (struct obj_data *find = ch->in_room->contents; find; find = find->next_content)
+                struct obj_data *chips = NULL, *part = NULL, *find;
+                FOR_ITEMS_AROUND_CH(ch, find) {
                     if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(find, 0) == TYPE_PARTS) {
                         if (GET_OBJ_VAL(find, 1) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 9))
                             chips = find;
                         else if (!GET_OBJ_VAL(find, 1) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 8))
                             part = find;
                     }
+                }
                 for (struct obj_data *find = ch->carrying; find; find = find->next_content)
                     if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(find, 0) == TYPE_PARTS) {
                         if (GET_OBJ_VAL(find, 1) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 9))
@@ -837,13 +843,15 @@ ACMD(do_progress)
   }
   
   if (AFF_FLAGS(ch).IsSet(AFF_PACKING)) {
-    for (struct obj_data *obj = ch->in_room->contents; obj; obj = obj->next_content)
+    struct obj_data *obj;
+    FOR_ITEMS_AROUND_CH(ch, obj) {
       if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 3)) {
         send_to_char(ch, "You are about %d%% of the way through%spacking %s.\r\n",
                           (int)((float)((3.0-GET_OBJ_VAL(obj, 3)) / 3)*100), GET_OBJ_VAL(obj, 2) ? " " : " un", 
                          GET_OBJ_NAME(obj));
         break;
       } 
+    }
     return;
   }
   

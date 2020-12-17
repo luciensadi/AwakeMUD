@@ -254,20 +254,12 @@ ACMD(do_pockets) {
             
     // They didn't have one on their person-- check the room.
     if (!ammobox) {
-      if (ch->in_veh) {
-        for (ammobox = ch->in_veh->contents; ammobox; ammobox = ammobox->next_content)
-          if (GET_OBJ_TYPE(ammobox) == ITEM_GUN_AMMO 
-              && GET_AMMOBOX_WEAPON(ammobox) == weapon
-              && GET_AMMOBOX_TYPE(ammobox) == ammotype
-              && GET_AMMOBOX_QUANTITY(ammobox) >= quantity)
-                break;
-      } else {
-        for (ammobox = ch->in_room->contents; ammobox; ammobox = ammobox->next_content)
-          if (GET_OBJ_TYPE(ammobox) == ITEM_GUN_AMMO 
-              && GET_AMMOBOX_WEAPON(ammobox) == weapon
-              && GET_AMMOBOX_TYPE(ammobox) == ammotype
-              && GET_AMMOBOX_QUANTITY(ammobox) >= quantity)
-                break;
+      FOR_ITEMS_AROUND_CH(ch, ammobox) {
+        if (GET_OBJ_TYPE(ammobox) == ITEM_GUN_AMMO 
+            && GET_AMMOBOX_WEAPON(ammobox) == weapon
+            && GET_AMMOBOX_TYPE(ammobox) == ammotype
+            && GET_AMMOBOX_QUANTITY(ammobox) >= quantity)
+          break;
       }
       
       // Make sure they can carry it. We don't do this check for already-carried boxes.

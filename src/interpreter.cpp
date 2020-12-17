@@ -1980,7 +1980,7 @@ int special(struct char_data * ch, int cmd, char *arg)
         return 1;
 
   /* special in object present? */
-  for (i = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; i; i = i->next_content)
+  FOR_ITEMS_AROUND_CH(ch, i)
     if (GET_OBJ_SPEC(i) != NULL && !(ch->in_veh && ch->vfront != i->vfront))
       if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
         return 1;

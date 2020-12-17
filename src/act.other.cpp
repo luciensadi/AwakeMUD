@@ -2699,7 +2699,8 @@ ACMD(do_photo)
           strcat(buf, ".\r\n");
         }
       }
-    for (struct obj_data *obj = ch->in_room->contents; obj; obj = obj->next_content) {
+    struct obj_data *obj;
+    FOR_ITEMS_AROUND_CH(ch, obj) {
       int num = 0;
       while (obj->next_content) {
         if (obj->item_number != obj->next_content->item_number || obj->restring)
@@ -3323,7 +3324,7 @@ ACMD(do_unpack)
       send_to_char("You can't set up a vehicle in the front seat.\r\n", ch);
     }
   }
-  for (shop = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; shop; shop = shop->next_content)
+  FOR_ITEMS_AROUND_CH(ch, shop) {
     if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_WORKSHOP) {
       if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
         send_to_char("There is already a workshop set up here.\r\n", ch);
@@ -3331,6 +3332,7 @@ ACMD(do_unpack)
       } else
         break;
     }
+  }
   if (!shop)
     send_to_char(ch, "There is no workshop here to set up.\r\n");
   else {
@@ -3352,7 +3354,7 @@ ACMD(do_unpack)
 ACMD(do_packup)
 {
   struct obj_data *shop = NULL;
-  for (shop = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; shop; shop = shop->next_content)
+  FOR_ITEMS_AROUND_CH(ch, shop) {
     if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_OBJ_VAL(shop, 1) > 1) {
       if (GET_OBJ_VAL(shop, 3)) {
         send_to_char(ch, "Someone is already working on the workshop.\r\n");
@@ -3360,6 +3362,7 @@ ACMD(do_packup)
       } else if (GET_OBJ_VAL(shop, 2))
         break;
     }
+  }
   if (!shop)
     send_to_char(ch, "There is no workshop here to pack up.\r\n");
   else {

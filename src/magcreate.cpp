@@ -185,20 +185,12 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
     send_to_char("Take a seat before beginning to design a spell.\r\n", ch);
     return;
   }
-  if (ch->in_veh) {
-    for (lib = ch->in_veh->contents; lib; lib = lib->next_content)
-      if (GET_OBJ_TYPE(lib) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(lib, 1) >= GET_OBJ_VAL(formula, 0) &&
-          ((GET_TRADITION(ch) == TRAD_SHAMANIC
-            && GET_OBJ_VAL(lib, 0) == TYPE_LODGE && GET_OBJ_VAL(lib, 3) == GET_IDNUM(ch)) ||
-           (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(lib, 0) == TYPE_LIBRARY_SPELL)))
-        break;
-  } else {
-    for (lib = ch->in_room->contents; lib; lib = lib->next_content)
-      if (GET_OBJ_TYPE(lib) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(lib, 1) >= GET_OBJ_VAL(formula, 0) &&
-          ((GET_TRADITION(ch) == TRAD_SHAMANIC
-            && GET_OBJ_VAL(lib, 0) == TYPE_LODGE && GET_OBJ_VAL(lib, 3) == GET_IDNUM(ch)) ||
-           (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(lib, 0) == TYPE_LIBRARY_SPELL)))
-        break;
+  FOR_ITEMS_AROUND_CH(ch, lib) {
+    if (GET_OBJ_TYPE(lib) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(lib, 1) >= GET_OBJ_VAL(formula, 0) &&
+        ((GET_TRADITION(ch) == TRAD_SHAMANIC
+          && GET_OBJ_VAL(lib, 0) == TYPE_LODGE && GET_OBJ_VAL(lib, 3) == GET_IDNUM(ch)) ||
+         (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(lib, 0) == TYPE_LIBRARY_SPELL)))
+      break;
   }
   if (!lib) {
     send_to_char("You don't have the right tools here to design that spell.\r\n", ch);

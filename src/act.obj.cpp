@@ -1289,7 +1289,7 @@ ACMD(do_get)
             act(buf, FALSE, ch, cont, 0, TO_CHAR);
           }
         }
-      for (cont = ch->in_room->contents; cont; cont = cont->next_content)
+      FOR_ITEMS_AROUND_CH(ch, cont) {
         if (CAN_SEE_OBJ(ch, cont) &&
             (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
           if (GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING) {
@@ -1301,6 +1301,7 @@ ACMD(do_get)
             found = 1;
           }
         }
+      }
       if (!found) {
         if (cont_dotmode == FIND_ALL) {
           send_to_char(ch, "You can't seem to find any %s.\r\n", (!cyberdeck ? "containers" : "cyberdeck"));

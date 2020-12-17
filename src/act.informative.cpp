@@ -1701,14 +1701,16 @@ void look_at_target(struct char_data * ch, char *arg)
   }
   
   /* Does the argument match an extra desc of an object in the room? */
-  if (ch->in_room)
-    for (obj = ch->in_room->contents; obj && !found; obj = obj->next_content)
-      if (CAN_SEE_OBJ(ch, obj))
-        if ((desc = find_exdesc(arg, obj->ex_description)) != NULL)
-        {
+  if (ch->in_room) {
+    FOR_ITEMS_AROUND_CH(ch, obj) {
+      if (CAN_SEE_OBJ(ch, obj)) {
+        if ((desc = find_exdesc(arg, obj->ex_description)) != NULL) {
           send_to_char(desc, ch);
           found = 1;
         }
+      }
+    }
+  }
   if (bits)
   {                   /* If an object was found back in
                        * generic_find */

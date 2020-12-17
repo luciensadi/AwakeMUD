@@ -758,9 +758,10 @@ ACMD(do_broadcast)
                   if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
                     radio = obj2;
             }
-          for (obj = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; obj && !radio; obj = obj->next_content)
+          FOR_ITEMS_AROUND_CH(ch, obj) {
             if (GET_OBJ_TYPE(obj) == ITEM_RADIO && !CAN_WEAR(obj, ITEM_WEAR_TAKE))
               radio = obj;
+          }
 
           if (radio) {
             suc = success_test(GET_SKILL(d->character, GET_LANGUAGE(ch)), 4);

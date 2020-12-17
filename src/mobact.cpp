@@ -756,6 +756,9 @@ bool mobact_process_self_buff(struct char_data *ch) {
 }
 
 bool mobact_process_scavenger(struct char_data *ch) {
+  if (!ch || !ch->in_room)
+    return FALSE;
+    
   /* Scavenger (picking up objects) */
   if (MOB_FLAGGED(ch, MOB_SCAVENGER)) {
     if (ch->in_room->contents && !number(0, 10)) {
@@ -763,7 +766,7 @@ bool mobact_process_scavenger(struct char_data *ch) {
       int max = 1;
       
       // Find the most valuable object in the room (ignoring worthless things):
-      for (obj = ch->in_room->contents; obj; obj = obj->next_content) {
+      FOR_ITEMS_AROUND_CH(ch, obj) {
         if (CAN_GET_OBJ(ch, obj) && GET_OBJ_COST(obj) > max && GET_OBJ_TYPE(obj) != ITEM_WORKSHOP) {
           best_obj = obj;
           max = GET_OBJ_COST(obj);
