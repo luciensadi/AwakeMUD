@@ -1625,9 +1625,17 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     delete [] representation;
   }
 
-  if (!IS_NPC(ch) && IS_NPC(vict) && GET_QUEST(ch)) {
-    if (check_quest_delivery(ch, vict, obj))
+  if (!IS_NPC(ch) && IS_NPC(vict)) {
+    if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj))
       extract_obj(obj);
+    else {
+      act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
+      obj_from_char(obj);
+      if (vict->in_room)
+        obj_to_room(obj, vict->in_room);
+      else
+        obj_to_veh(obj, vict->in_veh);
+    }
   } else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
            !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master))
     if (check_quest_delivery(ch->master, vict, obj))
