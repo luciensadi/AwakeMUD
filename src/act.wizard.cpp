@@ -123,6 +123,7 @@ ACMD(do_copyover)
 {
   FILE *fp;
   struct descriptor_data *d, *d_next;
+  struct char_data *och;
   int mesnum = number(0, 18);
   const char *messages[] =
     {
@@ -156,6 +157,50 @@ ACMD(do_copyover)
     send_to_char ("Copyover file not writeable, aborted.\n\r",ch);
     return;
   }
+  
+  // Check for PCs on quests and people not in PLAYING state.  
+  strncpy(buf, "Characters currently on quests: ", sizeof(buf));
+  int num_questors = 0;
+  int fucky_states = 0;
+  for (d = descriptor_list; d; d = d->next) {
+    och = d->character;
+    if (GET_QUEST(och)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s",
+               num_questors > 0 ? "^n, ^c" : "^c",
+               GET_CHAR_NAME(och));
+      num_questors += 1;
+    }
+    if (STATE(d) != CON_PLAYING)
+      fucky_states++;
+  }
+  
+  skip_spaces(&argument);
+  if (str_cmp(argument, "force") != 0) {
+    if (num_questors > 0) {
+      send_to_char(ch, "Copyover aborted, there %s %d character%s doing autoruns right now. Use 'copyover force' to override this.\r\n%s^n.\r\n",
+                   num_questors != 1 ? "are" : "is",
+                   num_questors, 
+                   num_questors != 1 ? "s" : "",
+                   buf);
+      return;
+    }
+    
+    // Check for PCs in non-playing states.
+    if (fucky_states > 0) {
+      send_to_char(ch, "Copyover aborted, %d player%s not in the playing state. Check USERS for details. Use 'copyover force' to override this.\r\n",
+                   fucky_states != 1 ? "s are" : " is");
+      return;
+    }
+  } else if (ch->desc){
+    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s and drop %d quest%s.\r\n",
+             fucky_states, 
+             fucky_states != 1 ? "s" : "",
+             num_questors,
+             num_questors != 1 ? "s" : "");
+    write_to_descriptor(ch->desc->descriptor, buf);
+  } else {
+    log("WTF, ch who initiated copyover had no desc? ;-;");
+  }
 
   snprintf(buf, sizeof(buf), "Copyover initiated by %s", GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
@@ -164,7 +209,7 @@ ACMD(do_copyover)
   log("Disconnecting players.");
   /* For each playing descriptor, save its state */
   for (d = descriptor_list; d ; d = d_next) {
-    struct char_data * och = d->character;
+    och = d->character;
     d_next = d->next; // delete from list, save stuff
 
     if (!d->character || d->connected > CON_PLAYING) // drops those logging on
