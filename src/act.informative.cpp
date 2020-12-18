@@ -91,6 +91,7 @@ const char* blood_messages[] = {
   "If you see this, alert an immort that the blood level is too high.\r\n"
 };
 
+ACMD_DECLARE(do_examine);
 
 /* end blood stuff */
 
@@ -1767,9 +1768,14 @@ ACMD(do_look)
     else if ((look_type = search_block(arg, lookdirs, FALSE)) >= 0)
       look_in_direction(ch, convert_look[look_type]);
     else if (is_abbrev(arg, "at"))
+      do_examine(ch, arg2, 0, SCMD_EXAMINE);
+    else
+      do_examine(ch, arg, 0, SCMD_EXAMINE);
+    /* else if (is_abbrev(arg, "at"))
       look_at_target(ch, arg2);
     else
       look_at_target(ch, arg);
+      */
   }
 }
 
