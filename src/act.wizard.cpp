@@ -5241,7 +5241,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   }
   
   if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char("You don't have that item.\r\n", ch);
+    send_to_char("You're not carrying that item.\r\n", ch);
     return FALSE;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_MOD) {
@@ -5249,7 +5249,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     return FALSE;
   }
   if (strlen(buf) >= LINE_LENGTH) {
-    send_to_char("That restring is too long, please shorten it.\r\n", ch);
+    send_to_char(ch, "That restring is too long, please shorten it. The maximum length is %d characters.\r\n", LINE_LENGTH - 1);
     return FALSE;
   }
   
@@ -5272,7 +5272,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
       GET_SYSTEM_POINTS(ch) -= SYSP_RESTRING_COST;
     } else {
       if (GET_KARMA(ch) < 250) {
-        send_to_char(ch, "You don't have enough karma to restring that.\r\n");
+        send_to_char("You don't have enough karma to restring that. It costs 2.5 karma.\r\n", ch);
         return FALSE;
       }
       GET_KARMA(ch) -= 250;
@@ -5300,10 +5300,8 @@ ACMD(do_incognito)
   if (!*arg)
     if (GET_INCOG_LEV(ch)) {
       GET_INCOG_LEV(ch) = 0;
-      send_to_char("You are no longer incognito.\r\n", ch);
     } else {
       GET_INCOG_LEV(ch) = 2;
-      send_to_char("Your incognito is level 2.\r\n", ch);
     }
   else {
     i = atoi(arg);
@@ -5313,12 +5311,15 @@ ACMD(do_incognito)
     }
     if (i < 1) {
       GET_INCOG_LEV(ch) = 0;
-      send_to_char("You are no longer incognito.\r\n", ch);
     } else {
       GET_INCOG_LEV(ch) = i;
-      send_to_char(ch, "Your incognito is level %d.\r\n", i);
     }
   }
+  
+  if (GET_INCOG_LEV(ch) == 0)
+    send_to_char("You are no longer incognito on the wholist.\r\n", ch);
+  else
+    send_to_char(ch, "Your wholist incognito is level %d.\r\n", i);
 }
 
 ACMD(do_zone) {
