@@ -4710,7 +4710,7 @@ ACMD(do_tke){
   send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <tke|reputation|notoriety|nuyen|syspoints>\r\n"
+#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <tke|reputation|notoriety|nuyen|syspoints|fired>\r\n"
 ACMD(do_leaderboard) {
   // leaderboard <tke|rep|notor|nuyen|sysp>
   skip_spaces(&argument);
@@ -4744,6 +4744,11 @@ ACMD(do_leaderboard) {
   else if (!strncmp(argument, "syspoints", strlen(argument))) {
     display_string = "syspoints";
     query_string = "syspoints";
+  }
+  
+  else if (!strncmp(argument, "fired", strlen(argument))) {
+    display_string = "shots fired";
+    query_string = "ShotsFired";
   }
   
   else {
@@ -4803,6 +4808,6 @@ ACMD(do_search) {
     send_to_char("You search the area for secrets, but fail to turn anything up.\r\n", ch);
     
     if (has_secrets && success_test(GET_INT(ch), 4))
-      send_to_char("You feel like there's something to uncover here.\r\n", ch);
+      send_to_char("You feel like there's still something to uncover here...\r\n", ch);
   }
 }
