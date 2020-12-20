@@ -4306,44 +4306,56 @@ SPECIAL(chargen_south_from_trainer)
 
 SPECIAL(chargen_unpractice_skill)
 {
-  if (!ch || !cmd || IS_NPC(ch) || !CMD_IS("unpractice"))
+  if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
+    
+  if (CMD_IS("nw")) {
+    if (GET_TRADITION(ch) == TRAD_MUNDANE) {
+      send_to_char("You don't have the ability to learn magic.\r\n", ch);
+      return TRUE;
+    }
+    return FALSE;
+  }
   
-  skip_spaces(&argument);
-  
-  if (!*argument) {
-    send_to_char("Syntax: UNPRACTICE [skill name]\r\n", ch);
+  else if (CMD_IS("unpractice")) {
+    skip_spaces(&argument);
+    
+    if (!*argument) {
+      send_to_char("Syntax: UNPRACTICE [skill name]\r\n", ch);
+      return TRUE;
+    }
+    
+    int skill_num = find_skill_num(argument);
+    
+    if (skill_num < 0) {
+      send_to_char("Please specify a valid skill.\r\n", ch);
+      return TRUE;
+    }
+    
+    if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
+      send_to_char("You can't unpractice a skill you currently have a skillsoft or other boost for.\r\n", ch);
+      return TRUE;
+    }
+    
+    if (GET_SKILL(ch, skill_num) <= 0) {
+      send_to_char("You don't know that skill.\r\n", ch);
+      return TRUE;
+    }
+    
+    // Success. Lower the skill by one point.
+    GET_SKILL_POINTS(ch)++;
+    set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) - 1, FALSE);
+    
+    if (GET_SKILL(ch, skill_num) == 0) {
+      send_to_char(ch, "With the assistance of several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
+    } else {
+      send_to_char(ch, "With the assistance of several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
+    }
+    
     return TRUE;
   }
   
-  int skill_num = find_skill_num(argument);
-  
-  if (skill_num < 0) {
-    send_to_char("Please specify a valid skill.\r\n", ch);
-    return TRUE;
-  }
-  
-  if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
-    send_to_char("You can't unpractice a skill you currently have a skillsoft or other boost for.\r\n", ch);
-    return TRUE;
-  }
-  
-  if (GET_SKILL(ch, skill_num) <= 0) {
-    send_to_char("You don't know that skill.\r\n", ch);
-    return TRUE;
-  }
-  
-  // Success. Lower the skill by one point.
-  GET_SKILL_POINTS(ch)++;
-  set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) - 1, FALSE);
-  
-  if (GET_SKILL(ch, skill_num) == 0) {
-    send_to_char(ch, "With the assistance of several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
-  } else {
-    send_to_char(ch, "With the assistance of several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
-  }
-  
-  return TRUE;
+  return FALSE;
 }
 
 // Prevent people from moving south from teachers until they've spent all their skill points.

@@ -784,6 +784,7 @@ struct ccreate_t
   sh_int pr[NUM_CCR_PR_POINTS];
   sh_int force_points;
   sh_int temp;
+  bool archetypal;
   int points;
 };
 

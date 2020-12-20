@@ -1883,38 +1883,6 @@ enum {
 #define CON_PGEDIT       46
 #define CON_HELPEDIT     47
 
-/* chargen connected modes */
-#define CCR_AWAIT_CR    -1
-#define CCR_SEX         0
-#define CCR_RACE        1
-#define CCR_TOTEM       2
-#define CCR_PRIORITY    3
-#define CCR_ASSIGN      4
-#define CCR_TRADITION   5
-#define CCR_ASPECT	6
-#define CCR_TOTEM2	7
-#define CCR_TYPE	8
-#define CCR_POINTS	9
-#define CCR_PO_ATTR	10
-#define CCR_PO_SKILL	11
-#define CCR_PO_RESOURCES	12
-#define CCR_PO_MAGIC	13
-
-#define PO_RACE		0
-#define PO_ATTR		1
-#define PO_SKILL	2
-#define PO_RESOURCES	3
-#define PO_MAGIC	4
-#define PO_I_DONT_EVEN_KNOW 5
-
-/* priority choosing chargen modes */
-#define PR_NONE         0
-#define PR_ATTRIB       1
-#define PR_MAGIC        2
-#define PR_RESOURCE     3
-#define PR_SKILL        4
-#define PR_RACE         5
-
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0
 #define DB_BOOT_MOB     1

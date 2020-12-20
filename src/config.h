@@ -24,26 +24,26 @@ extern const char *CANNOT_GO_THAT_WAY;
 extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // What karma multiplier do you want your game to have? This effects grind length, higher is faster.
-#define KARMA_GAIN_MULTIPLIER 2.5
+#define KARMA_GAIN_MULTIPLIER  2.5
 
 // What maximum amount of karma per action do you want PCs < 100 TKE to have?
-#define MAX_NEWCHAR_GAIN 50
+#define MAX_NEWCHAR_GAIN  50
 
 // What maximum amount of karma per action do you want PCs < 500 TKE to have?
-#define MAX_MIDCHAR_GAIN 100
+#define MAX_MIDCHAR_GAIN  100
 
 // What maximum amount of karma per action do you want PCs >= 500 TKE to have?
-#define MAX_OLDCHAR_GAIN MAX(100, GET_TKE(ch) / 4)
+#define MAX_OLDCHAR_GAIN  MAX(100, GET_TKE(ch) / 4)
 
 // What do you want the maximum skill levels to be? Reference values in awake.h.
 #define MAX_SKILL_LEVEL_FOR_MORTS  LEARNED_LEVEL
 #define MAX_SKILL_LEVEL_FOR_IMMS   100
 
 // What do you want the newbie karma threshold to be? Above this, you lose the newbie flag.
-#define NEWBIE_KARMA_THRESHOLD     25
+#define NEWBIE_KARMA_THRESHOLD  25
 
 // How many syspoints should someone spend to restring an item?
-#define SYSP_RESTRING_COST                                        2
+#define SYSP_RESTRING_COST  2
 
 // How long should the MUD wait for recovery before killing itself? Note that it
 // considers itself to be stuck during copyover too, so if you have a large world,
@@ -52,5 +52,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // What is the maximum cab fare in nuyen?
 #define MAX_CAB_FARE  250
+
+// What should the level of new characters' starting language be?
+#define STARTING_LANGUAGE_SKILL_LEVEL  10
+
+// How many restring points should newbies get to use in chargen?
+#define STARTING_RESTRING_POINTS  5
 
 #endif
