@@ -178,6 +178,7 @@ ACMD(do_copyover)
   if (str_cmp(argument, "force") != 0) {
     if (num_questors > 0) {
       send_to_char(ch, "Copyover aborted, there %s %d character%s doing autoruns right now. Use 'copyover force' to override this.\r\n%s^n.\r\n",
+                   num_questors,
                    num_questors != 1 ? "are" : "is",
                    num_questors, 
                    num_questors != 1 ? "s" : "",
@@ -188,7 +189,7 @@ ACMD(do_copyover)
     // Check for PCs in non-playing states.
     if (fucky_states > 0) {
       send_to_char(ch, "Copyover aborted, %d player%s not in the playing state. Check USERS for details. Use 'copyover force' to override this.\r\n",
-                   fucky_states != 1 ? "s are" : " is");
+                   fucky_states, fucky_states != 1 ? "s are" : " is");
       return;
     }
   } else if (ch->desc){
