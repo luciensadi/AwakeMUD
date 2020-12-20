@@ -16,6 +16,8 @@
 #include "constants.h"
 #include "config.h"
 #include "chargen.h"
+#include "archetypes.h"
+#include "bullet_pants.h"
 
 #define CH d->character
 
@@ -23,7 +25,266 @@ extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 extern void display_help(char *help, int help_len, const char *arg, struct char_data *ch);
 
+static void start_game(descriptor_data *d);
+
 int get_minimum_attribute_points_for_race(int race);
+void init_char_sql(struct char_data *ch);
+void init_create_vars(struct descriptor_data *d);
+
+/*********
+
+EXPECTED FLOW:
+
+- name
+- password
+- pronouns
+- archetype or custom?
+
+ARCHETYPE:
+- brief descs of archetypes, then archetype selection menu
+- help available through arch selection menu
+- once selected, put into abbreviated chargen (basics, then special info) with all skills/etc already set, and a bail-out-and-play exit
+
+CUSTOM:
+- standard AW chargen tree
+*/
+
+// Invoked from interpreter, this menu puts the character in a state to select their sex.
+void ccr_pronoun_menu(struct descriptor_data *d) {
+  SEND_TO_Q("What pronouns will your character use? (M)ale, (F)emale, (N)eutral: ", d);
+  d->ccr.mode = CCR_PRONOUNS;
+}
+
+void ccr_race_menu(struct descriptor_data *d) {
+  SEND_TO_Q("\r\nSelect a race:"
+            "\r\n  [1] Human"
+            "\r\n  [2] Dwarf"
+            "\r\n  [3] Elf"
+            "\r\n  [4] Ork"
+            "\r\n  [5] Troll"
+            "\r\n  [6] Cyclops"
+            "\r\n  [7] Koborokuru"
+            "\r\n  [8] Fomori"
+            "\r\n  [9] Menehune"
+            "\r\n  [A] Hobgoblin"
+            "\r\n  [B] Giant"
+            "\r\n  [C] Gnome"
+            "\r\n  [D] Oni"
+            "\r\n  [E] Wakyambi"
+            "\r\n  [F] Ogre"
+            "\r\n  [G] Minotaur"
+            "\r\n  [H] Satyr"
+            "\r\n  [I] Night-One"
+            "\r\n  ?# (for help on a particular race)"
+            "\r\n"
+            "\r\nRace: ", d);
+  d->ccr.mode = CCR_RACE;
+}
+
+void ccr_archetypal_menu(struct descriptor_data *d) {
+  SEND_TO_Q("\r\nHow would you like to make your character?"
+            "\r\n"
+            "\r\n1) Archetypal creation (quick; recommended for new players)"
+            "\r\n2) Custom creation (long; recommended for experienced players)"
+            "\r\n"
+            "\r\nChoose 1 or 2: ", d);
+  d->ccr.mode = CCR_ARCHETYPE_MODE;
+}
+
+void ccr_archetype_selection_menu(struct descriptor_data *d) {
+  SEND_TO_Q("\r\nThe following archetypes are available:"
+            "\r\n", d);
+  
+  for (int i = 0; i < NUM_CCR_ARCHETYPES; i++) {
+    snprintf(buf, sizeof(buf), "\r\n%d) %s", i + 1, archetypes[i]->name);
+    SEND_TO_Q(buf, d);
+  }
+  
+  SEND_TO_Q("\r\n\r\nEnter the number of the archetype you'd like to play, or ? for more info: ", d);
+  
+  d->ccr.mode = CCR_ARCHETYPE_SELECTION_MODE;
+}
+
+#define ATTACH_IF_EXISTS(vnum, location) \
+if ((vnum) > 0) { \
+  if ((temp_obj = read_object((vnum), VIRTUAL))) { \
+    attach_attachment_to_weapon(temp_obj, weapon, NULL, (location)); \
+    extract_obj(temp_obj); \
+  } else { \
+    snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach nonexistent item %d to weapon for archetype %d.", (location), i); \
+    mudlog(buf, CH, LOG_SYSLOG, TRUE); \
+  } \
+}
+
+void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
+  // Account for the incrementing we did when presenting the options.
+  int i = atoi(arg) - 1;
+  
+  // Help mode.
+  if (*arg == '?') {
+    // TODO
+    SEND_TO_Q("help wip", d);
+    return;
+  }
+  
+  // Selection mode.
+  if (i < 0 || i >= NUM_CCR_ARCHETYPES) {
+    SEND_TO_Q("\r\nThat's not a valid archetype. Enter the archetype you'd like to play as: ", d);
+    return;
+  }
+  
+  struct obj_data *temp_obj = NULL;
+  
+  // Set race.
+  GET_RACE(CH) = archetypes[i]->race;
+  
+  // Set attributes.
+  for (int attr = BOD; attr <= WIL; attr++)
+    GET_REAL_ATT(CH, attr) = archetypes[i]->attributes[attr];
+      
+  // Set magic data. TODO.
+  GET_TRADITION(CH) = archetypes[i]->tradition;
+  GET_REAL_MAG(CH) = archetypes[i]->magic;
+  GET_ASPECT(CH) = archetypes[i]->aspect;
+  GET_PP(CH) = archetypes[i]->powerpoints;
+  GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
+  
+  // TODO: adept abilities
+  
+  // Equip weapon.
+  snprintf(buf, sizeof(buf), "Attempting to attach %lu %lu %lu...", archetypes[i]->weapon_top, archetypes[i]->weapon_barrel, archetypes[i]->weapon_under);
+  log(buf);
+  struct obj_data *weapon = read_object(archetypes[i]->weapon, VIRTUAL);
+  
+  ATTACH_IF_EXISTS(archetypes[i]->weapon_top, ACCESS_ACCESSORY_LOCATION_TOP);
+  ATTACH_IF_EXISTS(archetypes[i]->weapon_barrel, ACCESS_ACCESSORY_LOCATION_BARREL);
+  ATTACH_IF_EXISTS(archetypes[i]->weapon_under, ACCESS_ACCESSORY_LOCATION_UNDER);
+  equip_char(CH, weapon, WEAR_WIELD);
+  
+  // Fill pockets.
+  update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(GET_EQ(CH, WEAR_WIELD)), AMMO_NORMAL, archetypes[i]->ammo_q);
+  
+  // Grant modulator (unbonded, unworn).
+  if (archetypes[i]->modulator > 0)
+    obj_to_char(read_object(archetypes[i]->modulator, VIRTUAL), CH);
+  
+  // Equip worn items.
+  for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++)
+    if (archetypes[i]->worn[wearloc] > 0)
+      equip_char(CH, read_object(archetypes[i]->worn[wearloc], VIRTUAL), wearloc);
+  
+  // Give carried items.
+  for (int carried = 0; carried < NUM_ARCHETYPE_CARRIED; carried++)
+    if (archetypes[i]->carried[carried] > 0)
+      obj_to_char(read_object(archetypes[i]->carried[carried], VIRTUAL), CH);
+  
+  // Equip cyberware (deduct essence and modify stats as appropriate)
+  for (int cyb = 0; cyb < NUM_ARCHETYPE_CYBERWARE; cyb++) {
+    if (archetypes[i]->cyberware[cyb]) {
+      temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL);
+      int esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
+      
+      if (GET_TRADITION(CH) != TRAD_MUNDANE) {
+        if (GET_TOTEM(CH) == TOTEM_EAGLE)
+          esscost *= 2;
+        magic_loss(CH, esscost, TRUE);
+      }
+      
+      CH->real_abils.ess -= esscost;
+      CH->real_abils.ess = MAX(CH->real_abils.ess, 0);
+      
+      obj_to_cyberware(temp_obj, CH);
+    }
+  }
+  
+  // Equip bioware (deduct essence and modify stats as appropriate)
+  for (int bio = 0; bio < NUM_ARCHETYPE_BIOWARE; bio++) {
+    if (archetypes[i]->bioware[bio]) {
+      temp_obj = read_object(archetypes[i]->bioware[bio], VIRTUAL);
+      int esscost = GET_OBJ_VAL(temp_obj, 4); 
+      
+      GET_INDEX(CH) += esscost;
+      if (GET_TRADITION(CH) != TRAD_MUNDANE) {
+        magic_loss(CH, -esscost, TRUE);
+      }
+      
+      CH->real_abils.highestindex = GET_INDEX(CH);
+      obj_to_bioware(temp_obj, CH);
+    }
+  }
+  
+  /*
+     The code below is a mangled version of start_game(); we must CreateChar before setting certain things.
+  */
+  
+  // Sets up the character's idnum, wipes out their skills, etc.
+  CreateChar(d->character);
+  
+  d->character->player.host = str_dup(d->host);
+
+  set_character_skill(d->character, SKILL_ENGLISH, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
+  GET_LANGUAGE(d->character) = SKILL_ENGLISH;
+  GET_RESTRING_POINTS(d->character) = STARTING_RESTRING_POINTS;
+  GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
+
+  init_char_sql(d->character);
+  snprintf(buf, sizeof(buf), "%s [%s] new player.", GET_CHAR_NAME(d->character), d->host);
+  mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+  SEND_TO_Q(motd, d);
+  SEND_TO_Q("\r\n\n*** PRESS RETURN: ", d);
+  STATE(d) = CON_RMOTD;
+  
+  // Set skills. Has to be after CreateChar so they don't get wiped. TODO: not setting
+  for (int skill = 0; skill < MAX_SKILLS; skill++)
+    if (archetypes[i]->skills[skill])
+      set_character_skill(CH, skill, archetypes[i]->skills[skill], FALSE);
+      
+  // Grant subsidy card (bonded to ID). Has to be after CreateChar so the idnum doesn't change.
+  temp_obj = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL);
+  GET_OBJ_VAL(temp_obj, 0) = GET_IDNUM(CH);
+  GET_OBJ_VAL(temp_obj, 1) = archetypes[i]->subsidy_card;
+  obj_to_char(temp_obj, CH);
+  
+  d->ccr.archetypal = TRUE;
+
+  init_create_vars(d);
+}
+
+#undef ATTACH_IF_EXISTS
+
+void archetypal_parse(struct descriptor_data *d, const char *arg) {
+  switch (atoi(arg)) {
+    case 1:
+      ccr_archetype_selection_menu(d);
+      break;
+    case 2:
+      ccr_race_menu(d);
+      break;
+    default:
+      SEND_TO_Q("\r\n\r\nThat's not a valid selection. Please enter the number 1 for Archetypal creation or the number 2 for Custom creation: ", d);
+      return;
+  }
+}
+
+void parse_pronouns(struct descriptor_data *d, const char *arg) {
+  switch (tolower(*arg)) {
+    case 'm':
+      d->character->player.sex = SEX_MALE;
+      break;
+    case 'f':
+      d->character->player.sex = SEX_FEMALE;
+      break;
+    case 'n':
+      d->character->player.sex = SEX_NEUTRAL;
+      break;
+    default:
+      SEND_TO_Q("That is not a valid pronoun set.\r\nEnter M for male, F for female, or N for neutral. ", d);
+      return;
+  }
+  ccr_archetypal_menu(d);
+}
+
+// BELOW THIS IS UNTOUCHED CODE.
 
 const char *pc_race_types[] =
   {
@@ -53,28 +314,6 @@ const char *pc_race_types[] =
     "\n"
   };
 
-const char *race_menu =
-  "\r\nSelect a race:\r\n"
-  "  [1] Human\r\n"
-  "  [2] Dwarf\r\n"
-  "  [3] Elf\r\n"
-  "  [4] Ork\r\n"
-  "  [5] Troll\r\n"
-  "  [6] Cyclops\r\n"
-  "  [7] Koborokuru\r\n"
-  "  [8] Fomori\r\n"
-  "  [9] Menehune\r\n"
-  "  [A] Hobgoblin\r\n"
-  "  [B] Giant\r\n"
-  "  [C] Gnome\r\n"
-  "  [D] Oni\r\n"
-  "  [E] Wakyambi\r\n"
-  "  [F] Ogre\r\n"
-  "  [G] Minotaur\r\n"
-  "  [H] Satyr\r\n"
-  "  [I] Night-One\r\n"
-  "  ?# (for help on a particular race)\r\n";
-
 const char *assign_menu =
   "\r\nSelect a priority to assign:\r\n"
   "  [1] Attributes\r\n"
@@ -103,7 +342,7 @@ void set_attributes(struct char_data *ch, int magic)
   GET_INDEX(ch) = 0;
   GET_REAL_ESS(ch) = 600;
   
-  // Set all of the character's stats to their racial minimums.
+  // Set all of the character's stats to their racial minimums (1 + racial modifier, min 1)
   for (int attr = BOD; attr <= WIL; attr++) {
     GET_REAL_ATT(ch, attr) = MAX(1, racial_attribute_modifiers[(int)GET_RACE(ch)][attr] + 1);
   }
@@ -120,7 +359,6 @@ void init_create_vars(struct descriptor_data *d)
 {
   int i;
 
-  d->ccr.mode = CCR_SEX;
   for (i = 0; i < NUM_CCR_PR_POINTS - 1; i++)
     d->ccr.pr[i] = PR_NONE;
   d->ccr.force_points = 0;
@@ -549,17 +787,19 @@ void ccr_totem_spirit_menu(struct descriptor_data *d)
 
 void ccr_aspect_menu(struct descriptor_data *d)
 {
-  snprintf(buf, sizeof(buf), "Select your aspect: \r\n");
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  [1] Conjurer\r\n"
-          "  [2] Sorcerer\r\n");
+  strncpy(buf,   "As an aspected mage, you must select your aspect: \r\n"
+                 "  [1] Conjurer\r\n"
+                 "  [2] Sorcerer\r\n", sizeof(buf) - strlen(buf) - 1);
+                 
   if (GET_TRADITION(d->character) == TRAD_SHAMANIC)
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  [3] Shamanist\r\n");
+    strncat(buf, "  [3] Shamanist\r\n", sizeof(buf) - strlen(buf) - 1);
   else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  [3] Elementalist (Earth)\r\n"
-            "  [4] Elementalist (Air)\r\n"
-            "  [5] Elementalist (Fire)\r\n"
-            "  [6] Elementalist (water)\r\n");
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nAspect: ");
+    strncat(buf, "  [3] Elementalist (Earth)\r\n"
+                 "  [4] Elementalist (Air)\r\n"
+                 "  [5] Elementalist (Fire)\r\n"
+                 "  [6] Elementalist (water)\r\n", sizeof(buf) - strlen(buf) - 1);
+                 
+  strncat(buf,   "  [?] Help\r\n\r\nAspect: ", sizeof(buf) - strlen(buf) - 1);
   SEND_TO_Q(buf, d);
   d->ccr.mode = CCR_ASPECT;
 }
@@ -576,11 +816,11 @@ void ccr_type_menu(struct descriptor_data *d)
 void points_menu(struct descriptor_data *d)
 {
   d->ccr.mode = CCR_POINTS;
-  snprintf(buf, sizeof(buf), "  1) Attributes : ^c%8d^n (^c%2d^n Points)\r\n"
-               "  2) Skills     : ^c%8d^n (^c%2d^n Points)\r\n"
-               "  3) Resources  : ^c%8d^n (^c%2d^n Points)\r\n"
-               "  4) Magic      : ^c%8s^n (^c%2d^n Points)\r\n"
-               "     Race       : ^c%8s^n (^c%2d^n Points)\r\n"
+  snprintf(buf, sizeof(buf), "  1) Attributes: ^c%14d^n (^c%3d^n Points)\r\n"
+               "  2) Skills    : ^c%14d^n (^c%3d^n Points)\r\n"
+               "  3) Resources : ^c%14d^n (^c%3d^n Points)\r\n"
+               "  4) Magic     : ^c%14s^n (^c%3d^n Points)\r\n"
+               "     Race      : ^c%14s^n (^c%3d^n Points)\r\n"
                "  Points Remaining: ^c%d^n\r\n"
                "Choose an area to change points on(p to continue): ", d->ccr.pr[PO_ATTR]/2, d->ccr.pr[PO_ATTR],
                d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], resource_table[0][d->ccr.pr[PO_RESOURCES]], 
@@ -676,9 +916,9 @@ void create_parse(struct descriptor_data *d, const char *arg)
   case CCR_PO_MAGIC:
     i--;
     if (i > 3 || i < 0)
-      send_to_char(CH, "Invalid number. Enter desired magic level (^c%d^n available): ", d->ccr.points);
+      send_to_char(CH, "Invalid number. Enter desired type of magic (^c%d^n points available): ", d->ccr.points);
     else if (magic_cost[i] > d->ccr.points)
-      send_to_char(CH, "You do not have enough points for that. Enter desired magic level(^c%d^n available):", d->ccr.points);
+      send_to_char(CH, "You do not have enough points for that. Enter desired type of magic (^c%d^n points available):", d->ccr.points);
     else {
       d->ccr.pr[PO_MAGIC] = i;
       d->ccr.points -= magic_cost[d->ccr.pr[PO_MAGIC]];
@@ -720,7 +960,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         for (int x = 0; x < 4; x++)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %18s (%2d points)\r\n ", x+1, magic_table[x], magic_cost[x]);
         SEND_TO_Q(buf, d);
-        send_to_char(CH, "Enter desired magic level (^c%d^n available): ", d->ccr.points);
+        send_to_char(CH, "Enter desired type of magic (^c%d^n points available): ", d->ccr.points);
         d->ccr.mode = CCR_PO_MAGIC;
         break;
       case 'p':
@@ -761,7 +1001,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
             start_game(d);
           } else {
             d->ccr.mode = CCR_TRADITION;
-            SEND_TO_Q("\r\nFollow [h]ermetic, [s]hamanic tradition? ", d);
+            SEND_TO_Q("\r\nFollow [h]ermetic or [s]hamanic magical tradition? (enter ? for help) ", d);
           }
         } else {
           GET_TRADITION(CH) = TRAD_MUNDANE;
@@ -832,8 +1072,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     d->ccr.temp = 0;
     switch (d->ccr.mode) {
     case CCR_RACE:
-      SEND_TO_Q(race_menu, d);
-      SEND_TO_Q("\r\nRace: ", d);
+      ccr_race_menu(d);
       break;
     case CCR_PRIORITY:
       priority_menu(d);
@@ -845,27 +1084,14 @@ void create_parse(struct descriptor_data *d, const char *arg)
       log("Invalid mode in AWAIT_CR in chargen.");
     }
     break;
-  case CCR_SEX:
-    switch (*arg) {
-    case 'm':
-    case 'M':
-      d->character->player.sex = SEX_MALE;
-      break;
-    case 'f':
-    case 'F':
-      d->character->player.sex = SEX_FEMALE;
-      break;
-    case 'o':
-    case 'O':
-      d->character->player.sex = SEX_NEUTRAL;
-      break;
-    default:
-      SEND_TO_Q("That is not a sex..\r\nWhat IS your sex? ", d);
-      return;
-    }
-    SEND_TO_Q(race_menu, d);
-    SEND_TO_Q("\r\nRace: ", d);
-    d->ccr.mode = CCR_RACE;
+  case CCR_PRONOUNS:
+    parse_pronouns(d, arg);
+    break;
+  case CCR_ARCHETYPE_MODE:
+    archetypal_parse(d, arg);
+    break;
+  case CCR_ARCHETYPE_SELECTION_MODE:
+    archetype_selection_parse(d, arg);
     break;
   case CCR_RACE:
     if ((GET_RACE(d->character) = parse_race(d, arg)) == RACE_UNDEFINED) {
@@ -1187,7 +1413,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
             }
           } else {
             d->ccr.mode = CCR_TRADITION;
-            SEND_TO_Q("\r\nFollow [h]ermetic, [s]hamanic or som[a]tic (Adept) tradition? ", d);
+            SEND_TO_Q("\r\nFollow [h]ermetic, [s]hamanic or som[a]tic (Adept) magical tradition?  Enter '?' for help. ", d);
           }
             return;
         } else
@@ -1215,35 +1441,47 @@ void create_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case CCR_TRADITION:
-    switch (LOWER(*arg)) {
-    case 'h':
-      GET_TRADITION(d->character) = TRAD_HERMETIC;
-      if ((d->ccr.pr[5] = -1 && d->ccr.pr[PO_MAGIC] == 2) || (d->ccr.pr[5] != -1 && d->ccr.pr[1] == PR_MAGIC)) {
-        GET_FORCE_POINTS(CH) = 35;
-        ccr_aspect_menu(d);
-      } else {
-        GET_FORCE_POINTS(CH) = 25;
+  #define TRADITION_HELP_STRING "\r\nHermetic mages focus on magic as a science. Their conjured elementals are powerful, but expensive to bring forth." \
+            "\r\n" \
+            "\r\nShamanic mages focus on magic as a part of nature. Their conjured spirits are weaker than elementals, but free to conjure." \
+            "\r\n" \
+            "\r\nSomatic Adepts focus on magic as a way to improve the physical form. They cannot cast spells or conjure elementals, but their bodies are strengthened by their magic." \
+            "\r\n" \
+            "\r\nEnter H to select Hermetic, S to select Shamanic, or A to select Somatic Adept: "
+    if (isalpha(*arg) && isalpha(*(arg+1))) {
+      snprintf(buf, sizeof(buf), "\r\nARG: '%s'\r\n", arg);
+      SEND_TO_Q(buf, d);
+      SEND_TO_Q(TRADITION_HELP_STRING, d);
+    } else {
+      switch (LOWER(*arg)) {
+      case 'h':
+        GET_TRADITION(d->character) = TRAD_HERMETIC;
+        if ((d->ccr.pr[5] = -1 && d->ccr.pr[PO_MAGIC] == 2) || (d->ccr.pr[5] != -1 && d->ccr.pr[1] == PR_MAGIC)) {
+          GET_FORCE_POINTS(CH) = 35;
+          ccr_aspect_menu(d);
+        } else {
+          GET_FORCE_POINTS(CH) = 25;
+          start_game(d);
+        }
+        break;
+      case 's':
+        GET_TRADITION(d->character) = TRAD_SHAMANIC;
+        if ((d->ccr.pr[5] = -1 && d->ccr.pr[PO_MAGIC] == 2) || (d->ccr.pr[5] != -1 && d->ccr.pr[1] == PR_MAGIC)) {
+          GET_FORCE_POINTS(CH) = 35;
+          ccr_aspect_menu(d);
+        } else {
+          GET_FORCE_POINTS(CH) = 25;
+          ccr_totem_menu(d);
+        }
+        break;
+      case 'a':
+        GET_TRADITION(d->character) = TRAD_ADEPT;
         start_game(d);
+        break;
+      default:
+        SEND_TO_Q(TRADITION_HELP_STRING, d);
+        break;
       }
-      break;
-    case 's':
-      GET_TRADITION(d->character) = TRAD_SHAMANIC;
-      if ((d->ccr.pr[5] = -1 && d->ccr.pr[PO_MAGIC] == 2) || (d->ccr.pr[5] != -1 && d->ccr.pr[1] == PR_MAGIC)) {
-        GET_FORCE_POINTS(CH) = 35;
-        ccr_aspect_menu(d);
-      } else {
-        GET_FORCE_POINTS(CH) = 25;
-        ccr_totem_menu(d);
-      }
-      break;
-    case 'a':
-      GET_TRADITION(d->character) = TRAD_ADEPT;
-      start_game(d);
-      break;
-    default:
-      SEND_TO_Q("\r\nThat's not a tradition!\r\n"
-                "Follow [h]ermetic, [s]hamanic or som[a]tic tradition? ", d);
-      break;
     }
     break;
   case CCR_ASPECT:
@@ -1259,7 +1497,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         GET_ASPECT(d->character) = ASPECT_SHAMANIST;
         break;
       default:
-        SEND_TO_Q("\r\nInvalid Aspect! Aspect: ", d);
+        SEND_TO_Q("\r\nConjurers focus on conjuring spirits, but cannot cast spells. Sorcerers are the opposite of this. Shamanists are able to cast spells and conjure spirits, but are limited by their totem in the spells and spirits they can cast.\r\n\r\nSelect your aspect (1 for Conjurer, 2 for Sorcerer, 3 for Shamanist): ", d);
         return;
       }
       ccr_totem_menu(d);
@@ -1285,7 +1523,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         GET_ASPECT(d->character) = ASPECT_ELEMWATER;
         break;
       default:
-        SEND_TO_Q("\r\nInvalid Aspect! Aspect: ", d);
+        SEND_TO_Q("\r\nConjurers focus on conjuring spirits, but cannot cast spells. Sorcerers are the opposite of this. Elemental aspects are restricted to working with elementals of that flavor and certain classes of spells (Earth is Manipulation, Air is Detection, Fire is Combat, Water is Illusion).\r\n\r\nSelect your aspect (1 for Conjurer, 2 for Sorcerer, 3-6 for Earth, Air, Fire, Water.) ", d);
         return;
       }
     start_game(d);
