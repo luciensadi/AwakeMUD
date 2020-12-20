@@ -85,6 +85,7 @@ void cedit_parse(struct descriptor_data *d, char *arg);
 
 extern void affect_total(struct char_data * ch);
 extern void mag_menu_system(struct descriptor_data * d, char *arg);
+extern void ccr_pronoun_menu(struct descriptor_data *d);
 
 /* prototypes for all do_x functions. */
 ACMD_DECLARE(do_olcon);
@@ -2548,9 +2549,9 @@ void nanny(struct descriptor_data * d, char *arg)
     dirty_password = (STATE(d) == CON_CHPWD_VRFY);
 
     if (STATE(d) == CON_CNFPASSWD) {
-      SEND_TO_Q("What is your sex (M/F/O)? ", d);
       STATE(d) = CON_CCREATE;
       init_create_vars(d);
+      ccr_pronoun_menu(d);
     } else {
       if (STATE(d) != CON_CHPWD_VRFY)
         d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), TRUE);
@@ -2659,7 +2660,8 @@ void nanny(struct descriptor_data * d, char *arg)
 
       if (!GET_LEVEL(d->character)) {
         load_room = real_room(newbie_start_room);
-        do_start(d->character);
+        if (!d->ccr.archetypal)
+          do_start(d->character);
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
       } else {

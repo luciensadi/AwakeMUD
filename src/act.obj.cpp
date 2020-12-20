@@ -1380,6 +1380,13 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     send_to_char(ch, "You can't %s something you are working on.", sname);
     return 0;
   }
+  
+  if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD && GET_OBJ_VAL(obj, 1) > 0) {
+    // TODO: Make it so you can use partial amounts for rent payments- this will suck with 1 nuyen left.
+    send_to_char(ch, "You can't %s a subsidy card that still has nuyen on it!", sname);
+    return 0;
+  }
+  
   if (ch->in_veh)
   {
     if (ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load) {

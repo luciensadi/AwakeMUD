@@ -69,6 +69,7 @@ extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void weight_change_object(struct obj_data * obj, float weight);
+extern void generate_archetypes();
 
 
 /**************************************************************************
@@ -475,6 +476,9 @@ void DBInit()
   
   log("Loading shop orders.");
   boot_shop_orders();
+  
+  log("Generating character creation archetypes.");
+  generate_archetypes();
   
   log("DBInit -- DONE.");
 }
