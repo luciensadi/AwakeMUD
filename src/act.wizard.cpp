@@ -174,11 +174,13 @@ ACMD(do_copyover)
       fucky_states++;
   }
   
+  // Check for PC corpses with things still in them.
+  int num_corpses = ObjList.CountPlayerCorpses();
+  
   skip_spaces(&argument);
   if (str_cmp(argument, "force") != 0) {
     if (num_questors > 0) {
       send_to_char(ch, "Copyover aborted, there %s %d character%s doing autoruns right now. Use 'copyover force' to override this.\r\n%s^n.\r\n",
-                   num_questors,
                    num_questors != 1 ? "are" : "is",
                    num_questors, 
                    num_questors != 1 ? "s" : "",
@@ -192,10 +194,20 @@ ACMD(do_copyover)
                    fucky_states, fucky_states != 1 ? "s are" : " is");
       return;
     }
+    
+    if (num_corpses) {
+      send_to_char(ch, "Copyover aborted, there %s %d player corpse%s out there with things still in them.\r\n", 
+                   num_corpses != 1 ? "are" : "is",
+                   num_corpses,
+                   num_corpses != 1 ? "s" : "");
+      return;
+    }
   } else if (ch->desc){
-    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s and drop %d quest%s.\r\n",
+    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, delete %d corpse%s, and drop %d quest%s.\r\n",
              fucky_states, 
              fucky_states != 1 ? "s" : "",
+             num_corpses,
+             num_corpses != 1 ? "s" : "",
              num_questors,
              num_questors != 1 ? "s" : "");
     write_to_descriptor(ch->desc->descriptor, buf);

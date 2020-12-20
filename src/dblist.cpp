@@ -61,6 +61,22 @@ int objList::CountObj(int num)
   return counter;
 }
 
+// Adaptation of CountObj to find PC corpses with things in them.
+int objList::CountPlayerCorpses()
+{
+  int counter = 0;
+  nodeStruct<struct obj_data *> *temp;
+  for (temp = head; temp; temp = temp->next)
+    if (GET_OBJ_TYPE(temp->data) == ITEM_CONTAINER 
+        && temp->data->contains
+        && GET_OBJ_VAL(temp->data, 4) 
+        && IS_OBJ_STAT(temp->data, ITEM_CORPSE) 
+    )
+      counter++;
+
+  return counter;
+}
+
 // this function searches through the list and returns a pointer to the
 // object whose object rnum matches num
 struct obj_data *objList::FindObj(int num)

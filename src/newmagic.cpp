@@ -1081,7 +1081,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         target += 10 - (GET_ESS(vict) / 100);
       success = (int)(success_test(skill, target) -
                       ((spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) ? resist_spell(vict, spell, force, sub) : 0));
-      if (success > 0) {
+      if (success > 1) {
         create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         send_to_char("You feel your body tingle.\r\n", vict);
@@ -2109,7 +2109,7 @@ ACMD(do_bond)
       }
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         if (GET_FORCE_POINTS(ch) < karma) {
-          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the spell trainers and typing LEARN FORCE.\r\n", karma);
+          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the talismonger or the spell trainers and typing LEARN FORCE.\r\n", karma);
           return;
         }
         GET_FORCE_POINTS(ch) -= karma;

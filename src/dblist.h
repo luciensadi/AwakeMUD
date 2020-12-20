@@ -11,6 +11,7 @@ class objList : public List<struct obj_data *>
 public:
   int PrintList(struct char_data *ch, const char *arg);
   int CountObj(int num);
+  int CountPlayerCorpses();
   struct obj_data *FindObj(int num);
   struct obj_data *FindObj(struct char_data *ch, char *name, int num);
   void UpdateObjs(const struct obj_data *proto, int rnum);
@@ -22,4 +23,3 @@ public:
   void RemoveObjNum(int num);
   void RemoveQuestObjs(int id);
 };
-

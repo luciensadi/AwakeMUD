@@ -310,6 +310,9 @@ struct spell_trainer spelltrainers[] = {
   {60604, SPELL_POLTERGEIST, "Poltergeist", 0, 6},
   {60604, SPELL_SHADOW, "Shadow", 0, 6},
   
+  // A throwaway spell teacher slot for Jarmine so it can let people learn force.
+  { 60531, SPELL_MANABOLT, "Manabolt", 0, 6 },
+  
                             // Immortal HQ Trainer, not alphabetized because who has the time for that
                             {10013, SPELL_DEATHTOUCH, "Death Touch", 0, 50},
                             {10013, SPELL_MANABOLT, "Manabolt", 0, 50},
