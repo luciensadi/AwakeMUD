@@ -1673,13 +1673,16 @@ void docwagon(struct char_data *ch)
   if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
     return;
   
-  for (i = 0; (i < NUM_WEARS && !docwagon); i++)
+  // Find the best docwagon contract they're wearing.
+  for (i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_DOCWAGON && GET_DOCWAGON_BONDED_IDNUM(GET_EQ(ch, i)) == GET_IDNUM(ch))
+      if (docwagon == NULL || GET_DOCWAGON_CONTRACT_GRADE(GET_EQ(ch, i)) > GET_DOCWAGON_CONTRACT_GRADE(docwagon))
       docwagon = GET_EQ(ch, i);
   
   if (!docwagon)
     return;
   
+  // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
   if (success_test(GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1,
                    MAX(GET_SECURITY_LEVEL(ch->in_room), 4)) > 0)
   {
@@ -1696,8 +1699,7 @@ void docwagon(struct char_data *ch)
         end_sustained_spell(ch, sust);
       }
     }
-    if (ch->persona)
-    {
+    if (ch->persona) {
       snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", ch->persona->name);
       send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       extract_icon(ch->persona);
@@ -2148,18 +2150,22 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   {
     dam = -1;
     buf_mod(rbuf,"Invalid",dam);
+    if (ch)
+      send_to_char(ch, "^m(OOC Notice: %s has been made unkillable by the game's administration.)^n\r\n", GET_CHAR_NAME(victim));
   }
   
   /* shopkeeper protection */
-  if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+  else if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
       || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
       || mob_index[GET_MOB_RNUM(victim)].func == johnson 
       || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson)
   {
     dam = -1;
     buf_mod(rbuf,"Keeper",dam);
+    if (ch)
+      send_to_char(ch, "^m(OOC Notice: %s has been made unkillable by the game's administration.)^n\r\n", GET_CHAR_NAME(victim));
   }
-  if(IS_NPC(victim) && MOB_FLAGGED(victim,MOB_NOKILL))
+  else if (IS_NPC(victim) && MOB_FLAGGED(victim,MOB_NOKILL))
   {
     dam =-1;
     buf_mod(rbuf,"NoKill",dam);
@@ -2375,6 +2381,8 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     damage_equip(ch, victim, dam, attacktype);
   
   /* Use send_to_char -- act() doesn't send message if you are DEAD. */
+  bool unbonded_docwagon = FALSE;
+  struct obj_data *docwagon_biomonitor = NULL;
   switch (GET_POS(victim))
   {
     case POS_MORTALLYW:
@@ -2400,7 +2408,25 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
         act("$n is dead!  R.I.P.", FALSE, victim, 0, 0, TO_ROOM);
       else
         act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
-      send_to_char("You feel the world slip in to darkness, you better hope a wandering DocWagon finds you.\r\n", victim);
+        
+      for (int i = 0; i < NUM_WEARS && !docwagon_biomonitor; i++) {
+        if (GET_EQ(victim, i) && GET_OBJ_TYPE(GET_EQ(victim, i)) == ITEM_DOCWAGON) {
+          if (GET_DOCWAGON_BONDED_IDNUM(GET_EQ(victim, i)) != GET_IDNUM(victim)) {
+            unbonded_docwagon = TRUE;
+          } else {
+            docwagon_biomonitor = GET_EQ(victim, i);
+          }
+        }
+      }
+      
+      if (docwagon_biomonitor) {
+        send_to_char("You feel the vibration of your DocWagon biomonitor sending out an alert, but as the world slips into darkness you realize it's too little, too late.\r\n", victim);
+      } else if (unbonded_docwagon) {
+        send_to_char("Your last conscious thought involves wondering why your DocWagon biomonitor didn't work-- maybe you forgot to bond it? The world slips into darkness, and you hope a wandering DocWagon finds you.\r\n", victim);
+      } else {
+        send_to_char("You feel the world slip in to darkness, you'd better hope a wandering DocWagon finds you.\r\n", victim);
+      }
+      
       break;
     default:                      /* >= POSITION SLEEPING */
       if (dam > ((int)(GET_MAX_PHYSICAL(victim) / 100) >> 2))

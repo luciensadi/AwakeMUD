@@ -2305,7 +2305,12 @@ ACMD(do_award)
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
-    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
+    return;
+  }
+  
+  if (IS_SENATOR(vict)) {
+    send_to_char(ch, "Staff can't receive karma this way. Use the SET command.\r\n", ch);
     return;
   }
   
