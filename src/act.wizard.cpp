@@ -162,6 +162,7 @@ ACMD(do_copyover)
   strncpy(buf, "Characters currently on quests: ", sizeof(buf));
   int num_questors = 0;
   int fucky_states = 0;
+  int cab_inhabitants = 0;
   for (d = descriptor_list; d; d = d->next) {
     och = d->character;
     if (GET_QUEST(och)) {
@@ -170,8 +171,17 @@ ACMD(do_copyover)
                GET_CHAR_NAME(och));
       num_questors += 1;
     }
+    
+    // Count PCs in weird states.
     if (STATE(d) != CON_PLAYING)
       fucky_states++;
+      
+    // Count PCs in cabs.
+    if (och->in_room
+        && ((GET_ROOM_VNUM(och->in_room) >= FIRST_CAB && GET_ROOM_VNUM(och->in_room) <= LAST_CAB)
+            || (GET_ROOM_VNUM(och->in_room) >= FIRST_PORTCAB && GET_ROOM_VNUM(och->in_room) <= LAST_PORTCAB))
+      )
+      cab_inhabitants++;
   }
   
   // Check for PC corpses with things still in them.
@@ -203,14 +213,12 @@ ACMD(do_copyover)
       return;
     }
   } else if (ch->desc){
-    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, delete %d corpse%s, and drop %d quest%s.\r\n",
-             fucky_states, 
-             fucky_states != 1 ? "s" : "",
-             num_corpses,
-             num_corpses != 1 ? "s" : "",
-             num_questors,
-             num_questors != 1 ? "s" : "");
-    write_to_descriptor(ch->desc->descriptor, buf);
+    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, delete %d corpse%s, refund %d cab fare%s, and drop %d quest%s.\r\n",
+             fucky_states,    fucky_states    != 1 ? "s" : "",
+             num_corpses,     num_corpses     != 1 ? "s" : "",
+             cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
+             num_questors,    num_questors    != 1 ? "s" : "");
+    write_to_descriptor(ch->desc->descriptor, buf);    
   } else {
     log("WTF, ch who initiated copyover had no desc? ;-;");
   }
@@ -231,6 +239,15 @@ ACMD(do_copyover)
       close_socket (d); // yer outta here!
 
     } else {
+      // Refund people in cabs for the extra cash. Fixes edge case of 'I only had enough to cover my original cab fare'.
+      if (!PLR_FLAGGED(och, PLR_NEWBIE) && och->in_room
+          && ((GET_ROOM_VNUM(och->in_room) >= FIRST_CAB && GET_ROOM_VNUM(och->in_room) <= LAST_CAB)
+              || (GET_ROOM_VNUM(och->in_room) >= FIRST_PORTCAB && GET_ROOM_VNUM(och->in_room) <= LAST_PORTCAB))
+        ) {
+        send_to_char(och, "You have been refunded %d nuyen to compensate for the extra cab fare.", MAX_CAB_FARE);
+        GET_NUYEN(och) += MAX_CAB_FARE;
+      }
+      
       fprintf (fp, "%d %s %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d));
       GET_LAST_IN(och) = get_ch_in_room(och)->number;
       if (!GET_LAST_IN(och) || GET_LAST_IN(och) == NOWHERE) {

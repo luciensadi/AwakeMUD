@@ -50,4 +50,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // you should increase this value.
 #define SECONDS_TO_WAIT_FOR_HUNG_MUD_TO_RECOVER_BEFORE_KILLING_IT 30
 
+// What is the maximum cab fare in nuyen?
+#define MAX_CAB_FARE  250
+
 #endif

@@ -28,6 +28,7 @@
 #include "transport.h"
 #include "utils.h"
 #include "constants.h"
+#include "config.h"
 
 SPECIAL(call_elevator);
 SPECIAL(elevator_spec);
@@ -725,9 +726,9 @@ SPECIAL(taxi)
       dist++;
     }
     if (!temp_room)
-      GET_SPARE1(driver) = 250;
+      GET_SPARE1(driver) = MAX_CAB_FARE;
     else
-      GET_SPARE1(driver) = MIN(250, 5 + dist);
+      GET_SPARE1(driver) = MIN(MAX_CAB_FARE, 5 + dist);
     GET_SPARE2(driver) = dest;
     GET_ACTIVE(driver) = ACT_REPLY_DEST;
     if (PLR_FLAGGED(ch, PLR_NEWBIE))
