@@ -1723,7 +1723,7 @@ void look_at_target(struct char_data * ch, char *arg)
     if (str_str("pockets", arg)) {
       send_to_char("Please see ^WHELP POCKETS^n for info on how to use your ammo pockets.\r\n", ch);
     } else {
-      send_to_char(ch, "You don't see anything named '%s' here.", arg);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
     }
   }
     
@@ -3135,9 +3135,9 @@ ACMD(do_score)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/  ^L\\\\@//                                                            ^L/^b/\r\n");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/   ^L`^^                                                              ^b/^L/\r\n");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/                                                                   ^L/^b/\r\n");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nBody          ^w%2d (^W%2d^w)    Height: ^W%0.2f^w meters   Weight: ^W%3d^w kilos  ^b/^L/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nBody          ^w%2d (^W%2d^w)    Height: ^W%4.2f^w meters   Weight: ^W%3d^w kilos  ^b/^L/\r\n",
                           GET_REAL_BOD(ch), GET_BOD(ch), ((float)GET_HEIGHT(ch) / 100), GET_WEIGHT(ch));
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)    Encumbrance: ^W%3.2f^w kgs carried, ^W%3d^w max ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)    Encumbrance: ^W%6.2f^w kgs carried, ^W%3d^w max ^L/^b/\r\n",
                           GET_REAL_QUI(ch), GET_QUI(ch), IS_CARRYING_W(ch) ,CAN_CARRY_W(ch));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nStrength      ^w%2d (^W%2d^w)    Current session length ^W%2d^w days, ^W%2d^w hours.^b/^L/\r\n",
                           GET_REAL_STR(ch), GET_STR(ch), playing_time.day, playing_time.hours);
@@ -4235,7 +4235,7 @@ ACMD(do_diagnose)
   
   if (*buf) {
     if (!(vict = get_char_room_vis(ch, buf))) {
-      send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
       return;
     } else
       diag_char_to_char(vict, ch);

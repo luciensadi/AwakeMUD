@@ -55,7 +55,7 @@ ACMD(do_assist)
   if (!*arg)
     send_to_char("Whom do you wish to assist?\r\n", ch);
   else if (!(helpee = get_char_room_vis(ch, arg)))
-    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
   else if (helpee == ch)
     send_to_char("You can't help yourself any more than this!\r\n", ch);
   else {

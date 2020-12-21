@@ -615,7 +615,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       break;
     default:
       send_to_char("Invalid choice!\r\n", d->character);
-      send_to_char("Do you wish to save this room internally?", d->character);
+      send_to_char("Do you wish to save this room internally?\r\n", d->character);
       break;
     }
     break; /* end of REDIT_CONFIRM_SAVESTRING */

@@ -675,7 +675,7 @@ bool find_duplicate_spell(struct char_data *ch, struct char_data *vict, int spel
 bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell, char *buf)
 {
   if (!vict)
-    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
   else if (((IS_PROJECT(ch) || IS_ASTRAL(ch)) && !(IS_DUAL(vict) || IS_ASTRAL(vict) || IS_PROJECT(vict))) ||
            ((IS_PROJECT(vict) || IS_ASTRAL(vict)) && !(IS_DUAL(ch) || IS_ASTRAL(ch) || IS_PROJECT(ch))))
     send_to_char("They aren't accessible from this plane.\r\n", ch);
@@ -2914,7 +2914,7 @@ POWER(spirit_accident)
       }
     if (success < 1) {
       act("$n trips and stumbles.", TRUE, tch, 0, 0, TO_ROOM);
-      send_to_char(tch, "You trip and stumble!");
+      send_to_char(tch, "You trip and stumble!\r\n");
       GET_INIT_ROLL(tch) -= 10;
     } else {
       snprintf(buf, sizeof(buf), "%s fails to cause $N to have an accident.", CAP(GET_NAME(spirit)));
@@ -3594,7 +3594,7 @@ ACMD(do_track)
   two_arguments(argument, buf, buf1);
   if (!generic_find(buf,  FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
                     FIND_CHAR_ROOM, ch, &vict, &obj)) {
-    send_to_char(ch, "You don't see anything named '%s' here.", buf);
+    send_to_char(ch, "You don't see anything named '%s' here.\r\n", buf);
     return;
   }
   if (vict) {
@@ -3699,7 +3699,7 @@ ACMD(do_dispell)
   struct char_data *vict;
   two_arguments(argument, buf, buf2);
   if (!(vict = get_char_room_vis(ch, buf))) {
-    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return;
   }
   int x = atoi(buf2);
@@ -3761,7 +3761,7 @@ ACMD(do_heal)
   else if (GET_POS(ch) == POS_FIGHTING)
     send_to_char(TOOBUSY, ch);
   else if (!(vict = get_char_room_vis(ch, arg)))
-    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
   else if (GET_PHYSICAL(ch) <= 100)
     send_to_char("Succeeding in that task would surely kill you.\r\n", ch);
   else if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict))
@@ -3808,7 +3808,7 @@ ACMD(do_relieve)
   if (GET_POS(ch) == POS_FIGHTING)
     send_to_char(TOOBUSY, ch);
   else if (!(vict = get_char_room_vis(ch, argument)))
-    send_to_char(ch, "You don't see anyone named '%s' here.", argument);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
   else if (GET_MENTAL(vict) == GET_MAX_MENTAL(vict))
     send_to_char("They don't need your help.\r\n", ch);
   else if (GET_POS(vict) > POS_LYING)
@@ -3904,7 +3904,7 @@ bool init_cost(struct char_data *ch, bool spend)
   int karmacost = (GET_GRADE(ch) + 6) * 300;
   long nuyencost = MIN(825000, (25000 + (25000 * 1<<GET_GRADE(ch)))), tke = 0;
   if (karmacost > GET_KARMA(ch)) {
-    send_to_char("You do not have enough karma to initiate.\n\r", ch);
+    send_to_char("You do not have enough karma to initiate.\r\n", ch);
     return FALSE;
   }
   if (nuyencost > GET_NUYEN(ch)) {
@@ -3941,7 +3941,7 @@ ACMD(do_subpoint)
   struct char_data *vict;
   skip_spaces(&argument);
   if (!(vict = get_char_vis(ch, argument)))
-    send_to_char(ch, "You don't see anyone named '%s' here.", argument);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
   else if (GET_TRADITION(vict) != TRAD_ADEPT)
     send_to_char("You can only use this command on Adepts.\r\n", ch);
   else if (GET_PP(vict) <= 0)

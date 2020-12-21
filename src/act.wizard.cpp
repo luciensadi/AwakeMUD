@@ -125,36 +125,41 @@ ACMD(do_copyover)
   struct descriptor_data *d, *d_next;
   struct char_data *och;
   int mesnum = number(0, 18);
+  
+  /* Old messages, preserved for posterity.
+  // "I like copyovers, yes I do!  Eating player corpses in a copyover stew!\r\n",
+  // "A Haiku while you wait: Copyover time.  Your quests and corpses are fucked.  Ha ha ha ha ha.\r\n",
+  // "Yes. We did this copyover solely to fuck YOUR character over.\r\n",
+  // "Ahh drek, Maestra's broke the mud again!  Go bug Che and he might fix it.\r\n",
+  // "Deleting player corpses, please wait...\r\n",
+  */
   const char *messages[] =
     {
-      "This copyover has been brought to you by NERPS.  It's more than a lubricant, its a lifestyle!\r\n",
+      "This copyover has been brought to you by NERPS.  It's more than a lubricant, it's a lifestyle!\r\n", // 0
       "Yes, the mud is lagging.  Deal with it.\r\n",
-      // "I like copyovers, yes I do!  Eating player corpses in a copyover stew!\r\n",
-      // "A Haiku while you wait: Copyover time.  Your quests and corpses are fucked.  Ha ha ha ha ha.\r\n",
-      "Ahh drek, Maestra's broke the mud again!  Go bug Che and he might fix it.\r\n",
       "Its a copyover.  Now would be a good time to take out the trash.\r\n",
       "Jerry Garcia told me to type copyover.  He is wise, isn't he?\r\n",
-      // "Yes. We did this copyover solely to fuck YOUR character over.\r\n",
       "My dog told me to copyover. Goood dog, good dog.\r\n",
-      "It's called a changeover, the movie goes on, and nobody in the audience has any idea.\r\n",
+      "It's called a changeover, the movie goes on, and nobody in the audience has any idea.\r\n", // 5
       "Oh shit, I forgot to compile.  I'm gonna have to do this again!\r\n",
       "Please wait while your character is deleted.\r\n",
       "You are mortally wounded and will die soon if not aided.\r\n",
       "Connection closed by foreign host.\r\n",
-      "Someone says \x1B[0;35mOOCly\x1B[0m, \"I'm going to get fired for this.\"\r\n",
+      "Someone says \x1B[0;35mOOCly\x1B[0m, \"I'm going to get fired for this.\"\r\n", // 10
       "Yum Yum Copyover Stew, out with the old code, in with the new!\r\n",
-      "Deleting player corpses, please wait...\r\n",
       "\x1B[0;35m[\x1B[0mSerge\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This porn's taking too long to download, needs more bandwidth. So the Mud'll be back up in a bit.\"\r\n",
       "\x1B[0;35m[\x1B[0mLucien\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"Honestly, I give this new code a 30% chance of crashing outright.\"\r\n",
-      "One moment while we drive up the server cost with heavy CPU usage...\r\n",
+      "There's a sound like a record scratching, and everything around you stutters to a standstill.",
+      "One moment while we drive up the server cost with heavy CPU usage...\r\n", //15
       "You wake up. You're still a lizard sunning on a red rock. It was all a dream. The concept of selling 'feet pics' to pay back 'ripperdocs' is already losing its meaning as you open and lick your own eyeballs to moisten them. Time to eat a bug.\r\n",
-      "For the briefest of moments, you peer beyond the veil, catching a glimpse of the whirling, gleaming machinery that lies at the heart of the world. Your mind begins to break down at the sight...\r\n"
+      "For the briefest of moments, you peer beyond the veil, catching a glimpse of the whirling, gleaming machinery that lies at the heart of the world. Your mind begins to break down at the sight...\r\n",
+      "Your vision goes black, then starts to fade in again. You're sitting in the back of a cart, your hands bound before you. A disheveled blonde man sitting across from you meets your eyes. \"Hey, you. You're finally awake.\""
     };
 
   fp = fopen (COPYOVER_FILE, "w");
 
   if (!fp) {
-    send_to_char ("Copyover file not writeable, aborted.\n\r",ch);
+    send_to_char ("Copyover file not writeable, aborted.\r\n",ch);
     return;
   }
   
@@ -212,6 +217,14 @@ ACMD(do_copyover)
                    num_corpses != 1 ? "s" : "");
       return;
     }
+    
+    if (cab_inhabitants) {
+      send_to_char(ch, "Copyover aborted, there %s %d %s.\r\n", 
+                   cab_inhabitants != 1 ? "are" : "is",
+                   cab_inhabitants,
+                   cab_inhabitants != 1 ? "people taking taxis" : "person taking a cab");
+      return;
+    }
   } else if (ch->desc){
     snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, delete %d corpse%s, refund %d cab fare%s, and drop %d quest%s.\r\n",
              fucky_states,    fucky_states    != 1 ? "s" : "",
@@ -235,7 +248,7 @@ ACMD(do_copyover)
 
     if (!d->character || d->connected > CON_PLAYING) // drops those logging on
     {
-      write_to_descriptor (d->descriptor, "\n\rSorry, we are rebooting. Come back in a few minutes.\n\r");
+      write_to_descriptor (d->descriptor, "\r\nSorry, we are rebooting. Come back in a few minutes.\r\n");
       close_socket (d); // yer outta here!
 
     } else {
@@ -244,7 +257,8 @@ ACMD(do_copyover)
           && ((GET_ROOM_VNUM(och->in_room) >= FIRST_CAB && GET_ROOM_VNUM(och->in_room) <= LAST_CAB)
               || (GET_ROOM_VNUM(och->in_room) >= FIRST_PORTCAB && GET_ROOM_VNUM(och->in_room) <= LAST_PORTCAB))
         ) {
-        send_to_char(och, "You have been refunded %d nuyen to compensate for the extra cab fare.", MAX_CAB_FARE);
+        snprintf(buf, sizeof(buf), "You have been refunded %d nuyen to compensate for the extra cab fare.\r\n", MAX_CAB_FARE);
+        write_to_descriptor(d->descriptor, buf);
         GET_NUYEN(och) += MAX_CAB_FARE;
       }
       
@@ -285,7 +299,7 @@ ACMD(do_copyover)
   /* Failed - sucessful exec will not return */
 
   perror ("do_copyover: execl");
-  send_to_char ("Copyover FAILED!\n\r",ch);
+  send_to_char ("Copyover FAILED!\r\n",ch);
 
   exit (1); /* too much trouble to try to recover! */
 }
@@ -525,7 +539,7 @@ ACMD(do_send)
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
-    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     return;
   }
   if (!IS_NPC(vict) &&
@@ -717,7 +731,7 @@ ACMD(do_goto)
   
   // Perform location validity check for level lock.
   if (location->staff_level_lock > GET_REAL_LEVEL(ch)) {
-    send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.", location->staff_level_lock);
+    send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.\r\n", location->staff_level_lock);
     return;
   }
 
@@ -786,7 +800,7 @@ ACMD(do_trans)
     send_to_char("Whom do you wish to transfer?\r\n", ch);
   else if (str_cmp("all", buf)) {
     if (!(victim = get_char_vis(ch, buf)))
-      send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     else if (victim == ch)
       send_to_char("That doesn't make much sense, does it?\r\n", ch);
     else {
@@ -829,7 +843,7 @@ ACMD(do_vteleport)
   if (!*buf)
     send_to_char("What vehicle do you wish to teleport?\r\n", ch);
   else if (!(veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))
-    send_to_char(ch, "You don't see any vehicles named '%s' here.", buf);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", buf);
   else if (!*buf2)
     send_to_char("Where do you wish to send this vehicle?\r\n", ch);
   else if ((target = find_target_room(ch, buf2))) {
@@ -858,7 +872,7 @@ ACMD(do_teleport)
   if (!*buf)
     send_to_char("Whom do you wish to teleport?\r\n", ch);
   else if (!(victim = get_char_vis(ch, buf)))
-    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
   else if (victim == ch)
     send_to_char("Use 'goto' to teleport yourself.\r\n", ch);
   else if (GET_LEVEL(victim) > GET_LEVEL(ch) &&
@@ -1366,7 +1380,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
           GET_REAL_WIL(k), ((int)GET_REAL_MAG(k) / 100), GET_REAL_REA(k), ((float)GET_REAL_ESS(k) / 100));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Physical p.:[^G%d/%d^n]  Mental p.:[^G%d/%d^n]  Bio Index:[^c%0.2f^n]\r\n"
-          "Ess Index:[^c%0.2f^n]\n\r",
+          "Ess Index:[^c%0.2f^n]\r\n",
           (int)(GET_PHYSICAL(k) / 100), (int)(GET_MAX_PHYSICAL(k) / 100),
           (int)(GET_MENTAL(k) / 100), (int)(GET_MAX_MENTAL(k) / 100),
           ((float)GET_INDEX(k) / 100), (((float)GET_ESS(k) / 100) + 3));
@@ -1708,7 +1722,7 @@ ACMD(do_snoop)
   else if (victim->desc->snooping == ch->desc)
     send_to_char("Don't be stupid.\r\n", ch);
   else if (!IS_NPC(victim) && PLR_FLAGS(victim).IsSet(PLR_NOSNOOP) )
-    send_to_char("You can't snoop an unsnoopable person.\n\r",ch);
+    send_to_char("You can't snoop an unsnoopable person.\r\n",ch);
   else {
     if (victim->desc->original)
       tch = victim->desc->original;
@@ -2369,7 +2383,7 @@ ACMD(do_penalize)
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
-    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     return;
   }
 
@@ -2486,7 +2500,7 @@ ACMD(do_restore)
   
   // Not restore all mode-- find their target.
   if (!(vict = get_char_vis(ch, buf))) {
-    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return;
   }
   
@@ -2614,7 +2628,7 @@ ACMD(do_poofset)
       send_to_char(ch, "Your current poofout is: ^m%s^n\r\n", POOFOUT(ch));
     return;
   } else if (strlen(argument) >= LINE_LENGTH) {
-    send_to_char(ch, "Line too long (max %d characters); function aborted.\r\n",
+    send_to_char(ch, "Line too long (max %d characters). Function aborted.\r\n",
                  LINE_LENGTH - 1);
     return;
   }
@@ -2637,7 +2651,7 @@ ACMD(do_dc)
   one_argument(argument, arg);
 
   if (atoi(arg)) {
-    send_to_char("Usage: dc <name>\r\n""       dc *\r\n", ch);
+    send_to_char("Usage: dc <name>\r\n       dc *\r\n", ch);
     return;
   }
 
@@ -2825,7 +2839,7 @@ ACMD(do_force)
   // Single-person force.
   if (!access_level(ch, LVL_ADMIN) || (str_cmp("all", arg) && str_cmp("room", arg))) {
     if (!(vict = get_char_vis(ch, arg)))
-      send_to_char(ch, "You don't see anyone named '%s' here.", arg);
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     else if (PLR_FLAGGED(ch, PLR_WRITING) || PLR_FLAGGED(ch, PLR_EDITING) ||
              PLR_FLAGGED(ch, PLR_MAILING) || PLR_FLAGGED(ch, PLR_SPELL_CREATE) ||
              PLR_FLAGGED(ch, PLR_CUSTOMIZE))
@@ -4168,7 +4182,7 @@ ACMD(do_set)
 
     /* Can't demote other owners this way, unless it's yourself */
     if ( access_level(vict, LVL_PRESIDENT) && vict != ch ) {
-      send_to_char("You can't demote other presidents.\n\r",ch);
+      send_to_char("You can't demote other presidents.\r\n",ch);
 
       SET_CLEANUP(false);
 
@@ -5198,7 +5212,7 @@ ACMD(do_tail)
   two_arguments(argument, arg, buf);
 
   if ( !*arg ) {
-    send_to_char( "Syntax note: tail <lines into history to read> <logfile>", ch );
+    send_to_char( "Syntax note: tail <lines into history to read> <logfile>\r\n", ch );
     send_to_char( "The following logs are available:\r\n", ch );
     snprintf(buf, sizeof(buf), "ls -C ../log" );
   } else {

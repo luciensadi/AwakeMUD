@@ -2012,7 +2012,7 @@ void extract_veh(struct veh_data * veh)
   // If any players are inside, drop them where the vehicle is.
   struct char_data *ch = NULL;
   while ((ch = veh->people)) {
-    send_to_char(ch, "%s disintegrates around you!", veh->short_description);
+    send_to_char(ch, "%s disintegrates around you!\r\n", veh->short_description);
     if (veh->in_room) {
       char_from_room(ch);
       char_to_room(ch, veh->in_room);

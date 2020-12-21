@@ -124,7 +124,7 @@ ACMD(do_pockets) {
         int ammotype = GET_AMMOBOX_TYPE(ammobox);
         
         if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype) >= MAX_NUMBER_OF_BULLETS_IN_PANTS) {
-          send_to_char(ch, "Your pockets are already full of %s.", get_ammo_representation(weapontype, ammotype, 0));
+          send_to_char(ch, "Your pockets are already full of %s.\r\n", get_ammo_representation(weapontype, ammotype, 0));
           return;
         }
         
@@ -270,7 +270,7 @@ ACMD(do_pockets) {
     }
             
     if (!ammobox) {
-      send_to_char(ch, "You don't have an ammo box containing %d %s.",
+      send_to_char(ch, "You don't have an ammo box containing %d %s.\r\n",
                    quantity, get_ammo_representation(weapon, ammotype, quantity));
       return;
     }

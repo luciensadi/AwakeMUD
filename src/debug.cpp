@@ -54,11 +54,11 @@ void do_pgroup_debug(struct char_data *ch, char *argument) {
                      pgr->get_bank());
       }
     } else {
-      send_to_char(ch, "unrecognized input '%s'", arg2);
+      send_to_char(ch, "unrecognized input '%s'\r\n", arg2);
       return;
     }
   } else {
-    send_to_char(ch, "unrecognized input '%s'", arg2);
+    send_to_char(ch, "unrecognized input '%s'\r\n", arg2);
     return;
   }
 }

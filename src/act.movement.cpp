@@ -802,7 +802,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     } else if (GET_REAL_LEVEL(ch) == 1) {
       send_to_char("Sorry, that area is for game administration only.\r\n", ch);
     } else {
-      send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.", EXIT(ch, dir)->to_room->staff_level_lock);
+      send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.\r\n", EXIT(ch, dir)->to_room->staff_level_lock);
     }
     return 0;
   }
@@ -1454,7 +1454,7 @@ ACMD(do_drag)
   }
 
   if (!(vict = get_char_room_vis(ch, buf1))) {
-    send_to_char(ch, "You don't see anyone named '%s' here.", buf1);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
     return;
   }
   if (AFF_FLAGGED(vict, AFF_BINDING)) {
@@ -1918,7 +1918,7 @@ ACMD(do_wake)
     if (GET_POS(ch) == POS_SLEEPING)
       send_to_char("You can't wake people up if you're asleep yourself!\r\n", ch);
     else if ((vict = get_char_room_vis(ch, arg)) == NULL)
-      send_to_char(ch, "You don't see anyone named '%s' here.", arg);
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     else if (vict == ch)
       self = 1;
     else if (GET_POS(vict) > POS_SLEEPING)
@@ -1971,7 +1971,7 @@ ACMD(do_follow)
 
   if (*buf) {
     if (!(leader = get_char_room_vis(ch, buf))) {
-      send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
       return;
     }
   } else {

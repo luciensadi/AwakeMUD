@@ -259,9 +259,9 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
           || GET_OBJ_VAL(obj, 0) == SOFT_MASKING
           || GET_OBJ_VAL(obj, 0) == SOFT_EVASION)) {
     if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
-      send_to_char(ch, "%s is firmware, you'll have to BUILD it into the deck along with the matching chip.", GET_OBJ_NAME(obj));
+      send_to_char(ch, "%s is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", GET_OBJ_NAME(obj));
     } else {
-      send_to_char(ch, "%s is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.",
+      send_to_char(ch, "%s is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n",
                    GET_OBJ_NAME(obj));
     }
     return;
@@ -440,7 +440,7 @@ ACMD(do_put)
     
     // Restriction: You can't wombo-combo non-ammo into ammo.
     if (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO) {
-      send_to_char(ch, "%s will only accept the contents of other ammo boxes, and %s doesn't qualify.",
+      send_to_char(ch, "%s will only accept the contents of other ammo boxes, and %s doesn't qualify.\r\n",
         GET_OBJ_NAME(cont),
         GET_OBJ_NAME(obj)
       );
@@ -828,7 +828,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
   {
     if (GET_OBJ_VAL(cont, 4) == 1 && GET_OBJ_VAL(cont, 5) != GET_IDNUM(ch)
          && !IS_SENATOR(ch)) {
-      send_to_char("You cannot loot this corpse.\n\r",ch);
+      send_to_char("You cannot loot this corpse.\r\n",ch);
       return;
 /*    } else if (GET_OBJ_VAL(cont, 4) == 2 && !(PRF_FLAGGED(ch, PRF_PKER)
                || GET_IDNUM(ch) == GET_OBJ_VAL(cont, 5)) && !IS_SENATOR(ch)) {
@@ -980,7 +980,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
       if ( CAN_SEE_OBJ(ch, obj) ) {
         if ( IS_OBJ_STAT(obj, ITEM_CORPSE) && GET_OBJ_VAL(obj, 4) == 1
              && GET_OBJ_VAL(obj, 5) != GET_IDNUM(ch) && !IS_SENATOR(ch) )
-          send_to_char("It's not yours chummer...better leave it be.\n\r",ch);
+          send_to_char("It's not yours chummer...better leave it be.\r\n",ch);
         else {
           perform_get_from_room(ch, obj, FALSE);
         }
@@ -1008,7 +1008,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
         found = 1;
         if ( IS_OBJ_STAT(obj, ITEM_CORPSE) && GET_OBJ_VAL(obj, 4) == 1
              && GET_OBJ_VAL(obj, 5) != GET_IDNUM(ch) && !access_level(ch, LVL_FIXER) )
-          send_to_char("It's not yours chummer...better leave it be.\n\r",ch);
+          send_to_char("It's not yours chummer...better leave it be.\r\n",ch);
         else {
           perform_get_from_room(ch, obj, FALSE);
         }
@@ -1377,7 +1377,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   }
   if (obj == ch->char_specials.programming)
   {
-    send_to_char(ch, "You can't %s something you are working on.", sname);
+    send_to_char(ch, "You can't %s something you are working on.\r\n", sname);
     return 0;
   }
   
@@ -1663,7 +1663,7 @@ struct char_data *give_find_vict(struct char_data * ch, char *arg)
     return NULL;
   } else if (!(vict = get_char_room_vis(ch, arg)))
   {
-    send_to_char(ch, "You don't see anyone named '%s' here.", arg);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     return NULL;
   } else if (vict == ch)
   {
@@ -1901,7 +1901,7 @@ ACMD(do_drink)
   }
   if (!(temp = get_obj_in_list_vis(ch, arg, ch->carrying))) {
     if (!(temp = get_obj_in_list_vis(ch, arg, ch->in_room->contents))) {
-      send_to_char(ch, "You don't see anything named '%s' here.", arg);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
       return;
     } else
       on_ground = 1;
@@ -2061,7 +2061,7 @@ ACMD(do_pour)
       return;
     }
     if (!(from_obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't see anything named '%s' here.", arg1);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg1);
       return;
     }
     if (GET_OBJ_TYPE(from_obj) != ITEM_DRINKCON) {
@@ -2075,7 +2075,7 @@ ACMD(do_pour)
       return;
     }
     if (!(to_obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't see anything named '%s' here.", arg1);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg1);
       return;
     }
     if (GET_OBJ_TYPE(to_obj) != ITEM_DRINKCON) {
@@ -2118,7 +2118,7 @@ ACMD(do_pour)
       return;
     }
     if (!(to_obj = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
-      send_to_char(ch, "You don't see anything named '%s' here.", arg2);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg2);
       return;
     }
     if ((GET_OBJ_TYPE(to_obj) != ITEM_DRINKCON) &&
@@ -3040,7 +3040,7 @@ ACMD(do_type)
 
   if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying)))
     if (!(obj = get_object_in_equip_vis(ch, arg, ch->equipment, &i))) {
-      send_to_char(ch, "You don't have %s %s.", AN(arg), arg);
+      send_to_char(ch, "You don't have %s %s.\r\n", AN(arg), arg);
       return;
     }
 

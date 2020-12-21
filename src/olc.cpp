@@ -488,7 +488,7 @@ ACMD(do_dig)
       
       // Check if they can edit this zone.
       if (!can_edit_zone(ch, counter)) {
-        send_to_char(ch, "Sorry, you can't edit zone %d.", zone_table[counter].number);
+        send_to_char(ch, "Sorry, you can't edit zone %d.\r\n", zone_table[counter].number);
         return;
       }
       

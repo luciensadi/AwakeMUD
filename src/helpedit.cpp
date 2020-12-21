@@ -117,7 +117,7 @@ ACMD(do_helpexport) {
     return;
   }
   
-  send_to_char(ch, "Output:\r\n\r\n^c%s^n\r\n\r\n^RWARNING:^n Make sure your client's line wrap is turned off!", double_up_color_codes(output_ptr));
+  send_to_char(ch, "Output:\r\n\r\n^c%s^n\r\n\r\n^RWARNING:^n Make sure your client's line wrap is turned off!\r\n", double_up_color_codes(output_ptr));
 }
 
 

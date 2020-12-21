@@ -264,7 +264,7 @@ ACMD(do_tell)
     return;
   }
   if (!(vict = get_player_vis(ch, buf, 0))) {
-    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return;
   }
   if (!IS_NPC(vict) && !vict->desc)      /* linkless */
@@ -410,7 +410,7 @@ ACMD(do_spec_comm)
     ch->in_veh = last_veh;
   } else if (!(vict = get_char_room_vis(ch, buf)) &&
              !((veh = get_veh_list(buf, ch->in_room->vehicles, ch)) && subcmd == SCMD_WHISPER))
-    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
   else if (vict == ch)
     send_to_char("You can't get your mouth close enough to your ear...\r\n", ch);
   else if (IS_ASTRAL(ch) && vict &&
@@ -891,7 +891,7 @@ ACMD(do_gen_comm)
   }
 
   if ( _NO_OOC_ && subcmd == SCMD_OOC ) {
-    send_to_char("This command has been disabled.\n\r",ch);
+    send_to_char("This command has been disabled.\r\n",ch);
     return;
   }
 
