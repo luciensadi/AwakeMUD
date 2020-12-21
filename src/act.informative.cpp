@@ -1723,7 +1723,7 @@ void look_at_target(struct char_data * ch, char *arg)
     if (str_str("pockets", arg)) {
       send_to_char("Please see ^WHELP POCKETS^n for info on how to use your ammo pockets.\r\n", ch);
     } else {
-      send_to_char(ch, "You don't see anything named '%s' here.", arg);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
     }
   }
     
@@ -4235,7 +4235,7 @@ ACMD(do_diagnose)
   
   if (*buf) {
     if (!(vict = get_char_room_vis(ch, buf))) {
-      send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
       return;
     } else
       diag_char_to_char(vict, ch);

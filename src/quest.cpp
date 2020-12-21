@@ -1825,17 +1825,17 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'e':
     case 'E':
-      send_to_char("Enter the string that will be given when the Johnson comes to work:\n\r", CH);
+      send_to_char("Enter the string that will be given when the Johnson comes to work:\r\n", CH);
       d->edit_mode = QEDIT_SSTRING;
       break;
     case 'f':
     case 'F':
-      send_to_char("Enter the string that will be given when the Johnson leaves work:\n\r", CH);
+      send_to_char("Enter the string that will be given when the Johnson leaves work:\r\n", CH);
       d->edit_mode = QEDIT_ESTRING;
       break;
     case 'g':
     case 'G':
-      send_to_char("Enter the string that will be given if quest is already complete:\n\r", CH);
+      send_to_char("Enter the string that will be given if quest is already complete:\r\n", CH);
       d->edit_mode = QEDIT_DONE;
       break;
     case 'h':
@@ -2360,7 +2360,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
   case QEDIT_SHOUR:
     number = atoi(arg);
     if ( number > 23 || number < -1 ) {
-      send_to_char("Needs to be between -1 and 23.\n\rWhat time does he start work? ", CH);
+      send_to_char("Needs to be between -1 and 23.\r\nWhat time does he start work? ", CH);
     } else {
       QUEST->s_time = number;
       d->edit_mode = QEDIT_EHOUR;
@@ -2370,7 +2370,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
   case QEDIT_EHOUR:
     number = atoi(arg);
     if ( number > 23 || number < 0 ) {
-      send_to_char("Needs to be between 0 and 23.\n\rWhat time does he stop work? ", CH);
+      send_to_char("Needs to be between 0 and 23.\r\nWhat time does he stop work? ", CH);
       return;
     } else {
       QUEST->e_time = number;

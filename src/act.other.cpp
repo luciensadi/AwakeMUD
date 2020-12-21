@@ -233,7 +233,7 @@ ACMD(do_steal)
         act(buf, FALSE, ch, 0, vict, TO_CHAR);
         return;
       } else {                  /* It is equipment */
-        send_to_char(ch, "You unequip %s and steal it.", GET_OBJ_NAME(obj));
+        send_to_char(ch, "You unequip %s and steal it.\r\n", GET_OBJ_NAME(obj));
         obj_to_char(unequip_char(vict, eq_pos, TRUE), ch);
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
@@ -385,8 +385,7 @@ ACMD(do_group)
   }
 
   if (ch->master) {
-    act("You can not enroll group members without being head of the group.",
-        FALSE, ch, 0, 0, TO_CHAR);
+    send_to_char("You can not enroll group members without being head of the group.\r\n", ch);
     return;
   }
 
@@ -400,7 +399,7 @@ ACMD(do_group)
   }
 
   if (!(vict = get_char_room_vis(ch, buf)))
-    send_to_char(ch, "You don't see anyone named '%s' here.", buf);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
   else if ((vict->master != ch) && (vict != ch))
     act("$N must follow you to enter your group.", FALSE, ch, 0, vict, TO_CHAR);
   else {
@@ -1624,7 +1623,7 @@ ACMD(do_attach)
   }
   if (*arg) {
     if (ch->in_veh || !(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
-      send_to_char(ch, "You don't see any vehicles named '%s' here.", buf1);
+      send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", buf1);
       return;
     }
     if (veh->type != VEH_DRONE) {
@@ -2468,7 +2467,7 @@ ACMD(do_remember)
   if (!*buf1 || !*buf2)
     send_to_char(ch, "Remember Who as What?\r\n");
   else if (!(vict = get_char_room_vis(ch, buf1)) || (ch->in_veh && !(vict = get_char_veh(ch, buf1, ch->in_veh))))
-    send_to_char(ch, "You don't see anyone named '%s' here.", buf1);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
   else if (IS_NPC(vict))
     send_to_char(ch, "You cannot remember NPCs.\r\n");
   else if (ch == vict)
@@ -2660,7 +2659,7 @@ ACMD(do_photo)
       }
     }
     if (!found) {
-      send_to_char(ch, "You don't see anything named '%s' here.", argument);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", argument);
       return;
     }
   } else {
@@ -4127,7 +4126,7 @@ ACMD(do_syspoints) {
     vict = vict->desc->original;
     
   if (IS_NPC(vict)) {
-    send_to_char("Not on NPCs.", ch);
+    send_to_char("Not on NPCs.\r\n", ch);
     return;
   }
 

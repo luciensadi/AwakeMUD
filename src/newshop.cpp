@@ -1461,7 +1461,7 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   char buf[MAX_STRING_LENGTH];
   int number = atoi(arg);
 	if (number == 0) {
-		send_to_char(ch, "Unrecognized selection. Syntax: RECEIVE [number].");
+		send_to_char(ch, "Unrecognized selection. Syntax: RECEIVE [number].\r\n");
 		return;
 	}
   for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next)

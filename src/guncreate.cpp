@@ -193,7 +193,7 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
 
     if (!workshop) {
       if (kitwarn) {
-        send_to_char(ch, "Your ammunition kit doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.",
+        send_to_char(ch, "Your ammunition kit doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.\r\n",
                      ammo_type[GET_AMMOBOX_TYPE(obj)].name);
       } else {
         if (GET_AMMOBOX_TYPE(obj) != AMMO_NORMAL) {

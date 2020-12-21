@@ -1560,7 +1560,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case 'q':
         case 'Q':
           if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
-            send_to_char("You can't save this object! Edit it directly in the world files.", d->character);
+            send_to_char("You can't save this object! Edit it directly in the world files.\r\n", d->character);
             break;
           }
           d->edit_mode = IEDIT_CONFIRM_SAVESTRING;
