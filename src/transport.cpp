@@ -689,7 +689,11 @@ SPECIAL(taxi)
         comm = CMD_TAXI_NO;
       } else {
         do_say(ch, argument, 0, 0);
-        snprintf(buf2, sizeof(buf2), "Sorry chummer, rules %s rules. You gotta tell me something off of that sign there.", portland ? "are" : "is");
+        if (portland) {
+          snprintf(buf2, sizeof(buf2), " Hey chummer, rules is rules. You gotta tell me something off of that sign there.");
+        } else {
+          snprintf(buf2, sizeof(buf2), " Sorry chummer, rules are rules. You need to tell me something from the sign.");
+        }        
         do_say(driver, buf2, 0, 0);
         return TRUE;
       }

@@ -1819,9 +1819,12 @@ ACMD(do_return)
       if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT)) {
         GET_TEMP_ESSLOSS(ch->desc->original) = GET_ESS(ch->desc->original) - GET_ESS(ch);
         affect_total(ch->desc->original);
-      }
-      if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT))
         PLR_FLAGS(ch->desc->original).RemoveBit(PLR_PROJECT);
+        
+        // Make the projection unkillable.
+        if (IS_NPC(ch))
+          MOB_FLAGS(ch).SetBit(MOB_NOKILL);
+      }
       if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED))
         PLR_FLAGS(ch->desc->original).RemoveBit(PLR_SWITCHED);
 
@@ -1844,6 +1847,7 @@ ACMD(do_return)
       ch->desc->character->desc = ch->desc;
       update_pos(ch->desc->character);
       ch->desc = NULL;
+      
       if (IS_NPC(vict) && GET_MOB_VNUM(vict) >= 50 && GET_MOB_VNUM(vict) < 70 &&
           PLR_FLAGGED(ch, PLR_PROJECT)) {
         GET_MEMORY(vict) = NULL;
