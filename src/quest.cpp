@@ -26,6 +26,7 @@
 #include "boards.h"
 #include "constants.h"
 #include "newmatrix.h"
+#include "config.h"
 
 extern bool memory(struct char_data *ch, struct char_data *vict);
 extern class objList ObjList;
@@ -528,7 +529,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
       act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
     }
   }
-  nuyen = negotiate(ch, johnson, 0, nuyen, 0, FALSE);
+  nuyen = negotiate(ch, johnson, 0, nuyen, 0, FALSE) * NUYEN_GAIN_MULTIPLIER;
 
   if (AFF_FLAGGED(ch, AFF_GROUP))
   {

@@ -481,9 +481,9 @@ void make_corpse(struct char_data * ch)
   if (IS_NPC(ch))
   {
     nuyen = (int)(GET_NUYEN(ch) / 10);
-    nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen);
+    nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen) * NUYEN_GAIN_MULTIPLIER;
     credits = (int)(GET_BANK(ch) / 10);
-    credits = number(GET_BANK(ch) - credits, GET_BANK(ch) + credits);
+    credits = number(GET_BANK(ch) - credits, GET_BANK(ch) + credits) * NUYEN_GAIN_MULTIPLIER;
   } else
   {
     nuyen = GET_NUYEN(ch);
@@ -784,7 +784,7 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
   
   share = gain_karma(ch, share, FALSE, TRUE, TRUE);
   
-  if ( share >= 100 || access_level(ch, LVL_BUILDER) )
+  if ( share >= 100 * KARMA_GAIN_MULTIPLIER || access_level(ch, LVL_BUILDER) )
   {
     snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s.", GET_CHAR_NAME(ch),
             (double)share/100.0, GET_CHAR_NAME(victim));
