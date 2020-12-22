@@ -276,6 +276,7 @@ ACMD_DECLARE(do_send);
 ACMD_DECLARE(do_set);
 ACMD_DECLARE(do_settime);
 ACMD_DECLARE(do_shedit);
+ACMD_DECLARE(do_shopfind);
 ACMD_DECLARE(do_shoot);
 ACMD_DECLARE(do_show);
 ACMD_DECLARE(do_shutdown);
@@ -726,6 +727,7 @@ struct command_info cmd_info[] =
     { "shouts"   , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_SHOUTS },
     { "shoot"    , POS_FIGHTING, do_shoot    , 0, 0 },
     { "show"     , POS_DEAD    , do_show     , 0, 0 },
+    { "shopfind" , POS_DEAD    , do_shopfind , LVL_VICEPRES, 0 },
     { "shutdown" , POS_RESTING , do_shutdown , 0, SCMD_SHUTDOWN },
     { "sip"      , POS_RESTING , do_drink    , 0, SCMD_SIP },
     { "sit"      , POS_LYING   , do_sit      , 0, 0 },

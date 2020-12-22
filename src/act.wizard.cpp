@@ -5447,3 +5447,37 @@ ACMD(do_perfmon) {
         return;
     }
 }
+
+ACMD(do_shopfind)
+{
+  int number;
+
+  one_argument(argument, buf2);
+
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+    return;
+  }
+
+  if (!*buf2 || !isdigit(*buf2)) {
+    send_to_char("Usage: shopfind <number>\r\n", ch);
+    return;
+  }
+  if ((number = atoi(buf2)) < 0) {
+    send_to_char("A NEGATIVE number??\r\n", ch);
+    return;
+  }
+  
+  send_to_char(ch, "Shops selling the item with vnum %d:\r\n", number);
+  
+  int index = 0;
+  for (int i = 0; i <= top_of_shopt; i++) {
+    for (struct shop_sell_data *sell = shop_table[i].selling; sell; sell = sell->next, i++) {
+      if (sell->vnum == number) {
+        send_to_char(ch, "%3d)  %8ld  (%s)\r\n", ++index, shop_table[i].vnum, mob_proto[real_mobile(shop_table[i].keeper)].player.physical_text.name);
+      }
+    }
+  }
+  if (index == 0)
+    send_to_char("- None.\r\n", ch);
+}

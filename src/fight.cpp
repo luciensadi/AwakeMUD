@@ -4974,6 +4974,7 @@ void perform_violence(void)
           send_to_char(ch, "You close the distance and strike!\r\n");
           act("$n closes the distance and strikes.", FALSE, ch, 0, 0, TO_ROOM);
           AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
+          AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
         } else {
           send_to_char(ch, "You attempt to close the distance!\r\n");
           act("$n charges towards $N.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
