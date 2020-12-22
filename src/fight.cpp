@@ -57,6 +57,7 @@ void order_list(bool first,...);
 bool can_hurt(struct char_data *ch, struct char_data *victim);
 
 SPECIAL(johnson);
+SPECIAL(weapon_dominator);
 
 extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
@@ -1427,6 +1428,28 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
   rev = rev_dir[dir];
   if (opposite && opposite->dir_option[rev] && opposite->dir_option[rev]->to_room == room)
     ok = TRUE;
+    
+  // Remove the hidden bits-- doors don't stay hidden when attacked.
+  REMOVE_BIT(room->dir_option[dir]->exit_info, EX_HIDDEN);
+  if (ok)
+    REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_HIDDEN);
+    
+  // Dominators break down doors without rolls.
+  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
+    destroy_door(room, dir);
+    snprintf(buf, sizeof(buf), "The %s is destroyed in a scintillating burst of blue light!\r\n", fname(room->dir_option[dir]->keyword));
+    
+    send_to_room(buf, room);
+    if (ch && ch->in_room != room)
+      send_to_char(buf, ch);
+      
+    if (ok) {
+      destroy_door(opposite, rev);
+      snprintf(buf, sizeof(buf2), "The %s is destroyed from the other side in a scintillating burst of blue light!\r\n", fname(opposite->dir_option[rev]->keyword));
+      send_to_room(buf, opposite);
+    }
+    return;
+  }
   
   if (IS_SET(type, DAMOBJ_MANIPULATION))
   {
@@ -1468,15 +1491,11 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
   
   if (room->dir_option[dir]->condition <= 0) {
     snprintf(buf, sizeof(buf), "The %s has been destroyed!\r\n", fname(room->dir_option[dir]->keyword));
-    REMOVE_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
-    REMOVE_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
-    SET_BIT(room->dir_option[dir]->exit_info, EX_DESTROYED);
+    destroy_door(room, dir);
     if (ok) {
       snprintf(buf2, sizeof(buf2), "The %s is destroyed from the other side!\r\n", fname(room->dir_option[dir]->keyword));
       send_to_room(buf2, opposite);
-      REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_CLOSED);
-      REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_LOCKED);
-      SET_BIT(opposite->dir_option[rev]->exit_info, EX_DESTROYED);
+      destroy_door(opposite, rev);
     }
   }
   
@@ -3388,10 +3407,7 @@ int get_melee_skill(struct combat_data *cd) {
 }
 
 void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap)
-{
-  // Load our Dominator weapon spec, because that's totally canon and kosher right?
-  SPECIAL(weapon_dominator);
-  
+{  
   // Initialize our data structures for holding this round's fight-related data.
   struct combat_data attacker_data(attacker, weap);
   struct combat_data defender_data(victim, vict_weap);
@@ -4571,6 +4587,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     if (EXIT2(nextroom, dir) && EXIT2(nextroom, dir)->keyword &&
         isname(target, EXIT2(nextroom, dir)->keyword) &&
         !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_DESTROYED) &&
+        !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_HIDDEN) &&
         (PRF_FLAGGED(ch, PRF_HOLYLIGHT) || CURRENT_VISION(ch) == THERMOGRAPHIC ||
          light_level(nextroom) <= LIGHT_NORMALNOLIT ||
          ((light_level(nextroom) == LIGHT_MINLIGHT || light_level(nextroom) == LIGHT_PARTLIGHT) &&

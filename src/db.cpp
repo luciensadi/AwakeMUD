@@ -1304,6 +1304,11 @@ bool can_load_this_thing_in_zone_commands(DBIndex::rnum_t rnum, int zone, int cm
     log_zone_error(zone, cmd_no, "Money cannot be loaded in zone commands.");
     return FALSE;
   }
+  if (GET_OBJ_VNUM(&obj_proto[rnum]) == OBJ_OLD_BLANK_MAGAZINE_FROM_CE) {
+    // Zoneloading 601, which used to be a blank empty mag, is not allowed.
+    log_zone_error(zone, cmd_no, "Object 601 cannot be loaded in zone commands.");
+    return FALSE;
+  }
   return TRUE;
 }
 

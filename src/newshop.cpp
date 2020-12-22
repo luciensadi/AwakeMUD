@@ -835,7 +835,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       // Read the object; however, if it's an invalid vnum or has no sale cost, skip it.
-      if (!(obj = read_object(sell->vnum, VIRTUAL)) || GET_OBJ_COST(obj) < 1) {
+      if (!(obj = read_object(sell->vnum, VIRTUAL)) || GET_OBJ_COST(obj) < 1 || GET_OBJ_VNUM(obj) == OBJ_OLD_BLANK_MAGAZINE_FROM_CE) {
         i--;
         if (obj) {
           snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to cost of %d.",
@@ -896,7 +896,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
-      if (!obj || GET_OBJ_COST(obj) < 1) {
+      if (!obj || GET_OBJ_COST(obj) < 1 || GET_OBJ_VNUM(obj) == OBJ_OLD_BLANK_MAGAZINE_FROM_CE) {
         i--;
         if (obj) {
           snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
@@ -943,7 +943,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
             "------------------------------------------------------------------------------\r\n");
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
-      if (!obj || GET_OBJ_COST(obj) < 1) {
+      if (!obj || GET_OBJ_COST(obj) < 1 || GET_OBJ_VNUM(obj) == OBJ_OLD_BLANK_MAGAZINE_FROM_CE) {
         i--;
         if (obj) {
           snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));

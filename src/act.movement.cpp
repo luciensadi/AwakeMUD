@@ -903,7 +903,8 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
     if (EXIT(ch, door)) {
       if (EXIT(ch, door)->keyword) {
         if (isname(type, EXIT(ch, door)->keyword) &&
-            !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+            !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) &&
+            !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
           return door;
         else {
           send_to_char(ch, "I see no %s there.\r\n", type);
@@ -928,7 +929,8 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
       if (EXIT(ch, door))
         if (EXIT(ch, door)->keyword)
           if (isname(type, EXIT(ch, door)->keyword) &&
-              !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+              !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) &&
+              !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
             return door;
 
     send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(type), type);
@@ -987,7 +989,7 @@ const int flags_door[] =
 #define OPEN_DOOR(room, obj, door)      ((obj) ? (TOGGLE_BIT(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) : (TOGGLE_BIT(EXITN(room, door)->exit_info, EX_CLOSED)))
 #define LOCK_DOOR(room, obj, door)      ((obj) ? (TOGGLE_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) : (TOGGLE_BIT(EXITN(room, door)->exit_info, EX_LOCKED)))
 
-#define DOOR_IS_OPENABLE(ch, obj, door) ((obj) ? ((GET_OBJ_TYPE(obj) == ITEM_CONTAINER) && (IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSEABLE))) : (IS_SET(EXIT(ch, door)->exit_info, EX_ISDOOR) && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED)))
+#define DOOR_IS_OPENABLE(ch, obj, door) ((obj) ? ((GET_OBJ_TYPE(obj) == ITEM_CONTAINER) && (IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSEABLE))) : (IS_SET(EXIT(ch, door)->exit_info, EX_ISDOOR) && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)))
 #define DOOR_IS_OPEN(ch, obj, door)     ((obj) ? (!IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) : (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)))
 #define DOOR_IS_UNLOCKED(ch, obj, door) ((obj) ? (!IS_SET(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) : (!IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED)))
 #define DOOR_IS_PICKPROOF(ch, obj, door) ((obj) ? (IS_SET(GET_OBJ_VAL(obj, 1), CONT_PICKPROOF)) : (IS_SET(EXIT(ch, door)->exit_info, EX_PICKPROOF)))
@@ -1542,7 +1544,7 @@ ACMD(do_enter)
 
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (EXIT(ch, door))
-        if (EXIT(ch, door)->keyword && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+        if (EXIT(ch, door)->keyword && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
           if (!str_cmp(EXIT(ch, door)->keyword, buf)) {
             perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
             return;

@@ -2935,6 +2935,17 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
   return TRUE;
 }
 
+void destroy_door(struct room_data *room, int dir) {
+  if (!room || dir < NORTH || dir > DOWN)
+    return;
+    
+  room->dir_option[dir]->condition = 0;
+  REMOVE_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
+  REMOVE_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
+  REMOVE_BIT(room->dir_option[dir]->exit_info, EX_HIDDEN);
+  SET_BIT(room->dir_option[dir]->exit_info, EX_DESTROYED);
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
