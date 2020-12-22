@@ -81,16 +81,6 @@ void ccr_race_menu(struct descriptor_data *d) {
   d->ccr.mode = CCR_RACE;
 }
 
-void ccr_archetypal_menu(struct descriptor_data *d) {
-  SEND_TO_Q("\r\nHow would you like to make your character?"
-            "\r\n"
-            "\r\n1) Archetypal creation (quick; recommended for new players)"
-            "\r\n2) Custom creation (long; recommended for experienced players)"
-            "\r\n"
-            "\r\nChoose 1 or 2: ", d);
-  d->ccr.mode = CCR_ARCHETYPE_MODE;
-}
-
 void ccr_archetype_selection_menu(struct descriptor_data *d) {
   SEND_TO_Q("\r\nThe following archetypes are available:"
             "\r\n", d);
@@ -100,9 +90,32 @@ void ccr_archetype_selection_menu(struct descriptor_data *d) {
     SEND_TO_Q(buf, d);
   }
   
+  SEND_TO_Q("\r\n\r\nC) Advanced (custom) creation for experienced players\r\n", d);
+  
   SEND_TO_Q("\r\n\r\nEnter the number of the archetype you'd like to play, or ? for more info: ", d);
   
   d->ccr.mode = CCR_ARCHETYPE_SELECTION_MODE;
+}
+
+void ccr_confirm_switch_to_custom(struct descriptor_data *d) {
+  SEND_TO_Q("Are you sure you want to enter custom creation? This process will take a bit longer than the archetypal creation process, and we recommend having the Shadowrun 3 sourcebook on hand for reference.\r\n", d);
+  d->ccr.mode = CCR_ARCHETYPE_MODE;
+}
+
+void ccr_confirm_switch_to_custom_parse(struct descriptor_data *d, const char *arg) {
+  switch (*arg) {
+    case 'y':
+    case 'Y':
+      ccr_race_menu(d);
+      break;
+    case 'n':
+    case 'N':
+      ccr_archetype_selection_menu(d);
+      break;
+    default:
+      SEND_TO_Q("Please enter 'yes' or 'no': ", d);
+      break;
+  }
 }
 
 #define ATTACH_IF_EXISTS(vnum, location) \
@@ -124,6 +137,12 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   if (*arg == '?') {
     // TODO
     SEND_TO_Q("help wip", d);
+    return;
+  }
+  
+  // Custom creation mode.
+  if (*arg == 'c' || *arg == 'C') {
+    ccr_confirm_switch_to_custom(d);
     return;
   }
   
@@ -281,7 +300,7 @@ void parse_pronouns(struct descriptor_data *d, const char *arg) {
       SEND_TO_Q("That is not a valid pronoun set.\r\nEnter M for male, F for female, or N for neutral. ", d);
       return;
   }
-  ccr_archetypal_menu(d);
+  ccr_archetype_selection_menu(d);
 }
 
 // BELOW THIS IS UNTOUCHED CODE.
@@ -351,6 +370,12 @@ void set_attributes(struct char_data *ch, int magic)
   int attribute_point_cost = get_minimum_attribute_points_for_race(GET_RACE(ch));
   GET_ATT_POINTS(ch) -= attribute_point_cost;
   send_to_char(ch, "You spend %d attribute points to raise your attributes to their minimums.\r\n", attribute_point_cost);
+  
+  if (GET_ATT_POINTS(ch) > 1000) {
+    snprintf(buf, sizeof(buf), "Somehow, %s managed to get %d attribute points in chargen. Resetting to 0.", GET_CHAR_NAME(ch), GET_ATT_POINTS(ch));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    GET_ATT_POINTS(ch) = 0;
+  }
 
   ch->aff_abils = ch->real_abils;
 }
@@ -869,7 +894,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       // Calculate the working variables.
       minimum_attribute_points = get_minimum_attribute_points_for_race(GET_RACE(CH));
       maximum_attribute_points = get_maximum_attribute_points_for_race(GET_RACE(CH)) + minimum_attribute_points;
-      available_attribute_points = (int) (d->ccr.points / 2);
+      available_attribute_points = MIN((int) (d->ccr.points / 2), get_maximum_attribute_points_for_race(GET_RACE(CH)));
       
     if (i < minimum_attribute_points) {
       send_to_char(CH, "You need a minimum of %d points in attributes.\r\n"
@@ -1088,7 +1113,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     parse_pronouns(d, arg);
     break;
   case CCR_ARCHETYPE_MODE:
-    archetypal_parse(d, arg);
+    ccr_confirm_switch_to_custom_parse(d, arg);
     break;
   case CCR_ARCHETYPE_SELECTION_MODE:
     archetype_selection_parse(d, arg);
@@ -1160,19 +1185,32 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case TOTEM_BULL:
       case TOTEM_PRAIRIEDOG:
         i = GET_REAL_CHA(CH);
-        if (i < 4)
+        if (i < 4) {
+          if (GET_ATT_POINTS(CH) < 4 - i) {
+            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
+            return;
+          }
           GET_REAL_CHA(CH) = 4;
-        GET_ATT_POINTS(CH) -= 4 - i;
+          GET_ATT_POINTS(CH) -= 4 - i;
+        }
         break;
       case TOTEM_CHEETAH:
+        if (GET_REAL_QUI(CH) + GET_REAL_INT(CH) < 8) {
+          if (GET_ATT_POINTS(CH) < 8 - (GET_REAL_QUI(CH) + GET_REAL_INT(CH))) {
+            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
+            return;
+          }
+        }
         i = GET_REAL_QUI(CH);
-        if (i < 4)
+        if (i < 4) {
           GET_REAL_QUI(CH) = 4;
-        GET_ATT_POINTS(CH) -= 4 - i;
+          GET_ATT_POINTS(CH) -= 4 - i;
+        }
         i = GET_REAL_INT(CH);
-        if (i < 4)
+        if (i < 4) {
           GET_REAL_INT(CH) = 4;
-        GET_ATT_POINTS(CH) -= 4 - i;
+          GET_ATT_POINTS(CH) -= 4 - i;
+        }
         break;
     }
     if (GET_TOTEM(CH) == TOTEM_WOLF || GET_TOTEM(CH) == TOTEM_SNAKE || GET_TOTEM(CH) == TOTEM_GATOR || GET_TOTEM(CH) == TOTEM_FOX ||

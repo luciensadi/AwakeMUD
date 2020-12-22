@@ -40,9 +40,6 @@ struct archetype_data *generate_street_samurai() {
   arch->skills[SKILL_BR_BIKE] = 3;
   arch->skills[SKILL_STREET_ETIQUETTE] = 1;
   
-  // TODO: gear
-  arch->subsidy_card = 30000; // make sure to set the idnum too
-  
   // Inventory.
   arch->weapon = 838; // colt m-23, should be set to burst fire
   arch->weapon_top = 28702; // nicami scope
@@ -96,21 +93,198 @@ struct archetype_data *generate_street_samurai() {
   return arch;
 }
 
+// TODO
+struct archetype_data *generate_adept() {
+  struct archetype_data *arch = new archetype_data;
+  int i = 0;
+  
+  memset(arch, 0, sizeof(struct archetype_data));
+  
+  arch->name = str_dup("Adept");
+  arch->race = RACE_HUMAN;
+  
+  // Set attributes.
+  arch->attributes[BOD] = 6;
+  arch->attributes[QUI] = 6;
+  arch->attributes[STR] = 6;
+  arch->attributes[CHA] = 1;
+  arch->attributes[INT] = 6;
+  arch->attributes[WIL] = 6;
+  // Reaction, essence, etc is autocomputed on character creation.
+  
+  // Set magic stats.
+  arch->magic = 0;
+  arch->tradition = TRAD_MUNDANE;
+  
+  // Set skills.
+  arch->skills[SKILL_ASSAULT_RIFLES] = 6;
+  
+  // Inventory.
+  arch->weapon = 838; // colt m-23, should be set to burst fire
+  arch->weapon_top = 28702; // nicami scope
+  arch->weapon_barrel = 80403; // vent IV
+  arch->weapon_under = 31111; // smartlink II
+  arch->ammo_q = 500;
+  
+  arch->nuyen = 22660;
+  
+  arch->modulator = 16208; // platinum
+  
+  arch->worn[WEAR_ABOUT] = 1833; // a black trench coat
+  
+  i = 0;
+  arch->carried[i++] = 450; // medkit
+  assert(i < NUM_ARCHETYPE_CARRIED);
+  
+  // Cyberware.
+  i = 0;
+  arch->cyberware[i++] = 85066; // ceramic bone lacing
+  assert(i < NUM_ARCHETYPE_CYBERWARE);
+  
+  // Bioware.
+  i = 0;
+  arch->bioware[i++] = 85803; // enhanced articulation
+  assert(i < NUM_ARCHETYPE_BIOWARE);
+  
+  return arch;
+}
+
+
+// TODO
+struct archetype_data *generate_shaman() {
+  struct archetype_data *arch = new archetype_data;
+  int i = 0;
+  
+  memset(arch, 0, sizeof(struct archetype_data));
+  
+  arch->name = str_dup("Adept");
+  arch->race = RACE_HUMAN;
+  
+  // Set attributes.
+  arch->attributes[BOD] = 6;
+  arch->attributes[QUI] = 6;
+  arch->attributes[STR] = 6;
+  arch->attributes[CHA] = 1;
+  arch->attributes[INT] = 6;
+  arch->attributes[WIL] = 6;
+  // Reaction, essence, etc is autocomputed on character creation.
+  
+  // Set magic stats.
+  arch->magic = 0;
+  arch->tradition = TRAD_MUNDANE;
+  
+  // Set skills.
+  arch->skills[SKILL_ASSAULT_RIFLES] = 6;
+  
+  // Inventory.
+  arch->weapon = 838; // colt m-23, should be set to burst fire
+  arch->weapon_top = 28702; // nicami scope
+  arch->weapon_barrel = 80403; // vent IV
+  arch->weapon_under = 31111; // smartlink II
+  arch->ammo_q = 500;
+  
+  arch->nuyen = 22660;
+  
+  arch->modulator = 16208; // platinum
+  
+  arch->worn[WEAR_ABOUT] = 1833; // a black trench coat
+  
+  i = 0;
+  arch->carried[i++] = 450; // medkit
+  assert(i < NUM_ARCHETYPE_CARRIED);
+  
+  // Cyberware.
+  i = 0;
+  arch->cyberware[i++] = 85066; // ceramic bone lacing
+  assert(i < NUM_ARCHETYPE_CYBERWARE);
+  
+  // Bioware.
+  i = 0;
+  arch->bioware[i++] = 85803; // enhanced articulation
+  assert(i < NUM_ARCHETYPE_BIOWARE);
+  
+  return arch;
+}
+
+// TODO
+struct archetype_data *generate_decker() {
+  struct archetype_data *arch = new archetype_data;
+  int i = 0;
+  
+  memset(arch, 0, sizeof(struct archetype_data));
+  
+  arch->name = str_dup("Adept");
+  arch->race = RACE_HUMAN;
+  
+  // Set attributes.
+  arch->attributes[BOD] = 6;
+  arch->attributes[QUI] = 6;
+  arch->attributes[STR] = 6;
+  arch->attributes[CHA] = 1;
+  arch->attributes[INT] = 6;
+  arch->attributes[WIL] = 6;
+  // Reaction, essence, etc is autocomputed on character creation.
+  
+  // Set magic stats.
+  arch->magic = 0;
+  arch->tradition = TRAD_MUNDANE;
+  
+  // Set skills.
+  arch->skills[SKILL_ASSAULT_RIFLES] = 6;
+  
+  // Inventory.
+  arch->weapon = 838; // colt m-23, should be set to burst fire
+  arch->weapon_top = 28702; // nicami scope
+  arch->weapon_barrel = 80403; // vent IV
+  arch->weapon_under = 31111; // smartlink II
+  arch->ammo_q = 500;
+  
+  arch->nuyen = 22660;
+  
+  arch->modulator = 16208; // platinum
+  
+  arch->worn[WEAR_ABOUT] = 1833; // a black trench coat
+  
+  i = 0;
+  arch->carried[i++] = 450; // medkit
+  assert(i < NUM_ARCHETYPE_CARRIED);
+  
+  // Cyberware.
+  i = 0;
+  arch->cyberware[i++] = 85066; // ceramic bone lacing
+  assert(i < NUM_ARCHETYPE_CYBERWARE);
+  
+  // Bioware.
+  i = 0;
+  arch->bioware[i++] = 85803; // enhanced articulation
+  assert(i < NUM_ARCHETYPE_BIOWARE);
+  
+  return arch;
+}
+
+#undef MAG
+
 struct archetype_data *generate_archetype(int index) {
   switch(index) {
     case ARCHETYPE_STREET_SAMURAI:
       return generate_street_samurai();
+    case ARCHETYPE_ADEPT:
+      return generate_adept();
+    case ARCHETYPE_SHAMANIC_MAGE:
+      return generate_shaman();
+    case ARCHETYPE_DECKER:
+      return generate_decker();
+    default:
+      log_vfprintf("ERROR: Invalid archetype #%d passed to generate_archetypes!", index);
+      shutdown();
+      return NULL;
   }
-  snprintf(buf, sizeof(buf), "ERROR: Invalid archetype #%d passed to generate_archetypes!", index);
-  log(buf);
-  shutdown();
-  return NULL;
 }
 
 void generate_archetypes() {
   for (int i = 0; i < NUM_CCR_ARCHETYPES; i++) {
     archetypes[i] = generate_archetype(i);
-    snprintf(buf, sizeof(buf), "... %s.", archetypes[i]->name);
-    log(buf);
+    archetypes[i]->subsidy_card = 30000;
+    log_vfprintf("... %s.", archetypes[i]->name);
   }
 }
