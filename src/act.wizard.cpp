@@ -80,7 +80,7 @@ extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
 
 extern const char *pgroup_print_privileges(Bitfield privileges);
-extern void nonsensical_reply(struct char_data *ch);
+extern void nonsensical_reply(struct char_data *ch, const char *arg);
 extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
 
 extern struct elevator_data *elevator;
@@ -365,7 +365,6 @@ ACMD(do_echo)
   struct char_data *vict;
   struct veh_data *veh;
   skip_spaces(&argument);
-  extern void nonsensical_reply(struct char_data *ch);
 
   if (!*argument)
     send_to_char("Yes.. but what?\r\n", ch);
@@ -392,7 +391,7 @@ ACMD(do_echo)
       case SCMD_ECHO:
       case SCMD_AECHO:
         if (!PRF_FLAGGED(ch, PRF_QUESTOR) && (ch->desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : GET_LEVEL(ch)) < LVL_ARCHITECT) {
-          nonsensical_reply(ch);
+          nonsensical_reply(ch, NULL);
           return;
         }
         snprintf(buf, sizeof(buf), "%s", argument);
@@ -764,7 +763,7 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
   if (!ch || !victim)
     return;
   
-  act("$n is whisked away by the game's administration.", FALSE, victim, 0, 0, TO_ROOM);
+  act("$n is whisked away by the game's administration.", TRUE, victim, 0, 0, TO_ROOM);
   if (AFF_FLAGGED(victim, AFF_PILOT))
     AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
   char_from_room(victim);
@@ -777,7 +776,7 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
     char_to_room(victim, ch->in_room);
     snprintf(buf2, sizeof(buf2), "%s transferred %s to %s^g.", GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), GET_ROOM_NAME(victim->in_room));
   }
-  act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
+  act("$n arrives from a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
   act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
   look_at_room(victim, 0);
@@ -886,12 +885,12 @@ ACMD(do_teleport)
     send_to_char("Where do you wish to send this person?\r\n", ch);
   else if ((target = find_target_room(ch, buf2))) {
     send_to_char(OK, ch);
-    act("$n disappears in a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
+    act("$n disappears in a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
     if (AFF_FLAGGED(victim, AFF_PILOT))
       AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
     char_from_room(victim);
     char_to_room(victim, target);
-    act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
+    act("$n arrives from a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
     act("$n has teleported you!", FALSE, ch, 0, victim, TO_VICT);
     look_at_room(victim, 0);
     snprintf(buf2, sizeof(buf2), "%s teleported %s to %s",
@@ -1925,7 +1924,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   obj->obj_flags.extra_flags.SetBit(ITEM_IMMLOAD); // Why the hell do we have immload AND wizload?
   obj->obj_flags.extra_flags.SetBit(ITEM_WIZLOAD);
   act("$n makes a strange magical gesture.", TRUE, ch, 0, 0, TO_ROOM);
-  act("$n has created $p!", FALSE, ch, obj, 0, TO_ROOM);
+  act("$n has created $p!", TRUE, ch, obj, 0, TO_ROOM);
   act("You create $p.", FALSE, ch, obj, 0, TO_CHAR);
   snprintf(buf, sizeof(buf), "%s wizloaded object #%d (%s).",
           GET_CHAR_NAME(ch), vnum, GET_OBJ_NAME(obj));
@@ -1995,7 +1994,7 @@ ACMD(do_wizload)
 
     act("$n makes a quaint, magical gesture with one hand.", TRUE, ch,
         0, 0, TO_ROOM);
-    act("$n has created $N!", FALSE, ch, 0, mob, TO_ROOM);
+    act("$n has created $N!", TRUE, ch, 0, mob, TO_ROOM);
     act("You create $N.", FALSE, ch, 0, mob, TO_CHAR);
   } else if (is_abbrev(buf, "obj")) {
     perform_wizload_object(ch, numb);
@@ -2478,7 +2477,7 @@ ACMD(do_restore)
   
   // Shifted here from interpreter to allow morts to use the restore command for the testing obj.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
 
@@ -3164,7 +3163,7 @@ ACMD(do_wizutil)
         GET_FREEZE_LEV(vict) = GET_LEVEL(ch);
         send_to_char("A bitter wind suddenly rises and drains every erg of heat from your body!\r\nYou feel frozen!\r\n", vict);
         send_to_char("Frozen.\r\n", ch);
-        act("A sudden cold wind conjured from nowhere freezes $n!", FALSE, vict, 0, 0, TO_ROOM);
+        act("A sudden cold wind conjured from nowhere freezes $n!", TRUE, vict, 0, 0, TO_ROOM);
         snprintf(buf, sizeof(buf), "%s frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_WIZLOG, TRUE);
         break;
@@ -3185,7 +3184,7 @@ ACMD(do_wizutil)
         send_to_char("A fireball suddenly explodes in front of you, melting the ice!\r\nYou feel thawed.\r\n", vict);
         send_to_char("Thawed.\r\n", ch);
         GET_FREEZE_LEV(vict) = 0;
-        act("A sudden fireball conjured from nowhere thaws $n!", FALSE, vict, 0, 0, TO_ROOM);
+        act("A sudden fireball conjured from nowhere thaws $n!", TRUE, vict, 0, 0, TO_ROOM);
         break;
       default:
         log("SYSERR: Unknown subcmd passed to do_wizutil (act.wizard.c)");

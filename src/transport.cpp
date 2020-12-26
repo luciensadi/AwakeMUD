@@ -689,7 +689,7 @@ SPECIAL(taxi)
         comm = CMD_TAXI_NO;
       } else {
         do_say(ch, argument, 0, 0);
-        if (portland) {
+        if (!portland) {
           snprintf(buf2, sizeof(buf2), " Hey chummer, rules is rules. You gotta tell me something off of that sign there.");
         } else {
           snprintf(buf2, sizeof(buf2), " Sorry chummer, rules are rules. You need to tell me something from the sign.");

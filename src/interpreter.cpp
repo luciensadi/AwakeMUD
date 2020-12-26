@@ -1294,7 +1294,7 @@ const char *reserved[] =
     "\n"
   };
 
-void nonsensical_reply(struct char_data *ch)
+void nonsensical_reply(struct char_data *ch, const char *arg)
 {
   send_to_char(ch, "That is not a valid command.\r\n");
   if (ch->desc && ++ch->desc->invalid_command_counter >= 5) {
@@ -1303,6 +1303,11 @@ void nonsensical_reply(struct char_data *ch)
                  PRF_FLAGGED(ch, PRF_SCREENREADER) ? "type " : "",
                  PLR_FLAGGED(ch, PLR_NEWBIE) ? "NEWBIE" : "OOC");
     ch->desc->invalid_command_counter = 0;
+  }
+  if (arg) {
+    char log_buf[1000];
+    snprintf(log_buf, sizeof(log_buf), "Invalid command: '%s'.", arg);
+    mudlog(log_buf, ch, LOG_SYSLOG, TRUE);
   }
   /*  Removing the prior 'funny' messages and replacing them with something understandable by MUD newbies.
   switch (number(1, 9))
@@ -1409,7 +1414,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       
       // Nothing was found? Give them the "wat" and bail.
       if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
-        nonsensical_reply(ch);
+        nonsensical_reply(ch, arg);
         return;
       }
       
@@ -1431,7 +1436,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       if (!strncmp(rig_info[cmd].command, arg, length))
         break;
     if (*rig_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, rig_info)) == -1) {
-      nonsensical_reply(ch);
+      nonsensical_reply(ch, arg);
       return;
     } else {
       ch->desc->invalid_command_counter = 0;
@@ -1448,7 +1453,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
 
     // this was added so we can make the special respond to any text they type
     if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
-      nonsensical_reply(ch);
+      nonsensical_reply(ch, arg);
       return;
     } else {
       if (ch->desc)

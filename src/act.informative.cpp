@@ -1980,7 +1980,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           }
         }
         
-        // Do we require more recoil comp than is currently attached?
         if (burst_count > 0 && burst_count - standing_recoil_comp > 0) {
           strncat(buf, "\r\n\r\n^yIt doesn't have enough recoil compensation", sizeof(buf) - strlen(buf) - 1);
           if (burst_count - standing_recoil_comp - prone_recoil_comp <= 0) {
@@ -1988,10 +1987,20 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           } else if (prone_recoil_comp > 0){
             strncat(buf, " even when fired from prone", sizeof(buf) - strlen(buf) - 1);
           }
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ".^n\r\nStanding recoil penalty: ^c%d^n.  Prone recoil penalty: ^c%d^n.",
-                   burst_count - standing_recoil_comp, MAX(0, burst_count - standing_recoil_comp - prone_recoil_comp));
+          // Do we require more recoil comp than is currently attached?
+          switch (GET_WEAPON_SKILL(j)) {
+            case SKILL_SHOTGUNS:
+            case SKILL_MACHINE_GUNS:
+            case SKILL_ASSAULT_CANNON:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ".^n\r\nStanding recoil penalty (doubled): ^c%d^n.  Prone recoil penalty (doubled): ^c%d^n.",
+                       (burst_count - standing_recoil_comp) * 2, MAX(0, burst_count - standing_recoil_comp - prone_recoil_comp) * 2);
+              break;
+            default:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ".^n\r\nStanding recoil penalty: ^c%d^n.  Prone recoil penalty: ^c%d^n.",
+                      burst_count - standing_recoil_comp, MAX(0, burst_count - standing_recoil_comp - prone_recoil_comp));
+              break;
+          }
         }
-        
       }
       // Melee weapons.
       else {
@@ -4028,12 +4037,12 @@ ACMD(do_gen_ps)
   }
 }
 
-extern void nonsensical_reply( struct char_data *ch );
+extern void nonsensical_reply(struct char_data *ch, const char *arg);
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
   /* DISABLED FOR MORTALS */
-  nonsensical_reply(ch);
+  nonsensical_reply(ch, NULL);
   return;
 }
 
@@ -4710,7 +4719,7 @@ ACMD(do_tke){
   send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <tke|reputation|notoriety|nuyen|syspoints|fired>\r\n"
+#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <tke|reputation|notoriety|nuyen|syspoints>\r\n"
 ACMD(do_leaderboard) {
   // leaderboard <tke|rep|notor|nuyen|sysp>
   skip_spaces(&argument);
@@ -4744,11 +4753,6 @@ ACMD(do_leaderboard) {
   else if (!strncmp(argument, "syspoints", strlen(argument))) {
     display_string = "syspoints";
     query_string = "syspoints";
-  }
-  
-  else if (!strncmp(argument, "fired", strlen(argument))) {
-    display_string = "shots fired";
-    query_string = "ShotsFired";
   }
   
   else {

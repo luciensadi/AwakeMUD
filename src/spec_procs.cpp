@@ -3491,6 +3491,9 @@ SPECIAL(auth_room)
         obj_to_char(radio, ch);
         send_to_char(ch, "You have been given a radio.^n\r\n");
       }
+      // Heal them.
+      GET_PHYSICAL(ch) = 1000;
+      GET_MENTAL(ch) = 1000;
       snprintf(buf, sizeof(buf), "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       

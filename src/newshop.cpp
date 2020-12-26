@@ -34,7 +34,8 @@ const char *shop_flags[] =
     "Nothing",
     "Doctor",
     "!NEGOTIATE",
-    "!RESELL"
+    "!RESELL",
+    "CHARGEN"
   };
 
 const char *shop_type[3] =
@@ -329,8 +330,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         FALSE, keeper, 0, ch, TO_NOTVICT);
     snprintf(buf, sizeof(buf), "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-    GET_PHYSICAL(ch) = 100;
-    GET_MENTAL(ch) = 100;
+    if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+      GET_PHYSICAL(ch) = 100;
+      GET_MENTAL(ch) = 100;
+    }
     act("You delicately install $p into $N's body.",
         FALSE, keeper, obj, ch, TO_CHAR);
     act("$n performs a delicate procedure on $N.",
@@ -761,8 +764,10 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         FALSE, keeper, 0, ch, TO_NOTVICT);
     act("$n delicately removes $p from your body.",
         FALSE, keeper, obj, ch, TO_VICT);
-    GET_MENTAL(ch) = 100;
-    GET_PHYSICAL(ch) = 100;
+    if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+      GET_PHYSICAL(ch) = 100;
+      GET_MENTAL(ch) = 100;
+    }
     affect_total(ch);
     if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY)
       for (struct obj_data *chip = obj->contains; chip; chip = chip->next_content)

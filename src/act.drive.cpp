@@ -458,7 +458,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
   }
   int success = success_test(skill, target);
   if (vict) {
-    target = 4 + damage_modifier(vict, buf);
+    target = 4 + damage_modifier(vict, buf, sizeof(buf));
     success -= success_test(GET_DEFENSE(vict), target);
   }
   if (success > 0)

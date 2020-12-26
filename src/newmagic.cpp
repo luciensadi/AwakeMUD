@@ -22,7 +22,7 @@ extern void die(struct char_data *ch);
 extern void damage_equip(struct char_data *ch, struct char_data *vict, int power, int type);
 extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
 extern void check_killer(struct char_data * ch, struct char_data * vict);
-extern void nonsensical_reply(struct char_data *ch);
+extern void nonsensical_reply(struct char_data *ch, const char *arg);
 
 struct char_data *find_spirit_by_id(int spiritid, long playerid)
 {
@@ -1324,7 +1324,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target -= 2;
     else {
       // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target);
       
@@ -1372,7 +1372,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     if (!AWAKE(vict))
       target -= 2;
     else
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
       success = -1;
@@ -1425,7 +1425,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     if (!AWAKE(vict))
       target -= 2;
     else
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
       success = -1;
@@ -1475,7 +1475,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       target -= 2;
     else {
       // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
@@ -2460,7 +2460,7 @@ ACMD(do_spells)
 ACMD(do_forget)
 {
   if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || !GET_SPELLS(ch)) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   skip_spaces(&argument);
@@ -3445,7 +3445,7 @@ void deactivate_power(struct char_data *ch, int power)
 ACMD(do_powerdown)
 {
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   for (int i = 0; i < ADEPT_NUMPOWER; i++)
@@ -3955,14 +3955,14 @@ ACMD(do_subpoint)
 ACMD(do_initiate)
 {
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
   else if (subcmd == SCMD_INITIATE && init_cost(ch, FALSE)) {
     STATE(ch->desc) = CON_INITIATE;
     PLR_FLAGS(ch).SetBit(PLR_INITIATE);  
     disp_init_menu(ch->desc);
   } else if (subcmd == SCMD_POWERPOINT) {
     if (GET_TRADITION(ch) != TRAD_ADEPT) {
-      nonsensical_reply(ch);
+      nonsensical_reply(ch, NULL);
       return;
     }
     
@@ -4075,7 +4075,7 @@ void init_parse(struct descriptor_data *d, char *arg)
 ACMD(do_masking)
 {
   if (GET_METAMAGIC(ch, META_MASKING) < 2) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   skip_spaces(&argument);
@@ -4106,7 +4106,7 @@ ACMD(do_masking)
 ACMD(do_focus)
 {
   if (GET_TRADITION(ch) != TRAD_ADEPT || !GET_POWER(ch, ADEPT_LIVINGFOCUS)) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   skip_spaces(&argument);
@@ -4167,7 +4167,7 @@ ACMD(do_metamagic)
 ACMD(do_cleanse)
 {
   if (GET_METAMAGIC(ch, META_CLEANSING) < 2) {  
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   if (!(IS_ASTRAL(ch) || IS_DUAL(ch)))
