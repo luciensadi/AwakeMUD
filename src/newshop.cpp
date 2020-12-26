@@ -1416,7 +1416,9 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
       totaltime = totaltime / SECS_PER_MUD_DAY;
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_object(order->item)]), order->number);
       if (totaltime < 0)
-        strcat(buf, " AVAILABLE\r\n");
+        strncat(buf, " AVAILABLE\r\n", sizeof(buf) - strlen(buf) - 1);
+      else if (totaltime < 1 && (int)(24 * totaltime) == 0)
+        strncat(buf, " less than one hour", sizeof(buf) - strlen(buf) - 1);
       else
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d %s\r\n", totaltime < 1 ? (int)(24 * totaltime) : (int)totaltime,
                 totaltime < 1 ? "hours" : (totaltime == 1 ? "day" : "days"));
