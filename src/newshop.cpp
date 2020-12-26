@@ -599,7 +599,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     // Don't let people re-try repeatedly.
     for (int q = 0; q < SHOP_LAST_IDNUM_LIST_SIZE; q++) {
       if (sell->lastidnum[q] == GET_IDNUM(ch)) {
-        snprintf(buf, sizeof(buf), "%s Sorry, I couldn't get that in for you.", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s Sorry, I couldn't get that in for you. Try again tomorrow.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         extract_obj(obj);
         return;

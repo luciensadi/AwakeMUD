@@ -1386,7 +1386,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     if (target >= 8)
       return 0;
     target += 4;
-    snprintf(gskbuf, sizeof(gskbuf), "$n (%s) defaulting on %s = %d(%d): +4 TN", GET_CHAR_NAME(ch), skills[skill].name, GET_SKILL(ch, skill), REAL_SKILL(ch, skill));
+    snprintf(gskbuf, sizeof(gskbuf), "$n (%s) defaulting on %s = %d(%d): +4 TN, will have %d dice.", GET_CHAR_NAME(ch), skills[skill].name, GET_SKILL(ch, skill), REAL_SKILL(ch, skill), GET_ATT(ch, skills[skill].attribute));
     act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
     return GET_ATT(ch, skills[skill].attribute);
   }
