@@ -2998,7 +2998,10 @@ ACMD(do_assense)
       strcpy(buf, make_desc(ch, vict, buf2, 2, FALSE));
       if (success < 3) {
         if (vict->cyberware)
-          strcat(buf, " has cyberware present and");
+          if (GET_SEX(vict) != SEX_NEUTRAL || (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)))
+            strcat(buf, " has cyberware present and");
+          else
+            strcat(buf, " have cyberware present and");
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s spirit", spirit_name[GET_SPARE1(vict)]);

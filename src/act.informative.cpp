@@ -65,6 +65,9 @@ extern SPECIAL(spell_trainer);
 extern SPECIAL(johnson);
 extern SPECIAL(shop_keeper);
 extern SPECIAL(landlord_spec);
+extern SPECIAL(fence);
+extern SPECIAL(terell_davis);
+extern SPECIAL(hacker);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 extern float get_bulletpants_weight(struct char_data *ch);
@@ -794,11 +797,17 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s has a few things for sale.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s %s a few things for sale.^n\r\n", HSSH(i), HASHAVE(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == fence) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might be willing to buy something from you.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), HMHR(i));
         }
       }
       
@@ -827,11 +836,17 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "", HASHAVE(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == fence) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy something from you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "", HMHR(i));
         }
       }
     }

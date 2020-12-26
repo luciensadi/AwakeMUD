@@ -1354,7 +1354,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   else {
     // Ensure targeted character does not already have this priv.
     if (GET_PGROUP_MEMBER_DATA(vict)->privileges.IsSet(priv)) {
-      send_to_char(ch, "%s already has that privilege.\r\n", HSSH(vict));
+      send_to_char(ch, "%s already %s that privilege.\r\n", HSSH(vict), HASHAVE(vict));
       return;
     }
     

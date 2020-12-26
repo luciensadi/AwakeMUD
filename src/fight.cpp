@@ -3758,7 +3758,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->tn += att->modifiers[mod_index];
     }
     
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nTN: %d.", att->tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nThus, attacker's TN is: %d.", att->tn);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // Calculate the attacker's total skill and execute a success test.
@@ -3772,7 +3772,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
     
     att->successes = success_test(att->dice, att->tn);
-    snprintf(rbuf, sizeof(rbuf), "%d successes.", att->successes);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d successes.", att->successes);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // Dodge test.
