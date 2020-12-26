@@ -1374,7 +1374,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
   if (!isalpha(*argument))
   {
     // Strip out the PennMUSH bullshit.
-    if (*argument == '@' || *argument == '+') {
+    if (*argument == '@' || *argument == '+' || *argument == '/') {
       argument[0] = ' ';
       skip_spaces(&argument);
       if (!*argument)
@@ -2865,6 +2865,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("dorp", "drop");
   COMMAND_ALIAS("sheathe", "sheath");
   COMMAND_ALIAS("weild", "wield");
+  COMMAND_ALIAS("taxi", "hail");
   
   // one of the most common commands, although people eventually learn to just use 'l'
   COMMAND_ALIAS("olok", "look");
