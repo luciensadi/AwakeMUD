@@ -79,6 +79,7 @@ void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
 void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
+int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info);
 
 // for spell creation
 void cedit_parse(struct descriptor_data *d, char *arg);
@@ -796,7 +797,6 @@ struct command_info cmd_info[] =
     { "unsubscribe",POS_RESTING, do_subscribe, 0, SCMD_UNSUB },
     { "untrain"  , POS_RESTING , do_train    , 1, SCMD_UNTRAIN },
     { "unlearn"  , POS_DEAD    , do_forget   , 0, 0 },
-    { "unwield"  , POS_RESTING , do_remove   , 0, 0 },
     { "upgrade"  , POS_SITTING , do_upgrade  , 0 , 0 },
     { "uptime"   , POS_DEAD    , do_date     , LVL_BUILDER, SCMD_UPTIME },
     { "use"      , POS_SITTING , do_use      , 1, SCMD_USE },
@@ -1398,20 +1398,22 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     for (length = strlen(arg), cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
       if (!strncmp(mtx_info[cmd].command, arg, length))
         break;
-    if (*mtx_info[cmd].command == '\n') {
+        
+    // If they have failed to enter a valid Matrix command, and we were unable to fix a typo in their command:
+    if (*mtx_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, mtx_info)) == -1) {      
       // If the command exists outside of the Matrix, let them know that it's not an option here.
       for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
         if (!strncmp(cmd_info[cmd].command, arg, length))
           if ((cmd_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, cmd_info[cmd].minimum_level))
             break;
       
-      // Nothing was found, give them the "wat" and bail.
-      if (*cmd_info[cmd].command == '\n') {
+      // Nothing was found? Give them the "wat" and bail.
+      if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
         nonsensical_reply(ch);
         return;
-      } else {
-        ch->desc->invalid_command_counter = 0;
       }
+      
+      ch->desc->invalid_command_counter = 0;
       
       // Their command was valid in external context. Inform them.
       quit_the_matrix_first(ch, line, 0, 0);
@@ -1428,7 +1430,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     for (length = strlen(arg), cmd = 0; *rig_info[cmd].command != '\n'; cmd++)
       if (!strncmp(rig_info[cmd].command, arg, length))
         break;
-    if (*rig_info[cmd].command == '\n') {
+    if (*rig_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, rig_info)) == -1) {
       nonsensical_reply(ch);
       return;
     } else {
@@ -1445,7 +1447,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
           break;
 
     // this was added so we can make the special respond to any text they type
-    if (*cmd_info[cmd].command == '\n') {
+    if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
       nonsensical_reply(ch);
       return;
     } else {
@@ -1928,7 +1930,7 @@ void half_chop(char *string, char *arg1, char *arg2)
 }
 
 /* Used in specprocs, mostly.  (Exactly) matches "command" to cmd number */
-int find_command(const char *command)
+int find_command_in_x(const char *command, const struct command_info *cmd_info)
 {
   int cmd;
 
@@ -1938,15 +1940,16 @@ int find_command(const char *command)
 
   return -1;
 }
+
+/* Used in specprocs, mostly.  (Exactly) matches "command" to cmd number */
+int find_command(const char *command)
+{
+  return find_command_in_x(command, cmd_info);
+}
+
 int find_mcommand(const char *command)
 {
-  int cmd;
-
-  for (cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
-    if (!strcmp(mtx_info[cmd].command, command))
-      return cmd;
-
-  return -1;
+  return find_command_in_x(command, mtx_info);
 }
 
 int special(struct char_data * ch, int cmd, char *arg)
@@ -2848,3 +2851,26 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   }
 }
+
+// Attempts to map common typos to their actual commands.
+#define COMMAND_ALIAS(typo, corrected)   if (strncmp(arg, (typo), strlen(arg)) == 0) { return find_command_in_x((corrected), cmd_info); }
+
+int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
+  COMMAND_ALIAS("recieve", "receive");
+  COMMAND_ALIAS("dorp", "drop");
+  COMMAND_ALIAS("sheathe", "sheath");
+  COMMAND_ALIAS("weild", "wield");
+  
+  // one of the most common commands, although people eventually learn to just use 'l'
+  COMMAND_ALIAS("olok", "look");
+  COMMAND_ALIAS("lok", "look");
+  COMMAND_ALIAS("loko", "look");
+  
+  // equipment seems to give people a lot of trouble
+  COMMAND_ALIAS("unwield", "remove");
+  COMMAND_ALIAS("unwear", "remove");
+  
+  // Found nothing, return the failure code.
+  return -1;
+}
+#undef MAP_TYPO

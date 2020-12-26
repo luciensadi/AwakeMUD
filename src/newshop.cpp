@@ -1548,7 +1548,7 @@ SPECIAL(shop_keeper)
     shop_value(argument, ch, keeper, shop_nr);
   else if (CMD_IS("check"))
     shop_check(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("receive"))
+  else if (CMD_IS("receive") || CMD_IS("recieve"))
     shop_rec(argument, ch, keeper, shop_nr);
   else if (CMD_IS("hours"))
     shop_hours(ch, shop_nr);

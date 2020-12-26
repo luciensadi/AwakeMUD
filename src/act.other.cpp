@@ -1640,7 +1640,7 @@ ACMD(do_attach)
       return;
     }
     if (GET_OBJ_TYPE(item) != ITEM_WEAPON) {
-      send_to_char("How do you expect to attach that?\r\n", ch);
+      send_to_char(ch, "%s is not a weapon you can attach to %s.\r\n", capitalize(GET_OBJ_NAME(item)), GET_VEH_NAME(veh));
       return;
     }
     for (item2 = veh->mount; item2; item2 = item2->next_content)
