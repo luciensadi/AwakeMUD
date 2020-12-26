@@ -2864,6 +2864,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
   COMMAND_ALIAS("sheathe", "sheath");
+  COMMAND_ALIAS("unsheathe", "unsheath");
   COMMAND_ALIAS("weild", "wield");
   COMMAND_ALIAS("taxi", "hail");
   

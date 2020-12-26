@@ -366,8 +366,10 @@ ACMD(do_echo)
   struct veh_data *veh;
   skip_spaces(&argument);
 
-  if (!*argument)
+  if (!*argument) {
     send_to_char("Yes.. but what?\r\n", ch);
+    return;
+  }
   else {
     if (PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona) {
       send_to_char(ch, "You can't do that while hitching.\r\n");
