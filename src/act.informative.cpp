@@ -804,7 +804,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == fence) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might be willing to buy something from you.^n\r\n", HSSH(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might be willing to buy paydata from you.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), HMHR(i));
@@ -843,7 +843,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].func == fence) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy something from you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "", HMHR(i));
