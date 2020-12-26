@@ -470,7 +470,8 @@ int modify_target_rbuf(struct char_data *ch, char *rbuf)
 
 int modify_target(struct char_data *ch)
 {
-  return modify_target_rbuf_raw(ch, NULL, 0);
+  char fake_rbuf[5000];
+  return modify_target_rbuf_raw(ch, fake_rbuf, 0);
 }
 
 // this returns the general skill

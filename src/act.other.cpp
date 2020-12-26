@@ -2464,9 +2464,17 @@ ACMD(do_remember)
   argument = any_one_arg(argument, buf1);
   argument = one_argument(argument, buf2);
 
-  if (!*buf1 || !*buf2)
+  if (!*buf1 || !*buf2) {
     send_to_char(ch, "Remember Who as What?\r\n");
-  else if (!(vict = get_char_room_vis(ch, buf1)) || (ch->in_veh && !(vict = get_char_veh(ch, buf1, ch->in_veh))))
+    return;
+  }
+  
+  if (ch->in_veh)
+    vict = get_char_veh(ch, buf1, ch->in_veh);
+  else
+    vict = get_char_room_vis(ch, buf1);
+  
+  if (!vict)
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
   else if (IS_NPC(vict))
     send_to_char(ch, "You cannot remember NPCs.\r\n");
