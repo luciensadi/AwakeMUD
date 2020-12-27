@@ -2013,10 +2013,13 @@ ACMD(do_eat)
     send_to_char(ch, "You can't eat %s!\r\n", GET_OBJ_NAME(food));
     return;
   }
+#ifdef ENABLE_HUNGER
   if (GET_COND(ch, COND_FULL) > MAX_FULLNESS) {/* Stomach full */
     act("You are too full to eat more!", FALSE, ch, 0, 0, TO_CHAR);
     return;
   }
+#endif
+
   if (subcmd == SCMD_EAT) {
     act("You eat $p.", FALSE, ch, food, 0, TO_CHAR);
     act("$n eats $p.", TRUE, ch, food, 0, TO_ROOM);
