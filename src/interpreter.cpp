@@ -1308,6 +1308,11 @@ void nonsensical_reply(struct char_data *ch, const char *arg)
     char log_buf[1000];
     snprintf(log_buf, sizeof(log_buf), "Invalid command: '%s'.", arg);
     mudlog(log_buf, ch, LOG_SYSLOG, TRUE);
+    
+    // Log it to DB.
+    snprintf(buf, sizeof(buf), "INSERT INTO command_fuckups (Name, Count) VALUES ('%s', 1) ON DUPLICATE KEY UPDATE Count = Count + 1;", 
+             prepare_quotes(buf3, arg, sizeof(buf3) / sizeof(buf3[0])));
+    mysql_wrapper(mysql, buf);
   }
   /*  Removing the prior 'funny' messages and replacing them with something understandable by MUD newbies.
   switch (number(1, 9))

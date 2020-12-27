@@ -302,6 +302,39 @@ void check_for_common_fuckups() {
   }
 }
 
+// Kills the game if the table of the given name does not exist.
+void require_that_sql_table_exists(const char *table_name, const char *migration_path_from_root_directory) {
+  bool have_table = FALSE;
+  
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  
+  char query_buf[1000];
+  snprintf(query_buf, sizeof(query_buf), "SHOW TABLES LIKE '%s';", prepare_quotes(buf, table_name, sizeof(buf)));
+  mysql_wrapper(mysql, query_buf);
+  
+  if (!(res = mysql_use_result(mysql))) {
+    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
+                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 table_name,
+                 migration_path_from_root_directory);
+    exit(ERROR_DB_TABLE_REQUIRED);
+  }
+
+  if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql))
+    have_table = TRUE;
+    
+  mysql_free_result(res);
+  
+  if (!have_table) {
+    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
+                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 table_name,
+                 migration_path_from_root_directory);
+    exit(ERROR_DB_TABLE_REQUIRED);
+  }
+}
+
 void boot_world(void)
 {
   // Sanity check to ensure we haven't added more bits than our bitfield can hold.
@@ -339,10 +372,8 @@ void boot_world(void)
   verify_db_password_column_size();
   
   log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
-  if (!have_bullet_pants_table()) {
-    log("ERROR: You need to run the bullet_pants.sql migration from the SQL directory. Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < SQL/bullet_pants.sql`.");
-    exit(ERROR_BULLET_PANTS_FAILED);
-  }
+  require_that_sql_table_exists("pfiles_ammo", "SQL/bullet_pants.sql");
+  require_that_sql_table_exists("command_fuckups", "SQL/fuckups.sql");
   
   log("Handling idle deletion.");
   idle_delete();

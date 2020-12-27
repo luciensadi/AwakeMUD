@@ -328,27 +328,6 @@ ACMD(do_pockets) {
 * Database helpers *
 ********************/
 
-// Checks to see if the BP table is in yet.
-bool have_bullet_pants_table() {  
-  bool have_table = FALSE;
-  
-  MYSQL_RES *res;
-  MYSQL_ROW row;
-  
-  mysql_wrapper(mysql, "SHOW TABLES LIKE 'pfiles_ammo';");
-  
-  if (!(res = mysql_use_result(mysql)))
-    return FALSE;
-  
-  // Iterate through all the results and update the respective ammo values.
-  if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql))
-    have_table = TRUE;
-    
-  mysql_free_result(res);
-  
-  return have_table;
-}
-
 // Saves the ch's bullet pants to db.
 void save_bullet_pants(struct char_data *ch) {  
   if (!ch || IS_NPC(ch)) {

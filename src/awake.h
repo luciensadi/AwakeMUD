@@ -2186,7 +2186,7 @@ enum {
 #define ERROR_MYSQL_DATABASE_NOT_FOUND         17
 #define ERROR_ARRAY_OUT_OF_BOUNDS              18
 #define ERROR_CANNOT_RESOLVE_VNUM              19
-#define ERROR_BULLET_PANTS_FAILED              20
+#define ERROR_DB_TABLE_REQUIRED                20
 
 // Materials.
 #define MATERIAL_PAPER        0

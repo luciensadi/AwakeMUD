@@ -3742,8 +3742,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     if (att->gyro && !(AFF_FLAGGED(att->ch, AFF_MANNING) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_PILOT)))
       att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], GET_OBJ_VAL(att->gyro, 0));
     else if (IS_NPC(att->ch)) {
+      /*    We _used to_ assume NPCs had gyros, but this made them unreasonably powerful. -- LS
       // We assume that NPCs have a gyro equipped, and that the builder just didn't want to be handing out free gyros everywhere for balance reasons.
       att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], 4);
+      */
     }
     
     // Calculate and display pre-success-test information.
