@@ -3323,7 +3323,7 @@ ACMD(do_draw)
   else {
     int i = draw_weapon(ch);
     if (i == 0)
-      send_to_char(ch, "You have nothing to draw.\r\n");
+      send_to_char(ch, "You have nothing to draw. Make sure you're wearing a sheath or holster with a weapon in it, and that you've used the READY command on the sheath or holster.\r\n");
   }
 }
 

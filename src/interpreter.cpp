@@ -2871,10 +2871,13 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
   COMMAND_ALIAS("sheathe", "sheath");
-  COMMAND_ALIAS("unsheathe", "unsheath");
+  COMMAND_ALIAS("unsheathe", "draw");
   COMMAND_ALIAS("weild", "wield");
   COMMAND_ALIAS("taxi", "hail");
   COMMAND_ALIAS("prove", "probe");
+  COMMAND_ALIAS("pickup", "get");
+  COMMAND_ALIAS("yes", "nod");
+  COMMAND_ALIAS("setup", "unpack");
   
   // one of the most common commands, although people eventually learn to just use 'l'
   COMMAND_ALIAS("olok", "look");
