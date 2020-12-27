@@ -2398,3 +2398,44 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     break;
   }
 }
+
+// Remotely end a run. Requires a phone.
+ACMD(do_endrun) {
+  struct obj_data *phone = NULL;
+  
+  // Must be on a quest.
+  FAILURE_CASE(!GET_QUEST(ch), "But you're not on a run.");
+  
+  // Must have a phone.
+  for (phone = ch->carrying; phone; phone = phone->next_content)
+    if (GET_OBJ_TYPE(phone) == ITEM_PHONE)
+      break;
+  // Cyberware phones are fine.
+  if (!phone)
+    for (phone = ch->cyberware; phone; phone = phone->next_content)
+      if (GET_OBJ_VAL(phone, 0) == CYB_PHONE)
+        break;
+  // No phone? Go away.    
+  FAILURE_CASE(!phone, "How do you expect to contact your Johnson without a phone?");
+  
+  // Drop the quest.
+  for (struct char_data *johnson = character_list; johnson; johnson = johnson->next) {
+    if (IS_NPC(johnson) && (GET_MOB_VNUM(johnson) == quest_table[GET_QUEST(ch)].johnson)) {
+      send_to_char(ch, "You call your Johnson, and after a short wait the phone is picked up.\r\n"
+                       "^Y%s on the other end of the line says, \"%s\"^n\r\n"
+                       "With your run abandoned, you hang up the phone.\r\n", 
+                       GET_CHAR_NAME(johnson), 
+                       quest_table[GET_QUEST(ch)].quit);
+      snprintf(buf, sizeof(buf), "$z's phone rings. $e answers, listens for a moment, then says into it, \"%s\"", quest_table[GET_QUEST(ch)].quit);
+      act(buf, FALSE, johnson, NULL, NULL, TO_ROOM);
+      
+      end_quest(ch);
+      forget(johnson, ch);
+      return;
+    }
+  }
+  
+  // Error case.
+  mudlog("SYSERR: Attempted remote job termination, but the Johnson could not be found!", ch, LOG_SYSLOG, TRUE);
+  send_to_char("You dial your phone, but something's up with the connection, and you can't get through.\r\n", ch);
+}

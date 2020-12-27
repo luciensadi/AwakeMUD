@@ -157,6 +157,7 @@ ACMD_DECLARE(do_echo);
 ACMD_DECLARE(do_eject);
 ACMD_DECLARE(do_elemental);
 ACMD_DECLARE(do_enter);
+ACMD_DECLARE(do_endrun);
 ACMD_DECLARE(do_equipment);
 ACMD_DECLARE(do_examine);
 ACMD_DECLARE(do_exit);
@@ -518,7 +519,8 @@ struct command_info cmd_info[] =
     { "elemental", POS_DEAD    , do_elemental, 0, 0 },
     { "emote"    , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
     { ":"        , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
-    { "enter"    , POS_SITTING, do_enter    , 0, 0 },
+    { "enter"    , POS_SITTING , do_enter    , 0, 0 },
+    { "endrun"   , POS_RESTING , do_endrun   , 0, 0 },
     { "equipment", POS_SLEEPING, do_equipment, 0, 0 },
     { "exits"    , POS_LYING   , do_exits    , 0, 0 },
     { "examine"  , POS_RESTING , do_examine  , 0, SCMD_EXAMINE },
@@ -2878,6 +2880,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("pickup", "get");
   COMMAND_ALIAS("yes", "nod");
   COMMAND_ALIAS("setup", "unpack");
+  COMMAND_ALIAS("endjob", "endrun");
+  COMMAND_ALIAS("resign", "endrun");
   
   // one of the most common commands, although people eventually learn to just use 'l'
   COMMAND_ALIAS("olok", "look");
