@@ -2887,6 +2887,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   // equipment seems to give people a lot of trouble
   COMMAND_ALIAS("unwield", "remove");
   COMMAND_ALIAS("unwear", "remove");
+  COMMAND_ALIAS("unequip", "remove");
   
   // Found nothing, return the failure code.
   return -1;

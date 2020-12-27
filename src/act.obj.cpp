@@ -594,9 +594,9 @@ ACMD(do_put)
     }
     if (!found) {
       if (obj_dotmode == FIND_ALL) {
-        send_to_char(ch, "You don't seem to have anything to %s in it.\r\n", (cyberdeck ? "install" : "put"));
+        send_to_char(ch, "You don't seem to have anything in your inventory to %s in it.\r\n", (cyberdeck ? "install" : "put"));
       } else {
-        send_to_char(ch, "You don't seem to have any %ss.\r\n", arg1);
+        send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg1);
       }
     }
   }
@@ -1567,7 +1567,7 @@ ACMD(do_drop)
         return;
       }
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have any %ss.\r\n", arg);
+        send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg);
       }
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg, obj->next_content);
@@ -1576,7 +1576,7 @@ ACMD(do_drop)
       }
     } else {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+        send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
       } else
         amount += perform_drop(ch, obj, mode, sname, random_donation_room);
     }
@@ -1782,7 +1782,7 @@ ACMD(do_give)
     dotmode = find_all_dots(arg);
     if (dotmode == FIND_INDIV) {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+        send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
       } else
         perform_give(ch, vict, obj);
     } else {
@@ -2001,7 +2001,7 @@ ACMD(do_eat)
     return;
   }
   if (!(food = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
     return;
   }
   if (subcmd == SCMD_TASTE && ((GET_OBJ_TYPE(food) == ITEM_DRINKCON) ||
@@ -2567,7 +2567,7 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
       "back",
       "about",
       "body",
-      "under",
+      "underneath",
       "arms",
       "underarm",
       "!RESERVED!",
@@ -2687,14 +2687,14 @@ ACMD(do_wear)
       }
     }
     if (!items_worn)
-      send_to_char("You don't seem to have anything wearable.\r\n", ch);
+      send_to_char("You don't seem to have anything wearable in your inventory.\r\n", ch);
   } else if (dotmode == FIND_ALLDOT) {
     if (!*arg1) {
       send_to_char("Wear all of what?\r\n", ch);
       return;
     }
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't seem to have any %ss.\r\n", arg1);
+      send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg1);
     } else
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg1, obj->next_content);
@@ -2706,7 +2706,7 @@ ACMD(do_wear)
       }
   } else {
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg1), arg1);
+      send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg1), arg1);
     } else {
       if ((where = find_eq_pos(ch, obj, arg2)) >= 0)
         perform_wear(ch, obj, where);
@@ -2725,7 +2725,7 @@ ACMD(do_wield)
   if (!*arg)
     send_to_char("Wield what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
   } else {
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
       send_to_char(ch, "You can't wield %s.\r\n", GET_OBJ_NAME(obj));
@@ -2756,7 +2756,7 @@ ACMD(do_grab)
   if (!*arg)
     send_to_char("Hold what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
   } else {
     if (GET_OBJ_TYPE(obj) == ITEM_LIGHT)
       perform_wear(ch, obj, WEAR_LIGHT);
