@@ -1268,8 +1268,12 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
-  } else
-    send_to_char(ch, "^C%s^n\r\n", GET_ROOM_NAME(ch->in_room), ch);
+  } else {
+    send_to_char(ch, "^C%s^n%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+                 ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "");
+  }
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
