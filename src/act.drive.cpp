@@ -699,9 +699,9 @@ ACMD(do_upgrade)
     }
   }
 
-  snprintf(buf, sizeof(buf), "$n goes to work on %s.\r\n", GET_VEH_NAME(veh));
+  snprintf(buf, sizeof(buf), "$n goes to work on %s and installs %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(mod));
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
-  send_to_char(ch, "You go to work on %s.\r\n", GET_VEH_NAME(veh));
+  send_to_char(ch, "You go to work on %s and install %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(mod));
 }
 
 void disp_mod(struct veh_data *veh, struct char_data *ch, int i)

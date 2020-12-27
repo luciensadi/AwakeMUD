@@ -167,6 +167,7 @@ ACMD_DECLARE(do_focus);
 ACMD_DECLARE(do_follow);
 ACMD_DECLARE(do_force);
 ACMD_DECLARE(do_forget);
+ACMD_DECLARE(do_fuckups);
 ACMD_DECLARE(do_gecho);
 ACMD_DECLARE(do_gen_comm);
 ACMD_DECLARE(do_gen_door);
@@ -534,6 +535,7 @@ struct command_info cmd_info[] =
     { "focus"    , POS_RESTING , do_focus    , 0, 0 },
     { "follow"   , POS_RESTING , do_follow   , 0, 0 },
     { "freeze"   , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE },
+    { "fuckups"  , POS_DEAD    , do_fuckups  , LVL_ADMIN, 0 },
 
     { "get"      , POS_RESTING , do_get      , 0, 0 },
     { "gaecho"   , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, SCMD_AECHO },
@@ -2872,6 +2874,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unsheathe", "unsheath");
   COMMAND_ALIAS("weild", "wield");
   COMMAND_ALIAS("taxi", "hail");
+  COMMAND_ALIAS("prove", "probe");
   
   // one of the most common commands, although people eventually learn to just use 'l'
   COMMAND_ALIAS("olok", "look");

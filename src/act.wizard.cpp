@@ -5482,3 +5482,73 @@ ACMD(do_shopfind)
   if (index == 0)
     send_to_char("- None.\r\n", ch);
 }
+
+void print_x_fuckups(struct char_data *ch, int print_count) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  char query_buf[1000];
+  
+  snprintf(query_buf, sizeof(query_buf), "SELECT Name, Count FROM command_fuckups ORDER BY COUNT DESC LIMIT %d;", print_count);
+  
+  mysql_wrapper(mysql, query_buf);
+  if (!(res = mysql_use_result(mysql))) {
+    mudlog("SYSERR: Failed to access command fuckups data!", ch, LOG_SYSLOG, TRUE);
+    send_to_char(ch, "Sorry, the fuckups system is offline at the moment.\r\n");
+    return;
+  }
+  
+  send_to_char(ch, "^CTop %d fuckups:^n\r\n", print_count);
+  int counter = 1;
+  while ((row = mysql_fetch_row(res))) {
+    send_to_char(ch, "%2d) %-20s: %-5s\r\n", counter++, row[0], row[1]);
+  }
+  if (counter == 1)
+    send_to_char(ch, "...None! Lucky you, not a single command typo in the entire game.\r\n");
+  mysql_free_result(res);
+}
+
+ACMD(do_fuckups) {
+  // fuckups [x] -- list the top X fuckups, default 10
+  // fuckups del <cmd> -- remove something from the fuckups list
+  int fuckup_count = 10;
+  
+  skip_spaces(&argument);
+  
+  // Display 10.
+  if (!*argument) {
+    print_x_fuckups(ch, 10);
+    return;
+  }
+  
+  // Display X.
+  if ((fuckup_count = atoi(argument))) {
+    if (fuckup_count <= 0) {
+      send_to_char("1 or more, please.\r\n", ch);
+      return;
+    }
+    
+    print_x_fuckups(ch, fuckup_count);
+    return;
+  }
+  
+  // Delete mode.
+  char mode[100];
+  const char *deletion_string = one_argument(argument, mode);
+  if (!strncmp(mode, "delete", strlen(mode))) {
+    if (!access_level(ch, LVL_PRESIDENT) || IS_NPC(ch)) {
+      send_to_char("Sorry, only level-10 PC staff can delete fuckups.\r\n", ch);
+      return;
+    }
+    
+    char query_buf[1000];
+    snprintf(query_buf, sizeof(query_buf), "DELETE FROM command_fuckups WHERE Name = '%s'",
+             prepare_quotes(buf, deletion_string, sizeof(buf)));
+    mysql_wrapper(mysql, query_buf);
+    send_to_char("Done.\r\n", ch);
+    
+    snprintf(buf, sizeof(buf), "%s deleted command fuckup '%s' from the database.", GET_CHAR_NAME(ch), deletion_string);
+    return;
+  }
+  
+  send_to_char("Syntax: `fuckups [count]` to list, or `fuckups delete <command>` to remove.", ch);
+}
