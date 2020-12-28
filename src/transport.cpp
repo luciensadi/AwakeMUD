@@ -461,10 +461,10 @@ ACMD(do_hail)
   // Special condition: Hailing from Imm HQ's central room.
   if (ch->in_room->number == 10000) {
     skip_spaces(&argument);
-    if (!strncmp(argument, "portland", strlen(argument))) {
+    if (*argument && !strncmp(argument, "portland", strlen(argument))) {
       send_to_char("Portland cab network selected.\r\n", ch);
       dest_data_list = portland_taxi_destinations;
-    } else if (!strncmp(argument, "caribbean", strlen(argument))){
+    } else if (*argument && !strncmp(argument, "caribbean", strlen(argument))){
       send_to_char("Caribbean cab network selected.\r\n", ch);
       dest_data_list = caribbean_taxi_destinations;
     } else {
