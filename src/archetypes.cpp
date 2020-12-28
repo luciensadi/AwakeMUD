@@ -41,53 +41,54 @@ struct archetype_data *generate_street_samurai() {
   arch->skills[SKILL_STREET_ETIQUETTE] = 1;
   
   // Inventory.
-  arch->weapon = 838; // colt m-23, should be set to burst fire
-  arch->weapon_top = 28702; // nicami scope
-  arch->weapon_barrel = 80403; // vent IV
-  arch->weapon_under = 31111; // smartlink II
+  arch->weapon = OBJ_COLT_M23; // colt m-23, TODO: should be set to burst fire
+  arch->weapon_top = OBJ_NICAMI_SCOPE; // nicami scope
+  arch->weapon_barrel = OBJ_VENT_IV; // vent IV
+  arch->weapon_under = OBJ_SMARTLINK_II; // smartlink II
+  
   arch->ammo_q = 500;
   
   arch->nuyen = 22660;
   
-  arch->modulator = 16208; // platinum
+  arch->modulator = OBJ_PLATINUM_MODULATOR; // platinum
   
-  arch->worn[WEAR_ABOUT] = 1833; // a black trench coat
-  arch->worn[WEAR_BODY] = 64903; // a 100% cotton t-shirt
-  arch->worn[WEAR_UNDER] = 80734; // formfit III
-  arch->worn[WEAR_ARMS] = 700; // forearm guards
-  arch->worn[WEAR_BACK] = 2059; // rifle strap
-  arch->worn[WEAR_WAIST] = 9402; // a black leather duty belt
-  arch->worn[WEAR_LEGS] = 14618; // a pair of black BDU pants
-  arch->worn[WEAR_FEET] = 29010; // a pair of black combat boots
+  arch->worn[WEAR_ABOUT] = OBJ_BLACK_TRENCH_COAT; // a black trench coat
+  arch->worn[WEAR_BODY] = OBJ_100_PCT_COTTON_SHIRT; // a 100% cotton t-shirt
+  arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III; // formfit III
+  arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS; // forearm guards
+  arch->worn[WEAR_BACK] = OBJ_RIFLE_STRAP; // rifle strap
+  arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT; // a black leather duty belt
+  arch->worn[WEAR_LEGS] = OBJ_BLACK_BDU_PANTS; // a pair of black BDU pants
+  arch->worn[WEAR_FEET] = OBJ_BLACK_COMBAT_BOOTS; // a pair of black combat boots
   
   i = 0;
-  arch->carried[i++] = 450; // medkit
-  arch->carried[i++] = 47397; // vehicle toolkit
-  arch->carried[i++] = 60532; // electroncis kit
-  arch->carried[i++] = 60530; // cell phone
+  arch->carried[i++] = OBJ_MEDKIT; // medkit
+  arch->carried[i++] = OBJ_VEHICLE_TOOLKIT; // vehicle toolkit
+  arch->carried[i++] = OBJ_ELECTRONICS_KIT; // electronics kit
+  arch->carried[i++] = OBJ_CELL_PHONE; // cell phone
   arch->carried[i++] = OBJ_MAP_OF_SEATTLE;
-  arch->carried[i++] = 892; // scorpion tit
-  arch->carried[i++] = 897; // bison tit
-  arch->carried[i++] = 31542; // secretary
-  arch->carried[i++] = 60535; // duffelbag
+  arch->carried[i++] = OBJ_TITLE_TO_SCORPION; // scorpion tit
+  arch->carried[i++] = OBJ_TITLE_TO_BISON; // bison tit
+  arch->carried[i++] = OBJ_POCKET_SECRETARY; // secretary
+  arch->carried[i++] = OBJ_NEOPHYTE_DUFFELBAG; // duffelbag
   assert(i < NUM_ARCHETYPE_CARRIED);
   
   // Cyberware.
   i = 0;
-  arch->cyberware[i++] = 85066; // ceramic bone lacing
-  arch->cyberware[i++] = 85012; // datajack
-  arch->cyberware[i++] = 85270; // boosted reflexes III -alpha
-  arch->cyberware[i++] = 85053; // thermographic vision
-  arch->cyberware[i++] = 85318; // smartlink 2 --alpha
+  arch->cyberware[i++] = OBJ_CYB_CERAMIC_BONE_LACING; // ceramic bone lacing
+  arch->cyberware[i++] = OBJ_CYB_DATAJACK; // datajack
+  arch->cyberware[i++] = OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA; // boosted reflexes III -alpha
+  arch->cyberware[i++] = OBJ_CYB_THERMOGRAPHIC_VISION; // thermographic vision
+  arch->cyberware[i++] = OBJ_CYB_SMARTLINK_II_ALPHA; // smartlink 2 --alpha
   assert(i < NUM_ARCHETYPE_CYBERWARE);
   
   // Bioware.
   i = 0;
-  arch->bioware[i++] = 85803; // enhanced articulation
-  arch->bioware[i++] = 85812; // muscle toner iv
-  arch->bioware[i++] = 85940; // trauma damper
-  arch->bioware[i++] = 85939; // synamptic accelerator II
-  arch->bioware[i++] = 85927; // cerebral booster II
+  arch->bioware[i++] = OBJ_BIO_ENHANCED_ARTICULATION; // enhanced articulation
+  arch->bioware[i++] = OBJ_BIO_MUSCLE_TONER_IV; // muscle toner iv
+  arch->bioware[i++] = OBJ_BIO_TRAUMA_DAMPER; // trauma damper
+  arch->bioware[i++] = OBJ_BIO_SYNAPTIC_ACCELERATOR_II; // synamptic accelerator II
+  arch->bioware[i++] = OBJ_BIO_CEREBRAL_BOOSTER_II; // cerebral booster II
   assert(i < NUM_ARCHETYPE_BIOWARE);
   
   return arch;

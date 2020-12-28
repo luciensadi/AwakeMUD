@@ -2080,13 +2080,44 @@ enum {
 #define RM_JUNKYARD_BIKES           70508
 
 // Objects, to remove the magic numbers from the code.
-#define OBJ_NEWBIE_RADIO            60531
-#define OBJ_MULTNOMAH_VISA          17513
-#define OBJ_MAP_OF_SEATTLE          2041
-#define OBJ_ELEVATOR_SHAFT_KEY      998
-#define OBJ_DOCWAGON_BASIC_MOD      16206
-#define OBJ_SEATTLE_TAXI_SIGN       600
-#define OBJ_PORTLAND_TAXI_SIGN      699
+#define OBJ_NEWBIE_RADIO                   60531
+#define OBJ_MULTNOMAH_VISA                 17513
+#define OBJ_MAP_OF_SEATTLE                 2041
+#define OBJ_ELEVATOR_SHAFT_KEY             998
+#define OBJ_DOCWAGON_BASIC_MOD             16206
+#define OBJ_SEATTLE_TAXI_SIGN              600
+#define OBJ_PORTLAND_TAXI_SIGN             699
+#define OBJ_COLT_M23                       838
+#define OBJ_NICAMI_SCOPE                   28702
+#define OBJ_VENT_IV                        80403
+#define OBJ_SMARTLINK_II                   31111
+#define OBJ_PLATINUM_MODULATOR             16208
+#define OBJ_BLACK_TRENCH_COAT              1833
+#define OBJ_100_PCT_COTTON_SHIRT           64903
+#define OBJ_FORMFIT_III                    80734
+#define OBJ_FOREARM_GUARDS                 700
+#define OBJ_RIFLE_STRAP                    2059
+#define OBJ_BLACK_LEATHER_DUTY_BELT        9402
+#define OBJ_BLACK_BDU_PANTS                9402
+#define OBJ_BLACK_COMBAT_BOOTS             29010
+#define OBJ_MEDKIT                         450
+#define OBJ_VEHICLE_TOOLKIT                47397
+#define OBJ_ELECTRONICS_KIT                60532
+#define OBJ_CELL_PHONE                     60530
+#define OBJ_TITLE_TO_SCORPION              892
+#define OBJ_TITLE_TO_BISON                 897
+#define OBJ_POCKET_SECRETARY               31542
+#define OBJ_NEOPHYTE_DUFFELBAG             60535
+#define OBJ_CYB_CERAMIC_BONE_LACING        85066
+#define OBJ_CYB_DATAJACK                   85012
+#define OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA 85270
+#define OBJ_CYB_THERMOGRAPHIC_VISION       85053
+#define OBJ_CYB_SMARTLINK_II_ALPHA         85318
+#define OBJ_BIO_ENHANCED_ARTICULATION      85803
+#define OBJ_BIO_MUSCLE_TONER_IV            85812
+#define OBJ_BIO_TRAUMA_DAMPER              85940
+#define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    85939
+#define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 
