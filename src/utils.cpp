@@ -766,6 +766,7 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
       
       // We don't show log messages from imms who are invis at a level higher than you, unless you're a high enough level that that doesn't matter.
       if (ch
+          && !IS_NPC(ch)
           && !access_level(tch, GET_INVIS_LEV(ch))
           && !access_level(tch, LVL_VICEPRES))
         continue;
@@ -1931,7 +1932,7 @@ struct room_data *get_ch_in_room(struct char_data *ch) {
   char errbuf[500];
   if (!ch) {
     snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room was passed a NULL character!");
-    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
   
@@ -1942,7 +1943,7 @@ struct room_data *get_ch_in_room(struct char_data *ch) {
     return get_veh_in_room(ch->in_veh);
   }
   
-  snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room called on char %s, but they're not in a room or vehicle!", GET_NAME(ch));
+  snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room called on char %s, but they're not in a room or vehicle!", GET_CHAR_NAME(ch));
   mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
   
   return NULL;
