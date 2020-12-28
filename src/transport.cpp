@@ -137,7 +137,7 @@ struct dest_data portland_taxi_destinations[] =
   {
     { "hellhound", "Hellhound Bus Station", 14624, TAXI_DEST_TYPE_TRANSPORTATION, TRUE  },
     { "postal", "Royal Postal Station", 14629, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "trans-oregon", "Trans-Oregon Trucking", 14604, TAXI_DEST_TYPE_OTHER, TRUE },
+    { "trans-Oregon", "Trans-Oregon Trucking", 14604, TAXI_DEST_TYPE_OTHER, TRUE },
     { "thompson", "Thompson Autogroup",  14602, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "hard", "Hard Times", 14608, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "bank", "TT-Bank", 14610, TAXI_DEST_TYPE_OTHER, TRUE},
@@ -275,7 +275,8 @@ SPECIAL(taxi_sign) {
   }
   
   // Set up our default string.
-  strcpy(buf, "The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n--------------------------------------------\r\n");
+  strcpy(buf, "The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n"
+              "-------------------------------------------------\r\n");
   
   bool is_first_printed_dest_title = TRUE;
   
@@ -301,7 +302,7 @@ SPECIAL(taxi_sign) {
     // Iterate through and populate the dest list with what we've got available.
     for (unsigned int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
       if (DEST_IS_VALID(dest_index, dest_data_list) && dest_data_list[dest_index].type == taxi_dest_type) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-36s - %s%s^n\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-35s - %s%s^n\r\n",
                 dest_data_list[dest_index].str,
                 taxi_dest_type_info[taxi_dest_type].entry_color_string,
                 capitalize(dest_data_list[dest_index].keyword));
