@@ -301,7 +301,7 @@ SPECIAL(taxi_sign) {
     // Iterate through and populate the dest list with what we've got available.
     for (unsigned int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
       if (DEST_IS_VALID(dest_index, dest_data_list) && dest_data_list[dest_index].type == taxi_dest_type) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-30s - %s%s^n\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-36s - %s%s^n\r\n",
                 dest_data_list[dest_index].str,
                 taxi_dest_type_info[taxi_dest_type].entry_color_string,
                 capitalize(dest_data_list[dest_index].keyword));
