@@ -668,6 +668,9 @@ SPECIAL(taxi)
         if (destination_list == portland_taxi_destinations)
           snprintf(say, sizeof(say), "%s?  Sure, that will be %d nuyen.",
                   portland_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+        else if (destination_list == caribbean_taxi_destinations)
+          snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+                  caribbean_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
         else
           snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
                   seattle_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));

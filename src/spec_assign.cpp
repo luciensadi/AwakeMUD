@@ -804,6 +804,7 @@ void assign_objects(void)
   
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
   ASSIGNOBJ(OBJ_PORTLAND_TAXI_SIGN, taxi_sign);
+  ASSIGNOBJ(OBJ_CARIBBEAN_TAXI_SIGN, taxi_sign);
   
   ASSIGNOBJ(10005, weapon_dominator);
   
