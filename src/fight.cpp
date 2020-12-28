@@ -3304,11 +3304,15 @@ int get_weapon_damage_type(struct obj_data* weapon) {
 
 bool is_char_too_tall(struct char_data *ch) {
   assert(ch != NULL);
-  
+
+#ifdef USE_SLOUCH_RULES  
   if (!ch->in_room)
     return FALSE;
   
   return ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= ch->in_room->z*100;
+#else
+  return FALSE;
+#endif
 }
 
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
@@ -5038,15 +5042,19 @@ void perform_violence(void)
           quickness /= 2;
           
         // Penalty from too-tall.
-        if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) > ch->in_room->z*100) {
-          if (GET_HEIGHT(ch) > ch->in_room->z * 200) {
-            send_to_char(ch, "You're bent over double in here, there's no way you'll close the distance like this!\r\n");
-            act("$n looks like $e would really like to hit $N, but $e can't get close enough.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
-            continue;
+#ifdef USE_SLOUCH_RULES
+        if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
+          if (GET_HEIGHT(ch) > ch->in_room->z*100) {
+            if (GET_HEIGHT(ch) > ch->in_room->z * 200) {
+              send_to_char(ch, "You're bent over double in here, there's no way you'll close the distance like this!\r\n");
+              act("$n looks like $e would really like to hit $N, but $e can't get close enough.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
+              continue;
+            }
+            else quickness /= 2;
           }
-          else quickness /= 2;
         }
-        
+#endif
+
         // Strike.
         if (quickness > 0 && success_test(quickness, target) > 1) {
           send_to_char(ch, "You close the distance and strike!\r\n");

@@ -249,8 +249,10 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       strcat(buf, weather_line[weather_info.sky]);
     send_to_char(buf, ch);
   }
+#ifdef USE_SLOUCH_RULES
   if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= ch->in_room->z * 100)
     send_to_char("You have to slouch to fit in here.\r\n", ch);
+#endif
   if (ch->desc != NULL)
     look_at_room(ch, 0);
     if (room_is_a_taxicab(was_in->number))

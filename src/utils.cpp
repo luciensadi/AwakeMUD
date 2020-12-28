@@ -447,6 +447,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
         base_target += GET_LEVEL(sust->target);
         buf_mod(rbuf, sizeof(rbuf), "SConfused", GET_LEVEL(sust->target));
       }
+#ifdef USE_SLOUCH_RULES
   if (temp_room && ROOM_FLAGGED(temp_room, ROOM_INDOORS)) {
     float heightdif = GET_HEIGHT(ch) / ((temp_room->z != 0 ? temp_room->z : 1)*100);
     if (heightdif > 1) {
@@ -460,6 +461,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     if (heightdif > 2)
       base_target += 2;
   }
+#endif
   return base_target;
 }
 
