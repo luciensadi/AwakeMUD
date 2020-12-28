@@ -88,8 +88,6 @@ extern int num_elevators;
 
 
 ACMD_DECLARE(do_goto);
-extern struct dest_data taxi_destinations[];
-extern struct dest_data port_destinations[];
 
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
@@ -182,10 +180,7 @@ ACMD(do_copyover)
       fucky_states++;
       
     // Count PCs in cabs.
-    if (och->in_room
-        && ((GET_ROOM_VNUM(och->in_room) >= FIRST_CAB && GET_ROOM_VNUM(och->in_room) <= LAST_CAB)
-            || (GET_ROOM_VNUM(och->in_room) >= FIRST_PORTCAB && GET_ROOM_VNUM(och->in_room) <= LAST_PORTCAB))
-      )
+    if (och->in_room && room_is_a_taxicab(GET_ROOM_VNUM(och->in_room)))
       cab_inhabitants++;
   }
   
@@ -253,10 +248,7 @@ ACMD(do_copyover)
 
     } else {
       // Refund people in cabs for the extra cash. Fixes edge case of 'I only had enough to cover my original cab fare'.
-      if (!PLR_FLAGGED(och, PLR_NEWBIE) && och->in_room
-          && ((GET_ROOM_VNUM(och->in_room) >= FIRST_CAB && GET_ROOM_VNUM(och->in_room) <= LAST_CAB)
-              || (GET_ROOM_VNUM(och->in_room) >= FIRST_PORTCAB && GET_ROOM_VNUM(och->in_room) <= LAST_PORTCAB))
-        ) {
+      if (!PLR_FLAGGED(och, PLR_NEWBIE) && och->in_room && room_is_a_taxicab(GET_ROOM_VNUM(och->in_room))) {
         snprintf(buf, sizeof(buf), "You have been refunded %d nuyen to compensate for the extra cab fare.\r\n", MAX_CAB_FARE);
         write_to_descriptor(d->descriptor, buf);
         GET_NUYEN(och) += MAX_CAB_FARE;
@@ -679,36 +671,46 @@ ACMD(do_goto)
   char command[MAX_INPUT_LENGTH];
   struct room_data *location = NULL;
   struct char_data *vict = NULL;
+  rnum_t rnum;
   
   half_chop(argument, buf, command);
-
-  // Look for either a target room or someone standing in a room.
-  location = find_target_room(ch, buf);
   
   // Look for taxi destinations - Seattle.
-  if (!location) {    
-    // Seattle taxi destinations, including deactivated and invalid ones.
-    for (int dest = 0; *(taxi_destinations[dest].keyword) != '\n'; dest++) {
-      if (str_str((const char*) buf, taxi_destinations[dest].keyword)) {
-        int rnum = real_room(taxi_destinations[dest].vnum);
-        if (rnum >= 0)
-          location = &world[rnum];
+  struct dest_data *dest_data_list = seattle_taxi_destinations;
+  
+  // Seattle taxi destinations, including deactivated and invalid ones.
+  for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
+    if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+      location = &world[rnum];
+      break;
+    }
+  }
+  
+  // Portland taxi destinations.
+  if (!location) {
+    dest_data_list = portland_taxi_destinations;
+    for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
+      if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+        location = &world[rnum];
         break;
       }
     }
   }
   
-  // Look for taxi destinations - Portland.
+  // Caribbean taxi destinations.
   if (!location) {
-    // Portland taxi destinations, including deactivated and invalid ones.
-    for (int dest = 0; *(port_destinations[dest].keyword) != '\n'; dest++) {
-      if (str_str((const char*) buf, port_destinations[dest].keyword)) {
-        int rnum = real_room(port_destinations[dest].vnum);
-        if (rnum >= 0)
-          location = &world[rnum];
+    dest_data_list = caribbean_taxi_destinations;
+    for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
+      if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+        location = &world[rnum];
         break;
       }
     }
+  }
+
+  // Look for either a target room or someone standing in a room.
+  if (!location) {
+    location = find_target_room(ch, buf);
   }
   
   // We found no target in a room-- look for one in a veh.
@@ -3301,8 +3303,7 @@ bool room_has_any_exits(struct room_data *room) {
         return TRUE;
     
   // Is this a taxicab?
-  if ((room->number >= FIRST_CAB && room->number <= LAST_CAB)
-      || (room->number >= FIRST_PORTCAB && room->number <= LAST_PORTCAB))
+  if (room_is_a_taxicab(GET_ROOM_VNUM(room)))
     return TRUE;
   
   return FALSE;

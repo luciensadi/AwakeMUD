@@ -69,6 +69,7 @@ extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void weight_change_object(struct obj_data * obj, float weight);
+extern void populate_mobact_aggression_octets();
 
 
 /**************************************************************************
@@ -275,29 +276,43 @@ void initialize_and_connect_to_mysql() {
 }
 
 void check_for_common_fuckups() {
-  extern struct dest_data taxi_destinations[];
-  extern struct dest_data port_destinations[];
-  
   // Check for invalid taxi destinations. Meaningless maximum 10k chosen here.
   for (int i = 0; i < 10000; i++) {
-    if (taxi_destinations[i].vnum == 0)
+    if (seattle_taxi_destinations[i].vnum <= 0)
       break;
     
-    if (real_room(taxi_destinations[i].vnum) == NOWHERE) {
-      snprintf(buf, sizeof(buf), "ERROR: Taxi destination '%s' (%ld) does not exist.", taxi_destinations[i].keyword, taxi_destinations[i].vnum);
+    if (real_room(seattle_taxi_destinations[i].vnum) == NOWHERE) {
+      snprintf(buf, sizeof(buf), "ERROR: Seattle taxi destination '%s' (%ld) does not exist.", 
+               seattle_taxi_destinations[i].keyword, 
+               seattle_taxi_destinations[i].vnum);
       log(buf);
-      taxi_destinations[i].enabled = FALSE;
+      seattle_taxi_destinations[i].enabled = FALSE;
     }
   }
   
   for (int i = 0; i < 10000; i++) {
-    if (port_destinations[i].vnum == 0)
+    if (portland_taxi_destinations[i].vnum <= 0)
       break;
     
-    if (real_room(port_destinations[i].vnum) == NOWHERE) {
-      snprintf(buf, sizeof(buf), "ERROR: Portland taxi destination '%s' (%ld) does not exist.", port_destinations[i].keyword, port_destinations[i].vnum);
+    if (real_room(portland_taxi_destinations[i].vnum) == NOWHERE) {
+      snprintf(buf, sizeof(buf), "ERROR: Portland taxi destination '%s' (%ld) does not exist.", 
+               portland_taxi_destinations[i].keyword, 
+               portland_taxi_destinations[i].vnum);
       log(buf);
-      port_destinations[i].enabled = FALSE;
+      portland_taxi_destinations[i].enabled = FALSE;
+    }
+  }
+  
+  for (int i = 0; i < 10000; i++) {
+    if (caribbean_taxi_destinations[i].vnum <= 0)
+      break;
+    
+    if (real_room(caribbean_taxi_destinations[i].vnum) == NOWHERE) {
+      snprintf(buf, sizeof(buf), "ERROR: Caribbean taxi destination '%s' (%ld) does not exist.", 
+               caribbean_taxi_destinations[i].keyword, 
+               caribbean_taxi_destinations[i].vnum);
+      log(buf);
+      caribbean_taxi_destinations[i].enabled = FALSE;
     }
   }
 }
@@ -506,6 +521,9 @@ void DBInit()
   
   log("Loading shop orders.");
   boot_shop_orders();
+  
+  log("Setting up mobact aggression octets.");
+  populate_mobact_aggression_octets();
   
   log("DBInit -- DONE.");
 }

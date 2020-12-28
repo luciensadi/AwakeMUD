@@ -537,6 +537,9 @@ void assign_mobiles(void)
   /* cab drivers */
   ASSIGNMOB(600, taxi);
   ASSIGNMOB(650, taxi);
+  #ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNMOB(640, taxi);
+  #endif
 
   /* Immortal HQ */
   ASSIGNMOB(1002, janitor);

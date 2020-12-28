@@ -2992,7 +2992,7 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
 //#define COMBAT_MESSAGE_DEBUG_LOG(str) ;
 void combat_message(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, int damage, int burst)
 {
-  char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH],
+  char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH], buf4[MAX_MESSAGE_LENGTH],
   been_heard[MAX_STRING_LENGTH], temp[20];
   struct obj_data *obj = NULL;
   struct room_data *ch_room = NULL, *vict_room = NULL;
@@ -3025,18 +3025,18 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       switch (number(1, 3)) {
         case 1:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you manage to dodge.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E manages to dodge.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manage%s to dodge.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E manage%s to dodge.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you easily dodge.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E easily dodges.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodge%s.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E easily dodge%s.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 3:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you move out of the way.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E moves out of the way.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E move%s out of the way.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E move%s out of the way.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == 0) {
@@ -3048,8 +3048,8 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you roll with the impact.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E rolls with the impact.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E roll%s with the impact.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E roll%s with the impact.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == LIGHT) {
@@ -3088,18 +3088,21 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       switch (number(1, 3)) {
         case 1:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you manage to dodge.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E manages to dodge.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manage%s to dodge.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E manage%s to dodge.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e manage%s to dodge.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you easily dodge.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E easily dodges.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodge%s.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E easily dodge%s.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e easily dodge%s.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 3:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you move out of the way.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E moves out of the way.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E move%s out of the way.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E move%s out of the way.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e move%s out of the way.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == 0) {
@@ -3108,42 +3111,50 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but your armour holds.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but it doesn't seem to hurt $M.", buf);
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but it doesn't seem to hurt $m.", buf);
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you roll with the impact.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E rolls with the impact.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E roll%s with the impact.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E roll%s with the impact.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e roll%s with the impact.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == LIGHT) {
       snprintf(buf1, sizeof(buf1), "^r$n grazes you with a %s^r.^n", buf);
       snprintf(buf2, sizeof(buf2), "^yYou graze $N with a %s^y.^n", buf);
       snprintf(buf3, sizeof(buf3), "$n grazes $N with a %s^n.", buf);
+      snprintf(buf4, sizeof(buf4), "$N grazes $n with a %s^n.", buf);
     } else if (damage == MODERATE) {
       snprintf(buf1, sizeof(buf1), "^r$n hits you with a %s^r.^n", buf);
       snprintf(buf2, sizeof(buf2), "^yYou hit $N with a %s^y.^n", buf);
       snprintf(buf3, sizeof(buf3), "$n hits $N with a %s^n.", buf);
+      snprintf(buf4, sizeof(buf4), "$N hits $n with a %s^n.", buf);
     } else if (damage == SERIOUS) {
       snprintf(buf1, sizeof(buf1), "^r$n massacres you with a %s^r.^n", buf);
       snprintf(buf2, sizeof(buf2), "^yYou massacre $N with a %s^y.^n", buf);
       snprintf(buf3, sizeof(buf3), "$n massacres $N with a %s^n.", buf);
+      snprintf(buf4, sizeof(buf4), "$N massacres $n with a %s^n.", buf);
     } else if (damage >= DEADLY) {
       switch (number(1, 2)) {
         case 1:
           snprintf(buf1, sizeof(buf1), "^r$n puts you down with a deadly %s^r.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou put $N down with a deadly %s^y.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n puts $N down with a deadly %s^n.", buf);
+          snprintf(buf4, sizeof(buf4), "$N puts $n down with a deadly %s^n.", buf);
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r$n sublimates you with a deadly %s^r.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou sublimate $N with a deadly %s^y.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n sublimates $N with a deadly %s^n.", buf);
+          snprintf(buf4, sizeof(buf4), "$N sublimates $n with a deadly %s^n.", buf);
           break;
       }
     }
     act(buf1, FALSE, ch, weapon, victim, TO_VICT);
     act(buf2, FALSE, ch, weapon, victim, TO_CHAR);
     act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
+    act(buf4, FALSE, victim, weapon, ch, TO_ROOM);
     // End ranged messaging.
   }
   

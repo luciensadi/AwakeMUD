@@ -29,7 +29,6 @@
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);
-extern struct dest_data taxi_destinations[];
 extern struct time_info_data time_info;
 extern struct weather_data weather_info;
 extern int return_general(int skill_num);
@@ -2958,14 +2957,14 @@ SPECIAL(toggled_invis)
     return FALSE;
   else {
     if (!str_cmp(argument, "invis")) {
-      if (AFF_FLAGGED(obj->worn_by, AFF_IMP_INVIS)) {
-        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_IMP_INVIS);
-        send_to_char(ch, "Your suit goes silent as the cloaking device shuts off.\r\n");
+      if (AFF_FLAGGED(obj->worn_by, AFF_INVISIBLE)) {
+        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_INVISIBLE);
+        send_to_char(ch, "You feel the static fade as your ruthenium polymers power down.\\r\n");
         act("The air shimmers briefly as $n fades into view.\r\n", FALSE, ch, 0, 0, TO_ROOM);
         return TRUE;
       } else {
-        AFF_FLAGS(obj->worn_by).SetBit(AFF_IMP_INVIS);
-        send_to_char(ch, "Your suit whirs quietly as the cloaking device kicks in.\r\n");
+        AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
+        send_to_char(ch, "You feel a tiny static charge as your ruthenium polymers power up.\r\n");
         act("The world bends around $n as they vanish from sight.\r\n", FALSE, ch, 0, 0, TO_ROOM);
         return TRUE;
       }
@@ -5425,13 +5424,13 @@ SPECIAL(restoration_button) {
   }
   
   if (CMD_IS("jump")) {
-    for (int dest = 0; *(taxi_destinations[dest].keyword) != '\n'; dest++) {
+    for (int dest = 0; *(seattle_taxi_destinations[dest].keyword) != '\n'; dest++) {
       // Skip invalid destinations.
-      if (!DEST_IS_VALID(dest, taxi_destinations))
+      if (!DEST_IS_VALID(dest, seattle_taxi_destinations))
         continue;
       
-      if ( str_str((const char *)argument, taxi_destinations[dest].keyword)) {
-        snprintf(buf, sizeof(buf), "%ld", taxi_destinations[dest].vnum);
+      if ( str_str((const char *)argument, seattle_taxi_destinations[dest].keyword)) {
+        snprintf(buf, sizeof(buf), "%ld", seattle_taxi_destinations[dest].vnum);
         do_goto(ch, buf, 0, 0);
         return TRUE;
       }

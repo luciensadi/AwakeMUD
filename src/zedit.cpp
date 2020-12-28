@@ -705,7 +705,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case '6':
       send_to_char("0) Seattle\r\n"
                    "1) Portland\r\n"
-                   "2) Carribean\r\n"
+                   "2) Caribbean\r\n"
                    "3) Ocean\r\n"
                    "Enter jurisdiction: ", CH);
       d->edit_mode = ZEDIT_JURID;
