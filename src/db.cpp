@@ -4767,24 +4767,13 @@ void load_consist(void)
 {
   struct obj_data *attach;
   File file;
-  if (!(file.Open("etc/consist", "r"))) {
-    log("CONSISTENCY FILE NOT FOUND");
-    return;
-  }
-
-  VTable paydata;
-  paydata.Parse(&file);
-  file.Close();
-  market[0] = paydata.GetInt("MARKET/Blue", 5000);
-  market[1] = paydata.GetInt("MARKET/Green", 5000);
-  market[2] = paydata.GetInt("MARKET/Orange", 5000);
-  market[3] = paydata.GetInt("MARKET/Red", 5000);
-  market[4] = paydata.GetInt("MARKET/Black", 5000);
+  
   for (int nr = 0; nr <= top_of_world; nr++)
     if (ROOM_FLAGGED(&world[nr], ROOM_STORAGE)) {
       snprintf(buf, sizeof(buf), "storage/%ld", world[nr].number);
       if (!(file.Open(buf, "r")))
         continue;
+      log_vfprintf("Restoring storage contents for room %ld (%s)...", world[nr].number, buf);
       VTable data;
       data.Parse(&file);
       file.Close();
@@ -4845,6 +4834,20 @@ void load_consist(void)
         }
       }
     }
+  
+  if (!(file.Open("etc/consist", "r"))) {
+    log("PAYDATA CONSISTENCY FILE NOT FOUND");
+    return;
+  }
+
+  VTable paydata;
+  paydata.Parse(&file);
+  file.Close();
+  market[0] = paydata.GetInt("MARKET/Blue", 5000);
+  market[1] = paydata.GetInt("MARKET/Green", 5000);
+  market[2] = paydata.GetInt("MARKET/Orange", 5000);
+  market[3] = paydata.GetInt("MARKET/Red", 5000);
+  market[4] = paydata.GetInt("MARKET/Black", 5000);
 }
 
 void boot_shop_orders(void)
