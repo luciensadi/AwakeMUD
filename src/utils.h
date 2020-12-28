@@ -51,12 +51,12 @@ int     success_test(int number, int target);
 int     resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict);
 int     stage(int successes, int wound);
 bool    access_level(struct char_data *ch, int level);
-char *  buf_mod(char *buf, const char *name, int bonus);
-char *  buf_roll(char *buf, const char *name, int bonus);
-int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibility_penalty);
-int     modify_target_rbuf(struct char_data *ch, char *rbuf);
+char *  buf_mod(char *buf, int buf_len, const char *name, int bonus);
+//char *  buf_roll(char *buf, const char *name, int bonus);
+int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty);
+int     modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len);
 int     modify_target(struct char_data *ch);
-int     damage_modifier(struct char_data *ch, char *rbuf);
+int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
@@ -94,6 +94,7 @@ void    purgelog(struct veh_data *veh);
 char *  replace_substring(char *source, char *dest, const char *replace_target, const char *replacement);
 bool    combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
 void    update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount);
+void    destroy_door(struct room_data *room, int dir);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -614,9 +615,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 /* compound utilities and other macros **********************************/
 
-#define HSHR(ch) (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "his":"her") :"its")
-#define HSSH(ch) (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : "it")
-#define HMHR(ch) (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : "it")
+#define HSHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "his":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "its": "their"))
+#define HSSH(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "they"))
+#define HMHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "them"))
+#define HASHAVE(ch) (GET_SEX(ch) != SEX_NEUTRAL ?              "has"     : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "has": "have"))
 
 #define ANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "An" : "A")
 #define SANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "an" : "a")

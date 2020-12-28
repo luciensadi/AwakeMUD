@@ -39,6 +39,17 @@ void calc_weight(struct char_data *ch);
 
 SPECIAL(weapon_dominator);
 
+int wear_bitvectors[] = {
+                          ITEM_WEAR_TAKE, ITEM_WEAR_HEAD, ITEM_WEAR_EYES, ITEM_WEAR_EAR,
+                          ITEM_WEAR_EAR, ITEM_WEAR_FACE, ITEM_WEAR_NECK, ITEM_WEAR_NECK,
+                          ITEM_WEAR_BACK, ITEM_WEAR_ABOUT, ITEM_WEAR_BODY, ITEM_WEAR_UNDER,
+                          ITEM_WEAR_ARMS, ITEM_WEAR_ARM, ITEM_WEAR_ARM, ITEM_WEAR_WRIST,
+                          ITEM_WEAR_WRIST, ITEM_WEAR_HANDS, ITEM_WEAR_WIELD, ITEM_WEAR_HOLD, ITEM_WEAR_SHIELD,
+                          ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
+                          ITEM_WEAR_BELLY, ITEM_WEAR_WAIST, ITEM_WEAR_THIGH, ITEM_WEAR_THIGH,
+                          ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET };
+
 bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 {
   struct obj_data *temp;
@@ -583,9 +594,9 @@ ACMD(do_put)
     }
     if (!found) {
       if (obj_dotmode == FIND_ALL) {
-        send_to_char(ch, "You don't seem to have anything to %s in it.\r\n", (cyberdeck ? "install" : "put"));
+        send_to_char(ch, "You don't seem to have anything in your inventory to %s in it.\r\n", (cyberdeck ? "install" : "put"));
       } else {
-        send_to_char(ch, "You don't seem to have any %ss.\r\n", arg1);
+        send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg1);
       }
     }
   }
@@ -1563,7 +1574,7 @@ ACMD(do_drop)
         return;
       }
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have any %ss.\r\n", arg);
+        send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg);
       }
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg, obj->next_content);
@@ -1572,7 +1583,7 @@ ACMD(do_drop)
       }
     } else {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+        send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
       } else
         amount += perform_drop(ch, obj, mode, sname, random_donation_room);
     }
@@ -1778,7 +1789,7 @@ ACMD(do_give)
     dotmode = find_all_dots(arg);
     if (dotmode == FIND_INDIV) {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+        send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
       } else
         perform_give(ch, vict, obj);
     } else {
@@ -1997,7 +2008,7 @@ ACMD(do_eat)
     return;
   }
   if (!(food = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
     return;
   }
   if (subcmd == SCMD_TASTE && ((GET_OBJ_TYPE(food) == ITEM_DRINKCON) ||
@@ -2009,10 +2020,13 @@ ACMD(do_eat)
     send_to_char(ch, "You can't eat %s!\r\n", GET_OBJ_NAME(food));
     return;
   }
+#ifdef ENABLE_HUNGER
   if (GET_COND(ch, COND_FULL) > MAX_FULLNESS) {/* Stomach full */
     act("You are too full to eat more!", FALSE, ch, 0, 0, TO_CHAR);
     return;
   }
+#endif
+
   if (subcmd == SCMD_EAT) {
     act("You eat $p.", FALSE, ch, food, 0, TO_CHAR);
     act("$n eats $p.", TRUE, ch, food, 0, TO_ROOM);
@@ -2334,16 +2348,7 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
 void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
 {
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
-  int wear_bitvectors[] = {
-                            ITEM_WEAR_TAKE, ITEM_WEAR_HEAD, ITEM_WEAR_EYES, ITEM_WEAR_EAR,
-                            ITEM_WEAR_EAR, ITEM_WEAR_FACE, ITEM_WEAR_NECK, ITEM_WEAR_NECK,
-                            ITEM_WEAR_BACK, ITEM_WEAR_ABOUT, ITEM_WEAR_BODY, ITEM_WEAR_UNDER,
-                            ITEM_WEAR_ARMS, ITEM_WEAR_ARM, ITEM_WEAR_ARM, ITEM_WEAR_WRIST,
-                            ITEM_WEAR_WRIST, ITEM_WEAR_HANDS, ITEM_WEAR_WIELD, ITEM_WEAR_HOLD, ITEM_WEAR_SHIELD,
-                            ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
-                            ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
-                            ITEM_WEAR_BELLY, ITEM_WEAR_WAIST, ITEM_WEAR_THIGH, ITEM_WEAR_THIGH,
-                            ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET };
+  
 
   const char *already_wearing[] = {
                               "You're already using a light.\r\n",
@@ -2569,7 +2574,7 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
       "back",
       "about",
       "body",
-      "under",
+      "underneath",
       "arms",
       "underarm",
       "!RESERVED!",
@@ -2689,14 +2694,14 @@ ACMD(do_wear)
       }
     }
     if (!items_worn)
-      send_to_char("You don't seem to have anything wearable.\r\n", ch);
+      send_to_char("You don't seem to have anything wearable in your inventory.\r\n", ch);
   } else if (dotmode == FIND_ALLDOT) {
     if (!*arg1) {
       send_to_char("Wear all of what?\r\n", ch);
       return;
     }
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't seem to have any %ss.\r\n", arg1);
+      send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg1);
     } else
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg1, obj->next_content);
@@ -2708,7 +2713,7 @@ ACMD(do_wear)
       }
   } else {
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg1), arg1);
+      send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg1), arg1);
     } else {
       if ((where = find_eq_pos(ch, obj, arg2)) >= 0)
         perform_wear(ch, obj, where);
@@ -2727,7 +2732,7 @@ ACMD(do_wield)
   if (!*arg)
     send_to_char("Wield what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
   } else {
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
       send_to_char(ch, "You can't wield %s.\r\n", GET_OBJ_NAME(obj));
@@ -2758,10 +2763,16 @@ ACMD(do_grab)
   if (!*arg)
     send_to_char("Hold what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
   } else {
     if (GET_OBJ_TYPE(obj) == ITEM_LIGHT)
       perform_wear(ch, obj, WEAR_LIGHT);
+    
+    // Auto-wield if it's not holdable but is wieldable.
+    else if (!CAN_WEAR(obj, wear_bitvectors[WEAR_HOLD]) && CAN_WEAR(obj, wear_bitvectors[WEAR_WIELD]))
+      perform_wear(ch, obj, WEAR_WIELD);
+      
+    // Hold.
     else
       perform_wear(ch, obj, WEAR_HOLD);
   }
@@ -3322,7 +3333,7 @@ ACMD(do_draw)
   else {
     int i = draw_weapon(ch);
     if (i == 0)
-      send_to_char(ch, "You have nothing to draw.\r\n");
+      send_to_char(ch, "You have nothing to draw. Make sure you're wearing a sheath or holster with a weapon in it, and that you've used the READY command on the sheath or holster.\r\n");
   }
 }
 

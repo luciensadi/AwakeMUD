@@ -2088,6 +2088,8 @@ enum {
 #define OBJ_SEATTLE_TAXI_SIGN       600
 #define OBJ_PORTLAND_TAXI_SIGN      699
 
+#define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
+
 #define BOTTOM_OF_TEMPLATE_ITEMS    106
 #define OBJ_BLANK_OPTICAL_CHIP      106
 #define OBJ_BLANK_PROGRAM_DESIGN    107
@@ -2152,7 +2154,7 @@ enum {
 #define ERROR_MYSQL_DATABASE_NOT_FOUND         17
 #define ERROR_ARRAY_OUT_OF_BOUNDS              18
 #define ERROR_CANNOT_RESOLVE_VNUM              19
-#define ERROR_BULLET_PANTS_FAILED              20
+#define ERROR_DB_TABLE_REQUIRED                20
 
 // Materials.
 #define MATERIAL_PAPER        0

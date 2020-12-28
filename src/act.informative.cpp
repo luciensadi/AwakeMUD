@@ -65,6 +65,9 @@ extern SPECIAL(spell_trainer);
 extern SPECIAL(johnson);
 extern SPECIAL(shop_keeper);
 extern SPECIAL(landlord_spec);
+extern SPECIAL(fence);
+extern SPECIAL(terell_davis);
+extern SPECIAL(hacker);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 extern float get_bulletpants_weight(struct char_data *ch);
@@ -794,11 +797,17 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s has a few things for sale.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s %s a few things for sale.^n\r\n", HSSH(i), HASHAVE(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == fence) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might be willing to buy paydata from you.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), HMHR(i));
         }
       }
       
@@ -827,11 +836,17 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "", HASHAVE(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == fence) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "", HMHR(i));
         }
       }
     }
@@ -1253,8 +1268,12 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
-  } else
-    send_to_char(ch, "^C%s^n\r\n", GET_ROOM_NAME(ch->in_room), ch);
+  } else {
+    send_to_char(ch, "^C%s^n%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+                 ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "");
+  }
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
@@ -1980,7 +1999,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           }
         }
         
-        // Do we require more recoil comp than is currently attached?
         if (burst_count > 0 && burst_count - standing_recoil_comp > 0) {
           strncat(buf, "\r\n\r\n^yIt doesn't have enough recoil compensation", sizeof(buf) - strlen(buf) - 1);
           if (burst_count - standing_recoil_comp - prone_recoil_comp <= 0) {
@@ -1988,10 +2006,20 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           } else if (prone_recoil_comp > 0){
             strncat(buf, " even when fired from prone", sizeof(buf) - strlen(buf) - 1);
           }
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ".^n\r\nStanding recoil penalty: ^c%d^n.  Prone recoil penalty: ^c%d^n.",
-                   burst_count - standing_recoil_comp, MAX(0, burst_count - standing_recoil_comp - prone_recoil_comp));
+          // Do we require more recoil comp than is currently attached?
+          switch (GET_WEAPON_SKILL(j)) {
+            case SKILL_SHOTGUNS:
+            case SKILL_MACHINE_GUNS:
+            case SKILL_ASSAULT_CANNON:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ".^n\r\nStanding recoil penalty (doubled): ^c%d^n.  Prone recoil penalty (doubled): ^c%d^n.",
+                       (burst_count - standing_recoil_comp) * 2, MAX(0, burst_count - standing_recoil_comp - prone_recoil_comp) * 2);
+              break;
+            default:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ".^n\r\nStanding recoil penalty: ^c%d^n.  Prone recoil penalty: ^c%d^n.",
+                      burst_count - standing_recoil_comp, MAX(0, burst_count - standing_recoil_comp - prone_recoil_comp));
+              break;
+          }
         }
-        
       }
       // Melee weapons.
       else {
@@ -4028,12 +4056,12 @@ ACMD(do_gen_ps)
   }
 }
 
-extern void nonsensical_reply( struct char_data *ch );
+extern void nonsensical_reply(struct char_data *ch, const char *arg);
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
   /* DISABLED FOR MORTALS */
-  nonsensical_reply(ch);
+  nonsensical_reply(ch, NULL);
   return;
 }
 
@@ -4710,7 +4738,7 @@ ACMD(do_tke){
   send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <tke|reputation|notoriety|nuyen|syspoints|fired>\r\n"
+#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <tke|reputation|notoriety|nuyen|syspoints>\r\n"
 ACMD(do_leaderboard) {
   // leaderboard <tke|rep|notor|nuyen|sysp>
   skip_spaces(&argument);
@@ -4744,11 +4772,6 @@ ACMD(do_leaderboard) {
   else if (!strncmp(argument, "syspoints", strlen(argument))) {
     display_string = "syspoints";
     query_string = "syspoints";
-  }
-  
-  else if (!strncmp(argument, "fired", strlen(argument))) {
-    display_string = "shots fired";
-    query_string = "ShotsFired";
   }
   
   else {

@@ -552,7 +552,7 @@ ACMD(do_patch)
       return;
     }
     act("You slap $p on your shoulder and feel more aware.", FALSE, ch, patch, 0, TO_CHAR);
-    act("$n slaps $p on $s shoulder and appears more aware.", FALSE, ch, patch, 0, TO_ROOM);
+    act("$n slaps $p on $s shoulder and appears more aware.", TRUE, ch, patch, 0, TO_ROOM);
     GET_OBJ_VAL(patch,5) = GET_MENTAL(ch);
     GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + (GET_OBJ_VAL(patch, 1) * 100));
     obj_from_char(patch);
@@ -622,7 +622,7 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj)
       send_to_char(ch, "Maybe you should wait.\r\n");
       return;
     }
-    act("$n takes $p.", FALSE, ch, obj, 0, TO_ROOM);
+    act("$n takes $p.", TRUE, ch, obj, 0, TO_ROOM);
     GET_DRUG_AFFECT(ch) = drugval;
     GET_DRUG_DOSES(ch, drugval)++;
     if (GET_DRUG_DOSES(ch, drugval) == 1) {
@@ -1190,7 +1190,11 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "hired")) {
       result = PRF_TOG_CHK(ch, PRF_QUEST);
       mode = 14;
+#ifndef MORTS_CAN_SEE_ROLLS
     } else if (IS_SENATOR(ch) && is_abbrev(argument, "rolls")) {
+#else
+    } else if (is_abbrev(argument, "rolls")) {
+#endif
       result = PRF_TOG_CHK(ch, PRF_ROLLS);
       mode = 17;
     } else if (is_abbrev(argument, "roomflags") && IS_SENATOR(ch)) {
@@ -1640,7 +1644,7 @@ ACMD(do_attach)
       return;
     }
     if (GET_OBJ_TYPE(item) != ITEM_WEAPON) {
-      send_to_char("How do you expect to attach that?\r\n", ch);
+      send_to_char(ch, "%s is not a weapon you can attach to %s.\r\n", capitalize(GET_OBJ_NAME(item)), GET_VEH_NAME(veh));
       return;
     }
     for (item2 = veh->mount; item2; item2 = item2->next_content)
@@ -2464,9 +2468,17 @@ ACMD(do_remember)
   argument = any_one_arg(argument, buf1);
   argument = one_argument(argument, buf2);
 
-  if (!*buf1 || !*buf2)
+  if (!*buf1 || !*buf2) {
     send_to_char(ch, "Remember Who as What?\r\n");
-  else if (!(vict = get_char_room_vis(ch, buf1)) || (ch->in_veh && !(vict = get_char_veh(ch, buf1, ch->in_veh))))
+    return;
+  }
+  
+  if (ch->in_veh)
+    vict = get_char_veh(ch, buf1, ch->in_veh);
+  else
+    vict = get_char_room_vis(ch, buf1);
+  
+  if (!vict)
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
   else if (IS_NPC(vict))
     send_to_char(ch, "You cannot remember NPCs.\r\n");
@@ -2754,7 +2766,7 @@ ACMD(do_photo)
   }
   photo = read_object(OBJ_BLANK_PHOTO, VIRTUAL);
   if (!mem)
-    act("$n takes a photo with $p.", FALSE, ch, camera, NULL, TO_ROOM);
+    act("$n takes a photo with $p.", TRUE, ch, camera, NULL, TO_ROOM);
   send_to_char(ch, "You take a photo.\r\n");
   photo->photo = str_dup(buf);
   if (strlen(buf2) >= LINE_LENGTH)
@@ -2769,9 +2781,9 @@ ACMD(do_photo)
 ACMD(do_boost)
 {
   int suc;
-  extern void nonsensical_reply(struct char_data *ch);
+  extern void nonsensical_reply(struct char_data *ch, const char *arg);
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   skip_spaces(&argument);
@@ -2989,8 +3001,12 @@ ACMD(do_assense)
         mag -= GET_GRADE(vict) * 100;
       strcpy(buf, make_desc(ch, vict, buf2, 2, FALSE));
       if (success < 3) {
-        if (vict->cyberware)
-          strcat(buf, " has cyberware present and");
+        if (vict->cyberware) {
+          if (GET_SEX(vict) != SEX_NEUTRAL || (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)))
+            strcat(buf, " has cyberware present and");
+          else
+            strcat(buf, " have cyberware present and");
+        }
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s spirit", spirit_name[GET_SPARE1(vict)]);
@@ -3403,7 +3419,7 @@ ACMD(do_jack)
       obj_to_char(chip, ch);
       send_to_char(ch, "You remove %s from your chipjack.\r\n", GET_OBJ_NAME(chip));
       ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = 0;
-      act("$n removes a chip from their chipjack.", FALSE, ch, 0, 0, TO_ROOM);
+      act("$n removes a chip from their chipjack.", TRUE, ch, 0, 0, TO_ROOM);
     } else
       send_to_char(ch, "But you don't have anything installed in it.\r\n");
     return;
@@ -3438,7 +3454,7 @@ ACMD(do_jack)
     obj_from_char(chip);
     obj_to_obj(chip, jack);
     ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = MIN(max, GET_OBJ_VAL(chip, 1));
-    act("$n puts a chip into their chipjack.", FALSE, ch, 0, 0, TO_ROOM);
+    act("$n puts a chip into their chipjack.", TRUE, ch, 0, 0, TO_ROOM);
   }
 }
 

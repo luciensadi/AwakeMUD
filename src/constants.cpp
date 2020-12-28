@@ -2269,15 +2269,15 @@ const char *combat_modifiers[] =
 {
   "Recoil",
   "Movement",
-  "2Weap",
-  "Smart",
+  "Dual Wielding",
+  "Smartlink",
   "Distance",
   "Visibility",
   "Position",
   "Gyro",
   "Reach",
   "VehDamaged",
-  "DefMoving"
+  "Defender Moving"
 };
 
 const char *pgroup_privileges[] =
@@ -2431,4 +2431,38 @@ const char *tradition_names[] = {
   "UNKNOWN",
   "Adept",
   "ERROR"
+};
+
+const char *damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[] = {
+  "Hit",
+  "Sting",
+  "Whip",
+  "Slash",
+  "Bite",
+  "Bludgeon",
+  "Crush",
+  "Pound",
+  "Claw",
+  "Maul",
+  "Thrash",
+  "Pierce",
+  "Punch",
+  "Stab",
+  "Taser",
+  "Shuriken",
+  "Throwing Knife",
+  "Arrow",
+  "Hand Grenade",
+  "Grenade Launcher",
+  "Rocket",
+  "Pistol",
+  "Blast",
+  "Rifle",
+  "Shotgun",
+  "Machine Gun",
+  "Cannon",
+  "Bifurcate",
+  "Crash",
+  "Dumpshock",
+  "Blackic"
 };

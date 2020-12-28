@@ -193,7 +193,7 @@ int light_level(struct room_data *room)
     return room->vision[0];
 }
 
-int damage_modifier(struct char_data *ch, char *rbuf)
+int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
 {
   int physical = GET_PHYSICAL(ch), mental = GET_MENTAL(ch), base_target = 0;
   for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content) {
@@ -241,42 +241,42 @@ int damage_modifier(struct char_data *ch, char *rbuf)
   if (physical <= 400)
   {
     base_target += 3;
-    buf_mod( rbuf, "PhyS", 3 );
+    buf_mod(rbuf, rbuf_size, "Physical damage (S)", 3 );
   } else if (physical <= 700)
   {
     base_target += 2;
-    buf_mod( rbuf, "PhyM", 2 );
+    buf_mod(rbuf, rbuf_size, "Physical damage (M)", 2 );
   } else if (GET_PHYSICAL(ch) <= 900)
   {
     base_target += 1;
-    buf_mod( rbuf, "PhyL", 1 );
+    buf_mod(rbuf, rbuf_size, "Physical damage (L)", 1 );
   }
   if (mental <= 400)
   {
     base_target += 3;
-    buf_mod( rbuf, "MenS", 3 );
+    buf_mod(rbuf, rbuf_size, "Mental damage (S)", 3 );
   } else if (mental <= 700)
   {
     base_target += 2;
-    buf_mod( rbuf, "MenM", 2 );
+    buf_mod(rbuf, rbuf_size, "Mental damage (M)", 2 );
   } else if (mental <= 900)
   {
     base_target += 1;
-    buf_mod( rbuf, "MenL", 1 );
+    buf_mod(rbuf, rbuf_size, "Mental damage (L)", 1 );
   }
   return base_target;
 }
 
 // Adds the combat_mode toggle
-int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibility_penalty) {
+int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty) {
   extern time_info_data time_info;
   int base_target = 0, light_target = 0;
-  base_target += damage_modifier(ch, rbuf);
+  base_target += damage_modifier(ch, rbuf, rbuf_len);
   // then apply modifiers for sustained spells
   if (GET_SUSTAINED_NUM(ch) > 0)
   {
     base_target += ((GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
-    buf_mod( rbuf, "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
+    buf_mod(rbuf, sizeof(rbuf), "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
   }
   
   struct room_data *temp_room = get_ch_in_room(ch);
@@ -284,67 +284,67 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
   if (PLR_FLAGGED(ch, PLR_PERCEIVE))
   {
     base_target += 2;
-    buf_mod(rbuf, "AstralPercep", 2);
+    buf_mod(rbuf, sizeof(rbuf), "AstralPercep", 2);
   } else if (current_visibility_penalty < 8) {
     switch (light_level(temp_room)) {
       case LIGHT_FULLDARK:
         if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
           if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
             light_target += 2;
-            buf_mod(rbuf, "FullDark", 2);
+            buf_mod(rbuf, sizeof(rbuf), "FullDark", 2);
           } else {
             light_target += 4;
-            buf_mod(rbuf, "FullDark", 4);
+            buf_mod(rbuf, sizeof(rbuf), "FullDark", 4);
           }
         } else {
           light_target += 8;
-          buf_mod(rbuf, "FullDark", 8);
+          buf_mod(rbuf, sizeof(rbuf), "FullDark", 8);
         }
         break;
       case LIGHT_MINLIGHT:
         if (CURRENT_VISION(ch) == NORMAL) {
           light_target += 6;
-          buf_mod(rbuf, "MinLight", 6);
+          buf_mod(rbuf, sizeof(rbuf), "MinLight", 6);
         } else {
           if (NATURAL_VISION(ch) == NORMAL) {
             light_target += 4;
-            buf_mod(rbuf, "MinLight", 4);
+            buf_mod(rbuf, sizeof(rbuf), "MinLight", 4);
           } else {
             base_target += 2;
-            buf_mod(rbuf, "MinLight", 2);
+            buf_mod(rbuf, sizeof(rbuf), "MinLight", 2);
           }
         }
         break;
       case LIGHT_PARTLIGHT:
         if (CURRENT_VISION(ch) == NORMAL) {
           light_target += 2;
-          buf_mod(rbuf, "PartLight", 2);
+          buf_mod(rbuf, sizeof(rbuf), "PartLight", 2);
         } else if (CURRENT_VISION(ch) == LOWLIGHT) {
           if (NATURAL_VISION(ch) != LOWLIGHT) {
             light_target++;
-            buf_mod(rbuf, "PartLight", 1);
+            buf_mod(rbuf, sizeof(rbuf), "PartLight", 1);
           }
         } else {
           if (NATURAL_VISION(ch) != THERMOGRAPHIC) {
             light_target += 2;
-            buf_mod(rbuf, "PartLight", 2);
+            buf_mod(rbuf, sizeof(rbuf), "PartLight", 2);
           } else {
             light_target++;
-            buf_mod(rbuf, "PartLight", 1);
+            buf_mod(rbuf, sizeof(rbuf), "PartLight", 1);
           }
         }
         break;
       case LIGHT_GLARE:
         if (CURRENT_VISION(ch) == NORMAL) {
           light_target += 2;
-          buf_mod(rbuf, "Glare", 2);
+          buf_mod(rbuf, sizeof(rbuf), "Glare", 2);
         } else {
           if (NATURAL_VISION(ch) == NORMAL) {
             light_target += 4;
-            buf_mod(rbuf, "Glare", 2);
+            buf_mod(rbuf, sizeof(rbuf), "Glare", 2);
           } else {
             light_target += 2;
-            buf_mod(rbuf, "Glare", 2);
+            buf_mod(rbuf, sizeof(rbuf), "Glare", 2);
           }
         }
         break;
@@ -352,92 +352,92 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
     if (light_target > 0 && temp_room->light[1]) {
       if (temp_room->light[2]) {
         light_target = MAX(0, light_target - temp_room->light[2]);
-        buf_mod(rbuf, "LightSpell", - temp_room->light[2]);
+        buf_mod(rbuf, sizeof(rbuf), "LightSpell", - temp_room->light[2]);
       } else
         light_target /= 2;
     }
     if (temp_room->shadow[0]) {
       light_target += temp_room->shadow[1];
-      buf_mod(rbuf, "ShadowSpell", temp_room->shadow[1]);
+      buf_mod(rbuf, sizeof(rbuf), "ShadowSpell", temp_room->shadow[1]);
     }
     int smoke_target = 0;
     
     if (temp_room->vision[1] == LIGHT_MIST)
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == LOWLIGHT)) {
         smoke_target += 2;
-        buf_mod(rbuf, "Mist", 2);
+        buf_mod(rbuf, sizeof(rbuf), "Mist", 2);
       }
     if (temp_room->vision[1] == LIGHT_LIGHTSMOKE || (weather_info.sky == SKY_RAINING &&
                                                              temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) != LOWLIGHT)) {
         smoke_target += 4;
-        buf_mod(rbuf, "LSmoke", 4);
+        buf_mod(rbuf, sizeof(rbuf), "LSmoke", 4);
       } else if (CURRENT_VISION(ch) == LOWLIGHT) {
         smoke_target += 2;
-        buf_mod(rbuf, "LSmoke", 2);
+        buf_mod(rbuf, sizeof(rbuf), "LSmoke", 2);
       }
     }
     if (temp_room->vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
                                                              temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == NORMAL)) {
         smoke_target += 6;
-        buf_mod(rbuf, "HSmoke", 6);
+        buf_mod(rbuf, sizeof(rbuf), "HSmoke/Rain", 6);
       } else if (CURRENT_VISION(ch) == LOWLIGHT) {
         smoke_target += 4;
-        buf_mod(rbuf, "HSmoke", 4);
+        buf_mod(rbuf, sizeof(rbuf), "HSmoke/Rain", 4);
       } else if (CURRENT_VISION(ch) == THERMOGRAPHIC && NATURAL_VISION(ch) != THERMOGRAPHIC) {
         smoke_target++;
-        buf_mod(rbuf, "HSmoke", 1);
+        buf_mod(rbuf, sizeof(rbuf), "HSmoke/Rain", 1);
       }
     }
     if (temp_room->vision[1] == LIGHT_THERMALSMOKE) {
       if (CURRENT_VISION(ch) == NORMAL || CURRENT_VISION(ch) == LOWLIGHT) {
         smoke_target += 4;
-        buf_mod(rbuf, "TSmoke", 4);
+        buf_mod(rbuf, sizeof(rbuf), "TSmoke", 4);
       } else {
         if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
           smoke_target += 6;
-          buf_mod(rbuf, "TSmoke", 6);
+          buf_mod(rbuf, sizeof(rbuf), "TSmoke", 6);
         } else {
           smoke_target += 8;
-          buf_mod(rbuf, "TSmoke", 8);
+          buf_mod(rbuf, sizeof(rbuf), "TSmoke", 8);
         }
       }
     }
     // The maximum visibility penalty we apply is +8 TN to avoid things like an invisible person in a smoky pitch-black room getting +24 to hit TN.
     if (light_target + smoke_target + current_visibility_penalty > 8) {
-      buf_mod(rbuf, "ButVisPenaltyMaxIs8", (8 - current_visibility_penalty) - light_target + smoke_target);
+      buf_mod(rbuf, sizeof(rbuf), "ButVisPenaltyMaxIs8", (8 - current_visibility_penalty) - light_target + smoke_target);
       base_target += 8 - current_visibility_penalty;
     } else
       base_target += light_target + smoke_target;
   }
   base_target += GET_TARGET_MOD(ch);
-  buf_mod( rbuf, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
+  buf_mod(rbuf, sizeof(rbuf), "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
   if (GET_RACE(ch) == RACE_NIGHTONE && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch))
   {
     base_target += 1;
-    buf_mod( rbuf, "Sunlight", 1);
+    buf_mod(rbuf, sizeof(rbuf), "Sunlight", 1);
   }
   if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !IS_DUAL(ch))
   {
     base_target += 2;
-    buf_mod(rbuf, "Polter", 2);
+    buf_mod(rbuf, sizeof(rbuf), "Polter", 2);
   }
   if (AFF_FLAGGED(ch, AFF_ACID))
   {
     base_target += 4;
-    buf_mod(rbuf, "Acid", 4);
+    buf_mod(rbuf, sizeof(rbuf), "Acid", 4);
   }
   if (ch->points.fire[0] > 0)
   {
     base_target += 4;
-    buf_mod(rbuf, "OnFire", 4);
+    buf_mod(rbuf, sizeof(rbuf), "OnFire", 4);
   }
   for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
   {
     if (sust->caster == FALSE && (sust->spell == SPELL_CONFUSION || sust->spell == SPELL_CHAOS)) {
       base_target += MIN(sust->force, sust->success);
-      buf_mod(rbuf, "Confused", MIN(sust->force, sust->success));
+      buf_mod(rbuf, sizeof(rbuf), "Confused", MIN(sust->force, sust->success));
     }
   }
   if (!(IS_ELEMENTAL(ch) || IS_SPIRIT(ch)))
@@ -445,13 +445,13 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
       if (sust == CONFUSION)
       {
         base_target += GET_LEVEL(sust->target);
-        buf_mod(rbuf, "SConfused", GET_LEVEL(sust->target));
+        buf_mod(rbuf, sizeof(rbuf), "SConfused", GET_LEVEL(sust->target));
       }
   if (temp_room && ROOM_FLAGGED(temp_room, ROOM_INDOORS)) {
     float heightdif = GET_HEIGHT(ch) / ((temp_room->z != 0 ? temp_room->z : 1)*100);
     if (heightdif > 1) {
       base_target += 2;
-      buf_mod(rbuf, "TooTallRatio", (int)(heightdif*100));
+      buf_mod(rbuf, sizeof(rbuf), "TooTallRatio", (int)(heightdif*100));
     }
     if (heightdif > 1.2)
       base_target += 2;
@@ -463,14 +463,15 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
   return base_target;
 }
 
-int modify_target_rbuf(struct char_data *ch, char *rbuf)
+int modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len)
 {
-  return modify_target_rbuf_raw(ch, rbuf, 0);
+  return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0);
 }
 
 int modify_target(struct char_data *ch)
 {
-  return modify_target_rbuf_raw(ch, NULL, 0);
+  char fake_rbuf[5000];
+  return modify_target_rbuf_raw(ch, fake_rbuf, sizeof(fake_rbuf), 0);
 }
 
 // this returns the general skill
@@ -765,6 +766,7 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
       
       // We don't show log messages from imms who are invis at a level higher than you, unless you're a high enough level that that doesn't matter.
       if (ch
+          && !IS_NPC(ch)
           && !access_level(tch, GET_INVIS_LEV(ch))
           && !access_level(tch, LVL_VICEPRES))
         continue;
@@ -1058,17 +1060,20 @@ bool PLR_TOG_CHK(char_data *ch, dword offset)
   return PLR_FLAGS(ch).IsSet(offset);
 }
 
-char * buf_mod(char *rbuf, const char *name, int bonus)
+char * buf_mod(char *rbuf, int rbuf_len, const char *name, int bonus)
 {
   if ( !rbuf )
     return rbuf;
   if ( bonus == 0 )
     return rbuf;
+    
+  rbuf_len -= strlen(rbuf);
   rbuf += strlen(rbuf);
+  
   if ( bonus > 0 )
-    snprintf(rbuf, sizeof(rbuf), "%s +%d, ", name, bonus);
+    snprintf(rbuf, rbuf_len, "%s +%d, ", name, bonus);
   else
-    snprintf(rbuf, sizeof(rbuf), "%s %d, ", name, bonus);
+    snprintf(rbuf, rbuf_len, "%s %d, ", name, bonus);
   rbuf += strlen(rbuf);
   return rbuf;
 }
@@ -1190,18 +1195,18 @@ int get_skill(struct char_data *ch, int skill, int &target)
 {
   char gskbuf[MAX_STRING_LENGTH];
   gskbuf[0] = '\0';
+  int increase = 0;
   
   // Wearing too much armor? That'll hurt.
   if (skills[skill].attribute == QUI) {
-    int increase = 0;
     if (GET_TOTALIMP(ch) > GET_QUI(ch)) {
       increase = GET_TOTALIMP(ch) - GET_QUI(ch);
-      buf_mod(ENDOF(gskbuf), "OverImp", increase);
+      buf_mod(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "OverImp", increase);
       target += increase;
     }
     if (GET_TOTALBAL(ch) > GET_QUI(ch)) {
       increase = GET_TOTALBAL(ch) - GET_QUI(ch);
-      buf_mod(ENDOF(gskbuf), "OverBal", increase);
+      buf_mod(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "OverBal", increase);
       target += increase;
     }
   }
@@ -1246,16 +1251,20 @@ int get_skill(struct char_data *ch, int skill, int &target)
       
       // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
       if (chip && expert) {
-        totalskill += MIN(REAL_SKILL(ch, skill), expert);
+        increase = MIN(REAL_SKILL(ch, skill), expert);
+        totalskill += increase;
+        snprintf(gskbuf, sizeof(gskbuf), "Chip & Expert Skill Increase: %d", increase);
+        act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       }
     }
     
     // Iterate through their bioware, looking for anything important.
     if (ch->bioware) {
       for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-        if (GET_OBJ_VAL(bio, 0) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill)
+        if (GET_OBJ_VAL(bio, 0) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill) {
+          act("Reflex Recorder skill increase: 1", 1, ch, NULL, NULL, TO_ROLLS);
           totalskill++;
-        else if (GET_OBJ_VAL(bio, 0) == BIO_ENHANCEDARTIC)
+        } else if (GET_OBJ_VAL(bio, 0) == BIO_ENHANCEDARTIC)
           enhan = TRUE;
         else if (GET_OBJ_VAL(bio, 0) == BIO_SYNTHACARDIUM)
           synth = GET_OBJ_VAL(bio, 1);
@@ -1336,6 +1345,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_BR_HEAVYWEAPON:
         case SKILL_BR_SMG:
         case SKILL_BR_ARMOUR:
+          act("Enhanced Articulation skill increase: +1", 1, ch, NULL, NULL, TO_ROLLS);
           totalskill++;
           break;
           // Vehicle skills
@@ -1346,8 +1356,10 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_PILOT_CAR:
         case SKILL_PILOT_TRUCK:
           // You only get the bonus for vehicle skills if you're physically driving the vehicle.
-          if (!AFF_FLAGGED(ch, AFF_RIG))
+          if (!AFF_FLAGGED(ch, AFF_RIG)) {
+            act("Enhanced Articulation skill increase: +1", 1, ch, NULL, NULL, TO_ROLLS);
             totalskill++;
+          }
           break;
           break;
         default:
@@ -1356,12 +1368,18 @@ int get_skill(struct char_data *ch, int skill, int &target)
     }
     
     // Move-by-wire.
-    if (skill == SKILL_STEALTH || skill == SKILL_ATHLETICS)
+    if (skill == SKILL_STEALTH || skill == SKILL_ATHLETICS) {
+      snprintf(gskbuf, sizeof(gskbuf), "Move-By-Wire Skill Increase: %d", mbw);
+      act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       totalskill += mbw;
+    }
     
     // Synthacardium.
-    if (skill == SKILL_ATHLETICS)
+    if (skill == SKILL_ATHLETICS) {
+      snprintf(gskbuf, sizeof(gskbuf), "Synthacardium Skill Increase: %d", synth);
+      act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       totalskill += synth;
+    }
     
     return totalskill;
   }
@@ -1369,7 +1387,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     if (target >= 8)
       return 0;
     target += 4;
-    snprintf(gskbuf, sizeof(gskbuf), "$n (%s) %s(%d) = %d(%d): +4 TN", GET_CHAR_NAME(ch), skills[skill].name, skill, GET_SKILL(ch, skill), REAL_SKILL(ch, skill));
+    snprintf(gskbuf, sizeof(gskbuf), "$n (%s) defaulting on %s = %d(%d): +4 TN, will have %d dice.", GET_CHAR_NAME(ch), skills[skill].name, GET_SKILL(ch, skill), REAL_SKILL(ch, skill), GET_ATT(ch, skills[skill].attribute));
     act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
     return GET_ATT(ch, skills[skill].attribute);
   }
@@ -1914,7 +1932,7 @@ struct room_data *get_ch_in_room(struct char_data *ch) {
   char errbuf[500];
   if (!ch) {
     snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room was passed a NULL character!");
-    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
   
@@ -1925,7 +1943,7 @@ struct room_data *get_ch_in_room(struct char_data *ch) {
     return get_veh_in_room(ch->in_veh);
   }
   
-  snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room called on char %s, but they're not in a room or vehicle!", GET_NAME(ch));
+  snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room called on char %s, but they're not in a room or vehicle!", GET_CHAR_NAME(ch));
   mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
   
   return NULL;
@@ -2933,6 +2951,17 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
   
   // Everything succeeded.
   return TRUE;
+}
+
+void destroy_door(struct room_data *room, int dir) {
+  if (!room || dir < NORTH || dir > DOWN)
+    return;
+    
+  room->dir_option[dir]->condition = 0;
+  REMOVE_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
+  REMOVE_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
+  REMOVE_BIT(room->dir_option[dir]->exit_info, EX_HIDDEN);
+  SET_BIT(room->dir_option[dir]->exit_info, EX_DESTROYED);
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

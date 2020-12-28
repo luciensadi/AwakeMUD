@@ -93,8 +93,9 @@ int messageless_find_door(struct char_data *ch, char *type, char *dir, const cha
     door = convert_look[door];
     if (EXIT(ch, door)) {
       if (EXIT(ch, door)->keyword) {
-        if (isname(type, EXIT(ch, door)->keyword) &&
-            !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+        if (isname(type, EXIT(ch, door)->keyword)
+            && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED)
+            && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
           return door;
         else
           return -1;
@@ -110,8 +111,9 @@ int messageless_find_door(struct char_data *ch, char *type, char *dir, const cha
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (EXIT(ch, door))
         if (EXIT(ch, door)->keyword)
-          if (isname(type, EXIT(ch, door)->keyword) &&
-              !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+          if (isname(type, EXIT(ch, door)->keyword)
+              && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED)
+              && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
             return door;
 
     return -1;

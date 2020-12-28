@@ -54,6 +54,7 @@ extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
 extern void wire_nuyen(struct char_data *ch, struct char_data *target, int amount, bool isfile);
 extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
+extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
 
 extern struct command_info cmd_info[];
 
@@ -1503,6 +1504,15 @@ SPECIAL(car_dealer)
     else
       send_to_char(ch, "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
     save_vehicles();
+    return TRUE;
+  } else if (CMD_IS("probe") || CMD_IS("info")) {
+    argument = one_argument(argument, buf);
+    if (!(veh = get_veh_list(buf, world[car_room].vehicles, ch))) {
+      send_to_char("There is no such vehicle for sale.\r\n", ch);
+      return TRUE;
+    }
+    send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_VEH_NAME(veh));
+    do_probe_veh(ch, veh);
     return TRUE;
   }
   return FALSE;
@@ -3491,6 +3501,9 @@ SPECIAL(auth_room)
         obj_to_char(radio, ch);
         send_to_char(ch, "You have been given a radio.^n\r\n");
       }
+      // Heal them.
+      GET_PHYSICAL(ch) = 1000;
+      GET_MENTAL(ch) = 1000;
       snprintf(buf, sizeof(buf), "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       

@@ -376,9 +376,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   ch->points.sustained[0] = 0;
   GET_LAST_TELL(ch) = NOBODY;
   MYSQL_RES *res;
-  MYSQL_ROW row;
-  // TODO: Sanitize this. It shouldn't be exploitable to begin with, but better safe than sorry.
-  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", name);
+  MYSQL_ROW row;  
+  
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", prepare_quotes(buf3, name, sizeof(buf3) / sizeof(buf3[0])));
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
     return FALSE;

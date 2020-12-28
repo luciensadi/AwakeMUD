@@ -25,6 +25,8 @@ extern void reduce_abilities(struct char_data *vict);
 extern void do_probe_object(struct char_data * ch, struct obj_data * j);
 ACMD_CONST(do_say);
 
+bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr);
+
 int cmd_say;
 
 const char *shop_flags[] =
@@ -32,7 +34,8 @@ const char *shop_flags[] =
     "Nothing",
     "Doctor",
     "!NEGOTIATE",
-    "!RESELL"
+    "!RESELL",
+    "CHARGEN"
   };
 
 const char *shop_type[3] =
@@ -327,8 +330,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         FALSE, keeper, 0, ch, TO_NOTVICT);
     snprintf(buf, sizeof(buf), "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-    GET_PHYSICAL(ch) = 100;
-    GET_MENTAL(ch) = 100;
+    if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+      GET_PHYSICAL(ch) = 100;
+      GET_MENTAL(ch) = 100;
+    }
     act("You delicately install $p into $N's body.",
         FALSE, keeper, obj, ch, TO_CHAR);
     act("$n performs a delicate procedure on $N.",
@@ -594,7 +599,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     // Don't let people re-try repeatedly.
     for (int q = 0; q < SHOP_LAST_IDNUM_LIST_SIZE; q++) {
       if (sell->lastidnum[q] == GET_IDNUM(ch)) {
-        snprintf(buf, sizeof(buf), "%s Sorry, I couldn't get that in for you.", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s Sorry, I couldn't get that in for you. Try again tomorrow.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         extract_obj(obj);
         return;
@@ -759,8 +764,10 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         FALSE, keeper, 0, ch, TO_NOTVICT);
     act("$n delicately removes $p from your body.",
         FALSE, keeper, obj, ch, TO_VICT);
-    GET_MENTAL(ch) = 100;
-    GET_PHYSICAL(ch) = 100;
+    if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+      GET_PHYSICAL(ch) = 100;
+      GET_MENTAL(ch) = 100;
+    }
     affect_total(ch);
     if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY)
       for (struct obj_data *chip = obj->contains; chip; chip = chip->next_content)
@@ -835,17 +842,9 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       // Read the object; however, if it's an invalid vnum or has no sale cost, skip it.
-      if (!(obj = read_object(sell->vnum, VIRTUAL)) || GET_OBJ_COST(obj) < 1) {
+      obj = read_object(sell->vnum, VIRTUAL);
+      if (!can_sell_object(obj, keeper, shop_nr)) {
         i--;
-        if (obj) {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to cost of %d.",
-                  shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));
-          mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-          extract_obj(obj);
-        } else {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item (%ld) from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_VNUM(obj));
-          mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-        }
         continue;
       }
       
@@ -896,16 +895,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
-      if (!obj || GET_OBJ_COST(obj) < 1) {
+      if (!can_sell_object(obj, keeper, shop_nr)) {
         i--;
-        if (obj) {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
-          mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-          extract_obj(obj);
-        } else {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
-          mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-        }
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
@@ -943,16 +934,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
             "------------------------------------------------------------------------------\r\n");
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
-      if (!obj || GET_OBJ_COST(obj) < 1) {
+      if (!can_sell_object(obj, keeper, shop_nr)) {
         i--;
-        if (obj) {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_table[shop_nr].vnum, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
-          mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-          extract_obj(obj);
-        } else {
-          snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
-          mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-        }
         continue;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %2d)  ", i);
@@ -1438,7 +1421,9 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
       totaltime = totaltime / SECS_PER_MUD_DAY;
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_object(order->item)]), order->number);
       if (totaltime < 0)
-        strcat(buf, " AVAILABLE\r\n");
+        strncat(buf, " AVAILABLE\r\n", sizeof(buf) - strlen(buf) - 1);
+      else if (totaltime < 1 && (int)(24 * totaltime) == 0)
+        strncat(buf, " less than one hour", sizeof(buf) - strlen(buf) - 1);
       else
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d %s\r\n", totaltime < 1 ? (int)(24 * totaltime) : (int)totaltime,
                 totaltime < 1 ? "hours" : (totaltime == 1 ? "day" : "days"));
@@ -1568,7 +1553,7 @@ SPECIAL(shop_keeper)
     shop_value(argument, ch, keeper, shop_nr);
   else if (CMD_IS("check"))
     shop_check(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("receive"))
+  else if (CMD_IS("receive") || CMD_IS("recieve"))
     shop_rec(argument, ch, keeper, shop_nr);
   else if (CMD_IS("hours"))
     shop_hours(ch, shop_nr);
@@ -2204,4 +2189,37 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       shedit_disp_selling_menu(d);
     break;
   }
+}
+
+bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr) {
+  if (obj) {
+    if (GET_OBJ_VNUM(obj) == OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC
+        || GET_OBJ_VNUM(obj) == OBJ_BLANK_MAGAZINE) {
+      snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to matching a forbidden vnum.",
+               shop_table[shop_nr].vnum,
+               GET_NAME(keeper),
+               GET_OBJ_NAME(obj),
+               GET_OBJ_VNUM(obj));
+      mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
+      extract_obj(obj);
+      return FALSE;
+    }
+    
+    if (GET_OBJ_COST(obj) < 1) {
+      snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to cost of %d.", 
+               shop_table[shop_nr].vnum, 
+               GET_NAME(keeper), 
+               GET_OBJ_NAME(obj),
+               GET_OBJ_VNUM(obj), 
+               GET_OBJ_COST(obj));
+      mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
+      extract_obj(obj);
+      return FALSE;
+    }
+  } else {
+    snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
+    mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  return TRUE;
 }

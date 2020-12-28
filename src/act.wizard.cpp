@@ -80,7 +80,7 @@ extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
 
 extern const char *pgroup_print_privileges(Bitfield privileges);
-extern void nonsensical_reply(struct char_data *ch);
+extern void nonsensical_reply(struct char_data *ch, const char *arg);
 extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
 
 extern struct elevator_data *elevator;
@@ -365,10 +365,11 @@ ACMD(do_echo)
   struct char_data *vict;
   struct veh_data *veh;
   skip_spaces(&argument);
-  extern void nonsensical_reply(struct char_data *ch);
 
-  if (!*argument)
+  if (!*argument) {
     send_to_char("Yes.. but what?\r\n", ch);
+    return;
+  }
   else {
     if (PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona) {
       send_to_char(ch, "You can't do that while hitching.\r\n");
@@ -392,7 +393,7 @@ ACMD(do_echo)
       case SCMD_ECHO:
       case SCMD_AECHO:
         if (!PRF_FLAGGED(ch, PRF_QUESTOR) && (ch->desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : GET_LEVEL(ch)) < LVL_ARCHITECT) {
-          nonsensical_reply(ch);
+          nonsensical_reply(ch, NULL);
           return;
         }
         snprintf(buf, sizeof(buf), "%s", argument);
@@ -764,7 +765,7 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
   if (!ch || !victim)
     return;
   
-  act("$n is whisked away by the game's administration.", FALSE, victim, 0, 0, TO_ROOM);
+  act("$n is whisked away by the game's administration.", TRUE, victim, 0, 0, TO_ROOM);
   if (AFF_FLAGGED(victim, AFF_PILOT))
     AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
   char_from_room(victim);
@@ -777,7 +778,7 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
     char_to_room(victim, ch->in_room);
     snprintf(buf2, sizeof(buf2), "%s transferred %s to %s^g.", GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), GET_ROOM_NAME(victim->in_room));
   }
-  act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
+  act("$n arrives from a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
   act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
   look_at_room(victim, 0);
@@ -886,12 +887,12 @@ ACMD(do_teleport)
     send_to_char("Where do you wish to send this person?\r\n", ch);
   else if ((target = find_target_room(ch, buf2))) {
     send_to_char(OK, ch);
-    act("$n disappears in a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
+    act("$n disappears in a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
     if (AFF_FLAGGED(victim, AFF_PILOT))
       AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
     char_from_room(victim);
     char_to_room(victim, target);
-    act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
+    act("$n arrives from a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
     act("$n has teleported you!", FALSE, ch, 0, victim, TO_VICT);
     look_at_room(victim, 0);
     snprintf(buf2, sizeof(buf2), "%s teleported %s to %s",
@@ -1819,9 +1820,12 @@ ACMD(do_return)
       if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT)) {
         GET_TEMP_ESSLOSS(ch->desc->original) = GET_ESS(ch->desc->original) - GET_ESS(ch);
         affect_total(ch->desc->original);
-      }
-      if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT))
         PLR_FLAGS(ch->desc->original).RemoveBit(PLR_PROJECT);
+        
+        // Make the projection unkillable.
+        if (IS_NPC(ch))
+          MOB_FLAGS(ch).SetBit(MOB_NOKILL);
+      }
       if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED))
         PLR_FLAGS(ch->desc->original).RemoveBit(PLR_SWITCHED);
 
@@ -1844,6 +1848,7 @@ ACMD(do_return)
       ch->desc->character->desc = ch->desc;
       update_pos(ch->desc->character);
       ch->desc = NULL;
+      
       if (IS_NPC(vict) && GET_MOB_VNUM(vict) >= 50 && GET_MOB_VNUM(vict) < 70 &&
           PLR_FLAGGED(ch, PLR_PROJECT)) {
         GET_MEMORY(vict) = NULL;
@@ -1921,7 +1926,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   obj->obj_flags.extra_flags.SetBit(ITEM_IMMLOAD); // Why the hell do we have immload AND wizload?
   obj->obj_flags.extra_flags.SetBit(ITEM_WIZLOAD);
   act("$n makes a strange magical gesture.", TRUE, ch, 0, 0, TO_ROOM);
-  act("$n has created $p!", FALSE, ch, obj, 0, TO_ROOM);
+  act("$n has created $p!", TRUE, ch, obj, 0, TO_ROOM);
   act("You create $p.", FALSE, ch, obj, 0, TO_CHAR);
   snprintf(buf, sizeof(buf), "%s wizloaded object #%d (%s).",
           GET_CHAR_NAME(ch), vnum, GET_OBJ_NAME(obj));
@@ -1991,7 +1996,7 @@ ACMD(do_wizload)
 
     act("$n makes a quaint, magical gesture with one hand.", TRUE, ch,
         0, 0, TO_ROOM);
-    act("$n has created $N!", FALSE, ch, 0, mob, TO_ROOM);
+    act("$n has created $N!", TRUE, ch, 0, mob, TO_ROOM);
     act("You create $N.", FALSE, ch, 0, mob, TO_CHAR);
   } else if (is_abbrev(buf, "obj")) {
     perform_wizload_object(ch, numb);
@@ -2474,7 +2479,7 @@ ACMD(do_restore)
   
   // Shifted here from interpreter to allow morts to use the restore command for the testing obj.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
 
@@ -3160,7 +3165,7 @@ ACMD(do_wizutil)
         GET_FREEZE_LEV(vict) = GET_LEVEL(ch);
         send_to_char("A bitter wind suddenly rises and drains every erg of heat from your body!\r\nYou feel frozen!\r\n", vict);
         send_to_char("Frozen.\r\n", ch);
-        act("A sudden cold wind conjured from nowhere freezes $n!", FALSE, vict, 0, 0, TO_ROOM);
+        act("A sudden cold wind conjured from nowhere freezes $n!", TRUE, vict, 0, 0, TO_ROOM);
         snprintf(buf, sizeof(buf), "%s frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_WIZLOG, TRUE);
         break;
@@ -3181,7 +3186,7 @@ ACMD(do_wizutil)
         send_to_char("A fireball suddenly explodes in front of you, melting the ice!\r\nYou feel thawed.\r\n", vict);
         send_to_char("Thawed.\r\n", ch);
         GET_FREEZE_LEV(vict) = 0;
-        act("A sudden fireball conjured from nowhere thaws $n!", FALSE, vict, 0, 0, TO_ROOM);
+        act("A sudden fireball conjured from nowhere thaws $n!", TRUE, vict, 0, 0, TO_ROOM);
         break;
       default:
         log("SYSERR: Unknown subcmd passed to do_wizutil (act.wizard.c)");
@@ -5442,4 +5447,108 @@ ACMD(do_perfmon) {
         do_perfmon( ch, empty_arg, cmd, subcmd );
         return;
     }
+}
+
+ACMD(do_shopfind)
+{
+  int number;
+
+  one_argument(argument, buf2);
+
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+    return;
+  }
+
+  if (!*buf2 || !isdigit(*buf2)) {
+    send_to_char("Usage: shopfind <number>\r\n", ch);
+    return;
+  }
+  if ((number = atoi(buf2)) < 0) {
+    send_to_char("A NEGATIVE number??\r\n", ch);
+    return;
+  }
+  
+  send_to_char(ch, "Shops selling the item with vnum %d:\r\n", number);
+  
+  int index = 0;
+  for (int i = 0; i <= top_of_shopt; i++) {
+    for (struct shop_sell_data *sell = shop_table[i].selling; sell; sell = sell->next, i++) {
+      if (sell->vnum == number) {
+        send_to_char(ch, "%3d)  %8ld  (%s)\r\n", ++index, shop_table[i].vnum, mob_proto[real_mobile(shop_table[i].keeper)].player.physical_text.name);
+      }
+    }
+  }
+  if (index == 0)
+    send_to_char("- None.\r\n", ch);
+}
+
+void print_x_fuckups(struct char_data *ch, int print_count) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  char query_buf[1000];
+  
+  snprintf(query_buf, sizeof(query_buf), "SELECT Name, Count FROM command_fuckups ORDER BY COUNT DESC LIMIT %d;", print_count);
+  
+  mysql_wrapper(mysql, query_buf);
+  if (!(res = mysql_use_result(mysql))) {
+    mudlog("SYSERR: Failed to access command fuckups data!", ch, LOG_SYSLOG, TRUE);
+    send_to_char(ch, "Sorry, the fuckups system is offline at the moment.\r\n");
+    return;
+  }
+  
+  send_to_char(ch, "^CTop %d fuckups:^n\r\n", print_count);
+  int counter = 1;
+  while ((row = mysql_fetch_row(res))) {
+    send_to_char(ch, "%2d) %-20s: %-5s\r\n", counter++, row[0], row[1]);
+  }
+  if (counter == 1)
+    send_to_char(ch, "...None! Lucky you, not a single command typo in the entire game.\r\n");
+  mysql_free_result(res);
+}
+
+ACMD(do_fuckups) {
+  // fuckups [x] -- list the top X fuckups, default 10
+  // fuckups del <cmd> -- remove something from the fuckups list
+  int fuckup_count = 10;
+  
+  skip_spaces(&argument);
+  
+  // Display 10.
+  if (!*argument) {
+    print_x_fuckups(ch, 10);
+    return;
+  }
+  
+  // Display X.
+  if ((fuckup_count = atoi(argument))) {
+    if (fuckup_count <= 0) {
+      send_to_char("1 or more, please.\r\n", ch);
+      return;
+    }
+    
+    print_x_fuckups(ch, fuckup_count);
+    return;
+  }
+  
+  // Delete mode.
+  char mode[100];
+  const char *deletion_string = one_argument(argument, mode);
+  if (!strncmp(mode, "delete", strlen(mode))) {
+    if (!access_level(ch, LVL_PRESIDENT) || IS_NPC(ch)) {
+      send_to_char("Sorry, only level-10 PC staff can delete fuckups.\r\n", ch);
+      return;
+    }
+    
+    char query_buf[1000];
+    snprintf(query_buf, sizeof(query_buf), "DELETE FROM command_fuckups WHERE Name = '%s'",
+             prepare_quotes(buf, deletion_string, sizeof(buf)));
+    mysql_wrapper(mysql, query_buf);
+    send_to_char("Done.\r\n", ch);
+    
+    snprintf(buf, sizeof(buf), "%s deleted command fuckup '%s' from the database.", GET_CHAR_NAME(ch), deletion_string);
+    return;
+  }
+  
+  send_to_char("Syntax: `fuckups [count]` to list, or `fuckups delete <command>` to remove.", ch);
 }

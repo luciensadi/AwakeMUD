@@ -612,6 +612,7 @@ SPECIAL(landlord_spec)
 }
 /* call from boot_db - will load control recs, load objs, set atrium bits */
 /* should do sanity checks on vnums & remove invalid records */
+// aka boot_houses
 void House_boot(void)
 {
   vnum_t house_vnum, owner, landlord_vnum, paid, key_vnum;
