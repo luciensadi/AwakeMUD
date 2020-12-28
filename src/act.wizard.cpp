@@ -166,19 +166,22 @@ ACMD(do_copyover)
   int num_questors = 0;
   int fucky_states = 0;
   int cab_inhabitants = 0;
-  for (d = descriptor_list; d; d = d->next) {
-    och = d->character;
+  for (d = descriptor_list; d; d = d->next) {    
+    // Count PCs in weird states.
+    if (STATE(d) != CON_PLAYING) {
+      fucky_states++;
+      continue;
+    }
+    
+    if (!(och = d->character))
+      continue;
+      
     if (GET_QUEST(och)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s",
                num_questors > 0 ? "^n, ^c" : "^c",
                GET_CHAR_NAME(och));
       num_questors += 1;
     }
-    
-    // Count PCs in weird states.
-    if (STATE(d) != CON_PLAYING)
-      fucky_states++;
-      
     // Count PCs in cabs.
     if (och->in_room && room_is_a_taxicab(GET_ROOM_VNUM(och->in_room)))
       cab_inhabitants++;
@@ -241,31 +244,31 @@ ACMD(do_copyover)
     och = d->character;
     d_next = d->next; // delete from list, save stuff
 
-    if (!d->character || d->connected > CON_PLAYING) // drops those logging on
-    {
+    // drops those logging on
+    if (!och || d->connected > CON_PLAYING) {
       write_to_descriptor (d->descriptor, "\r\nSorry, we are rebooting. Come back in a few minutes.\r\n");
       close_socket (d); // yer outta here!
-
-    } else {
-      // Refund people in cabs for the extra cash. Fixes edge case of 'I only had enough to cover my original cab fare'.
-      if (!PLR_FLAGGED(och, PLR_NEWBIE) && och->in_room && room_is_a_taxicab(GET_ROOM_VNUM(och->in_room))) {
-        snprintf(buf, sizeof(buf), "You have been refunded %d nuyen to compensate for the extra cab fare.\r\n", MAX_CAB_FARE);
-        write_to_descriptor(d->descriptor, buf);
-        GET_NUYEN(och) += MAX_CAB_FARE;
-      }
-      
-      fprintf (fp, "%d %s %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d));
-      GET_LAST_IN(och) = get_ch_in_room(och)->number;
-      if (!GET_LAST_IN(och) || GET_LAST_IN(och) == NOWHERE) {
-        // Fuck it, send them to Grog's.
-        snprintf(buf, sizeof(buf), "%s's location could not be determined by the current copyover logic. %s will load at Grog's (35500).",
-                GET_CHAR_NAME(och), HSSH(och));
-        mudlog(buf, och, LOG_SYSLOG, TRUE);
-        GET_LAST_IN(och) = RM_ENTRANCE_TO_DANTES;
-      }
-      playerDB.SaveChar(och, GET_LOADROOM(och));
-      write_to_descriptor(d->descriptor, messages[mesnum]);
+      continue;
     }
+    
+    // Refund people in cabs for the extra cash. Fixes edge case of 'I only had enough to cover my original cab fare'.
+    if (!PLR_FLAGGED(och, PLR_NEWBIE) && och->in_room && room_is_a_taxicab(GET_ROOM_VNUM(och->in_room))) {
+      snprintf(buf, sizeof(buf), "You have been refunded %d nuyen to compensate for the extra cab fare.\r\n", MAX_CAB_FARE);
+      write_to_descriptor(d->descriptor, buf);
+      GET_NUYEN(och) += MAX_CAB_FARE;
+    }
+    
+    fprintf (fp, "%d %s %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d));
+    GET_LAST_IN(och) = get_ch_in_room(och)->number;
+    if (!GET_LAST_IN(och) || GET_LAST_IN(och) == NOWHERE) {
+      // Fuck it, send them to Grog's.
+      snprintf(buf, sizeof(buf), "%s's location could not be determined by the current copyover logic. %s will load at Grog's (35500).",
+              GET_CHAR_NAME(och), HSSH(och));
+      mudlog(buf, och, LOG_SYSLOG, TRUE);
+      GET_LAST_IN(och) = RM_ENTRANCE_TO_DANTES;
+    }
+    playerDB.SaveChar(och, GET_LOADROOM(och));
+    write_to_descriptor(d->descriptor, messages[mesnum]);
   }
 
   fprintf (fp, "-1\n");

@@ -648,7 +648,11 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   int mob_stealth_dice = get_skill(mob, SKILL_STEALTH, mob_tn);
   int mob_stealth_successes = success_test(mob_stealth_dice, mob_tn);
   
-  int pc_tn = 4 + modify_target_rbuf(pc, buf, sizeof(buf));
+  int pc_tn = 4;
+  if (pc->in_room == mob->in_room)
+    pc_tn = 2;
+    
+  pc_tn += modify_target_rbuf(pc, buf, sizeof(buf));
   int pc_dice = GET_INT(pc) + GET_POWER(pc, ADEPT_IMPROVED_PERCEPT);
   int pc_percept_successes = success_test(pc_dice, pc_tn);
   
