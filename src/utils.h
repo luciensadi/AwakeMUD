@@ -594,6 +594,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_OBJ_BARRIER(obj)    ((obj)->obj_flags.barrier)
 #define GET_OBJ_VNUM(obj) (VALID_OBJ_RNUM(obj) ? \
     obj_index[GET_OBJ_RNUM(obj)].vnum : NOTHING)
+#define GET_OBJ_KEYWORDS(obj)   ((obj)->text.keywords)
 #define IS_OBJ_STAT(obj, stat)  ((obj)->obj_flags.extra_flags.IsSet(stat))
 #define OBJ_VNUM_RNUM(rnum) ((obj_index[rnum]).vnum)
 #define VEH_VNUM_RNUM(rnum) ((veh_index[rnum]).vnum)

@@ -2953,23 +2953,43 @@ SPECIAL(toggled_invis)
 {
   struct obj_data *obj = (struct obj_data *) me;
 
-  if(!CMD_IS("activate") || !obj->worn_by)
+  if(!obj->worn_by)
     return FALSE;
-  else {
-    if (!str_cmp(argument, "invis")) {
-      if (AFF_FLAGGED(obj->worn_by, AFF_INVISIBLE)) {
+    
+  if (CMD_IS("deactivate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (AFF_FLAGGED(obj->worn_by, AFF_INVISIBLE) || obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
         AFF_FLAGS(obj->worn_by).RemoveBit(AFF_INVISIBLE);
-        send_to_char(ch, "You feel the static fade as your ruthenium polymers power down.\\r\n");
+        obj->obj_flags.bitvector.RemoveBit(AFF_INVISIBLE);
+        send_to_char(ch, "You feel the static fade as the ruthenium polymers in %s power down.\r\n", GET_OBJ_NAME(obj));
         act("The air shimmers briefly as $n fades into view.\r\n", FALSE, ch, 0, 0, TO_ROOM);
         return TRUE;
       } else {
-        AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
-        send_to_char(ch, "You feel a tiny static charge as your ruthenium polymers power up.\r\n");
-        act("The world bends around $n as they vanish from sight.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        send_to_char(ch, "%s is already deactivated.\r\n", capitalize(GET_OBJ_NAME(obj)));
         return TRUE;
       }
     }
+    return FALSE;
+  } 
+  
+  if (CMD_IS("activate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (!AFF_FLAGGED(obj->worn_by, AFF_INVISIBLE) || !obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
+        AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
+        obj->obj_flags.bitvector.SetBit(AFF_INVISIBLE);
+        send_to_char(ch, "You feel a tiny static charge as the ruthenium polymers in %s power up.\r\n", GET_OBJ_NAME(obj));
+        act("The world bends around $n as they vanish from sight.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        return TRUE;
+      } else {
+        send_to_char(ch, "%s is already activated.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
+  
   return FALSE;
 }
 
