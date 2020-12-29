@@ -1129,11 +1129,11 @@ int get_speed(struct veh_data *veh)
 int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy)
 {
   struct obj_data *bio;
-  int cmod = 0, tmod = 0;
+  int cmod = -GET_POWER(ch, ADEPT_KINESICS);
+  int tmod = -GET_POWER(tch, ADEPT_KINESICS);
   int cskill = get_skill(ch, SKILL_NEGOTIATION, cmod);
-  cmod -= GET_POWER(ch, ADEPT_KINESICS);
-  tmod -= GET_POWER(tch, ADEPT_KINESICS);
-  snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod is %d. After application of Kinesics (if any), base modifiers for PC and NPC are %d and %d.", mod, cmod, tmod);
+  int tskill = get_skill(tch, SKILL_NEGOTIATION, tmod);
+  snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod is %d. After application of get_skill() penalties and Kinesics bonuses (if any), base modifiers for PC and NPC are %d and %d.", mod, cmod, tmod);
   if (GET_RACE(ch) != GET_RACE(tch)) {
     switch (GET_RACE(ch)) {
       case RACE_HUMAN:
@@ -1144,7 +1144,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
         break;
       default:
         cmod += 4;
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant penalty +4 for PC.");
+        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for PC.");
         break;
     }
     switch (GET_RACE(tch)) {
@@ -1156,7 +1156,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
         break;
       default:
         tmod += 4;
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant penalty +4 for NPC.");
+        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for NPC.");
         break;
     }
   }
@@ -1169,7 +1169,6 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
       snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for PC.", delta);
       break;
     }
-  int tskill = get_skill(tch, SKILL_NEGOTIATION, tmod);
   
   for (bio = tch->bioware; bio; bio = bio->next_content)
     if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES)
@@ -1183,8 +1182,10 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   int chnego = success_test(cskill, chtn);
   int tchtn = GET_INT(ch)+mod+tmod;
   int tchnego = success_test(tskill, tchtn);
-  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC negotiation test gave %d successes on %d dice with TN %d.", chnego, cskill, chtn);
-  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d.", tchnego, tskill, tchtn);
+  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
+           chnego, cskill, chtn, GET_INT(tch), mod, cmod);
+  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).", 
+           tchnego, tskill, tchtn, GET_INT(ch), mod, tmod);
   if (comp)
   {
     int ch_delta = success_test(GET_SKILL(ch, comp), GET_INT(tch)+mod+cmod) / 2;
@@ -1201,7 +1202,6 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
       basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
     else
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "to %d.", basevalue);
   } else
   { 
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC got more successes, so basevalue goes from %d", basevalue);
@@ -1209,8 +1209,8 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
     else
       basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "to %d.", basevalue);
   }
+  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " to %d.", basevalue);
   act(buf3, FALSE, ch, NULL, NULL, TO_ROLLS);
   return basevalue;
   
@@ -1394,14 +1394,14 @@ int get_skill(struct char_data *ch, int skill, int &target)
     }
     
     // Move-by-wire.
-    if (skill == SKILL_STEALTH || skill == SKILL_ATHLETICS) {
+    if ((skill == SKILL_STEALTH || skill == SKILL_ATHLETICS) && mbw) {
       snprintf(gskbuf, sizeof(gskbuf), "Move-By-Wire Skill Increase: %d", mbw);
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       totalskill += mbw;
     }
     
     // Synthacardium.
-    if (skill == SKILL_ATHLETICS) {
+    if (skill == SKILL_ATHLETICS && synth) {
       snprintf(gskbuf, sizeof(gskbuf), "Synthacardium Skill Increase: %d", synth);
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       totalskill += synth;
