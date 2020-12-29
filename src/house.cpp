@@ -185,7 +185,7 @@ void House_save(struct house_control_rec *house, FILE *fl, long rnum)
   fprintf(fl, "[HOUSE]\n");
   o = 0;
   
-#define PRINT_TO_FILE_IF_UNCHANGED(sectname, obj_val, proto_val) { \
+#define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
   if (obj_val != proto_val)                                        \
     fprintf(fl, (sectname), (obj_val));                            \
 }
@@ -208,11 +208,11 @@ void House_save(struct house_control_rec *house, FILE *fl, long rnum)
         for (int x = 0; x < NUM_VALUES; x++)
           if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
             fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj), 0);
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tCost:\t%d\n", GET_OBJ_COST(obj), GET_OBJ_COST(prototype));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
+      PRINT_TO_FILE_IF_CHANGED("\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
+      PRINT_TO_FILE_IF_CHANGED("\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
+      PRINT_TO_FILE_IF_CHANGED("\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj), 0);
+      PRINT_TO_FILE_IF_CHANGED("\t\tCost:\t%d\n", GET_OBJ_COST(obj), GET_OBJ_COST(prototype));
+      PRINT_TO_FILE_IF_CHANGED("\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
       if (obj->restring)
         fprintf(fl, "\t\tName:\t%s\n", obj->restring);
       if (obj->photo)

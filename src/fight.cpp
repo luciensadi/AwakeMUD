@@ -2673,7 +2673,7 @@ bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded) {
 
 int check_smartlink(struct char_data *ch, struct obj_data *weapon)
 {
-  struct obj_data *obj, *access = NULL;
+  struct obj_data *obj, *access;
   
   // are they wielding two weapons?
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) &&
@@ -2681,23 +2681,31 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
     return 0;
   
   int mod = 0;
-  for (int i = 7; !mod && i < 10; i++)
-  {
+  for (int i = ACCESS_LOCATION_TOP; !mod && i <= ACCESS_LOCATION_UNDER; i++) {
+    // If they have a smartlink attached:
     if (GET_OBJ_VAL(weapon, i) > 0
         && real_object(GET_OBJ_VAL(weapon, i)) > 0
         && (access = &obj_proto[real_object(GET_OBJ_VAL(weapon, i))])
-        && GET_OBJ_VAL(access, 1) == ACCESS_SMARTLINK) {
-      for (obj = ch->cyberware; !mod && obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK && (GET_OBJ_VAL(obj, 1) == 1 || GET_OBJ_VAL(access, 2) < 2)) {
-          // Smartlink plus cyber found-- full value.
+        && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK) {
+      
+      // Iterate through their cyberware and look for a matching smartlink.
+      for (obj = ch->cyberware; !mod && obj; obj = obj->next_content) {
+        if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK) {
+          if (GET_ACCESSORY_TYPE(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
+            // Smartlink II with compatible cyberware.
+            return 4;
+          }
+          // Smartlink I.
           return 2;
         }
-      if (!mod && GET_EQ(ch, WEAR_EYES) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY &&
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_EYES), 1) == ACCESS_SMARTGOGGLE) {
+      }
+      if (!mod 
+          && GET_EQ(ch, WEAR_EYES) 
+          && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY 
+          && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE) {
         // Smartlink plus goggle found-- half value.
         return 1;
       }
-      access = NULL;
     }
   }
   

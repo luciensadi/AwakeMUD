@@ -371,23 +371,23 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
                                                              temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) != LOWLIGHT)) {
         smoke_target += 4;
-        buf_mod(rbuf, sizeof(rbuf), "LSmoke", 4);
+        buf_mod(rbuf, sizeof(rbuf), "LSmoke/LRain", 4);
       } else if (CURRENT_VISION(ch) == LOWLIGHT) {
         smoke_target += 2;
-        buf_mod(rbuf, sizeof(rbuf), "LSmoke", 2);
+        buf_mod(rbuf, sizeof(rbuf), "LSmoke/LRain", 2);
       }
     }
     if (temp_room->vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
                                                              temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == NORMAL)) {
         smoke_target += 6;
-        buf_mod(rbuf, sizeof(rbuf), "HSmoke/Rain", 6);
+        buf_mod(rbuf, sizeof(rbuf), "HSmoke/HRain", 6);
       } else if (CURRENT_VISION(ch) == LOWLIGHT) {
         smoke_target += 4;
-        buf_mod(rbuf, sizeof(rbuf), "HSmoke/Rain", 4);
+        buf_mod(rbuf, sizeof(rbuf), "HSmoke/HRain", 4);
       } else if (CURRENT_VISION(ch) == THERMOGRAPHIC && NATURAL_VISION(ch) != THERMOGRAPHIC) {
         smoke_target++;
-        buf_mod(rbuf, sizeof(rbuf), "HSmoke/Rain", 1);
+        buf_mod(rbuf, sizeof(rbuf), "HSmoke/HRain", 1);
       }
     }
     if (temp_room->vision[1] == LIGHT_THERMALSMOKE) {

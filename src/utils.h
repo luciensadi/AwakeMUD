@@ -877,6 +877,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_GUN_ACCESSORY convenience defines
 #define GET_ACCESSORY_ATTACH_LOCATION(accessory) (GET_OBJ_VAL((accessory), 0))
 #define GET_ACCESSORY_TYPE(accessory)            (GET_OBJ_VAL((accessory), 1))
+#define GET_ACCESSORY_RATING(accessory)          (GET_OBJ_VAL((accessory), 2))
 
 // ITEM_SPELL_FORMULA convenience defines
 

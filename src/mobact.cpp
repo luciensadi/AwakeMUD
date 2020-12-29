@@ -1175,6 +1175,8 @@ void mobile_activity(void)
           
           for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {            
             // Check each room in a straight line until we are either out of range or cannot go further.
+            current_room = get_ch_in_room(ch);
+            
             for (distance = 1; !has_acted && distance <= max_distance; distance++) {
               // Exit must be valid, and room must belong to same zone as character's room.
               if (CAN_GO2(current_room, dir) && EXIT2(current_room, dir)->to_room->zone == ch->in_room->zone) {
