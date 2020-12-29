@@ -1435,12 +1435,12 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
     REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_HIDDEN);
     
   // Dominators break down doors without rolls.
-  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
+  if (ch && GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
     destroy_door(room, dir);
     snprintf(buf, sizeof(buf), "The %s is destroyed in a scintillating burst of blue light!\r\n", fname(room->dir_option[dir]->keyword));
     
     send_to_room(buf, room);
-    if (ch && ch->in_room != room)
+    if (ch->in_room != room)
       send_to_char(buf, ch);
       
     if (ok) {
@@ -3783,11 +3783,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->tn += att->modifiers[mod_index];
     }
     
+    // Calculate the attacker's total skill (this modifies TN)
+    att->dice = get_skill(att->ch, GET_WEAPON_SKILL(att->weapon), att->tn);
+    
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nThus, attacker's TN is: %d.", att->tn);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
-    // Calculate the attacker's total skill and execute a success test.
-    att->dice = get_skill(att->ch, GET_WEAPON_SKILL(att->weapon), att->tn);
+    // Execute skill test
     if (!att->too_tall) {
       int bonus = MIN(GET_SKILL(att->ch, GET_WEAPON_SKILL(att->weapon)), GET_OFFENSE(att->ch));
       snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->dice, bonus);
@@ -3846,9 +3848,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->dice = GET_REA(att->ch);
       def->dice = GET_WIL(def->ch);
     } else {
-      act("Computing dice for attacker and defender...", 1, att->ch, NULL, NULL, TO_ROLLS );
-      def->dice = get_skill(def->ch, def->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(def->ch, def->skill), GET_OFFENSE(def->ch)));
+      act("Computing dice for attacker...", 1, att->ch, NULL, NULL, TO_ROLLS );
       att->dice = get_skill(att->ch, att->skill, att->tn) + (att->too_tall ? 0 : MIN(GET_SKILL(att->ch, att->skill), GET_OFFENSE(att->ch)));
+      act("Computing dice for defender...", 1, att->ch, NULL, NULL, TO_ROLLS );
+      def->dice = get_skill(def->ch, def->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(def->ch, def->skill), GET_OFFENSE(def->ch)));
     }
     
     // Adepts get bonus dice when counterattacking. Ip Man approves.
@@ -3893,6 +3896,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       def->tn += def->modifiers[mod_index];
     }
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    def->tn = MAX(def->tn, 2);
 
     // ----------------------
     
