@@ -853,8 +853,12 @@ bool mobact_process_self_buff(struct char_data *ch) {
     if (GET_PHYSICAL(ch) < GET_MAX_PHYSICAL(ch) && !AFF_FLAGGED(ch, AFF_HEALED))
       cast_health_spell(ch, SPELL_HEAL, 0, number(1, GET_MAG(ch)/100), NULL, ch);
     
+#ifdef GOTTAGOFAST
+    {
+#else
     // Buff self, but only act one out of every 16 ticks (on average).
     if (number(0, 15) == 0) {
+#endif
       // Apply armor to self.
       if (!affected_by_spell(ch, SPELL_ARMOUR)) {
         cast_manipulation_spell(ch, SPELL_ARMOUR, number(1, GET_MAG(ch)/100), NULL, ch);
@@ -1084,16 +1088,26 @@ void mobile_activity(void)
   for (ch = character_list; ch; ch = next_ch) {
     next_ch = ch->next;
     
+    // Skip them if they're a player character, are being possessed, or are sleeping.
+    if (!IS_NPC(ch) || !AWAKE(ch) || ch->desc)
+      continue;
+    
     // Skip broken-ass characters.
     if (!ch->in_room && !ch->in_veh) {
-      mudlog("SYSERR: Encountered char with no room, no veh in mobile_activity().", NULL, LOG_SYSLOG, TRUE);
+      snprintf(buf, sizeof(buf), "SYSERR: Encountered char '%s' with no room, no veh in mobile_activity().", GET_CHAR_NAME(ch));
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      continue;
+    }
+    
+    if (ch->nr == 0) {
+      mudlog("SYSERR: Encountered zeroed char in mobile_activity().", NULL, LOG_SYSLOG, TRUE);
       continue;
     }
     
     current_room = get_ch_in_room(ch);
     
-    // Skip them if they're a player character, are being possessed, are sleeping, or have no current room.
-    if (!IS_NPC(ch) || !AWAKE(ch) || ch->desc || !current_room)
+    // Skip them if they have no current room.
+    if (!current_room)
       continue;
 
     // Skip NPCs that are currently fighting someone in their room, or are fighting a vehicle.

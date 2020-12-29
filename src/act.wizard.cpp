@@ -86,6 +86,8 @@ extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict
 extern struct elevator_data *elevator;
 extern int num_elevators;
 
+extern void write_world_to_disk(int vnum);
+extern void alarm_handler(int signal);
 
 ACMD_DECLARE(do_goto);
 
@@ -5555,4 +5557,35 @@ ACMD(do_fuckups) {
   }
   
   send_to_char("Syntax: `fuckups [count]` to list, or `fuckups delete <command>` to remove.", ch);
+}
+
+ACMD(do_rewrite_world) {
+  if (subcmd != 1) {
+    send_to_char("You have to type out the full command to rewrite the world. Syntax: 'rewrite_world'\r\n", ch);
+    return;
+  }
+  
+  if (!ch->desc || !ch->desc->descriptor) {
+    send_to_char("You can fuck right off with that.\r\n", ch);
+    return;
+  }
+  
+  write_to_descriptor(ch->desc->descriptor, "Clearing alarm handler and rewriting all world files. This will take some time.\r\n");
+  
+  mudlog("World rewriting initiated. Please hold...", ch, LOG_SYSLOG, TRUE);
+  
+  // Clear our alarm handler.
+  signal(SIGALRM, SIG_IGN);
+  
+  // Perform writing for all zones that have rooms.
+  for (int i = 0; i <= top_of_zone_table; i++) {
+    write_world_to_disk(zone_table[i].number);
+  }
+  
+  // Re-register our alarm handler.
+  signal(SIGALRM, alarm_handler);
+  
+  mudlog("World rewriting complete.", ch, LOG_SYSLOG, TRUE);
+    
+  send_to_char("Done. Alarm handler has been restored.\r\n", ch);
 }

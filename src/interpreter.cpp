@@ -266,6 +266,7 @@ ACMD_DECLARE(do_restring);
 ACMD_DECLARE(do_restore);
 ACMD_DECLARE(do_retract);
 ACMD_DECLARE(do_return);
+ACMD_DECLARE(do_rewrite_world);
 ACMD_DECLARE(do_rlist);
 ACMD_DECLARE(do_rig);
 ACMD_DECLARE(do_room);
@@ -712,6 +713,8 @@ struct command_info cmd_info[] =
     { "rpe"      , POS_DEAD    , do_wizutil  , LVL_ADMIN, SCMD_RPE },
     { "rpetalk"  , POS_DEAD    , do_gen_comm , 0, SCMD_RPETALK },
     { "redit"    , POS_DEAD    , do_redit    , LVL_BUILDER, 0 },
+    { "rewrite_worl",  POS_DEAD, do_rewrite_world, LVL_PRESIDENT, 0 },
+    { "rewrite_world", POS_DEAD, do_rewrite_world, LVL_PRESIDENT, 1 },
 
     { "say"      , POS_LYING   , do_say      , 0, SCMD_SAY },
     { "says"     , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_SAYS },

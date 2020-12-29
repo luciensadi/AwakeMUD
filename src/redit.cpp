@@ -1291,6 +1291,7 @@ void write_world_to_disk(int vnum)
   int             znum = real_zone(vnum);
   FILE           *fp;
   struct extra_descr_data *ex_desc;
+  bool wrote_something = FALSE;
 
   // ideally, this would just fill a VTable with vals...maybe one day
 
@@ -1304,6 +1305,8 @@ void write_world_to_disk(int vnum)
     if (realcounter >= 0) {
       if (!strcmp("An unfinished room", RM.name))
         continue;
+        
+      wrote_something = TRUE;
       fprintf(fp, "#%ld\n", counter);
 
       fprintf(fp, "Name:\t%s\n",
@@ -1437,7 +1440,11 @@ void write_world_to_disk(int vnum)
   fprintf(fp, "END\n");
   fclose(fp);
 
-  write_index_file("wld");
+  if (wrote_something)
+    write_index_file("wld");
+  else
+    remove(buf);
   /* do NOT free strings! just the room structure */
 }
 #undef RM
+#undef PRINT_TO_FILE_IF_TRUE
