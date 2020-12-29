@@ -3204,7 +3204,7 @@ void reset_zone(int zone, int reboot)
         }
         
         // Special case: Weapons for mounts. Note that this ignores current vehicle load, mount size, etc.
-        else if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+        else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
           struct obj_data *mount = NULL;
           
           // Iterate through every mount on the vehicle.
@@ -3236,6 +3236,18 @@ void reset_zone(int zone, int reboot)
           }
         }
         else {
+          if (GET_MOD(veh, GET_OBJ_VAL(obj, 0))) {
+            snprintf(buf, sizeof(buf), "Warning: Double-upgrading vehicle %s with object %s (was %s). Extracting old mod.",
+                     GET_VEH_NAME(veh),
+                     GET_OBJ_NAME(obj),
+                     GET_OBJ_NAME(GET_MOD(veh, GET_OBJ_VAL(obj, 0))));
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            veh->usedload -= GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(obj, 0)), 1);
+            for (int j = 0; j < MAX_OBJ_AFFECT; j++)
+              affect_veh(veh, GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].location, -GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].modifier);
+            extract_obj(GET_MOD(veh, GET_OBJ_VAL(obj, 0)));
+          }
+          
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
           veh->usedload += GET_OBJ_VAL(obj, 1);
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
