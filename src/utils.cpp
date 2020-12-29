@@ -1133,6 +1133,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   int cskill = get_skill(ch, SKILL_NEGOTIATION, cmod);
   cmod -= GET_POWER(ch, ADEPT_KINESICS);
   tmod -= GET_POWER(tch, ADEPT_KINESICS);
+  snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod is %d. After application of Kinesics (if any), base modifiers for PC and NPC are %d and %d.", mod, cmod, tmod);
   if (GET_RACE(ch) != GET_RACE(tch)) {
     switch (GET_RACE(ch)) {
       case RACE_HUMAN:
@@ -1143,6 +1144,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
         break;
       default:
         cmod += 4;
+        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant penalty +4 for PC.");
         break;
     }
     switch (GET_RACE(tch)) {
@@ -1154,6 +1156,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
         break;
       default:
         tmod += 4;
+        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant penalty +4 for NPC.");
         break;
     }
   }
@@ -1161,7 +1164,9 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   for (bio = ch->bioware; bio; bio = bio->next_content)
     if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES)
     {
-      cskill += GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+      int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+      cskill += delta;
+      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for PC.", delta);
       break;
     }
   int tskill = get_skill(tch, SKILL_NEGOTIATION, tmod);
@@ -1169,30 +1174,44 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   for (bio = tch->bioware; bio; bio = bio->next_content)
     if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES)
     {
-      tskill += GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+      int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+      tskill += delta;
+      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for NPC.", delta);
       break;
     }
-  int chnego = success_test(cskill, GET_INT(tch)+mod+cmod);
-  int tchnego = success_test(tskill, GET_INT(ch)+mod+tmod);
+  int chtn = GET_INT(tch)+mod+cmod;
+  int chnego = success_test(cskill, chtn);
+  int tchtn = GET_INT(ch)+mod+tmod;
+  int tchnego = success_test(tskill, tchtn);
+  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC negotiation test gave %d successes on %d dice with TN %d.", chnego, cskill, chtn);
+  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d.", tchnego, tskill, tchtn);
   if (comp)
   {
-    chnego += success_test(GET_SKILL(ch, comp), GET_INT(tch)+mod+cmod) / 2;
-    tchnego += success_test(GET_SKILL(tch, comp), GET_INT(ch)+mod+tmod) / 2;
+    int ch_delta = success_test(GET_SKILL(ch, comp), GET_INT(tch)+mod+cmod) / 2;
+    int tch_delta = success_test(GET_SKILL(tch, comp), GET_INT(ch)+mod+tmod) / 2;
+    chnego += ch_delta;
+    tchnego += tch_delta;
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nidk what this 'comp' field is, but it was true, so we got an additional %d PC and %d successes.", ch_delta, tch_delta);
   }
   int num = chnego - tchnego;
   if (num > 0)
   {
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC got more successes, so basevalue goes from %d", basevalue);
     if (buy)
       basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
     else
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "to %d.", basevalue);
   } else
-  {
+  { 
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC got more successes, so basevalue goes from %d", basevalue);
     if (buy)
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
     else
       basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "to %d.", basevalue);
   }
+  act(buf3, FALSE, ch, NULL, NULL, TO_ROLLS);
   return basevalue;
   
 }
