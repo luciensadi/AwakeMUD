@@ -769,6 +769,8 @@ void assign_objects(void)
   ASSIGNOBJ(64900, gen_board); // RPE Board
   ASSIGNOBJ(65207, gen_board); // Backstage Group's Board
   ASSIGNOBJ(4603, gen_board);
+  ASSIGNOBJ(722, toggled_invis);
+  ASSIGNOBJ(25519, toggled_invis);
   ASSIGNOBJ(50301, toggled_invis);
   ASSIGNOBJ(50305, desktop);
   ASSIGNOBJ(8458, desktop);

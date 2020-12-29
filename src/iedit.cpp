@@ -500,8 +500,12 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
         send_to_char("Load space taken up: ", d->character);
       break;
     case ITEM_WORN:
-      send_to_char("Space for magazines: ", CH);
-      break;
+      // Skipping this field while doing nothing? Re-increment our counter.
+      if (d->iedit_limit_edits)
+        d->iedit_limit_edits++;
+      iedit_disp_val3_menu(d);
+      // send_to_char("Space for magazines: ", CH);
+      return;
     case ITEM_OTHER:
       send_to_char("Enter Value 0: ", CH);
       break;
@@ -649,8 +653,12 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
         send_to_char("Rating: ", CH);
       break;
     case ITEM_WORN:
-      send_to_char("Space for grenades: ", CH);
-      break;
+      // Skipping this field while doing nothing? Re-increment our counter.
+      if (d->iedit_limit_edits)
+        d->iedit_limit_edits++;
+      iedit_disp_val4_menu(d);
+      //send_to_char("Space for grenades: ", CH);
+      return;
     default:
       iedit_disp_menu(d);
   }
@@ -764,8 +772,12 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
         iedit_disp_menu(d);
       break;
     case ITEM_WORN:
-      send_to_char("Space for shuriken: ", CH);
-      break;
+      // Skipping this field while doing nothing? Re-increment our counter.
+      if (d->iedit_limit_edits)
+        d->iedit_limit_edits++;
+      iedit_disp_val5_menu(d);
+      //send_to_char("Space for shuriken: ", CH);
+      return;
     case ITEM_MOD:
       if (GET_OBJ_VAL(d->edit_obj, 0) == MOD_RADIO)
         send_to_char("Crypt Level (0-6): ", CH);

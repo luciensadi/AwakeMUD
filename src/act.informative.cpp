@@ -1903,6 +1903,31 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           strncat(buf, ".", sizeof(buf) - strlen(buf) - 1);
         }
         
+        if (j->contains 
+            && GET_OBJ_TYPE(j->contains) == ITEM_GUN_MAGAZINE
+            && GET_MAGAZINE_AMMO_COUNT(j->contains) > 0
+            && GET_MAGAZINE_AMMO_TYPE(j->contains) != AMMO_NORMAL) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is loaded with %s, which ", 
+                   ammo_type[GET_MAGAZINE_AMMO_TYPE(j->contains)].name);
+          switch (GET_MAGAZINE_AMMO_TYPE(j->contains)) {
+            case AMMO_APDS:
+              strncat(buf, "pierces through enemy ballistic armor, halving its value.", sizeof(buf) - strlen(buf) - 1);
+              break;
+            case AMMO_EX:
+              strncat(buf, "increases power by one and ", sizeof(buf) - strlen(buf) - 1);
+              // fall through
+            case AMMO_EXPLOSIVE:
+              strncat(buf, "ignores one point of enemy ballistic armor.", sizeof(buf) - strlen(buf) - 1);
+              break;
+            case AMMO_FLECHETTE:
+              strncat(buf, "deals more damage to fully unarmored targets.", sizeof(buf) - strlen(buf) - 1);
+              break;
+            case AMMO_GEL:
+              strncat(buf, "deals mental instead of physical damage, but treats the enemy's ballistic armor as two points higher.", sizeof(buf) - strlen(buf) - 1);
+              break;
+          }
+        }
+        
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
