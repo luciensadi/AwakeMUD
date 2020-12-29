@@ -2959,7 +2959,7 @@ SPECIAL(toggled_invis)
   if (CMD_IS("deactivate")) {
     skip_spaces(&argument);
     if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
-      if (AFF_FLAGGED(obj->worn_by, AFF_INVISIBLE) || obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
+      if (obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
         AFF_FLAGS(obj->worn_by).RemoveBit(AFF_INVISIBLE);
         obj->obj_flags.bitvector.RemoveBit(AFF_INVISIBLE);
         send_to_char(ch, "You feel the static fade as the ruthenium polymers in %s power down.\r\n", GET_OBJ_NAME(obj));
@@ -2976,7 +2976,7 @@ SPECIAL(toggled_invis)
   if (CMD_IS("activate")) {
     skip_spaces(&argument);
     if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
-      if (!AFF_FLAGGED(obj->worn_by, AFF_INVISIBLE) || !obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
+      if (!obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
         AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
         obj->obj_flags.bitvector.SetBit(AFF_INVISIBLE);
         send_to_char(ch, "You feel a tiny static charge as the ruthenium polymers in %s power up.\r\n", GET_OBJ_NAME(obj));
