@@ -1131,9 +1131,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
   struct obj_data *bio;
   int cmod = -GET_POWER(ch, ADEPT_KINESICS);
   int tmod = -GET_POWER(tch, ADEPT_KINESICS);
-  int cskill = get_skill(ch, SKILL_NEGOTIATION, cmod);
-  int tskill = get_skill(tch, SKILL_NEGOTIATION, tmod);
-  snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod is %d. After application of get_skill() penalties and Kinesics bonuses (if any), base modifiers for PC and NPC are %d and %d.", mod, cmod, tmod);
+  snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod is %d. After application of Kinesics bonuses (if any), base modifiers for PC and NPC are %d and %d.", mod, cmod, tmod);
   if (GET_RACE(ch) != GET_RACE(tch)) {
     switch (GET_RACE(ch)) {
       case RACE_HUMAN:
@@ -1161,6 +1159,14 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
     }
   }
   
+  int chtn = GET_INT(tch)+mod+cmod;
+  int tchtn = GET_INT(ch)+mod+tmod;
+  
+  act("Getting skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
+  int cskill = get_skill(ch, SKILL_NEGOTIATION, chtn);
+  act("Getting skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
+  int tskill = get_skill(tch, SKILL_NEGOTIATION, tchtn);
+  
   for (bio = ch->bioware; bio; bio = bio->next_content)
     if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES)
     {
@@ -1178,10 +1184,10 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
       snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheremone skill buff of %d for NPC.", delta);
       break;
     }
-  int chtn = GET_INT(tch)+mod+cmod;
-  int chnego = success_test(cskill, chtn);
-  int tchtn = GET_INT(ch)+mod+tmod;
+  
   int tchnego = success_test(tskill, tchtn);
+  int chnego = success_test(cskill, chtn);
+  
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
            chnego, cskill, chtn, GET_INT(tch), mod, cmod);
   snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).", 
