@@ -1335,7 +1335,7 @@ ACMD(do_skills)
       return;
     }
     extern int max_ability(int i);
-    for (i = 1; i <= ADEPT_NUMPOWER; i++) {
+    for (i = 1; i < ADEPT_NUMPOWER; i++) {
       if (!mode_all && *arg && !is_abbrev(arg, adept_powers[i]))
         continue;
       

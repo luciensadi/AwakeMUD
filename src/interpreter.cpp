@@ -1924,7 +1924,7 @@ int is_abbrev(const char *arg1, const char *arg2)
     return 0;
   }
   
-  if (!*arg1)
+  if (!*arg1 || !*arg2)
     return 0;
 
   for (; *arg1 && *arg2; arg1++, arg2++)

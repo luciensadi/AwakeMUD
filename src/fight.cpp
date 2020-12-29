@@ -1225,7 +1225,7 @@ void damage_equip(struct char_data *ch, struct char_data *victim, int power,
   {
     int x = 10;
     while (!GET_EQ(victim, i) && x > 0) {
-      i = number(0, NUM_WEARS);
+      i = number(0, NUM_WEARS - 1);
       x--;
     }
     damage_obj(ch, GET_EQ(victim, i), power, DAMOBJ_ACID);

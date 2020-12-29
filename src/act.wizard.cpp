@@ -3608,7 +3608,7 @@ ACMD(do_show)
     send_to_char(ch, "%s's abilities:", GET_NAME(vict));
     j = 0;
     snprintf(buf, sizeof(buf), "\r\n");
-    for (i = 1; i <= ADEPT_NUMPOWER; i++) {      
+    for (i = 1; i < ADEPT_NUMPOWER; i++) {      
       if (GET_POWER_TOTAL(vict, i) > 0) {
         snprintf(buf2, sizeof(buf2), "%-20s", adept_powers[i]);
         if (max_ability(i) > 1)

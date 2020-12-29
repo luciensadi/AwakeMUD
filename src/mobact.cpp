@@ -39,6 +39,7 @@ extern void cast_detection_spell(struct char_data *ch, int spell, int force, cha
 extern void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *arg, char_data *mob);
 extern void cast_illusion_spell(struct char_data *ch, int spell, int force, char *arg, char_data *mob);
 extern void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char *arg, char_data *mob);
+extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
 
 extern void perform_wear(struct char_data *, struct obj_data *, int);
 extern void perform_remove(struct char_data *, int);
@@ -858,15 +859,13 @@ bool mobact_process_self_buff(struct char_data *ch) {
   }
   
   // Always self-heal if able.
-  if (GET_PHYSICAL(ch) < GET_MAX_PHYSICAL(ch) && !AFF_FLAGGED(ch, AFF_HEALED))
+  if (GET_PHYSICAL(ch) < GET_MAX_PHYSICAL(ch) && !AFF_FLAGGED(ch, AFF_HEALED)) {
     cast_health_spell(ch, SPELL_HEAL, 0, number(1, GET_MAG(ch)/100), NULL, ch);
+    return TRUE;
+  }
   
-#ifdef GOTTAGOFAST
-  {
-#else
   // Buff self, but only act one out of every 16 ticks (on average).
   if (number(0, 15) == 0) {
-#endif
     // Apply armor to self.
     if (!affected_by_spell(ch, SPELL_ARMOUR)) {
       cast_manipulation_spell(ch, SPELL_ARMOUR, number(1, GET_MAG(ch)/100), NULL, ch);
@@ -910,7 +909,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
     // We've spent our action casting a spell, so time to stop acting.
     return TRUE;
   }
-  
+
   return FALSE;
 }
 

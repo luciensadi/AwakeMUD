@@ -1569,8 +1569,8 @@ void reduce_abilities(struct char_data *vict)
   if (GET_PP(vict) >= 0)
     return;
   
-  for (i = number(1, ADEPT_NUMPOWER); GET_PP(vict) < 0;
-       i = number(1, ADEPT_NUMPOWER))
+  for (i = number(1, ADEPT_NUMPOWER - 1); GET_PP(vict) < 0;
+       i = number(1, ADEPT_NUMPOWER - 1))
   {
     if (GET_POWER_TOTAL(vict, i) > 0) {
       GET_PP(vict) += ability_cost(i, GET_POWER_TOTAL(vict, i));
