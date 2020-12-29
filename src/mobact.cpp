@@ -847,62 +847,70 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
 }
 
 bool mobact_process_self_buff(struct char_data *ch) {
-  if (GET_SKILL(ch, SKILL_SORCERY) && GET_MAG(ch) >= 100 && !MOB_FLAGGED(ch, MOB_SPEC)) {
+  if (!GET_SKILL(ch, SKILL_SORCERY) || GET_MAG(ch) < 100  || MOB_FLAGGED(ch, MOB_SPEC))
+    return FALSE;
     
-    // Always self-heal if able.
-    if (GET_PHYSICAL(ch) < GET_MAX_PHYSICAL(ch) && !AFF_FLAGGED(ch, AFF_HEALED))
-      cast_health_spell(ch, SPELL_HEAL, 0, number(1, GET_MAG(ch)/100), NULL, ch);
-    
+  // Skip broken-ass characters.
+  if (!ch->in_room && !ch->in_veh) {
+    snprintf(buf, sizeof(buf), "FAILSAFE SYSERR: Encountered char '%s' with no room, no veh in mobact_process_self_buff().", GET_CHAR_NAME(ch));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // Always self-heal if able.
+  if (GET_PHYSICAL(ch) < GET_MAX_PHYSICAL(ch) && !AFF_FLAGGED(ch, AFF_HEALED))
+    cast_health_spell(ch, SPELL_HEAL, 0, number(1, GET_MAG(ch)/100), NULL, ch);
+  
 #ifdef GOTTAGOFAST
-    {
+  {
 #else
-    // Buff self, but only act one out of every 16 ticks (on average).
-    if (number(0, 15) == 0) {
+  // Buff self, but only act one out of every 16 ticks (on average).
+  if (number(0, 15) == 0) {
 #endif
-      // Apply armor to self.
-      if (!affected_by_spell(ch, SPELL_ARMOUR)) {
-        cast_manipulation_spell(ch, SPELL_ARMOUR, number(1, GET_MAG(ch)/100), NULL, ch);
-        return TRUE;
-      }
-      
-      // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
-      if (!affected_by_spell(ch, SPELL_INVIS) && !affected_by_spell(ch, SPELL_IMP_INVIS)) {
-        // Changed cast ratings to 1-- if PCs are going to cheese with rating 1, NPCs should too. -- LS
-        if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
-          // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
-          // cast_illusion_spell(ch, SPELL_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
-          cast_illusion_spell(ch, SPELL_INVIS, 1, NULL, ch);
-        } else {
-          // Look out, we've got a badass over here.
-          // cast_illusion_spell(ch, SPELL_IMP_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
-          cast_illusion_spell(ch, SPELL_IMP_INVIS, 1, NULL, ch);
-        }
-        return TRUE;
-      }
-      
-      // Apply combat sense to self.
-      if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
-        cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
-        return TRUE;
-      }
-      
-      // We're dead-set on casting a spell, so try to boost attributes.
-      switch (number(1, 3)) {
-        case 1:
-          cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
-          break;
-        case 2:
-          cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
-          break;
-        case 3:
-          cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
-          break;
-      }
-      
-      // We've spent our action casting a spell, so time to stop acting.
+    // Apply armor to self.
+    if (!affected_by_spell(ch, SPELL_ARMOUR)) {
+      cast_manipulation_spell(ch, SPELL_ARMOUR, number(1, GET_MAG(ch)/100), NULL, ch);
       return TRUE;
     }
-  } /* End spellcasting NPCs */
+    
+    // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
+    if (!affected_by_spell(ch, SPELL_INVIS) && !affected_by_spell(ch, SPELL_IMP_INVIS)) {
+      // Changed cast ratings to 1-- if PCs are going to cheese with rating 1, NPCs should too. -- LS
+      if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
+        // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
+        // cast_illusion_spell(ch, SPELL_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
+        cast_illusion_spell(ch, SPELL_INVIS, 1, NULL, ch);
+      } else {
+        // Look out, we've got a badass over here.
+        // cast_illusion_spell(ch, SPELL_IMP_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
+        cast_illusion_spell(ch, SPELL_IMP_INVIS, 1, NULL, ch);
+      }
+      return TRUE;
+    }
+    
+    // Apply combat sense to self.
+    if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
+      cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
+      return TRUE;
+    }
+    
+    // We're dead-set on casting a spell, so try to boost attributes.
+    switch (number(1, 3)) {
+      case 1:
+        cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
+        break;
+      case 2:
+        cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
+        break;
+      case 3:
+        cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
+        break;
+    }
+    
+    // We've spent our action casting a spell, so time to stop acting.
+    return TRUE;
+  }
+  
   return FALSE;
 }
 

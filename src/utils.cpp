@@ -281,6 +281,11 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
   
   struct room_data *temp_room = get_ch_in_room(ch);
   
+  if (!temp_room) {
+    mudlog("SYSERR: modify_target_rbuf_raw received char with NO room!", ch, LOG_SYSLOG, TRUE);
+    return 100;
+  }
+  
   if (PLR_FLAGGED(ch, PLR_PERCEIVE))
   {
     base_target += 2;
@@ -473,7 +478,7 @@ int modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len)
 int modify_target(struct char_data *ch)
 {
   char fake_rbuf[5000];
-  fake_rbuf[0] = '\0';
+  memset(fake_rbuf, 0, sizeof(fake_rbuf));
   return modify_target_rbuf_raw(ch, fake_rbuf, sizeof(fake_rbuf), 0);
 }
 
