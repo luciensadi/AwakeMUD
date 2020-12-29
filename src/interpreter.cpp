@@ -1308,7 +1308,8 @@ void nonsensical_reply(struct char_data *ch, const char *arg)
                  PLR_FLAGGED(ch, PLR_NEWBIE) ? "NEWBIE" : "OOC");
     ch->desc->invalid_command_counter = 0;
   }
-  if (arg) {
+  // There must be an arg, and it must not be a number.
+  if (arg && *arg && atoi(arg) == 0) {
     char log_buf[1000];
     snprintf(log_buf, sizeof(log_buf), "Invalid command: '%s'.", arg);
     mudlog(log_buf, ch, LOG_SYSLOG, TRUE);
@@ -2870,16 +2871,23 @@ void nanny(struct descriptor_data * d, char *arg)
 #define COMMAND_ALIAS(typo, corrected)   if (strncmp(arg, (typo), strlen(arg)) == 0) { return find_command_in_x((corrected), cmd_info); }
 
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
+  // Common typos and fuckups.
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
+  COMMAND_ALIAS("weild", "wield");
   COMMAND_ALIAS("sheathe", "sheath");
   COMMAND_ALIAS("unsheathe", "draw");
-  COMMAND_ALIAS("weild", "wield");
-  COMMAND_ALIAS("taxi", "hail");
   COMMAND_ALIAS("prove", "probe");
+  COMMAND_ALIAS("chekc", "check");
+  COMMAND_ALIAS("opend", "open");
+  
+  // Misc aliases.
+  COMMAND_ALIAS("taxi", "hail");
   COMMAND_ALIAS("pickup", "get");
   COMMAND_ALIAS("yes", "nod");
   COMMAND_ALIAS("setup", "unpack");
+  
+  // Job interaction commands.
   COMMAND_ALIAS("endjob", "endrun");
   COMMAND_ALIAS("resign", "endrun");
   
@@ -2892,6 +2900,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unwield", "remove");
   COMMAND_ALIAS("unwear", "remove");
   COMMAND_ALIAS("unequip", "remove");
+  
+  // Door-unlocking commands.
+  COMMAND_ALIAS("pick", "bypass");
+  COMMAND_ALIAS("hack", "bypass");
   
   // Found nothing, return the failure code.
   return -1;
