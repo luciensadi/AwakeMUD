@@ -16,6 +16,7 @@
 #include <time.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <signal.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define popen(x,y) _popen(x,y)
