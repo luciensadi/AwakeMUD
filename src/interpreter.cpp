@@ -2886,9 +2886,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("lisy", "list");
   
-  // Staff commands from other games.
+  // Commands from other games.
   COMMAND_ALIAS("bamfin", "poofin");
   COMMAND_ALIAS("bamfout", "poofout");
+  COMMAND_ALIAS("sacrifice", "junk");
   
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
