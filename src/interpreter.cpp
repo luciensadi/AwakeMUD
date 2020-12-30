@@ -2883,12 +2883,19 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("prove", "probe");
   COMMAND_ALIAS("chekc", "check");
   COMMAND_ALIAS("opend", "open");
+  COMMAND_ALIAS("leaev", "leave");
+  COMMAND_ALIAS("lisy", "list");
+  
+  // Staff commands from other games.
+  COMMAND_ALIAS("bamfin", "poofin");
+  COMMAND_ALIAS("bamfout", "poofout");
   
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
   COMMAND_ALIAS("pickup", "get");
   COMMAND_ALIAS("yes", "nod");
   COMMAND_ALIAS("setup", "unpack");
+  COMMAND_ALIAS("ability", "abilities");
   
   // Job interaction commands.
   COMMAND_ALIAS("endjob", "endrun");
@@ -2907,6 +2914,12 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   // Door-unlocking commands.
   COMMAND_ALIAS("pick", "bypass");
   COMMAND_ALIAS("hack", "bypass");
+  
+  // Doubled up movement for those impatient-ass people.
+  COMMAND_ALIAS("nn", "n");
+  COMMAND_ALIAS("ee", "e");
+  COMMAND_ALIAS("ss", "s");
+  COMMAND_ALIAS("ww", "w");
   
   // Found nothing, return the failure code.
   return -1;
