@@ -3871,11 +3871,17 @@ SPECIAL(multnomah_gate)
 
   if ((world[in_room].number == RM_MULTNOMAH_GATE_NORTH && CMD_IS("south")) || (world[in_room].number == RM_MULTNOMAH_GATE_SOUTH && CMD_IS("north"))) {
     if (!PLR_FLAGGED(ch, PLR_VISA)) {
-      send_to_char("The gate refuses to open for you. Try showing the guard your visa.\r\n", ch);
-      return TRUE;
-    } else if (ch->in_veh) {
+      if (access_level(ch, LVL_BUILDER)) {
+        send_to_char("You don't even bother making eye contact with the guard as you head towards the gate. Rank hath its privileges.\r\n", ch);
+      } else {
+        send_to_char("The gate refuses to open for you. Try showing the guard your visa.\r\n", ch);
+        return TRUE;
+      }
+    } 
+    
+    if (ch->in_veh) {
       for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
-        if (vict != ch && !PLR_FLAGGED(vict, PLR_VISA)) {
+        if (vict != ch && !PLR_FLAGGED(vict, PLR_VISA) && !IS_NPC(vict)) {
           send_to_char("The guards won't open the gate until everyone has shown their visas.\r\n", ch);
           return TRUE;
         }
@@ -3895,6 +3901,7 @@ SPECIAL(multnomah_gate)
       char_from_room(ch);
       char_to_room(ch, &world[to_room]);
     }
+    look_at_room(ch, 0);
     return TRUE;
   }
 
