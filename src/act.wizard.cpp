@@ -3358,6 +3358,7 @@ ACMD(do_show)
                { "noexits",        LVL_BUILDER },
                { "traps",          LVL_BUILDER },
                { "ammo",           LVL_ADMIN },
+               { "storage",        LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -3702,7 +3703,7 @@ ACMD(do_show)
     }
     send_to_char(buf, ch);
     break;
-  case 19:
+  case 19: /* show ammo */
     if (!*value) {
       send_to_char("A name would help.\r\n", ch);
       return;
@@ -3714,6 +3715,16 @@ ACMD(do_show)
 
     }
     display_pockets_to_char(ch, vict);
+    break;
+  case 20:
+    strcpy(buf, "Storage Rooms\r\n-----------\r\n");
+    for (i = 0, j = 0; i <= top_of_world; i++)
+      if (ROOM_FLAGGED(&world[i], ROOM_STORAGE))
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%8ld] %s %s\r\n", ++j,
+                world[i].number,
+                vnum_from_non_connected_zone(world[i].number) ? " " : "*",
+                world[i].name);
+    send_to_char(buf, ch);
     break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);

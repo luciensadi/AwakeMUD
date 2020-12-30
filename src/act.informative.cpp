@@ -562,12 +562,12 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         weight = GET_WEIGHT(i) - (GET_WEIGHT(i) % 10) + 10;
       
       if (weight > 4) {
-        snprintf(buf, sizeof(buf), "$e looks to be about %0.1f meters tall and "
-                "appears to weigh about %d kg.", height, weight);
+        snprintf(buf, sizeof(buf), "$e look%s to be about %0.1f meters tall and "
+                "appears to weigh about %d kg.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height, weight);
         act(buf, FALSE, i, 0, ch, TO_VICT);
       } else {
-        snprintf(buf, sizeof(buf), "$e looks to be about %0.1f meters tall and "
-                "appears to barely weigh anything.", height);
+        snprintf(buf, sizeof(buf), "$e look%s to be about %0.1f meters tall and "
+                "appears to barely weigh anything.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height);
         act(buf, FALSE, i, 0, ch, TO_VICT);
       }
     }
@@ -1269,10 +1269,11 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
   } else {
-    send_to_char(ch, "^C%s^n%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+    send_to_char(ch, "^C%s^n%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "");
+                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " (Arena)" : "");
   }
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
