@@ -2000,7 +2000,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 prone_recoil_comp += RECOIL_COMP_VALUE_TRIPOD;
                 break;
               case ACCESS_BAYONET:
-                if (mount_location != ACCESS_LOCATION_UNDER) {
+                if (mount_location != ACCESS_ACCESSORY_LOCATION_UNDER) {
                   strcat(buf, "\r\n^RYour bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.");
                 } else {
                   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
