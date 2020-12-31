@@ -1,6 +1,7 @@
 #ifndef __ARCHETYPES_H
 #define __ARCHETYPES_H
 
+#define NUM_ARCHETYPE_ABILITIES 5
 #define NUM_ARCHETYPE_CYBERWARE 10
 #define NUM_ARCHETYPE_BIOWARE   10
 #define NUM_ARCHETYPE_CARRIED   20
@@ -17,9 +18,7 @@ struct archetype_data {
   int magic;
   int tradition;
   int aspect;
-  int powerpoints;
-  int forcepoints;
-  int abilities[1];
+  int powers[NUM_ARCHETYPE_ABILITIES][2]; // 0 is power, 1 is rating
   
   vnum_t weapon;
   vnum_t weapon_top;

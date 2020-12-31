@@ -1864,15 +1864,16 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
             
             SHOP->vnum = d->edit_number;
             shop_table[counter] = *(d->edit_shop);
+            shop_nr = counter;
             found = TRUE;
             break;
           }
         }
         if (!found) {
           SHOP->vnum = d->edit_number;
-          shop_table[top_of_shopt + 1] = *SHOP;
+          shop_table[++top_of_shopt] = *SHOP;
+          shop_nr = top_of_shopt;
         }
-        top_of_shopt++;
       }
       i = real_mobile(shop_table[shop_nr].keeper);
       if (i > 0 && shop_table[shop_nr].keeper != 1151) {

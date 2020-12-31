@@ -166,8 +166,8 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   GET_TRADITION(CH) = archetypes[i]->tradition;
   GET_REAL_MAG(CH) = archetypes[i]->magic;
   GET_ASPECT(CH) = archetypes[i]->aspect;
-  GET_PP(CH) = archetypes[i]->powerpoints;
-  GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
+  
+  // TODO: Grant forcepoints for bonding purposes.
   
   // Set spells, if any. TODO.
   

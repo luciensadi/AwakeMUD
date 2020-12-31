@@ -371,7 +371,8 @@ enum {
 #define PRF_HELPLOG             46
 #define PRF_PURGELOG            47
 #define PRF_AUTOKILL            48
-#define PRF_MAX   		          49
+#define PRF_NO_RADIO_NAMES      49
+#define PRF_MAX   		          50
 
 /* log watch */
 
@@ -2084,7 +2085,6 @@ enum {
 #define OBJ_MULTNOMAH_VISA                 17513
 #define OBJ_MAP_OF_SEATTLE                 2041
 #define OBJ_ELEVATOR_SHAFT_KEY             998
-#define OBJ_DOCWAGON_BASIC_MOD             16206
 #define OBJ_SEATTLE_TAXI_SIGN              600
 #define OBJ_PORTLAND_TAXI_SIGN             699
 #define OBJ_CARIBBEAN_TAXI_SIGN            610
@@ -2092,7 +2092,9 @@ enum {
 #define OBJ_NICAMI_SCOPE                   28702
 #define OBJ_VENT_IV                        80403
 #define OBJ_SMARTLINK_II                   31111
-#define OBJ_PLATINUM_MODULATOR             16208
+#define OBJ_DOCWAGON_BASIC_MOD             16206
+#define OBJ_DOCWAGON_GOLD_MODULATOR        16207
+#define OBJ_DOCWAGON_PLATINUM_MODULATOR    16208
 #define OBJ_BLACK_TRENCH_COAT              1833
 #define OBJ_100_PCT_COTTON_SHIRT           64903
 #define OBJ_FORMFIT_III                    80734
@@ -2119,6 +2121,12 @@ enum {
 #define OBJ_BIO_TRAUMA_DAMPER              85940
 #define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    85939
 #define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
+#define OBJ_POLEARM_STRAP                  64989
+#define OBJ_THERMOGRAPHIC_GOGGLES          378
+#define OBJ_STEEL_COMBAT_AXE               658
+#define OBJ_SECURE_JACKET                  681
+#define OBJ_TOP_LASER_SIGHT                626
+#define OBJ_BAYONET                        749
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 
