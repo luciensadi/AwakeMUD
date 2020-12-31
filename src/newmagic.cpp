@@ -2536,14 +2536,22 @@ ACMD(do_learn)
     }
   }
   struct obj_data *library = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents;
+  int library_level = 0;
   for (;library; library = library->next_content)
-    if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(library, 1) >= force &&
-        ((GET_TRADITION(ch) == TRAD_SHAMANIC
-          && GET_OBJ_VAL(library, 0) == TYPE_LODGE && GET_OBJ_VAL(library, 3) == GET_IDNUM(ch)) ||
-         (GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL)))
-      break;
+    if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL
+        && ((GET_TRADITION(ch) == TRAD_SHAMANIC
+            && GET_OBJ_VAL(library, 0) == TYPE_LODGE && GET_OBJ_VAL(library, 3) == GET_IDNUM(ch)) 
+        || (GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL)))
+      if (GET_OBJ_VAL(library, 1) >= force) {
+        break;
+      } else
+        library_level = MAX(GET_OBJ_VAL(library, 1), library_level);
   if (!library) {
-    send_to_char("You don't have the right tools here to learn that spell.\r\n", ch);
+    if (library_level)
+      send_to_char(ch, "Your tools aren't a high enough rating to learn from %s. It's rating %d, but you only have a rating %d.",
+                   GET_OBJ_NAME(obj), force, library_level);
+    else
+      send_to_char("You don't have the right tools here to learn that spell.\r\n", ch);
     return;
   }
   if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_OBJ_VAL(library, 9)) {

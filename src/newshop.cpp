@@ -55,6 +55,7 @@ const char *selling_type[] =
 
 bool is_open(struct char_data *keeper, int shop_nr)
 {
+#ifndef USE_SHOP_OPEN_CLOSE_TIMES
   char buf[MAX_STRING_LENGTH];
   buf[0] = '\0';
   if (shop_table[shop_nr].open > shop_table[shop_nr].close) {
@@ -73,6 +74,9 @@ bool is_open(struct char_data *keeper, int shop_nr)
     do_say(keeper, buf, cmd_say, 0);
     return FALSE;
   }
+#else
+  return TRUE;
+#endif
 }
 
 bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr)
