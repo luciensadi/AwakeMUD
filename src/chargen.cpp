@@ -1059,13 +1059,13 @@ void create_parse(struct descriptor_data *d, const char *arg)
           case RACE_KOBOROKURU:
           case RACE_TROLL:
           case RACE_ELF:
+          case RACE_MENEHUNE:
             d->ccr.pr[PO_RACE] = 10;
             break;
           case RACE_CYCLOPS:
           case RACE_FOMORI:
           case RACE_GIANT:
           case RACE_MINOTAUR:
-          case RACE_MENEHUNE:
           case RACE_NIGHTONE:
           case RACE_WAKYAMBI:
             d->ccr.pr[PO_RACE] = 15;
