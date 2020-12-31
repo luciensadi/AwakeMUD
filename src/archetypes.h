@@ -11,6 +11,9 @@ struct archetype_data {
   int attributes[6];
   int skills[MAX_SKILLS];
   
+  vnum_t start_room;
+  vnum_t auth_room;
+  
   int magic;
   int tradition;
   int aspect;

@@ -470,6 +470,9 @@ void DBInit()
 
   log("Loading player index.");
   playerDB.Load();
+  
+  log("Generating character creation archetypes.");
+  generate_archetypes();
 
   log("Assigning function pointers:");
   if (!no_specials) {
@@ -522,9 +525,6 @@ void DBInit()
   
   log("Loading shop orders.");
   boot_shop_orders();
-  
-  log("Generating character creation archetypes.");
-  generate_archetypes();
 
   log("Setting up mobact aggression octets.");
   populate_mobact_aggression_octets();

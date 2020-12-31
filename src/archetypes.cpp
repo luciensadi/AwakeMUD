@@ -15,7 +15,10 @@ struct archetype_data *generate_street_samurai() {
   memset(arch, 0, sizeof(struct archetype_data));
   
   arch->name = str_dup("Street Samurai");
-  arch->race = RACE_HUMAN;
+  arch->race = RACE_HUMAN; 
+  
+  arch->start_room = 90500;
+  arch->auth_room = 90529;
   
   // Set attributes.
   arch->attributes[BOD] = 6;

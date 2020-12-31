@@ -15,6 +15,7 @@
 #include "db.h"
 #include "interpreter.h"
 #include "utils.h"
+#include "archetypes.h"
 
 void ASSIGNMOB(long mob, SPECIAL(fname));
 
@@ -45,6 +46,7 @@ struct teach_data metamagict[] = {
                        };
 
 struct teach_data teachers[] = {
+                      // Begin NERP teachers.
                        { 1001, { SKILL_BR_EDGED, SKILL_BR_POLEARM, SKILL_BR_CLUB, SKILL_BR_THROWINGWEAPONS, SKILL_BR_WHIPS, 
                          SKILL_BR_PROJECTILES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do "
                          "your job safer.\r\n", AMATEUR },
@@ -67,6 +69,8 @@ struct teach_data teachers[] = {
                        { 1008, { SKILL_DEMOLITIONS, SKILL_DIVING, SKILL_PARACHUTING, SKILL_UNDERWATER_COMBAT, SKILL_LOCK_PICKING,
                          SKILL_RIDING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
                          "safer.\r\n", AMATEUR },
+                      // End NERP teachers.
+                      
                        { 2508, { SKILL_BIOTECH, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of medical research and instruction, you begin "
                          "to\r\nunderstand more of the basic biotech procedures.\r\n", AMATEUR },
                        { 2701, { SKILL_ATHLETICS, SKILL_STEALTH, SKILL_UNARMED_COMBAT, SKILL_EDGED_WEAPONS,
@@ -80,7 +84,7 @@ struct teach_data teachers[] = {
                          SKILL_PILOT_CAR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of study and practice, you feel like you've "
                          "learned\r\nsomething.\r\n", AMATEUR },
                        { 4103, { SKILL_SHOTGUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SMG, SKILL_ASSAULT_RIFLES,
-                         SKILL_MACHINE_GUNS, SKILL_MISSILE_LAUNCHERS, SKILL_ASSAULT_CANNON, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                         SKILL_MACHINE_GUNS, SKILL_ASSAULT_CANNON, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "After hours of study and target practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
                        { 4104, { SKILL_CLUBS, SKILL_EDGED_WEAPONS, SKILL_POLE_ARMS, SKILL_WHIPS_FLAILS, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of study and melee practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
@@ -123,9 +127,11 @@ struct teach_data teachers[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
   
+  /*
   { 60539, { SKILL_PROJECTILES, SKILL_THROWING_WEAPONS, // Kyle the Mall Ninja
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "Kyle teaches you things you're pretty sure were more effective in the late 1800s.\r\n", NEWBIE },
+  */
   
   { 60540, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, // Jean Samuel Pauly
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -146,23 +152,27 @@ struct teach_data teachers[] = {
   { 60534, { SKILL_ATHLETICS, SKILL_BIOTECH, SKILL_POLICE_PROCEDURES, SKILL_STEALTH,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "Steve roughly throws you a text book and tells you to read it, you feel like you've learned something.\r\n", NEWBIE},
+  // End newbie teachers.
   
-                     { 30700, { SKILL_ENGLISH, SKILL_JAPANESE, SKILL_CHINESE, SKILL_KOREAN,
-                         SKILL_SPERETHIEL, SKILL_SALISH, SKILL_ITALIAN, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Socrates shows you the intricities "
-                         "of the language and you emerge with a greater understanding.\r\n", AMATEUR },
-                       { 13499, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_CYBERTERM, SKILL_CYBERTERM_DESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Brian explains some concepts you had yet to understand "
-                         "and\r\nyou feel like you've learned something.\r\n", AMATEUR },
-                       { 14608, { SKILL_PILOT_CAR, SKILL_GRENADE_LAUNCHERS, SKILL_MACHINE_GUNS,
-                         SKILL_MISSILE_LAUNCHERS, SKILL_ASSAULT_CANNON, SKILL_PILOT_BIKE, SKILL_PILOT_TRUCK, SKILL_GUNNERY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "Hal shows you a trick or two, and the rest just falls into place.\r\n", AMATEUR },
-                       { 14638, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BIOTECH, SKILL_BR_DRONE, SKILL_PROGRAM_SPECIAL, SKILL_PROGRAM_OPERATIONAL, SKILL_DATA_BROKERAGE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Gargamel looks at you, hands you some parts, drops you a clue, and you get it.\r\n", AMATEUR},
-                       { 7223, { SKILL_UNARMED_COMBAT, SKILL_THROWING_WEAPONS, SKILL_STEALTH, SKILL_ATHLETICS,
-                         SKILL_PROJECTILES, SKILL_CYBER_IMPLANTS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Shing gives you a work out like none you've ever had, "
-                         "but\r\nyou feel like you've learned something.\r\n", AMATEUR },
-                       { 24806, { SKILL_SORCERY, SKILL_CONJURING, SKILL_CENTERING, SKILL_ENCHANTING, SKILL_NEGOTIATION,
-                         SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_TALISMONGERING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Hermes imparts his wisdom upon you.\r\n", AMATEUR },
-                       { 37500, { SKILL_BR_CAR, SKILL_BR_BIKE, SKILL_BR_DRONE, SKILL_BR_TRUCK, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Marty shows you a few tricks of the "
-                         "trade and you emerge more skilled than before.\r\n", AMATEUR }, 
+   { 30700, { SKILL_ENGLISH, SKILL_JAPANESE, SKILL_CHINESE, SKILL_KOREAN,
+       SKILL_SPERETHIEL, SKILL_SALISH, SKILL_ITALIAN, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Socrates shows you the intricities "
+       "of the language and you emerge with a greater understanding.\r\n", AMATEUR },
+       
+   { 13499, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_CYBERTERM, SKILL_CYBERTERM_DESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Brian explains some concepts you had yet to understand "
+     "and\r\nyou feel like you've learned something.\r\n", AMATEUR },
+     
+   { 14608, { SKILL_PILOT_CAR, SKILL_MACHINE_GUNS, SKILL_ASSAULT_CANNON, SKILL_PILOT_BIKE, SKILL_PILOT_TRUCK, SKILL_GUNNERY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     "Hal shows you a trick or two, and the rest just falls into place.\r\n", AMATEUR },
+     
+   { 14638, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BIOTECH, SKILL_BR_DRONE, SKILL_PROGRAM_SPECIAL, SKILL_PROGRAM_OPERATIONAL, SKILL_DATA_BROKERAGE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Gargamel looks at you, hands you some parts, drops you a clue, and you get it.\r\n", AMATEUR},
+
+   { 7223, { SKILL_UNARMED_COMBAT, SKILL_STEALTH, SKILL_ATHLETICS, SKILL_CYBER_IMPLANTS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Shing gives you a work out like none you've ever had, "
+     "but\r\nyou feel like you've learned something.\r\n", AMATEUR },
+    
+   { 24806, { SKILL_SORCERY, SKILL_CONJURING, SKILL_NEGOTIATION, SKILL_AURA_READING, SKILL_SPELLDESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Hermes imparts his wisdom upon you.\r\n", AMATEUR },
+   
+   { 37500, { SKILL_BR_CAR, SKILL_BR_BIKE, SKILL_BR_DRONE, SKILL_BR_TRUCK, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Marty shows you a few tricks of the "
+     "trade and you emerge more skilled than before.\r\n", AMATEUR }, 
   
   { 35502, { SKILL_STREET_ETIQUETTE,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -179,28 +189,40 @@ struct teach_data teachers[] = {
   "You learn a few things from the surprisingly-knowledgeable kid.\r\n", AMATEUR },
 #endif
   
-                    { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You talk to the reporter about current events for"
-                         " a while.\r\n", AMATEUR },
-                       { 18311, { SKILL_STREET_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_ELF_ETIQUETTE, SKILL_CORPORATE_ETIQUETTE, 
-                                  SKILL_TRIBAL_ETIQUETTE, SKILL_NEGOTIATION, SKILL_POLICE_PROCEDURES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You read through "
-                         "various lifestyle books for a while.\r\n", LIBRARY },
-                       { 18312, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_CYBERTERM_DESIGN,
-                                  SKILL_BR_ELECTRONICS, SKILL_DATA_BROKERAGE, SKILL_PROGRAM_CYBERTERM, SKILL_PROGRAM_SPECIAL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "You read through various technological journals.\r\n", LIBRARY },
-                         { 18313, { SKILL_ENGLISH, SKILL_SPERETHIEL, SKILL_SPANISH, SKILL_JAPANESE, SKILL_CHINESE,
-                                  SKILL_KOREAN, SKILL_ITALIAN, SKILL_RUSSIAN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You raid the teach yourself languages section.\r\n", LIBRARY },
-                       { 778, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_ENCHANTING, SKILL_CENTERING, SKILL_TALISMONGERING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "The Master teaches you more than you thought possible.\r\n", ADVANCED },
-                       { 5914, { SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG, SKILL_ASSAULT_RIFLES,
-                         SKILL_GUNNERY, SKILL_MACHINE_GUNS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },  "Lucas runs through some theory with you then lets you "
-                         "have a few shots on the range.\r\n", NEWBIE},
-                       { 65119, { SKILL_RUSSIAN, SKILL_GERMAN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Olga Chernov brutally crams language forms and syntaxes into your skull.\r\n", AMATEUR },
-                       { 33004, { SKILL_ELF_ETIQUETTE, SKILL_GAELIC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "Milton Buckthorne drops knowledge on your patheticly underpowered brain.\r\n", AMATEUR },
-                       { 60235, { SKILL_SIOUX, SKILL_MAKAW, SKILL_CROW, SKILL_UTE, SKILL_SALISH, SKILL_NAVAJO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "Speaks-with-Many goes over his lessons with you until they become second nature.\r\n", AMATEUR },
-                       { 39226, { SKILL_LATIN, SKILL_ARABIC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "The gentleman demonstrates the finer points of articulation and pronunciation until you feel you've learn something new", AMATEUR },
-                       { 60540, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Gary teaches you the finer points of gunsmithing.\r\n", NEWBIE }, 
-                       { 22871, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "You spend some time reading through the library.\r\n", AMATEUR }, 
+    { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You talk to the reporter about current events for"
+         " a while.\r\n", AMATEUR },
+         
+   { 18311, { SKILL_STREET_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_ELF_ETIQUETTE, SKILL_CORPORATE_ETIQUETTE, 
+              SKILL_TRIBAL_ETIQUETTE, SKILL_NEGOTIATION, SKILL_POLICE_PROCEDURES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You read through "
+     "various lifestyle books for a while.\r\n", LIBRARY },
+     
+   { 18312, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_CYBERTERM_DESIGN,
+              SKILL_BR_ELECTRONICS, SKILL_DATA_BROKERAGE, SKILL_PROGRAM_CYBERTERM, SKILL_PROGRAM_SPECIAL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     "You read through various technological journals.\r\n", LIBRARY },
+     
+     { 18313, { SKILL_ENGLISH, SKILL_SPERETHIEL, SKILL_SPANISH, SKILL_JAPANESE, SKILL_CHINESE,
+              SKILL_KOREAN, SKILL_ITALIAN, SKILL_RUSSIAN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You raid the teach yourself languages section.\r\n", LIBRARY },
+              
+   { 778, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     "The Master teaches you more than you thought possible.\r\n", ADVANCED },
+     
+   { 5914, { SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG, SKILL_ASSAULT_RIFLES,
+     SKILL_GUNNERY, SKILL_MACHINE_GUNS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },  "Lucas runs through some theory with you then lets you "
+     "have a few shots on the range.\r\n", NEWBIE},
+     
+   { 65119, { SKILL_RUSSIAN, SKILL_GERMAN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Olga Chernov brutally crams language forms and syntaxes into your skull.\r\n", AMATEUR },
+
+   { 33004, { SKILL_ELF_ETIQUETTE, SKILL_GAELIC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "Milton Buckthorne drops knowledge on your patheticly underpowered brain.\r\n", AMATEUR },
+
+   { 60235, { SKILL_SIOUX, SKILL_MAKAW, SKILL_CROW, SKILL_UTE, SKILL_SALISH, SKILL_NAVAJO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     "Speaks-with-Many goes over his lessons with you until they become second nature.\r\n", AMATEUR },
+
+   { 39226, { SKILL_LATIN, SKILL_ARABIC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "The gentleman demonstrates the finer points of articulation and pronunciation until you feel you've learn something new", AMATEUR },
+
+   { 60540, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Gary teaches you the finer points of gunsmithing.\r\n", NEWBIE }, 
+
+   { 22871, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "You spend some time reading through the library.\r\n", LIBRARY }, 
+
   { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Report this bug!\r\n", 0 } // this MUST be last
 };
 
@@ -881,6 +903,9 @@ void assign_rooms(void)
   ASSIGNROOM(60626, chargen_unpractice_skill);
   ASSIGNROOM(60627, chargen_unpractice_skill);
   ASSIGNROOM(60628, chargen_unpractice_skill);
+  /* CharGen - auto-set archetype end rooms */
+  for (int i = 0; i < NUM_CCR_ARCHETYPES; i++)
+    ASSIGNROOM(archetypes[i]->auth_room, auth_room);
   
   /* Neophyte Guild */
   ASSIGNROOM(60585, neophyte_entrance);
