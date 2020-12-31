@@ -26,6 +26,7 @@
 #include "memory.h"
 #include "constants.h"
 #include "handler.h"
+#include "config.h"
 
 extern class memoryClass *Mem;
 
@@ -1282,6 +1283,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 }
 
 // world saving routine
+#define PRINT_TO_FILE_IF_TRUE(section, value) { if (value) { fprintf(fp, (section), (value)); } }
 #define RM world[realcounter]
 void write_world_to_disk(int vnum)
 {
@@ -1289,6 +1291,7 @@ void write_world_to_disk(int vnum)
   int             znum = real_zone(vnum);
   FILE           *fp;
   struct extra_descr_data *ex_desc;
+  bool wrote_something = FALSE;
 
   // ideally, this would just fill a VTable with vals...maybe one day
 
@@ -1302,6 +1305,8 @@ void write_world_to_disk(int vnum)
     if (realcounter >= 0) {
       if (!strcmp("An unfinished room", RM.name))
         continue;
+        
+      wrote_something = TRUE;
       fprintf(fp, "#%ld\n", counter);
 
       fprintf(fp, "Name:\t%s\n",
@@ -1312,13 +1317,12 @@ void write_world_to_disk(int vnum)
       if (RM.night_desc)
         fprintf(fp, "NightDesc:$\n%s~\n", cleanup(buf2, RM.night_desc));
 
-      fprintf(fp,
-              "Flags:\t%s\n"
-              "SecType:\t%s\n"
-              "MatrixExit:\t%ld\n",
-              RM.room_flags.ToString(),
-              spirit_name[RM.sector_type],
-              RM.matrix);
+      fprintf(fp, "Flags:\t%s\n", RM.room_flags.ToString());
+              
+      if (RM.sector_type != DEFAULT_SECTOR_TYPE)
+        fprintf(fp, "SecType:\t%s\n", spirit_name[RM.sector_type]);
+              
+      PRINT_TO_FILE_IF_TRUE("MatrixExit:\t%ld\n", RM.matrix);
 
       if (real_host(RM.matrix) > 0)
         fprintf(fp, "IO:\t%d\n"
@@ -1329,24 +1333,36 @@ void write_world_to_disk(int vnum)
                 "JackID:\t%d\n"
                 "Address:\t%s\n",
                 RM.io, RM.bandwidth, RM.access, RM.trace, RM.rtg, RM.jacknumber, RM.address);
+                  
+      PRINT_TO_FILE_IF_TRUE("Crowd:\t%d\n", RM.crowd);
+      PRINT_TO_FILE_IF_TRUE("Cover:\t%d\n", RM.cover);
+      
+      if (RM.x != DEFAULT_DIMENSIONS_X)
+        fprintf(fp, "X:\t%d\n", RM.x);
+        
+      if (RM.y != DEFAULT_DIMENSIONS_Y)
+        fprintf(fp, "Y:\t%d\n", RM.y);
+      
+      if (RM.z != DEFAULT_DIMENSIONS_Z)
+        fprintf(fp, "Z:\t%.2f\n", RM.z);
+        
+      PRINT_TO_FILE_IF_TRUE("RoomType:\t%d\n",  RM.type);
 
-      fprintf(fp, "Crowd:\t%d\n"
-                  "Cover:\t%d\n"
-                  "X:\t%d\n"
-                  "Y:\t%d\n"
-                  "Z:\t%.2f\n"
-                  "RoomType:\t%d\n", RM.crowd, RM.cover, RM.x, RM.y, RM.z, RM.type);
-
-      fprintf(fp  ,
-              "[POINTS]\n"
-              "\tSpecIdx:\t%d\n"
-              "\tRating:\t%d\n"
-              "\tLight:\t%d\n"
-              "\tSmoke:\t%d\n"
-              "\tBackground:\t%d\n"
-              "\tBackgroundType:\t%d\n"
-              "\tStaffLockLevel:\t%d\n",
-              RM.spec, RM.rating, RM.vision[0], RM.vision[1], RM.background[PERMANENT_BACKGROUND_COUNT], RM.background[PERMANENT_BACKGROUND_TYPE], RM.staff_level_lock);
+      fprintf(fp, "[POINTS]\n");
+      
+      PRINT_TO_FILE_IF_TRUE("\tRating:\t%d\n", RM.rating);
+      PRINT_TO_FILE_IF_TRUE("\tSpecIdx:\t%d\n", RM.spec);
+      PRINT_TO_FILE_IF_TRUE("\tLight:\t%d\n", RM.vision[0]);
+      PRINT_TO_FILE_IF_TRUE("\tSmoke:\t%d\n", RM.vision[1]);
+      
+      if (RM.background[PERMANENT_BACKGROUND_COUNT] > 0) {
+        fprintf(fp, "\tBackground:\t%d\n"
+                    "\tBackgroundType:\t%d\n",
+                    RM.background[PERMANENT_BACKGROUND_COUNT],
+                    RM.background[PERMANENT_BACKGROUND_TYPE]);
+      }
+      
+      PRINT_TO_FILE_IF_TRUE("\tStaffLockLevel:\t%d\n", RM.staff_level_lock);
 
       for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
         room_direction_data *ptr = RM.dir_option[counter2];
@@ -1356,8 +1372,8 @@ void write_world_to_disk(int vnum)
 
           fprintf(fp, "[EXIT %s]\n", fulldirs[counter2]);
 
-          if (ptr->keyword)
-            fprintf(fp, "\tKeywords:\t%s\n", ptr->keyword);
+          PRINT_TO_FILE_IF_TRUE("\tKeywords:\t%s\n", ptr->keyword);
+          
           if (ptr->general_description)
             fprintf(fp, "\tDesc:$\n%s~\n",
                     cleanup(buf2, ptr->general_description));
@@ -1378,15 +1394,15 @@ void write_world_to_disk(int vnum)
           } else
             temp_door_flag = 0;
 
-          fprintf(fp,
-                  "\tToVnum:\t%ld\n"
-                  "\tFlags:\t%d\n"
-                  "\tMaterial:\t%s\n"
-                  "\tBarrier:\t%d\n",
-                  ptr->to_room_vnum,
-                  temp_door_flag,
-                  material_names[(int)ptr->material],
-                  ptr->barrier);
+          fprintf(fp, "\tToVnum:\t%ld\n", ptr->to_room_vnum);
+          
+          PRINT_TO_FILE_IF_TRUE("\tFlags:\t%d\n", temp_door_flag);
+                  
+          if (ptr->material != DEFAULT_EXIT_MATERIAL)
+            fprintf(fp, "\tMaterial:\t%s\n", material_names[(int)ptr->material]);
+                  
+          if (ptr->barrier != DEFAULT_EXIT_BARRIER_RATING)
+            fprintf(fp, "\tBarrier:\t%d\n", ptr->barrier);
 
           if (DBIndex::IsValidV(ptr->key))
             fprintf(fp, "\tKeyVnum:\t%ld\n", ptr->key);
@@ -1395,15 +1411,12 @@ void write_world_to_disk(int vnum)
             fprintf(fp, "\tLockRating:\t%d\n", ptr->key_level);
 
           if (ptr->hidden > 0)
-            fprintf(fp, "\tHiddenRating:\t%d\n", ptr->hidden);
+            fprintf(fp, "\tHiddenRating:\t%d\n", MIN(ptr->hidden, MAX_EXIT_HIDDEN_RATING));
           
           // Add the new custom entry / exit strings.
-          if (ptr->go_into_secondperson)
-            fprintf(fp, "\tGoIntoSecondPerson:$\n%s~\n", ptr->go_into_secondperson);
-          if (ptr->go_into_thirdperson)
-            fprintf(fp, "\tGoIntoThirdPerson:$\n%s~\n", ptr->go_into_thirdperson);
-          if (ptr->come_out_of_thirdperson)
-            fprintf(fp, "\tComeOutOfThirdPerson:$\n%s~\n", ptr->come_out_of_thirdperson);
+          PRINT_TO_FILE_IF_TRUE("\tGoIntoSecondPerson:$\n%s~\n", ptr->go_into_secondperson);
+          PRINT_TO_FILE_IF_TRUE("\tGoIntoThirdPerson:$\n%s~\n", ptr->go_into_thirdperson);
+          PRINT_TO_FILE_IF_TRUE("\tComeOutOfThirdPerson:$\n%s~\n", ptr->come_out_of_thirdperson);
         }
       }
       if (RM.ex_description) {
@@ -1427,7 +1440,11 @@ void write_world_to_disk(int vnum)
   fprintf(fp, "END\n");
   fclose(fp);
 
-  write_index_file("wld");
+  if (wrote_something)
+    write_index_file("wld");
+  else
+    remove(buf);
   /* do NOT free strings! just the room structure */
 }
 #undef RM
+#undef PRINT_TO_FILE_IF_TRUE

@@ -537,6 +537,9 @@ void assign_mobiles(void)
   /* cab drivers */
   ASSIGNMOB(600, taxi);
   ASSIGNMOB(650, taxi);
+  #ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNMOB(640, taxi);
+  #endif
 
   /* Immortal HQ */
   ASSIGNMOB(1002, janitor);
@@ -766,6 +769,8 @@ void assign_objects(void)
   ASSIGNOBJ(64900, gen_board); // RPE Board
   ASSIGNOBJ(65207, gen_board); // Backstage Group's Board
   ASSIGNOBJ(4603, gen_board);
+  ASSIGNOBJ(722, toggled_invis);
+  ASSIGNOBJ(25519, toggled_invis);
   ASSIGNOBJ(50301, toggled_invis);
   ASSIGNOBJ(50305, desktop);
   ASSIGNOBJ(8458, desktop);
@@ -801,6 +806,7 @@ void assign_objects(void)
   
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
   ASSIGNOBJ(OBJ_PORTLAND_TAXI_SIGN, taxi_sign);
+  ASSIGNOBJ(OBJ_CARIBBEAN_TAXI_SIGN, taxi_sign);
   
   ASSIGNOBJ(10005, weapon_dominator);
   

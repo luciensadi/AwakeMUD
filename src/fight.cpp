@@ -1225,7 +1225,7 @@ void damage_equip(struct char_data *ch, struct char_data *victim, int power,
   {
     int x = 10;
     while (!GET_EQ(victim, i) && x > 0) {
-      i = number(0, NUM_WEARS);
+      i = number(0, NUM_WEARS - 1);
       x--;
     }
     damage_obj(ch, GET_EQ(victim, i), power, DAMOBJ_ACID);
@@ -1435,12 +1435,12 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
     REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_HIDDEN);
     
   // Dominators break down doors without rolls.
-  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
+  if (ch && GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
     destroy_door(room, dir);
     snprintf(buf, sizeof(buf), "The %s is destroyed in a scintillating burst of blue light!\r\n", fname(room->dir_option[dir]->keyword));
     
     send_to_room(buf, room);
-    if (ch && ch->in_room != room)
+    if (ch->in_room != room)
       send_to_char(buf, ch);
       
     if (ok) {
@@ -2673,7 +2673,7 @@ bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded) {
 
 int check_smartlink(struct char_data *ch, struct obj_data *weapon)
 {
-  struct obj_data *obj, *access = NULL;
+  struct obj_data *obj, *access;
   
   // are they wielding two weapons?
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) &&
@@ -2681,23 +2681,31 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
     return 0;
   
   int mod = 0;
-  for (int i = 7; !mod && i < 10; i++)
-  {
+  for (int i = ACCESS_LOCATION_TOP; !mod && i <= ACCESS_LOCATION_UNDER; i++) {
+    // If they have a smartlink attached:
     if (GET_OBJ_VAL(weapon, i) > 0
         && real_object(GET_OBJ_VAL(weapon, i)) > 0
         && (access = &obj_proto[real_object(GET_OBJ_VAL(weapon, i))])
-        && GET_OBJ_VAL(access, 1) == ACCESS_SMARTLINK) {
-      for (obj = ch->cyberware; !mod && obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK && (GET_OBJ_VAL(obj, 1) == 1 || GET_OBJ_VAL(access, 2) < 2)) {
-          // Smartlink plus cyber found-- full value.
+        && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK) {
+      
+      // Iterate through their cyberware and look for a matching smartlink.
+      for (obj = ch->cyberware; !mod && obj; obj = obj->next_content) {
+        if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK) {
+          if (GET_ACCESSORY_TYPE(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
+            // Smartlink II with compatible cyberware.
+            return 4;
+          }
+          // Smartlink I.
           return 2;
         }
-      if (!mod && GET_EQ(ch, WEAR_EYES) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY &&
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_EYES), 1) == ACCESS_SMARTGOGGLE) {
+      }
+      if (!mod 
+          && GET_EQ(ch, WEAR_EYES) 
+          && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY 
+          && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE) {
         // Smartlink plus goggle found-- half value.
         return 1;
       }
-      access = NULL;
     }
   }
   
@@ -2992,7 +3000,7 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
 //#define COMBAT_MESSAGE_DEBUG_LOG(str) ;
 void combat_message(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, int damage, int burst)
 {
-  char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH],
+  char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH], buf4[MAX_MESSAGE_LENGTH],
   been_heard[MAX_STRING_LENGTH], temp[20];
   struct obj_data *obj = NULL;
   struct room_data *ch_room = NULL, *vict_room = NULL;
@@ -3025,18 +3033,18 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       switch (number(1, 3)) {
         case 1:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you manage to dodge.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E manages to dodge.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manage%s to dodge.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E manage%s to dodge.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you easily dodge.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E easily dodges.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodge%s.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E easily dodge%s.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 3:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you move out of the way.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E moves out of the way.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E move%s out of the way.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E move%s out of the way.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == 0) {
@@ -3048,8 +3056,8 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you roll with the impact.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E rolls with the impact.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E roll%s with the impact.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E roll%s with the impact.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == LIGHT) {
@@ -3088,18 +3096,21 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       switch (number(1, 3)) {
         case 1:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you manage to dodge.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E manages to dodge.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manage%s to dodge.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E manage%s to dodge.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e manage%s to dodge.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you easily dodge.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E easily dodges.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodge%s.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E easily dodge%s.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e easily dodge%s.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 3:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you move out of the way.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E moves out of the way.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E move%s out of the way.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E move%s out of the way.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e move%s out of the way.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == 0) {
@@ -3108,42 +3119,50 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but your armour holds.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but it doesn't seem to hurt $M.", buf);
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but it doesn't seem to hurt $m.", buf);
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you roll with the impact.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E rolls with the impact.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E roll%s with the impact.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E roll%s with the impact.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e roll%s with the impact.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == LIGHT) {
       snprintf(buf1, sizeof(buf1), "^r$n grazes you with a %s^r.^n", buf);
       snprintf(buf2, sizeof(buf2), "^yYou graze $N with a %s^y.^n", buf);
       snprintf(buf3, sizeof(buf3), "$n grazes $N with a %s^n.", buf);
+      snprintf(buf4, sizeof(buf4), "$N grazes $n with a %s^n.", buf);
     } else if (damage == MODERATE) {
       snprintf(buf1, sizeof(buf1), "^r$n hits you with a %s^r.^n", buf);
       snprintf(buf2, sizeof(buf2), "^yYou hit $N with a %s^y.^n", buf);
       snprintf(buf3, sizeof(buf3), "$n hits $N with a %s^n.", buf);
+      snprintf(buf4, sizeof(buf4), "$N hits $n with a %s^n.", buf);
     } else if (damage == SERIOUS) {
       snprintf(buf1, sizeof(buf1), "^r$n massacres you with a %s^r.^n", buf);
       snprintf(buf2, sizeof(buf2), "^yYou massacre $N with a %s^y.^n", buf);
       snprintf(buf3, sizeof(buf3), "$n massacres $N with a %s^n.", buf);
+      snprintf(buf4, sizeof(buf4), "$N massacres $n with a %s^n.", buf);
     } else if (damage >= DEADLY) {
       switch (number(1, 2)) {
         case 1:
           snprintf(buf1, sizeof(buf1), "^r$n puts you down with a deadly %s^r.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou put $N down with a deadly %s^y.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n puts $N down with a deadly %s^n.", buf);
+          snprintf(buf4, sizeof(buf4), "$N puts $n down with a deadly %s^n.", buf);
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r$n sublimates you with a deadly %s^r.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou sublimate $N with a deadly %s^y.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n sublimates $N with a deadly %s^n.", buf);
+          snprintf(buf4, sizeof(buf4), "$N sublimates $n with a deadly %s^n.", buf);
           break;
       }
     }
     act(buf1, FALSE, ch, weapon, victim, TO_VICT);
     act(buf2, FALSE, ch, weapon, victim, TO_CHAR);
     act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
+    act(buf4, FALSE, victim, weapon, ch, TO_ROOM);
     // End ranged messaging.
   }
   
@@ -3293,11 +3312,15 @@ int get_weapon_damage_type(struct obj_data* weapon) {
 
 bool is_char_too_tall(struct char_data *ch) {
   assert(ch != NULL);
-  
+
+#ifdef USE_SLOUCH_RULES  
   if (!ch->in_room)
     return FALSE;
   
   return ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= ch->in_room->z*100;
+#else
+  return FALSE;
+#endif
 }
 
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
@@ -3760,11 +3783,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->tn += att->modifiers[mod_index];
     }
     
+    // Calculate the attacker's total skill (this modifies TN)
+    att->dice = get_skill(att->ch, GET_WEAPON_SKILL(att->weapon), att->tn);
+    
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nThus, attacker's TN is: %d.", att->tn);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
-    // Calculate the attacker's total skill and execute a success test.
-    att->dice = get_skill(att->ch, GET_WEAPON_SKILL(att->weapon), att->tn);
+    // Execute skill test
     if (!att->too_tall) {
       int bonus = MIN(GET_SKILL(att->ch, GET_WEAPON_SKILL(att->weapon)), GET_OFFENSE(att->ch));
       snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->dice, bonus);
@@ -3823,9 +3848,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->dice = GET_REA(att->ch);
       def->dice = GET_WIL(def->ch);
     } else {
-      act("Computing dice for attacker and defender...", 1, att->ch, NULL, NULL, TO_ROLLS );
-      def->dice = get_skill(def->ch, def->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(def->ch, def->skill), GET_OFFENSE(def->ch)));
+      act("Computing dice for attacker...", 1, att->ch, NULL, NULL, TO_ROLLS );
       att->dice = get_skill(att->ch, att->skill, att->tn) + (att->too_tall ? 0 : MIN(GET_SKILL(att->ch, att->skill), GET_OFFENSE(att->ch)));
+      act("Computing dice for defender...", 1, att->ch, NULL, NULL, TO_ROLLS );
+      def->dice = get_skill(def->ch, def->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(def->ch, def->skill), GET_OFFENSE(def->ch)));
     }
     
     // Adepts get bonus dice when counterattacking. Ip Man approves.
@@ -3870,6 +3896,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       def->tn += def->modifiers[mod_index];
     }
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    def->tn = MAX(def->tn, 2);
 
     // ----------------------
     
@@ -5027,15 +5054,19 @@ void perform_violence(void)
           quickness /= 2;
           
         // Penalty from too-tall.
-        if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) > ch->in_room->z*100) {
-          if (GET_HEIGHT(ch) > ch->in_room->z * 200) {
-            send_to_char(ch, "You're bent over double in here, there's no way you'll close the distance like this!\r\n");
-            act("$n looks like $e would really like to hit $N, but $e can't get close enough.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
-            continue;
+#ifdef USE_SLOUCH_RULES
+        if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
+          if (GET_HEIGHT(ch) > ch->in_room->z*100) {
+            if (GET_HEIGHT(ch) > ch->in_room->z * 200) {
+              send_to_char(ch, "You're bent over double in here, there's no way you'll close the distance like this!\r\n");
+              act("$n looks like $e would really like to hit $N, but $e can't get close enough.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
+              continue;
+            }
+            else quickness /= 2;
           }
-          else quickness /= 2;
         }
-        
+#endif
+
         // Strike.
         if (quickness > 0 && success_test(quickness, target) > 1) {
           send_to_char(ch, "You close the distance and strike!\r\n");

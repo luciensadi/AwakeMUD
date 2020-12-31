@@ -2087,6 +2087,7 @@ enum {
 #define OBJ_DOCWAGON_BASIC_MOD             16206
 #define OBJ_SEATTLE_TAXI_SIGN              600
 #define OBJ_PORTLAND_TAXI_SIGN             699
+#define OBJ_CARIBBEAN_TAXI_SIGN            610
 #define OBJ_COLT_M23                       838
 #define OBJ_NICAMI_SCOPE                   28702
 #define OBJ_VENT_IV                        80403

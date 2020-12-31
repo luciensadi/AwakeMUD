@@ -1335,7 +1335,7 @@ ACMD(do_skills)
       return;
     }
     extern int max_ability(int i);
-    for (i = 1; i <= ADEPT_NUMPOWER; i++) {
+    for (i = 1; i < ADEPT_NUMPOWER; i++) {
       if (!mode_all && *arg && !is_abbrev(arg, adept_powers[i]))
         continue;
       
@@ -2801,7 +2801,7 @@ ACMD(do_boost)
       send_to_char(ch, "You can't get your power to bond with your lifeforce.\r\n");
       return;
     }
-    BOOST(ch)[STR][0] = suc;
+    BOOST(ch)[STR][0] = suc + 1;
     BOOST(ch)[STR][1] = GET_POWER(ch, ADEPT_BOOST_STR);
     send_to_char(ch, "You feel stronger.\r\n");
     affect_total(ch);
@@ -2819,7 +2819,7 @@ ACMD(do_boost)
       send_to_char(ch, "You can't get your power to bond with your lifeforce.\r\n");
       return;
     }
-    BOOST(ch)[QUI][0] = suc;
+    BOOST(ch)[QUI][0] = suc + 1;
     BOOST(ch)[QUI][1] = GET_POWER(ch, ADEPT_BOOST_QUI);
     send_to_char(ch, "You feel quicker.\r\n");
     affect_total(ch);
@@ -2837,7 +2837,7 @@ ACMD(do_boost)
       send_to_char(ch, "You can't get your power to bond with your lifeforce.\r\n");
       return;
     }
-    BOOST(ch)[BOD][0] = suc;
+    BOOST(ch)[BOD][0] = suc + 1;
     BOOST(ch)[BOD][1] = GET_POWER(ch, ADEPT_BOOST_BOD);
     send_to_char(ch, "You feel hardier.\r\n");
     affect_total(ch);

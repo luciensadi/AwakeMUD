@@ -70,6 +70,7 @@ extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void generate_archetypes();
+extern void populate_mobact_aggression_octets();
 
 
 /**************************************************************************
@@ -276,29 +277,43 @@ void initialize_and_connect_to_mysql() {
 }
 
 void check_for_common_fuckups() {
-  extern struct dest_data taxi_destinations[];
-  extern struct dest_data port_destinations[];
-  
   // Check for invalid taxi destinations. Meaningless maximum 10k chosen here.
   for (int i = 0; i < 10000; i++) {
-    if (taxi_destinations[i].vnum == 0)
+    if (seattle_taxi_destinations[i].vnum <= 0)
       break;
     
-    if (real_room(taxi_destinations[i].vnum) == NOWHERE) {
-      snprintf(buf, sizeof(buf), "ERROR: Taxi destination '%s' (%ld) does not exist.", taxi_destinations[i].keyword, taxi_destinations[i].vnum);
+    if (real_room(seattle_taxi_destinations[i].vnum) == NOWHERE) {
+      snprintf(buf, sizeof(buf), "ERROR: Seattle taxi destination '%s' (%ld) does not exist.", 
+               seattle_taxi_destinations[i].keyword, 
+               seattle_taxi_destinations[i].vnum);
       log(buf);
-      taxi_destinations[i].enabled = FALSE;
+      seattle_taxi_destinations[i].enabled = FALSE;
     }
   }
   
   for (int i = 0; i < 10000; i++) {
-    if (port_destinations[i].vnum == 0)
+    if (portland_taxi_destinations[i].vnum <= 0)
       break;
     
-    if (real_room(port_destinations[i].vnum) == NOWHERE) {
-      snprintf(buf, sizeof(buf), "ERROR: Portland taxi destination '%s' (%ld) does not exist.", port_destinations[i].keyword, port_destinations[i].vnum);
+    if (real_room(portland_taxi_destinations[i].vnum) == NOWHERE) {
+      snprintf(buf, sizeof(buf), "ERROR: Portland taxi destination '%s' (%ld) does not exist.", 
+               portland_taxi_destinations[i].keyword, 
+               portland_taxi_destinations[i].vnum);
       log(buf);
-      port_destinations[i].enabled = FALSE;
+      portland_taxi_destinations[i].enabled = FALSE;
+    }
+  }
+  
+  for (int i = 0; i < 10000; i++) {
+    if (caribbean_taxi_destinations[i].vnum <= 0)
+      break;
+    
+    if (real_room(caribbean_taxi_destinations[i].vnum) == NOWHERE) {
+      snprintf(buf, sizeof(buf), "ERROR: Caribbean taxi destination '%s' (%ld) does not exist.", 
+               caribbean_taxi_destinations[i].keyword, 
+               caribbean_taxi_destinations[i].vnum);
+      log(buf);
+      caribbean_taxi_destinations[i].enabled = FALSE;
     }
   }
 }
@@ -510,6 +525,9 @@ void DBInit()
   
   log("Generating character creation archetypes.");
   generate_archetypes();
+
+  log("Setting up mobact aggression octets.");
+  populate_mobact_aggression_octets();
   
   log("DBInit -- DONE.");
 }
@@ -1099,7 +1117,7 @@ void parse_room(File &fl, long nr)
   room->room_flags.FromString(data.GetString("Flags", "0"));
   if (room->room_flags.IsSet(ROOM_PEACEFUL))
     room->peaceful = 1;
-  room->sector_type = data.LookupInt("SecType", spirit_name, SPIRIT_CITY);
+  room->sector_type = data.LookupInt("SecType", spirit_name, DEFAULT_SECTOR_TYPE);
   room->matrix = data.GetLong("MatrixExit", 0);
   room->io = data.GetInt("IO", 0);
   room->bandwidth = data.GetInt("Bandwidth", 0);
@@ -1125,9 +1143,9 @@ void parse_room(File &fl, long nr)
   }
   room->crowd = data.GetInt("Crowd", 0);
   room->cover = data.GetInt("Cover", 0);
-  room->x = data.GetInt("X", 20);
-  room->y = data.GetInt("Y", 20);
-  room->z = data.GetFloat("Z", 2.5);
+  room->x = data.GetInt("X", DEFAULT_DIMENSIONS_X);
+  room->y = data.GetInt("Y", DEFAULT_DIMENSIONS_Y);
+  room->z = data.GetFloat("Z", DEFAULT_DIMENSIONS_Z);
   room->type = data.GetInt("RoomType", 0);
   // read in directions
   int i;
@@ -1177,10 +1195,10 @@ void parse_room(File &fl, long nr)
         dir->exit_info = 0;
 
       snprintf(field, sizeof(field), "%s/Material", sect);
-      dir->material = data.LookupInt(field, material_names, 5);
+      dir->material = data.LookupInt(field, material_names, DEFAULT_EXIT_MATERIAL);
 
       snprintf(field, sizeof(field), "%s/Barrier", sect);
-      dir->barrier = data.GetInt(field, 4);
+      dir->barrier = data.GetInt(field, DEFAULT_EXIT_BARRIER_RATING);
       dir->condition = dir->barrier;
 
       snprintf(field, sizeof(field), "%s/KeyVnum", sect);
@@ -1191,6 +1209,9 @@ void parse_room(File &fl, long nr)
 
       snprintf(field, sizeof(field), "%s/HiddenRating", sect);
       dir->hidden = data.GetInt(field, 0);
+      if (dir->hidden > MAX_EXIT_HIDDEN_RATING) {
+        dir->hidden = MAX_EXIT_HIDDEN_RATING;
+      }
       
       snprintf(field, sizeof(field), "%s/GoIntoSecondPerson", sect);
       dir->go_into_secondperson = str_dup(data.GetString(field, NULL));
@@ -3187,7 +3208,7 @@ void reset_zone(int zone, int reboot)
         }
         
         // Special case: Weapons for mounts. Note that this ignores current vehicle load, mount size, etc.
-        else if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+        else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
           struct obj_data *mount = NULL;
           
           // Iterate through every mount on the vehicle.
@@ -3219,6 +3240,18 @@ void reset_zone(int zone, int reboot)
           }
         }
         else {
+          if (GET_MOD(veh, GET_OBJ_VAL(obj, 0))) {
+            snprintf(buf, sizeof(buf), "Warning: Double-upgrading vehicle %s with object %s (was %s). Extracting old mod.",
+                     GET_VEH_NAME(veh),
+                     GET_OBJ_NAME(obj),
+                     GET_OBJ_NAME(GET_MOD(veh, GET_OBJ_VAL(obj, 0))));
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            veh->usedload -= GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(obj, 0)), 1);
+            for (int j = 0; j < MAX_OBJ_AFFECT; j++)
+              affect_veh(veh, GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].location, -GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].modifier);
+            extract_obj(GET_MOD(veh, GET_OBJ_VAL(obj, 0)));
+          }
+          
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
           veh->usedload += GET_OBJ_VAL(obj, 1);
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
@@ -4753,24 +4786,13 @@ void load_consist(void)
 {
   struct obj_data *attach;
   File file;
-  if (!(file.Open("etc/consist", "r"))) {
-    log("CONSISTENCY FILE NOT FOUND");
-    return;
-  }
-
-  VTable paydata;
-  paydata.Parse(&file);
-  file.Close();
-  market[0] = paydata.GetInt("MARKET/Blue", 5000);
-  market[1] = paydata.GetInt("MARKET/Green", 5000);
-  market[2] = paydata.GetInt("MARKET/Orange", 5000);
-  market[3] = paydata.GetInt("MARKET/Red", 5000);
-  market[4] = paydata.GetInt("MARKET/Black", 5000);
+  
   for (int nr = 0; nr <= top_of_world; nr++)
     if (ROOM_FLAGGED(&world[nr], ROOM_STORAGE)) {
       snprintf(buf, sizeof(buf), "storage/%ld", world[nr].number);
       if (!(file.Open(buf, "r")))
         continue;
+      log_vfprintf("Restoring storage contents for room %ld (%s)...", world[nr].number, buf);
       VTable data;
       data.Parse(&file);
       file.Close();
@@ -4831,6 +4853,20 @@ void load_consist(void)
         }
       }
     }
+  
+  if (!(file.Open("etc/consist", "r"))) {
+    log("PAYDATA CONSISTENCY FILE NOT FOUND");
+    return;
+  }
+
+  VTable paydata;
+  paydata.Parse(&file);
+  file.Close();
+  market[0] = paydata.GetInt("MARKET/Blue", 5000);
+  market[1] = paydata.GetInt("MARKET/Green", 5000);
+  market[2] = paydata.GetInt("MARKET/Orange", 5000);
+  market[3] = paydata.GetInt("MARKET/Red", 5000);
+  market[4] = paydata.GetInt("MARKET/Black", 5000);
 }
 
 void boot_shop_orders(void)

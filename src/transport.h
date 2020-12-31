@@ -8,10 +8,12 @@
 
 #define ELEVATOR_FILE     "etc/elevator"
 
-#define FIRST_CAB         600
-#define LAST_CAB          610
-#define FIRST_PORTCAB	  650
-#define LAST_PORTCAB	  660
+#define FIRST_SEATTLE_CAB     600
+#define LAST_SEATTLE_CAB      610
+#define FIRST_PORTLAND_CAB    650
+#define LAST_PORTLAND_CAB     660
+#define FIRST_CARIBBEAN_CAB   640
+#define LAST_CARIBBEAN_CAB    649
 
 #define CMD_TAXI_NONE          0
 #define CMD_TAXI_DEST          1
@@ -41,6 +43,8 @@
 
 // Define to collapse validation logic for destinations. Input is an integer index in the destination list.
 #define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_connected_zone((dest_list)[(destination)].vnum))
+
+bool room_is_a_taxicab(vnum_t vnum);
 
 struct taxi_dest_type
 {
@@ -73,7 +77,10 @@ struct elevator_data
   elevator_data() :
       floor(NULL), destination(0), is_moving(FALSE)
   {}
-}
-;
+};
+
+extern struct dest_data seattle_taxi_destinations[];
+extern struct dest_data portland_taxi_destinations[];
+extern struct dest_data caribbean_taxi_destinations[];
 
 #endif

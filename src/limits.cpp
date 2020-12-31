@@ -903,7 +903,7 @@ void save_vehicles(void)
           break;
         default:
           // Pick a random one to scatter them about.
-          junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS)];
+          junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS - 1)];
           break;
       }
       temp_room = &world[real_room(junkyard_number)];

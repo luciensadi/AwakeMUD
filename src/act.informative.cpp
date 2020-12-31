@@ -562,12 +562,12 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         weight = GET_WEIGHT(i) - (GET_WEIGHT(i) % 10) + 10;
       
       if (weight > 4) {
-        snprintf(buf, sizeof(buf), "$e looks to be about %0.1f meters tall and "
-                "appears to weigh about %d kg.", height, weight);
+        snprintf(buf, sizeof(buf), "$e look%s to be about %0.1f meters tall and "
+                "appears to weigh about %d kg.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height, weight);
         act(buf, FALSE, i, 0, ch, TO_VICT);
       } else {
-        snprintf(buf, sizeof(buf), "$e looks to be about %0.1f meters tall and "
-                "appears to barely weigh anything.", height);
+        snprintf(buf, sizeof(buf), "$e look%s to be about %0.1f meters tall and "
+                "appears to barely weigh anything.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height);
         act(buf, FALSE, i, 0, ch, TO_VICT);
       }
     }
@@ -1269,10 +1269,11 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
   } else {
-    send_to_char(ch, "^C%s^n%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+    send_to_char(ch, "^C%s^n%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "");
+                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " (Arena)" : "");
   }
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
@@ -1903,6 +1904,31 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           strncat(buf, ".", sizeof(buf) - strlen(buf) - 1);
         }
         
+        if (j->contains 
+            && GET_OBJ_TYPE(j->contains) == ITEM_GUN_MAGAZINE
+            && GET_MAGAZINE_AMMO_COUNT(j->contains) > 0
+            && GET_MAGAZINE_AMMO_TYPE(j->contains) != AMMO_NORMAL) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is loaded with %s, which ", 
+                   ammo_type[GET_MAGAZINE_AMMO_TYPE(j->contains)].name);
+          switch (GET_MAGAZINE_AMMO_TYPE(j->contains)) {
+            case AMMO_APDS:
+              strncat(buf, "pierces through enemy ballistic armor, halving its value.", sizeof(buf) - strlen(buf) - 1);
+              break;
+            case AMMO_EX:
+              strncat(buf, "increases power by one and ", sizeof(buf) - strlen(buf) - 1);
+              // fall through
+            case AMMO_EXPLOSIVE:
+              strncat(buf, "ignores one point of enemy ballistic armor.", sizeof(buf) - strlen(buf) - 1);
+              break;
+            case AMMO_FLECHETTE:
+              strncat(buf, "deals more damage to fully unarmored targets.", sizeof(buf) - strlen(buf) - 1);
+              break;
+            case AMMO_GEL:
+              strncat(buf, "deals mental instead of physical damage, but treats the enemy's ballistic armor as two points higher.", sizeof(buf) - strlen(buf) - 1);
+              break;
+          }
+        }
+        
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
@@ -1974,7 +2000,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 prone_recoil_comp += RECOIL_COMP_VALUE_TRIPOD;
                 break;
               case ACCESS_BAYONET:
-                if (mount_location != ACCESS_LOCATION_UNDER) {
+                if (mount_location != ACCESS_ACCESSORY_LOCATION_UNDER) {
                   strcat(buf, "\r\n^RYour bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.");
                 } else {
                   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",

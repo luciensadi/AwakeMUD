@@ -267,6 +267,7 @@ ACMD_DECLARE(do_restring);
 ACMD_DECLARE(do_restore);
 ACMD_DECLARE(do_retract);
 ACMD_DECLARE(do_return);
+ACMD_DECLARE(do_rewrite_world);
 ACMD_DECLARE(do_rlist);
 ACMD_DECLARE(do_rig);
 ACMD_DECLARE(do_room);
@@ -713,6 +714,8 @@ struct command_info cmd_info[] =
     { "rpe"      , POS_DEAD    , do_wizutil  , LVL_ADMIN, SCMD_RPE },
     { "rpetalk"  , POS_DEAD    , do_gen_comm , 0, SCMD_RPETALK },
     { "redit"    , POS_DEAD    , do_redit    , LVL_BUILDER, 0 },
+    { "rewrite_worl",  POS_DEAD, do_rewrite_world, LVL_PRESIDENT, 0 },
+    { "rewrite_world", POS_DEAD, do_rewrite_world, LVL_PRESIDENT, 1 },
 
     { "say"      , POS_LYING   , do_say      , 0, SCMD_SAY },
     { "says"     , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_SAYS },
@@ -1309,7 +1312,8 @@ void nonsensical_reply(struct char_data *ch, const char *arg)
                  PLR_FLAGGED(ch, PLR_NEWBIE) ? "NEWBIE" : "OOC");
     ch->desc->invalid_command_counter = 0;
   }
-  if (arg) {
+  // There must be an arg, and it must not be a number.
+  if (arg && *arg && atoi(arg) == 0) {
     char log_buf[1000];
     snprintf(log_buf, sizeof(log_buf), "Invalid command: '%s'.", arg);
     mudlog(log_buf, ch, LOG_SYSLOG, TRUE);
@@ -1921,7 +1925,7 @@ int is_abbrev(const char *arg1, const char *arg2)
     return 0;
   }
   
-  if (!*arg1)
+  if (!*arg1 || !*arg2)
     return 0;
 
   for (; *arg1 && *arg2; arg1++, arg2++)
@@ -2872,16 +2876,32 @@ void nanny(struct descriptor_data * d, char *arg)
 #define COMMAND_ALIAS(typo, corrected)   if (strncmp(arg, (typo), strlen(arg)) == 0) { return find_command_in_x((corrected), cmd_info); }
 
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
+  // Common typos and fuckups.
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
+  COMMAND_ALIAS("weild", "wield");
   COMMAND_ALIAS("sheathe", "sheath");
   COMMAND_ALIAS("unsheathe", "draw");
-  COMMAND_ALIAS("weild", "wield");
-  COMMAND_ALIAS("taxi", "hail");
   COMMAND_ALIAS("prove", "probe");
+  COMMAND_ALIAS("chekc", "check");
+  COMMAND_ALIAS("opend", "open");
+  COMMAND_ALIAS("leaev", "leave");
+  COMMAND_ALIAS("lisy", "list");
+  COMMAND_ALIAS("unload", "eject");
+  
+  // Commands from other games.
+  COMMAND_ALIAS("bamfin", "poofin");
+  COMMAND_ALIAS("bamfout", "poofout");
+  COMMAND_ALIAS("sacrifice", "junk");
+  
+  // Misc aliases.
+  COMMAND_ALIAS("taxi", "hail");
   COMMAND_ALIAS("pickup", "get");
   COMMAND_ALIAS("yes", "nod");
   COMMAND_ALIAS("setup", "unpack");
+  COMMAND_ALIAS("ability", "abilities");
+  
+  // Job interaction commands.
   COMMAND_ALIAS("endjob", "endrun");
   COMMAND_ALIAS("resign", "endrun");
   
@@ -2894,6 +2914,16 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unwield", "remove");
   COMMAND_ALIAS("unwear", "remove");
   COMMAND_ALIAS("unequip", "remove");
+  
+  // Door-unlocking commands.
+  COMMAND_ALIAS("pick", "bypass");
+  COMMAND_ALIAS("hack", "bypass");
+  
+  // Doubled up movement for those impatient-ass people.
+  COMMAND_ALIAS("nn", "n");
+  COMMAND_ALIAS("ee", "e");
+  COMMAND_ALIAS("ss", "s");
+  COMMAND_ALIAS("ww", "w");
   
   // Found nothing, return the failure code.
   return -1;

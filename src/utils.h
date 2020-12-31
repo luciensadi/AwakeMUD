@@ -594,6 +594,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_OBJ_BARRIER(obj)    ((obj)->obj_flags.barrier)
 #define GET_OBJ_VNUM(obj) (VALID_OBJ_RNUM(obj) ? \
     obj_index[GET_OBJ_RNUM(obj)].vnum : NOTHING)
+#define GET_OBJ_KEYWORDS(obj)   ((obj)->text.keywords)
 #define IS_OBJ_STAT(obj, stat)  ((obj)->obj_flags.extra_flags.IsSet(stat))
 #define OBJ_VNUM_RNUM(rnum) ((obj_index[rnum]).vnum)
 #define VEH_VNUM_RNUM(rnum) ((veh_index[rnum]).vnum)
@@ -619,6 +620,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define HSSH(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "they"))
 #define HMHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "them"))
 #define HASHAVE(ch) (GET_SEX(ch) != SEX_NEUTRAL ?              "has"     : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "has": "have"))
+#define HSSH_SHOULD_PLURAL(ch) (GET_SEX(ch) || (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)))
 
 #define ANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "An" : "A")
 #define SANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "an" : "a")
@@ -876,6 +878,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_GUN_ACCESSORY convenience defines
 #define GET_ACCESSORY_ATTACH_LOCATION(accessory) (GET_OBJ_VAL((accessory), 0))
 #define GET_ACCESSORY_TYPE(accessory)            (GET_OBJ_VAL((accessory), 1))
+#define GET_ACCESSORY_RATING(accessory)          (GET_OBJ_VAL((accessory), 2))
 
 // ITEM_SPELL_FORMULA convenience defines
 

@@ -60,4 +60,15 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How many restring points should newbies get to use in chargen?
 #define STARTING_RESTRING_POINTS  5
 
+// What are the default settings of a room if not specified?
+#define DEFAULT_DIMENSIONS_X        20
+#define DEFAULT_DIMENSIONS_Y        20
+#define DEFAULT_DIMENSIONS_Z        2.5
+#define DEFAULT_EXIT_BARRIER_RATING 4
+#define DEFAULT_EXIT_MATERIAL       5
+#define DEFAULT_SECTOR_TYPE         SPIRIT_CITY
+
+// Bearing in mind that morts can't interact with an exit if they can't see it, what is the maximum hidden rating for an exit?
+#define MAX_EXIT_HIDDEN_RATING      20
+
 #endif

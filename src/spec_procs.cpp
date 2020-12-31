@@ -29,7 +29,6 @@
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);
-extern struct dest_data taxi_destinations[];
 extern struct time_info_data time_info;
 extern struct weather_data weather_info;
 extern int return_general(int skill_num);
@@ -2954,23 +2953,43 @@ SPECIAL(toggled_invis)
 {
   struct obj_data *obj = (struct obj_data *) me;
 
-  if(!CMD_IS("activate") || !obj->worn_by)
+  if(!obj->worn_by)
     return FALSE;
-  else {
-    if (!str_cmp(argument, "invis")) {
-      if (AFF_FLAGGED(obj->worn_by, AFF_IMP_INVIS)) {
-        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_IMP_INVIS);
-        send_to_char(ch, "Your suit goes silent as the cloaking device shuts off.\r\n");
+    
+  if (CMD_IS("deactivate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
+        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_INVISIBLE);
+        obj->obj_flags.bitvector.RemoveBit(AFF_INVISIBLE);
+        send_to_char(ch, "You feel the static fade as the ruthenium polymers in %s power down.\r\n", GET_OBJ_NAME(obj));
         act("The air shimmers briefly as $n fades into view.\r\n", FALSE, ch, 0, 0, TO_ROOM);
         return TRUE;
       } else {
-        AFF_FLAGS(obj->worn_by).SetBit(AFF_IMP_INVIS);
-        send_to_char(ch, "Your suit whirs quietly as the cloaking device kicks in.\r\n");
-        act("The world bends around $n as they vanish from sight.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        send_to_char(ch, "%s is already deactivated.\r\n", capitalize(GET_OBJ_NAME(obj)));
         return TRUE;
       }
     }
+    return FALSE;
+  } 
+  
+  if (CMD_IS("activate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (!obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
+        AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
+        obj->obj_flags.bitvector.SetBit(AFF_INVISIBLE);
+        send_to_char(ch, "You feel a tiny static charge as the ruthenium polymers in %s power up.\r\n", GET_OBJ_NAME(obj));
+        act("The world bends around $n as they vanish from sight.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        return TRUE;
+      } else {
+        send_to_char(ch, "%s is already activated.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
+  
   return FALSE;
 }
 
@@ -3852,11 +3871,17 @@ SPECIAL(multnomah_gate)
 
   if ((world[in_room].number == RM_MULTNOMAH_GATE_NORTH && CMD_IS("south")) || (world[in_room].number == RM_MULTNOMAH_GATE_SOUTH && CMD_IS("north"))) {
     if (!PLR_FLAGGED(ch, PLR_VISA)) {
-      send_to_char("The gate refuses to open for you. Try showing the guard your visa.\r\n", ch);
-      return TRUE;
-    } else if (ch->in_veh) {
+      if (access_level(ch, LVL_BUILDER)) {
+        send_to_char("You don't even bother making eye contact with the guard as you head towards the gate. Rank hath its privileges.\r\n", ch);
+      } else {
+        send_to_char("The gate refuses to open for you. Try showing the guard your visa.\r\n", ch);
+        return TRUE;
+      }
+    } 
+    
+    if (ch->in_veh) {
       for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
-        if (vict != ch && !PLR_FLAGGED(vict, PLR_VISA)) {
+        if (vict != ch && !PLR_FLAGGED(vict, PLR_VISA) && !IS_NPC(vict)) {
           send_to_char("The guards won't open the gate until everyone has shown their visas.\r\n", ch);
           return TRUE;
         }
@@ -3876,6 +3901,7 @@ SPECIAL(multnomah_gate)
       char_from_room(ch);
       char_to_room(ch, &world[to_room]);
     }
+    look_at_room(ch, 0);
     return TRUE;
   }
 
@@ -5437,13 +5463,13 @@ SPECIAL(restoration_button) {
   }
   
   if (CMD_IS("jump")) {
-    for (int dest = 0; *(taxi_destinations[dest].keyword) != '\n'; dest++) {
+    for (int dest = 0; *(seattle_taxi_destinations[dest].keyword) != '\n'; dest++) {
       // Skip invalid destinations.
-      if (!DEST_IS_VALID(dest, taxi_destinations))
+      if (!DEST_IS_VALID(dest, seattle_taxi_destinations))
         continue;
       
-      if ( str_str((const char *)argument, taxi_destinations[dest].keyword)) {
-        snprintf(buf, sizeof(buf), "%ld", taxi_destinations[dest].vnum);
+      if ( str_str((const char *)argument, seattle_taxi_destinations[dest].keyword)) {
+        snprintf(buf, sizeof(buf), "%ld", seattle_taxi_destinations[dest].vnum);
         do_goto(ch, buf, 0, 0);
         return TRUE;
       }

@@ -86,14 +86,22 @@ int can_move(struct char_data *ch, int dir, int extra)
     if (EXIT(ch, dir)->to_room->people &&
         EXIT(ch, dir)->to_room->people->next_in_room)
     {
-      send_to_char("There isn't enough room there for another person!\r\n", ch);
-      return 0;
+      if (access_level(ch, LVL_BUILDER)) {
+        send_to_char("You use your staff powers to bypass the tunnel restriction.\r\n", ch);
+      } else {
+        send_to_char("There isn't enough room there for another person!\r\n", ch);
+        return 0;
+      }
     }
 
   if (ch->in_room && ch->in_room->func && ch->in_room->func == escalator)
   {
-    send_to_char("You can't get off a moving escalator!\r\n", ch);
-    return 0;
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char("You use your staff powers to get off the moving escalator.\r\n", ch);
+    } else {
+      send_to_char("You can't get off a moving escalator!\r\n", ch);
+      return 0;
+    }
   }
 
   if (ch->in_room && IS_WATER(ch->in_room) && !IS_NPC(ch) && !IS_SENATOR(ch))
@@ -159,8 +167,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   GET_LASTROOM(ch) = ch->in_room->number;
 
-  if (real_room(ch->in_room->dir_option[dir]->to_room->number) >= real_room(FIRST_CAB) &&
-      real_room(ch->in_room->dir_option[dir]->to_room->number) <= real_room(LAST_CAB))
+  if (room_is_a_taxicab(ch->in_room->dir_option[dir]->to_room->number))
     snprintf(buf2, sizeof(buf2), "$n gets into the taxi.");
   else if (vict)
   {
@@ -242,11 +249,13 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       strcat(buf, weather_line[weather_info.sky]);
     send_to_char(buf, ch);
   }
+#ifdef USE_SLOUCH_RULES
   if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= ch->in_room->z * 100)
     send_to_char("You have to slouch to fit in here.\r\n", ch);
+#endif
   if (ch->desc != NULL)
     look_at_room(ch, 0);
-  if (was_in->number >= FIRST_CAB && was_in->number <= LAST_CAB)
+    if (room_is_a_taxicab(was_in->number))
     snprintf(buf2, sizeof(buf2), "$n gets out of the taxi.");
   else if (vict)
     snprintf(buf2, sizeof(buf2), "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
