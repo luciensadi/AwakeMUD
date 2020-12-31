@@ -1273,7 +1273,8 @@ void look_at_room(struct char_data * ch, int ignore_brief)
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " (Arena)" : "");
+                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " (Arena)" : "",
+                 ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "");
   }
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
