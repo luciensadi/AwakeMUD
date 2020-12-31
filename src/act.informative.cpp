@@ -1269,7 +1269,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
   } else {
-    send_to_char(ch, "^C%s^n%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+    send_to_char(ch, "^C%s^n%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
