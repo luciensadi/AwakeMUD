@@ -1937,7 +1937,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case '2':
       CLS(CH);
-      send_to_char(CH, "0) Grey (nuyen and credstick)\r\n1) Legal (credstick only)\r\n2) Black (nuyen only)\r\nEnter Shop Type: ");
+      send_to_char(CH, "0) Grey (nuyen and credstick; applies street index)\r\n1) Legal (credstick only; no street index)\r\n2) Black (nuyen only; applies street index)\r\nEnter Shop Type: ");
       d->edit_mode = SHEDIT_TYPE;
       break;
     case '3':
