@@ -5477,28 +5477,48 @@ ACMD(do_shopfind)
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
-
-  if (!*buf2 || !isdigit(*buf2)) {
-    send_to_char("Usage: shopfind <number>\r\n", ch);
+  
+  if (!*buf2) {
+    send_to_char("Usage: shopfind <number or keyword>\r\n", ch);
     return;
   }
+  
   if ((number = atoi(buf2)) < 0) {
     send_to_char("A NEGATIVE number??\r\n", ch);
     return;
   }
   
-  send_to_char(ch, "Shops selling the item with vnum %d:\r\n", number);
+  if (number)
+    send_to_char(ch, "Shops selling the item with vnum %d:\r\n", number);
+  else
+    send_to_char(ch, "Shops selling items with keyword %s:\r\n", buf2);
   
   int index = 0;
-  for (int i = 0; i <= top_of_shopt; i++) {
-    for (struct shop_sell_data *sell = shop_table[i].selling; sell; sell = sell->next, i++) {
-      if (sell->vnum == number) {
-        send_to_char(ch, "%3d)  %8ld  (%s)\r\n", ++index, shop_table[i].vnum, mob_proto[real_mobile(shop_table[i].keeper)].player.physical_text.name);
+  for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
+    for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next) {
+      int real_obj = real_object(sell->vnum);
+      if (real_obj < 0)
+        continue;
+      
+      if (number) {
+        if (sell->vnum == number) {
+          send_to_char(ch, "%3d)  Shop %8ld (%s)\r\n", 
+                       ++index,
+                       shop_table[shop_nr].vnum, 
+                       mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name);
+        }
+      } else if (isname(buf2, obj_proto[real_obj].text.name) || isname(buf2, obj_proto[real_obj].text.keywords)) {
+        send_to_char(ch, "%3d)  Shop %8ld (%s) sells %s (%ld)\r\n", 
+                     ++index,
+                     shop_table[shop_nr].vnum, 
+                     mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name,
+                     GET_OBJ_NAME(&obj_proto[real_obj]),
+                     GET_OBJ_VNUM(&obj_proto[real_obj]));
       }
     }
   }
   if (index == 0)
-    send_to_char("- None.\r\n", ch);
+    send_to_char("- None.\r\n", ch);  
 }
 
 void print_x_fuckups(struct char_data *ch, int print_count) {

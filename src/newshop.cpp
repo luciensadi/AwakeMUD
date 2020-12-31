@@ -2238,6 +2238,20 @@ bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr
       extract_obj(obj);
       return FALSE;
     }
+    
+    if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA) {
+      if (spell_is_nerp(GET_SPELLFORMULA_SPELL(obj))) {
+        snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to having NERP spell %s.", 
+                 shop_table[shop_nr].vnum, 
+                 GET_NAME(keeper), 
+                 GET_OBJ_NAME(obj),
+                 GET_OBJ_VNUM(obj), 
+                 spells[GET_OBJ_VAL(obj, 1)].name);
+        mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
+        extract_obj(obj);
+        return FALSE;
+      }
+    }
   } else {
     snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
     mudlog(buf2, keeper, LOG_SYSLOG, TRUE);

@@ -2996,6 +2996,34 @@ void destroy_door(struct room_data *room, int dir) {
   SET_BIT(room->dir_option[dir]->exit_info, EX_DESTROYED);
 }
 
+bool spell_is_nerp(int spell_num) {
+  switch (spell_num) {
+    case SPELL_MANABALL:
+    case SPELL_POWERBALL:
+    case SPELL_STUNBALL:
+    case SPELL_ANALYZEDEVICE:
+    case SPELL_CLAIRAUDIENCE:
+    case SPELL_CLAIRVOYANCE:
+    case SPELL_DETECTENEMIES:
+    case SPELL_DETECTINDIV:
+    case SPELL_DETECTLIFE:
+    case SPELL_DETECTMAGIC:
+    case SPELL_DETECTOBJECT:
+    case SPELL_PROPHYLAXIS:
+    case SPELL_MASSCONFUSION:
+    case SPELL_CHAOTICWORLD:
+    case SPELL_MASK:
+    case SPELL_PHYSMASK:
+    case SPELL_FIREBALL:
+    case SPELL_BALLLIGHTNING:
+    case SPELL_PHYSICALBARRIER:
+    case SPELL_ASTRALBARRIER:
+      return TRUE;
+  }
+  
+  return FALSE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

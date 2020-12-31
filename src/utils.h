@@ -95,6 +95,7 @@ char *  replace_substring(char *source, char *dest, const char *replace_target, 
 bool    combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
 void    update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount);
 void    destroy_door(struct room_data *room, int dir);
+bool    spell_is_nerp(int spell_num);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -881,6 +882,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_ACCESSORY_RATING(accessory)          (GET_OBJ_VAL((accessory), 2))
 
 // ITEM_SPELL_FORMULA convenience defines
+#define GET_SPELLFORMULA_SPELL(formula)          (GET_OBJ_VAL((formula), 1))
 
 // ITEM_FOCUS convenience defines
 

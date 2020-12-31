@@ -152,6 +152,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     return;
   }
   
+  // Valid archetype number was input, so set them up with it. First, declare temp vars.
   struct obj_data *temp_obj = NULL;
   
   // Set race.
@@ -167,6 +168,8 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   GET_ASPECT(CH) = archetypes[i]->aspect;
   GET_PP(CH) = archetypes[i]->powerpoints;
   GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
+  
+  // Set spells, if any. TODO.
   
   // TODO: adept abilities
   
@@ -244,10 +247,10 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   set_character_skill(d->character, SKILL_ENGLISH, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
   GET_LANGUAGE(d->character) = SKILL_ENGLISH;
   GET_RESTRING_POINTS(d->character) = STARTING_RESTRING_POINTS;
-  GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
+  GET_LOADROOM(d->character) = archetypes[i]->start_room;
 
   init_char_sql(d->character);
-  snprintf(buf, sizeof(buf), "%s [%s] new player.", GET_CHAR_NAME(d->character), d->host);
+  snprintf(buf, sizeof(buf), "%s [%s] new character (archetypal %s).", GET_CHAR_NAME(d->character), d->host, archetypes[i]->name);
   mudlog(buf, d->character, LOG_CONNLOG, TRUE);
   SEND_TO_Q(motd, d);
   SEND_TO_Q("\r\n\n*** PRESS RETURN: ", d);
@@ -270,20 +273,6 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 }
 
 #undef ATTACH_IF_EXISTS
-
-void archetypal_parse(struct descriptor_data *d, const char *arg) {
-  switch (atoi(arg)) {
-    case 1:
-      ccr_archetype_selection_menu(d);
-      break;
-    case 2:
-      ccr_race_menu(d);
-      break;
-    default:
-      SEND_TO_Q("\r\n\r\nThat's not a valid selection. Please enter the number 1 for Archetypal creation or the number 2 for Custom creation: ", d);
-      return;
-  }
-}
 
 void parse_pronouns(struct descriptor_data *d, const char *arg) {
   switch (tolower(*arg)) {
@@ -727,7 +716,7 @@ static void start_game(descriptor_data *d)
 
   init_char_sql(d->character);
   if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
-    snprintf(buf, sizeof(buf), "%s [%s] new player.",
+    snprintf(buf, sizeof(buf), "%s [%s] new character.",
             GET_CHAR_NAME(d->character), d->host);
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     SEND_TO_Q(motd, d);
@@ -742,7 +731,7 @@ static void start_game(descriptor_data *d)
 
     init_create_vars(d);
 
-    snprintf(buf, sizeof(buf), "%s [%s] new player.",
+    snprintf(buf, sizeof(buf), "%s [%s] new character.",
             GET_CHAR_NAME(d->character), d->host);
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
   }

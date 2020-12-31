@@ -107,6 +107,9 @@ struct archetype_data *generate_adept() {
   arch->name = str_dup("Adept");
   arch->race = RACE_HUMAN;
   
+  arch->start_room = 90600;
+  arch->auth_room = 90600; // todo
+  
   // Set attributes.
   arch->attributes[BOD] = 6;
   arch->attributes[QUI] = 6;
@@ -161,8 +164,11 @@ struct archetype_data *generate_shaman() {
   
   memset(arch, 0, sizeof(struct archetype_data));
   
-  arch->name = str_dup("Adept");
+  arch->name = str_dup("Shaman");
   arch->race = RACE_HUMAN;
+  
+  arch->start_room = 90800;
+  arch->auth_room = 90800; // todo
   
   // Set attributes.
   arch->attributes[BOD] = 6;
@@ -217,8 +223,11 @@ struct archetype_data *generate_decker() {
   
   memset(arch, 0, sizeof(struct archetype_data));
   
-  arch->name = str_dup("Adept");
+  arch->name = str_dup("Decker");
   arch->race = RACE_HUMAN;
+  
+  arch->start_room = 90900;
+  arch->auth_room = 90900; // todo
   
   // Set attributes.
   arch->attributes[BOD] = 6;
