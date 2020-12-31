@@ -55,7 +55,7 @@ const char *selling_type[] =
 
 bool is_open(struct char_data *keeper, int shop_nr)
 {
-#ifndef USE_SHOP_OPEN_CLOSE_TIMES
+#ifdef USE_SHOP_OPEN_CLOSE_TIMES
   char buf[MAX_STRING_LENGTH];
   buf[0] = '\0';
   if (shop_table[shop_nr].open > shop_table[shop_nr].close) {
@@ -1505,6 +1505,7 @@ void shop_cancel(char *arg, struct char_data *ch, struct char_data *keeper, vnum
 
 void shop_hours(struct char_data *ch, vnum_t shop_nr)
 {
+#ifdef USE_SHOP_OPEN_CLOSE_TIMES
   strcpy(buf, "This shop is ");
   if (!shop_table[shop_nr].open && shop_table[shop_nr].close == 24)
     strcat(buf, "always open");
@@ -1530,6 +1531,9 @@ void shop_hours(struct char_data *ch, vnum_t shop_nr)
   }
   strcat(buf, ".\r\n");
   send_to_char(buf, ch);
+#else
+  send_to_char("The shop-hours system is disabled, so shops are always open.\r\n", ch);
+#endif
 }
 
 SPECIAL(shop_keeper)
@@ -1607,9 +1611,14 @@ void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Name: %30s Shopkeeper: %s [%5ld]\r\n", shop_table[shop_nr].shopname,
                        mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name,
           shop_table[shop_nr].keeper);
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Buy at:     [%1.2f], Sell at: [%1.2f], +/- %%: [%d], Current %%: [%d], Hours [%d-%d]\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Buy at:     [%1.2f], Sell at: [%1.2f], +/- %%: [%d], Current %%: [%d]",
           shop_table[shop_nr].profit_buy, shop_table[shop_nr].profit_sell, shop_table[shop_nr].random_amount,
-          shop_table[shop_nr].random_current, shop_table[shop_nr].open, shop_table[shop_nr].close);
+          shop_table[shop_nr].random_current);
+#ifdef USE_SHOP_OPEN_CLOSE_TIMES
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Hours [%d-%d]\r\n", shop_table[shop_nr].open, shop_table[shop_nr].close);
+#else
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Hours (disabled) [%d-%d]\r\n", shop_table[shop_nr].open, shop_table[shop_nr].close);
+#endif
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Type:       %s, Etiquette: %s\r\n", shop_type[shop_table[shop_nr].type], skills[shop_table[shop_nr].ettiquete].name);
   shop_table[shop_nr].races.PrintBits(buf2, MAX_STRING_LENGTH, pc_race_types, NUM_RACES);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "!Serves:     %s\r\n", buf2);
@@ -1646,8 +1655,13 @@ void write_shops_to_disk(int zone)
               "ProfitBuy:\t%.2f\n"
               "ProfitSell:\t%.2f\n"
               "Random:\t%d\n"
+#ifdef USE_SHOP_OPEN_CLOSE_TIMES
               "Open:\t%d\n"
               "Close:\t%d\n"
+#else
+              "Open (disabled):\t%d\n"
+              "Close (disabled):\t%d\n"
+#endif
               "Type:\t%s\n",
               shop->keeper, shop->profit_buy, shop->profit_sell, shop->random_amount, shop->open,
               shop->close, shop_type[shop->type]);
@@ -1762,11 +1776,15 @@ void shedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "Shop Number: %ld\r\n", SHOP->vnum);
   send_to_char(CH, "1) Keeper: ^c%ld^n (^c%s^n)\r\n", SHOP->keeper,
                real_mobile(SHOP->keeper) > 0 ? GET_NAME(&mob_proto[real_mobile(SHOP->keeper)]) : "NULL");
-  send_to_char(CH, "2) Shop Type (not implemented): ^c%s^n\r\n", shop_type[SHOP->type]);
+  send_to_char(CH, "2) Shop Type: ^c%s^n\r\n", shop_type[SHOP->type]);
   send_to_char(CH, "3) Cost Multiplier when Player Buying: ^c%.2f^n\r\n", SHOP->profit_buy);
   send_to_char(CH, "4) Cost Multiplier when Player Selling: ^c%.2f^n\r\n", SHOP->profit_sell);
   send_to_char(CH, "5) %% +/-: ^c%d^n\r\n", SHOP->random_amount);
+#ifdef USE_SHOP_OPEN_CLOSE_TIMES
   send_to_char(CH, "6) Opens: ^c%d^n Closes: ^c%d^n\r\n", SHOP->open, SHOP->close);
+#else
+  send_to_char(CH, "6) Opens: ^c%d^n Closes: ^c%d^n (Note: system is currently disabled)\r\n", SHOP->open, SHOP->close);
+#endif
   send_to_char(CH, "7) Etiquette Used for Availability Rolls: ^c%s^n\r\n", skills[SHOP->ettiquete].name);
   SHOP->races.PrintBits(buf, MAX_STRING_LENGTH, pc_race_types, NUM_RACES);
   send_to_char(CH, "8) Doesn't Trade With: ^c%s^n\r\n", buf);
@@ -1894,7 +1912,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case '2':
       CLS(CH);
-      send_to_char(CH, "0) Grey\r\n1) Legal\r\n2) Black\r\nEnter Shop Type: ");
+      send_to_char(CH, "0) Grey (nuyen and credstick)\r\n1) Legal (credstick only)\r\n2) Black (nuyen only)\r\nEnter Shop Type: ");
       d->edit_mode = SHEDIT_TYPE;
       break;
     case '3':
