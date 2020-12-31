@@ -2435,7 +2435,7 @@ ACMD(do_spells)
   
   // Adepts and Mundanes cannot cast spells.
   if (GET_TRADITION(ch) == TRAD_ADEPT || GET_TRADITION(ch) == TRAD_MUNDANE) {
-    send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", tradition_names[GET_ASPECT(ch)]);
+    send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", tradition_names[(int) GET_TRADITION(ch)]);
     return;
   }
   
@@ -2489,19 +2489,19 @@ ACMD(do_learn)
   struct spell_data *spell = NULL;
   int force, oldforce = 0;
   if (!*buf || !(obj = get_obj_in_list_vis(ch, buf, ch->carrying))) {
-    send_to_char("Learn which spell?\r\n", ch);
+    send_to_char(ch, "You're not carrying any '%s' to learn from.\r\n", buf);
     return;
   }
   if (GET_OBJ_TYPE(obj) != ITEM_SPELL_FORMULA) {
-    send_to_char("You can't learn anything from that.\r\n", ch);
+    send_to_char(ch, "%s doesn't contain a spell formula to learn.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return;
   }
   if (GET_OBJ_TIMER(obj) <= -2) {
-    send_to_char("That spell design isn't complete.\r\n", ch); 
+    send_to_char(ch, "The spell design on %s isn't complete.\r\n", GET_OBJ_NAME(obj)); 
     return;
   }
   if ((GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(obj, 2)) || (GET_TRADITION(ch) == TRAD_SHAMANIC && !GET_OBJ_VAL(obj, 2))) {
-    send_to_char("You don't understand this formula.\r\n", ch);
+    send_to_char(ch, "You don't understand the formula written on %s-- seems like it's for another tradition of magic.\r\n", GET_OBJ_NAME(obj));
     return;
   }
   if (!*buf2 || atoi(buf1) == 0)
@@ -2511,7 +2511,7 @@ ACMD(do_learn)
   for (spell = GET_SPELLS(ch); spell; spell = spell->next)
     if (spell->type == GET_OBJ_VAL(obj, 1) && spell->subtype == GET_OBJ_VAL(obj, 3)) {
       if (spell->force >= force) {
-        send_to_char("You already know this spell at an equal or higher force.\r\n", ch);
+        send_to_char(ch, "You already know %s at an equal or higher force.\r\n", spells[GET_OBJ_VAL(obj, 1)].name);
         return;
       } else {
         oldforce = spell->force;
@@ -2519,14 +2519,14 @@ ACMD(do_learn)
       }
     }
   if (GET_KARMA(ch) < (force  - oldforce) * 100) {
-    send_to_char(ch, "You don't have enough karma to learn this spell at that force! (You need %d)\r\n", force);
+    send_to_char(ch, "You don't have enough karma to learn this spell at that force! You need %d.\r\n", force);
     return;
   }
   if ((GET_ASPECT(ch) == ASPECT_ELEMFIRE && spells[GET_OBJ_VAL(obj, 1)].category != COMBAT) ||
       (GET_ASPECT(ch) == ASPECT_ELEMEARTH && spells[GET_OBJ_VAL(obj, 1)].category != MANIPULATION) ||
       (GET_ASPECT(ch) == ASPECT_ELEMWATER && spells[GET_OBJ_VAL(obj, 1)].category != ILLUSION) ||
       (GET_ASPECT(ch) == ASPECT_ELEMAIR && spells[GET_OBJ_VAL(obj, 1)].category != DETECTION)) {
-    send_to_char("Glancing over the formula you realise you can't bind mana in that fashion.\r\n", ch);
+    send_to_char("Glancing over the formula, you realize you can't bind mana in that fashion.\r\n", ch);
   }
   if (GET_ASPECT(ch) == ASPECT_SHAMANIST) {
     int skill = 0, target = 0;
@@ -2537,21 +2537,25 @@ ACMD(do_learn)
   }
   struct obj_data *library = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents;
   int library_level = 0;
-  for (;library; library = library->next_content)
+  for (;library; library = library->next_content) {
     if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL
         && ((GET_TRADITION(ch) == TRAD_SHAMANIC
             && GET_OBJ_VAL(library, 0) == TYPE_LODGE && GET_OBJ_VAL(library, 3) == GET_IDNUM(ch)) 
-        || (GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL)))
+        || (GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL))) {
       if (GET_OBJ_VAL(library, 1) >= force) {
         break;
-      } else
+      } else {
         library_level = MAX(GET_OBJ_VAL(library, 1), library_level);
+      }
+    }
+  }
   if (!library) {
     if (library_level)
       send_to_char(ch, "Your tools aren't a high enough rating to learn from %s. It's rating %d, but you only have a rating %d.",
                    GET_OBJ_NAME(obj), force, library_level);
     else
-      send_to_char("You don't have the right tools here to learn that spell.\r\n", ch);
+      send_to_char(ch, "You don't have the right tools here to learn that spell. You need a rating-%d (or higher) %s.\r\n",
+                   force, GET_TRADITION(ch) == TRAD_HERMETIC ? "library" : "lodge");
     return;
   }
   if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_OBJ_VAL(library, 9)) {
