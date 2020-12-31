@@ -175,22 +175,29 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
   {
     int num = atoi(arg+1) - 1;
     for (;sell; sell = sell->next, num--) {
-      if (obj_proto[real_object(sell->vnum)].obj_flags.cost < 1)
-        num++;
-      if (num == 0)
-        break;
+      int real_obj = real_object(sell->vnum);
+      if (real_obj >= 0) {
+        if (obj_proto[real_obj].obj_flags.cost < 1)
+          num++;
+        if (num == 0)
+          break;
+      }
     }
     if (sell)
       *obj = read_object(sell->vnum, VIRTUAL);
   } else
   {
-    for (; sell; sell = sell->next)
-      if (obj_proto[real_object(sell->vnum)].obj_flags.cost &&
-          (isname(arg, obj_proto[real_object(sell->vnum)].text.name) ||
-           isname(arg, obj_proto[real_object(sell->vnum)].text.keywords))) {
-        *obj = read_object(sell->vnum, VIRTUAL);
-        break;
+    for (; sell; sell = sell->next) {
+      int real_obj = real_object(sell->vnum);
+      if (real_obj >= 0) {
+        if (obj_proto[real_obj].obj_flags.cost &&
+            (isname(arg, obj_proto[real_obj].text.name) ||
+             isname(arg, obj_proto[real_obj].text.keywords))) {
+          *obj = read_object(sell->vnum, VIRTUAL);
+          break;
+        }
       }
+    }
   }
   return sell;
 }
@@ -1106,20 +1113,23 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                 GET_WEAPON_INTEGRAL_RECOIL_COMP(obj) > 1 ? "s" : "");
       if (GET_OBJ_VAL(obj, 7) > 0 || GET_OBJ_VAL(obj, 8) > 0 || GET_OBJ_VAL(obj, 9) > 0)
         strcat(buf, ". It comes standard with ");
-      if (real_object(GET_OBJ_VAL(obj, 7)) > 0) {
-        strcat(buf, obj_proto[real_object(GET_OBJ_VAL(obj, 7))].text.name);
+        
+      int real_obj;
+      if ((real_obj = real_object(GET_OBJ_VAL(obj, 7))) > 0) {
+        strcat(buf, obj_proto[real_obj].text.name);
         if ((GET_OBJ_VAL(obj, 8) > 0 && GET_OBJ_VAL(obj, 9) < 1) || (GET_OBJ_VAL(obj, 8) < 1 && GET_OBJ_VAL(obj, 9) > 0))
           strcat(buf, " and ");
         if (GET_OBJ_VAL(obj, 8) > 0 && GET_OBJ_VAL(obj, 9) > 0)
           strcat(buf, ", ");
       }
-      if (real_object(GET_OBJ_VAL(obj, 8)) > 0) {
-        strcat(buf, obj_proto[real_object(GET_OBJ_VAL(obj, 8))].text.name);
+      if ((real_obj = real_object(GET_OBJ_VAL(obj, 8))) > 0) {
+        strcat(buf, obj_proto[real_obj].text.name);
         if (GET_OBJ_VAL(obj, 9) > 0)
           strcat(buf, " and ");
       }
-      if (real_object(GET_OBJ_VAL(obj, 9)) > 0)
-        strcat(buf, obj_proto[real_object(GET_OBJ_VAL(obj, 9))].text.name);
+      if ((real_obj = real_object(GET_OBJ_VAL(obj, 7))) > 9) {
+        strcat(buf, obj_proto[real_obj].text.name);
+      }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It can hold a maximum of %d rounds.", GET_OBJ_VAL(obj, 5));
     } else {
       // Map damage value to phrase.
@@ -1423,7 +1433,11 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
       i++;
       float totaltime = order->timeavail - time(0);
       totaltime = totaltime / SECS_PER_MUD_DAY;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_object(order->item)]), order->number);
+      int real_obj = real_object(order->item);
+      if (real_obj >= 0)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_obj]), order->number);
+      else
+        strncat(buf, " ERROR\r\n", sizeof(buf) - strlen(buf) - 1);
       if (totaltime < 0)
         strncat(buf, " AVAILABLE\r\n", sizeof(buf) - strlen(buf) - 1);
       else if (totaltime < 1 && (int)(24 * totaltime) == 0)
@@ -1491,7 +1505,11 @@ void shop_cancel(char *arg, struct char_data *ch, struct char_data *keeper, vnum
     for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next)
       if (order->player == GET_IDNUM(ch) && !--number) {
         struct shop_order_data *temp;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I'll let my contacts know you no longer want %s.", GET_OBJ_NAME(&obj_proto[real_object(order->item)]));
+        int real_obj = real_object(order->item);
+        if (real_obj >= 0)
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I'll let my contacts know you no longer want %s.", GET_OBJ_NAME(&obj_proto[real_obj]));
+        else
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I'll let my contacts know you no longer want that.");
         REMOVE_FROM_LIST(order, shop_table[shop_nr].order, next);
         delete order;
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -1627,9 +1645,12 @@ void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
   shop_table[shop_nr].buytypes.PrintBits(buf2, MAX_STRING_LENGTH, item_types, NUM_ITEMS);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Buytypes:   %s\r\n", buf2);
   strcat(buf, "Selling: \r\n");
-  for (struct shop_sell_data *selling = shop_table[shop_nr].selling; selling; selling = selling->next)
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-50s (%5ld) Type: %s Amount: %d\r\n", obj_proto[real_object(selling->vnum)].text.name,
-            selling->vnum, selling_type[selling->type], selling->stock);
+  for (struct shop_sell_data *selling = shop_table[shop_nr].selling; selling; selling = selling->next) {
+    int real_obj = real_object(selling->vnum);
+    if (real_obj)
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-50s (%5ld) Type: %s Amount: %d\r\n", obj_proto[real_obj].text.name,
+              selling->vnum, selling_type[selling->type], selling->stock);
+  }
   page_string(ch->desc, buf, 0);
 }
 
@@ -1758,9 +1779,12 @@ void shedit_disp_selling_menu(struct descriptor_data *d)
   int i = 1;
   for (struct shop_sell_data *sell = SHOP->selling; sell; sell = sell->next, i++)
   {
-
-    snprintf(buf, sizeof(buf), "%d) ^c%-50s^n (^c%5ld^n) Type: ^c%6s^n", i, GET_OBJ_NAME(&obj_proto[real_object(sell->vnum)]),
-            sell->vnum, selling_type[sell->type]);
+    int real_obj = real_object(sell->vnum);
+    if (real_obj < 0)
+      snprintf(buf, sizeof(buf), "%d) INVALID OBJECT, DELETE IT  ", i);
+    else
+      snprintf(buf, sizeof(buf), "%d) ^c%-50s^n (^c%5ld^n) Type: ^c%6s^n", i, GET_OBJ_NAME(&obj_proto[real_obj]),
+              sell->vnum, selling_type[sell->type]);
     if (sell->type == SELL_STOCK)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Stock: ^c%d^n", sell->stock);
     strcat(buf, "\r\n");
