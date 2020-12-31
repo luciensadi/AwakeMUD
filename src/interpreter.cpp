@@ -2885,6 +2885,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("opend", "open");
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("lisy", "list");
+  COMMAND_ALIAS("unload", "eject");
   
   // Commands from other games.
   COMMAND_ALIAS("bamfin", "poofin");
