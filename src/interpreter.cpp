@@ -2824,7 +2824,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
   case CON_DELCNF2:
   case CON_QDELCONF2:
-    if (!strcmp(arg, GET_CHAR_NAME(d->character))) {
+    if (!str_cmp(arg, GET_CHAR_NAME(d->character))) {
       if (PLR_FLAGGED(d->character, PLR_FROZEN)) {
         SEND_TO_Q("You try to kill yourself, but the ice stops you.\r\n", d);
         SEND_TO_Q("Character not deleted.\r\n\r\n", d);
