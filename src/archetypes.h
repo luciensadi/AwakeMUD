@@ -1,7 +1,8 @@
 #ifndef __ARCHETYPES_H
 #define __ARCHETYPES_H
 
-#define NUM_ARCHETYPE_ABILITIES 5
+#define NUM_ARCHETYPE_SPELLS 10
+#define NUM_ARCHETYPE_ABILITIES 10
 #define NUM_ARCHETYPE_CYBERWARE 10
 #define NUM_ARCHETYPE_BIOWARE   10
 #define NUM_ARCHETYPE_CARRIED   20
@@ -19,6 +20,8 @@ struct archetype_data {
   int tradition;
   int aspect;
   int powers[NUM_ARCHETYPE_ABILITIES][2]; // 0 is power, 1 is rating
+  int spells[NUM_ARCHETYPE_SPELLS][3]; // 0 is spell ID, 1 is subtype, 2 is force
+  int forcepoints; // for bonding foci
   
   vnum_t weapon;
   vnum_t weapon_top;
@@ -36,11 +39,12 @@ struct archetype_data {
   vnum_t bioware[NUM_ARCHETYPE_BIOWARE];
 };
 
-
 #define ARCHETYPE_STREET_SAMURAI 0
 #define ARCHETYPE_ADEPT          1
 #define ARCHETYPE_SHAMANIC_MAGE  2
 #define ARCHETYPE_DECKER         3
+#define ARCHETYPE_HERMETIC       4
+#define ARCHETYPE_RIGGER         5
 
 // TODO: Increment this as the archetypes complete.
 #define NUM_CCR_ARCHETYPES 2

@@ -148,7 +148,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   
   // Selection mode.
   if (i < 0 || i >= NUM_CCR_ARCHETYPES) {
-    SEND_TO_Q("\r\nThat's not a valid archetype. Enter the archetype you'd like to play as: ", d);
+    SEND_TO_Q("\r\nThat's not a valid archetype. Enter the number of the archetype you'd like to play as: ", d);
     return;
   }
   
@@ -162,16 +162,34 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   for (int attr = BOD; attr <= WIL; attr++)
     GET_REAL_ATT(CH, attr) = archetypes[i]->attributes[attr];
       
-  // Set magic data. TODO.
+  // Set magic data.
   GET_TRADITION(CH) = archetypes[i]->tradition;
   GET_REAL_MAG(CH) = archetypes[i]->magic;
   GET_ASPECT(CH) = archetypes[i]->aspect;
   
-  // TODO: Grant forcepoints for bonding purposes.
+  // Grant forcepoints for bonding purposes.
+  GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
   
   // Set spells, if any. TODO.
+  for (int spell_idx = 0; spell_idx < NUM_ARCHETYPE_SPELLS; spell_idx++)
+    if (archetypes[i]->spells[spell_idx][0]) {
+      struct spell_data *spell = new spell_data;
+      spell->name = str_dup(spells[archetypes[i]->spells[spell_idx][0]].name);
+      spell->type = archetypes[i]->spells[spell_idx][0]; // ex: SPELL_MANABOLT
+      spell->subtype = archetypes[i]->spells[spell_idx][1]; // ex: BOD QUI STR - used for incattr
+      spell->force = archetypes[i]->spells[spell_idx][2];
+      spell->next = GET_SPELLS(CH);
+      GET_SPELLS(CH) = spell;
+    } else {
+      break;
+    }
   
-  // TODO: adept abilities
+  // Assign adept abilities.
+  for (int power = 0; power < NUM_ARCHETYPE_ABILITIES; power++)
+    if (archetypes[i]->powers[power][0])
+      GET_POWER_TOTAL(CH, archetypes[i]->powers[power][0]) = archetypes[i]->powers[power][1];
+    else
+      break;
   
   // Equip weapon.
   snprintf(buf, sizeof(buf), "Attempting to attach %lu %lu %lu...", archetypes[i]->weapon_top, archetypes[i]->weapon_barrel, archetypes[i]->weapon_under);
