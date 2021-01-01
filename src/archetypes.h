@@ -43,7 +43,7 @@ struct archetype_data {
 #define ARCHETYPE_DECKER         3
 
 // TODO: Increment this as the archetypes complete.
-#define NUM_CCR_ARCHETYPES 1
+#define NUM_CCR_ARCHETYPES 2
 
 extern struct archetype_data *archetypes[NUM_CCR_ARCHETYPES];
 
