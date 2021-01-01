@@ -2626,7 +2626,6 @@ void nanny(struct descriptor_data * d, char *arg)
           STATE(d) = CON_CLOSE;
           return;
         }
-        // TODO: If you died and then hit 1, your old character's data is leaked here.
         char char_name[strlen(GET_CHAR_NAME(d->character))+1];
         strcpy(char_name, GET_CHAR_NAME(d->character));
         free_char(d->character);
@@ -2642,12 +2641,14 @@ void nanny(struct descriptor_data * d, char *arg)
         }
         playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
       }
+      // Wipe out various pointers related to game state and recalculate carry weight.
       reset_char(d->character);
       PLR_FLAGS(d->character).RemoveBit(PLR_CUSTOMIZE);
       d->character->next = character_list;
       character_list = d->character;
       d->character->player.time.logon = time(0);
 
+      // Non-newbies don't get to start in the newbie load room.
       if (GET_LOADROOM(d->character) == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
         GET_LOADROOM(d->character) = mortal_start_room;
 
@@ -2668,8 +2669,12 @@ void nanny(struct descriptor_data * d, char *arg)
       if (ROOM_FLAGGED(&world[load_room], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room].number))
         load_room = real_room(mortal_start_room);
       /* If char was saved with NOWHERE, or real_room above failed... */
-      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED))
-        load_room = real_room(newbie_start_room);
+      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
+        if (d->ccr.archetypal)
+          load_room = real_room(GET_LOADROOM(d->character));
+        else
+          load_room = real_room(newbie_start_room);
+      }
 
       if (load_room == NOWHERE) {
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
@@ -2681,15 +2686,19 @@ void nanny(struct descriptor_data * d, char *arg)
           load_room = real_room(mortal_start_room);
       }
 
+      // Override all the previous with the frozen start room.
       if (PLR_FLAGGED(d->character, PLR_FROZEN))
         load_room = real_room(frozen_start_room);
 
+      // First-time login.
       if (!GET_LEVEL(d->character)) {
-        load_room = real_room(newbie_start_room);
-        if (!d->ccr.archetypal)
+        if (!d->ccr.archetypal) {
+          load_room = real_room(GET_LOADROOM(d->character));
           do_start(d->character, TRUE);
-        else
+        } else {
+          load_room = real_room(newbie_start_room);
           do_start(d->character, FALSE);
+        }
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
       } else {
@@ -2815,7 +2824,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
   case CON_DELCNF2:
   case CON_QDELCONF2:
-    if (!strcmp(arg, "yes") || !strcmp(arg, "YES")) {
+    if (!strcmp(arg, GET_CHAR_NAME(d->character))) {
       if (PLR_FLAGGED(d->character, PLR_FROZEN)) {
         SEND_TO_Q("You try to kill yourself, but the ice stops you.\r\n", d);
         SEND_TO_Q("Character not deleted.\r\n\r\n", d);
