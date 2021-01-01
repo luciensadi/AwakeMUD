@@ -36,6 +36,7 @@
 #include "protocol.h"
 #include "newdb.h"
 #include "helpedit.h"
+#include "archetypes.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2647,58 +2648,61 @@ void nanny(struct descriptor_data * d, char *arg)
       d->character->next = character_list;
       character_list = d->character;
       d->character->player.time.logon = time(0);
-
-      // Non-newbies don't get to start in the newbie load room.
-      if (GET_LOADROOM(d->character) == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
-        GET_LOADROOM(d->character) = mortal_start_room;
-
-      if ((load_room = GET_LAST_IN(d->character)) != NOWHERE)
+      
+      // Rewrote the entire janky-ass load room tree.        
+      // First: Frozen characters. They go to the frozen start room.
+      if (PLR_FLAGGED(d->character, PLR_FROZEN))
+        load_room = real_room(frozen_start_room);
+        
+      // Next: Unauthed (chargen) characters. They go to the start of their chargen areas.
+      else if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
+        if (!d->ccr.archetypal || (load_room = real_room(archetypes[d->ccr.archetype]->start_room)) == NOWHERE)
+          load_room = real_room(newbie_start_room);
+      }
+      
+      // Next: Characters who have GET_LAST_IN rooms load in there.
+      else if ((load_room = GET_LAST_IN(d->character)) != NOWHERE)
         load_room = real_room(load_room);
+        
+      // Post-processing: Non-newbies don't get to start in the newbie loadroom-- rewrite their loadroom value.
+      if (load_room == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
+        load_room = mortal_start_room;
 
+      // Post-processing: Staff with invalid or mort-start-room loadrooms instead load in at their defined loadroom.
       if (IS_SENATOR(d->character) && (load_room <= 0 || load_room == real_room(mortal_start_room)))
         load_room = real_room(GET_LOADROOM(d->character));
         
-      if (load_room < 0) {
-        snprintf(buf, sizeof(buf), "SYSERR: Character %s is loading in with invalid load room %ld (%ld). Changing to Grog's place (35500).",
-                     GET_CHAR_NAME(d->character), GET_LOADROOM(d->character), load_room);
-        mudlog(buf, d->character, LOG_SYSLOG, TRUE);
-        load_room = real_room(RM_ENTRANCE_TO_DANTES);
-        GET_LOADROOM(d->character) = RM_ENTRANCE_TO_DANTES;
-      }
-      
+      // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
       if (ROOM_FLAGGED(&world[load_room], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room].number))
         load_room = real_room(mortal_start_room);
-      /* If char was saved with NOWHERE, or real_room above failed... */
-      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
-        if (d->ccr.archetypal)
-          load_room = real_room(GET_LOADROOM(d->character));
-        else
-          load_room = real_room(newbie_start_room);
-      }
-
+      
+      // Post-processing: Invalid load room characters go to the newbie or mortal start rooms.
       if (load_room == NOWHERE) {
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
-          if (d->ccr.archetypal)
-            load_room = real_room(GET_LOADROOM(d->character));
-          else
-            load_room = real_room(RM_NEWBIE_LOADROOM);
+          load_room = real_room(RM_NEWBIE_LOADROOM);
         } else
           load_room = real_room(mortal_start_room);
       }
 
-      // Override all the previous with the frozen start room.
-      if (PLR_FLAGGED(d->character, PLR_FROZEN))
-        load_room = real_room(frozen_start_room);
-
-      // First-time login.
+      // First-time login. This overrides the above, but it's for a good cause.
       if (!GET_LEVEL(d->character)) {
-        if (!d->ccr.archetypal) {
-          load_room = real_room(GET_LOADROOM(d->character));
+        if (d->ccr.archetypal) {
+          load_room = real_room(archetypes[d->ccr.archetype]->start_room);
+          // Correct for invalid archetype start rooms.
+          if (load_room == NOWHERE) {
+            snprintf(buf, sizeof(buf), "WARNING: Start room %ld for archetype %s does not exist!", 
+                     archetypes[d->ccr.archetype]->start_room,
+                     archetypes[d->ccr.archetype]->name);
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            load_room = real_room(newbie_start_room);
+          }
           do_start(d->character, TRUE);
         } else {
           load_room = real_room(newbie_start_room);
           do_start(d->character, FALSE);
         }
+        
+          
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
       } else {

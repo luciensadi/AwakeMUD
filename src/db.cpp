@@ -2025,6 +2025,18 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].s_string = fl.ReadString("s_string");
   quest_table[quest_nr].e_string = fl.ReadString("e_string");
   quest_table[quest_nr].done = fl.ReadString("done");
+  
+  /* Alright, here's the situation. I was going to add in a location field for 
+     the quests, which would show up in the recap and help newbies out... BUT.
+     Turns out we use a shit-tacular file format that's literally just 'crap out
+     strings into a file and require that they exist, no defaulting allowed, or
+     you can't load any quests and the game dies'. Gotta love that jank-ass code.
+     
+     This feature is disabled until someone transitions all the quests into an
+     actually sensible file format. -- LS */
+#ifdef USE_QUEST_LOCATION_CODE
+  quest_table[quest_nr].location = NULL; //fl.ReadString("location");
+#endif
 
   top_of_questt = quest_nr++;
 }

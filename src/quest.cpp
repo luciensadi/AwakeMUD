@@ -435,9 +435,11 @@ void check_quest_kill(struct char_data *ch, struct char_data *victim)
       {
       case QMO_KILL_ONE:
       case QMO_KILL_MANY:
+        send_to_char("check_quest_kill: +1\r\n", ch);
         ch->player_specials->mob_complete[i]++;
         return;
       }
+  send_to_char("check_quest_kill: didn't count\r\n", ch);
 }
 
 void end_quest(struct char_data *ch)
@@ -799,7 +801,14 @@ SPECIAL(johnson)
       }
       
       // Drop the quest.
-      do_say(johnson, quest_table[GET_QUEST(ch)].quit, 0, 0);
+      if (quest_table[GET_QUEST(ch)].quit)
+        do_say(johnson, quest_table[GET_QUEST(ch)].quit, 0, 0);
+      else {
+        snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_QUEST(ch)].vnum);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        do_say(johnson, "Fine.", 0, 0);
+      }
+      
       end_quest(ch);
       forget(johnson, ch);
       return TRUE;
@@ -846,7 +855,13 @@ SPECIAL(johnson)
           GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
         GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
         reward(ch, johnson);
-        do_say(johnson, quest_table[GET_QUEST(ch)].finish, 0, 0);
+        if (quest_table[GET_QUEST(ch)].finish)
+          do_say(johnson, quest_table[GET_QUEST(ch)].finish, 0, 0);
+        else {
+          snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_QUEST(ch)].vnum);
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          do_say(johnson, "Well done.", 0, 0);
+        }
         forget(johnson, ch);
       } else
         do_say(johnson, "You haven't completed any of your objectives yet.", 0, 0);
@@ -882,7 +897,13 @@ SPECIAL(johnson)
       // If you've done this quest recently, you can't do it again until you do more.
       for (int i = QUEST_TIMER - 1; i >= 0; i--)
         if (GET_LQUEST(ch, i) == quest_table[GET_SPARE2(johnson)].vnum) {
-          do_say(johnson, quest_table[GET_SPARE2(johnson)].done, 0, 0);
+          if (quest_table[GET_SPARE2(johnson)].done)
+            do_say(johnson, quest_table[GET_SPARE2(johnson)].done, 0, 0);
+          else {
+            snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_SPARE2(johnson)].vnum);
+            mudlog(buf, ch, LOG_SYSLOG, TRUE);
+            do_say(johnson, "I don't need help right now.", 0, 0);
+          }
           if (memory(johnson, ch))
             forget(johnson, ch);
           return TRUE;
@@ -908,7 +929,13 @@ SPECIAL(johnson)
       
       // Assign the quest.
       GET_SPARE1(johnson) = 0;
-      do_say(johnson, quest_table[GET_SPARE2(johnson)].intro, 0, 0);
+      if (quest_table[GET_SPARE2(johnson)].intro)
+        do_say(johnson, quest_table[GET_SPARE2(johnson)].intro, 0, 0);
+      else {
+        snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_SPARE2(johnson)].vnum);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        do_say(johnson, "I've got a job for you.", 0, 0);
+      }
       do_say(johnson, "Are you interested?", 0, 0);
       if (!memory(johnson, ch))
         remember(johnson, ch);
@@ -968,7 +995,13 @@ SPECIAL(johnson)
       GET_SPARE1(johnson) = -1;
       GET_QUEST(ch) = 0;
       forget(johnson, ch);
-      do_say(johnson, quest_table[GET_SPARE2(johnson)].decline, 0, 0);
+      if (quest_table[GET_SPARE2(johnson)].decline)
+        do_say(johnson, quest_table[GET_SPARE2(johnson)].decline, 0, 0);
+      else {
+        snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[GET_SPARE2(johnson)].vnum);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        do_say(johnson, "Fine.", 0, 0);
+      }
       return TRUE;
     default:
       do_say(johnson, "Ugh, drank too much last night. Talk to me later when I've sobered up.", 0, 0);
@@ -1175,6 +1208,9 @@ void boot_one_quest(struct quest_data *quest)
   quest_table[quest_nr].done = str_dup(quest->done);
   quest_table[quest_nr].s_string = str_dup(quest->s_string);
   quest_table[quest_nr].e_string = str_dup(quest->e_string);
+#ifdef USE_QUEST_LOCATION_CODE
+  quest_table[quest_nr].location = str_dup(quest->location);
+#endif
 
   if ((i = real_mobile(quest_table[quest_nr].johnson)) > 0 &&
       mob_index[i].func != johnson)
@@ -1267,6 +1303,12 @@ void reboot_quest(int rnum, struct quest_data *quest)
   if (quest_table[rnum].e_string)
     delete [] quest_table[rnum].e_string;
   quest_table[rnum].e_string = str_dup(quest->e_string);
+  
+#ifdef USE_QUEST_LOCATION_CODE
+  if (quest_table[rnum].location)
+    delete [] quest_table[rnum].location;
+  quest_table[rnum].location = str_dup(quest->location);
+#endif
 }
 
 int write_quests_to_disk(int zone)
@@ -1274,6 +1316,7 @@ int write_quests_to_disk(int zone)
   long i, j, found = 0, counter;
   FILE *fp;
   zone = real_zone(zone);
+  bool wrote_something = FALSE;
 
   snprintf(buf, sizeof(buf), "world/qst/%d.qst", zone_table[zone].number);
 
@@ -1287,6 +1330,7 @@ int write_quests_to_disk(int zone)
   for (counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top; counter++) {
     if ((i = real_quest(counter)) > -1) {
+      wrote_something = TRUE;
       fprintf(fp, "#%ld\n", quest_table[i].vnum);
       fprintf(fp, "%ld %d %d %d %d %d %d %d %d %d %d %d\n", quest_table[i].johnson,
               quest_table[i].time, quest_table[i].min_rep,
@@ -1318,25 +1362,35 @@ int write_quests_to_disk(int zone)
       fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].s_string));
       fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].e_string));
       fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].done));
+#ifdef USE_QUEST_LOCATION_CODE
+      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].location));
+#endif
     }
   }
   fprintf(fp, "$~\n");
   fclose(fp);
 
-  fp = fopen("world/qst/index", "w+");
+  // If we wrote anything for this zone, update the index file.
+  if (wrote_something) {
+    fp = fopen("world/qst/index", "w+");
 
-  for (i = 0; i <= top_of_zone_table; ++i) {
-    found = 0;
-    for (j = 0; !found && j <= top_of_questt; j++)
-      if (quest_table[j].vnum >= (zone_table[i].number * 100) &&
-          quest_table[j].vnum <= zone_table[i].top) {
-        found = 1;
-        fprintf(fp, "%d.qst\n", zone_table[i].number);
-      }
+    for (i = 0; i <= top_of_zone_table; ++i) {
+      found = 0;
+      for (j = 0; !found && j <= top_of_questt; j++)
+        if (quest_table[j].vnum >= (zone_table[i].number * 100) &&
+            quest_table[j].vnum <= zone_table[i].top) {
+          found = 1;
+          fprintf(fp, "%d.qst\n", zone_table[i].number);
+        }
+    }
+
+    fprintf(fp, "$~\n");
+    fclose(fp);
   }
-
-  fprintf(fp, "$~\n");
-  fclose(fp);
+  // Otherwise, delete the empty junk file.
+  else
+    remove(buf);
+  
   return 1;
 }
 
@@ -1642,6 +1696,10 @@ void qedit_disp_menu(struct descriptor_data *d)
                QUEST->intro, CCNRM(CH, C_CMP));
   send_to_char(CH, "9) Decline text:       %s%s%s\r\n", CCCYN(CH, C_CMP),
                QUEST->decline, CCNRM(CH, C_CMP));
+#ifdef USE_QUEST_LOCATION_CODE
+  send_to_char(CH, "0) Location text:      %s%s%s\r\n", CCCYN(CH, C_CMP),
+               QUEST->decline, CCNRM(CH, C_CMP));
+#endif
   send_to_char(CH, "a) Quit text:          %s%s%s\r\n", CCCYN(CH, C_CMP),
                QUEST->quit, CCNRM(CH, C_CMP));
   send_to_char(CH, "b) Completed text:     %s%s%s\r\n", CCCYN(CH, C_CMP),
@@ -1798,6 +1856,10 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     case '9':
       send_to_char("Enter decline text: ", d->character);
       d->edit_mode = QEDIT_DECLINE;
+      break;
+    case '0':
+      send_to_char("Enter a description of the Johnson's location (ex: 'a booth on the second level of Dante's Inferno'): ", d->character);
+      d->edit_mode = QEDIT_LOCATION;
       break;
     case 'a':
     case 'A':
@@ -2334,6 +2396,14 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     QUEST->decline = str_dup(arg);
     qedit_disp_menu(d);
     break;
+#ifdef USE_QUEST_LOCATION_CODE
+  case QEDIT_LOCATION:
+    if (QUEST->location)
+      delete [] QUEST->location;
+    QUEST->location = str_dup(arg);
+    qedit_disp_menu(d);
+    break;
+#endif
   case QEDIT_QUIT:
     if (QUEST->quit)
       delete [] QUEST->quit;

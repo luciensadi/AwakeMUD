@@ -124,7 +124,7 @@ if ((vnum) > 0) { \
     attach_attachment_to_weapon(temp_obj, weapon, NULL, (location)); \
     extract_obj(temp_obj); \
   } else { \
-    snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach nonexistent item %d to weapon for archetype %d.", (location), i); \
+    snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach nonexistent item %d to %s of weapon for archetype %s.", (vnum), gun_accessory_locations[(location)], archetypes[i]->name); \
     mudlog(buf, CH, LOG_SYSLOG, TRUE); \
   } \
 }
@@ -205,18 +205,36 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(GET_EQ(CH, WEAR_WIELD)), AMMO_NORMAL, archetypes[i]->ammo_q);
   
   // Grant modulator (unbonded, unworn).
-  if (archetypes[i]->modulator > 0)
-    obj_to_char(read_object(archetypes[i]->modulator, VIRTUAL), CH);
+  if (archetypes[i]->modulator > 0) {
+    if ((temp_obj = read_object(archetypes[i]->modulator, VIRTUAL))) {
+      obj_to_char(temp_obj, CH);
+    } else {
+      snprintf(buf, sizeof(buf), "SYSERR: Invalid modulator %ld specified for archetype %s.", archetypes[i]->modulator, archetypes[i]->name);
+    }
+  }
+    
   
   // Equip worn items.
   for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++)
-    if (archetypes[i]->worn[wearloc] > 0)
-      equip_char(CH, read_object(archetypes[i]->worn[wearloc], VIRTUAL), wearloc);
+    if (archetypes[i]->worn[wearloc] > 0) {
+      if ((temp_obj = read_object(archetypes[i]->worn[wearloc], VIRTUAL))) {
+        obj_to_char(temp_obj, CH);
+      } else {
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid worn item %ld specified for archetype %s's wearloc %s (%d).", 
+                 archetypes[i]->worn[wearloc], archetypes[i]->name, where[wearloc], wearloc);
+      }
+    }
   
   // Give carried items.
   for (int carried = 0; carried < NUM_ARCHETYPE_CARRIED; carried++)
-    if (archetypes[i]->carried[carried] > 0)
-      obj_to_char(read_object(archetypes[i]->carried[carried], VIRTUAL), CH);
+    if (archetypes[i]->carried[carried] > 0) {
+      if ((temp_obj = read_object(archetypes[i]->carried[carried], VIRTUAL))) {
+        obj_to_char(temp_obj, CH);
+      } else {
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid carried item %ld specified for archetype %s.", 
+                 archetypes[i]->carried[carried], archetypes[i]->name);
+      }
+    }
       
   // Set their index and essence. Everyone starts with 0 bioware index and 6.00 essence.
   GET_INDEX(CH) = 0;
@@ -225,7 +243,14 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Equip cyberware (deduct essence and modify stats as appropriate)
   for (int cyb = 0; cyb < NUM_ARCHETYPE_CYBERWARE; cyb++) {
     if (archetypes[i]->cyberware[cyb]) {
-      temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL);
+      if ((temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL))) {
+        obj_to_char(temp_obj, CH);
+      } else {
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for archetype %s.", 
+                 archetypes[i]->cyberware[cyb], archetypes[i]->name);
+        continue;
+      }
+      
       int esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
       
       if (GET_TRADITION(CH) != TRAD_MUNDANE) {
@@ -243,12 +268,19 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Equip bioware (deduct essence and modify stats as appropriate)
   for (int bio = 0; bio < NUM_ARCHETYPE_BIOWARE; bio++) {
     if (archetypes[i]->bioware[bio]) {
-      temp_obj = read_object(archetypes[i]->bioware[bio], VIRTUAL);
+      if ((temp_obj = read_object(archetypes[i]->bioware[bio], VIRTUAL))) {
+        obj_to_char(temp_obj, CH);
+      } else {
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid bioware item %ld specified for archetype %s.", 
+                 archetypes[i]->bioware[bio], archetypes[i]->name);
+        continue;
+      }
+      
       int esscost = GET_OBJ_VAL(temp_obj, 4); 
       
       GET_INDEX(CH) += esscost;
       if (GET_TRADITION(CH) != TRAD_MUNDANE) {
-        magic_loss(CH, -esscost, TRUE);
+        magic_loss(CH, esscost / 2, TRUE);
       }
       
       GET_HIGHEST_INDEX(CH) = GET_INDEX(CH);

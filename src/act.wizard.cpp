@@ -87,6 +87,7 @@ extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict
 extern struct elevator_data *elevator;
 extern int num_elevators;
 
+extern int write_quests_to_disk(int zone);
 extern void write_world_to_disk(int vnum);
 extern void alarm_handler(int signal);
 
@@ -5612,6 +5613,7 @@ ACMD(do_rewrite_world) {
   // Perform writing for all zones that have rooms.
   for (int i = 0; i <= top_of_zone_table; i++) {
     write_world_to_disk(zone_table[i].number);
+    write_quests_to_disk(zone_table[i].number);
   }
   
   // Re-register our alarm handler.

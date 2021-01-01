@@ -4731,8 +4731,14 @@ ACMD(do_recap)
   if (!GET_QUEST(ch))
     send_to_char(ch, "You're not currently on a run.\r\n");
   else {
-    snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
-            quest_table[GET_QUEST(ch)].info);
+#ifdef USE_QUEST_LOCATION_CODE
+    if (quest_table[GET_QUEST(ch)].location)
+      snprintf(buf, sizeof(buf), "At %s, %s told you: \r\n%s", quest_table[GET_QUEST(ch)].location, GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
+              quest_table[GET_QUEST(ch)].info);
+    else
+#endif
+      snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
+              quest_table[GET_QUEST(ch)].info);
     send_to_char(buf, ch);
   }
 }

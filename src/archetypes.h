@@ -31,7 +31,7 @@ struct archetype_data {
   int ammo_q;
   int nuyen;
   int subsidy_card;
-  int modulator;
+  vnum_t modulator;
   
   vnum_t worn[NUM_WEARS];
   vnum_t carried[NUM_ARCHETYPE_CARRIED];

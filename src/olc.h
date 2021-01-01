@@ -276,11 +276,12 @@ extern void write_index_file(const char *suffix);
 #define QEDIT_FINISH                     32
 #define QEDIT_INFO                       33
 #define QEDIT_REWARD                     34
-#define QEDIT_SHOUR    35
-#define QEDIT_EHOUR    36
-#define QEDIT_SSTRING    37
-#define QEDIT_ESTRING    38
-#define QEDIT_DONE    39
+#define QEDIT_SHOUR                      35
+#define QEDIT_EHOUR                      36
+#define QEDIT_SSTRING                    37
+#define QEDIT_ESTRING                    38
+#define QEDIT_DONE                       39
+#define QEDIT_LOCATION                   40
 
 // zone defines
 #define ZEDIT_CONFIRM_EDIT_DATA         0

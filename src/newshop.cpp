@@ -287,12 +287,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           }
           magic_loss(ch, esscost, TRUE);
         }
-        ch->real_abils.esshole = 0;
-        ch->real_abils.ess -= esscost;
-        ch->real_abils.ess = MAX(ch->real_abils.ess, 0);
+        GET_ESSHOLE(ch) = 0;
+        GET_REAL_ESS(ch) -= esscost;
+        GET_REAL_ESS(ch) = MAX(GET_REAL_ESS(ch), 0);
       } else {
-        ch->real_abils.esshole -= esscost;
-        ch->real_abils.esshole = MAX(ch->real_abils.esshole, 0);
+        GET_ESSHOLE(ch) -= esscost;
+        GET_ESSHOLE(ch) = MAX(GET_ESSHOLE(ch), 0);
       }
       obj_to_cyberware(obj, ch);
     } else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {

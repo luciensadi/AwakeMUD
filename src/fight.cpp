@@ -2493,11 +2493,12 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
           break;
         }
     }
-    if (ch != victim && !IS_NPC(ch) && GET_QUEST(ch) && IS_NPC(victim))
-      check_quest_kill(ch, victim);
-    else if (ch != victim && AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
-             !IS_NPC(ch->master) && GET_QUEST(ch->master) && IS_NPC(victim))
-      check_quest_kill(ch->master, victim);
+    if (ch != victim) {
+      if (!IS_NPC(ch) && GET_QUEST(ch) && IS_NPC(victim))
+        check_quest_kill(ch, victim);
+      else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && IS_NPC(victim))
+        check_quest_kill(ch->master, victim);
+    }
     
     if ((IS_NPC(victim) || victim->desc) && ch != victim &&
         attacktype != TYPE_EXPLOSION) {
