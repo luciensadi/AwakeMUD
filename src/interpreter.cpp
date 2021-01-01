@@ -54,7 +54,7 @@ extern int restrict;
 /* external functions */
 void echo_on(struct descriptor_data * d);
 void echo_off(struct descriptor_data * d);
-void do_start(struct char_data * ch);
+void do_start(struct char_data * ch, bool wipe_skills);
 int special(struct char_data * ch, int cmd, char *arg);
 int isbanned(char *hostname);
 void init_create_vars(struct descriptor_data *d);
@@ -2672,9 +2672,12 @@ void nanny(struct descriptor_data * d, char *arg)
         load_room = real_room(newbie_start_room);
 
       if (load_room == NOWHERE) {
-        if (PLR_FLAGGED(d->character, PLR_NEWBIE))
-          load_room = real_room(RM_NEWBIE_LOADROOM); // The Neophyte Hotel (previously 8039 which does not exist)
-        else
+        if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
+          if (d->ccr.archetypal)
+            load_room = real_room(GET_LOADROOM(d->character));
+          else
+            load_room = real_room(RM_NEWBIE_LOADROOM);
+        } else
           load_room = real_room(mortal_start_room);
       }
 
@@ -2684,7 +2687,9 @@ void nanny(struct descriptor_data * d, char *arg)
       if (!GET_LEVEL(d->character)) {
         load_room = real_room(newbie_start_room);
         if (!d->ccr.archetypal)
-          do_start(d->character);
+          do_start(d->character, TRUE);
+        else
+          do_start(d->character, FALSE);
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
       } else {
@@ -2797,9 +2802,10 @@ void nanny(struct descriptor_data * d, char *arg)
         STATE(d) = CON_QMENU;
       }
     } else {
-      SEND_TO_Q("\r\nYOU ARE ABOUT TO DELETE THIS CHARACTER PERMANENTLY.\r\n"
-                "ARE YOU ABSOLUTELY SURE?\r\n\r\n"
-                "Please type \"yes\" to confirm: ", d);
+      snprintf(buf, sizeof(buf), "\r\nYOU ARE ABOUT TO DELETE THIS CHARACTER (%s) PERMANENTLY. THIS CANNOT BE UNDONE.\r\n", GET_CHAR_NAME(d->character));
+      SEND_TO_Q(buf, d);
+      snprintf(buf, sizeof(buf), "\r\n\r\nIf you're ABSOLUTELY SURE, type your character's name (%s) to confirm, or anything else to abort: ", GET_CHAR_NAME(d->character));
+      SEND_TO_Q(buf, d);
       if (STATE(d) == CON_DELCNF1)
         STATE(d) = CON_DELCNF2;
       else

@@ -2220,7 +2220,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
   struct char_data *victim;
   char *name = arg, *level = buf2;
   int newlevel, i;
-  void do_start(struct char_data *ch);
+  void do_start(struct char_data *ch, bool wipe_skills);
   extern void check_autowiz(struct char_data * ch);
 
   two_arguments(argument, name, level);
@@ -2277,7 +2277,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     send_to_char(victim, "%s has demoted you from %s to %s. Note that this has reset your skills, stats, karma, etc.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
     snprintf(buf3, sizeof(buf3), "%s has demoted %s from %s to %s.",
             GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
-    do_start(victim);
+    do_start(victim, TRUE);
     GET_LEVEL(victim) = newlevel;
   } else {
     /* Preserved for history's sake. -LS

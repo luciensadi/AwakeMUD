@@ -286,7 +286,7 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest)
 }
 
 /* Some initializations for characters, including initial skills */
-void do_start(struct char_data * ch)
+void do_start(struct char_data * ch, bool wipe_skills)
 {
   void advance_level(struct char_data * ch);
 
@@ -325,11 +325,13 @@ void do_start(struct char_data * ch)
   ch->player.time.lastdisc = time(0);
 
   // Clear all their skills except for English.
-  for (int i = MIN_SKILLS; i < MAX_SKILLS; i++) {
-    if (i == SKILL_ENGLISH)
-      set_character_skill(ch, i, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
-    else
-      set_character_skill(ch, i, 0, FALSE);
+  if (wipe_skills) {
+    for (int i = MIN_SKILLS; i < MAX_SKILLS; i++) {
+      if (i == SKILL_ENGLISH)
+        set_character_skill(ch, i, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
+      else
+        set_character_skill(ch, i, 0, FALSE);
+    }
   }
   
   // For morts, this just saves them and prints a message about their new level.
@@ -427,10 +429,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_REAL_CHA(ch) = atoi(row[33]);
   GET_REAL_INT(ch) = atoi(row[34]);
   GET_REAL_WIL(ch) = atoi(row[35]);
-  ch->real_abils.ess = atoi(row[36]);
-  ch->real_abils.esshole = atoi(row[37]);
-  ch->real_abils.bod_index = atoi(row[38]);
-  ch->real_abils.highestindex = atoi(row[39]);
+  GET_REAL_ESS(ch) = atoi(row[36]);
+  GET_ESSHOLE(ch) = atoi(row[37]);
+  GET_INDEX(ch) = atoi(row[38]);
+  GET_HIGHEST_INDEX(ch) = atoi(row[39]);
   ch->real_abils.hacking_pool_max = atoi(row[40]);
   ch->real_abils.body_pool = atoi(row[41]);
   ch->real_abils.defense_pool = atoi(row[42]);

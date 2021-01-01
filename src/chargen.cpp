@@ -217,6 +217,10 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   for (int carried = 0; carried < NUM_ARCHETYPE_CARRIED; carried++)
     if (archetypes[i]->carried[carried] > 0)
       obj_to_char(read_object(archetypes[i]->carried[carried], VIRTUAL), CH);
+      
+  // Set their index and essence. Everyone starts with 0 bioware index and 6.00 essence.
+  GET_INDEX(CH) = 0;
+  GET_REAL_ESS(CH) = 600;
   
   // Equip cyberware (deduct essence and modify stats as appropriate)
   for (int cyb = 0; cyb < NUM_ARCHETYPE_CYBERWARE; cyb++) {
@@ -230,8 +234,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         magic_loss(CH, esscost, TRUE);
       }
       
-      CH->real_abils.ess -= esscost;
-      CH->real_abils.ess = MAX(CH->real_abils.ess, 0);
+      GET_REAL_ESS(CH) -= esscost;
       
       obj_to_cyberware(temp_obj, CH);
     }
@@ -248,7 +251,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         magic_loss(CH, -esscost, TRUE);
       }
       
-      CH->real_abils.highestindex = GET_INDEX(CH);
+      GET_HIGHEST_INDEX(CH) = GET_INDEX(CH);
       obj_to_bioware(temp_obj, CH);
     }
   }
@@ -274,7 +277,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   SEND_TO_Q("\r\n\n*** PRESS RETURN: ", d);
   STATE(d) = CON_RMOTD;
   
-  // Set skills. Has to be after CreateChar so they don't get wiped. TODO: not setting
+  // Set skills. Has to be after CreateChar so they don't get wiped.
   for (int skill = 0; skill < MAX_SKILLS; skill++)
     if (archetypes[i]->skills[skill])
       set_character_skill(CH, skill, archetypes[i]->skills[skill], FALSE);
@@ -286,7 +289,9 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   obj_to_char(temp_obj, CH);
   
   d->ccr.archetypal = TRUE;
+  d->ccr.archetype = i;
 
+  // Wipe their remaining ccr data.
   init_create_vars(d);
 }
 
