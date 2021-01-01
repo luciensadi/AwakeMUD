@@ -102,12 +102,10 @@ struct archetype_data *generate_adept() {
   struct archetype_data *arch = new archetype_data;
   int i = 0;
   
-  // combat sense 3, side step 5
-  
   memset(arch, 0, sizeof(struct archetype_data));
   
   arch->name = str_dup("Adept");
-  arch->race = RACE_HUMAN;
+  arch->race = RACE_ORK;
   
   arch->start_room = 90600;
   arch->auth_room = 90600; // todo
@@ -115,9 +113,9 @@ struct archetype_data *generate_adept() {
   // Set attributes.
   arch->attributes[BOD] = 6;
   arch->attributes[QUI] = 6;
-  arch->attributes[STR] = 6;
+  arch->attributes[STR] = 8;
   arch->attributes[CHA] = 1;
-  arch->attributes[INT] = 6;
+  arch->attributes[INT] = 5;
   arch->attributes[WIL] = 6;
   // Reaction, essence, etc is autocomputed on character creation.
   
@@ -127,9 +125,10 @@ struct archetype_data *generate_adept() {
   
   // Set adept powers.
   i = 0;
-  ARCH_ADEPT_POWER(ADEPT_SIDESTEP, 6);
-  ARCH_ADEPT_POWER(ADEPT_COMBAT_SENSE, 3);
-  assert(i < NUM_ARCHETYPE_CARRIED);
+  ARCH_ADEPT_POWER(ADEPT_COUNTERSTRIKE, 3);
+  ARCH_ADEPT_POWER(ADEPT_IMPROVED_QUI, 3);
+  ARCH_ADEPT_POWER(ADEPT_MYSTIC_ARMOUR, 3);
+  assert(i < NUM_ARCHETYPE_ABILITIES);
   
   // Set skills.
   arch->skills[SKILL_ASSAULT_RIFLES] = 6;
@@ -310,9 +309,9 @@ struct archetype_data *generate_hermetic() {
   arch->name = str_dup("Hermetic");
   arch->race = RACE_HUMAN;
   
-  
-  arch->start_room = 90800;
-  arch->auth_room = 90800; // todo
+  // kosher for hermetic mage
+  arch->start_room = 90700;
+  arch->auth_room = 90738;
   
   // Set attributes.
   arch->attributes[BOD] = 6;
