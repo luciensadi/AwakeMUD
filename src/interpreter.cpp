@@ -2909,6 +2909,15 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("bamfout", "poofout");
   COMMAND_ALIAS("sacrifice", "junk");
   
+  // Common staff goofs.
+  COMMAND_ALIAS("odelete", "idelete");
+  COMMAND_ALIAS("oload", "iload");
+  COMMAND_ALIAS("oedit", "iedit");
+  COMMAND_ALIAS("ostat", "vstat");
+  COMMAND_ALIAS("mstat", "vstat");
+  COMMAND_ALIAS("qstat", "vstat");
+  COMMAND_ALIAS("sstat", "vstat");
+  
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
   COMMAND_ALIAS("pickup", "get");

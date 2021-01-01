@@ -2786,11 +2786,23 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
       break;
     case ITEM_GUN_AMMO:
       // A box of ammunition.
-      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d units of %s %s ammo", GET_OBJ_VAL(obj, 0),
-              ammo_type[GET_OBJ_VAL(obj, 2)].name, weapon_type[GET_OBJ_VAL(obj, 1)]);
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s", 
+               GET_AMMOBOX_QUANTITY(obj), 
+               get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
       break;
+    case ITEM_GUN_MAGAZINE:
+      // A magazine.
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s", 
+               GET_MAGAZINE_AMMO_COUNT(obj), 
+               get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj), GET_MAGAZINE_AMMO_TYPE(obj), GET_MAGAZINE_AMMO_COUNT(obj)));
     default:
       break;
+  }
+  
+  if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", bonded to character id %d with %d nuyen on it", 
+             GET_OBJ_VAL(obj, 0),
+             GET_OBJ_VAL(obj, 1));
   }
   
   return str_dup(log_string);

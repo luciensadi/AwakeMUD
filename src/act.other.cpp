@@ -238,6 +238,7 @@ ACMD(do_steal)
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
         mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        delete [] representation;
       }
     } else {                    /* obj found in inventory */
       if ((IS_CARRYING_N(ch) + 1 < CAN_CARRY_N(ch))) {
@@ -248,6 +249,7 @@ ACMD(do_steal)
             char *representation = generate_new_loggable_representation(obj);
             snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
             mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+            delete [] representation;
             
             obj_from_char(obj);
             obj_to_char(obj, ch);
