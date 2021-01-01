@@ -117,7 +117,7 @@ struct archetype_data *generate_adept() {
   arch->race = RACE_ORK;
   
   arch->start_room = 90600;
-  arch->auth_room = 90600; // todo
+  arch->auth_room = 90629;
   
   // Set attributes.
   arch->attributes[BOD] = 6;
