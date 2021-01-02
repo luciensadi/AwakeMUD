@@ -3124,7 +3124,7 @@ POWER(spirit_dematerialize)
   act("$n fades from the physical realm.\r\n", TRUE, spirit, 0, ch, TO_ROOM);
   MOB_FLAGS(spirit).RemoveBits(MOB_DUAL_NATURE, MOB_FLAMEAURA, ENDBIT);
   MOB_FLAGS(spirit).SetBit(MOB_ASTRAL);
-  spiritdata->services--;
+  // spiritdata->services--;
 }
 
 POWER(spirit_materialize)
@@ -3135,7 +3135,7 @@ POWER(spirit_materialize)
   }
   MOB_FLAGS(spirit).SetBit(MOB_DUAL_NATURE);
   MOB_FLAGS(spirit).RemoveBit(MOB_ASTRAL);
-  spiritdata->services--;
+  // spiritdata->services--;
   act("$n takes on a physical form.", TRUE, spirit, 0, ch, TO_ROOM);
 }
 
