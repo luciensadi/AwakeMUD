@@ -435,11 +435,11 @@ void check_quest_kill(struct char_data *ch, struct char_data *victim)
       {
       case QMO_KILL_ONE:
       case QMO_KILL_MANY:
-        send_to_char("check_quest_kill: +1\r\n", ch);
+        // send_to_char("check_quest_kill: +1\r\n", ch);
         ch->player_specials->mob_complete[i]++;
         return;
       }
-  send_to_char("check_quest_kill: didn't count\r\n", ch);
+  // send_to_char("check_quest_kill: didn't count\r\n", ch);
 }
 
 void end_quest(struct char_data *ch)

@@ -223,6 +223,8 @@ struct teach_data teachers[] = {
 
    { 22871, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "You spend some time reading through the library.\r\n", LIBRARY }, 
 
+   { 62803, { SKILL_PILOT_CAR, SKILL_PILOT_BIKE, SKILL_PISTOLS, SKILL_UNARMED_COMBAT, SKILL_EDGED_WEAPONS, SKILL_STREET_ETIQUETTE, SKILL_STEALTH, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "You spend some time listening to Axehead's stories, and you feel like you've learned something.\r\n", 3 },
+
   { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Report this bug!\r\n", 0 } // this MUST be last
 };
 
@@ -533,6 +535,7 @@ void assign_mobiles(void)
   SPECIAL(knightcenter_bouncer);
   SPECIAL(cybered_yakuza);
   SPECIAL(airport_guard);
+  SPECIAL(axehead);
 
   /* trainers */
   for (i = 0; trainers[i].vnum != 0; i++)
@@ -699,6 +702,9 @@ void assign_mobiles(void)
   
   /* Star Sapphire */
   ASSIGNMOB(70302, bouncer_gentle);
+  
+  /* Slitch Pit */
+  ASSIGNMOB(62803, axehead);
 }
 
 /* assign special procedures to objects */
@@ -872,6 +878,8 @@ void assign_rooms(void)
   SPECIAL(floor_has_glass_shards);
   SPECIAL(chargen_career_archetype_paths);
   SPECIAL(chargen_spirit_combat_west);
+  SPECIAL(archetype_chargen_magic_split);
+  SPECIAL(archetype_chargen_reverse_magic_split);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -962,6 +970,10 @@ void assign_rooms(void)
   ASSIGNROOM(35610, mageskill_moore);
   ASSIGNROOM(62166, airport_gate);
   ASSIGNROOM(62173, airport_gate);
+  
+  /* Archetypal chargen. */
+  ASSIGNROOM(90700, archetype_chargen_magic_split);
+  ASSIGNROOM(90709, archetype_chargen_reverse_magic_split);
   
   // Junkyard
   ASSIGNROOM(70504, floor_has_glass_shards);

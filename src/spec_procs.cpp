@@ -5480,3 +5480,75 @@ SPECIAL(restoration_button) {
   
   return FALSE;
 }
+
+SPECIAL(axehead) {
+  int message_num;
+  const char *axehead_messages[] = {
+    "Runners these days don't realize how valuable keeping notes on their pocket secretary is. Like where Johnsons hang out.",
+    "Stick your radio and phone in a pocket. You can still hear 'em, and it keeps your hands free.",
+    "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun in their hand.",
+    "Back in my day, we didn't have anything like the 8 MHz band available. Being able to talk to runners is a blessing.",
+    "When in doubt, just take a cab back to somewhere familiar.",
+    "If you're on a job and you just can't get it done, call your Johnson and tell them you quit. Easier than hoofing it all the way back.",
+    "It's dangerous to go alone. Make friends."
+  };
+#define NUM_AXEHEAD_MESSAGES 7
+  
+  if (cmd || FIGHTING(ch) || !AWAKE(ch) || (message_num = number(0, 100)) >= NUM_AXEHEAD_MESSAGES)
+    return FALSE;
+    
+  do_say(ch, axehead_messages[message_num], 0, 0);
+  return TRUE;
+}
+
+SPECIAL(archetype_chargen_magic_split) {
+  struct room_data *room = (struct room_data *) me;
+  struct room_data *temp_to_room = NULL;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  // Funnel hermetic and shamanic mages into the correct archetypal path.
+  if (CMD_IS("south") || CMD_IS("s")) {
+    // Store the current exit, then overwrite with our custom one.
+    temp_to_room = room->dir_option[SOUTH]->to_room;
+    if (GET_TRADITION(ch) == TRAD_HERMETIC)
+      room->dir_option[SOUTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC)];
+    else
+      room->dir_option[SOUTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC)];
+      
+    // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
+    ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
+    
+    // Restore the south exit for the room to the normal one.
+    room->dir_option[SOUTH]->to_room = temp_to_room;
+  }
+    
+  return TRUE;
+}
+
+SPECIAL(archetype_chargen_reverse_magic_split) {
+  struct room_data *room = (struct room_data *) me;
+  struct room_data *temp_to_room = NULL;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  // Funnel hermetic and shamanic mages into the correct archetypal path.
+  if (CMD_IS("north") || CMD_IS("n")) {
+    // Store the current exit, then overwrite with our custom one.
+    temp_to_room = room->dir_option[NORTH]->to_room;
+    if (GET_TRADITION(ch) == TRAD_HERMETIC)
+      room->dir_option[NORTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_CONJURING_HERMETIC)];
+    else
+      room->dir_option[NORTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_CONJURING_SHAMANIC)];
+      
+    // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
+    ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
+    
+    // Restore the north exit for the room to the normal one.
+    room->dir_option[NORTH]->to_room = temp_to_room;
+  }
+    
+  return TRUE;
+}
