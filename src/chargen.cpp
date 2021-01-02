@@ -124,7 +124,7 @@ if ((vnum) > 0) { \
     attach_attachment_to_weapon(temp_obj, weapon, NULL, (location)); \
     extract_obj(temp_obj); \
   } else { \
-    snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach nonexistent item %d to %s of weapon for archetype %s.", (vnum), gun_accessory_locations[(location)], archetypes[i]->name); \
+    snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach nonexistent item %ld to %s of weapon for archetype %s.", (vnum), gun_accessory_locations[(location)], archetypes[i]->name); \
     mudlog(buf, CH, LOG_SYSLOG, TRUE); \
   } \
 }
