@@ -3333,6 +3333,9 @@ ACMD(do_show)
   void show_shops(struct char_data * ch, char *value);
   void hcontrol_list_houses(struct char_data *ch);
   SPECIAL(call_elevator);
+  
+  int total_stats;
+  bool printed;
 
   struct show_struct {
     const char *cmd;
@@ -3360,6 +3363,7 @@ ACMD(do_show)
                { "traps",          LVL_BUILDER },
                { "ammo",           LVL_ADMIN },
                { "storage",        LVL_BUILDER },
+               { "anomalies",      LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -3726,6 +3730,91 @@ ACMD(do_show)
                 vnum_from_non_connected_zone(world[i].number) ? " " : "*",
                 world[i].name);
     send_to_char(buf, ch);
+    break;
+  case 21:
+    send_to_char("Anomalous Rooms -----------\r\n", ch);
+    for (i = 0, j = 0; i <= top_of_world; i++) {
+      // Check for hidden rating higher than 10 (or whatever threshold is configured as).
+      for (k = 0; k < NUM_OF_DIRS; k++) {
+        if (world[i].dir_option[k] && world[i].dir_option[k]->hidden > ANOMALOUS_HIDDEN_RATING_THRESHOLD) {
+          send_to_char(ch, "%4d: [%8ld] %s %s^n: %s exit has hidden rating %d > %d\r\n", ++j,
+                  world[i].number,
+                  vnum_from_non_connected_zone(world[i].number) ? " " : "*",
+                  world[i].name,
+                  dirs[k],
+                  world[i].dir_option[k]->hidden,
+                  ANOMALOUS_HIDDEN_RATING_THRESHOLD);
+        }
+      }
+    }
+    if (j == 0)
+      send_to_char("...None.\r\n", ch);
+    
+    send_to_char("\r\n\r\nAnomalous Mobs -----------\r\n", ch);
+    for (i = 0, j = 0; i <= top_of_mobt; i++) {
+      printed = FALSE;
+      
+      // Skip non-connected areas or known staff areas.
+      if (vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[i]))
+          || GET_MOB_VNUM(&mob_proto[i]) < 100
+          || (GET_MOB_VNUM(&mob_proto[i]) >= 1000 && GET_MOB_VNUM(&mob_proto[i]) <= 1099)
+          || (GET_MOB_VNUM(&mob_proto[i]) >= 10000 && GET_MOB_VNUM(&mob_proto[i]) <= 10099))
+        continue;
+      
+      // Check stats, etc
+      total_stats = 0;
+      for (k = BOD; k <= REA; k++)
+        total_stats += GET_REAL_ATT(&mob_proto[i], k);
+      
+      snprintf(buf, sizeof(buf), "%4d: [%8ld] %s %s^n", ++j,
+               GET_MOB_VNUM(&mob_proto[i]),
+               vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[i])) ? " " : "*",
+               GET_CHAR_NAME(&mob_proto[i]));
+               
+      // Flag mobs with crazy stats
+      if (total_stats > ANOMALOUS_TOTAL_STATS_THRESHOLD) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^ctotal attributes %d > %d^n",
+                 total_stats,
+                 ANOMALOUS_TOTAL_STATS_THRESHOLD);
+        printed = TRUE;
+      }
+      
+      // Flag mobs with no stats
+      if (total_stats == 0) {
+        strncat(buf, " has not had its attributes set yet", sizeof(buf) - strlen(buf) - 1);
+        printed = TRUE;
+      }
+      
+      // Flag mobs with crazy skills
+      for (k = MIN_SKILLS; k < MAX_SKILLS; k++)
+        if (GET_SKILL(&mob_proto[i], k) > ANOMALOUS_SKILL_THRESHOLD) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s %d > %d^n",
+                   printed ? ";" : " has",
+                   skills[k].name,
+                   GET_SKILL(&mob_proto[i], k),
+                   ANOMALOUS_SKILL_THRESHOLD);
+          printed = TRUE;
+        }
+      
+      if (GET_RACE(&mob_proto[i]) <= RACE_UNDEFINED || GET_RACE(&mob_proto[i]) >= NUM_RACES) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cundefined or unknown race^n", printed ? ";" : " has");
+        printed = TRUE;
+      }
+      
+      if (printed)
+        send_to_char(ch, "%s\r\n", buf);
+    }
+    if (j == 0)
+      send_to_char("...None.\r\n", ch);
+    
+    /*
+    send_to_char("\r\n\r\nAnomalous Objects -----------\r\n", ch);
+    for (i = 0, j = 0; i <= top_of_objt; i++) {
+      // Check stats, etc
+    }
+    if (j == 0)
+      send_to_char("...None.\r\n", ch);
+    */
     break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);

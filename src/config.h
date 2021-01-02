@@ -69,6 +69,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define DEFAULT_SECTOR_TYPE         SPIRIT_CITY
 
 // Bearing in mind that morts can't interact with an exit if they can't see it, what is the maximum hidden rating for an exit?
-#define MAX_EXIT_HIDDEN_RATING      20
+#define MAX_EXIT_HIDDEN_RATING      10
+
+// Thresholds for warning builders about anomalies.
+#define ANOMALOUS_HIDDEN_RATING_THRESHOLD 10
+#define ANOMALOUS_TOTAL_STATS_THRESHOLD 60
+#define ANOMALOUS_SKILL_THRESHOLD 10
 
 #endif
