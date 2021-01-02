@@ -3319,6 +3319,8 @@ int find_hotel_cost(struct char_data *ch)
     case 14626:
       cost = 6.0;
       break;
+    case 62820:
+      cost = 2.0;
     default:
       snprintf(buf, sizeof(buf), "SYSERR: Invalid loadroom %ld specified to find_hotel_cost. Defaulting to 6.0.", GET_LOADROOM(ch));
       mudlog(buf, NULL, LOG_SYSLOG, FALSE);
@@ -3346,6 +3348,8 @@ int find_hotel_room(int room)
       return 70759;
     case 39287:
       return 39288;
+    case 62820:
+      return 62820;
   }
   return room;
 }

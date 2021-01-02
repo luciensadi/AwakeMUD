@@ -5496,6 +5496,13 @@ ACMD(do_shopfind)
   
   int index = 0;
   for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
+    int real_mob = real_mobile(shop_table[shop_nr].keeper);
+    if (real_mob < 0) {
+      snprintf(buf, sizeof(buf), "Warning: Shop %ld does not have a valid keeper!", shop_table[shop_nr].vnum);
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      continue;
+    }
+    
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next) {
       int real_obj = real_object(sell->vnum);
       if (real_obj < 0)
@@ -5506,13 +5513,13 @@ ACMD(do_shopfind)
           send_to_char(ch, "%3d)  Shop %8ld (%s)\r\n", 
                        ++index,
                        shop_table[shop_nr].vnum, 
-                       mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name);
+                       mob_proto[real_mob].player.physical_text.name);
         }
       } else if (isname(buf2, obj_proto[real_obj].text.name) || isname(buf2, obj_proto[real_obj].text.keywords)) {
         send_to_char(ch, "%3d)  Shop %8ld (%s) sells %s (%ld)\r\n", 
                      ++index,
                      shop_table[shop_nr].vnum, 
-                     mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name,
+                     mob_proto[real_mob].player.physical_text.name,
                      GET_OBJ_NAME(&obj_proto[real_obj]),
                      GET_OBJ_VNUM(&obj_proto[real_obj]));
       }

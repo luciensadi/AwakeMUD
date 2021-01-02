@@ -703,8 +703,11 @@ void assign_mobiles(void)
   /* Star Sapphire */
   ASSIGNMOB(70302, bouncer_gentle);
   
+#ifdef USE_PRIVATE_CE_WORLD
   /* Slitch Pit */
   ASSIGNMOB(62803, axehead);
+  ASSIGNMOB(62820, receptionist);
+#endif
 }
 
 /* assign special procedures to objects */
