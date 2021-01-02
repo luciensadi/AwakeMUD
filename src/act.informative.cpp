@@ -772,81 +772,54 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strcat(buf, i->player.physical_text.room_desc);
     
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
-      if (mob_index[GET_MOB_RNUM(i)].func) {
-        if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
+      bool already_printed = FALSE;
+      if (mob_index[GET_MOB_RNUM(i)].func || mob_index[GET_MOB_RNUM(i)].sfunc) {
+        if (mob_index[GET_MOB_RNUM(i)].func == trainer || mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == teacher || mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
+        if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher || mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), already_printed ? " also" : "");
+            already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
+        if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), already_printed ? " also" : "");
+            already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer) {
+        if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), already_printed ? " also" : "");
+            already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == johnson || mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s %s a few things for sale.^n\r\n", HSSH(i), HASHAVE(i));
+        if ((mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis)
+            || (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].sfunc == terell_davis)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.^n\r\n", HSSH(i), HASHAVE(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec || mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == fence) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might be willing to buy paydata from you.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == fence || mob_index[GET_MOB_RNUM(i)].sfunc == fence) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), HMHR(i));
-        }
-      }
-      
-      if (mob_index[GET_MOB_RNUM(i)].sfunc && mob_index[GET_MOB_RNUM(i)].sfunc != mob_index[GET_MOB_RNUM(i)].func) {
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
-          // Mundanes can't see metamagic teachers' abilities.
-          if (GET_TRADITION(ch) != TRAD_MUNDANE)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
-          // Adepts can't see adept trainers' abilities.
-          if (GET_TRADITION(ch) == TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
-          // Mundanes and adepts can't see spell trainers' abilities.
-          if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "", HASHAVE(i));
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].func == fence) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "", HMHR(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == hacker || mob_index[GET_MOB_RNUM(i)].sfunc == hacker) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), HMHR(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
       }
     }
