@@ -2696,10 +2696,10 @@ void nanny(struct descriptor_data * d, char *arg)
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
             load_room = real_room(newbie_start_room);
           }
-          do_start(d->character, TRUE);
+          do_start(d->character, FALSE);
         } else {
           load_room = real_room(newbie_start_room);
-          do_start(d->character, FALSE);
+          do_start(d->character, TRUE);
         }
         
           
