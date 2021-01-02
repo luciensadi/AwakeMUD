@@ -711,7 +711,7 @@ void assign_mobiles(void)
 #ifdef USE_PRIVATE_CE_WORLD
   /* Slitch Pit */
   ASSIGNMOB(62803, axehead);
-  ASSIGNMOB(62820, receptionist);
+  ASSIGNMOB(62807, receptionist);
 #endif
 }
 
