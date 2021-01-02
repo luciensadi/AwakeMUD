@@ -94,6 +94,7 @@ int can_move(struct char_data *ch, int dir, int extra)
       }
     }
 
+  /*
   if (ch->in_room && ch->in_room->func && ch->in_room->func == escalator)
   {
     if (access_level(ch, LVL_BUILDER)) {
@@ -103,6 +104,7 @@ int can_move(struct char_data *ch, int dir, int extra)
       return 0;
     }
   }
+  */
 
   if (ch->in_room && IS_WATER(ch->in_room) && !IS_NPC(ch) && !IS_SENATOR(ch))
   {

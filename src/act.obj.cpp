@@ -3272,8 +3272,9 @@ ACMD(do_holster)
   else
     obj_from_char(obj);
   obj_to_obj(obj, cont);
-  send_to_char(ch, "You slip %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+  send_to_char(ch, "You slip %s into %s and ready it for a quick draw.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
   act("$n slips $p into $P.", FALSE, ch, obj, cont, TO_ROOM);
+  GET_HOLSTER_READY_STATUS(cont) = 1;
   return;
 }
 
@@ -3333,7 +3334,7 @@ ACMD(do_draw)
   else {
     int i = draw_weapon(ch);
     if (i == 0)
-      send_to_char(ch, "You have nothing to draw. Make sure you're wearing a sheath or holster with a weapon in it, and that you've used the READY command on the sheath or holster.\r\n");
+      send_to_char(ch, "You have nothing to draw, or you're trying to draw a two-handed weapon with something in your hands. Make sure you're wearing a sheath or holster with a weapon in it, and that you've used the ^WREADY^n command on the sheath or holster.\r\n");
   }
 }
 

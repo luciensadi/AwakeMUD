@@ -965,7 +965,7 @@ void do_stat_room(struct char_data * ch)
       strcat(buf, " ");
       strcat(buf, desc->keyword);
     }
-    send_to_char(strcat(buf, "\r\n"), ch);
+    send_to_char(strcat(buf, "^n\r\n"), ch);
   }
   strcpy(buf, "Chars present:^y");
   for (found = 0, k = rm->people; k; k = k->next_in_room)
