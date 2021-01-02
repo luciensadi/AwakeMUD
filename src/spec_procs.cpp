@@ -5481,6 +5481,7 @@ SPECIAL(restoration_button) {
   return FALSE;
 }
 
+int axehead_last_said = -1;
 SPECIAL(axehead) {
   int message_num;
   const char *axehead_messages[] = {
@@ -5494,10 +5495,11 @@ SPECIAL(axehead) {
   };
 #define NUM_AXEHEAD_MESSAGES 7
   
-  if (cmd || FIGHTING(ch) || !AWAKE(ch) || (message_num = number(0, 100)) >= NUM_AXEHEAD_MESSAGES)
+  if (cmd || FIGHTING(ch) || !AWAKE(ch) || (message_num = number(0, NUM_AXEHEAD_MESSAGES * 20)) >= NUM_AXEHEAD_MESSAGES || message_num == axehead_last_said)
     return FALSE;
     
   do_say(ch, axehead_messages[message_num], 0, 0);
+  axehead_last_said = message_num;
   return TRUE;
 }
 
