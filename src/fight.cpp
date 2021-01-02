@@ -4828,6 +4828,7 @@ void roll_initiative(void)
       int dam = convert_damage(stage(-success_test(GET_QUI(ch), ch->in_room->poltergeist[1] - GET_IMPACT(ch)), LIGHT));
       if (dam > 0) {
         act("You are hit by flying objects!\r\n", FALSE, ch, 0, 0, TO_CHAR);
+        act("$n is hit by flying objects!\r\n", TRUE, ch, 0, 0, TO_ROOM);
         damage(ch, ch, dam, TYPE_POLTERGEIST, MENTAL);
       }
     }

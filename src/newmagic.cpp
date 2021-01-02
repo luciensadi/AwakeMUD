@@ -3347,6 +3347,11 @@ ACMD(do_order)
     struct char_data *mob = find_spirit_by_id(spirit->id, GET_IDNUM(ch));
     
     if (!mob) {
+      if (order == SERV_LEAVE) {
+        ((*services[order].func) (ch, mob, spirit, buf2));
+        return;
+      }
+      
       send_to_char(ch, "That %s has been ensnared by forces you cannot control. Your only option is to release it.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       snprintf(buf, sizeof(buf), "SYSERR: %s belonging to %s (%ld) has disappeared unexpectedly-- did someone purge it?", GET_TRADITION(ch) == TRAD_HERMETIC ? "Elemental" : "Spirit",
               GET_CHAR_NAME(ch), GET_IDNUM(ch));

@@ -2790,7 +2790,7 @@ ACMD(do_gold)
 ACMD(do_pool)
 {
   char pools[MAX_INPUT_LENGTH];
-  if (GET_POWER(ch, ADEPT_SIDESTEP) && GET_DEFENSE(ch))
+  if (GET_POWER(ch, ADEPT_SIDESTEP))
     snprintf(buf, sizeof(buf), "^R+%d^n", GET_POWER(ch, ADEPT_SIDESTEP));
   else
     strncpy(buf, "  ", sizeof(buf));

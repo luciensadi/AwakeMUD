@@ -1042,7 +1042,7 @@ SPECIAL(spell_trainer)
               continue;
           }
 
-          send_to_char(ch, "%-30s Force Max: %d\r\n", spelltrainers[i].name, spelltrainers[i].force);
+          send_to_char(ch, "%-30s Force Max: %d\r\n", spells[spelltrainers[i].type].name, spelltrainers[i].force);
         }
     if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
       if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER)
@@ -1107,7 +1107,7 @@ SPECIAL(spell_trainer)
         if (skill < 1)
           continue;
       }
-      if (is_abbrev(buf, spelltrainers[i].name))
+      if (is_abbrev(buf, spells[spelltrainers[i].type].name))
         break;
     }
     if (!spelltrainers[i].teacher) {
@@ -1153,13 +1153,13 @@ SPECIAL(spell_trainer)
       else
         GET_KARMA(ch) -= cost * 100;
       
-      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spelltrainers[i].name, force);
+      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spells[spelltrainers[i].type].name, force);
       
       if (spell) {
         spell->force = force;
       } else {
         spell = new spell_data;
-        spell->name = str_dup(spelltrainers[i].name);
+        spell->name = str_dup(spells[spelltrainers[i].type].name);
         spell->type = spelltrainers[i].type;
         spell->subtype = spelltrainers[i].subtype;
         spell->force = force;
