@@ -918,10 +918,19 @@ bool House_can_enter(struct char_data *ch, vnum_t house)
   int j;
   struct house_control_rec *room = find_house(house);
 
-  if (IS_NPC(ch) || !room)
+  // No room? No entry.
+  if (!room)
     return FALSE;
+  
+  // NPC, but not a spirit or elemental? No entry.
+  if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_ELEMENTAL(ch)))
+    return FALSE;
+  
+  // Admins, astral projections, and owners can enter any room.
   if (GET_LEVEL(ch) >= LVL_ADMIN || GET_IDNUM(ch) == room->owner || IS_ASTRAL(ch))
     return TRUE;
+  
+  // Guests can enter any room.
   for (j = 0; j < MAX_GUESTS; j++)
     if (GET_IDNUM(ch) == room->guests[j])
       return TRUE;
