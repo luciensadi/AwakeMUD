@@ -1626,9 +1626,16 @@ void randomize_shop_prices(void)
 void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
 {
   snprintf(buf, sizeof(buf), "Vnum:       [%5ld], Rnum: [%5ld]\r\n", shop_table[shop_nr].vnum, shop_nr);
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Name: %30s Shopkeeper: %s [%5ld]\r\n", shop_table[shop_nr].shopname,
-                       mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name,
-          shop_table[shop_nr].keeper);
+  
+  int real_mob = real_mobile(shop_table[shop_nr].keeper);
+  if (real_mob > 0) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Name: %30s Shopkeeper: %s [%5ld]\r\n", shop_table[shop_nr].shopname,
+             mob_proto[real_mob].player.physical_text.name,
+             shop_table[shop_nr].keeper);
+  } else {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Name: %30s Shopkeeper: (N/A) [%5ld]\r\n", shop_table[shop_nr].shopname, shop_table[shop_nr].keeper);
+  }
+  
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Buy at:     [%1.2f], Sell at: [%1.2f], +/- %%: [%d], Current %%: [%d]",
           shop_table[shop_nr].profit_buy, shop_table[shop_nr].profit_sell, shop_table[shop_nr].random_amount,
           shop_table[shop_nr].random_current);
@@ -1796,10 +1803,11 @@ void shedit_disp_selling_menu(struct descriptor_data *d)
 
 void shedit_disp_menu(struct descriptor_data *d)
 {
+  int real_mob = real_mobile(SHOP->keeper);
   CLS(CH);
   send_to_char(CH, "Shop Number: %ld\r\n", SHOP->vnum);
   send_to_char(CH, "1) Keeper: ^c%ld^n (^c%s^n)\r\n", SHOP->keeper,
-               real_mobile(SHOP->keeper) > 0 ? GET_NAME(&mob_proto[real_mobile(SHOP->keeper)]) : "NULL");
+               real_mob > 0 ? GET_NAME(&mob_proto[real_mob]) : "NULL");
   send_to_char(CH, "2) Shop Type: ^c%s^n\r\n", shop_type[SHOP->type]);
   send_to_char(CH, "3) Cost Multiplier when Player Buying: ^c%.2f^n\r\n", SHOP->profit_buy);
   send_to_char(CH, "4) Cost Multiplier when Player Selling: ^c%.2f^n\r\n", SHOP->profit_sell);

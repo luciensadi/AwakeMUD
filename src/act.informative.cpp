@@ -1809,7 +1809,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
 }
 
 void do_probe_object(struct char_data * ch, struct obj_data * j) {
-  int i, found, mount_location;
+  int i, found, mount_location, bal, imp;
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *access = NULL;
   
@@ -2051,16 +2051,20 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_WORN:
       strncpy(buf1, "It has space for ", sizeof(buf1));
       
-      if (GET_OBJ_VAL(j, 0) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) > 1 ? "s":"");
+      if (GET_WORN_POCKETS_HOLSTERS(j) > 0) {
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s", 
+                 (has_pockets?", ":""), GET_WORN_POCKETS_HOLSTERS(j), GET_WORN_POCKETS_HOLSTERS(j) > 1 ? "s":"");
         has_pockets = TRUE;
       }
+      /*   Magazines aren't a thing anymore. -- LS
       if (GET_OBJ_VAL(j, 1) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n magazine%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n magazine%s", 
+                 (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
         has_pockets = TRUE;
-      }
-      if (GET_OBJ_VAL(j, 4) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n miscellaneous small item%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 4), GET_OBJ_VAL(j, 4) > 1 ? "s":"");
+      } */
+      if (GET_WORN_POCKETS_MISC(j) > 0) {
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n miscellaneous small item%s", 
+                 (has_pockets?", ":""), GET_WORN_POCKETS_MISC(j), GET_WORN_POCKETS_MISC(j) > 1 ? "s":"");
         has_pockets = TRUE;
       }
       
@@ -2069,8 +2073,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       } else {
         strcat(buf, "It has no pockets.\r\n");
       }
+      bal = GET_WORN_BALLISTIC(j);
+      imp = GET_WORN_IMPACT(j);
+      if (GET_WORN_MATCHED_SET(j)) {
+        bal = (int)(GET_WORN_BALLISTIC(j) / 100);
+        imp = (int)(GET_WORN_IMPACT(j) / 100);
+      }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. Its concealability rating is ^c%d^n.",
-              GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6), GET_OBJ_VAL(j, 7));
+              bal, imp, GET_WORN_CONCEAL_RATING(j));
       break;
     case ITEM_DOCWAGON:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
