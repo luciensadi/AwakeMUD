@@ -5522,9 +5522,10 @@ SPECIAL(archetype_chargen_magic_split) {
     
     // Restore the south exit for the room to the normal one.
     room->dir_option[SOUTH]->to_room = temp_to_room;
+    return TRUE;
   }
     
-  return TRUE;
+  return FALSE;
 }
 
 SPECIAL(archetype_chargen_reverse_magic_split) {
@@ -5548,7 +5549,8 @@ SPECIAL(archetype_chargen_reverse_magic_split) {
     
     // Restore the north exit for the room to the normal one.
     room->dir_option[NORTH]->to_room = temp_to_room;
+    return TRUE;
   }
     
-  return TRUE;
+  return FALSE;
 }
