@@ -2649,7 +2649,7 @@ const char *skill_rank_name(int rank, bool knowledge) {
 char *how_good(int skill, int rank)
 {
   static char buf[256];
-  snprintf(buf, sizeof(buf), " (%s)", skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE));
+  snprintf(buf, sizeof(buf), " (%s / rank %d)", skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE), rank);
   return buf;
 }
 
