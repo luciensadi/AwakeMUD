@@ -218,7 +218,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++)
     if (archetypes[i]->worn[wearloc] > 0) {
       if ((temp_obj = read_object(archetypes[i]->worn[wearloc], VIRTUAL))) {
-        obj_to_char(temp_obj, CH);
+        equip_char(CH, temp_obj, wearloc);
       } else {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid worn item %ld specified for archetype %s's wearloc %s (%d).", 
                  archetypes[i]->worn[wearloc], archetypes[i]->name, where[wearloc], wearloc);
@@ -243,9 +243,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Equip cyberware (deduct essence and modify stats as appropriate)
   for (int cyb = 0; cyb < NUM_ARCHETYPE_CYBERWARE; cyb++) {
     if (archetypes[i]->cyberware[cyb]) {
-      if ((temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL))) {
-        obj_to_char(temp_obj, CH);
-      } else {
+      if (!(temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL))) {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for archetype %s.", 
                  archetypes[i]->cyberware[cyb], archetypes[i]->name);
         continue;
@@ -268,9 +266,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Equip bioware (deduct essence and modify stats as appropriate)
   for (int bio = 0; bio < NUM_ARCHETYPE_BIOWARE; bio++) {
     if (archetypes[i]->bioware[bio]) {
-      if ((temp_obj = read_object(archetypes[i]->bioware[bio], VIRTUAL))) {
-        obj_to_char(temp_obj, CH);
-      } else {
+      if (!(temp_obj = read_object(archetypes[i]->bioware[bio], VIRTUAL))) {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid bioware item %ld specified for archetype %s.", 
                  archetypes[i]->bioware[bio], archetypes[i]->name);
         continue;
