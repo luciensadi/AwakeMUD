@@ -425,24 +425,27 @@ void ASSIGNMOB(long mob, SPECIAL(fname))
 
 void ASSIGNOBJ(long obj, SPECIAL(fname))
 {
-  if (real_object(obj) >= 0)
-    obj_index[real_object(obj)].func = fname;
+  int real_obj;
+  if ((real_obj = real_object(obj)) >= 0)
+    obj_index[real_obj].func = fname;
   else
     log_vfprintf("SYSERR: Attempt to assign spec to non-existent obj #%d", obj);
 }
 
 void ASSIGNWEAPON(long weapon, WSPEC(fname))
 {
-  if (real_object(weapon) >= 0)
-    obj_index[real_object(weapon)].wfunc = fname;
+  int real_obj;
+  if ((real_obj = real_object(weapon)) >= 0)
+    obj_index[real_obj].wfunc = fname;
   else
     log_vfprintf("SYSERR: Attempt to assign spec to non-existent weapon #%d", weapon);
 }
 
 void ASSIGNROOM(long room, SPECIAL(fname))
 {
-  if (real_room(room) >= 0)
-    world[real_room(room)].func = fname;
+  int real_rm;
+  if ((real_rm = real_room(room)) >= 0)
+    world[real_rm].func = fname;
   else
     log_vfprintf("SYSERR: Attempt to assign spec to non-existent rm. #%d", room);
 }
@@ -555,9 +558,11 @@ void assign_mobiles(void)
   for (i = 0; adepts[i].vnum != 0; i++)
     ASSIGNMOB(adepts[i].vnum, adept_trainer);
 
-  for (i = 0; spelltrainers[i].teacher; i++)
-    if (mob_index[real_mobile(spelltrainers[i].teacher)].func != spell_trainer)
+  for (i = 0; spelltrainers[i].teacher; i++) {
+    int real_mob = real_mobile(spelltrainers[i].teacher);
+    if (real_mob >= 0 && mob_index[real_mob].func != spell_trainer)
       ASSIGNMOB(spelltrainers[i].teacher, spell_trainer);
+  }
 
   /* cab drivers */
   ASSIGNMOB(600, taxi);

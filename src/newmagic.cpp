@@ -2157,13 +2157,17 @@ ACMD(do_release)
       send_to_char(ch, "Which %s do you wish to release from your services?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
+    int real_mob;
     for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
       if (--i == 0) {
         struct spirit_data *temp;
-        if (GET_TRADITION(ch) == TRAD_HERMETIC)
-          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", GET_NAME(&mob_proto[real_mobile(elements[spirit->type].vnum)]));
+        if (GET_TRADITION(ch) == TRAD_HERMETIC) {
+          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", 
+                       (real_mob = real_mobile(elements[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental");
+        }
         else
-          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", GET_NAME(&mob_proto[real_mobile(spirits[spirit->type].vnum)]));
+          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", 
+                       (real_mob = real_mobile(spirits[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit");
         if (spirit->called)
           for (struct char_data *mob = character_list; mob; mob = mob->next)
             if (IS_NPC(mob) && GET_ACTIVE(mob) == GET_IDNUM(ch) && GET_GRADE(mob) == spirit->id) {
@@ -2640,14 +2644,19 @@ ACMD(do_elemental)
     send_to_char(ch, "You don't have any %s bound to you.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
     return;
   }
-  int i = 1;
+  int i = 1, real_mob;
   snprintf(buf, sizeof(buf), "You currently have the following %s bound:\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
   for (struct spirit_data *elem = GET_SPIRIT(ch); elem; elem = elem->next, i++) {
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services %d\r\n", i, GET_NAME(&mob_proto[real_mobile(spirits[elem->type].vnum)]), elem->force, elem->services);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services %d\r\n", 
+               i, 
+               (real_mob = real_mobile(spirits[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit", 
+               elem->force, elem->services);
     else
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n", i, GET_NAME(&mob_proto[real_mobile(elements[elem->type].vnum)]),
-              elem->force, elem->services, elem->called ? " Present" : " ");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n", 
+               i, 
+               (real_mob = real_mobile(elements[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental",
+               elem->force, elem->services, elem->called ? " Present" : " ");
   }
   send_to_char(buf, ch);
 }

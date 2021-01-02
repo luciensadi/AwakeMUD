@@ -1276,10 +1276,13 @@ int get_skill(struct char_data *ch, int skill, int &target)
           mbw = GET_OBJ_VAL(obj, 1);
         else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACKEXPERT)
           expert = GET_OBJ_VAL(obj, 1);
-        else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACK)
-          for (int i = 5; i < 10; i++)
-            if (real_object(GET_OBJ_VAL(obj, i)) && obj_proto[real_object(GET_OBJ_VAL(obj, i))].obj_flags.value[0] == skill)
+        else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACK) {
+          int real_obj;
+          for (int i = 5; i < 10; i++) {
+            if ((real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0 && obj_proto[real_obj].obj_flags.value[0] == skill)
               chip = TRUE;
+          }
+        }
       
       // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
       if (chip && expert) {

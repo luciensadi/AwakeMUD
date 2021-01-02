@@ -1396,7 +1396,7 @@ int write_quests_to_disk(int zone)
 
 void qedit_list_obj_objectives(struct descriptor_data *d)
 {
-  int i;
+  int i, real_obj;
   long rnum;
 
   CLS(CH);
@@ -1472,7 +1472,9 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
       break;
     case QOO_TAR_MOB:
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item %ld (%s) to M%d ",
-              QUEST->obj[i].vnum, GET_OBJ_NAME(&obj_proto[real_object(QUEST->obj[i].vnum)]), QUEST->obj[i].o_data);
+              QUEST->obj[i].vnum, 
+              (real_obj = real_object(QUEST->obj[i].vnum)) >= 0 ? GET_OBJ_NAME(&obj_proto[real_obj]) : "N/A", 
+              QUEST->obj[i].o_data);
       if (QUEST->obj[i].o_data >= 0 &&
           QUEST->obj[i].o_data < QUEST->num_mobs &&
           (rnum = real_mobile(QUEST->mob[QUEST->obj[i].o_data].vnum)) > -1) {
@@ -1504,7 +1506,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
 
 void qedit_list_mob_objectives(struct descriptor_data *d)
 {
-  int i, rnum = 0;
+  int i, rnum = 0, real_mob;
   
   CLS(CH);
 
@@ -1543,19 +1545,19 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
               ((float)QUEST->mob[i].karma / 100), QUEST->mob[i].o_data);
       break;
     case QMO_KILL_ONE:
-            if (real_mobile(QUEST->mob[i].vnum) >= 0)
+            if ((real_mob = real_mobile(QUEST->mob[i].vnum)) >= 0)
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
                 "killing target '%s' (%ld)\r\n", QUEST->mob[i].nuyen,
                 ((float)QUEST->mob[i].karma / 100),
-                GET_CHAR_NAME(&mob_proto[real_mobile(QUEST->mob[i].vnum)]),
+                GET_CHAR_NAME(&mob_proto[real_mob]),
                 QUEST->mob[i].vnum);
       break;
     case QMO_KILL_MANY:
-            if (real_mobile(QUEST->mob[i].vnum) >= 0)
+            if ((real_mob = real_mobile(QUEST->mob[i].vnum)) >= 0)
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
                 "each target '%s' (%ld) killed\r\n", QUEST->mob[i].nuyen,
                 ((float)QUEST->mob[i].karma / 100),
-                GET_CHAR_NAME(&mob_proto[real_mobile(QUEST->mob[i].vnum)]),
+                GET_CHAR_NAME(&mob_proto[real_mob]),
                 QUEST->mob[i].vnum);
       break;
     case QMO_KILL_ESCORTEE:
@@ -1733,12 +1735,13 @@ void qedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "g) Quest already completed message: %s%s%s\r\n", CCCYN(CH, C_CMP),
                QUEST->done, CCNRM(CH, C_CMP));
 
-  if (access_level(CH, LVL_VICEPRES))
+  if (access_level(CH, LVL_VICEPRES)) {
+    int real_obj;
     send_to_char(CH, "h) Item Reward: %s%d%s (%s%s%s)\r\n", CCCYN(CH, C_CMP),
                  QUEST->reward, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
-                 real_object(QUEST->reward) <= 0 ? "no item reward" :
-                 obj_proto[real_object(QUEST->reward)].text.name,
+                 (real_obj = real_object(QUEST->reward)) <= 0 ? "no item reward" : obj_proto[real_obj].text.name,
                  CCNRM(CH, C_CMP));
+  }
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
   send_to_char("Enter your choice:\r\n", CH);

@@ -121,10 +121,11 @@ bool House_load(struct house_control_rec *house)
       }
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
         add_phone_to_list(obj);
+      int real_obj;
       if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
         for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-          if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
-             (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+          if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
+             (attach = &obj_proto[real_obj])) {
             // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
             GET_OBJ_VAL(obj, i) = 0;
             attach_attachment_to_weapon(attach, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);

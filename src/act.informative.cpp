@@ -1912,10 +1912,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         // Info about attachments, if any.
         int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(j);
         int prone_recoil_comp = 0;
+        int real_obj;
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
           if (GET_OBJ_VAL(j, i) > 0
-              && real_object(GET_OBJ_VAL(j, i)) > 0
-              && (access = &obj_proto[real_object(GET_OBJ_VAL(j, i))])) {
+              && (real_obj = real_object(GET_OBJ_VAL(j, i))) > 0
+              && (access = &obj_proto[real_obj])) {
             // mount_location: used for gun_accessory_locations[] lookup.
             mount_location = i - ACCESS_LOCATION_TOP;
             

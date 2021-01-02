@@ -2791,7 +2791,7 @@ SPECIAL(vendtix)
 {
   extern struct obj_data *obj_proto;
   struct obj_data *vendtix = (struct obj_data *) me;
-  int ticket;
+  int ticket, real_obj;
 
   if (!cmd)
     return FALSE;
@@ -2801,9 +2801,14 @@ SPECIAL(vendtix)
   else
     ticket = SEATTLE_TICKET;
 
+  if ((real_obj = real_object(ticket)) < 0) {
+    send_to_char(ch, "A red light flashes on the VendTix-- it's currently out of order.\r\n");
+    mudlog("SYSERR: Invalid vnum for VendTix!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+    
   if (CMD_IS("list")) {
-    send_to_char(ch, "Ticket price is %d nuyen.\r\n",
-                 obj_proto[real_object(ticket)].obj_flags.cost);
+    send_to_char(ch, "Ticket price is %d nuyen.\r\n", obj_proto[real_obj].obj_flags.cost);
     act("$n presses some buttons on $p.", TRUE, ch, vendtix, 0, TO_ROOM);
     return TRUE;
   }
@@ -2814,7 +2819,7 @@ SPECIAL(vendtix)
       return TRUE;
     }
 
-    if ((GET_NUYEN(ch) - obj_proto[real_object(ticket)].obj_flags.cost) < 0) {
+    if ((GET_NUYEN(ch) - obj_proto[real_obj].obj_flags.cost) < 0) {
       send_to_char("You don't have enough nuyen!\r\n", ch);
       return TRUE;
     }
@@ -3750,9 +3755,12 @@ SPECIAL(quest_debug_scanner)
     }
     
     snprintf(buf, sizeof(buf), "Player %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+    int real_mob = real_mobile(quest_table[GET_QUEST(to)].johnson);
     if (GET_QUEST(to)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current quest: %ld (given by %s [%ld])\r\n",
-              quest_table[GET_QUEST(to)].vnum, mob_proto[real_mobile(quest_table[GET_QUEST(to)].johnson)].player.physical_text.name, quest_table[GET_QUEST(to)].johnson);
+              quest_table[GET_QUEST(to)].vnum, 
+              real_mob >= 0 ? mob_proto[real_mob].player.physical_text.name : "N/A", 
+              quest_table[GET_QUEST(to)].johnson);
     } else {
       strcat(buf, "Not currently on a quest.\r\n");
     }

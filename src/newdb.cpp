@@ -740,14 +740,16 @@ bool load_char(const char *name, char_data *ch, bool logon)
           GET_OBJ_VAL(obj, 4) = 0;
         if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4))
           GET_FOCI(ch)++;
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
+        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
+          int real_obj;
           for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-            if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
-               (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+            if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
+               (attach = &obj_proto[real_obj])) {
               // Zero out the attachment so that we don't get attaching-overtop errors.
               GET_OBJ_VAL(obj, q) = 0;
               attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
             }
+        }
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[19]);
         
@@ -813,9 +815,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
           case ITEM_WEAPON:
             if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
               // Process attachments.
+              int real_obj;
               for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-                if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
-                   (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+                if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 &&
+                   (attach = &obj_proto[real_obj])) {
                   // Zero out the attachment so that we don't get attaching-overtop errors.
                   GET_OBJ_VAL(obj, q) = 0;
                   attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);

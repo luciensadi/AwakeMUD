@@ -2681,12 +2681,12 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
       CAN_WEAR(GET_EQ(ch, WEAR_HOLD), ITEM_WEAR_WIELD))
     return 0;
   
-  int mod = 0;
+  int mod = 0, real_obj;
   for (int i = ACCESS_LOCATION_TOP; !mod && i <= ACCESS_LOCATION_UNDER; i++) {
     // If they have a smartlink attached:
     if (GET_OBJ_VAL(weapon, i) > 0
-        && real_object(GET_OBJ_VAL(weapon, i)) > 0
-        && (access = &obj_proto[real_object(GET_OBJ_VAL(weapon, i))])
+        && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
+        && (access = &obj_proto[real_obj])
         && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK) {
       
       // Iterate through their cyberware and look for a matching smartlink.

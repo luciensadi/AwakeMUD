@@ -741,9 +741,14 @@ void point_update(void)
         for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next, i++) {
           totaltime = order->timeavail - time(0);
           if (!order->sent && totaltime < 0) {
-            snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup.\r\n", CAP(obj_proto[real_object(order->item)].text.name),
+            int real_obj = real_object(order->item);
+            snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup.\r\n", real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
                     shop_table[shop_nr].shopname);
-            raw_store_mail(order->player, 0, mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name, (const char *) buf2);
+            int real_mob = real_mobile(shop_table[shop_nr].keeper);
+            if (real_mob > 0)
+              raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
+            else
+              raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
             order->sent = TRUE;
           }
           fprintf(fl, "\t[ORDER %d]\n", i);

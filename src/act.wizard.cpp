@@ -4940,13 +4940,13 @@ ACMD(do_qlist)
 
   snprintf(buf, sizeof(buf), "Quests, %ld to %ld:\r\n", first, last);
 
+  int real_mob;
   for (nr = MAX(0, real_quest(first)); nr <= top_of_questt &&
        (quest_table[nr].vnum <= last); nr++)
     if (quest_table[nr].vnum >= first)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5ld. [%8ld] %s (%ld)\r\n",
               ++found, quest_table[nr].vnum,
-              real_mobile(quest_table[nr].johnson) < 0 ? "None" :
-              GET_NAME(&mob_proto[real_mobile(quest_table[nr].johnson)]),
+              (real_mob = real_mobile(quest_table[nr].johnson)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
               quest_table[nr].johnson);
 
   if (!found)
@@ -5142,12 +5142,13 @@ ACMD(do_slist)
 
   snprintf(buf, sizeof(buf), "Shops, %d to %d:\r\n", first, last);
 
+  int real_mob;
   for (nr = MAX(0, real_shop(first)); nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++)
     if (shop_table[nr].vnum >= first)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,
               shop_table[nr].vnum,
               vnum_from_non_connected_zone(shop_table[nr].keeper) ? " " : "*",
-              real_mobile(shop_table[nr].keeper) < 0 ? "None" : GET_NAME(&mob_proto[real_mobile(shop_table[nr].keeper)]),
+              (real_mob = real_mobile(shop_table[nr].keeper)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
               shop_table[nr].keeper);
 
   if (!found)
