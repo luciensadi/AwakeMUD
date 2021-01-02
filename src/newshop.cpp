@@ -1874,13 +1874,15 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
         if (shop_table[shop_nr].keeper != SHOP->keeper && shop_table[shop_nr].keeper != 1151) {
           okn = real_mobile(shop_table[shop_nr].keeper);
           nkn = real_mobile(SHOP->keeper);
-          if (mob_index[okn].func == shop_keeper) {
+          if (okn > 0 && mob_index[okn].func == shop_keeper) {
             mob_index[okn].func = mob_index[okn].sfunc;
             mob_index[okn].sfunc = NULL;
-          } else if (mob_index[okn].sfunc == shop_keeper)
+          } else if (okn > 0 && mob_index[okn].sfunc == shop_keeper)
             mob_index[okn].sfunc = NULL;
-          mob_index[nkn].sfunc = mob_index[nkn].func;
-          mob_index[nkn].func = shop_keeper;
+          if (nkn > 0) {
+            mob_index[nkn].sfunc = mob_index[nkn].func;
+            mob_index[nkn].func = shop_keeper;
+          }
         }
         SHOP->order = shop_table[shop_nr].order;
         SHOP->vnum = d->edit_number;
