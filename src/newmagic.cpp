@@ -3531,12 +3531,12 @@ ACMD(do_deactivate)
   }
   if (!(obj = get_object_in_equip_vis(ch, argument, ch->equipment, &i)) &&
       !(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-    send_to_char("Deactivate which focus?\r\n", ch);
+    send_to_char("Deactivate which focus or power?\r\n", ch);
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
     if (GET_OBJ_VAL(obj, 4) < 1)
-      send_to_char("That focus isn't activated.\r\n", ch);
+      send_to_char(ch, "%s isn't activated.\r\n", GET_OBJ_NAME(obj));
     else {
       GET_OBJ_VAL(obj, 4) = 0;
       GET_FOCI(ch)--;
@@ -3546,7 +3546,7 @@ ACMD(do_deactivate)
   } else if (GET_OBJ_TYPE(obj) == ITEM_MONEY && GET_OBJ_VAL(obj, 1) && GET_OBJ_VAL(obj, 4) == GET_IDNUM(ch)) {
     GET_OBJ_VAL(obj, 3) = GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 5) = 0;
     send_to_char(ch, "You deactivate %s.\r\n", GET_OBJ_NAME(obj));
-  } else send_to_char("You can't deactivate that.\r\n", ch);
+  } else send_to_char(ch, "You can't deactivate %s.\r\n", GET_OBJ_NAME(obj));
 }
 
 ACMD(do_destroy)
@@ -3558,7 +3558,7 @@ ACMD(do_destroy)
   skip_spaces(&argument);
   struct obj_data *obj;
   if (ch->in_veh || !(obj = get_obj_in_list_vis(ch, argument, ch->in_room->contents))) {
-    send_to_char("That object isn't here.\r\n", ch);
+    send_to_char(ch, "'%s' isn't here.\r\n", argument);
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_LODGE || GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE)) {
@@ -3571,7 +3571,7 @@ ACMD(do_destroy)
     }
     extract_obj(obj);
   } else
-    send_to_char("You can't destroy that object.\r\n", ch);
+    send_to_char(ch, "You can't destroy %s. Maybe pick it up and JUNK it?\r\n", GET_OBJ_NAME(obj));
 }
 
 ACMD(do_track)

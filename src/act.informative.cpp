@@ -806,7 +806,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         }
         if ((mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis)
             || (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].sfunc == terell_davis)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.^n\r\n", HSSH(i), HASHAVE(i), already_printed ? " also" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.^n\r\n", HSSH(i), already_printed ? " also" : "", HASHAVE(i));
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec || mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
@@ -818,7 +818,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == hacker || mob_index[GET_MOB_RNUM(i)].sfunc == hacker) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), HMHR(i), already_printed ? " also" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), already_printed ? " also" : "", HMHR(i));
           already_printed = TRUE;
         }
       }
