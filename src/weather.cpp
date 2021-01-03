@@ -20,6 +20,8 @@
 #include "interpreter.h"
 #include "db.h"
 #include "newmagic.h"
+#include "strn_bullshit.h"
+
 extern struct time_info_data time_info;
 extern struct char_data *character_list;
 extern struct index_data *mob_index;
@@ -48,7 +50,7 @@ void another_hour(void)
       temp = "^y";
     else
       temp = "^L";
-    snprintf(buf, sizeof(buf), "%sThe sun rises in the east.^n\r\n", temp);
+    SPRINTF(buf, "%sThe sun rises in the east.^n\r\n", temp);
     send_to_outdoor(buf);
     for (ch = character_list; ch; ch = next) {
       next = ch->next;
