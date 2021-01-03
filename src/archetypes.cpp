@@ -78,7 +78,6 @@ struct archetype_data *generate_street_samurai() {
   arch->carried[i++] = OBJ_VEHICLE_TOOLKIT; // vehicle toolkit
   arch->carried[i++] = OBJ_ELECTRONICS_KIT; // electronics kit
   arch->carried[i++] = OBJ_CELL_PHONE; // cell phone
-  arch->carried[i++] = OBJ_MAP_OF_SEATTLE;
   arch->carried[i++] = OBJ_TITLE_TO_SCORPION; // scorpion tit
   arch->carried[i++] = OBJ_TITLE_TO_BISON; // bison tit
   arch->carried[i++] = OBJ_POCKET_SECRETARY; // secretary
@@ -183,7 +182,6 @@ struct archetype_data *generate_adept() {
   arch->carried[i++] = OBJ_VEHICLE_TOOLKIT; // vehicle toolkit
   arch->carried[i++] = OBJ_ELECTRONICS_KIT; // electronics kit
   arch->carried[i++] = OBJ_CELL_PHONE; // cell phone
-  arch->carried[i++] = OBJ_MAP_OF_SEATTLE;
   arch->carried[i++] = OBJ_TITLE_TO_SCORPION; // scorpion tit
   arch->carried[i++] = OBJ_POCKET_SECRETARY; // secretary
   arch->carried[i++] = OBJ_NEOPHYTE_DUFFELBAG; // duffelbag
@@ -195,7 +193,7 @@ struct archetype_data *generate_adept() {
 #undef ARCH_ADEPT_POWER
 
 // TODO
-#define ARCH_SPELL(spell, force) arch->spells[i][0] = (spell); arch->spells[i++][1] = (force);
+#define ARCH_SPELL(spell, subtype, force) arch->spells[i][0] = (spell); arch->spells[i][1] = (subtype); arch->spells[i++][2] = (force);
 struct archetype_data *generate_shaman() {
   struct archetype_data *arch = new archetype_data;
   int i = 0;
@@ -203,16 +201,16 @@ struct archetype_data *generate_shaman() {
   memset(arch, 0, sizeof(struct archetype_data));
   
   arch->name = str_dup("Shaman");
-  arch->race = RACE_HUMAN;
+  arch->race = RACE_ELF;
   
-  arch->start_room = 90800;
-  arch->auth_room = 90800; // todo
+  arch->start_room = 90700;
+  arch->auth_room = 90738;
   
   // Set attributes.
-  arch->attributes[BOD] = 6;
-  arch->attributes[QUI] = 6;
-  arch->attributes[STR] = 6;
-  arch->attributes[CHA] = 1;
+  arch->attributes[BOD] = 4;
+  arch->attributes[QUI] = 7;
+  arch->attributes[STR] = 2;
+  arch->attributes[CHA] = 3;
   arch->attributes[INT] = 6;
   arch->attributes[WIL] = 6;
   // Reaction, essence, etc is autocomputed on character creation.
@@ -222,47 +220,57 @@ struct archetype_data *generate_shaman() {
   arch->tradition = TRAD_SHAMANIC;
   arch->forcepoints = 25;
   
+  // Spells.
+  i = 0;
+  ARCH_SPELL(SPELL_TREAT, 0, 3);
+  ARCH_SPELL(SPELL_CLOUT, 0, 6);
+  ARCH_SPELL(SPELL_ARMOUR, 0, 3);
+  ARCH_SPELL(SPELL_IMP_INVIS, 0, 1);
+  ARCH_SPELL(SPELL_HEAL, 0, 6);
+  ARCH_SPELL(SPELL_STUNBOLT, 0, 6);
+  assert(i < NUM_ARCHETYPE_SPELLS);
+  
   // Set skills.
-  arch->skills[SKILL_ASSAULT_RIFLES] = 6;
+  arch->skills[SKILL_SORCERY] = 6;
+  arch->skills[SKILL_CONJURING] = 5;
+  arch->skills[SKILL_NEGOTIATION] = 2;
+  arch->skills[SKILL_STREET_ETIQUETTE] = 2;
+  arch->skills[SKILL_AURA_READING] = 2;
+  arch->skills[SKILL_STEALTH] = 3;
   
-  // Inventory.
-  arch->weapon = 838; // colt m-23, should be set to burst fire
-  arch->weapon_top = 28702; // nicami scope
-  arch->weapon_barrel = 80403; // vent IV
-  arch->weapon_under = 31111; // smartlink II
-  arch->ammo_q = 500;
+  // Inventory.  
+  // arch->nuyen = 22660;
   
-  arch->nuyen = 22660;
+  arch->modulator = OBJ_DOCWAGON_BASIC_MOD;
   
-  arch->modulator = 16208; // platinum
-  
-  arch->worn[WEAR_ABOUT] = 1833; // a black trench coat
+  arch->worn[WEAR_ABOUT] = OBJ_LONDON_FOG_COUNT;
+  arch->worn[WEAR_BACK] = OBJ_NEOPHYTE_DUFFELBAG;
+  arch->worn[WEAR_BODY] = OBJ_PLATED_ARMOR_VEST;
+  arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III;
+  arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS;
+  arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT;
+  arch->worn[WEAR_LEGS] = OBJ_BLACK_BDU_PANTS;
+  arch->worn[WEAR_FEET] = OBJ_BLACK_COMBAT_BOOTS;
   
   i = 0;
-  arch->carried[i++] = 450; // medkit
+  arch->carried[i++] = OBJ_ELECTRONICS_KIT;
+  arch->carried[i++] = OBJ_POCKET_SECRETARY;
+  arch->carried[i++] = OBJ_CELL_PHONE;
+  arch->carried[i++] = OBJ_ASH_LEAF_ANKLET;
+  arch->carried[i++] = OBJ_ORICHALCUM_BRACELET;
   assert(i < NUM_ARCHETYPE_CARRIED);
-  
-  // Cyberware.
-  i = 0;
-  arch->cyberware[i++] = 85066; // ceramic bone lacing
-  assert(i < NUM_ARCHETYPE_CYBERWARE);
-  
-  // Bioware.
-  i = 0;
-  arch->bioware[i++] = 85803; // enhanced articulation
-  assert(i < NUM_ARCHETYPE_BIOWARE);
   
   return arch;
 }
 
 // TODO
-struct archetype_data *generate_hermetic() {
+struct archetype_data *generate_street_mage() {
   struct archetype_data *arch = new archetype_data;
   int i = 0;
   
   memset(arch, 0, sizeof(struct archetype_data));
   
-  arch->name = str_dup("Hermetic");
+  arch->name = str_dup("Street Mage");
   arch->race = RACE_HUMAN;
   
   // kosher for hermetic mage
@@ -270,10 +278,10 @@ struct archetype_data *generate_hermetic() {
   arch->auth_room = 90738;
   
   // Set attributes.
-  arch->attributes[BOD] = 6;
+  arch->attributes[BOD] = 3;
   arch->attributes[QUI] = 6;
-  arch->attributes[STR] = 6;
-  arch->attributes[CHA] = 1;
+  arch->attributes[STR] = 2;
+  arch->attributes[CHA] = 2;
   arch->attributes[INT] = 6;
   arch->attributes[WIL] = 6;
   // Reaction, essence, etc is autocomputed on character creation.
@@ -284,34 +292,38 @@ struct archetype_data *generate_hermetic() {
   arch->forcepoints = 25;
   
   // Set skills.
-  arch->skills[SKILL_ASSAULT_RIFLES] = 6;
+  arch->skills[SKILL_SORCERY] = 6;
+  arch->skills[SKILL_CONJURING] = 4;
+  arch->skills[SKILL_AURA_READING] = 3;
+  arch->skills[SKILL_STREET_ETIQUETTE] = 1;
+  arch->skills[SKILL_CORPORATE_ETIQUETTE] = 2;
+  arch->skills[SKILL_NEGOTIATION] = 2;
+  arch->skills[SKILL_STEALTH] = 3;
+  arch->skills[SKILL_SPELLDESIGN] = 4;
   
-  // Inventory.
-  arch->weapon = 838; // colt m-23, should be set to burst fire
-  arch->weapon_top = 28702; // nicami scope
-  arch->weapon_barrel = 80403; // vent IV
-  arch->weapon_under = 31111; // smartlink II
-  arch->ammo_q = 500;
+  // arch->nuyen = 22660;
   
-  arch->nuyen = 22660;
+  arch->modulator = OBJ_DOCWAGON_GOLD_MODULATOR;
   
-  arch->modulator = 16208; // platinum
-  
-  arch->worn[WEAR_ABOUT] = 1833; // a black trench coat
+  arch->worn[WEAR_EYES] = OBJ_THERMOGRAPHIC_GOGGLES;
+  arch->worn[WEAR_BACK] = OBJ_NEOPHYTE_DUFFELBAG;
+  arch->worn[WEAR_ABOUT] = OBJ_LONDON_FOG_MERLIN;
+  arch->worn[WEAR_BODY] = OBJ_PLATED_ARMOR_VEST;
+  arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III;
+  arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS;
+  arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT;
+  arch->worn[WEAR_LEGS] = OBJ_BLACK_SLACKS;
+  arch->worn[WEAR_FEET] = OBJ_BLACK_DRESS_SHOES;
   
   i = 0;
-  arch->carried[i++] = 450; // medkit
+  arch->carried[i++] = OBJ_ELECTRONICS_KIT;
+  arch->carried[i++] = OBJ_TITLE_TO_AMERICAR;
+  arch->carried[i++] = OBJ_POCKET_SECRETARY;
+  arch->carried[i++] = OBJ_CELL_PHONE;
+  arch->carried[i++] = OBJ_ASH_LEAF_ANKLET;
+  arch->carried[i++] = OBJ_ORICHALCUM_BRACELET;
+  arch->carried[i++] = OBJ_ORICHALCUM_BRACELET;
   assert(i < NUM_ARCHETYPE_CARRIED);
-  
-  // Cyberware.
-  i = 0;
-  arch->cyberware[i++] = 85066; // ceramic bone lacing
-  assert(i < NUM_ARCHETYPE_CYBERWARE);
-  
-  // Bioware.
-  i = 0;
-  arch->bioware[i++] = 85803; // enhanced articulation
-  assert(i < NUM_ARCHETYPE_BIOWARE);
   
   return arch;
 }
@@ -443,10 +455,10 @@ struct archetype_data *generate_archetype(int index) {
       return generate_adept();
     case ARCHETYPE_SHAMANIC_MAGE:
       return generate_shaman();
+    case ARCHETYPE_STREET_MAGE:
+      return generate_street_mage();
     case ARCHETYPE_DECKER:
       return generate_decker();
-    case ARCHETYPE_HERMETIC:
-      return generate_hermetic();
     case ARCHETYPE_RIGGER:
       return generate_rigger();
     default:

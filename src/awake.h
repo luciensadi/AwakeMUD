@@ -2134,6 +2134,15 @@ enum {
 #define OBJ_SECURE_JACKET                  681
 #define OBJ_TOP_LASER_SIGHT                626
 #define OBJ_BAYONET                        749
+#define OBJ_LONDON_FOG_MERLIN              8438
+#define OBJ_PLATED_ARMOR_VEST              707
+#define OBJ_BLACK_SLACKS                   8455
+#define OBJ_BLACK_DRESS_SHOES              38005
+#define OBJ_LONDON_FOG_COUNT               8435
+#define OBJ_ASH_LEAF_ANKLET                60565
+#define OBJ_ORICHALCUM_BRACELET            4906
+#define OBJ_TITLE_TO_AMERICAR              891
+
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 
@@ -2268,5 +2277,10 @@ enum {
 #define VEH_DAM_THRESHOLD_SEVERE    6
 #define VEH_DAM_THRESHOLD_DESTROYED 10
 #define VEH_DAMAGE_NEEDS_WORKSHOP   7
+
+// Don't change these.
+#define STRING_ROOM_TITLE_UNFINISHED "An unfinished room"
+#define STRING_ROOM_DESC_UNFINISHED "You are in an unfinished room.\r\n"
+#define STRING_ROOM_JACKPOINT_NO_ADDR "An undisclosed location"
 
 #endif

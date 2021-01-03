@@ -1107,10 +1107,11 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
   case MEDIT_CLASS:
     number = atoi(arg);
-    if ((number < 1) || (number > NUM_RACES))
+    if ((number < 0) || (number > NUM_RACES))
       medit_disp_class_menu(d);
     else {
-      GET_RACE(MOB) = number;
+      if (number != 0)
+        GET_RACE(MOB) = number;
       medit_disp_menu(d);
     }
     break;

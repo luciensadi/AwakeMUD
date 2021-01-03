@@ -1303,17 +1303,17 @@ void write_world_to_disk(int vnum)
     realcounter = real_room(counter);
 
     if (realcounter >= 0) {
-      if (!strcmp("An unfinished room", RM.name))
+      if (!strcmp(STRING_ROOM_TITLE_UNFINISHED, RM.name))
         continue;
         
       wrote_something = TRUE;
       fprintf(fp, "#%ld\n", counter);
 
       fprintf(fp, "Name:\t%s\n",
-              RM.name ? RM.name : "An unnamed room");
+              RM.name ? RM.name : STRING_ROOM_TITLE_UNFINISHED);
       fprintf(fp, "Desc:$\n%s~\n",
               cleanup(buf2, RM.description ? RM.description :
-                      "You see an empty room"));
+                      STRING_ROOM_DESC_UNFINISHED));
       if (RM.night_desc)
         fprintf(fp, "NightDesc:$\n%s~\n", cleanup(buf2, RM.night_desc));
 

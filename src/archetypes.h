@@ -42,12 +42,12 @@ struct archetype_data {
 #define ARCHETYPE_STREET_SAMURAI 0
 #define ARCHETYPE_ADEPT          1
 #define ARCHETYPE_SHAMANIC_MAGE  2
-#define ARCHETYPE_DECKER         3
-#define ARCHETYPE_HERMETIC       4
+#define ARCHETYPE_STREET_MAGE    3
+#define ARCHETYPE_DECKER         4
 #define ARCHETYPE_RIGGER         5
 
 // TODO: Increment this as the archetypes complete.
-#define NUM_CCR_ARCHETYPES 2
+#define NUM_CCR_ARCHETYPES 3
 
 extern struct archetype_data *archetypes[NUM_CCR_ARCHETYPES];
 

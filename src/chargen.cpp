@@ -210,6 +210,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       obj_to_char(temp_obj, CH);
     } else {
       snprintf(buf, sizeof(buf), "SYSERR: Invalid modulator %ld specified for archetype %s.", archetypes[i]->modulator, archetypes[i]->name);
+      mudlog(buf, CH, LOG_SYSLOG, TRUE);
     }
   }
     
@@ -222,6 +223,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       } else {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid worn item %ld specified for archetype %s's wearloc %s (%d).", 
                  archetypes[i]->worn[wearloc], archetypes[i]->name, where[wearloc], wearloc);
+        mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
     }
   
@@ -233,8 +235,18 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       } else {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid carried item %ld specified for archetype %s.", 
                  archetypes[i]->carried[carried], archetypes[i]->name);
+        mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
     }
+  
+  // Give them a map.
+  if ((temp_obj = read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL)))
+    obj_to_char(temp_obj, CH);
+  else {
+    snprintf(buf, sizeof(buf), "SYSERR: Invalid map %d specified for archetype %s.", 
+             OBJ_MAP_OF_SEATTLE, archetypes[i]->name);
+    mudlog(buf, CH, LOG_SYSLOG, TRUE);
+  }
       
   // Set their index and essence. Everyone starts with 0 bioware index and 6.00 essence.
   GET_INDEX(CH) = 0;
@@ -246,6 +258,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       if (!(temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL))) {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for archetype %s.", 
                  archetypes[i]->cyberware[cyb], archetypes[i]->name);
+        mudlog(buf, CH, LOG_SYSLOG, TRUE);
         continue;
       }
       
@@ -269,6 +282,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       if (!(temp_obj = read_object(archetypes[i]->bioware[bio], VIRTUAL))) {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid bioware item %ld specified for archetype %s.", 
                  archetypes[i]->bioware[bio], archetypes[i]->name);
+        mudlog(buf, CH, LOG_SYSLOG, TRUE);
         continue;
       }
       

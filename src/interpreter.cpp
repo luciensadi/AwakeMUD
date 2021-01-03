@@ -105,6 +105,7 @@ ACMD_DECLARE(do_at);
 ACMD_DECLARE(do_attach);
 ACMD_DECLARE(do_award);
 ACMD_DECLARE(do_availoffset);
+ACMD_DECLARE(do_audit);
 ACMD_DECLARE(do_backstab);
 ACMD_DECLARE(do_ban);
 ACMD_DECLARE(do_banish);
@@ -444,6 +445,7 @@ struct command_info cmd_info[] =
     { "assist"   , POS_FIGHTING, do_assist   , 1, 0 },
     { "ask"      , POS_LYING   , do_spec_comm, 0, SCMD_ASK },
     { "award"    , POS_DEAD    , do_award    , LVL_FIXER, 0 },
+    { "audit"    , POS_DEAD    , do_audit    , LVL_BUILDER, 0 },
     { "authorize", POS_DEAD    , do_wizutil  , LVL_CONSPIRATOR, SCMD_AUTHORIZE },
     { "availoffset", POS_DEAD  , do_availoffset, 0, 0 },
 
@@ -2917,6 +2919,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("odelete", "idelete");
   COMMAND_ALIAS("oload", "iload");
   COMMAND_ALIAS("oedit", "iedit");
+  COMMAND_ALIAS("olist", "ilist");
   COMMAND_ALIAS("ostat", "vstat");
   COMMAND_ALIAS("mstat", "vstat");
   COMMAND_ALIAS("qstat", "vstat");

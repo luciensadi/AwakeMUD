@@ -291,9 +291,9 @@ ACMD (do_redit)
      */
     d->edit_room = Mem->GetRoom();
     //memset((char *) d->edit_room, 0, sizeof(struct room_data));
-    d->edit_room->name = str_dup("An unfinished room");
-    d->edit_room->description = str_dup("You are in an unfinished room.\r\n");
-    d->edit_room->address = str_dup("An undisclosed location");
+    d->edit_room->name = str_dup(STRING_ROOM_TITLE_UNFINISHED);
+    d->edit_room->description = str_dup(STRING_ROOM_DESC_UNFINISHED);
+    d->edit_room->address = str_dup(STRING_ROOM_JACKPOINT_NO_ADDR);
     int i = 0;
     while ((d->edit_number > zone_table[i].top) && (i < top_of_zone_table))
       ++i;

@@ -90,6 +90,7 @@ extern int num_elevators;
 extern int write_quests_to_disk(int zone);
 extern void write_world_to_disk(int vnum);
 extern void alarm_handler(int signal);
+extern bool can_edit_zone(struct char_data *ch, int zone);
 
 ACMD_DECLARE(do_goto);
 
@@ -5719,4 +5720,454 @@ ACMD(do_rewrite_world) {
   mudlog("World rewriting complete.", ch, LOG_SYSLOG, TRUE);
     
   send_to_char("Done. Alarm handler has been restored.\r\n", ch);
+}
+
+int audit_zone_rooms(struct char_data *ch, int zone_num, bool verbose) {
+  int real_rm, issues = 0;
+  struct room_data *room;
+  
+  if (verbose)
+    send_to_char(ch, "\r\nAuditing rooms for zone %d...\r\n", zone_table[zone_num].number);
+    
+  for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    if ((real_rm = real_room(i)) < 0)
+      continue;
+      
+    room = &world[real_rm];
+    
+    // Check its strings.
+    if (!strcmp(GET_ROOM_NAME(room), STRING_ROOM_TITLE_UNFINISHED)) {
+      send_to_char(ch, "[%8ld] %s %s^n: Default room title used. This room will NOT be saved in the world files.\r\n",
+              room->number,
+              vnum_from_non_connected_zone(room->number) ? " " : "*",
+              room->name);
+      issues++;
+    }
+    
+    if (!strcmp(GET_ROOM_DESC(room), STRING_ROOM_DESC_UNFINISHED)) {
+      send_to_char(ch, "[%8ld] %s %s^n: Default room desc used.\r\n",
+              room->number,
+              vnum_from_non_connected_zone(room->number) ? " " : "*",
+              room->name);
+      issues++;
+    }
+    
+    if (room->matrix > 0) {
+      if (real_host(room->matrix) < 1) {
+        send_to_char(ch, "[%8ld] %s %s^n: Invalid Matrix host specified.\r\n",
+                room->number,
+                vnum_from_non_connected_zone(room->number) ? " " : "*",
+                room->name);
+        issues++;
+      }
+      
+      if (!strcmp(room->address, STRING_ROOM_JACKPOINT_NO_ADDR)) {
+        send_to_char(ch, "[%8ld] %s %s^n: Default jackpoint address used.\r\n",
+                room->number,
+                vnum_from_non_connected_zone(room->number) ? " " : "*",
+                room->name);
+        issues++;
+      }
+    }
+    
+    // Check its flags.
+    if (ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION)) {
+      send_to_char(ch, "[%8ld] %s %s^n: Socialization flag is set.\r\n",
+              room->number,
+              vnum_from_non_connected_zone(room->number) ? " " : "*",
+              room->name);
+      issues++;
+    }
+    
+    // Check its exits.
+    for (int k = 0; k < NUM_OF_DIRS; k++) {
+      // Check for hidden rating higher than 10 (or whatever threshold is configured as).
+      if (room->dir_option[k] && room->dir_option[k]->hidden > ANOMALOUS_HIDDEN_RATING_THRESHOLD) {
+        send_to_char(ch, "[%8ld] %s %s^n: %s exit has hidden rating %d > %d.\r\n",
+                room->number,
+                vnum_from_non_connected_zone(room->number) ? " " : "*",
+                room->name,
+                dirs[k],
+                room->dir_option[k]->hidden,
+                ANOMALOUS_HIDDEN_RATING_THRESHOLD);
+        issues++;
+      }
+      // Check for keywords and descs on doors.
+      if (room->dir_option[k] && room->dir_option[k]->exit_info != 0 
+          && (!room->dir_option[k]->keyword || !room->dir_option[k]->general_description)) {
+        send_to_char(ch, "[%8ld] %s %s^n: %s exit is missing keywords and/or description.\r\n",
+                room->number,
+                vnum_from_non_connected_zone(room->number) ? " " : "*",
+                room->name,
+                dirs[k]);
+        issues++;
+      }
+      // Check for valid exits.
+      if (room->dir_option[k] && !room->dir_option[k]->to_room) {
+        send_to_char(ch, "[%8ld] %s %s^n: %s exit leads to an invalid room.\r\n",
+                room->number,
+                vnum_from_non_connected_zone(room->number) ? " " : "*",
+                room->name,
+                dirs[k]);
+        issues++;
+      }
+    }
+  }
+  
+  return issues;
+}
+
+int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
+  int issues = 0, total_stats, real_mob, k;
+  bool printed = FALSE;
+  char candidate;
+  
+  if (verbose)
+    send_to_char(ch, "\r\nAuditing mobs for zone %d...\r\n", zone_table[zone_num].number);
+    
+  for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    if ((real_mob = real_mobile(i)) < 0)
+      continue;
+      
+    struct char_data *mob = &mob_proto[real_mob];
+    
+    // Check stats, etc
+    total_stats = 0;
+    for (k = BOD; k <= REA; k++)
+      total_stats += GET_REAL_ATT(mob, k);
+    
+    snprintf(buf, sizeof(buf), "[%8ld] %s %s^n",
+             GET_MOB_VNUM(mob),
+             vnum_from_non_connected_zone(GET_MOB_VNUM(mob)) ? " " : "*",
+             GET_CHAR_NAME(mob));
+    
+    printed = FALSE;
+             
+    // Flag mobs with crazy stats
+    if (total_stats > ANOMALOUS_TOTAL_STATS_THRESHOLD) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^ctotal attributes %d > %d^n",
+               total_stats,
+               ANOMALOUS_TOTAL_STATS_THRESHOLD);
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag mobs with no stats
+    if (total_stats == 0) {
+      strncat(buf, " has not had its attributes set yet", sizeof(buf) - strlen(buf) - 1);
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag mobs with crazy skills
+    for (k = MIN_SKILLS; k < MAX_SKILLS; k++)
+      if (GET_SKILL(mob, k) > ANOMALOUS_SKILL_THRESHOLD) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s %d > %d^n",
+                 printed ? ";" : " has",
+                 skills[k].name,
+                 GET_SKILL(mob, k),
+                 ANOMALOUS_SKILL_THRESHOLD);
+        printed = TRUE;
+        issues++;
+      }
+    
+    // Flag mobs with weird races.
+    if (GET_RACE(mob) <= RACE_UNDEFINED || GET_RACE(mob) >= NUM_RACES) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cundefined or unknown race^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag mobs with bad strings.
+    if (!mob->player.physical_text.name || !*mob->player.physical_text.name) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cmissing name^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    candidate = mob->player.physical_text.name[strlen(mob->player.physical_text.name) - 1];
+    if (ispunct(candidate)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s name ^cending in punctuation (%c)^n", 
+               printed ? ";" : " has", candidate);
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!mob->player.physical_text.keywords || !*mob->player.physical_text.keywords) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cmissing keywords^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!mob->player.physical_text.look_desc || !*mob->player.physical_text.look_desc) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cmissing look desc^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!mob->player.physical_text.room_desc || !*mob->player.physical_text.room_desc) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cmissing room desc^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    candidate = mob->player.physical_text.room_desc[strlen(mob->player.physical_text.room_desc) - 4];
+    if (!ispunct(candidate)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s room desc ^cnot ending in punctuation (%c)^n", 
+               printed ? ";" : " has", candidate);
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (printed)
+      send_to_char(ch, "%s\r\n", buf);
+  }
+    
+  return issues;
+}
+
+int audit_zone_objects(struct char_data *ch, int zone_num, bool verbose) {
+  int issues = 0, real_obj;
+  struct obj_data *obj;
+  bool printed = FALSE;
+  
+  if (verbose)
+    send_to_char(ch, "\r\nAuditing objects for zone %d...\r\n", zone_table[zone_num].number);
+    
+  for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    if ((real_obj = real_object(i)) < 0)
+      continue;
+      
+    obj = &obj_proto[real_obj];
+    
+    snprintf(buf, sizeof(buf), "[%8ld] %s %s^n",
+             GET_OBJ_VNUM(obj),
+             vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) ? " " : "*",
+             GET_OBJ_NAME(obj));
+    
+    printed = FALSE;
+             
+    // Flag objects with zero cost
+    if (GET_OBJ_COST(obj) <= 0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^ccost %d^n", GET_OBJ_COST(obj));
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag objects with zero weight
+    if (GET_OBJ_WEIGHT(obj) <= 0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cweight %0.2f^n", printed ? ";" : " has", GET_OBJ_WEIGHT(obj));
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (printed)
+      send_to_char(ch, "%s\r\n", buf);
+  }  
+  // TODO: Make sure they've got all their strings set.
+    
+  return issues;
+}
+
+int audit_zone_quests(struct char_data *ch, int zone_num, bool verbose) {
+  int issues = 0, real_qst;
+  struct quest_data *quest;  // qwest?  (^_^) 0={=====>
+  bool printed = FALSE;
+  
+  if (verbose)
+    send_to_char(ch, "\r\nAuditing quests for zone %d...\r\n", zone_table[zone_num].number);
+    
+  for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    if ((real_qst = real_quest(i)) < 0)
+      continue;
+      
+    quest = &quest_table[real_qst];
+    
+    snprintf(buf, sizeof(buf), "[%8ld] ^n", quest->vnum);
+    
+    printed = FALSE;
+             
+    // Flag invalid Johnsons
+    if (quest->johnson <= 0 || real_mobile(quest->johnson) <= 0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^cinvalid Johnson %ld^n", quest->johnson);
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag invalid strings
+    if (!quest->intro || !*quest->intro) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno intro string^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!quest->decline || !*quest->decline) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno decline string^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!quest->finish || !*quest->finish) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno finish string^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!quest->info || !*quest->info) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno info string^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!quest->quit || !*quest->quit) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno quit string^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!quest->done || !*quest->done) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno done string^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+    
+#ifdef USE_QUEST_LOCATION_CODE
+    if (!quest->location || !*quest->location) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno location string^n", printed ? ";" : " has");
+      printed = TRUE;
+      issues++;
+    }
+#endif
+    
+    if (printed)
+      send_to_char(ch, "%s\r\n", buf);
+  } 
+    
+  return issues;
+}
+
+int audit_zone_shops(struct char_data *ch, int zone_num, bool verbose) {
+  int issues = 0, real_shp;
+  struct shop_data *shop;
+  bool printed = FALSE;
+  
+  if (verbose)
+    send_to_char(ch, "\r\nAuditing shops for zone %d...\r\n", zone_table[zone_num].number);
+    
+  for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    if ((real_shp = real_shop(i)) < 0)
+      continue;
+      
+    shop = &shop_table[real_shp];
+    
+    snprintf(buf, sizeof(buf), "[%8ld] ^n", shop->vnum);
+    
+    printed = FALSE;
+             
+    // Flag invalid sell multipliers
+    if (shop->profit_buy < 1.0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^ctoo-low buy profit %0.2f < 1.0^n", shop->profit_buy);
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag invalid strings
+    if (shop->profit_sell > 0.1) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^ctoo-high sell profit %0.2f > 0.1^n", printed ? ";" : " has", shop->profit_sell);
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (printed)
+      send_to_char(ch, "%s\r\n", buf);
+  } 
+    
+  // TODO: Make sure they've got all their strings set.
+    
+  return issues;
+}
+
+int audit_zone_vehicles(struct char_data *ch, int zone_num, bool verbose) {
+  int issues = 0;
+
+  if (verbose)
+    send_to_char(ch, "\r\nAuditing vehicles for zone %d...\r\n", zone_table[zone_num].number);
+    
+  // TODO: Make sure they've got all their strings set.
+    
+  return issues;
+}
+
+int audit_zone_hosts(struct char_data *ch, int zone_num, bool verbose) {
+  int issues = 0;
+  
+  if (verbose)
+    send_to_char(ch, "\r\nAuditing hosts for zone %d...\r\n", zone_table[zone_num].number);
+    
+  // TODO: Make sure they've got all their strings set.
+    
+  return issues;
+}
+
+int audit_zone_ics(struct char_data *ch, int zone_num, bool verbose) {
+  int issues = 0;
+  
+  if (verbose)
+    send_to_char(ch, "\r\nAuditing ICs for zone %d...\r\n", zone_table[zone_num].number);
+    
+  // TODO: Make sure they've got all their strings set.
+    
+  return issues;
+}
+
+int audit_zone_commands(struct char_data *ch, int zone_num, bool verbose) {
+  int issues = 0;
+  
+  if (verbose)
+    send_to_char(ch, "\r\nAuditing zone commands for zone %d...\r\n", zone_table[zone_num].number);
+    
+  return issues;
+}
+
+ACMD(do_audit) {
+  int number, zonenum;
+  char arg1[MAX_INPUT_LENGTH];
+  
+  // we just wanna check the zone number they want to switch to
+  any_one_arg(argument, arg1);
+
+  // convert the arg to an int
+  number = atoi(arg1);
+  // find the real zone number
+  zonenum = real_zone(number);
+
+  // and see if they can edit it
+  if (!can_edit_zone(ch, zonenum)) {
+    send_to_char("Sorry, you don't have access to audit this zone.\r\n", ch);
+    return;
+  }
+  
+  // Perform auditing of the zone.
+  int issues = 0;
+  issues += audit_zone_rooms(ch, zonenum, TRUE);
+  issues += audit_zone_mobs(ch, zonenum, TRUE);
+  issues += audit_zone_objects(ch, zonenum, TRUE);
+  issues += audit_zone_quests(ch, zonenum, TRUE);
+  issues += audit_zone_shops(ch, zonenum, TRUE);
+  issues += audit_zone_vehicles(ch, zonenum, TRUE);
+  issues += audit_zone_hosts(ch, zonenum, TRUE);
+  issues += audit_zone_ics(ch, zonenum, TRUE);
+  issues += audit_zone_commands(ch, zonenum, TRUE);
+  
+  send_to_char(ch, "\r\nDone. Found a total of %d potential issue%s. Note that something being in this list does not disqualify the zone from approval-- it just requires extra scrutiny. Conversely, something not being flagged here doesn't mean it's kosher, it just means we didn't write a coded check for it yet.\r\n", 
+               issues, issues != 1 ? "s" : "");
+  
+  /*
+  send_to_char("\r\n\r\nAnomalous Objects -----------\r\n", ch);
+  for (i = 0, j = 0; i <= top_of_objt; i++) {
+    // Check stats, etc
+  }
+  if (j == 0)
+    send_to_char("...None.\r\n", ch);
+  */
 }
