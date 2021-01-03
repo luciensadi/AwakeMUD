@@ -1446,8 +1446,8 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
       i2++;
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "eq: %d\r\n", i2);
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Hunger: %d, Thirst: %d, Drunk: %d\r\n",
-          GET_COND(k, COND_FULL), GET_COND(k, COND_THIRST), GET_COND(k, COND_DRUNK));
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Hunger: %d, Thirst: %d, Drunk: %d,  Socialization Bonus: ^c%d^n\r\n",
+          GET_COND(k, COND_FULL), GET_COND(k, COND_THIRST), GET_COND(k, COND_DRUNK), GET_CONGREGATION_BONUS(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Master is: %s, Followers are:",
           ((k->master) ? GET_CHAR_NAME(k->master) : "<none>"));
