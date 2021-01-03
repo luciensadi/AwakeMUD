@@ -1042,7 +1042,7 @@ SPECIAL(spell_trainer)
               continue;
           }
 
-          send_to_char(ch, "%-30s Force Max: %d\r\n", spelltrainers[i].name, spelltrainers[i].force);
+          send_to_char(ch, "%-30s Force Max: %d\r\n", spells[spelltrainers[i].type].name, spelltrainers[i].force);
         }
     if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
       if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER)
@@ -1107,7 +1107,7 @@ SPECIAL(spell_trainer)
         if (skill < 1)
           continue;
       }
-      if (is_abbrev(buf, spelltrainers[i].name))
+      if (is_abbrev(buf, spells[spelltrainers[i].type].name))
         break;
     }
     if (!spelltrainers[i].teacher) {
@@ -1153,13 +1153,13 @@ SPECIAL(spell_trainer)
       else
         GET_KARMA(ch) -= cost * 100;
       
-      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spelltrainers[i].name, force);
+      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spells[spelltrainers[i].type].name, force);
       
       if (spell) {
         spell->force = force;
       } else {
         spell = new spell_data;
-        spell->name = str_dup(spelltrainers[i].name);
+        spell->name = str_dup(spells[spelltrainers[i].type].name);
         spell->type = spelltrainers[i].type;
         spell->subtype = spelltrainers[i].subtype;
         spell->force = force;
@@ -2791,7 +2791,7 @@ SPECIAL(vendtix)
 {
   extern struct obj_data *obj_proto;
   struct obj_data *vendtix = (struct obj_data *) me;
-  int ticket;
+  int ticket, real_obj;
 
   if (!cmd)
     return FALSE;
@@ -2801,9 +2801,14 @@ SPECIAL(vendtix)
   else
     ticket = SEATTLE_TICKET;
 
+  if ((real_obj = real_object(ticket)) < 0) {
+    send_to_char(ch, "A red light flashes on the VendTix-- it's currently out of order.\r\n");
+    mudlog("SYSERR: Invalid vnum for VendTix!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+    
   if (CMD_IS("list")) {
-    send_to_char(ch, "Ticket price is %d nuyen.\r\n",
-                 obj_proto[real_object(ticket)].obj_flags.cost);
+    send_to_char(ch, "Ticket price is %d nuyen.\r\n", obj_proto[real_obj].obj_flags.cost);
     act("$n presses some buttons on $p.", TRUE, ch, vendtix, 0, TO_ROOM);
     return TRUE;
   }
@@ -2814,7 +2819,7 @@ SPECIAL(vendtix)
       return TRUE;
     }
 
-    if ((GET_NUYEN(ch) - obj_proto[real_object(ticket)].obj_flags.cost) < 0) {
+    if ((GET_NUYEN(ch) - obj_proto[real_obj].obj_flags.cost) < 0) {
       send_to_char("You don't have enough nuyen!\r\n", ch);
       return TRUE;
     }
@@ -3319,6 +3324,8 @@ int find_hotel_cost(struct char_data *ch)
     case 14626:
       cost = 6.0;
       break;
+    case 62820:
+      cost = 2.0;
     default:
       snprintf(buf, sizeof(buf), "SYSERR: Invalid loadroom %ld specified to find_hotel_cost. Defaulting to 6.0.", GET_LOADROOM(ch));
       mudlog(buf, NULL, LOG_SYSLOG, FALSE);
@@ -3346,6 +3353,8 @@ int find_hotel_room(int room)
       return 70759;
     case 39287:
       return 39288;
+    case 62820:
+      return 62820;
   }
   return room;
 }
@@ -3746,9 +3755,12 @@ SPECIAL(quest_debug_scanner)
     }
     
     snprintf(buf, sizeof(buf), "Player %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+    int real_mob = real_mobile(quest_table[GET_QUEST(to)].johnson);
     if (GET_QUEST(to)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current quest: %ld (given by %s [%ld])\r\n",
-              quest_table[GET_QUEST(to)].vnum, mob_proto[real_mobile(quest_table[GET_QUEST(to)].johnson)].player.physical_text.name, quest_table[GET_QUEST(to)].johnson);
+              quest_table[GET_QUEST(to)].vnum, 
+              real_mob >= 0 ? mob_proto[real_mob].player.physical_text.name : "N/A", 
+              quest_table[GET_QUEST(to)].johnson);
     } else {
       strcat(buf, "Not currently on a quest.\r\n");
     }
@@ -4345,44 +4357,56 @@ SPECIAL(chargen_south_from_trainer)
 
 SPECIAL(chargen_unpractice_skill)
 {
-  if (!ch || !cmd || IS_NPC(ch) || !CMD_IS("unpractice"))
+  if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
+    
+  if (CMD_IS("nw")) {
+    if (GET_TRADITION(ch) == TRAD_MUNDANE) {
+      send_to_char("You don't have the ability to learn magic.\r\n", ch);
+      return TRUE;
+    }
+    return FALSE;
+  }
   
-  skip_spaces(&argument);
-  
-  if (!*argument) {
-    send_to_char("Syntax: UNPRACTICE [skill name]\r\n", ch);
+  else if (CMD_IS("unpractice")) {
+    skip_spaces(&argument);
+    
+    if (!*argument) {
+      send_to_char("Syntax: UNPRACTICE [skill name]\r\n", ch);
+      return TRUE;
+    }
+    
+    int skill_num = find_skill_num(argument);
+    
+    if (skill_num < 0) {
+      send_to_char("Please specify a valid skill.\r\n", ch);
+      return TRUE;
+    }
+    
+    if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
+      send_to_char("You can't unpractice a skill you currently have a skillsoft or other boost for.\r\n", ch);
+      return TRUE;
+    }
+    
+    if (GET_SKILL(ch, skill_num) <= 0) {
+      send_to_char("You don't know that skill.\r\n", ch);
+      return TRUE;
+    }
+    
+    // Success. Lower the skill by one point.
+    GET_SKILL_POINTS(ch)++;
+    set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) - 1, FALSE);
+    
+    if (GET_SKILL(ch, skill_num) == 0) {
+      send_to_char(ch, "With the assistance of several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
+    } else {
+      send_to_char(ch, "With the assistance of several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
+    }
+    
     return TRUE;
   }
   
-  int skill_num = find_skill_num(argument);
-  
-  if (skill_num < 0) {
-    send_to_char("Please specify a valid skill.\r\n", ch);
-    return TRUE;
-  }
-  
-  if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
-    send_to_char("You can't unpractice a skill you currently have a skillsoft or other boost for.\r\n", ch);
-    return TRUE;
-  }
-  
-  if (GET_SKILL(ch, skill_num) <= 0) {
-    send_to_char("You don't know that skill.\r\n", ch);
-    return TRUE;
-  }
-  
-  // Success. Lower the skill by one point.
-  GET_SKILL_POINTS(ch)++;
-  set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) - 1, FALSE);
-  
-  if (GET_SKILL(ch, skill_num) == 0) {
-    send_to_char(ch, "With the assistance of several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
-  } else {
-    send_to_char(ch, "With the assistance of several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
-  }
-  
-  return TRUE;
+  return FALSE;
 }
 
 // Prevent people from moving south from teachers until they've spent all their skill points.
@@ -5466,5 +5490,81 @@ SPECIAL(restoration_button) {
     return TRUE;
   }
   
+  return FALSE;
+}
+
+int axehead_last_said = -1;
+SPECIAL(axehead) {
+  int message_num;
+  const char *axehead_messages[] = {
+    "Runners these days don't realize how valuable keeping notes on their pocket secretary is. Like where Johnsons hang out.",
+    "Stick your radio and phone in a pocket. You can still hear 'em, and it keeps your hands free.",
+    "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun in their hand.",
+    "Back in my day, we didn't have anything like the 8 MHz band available. Being able to talk to runners is a blessing.",
+    "When in doubt, just take a cab back to somewhere familiar.",
+    "If you're on a job and you just can't get it done, call your Johnson and tell them you quit. Easier than hoofing it all the way back.",
+    "It's dangerous to go alone. Make friends."
+  };
+#define NUM_AXEHEAD_MESSAGES 7
+  
+  if (cmd || FIGHTING(ch) || !AWAKE(ch) || (message_num = number(0, NUM_AXEHEAD_MESSAGES * 20)) >= NUM_AXEHEAD_MESSAGES || message_num == axehead_last_said)
+    return FALSE;
+    
+  do_say(ch, axehead_messages[message_num], 0, 0);
+  axehead_last_said = message_num;
+  return TRUE;
+}
+
+SPECIAL(archetype_chargen_magic_split) {
+  struct room_data *room = (struct room_data *) me;
+  struct room_data *temp_to_room = NULL;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  // Funnel hermetic and shamanic mages into the correct archetypal path.
+  if (CMD_IS("south") || CMD_IS("s")) {
+    // Store the current exit, then overwrite with our custom one.
+    temp_to_room = room->dir_option[SOUTH]->to_room;
+    if (GET_TRADITION(ch) == TRAD_HERMETIC)
+      room->dir_option[SOUTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC)];
+    else
+      room->dir_option[SOUTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC)];
+      
+    // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
+    ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
+    
+    // Restore the south exit for the room to the normal one.
+    room->dir_option[SOUTH]->to_room = temp_to_room;
+    return TRUE;
+  }
+    
+  return FALSE;
+}
+
+SPECIAL(archetype_chargen_reverse_magic_split) {
+  struct room_data *room = (struct room_data *) me;
+  struct room_data *temp_to_room = NULL;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  // Funnel hermetic and shamanic mages into the correct archetypal path.
+  if (CMD_IS("north") || CMD_IS("n")) {
+    // Store the current exit, then overwrite with our custom one.
+    temp_to_room = room->dir_option[NORTH]->to_room;
+    if (GET_TRADITION(ch) == TRAD_HERMETIC)
+      room->dir_option[NORTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_CONJURING_HERMETIC)];
+    else
+      room->dir_option[NORTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_CONJURING_SHAMANIC)];
+      
+    // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
+    ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
+    
+    // Restore the north exit for the room to the normal one.
+    room->dir_option[NORTH]->to_room = temp_to_room;
+    return TRUE;
+  }
+    
   return FALSE;
 }

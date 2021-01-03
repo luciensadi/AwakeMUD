@@ -1130,6 +1130,7 @@ void mobile_activity(void)
       
       // If you just entered calm state and have a weapon, you get your ammo back.
       // check if they have ammo in proto-- if so, paste in proto ammo, if not, give max * 3 normal ammo
+      // real_mobile is guaranteed to resolve here since we're referencing a vnum from an existing NPC
       struct char_data *proto_mob = &mob_proto[real_mobile(GET_MOB_VNUM(ch))];
       
       // Copy over their ammo data. We scan the whole thing instead of just their weapon to prevent someone

@@ -238,6 +238,7 @@ ACMD(do_steal)
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
         mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        delete [] representation;
       }
     } else {                    /* obj found in inventory */
       if ((IS_CARRYING_N(ch) + 1 < CAN_CARRY_N(ch))) {
@@ -248,6 +249,7 @@ ACMD(do_steal)
             char *representation = generate_new_loggable_representation(obj);
             snprintf(buf, sizeof(buf), "%s steals from %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
             mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+            delete [] representation;
             
             obj_from_char(obj);
             obj_to_char(obj, ch);
@@ -1071,8 +1073,11 @@ const char *tog_messages[][2] = {
                              "You will no longer receive ANSI color codes.\r\n"},
                             {"You will now receive prompts.\r\n",
                              "You will no longer receive prompts automatically.\r\n"},
-                            {"You will no longer autokill NPCs, and will instead stop when they're downed.\r\n",
-                             "You will now continue attacking downed NPCs.\r\n"}
+                            {"You will now continue attacking downed NPCs.\r\n",
+                             "You will no longer autokill NPCs, and will instead stop when they're downed.\r\n"},
+                            {"You will now see names auto-appended to voices.\r\n",
+                             "You will no longer see names auto-appended to voices.\r\n"},
+                            
                           };
 
 ACMD(do_toggle)
@@ -1259,9 +1264,12 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "noprompts") || is_abbrev(argument, "prompts")) {
       result = PRF_TOG_CHK(ch, PRF_NOPROMPT);
       mode = 31;
-    } else if (is_abbrev(argument, "autokill")) {
-      result = PRF_TOG_CHK(ch, PRF_AUTOKILL);
+    } else if (is_abbrev(argument, "autokill") || is_abbrev(argument, "noautokill")) {
+      result = PRF_TOG_CHK(ch, PRF_NOAUTOKILL);
       mode = 32;
+    } else if (IS_SENATOR(ch) && is_abbrev(argument, "radionames")) {
+      result = PRF_TOG_CHK(ch, PRF_NO_RADIO_NAMES);
+      mode = 33;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

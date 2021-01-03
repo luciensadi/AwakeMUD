@@ -1469,20 +1469,32 @@ void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
 {
   int j;
   
+  if (!obj) {
+    mudlog("SYSERR: Null object passed to equip_char.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (!ch) {
+    mudlog("SYSERR: Null character passed to equip_char.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   if (GET_EQ(ch, pos))
   {
-    log_vfprintf("SYSLOG: Char is already equipped: %s, %s",
+    char errbuf[1000];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: Char is already equipped: %s, %s",
                  GET_NAME(ch), obj->text.name);
+    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
   if (obj->carried_by)
   {
-    log("SYSLOG: EQUIP: Obj is carried_by when equip.");
+    mudlog("SYSERR: EQUIP: Obj is carried_by when equip.", ch, LOG_SYSLOG, TRUE);
     return;
   }
   if (obj->in_room)
   {
-    log("SYSLOG: EQUIP: Obj is in_room when equip.");
+      mudlog("SYSERR: EQUIP: Obj is in_room when equip.", ch, LOG_SYSLOG, TRUE);
     return;
   }
   if (IS_OBJ_STAT(obj, ITEM_GODONLY) && !IS_NPC(ch) && !IS_SENATOR(ch))
@@ -1520,11 +1532,19 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
   int j;
   struct obj_data *obj;
   
-  if (pos < 0 || pos >= NUM_WEARS)
-    log_vfprintf("SYSERR: pos < 0 || pos >= NUM_WEARS, %s - %d", GET_NAME(ch), pos);
+  if (pos < 0 || pos >= NUM_WEARS) {
+    char errbuf[1000];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: pos < 0 || pos >= NUM_WEARS, %s - %d", GET_NAME(ch), pos);
+    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
   
-  if (!GET_EQ(ch, pos))
-    log_vfprintf("SYSERR: Trying to remove non-existent item from %s at %d", GET_NAME(ch), pos);
+  if (!GET_EQ(ch, pos)) {
+    char errbuf[1000];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: Trying to remove non-existent item from %s at %d", GET_NAME(ch), pos);
+    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
   
   obj = GET_EQ(ch, pos);
   obj->worn_by = NULL;

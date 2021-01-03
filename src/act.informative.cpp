@@ -772,81 +772,215 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strcat(buf, i->player.physical_text.room_desc);
     
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
-      if (mob_index[GET_MOB_RNUM(i)].func) {
-        if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
+      bool already_printed = FALSE;
+      if (mob_index[GET_MOB_RNUM(i)].func || mob_index[GET_MOB_RNUM(i)].sfunc) {
+        if (mob_index[GET_MOB_RNUM(i)].func == trainer || mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == teacher || mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
+        if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher || mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), already_printed ? " also" : "");
+            already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
+        if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), already_printed ? " also" : "");
+            already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer) {
+        if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), already_printed ? " also" : "");
+            already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == johnson || mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s %s a few things for sale.^n\r\n", HSSH(i), HASHAVE(i));
+        if ((mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis)
+            || (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].sfunc == terell_davis)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.^n\r\n", HSSH(i), already_printed ? " also" : "", HASHAVE(i));
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec || mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == fence) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might be willing to buy paydata from you.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == fence || mob_index[GET_MOB_RNUM(i)].sfunc == fence) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), HMHR(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == hacker || mob_index[GET_MOB_RNUM(i)].sfunc == hacker) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), already_printed ? " also" : "", HMHR(i));
+          already_printed = TRUE;
         }
-      }
-      
-      if (mob_index[GET_MOB_RNUM(i)].sfunc && mob_index[GET_MOB_RNUM(i)].sfunc != mob_index[GET_MOB_RNUM(i)].func) {
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
-          // Mundanes can't see metamagic teachers' abilities.
-          if (GET_TRADITION(ch) != TRAD_MUNDANE)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
-          // Adepts can't see adept trainers' abilities.
-          if (GET_TRADITION(ch) == TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
-          // Mundanes and adepts can't see spell trainers' abilities.
-          if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "", HASHAVE(i));
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].func == fence) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].func == hacker) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "", HMHR(i));
+        
+#define FUNC_TO_DEBUG_MSG(function, message) \
+if (mob_index[GET_MOB_RNUM(i)].func == (function) || mob_index[GET_MOB_RNUM(i)].sfunc == (function)) \
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...DEBUG: %s has function: %s.^n\r\n", HSSH(i), (message));
+
+        if (access_level(ch, LVL_VICEPRES)) {
+          SPECIAL(postmaster);
+          SPECIAL(generic_guard);
+          SPECIAL(receptionist);
+          // SPECIAL(cryogenicist);
+          SPECIAL(teacher);
+          SPECIAL(metamagic_teacher);
+          SPECIAL(trainer);
+          SPECIAL(adept_trainer);
+          SPECIAL(spell_trainer);
+          // SPECIAL(puff);
+          SPECIAL(janitor);
+          // SPECIAL(snake);
+          // SPECIAL(thief);
+          SPECIAL(pike);
+          SPECIAL(jeff);
+          SPECIAL(captain);
+          SPECIAL(rodgers);
+          SPECIAL(delaney);
+          SPECIAL(lone_star_park);
+          SPECIAL(mugger_park);
+          SPECIAL(gate_guard_park);
+          SPECIAL(squirrel_park);
+          SPECIAL(sick_ork);
+          // SPECIAL(mage_messenger);
+          // SPECIAL(malinalxochi);
+          SPECIAL(adept_guard);
+          SPECIAL(takehero_tsuyama);
+          SPECIAL(bio_secretary);
+          // SPECIAL(pool);
+          SPECIAL(harlten);
+          SPECIAL(branson);
+          SPECIAL(bio_guard);
+          SPECIAL(worker);
+          // SPECIAL(dwarf);
+          // SPECIAL(elf);
+          // SPECIAL(george);
+          // SPECIAL(wendigo);
+          // SPECIAL(pimp);
+          // SPECIAL(prostitute);
+          // SPECIAL(heinrich);
+          // SPECIAL(ignaz);
+          // SPECIAL(waitress);
+          // SPECIAL(dracula);
+          // SPECIAL(tunnel_rat);
+          SPECIAL(saeder_guard);
+          SPECIAL(fixer);
+          SPECIAL(hacker);
+          SPECIAL(fence);
+          SPECIAL(taxi);
+          SPECIAL(crime_mall_guard);
+          SPECIAL(doctor_scriptshaw);
+          SPECIAL(huge_troll);
+          // SPECIAL(roots_receptionist);
+          SPECIAL(aegnor);
+          SPECIAL(purple_haze_bartender);
+          SPECIAL(yukiya_dahoto);
+          SPECIAL(smelly);
+          SPECIAL(terell_davis);
+          SPECIAL(smiths_bouncer);
+          SPECIAL(bouncer_gentle);
+          SPECIAL(matchsticks);
+          SPECIAL(painter);
+          SPECIAL(multnomah_guard);
+          SPECIAL(nerp_skills_teacher);
+          SPECIAL(orkish_truckdriver);
+          SPECIAL(Janis_Meet);
+          SPECIAL(Janis_Amer_Door);
+          SPECIAL(Janis_Amer_Girl);
+          SPECIAL(Janis_Amer_Jerry);
+          SPECIAL(Janis_Captive);
+          SPECIAL(mageskill_anatoly);
+          SPECIAL(mageskill_herbie);
+          SPECIAL(mageskill_trainer);
+          SPECIAL(mageskill_nightwing);
+          SPECIAL(bouncer_troll);
+          SPECIAL(knightcenter_bouncer);
+          SPECIAL(cybered_yakuza);
+          SPECIAL(airport_guard);
+          SPECIAL(axehead);
+          
+          FUNC_TO_DEBUG_MSG(postmaster, "postmaster");
+          FUNC_TO_DEBUG_MSG(generic_guard, "generic guard");
+          FUNC_TO_DEBUG_MSG(receptionist, "receptionist");
+          // FUNC_TO_DEBUG_MSG(cryogenicist, "cryogenicist");
+          // FUNC_TO_DEBUG_MSG(puff, "puff");
+          FUNC_TO_DEBUG_MSG(janitor, "janitor");
+          // FUNC_TO_DEBUG_MSG(snake, "snake");
+          // FUNC_TO_DEBUG_MSG(thief, "thief");
+          FUNC_TO_DEBUG_MSG(pike, "pike");
+          FUNC_TO_DEBUG_MSG(jeff, "jeff");
+          FUNC_TO_DEBUG_MSG(captain, "cpt");
+          FUNC_TO_DEBUG_MSG(rodgers, "rodg");
+          FUNC_TO_DEBUG_MSG(delaney, "dela");
+          FUNC_TO_DEBUG_MSG(lone_star_park, "lone park");
+          FUNC_TO_DEBUG_MSG(mugger_park, "mug park");
+          FUNC_TO_DEBUG_MSG(gate_guard_park, "gate park");
+          FUNC_TO_DEBUG_MSG(squirrel_park, "squir park");
+          FUNC_TO_DEBUG_MSG(sick_ork, "sick ork");
+          // FUNC_TO_DEBUG_MSG(mage_messenger, "mage mes");
+          // FUNC_TO_DEBUG_MSG(malinalxochi, "malinalxochi");
+          FUNC_TO_DEBUG_MSG(adept_guard, "adept guard");
+          FUNC_TO_DEBUG_MSG(takehero_tsuyama, "takehero");
+          FUNC_TO_DEBUG_MSG(bio_secretary, "bio_sec");
+          // FUNC_TO_DEBUG_MSG(pool, "pool");
+          FUNC_TO_DEBUG_MSG(harlten, "harlten");
+          FUNC_TO_DEBUG_MSG(branson, "branson");
+          FUNC_TO_DEBUG_MSG(bio_guard, "bio_guard");
+          FUNC_TO_DEBUG_MSG(worker, "worker");
+          // FUNC_TO_DEBUG_MSG(dwarf, "dwarf");
+          // FUNC_TO_DEBUG_MSG(elf, "elf");
+          // FUNC_TO_DEBUG_MSG(george, "george");
+          // FUNC_TO_DEBUG_MSG(wendigo, "wendigo");
+          // FUNC_TO_DEBUG_MSG(pimp, "pimp");
+          // FUNC_TO_DEBUG_MSG(prostitute, "prost");
+          // FUNC_TO_DEBUG_MSG(heinrich, "hein");
+          // FUNC_TO_DEBUG_MSG(ignaz, "ignaz");
+          // FUNC_TO_DEBUG_MSG(waitress, "wait");
+          // FUNC_TO_DEBUG_MSG(dracula, "dracul");
+          // FUNC_TO_DEBUG_MSG(tunnel_rat, "tunnel rat");
+          FUNC_TO_DEBUG_MSG(saeder_guard, "saeder");
+          FUNC_TO_DEBUG_MSG(fixer, "fixer");
+          FUNC_TO_DEBUG_MSG(hacker, "hacker");
+          FUNC_TO_DEBUG_MSG(fence, "fence");
+          FUNC_TO_DEBUG_MSG(taxi, "taxi");
+          FUNC_TO_DEBUG_MSG(crime_mall_guard, "crime mall g");
+          FUNC_TO_DEBUG_MSG(doctor_scriptshaw, "doct s");
+          FUNC_TO_DEBUG_MSG(huge_troll, "troll");
+          // FUNC_TO_DEBUG_MSG(roots_receptionist, "roots rece");
+          FUNC_TO_DEBUG_MSG(aegnor, "aeg");
+          FUNC_TO_DEBUG_MSG(purple_haze_bartender, "purple");
+          FUNC_TO_DEBUG_MSG(yukiya_dahoto, "yukiya");
+          FUNC_TO_DEBUG_MSG(smelly, "smelly");
+          FUNC_TO_DEBUG_MSG(terell_davis, "terell");
+          FUNC_TO_DEBUG_MSG(smiths_bouncer, "smiths b");
+          FUNC_TO_DEBUG_MSG(bouncer_gentle, "bouncer g");
+          FUNC_TO_DEBUG_MSG(matchsticks, "matchs");
+          FUNC_TO_DEBUG_MSG(painter, "paint");
+          FUNC_TO_DEBUG_MSG(multnomah_guard, "multn g");
+          FUNC_TO_DEBUG_MSG(nerp_skills_teacher, "nerp t");
+          FUNC_TO_DEBUG_MSG(orkish_truckdriver, "ork t");
+          FUNC_TO_DEBUG_MSG(Janis_Meet, "janm");
+          FUNC_TO_DEBUG_MSG(Janis_Amer_Door, "janad");
+          FUNC_TO_DEBUG_MSG(Janis_Amer_Girl, "janag");
+          FUNC_TO_DEBUG_MSG(Janis_Amer_Jerry, "janaj");
+          FUNC_TO_DEBUG_MSG(Janis_Captive, "janc");
+          FUNC_TO_DEBUG_MSG(mageskill_anatoly, "m_a");
+          FUNC_TO_DEBUG_MSG(mageskill_herbie, "m_h");
+          FUNC_TO_DEBUG_MSG(mageskill_trainer, "m_t");
+          FUNC_TO_DEBUG_MSG(mageskill_nightwing, "m_n");
+          FUNC_TO_DEBUG_MSG(bouncer_troll, "bouncer t");
+          FUNC_TO_DEBUG_MSG(knightcenter_bouncer, "kc bounc");
+          FUNC_TO_DEBUG_MSG(cybered_yakuza, "cyber yak");
+          FUNC_TO_DEBUG_MSG(airport_guard, "air guard");
+          FUNC_TO_DEBUG_MSG(axehead, "axeh");
         }
       }
     }
@@ -1269,11 +1403,12 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
   } else {
-    send_to_char(ch, "^C%s^n%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+    send_to_char(ch, "^C%s^n%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " (Arena)" : "");
+                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " (Arena)" : "",
+                 ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "");
   }
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
@@ -1835,7 +1970,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
 }
 
 void do_probe_object(struct char_data * ch, struct obj_data * j) {
-  int i, found, mount_location;
+  int i, found, mount_location, bal, imp;
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *access = NULL;
   
@@ -1849,12 +1984,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
           AN(buf1), buf1, GET_OBJ_WEIGHT(j), material_names[(int)GET_OBJ_MATERIAL(j)], GET_OBJ_BARRIER(j));
   
+  bool was_take = j->obj_flags.wear_flags.IsSet(ITEM_WEAR_TAKE);
+  j->obj_flags.wear_flags.RemoveBit(ITEM_WEAR_TAKE);
   if (strcmp(j->obj_flags.wear_flags.ToString(), "0") != 0) {
     j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH, wear_bits, NUM_WEARS);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can be worn or equipped at the following wear location(s):\r\n  ^c%s^n\r\n", buf2);
   } else {
     strncat(buf, "This item cannot be worn or equipped.\r\n", sizeof(buf) - strlen(buf) - 1);
   }
+  if (was_take)
+    j->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
+  else
+    strncat(buf, "^yIt cannot be picked up once dropped.^n\r\n", sizeof(buf) - strlen(buf) - 1);
   
   switch (GET_OBJ_TYPE(j))
   {
@@ -1938,10 +2079,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         // Info about attachments, if any.
         int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(j);
         int prone_recoil_comp = 0;
+        int real_obj;
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
           if (GET_OBJ_VAL(j, i) > 0
-              && real_object(GET_OBJ_VAL(j, i)) > 0
-              && (access = &obj_proto[real_object(GET_OBJ_VAL(j, i))])) {
+              && (real_obj = real_object(GET_OBJ_VAL(j, i))) > 0
+              && (access = &obj_proto[real_obj])) {
             // mount_location: used for gun_accessory_locations[] lookup.
             mount_location = i - ACCESS_LOCATION_TOP;
             
@@ -2077,16 +2219,20 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_WORN:
       strncpy(buf1, "It has space for ", sizeof(buf1));
       
-      if (GET_OBJ_VAL(j, 0) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) > 1 ? "s":"");
+      if (GET_WORN_POCKETS_HOLSTERS(j) > 0) {
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s", 
+                 (has_pockets?", ":""), GET_WORN_POCKETS_HOLSTERS(j), GET_WORN_POCKETS_HOLSTERS(j) > 1 ? "s":"");
         has_pockets = TRUE;
       }
+      /*   Magazines aren't a thing anymore. -- LS
       if (GET_OBJ_VAL(j, 1) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n magazine%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n magazine%s", 
+                 (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
         has_pockets = TRUE;
-      }
-      if (GET_OBJ_VAL(j, 4) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n miscellaneous small item%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 4), GET_OBJ_VAL(j, 4) > 1 ? "s":"");
+      } */
+      if (GET_WORN_POCKETS_MISC(j) > 0) {
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n miscellaneous small item%s", 
+                 (has_pockets?", ":""), GET_WORN_POCKETS_MISC(j), GET_WORN_POCKETS_MISC(j) > 1 ? "s":"");
         has_pockets = TRUE;
       }
       
@@ -2095,8 +2241,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       } else {
         strcat(buf, "It has no pockets.\r\n");
       }
+      bal = GET_WORN_BALLISTIC(j);
+      imp = GET_WORN_IMPACT(j);
+      if (GET_WORN_MATCHED_SET(j)) {
+        bal = (int)(GET_WORN_BALLISTIC(j) / 100);
+        imp = (int)(GET_WORN_IMPACT(j) / 100);
+      }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. Its concealability rating is ^c%d^n.",
-              GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6), GET_OBJ_VAL(j, 7));
+              bal, imp, GET_WORN_CONCEAL_RATING(j));
       break;
     case ITEM_DOCWAGON:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
@@ -2644,7 +2796,7 @@ ACMD(do_gold)
 ACMD(do_pool)
 {
   char pools[MAX_INPUT_LENGTH];
-  if (GET_POWER(ch, ADEPT_SIDESTEP) && GET_DEFENSE(ch))
+  if (GET_POWER(ch, ADEPT_SIDESTEP))
     snprintf(buf, sizeof(buf), "^R+%d^n", GET_POWER(ch, ADEPT_SIDESTEP));
   else
     strncpy(buf, "  ", sizeof(buf));
@@ -4730,8 +4882,14 @@ ACMD(do_recap)
   if (!GET_QUEST(ch))
     send_to_char(ch, "You're not currently on a run.\r\n");
   else {
-    snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
-            quest_table[GET_QUEST(ch)].info);
+#ifdef USE_QUEST_LOCATION_CODE
+    if (quest_table[GET_QUEST(ch)].location)
+      snprintf(buf, sizeof(buf), "At %s, %s told you: \r\n%s", quest_table[GET_QUEST(ch)].location, GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
+              quest_table[GET_QUEST(ch)].info);
+    else
+#endif
+      snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
+              quest_table[GET_QUEST(ch)].info);
     send_to_char(buf, ch);
   }
 }

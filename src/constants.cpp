@@ -571,7 +571,8 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Prompt"   , FALSE, TRUE  },
   { "Helplog"     , TRUE , TRUE  },
   { "Purgelog"    , TRUE , TRUE  },
-  { "Autokill"    , FALSE, TRUE  },
+  { "No Autokill" , FALSE, TRUE  },
+  { "Voice Names" , FALSE, TRUE  },
   { "\n"          , 0    , 0     }
 };
 

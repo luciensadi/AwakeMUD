@@ -58,6 +58,7 @@ bool can_hurt(struct char_data *ch, struct char_data *victim);
 
 SPECIAL(johnson);
 SPECIAL(weapon_dominator);
+SPECIAL(landlord_spec);
 
 extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
@@ -2088,7 +2089,9 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype) {
     if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
         || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
         || mob_index[GET_MOB_RNUM(victim)].func == johnson
-        || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson)
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
+        || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec)
       return false;
     
     // Nokill protection.
@@ -2181,7 +2184,9 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   else if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
       || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
       || mob_index[GET_MOB_RNUM(victim)].func == johnson 
-      || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson)
+      || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
+      || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
+      || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec)
   {
     dam = -1;
     buf_mod(rbuf, sizeof(rbuf), "Keeper",dam);
@@ -2474,7 +2479,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   
   if (GET_MENTAL(victim) < 100 || GET_PHYSICAL(victim) < 0)
     if (FIGHTING(ch) == victim)
-      if (GET_POS(victim) == POS_DEAD || !IS_NPC(victim) || !PRF_FLAGGED(ch, PRF_AUTOKILL)) {
+      if (GET_POS(victim) == POS_DEAD || !IS_NPC(victim) || PRF_FLAGGED(ch, PRF_NOAUTOKILL)) {
         stop_fighting(ch);
         if (GET_POS(victim) != POS_DEAD)
           act("You leave off attacking $N.", FALSE, ch, 0, victim, TO_CHAR);
@@ -2493,11 +2498,12 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
           break;
         }
     }
-    if (ch != victim && !IS_NPC(ch) && GET_QUEST(ch) && IS_NPC(victim))
-      check_quest_kill(ch, victim);
-    else if (ch != victim && AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
-             !IS_NPC(ch->master) && GET_QUEST(ch->master) && IS_NPC(victim))
-      check_quest_kill(ch->master, victim);
+    if (ch != victim) {
+      if (!IS_NPC(ch) && GET_QUEST(ch) && IS_NPC(victim))
+        check_quest_kill(ch, victim);
+      else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && IS_NPC(victim))
+        check_quest_kill(ch->master, victim);
+    }
     
     if ((IS_NPC(victim) || victim->desc) && ch != victim &&
         attacktype != TYPE_EXPLOSION) {
@@ -2680,12 +2686,12 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
       CAN_WEAR(GET_EQ(ch, WEAR_HOLD), ITEM_WEAR_WIELD))
     return 0;
   
-  int mod = 0;
+  int mod = 0, real_obj;
   for (int i = ACCESS_LOCATION_TOP; !mod && i <= ACCESS_LOCATION_UNDER; i++) {
     // If they have a smartlink attached:
     if (GET_OBJ_VAL(weapon, i) > 0
-        && real_object(GET_OBJ_VAL(weapon, i)) > 0
-        && (access = &obj_proto[real_object(GET_OBJ_VAL(weapon, i))])
+        && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
+        && (access = &obj_proto[real_obj])
         && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK) {
       
       // Iterate through their cyberware and look for a matching smartlink.
@@ -4822,6 +4828,7 @@ void roll_initiative(void)
       int dam = convert_damage(stage(-success_test(GET_QUI(ch), ch->in_room->poltergeist[1] - GET_IMPACT(ch)), LIGHT));
       if (dam > 0) {
         act("You are hit by flying objects!\r\n", FALSE, ch, 0, 0, TO_CHAR);
+        act("$n is hit by flying objects!\r\n", TRUE, ch, 0, 0, TO_ROOM);
         damage(ch, ch, dam, TYPE_POLTERGEIST, MENTAL);
       }
     }

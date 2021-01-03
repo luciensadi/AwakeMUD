@@ -36,6 +36,7 @@
 #include "protocol.h"
 #include "newdb.h"
 #include "helpedit.h"
+#include "archetypes.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -54,7 +55,7 @@ extern int restrict;
 /* external functions */
 void echo_on(struct descriptor_data * d);
 void echo_off(struct descriptor_data * d);
-void do_start(struct char_data * ch);
+void do_start(struct char_data * ch, bool wipe_skills);
 int special(struct char_data * ch, int cmd, char *arg);
 int isbanned(char *hostname);
 void init_create_vars(struct descriptor_data *d);
@@ -86,6 +87,7 @@ void cedit_parse(struct descriptor_data *d, char *arg);
 
 extern void affect_total(struct char_data * ch);
 extern void mag_menu_system(struct descriptor_data * d, char *arg);
+extern void ccr_pronoun_menu(struct descriptor_data *d);
 
 /* prototypes for all do_x functions. */
 ACMD_DECLARE(do_olcon);
@@ -2571,9 +2573,9 @@ void nanny(struct descriptor_data * d, char *arg)
     dirty_password = (STATE(d) == CON_CHPWD_VRFY);
 
     if (STATE(d) == CON_CNFPASSWD) {
-      SEND_TO_Q("What is your sex (M/F/O)? ", d);
       STATE(d) = CON_CCREATE;
       init_create_vars(d);
+      ccr_pronoun_menu(d);
     } else {
       if (STATE(d) != CON_CHPWD_VRFY)
         d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), TRUE);
@@ -2625,7 +2627,6 @@ void nanny(struct descriptor_data * d, char *arg)
           STATE(d) = CON_CLOSE;
           return;
         }
-        // TODO: If you died and then hit 1, your old character's data is leaked here.
         char char_name[strlen(GET_CHAR_NAME(d->character))+1];
         strcpy(char_name, GET_CHAR_NAME(d->character));
         free_char(d->character);
@@ -2641,48 +2642,67 @@ void nanny(struct descriptor_data * d, char *arg)
         }
         playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
       }
+      // Wipe out various pointers related to game state and recalculate carry weight.
       reset_char(d->character);
       PLR_FLAGS(d->character).RemoveBit(PLR_CUSTOMIZE);
       d->character->next = character_list;
       character_list = d->character;
       d->character->player.time.logon = time(0);
-
-      if (GET_LOADROOM(d->character) == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
-        GET_LOADROOM(d->character) = mortal_start_room;
-
-      if ((load_room = GET_LAST_IN(d->character)) != NOWHERE)
+      
+      // Rewrote the entire janky-ass load room tree.        
+      // First: Frozen characters. They go to the frozen start room.
+      if (PLR_FLAGGED(d->character, PLR_FROZEN))
+        load_room = real_room(frozen_start_room);
+        
+      // Next: Unauthed (chargen) characters. They go to the start of their chargen areas.
+      else if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
+        if (!d->ccr.archetypal || (load_room = real_room(archetypes[d->ccr.archetype]->start_room)) == NOWHERE)
+          load_room = real_room(newbie_start_room);
+      }
+      
+      // Next: Characters who have GET_LAST_IN rooms load in there.
+      else if ((load_room = GET_LAST_IN(d->character)) != NOWHERE)
         load_room = real_room(load_room);
+        
+      // Post-processing: Non-newbies don't get to start in the newbie loadroom-- rewrite their loadroom value.
+      if (load_room == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
+        load_room = mortal_start_room;
 
+      // Post-processing: Staff with invalid or mort-start-room loadrooms instead load in at their defined loadroom.
       if (IS_SENATOR(d->character) && (load_room <= 0 || load_room == real_room(mortal_start_room)))
         load_room = real_room(GET_LOADROOM(d->character));
         
-      if (load_room < 0) {
-        snprintf(buf, sizeof(buf), "SYSERR: Character %s is loading in with invalid load room %ld (%ld). Changing to Grog's place (35500).",
-                     GET_CHAR_NAME(d->character), GET_LOADROOM(d->character), load_room);
-        mudlog(buf, d->character, LOG_SYSLOG, TRUE);
-        load_room = real_room(RM_ENTRANCE_TO_DANTES);
-        GET_LOADROOM(d->character) = RM_ENTRANCE_TO_DANTES;
-      }
-      
+      // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
       if (ROOM_FLAGGED(&world[load_room], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room].number))
         load_room = real_room(mortal_start_room);
-      /* If char was saved with NOWHERE, or real_room above failed... */
-      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED))
-        load_room = real_room(newbie_start_room);
-
+      
+      // Post-processing: Invalid load room characters go to the newbie or mortal start rooms.
       if (load_room == NOWHERE) {
-        if (PLR_FLAGGED(d->character, PLR_NEWBIE))
-          load_room = real_room(RM_NEWBIE_LOADROOM); // The Neophyte Hotel (previously 8039 which does not exist)
-        else
+        if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
+          load_room = real_room(RM_NEWBIE_LOADROOM);
+        } else
           load_room = real_room(mortal_start_room);
       }
 
-      if (PLR_FLAGGED(d->character, PLR_FROZEN))
-        load_room = real_room(frozen_start_room);
-
+      // First-time login. This overrides the above, but it's for a good cause.
       if (!GET_LEVEL(d->character)) {
-        load_room = real_room(newbie_start_room);
-        do_start(d->character);
+        if (d->ccr.archetypal) {
+          load_room = real_room(archetypes[d->ccr.archetype]->start_room);
+          // Correct for invalid archetype start rooms.
+          if (load_room == NOWHERE) {
+            snprintf(buf, sizeof(buf), "WARNING: Start room %ld for archetype %s does not exist!", 
+                     archetypes[d->ccr.archetype]->start_room,
+                     archetypes[d->ccr.archetype]->name);
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            load_room = real_room(newbie_start_room);
+          }
+          do_start(d->character, FALSE);
+        } else {
+          load_room = real_room(newbie_start_room);
+          do_start(d->character, TRUE);
+        }
+        
+          
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
       } else {
@@ -2795,9 +2815,10 @@ void nanny(struct descriptor_data * d, char *arg)
         STATE(d) = CON_QMENU;
       }
     } else {
-      SEND_TO_Q("\r\nYOU ARE ABOUT TO DELETE THIS CHARACTER PERMANENTLY.\r\n"
-                "ARE YOU ABSOLUTELY SURE?\r\n\r\n"
-                "Please type \"yes\" to confirm: ", d);
+      snprintf(buf, sizeof(buf), "\r\nYOU ARE ABOUT TO DELETE THIS CHARACTER (%s) PERMANENTLY. THIS CANNOT BE UNDONE.\r\n", GET_CHAR_NAME(d->character));
+      SEND_TO_Q(buf, d);
+      snprintf(buf, sizeof(buf), "\r\n\r\nIf you're ABSOLUTELY SURE, type your character's name (%s) to confirm, or anything else to abort: ", GET_CHAR_NAME(d->character));
+      SEND_TO_Q(buf, d);
       if (STATE(d) == CON_DELCNF1)
         STATE(d) = CON_DELCNF2;
       else
@@ -2807,7 +2828,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
   case CON_DELCNF2:
   case CON_QDELCONF2:
-    if (!strcmp(arg, "yes") || !strcmp(arg, "YES")) {
+    if (!str_cmp(arg, GET_CHAR_NAME(d->character))) {
       if (PLR_FLAGGED(d->character, PLR_FROZEN)) {
         SEND_TO_Q("You try to kill yourself, but the ice stops you.\r\n", d);
         SEND_TO_Q("Character not deleted.\r\n\r\n", d);
@@ -2891,6 +2912,15 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("bamfin", "poofin");
   COMMAND_ALIAS("bamfout", "poofout");
   COMMAND_ALIAS("sacrifice", "junk");
+  
+  // Common staff goofs.
+  COMMAND_ALIAS("odelete", "idelete");
+  COMMAND_ALIAS("oload", "iload");
+  COMMAND_ALIAS("oedit", "iedit");
+  COMMAND_ALIAS("ostat", "vstat");
+  COMMAND_ALIAS("mstat", "vstat");
+  COMMAND_ALIAS("qstat", "vstat");
+  COMMAND_ALIAS("sstat", "vstat");
   
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");

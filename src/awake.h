@@ -370,8 +370,9 @@ enum {
 #define PRF_NOPROMPT            45
 #define PRF_HELPLOG             46
 #define PRF_PURGELOG            47
-#define PRF_AUTOKILL            48
-#define PRF_MAX   		          49
+#define PRF_NOAUTOKILL          48
+#define PRF_NO_RADIO_NAMES      49
+#define PRF_MAX   		          50
 
 /* log watch */
 
@@ -1883,38 +1884,6 @@ enum {
 #define CON_PGEDIT       46
 #define CON_HELPEDIT     47
 
-/* chargen connected modes */
-#define CCR_AWAIT_CR    -1
-#define CCR_SEX         0
-#define CCR_RACE        1
-#define CCR_TOTEM       2
-#define CCR_PRIORITY    3
-#define CCR_ASSIGN      4
-#define CCR_TRADITION   5
-#define CCR_ASPECT	6
-#define CCR_TOTEM2	7
-#define CCR_TYPE	8
-#define CCR_POINTS	9
-#define CCR_PO_ATTR	10
-#define CCR_PO_SKILL	11
-#define CCR_PO_RESOURCES	12
-#define CCR_PO_MAGIC	13
-
-#define PO_RACE		0
-#define PO_ATTR		1
-#define PO_SKILL	2
-#define PO_RESOURCES	3
-#define PO_MAGIC	4
-#define PO_I_DONT_EVEN_KNOW 5
-
-/* priority choosing chargen modes */
-#define PR_NONE         0
-#define PR_ATTRIB       1
-#define PR_MAGIC        2
-#define PR_RESOURCE     3
-#define PR_SKILL        4
-#define PR_RACE         5
-
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0
 #define DB_BOOT_MOB     1
@@ -2101,6 +2070,12 @@ enum {
 #define RM_CHARGEN_CONJURING_HERMETIC             60522
 #define RM_CHARGEN_CONJURING_SHAMANIC             60625
 
+// Archetypal chargen room defines
+#define RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC 90701
+#define RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC 90705
+#define RM_ARCHETYPAL_CHARGEN_CONJURING_HERMETIC 90704
+#define RM_ARCHETYPAL_CHARGEN_CONJURING_SHAMANIC 90708
+
 #define RM_JUNKYARD_GATES           70501
 #define RM_JUNKYARD_PARTS           70502
 #define RM_JUNKYARD_GLASS           70504
@@ -2112,14 +2087,52 @@ enum {
 #define RM_JUNKYARD_BIKES           70508
 
 // Objects, to remove the magic numbers from the code.
-#define OBJ_NEWBIE_RADIO            60531
-#define OBJ_MULTNOMAH_VISA          17513
-#define OBJ_MAP_OF_SEATTLE          2041
-#define OBJ_ELEVATOR_SHAFT_KEY      998
-#define OBJ_DOCWAGON_BASIC_MOD      16206
-#define OBJ_SEATTLE_TAXI_SIGN       600
-#define OBJ_CARIBBEAN_TAXI_SIGN        610
-#define OBJ_PORTLAND_TAXI_SIGN      699
+#define OBJ_NEWBIE_RADIO                   60531
+#define OBJ_MULTNOMAH_VISA                 17513
+#define OBJ_MAP_OF_SEATTLE                 2041
+#define OBJ_ELEVATOR_SHAFT_KEY             998
+#define OBJ_SEATTLE_TAXI_SIGN              600
+#define OBJ_PORTLAND_TAXI_SIGN             699
+#define OBJ_CARIBBEAN_TAXI_SIGN            610
+#define OBJ_COLT_M23                       838
+#define OBJ_NICAMI_SCOPE                   28702
+#define OBJ_VENT_IV                        80403
+#define OBJ_SMARTLINK_II                   31111
+#define OBJ_DOCWAGON_BASIC_MOD             16206
+#define OBJ_DOCWAGON_GOLD_MODULATOR        16207
+#define OBJ_DOCWAGON_PLATINUM_MODULATOR    16208
+#define OBJ_BLACK_TRENCH_COAT              1833
+#define OBJ_100_PCT_COTTON_SHIRT           64903
+#define OBJ_FORMFIT_III                    80734
+#define OBJ_FOREARM_GUARDS                 700
+#define OBJ_RIFLE_STRAP                    2059
+#define OBJ_BLACK_LEATHER_DUTY_BELT        9402
+#define OBJ_BLACK_BDU_PANTS                9402
+#define OBJ_BLACK_COMBAT_BOOTS             29010
+#define OBJ_MEDKIT                         450
+#define OBJ_VEHICLE_TOOLKIT                47397
+#define OBJ_ELECTRONICS_KIT                60532
+#define OBJ_CELL_PHONE                     60530
+#define OBJ_TITLE_TO_SCORPION              892
+#define OBJ_TITLE_TO_BISON                 897
+#define OBJ_POCKET_SECRETARY               31542
+#define OBJ_NEOPHYTE_DUFFELBAG             60535
+#define OBJ_CYB_CERAMIC_BONE_LACING        85066
+#define OBJ_CYB_DATAJACK                   85012
+#define OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA 85270
+#define OBJ_CYB_THERMOGRAPHIC_VISION       85053
+#define OBJ_CYB_SMARTLINK_II_ALPHA         85318
+#define OBJ_BIO_ENHANCED_ARTICULATION      85803
+#define OBJ_BIO_MUSCLE_TONER_IV            85812
+#define OBJ_BIO_TRAUMA_DAMPER              85940
+#define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    85939
+#define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
+#define OBJ_POLEARM_STRAP                  64989
+#define OBJ_THERMOGRAPHIC_GOGGLES          378
+#define OBJ_STEEL_COMBAT_AXE               658
+#define OBJ_SECURE_JACKET                  681
+#define OBJ_TOP_LASER_SIGHT                626
+#define OBJ_BAYONET                        749
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 

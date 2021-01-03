@@ -95,6 +95,7 @@ char *  replace_substring(char *source, char *dest, const char *replace_target, 
 bool    combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
 void    update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount);
 void    destroy_door(struct room_data *room, int dir);
+bool    spell_is_nerp(int spell_num);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -368,6 +369,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_ESS(ch)           ((ch)->aff_abils.ess)
 #define GET_ESSHOLE(ch)		((ch)->aff_abils.esshole)
 #define GET_INDEX(ch)         ((ch)->real_abils.bod_index)
+#define GET_HIGHEST_INDEX(ch)      ((ch)->real_abils.highestindex)
 #define GET_BIOOVER(ch)       (-((int)((GET_ESS((ch)) + 300) - GET_INDEX((ch))) / 100))
 #define GET_TEMP_MAGIC_LOSS(ch)	((ch)->points.magic_loss)
 #define GET_TEMP_ESSLOSS(ch)	((ch)->points.ess_loss)
@@ -811,8 +813,11 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_DRUG convenience defines
 
 // ITEM_WORN convenience defines
+#define GET_WORN_POCKETS_HOLSTERS(worn)        (GET_OBJ_VAL((worn), 0))
+#define GET_WORN_POCKETS_MISC(worn)            (GET_OBJ_VAL((worn), 4))
 #define GET_WORN_BALLISTIC(worn)               (GET_OBJ_VAL((worn), 5))
 #define GET_WORN_IMPACT(worn)                  (GET_OBJ_VAL((worn), 6))
+#define GET_WORN_CONCEAL_RATING(worn)          (GET_OBJ_VAL((worn), 7))
 #define GET_WORN_MATCHED_SET(worn)             (GET_OBJ_VAL((worn), 8))
 
 // ITEM_OTHER convenience defines
@@ -881,6 +886,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_ACCESSORY_RATING(accessory)          (GET_OBJ_VAL((accessory), 2))
 
 // ITEM_SPELL_FORMULA convenience defines
+#define GET_SPELLFORMULA_SPELL(formula)          (GET_OBJ_VAL((formula), 1))
 
 // ITEM_FOCUS convenience defines
 

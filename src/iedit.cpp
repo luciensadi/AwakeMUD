@@ -1341,6 +1341,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
   long             number, j;
   long            obj_number;   /* the RNUM */
   float fnumber;
+  int real_obj;
   bool modified = FALSE;
   switch (d->edit_mode)
   {
@@ -2408,7 +2409,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               }
               break;
             case CYB_CRANIALCYBER:
-              if (real_object(number) < 1|| obj_proto[real_object(number)].obj_flags.type_flag != ITEM_CYBERDECK) {
+              if ((real_obj = real_object(number)) < 1|| obj_proto[real_obj].obj_flags.type_flag != ITEM_CYBERDECK) {
                 send_to_char("Object doesn't exist or is not a cyberdeck! Vnum of cyberdeck to be included in headware (0 to quit): ", CH);
                 return;
               }

@@ -1276,10 +1276,13 @@ int get_skill(struct char_data *ch, int skill, int &target)
           mbw = GET_OBJ_VAL(obj, 1);
         else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACKEXPERT)
           expert = GET_OBJ_VAL(obj, 1);
-        else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACK)
-          for (int i = 5; i < 10; i++)
-            if (real_object(GET_OBJ_VAL(obj, i)) && obj_proto[real_object(GET_OBJ_VAL(obj, i))].obj_flags.value[0] == skill)
+        else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACK) {
+          int real_obj;
+          for (int i = 5; i < 10; i++) {
+            if ((real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0 && obj_proto[real_obj].obj_flags.value[0] == skill)
               chip = TRUE;
+          }
+        }
       
       // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
       if (chip && expert) {
@@ -2649,7 +2652,7 @@ const char *skill_rank_name(int rank, bool knowledge) {
 char *how_good(int skill, int rank)
 {
   static char buf[256];
-  snprintf(buf, sizeof(buf), " (%s)", skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE));
+  snprintf(buf, sizeof(buf), " (%s / rank %d)", skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE), rank);
   return buf;
 }
 
@@ -2786,11 +2789,23 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
       break;
     case ITEM_GUN_AMMO:
       // A box of ammunition.
-      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d units of %s %s ammo", GET_OBJ_VAL(obj, 0),
-              ammo_type[GET_OBJ_VAL(obj, 2)].name, weapon_type[GET_OBJ_VAL(obj, 1)]);
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s", 
+               GET_AMMOBOX_QUANTITY(obj), 
+               get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
       break;
+    case ITEM_GUN_MAGAZINE:
+      // A magazine.
+      snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s", 
+               GET_MAGAZINE_AMMO_COUNT(obj), 
+               get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj), GET_MAGAZINE_AMMO_TYPE(obj), GET_MAGAZINE_AMMO_COUNT(obj)));
     default:
       break;
+  }
+  
+  if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", bonded to character id %d with %d nuyen on it", 
+             GET_OBJ_VAL(obj, 0),
+             GET_OBJ_VAL(obj, 1));
   }
   
   return str_dup(log_string);
@@ -2994,6 +3009,34 @@ void destroy_door(struct room_data *room, int dir) {
   REMOVE_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
   REMOVE_BIT(room->dir_option[dir]->exit_info, EX_HIDDEN);
   SET_BIT(room->dir_option[dir]->exit_info, EX_DESTROYED);
+}
+
+bool spell_is_nerp(int spell_num) {
+  switch (spell_num) {
+    case SPELL_MANABALL:
+    case SPELL_POWERBALL:
+    case SPELL_STUNBALL:
+    case SPELL_ANALYZEDEVICE:
+    case SPELL_CLAIRAUDIENCE:
+    case SPELL_CLAIRVOYANCE:
+    case SPELL_DETECTENEMIES:
+    case SPELL_DETECTINDIV:
+    case SPELL_DETECTLIFE:
+    case SPELL_DETECTMAGIC:
+    case SPELL_DETECTOBJECT:
+    case SPELL_PROPHYLAXIS:
+    case SPELL_MASSCONFUSION:
+    case SPELL_CHAOTICWORLD:
+    case SPELL_MASK:
+    case SPELL_PHYSMASK:
+    case SPELL_FIREBALL:
+    case SPELL_BALLLIGHTNING:
+    case SPELL_PHYSICALBARRIER:
+    case SPELL_ASTRALBARRIER:
+      return TRUE;
+  }
+  
+  return FALSE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

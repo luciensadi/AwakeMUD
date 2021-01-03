@@ -87,6 +87,7 @@ extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict
 extern struct elevator_data *elevator;
 extern int num_elevators;
 
+extern int write_quests_to_disk(int zone);
 extern void write_world_to_disk(int vnum);
 extern void alarm_handler(int signal);
 
@@ -964,7 +965,7 @@ void do_stat_room(struct char_data * ch)
       strcat(buf, " ");
       strcat(buf, desc->keyword);
     }
-    send_to_char(strcat(buf, "\r\n"), ch);
+    send_to_char(strcat(buf, "^n\r\n"), ch);
   }
   strcpy(buf, "Chars present:^y");
   for (found = 0, k = rm->people; k; k = k->next_in_room)
@@ -2220,7 +2221,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
   struct char_data *victim;
   char *name = arg, *level = buf2;
   int newlevel, i;
-  void do_start(struct char_data *ch);
+  void do_start(struct char_data *ch, bool wipe_skills);
   extern void check_autowiz(struct char_data * ch);
 
   two_arguments(argument, name, level);
@@ -2277,7 +2278,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     send_to_char(victim, "%s has demoted you from %s to %s. Note that this has reset your skills, stats, karma, etc.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
     snprintf(buf3, sizeof(buf3), "%s has demoted %s from %s to %s.",
             GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
-    do_start(victim);
+    do_start(victim, TRUE);
     GET_LEVEL(victim) = newlevel;
   } else {
     /* Preserved for history's sake. -LS
@@ -3332,6 +3333,9 @@ ACMD(do_show)
   void show_shops(struct char_data * ch, char *value);
   void hcontrol_list_houses(struct char_data *ch);
   SPECIAL(call_elevator);
+  
+  int total_stats;
+  bool printed;
 
   struct show_struct {
     const char *cmd;
@@ -3359,6 +3363,7 @@ ACMD(do_show)
                { "traps",          LVL_BUILDER },
                { "ammo",           LVL_ADMIN },
                { "storage",        LVL_BUILDER },
+               { "anomalies",      LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -3725,6 +3730,91 @@ ACMD(do_show)
                 vnum_from_non_connected_zone(world[i].number) ? " " : "*",
                 world[i].name);
     send_to_char(buf, ch);
+    break;
+  case 21:
+    send_to_char("Anomalous Rooms -----------\r\n", ch);
+    for (i = 0, j = 0; i <= top_of_world; i++) {
+      // Check for hidden rating higher than 10 (or whatever threshold is configured as).
+      for (k = 0; k < NUM_OF_DIRS; k++) {
+        if (world[i].dir_option[k] && world[i].dir_option[k]->hidden > ANOMALOUS_HIDDEN_RATING_THRESHOLD) {
+          send_to_char(ch, "%4d: [%8ld] %s %s^n: %s exit has hidden rating %d > %d\r\n", ++j,
+                  world[i].number,
+                  vnum_from_non_connected_zone(world[i].number) ? " " : "*",
+                  world[i].name,
+                  dirs[k],
+                  world[i].dir_option[k]->hidden,
+                  ANOMALOUS_HIDDEN_RATING_THRESHOLD);
+        }
+      }
+    }
+    if (j == 0)
+      send_to_char("...None.\r\n", ch);
+    
+    send_to_char("\r\n\r\nAnomalous Mobs -----------\r\n", ch);
+    for (i = 0, j = 0; i <= top_of_mobt; i++) {
+      printed = FALSE;
+      
+      // Skip non-connected areas or known staff areas.
+      if (vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[i]))
+          || GET_MOB_VNUM(&mob_proto[i]) < 100
+          || (GET_MOB_VNUM(&mob_proto[i]) >= 1000 && GET_MOB_VNUM(&mob_proto[i]) <= 1099)
+          || (GET_MOB_VNUM(&mob_proto[i]) >= 10000 && GET_MOB_VNUM(&mob_proto[i]) <= 10099))
+        continue;
+      
+      // Check stats, etc
+      total_stats = 0;
+      for (k = BOD; k <= REA; k++)
+        total_stats += GET_REAL_ATT(&mob_proto[i], k);
+      
+      snprintf(buf, sizeof(buf), "%4d: [%8ld] %s %s^n", ++j,
+               GET_MOB_VNUM(&mob_proto[i]),
+               vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[i])) ? " " : "*",
+               GET_CHAR_NAME(&mob_proto[i]));
+               
+      // Flag mobs with crazy stats
+      if (total_stats > ANOMALOUS_TOTAL_STATS_THRESHOLD) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^ctotal attributes %d > %d^n",
+                 total_stats,
+                 ANOMALOUS_TOTAL_STATS_THRESHOLD);
+        printed = TRUE;
+      }
+      
+      // Flag mobs with no stats
+      if (total_stats == 0) {
+        strncat(buf, " has not had its attributes set yet", sizeof(buf) - strlen(buf) - 1);
+        printed = TRUE;
+      }
+      
+      // Flag mobs with crazy skills
+      for (k = MIN_SKILLS; k < MAX_SKILLS; k++)
+        if (GET_SKILL(&mob_proto[i], k) > ANOMALOUS_SKILL_THRESHOLD) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s %d > %d^n",
+                   printed ? ";" : " has",
+                   skills[k].name,
+                   GET_SKILL(&mob_proto[i], k),
+                   ANOMALOUS_SKILL_THRESHOLD);
+          printed = TRUE;
+        }
+      
+      if (GET_RACE(&mob_proto[i]) <= RACE_UNDEFINED || GET_RACE(&mob_proto[i]) >= NUM_RACES) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cundefined or unknown race^n", printed ? ";" : " has");
+        printed = TRUE;
+      }
+      
+      if (printed)
+        send_to_char(ch, "%s\r\n", buf);
+    }
+    if (j == 0)
+      send_to_char("...None.\r\n", ch);
+    
+    /*
+    send_to_char("\r\n\r\nAnomalous Objects -----------\r\n", ch);
+    for (i = 0, j = 0; i <= top_of_objt; i++) {
+      // Check stats, etc
+    }
+    if (j == 0)
+      send_to_char("...None.\r\n", ch);
+    */
     break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
@@ -4939,13 +5029,13 @@ ACMD(do_qlist)
 
   snprintf(buf, sizeof(buf), "Quests, %ld to %ld:\r\n", first, last);
 
+  int real_mob;
   for (nr = MAX(0, real_quest(first)); nr <= top_of_questt &&
        (quest_table[nr].vnum <= last); nr++)
     if (quest_table[nr].vnum >= first)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5ld. [%8ld] %s (%ld)\r\n",
               ++found, quest_table[nr].vnum,
-              real_mobile(quest_table[nr].johnson) < 0 ? "None" :
-              GET_NAME(&mob_proto[real_mobile(quest_table[nr].johnson)]),
+              (real_mob = real_mobile(quest_table[nr].johnson)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
               quest_table[nr].johnson);
 
   if (!found)
@@ -5141,12 +5231,13 @@ ACMD(do_slist)
 
   snprintf(buf, sizeof(buf), "Shops, %d to %d:\r\n", first, last);
 
+  int real_mob;
   for (nr = MAX(0, real_shop(first)); nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++)
     if (shop_table[nr].vnum >= first)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,
               shop_table[nr].vnum,
               vnum_from_non_connected_zone(shop_table[nr].keeper) ? " " : "*",
-              real_mobile(shop_table[nr].keeper) < 0 ? "None" : GET_NAME(&mob_proto[real_mobile(shop_table[nr].keeper)]),
+              (real_mob = real_mobile(shop_table[nr].keeper)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
               shop_table[nr].keeper);
 
   if (!found)
@@ -5477,28 +5568,55 @@ ACMD(do_shopfind)
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
-
-  if (!*buf2 || !isdigit(*buf2)) {
-    send_to_char("Usage: shopfind <number>\r\n", ch);
+  
+  if (!*buf2) {
+    send_to_char("Usage: shopfind <number or keyword>\r\n", ch);
     return;
   }
+  
   if ((number = atoi(buf2)) < 0) {
     send_to_char("A NEGATIVE number??\r\n", ch);
     return;
   }
   
-  send_to_char(ch, "Shops selling the item with vnum %d:\r\n", number);
+  if (number)
+    send_to_char(ch, "Shops selling the item with vnum %d:\r\n", number);
+  else
+    send_to_char(ch, "Shops selling items with keyword %s:\r\n", buf2);
   
   int index = 0;
-  for (int i = 0; i <= top_of_shopt; i++) {
-    for (struct shop_sell_data *sell = shop_table[i].selling; sell; sell = sell->next, i++) {
-      if (sell->vnum == number) {
-        send_to_char(ch, "%3d)  %8ld  (%s)\r\n", ++index, shop_table[i].vnum, mob_proto[real_mobile(shop_table[i].keeper)].player.physical_text.name);
+  for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
+    int real_mob = real_mobile(shop_table[shop_nr].keeper);
+    if (real_mob < 0) {
+      snprintf(buf, sizeof(buf), "Warning: Shop %ld does not have a valid keeper!", shop_table[shop_nr].vnum);
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      continue;
+    }
+    
+    for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next) {
+      int real_obj = real_object(sell->vnum);
+      if (real_obj < 0)
+        continue;
+      
+      if (number) {
+        if (sell->vnum == number) {
+          send_to_char(ch, "%3d)  Shop %8ld (%s)\r\n", 
+                       ++index,
+                       shop_table[shop_nr].vnum, 
+                       mob_proto[real_mob].player.physical_text.name);
+        }
+      } else if (isname(buf2, obj_proto[real_obj].text.name) || isname(buf2, obj_proto[real_obj].text.keywords)) {
+        send_to_char(ch, "%3d)  Shop %8ld (%s) sells %s (%ld)\r\n", 
+                     ++index,
+                     shop_table[shop_nr].vnum, 
+                     mob_proto[real_mob].player.physical_text.name,
+                     GET_OBJ_NAME(&obj_proto[real_obj]),
+                     GET_OBJ_VNUM(&obj_proto[real_obj]));
       }
     }
   }
   if (index == 0)
-    send_to_char("- None.\r\n", ch);
+    send_to_char("- None.\r\n", ch);  
 }
 
 void print_x_fuckups(struct char_data *ch, int print_count) {
@@ -5592,6 +5710,7 @@ ACMD(do_rewrite_world) {
   // Perform writing for all zones that have rooms.
   for (int i = 0; i <= top_of_zone_table; i++) {
     write_world_to_disk(zone_table[i].number);
+    write_quests_to_disk(zone_table[i].number);
   }
   
   // Re-register our alarm handler.
