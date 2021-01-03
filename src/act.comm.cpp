@@ -826,7 +826,6 @@ ACMD(do_gen_comm)
   struct descriptor_data *i;
   struct descriptor_data *d;
   int channel = 0;
-  char *str_to_add_return_to = NULL;
 
   static int channels[] = {
                             PRF_DEAF,
@@ -1016,9 +1015,13 @@ ACMD(do_gen_comm)
       return;
     delete_doubledollar(argument);
     for ( d = descriptor_list; d != NULL; d = d->next ) {
-      if ( !d->character || ( d->connected != CON_PLAYING && !PRF_FLAGGED(d->character, PRF_MENUGAG)) ||
-           PLR_FLAGGED( d->character, PLR_WRITING) ||
-           PRF_FLAGGED( d->character, PRF_NOOOC) || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED) || found_mem(GET_IGNORE(d->character), ch))
+      if (!d->character || found_mem(GET_IGNORE(d->character), ch))
+        continue;
+      if (!access_level(d->character, LVL_BUILDER) 
+          && ((d->connected != CON_PLAYING && !PRF_FLAGGED(d->character, PRF_MENUGAG))
+              || PLR_FLAGGED( d->character, PLR_WRITING) 
+              || PRF_FLAGGED( d->character, PRF_NOOOC) 
+              || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)))
         continue;
 
       if (!access_level(d->character, GET_INCOG_LEV(ch)))
@@ -1032,35 +1035,58 @@ ACMD(do_gen_comm)
 
     return;
   } else if (subcmd == SCMD_RPETALK) {
-    snprintf(buf, sizeof(buf), "%s%s ^W[^rRPE^W]^r %s^n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
-    send_to_char(ch, "%s\r\n", buf);
+    snprintf(buf, sizeof(buf), "%s%s ^W[^rRPE^W]^r %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
     
     channel = COMM_CHANNEL_RPE;
-    int size = strlen(buf) + 4;
-    str_to_add_return_to = new char[size];
-    snprintf(str_to_add_return_to, size, "%s\r\n", buf);
-    store_message_to_history(ch->desc, channel, str_to_add_return_to);
+    store_message_to_history(ch->desc, channel, str_dup(buf));
   } else if (subcmd == SCMD_HIREDTALK) {
-    snprintf(buf, sizeof(buf), "%s%s ^y[^YHIRED^y]^Y %s^n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
-    send_to_char(ch, "%s\r\n", buf);
+    snprintf(buf, sizeof(buf), "%s%s ^y[^YHIRED^y]^Y %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
     
     channel = COMM_CHANNEL_HIRED;
-    int size = strlen(buf) + 4;
-    str_to_add_return_to = new char[size];
-    snprintf(str_to_add_return_to, size, "%s\r\n", buf);
-    store_message_to_history(ch->desc, channel, str_to_add_return_to);
+    store_message_to_history(ch->desc, channel, str_dup(buf));
   } else {
-    snprintf(buf, sizeof(buf), "%s%s |]newbie[| %s^n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
-    send_to_char(ch, "%s\r\n", buf);
+    snprintf(buf, sizeof(buf), "%s%s |]newbie[| %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
+    send_to_char(buf, ch);
     
     channel = COMM_CHANNEL_NEWBIE;
-    int size = strlen(buf) + 4;
-    str_to_add_return_to = new char[strlen(buf) + 4];
-    snprintf(str_to_add_return_to, size, "%s\r\n", buf);
-    store_message_to_history(ch->desc, channel, str_to_add_return_to);
+    store_message_to_history(ch->desc, channel, str_dup(buf));
+  }
+  
+  for (i = descriptor_list; i; i = i->next) {
+    if (i == ch->desc || !i->character || IS_PROJECT(i->character))
+      continue;
+      
+    if (PRF_FLAGGED(i->character, channels[subcmd]))
+      continue;
+      
+    if (!IS_SENATOR(i->character)) {
+      if (i->connected || PLR_FLAGS(i->character).AreAnySet(PLR_WRITING, PLR_MAILING, PLR_EDITING, ENDBIT))
+        continue;
+    }
+      
+    switch (subcmd) {
+      case SCMD_SHOUT:
+        if (ROOM_FLAGGED(get_ch_in_room(i->character), ROOM_SOUNDPROOF))
+          continue;
+        break;
+      case SCMD_NEWBIE:
+        if (!(PLR_FLAGGED(i->character, PLR_NEWBIE) || IS_SENATOR(i->character) || PRF_FLAGGED(i->character, PRF_NEWBIEHELPER)))
+          continue;
+        break;
+      case SCMD_RPETALK:
+        if (!(PLR_FLAGGED(i->character, PLR_RPE) || IS_SENATOR(i->character)))
+          continue;
+        break;
+      case SCMD_HIREDTALK:
+        if (!(PRF_FLAGGED(i->character, PRF_QUEST) || IS_SENATOR(i->character)))
+          continue;
+        break;
+    }
+    send_to_char(buf, i->character);
+    store_message_to_history(i, channel, str_dup(buf));
   }
 
-  /* now send all the strings out */
+  /* now send all the strings out 
   for (i = descriptor_list; i; i = i->next)
     if (!i->connected && i != ch->desc && i->character &&
         !PRF_FLAGGED(i->character, channels[subcmd]) &&
@@ -1082,7 +1108,7 @@ ACMD(do_gen_comm)
         // Note that this invokes act().
         store_message_to_history(i, channel, str_dup(act(buf, FALSE, ch, 0, i->character, TO_VICT | TO_SLEEP)));
       }
-    }
+    } */
 }
 
 ACMD(do_language)
