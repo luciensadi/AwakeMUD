@@ -84,6 +84,9 @@ void mental_gain(struct char_data * ch)
   if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
     gain >>= 1;
 #endif
+
+  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+    gain *= 2;
   
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     gain *= GET_POWER(ch, ADEPT_HEALING) + 1;
@@ -134,6 +137,9 @@ void physical_gain(struct char_data * ch)
   
   if (find_workshop(ch, TYPE_MEDICAL))
     gain = (int)(gain * 1.8);
+  
+  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+    gain *= 2;
   
   if (IS_NPC(ch))
     gain *= 2;
@@ -229,6 +235,16 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
       }
     }
     
+    if (multiplier && GET_CONGREGATION_BONUS(ch) > 0) {
+      int karma_delta = MAX(CONGREGATION_MIN_KARMA_GAIN_PER_ACTION, gain * CONGREGATION_MULTIPLIER);
+      karma_delta = MIN(CONGREGATION_MAX_KARMA_GAIN_PER_ACTION, karma_delta);
+      gain += karma_delta;
+      if ((--GET_CONGREGATION_BONUS(ch)) <= 0) {
+        GET_CONGREGATION_BONUS(ch) = 0;
+        send_to_char("The last of your extra energy from socializing runs out.\r\n", ch);
+      }
+    }
+    
     if (gain < 0) {
       char message_buf[500];
       snprintf(message_buf, sizeof(message_buf), 
@@ -312,7 +328,7 @@ void gain_condition(struct char_data * ch, int condition, int value)
 #endif
     case COND_DRUNK:
       if (intoxicated)
-        send_to_char("Your head seems to clear slightly...\r\n", ch);
+        send_to_char("You feel a little less drunk.\r\n", ch);
       return;
     default:
       break;
@@ -501,7 +517,7 @@ void process_regeneration(int half_hour)
     if (GET_TEMP_QUI_LOSS(ch) > 0) {
       GET_TEMP_QUI_LOSS(ch)--;
       affect_total(ch);
-    }
+    }      
     if (GET_POS(ch) >= POS_STUNNED) {
       physical_gain(ch);
       mental_gain(ch);

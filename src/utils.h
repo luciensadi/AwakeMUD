@@ -510,6 +510,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
 #define GET_SKILL_DIRTY_BIT(ch)  ((ch)->char_specials.saved.dirty)
+#define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
 #define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)
 #define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[(ch->nr)].sfunc) : NULL)

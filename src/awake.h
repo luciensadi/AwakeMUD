@@ -489,38 +489,39 @@ enum {
 /* Room flags: used in room_data.room_flags */
 
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
-#define ROOM_DARK               0   /* Dark                      */
-#define ROOM_DEATH              1   /* Death trap                */
-#define ROOM_NOMOB              2   /* MOBs not allowed          */
-#define ROOM_INDOORS            3   /* Indoors                   */
-#define ROOM_PEACEFUL           4   /* Violence not allowed      */
-#define ROOM_SOUNDPROOF         5   /* Shouts, gossip blocked    */
-#define ROOM_NOTRACK            6   /* Track won't go through    */
-#define ROOM_NOMAGIC            7   /* Magic not allowed         */
-#define ROOM_TUNNEL             8   /* room for only 1 pers      */
-#define ROOM_ARENA              9   /* Can't teleport in         */
-#define ROOM_STREETLIGHTS       10  /* Room has a streetlight    */
-#define ROOM_HOUSE              11  /* (R) Room is a house       */
-#define ROOM_HOUSE_CRASH        12  /* (R) House needs saving    */
-#define ROOM_ATRIUM             13  /* (R) The door to a house   */
-#define ROOM_OLC                14  /* (R) Modifyable/!compress  */
-#define ROOM_BFS_MARK           15  /* (R) breath-first srch mrk */
-#define ROOM_LOW_LIGHT          16  /* Room viewable with ll-eyes */
-#define ROOM_NO_RADIO           18  /* Radio is sketchy and phones dont work */
-#define ROOM_NOBIKE		          19  // Room blocks bikes from passing through it.
-#define ROOM_FREEWAY            20  /* Room cannot be walked across. */
-#define ROOM_FALL               21  // room is a 'fall' room
-#define ROOM_ROAD               22  // Room is compatible with cars.
-#define ROOM_GARAGE             23  // Room stores cars.
-#define ROOM_STAFF_ONLY         24  // Room does not allow mortals to walk into it.
-#define ROOM_NOQUIT             25  // Room does not allow quitting in it.
-#define ROOM_SENT               26
-#define ROOM_ASTRAL 	       	  27 // Astral room
-#define ROOM_NOGRID    	       	28 // Room blocks gridguide.
-#define ROOM_STORAGE	        	29 // Room stores items dropped in it.
-#define ROOM_NO_TRAFFIC         30 // Prevents display of traffic atmospheric messages.
-#define ROOM_ELEVATOR_SHAFT     31 // Don't set this manually
-#define ROOM_MAX        	      32
+#define ROOM_DARK                   0   /* Dark                      */
+#define ROOM_DEATH                  1   /* Death trap                */
+#define ROOM_NOMOB                  2   /* MOBs not allowed          */
+#define ROOM_INDOORS                3   /* Indoors                   */
+#define ROOM_PEACEFUL               4   /* Violence not allowed      */
+#define ROOM_SOUNDPROOF             5   /* Shouts, gossip blocked    */
+#define ROOM_NOTRACK                6   /* Track won't go through    */
+#define ROOM_NOMAGIC                7   /* Magic not allowed         */
+#define ROOM_TUNNEL                 8   /* room for only 1 pers      */
+#define ROOM_ARENA                  9   /* Can't teleport in         */
+#define ROOM_STREETLIGHTS           10  /* Room has a streetlight    */
+#define ROOM_HOUSE                  11  /* (R) Room is a house       */
+#define ROOM_HOUSE_CRASH            12  /* (R) House needs saving    */
+#define ROOM_ATRIUM                 13  /* (R) The door to a house   */
+#define ROOM_OLC                    14  /* (R) Modifyable/!compress  */
+#define ROOM_BFS_MARK               15  /* (R) breath-first srch mrk */
+#define ROOM_LOW_LIGHT              16  /* Room viewable with ll-eyes */
+#define ROOM_NO_RADIO               18  /* Radio is sketchy and phones dont work */
+#define ROOM_NOBIKE		              19  // Room blocks bikes from passing through it.
+#define ROOM_FREEWAY                20  /* Room cannot be walked across. */
+#define ROOM_FALL                   21  // room is a 'fall' room
+#define ROOM_ROAD                   22  // Room is compatible with cars.
+#define ROOM_GARAGE                 23  // Room stores cars.
+#define ROOM_STAFF_ONLY             24  // Room does not allow mortals to walk into it.
+#define ROOM_NOQUIT                 25  // Room does not allow quitting in it.
+#define ROOM_SENT                   26
+#define ROOM_ASTRAL 	       	      27 // Astral room
+#define ROOM_NOGRID    	       	    28 // Room blocks gridguide.
+#define ROOM_STORAGE	        	    29 // Room stores items dropped in it.
+#define ROOM_NO_TRAFFIC             30 // Prevents display of traffic atmospheric messages.
+#define ROOM_ELEVATOR_SHAFT         31 // Don't set this manually
+#define ROOM_ENCOURAGE_CONGREGATION 32
+#define ROOM_MAX        	          33
 
 #define NORMAL		0
 #define LOWLIGHT	1
@@ -2201,6 +2202,7 @@ enum {
 #define ERROR_ARRAY_OUT_OF_BOUNDS              18
 #define ERROR_CANNOT_RESOLVE_VNUM              19
 #define ERROR_DB_TABLE_REQUIRED                20
+#define ERROR_DB_COLUMN_REQUIRED               21
 
 // Materials.
 #define MATERIAL_PAPER        0
