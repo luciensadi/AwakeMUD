@@ -2107,7 +2107,7 @@ enum {
 #define OBJ_FOREARM_GUARDS                 700
 #define OBJ_RIFLE_STRAP                    2059
 #define OBJ_BLACK_LEATHER_DUTY_BELT        9402
-#define OBJ_BLACK_BDU_PANTS                9402
+#define OBJ_BLACK_BDU_PANTS                14618
 #define OBJ_BLACK_COMBAT_BOOTS             29010
 #define OBJ_MEDKIT                         450
 #define OBJ_VEHICLE_TOOLKIT                47397
