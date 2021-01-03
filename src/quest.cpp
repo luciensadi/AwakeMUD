@@ -2498,6 +2498,8 @@ ACMD(do_endrun) {
                        "With your run abandoned, you hang up the phone.\r\n", 
                        GET_CHAR_NAME(johnson), 
                        quest_table[GET_QUEST(ch)].quit);
+      if (ch->in_room)
+        act("$n makes a brief phone call to $s Johnson to quit $s current run. Scandalous.", FALSE, ch, 0, 0, TO_ROOM);
       snprintf(buf, sizeof(buf), "$z's phone rings. $e answers, listens for a moment, then says into it, \"%s\"", quest_table[GET_QUEST(ch)].quit);
       act(buf, FALSE, johnson, NULL, NULL, TO_ROOM);
       
