@@ -5729,7 +5729,7 @@ int audit_zone_rooms(struct char_data *ch, int zone_num, bool verbose) {
   bool printed = FALSE;
   
   if (verbose)
-    send_to_char(ch, "\r\nAuditing rooms for zone %d...\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing rooms for zone %d...^n\r\n", zone_table[zone_num].number);
     
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_rm = real_room(i)) < 0)
@@ -5797,11 +5797,13 @@ int audit_zone_rooms(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
     }
     
+#ifdef USE_SLOUCH_RULES
     if (room->z < 2.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Low ceilings - %0.2f meters.\r\n", room->z);
       issues++;
       printed = TRUE;
     }
+#endif
     
     if (room->staff_level_lock > 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Staff-locked to level %d.\r\n", room->staff_level_lock);
@@ -5883,7 +5885,7 @@ int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
   char candidate;
   
   if (verbose)
-    send_to_char(ch, "\r\nAuditing mobs for zone %d...\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing mobs for zone %d...^n\r\n", zone_table[zone_num].number);
     
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_mob = real_mobile(i)) < 0)
@@ -6009,7 +6011,7 @@ int audit_zone_objects(struct char_data *ch, int zone_num, bool verbose) {
   char candidate;
   
   if (verbose)
-    send_to_char(ch, "\r\nAuditing objects for zone %d...\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing objects for zone %d...^n\r\n", zone_table[zone_num].number);
     
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_obj = real_object(i)) < 0)
@@ -6115,7 +6117,7 @@ int audit_zone_quests(struct char_data *ch, int zone_num, bool verbose) {
   bool printed = FALSE;
   
   if (verbose)
-    send_to_char(ch, "\r\nAuditing quests for zone %d...\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing quests for zone %d...^n\r\n", zone_table[zone_num].number);
     
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_qst = real_quest(i)) < 0)
@@ -6192,7 +6194,7 @@ int audit_zone_shops(struct char_data *ch, int zone_num, bool verbose) {
   bool printed = FALSE;
   
   if (verbose)
-    send_to_char(ch, "\r\nAuditing shops for zone %d...\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing shops for zone %d...^n\r\n", zone_table[zone_num].number);
     
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_shp = real_shop(i)) < 0)
@@ -6233,7 +6235,7 @@ int audit_zone_vehicles(struct char_data *ch, int zone_num, bool verbose) {
   bool printed = FALSE;
   
   if (verbose)
-    send_to_char(ch, "\r\nAuditing vehicles for zone %d...\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing vehicles for zone %d...^n\r\n", zone_table[zone_num].number);
     
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_veh = real_vehicle(i)) < 0)
@@ -6276,7 +6278,7 @@ int audit_zone_hosts(struct char_data *ch, int zone_num, bool verbose) {
   bool printed = FALSE;
   
   if (verbose)
-    send_to_char(ch, "\r\nAuditing hosts for zone %d...\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing hosts for zone %d...^n\r\n", zone_table[zone_num].number);
     
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_hst = real_host(i)) < 0)
@@ -6319,7 +6321,7 @@ int audit_zone_ics(struct char_data *ch, int zone_num, bool verbose) {
   bool printed = FALSE;
   
   if (verbose)
-    send_to_char(ch, "\r\nAuditing ICs for zone %d...\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing ICs for zone %d...^n\r\n", zone_table[zone_num].number);
     
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_num = real_ic(i)) < 0)
@@ -6360,7 +6362,7 @@ int audit_zone_commands(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0;
   
   if (verbose)
-    send_to_char(ch, "\r\nAuditing zone commands for zone %d...\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing zone commands for zone %d...^n\r\n", zone_table[zone_num].number);
   
   for (int cmd_no = 0; cmd_no < zone_table[zone_num].num_cmds; cmd_no++) {
     
@@ -6380,6 +6382,11 @@ ACMD(do_audit) {
   number = atoi(arg1);
   // find the real zone number
   zonenum = real_zone(number);
+  
+  if (zonenum == 0) {
+    send_to_char("That's not a valid zone number.\r\n", ch);
+    return;
+  }
 
   // and see if they can edit it
   if (!can_edit_zone(ch, zonenum)) {
