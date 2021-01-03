@@ -370,7 +370,7 @@ enum {
 #define PRF_NOPROMPT            45
 #define PRF_HELPLOG             46
 #define PRF_PURGELOG            47
-#define PRF_AUTOKILL            48
+#define PRF_NOAUTOKILL          48
 #define PRF_NO_RADIO_NAMES      49
 #define PRF_MAX   		          50
 
