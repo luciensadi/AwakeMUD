@@ -915,6 +915,15 @@ void game_loop(int mother_desc)
       check_idle_passwords();
     }
     
+    // Every 30 IRL seconds
+    if (!(pulse % (30 * PASSES_PER_SEC))) {
+      // Apply congregation / socializing bonuses. We specifically don't want to tell them when it's full,
+      // because that encourages breaking off from RP to go burn it down again. Let them chill.
+      for (struct char_data *i = character_list; i; i = i->next)
+        if (!IS_NPC(i) && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
+          GET_CONGREGATION_BONUS(i) = MIN(GET_CONGREGATION_BONUS(i) + 1, MAX_CONGREGATION_BONUS);
+    }
+    
     // Every IRL minute
     if (!(pulse % (60 * PASSES_PER_SEC))) {
       check_idling();

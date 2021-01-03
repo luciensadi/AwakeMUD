@@ -76,4 +76,12 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define ANOMALOUS_TOTAL_STATS_THRESHOLD 60
 #define ANOMALOUS_SKILL_THRESHOLD 10
 
+// What is the maximum congregation bonus that can be accrued? If you change this, also take a look at score in act.informative.cpp and make sure the spacing matches up.
+#define MAX_CONGREGATION_BONUS 500
+#define CONGREGATION_MULTIPLIER 1.5
+// Note that these values are in hundredths of karma.
+#define CONGREGATION_MAX_KARMA_GAIN_PER_ACTION 50
+#define CONGREGATION_MIN_KARMA_GAIN_PER_ACTION 25
+// The min value must be less than the max value. It ensures people don't feel like they're wasting their karma mult if the accidentally kill a 0.01-karma mob.
+
 #endif

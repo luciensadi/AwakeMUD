@@ -38,6 +38,7 @@ using namespace std;
 #include "transport.h"
 #include "newdb.h"
 #include "bullet_pants.h"
+#include "config.h"
 
 const char *CCHAR;
 
@@ -821,7 +822,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), already_printed ? " also" : "", HMHR(i));
           already_printed = TRUE;
         }
-        
+/*
 #define FUNC_TO_DEBUG_MSG(function, message) \
 if (mob_index[GET_MOB_RNUM(i)].func == (function) || mob_index[GET_MOB_RNUM(i)].sfunc == (function)) \
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...DEBUG: %s has function: %s.^n\r\n", HSSH(i), (message));
@@ -982,6 +983,7 @@ if (mob_index[GET_MOB_RNUM(i)].func == (function) || mob_index[GET_MOB_RNUM(i)].
           FUNC_TO_DEBUG_MSG(airport_guard, "air guard");
           FUNC_TO_DEBUG_MSG(axehead, "axeh");
         }
+        */
       }
     }
     
@@ -1403,12 +1405,13 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
   } else {
-    send_to_char(ch, "^C%s^n%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+    send_to_char(ch, "^C%s^n%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " (Arena)" : "",
-                 ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "");
+                 ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " (Socialization Bonus)" : "");
   }
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
@@ -3052,6 +3055,9 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
   
   if (AFF_FLAGGED(ch, AFF_SNEAK))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are sneaking.\r\n");
+    
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You have accrued %d out of a possible %d socialization bonus points.\r\n",
+           GET_CONGREGATION_BONUS(ch), MAX_CONGREGATION_BONUS);
   
   // Physical and misc attributes.
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Height: %.2f meters\r\n", ((float)GET_HEIGHT(ch) / 100));
@@ -3374,8 +3380,8 @@ ACMD(do_score)
                           GET_REA(ch), 1 + GET_INIT_DICE(ch), shaman_string);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nArmor     ^w[ ^W%2d^rB^w/ ^W%2d^rI^w]    ^L%-17s^n                        ^b/^L/\r\n",
                           GET_BALLISTIC(ch), GET_IMPACT(ch), AFF_FLAGGED(ch, AFF_SNEAK) ? "You are sneaking." : "");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nNuyen     ^w[^W%'9ld^w]    %11s                              ^L/^b/\r\n",
-                          GET_NUYEN(ch), grade_string);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nNuyen     ^w[^W%'9ld^w]    %11s   Social Bonus: [^W%3d / %3d^n]  ^L/^b/\r\n",
+                          GET_NUYEN(ch), grade_string, GET_CONGREGATION_BONUS(ch), MAX_CONGREGATION_BONUS);
     strcat(buf, "^L/^b/                                                                   ^b/^L/\r\n"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"

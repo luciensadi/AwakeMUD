@@ -269,6 +269,7 @@ const char *room_bits[] =
     "STORAGE",
     "!TRAFFIC",
     "ELEVATOR_SHAFT",
+    "SOCIALIZE!",
     "\n"
   };
 
