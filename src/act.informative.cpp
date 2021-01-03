@@ -1985,11 +1985,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           AN(buf1), buf1, GET_OBJ_WEIGHT(j), material_names[(int)GET_OBJ_MATERIAL(j)], GET_OBJ_BARRIER(j));
   
   if (strcmp(j->obj_flags.wear_flags.ToString(), "0") != 0) {
+    bool was_take = j->obj_flags.wear_flags.IsSet(ITEM_WEAR_TAKE);
+    j->obj_flags.wear_flags.RemoveBit(ITEM_WEAR_TAKE);
     j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH, wear_bits, NUM_WEARS);
+    if (was_take)
+      j->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can be worn or equipped at the following wear location(s):\r\n  ^c%s^n\r\n", buf2);
   } else {
     strncat(buf, "This item cannot be worn or equipped.\r\n", sizeof(buf) - strlen(buf) - 1);
   }
+  
+  if (j->obj_flags.wear_flags.IsSet(ITEM_WEAR_TAKE))
+    strncat(buf, "^yIt cannot be picked up once dropped.^n\r\n", sizeof(buf) - strlen(buf) - 1);
   
   switch (GET_OBJ_TYPE(j))
   {
