@@ -6212,7 +6212,7 @@ int audit_zone_shops(struct char_data *ch, int zone_num, bool verbose) {
     }
     
     // Flag invalid strings
-    if (shop->profit_sell > 0.1) {
+    if (shop->profit_sell > 0.100001) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - too-high sell profit %0.2f > 0.1^n.\r\n", shop->profit_sell);
       printed = TRUE;
       issues++;
