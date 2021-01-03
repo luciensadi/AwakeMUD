@@ -22,6 +22,7 @@
 #include "constants.h"
 #include "interpreter.h" // for alias
 #include "config.h"
+#include "bullet_pants.h"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -33,6 +34,9 @@ static const char *const INDEX_FILENAME = "etc/pfiles/index";
 extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern Playergroup *loaded_playergroups;
+
+extern void save_bullet_pants(struct char_data *ch);
+extern void load_bullet_pants(struct char_data *ch);
 
 void auto_repair_obj(struct obj_data *obj);
 
@@ -259,8 +263,19 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest)
   while (*str) {
     if ((unsigned long) (temp - dest) >= size_of_dest - 2) {
       // Die to protect memory / database.
-      terminate_mud_process_with_message("prepare_quotes would overflow dest buf", ERROR_ARRAY_OUT_OF_BOUNDS);
+      char error_buf[MAX_STRING_LENGTH];
+      snprintf(error_buf, sizeof(error_buf), "prepare_quotes(dest, '%s', %lu) would overflow dest buf", str, size_of_dest);
+      terminate_mud_process_with_message(error_buf, ERROR_ARRAY_OUT_OF_BOUNDS);
     }
+    // Special case handling: Newlines to \r\n.
+    /*
+    if (*str == '\r' || *str == '\n') {
+      *temp++ = '\\';
+      *temp++ = *str == '\r' ? 'r' : 'n';
+      continue;
+    }
+    */
+    
     if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\' || *str == '%') {
       *temp++ = '\\';
     }
@@ -271,7 +286,7 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest)
 }
 
 /* Some initializations for characters, including initial skills */
-void do_start(struct char_data * ch)
+void do_start(struct char_data * ch, bool wipe_skills)
 {
   void advance_level(struct char_data * ch);
 
@@ -310,11 +325,13 @@ void do_start(struct char_data * ch)
   ch->player.time.lastdisc = time(0);
 
   // Clear all their skills except for English.
-  for (int i = MIN_SKILLS; i < MAX_SKILLS; i++) {
-    if (i == SKILL_ENGLISH)
-      set_character_skill(ch, i, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
-    else
-      set_character_skill(ch, i, 0, FALSE);
+  if (wipe_skills) {
+    for (int i = MIN_SKILLS; i < MAX_SKILLS; i++) {
+      if (i == SKILL_ENGLISH)
+        set_character_skill(ch, i, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
+      else
+        set_character_skill(ch, i, 0, FALSE);
+    }
   }
   
   // For morts, this just saves them and prints a message about their new level.
@@ -361,9 +378,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   ch->points.sustained[0] = 0;
   GET_LAST_TELL(ch) = NOBODY;
   MYSQL_RES *res;
-  MYSQL_ROW row;
-  // TODO: Sanitize this. It shouldn't be exploitable to begin with, but better safe than sorry.
-  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", name);
+  MYSQL_ROW row;  
+  
+  snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", prepare_quotes(buf3, name, sizeof(buf3) / sizeof(buf3[0])));
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
     return FALSE;
@@ -412,10 +429,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_REAL_CHA(ch) = atoi(row[33]);
   GET_REAL_INT(ch) = atoi(row[34]);
   GET_REAL_WIL(ch) = atoi(row[35]);
-  ch->real_abils.ess = atoi(row[36]);
-  ch->real_abils.esshole = atoi(row[37]);
-  ch->real_abils.bod_index = atoi(row[38]);
-  ch->real_abils.highestindex = atoi(row[39]);
+  GET_REAL_ESS(ch) = atoi(row[36]);
+  GET_ESSHOLE(ch) = atoi(row[37]);
+  GET_INDEX(ch) = atoi(row[38]);
+  GET_HIGHEST_INDEX(ch) = atoi(row[39]);
   ch->real_abils.hacking_pool_max = atoi(row[40]);
   ch->real_abils.body_pool = atoi(row[41]);
   ch->real_abils.defense_pool = atoi(row[42]);
@@ -455,6 +472,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   ch->player_specials->saved.last_veh = atol(row[75]);
   // note that pgroup is 76
   GET_SYSTEM_POINTS(ch) = atoi(row[77]);
+  GET_CONGREGATION_BONUS(ch) = atoi(row[78]);
   mysql_free_result(res);
 
   if (GET_LEVEL(ch) > 0) {
@@ -723,14 +741,16 @@ bool load_char(const char *name, char_data *ch, bool logon)
           GET_OBJ_VAL(obj, 4) = 0;
         if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4))
           GET_FOCI(ch)++;
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
+        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
+          int real_obj;
           for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-            if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
-               (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+            if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
+               (attach = &obj_proto[real_obj])) {
               // Zero out the attachment so that we don't get attaching-overtop errors.
               GET_OBJ_VAL(obj, q) = 0;
               attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
             }
+        }
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[19]);
         
@@ -780,22 +800,37 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->photo = str_dup(row[4]);
         for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
-        if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
-          add_phone_to_list(obj);
-        else if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
-          GET_OBJ_VAL(obj, 9) = 1;
-        if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED)
-          GET_OBJ_VAL(obj, 4) = 0;
-        if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4))
-          GET_FOCI(ch)++;
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
-          for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-            if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
-               (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
-              // Zero out the attachment so that we don't get attaching-overtop errors.
-              GET_OBJ_VAL(obj, q) = 0;
-              attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
+          
+        switch (GET_OBJ_TYPE(obj)) {
+          case ITEM_PHONE:
+            if (GET_OBJ_VAL(obj, 2))
+              add_phone_to_list(obj);
+            // TODO: What was the purpose of the broken if check to set the phone's value 9 to 1?
+            break;
+          case ITEM_FOCUS:
+            if (GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED)
+              GET_OBJ_VAL(obj, 4) = 0;
+            else if (GET_OBJ_VAL(obj, 4))
+              GET_FOCI(ch)++;
+            break;
+          case ITEM_WEAPON:
+            if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+              // Process attachments.
+              int real_obj;
+              for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
+                if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 &&
+                   (attach = &obj_proto[real_obj])) {
+                  // Zero out the attachment so that we don't get attaching-overtop errors.
+                  GET_OBJ_VAL(obj, q) = 0;
+                  attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
+                }
             }
+            break;
+          case ITEM_GUN_AMMO:
+            // Process weight.
+            GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
+            break;
+        }
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[18]);
         
@@ -827,6 +862,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
     mysql_free_result(res);
   }
+  
+  // Load bullet pants.
+  load_bullet_pants(ch);
   
   // Load pgroup membership data.
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_playergroups WHERE idnum=%ld;", GET_IDNUM(ch));
@@ -1061,7 +1099,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
-               "Inveh=%ld, rank=%d, gender=%d, SysPoints=%d WHERE idnum=%ld;",
+               "Inveh=%ld, rank=%d, gender=%d, SysPoints=%d, socialbonus=%d WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
                GET_REAL_STR(player), GET_REAL_CHA(player), GET_REAL_INT(player), GET_REAL_WIL(player),
@@ -1074,7 +1112,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),
                GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
                SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
-               inveh, GET_LEVEL(player), GET_SEX(player), GET_SYSTEM_POINTS(player), GET_IDNUM(player));
+               inveh, GET_LEVEL(player), GET_SEX(player), GET_SYSTEM_POINTS(player), 
+               MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS), GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
@@ -1350,7 +1389,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     if ((obj = GET_EQ(player, i)) && !IS_OBJ_STAT(obj, ITEM_NORENT))
       break;
   while (obj && i < NUM_WEARS) {
-    if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
+    if (!IS_OBJ_STAT(obj, ITEM_NORENT) || GET_OBJ_VNUM(obj) == OBJ_BLANK_MAGAZINE) {
       strcpy(buf, "INSERT INTO pfiles_worn (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
               "Value7, Value8, Value9, Value10, Value11, Inside, Position, Timer, ExtraFlags, Attempt, Cond, posi) VALUES (");
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
@@ -1414,6 +1453,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     if (obj)
       obj = obj->next_content;
   }
+  
+  // Save bullet pants.
+  save_bullet_pants(player);
+  
   if (GET_LEVEL(player) > 1) {
     snprintf(buf, sizeof(buf),  "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber) VALUES (%ld, %d, %d, %d)"
                   " ON DUPLICATE KEY UPDATE"
@@ -1876,6 +1919,8 @@ void DeleteChar(long idx)
   mysql_wrapper(mysql, buf);
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_ammo WHERE idnum=%ld", idx);
+  mysql_wrapper(mysql, buf);
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_spells WHERE idnum=%ld", idx);
@@ -1921,15 +1966,19 @@ void idle_delete()
     log("IDLEDELETE- Could not open extra socket, aborting");
     return;
   }
-  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE lastd <= %ld AND nodelete = 0 ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50));
+  snprintf(buf, sizeof(buf), "SELECT idnum, lastd, tke FROM pfiles WHERE lastd <= %ld AND nodelete = 0 AND name != 'deleted' ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50));
   mysql_wrapper(mysqlextra, buf);
   MYSQL_RES *res = mysql_use_result(mysqlextra);
   MYSQL_ROW row;
   while ((row = mysql_fetch_row(res))) {
 #ifndef IDLEDELETE_DRYRUN
-		// TODO: Wipe out character's vehicles.
-    DeleteChar(atol(row[0]));
-    deleted++;
+		// TODO: Increase idle deletion leniency time by their TKE.
+    int tke = atoi(row[2]);
+    time_t lastd = atol(row[0]);
+    if (lastd < (time(0) - (SECS_PER_REAL_DAY * 50) - (SECS_PER_REAL_DAY * tke / 10))) {
+      DeleteChar(atol(row[0]));
+      deleted++;
+    }
 #else
     log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
 #endif

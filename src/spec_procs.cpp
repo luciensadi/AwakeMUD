@@ -25,16 +25,18 @@
 #include "pocketsec.h"
 #include "limits.h"
 #include "config.h"
+#include "transport.h"
 
 /*   external vars  */
+ACMD_DECLARE(do_goto);
 extern struct time_info_data time_info;
 extern struct weather_data weather_info;
 extern int return_general(int skill_num);
-extern train_t trainers[];
-extern teach_t teachers[];
-extern teach_t metamagict[];
-extern adept_t adepts[];
-extern spell_t spelltrainers[];
+extern struct train_data trainers[];
+extern struct teach_data teachers[];
+extern struct teach_data metamagict[];
+extern struct adept_data adepts[];
+extern struct spell_trainer spelltrainers[];
 /* extern functions */
 void add_follower(struct char_data * ch, struct char_data * leader);
 extern void docwagon(struct char_data *ch);
@@ -51,6 +53,7 @@ extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
 extern void wire_nuyen(struct char_data *ch, struct char_data *target, int amount, bool isfile);
 extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
+extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
 
 extern struct command_info cmd_info[];
 
@@ -462,10 +465,15 @@ SPECIAL(nerp_skills_teacher) {
   }
   
   // Negate any skill in our array that is taught elsewhere in the game.
-  for (int ind = 0; teachers[ind].vnum != 0; ind++)
+  for (int ind = 0; teachers[ind].vnum != 0; ind++) {
+    // Skip Sombrero teachers-- they have NERP skills.
+    if (teachers[ind].vnum >= 1000 && teachers[ind].vnum <= 1099)
+      continue;
+    
     for (int skill_index = 0; skill_index < NUM_TEACHER_SKILLS; skill_index++)
       if (teachers[ind].s[skill_index] > 0)
         can_teach_skill[teachers[ind].s[skill_index]] = FALSE;
+  }
   
   skip_spaces(&argument);
   
@@ -1034,7 +1042,7 @@ SPECIAL(spell_trainer)
               continue;
           }
 
-          send_to_char(ch, "%-30s Force Max: %d\r\n", spelltrainers[i].name, spelltrainers[i].force);
+          send_to_char(ch, "%-30s Force Max: %d\r\n", spells[spelltrainers[i].type].name, spelltrainers[i].force);
         }
     if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
       if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER)
@@ -1099,7 +1107,7 @@ SPECIAL(spell_trainer)
         if (skill < 1)
           continue;
       }
-      if (is_abbrev(buf, spelltrainers[i].name))
+      if (is_abbrev(buf, spells[spelltrainers[i].type].name))
         break;
     }
     if (!spelltrainers[i].teacher) {
@@ -1145,13 +1153,13 @@ SPECIAL(spell_trainer)
       else
         GET_KARMA(ch) -= cost * 100;
       
-      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spelltrainers[i].name, force);
+      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spells[spelltrainers[i].type].name, force);
       
       if (spell) {
         spell->force = force;
       } else {
         spell = new spell_data;
-        spell->name = str_dup(spelltrainers[i].name);
+        spell->name = str_dup(spells[spelltrainers[i].type].name);
         spell->type = spelltrainers[i].type;
         spell->subtype = spelltrainers[i].subtype;
         spell->force = force;
@@ -1368,7 +1376,7 @@ SPECIAL(janitor)
   if (cmd || FIGHTING(ch) || !AWAKE(ch))
     return 0;
 
-  for (i = jan->in_room->contents; i; i = i->next_content) {
+  FOR_ITEMS_AROUND_CH(jan, i) {
     if (!CAN_WEAR(i, ITEM_WEAR_TAKE) || IS_OBJ_STAT(i, ITEM_CORPSE) || i->obj_flags.quest_id)
       continue;
     switch (GET_MOB_VNUM(jan)) {
@@ -1462,6 +1470,11 @@ SPECIAL(car_dealer)
 
   if (!cmd || ch->in_veh || !ch->in_room)
     return FALSE;
+    
+  if (IS_NPC(ch)) {
+    send_to_char("You're having a hard time getting the dealer's attention.\r\n", ch);
+    return TRUE;
+  }
 
   int car_room = real_room(ch->in_room->number) - 1;
 
@@ -1490,6 +1503,15 @@ SPECIAL(car_dealer)
     else
       send_to_char(ch, "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
     save_vehicles();
+    return TRUE;
+  } else if (CMD_IS("probe") || CMD_IS("info")) {
+    argument = one_argument(argument, buf);
+    if (!(veh = get_veh_list(buf, world[car_room].vehicles, ch))) {
+      send_to_char("There is no such vehicle for sale.\r\n", ch);
+      return TRUE;
+    }
+    send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_VEH_NAME(veh));
+    do_probe_veh(ch, veh);
     return TRUE;
   }
   return FALSE;
@@ -1785,7 +1807,7 @@ SPECIAL(mugger_park)
   }
 
   if (!FIGHTING(ch)) {
-    for (obj = ch->in_room->contents; obj; obj = obj->next_content)
+    FOR_ITEMS_AROUND_CH(ch, obj)
       if (GET_OBJ_TYPE(obj) == ITEM_MONEY) {
         act("$n grins as he picks up $p from the ground.", FALSE, ch, obj, 0, TO_ROOM);
         act("You grin slightly as you pick up $p.", FALSE, ch, obj, 0, TO_CHAR);
@@ -2161,8 +2183,8 @@ SPECIAL(crime_mall_guard)
 
   struct char_data *guard = (struct char_data *) me;
 
-  if ((guard->in_room->number == 10075 && CMD_IS("east")) ||
-      (guard->in_room->number == 10077 && CMD_IS("west"))) {
+  if ((guard->in_room->number == 100075 && CMD_IS("east")) ||
+      (guard->in_room->number == 100077 && CMD_IS("west"))) {
     if (GET_NUYEN(ch) < 2000000) {
       act("$n shakes $s head as $e stops you.  \"Not this time, chummer.\"",
           FALSE, guard, 0, ch, TO_VICT);
@@ -2570,11 +2592,11 @@ SPECIAL(yukiya_dahoto)
 {
   char_data *yukiya = (char_data *) me;
 
-  if (yukiya != NULL && (CMD_IS("open") || CMD_IS("hit") || CMD_IS("shoot")) && CAN_SEE(yukiya, ch) &&
+  if (yukiya != NULL && (CMD_IS("open") || CMD_IS("hit") || CMD_IS("shoot") || CMD_IS("up")) && CAN_SEE(yukiya, ch) &&
       yukiya->in_room->number == YUKIYA_OFFICE) {
     skip_spaces(&argument);
 
-    if (!str_cmp(argument, "vent")) {
+    if (str_str("vent", argument)) {
       act("$n attacks, saying, \"You will not pass!  YOU WILL DIE!\"",
           FALSE, yukiya, 0, ch, TO_VICT);
       act("$n attacks $N, saying, \"You will not pass!  YOU WILL DIE!\"",
@@ -2621,7 +2643,7 @@ SPECIAL(smiths_bouncer)
       if (GET_OBJ_VNUM(obj) == 38094)
         found = TRUE;
 
-    if (found)
+    if (found || IS_NPC(ch) || access_level(ch, LVL_ADMIN))
       perform_move(ch, EAST, LEADER, NULL);
     else
       do_say(wendigo, "Hey chummer, invitation needed.", 0, 0);
@@ -2769,7 +2791,7 @@ SPECIAL(vendtix)
 {
   extern struct obj_data *obj_proto;
   struct obj_data *vendtix = (struct obj_data *) me;
-  int ticket;
+  int ticket, real_obj;
 
   if (!cmd)
     return FALSE;
@@ -2779,9 +2801,14 @@ SPECIAL(vendtix)
   else
     ticket = SEATTLE_TICKET;
 
+  if ((real_obj = real_object(ticket)) < 0) {
+    send_to_char(ch, "A red light flashes on the VendTix-- it's currently out of order.\r\n");
+    mudlog("SYSERR: Invalid vnum for VendTix!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+    
   if (CMD_IS("list")) {
-    send_to_char(ch, "Ticket price is %d nuyen.\r\n",
-                 obj_proto[real_object(ticket)].obj_flags.cost);
+    send_to_char(ch, "Ticket price is %d nuyen.\r\n", obj_proto[real_obj].obj_flags.cost);
     act("$n presses some buttons on $p.", TRUE, ch, vendtix, 0, TO_ROOM);
     return TRUE;
   }
@@ -2792,7 +2819,7 @@ SPECIAL(vendtix)
       return TRUE;
     }
 
-    if ((GET_NUYEN(ch) - obj_proto[real_object(ticket)].obj_flags.cost) < 0) {
+    if ((GET_NUYEN(ch) - obj_proto[real_obj].obj_flags.cost) < 0) {
       send_to_char("You don't have enough nuyen!\r\n", ch);
       return TRUE;
     }
@@ -2821,7 +2848,7 @@ SPECIAL(bank)
   if ((CMD_IS("balance") || CMD_IS("transfer") || CMD_IS("deposit")
        || CMD_IS("withdraw") || CMD_IS("wire")) && IS_NPC(ch)) {
     send_to_char(ch, "What use do you have for a bank account?\r\n", ch);
-    return FALSE;
+    return TRUE;
   }
 
   if (CMD_IS("balance")) {
@@ -2931,23 +2958,43 @@ SPECIAL(toggled_invis)
 {
   struct obj_data *obj = (struct obj_data *) me;
 
-  if(!CMD_IS("activate") || !obj->worn_by)
+  if(!obj->worn_by)
     return FALSE;
-  else {
-    if(str_cmp(argument, "invis")) {
-      if (AFF_FLAGGED(obj->worn_by, AFF_IMP_INVIS)) {
-        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_IMP_INVIS);
-        send_to_char(ch, "Your suit goes silent as the cloaking device shuts off.\r\n");
+    
+  if (CMD_IS("deactivate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
+        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_INVISIBLE);
+        obj->obj_flags.bitvector.RemoveBit(AFF_INVISIBLE);
+        send_to_char(ch, "You feel the static fade as the ruthenium polymers in %s power down.\r\n", GET_OBJ_NAME(obj));
         act("The air shimmers briefly as $n fades into view.\r\n", FALSE, ch, 0, 0, TO_ROOM);
         return TRUE;
       } else {
-        AFF_FLAGS(obj->worn_by).SetBit(AFF_IMP_INVIS);
-        send_to_char(ch, "Your suit whirs quietly as the cloaking device kicks in.\r\n");
-        act("The world bends around $n as they vanish from sight.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        send_to_char(ch, "%s is already deactivated.\r\n", capitalize(GET_OBJ_NAME(obj)));
         return TRUE;
       }
     }
+    return FALSE;
+  } 
+  
+  if (CMD_IS("activate")) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
+      if (!obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
+        AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
+        obj->obj_flags.bitvector.SetBit(AFF_INVISIBLE);
+        send_to_char(ch, "You feel a tiny static charge as the ruthenium polymers in %s power up.\r\n", GET_OBJ_NAME(obj));
+        act("The world bends around $n as they vanish from sight.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        return TRUE;
+      } else {
+        send_to_char(ch, "%s is already activated.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
+  
   return FALSE;
 }
 
@@ -2987,15 +3034,22 @@ const char *traffic_messages[] = {
   "A few sporadic pops of gunfire sound from somewhere in the distance.\r\n",
   "The stench of garbage wafts from somewhere nearby.\r\n",
   "A harried-looking salaryman hurries by.\r\n",
-  "A backfiring Ford-Canada Bison splutters past.\r\n" // 35
+  "A backfiring Ford-Canada Bison splutters past.\r\n", // 35
+  "A sleek ^rred^n roto-drone zips past.\r\n",
+  "A crumpled-up plastic bag skitters past, carried by the wind.\r\n",
+  "A poised and confident executive strides past, talking on her phone.\r\n",
+  "An annoying-ass teen on a scooter does a drive-by on you with a squirt gun.\r\n",
+  "A billboard nearby flickers with an ad for ^RChernobyl Vodka^n.\r\n", // 40
+  "A billboard nearby displays an ad for ^rBrimstone ^RRed^n Ale^n.\r\n",
+  "The greasy scent of fast food is carried to you on the breeze.\r\n"
 };
-#define NUM_TRAFFIC_MESSAGES 36
+#define NUM_TRAFFIC_MESSAGES 43
 
 SPECIAL(traffic)
 {
   struct room_data *room = (struct room_data *) me;
 
-  if (!cmd && room->people && number(0, 6) == 1)
+  if (!cmd && room->people)
     send_to_room(traffic_messages[number(0, NUM_TRAFFIC_MESSAGES - 1)], room);
   
   return FALSE;
@@ -3060,6 +3114,7 @@ SPECIAL(simulate_bar_fight)
 
   if (!vict)
     return FALSE;
+    
   act("A chair flies across the room, hitting $n square in the head!",
       TRUE, vict, 0, 0, TO_ROOM);
   act("A chair flies across the room, hitting you square in the head!",
@@ -3095,10 +3150,10 @@ SPECIAL(crime_mall_blockade)
   struct char_data *temp;
 
   for (temp = ch->in_room->people; temp && !found; temp = temp->next_in_room)
-    if (IS_NPC(temp) && GET_MOB_VNUM(temp) == 10022)
+    if (IS_NPC(temp) && GET_MOB_VNUM(temp) == 100022)
       found = 1;
   if (!found)
-    if ((ch->in_room->number == 10075 && CMD_IS("east")) || (ch->in_room->number == 10077 &&
+    if ((ch->in_room->number == 100075 && CMD_IS("east")) || (ch->in_room->number == 100077 &&
                                                                    CMD_IS("west"))) {
       act("There seems to be an invisible barrier of some kind...", FALSE, ch, 0, 0, TO_CHAR);
       return TRUE;
@@ -3111,6 +3166,7 @@ SPECIAL(circulation_fan)
   static bool running = true;
   room_data *room = (struct room_data *) me;
 
+  // Override to stop the fan from killing people.
   if (cmd)
     return false;
 
@@ -3268,6 +3324,9 @@ int find_hotel_cost(struct char_data *ch)
     case 14626:
       cost = 6.0;
       break;
+    case 62820:
+      cost = 2.0;
+      break;
     default:
       snprintf(buf, sizeof(buf), "SYSERR: Invalid loadroom %ld specified to find_hotel_cost. Defaulting to 6.0.", GET_LOADROOM(ch));
       mudlog(buf, NULL, LOG_SYSLOG, FALSE);
@@ -3295,6 +3354,8 @@ int find_hotel_room(int room)
       return 70759;
     case 39287:
       return 39288;
+    case 62820:
+      return 62820;
   }
   return room;
 }
@@ -3469,6 +3530,9 @@ SPECIAL(auth_room)
         obj_to_char(radio, ch);
         send_to_char(ch, "You have been given a radio.^n\r\n");
       }
+      // Heal them.
+      GET_PHYSICAL(ch) = 1000;
+      GET_MENTAL(ch) = 1000;
       snprintf(buf, sizeof(buf), "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       
@@ -3629,12 +3693,11 @@ SPECIAL(matchsticks)
         act("$n nods once then digs briefly behind the bar, bringing out a small card and handing it to $N.", TRUE, carl, 0, ch, TO_ROOM);
       else
         act("$n nods once then digs briefly behind the bar, bringing out a small card and handing it to $N, smirking.", TRUE, carl, 0, ch, TO_ROOM);
-      /* -- Removed, this object does not exist. -LS
-      
+
       struct obj_data *obj = read_object(31714, VIRTUAL);
       obj_to_char(obj, ch);
       GET_NUYEN(ch) -= amount;
-      return TRUE; */
+      return TRUE;
     }
   }
   return FALSE;
@@ -3693,9 +3756,12 @@ SPECIAL(quest_debug_scanner)
     }
     
     snprintf(buf, sizeof(buf), "Player %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+    int real_mob = real_mobile(quest_table[GET_QUEST(to)].johnson);
     if (GET_QUEST(to)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current quest: %ld (given by %s [%ld])\r\n",
-              quest_table[GET_QUEST(to)].vnum, mob_proto[real_mobile(quest_table[GET_QUEST(to)].johnson)].player.physical_text.name, quest_table[GET_QUEST(to)].johnson);
+              quest_table[GET_QUEST(to)].vnum, 
+              real_mob >= 0 ? mob_proto[real_mob].player.physical_text.name : "N/A", 
+              quest_table[GET_QUEST(to)].johnson);
     } else {
       strcat(buf, "Not currently on a quest.\r\n");
     }
@@ -3746,6 +3812,7 @@ SPECIAL(portable_gridguide)
   return FALSE;
 }
 
+#define PAINTER_COST 20000
 SPECIAL(painter)
 {
   struct veh_data *veh = NULL;
@@ -3766,27 +3833,32 @@ SPECIAL(painter)
     }
   if (!CMD_IS("paint"))
     return FALSE;
+  if (IS_NPC(ch)) {
+    send_to_char("You're having a hard time getting the painter's attention.\r\n", ch);
+    return TRUE;
+  }
   skip_spaces(&argument);
   if (!*argument) {
-    do_say(painter, "I'll paint any vehicle for 20000 nuyen upfront.", 0, 0);
+    snprintf(buf, sizeof(buf), "I'll paint any vehicle for %d nuyen upfront.", PAINTER_COST);
+    do_say(painter, buf, 0, 0);
     return TRUE;
   }
   if (world[real_painter_storage].vehicles) {
-    do_say(painter, "We're already working on someones ride, bring it back later.", 0, 0);
+    do_say(painter, "We're already working on someone's ride, bring it back later.", 0, 0);
     return TRUE;
   }
   if (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))
     do_say(painter, "What do you want me to paint?", 0, 0);
   else if (veh->owner != GET_IDNUM(ch))
     do_say(painter, "Bring me your own ride and I'll paint it.", 0, 0);
-  else if (GET_NUYEN(ch) < 20000)
+  else if (GET_NUYEN(ch) < PAINTER_COST)
     do_say(painter, "You don't have the nuyen for that.", 0, 0);
   else {
     veh->spare = time(0) + (SECS_PER_MUD_DAY * 3);
     ch->desc->edit_veh = veh;
     veh_from_room(veh);
     veh_to_room(veh, &world[real_painter_storage]);
-    GET_NUYEN(ch) -= 20000;
+    GET_NUYEN(ch) -= PAINTER_COST;
     snprintf(buf, sizeof(buf), "%s is wheeled into the painting booth.", GET_VEH_NAME(veh));
     act(buf, FALSE, painter, 0, 0, TO_ROOM);
     if (!veh->restring)
@@ -3799,6 +3871,7 @@ SPECIAL(painter)
   }
   return TRUE;
 }
+#undef PAINTER_COST
 
 SPECIAL(multnomah_gate)
 {
@@ -3811,11 +3884,17 @@ SPECIAL(multnomah_gate)
 
   if ((world[in_room].number == RM_MULTNOMAH_GATE_NORTH && CMD_IS("south")) || (world[in_room].number == RM_MULTNOMAH_GATE_SOUTH && CMD_IS("north"))) {
     if (!PLR_FLAGGED(ch, PLR_VISA)) {
-      send_to_char("The gate refuses to open for you.\r\n", ch);
-      return TRUE;
-    } else if (ch->in_veh) {
+      if (access_level(ch, LVL_BUILDER)) {
+        send_to_char("You don't even bother making eye contact with the guard as you head towards the gate. Rank hath its privileges.\r\n", ch);
+      } else {
+        send_to_char("The gate refuses to open for you. Try showing the guard your visa.\r\n", ch);
+        return TRUE;
+      }
+    } 
+    
+    if (ch->in_veh) {
       for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
-        if (vict != ch && !PLR_FLAGGED(vict, PLR_VISA)) {
+        if (vict != ch && !PLR_FLAGGED(vict, PLR_VISA) && !IS_NPC(vict)) {
           send_to_char("The guards won't open the gate until everyone has shown their visas.\r\n", ch);
           return TRUE;
         }
@@ -3835,6 +3914,7 @@ SPECIAL(multnomah_gate)
       char_from_room(ch);
       char_to_room(ch, &world[to_room]);
     }
+    look_at_room(ch, 0);
     return TRUE;
   }
 
@@ -3853,8 +3933,8 @@ SPECIAL(multnomah_guard)
         snprintf(arg, sizeof(arg), "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
         do_say(guard, arg, 0, SCMD_SAYTO);
       } else {
-        snprintf(arg, sizeof(arg), "%s Get out of here, before we arrest you.", GET_CHAR_NAME(ch));
-        extract_obj(visa);
+        snprintf(arg, sizeof(arg), "%s That's not your visa. Get out of here before we arrest you.", GET_CHAR_NAME(ch));
+        // extract_obj(visa);  -- why do this? Punishing people for having the wrong visa is no bueno.
         do_say(guard, arg, 0, SCMD_SAYTO);
       }
       return TRUE;
@@ -3919,7 +3999,7 @@ SPECIAL(bouncer_gentle)
     return FALSE;
   
   struct char_data *bouncer = (struct char_data *) me;
-  if (!(PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)))
+  if (IS_NPC(ch) || (!PLR_FLAGGED(ch, PLR_KILLER) && !PLR_FLAGGED(ch, PLR_BLACKLIST)))
     return FALSE;
   int toroom = -1, dir_index;
   
@@ -3954,7 +4034,7 @@ SPECIAL(bouncer_troll)
     return FALSE;
 
   struct char_data *troll = (struct char_data *) me;
-  if (!(PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)))
+  if (IS_NPC(ch) || !(PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)))
     return FALSE;
   int toroom = -1;
   char *dir = NULL, *dir2 = str_dup("nothing");
@@ -4056,7 +4136,7 @@ SPECIAL(locker)
       send_to_char("No lockers are currently free. Please try again later.\r\n", ch);
     else {
       num = 0;
-      for (locker = ch->in_room->contents; locker; locker = locker->next_content)
+      FOR_ITEMS_AROUND_CH(ch, locker)
         if (GET_OBJ_VNUM(locker) == 9826) {
           num++;
           if (!GET_OBJ_VAL(locker, 9))
@@ -4072,7 +4152,7 @@ SPECIAL(locker)
       send_to_char("The system beeps loudly.\r\n", ch);
     else {
       num = 0;
-      for (locker = ch->in_room->contents; locker; locker = locker->next_content)
+      FOR_ITEMS_AROUND_CH(ch, locker)
         if (GET_OBJ_VNUM(locker) == 9826 && ++num && GET_OBJ_VAL(locker, 9) == free) {
           int cost = (int)((((time(0) - GET_OBJ_VAL(locker, 8)) / SECS_PER_REAL_DAY) + 1) * 50);
           if (GET_NUYEN(ch) < cost)
@@ -4090,7 +4170,7 @@ SPECIAL(locker)
     }
   } else if (CMD_IS("lock")) {
     num = atoi(argument);
-    for (locker = ch->in_room->contents; locker; locker = locker->next_content)
+    FOR_ITEMS_AROUND_CH(ch, locker)
       if (GET_OBJ_VNUM(locker) == 9826 && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
         snprintf(buf, sizeof(buf), "%d%d%d%d%d%d%d", number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9));
         GET_OBJ_VAL(locker, 8) = time(0);
@@ -4278,44 +4358,56 @@ SPECIAL(chargen_south_from_trainer)
 
 SPECIAL(chargen_unpractice_skill)
 {
-  if (!ch || !cmd || IS_NPC(ch) || !CMD_IS("unpractice"))
+  if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
+    
+  if (CMD_IS("nw")) {
+    if (GET_TRADITION(ch) == TRAD_MUNDANE) {
+      send_to_char("You don't have the ability to learn magic.\r\n", ch);
+      return TRUE;
+    }
+    return FALSE;
+  }
   
-  skip_spaces(&argument);
-  
-  if (!*argument) {
-    send_to_char("Syntax: UNPRACTICE [skill name]\r\n", ch);
+  else if (CMD_IS("unpractice")) {
+    skip_spaces(&argument);
+    
+    if (!*argument) {
+      send_to_char("Syntax: UNPRACTICE [skill name]\r\n", ch);
+      return TRUE;
+    }
+    
+    int skill_num = find_skill_num(argument);
+    
+    if (skill_num < 0) {
+      send_to_char("Please specify a valid skill.\r\n", ch);
+      return TRUE;
+    }
+    
+    if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
+      send_to_char("You can't unpractice a skill you currently have a skillsoft or other boost for.\r\n", ch);
+      return TRUE;
+    }
+    
+    if (GET_SKILL(ch, skill_num) <= 0) {
+      send_to_char("You don't know that skill.\r\n", ch);
+      return TRUE;
+    }
+    
+    // Success. Lower the skill by one point.
+    GET_SKILL_POINTS(ch)++;
+    set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) - 1, FALSE);
+    
+    if (GET_SKILL(ch, skill_num) == 0) {
+      send_to_char(ch, "With the assistance of several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
+    } else {
+      send_to_char(ch, "With the assistance of several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
+    }
+    
     return TRUE;
   }
   
-  int skill_num = find_skill_num(argument);
-  
-  if (skill_num < 0) {
-    send_to_char("Please specify a valid skill.\r\n", ch);
-    return TRUE;
-  }
-  
-  if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
-    send_to_char("You can't unpractice a skill you currently have a skillsoft or other boost for.\r\n", ch);
-    return TRUE;
-  }
-  
-  if (GET_SKILL(ch, skill_num) <= 0) {
-    send_to_char("You don't know that skill.\r\n", ch);
-    return TRUE;
-  }
-  
-  // Success. Lower the skill by one point.
-  GET_SKILL_POINTS(ch)++;
-  set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) - 1, FALSE);
-  
-  if (GET_SKILL(ch, skill_num) == 0) {
-    send_to_char(ch, "With the assistance of several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
-  } else {
-    send_to_char(ch, "With the assistance of several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
-  }
-  
-  return TRUE;
+  return FALSE;
 }
 
 // Prevent people from moving south from teachers until they've spent all their skill points.
@@ -5271,7 +5363,7 @@ SPECIAL(sombrero_bridge)
     if (!*argument)
       send_to_char("Who do you want to beam?\r\n", ch);
     else if (!(victim = get_char_vis(ch, argument)))
-      send_to_char("You can't see that person.\r\n", ch);
+      send_to_char(ch, "You can't see anyone named '%s'.\r\n", argument);
     else if (GET_ROOM_VNUM(victim->in_room) >= 1000 && GET_ROOM_VNUM(victim->in_room) <= 1099) {
       send_to_char("PZZZAAAAAAATTTT!!!!\r\n", victim);
       act("$n sparkles momentarily then fades from view.", FALSE, victim, 0, 0, TO_ROOM);
@@ -5373,11 +5465,107 @@ SPECIAL(airport_guard)
 
 // Give to morts for testing combat so staff don't have to restore them all the time.
 SPECIAL(restoration_button) {  
-  if (cmd && CMD_IS("restore")) {
+  if (!cmd)
+    return FALSE;
+    
+  if (CMD_IS("restore")) {
     restore_character(ch, FALSE);
     send_to_char("You use the cheat button to self-restore, enabling further testing.\r\n", ch);
     mudlog("Self-restore button used.", ch, LOG_CHEATLOG, TRUE);
     return TRUE;
   }
+  
+  if (CMD_IS("jump")) {
+    for (int dest = 0; *(seattle_taxi_destinations[dest].keyword) != '\n'; dest++) {
+      // Skip invalid destinations.
+      if (!DEST_IS_VALID(dest, seattle_taxi_destinations))
+        continue;
+      
+      if ( str_str((const char *)argument, seattle_taxi_destinations[dest].keyword)) {
+        snprintf(buf, sizeof(buf), "%ld", seattle_taxi_destinations[dest].vnum);
+        do_goto(ch, buf, 0, 0);
+        return TRUE;
+      }
+    }
+    send_to_char(ch, "'%s' is not a valid location. You can jump to anywhere that has a taxi stop (ex: jump afterlife).\r\n", argument);
+    return TRUE;
+  }
+  
+  return FALSE;
+}
+
+int axehead_last_said = -1;
+SPECIAL(axehead) {
+  int message_num;
+  const char *axehead_messages[] = {
+    "Runners these days don't realize how valuable keeping notes on their pocket secretary is. Like where Johnsons hang out.",
+    "Stick your radio and phone in a pocket. You can still hear 'em, and it keeps your hands free.",
+    "Seems like every day I hear about another wanna-be runner getting gunned down by the Star for walking around with their gun in their hand.",
+    "Back in my day, we didn't have anything like the 8 MHz band available. Being able to talk to runners is a blessing.",
+    "When in doubt, just take a cab back to somewhere familiar.",
+    "If you're on a job and you just can't get it done, call your Johnson and tell them you quit. Easier than hoofing it all the way back.",
+    "It's dangerous to go alone. Make friends."
+  };
+#define NUM_AXEHEAD_MESSAGES 7
+  
+  if (cmd || FIGHTING(ch) || !AWAKE(ch) || (message_num = number(0, NUM_AXEHEAD_MESSAGES * 20)) >= NUM_AXEHEAD_MESSAGES || message_num == axehead_last_said)
+    return FALSE;
+    
+  do_say(ch, axehead_messages[message_num], 0, 0);
+  axehead_last_said = message_num;
+  return TRUE;
+}
+
+SPECIAL(archetype_chargen_magic_split) {
+  struct room_data *room = (struct room_data *) me;
+  struct room_data *temp_to_room = NULL;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  // Funnel hermetic and shamanic mages into the correct archetypal path.
+  if (CMD_IS("south") || CMD_IS("s")) {
+    // Store the current exit, then overwrite with our custom one.
+    temp_to_room = room->dir_option[SOUTH]->to_room;
+    if (GET_TRADITION(ch) == TRAD_HERMETIC)
+      room->dir_option[SOUTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC)];
+    else
+      room->dir_option[SOUTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC)];
+      
+    // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
+    ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
+    
+    // Restore the south exit for the room to the normal one.
+    room->dir_option[SOUTH]->to_room = temp_to_room;
+    return TRUE;
+  }
+    
+  return FALSE;
+}
+
+SPECIAL(archetype_chargen_reverse_magic_split) {
+  struct room_data *room = (struct room_data *) me;
+  struct room_data *temp_to_room = NULL;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  // Funnel hermetic and shamanic mages into the correct archetypal path.
+  if (CMD_IS("north") || CMD_IS("n")) {
+    // Store the current exit, then overwrite with our custom one.
+    temp_to_room = room->dir_option[NORTH]->to_room;
+    if (GET_TRADITION(ch) == TRAD_HERMETIC)
+      room->dir_option[NORTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_CONJURING_HERMETIC)];
+    else
+      room->dir_option[NORTH]->to_room = &world[real_room(RM_ARCHETYPAL_CHARGEN_CONJURING_SHAMANIC)];
+      
+    // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
+    ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
+    
+    // Restore the north exit for the room to the normal one.
+    room->dir_option[NORTH]->to_room = temp_to_room;
+    return TRUE;
+  }
+    
   return FALSE;
 }

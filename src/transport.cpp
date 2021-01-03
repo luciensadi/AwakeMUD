@@ -28,11 +28,16 @@
 #include "transport.h"
 #include "utils.h"
 #include "constants.h"
+#include "config.h"
 
 SPECIAL(call_elevator);
 SPECIAL(elevator_spec);
 extern int find_first_step(vnum_t src, vnum_t target);
 extern void perform_fall(struct char_data *ch);
+
+ACMD_DECLARE(do_echo);
+struct dest_data *get_dest_data_list_for_zone(int zone_num);
+
 // ----------------------------------------------------------------------------
 
 // ______________________________
@@ -48,7 +53,7 @@ extern int ELEVATOR_SHAFT_FALL_RATING;
 // static const int NUM_SEATTLE_STATIONS = 6;
 static const int NUM_SEATAC_STATIONS = 6;
 
-struct dest_data taxi_destinations[] =
+struct dest_data seattle_taxi_destinations[] =
   {
   { "action", "Action Computers", 32650, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "afterlife", "The Afterlife", 2072, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
@@ -73,7 +78,7 @@ struct dest_data taxi_destinations[] =
   { "airport", "Seattle-Tacoma Airport", 19410, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "tarislar", "Tarislar", 4965, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "tacoma", "Tacoma", 2000, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
-  { "twe", "Tacoma Weapons Emporium", 2514, TAXI_DEST_TYPE_SHOPPING, TRUE },
+  { "TWE", "Tacoma Weapons Emporium", 2514, TAXI_DEST_TYPE_SHOPPING, TRUE },
   // TODO: Stopped alphabetizing by title here.
     // { "vieux", "Le Cinema Vieux", 32588 },
     { "big", "The Big Rhino", 32635, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
@@ -81,7 +86,7 @@ struct dest_data taxi_destinations[] =
     { "yoshi", "Yoshi's Sushi Bar", 32751, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "garage", "Seattle Parking Garage", 32720, TAXI_DEST_TYPE_OTHER , TRUE },
     { "formal", "Seattle Formal Wear", 32746, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "sda", "The SDA Plaza", 30610, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
+    { "SDA", "The SDA Plaza", 30610, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
     { "dante", "Dante's Inferno", 32661, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "quinns", "Quinn's", 32521, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "shintaru", "Shintaru", 32513, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
@@ -121,17 +126,18 @@ struct dest_data taxi_destinations[] =
     { "touristville", "Touristville", 25313, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
     { "skeleton", "The Skeleton", 25308, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "junkyard",  "The Tacoma Junkyard", 2070, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
+    { "neophyte",  "The Neophyte Guild", 32679, TAXI_DEST_TYPE_OTHER, TRUE },
 #ifdef USE_PRIVATE_CE_WORLD
     { "planetary", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
 #endif
     { "\n", "", 0, 0, 0 } // this MUST be last
   };
 
-struct dest_data port_destinations[] =
+struct dest_data portland_taxi_destinations[] =
   {
     { "hellhound", "Hellhound Bus Station", 14624, TAXI_DEST_TYPE_TRANSPORTATION, TRUE  },
     { "postal", "Royal Postal Station", 14629, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "trans-oregon", "Trans-Oregon Trucking", 14604, TAXI_DEST_TYPE_OTHER, TRUE },
+    { "trans-Oregon", "Trans-Oregon Trucking", 14604, TAXI_DEST_TYPE_OTHER, TRUE },
     { "thompson", "Thompson Autogroup",  14602, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "hard", "Hard Times", 14608, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "bank", "TT-Bank", 14610, TAXI_DEST_TYPE_OTHER, TRUE},
@@ -152,6 +158,23 @@ struct dest_data port_destinations[] =
     { "max", "Downtown MAX Station", 20800, TAXI_DEST_TYPE_TRANSPORTATION, TRUE  },
     { "\n", "", 0, 0, 0 } // this MUST be last
  
+  };
+  
+struct dest_data caribbean_taxi_destinations[] = 
+  {
+    { "airport", "St. Patricks International Airport", 62117, TAXI_DEST_TYPE_TRANSPORTATION, TRUE},
+    { "pelagie", "Pelagie Waterfront Apartments", 62125, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
+    { "montplaisir", "Montplaisir Restaurant", 62151, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "viltz", "Viltz Motel",  62135, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
+    { "church", "Church of Saint Sarasses", 62157, TAXI_DEST_TYPE_OTHER, TRUE},
+    { "cienfuegos", "Cienfuegos Cantina", 62146, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "prospect", "Prospect & Union", 62207, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
+    { "docwagon", "Victoria DocWagon", 62249, TAXI_DEST_TYPE_HOSPITALS, TRUE},
+    { "garage", "Victoria City Parking Garage", 62247, TAXI_DEST_TYPE_OTHER, TRUE},
+    { "mchughs", "McHughs Fast Food", 62272, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "casino", "Grandmaion Casino", 62275, TAXI_DEST_TYPE_OTHER, TRUE},
+    { "police", "Victoria Police Station", 62264, TAXI_DEST_TYPE_OTHER, TRUE},
+    { "\n", "", 0, 0, 0 } // this MUST be last
   };
 
 struct taxi_dest_type taxi_dest_type_info[] = {
@@ -205,9 +228,6 @@ int process_elevator(struct room_data *room,
 // Taxi
 // ____________________________________________________________________________
 
-// Define to collapse validation logic for destinations. Input is an integer index in the destination list.
-#define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_connected_zone((dest_list)[(destination)].vnum))
-
 // Taxi sign: If you look at it, it prints a dynamic description instead of the hardcoded one.
 SPECIAL(taxi_sign) {
   struct obj_data *obj = (struct obj_data *) me;
@@ -239,10 +259,13 @@ SPECIAL(taxi_sign) {
   // Select our destination list based on our vnum.
   switch (GET_OBJ_VNUM(obj)) {
     case OBJ_SEATTLE_TAXI_SIGN:
-      dest_data_list = taxi_destinations;
+      dest_data_list = seattle_taxi_destinations;
       break;
     case OBJ_PORTLAND_TAXI_SIGN:
-      dest_data_list = port_destinations;
+      dest_data_list = portland_taxi_destinations;
+      break;
+    case OBJ_CARIBBEAN_TAXI_SIGN:
+      dest_data_list = caribbean_taxi_destinations;
       break;
     default:
       snprintf(buf, sizeof(buf), "Warning: taxi_sign spec given to object %s (%ld) that had no matching definition in transport.cpp!",
@@ -252,7 +275,8 @@ SPECIAL(taxi_sign) {
   }
   
   // Set up our default string.
-  strcpy(buf, "The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n--------------------------------------------\r\n");
+  strcpy(buf, "The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n"
+              "-------------------------------------------------\r\n");
   
   bool is_first_printed_dest_title = TRUE;
   
@@ -278,7 +302,7 @@ SPECIAL(taxi_sign) {
     // Iterate through and populate the dest list with what we've got available.
     for (unsigned int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
       if (DEST_IS_VALID(dest_index, dest_data_list) && dest_data_list[dest_index].type == taxi_dest_type) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-30s - %s%s^n\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-35s - %s%s^n\r\n",
                 dest_data_list[dest_index].str,
                 taxi_dest_type_info[taxi_dest_type].entry_color_string,
                 capitalize(dest_data_list[dest_index].keyword));
@@ -341,44 +365,67 @@ void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
   taxi->dir_option[dir] = NULL;
 }
 
-void taxi_leaves(void)
-{
-  bool taxi_cant_leave = FALSE;
-  struct room_data *to = NULL;
-  struct char_data *temp;
-  for (int j = real_room(FIRST_CAB); j <= real_room(LAST_PORTCAB); j++) {
-    // Skip taxis that are occupied or still have a rating cooldown.
-    taxi_cant_leave = FALSE;
-    for (temp = world[j].people; temp; temp = temp->next_in_room)
-      if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi)) {
-        taxi_cant_leave = TRUE;
-        break;
+void raw_taxi_leaves(rnum_t real_room_num) {
+  struct room_data *to;
+  
+  // Message the cab and surrounding rooms.
+  for (int i = NORTH; i < UP; i++)
+    if (world[real_room_num].dir_option[i]) {
+      to = world[real_room_num].dir_option[i]->to_room;
+      close_taxi_door(to, rev_dir[i], &world[real_room_num]);
+      if (to->people) {
+        if (real_room_num >= real_room(FIRST_SEATTLE_CAB) && real_room_num <= real_room(LAST_SEATTLE_CAB))
+          snprintf(buf, sizeof(buf), "The taxi door slams shut as its wheels churn up a cloud of smoke.");
+        else if (real_room_num >= real_room(FIRST_PORTLAND_CAB) && real_room_num <= real_room(LAST_PORTLAND_CAB))
+          snprintf(buf, sizeof(buf), "The taxi doors slide shut and it pulls off from the curb.");
+        else // if (real_room_num >= real_room(FIRST_CARIBBEAN_CAB) || real_room_num <= real_room(LAST_CARIBBEAN_CAB))
+          snprintf(buf, sizeof(buf), "The truck's doors close and it pulls away from the curb.");
+        
+        act(buf, FALSE, to->people, 0, 0, TO_ROOM);
+        act(buf, FALSE, to->people, 0, 0, TO_CHAR);
       }
-    // Decrement taxis with a wait-rating, then skip them.
-    if (world[j].rating > 0) {
-      world[j].rating--;
-      continue;
+      if (world[real_room_num].people)
+        act("The door shuts as the taxi begins to accelerate.",
+            FALSE, world[real_room_num].people, 0, 0, TO_ROOM);
+        act("The door shuts as the taxi begins to accelerate.",
+            FALSE, world[real_room_num].people, 0, 0, TO_CHAR);
     }
-    if (taxi_cant_leave)
-      continue;
-    
-    for (int i = NORTH; i < UP; i++)
-      if (world[j].dir_option[i]) {
-        to = world[j].dir_option[i]->to_room;
-        close_taxi_door(to, rev_dir[i], &world[j]);
-        if (to->people) {
-          if (j >= real_room(FIRST_PORTCAB))
-            snprintf(buf, sizeof(buf), "The taxi doors slide shut and it pulls off from the curb.");
-          else snprintf(buf, sizeof(buf), "The taxi door slams shut as its wheels churn up a cloud of smoke.");
-          act(buf, FALSE, to->people, 0, 0, TO_ROOM);
-          act(buf, FALSE, to->people, 0, 0, TO_CHAR);
-        }
-        if (world[j].people)
-          act("The door automatically closes.",
-              FALSE, world[j].people, 0, 0, TO_CHAR);
-      }
-    if (j == LAST_CAB)
-      j = FIRST_PORTCAB - 1;
+}
+
+void do_taxi_leaves(rnum_t real_room_num) {
+  struct char_data *temp;
+  
+  // Skip taxis that are occupied by non-drivers.
+  for (temp = world[real_room_num].people; temp; temp = temp->next_in_room)
+    if (!(GET_MOB_SPEC(temp) 
+          && (GET_MOB_SPEC(temp) == taxi 
+              || GET_MOB_SPEC2(temp) == taxi))) {
+      return;
+    }
+  
+  // Decrement taxis with a wait-rating, then skip them.
+  if (world[real_room_num].rating > 0) {
+    world[real_room_num].rating--;
+    return;
+  }
+  
+  raw_taxi_leaves(real_room_num);
+}
+void taxi_leaves(void)
+{  
+  int rr_last_seattle_cab = real_room(LAST_SEATTLE_CAB);
+  for (int j = real_room(FIRST_SEATTLE_CAB); j <= rr_last_seattle_cab; j++) {
+    do_taxi_leaves(j);
+  }
+  
+  int rr_last_caribean_cab = real_room(LAST_CARIBBEAN_CAB);
+  for (int j = real_room(FIRST_CARIBBEAN_CAB); j <= rr_last_caribean_cab; j++) {
+    do_taxi_leaves(j);
+  }
+  
+  int rr_last_portland_cab = real_room(LAST_PORTLAND_CAB);
+  for (int j = real_room(FIRST_PORTLAND_CAB); j <= rr_last_portland_cab; j++) {
+    do_taxi_leaves(j);
   }
 }
 
@@ -391,8 +438,10 @@ ACMD(do_hail)
 {
   struct char_data *temp;
   int cab, first, last;
-  bool found = FALSE, empty = FALSE, portland = FALSE;
+  bool found = FALSE, empty = FALSE;
   SPECIAL(taxi);
+  
+  struct dest_data *dest_data_list = NULL;
   
   if (!ch->in_room) {
     send_to_char("You can't do that here.\r\n", ch);
@@ -411,20 +460,118 @@ ACMD(do_hail)
   
   // Special condition: Hailing from Imm HQ's central room.
   if (ch->in_room->number == 10000) {
-    if (str_str(argument, "portland")) {
-      portland = TRUE;
+    skip_spaces(&argument);
+    if (*argument && !strncmp(argument, "portland", strlen(argument))) {
+      send_to_char("Portland cab network selected.\r\n", ch);
+      dest_data_list = portland_taxi_destinations;
+    } else if (*argument && !strncmp(argument, "caribbean", strlen(argument))){
+      send_to_char("Caribbean cab network selected.\r\n", ch);
+      dest_data_list = caribbean_taxi_destinations;
     } else {
-      portland = FALSE;
+      send_to_char("Seattle (default) cab network selected. Use 'hail portland' or 'hail caribbean' for others.\r\n", ch);
+      dest_data_list = seattle_taxi_destinations;
     }
-  } else {
-    if (ch->in_room->sector_type != SPIRIT_CITY
-        || !empty 
-        || ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-      send_to_char("There don't seem to be any cabs in the area.\r\n", ch);
+  }
+  else {
+    // Cabs can always be caught from the freeway. Realistic? Nah, but keeps people from being stranded.
+    if (!ROOM_FLAGGED(ch->in_room, ROOM_FREEWAY)
+        && (ch->in_room->sector_type != SPIRIT_CITY
+            || !empty 
+            || ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
+      send_to_char("This isn't really the kind of place that cabs frequent.\r\n", ch);
       return;
     }
+    
+    dest_data_list = get_dest_data_list_for_zone(zone_table[ch->in_room->zone].number);
 
-    switch (zone_table[ch->in_room->zone].number) {
+    if (dest_data_list == NULL) { 
+      // Someone fucked up.
+      if (ROOM_FLAGGED(ch->in_room, ROOM_FREEWAY)) {
+        snprintf(buf, sizeof(buf), "WARNING: Freeway room '%s' (%ld) is not supported in cab switch statement! Defaulting to Seattle.",
+                 GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        dest_data_list = seattle_taxi_destinations;
+      } else {
+        /* Cab doesn't service the area */
+        send_to_char("There don't seem to be any cabs in the area.\r\n",ch);
+        snprintf(buf, sizeof(buf), "Cab expansion opportunity: Called in '%s' (%ld) of zone '%s' (%d), which is not supported in cab switch.",
+                 GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room),
+                 zone_table[ch->in_room->zone].name, zone_table[ch->in_room->zone].number);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+    }
+
+    if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
+        || GET_INVIS_LEV(ch) > 0)  {
+      send_to_char("A cab almost stops, but guns it at the last second, splashing you... hailing taxis while invisible is hard!\r\n",ch);
+      return;
+    }
+}
+  if (dest_data_list == portland_taxi_destinations) {
+    first = real_room(FIRST_PORTLAND_CAB);
+    last = real_room(LAST_PORTLAND_CAB);
+  } else if (dest_data_list == caribbean_taxi_destinations) {
+    first = real_room(FIRST_CARIBBEAN_CAB);
+    last = real_room(LAST_CARIBBEAN_CAB);
+  } else {
+    first = real_room(FIRST_SEATTLE_CAB);
+    last = real_room(LAST_SEATTLE_CAB);
+  }
+  
+  for (cab = first; cab <= last; cab++) {
+    // Skip in-use cabs.
+    for (temp = world[cab].people; temp; temp = temp->next_in_room)
+      if (!(GET_MOB_SPEC(temp) && (GET_MOB_SPEC(temp) == taxi || GET_MOB_SPEC2(temp) == taxi)))
+        break;
+    if (!temp) {
+      found = TRUE;
+      // Skip cabs that are already open and waiting at the curb.
+      for (int dir = NORTH; dir < UP; dir++)
+        if (world[cab].dir_option[dir])
+          found = FALSE;
+      if (found)
+        break;
+    }
+  }
+
+  if (!found) {
+    send_to_char("Hail as you might, no cab answers.\r\n", ch);
+    snprintf(buf, sizeof(buf), "Warning: No cab available in %s-- are all in use?",
+             dest_data_list == seattle_taxi_destinations ? "Seattle" :
+               (dest_data_list == portland_taxi_destinations ? "Portland" : 
+                 (dest_data_list == caribbean_taxi_destinations ? "the Caribbean" : "ERROR")));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  for (int dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
+    if (!ch->in_room->dir_option[dir]) {
+      open_taxi_door(ch->in_room, dir, &world[cab], 1);
+      if (dest_data_list == portland_taxi_destinations)
+        snprintf(buf, sizeof(buf), "A nice looking red and white cab pulls up smoothly to the curb, "
+                 "and its door opens to the %s.", fulldirs[dir]);
+      else if (dest_data_list == caribbean_taxi_destinations)
+        snprintf(buf, sizeof(buf), "A small, compact truck with a retrofitted cab putters up to the curb, "
+                 "and its door opens to the %s.", fulldirs[dir]);
+      else 
+        snprintf(buf, sizeof(buf), "A beat-up yellow cab screeches to a halt, "
+                 "and its door opens to the %s.", fulldirs[dir]);
+                 
+      act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      act(buf, FALSE, ch, 0, 0, TO_CHAR);
+      return;
+    }
+}
+
+// ______________________________
+//
+// driver spec
+// ______________________________
+
+// get_dest_data_list_for_zone(zone_table[ch->in_room->zone].number);
+struct dest_data *get_dest_data_list_for_zone(int zone_num) {
+  switch (zone_num) {
     case 13:
     case 15:
     case 20:
@@ -442,6 +589,7 @@ ACMD(do_hail)
     case 45:
     case 49:
     case 74:
+    case 81:
     case 91:
     case 143:
     case 194:
@@ -454,70 +602,37 @@ ACMD(do_hail)
     case 707:
     case 253:
     case 725:
-      break;
+      return seattle_taxi_destinations;
     case 27:
     case 146:
     case 188:
     case 208:
     case 241:
-      portland = TRUE;
-      break;
-    default:
-      /* Cab doesn't service the area */
-      send_to_char("There don't seem to be any cabs in the area.\r\n",ch);
-      return;
-    }
-
-    if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
-        || GET_INVIS_LEV(ch) > 0)  {
-      send_to_char("A cab almost stops, but guns it at the last second, splashing you...\r\n",ch);
-      send_to_char("(OOC: You can't hail taxis while invisible.)\r\n", ch);
-      return;
-    }
+      return portland_taxi_destinations;
+    case 621:
+    case 622:
+    case 623:
+      return caribbean_taxi_destinations;
+  }
+  
+  // Destination not found.
+  return NULL;
 }
 
-  first = real_room(portland ? FIRST_PORTCAB : FIRST_CAB);
-  last = real_room(portland ? LAST_PORTCAB : LAST_CAB);
-
-  for (cab = first; cab <= last; cab++) {
-    // Skip in-use cabs.
-    for (temp = world[cab].people; temp; temp = temp->next_in_room)
-      if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi))
-        break;
-    if (!temp) {
-      found = TRUE;
-      // Skip cabs that are already open and waiting at the curb.
-      for (int dir = NORTH; dir < UP; dir++)
-        if (world[cab].dir_option[dir])
-          found = FALSE;
-      if (found)
-        break;
-    }
+// get_dest_data_list_from_driver_vnum(GET_MOB_VNUM(driver));
+struct dest_data *get_dest_data_list_from_driver_vnum(vnum_t vnum) {
+  switch (vnum) {
+    case 600:
+      return seattle_taxi_destinations;
+    case 650:
+      return portland_taxi_destinations;
+    case 640:
+      return caribbean_taxi_destinations;
   }
-
-  if (!found) {
-    send_to_char("Hail as you might, no cab answers.\r\n", ch);
-    return;
-  }
-
-  for (int dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
-    if (!ch->in_room->dir_option[dir]) {
-      open_taxi_door(ch->in_room, dir, &world[cab], 1);
-      if (portland)
-      snprintf(buf, sizeof(buf), "A nice looking red and white cab pulls up smoothly to the curb, "
-              "and its door opens to the %s.", fulldirs[dir]);
-      else snprintf(buf, sizeof(buf), "A beat-up yellow cab screeches to a halt, "
-              "and its door opens to the %s.", fulldirs[dir]);
-      act(buf, FALSE, ch, 0, 0, TO_ROOM);
-      act(buf, FALSE, ch, 0, 0, TO_CHAR);
-      return;
-    }
+  
+  // Destination not found.
+  return NULL;
 }
-
-// ______________________________
-//
-// driver spec
-// ______________________________
 
 SPECIAL(taxi)
 {
@@ -530,11 +645,8 @@ SPECIAL(taxi)
   int comm = CMD_TAXI_NONE;
   char say[MAX_STRING_LENGTH];
   vnum_t dest = 0;
-  bool portland = FALSE;
   
-  // Portland taxi has a special set of messages, directions, etc.
-  if (GET_MOB_VNUM(driver) == 650)
-    portland = TRUE;
+  struct dest_data *destination_list = get_dest_data_list_from_driver_vnum(GET_MOB_VNUM(driver));
   
   // Evaluate the taxi driver's reactions.
   if (!cmd) {
@@ -554,11 +666,15 @@ SPECIAL(taxi)
     // Otherwise, process the incoming command.
     switch (GET_ACTIVE(driver)) {
       case ACT_REPLY_DEST:
-        if (portland)
+        if (destination_list == portland_taxi_destinations)
           snprintf(say, sizeof(say), "%s?  Sure, that will be %d nuyen.",
-                  port_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
-        else snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
-                  taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+                  portland_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+        else if (destination_list == caribbean_taxi_destinations)
+          snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+                  caribbean_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+        else
+          snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+                  seattle_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
         do_say(driver, say, 0, 0);
         if (GET_EXTRA(driver) == 1) {
           do_say(driver, "But seeing as you're new around here, I'll waive my usual fee, okay?", 0, 0);
@@ -568,18 +684,20 @@ SPECIAL(taxi)
         GET_ACTIVE(driver) = ACT_AWAIT_YESNO;
         break;
       case ACT_REPLY_NOTOK:
-        if (portland)
+        if (destination_list == portland_taxi_destinations)
           do_say(driver, "You don't seem to have enough nuyen!", 0, 0);
-        else do_say(driver, "Ya ain't got the nuyen!", 0, 0);
+        else 
+          do_say(driver, "Ya ain't got the nuyen!", 0, 0);
         forget(driver, temp);
         GET_SPARE1(driver) = 0;
         GET_SPARE2(driver) = 0;
         GET_ACTIVE(driver) = ACT_AWAIT_CMD;
         break;
       case ACT_REPLY_TOOBAD:
-        if (portland)
+        if (destination_list == portland_taxi_destinations)
           do_say(driver, "Somewhere else then, chummer?", 0, 0);
-        else do_say(driver, "Whatever, chum.", 0, 0);
+        else 
+          do_say(driver, "Whatever, chum.", 0, 0);
         forget(driver, temp);
         GET_SPARE1(driver) = 0;
         GET_SPARE2(driver) = 0;
@@ -649,14 +767,17 @@ SPECIAL(taxi)
     
     bool found = FALSE;
     if (GET_ACTIVE(driver) == ACT_AWAIT_CMD)
-      for (dest = 0; (portland ? *port_destinations[dest].keyword : *taxi_destinations[dest].keyword) != '\n'; dest++) {
+      for (dest = 0; *(destination_list[dest].keyword) != '\n'; dest++) {
         // Skip invalid destinations.
-        if (!DEST_IS_VALID(dest, portland ? port_destinations : taxi_destinations))
+        if (!DEST_IS_VALID(dest, destination_list))
           continue;
         
-        if ( str_str((const char *)argument, (portland ? port_destinations[dest].keyword : taxi_destinations[dest].keyword))) {
+        if ( str_str((const char *)argument, destination_list[dest].keyword)) {
           comm = CMD_TAXI_DEST;
           found = TRUE;
+          do_say(ch, argument, 0, 0);
+          strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
+          do_echo(driver, buf2, 0, SCMD_EMOTE);
           break;
         }
       }
@@ -666,9 +787,18 @@ SPECIAL(taxi)
         comm = CMD_TAXI_YES;
       } else if (str_str(argument, "no") || str_str(argument, "nah") || str_str(argument, "negative")) {
         comm = CMD_TAXI_NO;
+      } else {
+        do_say(ch, argument, 0, 0);
+        if (destination_list == portland_taxi_destinations) {
+          snprintf(buf2, sizeof(buf2), " Sorry chummer, rules are rules. You need to tell me something from the sign.");
+        } else {
+          snprintf(buf2, sizeof(buf2), " Hey chummer, rules is rules. You gotta tell me something off of that sign there.");
+        }        
+        do_say(driver, buf2, 0, 0);
+        return TRUE;
       }
+      do_say(ch, argument, 0, 0);
     }
-    do_say(ch, argument, 0, 0);
   } else if (CMD_IS("nod") || CMD_IS("agree")) {
     comm = CMD_TAXI_YES;
     do_action(ch, argument, cmd, 0);
@@ -689,7 +819,7 @@ SPECIAL(taxi)
       }
     int dist = 0;
     while (temp_room) {
-      int x = find_first_step(real_room(temp_room->number), real_room((portland ? port_destinations[dest].vnum : taxi_destinations[dest].vnum)));
+      int x = find_first_step(real_room(temp_room->number), real_room(destination_list[dest].vnum));
       if (x == -2)
         break;
       else if (x < 0) {
@@ -700,9 +830,9 @@ SPECIAL(taxi)
       dist++;
     }
     if (!temp_room)
-      GET_SPARE1(driver) = 250;
+      GET_SPARE1(driver) = MAX_CAB_FARE;
     else
-      GET_SPARE1(driver) = MIN(250, 5 + dist);
+      GET_SPARE1(driver) = MIN(MAX_CAB_FARE, 5 + dist);
     GET_SPARE2(driver) = dest;
     GET_ACTIVE(driver) = ACT_REPLY_DEST;
     if (PLR_FLAGGED(ch, PLR_NEWBIE))
@@ -718,25 +848,10 @@ SPECIAL(taxi)
     if (!IS_SENATOR(ch))
       GET_NUYEN(ch) -= GET_SPARE1(driver);
     GET_SPARE1(driver) = (int)(GET_SPARE1(driver) / 50);
-    GET_SPARE2(driver) = portland ? port_destinations[GET_SPARE2(driver)].vnum : taxi_destinations[GET_SPARE2(driver)].vnum;
+    GET_SPARE2(driver) = destination_list[GET_SPARE2(driver)].vnum;
     GET_ACTIVE(driver) = ACT_DRIVING;
 
-    for (int dir = NORTH; dir < UP; dir++)
-      if (ch->in_room->dir_option[dir]) {
-        temp_room = ch->in_room->dir_option[dir]->to_room;
-        close_taxi_door(temp_room, rev_dir[dir], ch->in_room);
-        if (temp_room->people) {
-          if (portland)
-            snprintf(buf, sizeof(buf), "The taxi doors slide shut and it pulls off from the curb.");
-          else snprintf(buf, sizeof(buf), "The taxi door slams shut as its wheels churn up a cloud of smoke.");
-          act(buf, FALSE, temp_room->people, 0, 0, TO_ROOM);
-          act(buf, FALSE, temp_room->people, 0, 0, TO_CHAR);
-        }
-        act("The door shuts as the taxi begins to accelerate.",
-            FALSE, ch, 0, 0, TO_ROOM);
-        act("The door shuts as the taxi begins to accelerate.",
-            FALSE, ch, 0, 0, TO_CHAR);
-      }
+    raw_taxi_leaves(real_room(GET_ROOM_VNUM(ch->in_room)));
   } else if (comm == CMD_TAXI_NO && memory(driver, ch) &&
              GET_ACTIVE(driver) == ACT_AWAIT_YESNO)
     GET_ACTIVE(driver) = ACT_REPLY_TOOBAD;
@@ -2393,4 +2508,10 @@ void MonorailProcess(void)
   process_grenada_plane();
   process_victoria_ferry();
   process_sugarloaf_ferry();
+}
+
+bool room_is_a_taxicab(vnum_t vnum) {
+  return ((vnum >= FIRST_SEATTLE_CAB && vnum <= LAST_SEATTLE_CAB)
+          || (vnum >= FIRST_PORTLAND_CAB && vnum <= LAST_PORTLAND_CAB)
+          || (vnum >= FIRST_CARIBBEAN_CAB && vnum <= LAST_CARIBBEAN_CAB));
 }

@@ -64,6 +64,11 @@ bool Bitfield::IsSet(dword offset) const
 #undef BITFIELD_IDX
 #undef BITFIELD_FLAG
 
+bool Bitfield::IsSetPrecomputed(int field, int flags) const
+{
+  return (data[field] & flags);
+}
+
 bool Bitfield::AreAnySet(dword one, ...) const
 {
   va_list arg_list;
@@ -326,4 +331,3 @@ void Bitfield::PrintBits(char *dest, size_t dest_size,
 
   *(dest+len) = '\0';
 }
-

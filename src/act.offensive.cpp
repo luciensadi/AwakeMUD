@@ -55,7 +55,7 @@ ACMD(do_assist)
   if (!*arg)
     send_to_char("Whom do you wish to assist?\r\n", ch);
   else if (!(helpee = get_char_room_vis(ch, arg)))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
   else if (helpee == ch)
     send_to_char("You can't help yourself any more than this!\r\n", ch);
   else {
@@ -93,8 +93,9 @@ int messageless_find_door(struct char_data *ch, char *type, char *dir, const cha
     door = convert_look[door];
     if (EXIT(ch, door)) {
       if (EXIT(ch, door)->keyword) {
-        if (isname(type, EXIT(ch, door)->keyword) &&
-            !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+        if (isname(type, EXIT(ch, door)->keyword)
+            && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED)
+            && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
           return door;
         else
           return -1;
@@ -110,8 +111,9 @@ int messageless_find_door(struct char_data *ch, char *type, char *dir, const cha
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (EXIT(ch, door))
         if (EXIT(ch, door)->keyword)
-          if (isname(type, EXIT(ch, door)->keyword) &&
-              !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+          if (isname(type, EXIT(ch, door)->keyword)
+              && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED)
+              && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
             return door;
 
     return -1;
@@ -196,12 +198,13 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
           return TRUE;
         WAIT_STATE(ch, PULSE_VIOLENCE * 2);
         if (EXIT(ch, dir)->keyword) {
-          snprintf(buf, sizeof(buf), "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
+          snprintf(buf, sizeof(buf), "$n attacks the %s to %s.", fname(EXIT(ch, dir)->keyword), thedirs[dir]);
           act(buf, TRUE, ch, 0, 0, TO_ROOM);
-          snprintf(buf, sizeof(buf), "You aim $p at the %s!", fname(EXIT(ch, dir)->keyword));
+          snprintf(buf, sizeof(buf), "You aim $p at the %s to %s!", fname(EXIT(ch, dir)->keyword), thedirs[dir]);
           act(buf, FALSE, ch, wielded, 0, TO_CHAR);
         } else {
-          act("$n attacks the door.", TRUE, ch, 0, 0, TO_ROOM);
+          snprintf(buf, sizeof(buf), "$n attacks the door to %s.", thedirs[dir]);
+          act(buf, TRUE, ch, 0, 0, TO_ROOM);
           act("You aim $p at the door!", FALSE, ch, wielded, 0, TO_CHAR);
         }
         damage_door(ch, ch->in_room, dir, (int)(GET_WEAPON_POWER(wielded) / 2), DAMOBJ_PIERCE);
@@ -211,12 +214,13 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
           return TRUE;
         WAIT_STATE(ch, PULSE_VIOLENCE * 2);
         if (EXIT(ch, dir)->keyword) {
-          snprintf(buf, sizeof(buf), "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
+          snprintf(buf, sizeof(buf), "$n attacks the %s to %s.", fname(EXIT(ch, dir)->keyword), thedirs[dir]);
           act(buf, TRUE, ch, 0, 0, TO_ROOM);
-          snprintf(buf, sizeof(buf), "You aim $p at the %s!", fname(EXIT(ch, dir)->keyword));
+          snprintf(buf, sizeof(buf), "You aim $p at the %s to %s!", fname(EXIT(ch, dir)->keyword), thedirs[dir]);
           act(buf, FALSE, ch, wielded, 0, TO_CHAR);
         } else {
-          act("$n attacks the door.", TRUE, ch, 0, 0, TO_ROOM);
+          snprintf(buf, sizeof(buf), "$n attacks the door to %s.", thedirs[dir]);
+          act(buf, TRUE, ch, 0, 0, TO_ROOM);
           act("You aim $p at the door!", FALSE, ch, wielded, 0, TO_CHAR);
         }
         damage_door(ch, ch->in_room, dir, (int)(GET_WEAPON_POWER(wielded) / 2), DAMOBJ_PROJECTILE);
@@ -243,12 +247,13 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         }
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
       if (EXIT(ch, dir)->keyword) {
-        snprintf(buf, sizeof(buf), "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
+        snprintf(buf, sizeof(buf), "$n attacks the %s to %s.", fname(EXIT(ch, dir)->keyword), thedirs[dir]);
         act(buf, TRUE, ch, 0, 0, TO_ROOM);
         snprintf(buf, sizeof(buf), "You aim $p at the %s!", fname(EXIT(ch, dir)->keyword));
         act(buf, FALSE, ch, wielded, 0, TO_CHAR);
       } else {
-        act("$n attacks the door.", TRUE, ch, 0, 0, TO_ROOM);
+        snprintf(buf, sizeof(buf), "$n attacks the door to %s.", thedirs[dir]);
+        act(buf, TRUE, ch, 0, 0, TO_ROOM);
         act("You aim $p at the door!", FALSE, ch, wielded, 0, TO_CHAR);
       }
       damage_door(ch, ch->in_room, dir, (int)((GET_STR(ch) + GET_WEAPON_POWER(wielded)) / 2), type);
@@ -258,11 +263,12 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       if (EXIT(ch, dir)->keyword) {
         send_to_char(ch, "You take a swing at the %s!\r\n",
                      fname(EXIT(ch, dir)->keyword));
-        snprintf(buf, sizeof(buf), "$n attacks the %s.", fname(EXIT(ch, dir)->keyword));
+        snprintf(buf, sizeof(buf), "$n attacks the %s to %s.", fname(EXIT(ch, dir)->keyword), thedirs[dir]);
         act(buf, TRUE, ch, 0, 0, TO_ROOM);
       } else {
         act("You take a swing at the door!", FALSE, ch, 0, 0, TO_CHAR);
-        act("$n attacks the door.", FALSE, ch, 0, 0, TO_ROOM);
+        snprintf(buf, sizeof(buf), "$n attacks the door to %s.", thedirs[dir]);
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
       }
       damage_door(ch, ch->in_room, dir, (int)(GET_STR(ch) / 2), DAMOBJ_CRUSH);
     }
@@ -593,19 +599,14 @@ ACMD(do_kick)
   struct char_data *vict;
   int dir;
 
-  any_one_arg(argument, arg);
+  two_arguments(argument, arg, buf2);
 
   if (!*arg) {
     send_to_char("Kick who or what?\r\n", ch);
     return;
   }
-
-  for (dir = 0; dir < NUM_OF_DIRS; dir++)
-    if (EXIT(ch, dir) && EXIT(ch, dir)->keyword &&
-        isname(arg, EXIT(ch, dir)->keyword) &&
-        !IS_SET(EXIT(ch, dir)->exit_info, EX_DESTROYED))
-      break;
-  if (dir >= NUM_OF_DIRS) {
+  
+  if ((dir = messageless_find_door(ch, arg, buf2, "do_kick")) < 0) {
     if (!(vict = get_char_room_vis(ch, arg)))
       send_to_char("They aren't here.\r\n", ch);
     else if (vict == ch) {
@@ -637,13 +638,14 @@ ACMD(do_kick)
       send_to_char(ch, "You show the %s the bottom of %s!\r\n",
                    fname(EXIT(ch, dir)->keyword), GET_EQ(ch, WEAR_FEET) ?
                    GET_OBJ_NAME(GET_EQ(ch, WEAR_FEET)) : "your foot");
-      snprintf(buf, sizeof(buf), "$n kicks the %s.", fname(EXIT(ch, dir)->keyword));
+      snprintf(buf, sizeof(buf), "$n kicks the %s to %s.", fname(EXIT(ch, dir)->keyword), thedirs[dir]);
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
     } else {
       send_to_char(ch, "You show the door the bottom of %s!\r\n",
                    GET_EQ(ch, WEAR_FEET) ?
                    GET_EQ(ch, WEAR_FEET)->text.name : "your foot");
-      act("$n kicks the door.", TRUE, ch, 0, 0, TO_ROOM);
+      snprintf(buf, sizeof(buf), "$n kicks the door to %s.", thedirs[dir]);
+      act(buf, TRUE, ch, 0, 0, TO_ROOM);
     }
     damage_door(ch, ch->in_room, dir, (int)(GET_STR(ch) / 2), DAMOBJ_CRUSH);
   }

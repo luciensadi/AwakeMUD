@@ -30,6 +30,7 @@
 #include "constants.h"
 #include "newdb.h"
 #include "helpedit.h"
+#include "config.h"
 
 #define DO_FORMAT_INDENT   1
 #define DONT_FORMAT_INDENT 0
@@ -105,7 +106,7 @@ void format_string(struct descriptor_data *d, int indent)
     }
   
   char *format = new char[d->max_str];
-  snprintf(format, sizeof(format), "%s%s\r\n", indent ? "   " : "", *d->str);
+  snprintf(format, d->max_str, "%s%s\r\n", indent ? "   " : "", *d->str);
   int q = 0;
   for (k = 0; strlen(format) > (u_int) k && q < 1023; q++)
   {
@@ -273,6 +274,9 @@ void string_add(struct descriptor_data *d, char *str)
         break;
       case MEDIT_REG_DESCR:
         REPLACE_STRING(d->edit_mob->player.physical_text.room_desc);
+        char candidate = d->edit_mob->player.physical_text.room_desc[strlen(d->edit_mob->player.physical_text.room_desc) - 4];
+        if (!ispunct(candidate))
+          send_to_char(d->character, "^YWARNING: You're missing punctuation at the end of the room desc. (%c is not punctuation)^n\r\n", candidate);
         medit_disp_menu(d);
         break;
       }
@@ -493,7 +497,7 @@ ACMD(do_spellset)
   }
   
   if (!(vict = get_char_vis(ch, name))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", name);
     return;
   }
   
@@ -645,7 +649,7 @@ ACMD(do_skillset)
     return;
   }
   if (!(vict = get_char_vis(ch, name))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", name);
     return;
   }
   skip_spaces(&argument);

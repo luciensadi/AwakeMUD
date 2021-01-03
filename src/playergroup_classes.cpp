@@ -428,7 +428,7 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
   } else if (!SENDOK(target)) {
     send_to_char("They can't hear you.\r\n", ch);
   } else if (GET_TKE(target) < 100) {
-    send_to_char("That person isn't experienced enough to be a valuable addition to your group yet.\r\n", ch);
+    send_to_char(ch, "%s isn't experienced enough to be a valuable addition to your group yet.\r\n", capitalize(GET_CHAR_NAME(target)));
   } else if (GET_PGROUP_MEMBER_DATA(target) && GET_PGROUP(target) && GET_PGROUP(target) == GET_PGROUP(ch)) {
     send_to_char("They're already part of your group!\r\n", ch);
     // TODO: If the group is secret, this is info disclosure.

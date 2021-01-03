@@ -269,6 +269,7 @@ const char *room_bits[] =
     "STORAGE",
     "!TRAFFIC",
     "ELEVATOR_SHAFT",
+    "SOCIALIZE!",
     "\n"
   };
 
@@ -571,7 +572,8 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Prompt"   , FALSE, TRUE  },
   { "Helplog"     , TRUE , TRUE  },
   { "Purgelog"    , TRUE , TRUE  },
-  { "Autokill"    , FALSE, TRUE  },
+  { "No Autokill" , FALSE, TRUE  },
+  { "Voice Names" , FALSE, TRUE  },
   { "\n"          , 0    , 0     }
 };
 
@@ -1681,15 +1683,16 @@ const char *ic_option_long[] =
     "Trap  "
   };
 
+// Weight and cost are PER ROUND now.
 struct ammo_data ammo_type[] =
   {
     // name      tn  time  weight  cost    s. index
-    {"normal",    2,    1,    .25,    2,     .75},
-    {"APDS",     14,   14,    .25,    7,     4},
-    {"explosive", 3,  1.5,    .75,    5,     .8},
-    {"EX",        6,    3,    .75,   10,     1.5},
-    {"flechette", 3,  1.5,    .5,    10,     .8},
-    {"gel",       4,    2,    .25,    3,     1}
+    {"normal",    2,    1,    .025,    2,     .75},
+    {"APDS",     14,   14,    .025,    7,     4},
+    {"explosive", 3,  1.5,    .075,    5,     .8},
+    {"EX",        6,    3,    .075,   10,     1.5},
+    {"flechette", 3,  1.5,    .05,    10,     .8},
+    {"gel",       4,    2,    .025,    3,     1}
   };
 
 const char *positions[] =
@@ -2268,15 +2271,15 @@ const char *combat_modifiers[] =
 {
   "Recoil",
   "Movement",
-  "2Weap",
-  "Smart",
+  "Dual Wielding",
+  "Smartlink",
   "Distance",
   "Visibility",
   "Position",
   "Gyro",
   "Reach",
   "VehDamaged",
-  "DefMoving"
+  "Defender Moving"
 };
 
 const char *pgroup_privileges[] =
@@ -2427,5 +2430,41 @@ const char *tradition_names[] = {
   "Hermetic",
   "Shamanic",
   "Mundane",
-  "Adept"
+  "UNKNOWN",
+  "Adept",
+  "ERROR"
+};
+
+const char *damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[] = {
+  "Hit",
+  "Sting",
+  "Whip",
+  "Slash",
+  "Bite",
+  "Bludgeon",
+  "Crush",
+  "Pound",
+  "Claw",
+  "Maul",
+  "Thrash",
+  "Pierce",
+  "Punch",
+  "Stab",
+  "Taser",
+  "Shuriken",
+  "Throwing Knife",
+  "Arrow",
+  "Hand Grenade",
+  "Grenade Launcher",
+  "Rocket",
+  "Pistol",
+  "Blast",
+  "Rifle",
+  "Shotgun",
+  "Machine Gun",
+  "Cannon",
+  "Bifurcate",
+  "Crash",
+  "Dumpshock",
+  "Blackic"
 };

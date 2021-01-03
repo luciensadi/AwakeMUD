@@ -121,10 +121,11 @@ bool House_load(struct house_control_rec *house)
       }
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
         add_phone_to_list(obj);
+      int real_obj;
       if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
         for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-          if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
-             (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+          if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
+             (attach = &obj_proto[real_obj])) {
             // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
             GET_OBJ_VAL(obj, i) = 0;
             attach_attachment_to_weapon(attach, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
@@ -185,7 +186,7 @@ void House_save(struct house_control_rec *house, FILE *fl, long rnum)
   fprintf(fl, "[HOUSE]\n");
   o = 0;
   
-#define PRINT_TO_FILE_IF_UNCHANGED(sectname, obj_val, proto_val) { \
+#define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
   if (obj_val != proto_val)                                        \
     fprintf(fl, (sectname), (obj_val));                            \
 }
@@ -208,11 +209,11 @@ void House_save(struct house_control_rec *house, FILE *fl, long rnum)
         for (int x = 0; x < NUM_VALUES; x++)
           if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
             fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj, x));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj), 0);
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tCost:\t%d\n", GET_OBJ_COST(obj), GET_OBJ_COST(prototype));
-      PRINT_TO_FILE_IF_UNCHANGED("\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
+      PRINT_TO_FILE_IF_CHANGED("\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
+      PRINT_TO_FILE_IF_CHANGED("\t\tTimer:\t%d\n", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
+      PRINT_TO_FILE_IF_CHANGED("\t\tAttempt:\t%d\n", GET_OBJ_ATTEMPT(obj), 0);
+      PRINT_TO_FILE_IF_CHANGED("\t\tCost:\t%d\n", GET_OBJ_COST(obj), GET_OBJ_COST(prototype));
+      PRINT_TO_FILE_IF_CHANGED("\t\tExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), GET_OBJ_EXTRA(prototype).ToString());
       if (obj->restring)
         fprintf(fl, "\t\tName:\t%s\n", obj->restring);
       if (obj->photo)
@@ -612,6 +613,7 @@ SPECIAL(landlord_spec)
 }
 /* call from boot_db - will load control recs, load objs, set atrium bits */
 /* should do sanity checks on vnums & remove invalid records */
+// aka boot_houses
 void House_boot(void)
 {
   vnum_t house_vnum, owner, landlord_vnum, paid, key_vnum;
@@ -916,10 +918,19 @@ bool House_can_enter(struct char_data *ch, vnum_t house)
   int j;
   struct house_control_rec *room = find_house(house);
 
-  if (IS_NPC(ch) || !room)
+  // No room? No entry.
+  if (!room)
     return FALSE;
+  
+  // NPC, but not a spirit or elemental? No entry.
+  if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_ELEMENTAL(ch)))
+    return FALSE;
+  
+  // Admins, astral projections, and owners can enter any room.
   if (GET_LEVEL(ch) >= LVL_ADMIN || GET_IDNUM(ch) == room->owner || IS_ASTRAL(ch))
     return TRUE;
+  
+  // Guests can enter any room.
   for (j = 0; j < MAX_GUESTS; j++)
     if (GET_IDNUM(ch) == room->guests[j])
       return TRUE;

@@ -35,6 +35,7 @@
 #include "newmagic.h"
 #include "newmail.h"
 #include <sys/time.h>
+#include "config.h"
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
@@ -83,6 +84,9 @@ void mental_gain(struct char_data * ch)
   if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
     gain >>= 1;
 #endif
+
+  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+    gain *= 2;
   
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     gain *= GET_POWER(ch, ADEPT_HEALING) + 1;
@@ -133,6 +137,9 @@ void physical_gain(struct char_data * ch)
   
   if (find_workshop(ch, TYPE_MEDICAL))
     gain = (int)(gain * 1.8);
+  
+  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION))
+    gain *= 2;
   
   if (IS_NPC(ch))
     gain *= 2;
@@ -195,37 +202,61 @@ void set_pretitle(struct char_data * ch, const char *title)
   GET_PRETITLE(ch) = get_new_kosherized_title(title, MAX_TITLE_LENGTH);
 }
 
-int gain_exp(struct char_data * ch, int gain, bool rep)
-{
+// The centralized karma gain func. Includes code in support of multipliers.
+int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool multiplier)
+{  
   if (IS_PROJECT(ch))
     ch = ch->desc->original;
-  int max_gain, old = (int)(GET_KARMA(ch) / 100);
+    
+  int old = (int)(GET_KARMA(ch) / 100);
+  
+  // Non-NPC level 0? Not sure how that's a thing. Also, staff get no karma.
   if (!IS_NPC(ch) && ((GET_LEVEL(ch) < 1 || IS_SENATOR(ch))))
     return 0;
   
-  if (IS_NPC(ch))
-  {
+  // NPCs have a standard gain formula, no frills. No multiplier either.
+  if (IS_NPC(ch)) {
     GET_KARMA(ch) += (int)(gain / 10);
     return (int)(gain / 10);
   }
   
-  if ( GET_TKE(ch) >= 0 && GET_TKE(ch) < 100 )
-  {
-    max_gain = 20;
-  } else if ( GET_TKE(ch) >= 100 && GET_TKE(ch) < 500 )
-  {
-    max_gain = 30;
-  } else
-  {
-    max_gain = GET_TKE(ch)/4;
-  }
+  // If we've gotten here, it's a player. Mult it up.
+  if (multiplier)
+    gain *= KARMA_GAIN_MULTIPLIER;
   
-  if (gain > 0)
-  {
-    gain = MIN(max_gain, gain); /* put a cap on the max gain per kill */
+  if (gain != 0) {
+    if (limits) {
+      if (GET_TKE(ch) >= 0 && GET_TKE(ch) < 100) {
+        gain = MIN(MAX_NEWCHAR_GAIN, gain);
+      } else if (GET_TKE(ch) >= 100 && GET_TKE(ch) < 500) {
+        gain = MIN(MAX_MIDCHAR_GAIN, gain);
+      } else {
+        gain = MIN(MAX_OLDCHAR_GAIN, gain);
+      }
+    }
+    
+    if (multiplier && GET_CONGREGATION_BONUS(ch) > 0) {
+      int karma_delta = MAX(CONGREGATION_MIN_KARMA_GAIN_PER_ACTION, gain * CONGREGATION_MULTIPLIER);
+      karma_delta = MIN(CONGREGATION_MAX_KARMA_GAIN_PER_ACTION, karma_delta);
+      gain += karma_delta;
+      if ((--GET_CONGREGATION_BONUS(ch)) <= 0) {
+        GET_CONGREGATION_BONUS(ch) = 0;
+        send_to_char("The last of your extra energy from socializing runs out.\r\n", ch);
+      }
+    }
+    
+    if (gain < 0) {
+      char message_buf[500];
+      snprintf(message_buf, sizeof(message_buf), 
+               "Info: gain_karma processing negative karma amount %d for %s.", 
+               gain, GET_CHAR_NAME(ch));
+      mudlog(message_buf, ch, LOG_SYSLOG, TRUE);
+    }
     
     GET_KARMA(ch) += gain;
+    
     GET_TKE(ch) += (int)(GET_KARMA(ch) / 100) - old;
+    
     if (rep)
       GET_REP(ch) += (int)(GET_KARMA(ch) / 100) - old;
     else
@@ -233,27 +264,6 @@ int gain_exp(struct char_data * ch, int gain, bool rep)
   }
   
   return gain;
-}
-
-void gain_exp_regardless(struct char_data * ch, int gain)
-{
-  if (IS_PROJECT(ch))
-    ch = ch->desc->original;
-  int old = (int)(GET_KARMA(ch) / 100);
-  
-  if (!IS_NPC(ch))
-  {
-    GET_KARMA(ch) += gain;
-    if (GET_KARMA(ch) < 0)
-      GET_KARMA(ch) = 0;
-    GET_TKE(ch) += (int)(GET_KARMA(ch) / 100) - old;
-    GET_REP(ch) += (int)(GET_KARMA(ch) / 100) - old;
-  } else
-  {
-    GET_KARMA(ch) += gain;
-    if (GET_KARMA(ch) < 0)
-      GET_KARMA(ch) = 0;
-  }
 }
 
 // only the pcs should need to access this
@@ -318,7 +328,7 @@ void gain_condition(struct char_data * ch, int condition, int value)
 #endif
     case COND_DRUNK:
       if (intoxicated)
-        send_to_char("Your head seems to clear slightly...\r\n", ch);
+        send_to_char("You feel a little less drunk.\r\n", ch);
       return;
     default:
       break;
@@ -507,7 +517,7 @@ void process_regeneration(int half_hour)
     if (GET_TEMP_QUI_LOSS(ch) > 0) {
       GET_TEMP_QUI_LOSS(ch)--;
       affect_total(ch);
-    }
+    }      
     if (GET_POS(ch) >= POS_STUNNED) {
       physical_gain(ch);
       mental_gain(ch);
@@ -540,10 +550,15 @@ void process_regeneration(int half_hour)
         damage(ch, ch, 1, TYPE_SUFFERING, PHYSICAL);
     }
   }
-  /* blood stuff */
+  
+  /* world updates for things like blood */
   for (int i = 0; i <= top_of_world; i++) {
-    if (half_hour && world[i].blood > 0)
-      world[i].blood--;
+    if (half_hour) {
+      if (world[i].blood > 0)
+        world[i].blood--;
+      if (world[i].debris > 0)
+        world[i].debris--;
+    }
     if (world[i].icesheet[0])
       if (!--world[i].icesheet[1])
         world[i].icesheet[0] = 0;
@@ -742,9 +757,14 @@ void point_update(void)
         for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next, i++) {
           totaltime = order->timeavail - time(0);
           if (!order->sent && totaltime < 0) {
-            snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup.\r\n", CAP(obj_proto[real_object(order->item)].text.name),
+            int real_obj = real_object(order->item);
+            snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup.\r\n", real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
                     shop_table[shop_nr].shopname);
-            raw_store_mail(order->player, 0, mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name, (const char *) buf2);
+            int real_mob = real_mobile(shop_table[shop_nr].keeper);
+            if (real_mob > 0)
+              raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);
+            else
+              raw_store_mail(order->player, 0, "An anonymous shopkeeper", (const char *) buf2);
             order->sent = TRUE;
           }
           fprintf(fl, "\t[ORDER %d]\n", i);
@@ -784,34 +804,64 @@ bool veh_is_in_junkyard(struct veh_data *veh) {
   return FALSE;
 }
 
+bool should_save_this_vehicle(struct veh_data *veh) {
+  // Must be a PC vehicle. We specifically don't check for PC exist-- that's handled in LOADING, not saving.
+  if (veh->owner <= 0)
+    return FALSE;
+    
+  /* log_vfprintf("Evaluating save info for PC veh '%s' at '%ld' (damage %d/10)",
+               GET_VEH_NAME(veh), get_veh_in_room(veh) ? get_veh_in_room(veh)->number : -1, veh->damage); */
+    
+  // If it's thrashed, it must be in the proper location.
+  if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+    // It was in the Junkyard and nobody came to fix it.
+    if (veh_is_in_junkyard(veh))
+      return FALSE;
+    
+    // It's being taken care of.
+    if (veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))
+      return TRUE;
+      
+    // It's towed.
+    if (!veh->in_veh && !veh->in_room)
+      return TRUE;
+  }
+  
+  return TRUE;
+}
+
 void save_vehicles(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   struct veh_data *veh;
   FILE *fl;
   struct char_data *i;
-  long v;
+  int v;
   struct room_data *temp_room = NULL;
   struct obj_data *obj;
   int num_veh = 0;
-  bool found;
-  for (veh = veh_list; veh; veh = veh->next)
-    if ((veh->owner > 0 && (veh->damage < VEH_DAM_THRESHOLD_DESTROYED || !veh_is_in_junkyard(veh) || veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))) && (does_player_exist(veh->owner)))
-      num_veh++;
   
+  for (veh = veh_list; veh; veh = veh->next)
+    if (should_save_this_vehicle(veh))
+      num_veh++;
+      
+  // log_vfprintf("We have %d vehicles to save.", num_veh);
+  
+  // Write the count of vehicles to the file.
   if (!(fl = fopen("veh/vfile", "w"))) {
     mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
     return;
   }
   fprintf(fl, "%d\n", num_veh);
   fclose(fl);
-  for (veh = veh_list, v = 0; veh && v < num_veh; veh = veh->next) {
-    // Skip NPC-owned vehicles and world vehicles.
-    if (veh->owner < 1)
+  
+  for (veh = veh_list, v = 0; veh; veh = veh->next) {
+    // Skip disqualified vehicles.
+    if (veh->owner <= 0)
       continue;
     
     bool send_veh_to_junkyard = FALSE;
-    if ((veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
+    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
       // If the vehicle is wrecked and is in neither a containing vehicle nor a garage...
       if (veh_is_in_junkyard(veh)) {
         // If it's already in the junkyard, we don't save it-- they should have come and fixed it.
@@ -829,7 +879,7 @@ void save_vehicles(void)
     }
      */
     
-    snprintf(buf, sizeof(buf), "veh/%07ld", v);
+    snprintf(buf, sizeof(buf), "veh/%07d", v);
     v++;
     if (!(fl = fopen(buf, "w"))) {
       mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
@@ -839,11 +889,11 @@ void save_vehicles(void)
     if (veh->sub)
       for (i = character_list; i; i = i->next)
         if (GET_IDNUM(i) == veh->owner) {
-          found = FALSE;
-          for (struct veh_data *f = i->char_specials.subscribe; f; f = f->next_sub)
+          struct veh_data *f = NULL;
+          for (f = i->char_specials.subscribe; f; f = f->next_sub)
             if (f == veh)
-              found = TRUE;
-          if (!found) {
+              break;
+          if (!f) {
             veh->next_sub = i->char_specials.subscribe;
             
             // Doubly link it into the list.
@@ -874,14 +924,29 @@ void save_vehicles(void)
           break;
         default:
           // Pick a random one to scatter them about.
-          junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS)];
+          junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS - 1)];
           break;
       }
       temp_room = &world[real_room(junkyard_number)];
     } else {
       // If veh is not in a garage (or the owner is not allowed to enter the house anymore), send it to a garage.
       temp_room = get_veh_in_room(veh);
-      if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) || (ROOM_FLAGGED(temp_room, ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, temp_room->number))) {
+      
+      // No temp room means it's towed. Yolo it into the Seattle garage.
+      if (!temp_room) {
+        // snprintf(buf, sizeof(buf), "Falling back to Seattle garage for non-veh, non-room veh %s.", GET_VEH_NAME(veh));
+        // log(buf);
+        temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
+      }
+
+      // Otherwise, derive the garage from its location.
+      else if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) 
+               || (ROOM_FLAGGED(temp_room, ROOM_HOUSE) 
+                   && !House_can_enter_by_idnum(veh->owner, temp_room->number))) {
+       snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).", 
+                GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room)
+              );
+       log(buf);
         switch (GET_JURISDICTION(veh->in_room)) {
           case ZONE_PORTLAND:
             switch (number(0, 2)) {
@@ -973,17 +1038,23 @@ void save_vehicles(void)
     fprintf(fl, "[MOUNTS]\n");
     int m = 0;
     for (obj = veh->mount; obj; obj = obj->next_content, m++) {
+      struct obj_data *ammo = NULL;
+      struct obj_data *gun = NULL;
+      
       fprintf(fl, "\t[Mount %d]\n", m);
       fprintf(fl, "\t\tMountNum:\t%ld\n", GET_OBJ_VNUM(obj));
-      fprintf(fl, "\t\tAmmo:\t%d\n", GET_OBJ_VAL(obj, 9));
-      if (obj->contains) {
-        fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(obj->contains));
-        fprintf(fl, "\t\tCondition:\t%d\n", GET_OBJ_CONDITION(obj->contains));
-        if (obj->restring)
-          fprintf(fl, "\t\tName:\t%s\n", obj->contains->restring);
+      if ((ammo = get_mount_ammo(obj)) && GET_AMMOBOX_QUANTITY(ammo) > 0) {
+        fprintf(fl, "\t\tAmmo:\t%d\n", GET_AMMOBOX_QUANTITY(ammo));
+        fprintf(fl, "\t\tAmmoType:\t%d\n", GET_AMMOBOX_TYPE(ammo));
+        fprintf(fl, "\t\tAmmoWeap:\t%d\n", GET_AMMOBOX_WEAPON(ammo));
+      }
+      if ((gun = get_mount_weapon(obj))) {
+        fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(gun));
+        fprintf(fl, "\t\tCondition:\t%d\n", GET_OBJ_CONDITION(gun));
+        if (gun->restring)
+          fprintf(fl, "\t\tName:\t%s\n", gun->restring);
         for (int x = 0; x < NUM_VALUES; x++)
-          fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(obj->contains, x));
-        
+          fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(gun, x));
       }
     }
     fprintf(fl, "[GRIDGUIDE]\n");
@@ -994,6 +1065,11 @@ void save_vehicles(void)
       fprintf(fl, "\t\tRoom:\t%ld\n", grid->room);
     }
     fclose(fl);
+  }
+  
+  if (v != num_veh) {
+    snprintf(buf, sizeof(buf), "SYSERR: LOST VEHICLES: %d != %d in save_vehicles, so some vehicles ARE NOT SAVED.", v, num_veh);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   }
   
   // Update paydata markets. Why this is here, IDK.
@@ -1080,37 +1156,37 @@ void misc_update(void)
     }
     
     if (affected_by_spell(ch, SPELL_CONFUSION) || affected_by_spell(ch, SPELL_CHAOS) || affected_by_power(ch, CONFUSION)) {
-      if (number(1, 10) >= 5) {
-        switch(number(0, 10)) {
-          case 0:
+      if ((i = number(1, 15)) >= 5) {
+        switch(i) {
+          case 5:
             send_to_char("Lovely weather today.\r\n", ch);
             break;
-          case 1:
+          case 6:
             send_to_char("Is that who I think it is? ...Nah, my mistake.\r\n", ch);
             break;
-          case 2:
+          case 7:
             send_to_char("Now, where did I leave my car keys...\r\n", ch);
             break;
-          case 3:
+          case 8:
             send_to_char("Over There!\r\n", ch);
             break;
-          case 4:
+          case 9:
             send_to_char("x + 2dy divided by 3 is... no wait CARRY THE 1!\r\n", ch);
             break;
-          case 5:
+          case 10:
             send_to_char("A large troll carrying a panther assault cannon arrives from the north.\r\n", ch);
             break;
-          case 6:
+          case 11:
             if (ch->carrying)
               send_to_char(ch, "You complete the bonding ritual for %s.\r\n", GET_OBJ_NAME(ch->carrying));
             break;
-          case 7:
+          case 12:
             send_to_char("You don't have enough karma to do that!\r\n", ch);
             break;
-          case 8:
+          case 13:
             send_to_char("You could do it with a needle!\r\n", ch);
             break;
-          case 9:
+          case 14:
             send_to_char("Nothing seems to happen.\r\n", ch);
             break;
         }

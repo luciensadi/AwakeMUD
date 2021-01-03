@@ -56,6 +56,10 @@ void remember(struct char_data * ch, struct char_data * victim);
 void order_list(bool first,...);
 bool can_hurt(struct char_data *ch, struct char_data *victim);
 
+SPECIAL(johnson);
+SPECIAL(weapon_dominator);
+SPECIAL(landlord_spec);
+
 extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
                          int tar_for_vict);
@@ -80,6 +84,7 @@ extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char
 extern char *get_player_name(vnum_t id);
 
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
+extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
@@ -223,6 +228,11 @@ void increase_blood(struct room_data *rm)
   rm->blood = MIN(rm->blood + 1, 10);
 }
 
+void increase_debris(struct room_data *rm)
+{
+  rm->debris= MIN(rm->debris + 1, 50);
+}
+
 
 void check_killer(struct char_data * ch, struct char_data * vict)
 {
@@ -282,12 +292,12 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
       draw_weapon(ch);
     
     if (GET_EQ(ch, WEAR_WIELD))
-      if (!IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)) &&
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3) != TYPE_ARROW)
+      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) &&
+          GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)) != TYPE_ARROW)
         AFF_FLAGS(ch).SetBit(AFF_APPROACH);
     if (GET_EQ(ch, WEAR_HOLD))
-      if (!IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3)) &&
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3) != TYPE_ARROW)
+      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD))) &&
+          GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD)) != TYPE_ARROW)
         AFF_FLAGS(ch).SetBit(AFF_APPROACH);
     if (!GET_EQ(ch, WEAR_WIELD) && !GET_EQ(ch, WEAR_HOLD))
       AFF_FLAGS(ch).SetBit(AFF_APPROACH);
@@ -436,6 +446,14 @@ void make_corpse(struct char_data * ch)
     GET_OBJ_VAL(corpse, 5) = GET_IDNUM(ch);
     /* make 'em bullet proof...(anti-twink measure) */
     GET_OBJ_BARRIER(corpse) = 75;
+    
+    // Drain their pockets of ammo and put it on the corpse.
+    for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+      for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
+        if (GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) > 0
+            && (o = generate_ammobox_from_pockets(ch, wp, am, GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am)))) {
+          obj_to_obj(o, corpse);
+        }
   }
   
   /* transfer character's inventory to the corpse */
@@ -464,9 +482,9 @@ void make_corpse(struct char_data * ch)
   if (IS_NPC(ch))
   {
     nuyen = (int)(GET_NUYEN(ch) / 10);
-    nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen);
+    nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen) * NUYEN_GAIN_MULTIPLIER;
     credits = (int)(GET_BANK(ch) / 10);
-    credits = number(GET_BANK(ch) - credits, GET_BANK(ch) + credits);
+    credits = number(GET_BANK(ch) - credits, GET_BANK(ch) + credits) * NUYEN_GAIN_MULTIPLIER;
   } else
   {
     nuyen = GET_NUYEN(ch);
@@ -765,9 +783,9 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
   if ( !PLR_FLAGGED(ch, PLR_NEWBIE) )
     share /= 2;
   
-  share = gain_exp(ch, share, 0);
+  share = gain_karma(ch, share, FALSE, TRUE, TRUE);
   
-  if ( share >= 100 || access_level(ch, LVL_BUILDER) )
+  if ( share >= 100 * KARMA_GAIN_MULTIPLIER || access_level(ch, LVL_BUILDER) )
   {
     snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s.", GET_CHAR_NAME(ch),
             (double)share/100.0, GET_CHAR_NAME(victim));
@@ -1208,7 +1226,7 @@ void damage_equip(struct char_data *ch, struct char_data *victim, int power,
   {
     int x = 10;
     while (!GET_EQ(victim, i) && x > 0) {
-      i = number(0, NUM_WEARS);
+      i = number(0, NUM_WEARS - 1);
       x--;
     }
     damage_obj(ch, GET_EQ(victim, i), power, DAMOBJ_ACID);
@@ -1411,6 +1429,28 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
   rev = rev_dir[dir];
   if (opposite && opposite->dir_option[rev] && opposite->dir_option[rev]->to_room == room)
     ok = TRUE;
+    
+  // Remove the hidden bits-- doors don't stay hidden when attacked.
+  REMOVE_BIT(room->dir_option[dir]->exit_info, EX_HIDDEN);
+  if (ok)
+    REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_HIDDEN);
+    
+  // Dominators break down doors without rolls.
+  if (ch && GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
+    destroy_door(room, dir);
+    snprintf(buf, sizeof(buf), "The %s is destroyed in a scintillating burst of blue light!\r\n", fname(room->dir_option[dir]->keyword));
+    
+    send_to_room(buf, room);
+    if (ch->in_room != room)
+      send_to_char(buf, ch);
+      
+    if (ok) {
+      destroy_door(opposite, rev);
+      snprintf(buf, sizeof(buf2), "The %s is destroyed from the other side in a scintillating burst of blue light!\r\n", fname(opposite->dir_option[rev]->keyword));
+      send_to_room(buf, opposite);
+    }
+    return;
+  }
   
   if (IS_SET(type, DAMOBJ_MANIPULATION))
   {
@@ -1452,15 +1492,11 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
   
   if (room->dir_option[dir]->condition <= 0) {
     snprintf(buf, sizeof(buf), "The %s has been destroyed!\r\n", fname(room->dir_option[dir]->keyword));
-    REMOVE_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
-    REMOVE_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
-    SET_BIT(room->dir_option[dir]->exit_info, EX_DESTROYED);
+    destroy_door(room, dir);
     if (ok) {
       snprintf(buf2, sizeof(buf2), "The %s is destroyed from the other side!\r\n", fname(room->dir_option[dir]->keyword));
       send_to_room(buf2, opposite);
-      REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_CLOSED);
-      REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_LOCKED);
-      SET_BIT(opposite->dir_option[rev]->exit_info, EX_DESTROYED);
+      destroy_door(opposite, rev);
     }
   }
   
@@ -1657,13 +1693,16 @@ void docwagon(struct char_data *ch)
   if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
     return;
   
-  for (i = 0; (i < NUM_WEARS && !docwagon); i++)
+  // Find the best docwagon contract they're wearing.
+  for (i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_DOCWAGON && GET_DOCWAGON_BONDED_IDNUM(GET_EQ(ch, i)) == GET_IDNUM(ch))
+      if (docwagon == NULL || GET_DOCWAGON_CONTRACT_GRADE(GET_EQ(ch, i)) > GET_DOCWAGON_CONTRACT_GRADE(docwagon))
       docwagon = GET_EQ(ch, i);
   
   if (!docwagon)
     return;
   
+  // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
   if (success_test(GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1,
                    MAX(GET_SECURITY_LEVEL(ch->in_room), 4)) > 0)
   {
@@ -1680,8 +1719,7 @@ void docwagon(struct char_data *ch)
         end_sustained_spell(ch, sust);
       }
     }
-    if (ch->persona)
-    {
+    if (ch->persona) {
       snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", ch->persona->name);
       send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       extract_icon(ch->persona);
@@ -2048,7 +2086,12 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
 bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype) {
   if (IS_NPC(victim)) {
     // Shopkeeper protection.
-    if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper)
+    if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
+        || mob_index[GET_MOB_RNUM(victim)].func == johnson
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
+        || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec)
       return false;
     
     // Nokill protection.
@@ -2112,8 +2155,12 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     return 0;                   /* -je, 7/7/92 */
   }
   
-  snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %d): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
-          wound_name[MIN(DEADLY, MAX(0, dam))], attacktype);
+  if (attacktype <= TYPE_BLACKIC)
+    snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %s): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
+            wound_name[MIN(DEADLY, MAX(0, dam))], damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[attacktype - 300]);
+  else
+    snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %d): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
+            wound_name[MIN(DEADLY, MAX(0, dam))], attacktype);
   if (( (!IS_NPC(ch)
          && IS_SENATOR(ch)
          && !access_level(ch, LVL_ADMIN))
@@ -2128,19 +2175,28 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       && !vnum_from_non_connected_zone(GET_MOB_VNUM(victim)))
   {
     dam = -1;
-    buf_mod(rbuf,"Invalid",dam);
+    buf_mod(rbuf, sizeof(rbuf), "Invalid",dam);
+    if (ch)
+      send_to_char(ch, "^m(OOC Notice: %s has been made unkillable by the game's administration.)^n\r\n", GET_CHAR_NAME(victim));
   }
   
   /* shopkeeper protection */
-  if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper)
+  else if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+      || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
+      || mob_index[GET_MOB_RNUM(victim)].func == johnson 
+      || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
+      || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
+      || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec)
   {
     dam = -1;
-    buf_mod(rbuf,"Keeper",dam);
+    buf_mod(rbuf, sizeof(rbuf), "Keeper",dam);
+    if (ch)
+      send_to_char(ch, "^m(OOC Notice: %s has been made unkillable by the game's administration.)^n\r\n", GET_CHAR_NAME(victim));
   }
-  if(IS_NPC(victim) && MOB_FLAGGED(victim,MOB_NOKILL))
+  else if (IS_NPC(victim) && MOB_FLAGGED(victim,MOB_NOKILL))
   {
     dam =-1;
-    buf_mod(rbuf,"NoKill",dam);
+    buf_mod(rbuf, sizeof(rbuf), "NoKill",dam);
     if (ch)
       send_to_char(ch, "^m(OOC Notice: %s has been made unkillable by the game's administration.)^n\r\n", GET_CHAR_NAME(victim));
   }
@@ -2192,7 +2248,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       // Unless both chars are PK, or victim is KILLER, deal no damage and abort without flagging anyone as KILLER.
       if (!(PLR_FLAGGED(victim, PLR_KILLER) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(victim, PRF_PKER)))) {
         dam = -1;
-        buf_mod(rbuf, "accidental", dam);
+        buf_mod(rbuf, sizeof(rbuf), "accidental", dam);
       } else {
         check_killer(ch, victim);
       }
@@ -2203,17 +2259,17 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   if (PLR_FLAGGED(ch, PLR_KILLER) && ch != victim && !IS_NPC(victim))
   {
     dam = -1;
-    buf_mod(rbuf,"No-PK",dam);
+    buf_mod(rbuf, sizeof(rbuf), "No-PK",dam);
   }
   if (attacktype == TYPE_EXPLOSION && (IS_ASTRAL(victim) || MOB_FLAGGED(victim, MOB_IMMEXPLODE)))
   {
     dam = -1;
-    buf_mod(rbuf,"ImmExplode",dam);
+    buf_mod(rbuf, sizeof(rbuf), "ImmExplode",dam);
   }
   if (dam == 0)
     strcat(rbuf, " 0");
   else if (dam > 0)
-    buf_mod(rbuf, "", dam);
+    buf_mod(rbuf, sizeof(rbuf), "", dam);
   
   act(rbuf, 0, ch, 0, victim, TO_ROLLS);
   
@@ -2302,7 +2358,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
         next = sust->next;
         if (sust->caster && !sust->focus && !sust->spirit)
-          if (success_test(GET_SKILL(victim, SKILL_SORCERY), sust->force + damage_modifier(victim, buf)) < 1)
+          if (success_test(GET_SKILL(victim, SKILL_SORCERY), sust->force + damage_modifier(victim, buf, sizeof(buf))) < 1)
             end_sustained_spell(victim, sust);
       }
     }
@@ -2353,6 +2409,8 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     damage_equip(ch, victim, dam, attacktype);
   
   /* Use send_to_char -- act() doesn't send message if you are DEAD. */
+  bool unbonded_docwagon = FALSE;
+  struct obj_data *docwagon_biomonitor = NULL;
   switch (GET_POS(victim))
   {
     case POS_MORTALLYW:
@@ -2378,7 +2436,25 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
         act("$n is dead!  R.I.P.", FALSE, victim, 0, 0, TO_ROOM);
       else
         act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
-      send_to_char("You feel the world slip in to darkness, you better hope a wandering DocWagon finds you.\r\n", victim);
+        
+      for (int i = 0; i < NUM_WEARS && !docwagon_biomonitor; i++) {
+        if (GET_EQ(victim, i) && GET_OBJ_TYPE(GET_EQ(victim, i)) == ITEM_DOCWAGON) {
+          if (GET_DOCWAGON_BONDED_IDNUM(GET_EQ(victim, i)) != GET_IDNUM(victim)) {
+            unbonded_docwagon = TRUE;
+          } else {
+            docwagon_biomonitor = GET_EQ(victim, i);
+          }
+        }
+      }
+      
+      if (docwagon_biomonitor) {
+        send_to_char("You feel the vibration of your DocWagon biomonitor sending out an alert, but as the world slips into darkness you realize it's too little, too late.\r\n", victim);
+      } else if (unbonded_docwagon) {
+        send_to_char("Your last conscious thought involves wondering why your DocWagon biomonitor didn't work-- maybe you forgot to bond it? The world slips into darkness, and you hope a wandering DocWagon finds you.\r\n", victim);
+      } else {
+        send_to_char("You feel the world slip in to darkness, you'd better hope a wandering DocWagon finds you.\r\n", victim);
+      }
+      
       break;
     default:                      /* >= POSITION SLEEPING */
       if (dam > ((int)(GET_MAX_PHYSICAL(victim) / 100) >> 2))
@@ -2403,7 +2479,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   
   if (GET_MENTAL(victim) < 100 || GET_PHYSICAL(victim) < 0)
     if (FIGHTING(ch) == victim)
-      if (GET_POS(victim) == POS_DEAD || !IS_NPC(victim) || !PRF_FLAGGED(ch, PRF_AUTOKILL)) {
+      if (GET_POS(victim) == POS_DEAD || !IS_NPC(victim) || PRF_FLAGGED(ch, PRF_NOAUTOKILL)) {
         stop_fighting(ch);
         if (GET_POS(victim) != POS_DEAD)
           act("You leave off attacking $N.", FALSE, ch, 0, victim, TO_CHAR);
@@ -2422,11 +2498,12 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
           break;
         }
     }
-    if (ch != victim && !IS_NPC(ch) && GET_QUEST(ch) && IS_NPC(victim))
-      check_quest_kill(ch, victim);
-    else if (ch != victim && AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
-             !IS_NPC(ch->master) && GET_QUEST(ch->master) && IS_NPC(victim))
-      check_quest_kill(ch->master, victim);
+    if (ch != victim) {
+      if (!IS_NPC(ch) && GET_QUEST(ch) && IS_NPC(victim))
+        check_quest_kill(ch, victim);
+      else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && IS_NPC(victim))
+        check_quest_kill(ch->master, victim);
+    }
     
     if ((IS_NPC(victim) || victim->desc) && ch != victim &&
         attacktype != TYPE_EXPLOSION) {
@@ -2439,7 +2516,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
           group_gain(ch, victim);
         } else {
           exp = calc_karma(ch, victim);
-          exp = gain_exp(ch, exp, 0);
+          exp = gain_karma(ch, exp, FALSE, TRUE, TRUE);
           if ( exp >= 100 || access_level(ch, LVL_BUILDER) ) {
             snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s.",
                     IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch),
@@ -2602,31 +2679,39 @@ bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded) {
 
 int check_smartlink(struct char_data *ch, struct obj_data *weapon)
 {
-  struct obj_data *obj, *access = NULL;
+  struct obj_data *obj, *access;
   
   // are they wielding two weapons?
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) &&
       CAN_WEAR(GET_EQ(ch, WEAR_HOLD), ITEM_WEAR_WIELD))
     return 0;
   
-  int mod = 0;
-  for (int i = 7; !mod && i < 10; i++)
-  {
+  int mod = 0, real_obj;
+  for (int i = ACCESS_LOCATION_TOP; !mod && i <= ACCESS_LOCATION_UNDER; i++) {
+    // If they have a smartlink attached:
     if (GET_OBJ_VAL(weapon, i) > 0
-        && real_object(GET_OBJ_VAL(weapon, i)) > 0
-        && (access = &obj_proto[real_object(GET_OBJ_VAL(weapon, i))])
-        && GET_OBJ_VAL(access, 1) == ACCESS_SMARTLINK) {
-      for (obj = ch->cyberware; !mod && obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK && (GET_OBJ_VAL(obj, 1) == 1 || GET_OBJ_VAL(access, 2) < 2)) {
-          // Smartlink plus cyber found-- full value.
+        && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
+        && (access = &obj_proto[real_obj])
+        && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK) {
+      
+      // Iterate through their cyberware and look for a matching smartlink.
+      for (obj = ch->cyberware; !mod && obj; obj = obj->next_content) {
+        if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK) {
+          if (GET_ACCESSORY_TYPE(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
+            // Smartlink II with compatible cyberware.
+            return 4;
+          }
+          // Smartlink I.
           return 2;
         }
-      if (!mod && GET_EQ(ch, WEAR_EYES) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY &&
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_EYES), 1) == ACCESS_SMARTGOGGLE) {
+      }
+      if (!mod 
+          && GET_EQ(ch, WEAR_EYES) 
+          && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY 
+          && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE) {
         // Smartlink plus goggle found-- half value.
         return 1;
       }
-      access = NULL;
     }
   }
   
@@ -2921,7 +3006,7 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
 //#define COMBAT_MESSAGE_DEBUG_LOG(str) ;
 void combat_message(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, int damage, int burst)
 {
-  char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH],
+  char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH], buf4[MAX_MESSAGE_LENGTH],
   been_heard[MAX_STRING_LENGTH], temp[20];
   struct obj_data *obj = NULL;
   struct room_data *ch_room = NULL, *vict_room = NULL;
@@ -2954,18 +3039,18 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       switch (number(1, 3)) {
         case 1:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you manage to dodge.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E manages to dodge.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manage%s to dodge.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E manage%s to dodge.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you easily dodge.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E easily dodges.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodge%s.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E easily dodge%s.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 3:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you move out of the way.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E moves out of the way.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E move%s out of the way.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E move%s out of the way.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == 0) {
@@ -2977,8 +3062,8 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but you roll with the impact.^n", vehicle_message, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E rolls with the impact.", vehicle_message, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E roll%s with the impact.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but $E roll%s with the impact.", vehicle_message, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == LIGHT) {
@@ -3017,18 +3102,21 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       switch (number(1, 3)) {
         case 1:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you manage to dodge.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E manages to dodge.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E manage%s to dodge.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E manage%s to dodge.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e manage%s to dodge.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you easily dodge.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E easily dodges.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E easily dodge%s.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E easily dodge%s.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e easily dodge%s.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
         case 3:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you move out of the way.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E moves out of the way.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E move%s out of the way.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E move%s out of the way.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e move%s out of the way.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == 0) {
@@ -3037,42 +3125,50 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but your armour holds.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but it doesn't seem to hurt $M.", buf);
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but it doesn't seem to hurt $m.", buf);
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but you roll with the impact.^n", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
-          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E rolls with the impact.", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but $E roll%s with the impact.^n", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but $E roll%s with the impact.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but $e roll%s with the impact.", buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
           break;
       }
     } else if (damage == LIGHT) {
       snprintf(buf1, sizeof(buf1), "^r$n grazes you with a %s^r.^n", buf);
       snprintf(buf2, sizeof(buf2), "^yYou graze $N with a %s^y.^n", buf);
       snprintf(buf3, sizeof(buf3), "$n grazes $N with a %s^n.", buf);
+      snprintf(buf4, sizeof(buf4), "$N grazes $n with a %s^n.", buf);
     } else if (damage == MODERATE) {
       snprintf(buf1, sizeof(buf1), "^r$n hits you with a %s^r.^n", buf);
       snprintf(buf2, sizeof(buf2), "^yYou hit $N with a %s^y.^n", buf);
       snprintf(buf3, sizeof(buf3), "$n hits $N with a %s^n.", buf);
+      snprintf(buf4, sizeof(buf4), "$N hits $n with a %s^n.", buf);
     } else if (damage == SERIOUS) {
       snprintf(buf1, sizeof(buf1), "^r$n massacres you with a %s^r.^n", buf);
       snprintf(buf2, sizeof(buf2), "^yYou massacre $N with a %s^y.^n", buf);
       snprintf(buf3, sizeof(buf3), "$n massacres $N with a %s^n.", buf);
+      snprintf(buf4, sizeof(buf4), "$N massacres $n with a %s^n.", buf);
     } else if (damage >= DEADLY) {
       switch (number(1, 2)) {
         case 1:
           snprintf(buf1, sizeof(buf1), "^r$n puts you down with a deadly %s^r.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou put $N down with a deadly %s^y.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n puts $N down with a deadly %s^n.", buf);
+          snprintf(buf4, sizeof(buf4), "$N puts $n down with a deadly %s^n.", buf);
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r$n sublimates you with a deadly %s^r.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou sublimate $N with a deadly %s^y.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n sublimates $N with a deadly %s^n.", buf);
+          snprintf(buf4, sizeof(buf4), "$N sublimates $n with a deadly %s^n.", buf);
           break;
       }
     }
     act(buf1, FALSE, ch, weapon, victim, TO_VICT);
     act(buf2, FALSE, ch, weapon, victim, TO_CHAR);
     act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
+    act(buf4, FALSE, victim, weapon, ch, TO_ROOM);
     // End ranged messaging.
   }
   
@@ -3222,11 +3318,15 @@ int get_weapon_damage_type(struct obj_data* weapon) {
 
 bool is_char_too_tall(struct char_data *ch) {
   assert(ch != NULL);
-  
+
+#ifdef USE_SLOUCH_RULES  
   if (!ch->in_room)
     return FALSE;
   
   return ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= ch->in_room->z*100;
+#else
+  return FALSE;
+#endif
 }
 
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
@@ -3340,10 +3440,7 @@ int get_melee_skill(struct combat_data *cd) {
 }
 
 void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap)
-{
-  // Load our Dominator weapon spec, because that's totally canon and kosher right?
-  SPECIAL(weapon_dominator);
-  
+{  
   // Initialize our data structures for holding this round's fight-related data.
   struct combat_data attacker_data(attacker, weap);
   struct combat_data defender_data(victim, vict_weap);
@@ -3365,8 +3462,15 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     return;
   }
   
-  // Precondition: If you're asleep, paralyzed, or out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
-  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0 || (att->weapon && !has_ammo(att->ch, att->weapon)))
+  // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent closes immediately.
+  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0) {
+    AFF_FLAGS(attacker).RemoveBit(AFF_APPROACH);
+    AFF_FLAGS(victim).RemoveBit(AFF_APPROACH);
+    return;
+  }
+  
+  // Precondition: If you're out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
+  if (att->weapon && !has_ammo(att->ch, att->weapon))
     return;
   
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
@@ -3436,31 +3540,43 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   // Early execution: Nerve strike doesn't require as much setup, so perform it here to save on resources.
   if (melee && IS_NERVE(att->ch) && !(att->weapon) && !(IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch))) {
     // Calculate and display pre-success-test information.
-    snprintf(rbuf, sizeof(rbuf), "%s", GET_CHAR_NAME(att->ch));
-    rbuf[3] = 0;
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "|%s", GET_CHAR_NAME(def->ch));
-    rbuf[7] = 0;
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf),
-            ">Nerve Targ: Base 4 + impact %d ", GET_IMPACT(def->ch));
+    snprintf(rbuf, sizeof(rbuf), "%s VS %s: Nerve Strike target is 4 + impact (%d) + modifiers: ",
+             GET_CHAR_NAME(att->ch), 
+             GET_CHAR_NAME(def->ch),
+             GET_IMPACT(def->ch));
     
-    att->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->tn += GET_IMPACT(def->ch) + modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->modifiers[COMBAT_MOD_VISIBILITY]);
+    
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
+      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->modifiers[mod_index]);
       att->tn += att->modifiers[mod_index];
     }
     
-    buf_roll( rbuf, "Total", att->tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Total TN is %d.", att->tn);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // Calculate the attacker's total skill and execute a success test.
     att->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->tn);
-    if (!att->too_tall)
-      att->dice += MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
+    if (!att->too_tall) {
+      int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
+      snprintf(rbuf, sizeof(rbuf), "Attacker is rolling %d + %d dice", att->dice, bonus);
+      att->dice += bonus;
+    } else {
+      snprintf(rbuf, sizeof(rbuf), "Attacker is rolling %d dice (no bonus: too tall)", att->dice);
+    }
     
-    if (GET_QUI(def->ch) <= 0)
+    if (GET_QUI(def->ch) <= 0) {
+      strncat(rbuf, "-- but we're zeroing out successes since the defender is paralyzed.", sizeof(rbuf) - strlen(rbuf) - 1);
       att->successes = 0;
-    else
+    }
+    else {
       att->successes = success_test(att->dice, att->tn);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", and got %d successes, which translates to %d qui loss.", 
+               att->successes,
+               (int) (att->successes / 2));
+    }
+    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+      
     if (att->successes > 0) {
       GET_TEMP_QUI_LOSS(def->ch) += (int) (att->successes / 2); // This used to be * 2!
       affect_total(def->ch);
@@ -3499,6 +3615,21 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(att->ch, att->veh);
+  
+  snprintf(rbuf, sizeof(rbuf), "%s: %s too tall, %sbayonet, damtype is %s (%s).\r\n%s: %s too tall, %sbayonet, damtype is %s (%s).\r\n",
+           GET_CHAR_NAME(attacker),
+           att->too_tall ? "is" : "not",
+           att->weapon_has_bayonet ? "" : "!", 
+           att->dam_type > TYPE_BLACKIC ? "weird" : damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[att->dam_type - 300],
+           att->is_physical ? "physical" : "mental",
+           
+           GET_CHAR_NAME(victim),
+           def->too_tall ? "is" : "not",
+           def->weapon_has_bayonet ? "" : "!", 
+           def->dam_type > TYPE_BLACKIC ? "weird" : damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[def->dam_type - 300],
+           def->is_physical ? "physical" : "mental");
+           
+  act(rbuf, TRUE, attacker, NULL, NULL, TO_ROLLS);
   
   // Setup for ranged combat.
   if (!melee) {
@@ -3588,12 +3719,11 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     if (IS_OBJ_STAT(att->weapon, ITEM_SNIPER) && att->ch->in_room == def->ch->in_room)
       att->modifiers[COMBAT_MOD_DISTANCE] += 6;
     
-    /* Non-canon, removed.
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
     if (!AWAKE(def->ch))
-      att->modifiers[COMBAT_MOD_POSITION] -= 2;
+      att->modifiers[COMBAT_MOD_POSITION] -= 6;
     else if (AFF_FLAGGED(def->ch, AFF_PRONE))
-      att->modifiers[COMBAT_MOD_POSITION]--; */
+      att->modifiers[COMBAT_MOD_POSITION]--;
     
     // Setup: Determine distance penalties.
     if (!att->veh && att->ch->in_room != def->ch->in_room) {
@@ -3641,54 +3771,63 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     if (att->gyro && !(AFF_FLAGGED(att->ch, AFF_MANNING) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_PILOT)))
       att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], GET_OBJ_VAL(att->gyro, 0));
     else if (IS_NPC(att->ch)) {
+      /*    We _used to_ assume NPCs had gyros, but this made them unreasonably powerful. -- LS
       // We assume that NPCs have a gyro equipped, and that the builder just didn't want to be handing out free gyros everywhere for balance reasons.
       att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], 4);
+      */
     }
     
     // Calculate and display pre-success-test information.
-    snprintf(rbuf, sizeof(rbuf), "%s", GET_CHAR_NAME( att->ch ) );
-    rbuf[3] = 0;
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "|%s", GET_CHAR_NAME( def->ch ) );
-    rbuf[7] = 0;
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf),
-            ">Targ: (burst/comp %d-%d, Base 4) ",
-            att->burst_count, att->recoil_comp);
-    
-    att->tn += modify_target_rbuf_raw(att->ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]);
+    snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info is %d/%d. Additional modifiers: ", 
+             GET_CHAR_NAME( att->ch ),
+             att->burst_count, 
+             att->recoil_comp);
+             
+    att->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->modifiers[COMBAT_MOD_VISIBILITY]);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
+      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->modifiers[mod_index]);
       att->tn += att->modifiers[mod_index];
     }
     
-    buf_roll( rbuf, "Total", att->tn);
+    // Calculate the attacker's total skill (this modifies TN)
+    att->dice = get_skill(att->ch, GET_WEAPON_SKILL(att->weapon), att->tn);
+    
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nThus, attacker's TN is: %d.", att->tn);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
-    // Calculate the attacker's total skill and execute a success test.
-    att->dice = get_skill(att->ch, GET_WEAPON_SKILL(att->weapon), att->tn);
-    if (!att->too_tall)
-      att->dice += MIN(GET_SKILL(att->ch, GET_WEAPON_SKILL(att->weapon)), GET_OFFENSE(att->ch));
+    // Execute skill test
+    if (!att->too_tall) {
+      int bonus = MIN(GET_SKILL(att->ch, GET_WEAPON_SKILL(att->weapon)), GET_OFFENSE(att->ch));
+      snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->dice, bonus);
+      att->dice += bonus;
+    } else {
+      snprintf(rbuf, sizeof(rbuf), "Too tall, so will roll just %d dice... ", att->dice);
+    }
     
     att->successes = success_test(att->dice, att->tn);
-    
-    // Display post-test information.
-    snprintf(rbuf, sizeof(rbuf), "Fight: Ski %d, TN %d, Suc %d", att->dice, att->tn, att->successes);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d successes.", att->successes);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // Dodge test.
     if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE) && !def->too_tall && !AFF_FLAGGED(def->ch, AFF_PRONE)) {
       // Previous code only allowed you to sidestep if you had also allocated at least one normal dodge die. Why?
       def->dice = GET_DEFENSE(def->ch) + GET_POWER(def->ch, ADEPT_SIDESTEP);
-      def->tn += damage_modifier(def->ch, buf) + (int)(att->burst_count / 3) + def->footanchors;
+      def->tn += damage_modifier(def->ch, buf, sizeof(buf)) + (int)(att->burst_count / 3) + def->footanchors;
       def->successes = MAX(success_test(def->dice, def->tn), 0);
       att->successes -= def->successes;
       
-      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Suc %d. NetSuc %d", def->dice, def->tn, def->successes, att->successes);
-      act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
-    } else
+      snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.", def->dice, def->tn, def->successes, att->successes);
+    } else {
       att->successes = MAX(att->successes, 1);
+      snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, successes confirmed as %d.", att->successes);
+    }
+    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // If the attack failed, print the relevant message and terminate.
     if (att->successes < 1) {
+      snprintf(rbuf, sizeof(rbuf), "%s failed to roll any successes, so we're bailing out.", GET_CHAR_NAME(attacker));
+      act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+      
       combat_message(att->ch, def->ch, att->weapon, -1, att->burst_count);
       damage(att->ch, def->ch, -1, att->dam_type, 0);
       return;
@@ -3715,16 +3854,28 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->dice = GET_REA(att->ch);
       def->dice = GET_WIL(def->ch);
     } else {
-      def->dice = get_skill(def->ch, def->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(def->ch, def->skill), GET_OFFENSE(def->ch)));
+      act("Computing dice for attacker...", 1, att->ch, NULL, NULL, TO_ROLLS );
       att->dice = get_skill(att->ch, att->skill, att->tn) + (att->too_tall ? 0 : MIN(GET_SKILL(att->ch, att->skill), GET_OFFENSE(att->ch)));
+      act("Computing dice for defender...", 1, att->ch, NULL, NULL, TO_ROLLS );
+      def->dice = get_skill(def->ch, def->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(def->ch, def->skill), GET_OFFENSE(def->ch)));
     }
     
     // Adepts get bonus dice when counterattacking. Ip Man approves.
-    def->dice += GET_POWER(def->ch, ADEPT_COUNTERSTRIKE);
+    if (GET_POWER(def->ch, ADEPT_COUNTERSTRIKE) > 0) {
+      def->dice += GET_POWER(def->ch, ADEPT_COUNTERSTRIKE);
+      snprintf(rbuf, sizeof(rbuf), "Defender counterstrike dice bonus is %d.", GET_POWER(def->ch, ADEPT_COUNTERSTRIKE));
+      act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    }
     
     // Bugfix: If you're unconscious or mortally wounded, you don't get to counterattack.
-    if (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0)
+    if (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) {
       def->dice = 0;
+      act("^yDefender incapped, dice capped to zero.^n", 1, att->ch, NULL, NULL, TO_ROLLS );
+    }
+      
+      
+    snprintf(rbuf, sizeof(rbuf), "^g%s's dice: ^W%d^g, %s's dice: ^W%d^g.^n", GET_CHAR_NAME(attacker), att->dice, GET_CHAR_NAME(victim), def->dice);
+    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // Calculate the net reach.
     int net_reach = GET_REACH(att->ch) - GET_REACH(def->ch);
@@ -3735,27 +3886,23 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // -------------------------------------------------------------------------------------------------------
     // Calculate and display pre-success-test information.
-    
-    snprintf(rbuf, sizeof(rbuf), "Attacker dice %s", GET_CHAR_NAME( att->ch ) );
-    rbuf[3] = 0;
-    att->tn += modify_target_rbuf_raw(att->ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]) - MAX(net_reach, 0);
+    snprintf(rbuf, sizeof(rbuf), "^cMelee combat mode. %s's TN modifiers: ", GET_CHAR_NAME(att->ch) );
+    att->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->modifiers[COMBAT_MOD_VISIBILITY]);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
+      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->modifiers[mod_index]);
       att->tn += att->modifiers[mod_index];
     }
+    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nDefender dice %s%s", GET_CHAR_NAME( def->ch ),
+    snprintf(rbuf, sizeof(rbuf), "^c%s%s's TN modifiers: ", GET_CHAR_NAME( def->ch ),
             (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
-    rbuf[7] = 0;
-    def->tn += modify_target_rbuf_raw(att->ch, NULL, def->modifiers[COMBAT_MOD_VISIBILITY]);
+    def->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), def->modifiers[COMBAT_MOD_VISIBILITY]);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
+      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->modifiers[mod_index]);
       def->tn += def->modifiers[mod_index];
     }
-    
-    buf_roll(rbuf, "Attacker TN", att->tn);
-    buf_roll(rbuf, "Defender TN", def->tn);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    def->tn = MAX(def->tn, 2);
 
     // ----------------------
     
@@ -3774,13 +3921,26 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       net_successes = MAX(0, net_successes);
     }
     
+    snprintf(rbuf, sizeof(rbuf), "^g%s got ^W%d^g success%s from ^W%d^g dice at TN ^W%d^g.^n\r\n",
+             GET_CHAR_NAME(att->ch),
+             att->successes,
+             att->successes != 1 ? "s" : "",
+             att->dice,
+             att->tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^g%s got ^W%d^g success%s from ^W%d^g dice at TN ^W%d^g.^n\r\n",
+             GET_CHAR_NAME(def->ch),
+             def->successes,
+             def->successes != 1 ? "s" : "",
+             def->dice,
+             def->tn);
+    if (net_successes < 0)
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^yNet successes is ^W%d^y, which will cause a counterattack.^n\r\n", net_successes);
+    else
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Net successes is ^W%d^n.\r\n", net_successes);
+    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    
     act("$n clashes with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_ROOM);
     act("You clash with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_CHAR);
-    snprintf(rbuf, sizeof(rbuf), "%s> sk %d targ %d\r\n"
-            "%s> sk %d targ %d\r\n Reach %c%d NetSucc %d (att %d, def %d)", GET_CHAR_NAME(att->ch), att->dice, att->tn,
-            GET_CHAR_NAME(def->ch), def->dice, def->tn, net_reach > 0 ? 'b' : 't', net_reach < 0 ? -net_reach : net_reach, net_successes,
-            att->successes, def->successes);
-    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
     if (net_successes < 0) {
@@ -3858,7 +4018,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     att->is_physical = FALSE;
     
     // Check for active cyberweapons.
-    if (att->num_cyberweapons) {
+    if (att->num_cyberweapons > 0) {
       if (att->num_cyberweapons >= 2) {
         // Dual cyberweapons gives a power bonus per Core p121.
         att->power += (int) (GET_STR(att->ch) / 2);
@@ -3941,6 +4101,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
     else
       att->power -= GET_LEVEL(def->ch) * 2;
+    att->power = MAX(2, att->power);
   }
   
   // Perform body test for damage resistance.
@@ -3964,8 +4125,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
   int damage_total = convert_damage(staged_damage);
   
-  snprintf(rbuf, sizeof(rbuf), "Bod %d+%d, Pow %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.",
-          GET_BOD(def->ch), bod, att->power, bod_success, att->successes,
+  snprintf(rbuf, sizeof(rbuf), "^CBod dice %d, attack power %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.^n",
+          bod, att->power, bod_success, att->successes,
           wound_name[MIN(DEADLY, MAX(0, att->damage_level))],
           wound_name[MIN(DEADLY, MAX(0, damage_total))],
           damage_total, att->is_physical ? 'P' : 'M');
@@ -4392,7 +4553,10 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     } else if (distance > range) {
       act("$N seems to be out of $p's range.", FALSE, ch, weapon, vict, TO_CHAR);
       return;
-    } else if (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper) {
+    } else if (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper 
+               || mob_index[GET_MOB_RNUM(vict)].sfunc == shop_keeper
+               || mob_index[GET_MOB_RNUM(vict)].func == johnson 
+               || mob_index[GET_MOB_RNUM(vict)].sfunc == johnson) {
       send_to_char("Maybe that's not such a good idea.\r\n", ch);
       return;
     }
@@ -4520,6 +4684,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     if (EXIT2(nextroom, dir) && EXIT2(nextroom, dir)->keyword &&
         isname(target, EXIT2(nextroom, dir)->keyword) &&
         !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_DESTROYED) &&
+        !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_HIDDEN) &&
         (PRF_FLAGGED(ch, PRF_HOLYLIGHT) || CURRENT_VISION(ch) == THERMOGRAPHIC ||
          light_level(nextroom) <= LIGHT_NORMALNOLIT ||
          ((light_level(nextroom) == LIGHT_MINLIGHT || light_level(nextroom) == LIGHT_PARTLIGHT) &&
@@ -4598,7 +4763,7 @@ void roll_individual_initiative(struct char_data *ch)
       GET_INIT_ROLL(ch) = dice(1, 6) + GET_REA(ch);
     else
       GET_INIT_ROLL(ch) = dice(1 + GET_INIT_DICE(ch), 6) + GET_REA(ch);
-    GET_INIT_ROLL(ch) -= damage_modifier(ch, buf);
+    GET_INIT_ROLL(ch) -= damage_modifier(ch, buf, sizeof(buf));
     if (AFF_FLAGGED(ch, AFF_ACTION)) {
       GET_INIT_ROLL(ch) -= 10;
       AFF_FLAGS(ch).RemoveBit(AFF_ACTION);
@@ -4663,6 +4828,7 @@ void roll_initiative(void)
       int dam = convert_damage(stage(-success_test(GET_QUI(ch), ch->in_room->poltergeist[1] - GET_IMPACT(ch)), LIGHT));
       if (dam > 0) {
         act("You are hit by flying objects!\r\n", FALSE, ch, 0, 0, TO_CHAR);
+        act("$n is hit by flying objects!\r\n", TRUE, ch, 0, 0, TO_ROOM);
         damage(ch, ch, dam, TYPE_POLTERGEIST, MENTAL);
       }
     }
@@ -4845,9 +5011,9 @@ void perform_violence(void)
               && (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3)) 
                   || GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3) == TYPE_ARROW))
           || (GET_EQ(FIGHTING(ch), WEAR_WIELD) 
-              && !(IS_GUN(GET_OBJ_VAL(GET_EQ(FIGHTING(ch), WEAR_WIELD), 3)))) 
+              && !(IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(FIGHTING(ch), WEAR_WIELD))))) 
           || (GET_EQ(FIGHTING(ch), WEAR_HOLD) 
-              && !(IS_GUN(GET_OBJ_VAL(GET_EQ(FIGHTING(ch), WEAR_HOLD), 3)))) 
+              && !(IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(FIGHTING(ch), WEAR_HOLD))))) 
           || ch->in_room != FIGHTING(ch)->in_room) {
         AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
         AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
@@ -4895,17 +5061,25 @@ void perform_violence(void)
           quickness /= 2;
           
         // Penalty from too-tall.
-        if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) > ch->in_room->z*100) {
-          if (GET_HEIGHT(ch) > ch->in_room->z * 200)
-            quickness = 0;
-          else quickness /= 2;
+#ifdef USE_SLOUCH_RULES
+        if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
+          if (GET_HEIGHT(ch) > ch->in_room->z*100) {
+            if (GET_HEIGHT(ch) > ch->in_room->z * 200) {
+              send_to_char(ch, "You're bent over double in here, there's no way you'll close the distance like this!\r\n");
+              act("$n looks like $e would really like to hit $N, but $e can't get close enough.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
+              continue;
+            }
+            else quickness /= 2;
+          }
         }
-        
+#endif
+
         // Strike.
         if (quickness > 0 && success_test(quickness, target) > 1) {
           send_to_char(ch, "You close the distance and strike!\r\n");
           act("$n closes the distance and strikes.", FALSE, ch, 0, 0, TO_ROOM);
           AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
+          AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
         } else {
           send_to_char(ch, "You attempt to close the distance!\r\n");
           act("$n charges towards $N.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);

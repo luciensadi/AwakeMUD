@@ -21,18 +21,14 @@
 #include "constants.h"
 #include "act.drive.h"
 #include "transport.h"
+#include "quest.h"
+#include "bullet_pants.h"
+#include "bitfield.h"
 
 ACMD_DECLARE(do_say);
 
-// Change this to a no-op if you don't want mobact debugging.
-/*
-#define MOBACT_DEBUG(ch, speech) { \
-  char say_buf[500];               \
-  strcpy(say_buf, (speech));       \
-  do_say((ch), say_buf, 0, 0);    \
-}
-*/
-#define MOBACT_DEBUG(ch, speech) //
+// Note: If you want mobact debugging, add -DMOBACT_DEBUG to your makefile.
+// #define MOBACT_DEBUG
 
 /* external structs */
 extern void resist_drain(struct char_data *ch, int power, int drain_add, int wound);
@@ -43,6 +39,7 @@ extern void cast_detection_spell(struct char_data *ch, int spell, int force, cha
 extern void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *arg, char_data *mob);
 extern void cast_illusion_spell(struct char_data *ch, int spell, int force, char *arg, char_data *mob);
 extern void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char *arg, char_data *mob);
+extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
 
 extern void perform_wear(struct char_data *, struct obj_data *, int);
 extern void perform_remove(struct char_data *, int);
@@ -65,41 +62,272 @@ int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *
 bool attempt_reload(struct char_data *mob, int pos);
 bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed);
 void switch_weapons(struct char_data *mob, int pos);
+void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 
-#define MOB_AGGR_TO_RACE MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_ORK, MOB_AGGR_TROLL
+// This takes up a significant amount of processing time, so let's precompute it.
+#define NUM_AGGRO_OCTETS 3
+int AGGRESSION_OCTETS[NUM_AGGRO_OCTETS];
+
+char bitbuffer[100];
+const char *print_bits(int bits)
+{
+  char *buf_ptr = bitbuffer;
+
+  for (int i = BITFIELD_BITS_PER_VAR-1; i >= 0; i--)
+    if (bits & (1 << i))
+      *(buf_ptr++) = '1';
+    else
+      *(buf_ptr++) = '0';
+
+  if (buf_ptr == bitbuffer) {
+    // if no flags were set, just set it to "0":
+    strcpy(bitbuffer, "0");
+  } else
+    *buf_ptr = '\0';
+
+  return (const char *)bitbuffer;
+}
+
+#define ASSIGN_AGGRO_OCTET(bit_to_set) AGGRESSION_OCTETS[(int) ((bit_to_set) / BITFIELD_BITS_PER_VAR)] |= 1 << ((bit_to_set) % BITFIELD_BITS_PER_VAR)
+void populate_mobact_aggression_octets() {
+  for (int i = 0; i < NUM_AGGRO_OCTETS; i++)
+    AGGRESSION_OCTETS[i] = 0;
+    
+  ASSIGN_AGGRO_OCTET(MOB_AGGRESSIVE);
+  ASSIGN_AGGRO_OCTET(MOB_AGGR_ELF);
+  ASSIGN_AGGRO_OCTET(MOB_AGGR_DWARF);
+  ASSIGN_AGGRO_OCTET(MOB_AGGR_ORK);
+  ASSIGN_AGGRO_OCTET(MOB_AGGR_TROLL);
+  ASSIGN_AGGRO_OCTET(MOB_AGGR_HUMAN);
+#ifdef MOBACT_DEBUG
+  strncpy(buf, "Static mobact aggr info:", sizeof(buf) - 1);
+  for (int i = 0; i < NUM_AGGRO_OCTETS; i++)
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d=%s (%d)", i, print_bits(AGGRESSION_OCTETS[i]), AGGRESSION_OCTETS[i]);
+  log(buf);
+  
+  int expected_output = 1 << MOB_AGGRESSIVE | 1 << MOB_AGGR_ELF | 1 << MOB_AGGR_DWARF | 1 << MOB_AGGR_ORK | 1 << MOB_AGGR_TROLL | 1 << MOB_AGGR_HUMAN;
+  log_vfprintf("Expected output: %s (%d)", print_bits(expected_output), expected_output);
+#endif
+}
+#undef ASSIGN_AGGRO_OCTET
+
+bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression) {
+#ifdef MOBACT_DEBUG
+  snprintf(buf2, sizeof(buf2), "According to old logic, $n should be %s.",
+           MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_ORK, MOB_AGGR_TROLL, MOB_AGGR_HUMAN, ENDBIT) ? "aggro" : "calm");
+           
+  act(buf2, FALSE, ch, NULL, NULL, TO_ROOM);
+#endif
+  
+  if (include_base_aggression && MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE))
+    return TRUE;
+    
+  for (int i = 0; i < NUM_AGGRO_OCTETS; i++) {
+    if (MOB_FLAGS(ch).IsSetPrecomputed(i, AGGRESSION_OCTETS[i])) {
+#ifdef MOBACT_DEBUG
+      snprintf(buf2, sizeof(buf2), "Found match in octet %d.", i);
+      act(buf2, FALSE, ch, NULL, NULL, TO_ROOM);
+#endif
+      return TRUE;
+    }
+  }
+  
+  return FALSE;
+}
+
+bool mobact_holster_weapon(struct char_data *ch) {
+  if (!ch)
+    return FALSE;
+    
+  // Not wielding anything? Can't holster.
+  if (!GET_EQ(ch, WEAR_WIELD))
+    return FALSE;
+    
+  // Find the first holster-type thing and shove this in there. Bypass all the checks.
+  for (int i = 0; i < NUM_WEARS; i++) {
+    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_HOLSTER && !(GET_EQ(ch, i)->contains)) {
+      // NPCs don't give a fuck about sheath/holster differences or any of that. They'll shove an assault cannon in a bootknife sheath.
+      // TODO: Write the logic to make them care, but it's low priority.
+      struct obj_data *obj = unequip_char(ch, WEAR_WIELD, TRUE);
+      obj_to_obj(obj, GET_EQ(ch, i));
+      send_to_char(ch, "You slip %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(GET_EQ(ch, i)));
+      act("$n slips $p into $P.", FALSE, ch, obj, GET_EQ(ch, i), TO_ROOM);
+      GET_HOLSTER_READY_STATUS(GET_EQ(ch, i)) = TRUE;
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {  
+  // Missing var? Failure.
+  if (!ch || !vict || ch == vict)
+    return FALSE;
+    
+  // Can't see? Failure.
+  if (!CAN_SEE_ROOM_SPECIFIED(ch, vict, get_ch_in_room(ch))) {
+#ifdef MOBACT_DEBUG
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - I can't see them.", GET_CHAR_NAME(vict));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return FALSE;
+  }
+  
+  // Already downed? Failure.
+  if (GET_PHYSICAL(vict) <= 0) {
+#ifdef MOBACT_DEBUG
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - they're already mortally wounded.", GET_CHAR_NAME(vict));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return FALSE;
+  }
+    
+  // Vict is an NPC.
+  if (IS_NPC(vict)) {
+    // Am I a quest mob hunting this mob?
+    if (hunting_escortee(ch, vict)) {
+#ifdef MOBACT_DEBUG
+      snprintf(buf3, sizeof(buf3), "vict_is_valid_target: NPC %s is a valid target (escortee I am hunting).", GET_CHAR_NAME(vict));
+      do_say(ch, buf3, 0, 0);
+#endif
+      return TRUE;
+    }
+    
+    // Is this an astral projection?
+    if (!IS_PROJECT(vict)) {
+#ifdef MOBACT_DEBUG
+      snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping NPC %s - neither hunted escortee nor projection.", GET_CHAR_NAME(vict));
+      do_say(ch, buf3, 0, 0);
+#endif
+      return FALSE;
+    }
+  } 
+  
+  // Vict is a PC.
+  else {
+    // Are they a staff with nohassle? Failure.
+    if (PRF_FLAGGED(vict, PRF_NOHASSLE)) {
+#ifdef MOBACT_DEBUG
+      snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping PC %s - nohassle flag is set.", GET_CHAR_NAME(vict));
+      do_say(ch, buf3, 0, 0);
+#endif
+      return FALSE;
+    }
+    
+    // Are they our prior master (quest)? Failure.
+    if (GET_QUEST(vict)) {
+      for (int j = 0; j < quest_table[GET_QUEST(vict)].num_mobs; j++) {
+        if (quest_table[GET_QUEST(vict)].mob[j].vnum == GET_MOB_VNUM(ch)) {
+#ifdef MOBACT_DEBUG
+          snprintf(buf3, sizeof(buf3), "vict_is_valid_target: I am a prior escortee of PC %s, skipping.", GET_CHAR_NAME(vict));
+          do_say(ch, buf3, 0, 0);
+#endif
+          return FALSE;
+        }
+      }
+    }
+  }
+  
+  // They're a valid target, but I don't feel like fighting.
+#ifdef MOBACT_DEBUG
+  snprintf(buf3, sizeof(buf3), "vict_is_valid_target: %s is a valid target, provided I am aggressive.", GET_CHAR_NAME(vict));
+  do_say(ch, buf3, 0, 0);
+#endif
+  return TRUE;
+}
+
+bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
+  if (!vict_is_valid_target(ch, vict))
+    return FALSE;
+    
+  // If NPC is aggro or alarmed, or...
+  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM || (mob_is_aggressive(ch, FALSE) && (
+      // If NPC is aggro towards elves, and victim is an elf subrace, or...
+      (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
+       (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
+      // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
+      (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
+       (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
+      // If NPC is aggro towards humans, and victim is human, or...
+      (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
+       GET_RACE(vict) == RACE_HUMAN) ||
+      // If NPC is aggro towards orks, and victim is an ork subrace, or...
+      (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
+       (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
+      // If NPC is aggro towards trolls, and victim is a troll subrace:
+      (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
+       (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))))
+    // Kick their ass.
+  {
+#ifdef MOBACT_DEBUG
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s/%s/%s): %s.", 
+             MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) ? "base aggro" : "",
+             (MOB_FLAGGED(ch, MOB_AGGR_ELF)   && (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ? "anti-elf" : "",
+             (MOB_FLAGGED(ch, MOB_AGGR_DWARF) && (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ? "anti-dwarf" : "",
+             (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) && GET_RACE(vict) == RACE_HUMAN) ? "anti-human" : "",
+             (MOB_FLAGGED(ch, MOB_AGGR_ORK)   && (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ? "anti-ork" : "",
+             (MOB_FLAGGED(ch, MOB_AGGR_TROLL) && (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)) ? "anti-troll" : "",
+             GET_CHAR_NAME(vict));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return TRUE;
+  }
+  
+  return FALSE;
+}
+
+bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
+  if (!vict_is_valid_target(ch, vict))
+    return FALSE;
+  
+  int security_level = GET_SECURITY_LEVEL(get_ch_in_room(ch));
+  for (int i = 0; i < NUM_WEARS; i++) {
+    // If victim's equipment is illegal here, blast them.
+    if (GET_EQ(vict, i) && violates_zsp(security_level, vict, i, ch)) {
+      // Target found, stop processing.
+#ifdef MOBACT_DEBUG
+      snprintf(buf3, sizeof(buf3), "vict_is_valid_guard_target: %s's equipment violates ZSP.", GET_CHAR_NAME(vict));
+      do_say(ch, buf3, 0, 0);
+#endif
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
 
 void mobact_change_firemode(struct char_data *ch) {
   struct obj_data *weapon;
   
   // Precheck: Weapon must exist and must be a gun.
-  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_OBJ_VAL(weapon, 3)))
+  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
     return;
   
   // Set up info.
-  int prev_value = GET_OBJ_VAL(weapon, 11);
+  int prev_value = GET_WEAPON_FIREMODE(weapon);
   int mode_count = 0;
   
   // Reload the weapon if possible. If not, swap weapons.
   if (!weapon->contains && GET_WEAPON_MAX_AMMO(weapon) > 0 && !attempt_reload(ch, WEAR_WIELD)) {
     switch_weapons(ch, WEAR_WIELD);
+    return;
   }
   
   // Lowest-priority mode is single-shot.
   if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SS)) {
     mode_count += 1;
-    GET_OBJ_VAL(weapon, 11) = MODE_SS;
+    GET_WEAPON_FIREMODE(weapon) = MODE_SS;
   }
   
   // Semi-automatic is superior to single shot, so set that if we can.
   if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SA)) {
     mode_count += 1;
-    GET_OBJ_VAL(weapon, 11) = MODE_SA;
+    GET_WEAPON_FIREMODE(weapon) = MODE_SA;
   }
   
   // Full automatic with a 10-round spray deals more damage than the others.
   if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_FA)) {
     mode_count += 1;
-    GET_OBJ_VAL(weapon, 11) = MODE_FA;
+    GET_WEAPON_FIREMODE(weapon) = MODE_FA;
     
     // Set the rounds-to-fire count to 10.
     GET_OBJ_TIMER(weapon) = 10;
@@ -108,11 +336,11 @@ void mobact_change_firemode(struct char_data *ch) {
   // For some reason, NPCs were set to prefer burst fire above all other modes. Preserving this logic for now.
   if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_BF)) {
     mode_count += 1;
-    GET_OBJ_VAL(weapon, 11) = MODE_BF;
+    GET_WEAPON_FIREMODE(weapon) = MODE_BF;
   }
   
   // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
-  if (prev_value != GET_OBJ_VAL(weapon, 11) && mode_count > 1) {
+  if (prev_value != GET_WEAPON_FIREMODE(weapon) && mode_count > 1) {
     act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
   }
 }
@@ -120,7 +348,7 @@ void mobact_change_firemode(struct char_data *ch) {
 // Check if an NPC successfully fires a spec-proc. Returns TRUE if so, FALSE otherwise.
 bool mobact_evaluate_spec_proc(struct char_data *ch) {
   char empty = '\0';
-  if (mob_index[GET_MOB_RNUM(ch)].func == NULL) {
+  if (mob_index[GET_MOB_RNUM(ch)].func == NULL && mob_index[GET_MOB_RNUM(ch)].sfunc == NULL) {
     log_vfprintf("%s (#%d): Attempting to call non-existing mob func",
                  GET_NAME(ch), GET_MOB_VNUM(ch));
     
@@ -143,30 +371,42 @@ bool mobact_evaluate_spec_proc(struct char_data *ch) {
 bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   struct veh_data *tveh = NULL;
   struct char_data *vict = NULL;
+  struct room_data *in_room;
   
   // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
   if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: no veh, or not pilot/manning, or am astral.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_g: no veh, or not pilot/manning, or am astral.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     return FALSE;
   }
   
   // Precondition: If our vehicle is nested, just give up.
   if (ch->in_veh->in_veh) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: nested vehicle.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_g: nested vehicle.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     return FALSE;
   }
   
+  in_room = get_ch_in_room(ch);
+  
   // Peaceful room, or I'm not actually a guard? Bail out.
-  if (ROOM_FLAGGED(ch->in_veh->in_room, ROOM_PEACEFUL) || !(MOB_FLAGGED(ch, MOB_GUARD))) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: peaceful or not guard.");
+  if (ROOM_FLAGGED(in_room, ROOM_PEACEFUL) || !(MOB_FLAGGED(ch, MOB_GUARD))) {
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_g: peaceful or not guard.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     return FALSE;
   }
   
   /* Guard NPCs. */
       
   // If we're not in a road or garage, we expect to see no vehicles and will attack any that we see.
-  if (!(ROOM_FLAGGED(ch->in_veh->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_veh->in_room, ROOM_GARAGE))) {
-    for (tveh = ch->in_veh->in_room->vehicles; tveh; tveh = tveh->next_veh) {
+  if (!(ROOM_FLAGGED(in_room, ROOM_ROAD) || ROOM_FLAGGED(in_room, ROOM_GARAGE))) {
+    for (tveh = in_room->vehicles; tveh; tveh = tveh->next_veh) {
       // No attacking your own vehicle.
       if (tveh == ch->in_veh)
         continue;
@@ -174,41 +414,27 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
       // Check for our usual conditions.
       if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM)) {
         // Found a target, stop processing vehicles.
-        snprintf(buf, sizeof(buf), "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
-        MOBACT_DEBUG(ch, buf);
+#ifdef MOBACT_DEBUG
+        snprintf(buf3, sizeof(buf), "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
+        do_say(ch, buf3, 0, 0);
+#endif
         break;
       }
     }
   }
   
-  if (!tveh) {
-    // No vehicular targets? Check players.
-    for (vict = ch->in_veh->in_room->people; vict; vict = vict->next_in_room) {
-      // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
-      if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->in_room) || GET_PHYSICAL(vict) <= 0) {
-        snprintf(buf, sizeof(buf), "m_p_i_v_g: Skipping target %s due to precondition failure.", GET_CHAR_NAME(vict));
-        MOBACT_DEBUG(ch, buf);
-        continue;
-      }
-      
-      for (int i = 0; i < NUM_WEARS; i++) {
-        // If victim's equipment is illegal here, blast them.
-        if (GET_EQ(vict, i) && violates_zsp(GET_SECURITY_LEVEL(ch->in_veh->in_room), vict, i, ch)) {
-          // Target found, stop processing.
-          snprintf(buf, sizeof(buf), "m_p_i_v_g: Target found, attacking %s.", GET_CHAR_NAME(vict));
-          MOBACT_DEBUG(ch, buf);
-          break;
-        }
-      }
-      
-      snprintf(buf, sizeof(buf), "m_p_i_v_g: Skipping target %s since their gear is OK.", GET_CHAR_NAME(vict));
-      MOBACT_DEBUG(ch, buf);
-    }
-  }
+  // No vehicular targets? Check players.
+  if (!tveh)
+    for (vict = in_room->people; vict; vict = vict->next_in_room)
+      if (vict_is_valid_guard_target(ch, vict))
+        break;
   
   // No targets? Bail out.
   if (!tveh && !vict) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: No targets, stopping.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_g: No targets, stopping.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     return FALSE;
   }
   
@@ -218,7 +444,10 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   
   // Driver? It's rammin' time.
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_g: Ramming.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_g: Ramming.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     do_raw_ram(ch, ch->in_veh, tveh, vict);
     
     return TRUE;
@@ -228,7 +457,10 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
     struct obj_data *mount = get_mount_manned_by_ch(ch);
     if (mount && mount_has_weapon(mount)) {
-      MOBACT_DEBUG(ch, "m_p_i_v_g: Firing.");
+#ifdef MOBACT_DEBUG
+      strncpy(buf3, "m_p_i_v_g: Firing.", sizeof(buf));
+      do_say(ch, buf3, 0, 0);
+#endif
       do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
       return TRUE;
     }
@@ -243,85 +475,73 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
 bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   struct veh_data *tveh = NULL;
   struct char_data *vict = NULL;
+  struct room_data *in_room;
   
   // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
   if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: no veh, not pilot/manning, or am astral.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_a: no veh, not pilot/manning, or am astral.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     return FALSE;
   }
   
   // Precondition: If our vehicle is nested, just give up.
   if (ch->in_veh->in_veh) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: nested veh.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_a: nested veh.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     return FALSE;
   }
   
-  // Peaceful room, or I'm not actually aggro or alarmed? Bail out.
-  if (ROOM_FLAGGED(ch->in_veh->in_room, ROOM_PEACEFUL) ||
-      !(MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: peaceful, or aggro failure");
+  in_room = get_ch_in_room(ch);
+  
+  if (ROOM_FLAGGED(in_room, ROOM_PEACEFUL)) {
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_a: Room is peaceful.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     return FALSE;
   }
   
-  // Target selection. We disallow targeting of unowned vehicles so our guards don't Thunderdome each other before players even show up.
-  for (tveh = ch->in_veh->in_room->vehicles; tveh; tveh = tveh->next_veh) {
-    if (tveh == ch->in_veh)
-      continue;
-      
-    if (vehicle_is_valid_mob_target(tveh, TRUE)) {
-      // Found a valid target, stop looking.
-      snprintf(buf, sizeof(buf), "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
-      MOBACT_DEBUG(ch, buf);
-      break;
-    }
+  if (!mob_is_aggressive(ch, TRUE) && GET_MOBALERT(ch) != MALERT_ALARM) {
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_a: I am neither aggressive nor alarmed.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return FALSE;
   }
-  
-  // Select a non-vehicle target.
-  if (!tveh) {
-    // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
-    for (vict = ch->in_veh->in_room->people; vict; vict = vict->next_in_room) {
-      // Skip conditions: Invisible, no-hassle, already downed, or is an NPC who is neither a player's astral body nor a player's escortee.
-      if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->in_room) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0) {
-        snprintf(buf, sizeof(buf), "m_p_i_v_a: Skipping %s - precondition failure.", GET_CHAR_NAME(vict));
-        MOBACT_DEBUG(ch, buf);
+
+  // Attack vehicles (but not for aggr-to-race)
+  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
+    // Target selection. We disallow targeting of unowned vehicles so our guards don't Thunderdome each other before players even show up.
+    for (tveh = in_room->vehicles; tveh; tveh = tveh->next_veh) {
+      if (tveh == ch->in_veh)
         continue;
-      }
-      
-      // Attack the escortee if we're hunting it specifically.
-      if (hunting_escortee(ch, vict)) {
-        snprintf(buf, sizeof(buf), "m_p_i_v_a: Target found (escortee), attacking %s.", GET_CHAR_NAME(vict));
-        MOBACT_DEBUG(ch, buf);
-        break;
-      }
-      
-      // If NPC is aggro or alarmed, or...
-      if (MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM || 
-          // If NPC is aggro towards elves, and victim is an elf subrace, or...
-          (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
-           (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
-          // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
-          (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
-           (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
-          // If NPC is aggro towards humans, and victim is human, or...
-          (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
-           GET_RACE(vict) == RACE_HUMAN) ||
-          // If NPC is aggro towards orks, and victim is an ork subrace, or...
-          (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
-           (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
-          // If NPC is aggro towards trolls, and victim is a troll subrace:
-          (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
-           (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))
-        // Kick their ass.
-      {
-        snprintf(buf, sizeof(buf), "m_p_i_v_a: Target found (racism / aggro / alarm): %s.", GET_CHAR_NAME(vict));
-        MOBACT_DEBUG(ch, buf);
+        
+      if (vehicle_is_valid_mob_target(tveh, TRUE)) {
+        // Found a valid target, stop looking.
+#ifdef MOBACT_DEBUG
+        snprintf(buf3, sizeof(buf), "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
+        do_say(ch, buf3, 0, 0);
+#endif
         break;
       }
     }
   }
+  
+  // No vehicle target found. Check character targets.
+  if (!tveh)
+    for (vict = in_room->people; vict; vict = vict->next_in_room)
+      if (vict_is_valid_aggro_target(ch, vict))
+        break;
   
   if (!tveh && !vict) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: No target.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_a: No target.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     return FALSE;
   }
   
@@ -331,7 +551,10 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   
   // Driver? It's rammin' time.
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    MOBACT_DEBUG(ch, "m_p_i_v_a: ramming.");
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_i_v_a: Ramming.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
     do_raw_ram(ch, ch->in_veh, tveh, vict);
     
     return TRUE;
@@ -341,7 +564,10 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
     struct obj_data *mount = get_mount_manned_by_ch(ch);
     if (mount && mount_has_weapon(mount)) {
-      MOBACT_DEBUG(ch, "m_p_i_v_a: firing.");
+#ifdef MOBACT_DEBUG
+      strncpy(buf3, "m_p_i_v_a: Firing.", sizeof(buf));
+      do_say(ch, buf3, 0, 0);
+#endif
       do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
       return TRUE;
     }
@@ -362,65 +588,117 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
   if ((IS_ELEMENTAL(ch) || IS_SPIRIT(ch)) && GET_ACTIVE(ch))
     return FALSE;
   
-  // Vehicle code is separate.
-  if (ch->in_veh && ch->in_veh->in_room->number == room->number)
-    return mobact_process_in_vehicle_aggro(ch);
- 
+  // Vehicle code is separate. Vehicles only attack same room.
+  if (ch->in_veh) {
+    if (ch->in_veh->in_room->number == room->number)
+      return mobact_process_in_vehicle_aggro(ch);
+    else
+      return FALSE;
+  }
   
-  if (!ROOM_FLAGGED(room, ROOM_PEACEFUL) &&
-      (MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM)) {
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL)) {
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_a: Room is peaceful.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return FALSE;
+  }
   
+  if (!mob_is_aggressive(ch, TRUE) && GET_MOBALERT(ch) != MALERT_ALARM) {
+#ifdef MOBACT_DEBUG
+    strncpy(buf3, "m_p_a: I am neither aggressive nor alarmed.", sizeof(buf));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return FALSE;
+  }
+
+  // Attack vehicles (but not for aggr-to-race)
+  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
     // If I am not astral, am in the same room, and am willing to attack a vehicle this round (coin flip), pick a fight with a vehicle.
     if (ch->in_room->number == room->number && !IS_ASTRAL(ch) && number(0, 1)) {
       for (veh = room->vehicles; veh; veh = veh->next_veh) {
         // Aggros don't care about road/garage status, so they act as if always alarmed.
         if (vehicle_is_valid_mob_target(veh, TRUE)) {
           stop_fighting(ch);
+          snprintf(buf, sizeof(buf), "$n glares at %s, preparing to attack it!", GET_VEH_NAME(veh));
+          act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
+          send_to_char(ch, "You prepare to attack %s!", GET_VEH_NAME(veh));
+          send_to_veh("%s glares at your vehicle, preparing to attack!", veh, NULL, TRUE, GET_CHAR_NAME(ch));
           set_fighting(ch, veh);
           return TRUE;
         }
       }
     }
+  }
+
+  // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
+  for (vict = room->people; vict; vict = vict->next_in_room) {
+    if (vict_is_valid_aggro_target(ch, vict)) {
+      stop_fighting(ch);
+      send_mob_aggression_warnings(vict, ch);
+      set_fighting(ch, vict);
+      return TRUE;
+    }
+  }
+    
+  return FALSE;
+}
+
+void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {  
+  int mob_tn = 4;
+  int mob_stealth_dice = get_skill(mob, SKILL_STEALTH, mob_tn);
+  int mob_stealth_successes = success_test(mob_stealth_dice, mob_tn);
   
-    // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
-    for (vict = room->people; vict; vict = vict->next_in_room) {
-      // Skip conditions: Invisible, no-hassle, already downed, or is an NPC who is neither a player's astral body nor a player's escortee.
-      if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0)
-        continue;
-      
-      // Attack the escortee if we're hunting it specifically.
-      if (hunting_escortee(ch, vict)) {
-        stop_fighting(ch);
-        set_fighting(ch, vict);
-        return true;
-      }
-      
-      // If NPC is aggro or alarmed, or...
-      if (!MOB_FLAGS(ch).AreAnySet(MOB_AGGR_TO_RACE, ENDBIT) ||
-          // If NPC is aggro towards elves, and victim is an elf subrace, or...
-          (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
-           (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
-          // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
-          (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
-           (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
-          // If NPC is aggro towards humans, and victim is human, or...
-          (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
-           GET_RACE(vict) == RACE_HUMAN) ||
-          // If NPC is aggro towards orks, and victim is an ork subrace, or...
-          (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
-           (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
-          // If NPC is aggro towards trolls, and victim is a troll subrace:
-          (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
-           (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))
-        // Kick their ass.
-      {
-        stop_fighting(ch);
-        set_fighting(ch, vict);
-        return true;
+  int pc_tn = 4;
+  if (pc->in_room == mob->in_room)
+    pc_tn = 2;
+    
+  pc_tn += modify_target_rbuf(pc, buf, sizeof(buf));
+  int pc_dice = GET_INT(pc) + GET_POWER(pc, ADEPT_IMPROVED_PERCEPT);
+  int pc_percept_successes = success_test(pc_dice, pc_tn);
+  
+  int net_succ = pc_percept_successes - mob_stealth_successes;
+  
+  snprintf(buf2, sizeof(buf2), "Aggression perception check: $n rolled %d success%s (%d dice, TN %d) vs $N's %d success%s (%d dice, TN %d). Net = %d, so PC %s.",
+           pc_percept_successes,
+           pc_percept_successes != 1 ? "es" : "",
+           pc_dice,
+           pc_tn,
+           mob_stealth_successes,
+           mob_stealth_successes != 1 ? "es" : "",
+           mob_stealth_dice,
+           mob_tn,
+           net_succ,
+           net_succ > 0 ? "succeeded" : "failed");
+  
+  act(buf2, TRUE, pc, NULL, mob, TO_ROLLS);
+  
+  // Message the PC.
+  if (net_succ > 0) {
+    if (pc->in_room == mob->in_room)
+      act("^y$n glares at you, preparing to attack!^n", TRUE, mob, NULL, pc, TO_VICT);
+    else {
+      if (GET_EQ(mob, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(mob, WEAR_WIELD)) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(mob, WEAR_WIELD)))) {
+        send_to_char("^yThe glint of a scope aiming your way catches your eye!^n\r\n", pc);
+      } else {
+        switch(number(0, 2)) {
+          case 0: send_to_char("^yA sudden chill runs down your spine.^n\r\n", pc); break;
+          case 1: send_to_char("^yThe hair on the back of your neck stands up.^n\r\n", pc); break;
+          case 2: send_to_char("^yYou feel unfriendly eyes watching you.^n\r\n", pc); break;
+          case 3: send_to_char("^yYou feel inexplicably uneasy.^n\r\n", pc); break;
+        }
       }
     }
   }
-  return false;
+  
+  // Message the NPC.
+  send_to_char(mob, "You prepare to attack %s!\r\n", GET_CHAR_NAME(pc));
+  
+  // Message bystanders.
+  if (pc->in_room == mob->in_room)
+    act("$n glares at $N, preparing to attack!", TRUE, mob, NULL, pc, TO_NOTVICT);
+  else
+    act("$n glares off into the distance, preparing to attack an intruder!", TRUE, mob, NULL, NULL, TO_ROOM);
 }
 
 bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
@@ -430,13 +708,14 @@ bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
   if (MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch)) {
     for (vict = room->people; vict; vict = vict->next_in_room) {
       // Skip NPCs, invisibles, and nohassle targets.
-      if (IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE))
+      if (IS_NPC(vict) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, room) || PRF_FLAGGED(vict, PRF_NOHASSLE))
         continue;
       
       // If we remember them, fuck 'em up.
       if (memory(ch, vict)) {
         act("'Hey! You're the fragger that attacked me!!!', exclaims $n.", FALSE, ch, 0, 0, TO_ROOM);
         stop_fighting(ch);
+        send_mob_aggression_warnings(vict, ch);
         set_fighting(ch, vict);
         return true;
       }
@@ -532,8 +811,12 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
     return FALSE;
   
   // Vehicle code is separate.
-  if (ch->in_veh && ch->in_veh->in_room == room)
-    return mobact_process_in_vehicle_guard(ch);
+  if (ch->in_veh) {
+    if (ch->in_veh->in_room == room)
+      return mobact_process_in_vehicle_guard(ch);
+    else
+      return FALSE;
+  }
   
   // Check vehicles, but only if they're in the same room as the guard.
   if (ch->in_room == room) {
@@ -541,6 +824,10 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
       // If the room we're in is neither a road nor a garage, attack any vehicles we see.
       if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM)) {
         stop_fighting(ch);
+        snprintf(buf, sizeof(buf), "$n glares at %s, preparing to attack it for security infractions!", GET_VEH_NAME(veh));
+        act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
+        send_to_char(ch, "You prepare to attack %s for security infractions!", GET_VEH_NAME(veh));
+        send_to_veh("%s glares at your vehicle, preparing to attack over security infractions!", veh, NULL, TRUE, GET_CHAR_NAME(ch));
         set_fighting(ch, veh);
         return TRUE;
       }
@@ -549,76 +836,87 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   
   // Check players.
   for (vict = room->people; vict; vict = vict->next_in_room) {
-    // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
-    if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE(ch, vict) || GET_PHYSICAL(vict) <= 0)
-      continue;
-    
-    for (int i = 0; i < NUM_WEARS; i++) {
-      // If victim's equipment is illegal here, blast them.
-      if (GET_EQ(vict, i) && violates_zsp(GET_SECURITY_LEVEL(room), vict, i, ch)) {
-        stop_fighting(ch);
-        set_fighting(ch, vict);
-        return true;
-      }
+    if (vict_is_valid_guard_target(ch, vict)) {
+      stop_fighting(ch);
+      send_mob_aggression_warnings(vict, ch);
+      set_fighting(ch, vict);
+      return TRUE;
     }
   }
   
-  return false;
+  return FALSE;
 }
 
 bool mobact_process_self_buff(struct char_data *ch) {
-  if (GET_SKILL(ch, SKILL_SORCERY) && !MOB_FLAGGED(ch, MOB_SPEC)) {
+  if (!GET_SKILL(ch, SKILL_SORCERY) || GET_MAG(ch) < 100  || MOB_FLAGGED(ch, MOB_SPEC))
+    return FALSE;
     
-    // Always self-heal if able.
-    if (GET_PHYSICAL(ch) < GET_MAX_PHYSICAL(ch) && !AFF_FLAGGED(ch, AFF_HEALED))
-      cast_health_spell(ch, SPELL_HEAL, 0, number(1, GET_MAG(ch)/100), NULL, ch);
-    
-    // Buff self, but only act one out of every 16 ticks (on average).
-    if (number(0, 15) == 0) {
-      // Apply armor to self.
-      if (!affected_by_spell(ch, SPELL_ARMOUR)) {
-        cast_manipulation_spell(ch, SPELL_ARMOUR, number(1, GET_MAG(ch)/100), NULL, ch);
-      }
-      
-      // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
-      else if (!affected_by_spell(ch, SPELL_INVIS) && !affected_by_spell(ch, SPELL_IMP_INVIS)) {
-        if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
-          // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
-          cast_illusion_spell(ch, SPELL_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
-        } else {
-          // Look out, we've got a badass over here.
-          cast_illusion_spell(ch, SPELL_IMP_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
-        }
-      }
-      
-      // Apply combat sense to self.
-      else if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
-        cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
-      }
-      
-      // We're dead-set on casting a spell, so try to boost attributes.
-      else {
-        switch (number(1, 3)) {
-          case 1:
-            cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-          case 2:
-            cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-          case 3:
-            cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-        }
-      }
-      
-      // We've spent our action casting a spell, so time to stop acting.
-      return true;
+  // Skip broken-ass characters.
+  if (!ch->in_room && !ch->in_veh) {
+    snprintf(buf, sizeof(buf), "FAILSAFE SYSERR: Encountered char '%s' with no room, no veh in mobact_process_self_buff().", GET_CHAR_NAME(ch));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // Always self-heal if able.
+  if (GET_PHYSICAL(ch) < GET_MAX_PHYSICAL(ch) && !AFF_FLAGGED(ch, AFF_HEALED)) {
+    cast_health_spell(ch, SPELL_HEAL, 0, number(1, GET_MAG(ch)/100), NULL, ch);
+    return TRUE;
+  }
+  
+  // Buff self, but only act one out of every 16 ticks (on average).
+  if (number(0, 15) == 0) {
+    // Apply armor to self.
+    if (!affected_by_spell(ch, SPELL_ARMOUR)) {
+      cast_manipulation_spell(ch, SPELL_ARMOUR, number(1, GET_MAG(ch)/100), NULL, ch);
+      return TRUE;
     }
-  } /* End spellcasting NPCs */
-  return false;
+    
+    // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
+    if (!affected_by_spell(ch, SPELL_INVIS) && !affected_by_spell(ch, SPELL_IMP_INVIS)) {
+      // Changed cast ratings to 1-- if PCs are going to cheese with rating 1, NPCs should too. -- LS
+      if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
+        // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
+        // cast_illusion_spell(ch, SPELL_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
+        cast_illusion_spell(ch, SPELL_INVIS, 1, NULL, ch);
+      } else {
+        // Look out, we've got a badass over here.
+        // cast_illusion_spell(ch, SPELL_IMP_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
+        cast_illusion_spell(ch, SPELL_IMP_INVIS, 1, NULL, ch);
+      }
+      return TRUE;
+    }
+    
+    // Apply combat sense to self.
+    if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
+      cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
+      return TRUE;
+    }
+    
+    // We're dead-set on casting a spell, so try to boost attributes.
+    switch (number(1, 3)) {
+      case 1:
+        cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
+        break;
+      case 2:
+        cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
+        break;
+      case 3:
+        cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
+        break;
+    }
+    
+    // We've spent our action casting a spell, so time to stop acting.
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 bool mobact_process_scavenger(struct char_data *ch) {
+  if (!ch || !ch->in_room)
+    return FALSE;
+    
   /* Scavenger (picking up objects) */
   if (MOB_FLAGGED(ch, MOB_SCAVENGER)) {
     if (ch->in_room->contents && !number(0, 10)) {
@@ -626,7 +924,7 @@ bool mobact_process_scavenger(struct char_data *ch) {
       int max = 1;
       
       // Find the most valuable object in the room (ignoring worthless things):
-      for (obj = ch->in_room->contents; obj; obj = obj->next_content) {
+      FOR_ITEMS_AROUND_CH(ch, obj) {
         if (CAN_GET_OBJ(ch, obj) && GET_OBJ_COST(obj) > max && GET_OBJ_TYPE(obj) != ITEM_WORKSHOP) {
           best_obj = obj;
           max = GET_OBJ_COST(obj);
@@ -651,14 +949,14 @@ int get_push_command_index() {
   if (global_push_command_index != -1)
     return global_push_command_index;
   
-  for (int i = 0; *cmd_info[i].command != '\n'; i++)
-    if (!strncmp(cmd_info[i].command, "push", 4)) {
-      global_push_command_index = i;
-      return global_push_command_index;
-    }
+  global_push_command_index = find_command("push");
   
-  mudlog("FATAL ERROR: Unable to find index of PUSH command. Put it back.", NULL, LOG_SYSLOG, TRUE);
-  exit(1);
+  if (global_push_command_index == -1) {
+    mudlog("FATAL ERROR: Unable to find index of PUSH command for NPC elevator usage. Put it back.", NULL, LOG_SYSLOG, TRUE);
+    exit(1);
+  }
+  
+  return global_push_command_index;
 }
 
 bool mobact_process_movement(struct char_data *ch) {
@@ -771,6 +1069,17 @@ bool mobact_process_movement(struct char_data *ch) {
   return false;
 }
 
+// Precondition: ch and weapon exist, and weapon is a firearm.
+void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon) {
+  // Check all ammotypes for this weapon. If we have any, return.
+  for (int am = 0; am < NUM_AMMOTYPES; am++)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0)
+      return;
+  
+  // If we had none, give them normal.
+  GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+}
+
 void mobile_activity(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -786,10 +1095,26 @@ void mobile_activity(void)
   for (ch = character_list; ch; ch = next_ch) {
     next_ch = ch->next;
     
+    // Skip them if they're a player character, are being possessed, or are sleeping.
+    if (!IS_NPC(ch) || !AWAKE(ch) || ch->desc)
+      continue;
+    
+    // Skip broken-ass characters.
+    if (!ch->in_room && !ch->in_veh) {
+      snprintf(buf, sizeof(buf), "SYSERR: Encountered char '%s' with no room, no veh in mobile_activity().", GET_CHAR_NAME(ch));
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      continue;
+    }
+    
+    if (ch->nr == 0) {
+      mudlog("SYSERR: Encountered zeroed char in mobile_activity().", NULL, LOG_SYSLOG, TRUE);
+      continue;
+    }
+    
     current_room = get_ch_in_room(ch);
     
-    // Skip them if they're a player character, are being possessed, are sleeping, or have no current room.
-    if (!IS_MOB(ch) || !AWAKE(ch) || ch->desc || !current_room)
+    // Skip them if they have no current room.
+    if (!current_room)
       continue;
 
     // Skip NPCs that are currently fighting someone in their room, or are fighting a vehicle.
@@ -800,8 +1125,33 @@ void mobile_activity(void)
       continue;
 
     // Cool down mob alert status.
-    if (GET_MOBALERT(ch) > MALERT_CALM && --GET_MOBALERTTIME(ch) <= 0)
+    if (GET_MOBALERT(ch) > MALERT_CALM && --GET_MOBALERTTIME(ch) <= 0) {
       GET_MOBALERT(ch) = MALERT_CALM;
+      
+      // If you just entered calm state and have a weapon, you get your ammo back.
+      // check if they have ammo in proto-- if so, paste in proto ammo, if not, give max * 3 normal ammo
+      // real_mobile is guaranteed to resolve here since we're referencing a vnum from an existing NPC
+      struct char_data *proto_mob = &mob_proto[real_mobile(GET_MOB_VNUM(ch))];
+      
+      // Copy over their ammo data. We scan the whole thing instead of just their weapon to prevent someone
+      // giving them a holdout pistol so they never regain their ammo stores.
+      for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+        for (int am = 0; am < NUM_AMMOTYPES; am++)
+          GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) = GET_BULLETPANTS_AMMO_AMOUNT(proto_mob, wp, am);
+          
+      // Carried weapons.
+      for (struct obj_data *weapon = ch->carrying; weapon; weapon = weapon->next_content)
+        if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && GET_WEAPON_MAX_AMMO(weapon) > 0)
+          ensure_mob_has_ammo_for_weapon(ch, weapon);
+      
+      // Wielded weapons.  
+      for (int index = 0; index < NUM_WEARS; index++)
+        if (GET_EQ(ch, index) 
+            && GET_OBJ_TYPE(GET_EQ(ch, index)) == ITEM_WEAPON 
+            && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, index)))
+            && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
+          ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
+    }
     
     // Manipulate wielded weapon (reload, set fire mode, etc).
     mobact_change_firemode(ch);
@@ -847,6 +1197,8 @@ void mobile_activity(void)
           
           for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {            
             // Check each room in a straight line until we are either out of range or cannot go further.
+            current_room = get_ch_in_room(ch);
+            
             for (distance = 1; !has_acted && distance <= max_distance; distance++) {
               // Exit must be valid, and room must belong to same zone as character's room.
               if (CAN_GO2(current_room, dir) && EXIT2(current_room, dir)->to_room->zone == ch->in_room->zone) {
@@ -885,6 +1237,11 @@ void mobile_activity(void)
       If we've gotten here, the NPC has not acted and has no valid targets.
       Add passive things like self-buffing and idle actions here.
     \**********************************************************************/
+    
+    // Not in combat? Put your weapon away, assuming you can.
+    if (mobact_holster_weapon(ch)) {
+      continue;
+    }
     
     // Cast spells to buff self. NPC must have sorcery skill and must not have any special procedures attached to it.
     if (mobact_process_self_buff(ch)) {
@@ -1038,8 +1395,7 @@ void clearMemory(struct char_data * ch)
 bool attempt_reload(struct char_data *mob, int pos)
 {
   // I would call the reload routine for players, but this is slightly faster
-  struct obj_data *magazine, *gun = NULL;
-  bool found = FALSE;
+  struct obj_data *gun = NULL;
   
   if (!(gun = GET_EQ(mob, pos))) {
     snprintf(buf, sizeof(buf), "SYSERR: attempt_reload received invalid wield position %d for %s.", pos, GET_CHAR_NAME(mob));
@@ -1048,7 +1404,7 @@ bool attempt_reload(struct char_data *mob, int pos)
   }
 
   if (GET_OBJ_TYPE(gun) != ITEM_WEAPON) {
-    act("$n can't reload weapon- $o is not a weapon.", TRUE, mob, gun, NULL, TO_ROLLS);
+    // act("$n can't reload weapon- $o is not a weapon.", TRUE, mob, gun, NULL, TO_ROLLS);
     return FALSE;
   }
   
@@ -1057,60 +1413,16 @@ bool attempt_reload(struct char_data *mob, int pos)
     return TRUE;
   }
   
-  // With the coming ammo rework, I can't be assed to give all NPCs blank mags in resets. -- LS
-  magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
-  GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(gun);
-  GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(gun);
-  snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
-  DELETE_ARRAY_IF_EXTANT(magazine->restring);
-  magazine->restring = strdup(buf);
-  found = TRUE;
-
-/*
-  for (magazine = mob->carrying; magazine && !found; magazine = magazine->next_content)
-  {
-    // Found a magazine. Does it work for us?
-    if (GET_OBJ_TYPE(magazine) == ITEM_GUN_MAGAZINE) {
-      // Carrying an unbonded mag? Sweet, adapt it to this gun and load it up.
-      if (!GET_MAGAZINE_BONDED_MAXAMMO(magazine)) {
-        GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(gun);
-        GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(gun);
-        snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
-        DELETE_ARRAY_IF_EXTANT(magazine->restring);
-        magazine->restring = strdup(buf);
-        found = TRUE;
-        break;
-      } 
+  // Reload with whatever we have on hand.
+  for (int index = 0; index < NUM_AMMOTYPES; index++)
+    if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(gun), npc_ammo_usage_preferences[index]) > 0) {
+      // act("$n has ammo, attempting to reload $o.", TRUE, mob, gun, NULL, TO_ROLLS);
+      return reload_weapon_from_bulletpants(mob, gun, npc_ammo_usage_preferences[index]);
+    }
       
-      // Carrying a bonded mag? Use it if it matches our loadout already.
-      else if (GET_MAGAZINE_BONDED_MAXAMMO(magazine) == GET_WEAPON_MAX_AMMO(gun) 
-               && GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) == (GET_WEAPON_ATTACK_TYPE(gun))) {
-        found = TRUE;
-        break;
-      }
-    } 
-  }
-  
-
-  if (!found) {
-    act("$n can't reload weapon- no magazines available for $o.", TRUE, mob, gun, NULL, TO_ROLLS);
-    return FALSE;
-  }
-  */
-
-  if (gun->contains)
-  {
-    struct obj_data *tempobj = gun->contains;
-    obj_from_obj(tempobj);
-    obj_to_room(tempobj, mob->in_room);
-  }
-  // obj_from_char(magazine);
-  obj_to_obj(magazine, gun);
-  // GET_OBJ_VAL(gun, 6) = GET_OBJ_VAL(magazine, 9);
-
-  act("$n reloads $p.", TRUE, mob, gun, 0, TO_ROOM);
-  act("You reload $p.", FALSE, mob, gun, 0, TO_CHAR);
-  return TRUE;
+  // We had nothing.
+  // act("$n can't reload weapon- have no ammo for $o.", TRUE, mob, gun, NULL, TO_ROLLS);
+  return FALSE;
 }
 
 void switch_weapons(struct char_data *mob, int pos)

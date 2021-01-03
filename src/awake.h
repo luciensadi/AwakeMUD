@@ -12,6 +12,8 @@
 #ifndef _awake_h_
 #define _awake_h_
 
+#include <time.h>
+
 #if (!defined(WIN32) || defined(__CYGWIN__)) && !defined(osx)
 using namespace std;
 #endif
@@ -368,8 +370,9 @@ enum {
 #define PRF_NOPROMPT            45
 #define PRF_HELPLOG             46
 #define PRF_PURGELOG            47
-#define PRF_AUTOKILL            48
-#define PRF_MAX   		          49
+#define PRF_NOAUTOKILL          48
+#define PRF_NO_RADIO_NAMES      49
+#define PRF_MAX   		          50
 
 /* log watch */
 
@@ -486,38 +489,39 @@ enum {
 /* Room flags: used in room_data.room_flags */
 
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
-#define ROOM_DARK               0   /* Dark                      */
-#define ROOM_DEATH              1   /* Death trap                */
-#define ROOM_NOMOB              2   /* MOBs not allowed          */
-#define ROOM_INDOORS            3   /* Indoors                   */
-#define ROOM_PEACEFUL           4   /* Violence not allowed      */
-#define ROOM_SOUNDPROOF         5   /* Shouts, gossip blocked    */
-#define ROOM_NOTRACK            6   /* Track won't go through    */
-#define ROOM_NOMAGIC            7   /* Magic not allowed         */
-#define ROOM_TUNNEL             8   /* room for only 1 pers      */
-#define ROOM_ARENA              9   /* Can't teleport in         */
-#define ROOM_STREETLIGHTS       10  /* Room has a streetlight    */
-#define ROOM_HOUSE              11  /* (R) Room is a house       */
-#define ROOM_HOUSE_CRASH        12  /* (R) House needs saving    */
-#define ROOM_ATRIUM             13  /* (R) The door to a house   */
-#define ROOM_OLC                14  /* (R) Modifyable/!compress  */
-#define ROOM_BFS_MARK           15  /* (R) breath-first srch mrk */
-#define ROOM_LOW_LIGHT          16  /* Room viewable with ll-eyes */
-#define ROOM_NO_RADIO           18  /* Radio is sketchy and phones dont work */
-#define ROOM_NOBIKE		          19  // Room blocks bikes from passing through it.
-#define ROOM_FREEWAY            20  /* Room cannot be walked across. */
-#define ROOM_FALL               21  // room is a 'fall' room
-#define ROOM_ROAD               22  // Room is compatible with cars.
-#define ROOM_GARAGE             23  // Room stores cars.
-#define ROOM_STAFF_ONLY         24  // Room does not allow mortals to walk into it.
-#define ROOM_NOQUIT             25  // Room does not allow quitting in it.
-#define ROOM_SENT               26
-#define ROOM_ASTRAL 	       	  27 // Astral room
-#define ROOM_NOGRID    	       	28 // Room blocks gridguide.
-#define ROOM_STORAGE	        	29 // Room stores items dropped in it.
-#define ROOM_NO_TRAFFIC         30 // Prevents display of traffic atmospheric messages.
-#define ROOM_ELEVATOR_SHAFT     31 // Don't set this manually
-#define ROOM_MAX        	      32
+#define ROOM_DARK                   0   /* Dark                      */
+#define ROOM_DEATH                  1   /* Death trap                */
+#define ROOM_NOMOB                  2   /* MOBs not allowed          */
+#define ROOM_INDOORS                3   /* Indoors                   */
+#define ROOM_PEACEFUL               4   /* Violence not allowed      */
+#define ROOM_SOUNDPROOF             5   /* Shouts, gossip blocked    */
+#define ROOM_NOTRACK                6   /* Track won't go through    */
+#define ROOM_NOMAGIC                7   /* Magic not allowed         */
+#define ROOM_TUNNEL                 8   /* room for only 1 pers      */
+#define ROOM_ARENA                  9   /* Can't teleport in         */
+#define ROOM_STREETLIGHTS           10  /* Room has a streetlight    */
+#define ROOM_HOUSE                  11  /* (R) Room is a house       */
+#define ROOM_HOUSE_CRASH            12  /* (R) House needs saving    */
+#define ROOM_ATRIUM                 13  /* (R) The door to a house   */
+#define ROOM_OLC                    14  /* (R) Modifyable/!compress  */
+#define ROOM_BFS_MARK               15  /* (R) breath-first srch mrk */
+#define ROOM_LOW_LIGHT              16  /* Room viewable with ll-eyes */
+#define ROOM_NO_RADIO               18  /* Radio is sketchy and phones dont work */
+#define ROOM_NOBIKE		              19  // Room blocks bikes from passing through it.
+#define ROOM_FREEWAY                20  /* Room cannot be walked across. */
+#define ROOM_FALL                   21  // room is a 'fall' room
+#define ROOM_ROAD                   22  // Room is compatible with cars.
+#define ROOM_GARAGE                 23  // Room stores cars.
+#define ROOM_STAFF_ONLY             24  // Room does not allow mortals to walk into it.
+#define ROOM_NOQUIT                 25  // Room does not allow quitting in it.
+#define ROOM_SENT                   26
+#define ROOM_ASTRAL 	       	      27 // Astral room
+#define ROOM_NOGRID    	       	    28 // Room blocks gridguide.
+#define ROOM_STORAGE	        	    29 // Room stores items dropped in it.
+#define ROOM_NO_TRAFFIC             30 // Prevents display of traffic atmospheric messages.
+#define ROOM_ELEVATOR_SHAFT         31 // Don't set this manually
+#define ROOM_ENCOURAGE_CONGREGATION 32
+#define ROOM_MAX        	          33
 
 #define NORMAL		0
 #define LOWLIGHT	1
@@ -1881,38 +1885,6 @@ enum {
 #define CON_PGEDIT       46
 #define CON_HELPEDIT     47
 
-/* chargen connected modes */
-#define CCR_AWAIT_CR    -1
-#define CCR_SEX         0
-#define CCR_RACE        1
-#define CCR_TOTEM       2
-#define CCR_PRIORITY    3
-#define CCR_ASSIGN      4
-#define CCR_TRADITION   5
-#define CCR_ASPECT	6
-#define CCR_TOTEM2	7
-#define CCR_TYPE	8
-#define CCR_POINTS	9
-#define CCR_PO_ATTR	10
-#define CCR_PO_SKILL	11
-#define CCR_PO_RESOURCES	12
-#define CCR_PO_MAGIC	13
-
-#define PO_RACE		0
-#define PO_ATTR		1
-#define PO_SKILL	2
-#define PO_RESOURCES	3
-#define PO_MAGIC	4
-#define PO_I_DONT_EVEN_KNOW 5
-
-/* priority choosing chargen modes */
-#define PR_NONE         0
-#define PR_ATTRIB       1
-#define PR_MAGIC        2
-#define PR_RESOURCE     3
-#define PR_SKILL        4
-#define PR_RACE         5
-
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0
 #define DB_BOOT_MOB     1
@@ -2088,9 +2060,9 @@ enum {
 #define RM_CARIB_PARKING_GARAGE     RM_DANTES_GARAGE
 #define RM_OCEAN_PARKING_GARAGE     RM_DANTES_GARAGE
 #define RM_PORTLAND_PARKING_GARAGE  RM_DANTES_GARAGE
-#define RM_PAINTER_LOT              1
-#define RM_MULTNOMAH_GATE_NORTH     1
-#define RM_MULTNOMAH_GATE_SOUTH     1
+#define RM_PAINTER_LOT              37519
+#define RM_MULTNOMAH_GATE_NORTH     17598
+#define RM_MULTNOMAH_GATE_SOUTH     17599
 
 // Chargen room defines
 #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC  60520
@@ -2098,6 +2070,12 @@ enum {
 #define RM_CHARGEN_PATH_OF_THE_ADEPT              60518
 #define RM_CHARGEN_CONJURING_HERMETIC             60522
 #define RM_CHARGEN_CONJURING_SHAMANIC             60625
+
+// Archetypal chargen room defines
+#define RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC 90701
+#define RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC 90705
+#define RM_ARCHETYPAL_CHARGEN_CONJURING_HERMETIC 90704
+#define RM_ARCHETYPAL_CHARGEN_CONJURING_SHAMANIC 90708
 
 #define RM_JUNKYARD_GATES           70501
 #define RM_JUNKYARD_PARTS           70502
@@ -2110,13 +2088,63 @@ enum {
 #define RM_JUNKYARD_BIKES           70508
 
 // Objects, to remove the magic numbers from the code.
-#define OBJ_NEWBIE_RADIO            60531
-#define OBJ_MULTNOMAH_VISA          1
-#define OBJ_MAP_OF_SEATTLE          2041
-#define OBJ_ELEVATOR_SHAFT_KEY      998
-#define OBJ_DOCWAGON_BASIC_MOD      16206
-#define OBJ_SEATTLE_TAXI_SIGN       600
-#define OBJ_PORTLAND_TAXI_SIGN      699
+#define OBJ_NEWBIE_RADIO                   60531
+#define OBJ_MULTNOMAH_VISA                 17513
+#define OBJ_MAP_OF_SEATTLE                 2041
+#define OBJ_ELEVATOR_SHAFT_KEY             998
+#define OBJ_SEATTLE_TAXI_SIGN              600
+#define OBJ_PORTLAND_TAXI_SIGN             699
+#define OBJ_CARIBBEAN_TAXI_SIGN            610
+#define OBJ_COLT_M23                       838
+#define OBJ_NICAMI_SCOPE                   28702
+#define OBJ_VENT_IV                        80403
+#define OBJ_SMARTLINK_II                   31111
+#define OBJ_DOCWAGON_BASIC_MOD             16206
+#define OBJ_DOCWAGON_GOLD_MODULATOR        16207
+#define OBJ_DOCWAGON_PLATINUM_MODULATOR    16208
+#define OBJ_BLACK_TRENCH_COAT              1833
+#define OBJ_100_PCT_COTTON_SHIRT           64903
+#define OBJ_FORMFIT_III                    80734
+#define OBJ_FOREARM_GUARDS                 700
+#define OBJ_RIFLE_STRAP                    2059
+#define OBJ_BLACK_LEATHER_DUTY_BELT        9402
+#define OBJ_BLACK_BDU_PANTS                14618
+#define OBJ_BLACK_COMBAT_BOOTS             29010
+#define OBJ_MEDKIT                         450
+#define OBJ_VEHICLE_TOOLKIT                47397
+#define OBJ_ELECTRONICS_KIT                60532
+#define OBJ_CELL_PHONE                     60530
+#define OBJ_TITLE_TO_SCORPION              892
+#define OBJ_TITLE_TO_BISON                 897
+#define OBJ_POCKET_SECRETARY               31542
+#define OBJ_NEOPHYTE_DUFFELBAG             60535
+#define OBJ_CYB_CERAMIC_BONE_LACING        85066
+#define OBJ_CYB_DATAJACK                   85012
+#define OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA 85270
+#define OBJ_CYB_THERMOGRAPHIC_VISION       85053
+#define OBJ_CYB_SMARTLINK_II_ALPHA         85318
+#define OBJ_BIO_ENHANCED_ARTICULATION      85803
+#define OBJ_BIO_MUSCLE_TONER_IV            85812
+#define OBJ_BIO_TRAUMA_DAMPER              85940
+#define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    85939
+#define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
+#define OBJ_POLEARM_STRAP                  64989
+#define OBJ_THERMOGRAPHIC_GOGGLES          378
+#define OBJ_STEEL_COMBAT_AXE               658
+#define OBJ_SECURE_JACKET                  681
+#define OBJ_TOP_LASER_SIGHT                626
+#define OBJ_BAYONET                        749
+#define OBJ_LONDON_FOG_MERLIN              8438
+#define OBJ_PLATED_ARMOR_VEST              707
+#define OBJ_BLACK_SLACKS                   8455
+#define OBJ_BLACK_DRESS_SHOES              38005
+#define OBJ_LONDON_FOG_COUNT               8435
+#define OBJ_ASH_LEAF_ANKLET                60565
+#define OBJ_ORICHALCUM_BRACELET            4906
+#define OBJ_TITLE_TO_AMERICAR              891
+
+
+#define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 
 #define BOTTOM_OF_TEMPLATE_ITEMS    106
 #define OBJ_BLANK_OPTICAL_CHIP      106
@@ -2139,26 +2167,11 @@ enum {
 
 #define OBJ_BLANK_MAGAZINE          127
 
-/* ban struct */
-struct ban_list_element
-{
-  char site[BANNED_SITE_LENGTH+1];
-  int  type;
-  time_t date;
-  char name[MAX_NAME_LENGTH+1];
-  struct ban_list_element *next;
-};
-
-// Above this, you will lose the newbie flag.
-#define NEWBIE_KARMA_THRESHOLD     25
-
 // Misc defines from spec_procs.cpp
 #define LIBRARY_SKILL    3
 #define NEWBIE_SKILL    6
 #define NORMAL_MAX_SKILL  8
 #define LEARNED_LEVEL    12
-#define MAX_SKILL_LEVEL_FOR_MORTS  LEARNED_LEVEL
-#define MAX_SKILL_LEVEL_FOR_IMMS   100
 #define RENT_FACTOR 1
 
 // Definitions for message history.
@@ -2197,6 +2210,8 @@ struct ban_list_element
 #define ERROR_MYSQL_DATABASE_NOT_FOUND         17
 #define ERROR_ARRAY_OUT_OF_BOUNDS              18
 #define ERROR_CANNOT_RESOLVE_VNUM              19
+#define ERROR_DB_TABLE_REQUIRED                20
+#define ERROR_DB_COLUMN_REQUIRED               21
 
 // Materials.
 #define MATERIAL_PAPER        0
@@ -2263,12 +2278,19 @@ struct ban_list_element
 #define VEH_DAM_THRESHOLD_DESTROYED 10
 #define VEH_DAMAGE_NEEDS_WORKSHOP   7
 
-// How many syspoints should someone spend to restring an item?
-#define SYSP_RESTRING_COST                                        2
+// Don't change these.
+#define STRING_ROOM_TITLE_UNFINISHED "An unfinished room"
+#define STRING_ROOM_DESC_UNFINISHED "You are in an unfinished room.\r\n"
+#define STRING_ROOM_JACKPOINT_NO_ADDR "An undisclosed location"
 
-// How long should the MUD wait for recovery before killing itself? Note that it
-// considers itself to be stuck during copyover too, so if you have a large world,
-// you should increase this value.
-#define SECONDS_TO_WAIT_FOR_HUNG_MUD_TO_RECOVER_BEFORE_KILLING_IT 20
+#define STRING_OBJ_NAME_UNFINISHED "unfinished object"
+#define STRING_OBJ_RDESC_UNFINISHED "An unfinished object is lying here."
+#define STRING_OBJ_SDESC_UNFINISHED "an unfinished object"
+#define STRING_OBJ_LDESC_UNFINISHED "It looks pretty much like an unfinished object"
+
+#define STRING_MOB_NAME_UNFINISHED "an unfinished mob"
+#define STRING_MOB_KEYWORDS_UNFINISHED "mob unfinished"
+#define STRING_MOB_RDESC_UNFINISHED "An unfinished mob stands here."
+#define STRING_MOB_LDESC_UNFINISHED "It looks barely coherent as it waits to be created.\r\n"
 
 #endif

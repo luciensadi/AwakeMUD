@@ -22,7 +22,7 @@ extern void die(struct char_data *ch);
 extern void damage_equip(struct char_data *ch, struct char_data *vict, int power, int type);
 extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
 extern void check_killer(struct char_data * ch, struct char_data * vict);
-extern void nonsensical_reply(struct char_data *ch);
+extern void nonsensical_reply(struct char_data *ch, const char *arg);
 
 struct char_data *find_spirit_by_id(int spiritid, long playerid)
 {
@@ -672,10 +672,10 @@ bool find_duplicate_spell(struct char_data *ch, struct char_data *vict, int spel
   return FALSE;
 }
 
-bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell)
+bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell, char *buf)
 {
   if (!vict)
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
   else if (((IS_PROJECT(ch) || IS_ASTRAL(ch)) && !(IS_DUAL(vict) || IS_ASTRAL(vict) || IS_PROJECT(vict))) ||
            ((IS_PROJECT(vict) || IS_ASTRAL(vict)) && !(IS_DUAL(ch) || IS_ASTRAL(ch) || IS_PROJECT(ch))))
     send_to_char("They aren't accessible from this plane.\r\n", ch);
@@ -751,7 +751,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   }
   if (*buf1)
     vict = get_char_room_vis(ch, buf1);
-  if (!check_spell_victim(ch, vict, spell))
+  if (!check_spell_victim(ch, vict, spell, buf1))
     return;
   if (ch == vict) {
     send_to_char("You can't target yourself with a combat spell!\r\n", ch);
@@ -878,7 +878,7 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
     vict = mob;
   else if (*arg)
     vict = get_char_room_vis(ch, arg);
-  if (!check_spell_victim(ch, vict, spell))
+  if (!check_spell_victim(ch, vict, spell, arg))
     return;
   if (find_duplicate_spell(ch, vict, spell, 0))
     return;
@@ -929,7 +929,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     vict = mob;
   else if (*arg)
     vict = get_char_room_vis(ch, arg);
-  if (!check_spell_victim(ch, vict, spell))
+  if (!check_spell_victim(ch, vict, spell, arg))
     return;
   if (find_duplicate_spell(ch, vict, spell, sub))
     return;
@@ -1044,15 +1044,15 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
           switch (sub) {
           case BOD:
-            if (BOOST(vict)[2][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
+            if (BOOST(vict)[BOD][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
               cyber = false;
             break;
           case QUI:
-            if (BOOST(vict)[1][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
+            if (BOOST(vict)[QUI][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
               cyber = false;
             break;
           case STR:
-            if (BOOST(vict)[0][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
+            if (BOOST(vict)[STR][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
               cyber = false;
             break;
           }
@@ -1081,7 +1081,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         target += 10 - (GET_ESS(vict) / 100);
       success = (int)(success_test(skill, target) -
                       ((spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) ? resist_spell(vict, spell, force, sub) : 0));
-      if (success > 0) {
+      if (success > 1) {
         create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         send_to_char("You feel your body tingle.\r\n", vict);
@@ -1111,7 +1111,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     {
     case SPELL_CONFUSION:
     case SPELL_CHAOS:
-      if (!check_spell_victim(ch, vict, spell))
+      if (!check_spell_victim(ch, vict, spell, arg))
         return;
       check_killer(ch, vict);
       if (spell == SPELL_CONFUSION)
@@ -1137,7 +1137,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       break;
     case SPELL_INVIS:
     case SPELL_IMP_INVIS:
-      if (!check_spell_victim(ch, vict, spell))
+      if (!check_spell_victim(ch, vict, spell, arg))
         return;
       success = success_test(skill, target + 4);
       if (success > 0) {
@@ -1149,7 +1149,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       spell_drain(ch, spell, force, 0);
       break;
     case SPELL_STEALTH:
-      if (!check_spell_victim(ch, vict, spell))
+      if (!check_spell_victim(ch, vict, spell, arg))
         return;
       success = success_test(skill, target + 4);
       if (success > 0) {
@@ -1228,7 +1228,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   switch (spell)
   {
   case SPELL_ARMOUR:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     success = success_test(skill, target + 6);
     if (success > 0) {
@@ -1275,7 +1275,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_IGNITE:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (ch == vict) {
@@ -1317,14 +1317,14 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_CLOUT:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (!AWAKE(vict))
       target -= 2;
     else {
       // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     success += success_test(skill, 4 + target);
       
@@ -1366,13 +1366,13 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, basedamage);
     break;
   case SPELL_FLAMETHROWER:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (!AWAKE(vict))
       target -= 2;
     else
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
       success = -1;
@@ -1419,13 +1419,13 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   case SPELL_ACIDSTREAM:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (!AWAKE(vict))
       target -= 2;
     else
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
       success = -1;
@@ -1468,14 +1468,14 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
   case SPELL_LIGHTNINGBOLT:
-    if (!check_spell_victim(ch, vict, spell))
+    if (!check_spell_victim(ch, vict, spell, arg))
       return;
     check_killer(ch, vict);
     if (!AWAKE(vict))
       target -= 2;
     else {
       // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
-      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
     }
     act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
@@ -1909,7 +1909,7 @@ ACMD(do_unbond)
   struct obj_data *obj = NULL;
   struct char_data *vict;
   if (!generic_find(argument,  FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &vict, &obj)) {
-    send_to_char("You don't have that item.\r\n", ch);
+    send_to_char(ch, "You don't have a '%s'.\r\n", argument);
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 2)) {
@@ -1940,7 +1940,7 @@ ACMD(do_bond)
         
   // No object-- failure case.
   if (!obj) {
-    send_to_char("You don't have that item.\r\n", ch);
+    send_to_char(ch, "You don't have a '%s'.\r\n", buf1);
     return;
   }
   
@@ -2001,7 +2001,7 @@ ACMD(do_bond)
     snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_AMMO_TYPE(magazine)]);
     if (magazine->restring)
       delete [] magazine->restring;
-    magazine->restring = strdup(buf);
+    magazine->restring = str_dup(buf);
     send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(weapon));
     return;
   }
@@ -2015,7 +2015,7 @@ ACMD(do_bond)
           snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_OBJ_VAL(i, 0), weapon_type[GET_OBJ_VAL(i, 1)]);
           if (i->restring)
             delete [] i->restring;
-          i->restring = strdup(buf);
+          i->restring = str_dup(buf);
           send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(obj));
           return;
         }
@@ -2109,7 +2109,7 @@ ACMD(do_bond)
       }
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         if (GET_FORCE_POINTS(ch) < karma) {
-          send_to_char(ch, "You don't have enough force points to bond that (Need %d).\r\n", karma);
+          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the talismonger or the spell trainers and typing LEARN FORCE.\r\n", karma);
           return;
         }
         GET_FORCE_POINTS(ch) -= karma;
@@ -2132,7 +2132,7 @@ ACMD(do_bond)
       return;
     }
   } else
-    send_to_char("You cannot bond that item.\r\n", ch);
+    send_to_char(ch, "You cannot bond %s.\r\n", GET_OBJ_NAME(obj));
 }
 
 ACMD(do_release)
@@ -2157,13 +2157,17 @@ ACMD(do_release)
       send_to_char(ch, "Which %s do you wish to release from your services?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
+    int real_mob;
     for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
       if (--i == 0) {
         struct spirit_data *temp;
-        if (GET_TRADITION(ch) == TRAD_HERMETIC)
-          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", GET_NAME(&mob_proto[real_mobile(elements[spirit->type].vnum)]));
+        if (GET_TRADITION(ch) == TRAD_HERMETIC) {
+          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", 
+                       (real_mob = real_mobile(elements[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental");
+        }
         else
-          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", GET_NAME(&mob_proto[real_mobile(spirits[spirit->type].vnum)]));
+          send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n", 
+                       (real_mob = real_mobile(spirits[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit");
         if (spirit->called)
           for (struct char_data *mob = character_list; mob; mob = mob->next)
             if (IS_NPC(mob) && GET_ACTIVE(mob) == GET_IDNUM(ch) && GET_GRADE(mob) == spirit->id) {
@@ -2198,7 +2202,7 @@ ACMD(do_release)
     }
     return;
   }
-  send_to_char("Release what?\r\n", ch);
+  send_to_char("You'll want to specify an spell number, an elemental/spirit number, or 'all'. HELP RELEASE for more.\r\n", ch);
 }
 
 ACMD(do_cast)
@@ -2316,7 +2320,7 @@ ACMD(do_conjure)
     }
     bool library = FALSE, circle = FALSE;
     struct obj_data *obj;
-    for (struct obj_data *obj = ch->in_room->contents; obj; obj = obj->next_content)
+    FOR_ITEMS_AROUND_CH(ch, obj)
       if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
         if (GET_OBJ_VAL(obj, 0) == TYPE_LIBRARY_CONJURE) {
           if (GET_OBJ_VAL(obj, 1) < force) {
@@ -2435,7 +2439,7 @@ ACMD(do_spells)
   
   // Adepts and Mundanes cannot cast spells.
   if (GET_TRADITION(ch) == TRAD_ADEPT || GET_TRADITION(ch) == TRAD_MUNDANE) {
-    send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", tradition_names[GET_ASPECT(ch)]);
+    send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", tradition_names[(int) GET_TRADITION(ch)]);
     return;
   }
   
@@ -2460,7 +2464,7 @@ ACMD(do_spells)
 ACMD(do_forget)
 {
   if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || !GET_SPELLS(ch)) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   skip_spaces(&argument);
@@ -2489,19 +2493,19 @@ ACMD(do_learn)
   struct spell_data *spell = NULL;
   int force, oldforce = 0;
   if (!*buf || !(obj = get_obj_in_list_vis(ch, buf, ch->carrying))) {
-    send_to_char("Learn which spell?\r\n", ch);
+    send_to_char(ch, "You're not carrying any '%s' to learn from.\r\n", buf);
     return;
   }
   if (GET_OBJ_TYPE(obj) != ITEM_SPELL_FORMULA) {
-    send_to_char("You can't learn anything from that.\r\n", ch);
+    send_to_char(ch, "%s doesn't contain a spell formula to learn.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return;
   }
   if (GET_OBJ_TIMER(obj) <= -2) {
-    send_to_char("That spell design isn't complete.\r\n", ch); 
+    send_to_char(ch, "The spell design on %s isn't complete.\r\n", GET_OBJ_NAME(obj)); 
     return;
   }
   if ((GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(obj, 2)) || (GET_TRADITION(ch) == TRAD_SHAMANIC && !GET_OBJ_VAL(obj, 2))) {
-    send_to_char("You don't understand this formula.\r\n", ch);
+    send_to_char(ch, "You don't understand the formula written on %s-- seems like it's for another tradition of magic.\r\n", GET_OBJ_NAME(obj));
     return;
   }
   if (!*buf2 || atoi(buf1) == 0)
@@ -2511,7 +2515,7 @@ ACMD(do_learn)
   for (spell = GET_SPELLS(ch); spell; spell = spell->next)
     if (spell->type == GET_OBJ_VAL(obj, 1) && spell->subtype == GET_OBJ_VAL(obj, 3)) {
       if (spell->force >= force) {
-        send_to_char("You already know this spell at an equal or higher force.\r\n", ch);
+        send_to_char(ch, "You already know %s at an equal or higher force.\r\n", spells[GET_OBJ_VAL(obj, 1)].name);
         return;
       } else {
         oldforce = spell->force;
@@ -2519,14 +2523,14 @@ ACMD(do_learn)
       }
     }
   if (GET_KARMA(ch) < (force  - oldforce) * 100) {
-    send_to_char(ch, "You don't have enough karma to learn this spell at that force! (You need %d)\r\n", force);
+    send_to_char(ch, "You don't have enough karma to learn this spell at that force! You need %d.\r\n", force);
     return;
   }
   if ((GET_ASPECT(ch) == ASPECT_ELEMFIRE && spells[GET_OBJ_VAL(obj, 1)].category != COMBAT) ||
       (GET_ASPECT(ch) == ASPECT_ELEMEARTH && spells[GET_OBJ_VAL(obj, 1)].category != MANIPULATION) ||
       (GET_ASPECT(ch) == ASPECT_ELEMWATER && spells[GET_OBJ_VAL(obj, 1)].category != ILLUSION) ||
       (GET_ASPECT(ch) == ASPECT_ELEMAIR && spells[GET_OBJ_VAL(obj, 1)].category != DETECTION)) {
-    send_to_char("Glancing over the formula you realise you can't bind mana in that fashion.\r\n", ch);
+    send_to_char("Glancing over the formula, you realize you can't bind mana in that fashion.\r\n", ch);
   }
   if (GET_ASPECT(ch) == ASPECT_SHAMANIST) {
     int skill = 0, target = 0;
@@ -2536,14 +2540,26 @@ ACMD(do_learn)
     }
   }
   struct obj_data *library = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents;
-  for (;library; library = library->next_content)
-    if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(library, 1) >= force &&
-        ((GET_TRADITION(ch) == TRAD_SHAMANIC
-          && GET_OBJ_VAL(library, 0) == TYPE_LODGE && GET_OBJ_VAL(library, 3) == GET_IDNUM(ch)) ||
-         (GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL)))
-      break;
+  int library_level = 0;
+  for (;library; library = library->next_content) {
+    if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL
+        && ((GET_TRADITION(ch) == TRAD_SHAMANIC
+            && GET_OBJ_VAL(library, 0) == TYPE_LODGE && GET_OBJ_VAL(library, 3) == GET_IDNUM(ch)) 
+        || (GET_TRADITION(ch) == TRAD_HERMETIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL))) {
+      if (GET_OBJ_VAL(library, 1) >= force) {
+        break;
+      } else {
+        library_level = MAX(GET_OBJ_VAL(library, 1), library_level);
+      }
+    }
+  }
   if (!library) {
-    send_to_char("You don't have the right tools here to learn that spell.\r\n", ch);
+    if (library_level)
+      send_to_char(ch, "Your tools aren't a high enough rating to learn from %s. It's rating %d, but you only have a rating %d.",
+                   GET_OBJ_NAME(obj), force, library_level);
+    else
+      send_to_char(ch, "You don't have the right tools here to learn that spell. You need a rating-%d (or higher) %s.\r\n",
+                   force, GET_TRADITION(ch) == TRAD_HERMETIC ? "library" : "lodge");
     return;
   }
   if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_OBJ_VAL(library, 9)) {
@@ -2628,14 +2644,19 @@ ACMD(do_elemental)
     send_to_char(ch, "You don't have any %s bound to you.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
     return;
   }
-  int i = 1;
+  int i = 1, real_mob;
   snprintf(buf, sizeof(buf), "You currently have the following %s bound:\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
   for (struct spirit_data *elem = GET_SPIRIT(ch); elem; elem = elem->next, i++) {
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services %d\r\n", i, GET_NAME(&mob_proto[real_mobile(spirits[elem->type].vnum)]), elem->force, elem->services);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services %d\r\n", 
+               i, 
+               (real_mob = real_mobile(spirits[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit", 
+               elem->force, elem->services);
     else
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n", i, GET_NAME(&mob_proto[real_mobile(elements[elem->type].vnum)]),
-              elem->force, elem->services, elem->called ? " Present" : " ");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d) %-30s (Force %d) Services: %d%10s\r\n", 
+               i, 
+               (real_mob = real_mobile(elements[elem->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental",
+               elem->force, elem->services, elem->called ? " Present" : " ");
   }
   send_to_char(buf, ch);
 }
@@ -2914,7 +2935,7 @@ POWER(spirit_accident)
       }
     if (success < 1) {
       act("$n trips and stumbles.", TRUE, tch, 0, 0, TO_ROOM);
-      send_to_char(tch, "You trip and stumble!");
+      send_to_char(tch, "You trip and stumble!\r\n");
       GET_INIT_ROLL(tch) -= 10;
     } else {
       snprintf(buf, sizeof(buf), "%s fails to cause $N to have an accident.", CAP(GET_NAME(spirit)));
@@ -3103,7 +3124,7 @@ POWER(spirit_dematerialize)
   act("$n fades from the physical realm.\r\n", TRUE, spirit, 0, ch, TO_ROOM);
   MOB_FLAGS(spirit).RemoveBits(MOB_DUAL_NATURE, MOB_FLAMEAURA, ENDBIT);
   MOB_FLAGS(spirit).SetBit(MOB_ASTRAL);
-  spiritdata->services--;
+  // spiritdata->services--;
 }
 
 POWER(spirit_materialize)
@@ -3114,7 +3135,7 @@ POWER(spirit_materialize)
   }
   MOB_FLAGS(spirit).SetBit(MOB_DUAL_NATURE);
   MOB_FLAGS(spirit).RemoveBit(MOB_ASTRAL);
-  spiritdata->services--;
+  // spiritdata->services--;
   act("$n takes on a physical form.", TRUE, spirit, 0, ch, TO_ROOM);
 }
 
@@ -3326,6 +3347,11 @@ ACMD(do_order)
     struct char_data *mob = find_spirit_by_id(spirit->id, GET_IDNUM(ch));
     
     if (!mob) {
+      if (order == SERV_LEAVE) {
+        ((*services[order].func) (ch, mob, spirit, buf2));
+        return;
+      }
+      
       send_to_char(ch, "That %s has been ensnared by forces you cannot control. Your only option is to release it.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       snprintf(buf, sizeof(buf), "SYSERR: %s belonging to %s (%ld) has disappeared unexpectedly-- did someone purge it?", GET_TRADITION(ch) == TRAD_HERMETIC ? "Elemental" : "Spirit",
               GET_CHAR_NAME(ch), GET_IDNUM(ch));
@@ -3445,7 +3471,7 @@ void deactivate_power(struct char_data *ch, int power)
 ACMD(do_powerdown)
 {
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   for (int i = 0; i < ADEPT_NUMPOWER; i++)
@@ -3519,12 +3545,12 @@ ACMD(do_deactivate)
   }
   if (!(obj = get_object_in_equip_vis(ch, argument, ch->equipment, &i)) &&
       !(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-    send_to_char("Deactivate which focus?\r\n", ch);
+    send_to_char("Deactivate which focus or power?\r\n", ch);
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
     if (GET_OBJ_VAL(obj, 4) < 1)
-      send_to_char("That focus isn't activated.\r\n", ch);
+      send_to_char(ch, "%s isn't activated.\r\n", GET_OBJ_NAME(obj));
     else {
       GET_OBJ_VAL(obj, 4) = 0;
       GET_FOCI(ch)--;
@@ -3534,7 +3560,7 @@ ACMD(do_deactivate)
   } else if (GET_OBJ_TYPE(obj) == ITEM_MONEY && GET_OBJ_VAL(obj, 1) && GET_OBJ_VAL(obj, 4) == GET_IDNUM(ch)) {
     GET_OBJ_VAL(obj, 3) = GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 5) = 0;
     send_to_char(ch, "You deactivate %s.\r\n", GET_OBJ_NAME(obj));
-  } else send_to_char("You can't deactivate that.\r\n", ch);
+  } else send_to_char(ch, "You can't deactivate %s.\r\n", GET_OBJ_NAME(obj));
 }
 
 ACMD(do_destroy)
@@ -3546,7 +3572,7 @@ ACMD(do_destroy)
   skip_spaces(&argument);
   struct obj_data *obj;
   if (ch->in_veh || !(obj = get_obj_in_list_vis(ch, argument, ch->in_room->contents))) {
-    send_to_char("That object isn't here.\r\n", ch);
+    send_to_char(ch, "'%s' isn't here.\r\n", argument);
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_LODGE || GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE)) {
@@ -3559,7 +3585,7 @@ ACMD(do_destroy)
     }
     extract_obj(obj);
   } else
-    send_to_char("You can't destroy that object.\r\n", ch);
+    send_to_char(ch, "You can't destroy %s. Maybe pick it up and JUNK it?\r\n", GET_OBJ_NAME(obj));
 }
 
 ACMD(do_track)
@@ -3594,7 +3620,7 @@ ACMD(do_track)
   two_arguments(argument, buf, buf1);
   if (!generic_find(buf,  FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
                     FIND_CHAR_ROOM, ch, &vict, &obj)) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see anything named '%s' here.\r\n", buf);
     return;
   }
   if (vict) {
@@ -3632,14 +3658,14 @@ ACMD(do_track)
   if (obj) {
     vict = NULL;
     if (GET_OBJ_TYPE(obj) != ITEM_FOCUS && !(GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE))) {
-      send_to_char("There is no astral signature present on that item.\r\n", ch);
+      send_to_char(ch, "There is no astral signature present on %s.\r\n", GET_OBJ_NAME(obj));
       return;
     }
     int num = 3;
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
       num = 2;
     if (!GET_OBJ_VAL(obj, num)) {
-      send_to_char("There is no astral signature present on that item.\r\n", ch);
+      send_to_char(ch, "There is no astral signature present on %s.\r\n", GET_OBJ_NAME(obj));
       return;
     }
     for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next)
@@ -3699,7 +3725,7 @@ ACMD(do_dispell)
   struct char_data *vict;
   two_arguments(argument, buf, buf2);
   if (!(vict = get_char_room_vis(ch, buf))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return;
   }
   int x = atoi(buf2);
@@ -3761,7 +3787,7 @@ ACMD(do_heal)
   else if (GET_POS(ch) == POS_FIGHTING)
     send_to_char(TOOBUSY, ch);
   else if (!(vict = get_char_room_vis(ch, arg)))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
   else if (GET_PHYSICAL(ch) <= 100)
     send_to_char("Succeeding in that task would surely kill you.\r\n", ch);
   else if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict))
@@ -3808,7 +3834,7 @@ ACMD(do_relieve)
   if (GET_POS(ch) == POS_FIGHTING)
     send_to_char(TOOBUSY, ch);
   else if (!(vict = get_char_room_vis(ch, argument)))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
   else if (GET_MENTAL(vict) == GET_MAX_MENTAL(vict))
     send_to_char("They don't need your help.\r\n", ch);
   else if (GET_POS(vict) > POS_LYING)
@@ -3904,7 +3930,7 @@ bool init_cost(struct char_data *ch, bool spend)
   int karmacost = (GET_GRADE(ch) + 6) * 300;
   long nuyencost = MIN(825000, (25000 + (25000 * 1<<GET_GRADE(ch)))), tke = 0;
   if (karmacost > GET_KARMA(ch)) {
-    send_to_char("You do not have enough karma to initiate.\n\r", ch);
+    send_to_char("You do not have enough karma to initiate.\r\n", ch);
     return FALSE;
   }
   if (nuyencost > GET_NUYEN(ch)) {
@@ -3941,7 +3967,7 @@ ACMD(do_subpoint)
   struct char_data *vict;
   skip_spaces(&argument);
   if (!(vict = get_char_vis(ch, argument)))
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
   else if (GET_TRADITION(vict) != TRAD_ADEPT)
     send_to_char("You can only use this command on Adepts.\r\n", ch);
   else if (GET_PP(vict) <= 0)
@@ -3955,14 +3981,14 @@ ACMD(do_subpoint)
 ACMD(do_initiate)
 {
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
   else if (subcmd == SCMD_INITIATE && init_cost(ch, FALSE)) {
     STATE(ch->desc) = CON_INITIATE;
     PLR_FLAGS(ch).SetBit(PLR_INITIATE);  
     disp_init_menu(ch->desc);
   } else if (subcmd == SCMD_POWERPOINT) {
     if (GET_TRADITION(ch) != TRAD_ADEPT) {
-      nonsensical_reply(ch);
+      nonsensical_reply(ch, NULL);
       return;
     }
     
@@ -4075,7 +4101,7 @@ void init_parse(struct descriptor_data *d, char *arg)
 ACMD(do_masking)
 {
   if (GET_METAMAGIC(ch, META_MASKING) < 2) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   skip_spaces(&argument);
@@ -4106,7 +4132,7 @@ ACMD(do_masking)
 ACMD(do_focus)
 {
   if (GET_TRADITION(ch) != TRAD_ADEPT || !GET_POWER(ch, ADEPT_LIVINGFOCUS)) {
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   skip_spaces(&argument);
@@ -4167,7 +4193,7 @@ ACMD(do_metamagic)
 ACMD(do_cleanse)
 {
   if (GET_METAMAGIC(ch, META_CLEANSING) < 2) {  
-    nonsensical_reply(ch);
+    nonsensical_reply(ch, NULL);
     return;
   }
   if (!(IS_ASTRAL(ch) || IS_DUAL(ch)))

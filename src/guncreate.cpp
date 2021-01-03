@@ -9,6 +9,7 @@
 #include "constants.h"
 #include "olc.h"
 #include "newmagic.h"
+#include "bullet_pants.h"
 
 #define CH d->character
 #define OBJ d->edit_obj
@@ -142,7 +143,7 @@ int gunsmith_skill(int weapon_type)
 
 bool ammo_test(struct char_data *ch, struct obj_data *obj)
 {
-  if (GET_NUYEN(ch) <= ammo_type[GET_AMMOBOX_TYPE(obj)].cost * 10) {
+  if (GET_NUYEN(ch) <= get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * 10) {
     send_to_char(ch, "You don't have enough nuyen for the materials to create %s.\r\n",
                  GET_OBJ_NAME(obj));
     if (IS_WORKING(ch))
@@ -161,7 +162,7 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
     GET_AMMOBOX_TIME_TO_COMPLETION(obj) = (int)((ammo_type[GET_AMMOBOX_TYPE(obj)].time / MAX(success - csuccess, 1)) * 60);
   else
     GET_AMMOBOX_TIME_TO_COMPLETION(obj) = -1;
-  GET_NUYEN(ch) -= (int)((ammo_type[GET_AMMOBOX_TYPE(obj)].cost * 10) * (1 - (csuccess * .05)));
+  GET_NUYEN(ch) -= (int)((get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * 10) * (1 - (csuccess * .05)));
   GET_OBJ_VAL(obj, 10) = GET_AMMOBOX_TIME_TO_COMPLETION(obj);
   return TRUE;
 }
@@ -192,7 +193,7 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
 
     if (!workshop) {
       if (kitwarn) {
-        send_to_char(ch, "Your ammunition kit doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.",
+        send_to_char(ch, "Your ammunition kit doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.\r\n",
                      ammo_type[GET_AMMOBOX_TYPE(obj)].name);
       } else {
         if (GET_AMMOBOX_TYPE(obj) != AMMO_NORMAL) {

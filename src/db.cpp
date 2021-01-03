@@ -55,6 +55,7 @@
 #include "olc.h"
 #include <new>
 #include "transport.h"
+#include "bullet_pants.h"
 
 extern void calc_weight(struct char_data *ch);
 extern void read_spells(struct char_data *ch);
@@ -68,6 +69,9 @@ extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void weight_change_object(struct obj_data * obj, float weight);
+extern void generate_archetypes();
+extern void populate_mobact_aggression_octets();
+
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -273,30 +277,111 @@ void initialize_and_connect_to_mysql() {
 }
 
 void check_for_common_fuckups() {
-  extern struct dest_data taxi_destinations[];
-  extern struct dest_data port_destinations[];
-  
   // Check for invalid taxi destinations. Meaningless maximum 10k chosen here.
   for (int i = 0; i < 10000; i++) {
-    if (taxi_destinations[i].vnum == 0)
+    if (seattle_taxi_destinations[i].vnum <= 0)
       break;
     
-    if (real_room(taxi_destinations[i].vnum) == NOWHERE) {
-      snprintf(buf, sizeof(buf), "ERROR: Taxi destination '%s' (%ld) does not exist.", taxi_destinations[i].keyword, taxi_destinations[i].vnum);
+    if (real_room(seattle_taxi_destinations[i].vnum) == NOWHERE) {
+      snprintf(buf, sizeof(buf), "ERROR: Seattle taxi destination '%s' (%ld) does not exist.", 
+               seattle_taxi_destinations[i].keyword, 
+               seattle_taxi_destinations[i].vnum);
       log(buf);
-      taxi_destinations[i].enabled = FALSE;
+      seattle_taxi_destinations[i].enabled = FALSE;
     }
   }
   
   for (int i = 0; i < 10000; i++) {
-    if (port_destinations[i].vnum == 0)
+    if (portland_taxi_destinations[i].vnum <= 0)
       break;
     
-    if (real_room(port_destinations[i].vnum) == NOWHERE) {
-      snprintf(buf, sizeof(buf), "ERROR: Portland taxi destination '%s' (%ld) does not exist.", port_destinations[i].keyword, port_destinations[i].vnum);
+    if (real_room(portland_taxi_destinations[i].vnum) == NOWHERE) {
+      snprintf(buf, sizeof(buf), "ERROR: Portland taxi destination '%s' (%ld) does not exist.", 
+               portland_taxi_destinations[i].keyword, 
+               portland_taxi_destinations[i].vnum);
       log(buf);
-      port_destinations[i].enabled = FALSE;
+      portland_taxi_destinations[i].enabled = FALSE;
     }
+  }
+  
+  for (int i = 0; i < 10000; i++) {
+    if (caribbean_taxi_destinations[i].vnum <= 0)
+      break;
+    
+    if (real_room(caribbean_taxi_destinations[i].vnum) == NOWHERE) {
+      snprintf(buf, sizeof(buf), "ERROR: Caribbean taxi destination '%s' (%ld) does not exist.", 
+               caribbean_taxi_destinations[i].keyword, 
+               caribbean_taxi_destinations[i].vnum);
+      log(buf);
+      caribbean_taxi_destinations[i].enabled = FALSE;
+    }
+  }
+}
+
+// Kills the game if the table of the given name does not exist.
+void require_that_sql_table_exists(const char *table_name, const char *migration_path_from_root_directory) {
+  bool have_table = FALSE;
+  
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  
+  char query_buf[1000];
+  snprintf(query_buf, sizeof(query_buf), "SHOW TABLES LIKE '%s';", prepare_quotes(buf, table_name, sizeof(buf)));
+  mysql_wrapper(mysql, query_buf);
+  
+  if (!(res = mysql_use_result(mysql))) {
+    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
+                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 table_name,
+                 migration_path_from_root_directory);
+    exit(ERROR_DB_TABLE_REQUIRED);
+  }
+
+  if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql))
+    have_table = TRUE;
+    
+  mysql_free_result(res);
+  
+  if (!have_table) {
+    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
+                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 table_name,
+                 migration_path_from_root_directory);
+    exit(ERROR_DB_TABLE_REQUIRED);
+  }
+}
+
+void require_that_field_exists_in_table(const char *field_name, const char *table_name, const char *migration_path_from_root_directory) {
+  bool have_column = FALSE;
+  
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  
+  char query_buf[1000];
+  snprintf(query_buf, sizeof(query_buf), "SHOW COLUMNS FROM %s LIKE '%s';", 
+           prepare_quotes(buf, table_name, sizeof(buf)),
+           prepare_quotes(buf2, field_name, sizeof(buf2)));
+  mysql_wrapper(mysql, query_buf);
+  
+  if (!(res = mysql_use_result(mysql))) {
+    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
+                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 table_name,
+                 migration_path_from_root_directory);
+    exit(ERROR_DB_COLUMN_REQUIRED);
+  }
+
+  if ((row = mysql_fetch_row(res)) && mysql_field_count(mysql))
+    have_column = TRUE;
+    
+  mysql_free_result(res);
+  
+  if (!have_column) {
+    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory! "
+                 "Probable syntax from root directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+                 table_name,
+                 migration_path_from_root_directory);
+    exit(ERROR_DB_COLUMN_REQUIRED);
   }
 }
 
@@ -335,6 +420,11 @@ void boot_world(void)
   
   log("Verifying DB compatibility with extended-length passwords.");
   verify_db_password_column_size();
+  
+  log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
+  require_that_sql_table_exists("pfiles_ammo", "SQL/bullet_pants.sql");
+  require_that_sql_table_exists("command_fuckups", "SQL/fuckups.sql");
+  require_that_field_exists_in_table("socialbonus", "pfiles", "SQL/migrations/socialize.sql");
   
   log("Handling idle deletion.");
   idle_delete();
@@ -415,6 +505,9 @@ void DBInit()
 
   log("Loading player index.");
   playerDB.Load();
+  
+  log("Generating character creation archetypes.");
+  generate_archetypes();
 
   log("Assigning function pointers:");
   if (!no_specials) {
@@ -467,6 +560,9 @@ void DBInit()
   
   log("Loading shop orders.");
   boot_shop_orders();
+
+  log("Setting up mobact aggression octets.");
+  populate_mobact_aggression_octets();
   
   log("DBInit -- DONE.");
 }
@@ -1056,7 +1152,7 @@ void parse_room(File &fl, long nr)
   room->room_flags.FromString(data.GetString("Flags", "0"));
   if (room->room_flags.IsSet(ROOM_PEACEFUL))
     room->peaceful = 1;
-  room->sector_type = data.LookupInt("SecType", spirit_name, SPIRIT_CITY);
+  room->sector_type = data.LookupInt("SecType", spirit_name, DEFAULT_SECTOR_TYPE);
   room->matrix = data.GetLong("MatrixExit", 0);
   room->io = data.GetInt("IO", 0);
   room->bandwidth = data.GetInt("Bandwidth", 0);
@@ -1082,9 +1178,9 @@ void parse_room(File &fl, long nr)
   }
   room->crowd = data.GetInt("Crowd", 0);
   room->cover = data.GetInt("Cover", 0);
-  room->x = data.GetInt("X", 20);
-  room->y = data.GetInt("Y", 20);
-  room->z = data.GetFloat("Z", 2.5);
+  room->x = data.GetInt("X", DEFAULT_DIMENSIONS_X);
+  room->y = data.GetInt("Y", DEFAULT_DIMENSIONS_Y);
+  room->z = data.GetFloat("Z", DEFAULT_DIMENSIONS_Z);
   room->type = data.GetInt("RoomType", 0);
   // read in directions
   int i;
@@ -1134,10 +1230,10 @@ void parse_room(File &fl, long nr)
         dir->exit_info = 0;
 
       snprintf(field, sizeof(field), "%s/Material", sect);
-      dir->material = data.LookupInt(field, material_names, 5);
+      dir->material = data.LookupInt(field, material_names, DEFAULT_EXIT_MATERIAL);
 
       snprintf(field, sizeof(field), "%s/Barrier", sect);
-      dir->barrier = data.GetInt(field, 4);
+      dir->barrier = data.GetInt(field, DEFAULT_EXIT_BARRIER_RATING);
       dir->condition = dir->barrier;
 
       snprintf(field, sizeof(field), "%s/KeyVnum", sect);
@@ -1148,6 +1244,9 @@ void parse_room(File &fl, long nr)
 
       snprintf(field, sizeof(field), "%s/HiddenRating", sect);
       dir->hidden = data.GetInt(field, 0);
+      if (dir->hidden > MAX_EXIT_HIDDEN_RATING) {
+        dir->hidden = MAX_EXIT_HIDDEN_RATING;
+      }
       
       snprintf(field, sizeof(field), "%s/GoIntoSecondPerson", sect);
       dir->go_into_secondperson = str_dup(data.GetString(field, NULL));
@@ -1180,6 +1279,7 @@ void parse_room(File &fl, long nr)
       if (!*keywords) {
         log_vfprintf("Room #%d's extra description #%d had no keywords -- skipping",
             nr, i);
+        DELETE_ARRAY_IF_EXTANT(keywords);
         continue;
       }
 
@@ -1293,6 +1393,16 @@ bool can_load_this_thing_in_zone_commands(DBIndex::rnum_t rnum, int zone, int cm
   if (GET_OBJ_TYPE(&obj_proto[rnum]) == ITEM_MONEY) {
     // Zoneloading money is forbidden.
     log_zone_error(zone, cmd_no, "Money cannot be loaded in zone commands.");
+    return FALSE;
+  }
+  if (GET_OBJ_VNUM(&obj_proto[rnum]) == OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC) {
+    // Zoneloading 601, which used to be a blank empty mag, is not allowed.
+    log_zone_error(zone, cmd_no, "Object 601 (old Classic magazine) cannot be loaded in zone commands.");
+    return FALSE;
+  }
+  if (GET_OBJ_VNUM(&obj_proto[rnum]) == OBJ_BLANK_MAGAZINE) {
+    // Zoneloading 601, which used to be a blank empty mag, is not allowed.
+    log_zone_error(zone, cmd_no, "Object 127 (blank magazine) cannot be loaded in zone commands.");
     return FALSE;
   }
   return TRUE;
@@ -1510,6 +1620,13 @@ void parse_mobile(File &in, long nr)
 
     GET_KARMA(mob) = MIN(old, calc_karma(NULL, mob));
   }
+  
+  // Load ammo.
+  for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+    for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
+      snprintf(buf, sizeof(buf), "AMMO/%s", get_ammo_representation(wp, am, 0));
+      GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) = data.GetInt(buf, 0);
+    }
 
   top_of_mobt = rnum++;
 }
@@ -1672,7 +1789,7 @@ void parse_object(File &fl, long nr)
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 500), 10);
           
           // Set values according to Assault Cannon ammo (SR3 p281).
-          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * 1.25;
+          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) * 1.25) / 10;
           GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * 45;
           GET_OBJ_AVAILDAY(obj) = 3;
           GET_OBJ_AVAILTN(obj) = 5;
@@ -1684,10 +1801,8 @@ void parse_object(File &fl, long nr)
           // Max size 1000-- otherwise it's too heavy to carry.
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
           
-          // Calculate weight as (count / 10) * multiplier (multiplier is per 10 rounds).
-          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
-          
-          // Calculate cost as count * multiplier (multiplier is per round)
+          // Update weight and cost.
+          GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
           GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].cost;
           
           // Set the TNs for this ammo per the default values.
@@ -1699,23 +1814,7 @@ void parse_object(File &fl, long nr)
         }
         
         // Set the strings-- we want all these things to match for simplicity's sake.
-        switch (GET_AMMOBOX_WEAPON(obj)) {
-          case WEAP_SHOTGUN:
-          case WEAP_CANNON:
-            type_as_string = "shell";
-            break;
-          case WEAP_MISS_LAUNCHER:
-            type_as_string = "rocket";
-            break;
-          case WEAP_GREN_LAUNCHER:
-            type_as_string = "grenade";
-            break;
-          case WEAP_TASER:
-            type_as_string = "dart";
-          default:
-            type_as_string = "round";
-            break;
-        }
+        type_as_string = get_weapon_ammo_name_as_string(GET_AMMOBOX_WEAPON(obj));
         
         snprintf(buf, sizeof(buf), "metal ammo ammunition box %s %s %d-%s %s%s",
                 GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
@@ -1961,6 +2060,18 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].s_string = fl.ReadString("s_string");
   quest_table[quest_nr].e_string = fl.ReadString("e_string");
   quest_table[quest_nr].done = fl.ReadString("done");
+  
+  /* Alright, here's the situation. I was going to add in a location field for 
+     the quests, which would show up in the recap and help newbies out... BUT.
+     Turns out we use a shit-tacular file format that's literally just 'crap out
+     strings into a file and require that they exist, no defaulting allowed, or
+     you can't load any quests and the game dies'. Gotta love that jank-ass code.
+     
+     This feature is disabled until someone transitions all the quests into an
+     actually sensible file format. -- LS */
+#ifdef USE_QUEST_LOCATION_CODE
+  quest_table[quest_nr].location = NULL; //fl.ReadString("location");
+#endif
 
   top_of_questt = quest_nr++;
 }
@@ -2829,7 +2940,7 @@ struct char_data *read_mobile(int nr, int type)
 
   affect_total(mob);
 
-  if (GET_MOB_SPEC(mob) && !MOB_FLAGGED(mob, MOB_SPEC))
+  if ((GET_MOB_SPEC(mob) || GET_MOB_SPEC2(mob)) && !MOB_FLAGGED(mob, MOB_SPEC))
     MOB_FLAGS(mob).SetBit(MOB_SPEC);
 
   return mob;
@@ -2934,9 +3045,10 @@ struct obj_data *read_object(int nr, int type)
   } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE)
     GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 0);
   else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
+    int real_obj;
     for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++)
-      if (GET_OBJ_VAL(obj, i) > 0 && real_object(GET_OBJ_VAL(obj, i)) > 0) {
-        struct obj_data *mod = &obj_proto[real_object(GET_OBJ_VAL(obj, i))];
+      if (GET_OBJ_VAL(obj, i) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, i))) > 0) {
+        struct obj_data *mod = &obj_proto[real_obj];
         // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
         GET_OBJ_VAL(obj, i) = 0;
         attach_attachment_to_weapon(mod, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
@@ -2957,14 +3069,18 @@ struct obj_data *read_object(int nr, int type)
   return obj;
 }
 
+SPECIAL(traffic);
 void spec_update(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   int i;
   char empty_argument = '\0';
+  
+  // Instead of calculating the random number for every traffic room, just calc once.
+  bool will_traffic = (number(0, 6) == 1);
 
   for (i = 0; i <= top_of_world; i++)
-    if (world[i].func != NULL)
+    if (world[i].func != NULL && (will_traffic || world[i].func != traffic))
       world[i].func (NULL, world + i, 0, &empty_argument);
 
   ObjList.CallSpec();
@@ -3135,13 +3251,12 @@ void reset_zone(int zone, int reboot)
           veh->usedload += load;
           veh->sig -= sig;
 
-          if (veh->mount)
-            obj->next_content = veh->mount;
+          obj->next_content = veh->mount;
           veh->mount = obj;
         }
         
         // Special case: Weapons for mounts. Note that this ignores current vehicle load, mount size, etc.
-        else if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+        else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
           struct obj_data *mount = NULL;
           
           // Iterate through every mount on the vehicle.
@@ -3169,9 +3284,22 @@ void reset_zone(int zone, int reboot)
               GET_OBJ_VAL(obj, 11) = MODE_SS;
           } else {
             ZONE_ERROR("Not enough mounts in target vehicle, cannot mount item");
+            extract_obj(obj);
           }
         }
         else {
+          if (GET_MOD(veh, GET_OBJ_VAL(obj, 0))) {
+            snprintf(buf, sizeof(buf), "Warning: Double-upgrading vehicle %s with object %s (was %s). Extracting old mod.",
+                     GET_VEH_NAME(veh),
+                     GET_OBJ_NAME(obj),
+                     GET_OBJ_NAME(GET_MOD(veh, GET_OBJ_VAL(obj, 0))));
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            veh->usedload -= GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(obj, 0)), 1);
+            for (int j = 0; j < MAX_OBJ_AFFECT; j++)
+              affect_veh(veh, GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].location, -GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].modifier);
+            extract_obj(GET_MOD(veh, GET_OBJ_VAL(obj, 0)));
+          }
+          
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
           veh->usedload += GET_OBJ_VAL(obj, 1);
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
@@ -3179,6 +3307,8 @@ void reset_zone(int zone, int reboot)
         }
         
         last_cmd = 1;
+        
+        
       } else
         last_cmd = 0;
       break;
@@ -3247,8 +3377,51 @@ void reset_zone(int zone, int reboot)
         }
         if (obj != obj_to)
           obj_to_obj(obj, obj_to);
-        if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER)
-          GET_OBJ_VAL(obj_to, 3) = 1;
+        if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER) {
+          GET_HOLSTER_READY_STATUS(obj_to) = 1;
+          
+          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {       
+            // If it's carried by an NPC, make sure it's loaded.     
+            if (GET_WEAPON_MAX_AMMO(obj) > 0) {
+              struct obj_data *outermost = obj;
+              while (outermost && outermost->in_obj) {
+                outermost = outermost->in_obj;
+              }
+                
+              struct char_data *temp_ch = NULL;
+              if ((temp_ch = outermost->carried_by) || (temp_ch = outermost->worn_by)) {
+                // Reload from their ammo.
+                for (int index = 0; index < NUM_AMMOTYPES; index++) {
+                  if (GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                    reload_weapon_from_bulletpants(temp_ch, obj, npc_ammo_usage_preferences[index]);
+                    break;
+                  }
+                }
+                
+                // If they failed to reload, they have no ammo. Give them some normal and reload with it.
+                if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
+                  GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                  reload_weapon_from_bulletpants(temp_ch, obj, AMMO_NORMAL);
+                  
+                  // Decrement their debris-- we want this reload to not create clutter.
+                  get_ch_in_room(temp_ch)->debris--;
+                }
+              }
+            }
+            
+            // Set the firemode.
+            if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF)) {
+              GET_WEAPON_FIREMODE(obj) = MODE_BF;
+            } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_FA)) {
+              GET_WEAPON_FIREMODE(obj) = MODE_FA;
+              GET_OBJ_TIMER(obj) = 10;
+            } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SA)) {
+              GET_WEAPON_FIREMODE(obj) = MODE_SA;
+            } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SS)) {
+              GET_WEAPON_FIREMODE(obj) = MODE_SS;
+            }
+          }
+        }
         if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
           GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
         last_cmd = 1;
@@ -3299,14 +3472,23 @@ void reset_zone(int zone, int reboot)
             if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
                 && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
                 && GET_WEAPON_MAX_AMMO(obj) != -1) {
-                // Load it with a magazine.
-                struct obj_data *magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
-                GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(obj);
-                GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(obj);
-                snprintf(buf, sizeof(buf), "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
-                DELETE_ARRAY_IF_EXTANT(magazine->restring);
-                magazine->restring = strdup(buf);
-                obj_to_obj(magazine, obj);
+                               
+              // Reload from their ammo.
+              for (int index = 0; index < NUM_AMMOTYPES; index++) {
+                if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                  reload_weapon_from_bulletpants(mob, obj, npc_ammo_usage_preferences[index]);
+                  break;
+                }
+              }
+              
+              // If they failed to reload, they have no ammo. Give them some normal and reload with it.
+              if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
+                GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
+                
+                // Decrement their debris-- we want this reload to not create clutter.
+                get_ch_in_room(mob)->debris--;
+              }
             }
           }
         }
@@ -3340,20 +3522,26 @@ void reset_zone(int zone, int reboot)
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERWARE) {
           ZONE_ERROR("attempt to install non-cyberware to mob");
           ZCMD.command = '*';
+          extract_obj(obj);
           break;
         }
-        if (GET_ESS(mob) < GET_OBJ_VAL(obj, 4))
+        if (GET_ESS(mob) < GET_OBJ_VAL(obj, 4)) {
+          extract_obj(obj);
           break;
+        }
         GET_ESS(mob) -= GET_OBJ_VAL(obj, 4);
         obj_to_cyberware(obj, mob);
       } else {
         if (GET_OBJ_TYPE(obj) != ITEM_BIOWARE) {
           ZONE_ERROR("attempt to install non-bioware to mob");
           ZCMD.command = '*';
+          extract_obj(obj);
           break;
         }
-        if (GET_INDEX(mob) < GET_OBJ_VAL(obj, 4))
+        if (GET_INDEX(mob) < GET_OBJ_VAL(obj, 4)) {
+          extract_obj(obj);
           break;
+        }
         GET_INDEX(mob) -= GET_OBJ_VAL(obj, 4);
         for (check = mob->bioware; check && !found; check = check->next_content) {
           if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(obj)))
@@ -3370,8 +3558,10 @@ void reset_zone(int zone, int reboot)
             if (GET_OBJ_VAL(check, 2) == 20 && GET_OBJ_VAL(obj, 2) == 10)
               found = 1;
           }
-        if (found)
+        if (found) {
+          extract_obj(obj);
           break;
+        }
         if (GET_OBJ_VAL(obj, 2) == 0)
           GET_OBJ_VAL(obj, 5) = 24;
         obj_to_bioware(obj, mob);
@@ -4425,6 +4615,7 @@ void purge_unowned_vehs() {
   }
 }
 
+// aka load_vehs, veh_load, and everything else I keep searching for it by --LS
 void load_saved_veh()
 {
   FILE *fl;
@@ -4446,8 +4637,10 @@ void load_saved_veh()
   for (int i = 0; i < num_veh; i++) {
     File file;
     snprintf(buf, sizeof(buf), "veh/%07d", i);
-    if (!(file.Open(buf, "r")))
+    if (!(file.Open(buf, "r"))) {
+      log_vfprintf("Warning: Unable to open vehfile %s for reading. Skipping.", buf);
       continue;
+    }
 
     VTable data;
     data.Parse(&file);
@@ -4491,15 +4684,17 @@ void load_saved_veh()
         }
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
           add_phone_to_list(obj);
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
+        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
+          int real_obj;
           for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-            if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
-               (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+            if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 && 
+               (attach = &obj_proto[real_obj])) {
               // The cost of the item was preserved, but nothing else was. Re-attach the item, then subtract its cost.
               // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
               GET_OBJ_VAL(obj, i) = 0;
               attach_attachment_to_weapon(attach, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
             }
+        }
         snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
         GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
         snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
@@ -4518,6 +4713,8 @@ void load_saved_veh()
             }
           if (last_obj)
             obj_to_obj(obj, last_obj);
+          else
+            obj_to_veh(obj, veh);
         } else
           obj_to_veh(obj, veh);
         last_in = inside;
@@ -4553,7 +4750,17 @@ void load_saved_veh()
       snprintf(buf, sizeof(buf), "%s/MountNum", sect_name);
       obj = read_object(data.GetLong(buf, 0), VIRTUAL);
       snprintf(buf, sizeof(buf), "%s/Ammo", sect_name);
-      GET_OBJ_VAL(obj, 9) = data.GetInt(buf, 0);
+      int ammo_qty = data.GetInt(buf, 0);
+      if (ammo_qty > 0) {
+        struct obj_data *ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
+        GET_AMMOBOX_QUANTITY(ammo) = ammo_qty;
+        snprintf(buf, sizeof(buf), "%s/AmmoType", sect_name);
+        GET_AMMOBOX_TYPE(ammo) = data.GetInt(buf, 0);
+        snprintf(buf, sizeof(buf), "%s/AmmoWeap", sect_name);
+        GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
+        ammo->restring = str_dup(get_ammobox_default_restring(ammo));
+        obj_to_obj(ammo, obj);
+      }
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
       int gun = data.GetLong(buf, 0);
       struct obj_data *weapon;
@@ -4617,6 +4824,7 @@ void load_saved_veh()
           snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no room was found! Dumping to Seattle Garage (%ld).\r\n",
                   veh->name, veh->veh_number, veh_room);
         }
+        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
         veh->spare2 = 0;
         veh_to_room(veh, &world[real_room(veh_room)]);
       }
@@ -4628,24 +4836,13 @@ void load_consist(void)
 {
   struct obj_data *attach;
   File file;
-  if (!(file.Open("etc/consist", "r"))) {
-    log("CONSISTENCY FILE NOT FOUND");
-    return;
-  }
-
-  VTable paydata;
-  paydata.Parse(&file);
-  file.Close();
-  market[0] = paydata.GetInt("MARKET/Blue", 5000);
-  market[1] = paydata.GetInt("MARKET/Green", 5000);
-  market[2] = paydata.GetInt("MARKET/Orange", 5000);
-  market[3] = paydata.GetInt("MARKET/Red", 5000);
-  market[4] = paydata.GetInt("MARKET/Black", 5000);
+  
   for (int nr = 0; nr <= top_of_world; nr++)
     if (ROOM_FLAGGED(&world[nr], ROOM_STORAGE)) {
       snprintf(buf, sizeof(buf), "storage/%ld", world[nr].number);
       if (!(file.Open(buf, "r")))
         continue;
+      log_vfprintf("Restoring storage contents for room %ld (%s)...", world[nr].number, buf);
       VTable data;
       data.Parse(&file);
       file.Close();
@@ -4678,14 +4875,16 @@ void load_consist(void)
           snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
           
           // Handle weapon attachments.
-          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
+          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
+            int real_obj;
             for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-              if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
-                  (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+              if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 &&
+                  (attach = &obj_proto[real_obj])) {
                 // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
                 GET_OBJ_VAL(obj, i) = 0;
                 attach_attachment_to_weapon(attach, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
               }
+          }
           
           inside = data.GetInt(buf, 0);
           if (inside > 0) {
@@ -4706,6 +4905,20 @@ void load_consist(void)
         }
       }
     }
+  
+  if (!(file.Open("etc/consist", "r"))) {
+    log("PAYDATA CONSISTENCY FILE NOT FOUND");
+    return;
+  }
+
+  VTable paydata;
+  paydata.Parse(&file);
+  file.Close();
+  market[0] = paydata.GetInt("MARKET/Blue", 5000);
+  market[1] = paydata.GetInt("MARKET/Green", 5000);
+  market[2] = paydata.GetInt("MARKET/Orange", 5000);
+  market[3] = paydata.GetInt("MARKET/Red", 5000);
+  market[4] = paydata.GetInt("MARKET/Black", 5000);
 }
 
 void boot_shop_orders(void)

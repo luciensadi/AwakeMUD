@@ -67,6 +67,7 @@ typedef SOCKET  socket_t;
 #include "protocol.h"
 #include "perfmon.h"
 #include "strn_bullshit.h"
+#include "config.h"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -286,7 +287,7 @@ void copyover_recover()
       break;
     
     /* Write something, and check if it goes error-free */
-    if (write_to_descriptor (desc, "\n\rRestoring from copyover...\n\r") < 0) {
+    if (write_to_descriptor (desc, "\n\rJust kidding. Restoring from copyover...\n\r") < 0) {
       close (desc); /* nope */
       continue;
     }
@@ -330,7 +331,7 @@ void copyover_recover()
     } else /* ok! */
     {
       long load_room;
-      write_to_descriptor (desc, "\n\rCopyover recovery complete.\n\r");
+      write_to_descriptor (desc, "\n\rCopyover recovery complete. If you were driving, your car is likely now at the Seattle Garage.\n\r");
       d->connected = CON_PLAYING;
       reset_char(d->character);
       d->character->next = character_list;
@@ -344,6 +345,34 @@ void copyover_recover()
     }
   }
   fclose (fp);
+  
+  // Regenerate everyone's subscriber lists.
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+    if (!veh->sub)
+      continue;
+    
+    for (struct char_data *i = character_list; i; i = i->next) {
+      if (GET_IDNUM(i) != veh->owner)
+        continue;
+        
+      struct veh_data *f = NULL;
+      for (f = i->char_specials.subscribe; f; f = f->next_sub)
+        if (f == veh)
+          break;
+          
+      if (!f) {
+        veh->next_sub = i->char_specials.subscribe;
+        
+        // Doubly link it into the list.
+        if (i->char_specials.subscribe)
+          i->char_specials.subscribe->prev_sub = veh;
+          
+        i->char_specials.subscribe = veh;
+      }
+      
+      break;
+    }
+  }
   
   // Force all player characters to look now that everyone's properly loaded.
   struct char_data *plr = character_list;
@@ -803,7 +832,6 @@ void game_loop(int mother_desc)
       zone_update();
       phone_check();
       process_autonav();
-      process_boost();
     }
     
     if (!(pulse % PULSE_SPECIAL)) {
@@ -888,11 +916,21 @@ void game_loop(int mother_desc)
       check_idle_passwords();
     }
     
+    // Every 30 IRL seconds
+    if (!(pulse % (30 * PASSES_PER_SEC))) {
+      // Apply congregation / socializing bonuses. We specifically don't want to tell them when it's full,
+      // because that encourages breaking off from RP to go burn it down again. Let them chill.
+      for (struct char_data *i = character_list; i; i = i->next)
+        if (!IS_NPC(i) && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION))
+          GET_CONGREGATION_BONUS(i) = MIN(GET_CONGREGATION_BONUS(i) + 1, MAX_CONGREGATION_BONUS);
+    }
+    
     // Every IRL minute
     if (!(pulse % (60 * PASSES_PER_SEC))) {
       check_idling();
       send_keepalives();
       // johnson_update();
+      process_boost();
     }
     
     // Every IRL day
@@ -1464,7 +1502,6 @@ int new_descriptor(int s)
   struct descriptor_data *newd;
   struct sockaddr_in peer;
   struct hostent *from;
-  extern char *GREETINGS;
   
   /* accept the new connection */
   i = sizeof(peer);
@@ -2511,15 +2548,24 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
   if (IS_NPC(speaker))
     return GET_NAME(speaker);
   else {
+    // No radio names mode means just give the voice desc.
+    if (PRF_FLAGGED(listener, PRF_NO_RADIO_NAMES))
+      return speaker->player.physical_text.room_desc;
+      
+    // Staff? You see their name.
     if (IS_SENATOR(listener)) {
       snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, GET_CHAR_NAME(speaker));
       return voice_buf;
-    } else if ((mem = found_mem(GET_MEMORY(listener), speaker))) {
+    }
+    
+    // Non-staff, but remembered the speaker? You see their remembered name.
+    if ((mem = found_mem(GET_MEMORY(listener), speaker))) {
       snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, CAP(mem->mem));
       return voice_buf;
-    } else {
-      return speaker->player.physical_text.room_desc;
     }
+    
+    // Otherwise, you just get the voice desc.
+    return speaker->player.physical_text.room_desc;
   }
 }
 

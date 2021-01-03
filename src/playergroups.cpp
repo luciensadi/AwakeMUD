@@ -378,19 +378,19 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_balance(struct char_data *ch, char *argument) {
-  send_to_char(ch, "%s currently has %lu nuyen in its accounts.", GET_PGROUP(ch)->get_name(), GET_PGROUP(ch)->get_bank());
+  send_to_char(ch, "%s currently has %lu nuyen in its accounts.\r\n", GET_PGROUP(ch)->get_name(), GET_PGROUP(ch)->get_bank());
 }
 
 void do_pgroup_buy(struct char_data *ch, char *argument) {
   // TODO: Log.
   // pgroup  buy  <vehicle>  Purchase a vehicle, drawing funds from bank and assigning ownership to pgroup.
-  send_to_char("buy", ch);
+  send_to_char("Sorry, the buy function is still under construction.\r\n", ch);
 }
 
 void do_pgroup_contest(struct char_data *ch, char *argument) {
   // TODO: Log.
   // pgroup  contest  [confirm]      On confirm, kicks off election cycle. If cycle open, joins cycle as nominee.
-  send_to_char("contest", ch);
+  send_to_char("Sorry, the contest function is still under construction.\r\n", ch);
 }
 
 void do_pgroup_create(struct char_data *ch, char *argument) {
@@ -419,7 +419,7 @@ void do_pgroup_demote(struct char_data *ch, char *argument) {
 
 void do_pgroup_design(struct char_data *ch, char *argument) {
   // TODO: Log
-  send_to_char("Sorry, the design feature is still under construction.", ch);
+  send_to_char("Sorry, the design feature is still under construction.\r\n", ch);
   
   /* Requirements for design:
    - You must obtain an architect's drafting board (to be built)
@@ -504,7 +504,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
     if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
       // Notify the character, unless they're the person doing the disbanding.
       if (i != ch) {
-        send_to_char(i, "The playergroup '%s' has been disbanded.", pgr->get_name());
+        send_to_char(i, "The playergroup '%s' has been disbanded.\r\n", pgr->get_name());
       }
       
       // Wipe out the data and null the pointer.
@@ -549,7 +549,7 @@ void do_pgroup_donate(struct char_data *ch, char *argument) {
   }
   
   if (strlen(remainder) > MAX_PGROUP_LOG_LENGTH - 2) {
-    send_to_char(ch, "That reason is too long; you're limited to %d characters.", MAX_PGROUP_LOG_LENGTH - 2);
+    send_to_char(ch, "That reason is too long; you're limited to %d characters.\r\n", MAX_PGROUP_LOG_LENGTH - 2);
     return;
   }
   
@@ -625,13 +625,13 @@ void do_pgroup_grant(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_help(struct char_data *ch, char *argument) {
-  send_to_char("Sorry, the help feature is still under construction.", ch);
+  send_to_char("Sorry, the help feature is still under construction.\r\n", ch);
   
   // pgroup  help  [command]     Displays info on pgroup or its subcommands.
 }
 
 void do_pgroup_invitations(struct char_data *ch, char *argument) {
-  send_to_char("Sorry, the invitations feature is still under construction.", ch);
+  send_to_char("Sorry, the invitations feature is still under construction.\r\n", ch);
   // pgroup  invitations  [revoke]  [name]  No args: Displays group's open invitations. With revoke: Deletes the specified invitation.
 }
 
@@ -643,7 +643,7 @@ void do_pgroup_invite(struct char_data *ch, char *argument) {
 void do_pgroup_lease(struct char_data *ch, char *argument) {
   // TODO: Log.
   // pgroup  lease  <apartment>      Lease an apartment in your pgroup's name using pgroup bank funds.
-  send_to_char("Sorry, the lease feature is still under construction.", ch);
+  send_to_char("Sorry, the lease feature is still under construction.\r\n", ch);
 }
 
 void do_pgroup_logs(struct char_data *ch, char *argument) {
@@ -693,7 +693,7 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
   FAILURE_CASE(!*argument, "You must specify something to notate in the logs.");
   
   if (strlen(argument) > MAX_PGROUP_LOG_LENGTH) {
-    send_to_char(ch, "Sorry, log entries must be %d characters or fewer.", MAX_PGROUP_LOG_LENGTH);
+    send_to_char(ch, "Sorry, log entries must be %d characters or fewer.\r\n", MAX_PGROUP_LOG_LENGTH);
     return;
   }
   
@@ -892,12 +892,12 @@ void do_pgroup_status(struct char_data *ch, char *argument) {
 void do_pgroup_transfer(struct char_data *ch, char *argument) {
   // TODO: Log.
   // pgroup  transfer  <vehicle>  <target>   Transfer a vehicle like do_transfer.
-  send_to_char("Sorry, the transfer feature is still under construction.", ch);
+  send_to_char("Sorry, the transfer feature is still under construction.\r\n", ch);
 }
 
 void do_pgroup_vote(struct char_data *ch, char *argument) {
   // PGROUP VOTE to list candidates (assuming a contest is open). PGROUP VOTE FOR <name> to cast/change vote.
-  send_to_char("Sorry, the vote feature is still under construction.", ch);
+  send_to_char("Sorry, the vote feature is still under construction.\r\n", ch);
 }
 
 void do_pgroup_wire(struct char_data *ch, char *argument) {
@@ -924,7 +924,7 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
   FAILURE_CASE(!*remainder, "Why are you sending this wire? (Syntax: PGROUP WIRE <amount> <recipient> <reason>)");
   
   if (strlen(remainder) > MAX_PGROUP_LOG_LENGTH - 2) {
-    send_to_char(ch, "That reason is too long; you're limited to %d characters.", MAX_PGROUP_LOG_LENGTH - 2);
+    send_to_char(ch, "That reason is too long; you're limited to %d characters.\r\n", MAX_PGROUP_LOG_LENGTH - 2);
     return;
   }
   
@@ -1356,7 +1356,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   else {
     // Ensure targeted character does not already have this priv.
     if (GET_PGROUP_MEMBER_DATA(vict)->privileges.IsSet(priv)) {
-      send_to_char(ch, "%s already has that privilege.\r\n", HSSH(vict));
+      send_to_char(ch, "%s already %s that privilege.\r\n", HSSH(vict), HASHAVE(vict));
       return;
     }
     

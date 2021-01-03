@@ -458,7 +458,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
   }
   int success = success_test(skill, target);
   if (vict) {
-    target = 4 + damage_modifier(vict, buf);
+    target = 4 + damage_modifier(vict, buf, sizeof(buf));
     success -= success_test(GET_DEFENSE(vict), target);
   }
   if (success > 0)
@@ -489,7 +489,7 @@ ACMD(do_upgrade)
     return;
   }
   if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
-    send_to_char(ch, "You don't see a vehicle called '%s' here.", buf1);
+    send_to_char(ch, "You don't see a vehicle called '%s' here.\r\n", buf1);
     return;
   }
 
@@ -699,9 +699,9 @@ ACMD(do_upgrade)
     }
   }
 
-  snprintf(buf, sizeof(buf), "$n goes to work on %s.\r\n", GET_VEH_NAME(veh));
+  snprintf(buf, sizeof(buf), "$n goes to work on %s and installs %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(mod));
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
-  send_to_char(ch, "You go to work on %s.\r\n", GET_VEH_NAME(veh));
+  send_to_char(ch, "You go to work on %s and install %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(mod));
 }
 
 void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
@@ -906,9 +906,10 @@ ACMD(do_subscribe)
   if (!*argument) {
     if (ch->char_specials.subscribe) {
       send_to_char("Your subscriber list contains:\r\n", ch);
+      struct room_data *room;
       for (veh = ch->char_specials.subscribe; veh; veh = veh->next_sub) {
         snprintf(buf, sizeof(buf), "%2d) %-30s (At %s^n) [%2d/10] Damage\r\n", i, GET_VEH_NAME(veh),
-                get_veh_in_room(veh)->name, veh->damage);
+                (room = get_veh_in_room(veh)) ? room->name : "someone's tow rig, probably", veh->damage);
         send_to_char(buf, ch);
         i++;
       }
@@ -929,7 +930,7 @@ ACMD(do_subscribe)
   } else
     veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch);
   if (!veh) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", buf);
     return;
   }
   if (veh->owner != GET_IDNUM(ch)) {
@@ -969,7 +970,7 @@ ACMD(do_repair)
   }
 
   if (!(veh = get_veh_list(argument, ch->in_veh ? ch->in_veh->carriedvehs : get_ch_in_room(ch)->vehicles, ch))) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
     return;
   }
 
@@ -1062,7 +1063,7 @@ ACMD(do_driveby)
     return;
   }
   if (!(vict = get_char_in_list_vis(ch, arg, ch->in_veh->in_room->people))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     return;
   }
   if ((dir = search_block(buf2, lookdirs, FALSE)) == -1) {
@@ -1255,7 +1256,7 @@ ACMD(do_chase)
 
   if (!(tveh = get_veh_list(arg, veh->in_room->vehicles, ch)) &&
       !(vict = get_char_room(arg, veh->in_room))) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see anything or anyone named '%s' here.\r\n", arg);
     return;
   }
 
@@ -1758,7 +1759,7 @@ ACMD(do_pop)
     return;
   }
   if (!veh && (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
     return;
   }
   if (!ch->in_veh && !veh->hood && veh->owner != GET_IDNUM(ch)) {
@@ -1822,16 +1823,18 @@ ACMD(do_tow)
     snprintf(buf, sizeof(buf), "%s releases %s from its towing equipment.\r\n", buf3, GET_VEH_NAME(veh->towing));
     send_to_char(ch, "You release %s from your towing equipment.\r\n", GET_VEH_NAME(veh->towing));
     
-    if (ch->in_veh->in_room) {
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+    if (veh->in_room) {
+      if (veh->in_room->people) {
+        act(buf, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
+        act(buf, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
+      }
       veh_to_room(veh->towing, veh->in_room);
       veh->towing = NULL;
-    } else if (ch->in_veh->in_veh){
-      send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+    } else if (veh->in_veh){
+      send_to_veh(buf, veh->in_veh, ch, TRUE);
       veh_to_veh(veh->towing, veh->in_veh);
     } else {
-      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(veh), veh->idnum);
       send_to_char("The game system encountered an error. Tow not released.\r\n", ch);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return;
@@ -1842,7 +1845,7 @@ ACMD(do_tow)
   }
   skip_spaces(&argument);
   if (!(tveh = get_veh_list(argument, veh->in_room->vehicles, ch))) {
-    send_to_char(NOOBJECT, ch);
+    send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
     return;
   }
   if (tveh->type == VEH_TRUCK)
@@ -1863,13 +1866,15 @@ ACMD(do_tow)
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));
     strcpy(buf3, GET_VEH_NAME(veh));
     snprintf(buf, sizeof(buf), "%s picks up %s with its towing equipment.\r\n", buf3, GET_VEH_NAME(tveh));
-    if (ch->in_veh->in_room) {
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
-      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
-    } else if (ch->in_veh->in_veh){
-      send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+    if (veh->in_room) {
+      if (veh->in_room->people) {
+        act(buf, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
+        act(buf, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
+      }
+    } else if (veh->in_veh){
+      send_to_veh(buf, veh->in_veh, ch, TRUE);
     } else {
-      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      snprintf(buf, sizeof(buf), "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(veh), veh->idnum);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
     veh->towing = tveh;
@@ -2021,7 +2026,7 @@ ACMD(do_transfer)
   else if (veh->owner != GET_IDNUM(ch))
     send_to_char("You can't transfer ownership of a vehicle you don't own.\r\n", ch);
   else if (!(targ = get_char_room_vis(ch, buf2)))
-    send_to_char("You don't see that person here.\r\n", ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf2);
   else {
     snprintf(buf, sizeof(buf), "You transfer ownership of %s to $N.", GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "$n transfers ownership of %s to you.", GET_VEH_NAME(veh));

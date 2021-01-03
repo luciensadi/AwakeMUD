@@ -61,6 +61,22 @@ int objList::CountObj(int num)
   return counter;
 }
 
+// Adaptation of CountObj to find PC corpses with things in them.
+int objList::CountPlayerCorpses()
+{
+  int counter = 0;
+  nodeStruct<struct obj_data *> *temp;
+  for (temp = head; temp; temp = temp->next)
+    if (GET_OBJ_TYPE(temp->data) == ITEM_CONTAINER 
+        && temp->data->contains
+        && GET_OBJ_VAL(temp->data, 4) 
+        && IS_OBJ_STAT(temp->data, ITEM_CORPSE) 
+    )
+      counter++;
+
+  return counter;
+}
+
 // this function searches through the list and returns a pointer to the
 // object whose object rnum matches num
 struct obj_data *objList::FindObj(int num)
@@ -246,17 +262,23 @@ void objList::UpdateCounters(void)
       
       // If there were no characters in the room working on it, clear its pack/unpack counter.
       if (!ch) {
-        snprintf(buf, sizeof(buf), "A passerby rolls %s eyes and quickly re-%spacks the half-packed $P.",
-                number(0, 1) == 0 ? "his" : "her",
-                GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "");
-        act(buf, FALSE, NULL, NULL, OBJ, TO_ROOM);
+        // Only send a message if someone is there.
+        if (OBJ->in_room->people) {
+          snprintf(buf, sizeof(buf), "A passerby rolls %s eyes and quickly re-%spacks the half-packed $p.",
+                  number(0, 1) == 0 ? "his" : "her",
+                  GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "");
+          act(buf, FALSE, OBJ->in_room->people, NULL, OBJ, TO_ROOM);
+        }
         GET_WORKSHOP_UNPACK_TICKS(OBJ) = 0;
       }
     }
     
     // Cook chips.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER && OBJ->contains && GET_OBJ_VAL(OBJ, 9) > 0) {
-      if (--GET_OBJ_VAL(OBJ, 9) < 1) {
+    if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY 
+        && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER 
+        && OBJ->contains 
+        && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0) {
+      if (--GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) < 1) {
         struct obj_data *chip = OBJ->contains;
         act("$p beeps loudly, signaling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
         if (GET_OBJ_TIMER(chip) == -1) {

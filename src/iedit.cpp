@@ -116,9 +116,9 @@ void iedit_disp_prompt_apply_menu(struct descriptor_data * d)
   {
     if (d->edit_obj->affected[counter].modifier) {
       if (GET_OBJ_TYPE(d->edit_obj) == ITEM_MOD)
-        sprinttype(d->edit_obj->affected[counter].location, veh_aff, buf2);
+        sprinttype(d->edit_obj->affected[counter].location, veh_aff, buf2, sizeof(buf2));
       else
-        sprinttype(d->edit_obj->affected[counter].location, apply_types, buf2);
+        sprinttype(d->edit_obj->affected[counter].location, apply_types, buf2, sizeof(buf2));
       send_to_char(CH, " %d) %+d to %s%s%s\r\n", counter + 1,
                    d->edit_obj->affected[counter].modifier, CCCYN(CH, C_CMP), buf2,
                    CCNRM(CH, C_CMP));
@@ -461,6 +461,9 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
         case TYPE_PARTS:
           send_to_char("  0) General Parts\r\n  1) Memory Chips\r\n", CH);
           break;
+        case TYPE_COOKER:
+          send_to_char("Rating: ", CH);
+          break;
         default:
           iedit_disp_menu(d);
           break;
@@ -497,8 +500,12 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
         send_to_char("Load space taken up: ", d->character);
       break;
     case ITEM_WORN:
-      send_to_char("Space for magazines: ", CH);
-      break;
+      // Skipping this field while doing nothing? Re-increment our counter.
+      if (d->iedit_limit_edits)
+        d->iedit_limit_edits++;
+      iedit_disp_val3_menu(d);
+      // send_to_char("Space for magazines: ", CH);
+      return;
     case ITEM_OTHER:
       send_to_char("Enter Value 0: ", CH);
       break;
@@ -646,8 +653,12 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
         send_to_char("Rating: ", CH);
       break;
     case ITEM_WORN:
-      send_to_char("Space for grenades: ", CH);
-      break;
+      // Skipping this field while doing nothing? Re-increment our counter.
+      if (d->iedit_limit_edits)
+        d->iedit_limit_edits++;
+      iedit_disp_val4_menu(d);
+      //send_to_char("Space for grenades: ", CH);
+      return;
     default:
       iedit_disp_menu(d);
   }
@@ -761,8 +772,12 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
         iedit_disp_menu(d);
       break;
     case ITEM_WORN:
-      send_to_char("Space for shuriken: ", CH);
-      break;
+      // Skipping this field while doing nothing? Re-increment our counter.
+      if (d->iedit_limit_edits)
+        d->iedit_limit_edits++;
+      iedit_disp_val5_menu(d);
+      //send_to_char("Space for shuriken: ", CH);
+      return;
     case ITEM_MOD:
       if (GET_OBJ_VAL(d->edit_obj, 0) == MOD_RADIO)
         send_to_char("Crypt Level (0-6): ", CH);
@@ -1211,30 +1226,30 @@ void iedit_disp_wear_menu(struct descriptor_data * d)
 void iedit_disp_legality_menu(struct descriptor_data *d) {
   CLS(CH);
   if (d->edit_mode == IEDIT_LEGAL1) {
-    send_to_char("1) Small Blade\r\n"
-                 "2) Large Blade\r\n"
-                 "3) Blunt Weapon\r\n"
-                 "4) Projectile\r\n"
-                 "5) Pistol\r\n"
-                 "6) Rifle\r\n"
-                 "7) Automatic Weapon\r\n"
-                 "8) Heavy Weapon\r\n"
-                 "9) Explosive\r\n"
-                 "10) Military Weapon\r\n"
-                 "11) Military Armour\r\n"
-                 "12) Military Ammunition\r\n"
-                 "13) Class A (Paralegal) Cyberware\r\n"
-                 "14) Class B (Security Grade) Cyberware\r\n"
-                 "15) Class C (Military Grade) Cyberware\r\n"
-                 "16) Class D Matrix\r\n"
-                 "17) Class E Magic\r\n"
-                 "18) Class A (Paralegal) Equipment\r\n"
-                 "19) Class B (Security Grade) Equipment\r\n"
-                 "20) Class C (Military Grade) Equipment\r\n"
-                 "21) Class A (Pharmaceuticals) Controlled\r\n"
-                 "22) Class B (BTL) Controlled\r\n"
-                 "23) Class C (Biological Agents) Controlled\r\n"
-                 "Select Security Category (0 for other): ", CH);
+    send_to_char("1) Small Blade                              (A)\r\n"
+                 "2) Large Blade                              (B)\r\n"
+                 "3) Blunt Weapon                             (C)\r\n"
+                 "4) Projectile                               (D)\r\n"
+                 "5) Pistol                                   (E)\r\n"
+                 "6) Rifle                                    (F)\r\n"
+                 "7) Automatic Weapon                         (G)\r\n"
+                 "8) Heavy Weapon                             (H)\r\n"
+                 "9) Explosive                                (J)\r\n"
+                 "10) Military Weapon                         (K)\r\n"
+                 "11) Military Armour                         (L)\r\n"
+                 "12) Military Ammunition                     (M)\r\n"
+                 "13) Class A (Paralegal) Cyberware           (N)\r\n"
+                 "14) Class B (Security Grade) Cyberware      (Q)\r\n"
+                 "15) Class C (Military Grade) Cyberware      (R)\r\n"
+                 "16) Class D Matrix                          (S)\r\n"
+                 "17) Class E Magic                           (T)\r\n"
+                 "18) Class A (Paralegal) Equipment           (U)\r\n"
+                 "19) Class B (Security Grade) Equipment      (V)\r\n"
+                 "20) Class C (Military Grade) Equipment      (W)\r\n"
+                 "21) Class A (Pharmaceuticals) Controlled    (X)\r\n"
+                 "22) Class B (BTL) Controlled                (Y)\r\n"
+                 "23) Class C (Biological Agents) Controlled  (Z)\r\n"
+                 "\r\nSelect Security Category (0 for other): ", CH);
     d->edit_mode = IEDIT_LEGAL2;
   } else if (d->edit_mode == IEDIT_LEGAL2) {
     send_to_char("Permit available (0 for no, 1 for yes): ", CH);
@@ -1258,7 +1273,7 @@ void iedit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "4) Look description: \r\n%s\r\n",
                d->edit_obj->text.look_desc ? d->edit_obj->text.look_desc :
                "(not set)");
-  sprinttype(GET_OBJ_TYPE(d->edit_obj), item_types, buf1);
+  sprinttype(GET_OBJ_TYPE(d->edit_obj), item_types, buf1, sizeof(buf1));
   send_to_char(CH, "5) Item type: ^c%s^n\r\n", buf1);
   GET_OBJ_EXTRA(d->edit_obj).PrintBits(buf1, MAX_STRING_LENGTH,
                                        extra_bits, ITEM_EXTRA_MAX);
@@ -1326,6 +1341,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
   long             number, j;
   long            obj_number;   /* the RNUM */
   float fnumber;
+  int real_obj;
   bool modified = FALSE;
   switch (d->edit_mode)
   {
@@ -1557,7 +1573,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case 'q':
         case 'Q':
           if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
-            send_to_char("You can't save this object! Edit it directly in the world files.", d->character);
+            send_to_char("You can't save this object! Edit it directly in the world files.\r\n", d->character);
             break;
           }
           d->edit_mode = IEDIT_CONFIRM_SAVESTRING;
@@ -2076,6 +2092,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
                 return;
               }
               break;
+            case TYPE_COOKER:
+              if (number < 0 || number > 10) {
+                send_to_char("Rating must be between 0 and 10. Rating: ", CH);
+                return;
+              }
+              break;
           }
           break;
         case ITEM_PATCH:
@@ -2387,7 +2409,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               }
               break;
             case CYB_CRANIALCYBER:
-              if (real_object(number) < 1|| obj_proto[real_object(number)].obj_flags.type_flag != ITEM_CYBERDECK) {
+              if ((real_obj = real_object(number)) < 1|| obj_proto[real_obj].obj_flags.type_flag != ITEM_CYBERDECK) {
                 send_to_char("Object doesn't exist or is not a cyberdeck! Vnum of cyberdeck to be included in headware (0 to quit): ", CH);
                 return;
               }

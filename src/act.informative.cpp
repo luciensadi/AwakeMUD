@@ -37,6 +37,8 @@ using namespace std;
 #include "quest.h"
 #include "transport.h"
 #include "newdb.h"
+#include "bullet_pants.h"
+#include "config.h"
 
 const char *CCHAR;
 
@@ -64,10 +66,15 @@ extern SPECIAL(spell_trainer);
 extern SPECIAL(johnson);
 extern SPECIAL(shop_keeper);
 extern SPECIAL(landlord_spec);
+extern SPECIAL(fence);
+extern SPECIAL(terell_davis);
+extern SPECIAL(hacker);
+extern SPECIAL(receptionist);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
+extern float get_bulletpants_weight(struct char_data *ch);
 
-extern teach_t teachers[];
+extern struct teach_data teachers[];
 
 extern struct elevator_data *elevator;
 extern int num_elevators;
@@ -89,6 +96,7 @@ const char* blood_messages[] = {
   "If you see this, alert an immort that the blood level is too high.\r\n"
 };
 
+ACMD_DECLARE(do_examine);
 
 /* end blood stuff */
 
@@ -203,12 +211,15 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     else {
       // Gun magazines get special consideration.
       if (GET_OBJ_TYPE(object) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_MAXAMMO(object)) {
-        snprintf(buf, sizeof(buf), "A%s %d-round %s %s magazine has been left here.",
+        snprintf(buf, sizeof(buf), "^gA%s %d-round %s %s magazine has been left here.^n",
           GET_MAGAZINE_AMMO_COUNT(object) <= 0 ? "n empty" : "",
           GET_MAGAZINE_BONDED_MAXAMMO(object),
           ammo_type[GET_MAGAZINE_AMMO_TYPE(object)].name,
           weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(object)]
         );
+      // As do ammo boxes.
+      } else if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO) {
+        snprintf(buf, sizeof(buf), "^gA metal box of %s has been left here.^n", get_ammo_representation(GET_AMMOBOX_WEAPON(object), GET_AMMOBOX_TYPE(object), 0));
       } else {
         strcat(buf, object->text.room_desc);
       }
@@ -553,12 +564,12 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         weight = GET_WEIGHT(i) - (GET_WEIGHT(i) % 10) + 10;
       
       if (weight > 4) {
-        snprintf(buf, sizeof(buf), "$e looks to be about %0.1f meters tall and "
-                "appears to weigh about %d kg.", height, weight);
+        snprintf(buf, sizeof(buf), "$e look%s to be about %0.1f meters tall and "
+                "appears to weigh about %d kg.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height, weight);
         act(buf, FALSE, i, 0, ch, TO_VICT);
       } else {
-        snprintf(buf, sizeof(buf), "$e looks to be about %0.1f meters tall and "
-                "appears to barely weigh anything.", height);
+        snprintf(buf, sizeof(buf), "$e look%s to be about %0.1f meters tall and "
+                "appears to barely weigh anything.", HSSH_SHOULD_PLURAL(i) ? "s" : "", height);
         act(buf, FALSE, i, 0, ch, TO_VICT);
       }
     }
@@ -763,70 +774,221 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strcat(buf, i->player.physical_text.room_desc);
     
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
-      if (mob_index[GET_MOB_RNUM(i)].func) {
-        if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
+      bool already_printed = FALSE;
+      if (mob_index[GET_MOB_RNUM(i)].func || mob_index[GET_MOB_RNUM(i)].sfunc) {
+        if (mob_index[GET_MOB_RNUM(i)].func == trainer || mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == teacher || mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
+        if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher || mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), already_printed ? " also" : "");
+            already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
+        if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), already_printed ? " also" : "");
+            already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer) {
+        if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), already_printed ? " also" : "");
+            already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == johnson || mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s has a few things for sale.^n\r\n", HSSH(i));
+        if ((mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis)
+            || (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].sfunc == terell_davis)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.^n\r\n", HSSH(i), already_printed ? " also" : "", HASHAVE(i));
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+        if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec || mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-      }
-      
-      if (mob_index[GET_MOB_RNUM(i)].sfunc && mob_index[GET_MOB_RNUM(i)].sfunc != mob_index[GET_MOB_RNUM(i)].func) {
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        if (mob_index[GET_MOB_RNUM(i)].func == fence || mob_index[GET_MOB_RNUM(i)].sfunc == fence) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        if (mob_index[GET_MOB_RNUM(i)].func == hacker || mob_index[GET_MOB_RNUM(i)].sfunc == hacker) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- try GIVE one to %s.^n\r\n", HSSH(i), already_printed ? " also" : "", HMHR(i));
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
-          // Mundanes can't see metamagic teachers' abilities.
-          if (GET_TRADITION(ch) != TRAD_MUNDANE)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        if (mob_index[GET_MOB_RNUM(i)].func == receptionist || mob_index[GET_MOB_RNUM(i)].sfunc == receptionist) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has bunks for rent.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
-          // Adepts can't see adept trainers' abilities.
-          if (GET_TRADITION(ch) == TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+/*
+#define FUNC_TO_DEBUG_MSG(function, message) \
+if (mob_index[GET_MOB_RNUM(i)].func == (function) || mob_index[GET_MOB_RNUM(i)].sfunc == (function)) \
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...DEBUG: %s has function: %s.^n\r\n", HSSH(i), (message));
+
+        if (access_level(ch, LVL_VICEPRES)) {
+          SPECIAL(postmaster);
+          SPECIAL(generic_guard);
+          SPECIAL(receptionist);
+          // SPECIAL(cryogenicist);
+          SPECIAL(teacher);
+          SPECIAL(metamagic_teacher);
+          SPECIAL(trainer);
+          SPECIAL(adept_trainer);
+          SPECIAL(spell_trainer);
+          // SPECIAL(puff);
+          SPECIAL(janitor);
+          // SPECIAL(snake);
+          // SPECIAL(thief);
+          SPECIAL(pike);
+          SPECIAL(jeff);
+          SPECIAL(captain);
+          SPECIAL(rodgers);
+          SPECIAL(delaney);
+          SPECIAL(lone_star_park);
+          SPECIAL(mugger_park);
+          SPECIAL(gate_guard_park);
+          SPECIAL(squirrel_park);
+          SPECIAL(sick_ork);
+          // SPECIAL(mage_messenger);
+          // SPECIAL(malinalxochi);
+          SPECIAL(adept_guard);
+          SPECIAL(takehero_tsuyama);
+          SPECIAL(bio_secretary);
+          // SPECIAL(pool);
+          SPECIAL(harlten);
+          SPECIAL(branson);
+          SPECIAL(bio_guard);
+          SPECIAL(worker);
+          // SPECIAL(dwarf);
+          // SPECIAL(elf);
+          // SPECIAL(george);
+          // SPECIAL(wendigo);
+          // SPECIAL(pimp);
+          // SPECIAL(prostitute);
+          // SPECIAL(heinrich);
+          // SPECIAL(ignaz);
+          // SPECIAL(waitress);
+          // SPECIAL(dracula);
+          // SPECIAL(tunnel_rat);
+          SPECIAL(saeder_guard);
+          SPECIAL(fixer);
+          SPECIAL(hacker);
+          SPECIAL(fence);
+          SPECIAL(taxi);
+          SPECIAL(crime_mall_guard);
+          SPECIAL(doctor_scriptshaw);
+          SPECIAL(huge_troll);
+          // SPECIAL(roots_receptionist);
+          SPECIAL(aegnor);
+          SPECIAL(purple_haze_bartender);
+          SPECIAL(yukiya_dahoto);
+          SPECIAL(smelly);
+          SPECIAL(terell_davis);
+          SPECIAL(smiths_bouncer);
+          SPECIAL(bouncer_gentle);
+          SPECIAL(matchsticks);
+          SPECIAL(painter);
+          SPECIAL(multnomah_guard);
+          SPECIAL(nerp_skills_teacher);
+          SPECIAL(orkish_truckdriver);
+          SPECIAL(Janis_Meet);
+          SPECIAL(Janis_Amer_Door);
+          SPECIAL(Janis_Amer_Girl);
+          SPECIAL(Janis_Amer_Jerry);
+          SPECIAL(Janis_Captive);
+          SPECIAL(mageskill_anatoly);
+          SPECIAL(mageskill_herbie);
+          SPECIAL(mageskill_trainer);
+          SPECIAL(mageskill_nightwing);
+          SPECIAL(bouncer_troll);
+          SPECIAL(knightcenter_bouncer);
+          SPECIAL(cybered_yakuza);
+          SPECIAL(airport_guard);
+          SPECIAL(axehead);
+          
+          FUNC_TO_DEBUG_MSG(postmaster, "postmaster");
+          FUNC_TO_DEBUG_MSG(generic_guard, "generic guard");
+          FUNC_TO_DEBUG_MSG(receptionist, "receptionist");
+          // FUNC_TO_DEBUG_MSG(cryogenicist, "cryogenicist");
+          // FUNC_TO_DEBUG_MSG(puff, "puff");
+          FUNC_TO_DEBUG_MSG(janitor, "janitor");
+          // FUNC_TO_DEBUG_MSG(snake, "snake");
+          // FUNC_TO_DEBUG_MSG(thief, "thief");
+          FUNC_TO_DEBUG_MSG(pike, "pike");
+          FUNC_TO_DEBUG_MSG(jeff, "jeff");
+          FUNC_TO_DEBUG_MSG(captain, "cpt");
+          FUNC_TO_DEBUG_MSG(rodgers, "rodg");
+          FUNC_TO_DEBUG_MSG(delaney, "dela");
+          FUNC_TO_DEBUG_MSG(lone_star_park, "lone park");
+          FUNC_TO_DEBUG_MSG(mugger_park, "mug park");
+          FUNC_TO_DEBUG_MSG(gate_guard_park, "gate park");
+          FUNC_TO_DEBUG_MSG(squirrel_park, "squir park");
+          FUNC_TO_DEBUG_MSG(sick_ork, "sick ork");
+          // FUNC_TO_DEBUG_MSG(mage_messenger, "mage mes");
+          // FUNC_TO_DEBUG_MSG(malinalxochi, "malinalxochi");
+          FUNC_TO_DEBUG_MSG(adept_guard, "adept guard");
+          FUNC_TO_DEBUG_MSG(takehero_tsuyama, "takehero");
+          FUNC_TO_DEBUG_MSG(bio_secretary, "bio_sec");
+          // FUNC_TO_DEBUG_MSG(pool, "pool");
+          FUNC_TO_DEBUG_MSG(harlten, "harlten");
+          FUNC_TO_DEBUG_MSG(branson, "branson");
+          FUNC_TO_DEBUG_MSG(bio_guard, "bio_guard");
+          FUNC_TO_DEBUG_MSG(worker, "worker");
+          // FUNC_TO_DEBUG_MSG(dwarf, "dwarf");
+          // FUNC_TO_DEBUG_MSG(elf, "elf");
+          // FUNC_TO_DEBUG_MSG(george, "george");
+          // FUNC_TO_DEBUG_MSG(wendigo, "wendigo");
+          // FUNC_TO_DEBUG_MSG(pimp, "pimp");
+          // FUNC_TO_DEBUG_MSG(prostitute, "prost");
+          // FUNC_TO_DEBUG_MSG(heinrich, "hein");
+          // FUNC_TO_DEBUG_MSG(ignaz, "ignaz");
+          // FUNC_TO_DEBUG_MSG(waitress, "wait");
+          // FUNC_TO_DEBUG_MSG(dracula, "dracul");
+          // FUNC_TO_DEBUG_MSG(tunnel_rat, "tunnel rat");
+          FUNC_TO_DEBUG_MSG(saeder_guard, "saeder");
+          FUNC_TO_DEBUG_MSG(fixer, "fixer");
+          FUNC_TO_DEBUG_MSG(hacker, "hacker");
+          FUNC_TO_DEBUG_MSG(fence, "fence");
+          FUNC_TO_DEBUG_MSG(taxi, "taxi");
+          FUNC_TO_DEBUG_MSG(crime_mall_guard, "crime mall g");
+          FUNC_TO_DEBUG_MSG(doctor_scriptshaw, "doct s");
+          FUNC_TO_DEBUG_MSG(huge_troll, "troll");
+          // FUNC_TO_DEBUG_MSG(roots_receptionist, "roots rece");
+          FUNC_TO_DEBUG_MSG(aegnor, "aeg");
+          FUNC_TO_DEBUG_MSG(purple_haze_bartender, "purple");
+          FUNC_TO_DEBUG_MSG(yukiya_dahoto, "yukiya");
+          FUNC_TO_DEBUG_MSG(smelly, "smelly");
+          FUNC_TO_DEBUG_MSG(terell_davis, "terell");
+          FUNC_TO_DEBUG_MSG(smiths_bouncer, "smiths b");
+          FUNC_TO_DEBUG_MSG(bouncer_gentle, "bouncer g");
+          FUNC_TO_DEBUG_MSG(matchsticks, "matchs");
+          FUNC_TO_DEBUG_MSG(painter, "paint");
+          FUNC_TO_DEBUG_MSG(multnomah_guard, "multn g");
+          FUNC_TO_DEBUG_MSG(nerp_skills_teacher, "nerp t");
+          FUNC_TO_DEBUG_MSG(orkish_truckdriver, "ork t");
+          FUNC_TO_DEBUG_MSG(Janis_Meet, "janm");
+          FUNC_TO_DEBUG_MSG(Janis_Amer_Door, "janad");
+          FUNC_TO_DEBUG_MSG(Janis_Amer_Girl, "janag");
+          FUNC_TO_DEBUG_MSG(Janis_Amer_Jerry, "janaj");
+          FUNC_TO_DEBUG_MSG(Janis_Captive, "janc");
+          FUNC_TO_DEBUG_MSG(mageskill_anatoly, "m_a");
+          FUNC_TO_DEBUG_MSG(mageskill_herbie, "m_h");
+          FUNC_TO_DEBUG_MSG(mageskill_trainer, "m_t");
+          FUNC_TO_DEBUG_MSG(mageskill_nightwing, "m_n");
+          FUNC_TO_DEBUG_MSG(bouncer_troll, "bouncer t");
+          FUNC_TO_DEBUG_MSG(knightcenter_bouncer, "kc bounc");
+          FUNC_TO_DEBUG_MSG(cybered_yakuza, "cyber yak");
+          FUNC_TO_DEBUG_MSG(airport_guard, "air guard");
+          FUNC_TO_DEBUG_MSG(axehead, "axeh");
         }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
-          // Mundanes and adepts can't see spell trainers' abilities.
-          if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
-        }
-        if (mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
-        }
+        */
       }
     }
     
@@ -1247,8 +1409,15 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
-  } else
-    send_to_char(ch, "^C%s^n\r\n", GET_ROOM_NAME(ch->in_room), ch);
+  } else {
+    send_to_char(ch, "^C%s^n%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
+                 ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
+                 ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
+  }
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
@@ -1264,6 +1433,35 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   
   if (ch->in_room->blood > 0)
     send_to_char(blood_messages[(int) ch->in_room->blood], ch);
+    
+  if (ch->in_room->debris > 0) {
+    strncpy(buf, "^y", sizeof(buf));
+    
+    if (ch->in_room->debris < 5) {
+      strncat(buf, "A few spent casings and empty mags are scattered here.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 10) {
+      strncat(buf, "Spent casings and empty mags are scattered here.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 20) {
+      strncat(buf, "Bullet holes, spent casings, and empty mags litter the area.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 30) {
+      strncat(buf, "This place has been shot up, and weapons debris is everywhere.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 40) {
+      strncat(buf, "The acrid scent of propellant hangs in the air amidst the weapons debris.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else if (ch->in_room->debris < 45) {
+      strncat(buf, "Veritable piles of spent casings and empty mags fill the area.", sizeof(buf) - strlen(buf) - 1);
+    }
+    else {
+      strncpy(buf, "^YIt looks like World War III was fought here!", sizeof(buf));
+    }
+    strncat(buf, "^n\r\n", sizeof(buf) - strlen(buf) - 1);
+    send_to_char(buf, ch);
+  }
+  
   if (GET_BACKGROUND_COUNT(ch->in_room) && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
     if (GET_BACKGROUND_AURA(ch->in_room) == AURA_POWERSITE) {
       switch (GET_BACKGROUND_COUNT(ch->in_room)) {
@@ -1453,7 +1651,11 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   }
   
   if (!bits && !veh) {
-    send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
+    if (str_str("pockets", arg)) {
+      send_to_char("Please see ^WHELP POCKETS^n for info on how to use your ammo pockets.\r\n", ch);
+    } else {
+      send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
+    }
     return;
   }
   
@@ -1663,14 +1865,16 @@ void look_at_target(struct char_data * ch, char *arg)
   }
   
   /* Does the argument match an extra desc of an object in the room? */
-  if (ch->in_room)
-    for (obj = ch->in_room->contents; obj && !found; obj = obj->next_content)
-      if (CAN_SEE_OBJ(ch, obj))
-        if ((desc = find_exdesc(arg, obj->ex_description)) != NULL)
-        {
+  if (ch->in_room) {
+    FOR_ITEMS_AROUND_CH(ch, obj) {
+      if (CAN_SEE_OBJ(ch, obj)) {
+        if ((desc = find_exdesc(arg, obj->ex_description)) != NULL) {
           send_to_char(desc, ch);
           found = 1;
         }
+      }
+    }
+  }
   if (bits)
   {                   /* If an object was found back in
                        * generic_find */
@@ -1678,8 +1882,14 @@ void look_at_target(struct char_data * ch, char *arg)
       show_obj_to_char(found_obj, ch, 5);       /* Show no-description */
     else
       show_obj_to_char(found_obj, ch, 6);       /* Find hum, glow etc */
-  } else if (!found)
-    send_to_char(NOOBJECT, ch);
+  } else if (!found) {
+    if (str_str("pockets", arg)) {
+      send_to_char("Please see ^WHELP POCKETS^n for info on how to use your ammo pockets.\r\n", ch);
+    } else {
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
+    }
+  }
+    
   ch->in_room = was_in;
   
 }
@@ -1721,9 +1931,14 @@ ACMD(do_look)
     else if ((look_type = search_block(arg, lookdirs, FALSE)) >= 0)
       look_in_direction(ch, convert_look[look_type]);
     else if (is_abbrev(arg, "at"))
+      do_examine(ch, arg2, 0, SCMD_EXAMINE);
+    else
+      do_examine(ch, arg, 0, SCMD_EXAMINE);
+    /* else if (is_abbrev(arg, "at"))
       look_at_target(ch, arg2);
     else
       look_at_target(ch, arg);
+      */
   }
 }
 
@@ -1763,7 +1978,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
 }
 
 void do_probe_object(struct char_data * ch, struct obj_data * j) {
-  int i, found, mount_location;
+  int i, found, mount_location, bal, imp;
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *access = NULL;
   
@@ -1773,16 +1988,22 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     snprintf(buf, sizeof(buf), "^MOOC^n statistics for '^y%s^n':\r\n", (GET_OBJ_NAME(j) ? GET_OBJ_NAME(j) : "<None>"));
   }
   
-  sprinttype(GET_OBJ_TYPE(j), item_types, buf1);
+  sprinttype(GET_OBJ_TYPE(j), item_types, buf1, sizeof(buf1));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
           AN(buf1), buf1, GET_OBJ_WEIGHT(j), material_names[(int)GET_OBJ_MATERIAL(j)], GET_OBJ_BARRIER(j));
   
+  bool was_take = j->obj_flags.wear_flags.IsSet(ITEM_WEAR_TAKE);
+  j->obj_flags.wear_flags.RemoveBit(ITEM_WEAR_TAKE);
   if (strcmp(j->obj_flags.wear_flags.ToString(), "0") != 0) {
     j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH, wear_bits, NUM_WEARS);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can be worn or equipped at the following wear location(s):\r\n  ^c%s^n\r\n", buf2);
   } else {
     strncat(buf, "This item cannot be worn or equipped.\r\n", sizeof(buf) - strlen(buf) - 1);
   }
+  if (was_take)
+    j->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
+  else
+    strncat(buf, "^yIt cannot be picked up once dropped.^n\r\n", sizeof(buf) - strlen(buf) - 1);
   
   switch (GET_OBJ_TYPE(j))
   {
@@ -1808,15 +2029,55 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_WEAPON:
       // Ranged weapons first.
       if (IS_GUN(GET_OBJ_VAL((j), 3))) {
+        int burst_count = 0;
         if (GET_OBJ_VAL(j, 5) > 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
-                  GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
-                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire.",
+                  GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name);
         } else {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
-                  AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
-                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire.",
+                  AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name);
         }
+        // Damage code.
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its base damage code is ^c%d%s%s^n",
+                 GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+        
+        // Burst fire?
+        if (GET_WEAPON_FIREMODE(j) == MODE_BF || GET_WEAPON_FIREMODE(j) == MODE_FA) {
+          burst_count = GET_WEAPON_FIREMODE(j) == MODE_BF ? 3 : GET_WEAPON_FULL_AUTO_COUNT(j);
+          
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", raised to ^c%d%s%s^n by its current fire mode.",
+                   GET_WEAPON_POWER(j) + burst_count,
+                   wound_arr[MIN(DEADLY, GET_WEAPON_DAMAGE_CODE(j) + (int)(burst_count / 3))],
+                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+        } else {
+          strncat(buf, ".", sizeof(buf) - strlen(buf) - 1);
+        }
+        
+        if (j->contains 
+            && GET_OBJ_TYPE(j->contains) == ITEM_GUN_MAGAZINE
+            && GET_MAGAZINE_AMMO_COUNT(j->contains) > 0
+            && GET_MAGAZINE_AMMO_TYPE(j->contains) != AMMO_NORMAL) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is loaded with %s, which ", 
+                   ammo_type[GET_MAGAZINE_AMMO_TYPE(j->contains)].name);
+          switch (GET_MAGAZINE_AMMO_TYPE(j->contains)) {
+            case AMMO_APDS:
+              strncat(buf, "pierces through enemy ballistic armor, halving its value.", sizeof(buf) - strlen(buf) - 1);
+              break;
+            case AMMO_EX:
+              strncat(buf, "increases power by one and ", sizeof(buf) - strlen(buf) - 1);
+              // fall through
+            case AMMO_EXPLOSIVE:
+              strncat(buf, "ignores one point of enemy ballistic armor.", sizeof(buf) - strlen(buf) - 1);
+              break;
+            case AMMO_FLECHETTE:
+              strncat(buf, "deals more damage to fully unarmored targets.", sizeof(buf) - strlen(buf) - 1);
+              break;
+            case AMMO_GEL:
+              strncat(buf, "deals mental instead of physical damage, but treats the enemy's ballistic armor as two points higher.", sizeof(buf) - strlen(buf) - 1);
+              break;
+          }
+        }
+        
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
@@ -1824,10 +2085,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         }
         
         // Info about attachments, if any.
+        int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(j);
+        int prone_recoil_comp = 0;
+        int real_obj;
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
           if (GET_OBJ_VAL(j, i) > 0
-              && real_object(GET_OBJ_VAL(j, i)) > 0
-              && (access = &obj_proto[real_object(GET_OBJ_VAL(j, i))])) {
+              && (real_obj = real_object(GET_OBJ_VAL(j, i))) > 0
+              && (access = &obj_proto[real_obj])) {
             // mount_location: used for gun_accessory_locations[] lookup.
             mount_location = i - ACCESS_LOCATION_TOP;
             
@@ -1857,10 +2121,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               case ACCESS_GASVENT:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA gas vent installed in the %s provides ^c%d^n round%s worth of recoil compensation.",
                         gun_accessory_locations[mount_location], -GET_OBJ_VAL(access, 2), -GET_OBJ_VAL(access, 2) > 1 ? "s'" : "'s");
+                standing_recoil_comp -= GET_OBJ_VAL(access, 2);
                 break;
               case ACCESS_SHOCKPAD:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA shock pad installed on the %s provides ^c1^n round's worth of recoil compensation.",
                         gun_accessory_locations[mount_location]);
+                standing_recoil_comp++;
                 break;
               case ACCESS_SILENCER:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe silencer installed on the %s will muffle this weapon's report.",
@@ -1876,13 +2142,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               case ACCESS_BIPOD:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA bipod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
                         gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_BIPOD, RECOIL_COMP_VALUE_BIPOD > 1 ? "s'" : "'s");
+                prone_recoil_comp += RECOIL_COMP_VALUE_BIPOD;
                 break;
               case ACCESS_TRIPOD:
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA tripod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
                         gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_TRIPOD, RECOIL_COMP_VALUE_TRIPOD > 1 ? "s'" : "'s");
+                prone_recoil_comp += RECOIL_COMP_VALUE_TRIPOD;
                 break;
               case ACCESS_BAYONET:
-                if (mount_location != ACCESS_LOCATION_UNDER) {
+                if (mount_location != ACCESS_ACCESSORY_LOCATION_UNDER) {
                   strcat(buf, "\r\n^RYour bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.");
                 } else {
                   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nA bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
@@ -1904,6 +2172,28 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
             }
+          }
+        }
+        
+        if (burst_count > 0 && burst_count - standing_recoil_comp > 0) {
+          strncat(buf, "\r\n\r\n^yIt doesn't have enough recoil compensation", sizeof(buf) - strlen(buf) - 1);
+          if (burst_count - standing_recoil_comp - prone_recoil_comp <= 0) {
+            strncat(buf, " unless fired from prone", sizeof(buf) - strlen(buf) - 1);
+          } else if (prone_recoil_comp > 0){
+            strncat(buf, " even when fired from prone", sizeof(buf) - strlen(buf) - 1);
+          }
+          // Do we require more recoil comp than is currently attached?
+          switch (GET_WEAPON_SKILL(j)) {
+            case SKILL_SHOTGUNS:
+            case SKILL_MACHINE_GUNS:
+            case SKILL_ASSAULT_CANNON:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ".^n\r\nStanding recoil penalty (doubled): ^c%d^n.  Prone recoil penalty (doubled): ^c%d^n.",
+                       (burst_count - standing_recoil_comp) * 2, MAX(0, burst_count - standing_recoil_comp - prone_recoil_comp) * 2);
+              break;
+            default:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ".^n\r\nStanding recoil penalty: ^c%d^n.  Prone recoil penalty: ^c%d^n.",
+                      burst_count - standing_recoil_comp, MAX(0, burst_count - standing_recoil_comp - prone_recoil_comp));
+              break;
           }
         }
       }
@@ -1937,16 +2227,20 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_WORN:
       strncpy(buf1, "It has space for ", sizeof(buf1));
       
-      if (GET_OBJ_VAL(j, 0) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) > 1 ? "s":"");
+      if (GET_WORN_POCKETS_HOLSTERS(j) > 0) {
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n holster%s", 
+                 (has_pockets?", ":""), GET_WORN_POCKETS_HOLSTERS(j), GET_WORN_POCKETS_HOLSTERS(j) > 1 ? "s":"");
         has_pockets = TRUE;
       }
+      /*   Magazines aren't a thing anymore. -- LS
       if (GET_OBJ_VAL(j, 1) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n magazine%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n magazine%s", 
+                 (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
         has_pockets = TRUE;
-      }
-      if (GET_OBJ_VAL(j, 4) > 0) {
-        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n miscellaneous small item%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 4), GET_OBJ_VAL(j, 4) > 1 ? "s":"");
+      } */
+      if (GET_WORN_POCKETS_MISC(j) > 0) {
+        snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s^c%d^n miscellaneous small item%s", 
+                 (has_pockets?", ":""), GET_WORN_POCKETS_MISC(j), GET_WORN_POCKETS_MISC(j) > 1 ? "s":"");
         has_pockets = TRUE;
       }
       
@@ -1955,8 +2249,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       } else {
         strcat(buf, "It has no pockets.\r\n");
       }
+      bal = GET_WORN_BALLISTIC(j);
+      imp = GET_WORN_IMPACT(j);
+      if (GET_WORN_MATCHED_SET(j)) {
+        bal = (int)(GET_WORN_BALLISTIC(j) / 100);
+        imp = (int)(GET_WORN_IMPACT(j) / 100);
+      }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. Its concealability rating is ^c%d^n.",
-              GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6), GET_OBJ_VAL(j, 7));
+              bal, imp, GET_WORN_CONCEAL_RATING(j));
       break;
     case ITEM_DOCWAGON:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
@@ -1968,7 +2268,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_DRINKCON:
     case ITEM_FOUNTAIN:
-      sprinttype(GET_OBJ_VAL(j, 2), drinks, buf2);
+      sprinttype(GET_OBJ_VAL(j, 2), drinks, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It currently contains ^c%d/%d^n units of ^c%s^n.",
               GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1), buf2);
       break;
@@ -2086,6 +2386,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       } else if (GET_OBJ_VAL(j, 0) == TYPE_PARTS) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This pack of parts contains ^c%d^n units of ^c%s^n.",
                 GET_OBJ_COST(j), GET_OBJ_VAL(j, 1) == 0 ? "general parts" : "memory chips");
+      } else if (GET_OBJ_VAL(j, 0) == TYPE_COOKER) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This chip cooker is rating ^c%d^n.", GET_OBJ_VAL(j, 1));
       } else {
         snprintf(buf2, sizeof(buf2), "Error: Unknown ITEM_DECK_ACCESSORY type %d passed to probe command.", GET_OBJ_VAL(j, 0));
         log(buf2);
@@ -2195,9 +2497,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     if (j->affected[i].modifier)
     {
       if (GET_OBJ_TYPE(j) == ITEM_MOD)
-        sprinttype(j->affected[i].location, veh_aff, buf2);
+        sprinttype(j->affected[i].location, veh_aff, buf2, sizeof(buf2));
       else
-        sprinttype(j->affected[i].location, apply_types, buf2);
+        sprinttype(j->affected[i].location, apply_types, buf2, sizeof(buf2));
       snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "%s %+d to %s", found++ ? "," : "",
               j->affected[i].modifier, buf2);
     }
@@ -2382,7 +2684,9 @@ ACMD(do_examine)
       if (!tmp_object->contains)
         strncpy(buf, "The small LED is currently off.\r\n", sizeof(buf));
       else if (GET_OBJ_VAL(tmp_object, 9))
-        strncpy(buf, "The small LED is currently orange, indicating activity.\r\n", sizeof(buf));
+        snprintf(buf, sizeof(buf), "The small LED is currently orange, indicating activity. The progress meter for cooking %s is at %d%%.\r\n",
+                 GET_OBJ_NAME(tmp_object->contains),
+                 (int)(((float)(GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(tmp_object) - GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(tmp_object)) / GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(tmp_object)) * 100));
       else if (GET_OBJ_TIMER(tmp_object->contains) == -1)
         strncpy(buf, "The small LED is currently flashed red, indicating a failed encode.\r\n", sizeof(buf));
       else
@@ -2500,7 +2804,7 @@ ACMD(do_gold)
 ACMD(do_pool)
 {
   char pools[MAX_INPUT_LENGTH];
-  if (GET_POWER(ch, ADEPT_SIDESTEP) && GET_DEFENSE(ch))
+  if (GET_POWER(ch, ADEPT_SIDESTEP))
     snprintf(buf, sizeof(buf), "^R+%d^n", GET_POWER(ch, ADEPT_SIDESTEP));
   else
     strncpy(buf, "  ", sizeof(buf));
@@ -2756,6 +3060,9 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
   
   if (AFF_FLAGGED(ch, AFF_SNEAK))
     strncat(buf2, "You are sneaking.\r\n", sizeof(buf2) - strlen(buf2) - 1);
+    
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You have accrued %d out of a possible %d socialization bonus points.\r\n",
+           GET_CONGREGATION_BONUS(ch), MAX_CONGREGATION_BONUS);
   
   // Physical and misc attributes.
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Height: %.2f meters\r\n", ((float)GET_HEIGHT(ch) / 100));
@@ -3047,7 +3354,7 @@ ACMD(do_score)
     strncat(buf, "^b/^L/                                                                   ^L/^b/\r\n", sizeof(buf) - strlen(buf) - 1);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nBody          ^w%2d (^W%2d^w)    Height: ^W%0.2f^w meters   Weight: ^W%3d^w kilos  ^b/^L/\r\n",
                           GET_REAL_BOD(ch), GET_BOD(ch), ((float)GET_HEIGHT(ch) / 100), GET_WEIGHT(ch));
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)    Encumbrance: ^W%3.2f^w kilos carried, ^W%3d^w max ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)    Encumbrance: ^W%6.2f^w kgs carried, ^W%3d^w max ^L/^b/\r\n",
                           GET_REAL_QUI(ch), GET_QUI(ch), IS_CARRYING_W(ch) ,CAN_CARRY_W(ch));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nStrength      ^w%2d (^W%2d^w)    Current session length ^W%2d^w days, ^W%2d^w hours.^b/^L/\r\n",
                           GET_REAL_STR(ch), GET_STR(ch), playing_time.day, playing_time.hours);
@@ -3078,8 +3385,8 @@ ACMD(do_score)
                           GET_REA(ch), 1 + GET_INIT_DICE(ch), shaman_string);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nArmor     ^w[ ^W%2d^rB^w/ ^W%2d^rI^w]    ^L%-17s^n                        ^b/^L/\r\n",
                           GET_BALLISTIC(ch), GET_IMPACT(ch), AFF_FLAGGED(ch, AFF_SNEAK) ? "You are sneaking." : "");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nNuyen     ^w[^W%'9ld^w]    %11s                              ^L/^b/\r\n",
-                          GET_NUYEN(ch), grade_string);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nNuyen     ^w[^W%'9ld^w]    %11s   Social Bonus: [^W%3d / %3d^n]  ^L/^b/\r\n",
+                          GET_NUYEN(ch), grade_string, GET_CONGREGATION_BONUS(ch), MAX_CONGREGATION_BONUS);
     strcat(buf, "^L/^b/                                                                   ^b/^L/\r\n"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
@@ -3115,6 +3422,12 @@ ACMD(do_inventory)
 {
   send_to_char("You are carrying:\r\n", ch);
   list_obj_to_char(ch->carrying, ch, 1, TRUE, FALSE);
+  
+  float ammo_weight = get_bulletpants_weight(ch);
+  if (ammo_weight > 0)
+    send_to_char(ch, "\r\nAdditionally, you have %.2f kilos of ammo in your pockets.\r\n", ammo_weight);
+  else
+    send_to_char("\r\nYou have no ammo in your pockets.\r\n", ch);
 }
 
 ACMD(do_cyberware)
@@ -3932,12 +4245,12 @@ ACMD(do_gen_ps)
   }
 }
 
-extern void nonsensical_reply( struct char_data *ch );
+extern void nonsensical_reply(struct char_data *ch, const char *arg);
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
   /* DISABLED FOR MORTALS */
-  nonsensical_reply(ch);
+  nonsensical_reply(ch, NULL);
   return;
 }
 
@@ -4139,7 +4452,7 @@ ACMD(do_diagnose)
   
   if (*buf) {
     if (!(vict = get_char_room_vis(ch, buf))) {
-      send_to_char(NOPERSON, ch);
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
       return;
     } else
       diag_char_to_char(vict, ch);
@@ -4580,8 +4893,14 @@ ACMD(do_recap)
   if (!GET_QUEST(ch))
     send_to_char(ch, "You're not currently on a run.\r\n");
   else {
-    snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
-            quest_table[GET_QUEST(ch)].info);
+#ifdef USE_QUEST_LOCATION_CODE
+    if (quest_table[GET_QUEST(ch)].location)
+      snprintf(buf, sizeof(buf), "At %s, %s told you: \r\n%s", quest_table[GET_QUEST(ch)].location, GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
+              quest_table[GET_QUEST(ch)].info);
+    else
+#endif
+      snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
+              quest_table[GET_QUEST(ch)].info);
     send_to_char(buf, ch);
   }
 }
@@ -4707,6 +5026,6 @@ ACMD(do_search) {
     send_to_char("You search the area for secrets, but fail to turn anything up.\r\n", ch);
     
     if (has_secrets && success_test(GET_INT(ch), 4))
-      send_to_char("You feel like there's something to uncover here.\r\n", ch);
+      send_to_char("You feel like there's still something to uncover here...\r\n", ch);
   }
 }

@@ -291,9 +291,9 @@ ACMD (do_redit)
      */
     d->edit_room = Mem->GetRoom();
     //memset((char *) d->edit_room, 0, sizeof(struct room_data));
-    d->edit_room->name = str_dup("An unfinished room");
-    d->edit_room->description = str_dup("You are in an unfinished room.\r\n");
-    d->edit_room->address = str_dup("An undisclosed location");
+    d->edit_room->name = str_dup(STRING_ROOM_TITLE_UNFINISHED);
+    d->edit_room->description = str_dup(STRING_ROOM_DESC_UNFINISHED);
+    d->edit_room->address = str_dup(STRING_ROOM_JACKPOINT_NO_ADDR);
     int i = 0;
     while ((d->edit_number > zone_table[i].top) && (i < top_of_zone_table))
       ++i;
@@ -488,7 +488,7 @@ ACMD(do_dig)
       
       // Check if they can edit this zone.
       if (!can_edit_zone(ch, counter)) {
-        send_to_char(ch, "Sorry, you can't edit zone %d.", zone_table[counter].number);
+        send_to_char(ch, "Sorry, you can't edit zone %d.\r\n", zone_table[counter].number);
         return;
       }
       
@@ -894,10 +894,10 @@ ACMD (do_vedit)
      * create dummy object!
      */
     d->edit_veh = Mem->GetVehicle();
-    d->edit_veh->name = str_dup ("unfinished object");
-    d->edit_veh->description = str_dup ("An unfinished object is lying here.");
-    d->edit_veh->short_description = str_dup ("an unfinished object");
-    d->edit_veh->long_description = str_dup ("It looks pretty much like an unfinished object");
+    d->edit_veh->name = str_dup (STRING_OBJ_NAME_UNFINISHED);
+    d->edit_veh->description = str_dup (STRING_OBJ_RDESC_UNFINISHED);
+    d->edit_veh->short_description = str_dup (STRING_OBJ_SDESC_UNFINISHED);
+    d->edit_veh->long_description = str_dup (STRING_OBJ_LDESC_UNFINISHED);
     d->edit_mode = VEDIT_CONFIRM_EDIT;
     return;
   }
@@ -1039,12 +1039,10 @@ ACMD (do_iedit)
      */
     d->edit_obj = Mem->GetObject();
     //clear_object (d->edit_obj);
-    d->edit_obj->text.keywords = str_dup("object unfinished");
-    d->edit_obj->text.name = str_dup("an unfinished object");
-    d->edit_obj->text.room_desc =
-      str_dup("An unfinished object is lying here.");
-    d->edit_obj->text.look_desc =
-      str_dup("It looks pretty much like an unfinished object");
+    d->edit_obj->text.keywords = str_dup(STRING_OBJ_NAME_UNFINISHED);
+    d->edit_obj->text.name = str_dup(STRING_OBJ_SDESC_UNFINISHED);
+    d->edit_obj->text.room_desc = str_dup(STRING_OBJ_RDESC_UNFINISHED);
+    d->edit_obj->text.look_desc = str_dup(STRING_OBJ_LDESC_UNFINISHED);
 
     d->edit_obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
 
@@ -1420,11 +1418,11 @@ ACMD(do_medit)
 
     d->edit_mob->player_specials = &dummy_mob;
 
-    d->edit_mob->player.physical_text.keywords = str_dup("mob unfinished");
-    d->edit_mob->player.physical_text.name = str_dup("an unfinished mob");
-    d->edit_mob->player.physical_text.room_desc = str_dup("An unfinished mob stands here.");
+    d->edit_mob->player.physical_text.keywords = str_dup(STRING_MOB_KEYWORDS_UNFINISHED);
+    d->edit_mob->player.physical_text.name = str_dup(STRING_MOB_NAME_UNFINISHED);
+    d->edit_mob->player.physical_text.room_desc = str_dup(STRING_MOB_RDESC_UNFINISHED);
     d->edit_mob->player.physical_text.look_desc =
-      str_dup("It looks barely coherent as it waits to be created.\r\n");
+      str_dup(STRING_MOB_LDESC_UNFINISHED);
 
     d->edit_mob->player.title = NULL;
     d->edit_mob->char_specials.arrive = str_dup("arrives from");

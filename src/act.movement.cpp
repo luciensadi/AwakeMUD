@@ -86,15 +86,25 @@ int can_move(struct char_data *ch, int dir, int extra)
     if (EXIT(ch, dir)->to_room->people &&
         EXIT(ch, dir)->to_room->people->next_in_room)
     {
-      send_to_char("There isn't enough room there for another person!\r\n", ch);
-      return 0;
+      if (access_level(ch, LVL_BUILDER)) {
+        send_to_char("You use your staff powers to bypass the tunnel restriction.\r\n", ch);
+      } else {
+        send_to_char("There isn't enough room there for another person!\r\n", ch);
+        return 0;
+      }
     }
 
+  /*
   if (ch->in_room && ch->in_room->func && ch->in_room->func == escalator)
   {
-    send_to_char("You can't get off a moving escalator!\r\n", ch);
-    return 0;
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char("You use your staff powers to get off the moving escalator.\r\n", ch);
+    } else {
+      send_to_char("You can't get off a moving escalator!\r\n", ch);
+      return 0;
+    }
   }
+  */
 
   if (ch->in_room && IS_WATER(ch->in_room) && !IS_NPC(ch) && !IS_SENATOR(ch))
   {
@@ -159,8 +169,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   GET_LASTROOM(ch) = ch->in_room->number;
 
-  if (real_room(ch->in_room->dir_option[dir]->to_room->number) >= real_room(FIRST_CAB) &&
-      real_room(ch->in_room->dir_option[dir]->to_room->number) <= real_room(LAST_CAB))
+  if (room_is_a_taxicab(ch->in_room->dir_option[dir]->to_room->number))
     snprintf(buf2, sizeof(buf2), "$n gets into the taxi.");
   else if (vict)
   {
@@ -170,12 +179,12 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
   else if (ch->in_room->dir_option[dir]->go_into_thirdperson)
     strcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson);
-  else if (ch->char_specials.leave)
-    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
   else if (IS_WATER(ch->in_room) && !IS_WATER(EXIT(ch, dir)->to_room))
     snprintf(buf2, sizeof(buf2), "$n climbs out of the water to the %s.", fulldirs[dir]);
   else if (!IS_WATER(ch->in_room) && IS_WATER(EXIT(ch, dir)->to_room))
     snprintf(buf2, sizeof(buf2), "$n jumps into the water to the %s.", fulldirs[dir]);
+  else if (ch->char_specials.leave)
+    snprintf(buf2, sizeof(buf2), "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
   else
     snprintf(buf2, sizeof(buf2), "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
   
@@ -242,11 +251,13 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       strcat(buf, weather_line[weather_info.sky]);
     send_to_char(buf, ch);
   }
+#ifdef USE_SLOUCH_RULES
   if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= ch->in_room->z * 100)
     send_to_char("You have to slouch to fit in here.\r\n", ch);
+#endif
   if (ch->desc != NULL)
     look_at_room(ch, 0);
-  if (was_in->number >= FIRST_CAB && was_in->number <= LAST_CAB)
+    if (room_is_a_taxicab(was_in->number))
     snprintf(buf2, sizeof(buf2), "$n gets out of the taxi.");
   else if (vict)
     snprintf(buf2, sizeof(buf2), "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
@@ -782,10 +793,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       if (IS_ASTRAL(ch)) {
         send_to_char("As you approach, the cobalt flash of an astral barrier warns you back.\r\n", ch);
       } else if (EXIT(ch, dir)->keyword) {
-        bool plural = false;
-        if (!strcmp(EXIT(ch, dir)->keyword, "doors")) {
-          plural = true;
-        }
+        bool plural = !strcmp(fname(EXIT(ch, dir)->keyword), "doors");
         send_to_char(ch, "The %s seem%s to be closed.\r\n", fname(EXIT(ch, dir)->keyword), plural ? "" : "s");
       } else {
         send_to_char("It seems to be closed.\r\n", ch);
@@ -805,7 +813,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     } else if (GET_REAL_LEVEL(ch) == 1) {
       send_to_char("Sorry, that area is for game administration only.\r\n", ch);
     } else {
-      send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.", EXIT(ch, dir)->to_room->staff_level_lock);
+      send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.\r\n", EXIT(ch, dir)->to_room->staff_level_lock);
     }
     return 0;
   }
@@ -906,7 +914,8 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
     if (EXIT(ch, door)) {
       if (EXIT(ch, door)->keyword) {
         if (isname(type, EXIT(ch, door)->keyword) &&
-            !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+            !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) &&
+            !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
           return door;
         else {
           send_to_char(ch, "I see no %s there.\r\n", type);
@@ -931,7 +940,8 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
       if (EXIT(ch, door))
         if (EXIT(ch, door)->keyword)
           if (isname(type, EXIT(ch, door)->keyword) &&
-              !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+              !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) &&
+              !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
             return door;
 
     send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(type), type);
@@ -990,7 +1000,7 @@ const int flags_door[] =
 #define OPEN_DOOR(room, obj, door)      ((obj) ? (TOGGLE_BIT(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) : (TOGGLE_BIT(EXITN(room, door)->exit_info, EX_CLOSED)))
 #define LOCK_DOOR(room, obj, door)      ((obj) ? (TOGGLE_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) : (TOGGLE_BIT(EXITN(room, door)->exit_info, EX_LOCKED)))
 
-#define DOOR_IS_OPENABLE(ch, obj, door) ((obj) ? ((GET_OBJ_TYPE(obj) == ITEM_CONTAINER) && (IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSEABLE))) : (IS_SET(EXIT(ch, door)->exit_info, EX_ISDOOR) && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED)))
+#define DOOR_IS_OPENABLE(ch, obj, door) ((obj) ? ((GET_OBJ_TYPE(obj) == ITEM_CONTAINER) && (IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSEABLE))) : (IS_SET(EXIT(ch, door)->exit_info, EX_ISDOOR) && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)))
 #define DOOR_IS_OPEN(ch, obj, door)     ((obj) ? (!IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) : (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)))
 #define DOOR_IS_UNLOCKED(ch, obj, door) ((obj) ? (!IS_SET(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) : (!IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED)))
 #define DOOR_IS_PICKPROOF(ch, obj, door) ((obj) ? (IS_SET(GET_OBJ_VAL(obj, 1), CONT_PICKPROOF)) : (IS_SET(EXIT(ch, door)->exit_info, EX_PICKPROOF)))
@@ -1061,16 +1071,24 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
   }
 
   /* Notify the room */
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s.", ((obj) ? "" : "the "), (obj) ? "$p" :
-          (EXIT(ch, door)->keyword ? "$F" : "door"));
+  if (obj) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "$p.");
+  } else {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "the %s to %s.", 
+            EXIT(ch, door)->keyword ? "$F" : "door",
+            thedirs[door]);
+  }
+  
   if (!(obj) || (obj->in_room))
     act(buf, FALSE, ch, obj, obj ? 0 : EXIT(ch, door)->keyword, TO_ROOM);
 
   /* Notify the other room */
   if (((scmd == SCMD_OPEN) || (scmd == SCMD_CLOSE) || (scmd == SCMD_KNOCK)) && (back))
   {
-    snprintf(buf, sizeof(buf), "The %s is %s%s from the other side.\r\n",
-            (back->keyword ? fname(back->keyword) : "door"), cmd_door[scmd],
+    snprintf(buf, sizeof(buf), "The %s to %s is %s%s from the other side.\r\n",
+            (back->keyword ? fname(back->keyword) : "door"), 
+            thedirs[rev_dir[door]],
+            cmd_door[scmd],
             (scmd == SCMD_CLOSE) ? "d" : "ed");
     send_to_room(buf, EXIT(ch, door)->to_room);
   }
@@ -1449,7 +1467,7 @@ ACMD(do_drag)
   }
 
   if (!(vict = get_char_room_vis(ch, buf1))) {
-    send_to_char(NOPERSON, ch);
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
     return;
   }
   if (AFF_FLAGGED(vict, AFF_BINDING)) {
@@ -1537,7 +1555,7 @@ ACMD(do_enter)
 
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (EXIT(ch, door))
-        if (EXIT(ch, door)->keyword && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+        if (EXIT(ch, door)->keyword && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
           if (!str_cmp(EXIT(ch, door)->keyword, buf)) {
             perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
             return;
@@ -1913,7 +1931,7 @@ ACMD(do_wake)
     if (GET_POS(ch) == POS_SLEEPING)
       send_to_char("You can't wake people up if you're asleep yourself!\r\n", ch);
     else if ((vict = get_char_room_vis(ch, arg)) == NULL)
-      send_to_char(NOPERSON, ch);
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     else if (vict == ch)
       self = 1;
     else if (GET_POS(vict) > POS_SLEEPING)
@@ -1966,7 +1984,7 @@ ACMD(do_follow)
 
   if (*buf) {
     if (!(leader = get_char_room_vis(ch, buf))) {
-      send_to_char(NOPERSON, ch);
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
       return;
     }
   } else {

@@ -187,6 +187,7 @@ struct room_data
   char *address;
   Bitfield room_flags;     /* DEATH,DARK ... etc                 */
   byte blood;         /* mmmm blood, addded by root        */
+  byte debris;
   int vision[3];
   int background[4];
   byte spec;            // auto-assigns specs
@@ -260,40 +261,36 @@ struct spell_types
   sh_int draindamage;
 };
 
-typedef struct train_data
+struct train_data
 {
   vnum_t vnum;
   int attribs;
   byte is_newbie;
-}
-train_t;
+};
 
-typedef struct teach_data
+struct teach_data
 {
   vnum_t vnum;
   sh_int s[NUM_TEACHER_SKILLS];
   const char *msg;
   sh_int type;
-}
-teach_t;
+};
 
-typedef struct adept_data
+struct adept_data
 {
   vnum_t vnum;
   sh_int skills[ADEPT_NUMPOWER];
   byte is_newbie;
-}
-adept_t;
+};
 
-typedef struct spell_trainer
+struct spell_trainer
 {
   vnum_t teacher;
   int type;
   char name[120];
   int subtype;
   int force;
-}
-spell_t;
+};
 
 /* memory structure for characters */
 struct memory_rec_struct
@@ -733,8 +730,10 @@ struct char_data
   Pgroup_data *pgroup;                   /* Data concerning the player group this char is part of. */
   Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
   
+  int congregation_bonus_pool;         /* Bonuses accrued from spending time in a congregation room */
+  
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */
-  // int bullet_pants[END_OF_AMMO_USING_WEAPONS - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES];
+  unsigned short bullet_pants[(END_OF_AMMO_USING_WEAPONS + 1) - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES];
   
   /* Adding a field here? If it's a pointer, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
@@ -747,12 +746,10 @@ struct char_data
     for (int i = 0; i < NUM_WEARS; i++)
       equipment[i] = NULL;
     
-    /*  
     // Initialize our bullet pants. Note that we index from 0 here.
-    for (int wp = 0; wp < END_OF_AMMO_USING_WEAPONS - START_OF_AMMO_USING_WEAPONS; wp++)
-      for (int am = 0; am < NUM_AMMOTYPES; am++)
+    for (int wp = 0; wp <= END_OF_AMMO_USING_WEAPONS - START_OF_AMMO_USING_WEAPONS; wp++)
+      for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
         bullet_pants[wp][am] = 0;
-    */
   }
 };
 /* ====================================================================== */
@@ -789,6 +786,7 @@ struct ccreate_t
   sh_int pr[NUM_CCR_PR_POINTS];
   sh_int force_points;
   sh_int temp;
+  bool archetypal;
   int points;
 };
 
@@ -834,6 +832,7 @@ struct descriptor_data
   bool edit_convert_color_codes; /* if this is true, display color codes in descs as ^^ for copy-paste */
   long edit_number;              /* virtual num of thing being edited */
   long edit_number2;             /* misc number for editing */
+  long edit_number3;             /* misc number for editing */
   int edit_zone;                /* which zone object is part of      */
   int iedit_limit_edits;        /* Used in iedit to let you cut out of g-menus early. */
   void **misc_data;             /* misc data, usually for extra data crap */
@@ -1159,6 +1158,16 @@ struct preference_bit_struct {
   const char *name; // the name of the bit (ex: "PACIFY")
   bool staff_only;  // only displays to level > 1?
   bool on_off;      // true for ONOFF, false for YESNO
+};
+
+/* ban struct */
+struct ban_list_element
+{
+  char site[BANNED_SITE_LENGTH+1];
+  int  type;
+  time_t date;
+  char name[MAX_NAME_LENGTH+1];
+  struct ban_list_element *next;
 };
 
 #endif

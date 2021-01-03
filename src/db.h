@@ -73,8 +73,6 @@ char    *fread_string(FILE *fl, char *error);
 long    get_id_by_name(char *name);
 char    *get_name_by_id(long id);
 int  load_char(char *name, struct char_data *ch);
-//void    save_char(struct char_data *ch, sh_int load_room);
-//void    init_char(struct char_data *ch);
 struct char_data *read_mobile(int nr, int type);
 struct veh_data *read_vehicle(int nr, int type);
 long     real_mobile(long virt);
@@ -247,13 +245,9 @@ extern int olc_state;
 
 #ifndef __CONFIG_CC__
 extern const char *OK;
-extern const char *NOPERSON;
 extern const char	*TOOBUSY;
-extern const char	*NOOBJECT;
 #endif
 
 #endif
 
 extern void save_etext(struct char_data *ch);
-
-

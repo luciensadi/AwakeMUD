@@ -36,6 +36,7 @@
 #include "protocol.h"
 #include "newdb.h"
 #include "helpedit.h"
+#include "archetypes.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -54,7 +55,7 @@ extern int restrict;
 /* external functions */
 void echo_on(struct descriptor_data * d);
 void echo_off(struct descriptor_data * d);
-void do_start(struct char_data * ch);
+void do_start(struct char_data * ch, bool wipe_skills);
 int special(struct char_data * ch, int cmd, char *arg);
 int isbanned(char *hostname);
 void init_create_vars(struct descriptor_data *d);
@@ -79,12 +80,14 @@ void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
 void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
+int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info);
 
 // for spell creation
 void cedit_parse(struct descriptor_data *d, char *arg);
 
 extern void affect_total(struct char_data * ch);
 extern void mag_menu_system(struct descriptor_data * d, char *arg);
+extern void ccr_pronoun_menu(struct descriptor_data *d);
 
 /* prototypes for all do_x functions. */
 ACMD_DECLARE(do_olcon);
@@ -102,6 +105,7 @@ ACMD_DECLARE(do_at);
 ACMD_DECLARE(do_attach);
 ACMD_DECLARE(do_award);
 ACMD_DECLARE(do_availoffset);
+ACMD_DECLARE(do_audit);
 ACMD_DECLARE(do_backstab);
 ACMD_DECLARE(do_ban);
 ACMD_DECLARE(do_banish);
@@ -156,6 +160,7 @@ ACMD_DECLARE(do_echo);
 ACMD_DECLARE(do_eject);
 ACMD_DECLARE(do_elemental);
 ACMD_DECLARE(do_enter);
+ACMD_DECLARE(do_endrun);
 ACMD_DECLARE(do_equipment);
 ACMD_DECLARE(do_examine);
 ACMD_DECLARE(do_exit);
@@ -166,6 +171,7 @@ ACMD_DECLARE(do_focus);
 ACMD_DECLARE(do_follow);
 ACMD_DECLARE(do_force);
 ACMD_DECLARE(do_forget);
+ACMD_DECLARE(do_fuckups);
 ACMD_DECLARE(do_gecho);
 ACMD_DECLARE(do_gen_comm);
 ACMD_DECLARE(do_gen_door);
@@ -225,6 +231,7 @@ ACMD_DECLARE(do_patch);
 ACMD_DECLARE(do_perfmon);
 ACMD_DECLARE(do_pgroup);
 ACMD_DECLARE(do_photo);
+ACMD_DECLARE(do_pockets);
 ACMD_DECLARE(do_poofset);
 ACMD_DECLARE(do_pour);
 ACMD_DECLARE(do_pool);
@@ -262,10 +269,12 @@ ACMD_DECLARE(do_restring);
 ACMD_DECLARE(do_restore);
 ACMD_DECLARE(do_retract);
 ACMD_DECLARE(do_return);
+ACMD_DECLARE(do_rewrite_world);
 ACMD_DECLARE(do_rlist);
 ACMD_DECLARE(do_rig);
 ACMD_DECLARE(do_room);
 ACMD_DECLARE(do_say);
+ACMD_DECLARE(do_save);
 ACMD_DECLARE(do_scan);
 ACMD_DECLARE(do_score);
 ACMD_DECLARE(do_self_advance);
@@ -274,6 +283,7 @@ ACMD_DECLARE(do_send);
 ACMD_DECLARE(do_set);
 ACMD_DECLARE(do_settime);
 ACMD_DECLARE(do_shedit);
+ACMD_DECLARE(do_shopfind);
 ACMD_DECLARE(do_shoot);
 ACMD_DECLARE(do_show);
 ACMD_DECLARE(do_shutdown);
@@ -419,6 +429,7 @@ struct command_info cmd_info[] =
     { "aecho"    , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO },
     { "accept"   , POS_LYING   , do_accept   , 0, 0 },
     { "addpoint" , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT },
+    { "affects"  , POS_LYING   , do_status   , 0, 0 },
     { "ammo"     , POS_LYING   , do_ammo     , 0, 0 },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
     { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0 },
@@ -434,6 +445,7 @@ struct command_info cmd_info[] =
     { "assist"   , POS_FIGHTING, do_assist   , 1, 0 },
     { "ask"      , POS_LYING   , do_spec_comm, 0, SCMD_ASK },
     { "award"    , POS_DEAD    , do_award    , LVL_FIXER, 0 },
+    { "audit"    , POS_DEAD    , do_audit    , LVL_BUILDER, 0 },
     { "authorize", POS_DEAD    , do_wizutil  , LVL_CONSPIRATOR, SCMD_AUTHORIZE },
     { "availoffset", POS_DEAD  , do_availoffset, 0, 0 },
 
@@ -458,6 +470,7 @@ struct command_info cmd_info[] =
     { "close"    , POS_SITTING , do_gen_door , 0, SCMD_CLOSE },
     { "cls"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR },
     { "consider" , POS_LYING   , do_consider , 0, 0 },
+    { "configure", POS_DEAD    , do_toggle   , 0, 0 },
     { "conjure"  , POS_RESTING , do_conjure  , 0, 0 },
     { "connect"  , POS_RESTING , do_connect  , 0, 0 },
     { "contest"  , POS_SITTING , do_contest  , 0, 0 },
@@ -511,7 +524,8 @@ struct command_info cmd_info[] =
     { "elemental", POS_DEAD    , do_elemental, 0, 0 },
     { "emote"    , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
     { ":"        , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
-    { "enter"    , POS_SITTING, do_enter    , 0, 0 },
+    { "enter"    , POS_SITTING , do_enter    , 0, 0 },
+    { "endrun"   , POS_RESTING , do_endrun   , 0, 0 },
     { "equipment", POS_SLEEPING, do_equipment, 0, 0 },
     { "exits"    , POS_LYING   , do_exits    , 0, 0 },
     { "examine"  , POS_RESTING , do_examine  , 0, SCMD_EXAMINE },
@@ -528,6 +542,7 @@ struct command_info cmd_info[] =
     { "focus"    , POS_RESTING , do_focus    , 0, 0 },
     { "follow"   , POS_RESTING , do_follow   , 0, 0 },
     { "freeze"   , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE },
+    { "fuckups"  , POS_DEAD    , do_fuckups  , LVL_ADMIN, 0 },
 
     { "get"      , POS_RESTING , do_get      , 0, 0 },
     { "gaecho"   , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, SCMD_AECHO },
@@ -644,6 +659,7 @@ struct command_info cmd_info[] =
     { "phone"    , POS_LYING   , do_phone    , 0, 0 },
     { "phonelist", POS_DEAD    , do_phonelist, LVL_BUILDER, 0 },
     { "photo"    , POS_RESTING , do_photo    , 0, 0 },
+    { "pockets"  , POS_RESTING , do_pockets  , 0, 0 },
     { "pop"      , POS_SITTING , do_pop      , 0, 0 },
     { "policy"   , POS_DEAD    , do_gen_ps   , 0, SCMD_POLICIES },
     { "poofin"   , POS_DEAD    , do_poofset  , LVL_BUILDER, SCMD_POOFIN },
@@ -701,24 +717,29 @@ struct command_info cmd_info[] =
     { "rpe"      , POS_DEAD    , do_wizutil  , LVL_ADMIN, SCMD_RPE },
     { "rpetalk"  , POS_DEAD    , do_gen_comm , 0, SCMD_RPETALK },
     { "redit"    , POS_DEAD    , do_redit    , LVL_BUILDER, 0 },
+    { "rewrite_worl",  POS_DEAD, do_rewrite_world, LVL_PRESIDENT, 0 },
+    { "rewrite_world", POS_DEAD, do_rewrite_world, LVL_PRESIDENT, 1 },
 
     { "say"      , POS_LYING   , do_say      , 0, SCMD_SAY },
     { "says"     , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_SAYS },
     { "'"        , POS_LYING   , do_say      , 0, SCMD_SAY },
     { "sayto"    , POS_LYING   , do_say      , 0, SCMD_SAYTO },
-    { "\""  , POS_LYING   , do_say      , 0, SCMD_SAYTO },
+    { "\""       , POS_LYING   , do_say      , 0, SCMD_SAYTO },
+    { "save"     , POS_DEAD    , do_save     , 0, 0 },
     { "score"    , POS_DEAD    , do_score    , 0, 0 },
     { "scan"     , POS_RESTING , do_scan     , 0, 0 },
     { "search"   , POS_STANDING, do_search   , 0, 0 },
     { "send"     , POS_SLEEPING, do_send     , LVL_FIXER, 0 },
     { "sedit"    , POS_DEAD    , do_shedit   , LVL_BUILDER, 0 },
     { "set"      , POS_DEAD    , do_set      , LVL_DEVELOPER, 0 },
+    { "settings" , POS_DEAD    , do_toggle   , 0, 0 },
     { "settime"  , POS_DEAD    , do_settime  , LVL_DEVELOPER, 0 },
     { "sheath"   , POS_RESTING , do_holster  , 0, 0 },
     { "shout"    , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT },
     { "shouts"   , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_SHOUTS },
     { "shoot"    , POS_FIGHTING, do_shoot    , 0, 0 },
     { "show"     , POS_DEAD    , do_show     , 0, 0 },
+    { "shopfind" , POS_DEAD    , do_shopfind , LVL_VICEPRES, 0 },
     { "shutdown" , POS_RESTING , do_shutdown , 0, SCMD_SHUTDOWN },
     { "sip"      , POS_RESTING , do_drink    , 0, SCMD_SIP },
     { "sit"      , POS_LYING   , do_sit      , 0, 0 },
@@ -1284,7 +1305,7 @@ const char *reserved[] =
     "\n"
   };
 
-void nonsensical_reply(struct char_data *ch)
+void nonsensical_reply(struct char_data *ch, const char *arg)
 {
   send_to_char(ch, "That is not a valid command.\r\n");
   if (ch->desc && ++ch->desc->invalid_command_counter >= 5) {
@@ -1293,6 +1314,17 @@ void nonsensical_reply(struct char_data *ch)
                  PRF_FLAGGED(ch, PRF_SCREENREADER) ? "type " : "",
                  PLR_FLAGGED(ch, PLR_NEWBIE) ? "NEWBIE" : "OOC");
     ch->desc->invalid_command_counter = 0;
+  }
+  // There must be an arg, and it must not be a number.
+  if (arg && *arg && atoi(arg) == 0) {
+    char log_buf[1000];
+    snprintf(log_buf, sizeof(log_buf), "Invalid command: '%s'.", arg);
+    mudlog(log_buf, ch, LOG_SYSLOG, TRUE);
+    
+    // Log it to DB.
+    snprintf(buf, sizeof(buf), "INSERT INTO command_fuckups (Name, Count) VALUES ('%s', 1) ON DUPLICATE KEY UPDATE Count = Count + 1;", 
+             prepare_quotes(buf3, arg, sizeof(buf3) / sizeof(buf3[0])));
+    mysql_wrapper(mysql, buf);
   }
   /*  Removing the prior 'funny' messages and replacing them with something understandable by MUD newbies.
   switch (number(1, 9))
@@ -1358,9 +1390,18 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
    */
   if (!isalpha(*argument))
   {
-    arg[0] = argument[0];
-    arg[1] = '\0';
-    line = argument+1;
+    // Strip out the PennMUSH bullshit.
+    if (*argument == '@' || *argument == '+' || *argument == '/') {
+      argument[0] = ' ';
+      skip_spaces(&argument);
+      if (!*argument)
+        return;
+      line = any_one_arg(argument, arg);
+    } else {
+      arg[0] = argument[0];
+      arg[1] = '\0';
+      line = argument+1;
+    }
   } else
     line = any_one_arg(argument, arg);
   if (AFF_FLAGGED(ch, AFF_FEAR))
@@ -1379,20 +1420,22 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     for (length = strlen(arg), cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
       if (!strncmp(mtx_info[cmd].command, arg, length))
         break;
-    if (*mtx_info[cmd].command == '\n') {
+        
+    // If they have failed to enter a valid Matrix command, and we were unable to fix a typo in their command:
+    if (*mtx_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, mtx_info)) == -1) {      
       // If the command exists outside of the Matrix, let them know that it's not an option here.
       for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
         if (!strncmp(cmd_info[cmd].command, arg, length))
           if ((cmd_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, cmd_info[cmd].minimum_level))
             break;
       
-      // Nothing was found, give them the "wat" and bail.
-      if (*cmd_info[cmd].command == '\n') {
-        nonsensical_reply(ch);
+      // Nothing was found? Give them the "wat" and bail.
+      if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
+        nonsensical_reply(ch, arg);
         return;
-      } else {
-        ch->desc->invalid_command_counter = 0;
       }
+      
+      ch->desc->invalid_command_counter = 0;
       
       // Their command was valid in external context. Inform them.
       quit_the_matrix_first(ch, line, 0, 0);
@@ -1409,8 +1452,8 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     for (length = strlen(arg), cmd = 0; *rig_info[cmd].command != '\n'; cmd++)
       if (!strncmp(rig_info[cmd].command, arg, length))
         break;
-    if (*rig_info[cmd].command == '\n') {
-      nonsensical_reply(ch);
+    if (*rig_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, rig_info)) == -1) {
+      nonsensical_reply(ch, arg);
       return;
     } else {
       ch->desc->invalid_command_counter = 0;
@@ -1426,8 +1469,8 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
           break;
 
     // this was added so we can make the special respond to any text they type
-    if (*cmd_info[cmd].command == '\n') {
-      nonsensical_reply(ch);
+    if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
+      nonsensical_reply(ch, arg);
       return;
     } else {
       if (ch->desc)
@@ -1885,7 +1928,7 @@ int is_abbrev(const char *arg1, const char *arg2)
     return 0;
   }
   
-  if (!*arg1)
+  if (!*arg1 || !*arg2)
     return 0;
 
   for (; *arg1 && *arg2; arg1++, arg2++)
@@ -1909,7 +1952,7 @@ void half_chop(char *string, char *arg1, char *arg2)
 }
 
 /* Used in specprocs, mostly.  (Exactly) matches "command" to cmd number */
-int find_command(const char *command)
+int find_command_in_x(const char *command, const struct command_info *cmd_info)
 {
   int cmd;
 
@@ -1919,15 +1962,16 @@ int find_command(const char *command)
 
   return -1;
 }
+
+/* Used in specprocs, mostly.  (Exactly) matches "command" to cmd number */
+int find_command(const char *command)
+{
+  return find_command_in_x(command, cmd_info);
+}
+
 int find_mcommand(const char *command)
 {
-  int cmd;
-
-  for (cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
-    if (!strcmp(mtx_info[cmd].command, command))
-      return cmd;
-
-  return -1;
+  return find_command_in_x(command, mtx_info);
 }
 
 int special(struct char_data * ch, int cmd, char *arg)
@@ -1967,7 +2011,7 @@ int special(struct char_data * ch, int cmd, char *arg)
         return 1;
 
   /* special in object present? */
-  for (i = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; i; i = i->next_content)
+  FOR_ITEMS_AROUND_CH(ch, i)
     if (GET_OBJ_SPEC(i) != NULL && !(ch->in_veh && ch->vfront != i->vfront))
       if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
         return 1;
@@ -2531,9 +2575,9 @@ void nanny(struct descriptor_data * d, char *arg)
     dirty_password = (STATE(d) == CON_CHPWD_VRFY);
 
     if (STATE(d) == CON_CNFPASSWD) {
-      SEND_TO_Q("What is your sex (M/F/O)? ", d);
       STATE(d) = CON_CCREATE;
       init_create_vars(d);
+      ccr_pronoun_menu(d);
     } else {
       if (STATE(d) != CON_CHPWD_VRFY)
         d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), TRUE);
@@ -2585,7 +2629,6 @@ void nanny(struct descriptor_data * d, char *arg)
           STATE(d) = CON_CLOSE;
           return;
         }
-        // TODO: If you died and then hit 1, your old character's data is leaked here.
         char char_name[strlen(GET_CHAR_NAME(d->character))+1];
         strcpy(char_name, GET_CHAR_NAME(d->character));
         free_char(d->character);
@@ -2601,48 +2644,67 @@ void nanny(struct descriptor_data * d, char *arg)
         }
         playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
       }
+      // Wipe out various pointers related to game state and recalculate carry weight.
       reset_char(d->character);
       PLR_FLAGS(d->character).RemoveBit(PLR_CUSTOMIZE);
       d->character->next = character_list;
       character_list = d->character;
       d->character->player.time.logon = time(0);
-
-      if (GET_LOADROOM(d->character) == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
-        GET_LOADROOM(d->character) = mortal_start_room;
-
-      if ((load_room = GET_LAST_IN(d->character)) != NOWHERE)
+      
+      // Rewrote the entire janky-ass load room tree.        
+      // First: Frozen characters. They go to the frozen start room.
+      if (PLR_FLAGGED(d->character, PLR_FROZEN))
+        load_room = real_room(frozen_start_room);
+        
+      // Next: Unauthed (chargen) characters. They go to the start of their chargen areas.
+      else if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
+        if (!d->ccr.archetypal || (load_room = real_room(archetypes[d->ccr.archetype]->start_room)) == NOWHERE)
+          load_room = real_room(newbie_start_room);
+      }
+      
+      // Next: Characters who have GET_LAST_IN rooms load in there.
+      else if ((load_room = GET_LAST_IN(d->character)) != NOWHERE)
         load_room = real_room(load_room);
+        
+      // Post-processing: Non-newbies don't get to start in the newbie loadroom-- rewrite their loadroom value.
+      if (load_room == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
+        load_room = mortal_start_room;
 
+      // Post-processing: Staff with invalid or mort-start-room loadrooms instead load in at their defined loadroom.
       if (IS_SENATOR(d->character) && (load_room <= 0 || load_room == real_room(mortal_start_room)))
         load_room = real_room(GET_LOADROOM(d->character));
         
-      if (load_room < 0) {
-        snprintf(buf, sizeof(buf), "SYSERR: Character %s is loading in with invalid load room %ld (%ld). Changing to Grog's place (35500).",
-                     GET_CHAR_NAME(d->character), GET_LOADROOM(d->character), load_room);
-        mudlog(buf, d->character, LOG_SYSLOG, TRUE);
-        load_room = real_room(RM_ENTRANCE_TO_DANTES);
-        GET_LOADROOM(d->character) = RM_ENTRANCE_TO_DANTES;
-      }
-      
+      // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
       if (ROOM_FLAGGED(&world[load_room], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room].number))
         load_room = real_room(mortal_start_room);
-      /* If char was saved with NOWHERE, or real_room above failed... */
-      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED))
-        load_room = real_room(newbie_start_room);
-
+      
+      // Post-processing: Invalid load room characters go to the newbie or mortal start rooms.
       if (load_room == NOWHERE) {
-        if (PLR_FLAGGED(d->character, PLR_NEWBIE))
-          load_room = real_room(RM_NEWBIE_LOADROOM); // The Neophyte Hotel (previously 8039 which does not exist)
-        else
+        if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
+          load_room = real_room(RM_NEWBIE_LOADROOM);
+        } else
           load_room = real_room(mortal_start_room);
       }
 
-      if (PLR_FLAGGED(d->character, PLR_FROZEN))
-        load_room = real_room(frozen_start_room);
-
+      // First-time login. This overrides the above, but it's for a good cause.
       if (!GET_LEVEL(d->character)) {
-        load_room = real_room(newbie_start_room);
-        do_start(d->character);
+        if (d->ccr.archetypal) {
+          load_room = real_room(archetypes[d->ccr.archetype]->start_room);
+          // Correct for invalid archetype start rooms.
+          if (load_room == NOWHERE) {
+            snprintf(buf, sizeof(buf), "WARNING: Start room %ld for archetype %s does not exist!", 
+                     archetypes[d->ccr.archetype]->start_room,
+                     archetypes[d->ccr.archetype]->name);
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            load_room = real_room(newbie_start_room);
+          }
+          do_start(d->character, FALSE);
+        } else {
+          load_room = real_room(newbie_start_room);
+          do_start(d->character, TRUE);
+        }
+        
+          
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
       } else {
@@ -2672,6 +2734,26 @@ void nanny(struct descriptor_data * d, char *arg)
       d->prompt_mode = 1;
       /* affect total to make cyberware update stats */
       affect_total(d->character);
+      
+      // Regenerate their subscriber list.
+      for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+        if (veh->sub && GET_IDNUM(d->character) == veh->owner) {
+          struct veh_data *f = NULL;
+          for (f = d->character->char_specials.subscribe; f; f = f->next_sub) {
+            if (f == veh)
+              break;
+          }
+          if (!f) {
+            veh->next_sub = d->character->char_specials.subscribe;
+            
+            // Doubly link it into the list.
+            if (d->character->char_specials.subscribe)
+              d->character->char_specials.subscribe->prev_sub = veh;
+              
+            d->character->char_specials.subscribe = veh;
+          }
+        }
+      }
 
       break;
 
@@ -2735,9 +2817,10 @@ void nanny(struct descriptor_data * d, char *arg)
         STATE(d) = CON_QMENU;
       }
     } else {
-      SEND_TO_Q("\r\nYOU ARE ABOUT TO DELETE THIS CHARACTER PERMANENTLY.\r\n"
-                "ARE YOU ABSOLUTELY SURE?\r\n\r\n"
-                "Please type \"yes\" to confirm: ", d);
+      snprintf(buf, sizeof(buf), "\r\nYOU ARE ABOUT TO DELETE THIS CHARACTER (%s) PERMANENTLY. THIS CANNOT BE UNDONE.\r\n", GET_CHAR_NAME(d->character));
+      SEND_TO_Q(buf, d);
+      snprintf(buf, sizeof(buf), "\r\n\r\nIf you're ABSOLUTELY SURE, type your character's name (%s) to confirm, or anything else to abort: ", GET_CHAR_NAME(d->character));
+      SEND_TO_Q(buf, d);
       if (STATE(d) == CON_DELCNF1)
         STATE(d) = CON_DELCNF2;
       else
@@ -2747,7 +2830,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
   case CON_DELCNF2:
   case CON_QDELCONF2:
-    if (!strcmp(arg, "yes") || !strcmp(arg, "YES")) {
+    if (!str_cmp(arg, GET_CHAR_NAME(d->character))) {
       if (PLR_FLAGGED(d->character, PLR_FROZEN)) {
         SEND_TO_Q("You try to kill yourself, but the ice stops you.\r\n", d);
         SEND_TO_Q("Character not deleted.\r\n\r\n", d);
@@ -2809,3 +2892,71 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   }
 }
+
+// Attempts to map common typos to their actual commands.
+#define COMMAND_ALIAS(typo, corrected)   if (strncmp(arg, (typo), strlen(arg)) == 0) { return find_command_in_x((corrected), cmd_info); }
+
+int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
+  // Common typos and fuckups.
+  COMMAND_ALIAS("recieve", "receive");
+  COMMAND_ALIAS("dorp", "drop");
+  COMMAND_ALIAS("weild", "wield");
+  COMMAND_ALIAS("sheathe", "sheath");
+  COMMAND_ALIAS("unsheathe", "draw");
+  COMMAND_ALIAS("prove", "probe");
+  COMMAND_ALIAS("chekc", "check");
+  COMMAND_ALIAS("opend", "open");
+  COMMAND_ALIAS("leaev", "leave");
+  COMMAND_ALIAS("lisy", "list");
+  COMMAND_ALIAS("unload", "eject");
+  
+  // Commands from other games.
+  COMMAND_ALIAS("bamfin", "poofin");
+  COMMAND_ALIAS("bamfout", "poofout");
+  COMMAND_ALIAS("sacrifice", "junk");
+  
+  // Common staff goofs.
+  COMMAND_ALIAS("odelete", "idelete");
+  COMMAND_ALIAS("oload", "iload");
+  COMMAND_ALIAS("oedit", "iedit");
+  COMMAND_ALIAS("olist", "ilist");
+  COMMAND_ALIAS("ostat", "vstat");
+  COMMAND_ALIAS("mstat", "vstat");
+  COMMAND_ALIAS("qstat", "vstat");
+  COMMAND_ALIAS("sstat", "vstat");
+  
+  // Misc aliases.
+  COMMAND_ALIAS("taxi", "hail");
+  COMMAND_ALIAS("pickup", "get");
+  COMMAND_ALIAS("yes", "nod");
+  COMMAND_ALIAS("setup", "unpack");
+  COMMAND_ALIAS("ability", "abilities");
+  
+  // Job interaction commands.
+  COMMAND_ALIAS("endjob", "endrun");
+  COMMAND_ALIAS("resign", "endrun");
+  
+  // one of the most common commands, although people eventually learn to just use 'l'
+  COMMAND_ALIAS("olok", "look");
+  COMMAND_ALIAS("lok", "look");
+  COMMAND_ALIAS("loko", "look");
+  
+  // equipment seems to give people a lot of trouble
+  COMMAND_ALIAS("unwield", "remove");
+  COMMAND_ALIAS("unwear", "remove");
+  COMMAND_ALIAS("unequip", "remove");
+  
+  // Door-unlocking commands.
+  COMMAND_ALIAS("pick", "bypass");
+  COMMAND_ALIAS("hack", "bypass");
+  
+  // Doubled up movement for those impatient-ass people.
+  COMMAND_ALIAS("nn", "n");
+  COMMAND_ALIAS("ee", "e");
+  COMMAND_ALIAS("ss", "s");
+  COMMAND_ALIAS("ww", "w");
+  
+  // Found nothing, return the failure code.
+  return -1;
+}
+#undef MAP_TYPO

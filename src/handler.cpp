@@ -27,12 +27,7 @@
 #include "newmatrix.h"
 #include "newmagic.h"
 #include "playergroups.h"
-
-// memory object
-
-/* external vars */
-extern char *MENU;
-extern char *QMENU;
+#include "config.h"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -522,6 +517,9 @@ void affect_total(struct char_data * ch)
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
+      
+  int old_max_hacking = GET_MAX_HACKING(ch);
+  int old_rem_hacking = GET_REM_HACKING(ch);
   ch->aff_abils = ch->real_abils;
   
   /* calculate reaction before you add eq, cyberware, etc so that things *
@@ -722,12 +720,12 @@ void affect_total(struct char_data * ch)
     }
     GET_BOD(ch) += GET_POWER(ch, ADEPT_IMPROVED_BOD);
     GET_STR(ch) += GET_POWER(ch, ADEPT_IMPROVED_STR);
-    if (BOOST(ch)[0][0] > 0)
-      GET_STR(ch) += BOOST(ch)[0][1];
-    if (BOOST(ch)[1][0] > 0)
-      GET_QUI(ch) += BOOST(ch)[1][1];
-    if (BOOST(ch)[2][0] > 0)
-      GET_BOD(ch) += BOOST(ch)[2][1];
+    if (BOOST(ch)[STR][0] > 0)
+      GET_STR(ch) += BOOST(ch)[STR][1];
+    if (BOOST(ch)[QUI][0] > 0)
+      GET_QUI(ch) += BOOST(ch)[QUI][1];
+    if (BOOST(ch)[BOD][0] > 0)
+      GET_BOD(ch) += BOOST(ch)[BOD][1];
     GET_COMBAT(ch) += MIN(3, GET_POWER(ch, ADEPT_COMBAT_SENSE));
     if (GET_POWER(ch, ADEPT_LOW_LIGHT))
       NATURAL_VISION(ch) = LOWLIGHT;
@@ -913,6 +911,11 @@ void affect_total(struct char_data * ch)
     if (GET_HACKING(ch) < 0)
       GET_HACKING(ch) = 0;
   }
+  
+  // Restore their max_hacking and rem_hacking, which were wiped out in the earlier aff_abils = real_abils.
+  GET_REM_HACKING(ch) = MIN(old_rem_hacking, GET_HACKING(ch));
+  GET_MAX_HACKING(ch) = MIN(old_max_hacking, GET_HACKING(ch));
+  
   if (has_mbw) {
     GET_QUI(ch) += has_mbw;
     GET_REA(ch) += has_mbw * 2;
@@ -958,6 +961,9 @@ void affect_total(struct char_data * ch)
  */
 bool affected_by_spell(struct char_data * ch, int type)
 {
+  if (!GET_SUSTAINED(ch))
+    return FALSE;
+    
   for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next)
     if ((hjp->spell == type) && (hjp->caster == FALSE))
       return TRUE;
@@ -1463,20 +1469,32 @@ void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
 {
   int j;
   
+  if (!obj) {
+    mudlog("SYSERR: Null object passed to equip_char.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (!ch) {
+    mudlog("SYSERR: Null character passed to equip_char.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   if (GET_EQ(ch, pos))
   {
-    log_vfprintf("SYSLOG: Char is already equipped: %s, %s",
+    char errbuf[1000];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: Char is already equipped: %s, %s",
                  GET_NAME(ch), obj->text.name);
+    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
   if (obj->carried_by)
   {
-    log("SYSLOG: EQUIP: Obj is carried_by when equip.");
+    mudlog("SYSERR: EQUIP: Obj is carried_by when equip.", ch, LOG_SYSLOG, TRUE);
     return;
   }
   if (obj->in_room)
   {
-    log("SYSLOG: EQUIP: Obj is in_room when equip.");
+      mudlog("SYSERR: EQUIP: Obj is in_room when equip.", ch, LOG_SYSLOG, TRUE);
     return;
   }
   if (IS_OBJ_STAT(obj, ITEM_GODONLY) && !IS_NPC(ch) && !IS_SENATOR(ch))
@@ -1514,11 +1532,19 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
   int j;
   struct obj_data *obj;
   
-  if (pos < 0 || pos >= NUM_WEARS)
-    log_vfprintf("SYSERR: pos < 0 || pos >= NUM_WEARS, %s - %d", GET_NAME(ch), pos);
+  if (pos < 0 || pos >= NUM_WEARS) {
+    char errbuf[1000];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: pos < 0 || pos >= NUM_WEARS, %s - %d", GET_NAME(ch), pos);
+    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
   
-  if (!GET_EQ(ch, pos))
-    log_vfprintf("SYSERR: Trying to remove non-existent item from %s at %d", GET_NAME(ch), pos);
+  if (!GET_EQ(ch, pos)) {
+    char errbuf[1000];
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: Trying to remove non-existent item from %s at %d", GET_NAME(ch), pos);
+    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
   
   obj = GET_EQ(ch, pos);
   obj->worn_by = NULL;
@@ -2006,7 +2032,7 @@ void extract_veh(struct veh_data * veh)
   // If any players are inside, drop them where the vehicle is.
   struct char_data *ch = NULL;
   while ((ch = veh->people)) {
-    send_to_char(ch, "%s disintegrates around you!", veh->short_description);
+    send_to_char(ch, "%s disintegrates around you!\r\n", veh->short_description);
     if (veh->in_room) {
       char_from_room(ch);
       char_to_room(ch, veh->in_room);

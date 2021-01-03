@@ -41,7 +41,7 @@ void    log_death_trap(struct char_data *ch);
 int     number(int from, int to);
 int     dice(int number, int size);
 void    sprintbit(long vektor, const char *names[], char *result);
-void    sprinttype(int type, const char *names[], char *result);
+void    sprinttype(int type, const char *names[], char *result, int result_size);
 void    sprint_obj_mods(struct obj_data *obj, char *result);
 int     get_line(FILE *fl, char *buf);
 struct  time_info_data age(struct char_data *ch);
@@ -51,12 +51,12 @@ int     success_test(int number, int target);
 int     resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict);
 int     stage(int successes, int wound);
 bool    access_level(struct char_data *ch, int level);
-char *  buf_mod(char *buf, const char *name, int bonus);
-char *  buf_roll(char *buf, const char *name, int bonus);
-int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibility_penalty);
-int     modify_target_rbuf(struct char_data *ch, char *rbuf);
+char *  buf_mod(char *buf, int buf_len, const char *name, int bonus);
+//char *  buf_roll(char *buf, const char *name, int bonus);
+int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty);
+int     modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len);
 int     modify_target(struct char_data *ch);
-int     damage_modifier(struct char_data *ch, char *rbuf);
+int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
@@ -74,6 +74,7 @@ void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);
 bool    mount_has_weapon(struct obj_data *mount);
 struct  obj_data *get_mount_weapon(struct obj_data *mount);
+struct  obj_data *get_mount_ammo(struct obj_data *mount);
 struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message);
 struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
 void    terminate_mud_process_with_message(const char *message, int error_code);
@@ -93,6 +94,9 @@ void    purgelog(struct veh_data *veh);
 char *  replace_substring(char *source, char *dest, const char *replace_target, const char *replacement);
 bool    combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
 void    update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount);
+void    destroy_door(struct room_data *room, int dir);
+bool    spell_is_nerp(int spell_num);
+char    get_final_character_from_string(const char *str);
 
 // Skill-related.
 char *how_good(int skill, int rank);
@@ -149,8 +153,7 @@ void    advance_level(struct char_data *ch);
 void    set_title(struct char_data *ch, const char *title);
 void    set_pretitle(struct char_data *ch, const char *title);
 void    set_whotitle(struct char_data *ch, const char *title);
-int     gain_exp(struct char_data *ch, int gain, bool rep);
-void    gain_exp_regardless(struct char_data *ch, int gain);
+int     gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool multiplier);
 void    gain_condition(struct char_data *ch, int condition, int value);
 void    update_pos(struct char_data *victim);
 
@@ -367,6 +370,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_ESS(ch)           ((ch)->aff_abils.ess)
 #define GET_ESSHOLE(ch)		((ch)->aff_abils.esshole)
 #define GET_INDEX(ch)         ((ch)->real_abils.bod_index)
+#define GET_HIGHEST_INDEX(ch)      ((ch)->real_abils.highestindex)
 #define GET_BIOOVER(ch)       (-((int)((GET_ESS((ch)) + 300) - GET_INDEX((ch))) / 100))
 #define GET_TEMP_MAGIC_LOSS(ch)	((ch)->points.magic_loss)
 #define GET_TEMP_ESSLOSS(ch)	((ch)->points.ess_loss)
@@ -507,8 +511,11 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
 #define GET_SKILL_DIRTY_BIT(ch)  ((ch)->char_specials.saved.dirty)
+#define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
-#define GET_MOB_SPEC(ch)      (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)
+#define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[(ch->nr)].func) : NULL)
+#define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[(ch->nr)].sfunc) : NULL)
+
 #define GET_MOB_RNUM(mob)       ((mob)->nr)
 #define GET_MOB_VNUM(mob)       (IS_MOB(mob) ? mob_index[GET_MOB_RNUM(mob)].vnum : -1)
 #define MOB_VNUM_RNUM(rnum) ((mob_index[rnum]).vnum)
@@ -591,6 +598,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_OBJ_BARRIER(obj)    ((obj)->obj_flags.barrier)
 #define GET_OBJ_VNUM(obj) (VALID_OBJ_RNUM(obj) ? \
     obj_index[GET_OBJ_RNUM(obj)].vnum : NOTHING)
+#define GET_OBJ_KEYWORDS(obj)   ((obj)->text.keywords)
 #define IS_OBJ_STAT(obj, stat)  ((obj)->obj_flags.extra_flags.IsSet(stat))
 #define OBJ_VNUM_RNUM(rnum) ((obj_index[rnum]).vnum)
 #define VEH_VNUM_RNUM(rnum) ((veh_index[rnum]).vnum)
@@ -606,12 +614,17 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER)) || (type) == WEAP_REVOLVER)
 
+// Give this a weapon type straight from the weapon-- ex WEAP_SMG. It will convert it for you.
+#define GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon_type, ammo_type) ((ch)->bullet_pants[(weapon_type) - START_OF_AMMO_USING_WEAPONS][(ammo_type)])
+
 
 /* compound utilities and other macros **********************************/
 
-#define HSHR(ch) (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "his":"her") :"its")
-#define HSSH(ch) (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : "it")
-#define HMHR(ch) (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : "it")
+#define HSHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "his":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "its": "their"))
+#define HSSH(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "they"))
+#define HMHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "them"))
+#define HASHAVE(ch) (GET_SEX(ch) != SEX_NEUTRAL ?              "has"     : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "has": "have"))
+#define HSSH_SHOULD_PLURAL(ch) (GET_SEX(ch) || (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)))
 
 #define ANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "An" : "A")
 #define SANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "an" : "a")
@@ -802,8 +815,11 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_DRUG convenience defines
 
 // ITEM_WORN convenience defines
+#define GET_WORN_POCKETS_HOLSTERS(worn)        (GET_OBJ_VAL((worn), 0))
+#define GET_WORN_POCKETS_MISC(worn)            (GET_OBJ_VAL((worn), 4))
 #define GET_WORN_BALLISTIC(worn)               (GET_OBJ_VAL((worn), 5))
 #define GET_WORN_IMPACT(worn)                  (GET_OBJ_VAL((worn), 6))
+#define GET_WORN_CONCEAL_RATING(worn)          (GET_OBJ_VAL((worn), 7))
 #define GET_WORN_MATCHED_SET(worn)             (GET_OBJ_VAL((worn), 8))
 
 // ITEM_OTHER convenience defines
@@ -829,6 +845,11 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_ITEM_MONEY_CREDSTICK_ACTIVATED(money) (GET_OBJ_VAL((money), 4))
 
 // ITEM_PHONE convenience defines
+#define GET_ITEM_PHONE_NUMBER_PART_ONE(phone)  (GET_OBJ_VAL((phone), 0))
+#define GET_ITEM_PHONE_NUMBER_PART_TWO(phone)  (GET_OBJ_VAL((phone), 1))
+#define GET_ITEM_PHONE_SWITCHED_ON(phone)      (GET_OBJ_VAL((phone), 2))
+#define GET_ITEM_PHONE_RINGER_ON(phone)        (GET_OBJ_VAL((phone), 3))
+
 
 // ITEM_BIOWARE convenience defines
 
@@ -864,8 +885,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_GUN_ACCESSORY convenience defines
 #define GET_ACCESSORY_ATTACH_LOCATION(accessory) (GET_OBJ_VAL((accessory), 0))
 #define GET_ACCESSORY_TYPE(accessory)            (GET_OBJ_VAL((accessory), 1))
+#define GET_ACCESSORY_RATING(accessory)          (GET_OBJ_VAL((accessory), 2))
 
 // ITEM_SPELL_FORMULA convenience defines
+#define GET_SPELLFORMULA_SPELL(formula)          (GET_OBJ_VAL((formula), 1))
 
 // ITEM_FOCUS convenience defines
 
@@ -888,6 +911,11 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)      (GET_OBJ_VAL((accessory), 7))
 #define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)  (GET_OBJ_VAL((accessory), 8))
 #define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)     (GET_OBJ_VAL((accessory), 9))
+
+// ITEM_DECK_ACCESSORY TYPE_COOKER convenience defines
+#define GET_DECK_ACCESSORY_COOKER_RATING(accessory)         (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(accessory)  (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(accessory) (GET_OBJ_VAL((accessory), 9))
 
 // ITEM_RCDECK convenience defines
 
@@ -1045,5 +1073,7 @@ char    *crypt(const char *key, const char *salt);
     return;                                \
   }                                        \
 }                                          \
+
+#define FOR_ITEMS_AROUND_CH(ch, item_ptr) for ((item_ptr) = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; (item_ptr); (item_ptr) = (item_ptr)->next_content)
 
 #endif
