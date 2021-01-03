@@ -2545,15 +2545,24 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
   if (IS_NPC(speaker))
     return GET_NAME(speaker);
   else {
+    // No radio names mode means just give the voice desc.
+    if (PRF_FLAGGED(listener, PRF_NO_RADIO_NAMES))
+      return speaker->player.physical_text.room_desc;
+      
+    // Staff? You see their name.
     if (IS_SENATOR(listener)) {
       snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, GET_CHAR_NAME(speaker));
       return voice_buf;
-    } else if ((mem = found_mem(GET_MEMORY(listener), speaker))) {
+    }
+    
+    // Non-staff, but remembered the speaker? You see their remembered name.
+    if ((mem = found_mem(GET_MEMORY(listener), speaker))) {
       snprintf(voice_buf, sizeof(voice_buf), "%s(%s)", speaker->player.physical_text.room_desc, CAP(mem->mem));
       return voice_buf;
-    } else {
-      return speaker->player.physical_text.room_desc;
     }
+    
+    // Otherwise, you just get the voice desc.
+    return speaker->player.physical_text.room_desc;
   }
 }
 
