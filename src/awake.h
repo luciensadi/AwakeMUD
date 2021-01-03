@@ -2283,4 +2283,14 @@ enum {
 #define STRING_ROOM_DESC_UNFINISHED "You are in an unfinished room.\r\n"
 #define STRING_ROOM_JACKPOINT_NO_ADDR "An undisclosed location"
 
+#define STRING_OBJ_NAME_UNFINISHED "unfinished object"
+#define STRING_OBJ_RDESC_UNFINISHED "An unfinished object is lying here."
+#define STRING_OBJ_SDESC_UNFINISHED "an unfinished object"
+#define STRING_OBJ_LDESC_UNFINISHED "It looks pretty much like an unfinished object"
+
+#define STRING_MOB_NAME_UNFINISHED "an unfinished mob"
+#define STRING_MOB_KEYWORDS_UNFINISHED "mob unfinished"
+#define STRING_MOB_RDESC_UNFINISHED "An unfinished mob stands here."
+#define STRING_MOB_LDESC_UNFINISHED "It looks barely coherent as it waits to be created.\r\n"
+
 #endif

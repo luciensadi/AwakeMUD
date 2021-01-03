@@ -3039,6 +3039,18 @@ bool spell_is_nerp(int spell_num) {
   return FALSE;
 }
 
+// Gets the last non-zero, non-whitespace character from a given string. Returns 0 on error.
+char get_final_character_from_string(const char *str) {
+  if (!str || !*str)
+    return 0;
+    
+  for (int i = strlen(str) - 1; i >= 0; i--)
+    if (str[i] != '\r' && str[i] != '\n' && str[i] != ' ')
+      return str[i];
+  
+  return 0;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

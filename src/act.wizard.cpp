@@ -91,6 +91,7 @@ extern int write_quests_to_disk(int zone);
 extern void write_world_to_disk(int vnum);
 extern void alarm_handler(int signal);
 extern bool can_edit_zone(struct char_data *ch, int zone);
+extern const char *render_door_type_string(struct room_direction_data *door);
 
 ACMD_DECLARE(do_goto);
 
@@ -5617,7 +5618,7 @@ ACMD(do_shopfind)
     }
   }
   if (index == 0)
-    send_to_char("- None.\r\n", ch);  
+    send_to_char("  - None.\r\n", ch);  
 }
 
 void print_x_fuckups(struct char_data *ch, int print_count) {
@@ -5725,6 +5726,7 @@ ACMD(do_rewrite_world) {
 int audit_zone_rooms(struct char_data *ch, int zone_num, bool verbose) {
   int real_rm, issues = 0;
   struct room_data *room;
+  bool printed = FALSE;
   
   if (verbose)
     send_to_char(ch, "\r\nAuditing rooms for zone %d...\r\n", zone_table[zone_num].number);
@@ -5735,83 +5737,141 @@ int audit_zone_rooms(struct char_data *ch, int zone_num, bool verbose) {
       
     room = &world[real_rm];
     
+    printed = FALSE;
+    
+    snprintf(buf, sizeof(buf), "^c[%8ld]^n %s %s^n:\r\n",
+             room->number,
+             vnum_from_non_connected_zone(room->number) ? " " : "*",
+             room->name);
+    
     // Check its strings.
     if (!strcmp(GET_ROOM_NAME(room), STRING_ROOM_TITLE_UNFINISHED)) {
-      send_to_char(ch, "[%8ld] %s %s^n: Default room title used. This room will NOT be saved in the world files.\r\n",
-              room->number,
-              vnum_from_non_connected_zone(room->number) ? " " : "*",
-              room->name);
+      strncat(buf, "  - Default room title used. This room will NOT be saved in the world files.\r\n", sizeof(buf) - strlen(buf) - 1);
       issues++;
+      printed = TRUE;
     }
     
     if (!strcmp(GET_ROOM_DESC(room), STRING_ROOM_DESC_UNFINISHED)) {
-      send_to_char(ch, "[%8ld] %s %s^n: Default room desc used.\r\n",
-              room->number,
-              vnum_from_non_connected_zone(room->number) ? " " : "*",
-              room->name);
+      strncat(buf, "  - Default room desc used.\r\n", sizeof(buf) - strlen(buf) - 1);
       issues++;
+      printed = TRUE;
     }
     
     if (room->matrix > 0) {
       if (real_host(room->matrix) < 1) {
-        send_to_char(ch, "[%8ld] %s %s^n: Invalid Matrix host specified.\r\n",
-                room->number,
-                vnum_from_non_connected_zone(room->number) ? " " : "*",
-                room->name);
+        strncat(buf, "  - Invalid Matrix host specified.\r\n", sizeof(buf) - strlen(buf) - 1);
         issues++;
+        printed = TRUE;
       }
       
       if (!strcmp(room->address, STRING_ROOM_JACKPOINT_NO_ADDR)) {
-        send_to_char(ch, "[%8ld] %s %s^n: Default jackpoint address used.\r\n",
-                room->number,
-                vnum_from_non_connected_zone(room->number) ? " " : "*",
-                room->name);
+        strncat(buf, "  - Default jackpoint address used.\r\n", sizeof(buf) - strlen(buf) - 1);
         issues++;
+        printed = TRUE;
       }
     }
     
     // Check its flags.
     if (ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION)) {
-      send_to_char(ch, "[%8ld] %s %s^n: Socialization flag is set.\r\n",
-              room->number,
-              vnum_from_non_connected_zone(room->number) ? " " : "*",
-              room->name);
+      strncat(buf, "  - Socialization flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
       issues++;
+      printed = TRUE;
+    }
+    
+    if (ROOM_FLAGGED(room, ROOM_NOMAGIC)) {
+      strncat(buf, "  - !magic flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      issues++;
+      printed = TRUE;
+    }
+    
+    // Staff-only is allowed in the staff HQ area. Otherwise, flag it.
+    if ((GET_ROOM_VNUM(room) < 10000 || GET_ROOM_VNUM(room) > 10099) && ROOM_FLAGGED(room, ROOM_STAFF_ONLY)) {
+      strncat(buf, "  - Staff-only flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      issues++;
+      printed = TRUE;
+    }
+    
+    if (ROOM_FLAGS(room).AreAnySet(ROOM_HOUSE_CRASH, ROOM_BFS_MARK, ROOM_OLC, ROOM_NOQUIT, ROOM_ASTRAL, ENDBIT)) {
+      strncat(buf, "  - System-controlled or unimplemented flags are set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      issues++;
+      printed = TRUE;
+    }
+    
+    if (room->z < 2.0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Low ceilings - %0.2f meters.\r\n", room->z);
+      issues++;
+      printed = TRUE;
+    }
+    
+    if (room->staff_level_lock > 0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Staff-locked to level %d.\r\n", room->staff_level_lock);
+      issues++;
+      printed = TRUE;
     }
     
     // Check its exits.
     for (int k = 0; k < NUM_OF_DIRS; k++) {
+      if (!room->dir_option[k])
+        continue;
+        
       // Check for hidden rating higher than 10 (or whatever threshold is configured as).
-      if (room->dir_option[k] && room->dir_option[k]->hidden > ANOMALOUS_HIDDEN_RATING_THRESHOLD) {
-        send_to_char(ch, "[%8ld] %s %s^n: %s exit has hidden rating %d > %d.\r\n",
-                room->number,
-                vnum_from_non_connected_zone(room->number) ? " " : "*",
-                room->name,
+      if (room->dir_option[k]->hidden > ANOMALOUS_HIDDEN_RATING_THRESHOLD) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit has hidden rating %d > %d.\r\n",
                 dirs[k],
                 room->dir_option[k]->hidden,
                 ANOMALOUS_HIDDEN_RATING_THRESHOLD);
         issues++;
+        printed = TRUE;
       }
       // Check for keywords and descs on doors.
-      if (room->dir_option[k] && room->dir_option[k]->exit_info != 0 
+      if (room->dir_option[k]->exit_info != 0 
           && (!room->dir_option[k]->keyword || !room->dir_option[k]->general_description)) {
-        send_to_char(ch, "[%8ld] %s %s^n: %s exit is missing keywords and/or description.\r\n",
-                room->number,
-                vnum_from_non_connected_zone(room->number) ? " " : "*",
-                room->name,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit is missing keywords and/or description.\r\n",
                 dirs[k]);
         issues++;
+        printed = TRUE;
       }
       // Check for valid exits.
-      if (room->dir_option[k] && !room->dir_option[k]->to_room) {
-        send_to_char(ch, "[%8ld] %s %s^n: %s exit leads to an invalid room.\r\n",
-                room->number,
-                vnum_from_non_connected_zone(room->number) ? " " : "*",
-                room->name,
+      if (!room->dir_option[k]->to_room) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit leads to an invalid room.\r\n",
                 dirs[k]);
         issues++;
+        printed = TRUE;
+      } 
+      // to_room guaranteed to exist. Check if the exit on the other side comes back in our direction.
+      else {
+        if (!room->dir_option[k]->to_room->dir_option[rev_dir[k]]) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit is one-way: There is no return exit.\r\n", dirs[k]);
+          issues++;
+          printed = TRUE;
+        } 
+        // Exit coming back in our direction is guaranteed to exist. Check if it comes to us, and if so, if the flags are kosher.
+        else {
+          if (room->dir_option[k]->to_room->dir_option[rev_dir[k]]->to_room != room) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit: Return exit %s from %ld does not point here.\r\n",
+                    dirs[k],
+                    dirs[rev_dir[k]],
+                    GET_ROOM_VNUM(room->dir_option[k]->to_room));
+            issues++;
+            printed = TRUE;
+          }
+          else if (room->dir_option[k]->to_room->dir_option[rev_dir[k]]->exit_info != room->dir_option[k]->exit_info) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s exit has flags that don't match the return direction's flags (%s from here: %s, %s from %ld: %s).\r\n",
+                    dirs[k],
+                    dirs[k],
+                    render_door_type_string(room->dir_option[k]),
+                    dirs[rev_dir[k]],
+                    GET_ROOM_VNUM(room->dir_option[k]->to_room),
+                    render_door_type_string(room->dir_option[k]->to_room->dir_option[rev_dir[k]])
+                  );
+            issues++;
+            printed = TRUE;
+          }
+        }
       }
     }
+    if (printed)
+      send_to_char(ch, "%s\r\n", buf);
   }
   
   return issues;
@@ -5836,7 +5896,7 @@ int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
     for (k = BOD; k <= REA; k++)
       total_stats += GET_REAL_ATT(mob, k);
     
-    snprintf(buf, sizeof(buf), "[%8ld] %s %s^n",
+    snprintf(buf, sizeof(buf), "^c[%8ld]^n %s %s^n:\r\n",
              GET_MOB_VNUM(mob),
              vnum_from_non_connected_zone(GET_MOB_VNUM(mob)) ? " " : "*",
              GET_CHAR_NAME(mob));
@@ -5845,7 +5905,7 @@ int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
              
     // Flag mobs with crazy stats
     if (total_stats > ANOMALOUS_TOTAL_STATS_THRESHOLD) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^ctotal attributes %d > %d^n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has total attributes %d > %d^n.\r\n",
                total_stats,
                ANOMALOUS_TOTAL_STATS_THRESHOLD);
       printed = TRUE;
@@ -5854,7 +5914,7 @@ int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
     
     // Flag mobs with no stats
     if (total_stats == 0) {
-      strncat(buf, " has not had its attributes set yet", sizeof(buf) - strlen(buf) - 1);
+      strncat(buf, "  - has not had its attributes set yet.\r\n", sizeof(buf) - strlen(buf) - 1);
       printed = TRUE;
       issues++;
     }
@@ -5862,8 +5922,7 @@ int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
     // Flag mobs with crazy skills
     for (k = MIN_SKILLS; k < MAX_SKILLS; k++)
       if (GET_SKILL(mob, k) > ANOMALOUS_SKILL_THRESHOLD) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s %d > %d^n",
-                 printed ? ";" : " has",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - %s %d > %d^n.\r\n",
                  skills[k].name,
                  GET_SKILL(mob, k),
                  ANOMALOUS_SKILL_THRESHOLD);
@@ -5871,52 +5930,69 @@ int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
     
+    // Flag mobs with high armor.
+    if (GET_BALLISTIC(mob) > 10 || GET_IMPACT(mob) > 10) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high armor (%d/%d)^n.\r\n", GET_BALLISTIC(mob), GET_IMPACT(mob));
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag mobs with no weight or height
+    if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0.0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing vital statistics (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag mobs with neutral (default) gender
+    if (GET_SEX(mob) == SEX_NEUTRAL) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender^n (is this intentional?).\r\n");
+      printed = TRUE;
+      issues++;
+    }
+    
     // Flag mobs with weird races.
     if (GET_RACE(mob) <= RACE_UNDEFINED || GET_RACE(mob) >= NUM_RACES) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cundefined or unknown race^n", printed ? ";" : " has");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - undefined or unknown race^n.\r\n");
       printed = TRUE;
       issues++;
     }
     
     // Flag mobs with bad strings.
-    if (!mob->player.physical_text.name || !*mob->player.physical_text.name) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cmissing name^n", printed ? ";" : " has");
+    if (!mob->player.physical_text.name || !*mob->player.physical_text.name || !strcmp(mob->player.physical_text.name, STRING_MOB_NAME_UNFINISHED)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing name^n.\r\n");
+      printed = TRUE;
+      issues++;
+    } else {
+      if (ispunct((candidate = get_final_character_from_string(mob->player.physical_text.name)))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - name ending in punctuation (%c)^n.\r\n", candidate);
+        printed = TRUE;
+        issues++;
+      }
+    }
+    
+    if (!mob->player.physical_text.keywords || !*mob->player.physical_text.keywords || !strcmp(mob->player.physical_text.keywords, STRING_MOB_KEYWORDS_UNFINISHED)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing keywords^n.\r\n");
       printed = TRUE;
       issues++;
     }
     
-    candidate = mob->player.physical_text.name[strlen(mob->player.physical_text.name) - 1];
-    if (ispunct(candidate)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s name ^cending in punctuation (%c)^n", 
-               printed ? ";" : " has", candidate);
+    if (!mob->player.physical_text.look_desc || !*mob->player.physical_text.look_desc || !strcmp(mob->player.physical_text.look_desc, STRING_MOB_LDESC_UNFINISHED)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing look desc^n.\r\n");
       printed = TRUE;
       issues++;
     }
     
-    if (!mob->player.physical_text.keywords || !*mob->player.physical_text.keywords) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cmissing keywords^n", printed ? ";" : " has");
+    if (!mob->player.physical_text.room_desc || !*mob->player.physical_text.room_desc || !strcmp(mob->player.physical_text.room_desc, STRING_MOB_RDESC_UNFINISHED)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing room desc^n.\r\n");
       printed = TRUE;
       issues++;
-    }
-    
-    if (!mob->player.physical_text.look_desc || !*mob->player.physical_text.look_desc) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cmissing look desc^n", printed ? ";" : " has");
-      printed = TRUE;
-      issues++;
-    }
-    
-    if (!mob->player.physical_text.room_desc || !*mob->player.physical_text.room_desc) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cmissing room desc^n", printed ? ";" : " has");
-      printed = TRUE;
-      issues++;
-    }
-    
-    candidate = mob->player.physical_text.room_desc[strlen(mob->player.physical_text.room_desc) - 4];
-    if (!ispunct(candidate)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s room desc ^cnot ending in punctuation (%c)^n", 
-               printed ? ";" : " has", candidate);
-      printed = TRUE;
-      issues++;
+    } else {
+      if (!ispunct((candidate = get_final_character_from_string(mob->player.physical_text.room_desc)))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - room desc not ending in punctuation (%c)^n.\r\n", candidate);
+        printed = TRUE;
+        issues++;
+      }
     }
     
     if (printed)
@@ -5930,6 +6006,7 @@ int audit_zone_objects(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_obj;
   struct obj_data *obj;
   bool printed = FALSE;
+  char candidate;
   
   if (verbose)
     send_to_char(ch, "\r\nAuditing objects for zone %d...\r\n", zone_table[zone_num].number);
@@ -5940,25 +6017,88 @@ int audit_zone_objects(struct char_data *ch, int zone_num, bool verbose) {
       
     obj = &obj_proto[real_obj];
     
-    snprintf(buf, sizeof(buf), "[%8ld] %s %s^n",
+    snprintf(buf, sizeof(buf), "^c[%8ld]^n %s %s^n:\r\n",
              GET_OBJ_VNUM(obj),
              vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) ? " " : "*",
              GET_OBJ_NAME(obj));
     
     printed = FALSE;
-             
+    
     // Flag objects with zero cost
     if (GET_OBJ_COST(obj) <= 0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^ccost %d^n", GET_OBJ_COST(obj));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cost %d^n.\r\n", GET_OBJ_COST(obj));
       printed = TRUE;
       issues++;
     }
     
+    // Call out all objects with affs
+    for (int aff_index = 0; aff_index < MAX_OBJ_AFFECT; aff_index++) {
+      if (obj->affected[aff_index].modifier) {
+        sprinttype(obj->affected[aff_index].location, apply_types, buf2, sizeof(buf2));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - AFF %s %d^n.\r\n",
+                 buf2,
+                 obj->affected[aff_index].modifier);
+        printed = TRUE;
+        issues++;
+      }
+    }
+    
     // Flag objects with zero weight
     if (GET_OBJ_WEIGHT(obj) <= 0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cweight %0.2f^n", printed ? ";" : " has", GET_OBJ_WEIGHT(obj));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no or negative weight^n.\r\n");
       printed = TRUE;
       issues++;
+    }
+    
+    // Flag objects with high weight
+    if (GET_OBJ_WEIGHT(obj) >= 100.0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f^n.\r\n", GET_OBJ_WEIGHT(obj));
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag objects that can't be picked up
+    if (!GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cannot be picked up if dropped^n.\r\n");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!obj->text.name || !*obj->text.name || !strcmp(obj->text.name, STRING_OBJ_SDESC_UNFINISHED)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing name^n.\r\n");
+      printed = TRUE;
+      issues++;
+    } else {
+      if (ispunct((candidate = get_final_character_from_string(obj->text.name)))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - name ending in punctuation (%c)^n.\r\n", candidate);
+        printed = TRUE;
+        issues++;
+      }
+    }
+    
+    if (!obj->text.keywords || !*obj->text.keywords || !strcmp(obj->text.room_desc, STRING_OBJ_NAME_UNFINISHED)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing keywords^n.\r\n");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!obj->text.look_desc || !*obj->text.look_desc || !strcmp(obj->text.look_desc, STRING_OBJ_LDESC_UNFINISHED)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing look desc^n.\r\n");
+      printed = TRUE;
+      issues++;
+    }
+    
+    if (!obj->text.room_desc || !*obj->text.room_desc || !strcmp(obj->text.room_desc, STRING_OBJ_RDESC_UNFINISHED)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing room desc^n.\r\n");
+      printed = TRUE;
+      issues++;
+    }
+    else {
+      if (!ispunct((candidate = get_final_character_from_string(obj->text.room_desc)))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - room desc not ending in punctuation (%c)^n.\r\n", candidate);
+        printed = TRUE;
+        issues++;
+      }
     }
     
     if (printed)
@@ -5983,57 +6123,57 @@ int audit_zone_quests(struct char_data *ch, int zone_num, bool verbose) {
       
     quest = &quest_table[real_qst];
     
-    snprintf(buf, sizeof(buf), "[%8ld] ^n", quest->vnum);
+    snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n", quest->vnum);
     
     printed = FALSE;
              
     // Flag invalid Johnsons
     if (quest->johnson <= 0 || real_mobile(quest->johnson) <= 0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^cinvalid Johnson %ld^n", quest->johnson);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid Johnson %ld^n.\r\n", quest->johnson);
       printed = TRUE;
       issues++;
     }
     
     // Flag invalid strings
     if (!quest->intro || !*quest->intro) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno intro string^n", printed ? ";" : " has");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no intro string^n.\r\n");
       printed = TRUE;
       issues++;
     }
     
     if (!quest->decline || !*quest->decline) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno decline string^n", printed ? ";" : " has");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no decline string^n.\r\n");
       printed = TRUE;
       issues++;
     }
     
     if (!quest->finish || !*quest->finish) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno finish string^n", printed ? ";" : " has");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no finish string^n.\r\n");
       printed = TRUE;
       issues++;
     }
     
     if (!quest->info || !*quest->info) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno info string^n", printed ? ";" : " has");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no info string^n.\r\n");
       printed = TRUE;
       issues++;
     }
     
     if (!quest->quit || !*quest->quit) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno quit string^n", printed ? ";" : " has");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no quit string^n.\r\n");
       printed = TRUE;
       issues++;
     }
     
     if (!quest->done || !*quest->done) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno done string^n", printed ? ";" : " has");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no done string^n.\r\n");
       printed = TRUE;
       issues++;
     }
     
 #ifdef USE_QUEST_LOCATION_CODE
     if (!quest->location || !*quest->location) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^cno location string^n", printed ? ";" : " has");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no location string^n.\r\n");
       printed = TRUE;
       issues++;
     }
@@ -6060,20 +6200,20 @@ int audit_zone_shops(struct char_data *ch, int zone_num, bool verbose) {
       
     shop = &shop_table[real_shp];
     
-    snprintf(buf, sizeof(buf), "[%8ld] ^n", shop->vnum);
+    snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n", shop->vnum);
     
     printed = FALSE;
              
     // Flag invalid sell multipliers
     if (shop->profit_buy < 1.0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has ^ctoo-low buy profit %0.2f < 1.0^n", shop->profit_buy);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - too-low buy profit %0.2f < 1.0^n.\r\n", shop->profit_buy);
       printed = TRUE;
       issues++;
     }
     
     // Flag invalid strings
     if (shop->profit_sell > 0.1) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^ctoo-high sell profit %0.2f > 0.1^n", printed ? ";" : " has", shop->profit_sell);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - too-high sell profit %0.2f > 0.1^n.\r\n", shop->profit_sell);
       printed = TRUE;
       issues++;
     }
@@ -6088,10 +6228,42 @@ int audit_zone_shops(struct char_data *ch, int zone_num, bool verbose) {
 }
 
 int audit_zone_vehicles(struct char_data *ch, int zone_num, bool verbose) {
-  int issues = 0;
-
+  int issues = 0, real_veh;
+  struct veh_data *veh;
+  bool printed = FALSE;
+  
   if (verbose)
     send_to_char(ch, "\r\nAuditing vehicles for zone %d...\r\n", zone_table[zone_num].number);
+    
+  for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    if ((real_veh = real_vehicle(i)) < 0)
+      continue;
+      
+    veh = &veh_proto[real_veh];
+    
+    snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n", veh->veh_number);
+    
+    printed = FALSE;
+    
+    /*       
+    // Flag invalid sell multipliers
+    if (shop->profit_buy < 1.0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has too-low buy profit %0.2f < 1.0^n", shop->profit_buy);
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag invalid strings
+    if (shop->profit_sell > 0.1) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s too-high sell profit %0.2f > 0.1^n", printed ? ";" : " has", shop->profit_sell);
+      printed = TRUE;
+      issues++;
+    }
+    */
+    
+    if (printed)
+      send_to_char(ch, "%s\r\n", buf);
+  } 
     
   // TODO: Make sure they've got all their strings set.
     
@@ -6099,10 +6271,42 @@ int audit_zone_vehicles(struct char_data *ch, int zone_num, bool verbose) {
 }
 
 int audit_zone_hosts(struct char_data *ch, int zone_num, bool verbose) {
-  int issues = 0;
+  int issues = 0, real_hst;
+  struct host_data *host;
+  bool printed = FALSE;
   
   if (verbose)
     send_to_char(ch, "\r\nAuditing hosts for zone %d...\r\n", zone_table[zone_num].number);
+    
+  for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    if ((real_hst = real_host(i)) < 0)
+      continue;
+      
+    host = &matrix[real_hst];
+    
+    snprintf(buf, sizeof(buf), "[%8ld] ^n", host->vnum);
+    
+    printed = FALSE;
+    
+    /*       
+    // Flag invalid sell multipliers
+    if (shop->profit_buy < 1.0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has too-low buy profit %0.2f < 1.0^n", shop->profit_buy);
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag invalid strings
+    if (shop->profit_sell > 0.1) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s too-high sell profit %0.2f > 0.1^n", printed ? ";" : " has", shop->profit_sell);
+      printed = TRUE;
+      issues++;
+    }
+    */
+    
+    if (printed)
+      send_to_char(ch, "%s\r\n", buf);
+  } 
     
   // TODO: Make sure they've got all their strings set.
     
@@ -6110,10 +6314,42 @@ int audit_zone_hosts(struct char_data *ch, int zone_num, bool verbose) {
 }
 
 int audit_zone_ics(struct char_data *ch, int zone_num, bool verbose) {
-  int issues = 0;
+  int issues = 0, real_num;
+  struct matrix_icon *ic;
+  bool printed = FALSE;
   
   if (verbose)
     send_to_char(ch, "\r\nAuditing ICs for zone %d...\r\n", zone_table[zone_num].number);
+    
+  for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    if ((real_num = real_ic(i)) < 0)
+      continue;
+      
+    ic = &ic_proto[real_num];
+    
+    snprintf(buf, sizeof(buf), "^c[%8d]^n (%s^n)\r\n", ic->idnum, ic->name);
+    
+    printed = FALSE;
+    
+    /*       
+    // Flag invalid sell multipliers
+    if (shop->profit_buy < 1.0) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has too-low buy profit %0.2f < 1.0^n", shop->profit_buy);
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag invalid strings
+    if (shop->profit_sell > 0.1) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s too-high sell profit %0.2f > 0.1^n", printed ? ";" : " has", shop->profit_sell);
+      printed = TRUE;
+      issues++;
+    }
+    */
+    
+    if (printed)
+      send_to_char(ch, "%s\r\n", buf);
+  } 
     
   // TODO: Make sure they've got all their strings set.
     
@@ -6125,6 +6361,10 @@ int audit_zone_commands(struct char_data *ch, int zone_num, bool verbose) {
   
   if (verbose)
     send_to_char(ch, "\r\nAuditing zone commands for zone %d...\r\n", zone_table[zone_num].number);
+  
+  for (int cmd_no = 0; cmd_no < zone_table[zone_num].num_cmds; cmd_no++) {
+    
+  }
     
   return issues;
 }
@@ -6161,13 +6401,4 @@ ACMD(do_audit) {
   
   send_to_char(ch, "\r\nDone. Found a total of %d potential issue%s. Note that something being in this list does not disqualify the zone from approval-- it just requires extra scrutiny. Conversely, something not being flagged here doesn't mean it's kosher, it just means we didn't write a coded check for it yet.\r\n", 
                issues, issues != 1 ? "s" : "");
-  
-  /*
-  send_to_char("\r\n\r\nAnomalous Objects -----------\r\n", ch);
-  for (i = 0, j = 0; i <= top_of_objt; i++) {
-    // Check stats, etc
-  }
-  if (j == 0)
-    send_to_char("...None.\r\n", ch);
-  */
 }

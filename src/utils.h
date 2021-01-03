@@ -96,6 +96,7 @@ bool    combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct o
 void    update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount);
 void    destroy_door(struct room_data *room, int dir);
 bool    spell_is_nerp(int spell_num);
+char    get_final_character_from_string(const char *str);
 
 // Skill-related.
 char *how_good(int skill, int rank);
