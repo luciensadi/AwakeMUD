@@ -5784,6 +5784,12 @@ int audit_zone_rooms(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
     }
     
+    if (ROOM_FLAGGED(room, ROOM_ARENA)) {
+      strncat(buf, "  - Arena flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      issues++;
+      printed = TRUE;
+    }
+    
     // Staff-only is allowed in the staff HQ area. Otherwise, flag it.
     if ((GET_ROOM_VNUM(room) < 10000 || GET_ROOM_VNUM(room) > 10099) && ROOM_FLAGGED(room, ROOM_STAFF_ONLY)) {
       strncat(buf, "  - Staff-only flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
