@@ -70,6 +70,7 @@ extern SPECIAL(fence);
 extern SPECIAL(terell_davis);
 extern SPECIAL(hacker);
 extern SPECIAL(receptionist);
+extern SPECIAL(fixer);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 extern float get_bulletpants_weight(struct char_data *ch);
@@ -825,6 +826,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         }
         if (mob_index[GET_MOB_RNUM(i)].func == receptionist || mob_index[GET_MOB_RNUM(i)].sfunc == receptionist) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has bunks for rent.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          already_printed = TRUE;
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == fixer || mob_index[GET_MOB_RNUM(i)].sfunc == fixer) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.^n\r\n", HSSH(i), already_printed ? " also" : "");
           already_printed = TRUE;
         }
 /*

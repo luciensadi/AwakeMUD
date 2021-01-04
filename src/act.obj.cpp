@@ -35,6 +35,11 @@ extern void check_quest_delivery(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 
+extern SPECIAL(fence);
+extern SPECIAL(hacker);
+extern SPECIAL(fixer);
+extern SPECIAL(mageskill_herbie);
+
 void calc_weight(struct char_data *ch);
 
 SPECIAL(weapon_dominator);
@@ -1646,6 +1651,13 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   if (!IS_NPC(ch) && IS_NPC(vict)) {
     if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj))
       extract_obj(obj);
+    else if (GET_MOB_SPEC(ch) || GET_MOB_SPEC2(ch)) {
+      // These specs handle objects, so don't mess with them.
+      if (GET_MOB_SPEC(ch) == fence || GET_MOB_SPEC(ch) == hacker || GET_MOB_SPEC(ch) == fixer || GET_MOB_SPEC(ch) == mageskill_herbie)
+        return 1;
+      if (GET_MOB_SPEC2(ch) == fence || GET_MOB_SPEC2(ch) == hacker || GET_MOB_SPEC2(ch) == fixer || GET_MOB_SPEC2(ch) == mageskill_herbie)
+        return 1;
+    }
     else {
       act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
       obj_from_char(obj);
