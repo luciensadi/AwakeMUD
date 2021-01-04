@@ -2111,7 +2111,7 @@ enum {
 #define OBJ_BLACK_BDU_PANTS                14618
 #define OBJ_BLACK_COMBAT_BOOTS             29010
 #define OBJ_MEDKIT                         450
-#define OBJ_VEHICLE_TOOLKIT                47397
+#define OBJ_VEHICLE_TOOLKIT                37597
 #define OBJ_ELECTRONICS_KIT                60532
 #define OBJ_CELL_PHONE                     60530
 #define OBJ_TITLE_TO_SCORPION              892
