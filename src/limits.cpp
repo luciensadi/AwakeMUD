@@ -947,7 +947,7 @@ void save_vehicles(void)
                 GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room)
               );
        log(buf);
-        switch (GET_JURISDICTION(veh->in_room)) {
+        switch (GET_JURISDICTION(temp_room)) {
           case ZONE_PORTLAND:
             switch (number(0, 2)) {
               case 0:
