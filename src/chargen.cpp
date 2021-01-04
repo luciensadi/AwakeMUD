@@ -192,17 +192,20 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       break;
   
   // Equip weapon.
-  snprintf(buf, sizeof(buf), "Attempting to attach %lu %lu %lu...", archetypes[i]->weapon_top, archetypes[i]->weapon_barrel, archetypes[i]->weapon_under);
-  log(buf);
-  struct obj_data *weapon = read_object(archetypes[i]->weapon, VIRTUAL);
-  
-  ATTACH_IF_EXISTS(archetypes[i]->weapon_top, ACCESS_ACCESSORY_LOCATION_TOP);
-  ATTACH_IF_EXISTS(archetypes[i]->weapon_barrel, ACCESS_ACCESSORY_LOCATION_BARREL);
-  ATTACH_IF_EXISTS(archetypes[i]->weapon_under, ACCESS_ACCESSORY_LOCATION_UNDER);
-  equip_char(CH, weapon, WEAR_WIELD);
-  
-  // Fill pockets.
-  update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(GET_EQ(CH, WEAR_WIELD)), AMMO_NORMAL, archetypes[i]->ammo_q);
+  if (archetypes[i]->weapon > 0) {
+    snprintf(buf, sizeof(buf), "Attempting to attach %lu %lu %lu...", archetypes[i]->weapon_top, archetypes[i]->weapon_barrel, archetypes[i]->weapon_under);
+    log(buf);
+    struct obj_data *weapon = read_object(archetypes[i]->weapon, VIRTUAL);
+    
+    ATTACH_IF_EXISTS(archetypes[i]->weapon_top, ACCESS_ACCESSORY_LOCATION_TOP);
+    ATTACH_IF_EXISTS(archetypes[i]->weapon_barrel, ACCESS_ACCESSORY_LOCATION_BARREL);
+    ATTACH_IF_EXISTS(archetypes[i]->weapon_under, ACCESS_ACCESSORY_LOCATION_UNDER);
+    equip_char(CH, weapon, WEAR_WIELD);
+    
+    // Fill pockets.
+    if (archetypes[i]->ammo_q && GET_EQ(CH, WEAR_WIELD))
+      update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(GET_EQ(CH, WEAR_WIELD)), AMMO_NORMAL, archetypes[i]->ammo_q);
+  }
   
   // Grant modulator (unbonded, unworn).
   if (archetypes[i]->modulator > 0) {
@@ -213,7 +216,6 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       mudlog(buf, CH, LOG_SYSLOG, TRUE);
     }
   }
-    
   
   // Equip worn items.
   for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++)
