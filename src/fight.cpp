@@ -3884,7 +3884,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Reach is always used offensively. TODO: Add option to use it defensively instead.
     if (net_reach > 0)
       att->modifiers[COMBAT_MOD_REACH] -= net_reach;
-    
+    else
+      def->modifiers[COMBAT_MOD_REACH] -= -net_reach;
+      
     // -------------------------------------------------------------------------------------------------------
     // Calculate and display pre-success-test information.
     snprintf(rbuf, sizeof(rbuf), "^cMelee combat mode. %s's TN modifiers: ", GET_CHAR_NAME(att->ch) );
