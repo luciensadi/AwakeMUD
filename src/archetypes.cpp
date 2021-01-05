@@ -301,6 +301,14 @@ struct archetype_data *generate_street_mage() {
   arch->skills[SKILL_STEALTH] = 3;
   arch->skills[SKILL_SPELLDESIGN] = 4;
   
+  ARCH_SPELL(SPELL_HEAL, 0, 5);
+  ARCH_SPELL(SPELL_COMBATSENSE, 0, 3);
+  ARCH_SPELL(SPELL_FLAMETHROWER, 0, 6);
+  ARCH_SPELL(SPELL_MINDLINK, 0, 1);
+  ARCH_SPELL(SPELL_ARMOUR, 0, 3);
+  ARCH_SPELL(SPELL_IMP_INVIS, 0, 1);
+  ARCH_SPELL(SPELL_STUNBOLT, 0, 6);
+  
   // arch->nuyen = 22660;
   
   arch->modulator = OBJ_DOCWAGON_GOLD_MODULATOR;
