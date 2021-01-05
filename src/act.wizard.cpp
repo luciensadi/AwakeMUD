@@ -3985,6 +3985,7 @@ ACMD(do_set)
                { "noidle", LVL_VICEPRES, PC, BINARY },
                { "tke", LVL_VICEPRES, PC, NUMBER }, //70
                { "sysp", LVL_VICEPRES, PC, NUMBER },
+               { "socializationbonus", LVL_ADMIN, PC,     NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4514,6 +4515,10 @@ ACMD(do_set)
   case 71:
     RANGE(-10000, 10000);
     GET_SYSTEM_POINTS(vict) = value;
+  case 72:
+    RANGE(0, MAX_CONGREGATION_BONUS);
+    GET_CONGREGATION_BONUS(vict) = value;
+    break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
     break;
