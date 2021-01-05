@@ -28,7 +28,7 @@
 ACMD_DECLARE(do_say);
 
 // Note: If you want mobact debugging, add -DMOBACT_DEBUG to your makefile.
-#define MOBACT_DEBUG
+// #define MOBACT_DEBUG
 
 /* external structs */
 extern void resist_drain(struct char_data *ch, int power, int drain_add, int wound);
