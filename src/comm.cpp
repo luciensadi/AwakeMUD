@@ -129,6 +129,7 @@ void init_descriptor (struct descriptor_data *newd, int desc);
 char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 void send_keepalives();
 void msdp_update();
+void increase_congregation_bonus_pools();
 
 /* extern fcnts */
 extern void DBInit();
@@ -917,69 +918,7 @@ void game_loop(int mother_desc)
     
     // Every 30 IRL seconds
     if (!(pulse % (30 * PASSES_PER_SEC))) {
-      // Apply congregation / socializing bonuses. We specifically don't want to tell them when it's full,
-      // because that encourages breaking off from RP to go burn it down again. Let them chill.
-      for (struct char_data *i = character_list; i; i = i->next) {
-        if (!IS_NPC(i) && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION)) {
-          if (!i->desc || i->char_specials.timer >= 10) {
-            snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- no link, or idle.", GET_CHAR_NAME(i));
-            act(buf, FALSE, i, 0, 0, TO_ROLLS);
-            continue;
-          }
-          
-          int occupants = 1, total_occupants = 1;
-               
-          // Two iterations over the room. First, if you're not an NPC and not idle, you proceed to second check.
-          for (struct char_data *tempch = i->in_room->people; tempch; tempch = tempch->next_in_room) {
-            if (tempch == i || IS_NPC(tempch))
-              continue;
-              
-            if (!tempch->desc || tempch->char_specials.timer >= 10) {
-              snprintf(buf, sizeof(buf), "Socialization: Skipping %s in occupant count-- no link, or idle.", GET_CHAR_NAME(tempch));
-              act(buf, FALSE, i, 0, 0, TO_ROLLS);
-              continue;
-            }
-              
-            total_occupants++;
-              
-            // Second, if your host does not match anyone else's host, you count as an occupant.
-            bool is_multichar = FALSE;
-            for (struct char_data *descch = i->in_room->people; descch; descch = descch->next_in_room) {
-              if (descch == tempch || IS_NPC(descch) || !descch->desc || descch->char_specials.timer >= 10)
-                continue;
-                
-              if (!strcmp(descch->desc->host, tempch->desc->host)) {
-                snprintf(buf, sizeof(buf), "Socialization: Skipping %s in occupant count-- multichar of %s.", GET_CHAR_NAME(descch), GET_CHAR_NAME(tempch));
-                act(buf, FALSE, i, 0, 0, TO_ROLLS);
-                is_multichar = TRUE;
-                break;
-              }
-            }
-            if (is_multichar)
-              continue;
-            
-            snprintf(buf, sizeof(buf), "Socialization: Counting %s as an occupant.", GET_CHAR_NAME(tempch));
-            act(buf, FALSE, i, 0, 0, TO_ROLLS);
-            occupants++;
-          }
-          
-          int point_gain = 1;
-          if (occupants >= 10)
-            point_gain = 4;
-          else if (occupants >= 6)
-            point_gain = 3;
-          else if (occupants >= 3)
-            point_gain = 2;
-          
-          snprintf(buf, sizeof(buf), "Socialization: %s gets %d (valid PC occupants: %d of %d).", 
-                   GET_CHAR_NAME(i), 
-                   MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS) - GET_CONGREGATION_BONUS(i),
-                   occupants,
-                   total_occupants);
-          act(buf, FALSE, i, 0, 0, TO_ROLLS);
-          GET_CONGREGATION_BONUS(i) = MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS);
-        }
-      }
+      increase_congregation_bonus_pools();
     }
     
     // Every IRL minute
@@ -3017,4 +2956,76 @@ void msdp_update() {
    * snippet simple.  Optimise as you see fit.
    */
   MSSPSetPlayers( PlayerCount );
+}
+
+void increase_congregation_bonus_pools() {
+  // Apply congregation / socializing bonuses. We specifically don't want to tell them when it's full,
+  // because that encourages breaking off from RP to go burn it down again. Let them chill.
+  for (struct char_data *i = character_list; i; i = i->next) {
+    if (!IS_NPC(i) && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION)) {
+      if (!i->desc || i->char_specials.timer >= 10) {
+        snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- no link, or idle.", GET_CHAR_NAME(i));
+        act(buf, FALSE, i, 0, 0, TO_ROLLS);
+        continue;
+      }
+      
+      if (GET_CONGREGATION_BONUS(i) == MAX_CONGREGATION_BONUS) {
+        snprintf(buf, sizeof(buf), "Socialization: Skipping %s's opportunity to earn social points-- already maximized.", GET_CHAR_NAME(i));
+        act(buf, FALSE, i, 0, 0, TO_ROLLS);
+        continue;
+      }
+      
+      int occupants = 1, total_occupants = 1;
+           
+      // Two iterations over the room. First, if you're not an NPC and not idle, you proceed to second check.
+      for (struct char_data *tempch = i->in_room->people; tempch; tempch = tempch->next_in_room) {
+        if (tempch == i || IS_NPC(tempch))
+          continue;
+          
+        if (!tempch->desc || tempch->char_specials.timer >= 10) {
+          snprintf(buf, sizeof(buf), "Socialization: Skipping %s in occupant count-- no link, or idle.", GET_CHAR_NAME(tempch));
+          act(buf, FALSE, i, 0, 0, TO_ROLLS);
+          continue;
+        }
+          
+        total_occupants++;
+          
+        // Second, if your host does not match anyone else's host, you count as an occupant.
+        bool is_multichar = FALSE;
+        for (struct char_data *descch = i->in_room->people; descch; descch = descch->next_in_room) {
+          if (descch == tempch || IS_NPC(descch) || !descch->desc || descch->char_specials.timer >= 10)
+            continue;
+            
+          if (!strcmp(descch->desc->host, tempch->desc->host)) {
+            snprintf(buf, sizeof(buf), "Socialization: Skipping %s in occupant count-- multichar of %s.", GET_CHAR_NAME(descch), GET_CHAR_NAME(tempch));
+            act(buf, FALSE, i, 0, 0, TO_ROLLS);
+            is_multichar = TRUE;
+            break;
+          }
+        }
+        if (is_multichar)
+          continue;
+        
+        snprintf(buf, sizeof(buf), "Socialization: Counting %s as an occupant.", GET_CHAR_NAME(tempch));
+        act(buf, FALSE, i, 0, 0, TO_ROLLS);
+        occupants++;
+      }
+      
+      int point_gain = 1;
+      if (occupants >= 10)
+        point_gain = 4;
+      else if (occupants >= 6)
+        point_gain = 3;
+      else if (occupants >= 3)
+        point_gain = 2;
+      
+      snprintf(buf, sizeof(buf), "Socialization: %s gets %d (valid PC occupants: %d of %d).", 
+               GET_CHAR_NAME(i), 
+               MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS) - GET_CONGREGATION_BONUS(i),
+               occupants,
+               total_occupants);
+      act(buf, FALSE, i, 0, 0, TO_ROLLS);
+      GET_CONGREGATION_BONUS(i) = MIN(GET_CONGREGATION_BONUS(i) + point_gain, MAX_CONGREGATION_BONUS);
+    }
+  }
 }
