@@ -19,6 +19,7 @@
 #include "file.h"
 #include "newdb.h"
 #include "perfmon.h"
+#include "config.h"
 
 // extern vars
 extern class helpList Help;
@@ -182,12 +183,16 @@ void objList::UpdateCounters(void)
   char *trid = NULL;
   static nodeStruct<struct obj_data *> *temp, *next;
   
-  // Select the trideo broadcast message we'll be using this tick.
-  mysql_wrapper(mysql, "SELECT message FROM trideo_broadcast ORDER BY RAND() LIMIT 1");
-  res = mysql_use_result(mysql);
-  row = mysql_fetch_row(res);
-  trid = str_dup(row[0]);
-  mysql_free_result(res);
+  bool trideo_plays = (trideo_ticks++ % TRIDEO_TICK_DELAY == 0);
+
+  if (trideo_plays) {
+    // Select the trideo broadcast message we'll be using this tick.
+    mysql_wrapper(mysql, "SELECT message FROM trideo_broadcast ORDER BY RAND() LIMIT 1");
+    res = mysql_use_result(mysql);
+    row = mysql_fetch_row(res);
+    trid = str_dup(row[0]);
+    mysql_free_result(res);
+  }
   
   // Iterate through the list.
   for (temp = head; temp; temp = next) {
@@ -218,7 +223,7 @@ void objList::UpdateCounters(void)
       GET_OBJ_ATTEMPT(OBJ)--;
 
     // Send out the trideo messages. We assume anything that is a trideo box is not anything else.
-    if (GET_OBJ_SPEC(OBJ) == trideo && GET_OBJ_VAL(OBJ, 0)) {
+    if (trideo_plays && GET_OBJ_SPEC(OBJ) == trideo && GET_OBJ_VAL(OBJ, 0)) {
       snprintf(buf, sizeof(buf), "$p broadcasts, \"%s\"", trid);
       act(buf, TRUE, 0, OBJ, 0, TO_ROOM);
       continue;

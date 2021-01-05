@@ -8,7 +8,10 @@
 
 class objList : public List<struct obj_data *>
 {
+  int trideo_ticks;
 public:
+  objList() { trideo_ticks = 0; }
+  
   int PrintList(struct char_data *ch, const char *arg);
   int CountObj(int num);
   int CountPlayerCorpses();

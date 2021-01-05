@@ -4254,8 +4254,6 @@ SPECIAL(trideo)
        (trid->restring && isname(argument, trid->restring)))) {
       if (IS_ASTRAL(ch))
         send_to_char("You just can't seem to activate it.\r\n", ch);
-      if (trid->in_room)
-        send_to_char("You have to plug it in to turn it on.\r\n", ch);
       else if (!(CAN_WEAR(trid, ITEM_WEAR_TAKE)))
         send_to_char("You don't have control over that unit.\r\n", ch);
       else if (GET_OBJ_VAL(trid, 0)) {

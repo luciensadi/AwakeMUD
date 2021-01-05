@@ -84,4 +84,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define CONGREGATION_MIN_KARMA_GAIN_PER_ACTION 25
 // The min value must be less than the max value. It ensures people don't feel like they're wasting their karma mult if the accidentally kill a 0.01-karma mob.
 
+// How infrequently do you want your trideo units to display something?
+#define TRIDEO_TICK_DELAY 3
+
 #endif
