@@ -28,7 +28,7 @@
 ACMD_DECLARE(do_say);
 
 // Note: If you want mobact debugging, add -DMOBACT_DEBUG to your makefile.
-// #define MOBACT_DEBUG
+#define MOBACT_DEBUG
 
 /* external structs */
 extern void resist_drain(struct char_data *ch, int power, int drain_add, int wound);
@@ -277,6 +277,20 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
 }
 
 bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
+  const char *guard_messages[] = {
+    "%s Hey! You can't have %s here!",
+    "%s Drop %s, slitch!",
+    "%s Get out of here with %s!",
+    "%s You can't have %s here!",
+    "%s %s isn't allowed here! Leave!",
+    "%s You're really bringing %s in here? Really?",
+    "%s Bringing %s in here was the last mistake you'll ever make.",
+    "%s %s? Brave of you.",
+    "%s Call the DocWagon. Maybe they can use %s to scrape you off the ground.",
+    "%s You think %s is going to save you?"
+  };
+  #define NUM_GUARD_MESSAGES 10
+  
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
   
@@ -285,10 +299,8 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
     // If victim's equipment is illegal here, blast them.
     if (GET_EQ(vict, i) && violates_zsp(security_level, vict, i, ch)) {
       // Target found, stop processing.
-#ifdef MOBACT_DEBUG
-      snprintf(buf3, sizeof(buf3), "vict_is_valid_guard_target: %s's equipment violates ZSP.", GET_CHAR_NAME(vict));
-      do_say(ch, buf3, 0, 0);
-#endif
+      snprintf(buf3, sizeof(buf3), guard_messages[number(0, NUM_GUARD_MESSAGES)], GET_CHAR_NAME(vict), GET_OBJ_NAME(GET_EQ(vict, i)));
+      do_say(ch, buf3, 0, SCMD_SAYTO);
       return TRUE;
     }
   }
