@@ -574,6 +574,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Purgelog"    , TRUE , TRUE  },
   { "No Autokill" , FALSE, TRUE  },
   { "Voice Names" , FALSE, TRUE  },
+  { "FuckupLog"   , TRUE , TRUE  },
   { "\n"          , 0    , 0     }
 };
 
@@ -1087,6 +1088,7 @@ const char *log_types[] =
     "PGROUPLOG",
     "HELPLOG",
     "PURGELOG",
+    "FUCKUPLOG",
     "\n"
   };
 

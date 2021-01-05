@@ -1316,10 +1316,10 @@ void nonsensical_reply(struct char_data *ch, const char *arg)
     ch->desc->invalid_command_counter = 0;
   }
   // There must be an arg, and it must not be a number.
-  if (arg && *arg && atoi(arg) == 0) {
+  if (arg && *arg && isalpha(*arg)) {
     char log_buf[1000];
     snprintf(log_buf, sizeof(log_buf), "Invalid command: '%s'.", arg);
-    mudlog(log_buf, ch, LOG_SYSLOG, TRUE);
+    mudlog(log_buf, ch, LOG_FUCKUPLOG, TRUE);
     
     // Log it to DB.
     snprintf(buf, sizeof(buf), "INSERT INTO command_fuckups (Name, Count) VALUES ('%s', 1) ON DUPLICATE KEY UPDATE Count = Count + 1;", 
@@ -2950,11 +2950,16 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("pick", "bypass");
   COMMAND_ALIAS("hack", "bypass");
   
-  // Doubled up movement for those impatient-ass people.
+  // Doubled up and otherwise misspelled movement for those impatient-ass people.
   COMMAND_ALIAS("nn", "n");
   COMMAND_ALIAS("ee", "e");
   COMMAND_ALIAS("ss", "s");
   COMMAND_ALIAS("ww", "w");
+  COMMAND_ALIAS("ws", "sw");
+  COMMAND_ALIAS("wn", "nw");
+  COMMAND_ALIAS("en", "ne");
+  COMMAND_ALIAS("ws", "sw");
+  COMMAND_ALIAS("norht", "n"); // this one happened 18 times
   
   // Found nothing, return the failure code.
   return -1;

@@ -2086,12 +2086,13 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
 bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype) {
   if (IS_NPC(victim)) {
     // Shopkeeper protection.
-    if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
-        || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
-        || mob_index[GET_MOB_RNUM(victim)].func == johnson
-        || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
-        || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
-        || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec)
+    if (IS_NPC(victim) 
+        && (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+            || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
+            || mob_index[GET_MOB_RNUM(victim)].func == johnson
+            || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
+            || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
+            || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec))
       return false;
     
     // Nokill protection.
@@ -2181,12 +2182,12 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   }
   
   /* shopkeeper protection */
-  else if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
-      || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
-      || mob_index[GET_MOB_RNUM(victim)].func == johnson 
-      || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
-      || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
-      || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec)
+  else if (IS_NPC(victim) && (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+                              || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
+                              || mob_index[GET_MOB_RNUM(victim)].func == johnson 
+                              || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
+                              || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
+                              || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec))
   {
     dam = -1;
     buf_mod(rbuf, sizeof(rbuf), "Keeper",dam);

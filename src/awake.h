@@ -372,7 +372,8 @@ enum {
 #define PRF_PURGELOG            47
 #define PRF_NOAUTOKILL          48
 #define PRF_NO_RADIO_NAMES      49
-#define PRF_MAX   		          50
+#define PRF_FUCKUPLOG           50
+#define PRF_MAX   		          51
 
 /* log watch */
 
@@ -391,6 +392,7 @@ enum {
 #define LOG_PGROUPLOG      11
 #define LOG_HELPLOG        12
 #define LOG_PURGELOG       13
+#define LOG_FUCKUPLOG      14
 
 /* player conditions */
 
