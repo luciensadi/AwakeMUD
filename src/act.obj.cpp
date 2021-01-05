@@ -3177,6 +3177,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     act("$n draws $p from $P.", TRUE, ch, contents, holster, TO_ROOM);
     
     if (GET_OBJ_SPEC(contents) == weapon_dominator) {
+      GET_OBJ_TYPE(contents) = ITEM_OTHER;
       dominator_mode_switch(ch, contents, DOMINATOR_MODE_PARALYZER);
     }
     
@@ -3279,6 +3280,11 @@ ACMD(do_holster)
     send_to_char(ch, "%s doesn't seem to fit in %s.\r\n", capitalize(GET_OBJ_NAME(obj)), GET_OBJ_NAME(cont));
     return;
   }
+  
+  if (GET_OBJ_SPEC(obj) == weapon_dominator) {
+    dominator_mode_switch(ch, obj, DOMINATOR_MODE_PARALYZER);
+  }
+  
   if (obj->worn_by)
     obj = unequip_char(ch, obj->worn_on, TRUE);
   else

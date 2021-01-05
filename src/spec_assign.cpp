@@ -223,7 +223,7 @@ struct teach_data teachers[] = {
 
    { 22871, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "You spend some time reading through the library.\r\n", LIBRARY }, 
 
-   { 62803, { SKILL_PILOT_CAR, SKILL_PILOT_BIKE, SKILL_PISTOLS, SKILL_UNARMED_COMBAT, SKILL_EDGED_WEAPONS, SKILL_STREET_ETIQUETTE, SKILL_STEALTH, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "You spend some time listening to Axehead's stories, and you feel like you've learned something.\r\n", 3 },
+   { 62803, { SKILL_PILOT_CAR, SKILL_PILOT_BIKE, SKILL_PISTOLS, SKILL_UNARMED_COMBAT, SKILL_EDGED_WEAPONS, SKILL_STREET_ETIQUETTE, SKILL_STEALTH, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "You spend some time listening to Axehead's stories, and you feel like you've learned something.\r\n", AMATEUR },
 
   { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Report this bug!\r\n", 0 } // this MUST be last
 };
