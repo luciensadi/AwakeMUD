@@ -1473,7 +1473,7 @@ SPECIAL(car_dealer)
     
   if (IS_NPC(ch)) {
     send_to_char("You're having a hard time getting the dealer's attention.\r\n", ch);
-    return TRUE;
+    return FALSE;
   }
 
   int car_room = real_room(ch->in_room->number) - 1;
@@ -3835,7 +3835,7 @@ SPECIAL(painter)
     return FALSE;
   if (IS_NPC(ch)) {
     send_to_char("You're having a hard time getting the painter's attention.\r\n", ch);
-    return TRUE;
+    return FALSE;
   }
   skip_spaces(&argument);
   if (!*argument) {
