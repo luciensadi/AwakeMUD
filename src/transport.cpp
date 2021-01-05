@@ -128,6 +128,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "junkyard",  "The Tacoma Junkyard", 2070, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
     { "neophyte",  "The Neophyte Guild", 32679, TAXI_DEST_TYPE_OTHER, TRUE },
 #ifdef USE_PRIVATE_CE_WORLD
+    { "slitch", "The Slitch Pit", 32660, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "planetary", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
 #endif
     { "\n", "", 0, 0, 0 } // this MUST be last

@@ -3897,9 +3897,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     snprintf(rbuf, sizeof(rbuf), "^c%s%s's TN modifiers: ", GET_CHAR_NAME( def->ch ),
             (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
-    def->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), def->modifiers[COMBAT_MOD_VISIBILITY]);
+    def->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->modifiers[COMBAT_MOD_VISIBILITY]);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->modifiers[mod_index]);
+      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->modifiers[mod_index]);
       def->tn += def->modifiers[mod_index];
     }
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
@@ -4121,8 +4121,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   // Adjust messaging for unkillable entities.
   if (can_hurt(att->ch, def->ch, att->dam_type))
     staged_damage = stage(att->successes, att->damage_level);
-  else
+  else {
     staged_damage = -1;
+    act("Damage reduced to -1 due to failure of CAN_HURT().", TRUE, att->ch, NULL, NULL, TO_ROLLS);
+  }
   
   int damage_total = convert_damage(staged_damage);
   
