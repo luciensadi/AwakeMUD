@@ -333,6 +333,21 @@ struct archetype_data *generate_street_mage() {
   arch->carried[i++] = OBJ_ORICHALCUM_BRACELET;
   assert(i < NUM_ARCHETYPE_CARRIED);
   
+  i = 0;
+  arch->cyberware[i++] = OBJ_CYB_DATAJACK;
+  arch->cyberware[i++] = OBJ_CYB_ENCEPHALON_II;
+  arch->cyberware[i++] = OBJ_CYB_MATH_SPU_III;
+  arch->cyberware[i++] = OBJ_CYB_SMARTLINK_II;
+  arch->cyberware[i++] = OBJ_CYB_EYE_PACKAGE_LL_TH_FC_ALPHA;
+  assert(i < NUM_ARCHETYPE_CYBERWARE);
+  
+  i = 0;
+  arch->bioware[i++] = OBJ_BIO_MUSCLE_TONER_III;
+  arch->bioware[i++] = OBJ_BIO_CEREBRAL_BOOSTER_II;
+  arch->bioware[i++] = OBJ_BIO_ENHANCED_ARTICULATION;
+  arch->bioware[i++] = OBJ_BIO_MUSCLE_AUGMENTATION_II;
+  assert(i < NUM_ARCHETYPE_BIOWARE);
+  
   return arch;
 }
 #undef ARCH_SPELL
