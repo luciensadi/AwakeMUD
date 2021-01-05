@@ -1130,7 +1130,10 @@ struct combat_data
     ch = character;
     weapon = weap;
     
-    weapon_is_gun = (weapon && IS_GUN(GET_OBJ_VAL((weapon), 3)));
+    weapon_is_gun = (weapon 
+                     && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) 
+                     && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
+                         && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
     if (weapon_is_gun)
       magazine = weapon->contains;
   }
