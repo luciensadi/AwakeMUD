@@ -1,11 +1,12 @@
 #ifndef __ARCHETYPES_H
 #define __ARCHETYPES_H
 
-#define NUM_ARCHETYPE_SPELLS 10
+#define NUM_ARCHETYPE_SPELLS    10
 #define NUM_ARCHETYPE_ABILITIES 10
 #define NUM_ARCHETYPE_CYBERWARE 10
 #define NUM_ARCHETYPE_BIOWARE   10
 #define NUM_ARCHETYPE_CARRIED   20
+#define NUM_ARCHETYPE_SOFTWARE  20
 
 struct archetype_data {
   const char *name;
@@ -22,6 +23,9 @@ struct archetype_data {
   int powers[NUM_ARCHETYPE_ABILITIES][2]; // 0 is power, 1 is rating
   int spells[NUM_ARCHETYPE_SPELLS][3]; // 0 is spell ID, 1 is subtype, 2 is force
   int forcepoints; // for bonding foci
+  
+  vnum_t cyberdeck;
+  vnum_t software[NUM_ARCHETYPE_SOFTWARE];
   
   vnum_t weapon;
   vnum_t weapon_top;
@@ -47,7 +51,7 @@ struct archetype_data {
 #define ARCHETYPE_RIGGER         5
 
 // TODO: Increment this as the archetypes complete.
-#define NUM_CCR_ARCHETYPES 3
+#define NUM_CCR_ARCHETYPES 5
 
 extern struct archetype_data *archetypes[NUM_CCR_ARCHETYPES];
 

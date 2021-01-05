@@ -2142,6 +2142,27 @@ enum {
 #define OBJ_ASH_LEAF_ANKLET                60565
 #define OBJ_ORICHALCUM_BRACELET            4906
 #define OBJ_TITLE_TO_AMERICAR              891
+#define OBJ_SCK_MODEL_100                  786
+#define OBJ_TOP_MOUNTED_SMARTGUN_LINK      80422
+#define OBJ_FOREGRIP                       28618
+#define OBJ_PAIR_OF_WHITE_TRAINERS         22691
+#define OBJ_CYBERDECK_REPAIR_KIT           38041
+#define OBJ_NOVATECH_BURNER                1172
+#define OBJ_MITSUHAMA_Z4                   1847
+#define OBJ_LONDON_FOG_PROFESSIONAL        8439
+
+#define OBJ_CMT_AVATAR                     80004
+#define OBJ_NOVATECH_SIX_SENSORS           17116
+#define OBJ_NOVATECH_SIX_MASKING           17115
+#define OBJ_NOVATECH_SIX_BOD               17113
+#define OBJ_FUCHI_LTD_EVASION              6105
+#define OBJ_CATCO_SLEAZE                   6108
+#define OBJ_TRANSYS_SCRIBE                 1141
+#define OBJ_TRANSYS_RIFFLE                 1140
+#define OBJ_RENRAKU_BYPASS                 6109
+#define OBJ_FOXFIRE_KITSUNE                1966
+#define OBJ_TRANSYS_ARMOUR                 1139
+#define OBJ_MATRIX_SWORD                   387
 
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601

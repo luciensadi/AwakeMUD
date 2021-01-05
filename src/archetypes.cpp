@@ -344,9 +344,9 @@ struct archetype_data *generate_decker() {
   arch->auth_room = 91032;
   
   // Set attributes.
-  arch->attributes[BOD] = 6;
-  arch->attributes[QUI] = 6;
-  arch->attributes[STR] = 6;
+  arch->attributes[BOD] = 3;
+  arch->attributes[QUI] = 5;
+  arch->attributes[STR] = 2;
   arch->attributes[CHA] = 1;
   arch->attributes[INT] = 6;
   arch->attributes[WIL] = 6;
@@ -356,24 +356,66 @@ struct archetype_data *generate_decker() {
   arch->tradition = TRAD_MUNDANE;
   
   // Set skills.
-  arch->skills[SKILL_ASSAULT_RIFLES] = 6;
+  arch->skills[SKILL_SMG] = 6;
+  arch->skills[SKILL_CYBERTERM_DESIGN] = 6;
+  arch->skills[SKILL_COMPUTER] = 6;
+  arch->skills[SKILL_ELECTRONICS] = 3;
+  arch->skills[SKILL_BR_COMPUTER] = 4;
+  arch->skills[SKILL_NEGOTIATION] = 2;
+  arch->skills[SKILL_CORPORATE_ETIQUETTE] = 2;
+  arch->skills[SKILL_STREET_ETIQUETTE] = 1;
+  arch->skills[SKILL_PROGRAM_COMBAT] = 2;
+  arch->skills[SKILL_PROGRAM_DEFENSIVE] = 2;
+  arch->skills[SKILL_PROGRAM_OPERATIONAL] = 2;
+  arch->skills[SKILL_PROGRAM_SPECIAL] = 2;
+  arch->skills[SKILL_PROGRAM_CYBERTERM] = 2;
+  arch->skills[SKILL_DATA_BROKERAGE] = 4;
   
   // Inventory.
-  arch->weapon = 838; // colt m-23, should be set to burst fire
-  arch->weapon_top = 28702; // nicami scope
-  arch->weapon_barrel = 80403; // vent IV
-  arch->weapon_under = 31111; // smartlink II
+  arch->weapon = OBJ_SCK_MODEL_100;
+  arch->weapon_top = OBJ_TOP_MOUNTED_SMARTGUN_LINK;
+  arch->weapon_barrel = OBJ_VENT_IV;
+  arch->weapon_under = OBJ_FOREGRIP;
   arch->ammo_q = 500;
   
   arch->nuyen = 22660;
   
-  arch->modulator = 16208; // platinum
+  arch->modulator = OBJ_DOCWAGON_BASIC_MOD;
   
-  arch->worn[WEAR_ABOUT] = 1833; // a black trench coat
+  arch->worn[WEAR_ABOUT] = OBJ_LONDON_FOG_PROFESSIONAL;
+  arch->worn[WEAR_BACK] = OBJ_NEOPHYTE_DUFFELBAG;
+  arch->worn[WEAR_BODY] = OBJ_PLATED_ARMOR_VEST;
+  arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III;
+  arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS;
+  arch->worn[WEAR_LEGS] = OBJ_BLACK_BDU_PANTS;
+  arch->worn[WEAR_FEET] = OBJ_PAIR_OF_WHITE_TRAINERS;
+
   
   i = 0;
-  arch->carried[i++] = 450; // medkit
+  arch->carried[i++] = OBJ_CYBERDECK_REPAIR_KIT;
+  arch->carried[i++] = OBJ_TITLE_TO_BISON;
+  arch->carried[i++] = OBJ_NOVATECH_BURNER;
+  arch->carried[i++] = OBJ_MITSUHAMA_Z4;
+  arch->carried[i++] = OBJ_ELECTRONICS_KIT;
+  arch->carried[i++] = OBJ_POCKET_SECRETARY;
+  arch->carried[i++] = OBJ_CELL_PHONE;
   assert(i < NUM_ARCHETYPE_CARRIED);
+  
+  arch->cyberdeck = OBJ_CMT_AVATAR;
+  
+  i = 0;
+  arch->software[i++] = OBJ_NOVATECH_SIX_SENSORS;
+  arch->software[i++] = OBJ_NOVATECH_SIX_MASKING;
+  arch->software[i++] = OBJ_NOVATECH_SIX_BOD;
+  arch->software[i++] = OBJ_FUCHI_LTD_EVASION;
+  arch->software[i++] = OBJ_CATCO_SLEAZE;
+  arch->software[i++] = OBJ_TRANSYS_SCRIBE;
+  arch->software[i++] = OBJ_TRANSYS_RIFFLE;
+  arch->software[i++] = OBJ_RENRAKU_BYPASS;
+  arch->software[i++] = OBJ_FOXFIRE_KITSUNE;
+  arch->software[i++] = OBJ_TRANSYS_ARMOUR;
+  arch->software[i++] = OBJ_MATRIX_SWORD;
+  assert(i < NUM_ARCHETYPE_SOFTWARE);
   
   // Cyberware.
   i = 0;

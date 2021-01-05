@@ -240,6 +240,29 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
     }
+    
+  // Give cyberdeck with software installed.
+  if (archetypes[i]->cyberdeck > 0) {
+    if ((temp_obj = read_object(archetypes[i]->cyberdeck, VIRTUAL))) {
+      obj_to_char(temp_obj, CH);
+    } else {
+      snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberdeck %ld specified for archetype %s.", 
+               archetypes[i]->cyberdeck, archetypes[i]->name);
+      mudlog(buf, CH, LOG_SYSLOG, TRUE);
+    }
+    
+    for (int j = 0; j < NUM_ARCHETYPE_SOFTWARE; j++) {
+      struct obj_data *program;
+      if ((program = read_object(archetypes[i]->software[j], VIRTUAL))) {
+        GET_OBJ_VAL(program, 4)++;
+        obj_to_obj(program, temp_obj);
+      } else {
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid software %ld specified for archetype %s.", 
+                 archetypes[i]->software[j], archetypes[i]->name);
+        mudlog(buf, CH, LOG_SYSLOG, TRUE);
+      }
+    }
+  }
   
   // Give them a map.
   if ((temp_obj = read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL)))
