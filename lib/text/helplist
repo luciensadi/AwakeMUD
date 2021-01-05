@@ -1,6 +1,6 @@
-		   ^rAwake 2062 Help Directory^n
+                  ^rAwakeMUD CE Help Directory^n
 ==========================================================================
-		     ^WIndex of Information
+                    ^WIndex of Information^n
 ^yMovement and Observation^n: north, south, east, west, up, down, look, 
 enter, leave, sleep, wake, rest, sit, stand, lock, unlock, open, close,
 rig, drive, follow, scan, exits
@@ -11,15 +11,16 @@ exclaim, receive, check, radio, ooc, osay, newbie
 ^yInformation^n: score, help, info, who, news, time, weather,
 consider, wizlist, credits, policy, toggle, flags, status, software,
 subscribe, abilities, gname, skills, pools, spells, vehicles, display,
-finger, balance, cyberware, bioware
+finger, balance, cyberware, bioware, affects, recap
 
 ^yObjects^n: get, drop, junk, donate, put, give, wear, wield,
 grab, inventory, equipment, remove, examine, eat, drink, taste, sip, pour
 
-^yCombat^n: kill, defense, shoot, throw, flee, retreat, assist, hit, 
-cast, ram, holster, sheath, ready, reload
+^yCombat^n: kill, shoot, throw, flee, retreat, assist, hit, cast,
+ram, holster, sheath, ready, reload
 
-^yFinancial^n: activate, balance, credsticks, withdraw, deposit, transfer
+^yFinancial^n: activate, balance, credsticks, withdraw, deposit, transfer,
+availoffset, trade
 
 ^yUtility^n: !, bug, idea, typo, quit, rent, brief, title,
 commands, socials, drag, buy, sell, hail, repair, house
@@ -27,8 +28,8 @@ commands, socials, drag, buy, sell, hail, repair, house
 ^yRoleplay^n: rp, osay, ooc, description, background, law,
 customize, remember, emote, vemote, shadowruns, jobs, johnsons
 
-^yMagic^n: cast, status, bond, project, perceive, spells,
-initiation, abilities, return, release, order
+^yMagic^n: cast, status, bond, project, perceive, spells, addpoint,
+initiation, abilities, return, release, order, spool, banish
 
 ^yDecking^n: cyberdecks, matrix, software, install, uninstall,
 load, run, bod, evasion, masking, sensors, attack, sleaze, decrypt, medic,
