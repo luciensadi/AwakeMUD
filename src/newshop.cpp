@@ -382,7 +382,15 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO)) {
           
       // Deduct money up to the amount they can afford. Update the object's cost to match.
+      float current_obj_weight = 0.0;
       while (bought < buynum && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price) {
+        // Prevent taking more than you can carry.
+        current_obj_weight += GET_OBJ_WEIGHT(obj);
+        if (IS_CARRYING_W(ch) + current_obj_weight > CAN_CARRY_W(ch)) {
+          send_to_char(ch, "You can only carry %d of that.", bought);
+          break;
+        }
+          
         if (cred)
           GET_OBJ_VAL(cred, 0) -= price;
         else

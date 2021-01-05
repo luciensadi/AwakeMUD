@@ -485,7 +485,7 @@ ACMD(do_upgrade)
     return;
   }
   if (ch->in_veh && (ch->vfront || !ch->in_veh->flags.IsSet(VFLAG_WORKSHOP))) {
-    send_to_char("You don't have any more music to play on the radio.\r\n", ch);
+    send_to_char("You need to be in the back of the vehicle with an unpacked workshop to do that.\r\n", ch);
     return;
   }
   if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
