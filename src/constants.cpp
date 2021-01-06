@@ -518,10 +518,10 @@ const char *action_bits[] =
     "INANIMATE",
     "\n"
   };
-
+  
 /* PRF_x v2 */
 
-struct preference_bit_struct preference_bits_v2[] = {
+struct preference_bit_struct preference_bits_v2[] = { 
   // TODO: Add an 'inverted' flag for things like !OOC.
   // TODO: Is there a better way to name these? Or sort by channel / log / etc?
   { "Pacify"      , TRUE , TRUE  },
@@ -782,7 +782,6 @@ const char *where[] =
     "<worn around ankle>  ",
     "<worn as socks>      ",
     "<worn on feet>       ",
-    "<held in mouth>      ",
     "<patch>              "
   };
 
@@ -841,7 +840,6 @@ const char *short_where[] =
     "ANKLE2",
     "SOCK",
     "FEET",
-    "MOUTH",
     "PATCH"
   };
 
@@ -923,7 +921,6 @@ const char *wear_bits[] =
     "ARM",
     "FACE",
     "THIGH",
-    "MOUTH",
     "PATCH",
     "\n"
   };
@@ -1534,7 +1531,7 @@ struct mod_data mod_types[NUM_MODTYPES] =
     { "Tires", TYPE_KIT },
     { "Other", TYPE_KIT },
     { "Ammo Bin", TYPE_KIT }
-
+    
   };
 const char *mod_name[NUM_MODS] =
   {
@@ -2266,7 +2263,7 @@ const char *legality_codes[][2] = {
   { "Z", "Class C Controlled" }
 };
 
-const char *background_types[] =
+const char *background_types[] = 
 {
   "violence",
   "torture",

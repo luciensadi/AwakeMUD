@@ -137,7 +137,7 @@ using namespace std;
 #define TOTEM_JACKAL       34
 #define TOTEM_JAGUAR       35
 #define TOTEM_LEOPARD      36
-#define TOTEM_LIZARD       37
+#define TOTEM_LIZARD       37  
 #define TOTEM_MONKEY       38
 #define TOTEM_OTTER        39
 #define TOTEM_PARROT       40
@@ -230,7 +230,7 @@ enum {
 #define WEAR_EYES       2
 #define WEAR_EAR        3
 #define WEAR_EAR2       4
-#define WEAR_FACE       5
+#define WEAR_FACE        5
 #define WEAR_NECK_1     6
 #define WEAR_NECK_2     7
 #define WEAR_BACK       8
@@ -348,7 +348,7 @@ enum {
 
 // If you add to this list, also add to constant.cpp's preference_bits[].
 #define PRF_PACIFY              0
-#define PRF_COMPACT             1
+#define PRF_COMPACT             1 
 #define PRF_AUTOEXIT            2  /* Display exits in a room       */
 #define PRF_FIGHTGAG            3  /* Gag extra fight messages  */
 #define PRF_MOVEGAG             4  /* Gag extra movement messages    */
@@ -440,11 +440,11 @@ enum {
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 
 #define AFF_INVISIBLE     1  /* Char is invisible        */
-#define AFF_BANISH    2
+#define AFF_BANISH    2 
 #define AFF_DETECT_INVIS  3  /* Char can see invis chars    */
-#define AFF_PRONE               4
-#define AFF_MANIFEST    5
-#define AFF_HEALED    6
+#define AFF_PRONE               4  
+#define AFF_MANIFEST    5 
+#define AFF_HEALED    6 
 #define AFF_GROUP               7  /* (R) Char is grouped       */
 #define AFF_DAMAGED    8
 #define AFF_INFRAVISION      9  /* Char can see in dark        */
@@ -714,17 +714,17 @@ enum {
 #define TYPE_SUMMONING    4
 
 #define SPIRIT_HEARTH           0
-#define SPIRIT_CITY             1
-#define SPIRIT_FIELD            2
+#define SPIRIT_CITY             1 
+#define SPIRIT_FIELD            2 
 #define SPIRIT_FOREST           3
-#define SPIRIT_DESERT           4
-#define SPIRIT_MOUNTAIN         5
+#define SPIRIT_DESERT           4 
+#define SPIRIT_MOUNTAIN         5 
 #define SPIRIT_RIVER            6
 #define SPIRIT_SEA              7
 #define SPIRIT_PRAIRIE          8
 #define SPIRIT_SKY    9
-#define SPIRIT_MIST             9
-#define SPIRIT_STORM            10
+#define SPIRIT_MIST             9 
+#define SPIRIT_STORM            10 
 #define SPIRIT_WIND             11
 #define SPIRIT_LAKE             12
 #define SPIRIT_SWAMP            13
@@ -814,7 +814,7 @@ enum {
 #define SKILL_STEALTH               56
 #define SKILL_STEAL                 57
 #define SKILL_TRACK                 58
-#define SKILL_UNUSED_WAS_CLIMBING   59
+#define SKILL_UNUSED_WAS_CLIMBING   59 
 #define SKILL_PILOT_BIKE    60
 #define SKILL_UNUSED_WAS_PILOT_FIXED_WING   61
 #define SKILL_PILOT_CAR     62
@@ -871,13 +871,13 @@ enum {
 #define SKILL_OFFHAND_WHIP        110
 #define SKILL_SURVIVAL            111
 #define SKILL_NAVI_LAND           112
-#define SKILL_NAVI_WATER          113
-#define SKILL_NAVI_AIR            114
+#define SKILL_NAVI_WATER          113 
+#define SKILL_NAVI_AIR            114 
 #define SKILL_SMALL_UNIT_TACTICS  115
-#define SKILL_CHEMISTRY           116
+#define SKILL_CHEMISTRY           116 
 #define SKILL_DIVING              117
-#define SKILL_PARACHUTING         118
-#define SKILL_UNDERWATER_COMBAT   119
+#define SKILL_PARACHUTING         118 
+#define SKILL_UNDERWATER_COMBAT   119 
 #define SKILL_PILOT_ROTORCRAFT    120
 #define SKILL_PILOT_FIXEDWING     121
 #define SKILL_PILOT_VECTORTHRUST  122
@@ -885,9 +885,9 @@ enum {
 #define SKILL_DISGUISE            124
 #define SKILL_LOCK_PICKING        125
 #define SKILL_RIDING              126
-#define SKILL_SPRAY_WEAPONS       127
+#define SKILL_SPRAY_WEAPONS       127 
 #define SKILL_INTIMIDATION        128
-#define SKILL_GUNCANE             129
+#define SKILL_GUNCANE             129 
 #define SKILL_BRACERGUN           130
 #define SKILL_BLOWGUN             131
 #define SKILL_PHARMA              132
@@ -1157,7 +1157,7 @@ enum {
 #define ITEM_DONT_TOUCH     26    // Warns strenuously on editing.
 #define ITEM_EXTRA_MAX      27
 
-/* Ammo types */
+/* Ammo types */ 
 #define AMMO_NORMAL     0
 #define AMMO_APDS       1
 #define AMMO_EXPLOSIVE  2
@@ -1479,7 +1479,7 @@ enum {
 #define APPLY_TASK_BOD    26
 #define APPLY_TASK_QUI    27
 #define APPLY_TASK_STR    28
-#define APPLY_TASK_CHA    29
+#define APPLY_TASK_CHA    29  
 #define APPLY_TASK_INT    30
 #define APPLY_TASK_WIL    31
 #define APPLY_TASK_REA    32
