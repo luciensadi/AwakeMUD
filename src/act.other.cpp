@@ -2137,7 +2137,7 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
     }
   }
   if (mode)
-    send_to_char(CH, "q) Quit\r\nLine too long (max %d characters); function aborted.\r\n"
+    send_to_char(CH, "q) Quit\r\nLine invalid (max %d characters, min 5); function aborted.\r\n"
                  "Enter your choice:\r\n", LINE_LENGTH - 1);
   else
     send_to_char("q) Quit\r\nEnter your choice:\r\n", CH);
@@ -2414,7 +2414,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_ALIAS:
-    if (strlen(arg) >= LINE_LENGTH) {
+    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2426,7 +2426,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     break;
 
   case CEDIT_VOICE:
-    if (strlen(arg) >= LINE_LENGTH) {
+    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2437,7 +2437,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     break;
   case CEDIT_ARRIVE:
-    if (strlen(arg) >= LINE_LENGTH) {
+    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2446,7 +2446,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_LEAVE:
-    if (strlen(arg) >= LINE_LENGTH) {
+    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }
@@ -2455,7 +2455,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_SHORT_DESC:
-    if (strlen(arg) >= LINE_LENGTH) {
+    if (strlen(arg) >= LINE_LENGTH || strlen(arg) < 5) {
       cedit_disp_menu(d, 1);
       return;
     }

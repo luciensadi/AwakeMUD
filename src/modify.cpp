@@ -346,11 +346,17 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_PCUSTOMIZE || STATE(d) == CON_ACUSTOMIZE || STATE(d) == CON_FCUSTOMIZE) {
       switch(d->edit_mode) {
       case CEDIT_LONG_DESC:
-        REPLACE_STRING(d->edit_mob->player.physical_text.look_desc);
+        if (strlen(d->edit_mob->player.physical_text.look_desc) < 5)
+          SEND_TO_Q("Sorry, the minimum length is 5 characters.\r\n", d);
+        else
+          REPLACE_STRING(d->edit_mob->player.physical_text.look_desc);
         cedit_disp_menu(d, 0);
         break;
       case CEDIT_DESC:
-        REPLACE_STRING(d->edit_mob->player.physical_text.room_desc);
+        if (strlen(d->edit_mob->player.physical_text.room_desc) < 5)
+          SEND_TO_Q("Sorry, the minimum length is 5 characters.\r\n", d);
+        else
+          REPLACE_STRING(d->edit_mob->player.physical_text.room_desc);
         cedit_disp_menu(d, 0);
         break;
       }
