@@ -562,7 +562,7 @@ SPECIAL(nerp_skills_teacher) {
     return TRUE;
   }
   if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    int skill_nuyen_cost = MAX(1000, (GET_SKILL(ch, skill_num) * 5000));
+    int skill_nuyen_cost = MAX(1000, (GET_SKILL(ch, skill_num) * 2000));
     if (GET_NUYEN(ch) < skill_nuyen_cost) {
       send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n", skill_nuyen_cost);
       return TRUE;
@@ -687,7 +687,7 @@ SPECIAL(teacher)
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma %d nuyen)\r\n", skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
-                  MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
+                  MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 2000)));
         }
       }
     }
@@ -775,13 +775,13 @@ SPECIAL(teacher)
     return TRUE;
   }
 
-  if (GET_KARMA(ch) < get_skill_price(ch, skill_num) * 100 &&
+  if (GET_KARMA(ch) < get_skill_price(ch, skill_num) * 50 &&
       GET_SKILL_POINTS(ch) <= 0) {
     send_to_char("You don't have enough karma to improve that skill.\r\n", ch);
     return TRUE;
   }
   if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    int skill_nuyen_cost = MAX(1000, (GET_SKILL(ch, skill_num) * 5000));
+    int skill_nuyen_cost = MAX(1000, (GET_SKILL(ch, skill_num) * 2000));
     if (GET_NUYEN(ch) < skill_nuyen_cost) {
       send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n", skill_nuyen_cost);
       return TRUE;
@@ -791,7 +791,7 @@ SPECIAL(teacher)
   if (GET_SKILL_POINTS(ch) > 0)
     GET_SKILL_POINTS(ch)--;
   else
-    GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
+    GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 50;
 
   send_to_char(teachers[ind].msg, ch);
   set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) + 1, TRUE);
@@ -839,7 +839,7 @@ void send_training_list_to_char(struct char_data *ch, int ind) {
       if (GET_ATT_POINTS(ch) > 0)
         send_to_char(ch, "%s ^W%.3s^n", first ? "" : ",", string_to_uppercase(attributes[i]));
       else
-        send_to_char(ch, "%s   %.3s (%d karma %d nuyen)", first ? ":\r\n" : "\r\n", string_to_uppercase(attributes[i]), 2 * raw_cost, 1000 * raw_cost);
+        send_to_char(ch, "%s   %.3s (%d karma %d nuyen)", first ? ":\r\n" : "\r\n", string_to_uppercase(attributes[i]), karma_cost, nuyen_cost);
       first = 0;
     }
   }
@@ -854,8 +854,8 @@ void send_training_list_to_char(struct char_data *ch, int ind) {
 
 void train_attribute(struct char_data *ch, struct char_data *trainer, int ind, int attr, const char *success_message) {
   int raw_cost = calculate_training_raw_cost(ch, attr);
-  int karma_cost = 2 * raw_cost;
-  int nuyen_cost = 1000 * raw_cost;
+  int karma_cost = 5 * raw_cost;
+  int nuyen_cost = 5000 * raw_cost;
   
   // Check for racial maximums.
   if (!attribute_below_maximums(ch, attr)) {
