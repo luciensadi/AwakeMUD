@@ -4178,8 +4178,8 @@ ACMD(do_initiate)
       return;
     }
     
-    if (ch->points.extrapp > (int)(GET_REP(ch) / 50)) {
-      send_to_char(ch, "You do not have enough reputation to purchase a powerpoint. You need %d.\r\n", 50 * (ch->points.extrapp - (int)(GET_REP(ch) / 50)));
+    if (ch->points.extrapp > (int)(GET_TKE(ch) / 50)) {
+      send_to_char(ch, "You do not have enough TKE to purchase a powerpoint. You need %d.\r\n", 50 * (ch->points.extrapp - (int)(GET_TKE(ch) / 50)));
       return;
     }
     
