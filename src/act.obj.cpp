@@ -2363,7 +2363,6 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
 void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
 {
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
-
   
 
   const char *already_wearing[] = {
