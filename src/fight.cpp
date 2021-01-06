@@ -640,7 +640,7 @@ void raw_kill(struct char_data * ch)
 void death_penalty(struct char_data *ch)
 {
   int attribute = 0;
-  int old_rep = GET_TKE( ch );
+  int old_tke = GET_TKE( ch );
   
   if(!IS_NPC(ch)
      && !PLR_FLAGGED(ch, PLR_NEWBIE)
@@ -653,7 +653,7 @@ void death_penalty(struct char_data *ch)
     GET_TKE(ch) -= 2*GET_REAL_ATT(ch, attribute);
     GET_REAL_ATT(ch, attribute)--;
     snprintf(buf, sizeof(buf),"%s lost a point of attribute %d.  Total Karma Earned from %d to %d.",
-            GET_CHAR_NAME(ch), attribute, old_rep, GET_TKE( ch ) );
+            GET_CHAR_NAME(ch), attribute, old_tke, GET_TKE( ch ) );
     mudlog(buf, ch, LOG_DEATHLOG, TRUE);
     
   }
@@ -749,9 +749,9 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   base += bonus_karma;
   
   if (PLR_FLAGGED(ch, PLR_NEWBIE))
-    base -= (int)(GET_TKE(ch) / 5);
+    base -= (int)(GET_NOT(ch) / 5);
   else
-    base -= (int)(GET_TKE(ch) / 3);
+    base -= (int)(GET_NOT(ch) / 3);
   
   //now to randomize it a bit
   base += (!ch ? 0 : (!number(0,2) ? number(0,5) :
@@ -777,7 +777,7 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
   
   share = MIN(max_exp_gain, MAX(1, base));
   if (!IS_NPC(ch))
-    share = MIN(base, (PLR_FLAGGED(ch, PLR_NEWBIE) ? 20 : GET_TKE(ch) * 2));
+    share = MIN(base, (int) (PLR_FLAGGED(ch, PLR_NEWBIE) ? 20 : GET_NOT(ch) * 2));
   
   /* psuedo-fix of the group with a newbie to get more exp exploit */
   if ( !PLR_FLAGGED(ch, PLR_NEWBIE) )
@@ -818,7 +818,7 @@ void group_gain(struct char_data * ch, struct char_data * victim)
   for (f = k->followers; f; f = f->next)
     if (IS_AFFECTED(f->follower, AFF_GROUP)
         && f->follower->in_room == ch->in_room) {
-      if (GET_TKE(high) < GET_TKE(f->follower))
+      if (GET_NOT(high) < GET_NOT(f->follower))
         high = f->follower;
       tot_members++;
     }

@@ -3918,6 +3918,7 @@ ACMD(do_trade)
       GET_KARMA(ch) -= 100;
       send_to_char(ch, "You trade in 1 Karma for %d nuyen.\r\n", amount);
     }
+#ifdef ALLOW_TRADING_NUYEN_FOR_KARMA
   } else if (is_abbrev(argument, "nuyen")) {
     if (GET_NUYEN(ch) < 1800)
       send_to_char("You need to have at least 1,800 nuyen to trade for karma.\r\n", ch);
@@ -3928,6 +3929,9 @@ ACMD(do_trade)
       send_to_char(ch, "You spend %d nuyen to buy 1 point of karma.\r\n", amount);
     }
   } else send_to_char("What do you wish to trade?\r\n", ch);
+#else
+  } else send_to_char("You can only trade karma into nuyen. Sytax: TRADE KARMA\r\n", ch);
+#endif
 }
 
 ACMD(do_tridlog)

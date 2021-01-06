@@ -3366,6 +3366,7 @@ ACMD(do_show)
                { "ammo",           LVL_ADMIN },
                { "storage",        LVL_BUILDER },
                { "anomalies",      LVL_BUILDER },
+               { "roomflag",       LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -3818,6 +3819,27 @@ ACMD(do_show)
       send_to_char("...None.\r\n", ch);
     */
     break;
+  case 22:
+    if (*value) {
+      for (i = 0; i < ROOM_MAX; i++) {
+        if (str_str(room_bits[i], value)) {
+          send_to_char(ch, "Rooms with flag %s set:\r\n", room_bits[i]);
+          strcpy(buf, "Exitless Rooms\r\n-----------\r\n");
+          for (k = 0, j = 0; k <= top_of_world; k++)
+            if (ROOM_FLAGGED(&world[k], i))
+              send_to_char(ch, "%4d: [%8ld] %s %s\r\n", ++j,
+                           world[k].number,
+                           vnum_from_non_connected_zone(world[k].number) ? " " : "*",
+                           world[k].name);
+          return;
+        }
+      }
+    }
+    
+    send_to_char("Please specify a single roomflag from the following list:\r\n", ch);
+    for (i = 0; i < ROOM_MAX; i++)
+      send_to_char(ch, "  %s\r\n", room_bits[i]);
+    return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
     break;
