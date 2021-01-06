@@ -2403,6 +2403,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
                               "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
                               "You already have something on each of your ankles.\r\n",
                               "You are already wearing something on your feet.\r\n",
+                              "You're already wearing something on your feet.\r\n", // this message is repeated, not sure why
                               "You already have something in your mouth.\r\n",
                             };
 
