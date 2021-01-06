@@ -2937,16 +2937,14 @@ SPECIAL(bank)
     else if (!*buf1)
       send_to_char("Who do you want to wire funds to?\r\n", ch);
     else {
-      struct char_data *vict = NULL;
       long isfile = FALSE;
-      if (!(vict = get_player_vis(ch, buf1, FALSE)))
-        if ((isfile = get_player_id(buf1)) == -1) {
-          send_to_char("It won't let you transfer to that account\r\n", ch);
-          return TRUE;
-        }
-      wire_nuyen(ch, vict, amount, isfile);
+      if ((isfile = get_player_id(buf1)) == -1) {
+        send_to_char("It won't let you transfer to that account.\r\n", ch);
+        return TRUE;
+      }
+      wire_nuyen(ch, NULL, amount, isfile);
       char *cname = get_player_name(isfile);
-      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, vict ? GET_CHAR_NAME(vict) : cname);
+      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, cname);
       delete [] cname;
     }
     return TRUE;

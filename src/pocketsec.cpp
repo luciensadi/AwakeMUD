@@ -153,6 +153,8 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
   struct obj_data *folder = NULL, *file = NULL;
   int i;
   long x;
+  const char *name;
+  
   switch (d->edit_mode) {
     case SEC_MENU:
       switch (atoi(arg)) {
@@ -325,24 +327,27 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       }
       break;
     case SEC_WIRE1:
-      GET_EXTRA(CH) = FALSE;      
-      if (!(d->edit_mob = get_player_vis(CH, arg, FALSE)))
-        if ((GET_EXTRA(CH) = get_player_id(arg)) == -1) {
+      GET_EXTRA(CH) = FALSE;     
+      if ((GET_EXTRA(CH) = get_player_id(arg)) == -1) {
+        send_to_char("The bank refuses to let you wire to that account.\r\n", CH);
           pocketsec_bankmenu(d);
-          send_to_char("The bank refuses to let you wire to that account.\r\n", CH);
-          break;
-        }
-      send_to_char("How much do you wish to transfer? (@ to cancel)\r\n", CH);
+        break;
+      }
+      name = get_player_name(GET_EXTRA(CH));
+      send_to_char(CH, "How much do you wish to transfer to %s? (@ to cancel)\r\n", capitalize(name));
+      delete [] name;
       d->edit_mode = SEC_WIRE2;
       break;
     case SEC_WIRE2:
-      if (*arg != '@') {
-        x = atoi(arg);
+      if (*arg != '@' && (x = atoi(arg)) != 0) {
         if (x < 0)
           send_to_char("How much do you wish to transfer? (@ to cancel)\r\n", CH);
         else if (x > GET_BANK(CH))
           send_to_char("You do not have that much to transfer. (@ to cancel)\r\n", CH);
         else {
+          name = get_player_name(GET_EXTRA(CH));
+          send_to_char(CH, "You wire %d nuyen to %s's account.\r\n", x, capitalize(name));
+          delete [] name;
           wire_nuyen(CH, d->edit_mob, x, GET_EXTRA(CH));
           d->edit_mob = NULL;
           pocketsec_bankmenu(d);
