@@ -1671,19 +1671,62 @@ ACMD(do_leave)
     send_to_char("Maybe you should get on your feet first?\r\n", ch);
     return;
   }
-  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))
+  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
     send_to_char("You are outside.. where do you want to go?\r\n", ch);
-  else {
-    for (door = 0; door < NUM_OF_DIRS; door++)
-      if (EXIT(ch, door))
-        if (EXIT(ch, door)->to_room)
-          if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) &&
-              !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_INDOORS)) {
-            perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
-            return;
-          }
-    send_to_char("You see no obvious exits to the outside.\r\n", ch);
+    return;
   }
+  
+  // If you're in an apartment, you're able to leave to the atriun no matter what. Prevents lockin.
+  if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+    for (door = 0; door < NUM_OF_DIRS; door++) {
+      if (EXIT(ch, door) && EXIT(ch, door)->to_room && ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_ATRIUM)) {
+        send_to_char(ch, "You make your way out of the residence through the door to %s, leaving it locked behind you.\r\n", thedirs[door]);
+        act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
+        
+        // Transfer the char.
+        struct room_data *target_room = EXIT(ch, door)->to_room;
+        char_from_room(ch);
+        char_to_room(ch, target_room);
+        
+        // Message the room.
+        snprintf(buf, sizeof(buf), "$n enters from %s.", thedirs[door]);
+        act(buf, TRUE, ch, 0, 0, TO_ROOM);
+        
+        // If not screenreader, look.
+        if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+          look_at_room(ch, 0);
+        return;
+      }
+    }
+    // If we got here, there was no valid exit. Error condition.
+    snprintf(buf, sizeof(buf), "WARNING: %s attempted to leave apartment, but there was no valid exit! Rescuing to Dante's.",
+             GET_CHAR_NAME(ch));
+    
+    struct room_data *room = &world[real_room(RM_DANTES_GARAGE)];
+    if (room) {
+      act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
+      char_from_room(ch);
+      char_to_room(ch, room);
+      act("$n steps out of the shadows, looking slightly confused.", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("(System message: Something went wrong with getting you out of the apartment. Staff has been notified, and you have been relocated to Dante's Inferno.)\r\n", ch);
+      return;
+    } else {
+      snprintf(buf, sizeof(buf), "^RERROR:^g %s attempted to leave apartment, but there was no valid exit, and Dante's was unreachable! They're FUCKED.",
+               GET_CHAR_NAME(ch));
+    }
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  }
+
+  // Standard leave from indoors to outdoors.
+  for (door = 0; door < NUM_OF_DIRS; door++)
+    if (EXIT(ch, door) && EXIT(ch, door)->to_room) {
+      if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) && !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_INDOORS)) {
+        perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
+        return;
+      }
+    }
+  
+  send_to_char("You see no obvious exits to the outside.\r\n", ch);
 }
 
 ACMD(do_stand)
