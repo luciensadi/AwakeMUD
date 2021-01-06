@@ -1317,19 +1317,20 @@ void create_parse(struct descriptor_data *d, const char *arg)
           GET_ATT_POINTS(CH) -= 6 - i;
         }
         break;
-		      case TOTEM_OAK:
-        i = GET_REAL_BOD(CH);
-        if (i < 4) {
-          if (GET_ATT_POINTS(CH) < 4 - i) {
+      case TOTEM_OAK:
+        if (GET_REAL_BOD(CH) < 4 || GET_REAL_STR(CH) < 4) {  // 4 bod, 4 str
+          i = GET_REAL_BOD(CH) + GET_REAL_STR(CH);
+          if (GET_ATT_POINTS(CH) < 8 - i) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
           GET_REAL_BOD(CH) = 4;
-          GET_ATT_POINTS(CH) -= 4 - i;
+          GET_REAL_STR(CH) = 4;
+          GET_ATT_POINTS(CH) -= 8 - i;
         }
         break;
       case TOTEM_CHEETAH:
-        if (GET_REAL_QUI(CH) + GET_REAL_INT(CH) < 8) {
+        if (GET_REAL_QUI(CH) < 4 || GET_REAL_INT(CH) < 4) {
           if (GET_ATT_POINTS(CH) < 8 - (GET_REAL_QUI(CH) + GET_REAL_INT(CH))) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;

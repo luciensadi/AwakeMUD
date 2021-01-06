@@ -2278,7 +2278,7 @@ SPECIAL(hacker)
       amount = (int)(GET_OBJ_VAL(obj, 0) / 5);
     else
       amount = (int)(GET_OBJ_VAL(obj, 0) / 3);
-    nuyen = negotiate(ch, hacker, 0, nuyen, 2, FALSE);
+    // nuyen = negotiate(ch, hacker, 0, nuyen, 2, FALSE);
     nuyen = GET_OBJ_VAL(obj, 0) - amount;
     GET_BANK(hacker) += amount;
     GET_BANK(ch) += nuyen;

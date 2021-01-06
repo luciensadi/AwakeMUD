@@ -172,7 +172,9 @@ using namespace std;
 #define TOTEM_WILDHUNTSMAN 69
 #define TOTEM_WISEWARRIOR  70
 #define TOTEM_GREATMOTHER  71
-#define NUM_TOTEMS         72
+#define TOTEM_MOONMAIDEN   72
+#define TOTEM_TRICKSTER    73
+#define NUM_TOTEMS         74
 
 /* PC races */
 
