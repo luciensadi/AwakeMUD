@@ -630,6 +630,7 @@ const char *preference_bits[] =
     "HELPLOG",
     "PURGELOG",
     "AUTOKILL",
+    "FUCKUPLOG",
     "\n"
   };
 
@@ -1088,7 +1089,6 @@ const char *log_types[] =
     "PGROUPLOG",
     "HELPLOG",
     "PURGELOG",
-    "FUCKUPLOG",
     "\n"
   };
 
@@ -1909,7 +1909,31 @@ const char *totem_types[] =
     "Spider",
     "Stag",
     "Turtle",
-    "Whale"
+    "Whale",
+    "Sun",
+    "Lover",
+    "Seductress",
+    "Siren",
+    "Oak",
+    "Moon",
+    "Mountain",
+    "Sea",
+    "Stream",
+    "Wind",
+    "Adversary",
+    "Bacchus",
+    "Creator",
+    "Dark King",
+    "Dragonslayer",
+    "Fire Bringer",
+    "Horned Man",
+    "Sea King",
+    "Sky Father",
+    "Wild Huntsman",
+    "Wise Warrior",
+    "Great Mother",
+    "Moon Maiden",
+    "Trickster"
   };
 
 const char *spell_category[6] =

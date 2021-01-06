@@ -19,7 +19,7 @@ using namespace std;
 #endif
 
 #define NUM_RESERVED_DESCS      8
-#define NUM_VALUES		12
+#define NUM_VALUES    12
 # ifdef DEBUG
 # define _STLP_DEBUG 1
 # else
@@ -62,13 +62,13 @@ using namespace std;
 #define ATT_ESS         408
 
 /* attributes (mostly for trainers) */
-#define BOD		0
-#define QUI		1
-#define STR		2
-#define CHA		3
-#define INT		4
-#define WIL		5
-#define REA		6
+#define BOD    0
+#define QUI    1
+#define STR    2
+#define CHA    3
+#define INT    4
+#define WIL    5
+#define REA    6
 #define TBOD             (1 << 0)
 #define TQUI             (1 << 1)
 #define TSTR             (1 << 2)
@@ -88,69 +88,91 @@ using namespace std;
 #define TRAD_MUNDANE    2
 #define TRAD_ADEPT      4
 
-#define ASPECT_FULL		0
-#define ASPECT_CONJURER		1
-#define ASPECT_SHAMANIST	2
-#define ASPECT_SORCERER		3
-#define ASPECT_ELEMEARTH	4
-#define ASPECT_ELEMAIR		5
-#define ASPECT_ELEMFIRE		6
-#define ASPECT_ELEMWATER	7
+#define ASPECT_FULL    0
+#define ASPECT_CONJURER    1
+#define ASPECT_SHAMANIST  2
+#define ASPECT_SORCERER    3
+#define ASPECT_ELEMEARTH  4
+#define ASPECT_ELEMAIR    5
+#define ASPECT_ELEMFIRE    6
+#define ASPECT_ELEMWATER  7
 
 
 /* totems */
 
-#define TOTEM_UNDEFINED		0
-#define TOTEM_BEAR		1
-#define TOTEM_BUFFALO		2
-#define TOTEM_CAT		3
-#define TOTEM_COYOTE		4
-#define TOTEM_DOG		5
-#define TOTEM_DOLPHIN		6
-#define TOTEM_EAGLE		7
-#define TOTEM_GATOR		8
-#define TOTEM_LION		9
-#define TOTEM_MOUSE		10
-#define TOTEM_OWL		11
-#define TOTEM_RACCOON		12
-#define TOTEM_RAT		13
-#define TOTEM_RAVEN		14
-#define TOTEM_SHARK		15
-#define TOTEM_SNAKE		16
-#define TOTEM_WOLF		17
-#define TOTEM_BADGER		18
-#define TOTEM_BAT		19
-#define TOTEM_BOAR		20
-#define TOTEM_BULL		21
-#define TOTEM_CHEETAH		22
-#define TOTEM_COBRA		23
-#define TOTEM_CRAB		24
-#define TOTEM_CROCODILE		25
-#define TOTEM_DOVE		26
-#define TOTEM_ELK		27
-#define TOTEM_FISH		28
-#define TOTEM_FOX		29
-#define TOTEM_GECKO		30
-#define TOTEM_GOOSE		31
-#define TOTEM_HORSE		32
-#define TOTEM_HYENA		33
-#define TOTEM_JACKAL		34
-#define TOTEM_JAGUAR		35
-#define TOTEM_LEOPARD		36
-#define TOTEM_LIZARD		37	
-#define TOTEM_MONKEY		38
-#define TOTEM_OTTER		39
-#define TOTEM_PARROT		40
-#define TOTEM_POLECAT		41
-#define TOTEM_PRAIRIEDOG	42
-#define TOTEM_PUMA		43
-#define TOTEM_PYTHON		44
-#define TOTEM_SCORPION		45
-#define TOTEM_SPIDER		46
-#define TOTEM_STAG		47
-#define TOTEM_TURTLE		48
-#define TOTEM_WHALE		49
-#define NUM_TOTEMS		50
+#define TOTEM_UNDEFINED    0
+#define TOTEM_BEAR         1
+#define TOTEM_BUFFALO      2
+#define TOTEM_CAT          3
+#define TOTEM_COYOTE       4
+#define TOTEM_DOG          5
+#define TOTEM_DOLPHIN      6
+#define TOTEM_EAGLE        7
+#define TOTEM_GATOR        8
+#define TOTEM_LION         9
+#define TOTEM_MOUSE        10
+#define TOTEM_OWL          11
+#define TOTEM_RACCOON      12
+#define TOTEM_RAT          13
+#define TOTEM_RAVEN        14
+#define TOTEM_SHARK        15
+#define TOTEM_SNAKE        16
+#define TOTEM_WOLF         17
+#define TOTEM_BADGER       18
+#define TOTEM_BAT          19
+#define TOTEM_BOAR         20
+#define TOTEM_BULL         21
+#define TOTEM_CHEETAH      22
+#define TOTEM_COBRA        23
+#define TOTEM_CRAB         24
+#define TOTEM_CROCODILE    25
+#define TOTEM_DOVE         26
+#define TOTEM_ELK          27
+#define TOTEM_FISH         28
+#define TOTEM_FOX          29
+#define TOTEM_GECKO        30
+#define TOTEM_GOOSE        31
+#define TOTEM_HORSE        32
+#define TOTEM_HYENA        33
+#define TOTEM_JACKAL       34
+#define TOTEM_JAGUAR       35
+#define TOTEM_LEOPARD      36
+#define TOTEM_LIZARD       37  
+#define TOTEM_MONKEY       38
+#define TOTEM_OTTER        39
+#define TOTEM_PARROT       40
+#define TOTEM_POLECAT      41
+#define TOTEM_PRAIRIEDOG   42
+#define TOTEM_PUMA         43
+#define TOTEM_PYTHON       44
+#define TOTEM_SCORPION     45
+#define TOTEM_SPIDER       46
+#define TOTEM_STAG         47
+#define TOTEM_TURTLE       48
+#define TOTEM_WHALE        49
+#define TOTEM_SUN          50
+#define TOTEM_LOVER        51
+#define TOTEM_SEDUCTRESS   52
+#define TOTEM_SIREN        53
+#define TOTEM_OAK          54
+#define TOTEM_MOON         55
+#define TOTEM_MOUNTAIN     56
+#define TOTEM_SEA          57
+#define TOTEM_STREAM       58
+#define TOTEM_WIND         59
+#define TOTEM_ADVERSARY    60
+#define TOTEM_BACCHUS      61
+#define TOTEM_CREATOR      62
+#define TOTEM_DARKKING     63
+#define TOTEM_DRAGONSLAYER 64
+#define TOTEM_FIREBRINGER  65
+#define TOTEM_HORNEDMAN    66
+#define TOTEM_SEAKING      67
+#define TOTEM_SKYFATHER    68
+#define TOTEM_WILDHUNTSMAN 69
+#define TOTEM_WISEWARRIOR  70
+#define TOTEM_GREATMOTHER  71
+#define NUM_TOTEMS         72
 
 /* PC races */
 
@@ -160,7 +182,7 @@ using namespace std;
 #define RACE_ELF                4
 #define RACE_ORK                5
 #define RACE_TROLL              6
-#define RACE_CYCLOPS  		7
+#define RACE_CYCLOPS      7
 #define RACE_KOBOROKURU  8
 #define RACE_FOMORI  9
 #define RACE_MENEHUNE  10
@@ -175,8 +197,8 @@ using namespace std;
 #define RACE_NIGHTONE  19
 #define RACE_DRYAD  20
 #define RACE_DRAGON             21
-#define RACE_ELEMENTAL		22
-#define RACE_SPIRIT		23
+#define RACE_ELEMENTAL    22
+#define RACE_SPIRIT    23
 #define NUM_RACES               23  /* This must be the number of races */
 
 /* level definitions */
@@ -206,7 +228,7 @@ enum {
 #define WEAR_EYES       2
 #define WEAR_EAR        3
 #define WEAR_EAR2       4
-#define WEAR_FACE	      5
+#define WEAR_FACE        5
 #define WEAR_NECK_1     6
 #define WEAR_NECK_2     7
 #define WEAR_BACK       8
@@ -274,7 +296,7 @@ enum {
 #define PLR_NOT_YET_AUTHED      32 /* Player needs Auth */
 #define PLR_EDCON               33
 #define PLR_REMOTE              34
-#define PLR_INITIATE		        35
+#define PLR_INITIATE            35
 #define PLR_DRIVEBY             36
 #define PLR_RPE                 37
 #define PLR_NO_IDLE_OUT         38 /* Player will not idle out (morts- for test chars) */
@@ -308,16 +330,16 @@ enum {
 #define MOB_SNIPER              21 /* mob searches area for PCs              */
 #define MOB_PRIVATE             22 /* mob cannot be statted                  */
 #define MOB_TRACK               23 /* (R) for security routines              */
-#define MOB_FLAMEAURA		        24
-#define MOB_SPIRITGUARD		      25
+#define MOB_FLAMEAURA            24
+#define MOB_SPIRITGUARD          25
 #define MOB_STUDY               26 /* Saeder Krupp*/
 #define MOB_AIDSORCERY          27
 #define MOB_AZTECHNOLOGY        28 /* Azzies                                 */
 #define MOB_RENRAKU             29 /* Renraku   */
 #define MOB_NOKILL              30 /* Unkillable mob */
 #define MOB_TOTALINVIS          31 /* auto attack dragon PCs                 */
-#define MOB_INANIMATE		        32
-#define MOB_MAX			            33
+#define MOB_INANIMATE            32
+#define MOB_MAX                  33
 
 /* preference flags: used by char_data.player_specials.pref */
 
@@ -332,7 +354,7 @@ enum {
 #define PRF_NORADIO             7  /* Can't hear radio frequencies     */
 #define PRF_NONEWBIE            8  /* Can't hear newbie channel    */
 #define PRF_NOREPEAT            9  /* No repetition of comm commands  */
-#define PRF_HARDCORE	        	10
+#define PRF_HARDCORE            10
 #define PRF_PKER                11 /* is able to pk/be pked        */
 #define PRF_QUEST               12 /* On quest        */
 #define PRF_AFK                 13 /* Afk   */
@@ -359,9 +381,9 @@ enum {
 #define PRF_GRIDLOG             34
 #define PRF_WRECKLOG            35
 #define PRF_QUESTOR             36
-#define PRF_NEWBIEHELPER	      37
-#define PRF_MENUGAG		          38
-#define PRF_LONGWEAPON	      	39
+#define PRF_NEWBIEHELPER        37
+#define PRF_MENUGAG              38
+#define PRF_LONGWEAPON          39
 #define PRF_PGROUPLOG           40
 #define PRF_SHOWGROUPTAG        41
 #define PRF_KEEPALIVE           42
@@ -373,7 +395,7 @@ enum {
 #define PRF_NOAUTOKILL          48
 #define PRF_NO_RADIO_NAMES      49
 #define PRF_FUCKUPLOG           50
-#define PRF_MAX   		          51
+#define PRF_MAX                 51
 
 /* log watch */
 
@@ -386,9 +408,9 @@ enum {
 #define LOG_ZONELOG        5
 #define LOG_CHEATLOG       6
 #define LOG_WIZITEMLOG     7
-#define LOG_BANLOG    	   8
-#define LOG_GRIDLOG	       9
-#define LOG_WRECKLOG	     10
+#define LOG_BANLOG         8
+#define LOG_GRIDLOG         9
+#define LOG_WRECKLOG       10
 #define LOG_PGROUPLOG      11
 #define LOG_HELPLOG        12
 #define LOG_PURGELOG       13
@@ -414,18 +436,18 @@ enum {
 /* affect bits: used in char_data.char_specials.saved.affected_by */
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 
-#define AFF_INVISIBLE 		1  /* Char is invisible        */
-#define AFF_BANISH		2 
-#define AFF_DETECT_INVIS	3  /* Char can see invis chars    */
+#define AFF_INVISIBLE     1  /* Char is invisible        */
+#define AFF_BANISH    2 
+#define AFF_DETECT_INVIS  3  /* Char can see invis chars    */
 #define AFF_PRONE               4  
-#define AFF_MANIFEST		5 
-#define AFF_HEALED		6 
+#define AFF_MANIFEST    5 
+#define AFF_HEALED    6 
 #define AFF_GROUP               7  /* (R) Char is grouped       */
-#define AFF_DAMAGED		8
+#define AFF_DAMAGED    8
 #define AFF_INFRAVISION      9  /* Char can see in dark        */
 #define AFF_FEAR              10
-#define AFF_RESISTPAIN 		11
-#define AFF_DETOX		12
+#define AFF_RESISTPAIN     11
+#define AFF_DETOX    12
 #define AFF_LOW_LIGHT        13 /* Char has low light eyes       */
 #define AFF_LASER_SIGHT      14 /* Char using laser sight       */
 #define AFF_SNEAK               15 /* Char can move quietly           */
@@ -439,31 +461,31 @@ enum {
 #define AFF_STABILIZE        23 /* player won't die due to phys loss */
 #define AFF_PETRIFY             24 /* player's commands don't work       */
 #define AFF_IMP_INVIS        25 /* char is improved invis         */
-#define AFF_ACID		26
+#define AFF_ACID    26
 #define AFF_APPROACH      27 /* Character is using melee */
-#define AFF_PILOT	  28 /* Char is piloting a vehicle */
+#define AFF_PILOT    28 /* Char is piloting a vehicle */
 #define AFF_RIG           29
 #define AFF_MANNING       30 /* Char is in a (mini)turret */
-#define AFF_DESIGN	  	31
-#define AFF_PROGRAM	 	32
-#define AFF_PART_DESIGN		33
-#define AFF_PART_BUILD		34
-#define AFF_WITHDRAWAL_FORCE	35
-#define AFF_WITHDRAWAL		36
-#define AFF_BONDING		37
-#define AFF_CONJURE		38
-#define AFF_LODGE		39
-#define AFF_CIRCLE		40
-#define AFF_PACKING		41
-#define AFF_SPELLINVIS		42
-#define AFF_SPELLIMPINVIS	43
-#define AFF_TRACKING		44
-#define AFF_TRACKED		45
-#define AFF_BINDING		46
-#define AFF_SPELLDESIGN		47
-#define AFF_SURPRISE		48
-#define AFF_AMMOBUILD		49
-#define AFF_MAX   		50
+#define AFF_DESIGN      31
+#define AFF_PROGRAM     32
+#define AFF_PART_DESIGN    33
+#define AFF_PART_BUILD    34
+#define AFF_WITHDRAWAL_FORCE  35
+#define AFF_WITHDRAWAL    36
+#define AFF_BONDING    37
+#define AFF_CONJURE    38
+#define AFF_LODGE    39
+#define AFF_CIRCLE    40
+#define AFF_PACKING    41
+#define AFF_SPELLINVIS    42
+#define AFF_SPELLIMPINVIS  43
+#define AFF_TRACKING    44
+#define AFF_TRACKED    45
+#define AFF_BINDING    46
+#define AFF_SPELLDESIGN    47
+#define AFF_SURPRISE    48
+#define AFF_AMMOBUILD    49
+#define AFF_MAX       50
 
 
 /* room-related defines */
@@ -509,7 +531,7 @@ enum {
 #define ROOM_BFS_MARK               15  /* (R) breath-first srch mrk */
 #define ROOM_LOW_LIGHT              16  /* Room viewable with ll-eyes */
 #define ROOM_NO_RADIO               18  /* Radio is sketchy and phones dont work */
-#define ROOM_NOBIKE		              19  // Room blocks bikes from passing through it.
+#define ROOM_NOBIKE                  19  // Room blocks bikes from passing through it.
 #define ROOM_FREEWAY                20  /* Room cannot be walked across. */
 #define ROOM_FALL                   21  // room is a 'fall' room
 #define ROOM_ROAD                   22  // Room is compatible with cars.
@@ -517,28 +539,28 @@ enum {
 #define ROOM_STAFF_ONLY             24  // Room does not allow mortals to walk into it.
 #define ROOM_NOQUIT                 25  // Room does not allow quitting in it.
 #define ROOM_SENT                   26
-#define ROOM_ASTRAL 	       	      27 // Astral room
-#define ROOM_NOGRID    	       	    28 // Room blocks gridguide.
-#define ROOM_STORAGE	        	    29 // Room stores items dropped in it.
+#define ROOM_ASTRAL                  27 // Astral room
+#define ROOM_NOGRID                   28 // Room blocks gridguide.
+#define ROOM_STORAGE                29 // Room stores items dropped in it.
 #define ROOM_NO_TRAFFIC             30 // Prevents display of traffic atmospheric messages.
 #define ROOM_ELEVATOR_SHAFT         31 // Don't set this manually
 #define ROOM_ENCOURAGE_CONGREGATION 32
-#define ROOM_MAX        	          33
+#define ROOM_MAX                    33
 
-#define NORMAL		0
-#define LOWLIGHT	1
-#define THERMOGRAPHIC	2
+#define NORMAL    0
+#define LOWLIGHT  1
+#define THERMOGRAPHIC  2
 
-#define LIGHT_NORMAL		0
-#define LIGHT_NORMALNOLIT	1
-#define LIGHT_FULLDARK		2
-#define LIGHT_MINLIGHT		3
-#define LIGHT_PARTLIGHT		4
-#define LIGHT_GLARE		5
-#define LIGHT_MIST		6
-#define LIGHT_LIGHTSMOKE	7
-#define LIGHT_HEAVYSMOKE	8
-#define LIGHT_THERMALSMOKE	9
+#define LIGHT_NORMAL    0
+#define LIGHT_NORMALNOLIT  1
+#define LIGHT_FULLDARK    2
+#define LIGHT_MINLIGHT    3
+#define LIGHT_PARTLIGHT    4
+#define LIGHT_GLARE    5
+#define LIGHT_MIST    6
+#define LIGHT_LIGHTSMOKE  7
+#define LIGHT_HEAVYSMOKE  8
+#define LIGHT_THERMALSMOKE  9
 
 /* Exit info: used in room_data.dir_option.exit_info */
 #define EX_ISDOOR               (1 << 0)   /* Exit is a door            */
@@ -552,102 +574,102 @@ enum {
 
 /* spirit powers */
 
-#define SERV_APPEAR		0
-#define SERV_SORCERY		1
-#define SERV_STUDY		2
-#define SERV_SUSTAIN		3
-#define SERV_ACCIDENT		4
-#define SERV_BINDING		5
-#define SERV_CONCEAL		6
-#define SERV_CONFUSION		7
-#define SERV_DEMATERIAL		8
-#define SERV_ENGULF		9
-#define SERV_FEAR		10
-#define SERV_FLAMEAURA		11
-#define SERV_FLAMETHROWER	12
-#define SERV_GUARD		13
-#define SERV_LEAVE		14
-#define SERV_MATERIALIZE	15
-#define SERV_MOVEMENT		16
-#define SERV_BREATH		17
-#define SERV_PSYCHOKINESIS	18
-#define SERV_SEARCH		19
-#define SERV_ATTACK		20
-#define NUM_SERVICES		21
+#define SERV_APPEAR    0
+#define SERV_SORCERY    1
+#define SERV_STUDY    2
+#define SERV_SUSTAIN    3
+#define SERV_ACCIDENT    4
+#define SERV_BINDING    5
+#define SERV_CONCEAL    6
+#define SERV_CONFUSION    7
+#define SERV_DEMATERIAL    8
+#define SERV_ENGULF    9
+#define SERV_FEAR    10
+#define SERV_FLAMEAURA    11
+#define SERV_FLAMETHROWER  12
+#define SERV_GUARD    13
+#define SERV_LEAVE    14
+#define SERV_MATERIALIZE  15
+#define SERV_MOVEMENT    16
+#define SERV_BREATH    17
+#define SERV_PSYCHOKINESIS  18
+#define SERV_SEARCH    19
+#define SERV_ATTACK    20
+#define NUM_SERVICES    21
 
-#define SPELL_DEATHTOUCH	1
-#define SPELL_MANABOLT		2
-#define SPELL_MANABALL		3
-#define SPELL_POWERBOLT		4
-#define SPELL_POWERBALL		5
-#define SPELL_STUNBOLT		6
-#define SPELL_STUNBALL		7
-#define SPELL_ANALYZEDEVICE	8
-#define SPELL_CLAIRAUDIENCE	9
-#define SPELL_CLAIRVOYANCE	10
-#define SPELL_COMBATSENSE	11
-#define SPELL_DETECTENEMIES	12
-#define SPELL_DETECTINDIV	13
-#define SPELL_DETECTLIFE	14
-#define SPELL_DETECTMAGIC	15
-#define SPELL_DETECTOBJECT	16
-#define SPELL_MINDLINK		17
-#define SPELL_DECATTR		18
-#define SPELL_DECCYATTR		19
-#define SPELL_DETOX		20
-#define SPELL_HEAL		21
-#define SPELL_TREAT		22
-#define SPELL_HEALTHYGLOW	23
-#define SPELL_INCATTR		24
-#define SPELL_INCCYATTR		25
-#define SPELL_INCREA		26
-#define SPELL_INCREF1		27
-#define SPELL_INCREF2		28
-#define SPELL_INCREF3		29
-#define SPELL_PROPHYLAXIS	30
-#define SPELL_RESISTPAIN	31
-#define SPELL_STABILIZE		32
-#define SPELL_CONFUSION		33
-#define SPELL_MASSCONFUSION	34
-#define SPELL_CHAOS		35
-#define SPELL_CHAOTICWORLD	36
-#define SPELL_INVIS		37
-#define SPELL_IMP_INVIS		38
-#define SPELL_MASK		39
-#define SPELL_PHYSMASK		40
-#define SPELL_SILENCE		41
-#define SPELL_STEALTH		42
-#define SPELL_ACIDSTREAM	43
-#define SPELL_TOXICWAVE		44
-#define SPELL_FLAMETHROWER	45
-#define SPELL_FIREBALL		46
-#define SPELL_LIGHTNINGBOLT	47
-#define SPELL_BALLLIGHTNING	48
-#define SPELL_CLOUT		49
-#define SPELL_POLTERGEIST	50
-#define SPELL_ARMOUR		51
-#define SPELL_PHYSICALBARRIER	52
-#define SPELL_ASTRALBARRIER	53
-#define SPELL_ICESHEET		54
-#define SPELL_IGNITE		55
-#define SPELL_LIGHT		56
-#define SPELL_SHADOW		57
-#define MAX_SPELLS		58
+#define SPELL_DEATHTOUCH  1
+#define SPELL_MANABOLT    2
+#define SPELL_MANABALL    3
+#define SPELL_POWERBOLT    4
+#define SPELL_POWERBALL    5
+#define SPELL_STUNBOLT    6
+#define SPELL_STUNBALL    7
+#define SPELL_ANALYZEDEVICE  8
+#define SPELL_CLAIRAUDIENCE  9
+#define SPELL_CLAIRVOYANCE  10
+#define SPELL_COMBATSENSE  11
+#define SPELL_DETECTENEMIES  12
+#define SPELL_DETECTINDIV  13
+#define SPELL_DETECTLIFE  14
+#define SPELL_DETECTMAGIC  15
+#define SPELL_DETECTOBJECT  16
+#define SPELL_MINDLINK    17
+#define SPELL_DECATTR    18
+#define SPELL_DECCYATTR    19
+#define SPELL_DETOX    20
+#define SPELL_HEAL    21
+#define SPELL_TREAT    22
+#define SPELL_HEALTHYGLOW  23
+#define SPELL_INCATTR    24
+#define SPELL_INCCYATTR    25
+#define SPELL_INCREA    26
+#define SPELL_INCREF1    27
+#define SPELL_INCREF2    28
+#define SPELL_INCREF3    29
+#define SPELL_PROPHYLAXIS  30
+#define SPELL_RESISTPAIN  31
+#define SPELL_STABILIZE    32
+#define SPELL_CONFUSION    33
+#define SPELL_MASSCONFUSION  34
+#define SPELL_CHAOS    35
+#define SPELL_CHAOTICWORLD  36
+#define SPELL_INVIS    37
+#define SPELL_IMP_INVIS    38
+#define SPELL_MASK    39
+#define SPELL_PHYSMASK    40
+#define SPELL_SILENCE    41
+#define SPELL_STEALTH    42
+#define SPELL_ACIDSTREAM  43
+#define SPELL_TOXICWAVE    44
+#define SPELL_FLAMETHROWER  45
+#define SPELL_FIREBALL    46
+#define SPELL_LIGHTNINGBOLT  47
+#define SPELL_BALLLIGHTNING  48
+#define SPELL_CLOUT    49
+#define SPELL_POLTERGEIST  50
+#define SPELL_ARMOUR    51
+#define SPELL_PHYSICALBARRIER  52
+#define SPELL_ASTRALBARRIER  53
+#define SPELL_ICESHEET    54
+#define SPELL_IGNITE    55
+#define SPELL_LIGHT    56
+#define SPELL_SHADOW    57
+#define MAX_SPELLS    58
 
-#define META_ANCHORING		0
-#define META_CENTERING		1
-#define META_CLEANSING		2
-#define META_INVOKING		3
-#define META_MASKING		4
-#define META_POSSESSING		5
-#define META_QUICKENING		6
-#define META_REFLECTING		7
-#define META_SHIELDING		8
-#define META_MAX		9
+#define META_ANCHORING    0
+#define META_CENTERING    1
+#define META_CLEANSING    2
+#define META_INVOKING    3
+#define META_MASKING    4
+#define META_POSSESSING    5
+#define META_QUICKENING    6
+#define META_REFLECTING    7
+#define META_SHIELDING    8
+#define META_MAX    9
 
-#define MASK_INIT		(1 << 1)
-#define MASK_DUAL		(1 << 2)
-#define MASK_COMPLETE		(1 << 3)
+#define MASK_INIT    (1 << 1)
+#define MASK_DUAL    (1 << 2)
+#define MASK_COMPLETE    (1 << 3)
 
 #define AURA_VIOLENCE      0
 #define AURA_TORTURE       1
@@ -662,31 +684,31 @@ enum {
 #define AURA_LOST_HUMANITY 10
 #define AURA_STERILITY     11
 #define AURA_CONFUSION     12
-#define AURA_POWERSITE		 13
+#define AURA_POWERSITE     13
 #define AURA_BLOOD_MAGIC   14
-#define AURA_PLAYERCOMBAT	 15
-#define AURA_PLAYERDEATH	 16
+#define AURA_PLAYERCOMBAT   15
+#define AURA_PLAYERDEATH   16
 
-#define COMBAT			1
-#define DETECTION		2
-#define HEALTH			3
-#define ILLUSION		4
-#define MANIPULATION		5
+#define COMBAT      1
+#define DETECTION    2
+#define HEALTH      3
+#define ILLUSION    4
+#define MANIPULATION    5
 
-#define INSTANT			0
-#define SUSTAINED		1
-#define PERMANENT		2
+#define INSTANT      0
+#define SUSTAINED    1
+#define PERMANENT    2
 
-#define SINGLE			0
-#define AREA			1
-#define TOUCH			2
-#define CASTER			3
+#define SINGLE      0
+#define AREA      1
+#define TOUCH      2
+#define CASTER      3
 
-#define TYPE_LIBRARY_CONJURE	0
-#define TYPE_LIBRARY_SPELL	1
-#define TYPE_CIRCLE		2
-#define TYPE_LODGE		3
-#define TYPE_SUMMONING		4
+#define TYPE_LIBRARY_CONJURE  0
+#define TYPE_LIBRARY_SPELL  1
+#define TYPE_CIRCLE    2
+#define TYPE_LODGE    3
+#define TYPE_SUMMONING    4
 
 #define SPIRIT_HEARTH           0
 #define SPIRIT_CITY             1 
@@ -697,35 +719,35 @@ enum {
 #define SPIRIT_RIVER            6
 #define SPIRIT_SEA              7
 #define SPIRIT_PRAIRIE          8
-#define SPIRIT_SKY		9
+#define SPIRIT_SKY    9
 #define SPIRIT_MIST             9 
 #define SPIRIT_STORM            10 
 #define SPIRIT_WIND             11
 #define SPIRIT_LAKE             12
 #define SPIRIT_SWAMP            13
-#define NUM_SPIRITS		14
+#define NUM_SPIRITS    14
 
-#define ELEM_EARTH		0
-#define ELEM_FIRE		1
-#define ELEM_AIR		2
-#define ELEM_WATER		3
-#define NUM_ELEMENTS		4
+#define ELEM_EARTH    0
+#define ELEM_FIRE    1
+#define ELEM_AIR    2
+#define ELEM_WATER    3
+#define NUM_ELEMENTS    4
 
-#define ELEMAF_NONE		0
-#define ELEMAF_ACID		1
-#define ELEMAF_BLAST		2
-#define ELEMAF_FIRE		3
-#define ELEMAF_ICE		4
-#define ELEMAF_LIGHT		5
-#define ELEMAF_LIGHTNING	6
-#define ELEMAF_METAL		7
-#define ELEMAF_SAND		8
-#define ELEMAF_SMOKE		9
-#define ELEMAF_WATER		10
-#define NUM_ELEMS		11
+#define ELEMAF_NONE    0
+#define ELEMAF_ACID    1
+#define ELEMAF_BLAST    2
+#define ELEMAF_FIRE    3
+#define ELEMAF_ICE    4
+#define ELEMAF_LIGHT    5
+#define ELEMAF_LIGHTNING  6
+#define ELEMAF_METAL    7
+#define ELEMAF_SAND    8
+#define ELEMAF_SMOKE    9
+#define ELEMAF_WATER    10
+#define NUM_ELEMS    11
 
-#define MENTAL 			0
-#define PHYSICAL		1
+#define MENTAL       0
+#define PHYSICAL    1
 /* reserved skill defines */
 #define TYPE_UNDEFINED               -1
 
@@ -770,7 +792,7 @@ enum {
 #define SKILL_LEADERSHIP             37
 #define SKILL_INTERROGATION          38
 #define SKILL_NEGOTIATION            39
-#define SKILL_CHANTING	             40
+#define SKILL_CHANTING               40
 #define SKILL_CONJURING              41
 #define SKILL_SORCERY                42
 #define SKILL_LEGERDEMAIN            43
@@ -779,11 +801,11 @@ enum {
 #define SKILL_STREET_ETIQUETTE       46
 #define SKILL_TRIBAL_ETIQUETTE       47
 #define SKILL_ELF_ETIQUETTE          48
-#define SKILL_PROGRAM_COMBAT	    49
-#define SKILL_PROGRAM_DEFENSIVE	    50
+#define SKILL_PROGRAM_COMBAT      49
+#define SKILL_PROGRAM_DEFENSIVE      50
 #define SKILL_PROGRAM_OPERATIONAL   51
-#define SKILL_PROGRAM_SPECIAL	    52
-#define SKILL_PROGRAM_CYBERTERM	    53
+#define SKILL_PROGRAM_SPECIAL      52
+#define SKILL_PROGRAM_CYBERTERM      53
 #define SKILL_DATA_BROKERAGE        54
 #define SKILL_AURA_READING          55
 #define SKILL_STEALTH               56
@@ -798,32 +820,32 @@ enum {
 #define SKILL_BR_CAR     65
 #define SKILL_BR_DRONE     66
 #define SKILL_BR_TRUCK        67
-#define SKILL_DANCING		68
-#define SKILL_SINGING		69
-#define SKILL_INSTRUMENT	70
-#define SKILL_ARCANELANGUAGE	71
-#define SKILL_MEDITATION	72
+#define SKILL_DANCING    68
+#define SKILL_SINGING    69
+#define SKILL_INSTRUMENT  70
+#define SKILL_ARCANELANGUAGE  71
+#define SKILL_MEDITATION  72
 
-#define SKILL_ENGLISH   	  73
-#define SKILL_SPERETHIEL 	  74
-#define SKILL_SPANISH		  75
-#define SKILL_JAPANESE		  76
-#define SKILL_CHINESE		  77
-#define SKILL_KOREAN		  78
-#define SKILL_ITALIAN		  79
-#define SKILL_RUSSIAN		  80
-#define SKILL_SIOUX		  81
-#define SKILL_MAKAW		  82
-#define SKILL_CROW		  83
-#define SKILL_SALISH		  84
-#define SKILL_UTE		  85
-#define SKILL_NAVAJO		  86
-#define SKILL_GERMAN		  87
-#define SKILL_ORZET		  88
-#define SKILL_ARABIC		  89
-#define SKILL_LATIN		  90
+#define SKILL_ENGLISH       73
+#define SKILL_SPERETHIEL     74
+#define SKILL_SPANISH      75
+#define SKILL_JAPANESE      76
+#define SKILL_CHINESE      77
+#define SKILL_KOREAN      78
+#define SKILL_ITALIAN      79
+#define SKILL_RUSSIAN      80
+#define SKILL_SIOUX      81
+#define SKILL_MAKAW      82
+#define SKILL_CROW      83
+#define SKILL_SALISH      84
+#define SKILL_UTE      85
+#define SKILL_NAVAJO      86
+#define SKILL_GERMAN      87
+#define SKILL_ORZET      88
+#define SKILL_ARABIC      89
+#define SKILL_LATIN      90
 #define SKILL_GAELIC              91
-#define SKILL_FRENCH	          92
+#define SKILL_FRENCH            92
 // Also see SKILL_SIGN_LANGUAGE and the other language additions below.
 
 #define SKILL_ANIMAL_HANDLING     93
@@ -867,7 +889,7 @@ enum {
 #define SKILL_BLOWGUN             131
 #define SKILL_PHARMA              132
 
-#define MAX_SKILLS		  133
+#define MAX_SKILLS      133
 
 // Skill type definitions.
 #define SKILL_TYPE_ACTIVE         0
@@ -876,54 +898,54 @@ enum {
 /* TODO: Not yet implemented.
 #define SKILL_SIGN_LANGUAGE       133
 #define SKILL_IMMORTAL_LANGUAGE   134
-#define MAX_SKILLS		  135
+#define MAX_SKILLS      135
 */
 
 // Defines the size of the teach_t array. Changing this means you have to change every teacher too.
 #define NUM_TEACHER_SKILLS 20
 
-#define ADEPT_PERCEPTION	1
-#define ADEPT_COMBAT_SENSE	2
-#define ADEPT_BLIND_FIGHTING	3
-#define ADEPT_QUICK_STRIKE	4
-#define ADEPT_KILLING_HANDS	5
-#define ADEPT_NERVE_STRIKE	6
-#define ADEPT_SMASHING_BLOW	7
-#define ADEPT_DISTANCE_STRIKE	8
-#define ADEPT_REFLEXES		9
-#define ADEPT_BOOST_STR		10
-#define ADEPT_BOOST_QUI		11
-#define ADEPT_BOOST_BOD		12
-#define ADEPT_IMPROVED_STR	13
-#define ADEPT_IMPROVED_QUI	14
-#define ADEPT_IMPROVED_BOD	15
-#define ADEPT_IMPROVED_PERCEPT	16
-#define ADEPT_LOW_LIGHT		17
-#define ADEPT_THERMO		18
-#define ADEPT_IMAGE_MAG		19
-#define ADEPT_MAGIC_RESISTANCE	20
-#define ADEPT_PAIN_RESISTANCE	21
-#define ADEPT_TEMPERATURE_TOLERANCE	22
-#define ADEPT_SPELL_SHROUD	23
-#define ADEPT_TRUE_SIGHT	24
-#define ADEPT_MISSILE_PARRY	25
-#define ADEPT_MISSILE_MASTERY	26
-#define ADEPT_MYSTIC_ARMOUR	27
-#define ADEPT_HEALING		28
-#define ADEPT_FREEFALL		29
-#define ADEPT_IRONWILL		30
-#define ADEPT_AIDSPELL		31
-#define ADEPT_EMPATHICHEAL	32
-#define ADEPT_KINESICS		33
-#define ADEPT_LINGUISTICS	34
-#define ADEPT_LIVINGFOCUS	35
-#define ADEPT_MOTIONSENSE	36
-#define ADEPT_PAINRELIEF	37
-#define ADEPT_PENETRATINGSTRIKE	38
-#define ADEPT_SIDESTEP		39
-#define ADEPT_SUSTENANCE	40
-#define ADEPT_COUNTERSTRIKE	41
-#define ADEPT_NUMPOWER		42
+#define ADEPT_PERCEPTION  1
+#define ADEPT_COMBAT_SENSE  2
+#define ADEPT_BLIND_FIGHTING  3
+#define ADEPT_QUICK_STRIKE  4
+#define ADEPT_KILLING_HANDS  5
+#define ADEPT_NERVE_STRIKE  6
+#define ADEPT_SMASHING_BLOW  7
+#define ADEPT_DISTANCE_STRIKE  8
+#define ADEPT_REFLEXES    9
+#define ADEPT_BOOST_STR    10
+#define ADEPT_BOOST_QUI    11
+#define ADEPT_BOOST_BOD    12
+#define ADEPT_IMPROVED_STR  13
+#define ADEPT_IMPROVED_QUI  14
+#define ADEPT_IMPROVED_BOD  15
+#define ADEPT_IMPROVED_PERCEPT  16
+#define ADEPT_LOW_LIGHT    17
+#define ADEPT_THERMO    18
+#define ADEPT_IMAGE_MAG    19
+#define ADEPT_MAGIC_RESISTANCE  20
+#define ADEPT_PAIN_RESISTANCE  21
+#define ADEPT_TEMPERATURE_TOLERANCE  22
+#define ADEPT_SPELL_SHROUD  23
+#define ADEPT_TRUE_SIGHT  24
+#define ADEPT_MISSILE_PARRY  25
+#define ADEPT_MISSILE_MASTERY  26
+#define ADEPT_MYSTIC_ARMOUR  27
+#define ADEPT_HEALING    28
+#define ADEPT_FREEFALL    29
+#define ADEPT_IRONWILL    30
+#define ADEPT_AIDSPELL    31
+#define ADEPT_EMPATHICHEAL  32
+#define ADEPT_KINESICS    33
+#define ADEPT_LINGUISTICS  34
+#define ADEPT_LIVINGFOCUS  35
+#define ADEPT_MOTIONSENSE  36
+#define ADEPT_PAINRELIEF  37
+#define ADEPT_PENETRATINGSTRIKE  38
+#define ADEPT_SIDESTEP    39
+#define ADEPT_SUSTENANCE  40
+#define ADEPT_COUNTERSTRIKE  41
+#define ADEPT_NUMPOWER    42
 
 /* ban defines -- do not change */
 
@@ -966,7 +988,7 @@ enum {
 #define TYPE_BIFURCATE        327
 #define TYPE_CRASH            328
 #define TYPE_DUMPSHOCK        329
-#define TYPE_BLACKIC	        330
+#define TYPE_BLACKIC          330
 #define TYPE_SUFFERING        399
 #define TYPE_EXPLOSION        400
 #define TYPE_SCATTERING       401
@@ -996,8 +1018,8 @@ enum {
 #define WEAP_SMG            10
 #define WEAP_SPORT_RIFLE    11
 #define WEAP_SNIPER_RIFLE   12
-#define WEAP_ASSAULT_RIFLE	13
-#define WEAP_SHOTGUN		    14
+#define WEAP_ASSAULT_RIFLE  13
+#define WEAP_SHOTGUN        14
 #define WEAP_LMG            15
 #define WEAP_MMG            16
 #define WEAP_HMG            17
@@ -1028,7 +1050,7 @@ enum {
 #define ITEM_LIGHT          1        /* Item is a light source            */
 #define ITEM_WORKSHOP       2        /* Item is a workshop (veh, etc)     */
 #define ITEM_CAMERA         3        /* Item is a camera                  */
-#define ITEM_PART	          4        /* Item is a component of something  */
+#define ITEM_PART            4        /* Item is a component of something  */
 #define ITEM_WEAPON         5        /* Item is a weapon                  */
 #define ITEM_FIREWEAPON     6        /* Item is bow/xbow                  */
 #define ITEM_MISSILE        7        /* Item is arrow/bolt                */
@@ -1060,14 +1082,14 @@ enum {
 #define ITEM_QUIVER         34       /* holds projectiles                 */
 #define ITEM_DECK_ACCESSORY 35       /* decking accessory                 */
 #define ITEM_RCDECK         36       /* remote control deck               */
-#define ITEM_CHIP 	        37
-#define ITEM_MOD     	      38
-#define ITEM_HOLSTER 	      39
-#define ITEM_DESIGN	        40
-#define ITEM_QUEST	        41
-#define ITEM_GUN_AMMO	      42
+#define ITEM_CHIP           37
+#define ITEM_MOD             38
+#define ITEM_HOLSTER         39
+#define ITEM_DESIGN          40
+#define ITEM_QUEST          41
+#define ITEM_GUN_AMMO        42
 #define ITEM_KEYRING        43
-#define NUM_ITEMS	          44
+#define NUM_ITEMS            44
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -1150,21 +1172,21 @@ enum {
 
 #define TYPE_FILE            0
 #define TYPE_UPGRADE         1
-#define TYPE_COMPUTER	     2
-#define TYPE_PARTS	     3
-#define TYPE_COOKER	     4
+#define TYPE_COMPUTER       2
+#define TYPE_PARTS       3
+#define TYPE_COOKER       4
 
-#define DRUG_ACTH	1
-#define DRUG_HYPER	2
-#define DRUG_JAZZ	3
-#define DRUG_KAMIKAZE	4
-#define DRUG_PSYCHE	5
-#define DRUG_BLISS	6
-#define DRUG_BURN	7
-#define DRUG_CRAM	8
-#define DRUG_NITRO	9
-#define DRUG_NOVACOKE	10
-#define DRUG_ZEN	11
+#define DRUG_ACTH  1
+#define DRUG_HYPER  2
+#define DRUG_JAZZ  3
+#define DRUG_KAMIKAZE  4
+#define DRUG_PSYCHE  5
+#define DRUG_BLISS  6
+#define DRUG_BURN  7
+#define DRUG_CRAM  8
+#define DRUG_NITRO  9
+#define DRUG_NOVACOKE  10
+#define DRUG_ZEN  11
 #define NUM_DRUGS       12
 
 /* vehicle types table */
@@ -1181,28 +1203,28 @@ enum {
 #define VEH_LTA 10
 
 /* vehicle affection table */
-#define VAFF_NONE	0
-#define VAFF_HAND	1
-#define VAFF_SPD 	2
-#define VAFF_ACCL	3
-#define VAFF_BOD	4
-#define VAFF_ARM 	5
-#define VAFF_SIG	6
-#define VAFF_AUTO	7
-#define VAFF_SEAF	8
+#define VAFF_NONE  0
+#define VAFF_HAND  1
+#define VAFF_SPD   2
+#define VAFF_ACCL  3
+#define VAFF_BOD  4
+#define VAFF_ARM   5
+#define VAFF_SIG  6
+#define VAFF_AUTO  7
+#define VAFF_SEAF  8
 #define VAFF_SEAB       9
-#define VAFF_LOAD	10
-#define VAFF_SEN	11
-#define VAFF_PILOT	12
-#define VAFF_MAX	13
+#define VAFF_LOAD  10
+#define VAFF_SEN  11
+#define VAFF_PILOT  12
+#define VAFF_MAX  13
 #define SHFT(ch) (GET_LEVEL(ch))
 
 /* vehicle flag table */
-#define VFLAG_NONE	0
-#define VFLAG_CAN_FLY	1
-#define VFLAG_AMPHIB	2
-#define VFLAG_WORKSHOP	3
-#define VFLAG_NEWBIE	4
+#define VFLAG_NONE  0
+#define VFLAG_CAN_FLY  1
+#define VFLAG_AMPHIB  2
+#define VFLAG_WORKSHOP  3
+#define VFLAG_NEWBIE  4
 #define NUM_VFLAGS      5
 /* vehicle speed table */
 #define SPEED_OFF 0
@@ -1213,129 +1235,129 @@ enum {
 
 /* cyberware */
 
-#define BONE_PLASTIC	0
-#define BONE_ALUMINIUM	1
-#define BONE_TITANIUM	2
-#define BONE_KEVLAR	3
-#define BONE_CERAMIC	4
+#define BONE_PLASTIC  0
+#define BONE_ALUMINIUM  1
+#define BONE_TITANIUM  2
+#define BONE_KEVLAR  3
+#define BONE_CERAMIC  4
 
-#define DATA_STANDARD	0
-#define DATA_INDUCTION	1
+#define DATA_STANDARD  0
+#define DATA_INDUCTION  1
 
-#define EYE_CAMERA		(1 << 0)
-#define EYE_CYBEREYES		(1 << 1)
-#define EYE_DISPLAYLINK		(1 << 2)
-#define EYE_FLARECOMP		(1 << 3)
-#define EYE_IMAGELINK		(1 << 4)
-#define EYE_LOWLIGHT		(1 << 5)
-#define EYE_PROTECTIVECOVERS	(1 << 6)
-#define EYE_CLOCK		(1 << 7)
-#define EYE_RETINALDUPLICATION	(1 << 8)
-#define EYE_THERMO		(1 << 9)
-#define EYE_OPTMAG1		(1 << 10)
-#define EYE_OPTMAG2		(1 << 11)
-#define EYE_OPTMAG3		(1 << 12)
-#define EYE_ELECMAG1		(1 << 13)
-#define EYE_ELECMAG2		(1 << 14)
-#define EYE_ELECMAG3		(1 << 15)
-#define EYE_GUN			(1 << 16)
-#define EYE_DATAJACK		(1 << 17)
-#define EYE_DART		(1 << 18)
-#define EYE_LASER		(1 << 19)
-#define EYE_LIGHT		(1 << 20)
-#define EYE_ULTRASOUND		(1 << 21)
-#define EYE_COSMETIC		(1 << 22)
-#define NUM_EYEMODS		23
+#define EYE_CAMERA    (1 << 0)
+#define EYE_CYBEREYES    (1 << 1)
+#define EYE_DISPLAYLINK    (1 << 2)
+#define EYE_FLARECOMP    (1 << 3)
+#define EYE_IMAGELINK    (1 << 4)
+#define EYE_LOWLIGHT    (1 << 5)
+#define EYE_PROTECTIVECOVERS  (1 << 6)
+#define EYE_CLOCK    (1 << 7)
+#define EYE_RETINALDUPLICATION  (1 << 8)
+#define EYE_THERMO    (1 << 9)
+#define EYE_OPTMAG1    (1 << 10)
+#define EYE_OPTMAG2    (1 << 11)
+#define EYE_OPTMAG3    (1 << 12)
+#define EYE_ELECMAG1    (1 << 13)
+#define EYE_ELECMAG2    (1 << 14)
+#define EYE_ELECMAG3    (1 << 15)
+#define EYE_GUN      (1 << 16)
+#define EYE_DATAJACK    (1 << 17)
+#define EYE_DART    (1 << 18)
+#define EYE_LASER    (1 << 19)
+#define EYE_LIGHT    (1 << 20)
+#define EYE_ULTRASOUND    (1 << 21)
+#define EYE_COSMETIC    (1 << 22)
+#define NUM_EYEMODS    23
 
-#define FILTER_AIR	0
-#define FILTER_BLOOD	1
-#define FILTER_INGESTED	2
+#define FILTER_AIR  0
+#define FILTER_BLOOD  1
+#define FILTER_INGESTED  2
 
-#define CYBERWEAPON_RETRACTABLE	1
-#define CYBERWEAPON_IMPROVED	2
+#define CYBERWEAPON_RETRACTABLE  1
+#define CYBERWEAPON_IMPROVED  2
 
-#define GRADE_STANDARD	0
-#define GRADE_ALPHA	1
-#define GRADE_BETA	2
-#define GRADE_DELTA	3
+#define GRADE_STANDARD  0
+#define GRADE_ALPHA  1
+#define GRADE_BETA  2
+#define GRADE_DELTA  3
 
-#define CYB_CHIPJACK		0
-#define CYB_DATAJACK		1
-#define CYB_DATALOCK		2
-#define CYB_KNOWSOFTLINK	3
-#define CYB_MEMORY		4
-#define CYB_TOOTHCOMPARTMENT	5
-#define CYB_PHONE		6
-#define CYB_RADIO		7
-#define CYB_EYES		8
-#define CYB_BONELACING		9
-#define CYB_FINGERTIP		10
-#define CYB_HANDBLADE		11
-#define CYB_HANDRAZOR		12
-#define CYB_HANDSPUR		13
-#define CYB_VOICEMOD		14
-#define CYB_BOOSTEDREFLEXES	15
-#define CYB_DERMALPLATING	16
-#define CYB_FILTRATION		17
-#define CYB_SIMRIG		18
-#define CYB_SKILLWIRE		19
-#define CYB_VCR			20
-#define CYB_WIREDREFLEXES	21
-#define CYB_REACTIONENHANCE	22
-#define CYB_REFLEXTRIGGER	23
-#define CYB_BALANCEAUG		24
-#define CYB_ORALDART		25
-#define CYB_ORALGUN		26
-#define CYB_ORALSLASHER		27
-#define CYB_ASIST		28
-#define CYB_CHIPJACKEXPERT	29
-#define CYB_CRANIALCYBER	30
-#define CYB_DATACOMPACT		31
-#define CYB_ENCEPHALON		32
-#define CYB_MATHSSPU		33
-#define CYB_AUTOINJECT		34
-#define CYB_BALANCETAIL		35
-#define CYB_BODYCOMPART		36
-#define CYB_FIN			37
-#define CYB_SKULL		38
-#define CYB_TORSO		39
-#define CYB_DERMALSHEATHING	40
-#define CYB_FOOTANCHOR		41
-#define CYB_HYDRAULICJACK	42
-#define CYB_MOVEBYWIRE		43
-#define CYB_CLIMBINGCLAWS	44
-#define CYB_SMARTLINK		45
-#define CYB_MUSCLEREP		46
-#define NUM_CYBER		47
+#define CYB_CHIPJACK    0
+#define CYB_DATAJACK    1
+#define CYB_DATALOCK    2
+#define CYB_KNOWSOFTLINK  3
+#define CYB_MEMORY    4
+#define CYB_TOOTHCOMPARTMENT  5
+#define CYB_PHONE    6
+#define CYB_RADIO    7
+#define CYB_EYES    8
+#define CYB_BONELACING    9
+#define CYB_FINGERTIP    10
+#define CYB_HANDBLADE    11
+#define CYB_HANDRAZOR    12
+#define CYB_HANDSPUR    13
+#define CYB_VOICEMOD    14
+#define CYB_BOOSTEDREFLEXES  15
+#define CYB_DERMALPLATING  16
+#define CYB_FILTRATION    17
+#define CYB_SIMRIG    18
+#define CYB_SKILLWIRE    19
+#define CYB_VCR      20
+#define CYB_WIREDREFLEXES  21
+#define CYB_REACTIONENHANCE  22
+#define CYB_REFLEXTRIGGER  23
+#define CYB_BALANCEAUG    24
+#define CYB_ORALDART    25
+#define CYB_ORALGUN    26
+#define CYB_ORALSLASHER    27
+#define CYB_ASIST    28
+#define CYB_CHIPJACKEXPERT  29
+#define CYB_CRANIALCYBER  30
+#define CYB_DATACOMPACT    31
+#define CYB_ENCEPHALON    32
+#define CYB_MATHSSPU    33
+#define CYB_AUTOINJECT    34
+#define CYB_BALANCETAIL    35
+#define CYB_BODYCOMPART    36
+#define CYB_FIN      37
+#define CYB_SKULL    38
+#define CYB_TORSO    39
+#define CYB_DERMALSHEATHING  40
+#define CYB_FOOTANCHOR    41
+#define CYB_HYDRAULICJACK  42
+#define CYB_MOVEBYWIRE    43
+#define CYB_CLIMBINGCLAWS  44
+#define CYB_SMARTLINK    45
+#define CYB_MUSCLEREP    46
+#define NUM_CYBER    47
 
-#define BIO_ADRENALPUMP		0
-#define BIO_CATSEYES		1
-#define BIO_DIGESTIVEEXPANSION	2
-#define BIO_ENHANCEDARTIC	3
-#define BIO_EXTENDEDVOLUME	4
-#define BIO_METABOLICARRESTER	5
-#define BIO_MUSCLEAUG		6
-#define BIO_MUSCLETONER		7
-#define BIO_NEPHRITICSCREEN	8
-#define BIO_NICTATINGGLAND	9
-#define BIO_ORTHOSKIN		10
-#define BIO_PATHOGENICDEFENSE	11
-#define BIO_PLATELETFACTORY	12
-#define BIO_SUPRATHYROIDGLAND	13
-#define BIO_SYMBIOTES		14
-#define BIO_SYNTHACARDIUM	15
-#define BIO_TAILOREDPHEREMONES	16
-#define BIO_TOXINEXTRACTOR	17
-#define BIO_TRACHEALFILTER	18
+#define BIO_ADRENALPUMP    0
+#define BIO_CATSEYES    1
+#define BIO_DIGESTIVEEXPANSION  2
+#define BIO_ENHANCEDARTIC  3
+#define BIO_EXTENDEDVOLUME  4
+#define BIO_METABOLICARRESTER  5
+#define BIO_MUSCLEAUG    6
+#define BIO_MUSCLETONER    7
+#define BIO_NEPHRITICSCREEN  8
+#define BIO_NICTATINGGLAND  9
+#define BIO_ORTHOSKIN    10
+#define BIO_PATHOGENICDEFENSE  11
+#define BIO_PLATELETFACTORY  12
+#define BIO_SUPRATHYROIDGLAND  13
+#define BIO_SYMBIOTES    14
+#define BIO_SYNTHACARDIUM  15
+#define BIO_TAILOREDPHEREMONES  16
+#define BIO_TOXINEXTRACTOR  17
+#define BIO_TRACHEALFILTER  18
 // Everything past this line is assumed to be cultured by default. If you add more that's not cultured, change the cultured check in db.cpp.
-#define BIO_CEREBRALBOOSTER	19
-#define BIO_DAMAGECOMPENSATOR	20
-#define BIO_PAINEDITOR		21
-#define BIO_REFLEXRECORDER	22
-#define BIO_SYNAPTICACCELERATOR	23
-#define BIO_THERMOSENSEORGAN	24
-#define BIO_TRAUMADAMPNER	25
-#define NUM_BIOWARE		26
+#define BIO_CEREBRALBOOSTER  19
+#define BIO_DAMAGECOMPENSATOR  20
+#define BIO_PAINEDITOR    21
+#define BIO_REFLEXRECORDER  22
+#define BIO_SYNAPTICACCELERATOR  23
+#define BIO_THERMOSENSEORGAN  24
+#define BIO_TRAUMADAMPNER  25
+#define NUM_BIOWARE    26
 
 #define BIOWARE_STANDARD 0
 #define BIOWARE_CULTURED 1
@@ -1348,79 +1370,79 @@ enum {
 #define SOFT_ATTACK             5
 #define SOFT_SLOW               6
 #define SOFT_MEDIC              7
-#define SOFT_SNOOPER		8
-#define SOFT_BATTLETEC		9
-#define SOFT_COMPRESSOR		10
+#define SOFT_SNOOPER    8
+#define SOFT_BATTLETEC    9
+#define SOFT_COMPRESSOR    10
 #define SOFT_ANALYZE            11
 #define SOFT_DECRYPT            12
 #define SOFT_DECEPTION          13
 #define SOFT_RELOCATE           14
 #define SOFT_SLEAZE             15
-#define SOFT_SCANNER		16
-#define SOFT_BROWSE		17
-#define SOFT_READ		18
-#define SOFT_TRACK		19
-#define SOFT_ARMOUR		20
-#define SOFT_CAMO		21
-#define SOFT_CRASH		22
-#define SOFT_DEFUSE		23
-#define SOFT_EVALUATE		24
-#define SOFT_VALIDATE		25
-#define SOFT_SWERVE		26
-#define SOFT_SUITE		27
-#define SOFT_COMMLINK		28
-#define SOFT_CLOAK		29
-#define SOFT_LOCKON		30
-#define SOFT_ASIST_COLD		31
-#define SOFT_ASIST_HOT		32
-#define SOFT_HARDENING		33
-#define SOFT_ICCM		34
-#define SOFT_ICON		35
-#define SOFT_MPCP		36
-#define SOFT_REALITY		37
-#define SOFT_RESPONSE		38
-#define NUM_PROGRAMS		39
+#define SOFT_SCANNER    16
+#define SOFT_BROWSE    17
+#define SOFT_READ    18
+#define SOFT_TRACK    19
+#define SOFT_ARMOUR    20
+#define SOFT_CAMO    21
+#define SOFT_CRASH    22
+#define SOFT_DEFUSE    23
+#define SOFT_EVALUATE    24
+#define SOFT_VALIDATE    25
+#define SOFT_SWERVE    26
+#define SOFT_SUITE    27
+#define SOFT_COMMLINK    28
+#define SOFT_CLOAK    29
+#define SOFT_LOCKON    30
+#define SOFT_ASIST_COLD    31
+#define SOFT_ASIST_HOT    32
+#define SOFT_HARDENING    33
+#define SOFT_ICCM    34
+#define SOFT_ICON    35
+#define SOFT_MPCP    36
+#define SOFT_REALITY    37
+#define SOFT_RESPONSE    38
+#define NUM_PROGRAMS    39
 
-#define PART_ACTIVE		1
-#define PART_STORAGE		2
-#define PART_ASIST_HOT		3
-#define PART_ASIST_COLD		4
-#define PART_HARDENING		5
-#define PART_ICCM		6
-#define PART_ICON		7
-#define PART_IO			8
-#define PART_MPCP		9
-#define PART_BOD		10
-#define PART_SENSOR		11
-#define PART_MASKING		12
-#define PART_EVASION		13
-#define PART_PORTS		14
-#define PART_RAS_OVERRIDE	15
-#define PART_REALITY_FILTER	16
-#define PART_RESPONSE		17
-#define PART_MATRIX_INTERFACE	18
-#define PART_MASER		19
-#define PART_CELLULAR		20
-#define PART_LASER		21
-#define PART_MICROWAVE		22
-#define PART_RADIO		23
-#define PART_SATELLITE		24
-#define PART_SIGNAL_AMP		25
-#define NUM_PARTS		26
+#define PART_ACTIVE    1
+#define PART_STORAGE    2
+#define PART_ASIST_HOT    3
+#define PART_ASIST_COLD    4
+#define PART_HARDENING    5
+#define PART_ICCM    6
+#define PART_ICON    7
+#define PART_IO      8
+#define PART_MPCP    9
+#define PART_BOD    10
+#define PART_SENSOR    11
+#define PART_MASKING    12
+#define PART_EVASION    13
+#define PART_PORTS    14
+#define PART_RAS_OVERRIDE  15
+#define PART_REALITY_FILTER  16
+#define PART_RESPONSE    17
+#define PART_MATRIX_INTERFACE  18
+#define PART_MASER    19
+#define PART_CELLULAR    20
+#define PART_LASER    21
+#define PART_MICROWAVE    22
+#define PART_RADIO    23
+#define PART_SATELLITE    24
+#define PART_SIGNAL_AMP    25
+#define NUM_PARTS    26
 
 #define TYPE_KIT        1
 #define TYPE_WORKSHOP   2
 #define TYPE_FACILITY   3
 
 // Kit/Workshop/Facility types.
-#define TYPE_GENERAL		0
-#define TYPE_ELECTRONIC		1
-#define TYPE_MICROTRONIC	2
-#define TYPE_CYBERWARE		3
-#define TYPE_VEHICLE		4
-#define TYPE_WEAPON		5
-#define TYPE_MEDICAL		6
-#define TYPE_AMMO		7
+#define TYPE_GENERAL    0
+#define TYPE_ELECTRONIC    1
+#define TYPE_MICROTRONIC  2
+#define TYPE_CYBERWARE    3
+#define TYPE_VEHICLE    4
+#define TYPE_WEAPON    5
+#define TYPE_MEDICAL    6
+#define TYPE_AMMO    7
 #define NUM_WORKSHOP_TYPES 8
 /* modifier constants used with obj affects ('A' fields) */
 
@@ -1450,13 +1472,13 @@ enum {
 #define APPLY_INITIATIVE_DICE   23      /* Apply to Initiative Dice     */
 #define APPLY_TARGET            24      /* Apply to Target Numbers      */
 #define APPLY_CONTROL_POOL      25
-#define APPLY_TASK_BOD		26
-#define APPLY_TASK_QUI		27
-#define APPLY_TASK_STR		28
-#define APPLY_TASK_CHA		29	
-#define APPLY_TASK_INT		30
-#define APPLY_TASK_WIL		31
-#define APPLY_TASK_REA		32
+#define APPLY_TASK_BOD    26
+#define APPLY_TASK_QUI    27
+#define APPLY_TASK_STR    28
+#define APPLY_TASK_CHA    29  
+#define APPLY_TASK_INT    30
+#define APPLY_TASK_WIL    31
+#define APPLY_TASK_REA    32
 #define APPLY_MAX               33
 
 /* container flags - value[1] */
@@ -1516,24 +1538,24 @@ enum {
 
 /* types of foci */
 
-#define FOCI_EXPENDABLE		0
-#define FOCI_SPEC_SPELL		1
-#define FOCI_SPELL_CAT		2
-#define FOCI_SPIRIT		3
-#define FOCI_POWER		4
-#define FOCI_SUSTAINED		5
-#define FOCI_WEAPON		6
+#define FOCI_EXPENDABLE    0
+#define FOCI_SPEC_SPELL    1
+#define FOCI_SPELL_CAT    2
+#define FOCI_SPIRIT    3
+#define FOCI_POWER    4
+#define FOCI_SUSTAINED    5
+#define FOCI_WEAPON    6
 
-#define ACCESS_SMARTLINK	1
-#define ACCESS_SCOPE		2
-#define ACCESS_GASVENT		3
-#define ACCESS_SHOCKPAD		4
-#define ACCESS_SILENCER		5
-#define ACCESS_SOUNDSUPP	6
-#define ACCESS_SMARTGOGGLE	7
-#define ACCESS_BIPOD		8
-#define ACCESS_TRIPOD		9
-#define ACCESS_BAYONET		10
+#define ACCESS_SMARTLINK  1
+#define ACCESS_SCOPE    2
+#define ACCESS_GASVENT    3
+#define ACCESS_SHOCKPAD    4
+#define ACCESS_SILENCER    5
+#define ACCESS_SOUNDSUPP  6
+#define ACCESS_SMARTGOGGLE  7
+#define ACCESS_BIPOD    8
+#define ACCESS_TRIPOD    9
+#define ACCESS_BAYONET    10
 
 #define ACCESS_LOCATION_TOP    7
 #define ACCESS_LOCATION_BARREL 8
@@ -1549,66 +1571,66 @@ enum {
 #define RECOIL_COMP_VALUE_BIPOD   2
 #define RECOIL_COMP_VALUE_TRIPOD  6
 
-#define MOD_NOWHERE		0
-#define MOD_INTAKE_FRONT	1
-#define MOD_INTAKE_MID		2
-#define MOD_INTAKE_REAR		3
-#define MOD_ENGINE		4
-#define MOD_EXHAUST		5
-#define MOD_COOLING		6
-#define MOD_BRAKES		7
-#define MOD_SUSPENSION		8
-#define MOD_WHEELS		9
-#define MOD_TIRES		10
-#define MOD_BODY_FRONT		11
-#define MOD_BODY_DRIVERS	12
-#define MOD_BODY_PASS		13
-#define MOD_BODY_REAR		14
-#define MOD_BODY_HOOD		15
-#define MOD_BODY_ROOF		16
-#define MOD_BODY_SPOILER	17
-#define MOD_BODY_WINDSCREEN	18
-#define MOD_BODY_WINDOWS	19
-#define MOD_ARMOUR		20
-#define MOD_SEAT		21
-#define MOD_COMPUTER1		22
-#define MOD_COMPUTER2		23
-#define MOD_COMPUTER3		24
-#define MOD_PHONE		25
-#define MOD_RADIO		26
-#define MOD_MOUNT		27
-#define NUM_MODS		29
+#define MOD_NOWHERE    0
+#define MOD_INTAKE_FRONT  1
+#define MOD_INTAKE_MID    2
+#define MOD_INTAKE_REAR    3
+#define MOD_ENGINE    4
+#define MOD_EXHAUST    5
+#define MOD_COOLING    6
+#define MOD_BRAKES    7
+#define MOD_SUSPENSION    8
+#define MOD_WHEELS    9
+#define MOD_TIRES    10
+#define MOD_BODY_FRONT    11
+#define MOD_BODY_DRIVERS  12
+#define MOD_BODY_PASS    13
+#define MOD_BODY_REAR    14
+#define MOD_BODY_HOOD    15
+#define MOD_BODY_ROOF    16
+#define MOD_BODY_SPOILER  17
+#define MOD_BODY_WINDSCREEN  18
+#define MOD_BODY_WINDOWS  19
+#define MOD_ARMOUR    20
+#define MOD_SEAT    21
+#define MOD_COMPUTER1    22
+#define MOD_COMPUTER2    23
+#define MOD_COMPUTER3    24
+#define MOD_PHONE    25
+#define MOD_RADIO    26
+#define MOD_MOUNT    27
+#define NUM_MODS    29
 
-#define TYPE_ENGINECUST		1
-#define TYPE_NOS		2
-#define TYPE_TURBOCHARGER	3
-#define TYPE_AUTONAV		4
-#define TYPE_CMC		5
-#define TYPE_DRIVEBYWIRE	6
-#define TYPE_IMPSUSP		7
-#define TYPE_MOTORBIKEGYRO	8
-#define TYPE_OFFROADSUS		9
-#define TYPE_ARMOUR		10
-#define TYPE_CONCEALEDARMOUR	11
-#define TYPE_CRASHCAGE		12
-#define TYPE_ROLLBARS		13
-#define TYPE_THERMALMASK	14
-#define TYPE_MOUNT		15
-#define TYPE_ECM		16
-#define TYPE_ECCM		17
-#define TYPE_SENSORS		18
-#define TYPE_SEATS		19
-#define TYPE_TIRES		20
-#define TYPE_MISC		21
-#define TYPE_AMMOBIN		22
-#define NUM_MODTYPES		23
+#define TYPE_ENGINECUST    1
+#define TYPE_NOS    2
+#define TYPE_TURBOCHARGER  3
+#define TYPE_AUTONAV    4
+#define TYPE_CMC    5
+#define TYPE_DRIVEBYWIRE  6
+#define TYPE_IMPSUSP    7
+#define TYPE_MOTORBIKEGYRO  8
+#define TYPE_OFFROADSUS    9
+#define TYPE_ARMOUR    10
+#define TYPE_CONCEALEDARMOUR  11
+#define TYPE_CRASHCAGE    12
+#define TYPE_ROLLBARS    13
+#define TYPE_THERMALMASK  14
+#define TYPE_MOUNT    15
+#define TYPE_ECM    16
+#define TYPE_ECCM    17
+#define TYPE_SENSORS    18
+#define TYPE_SEATS    19
+#define TYPE_TIRES    20
+#define TYPE_MISC    21
+#define TYPE_AMMOBIN    22
+#define NUM_MODTYPES    23
 
-#define ENGINE_NONE		    0
-#define ENGINE_ELECTRIC		1
-#define ENGINE_FUELCELL		2
-#define ENGINE_GASOLINE		3
-#define ENGINE_METHANE		4
-#define ENGINE_DIESEL		  5
+#define ENGINE_NONE        0
+#define ENGINE_ELECTRIC    1
+#define ENGINE_FUELCELL    2
+#define ENGINE_GASOLINE    3
+#define ENGINE_METHANE    4
+#define ENGINE_DIESEL      5
 #define NUM_ENGINE_TYPES  6
 
 /* house value defines */
@@ -1622,10 +1644,10 @@ enum {
 #define HOUSE_HIGH    2
 #define HOUSE_LUXURY  3
 
-#define MODE_SS		1
-#define MODE_SA		2
-#define MODE_BF		3
-#define MODE_FA		4
+#define MODE_SS    1
+#define MODE_SA    2
+#define MODE_BF    3
+#define MODE_FA    4
 
 /* alias defines */
 #define ALIAS_SIMPLE    0
@@ -1675,7 +1697,7 @@ enum {
 #define SCMD_UNAFFECT   5
 #define SCMD_SQUELCHOOC 6
 #define SCMD_INITIATE   7
-#define SCMD_RPE 	8
+#define SCMD_RPE   8
 #define SCMD_POWERPOINT 9
 #define SCMD_AUTHORIZE  10
 
@@ -1774,7 +1796,7 @@ enum {
 /* do_echo */
 #define SCMD_ECHO       0
 #define SCMD_EMOTE      1
-#define SCMD_AECHO	3
+#define SCMD_AECHO  3
 
 /* do_gen_door */
 #define SCMD_OPEN       0
@@ -1810,13 +1832,13 @@ enum {
 #define SCMD_UNMAN 1
 
 /* do_load */
-#define SCMD_SWAP 	0
-#define SCMD_UPLOAD 	1
-#define SCMD_UNLOAD	2
+#define SCMD_SWAP   0
+#define SCMD_UPLOAD   1
+#define SCMD_UNLOAD  2
 
-#define SCMD_DRAIN	0
-#define SCMD_REFLECT	1
-#define SCMD_SDEFENSE	2
+#define SCMD_DRAIN  0
+#define SCMD_REFLECT  1
+#define SCMD_SDEFENSE  2
 
 /* do_practice */
 #define SCMD_UNPRACTICE 1
@@ -1830,11 +1852,11 @@ enum {
 
 /* END SUBCOMMANDS SECTION */
 
-#define FREE		0
-#define SIMPLE		1
-#define COMPLEX		2
-#define EXCLUSIVE	3
-#define NOCOMBAT	4
+#define FREE    0
+#define SIMPLE    1
+#define COMPLEX    2
+#define EXCLUSIVE  3
+#define NOCOMBAT  4
 
 /* modes of connectedness: used by descriptor_data.state */
 
@@ -1875,13 +1897,13 @@ enum {
 #define CON_ICEDIT       34
 #define CON_PRO_CREATE   35
 #define CON_DECK_CREATE  36
-#define CON_SPE_CREATE	 37
+#define CON_SPE_CREATE   37
 #define CON_INITIATE     38
-#define CON_DECORATE	   39
-#define CON_POCKETSEC	   40
-#define CON_VEHCUST	     41
-#define CON_BCUSTOMIZE	 42
-#define CON_TRIDEO	     43
+#define CON_DECORATE     39
+#define CON_POCKETSEC     40
+#define CON_VEHCUST       41
+#define CON_BCUSTOMIZE   42
+#define CON_TRIDEO       43
 #define CON_AMMO_CREATE  44
 #define CON_ASKNAME      45            /* Ask user for name            */
 #define CON_PGEDIT       46
@@ -1904,8 +1926,8 @@ enum {
 #define TO_NOTVICT             3
 #define TO_CHAR                4
 #define TO_ROLLS               5
-#define TO_VEH		             6
-#define TO_DECK		             7
+#define TO_VEH                 6
+#define TO_DECK                 7
 #define TO_VEH_ROOM            8
 #define TO_CHAR_INCLUDE_RIGGER 9
 #define TO_CHAR_FORCE          10
@@ -1922,7 +1944,7 @@ enum {
 
 /* teacher modes */
 
-#define LIBRARY		      0
+#define LIBRARY          0
 #define NEWBIE          1
 #define AMATEUR         2
 #define ADVANCED        3
@@ -1957,38 +1979,38 @@ enum {
 #define RENT_TIMEDOUT   5
 
 /* MATRIX HOSTS TYPES */
-#define HOST_DATASTORE	0
-#define HOST_LTG	      1
-#define HOST_RTG	      2
-#define HOST_PLTG	      3
-#define HOST_SECURITY	  4
-#define HOST_CONTOLLER	5
+#define HOST_DATASTORE  0
+#define HOST_LTG        1
+#define HOST_RTG        2
+#define HOST_PLTG        3
+#define HOST_SECURITY    4
+#define HOST_CONTOLLER  5
 
 /* IC Options */
-#define IC_ARMOUR	      1
-#define IC_CASCADE	    2
-#define IC_EX_DEFENSE  	3
-#define IC_EX_OFFENSE	  4
-#define IC_SHIELD	      5
-#define IC_SHIFT	      6
-#define IC_TRAP		      7
+#define IC_ARMOUR        1
+#define IC_CASCADE      2
+#define IC_EX_DEFENSE    3
+#define IC_EX_OFFENSE    4
+#define IC_SHIELD        5
+#define IC_SHIFT        6
+#define IC_TRAP          7
 
-#define ZONE_SEATTLE	  0
-#define ZONE_PORTLAND	  1
-#define ZONE_CARIB	    2
-#define ZONE_OCEAN	    3
+#define ZONE_SEATTLE    0
+#define ZONE_PORTLAND    1
+#define ZONE_CARIB      2
+#define ZONE_OCEAN      3
 
 /* MOB Alert Levels */
-#define MALERT_CALM	    0
-#define MALERT_ALERT	  1
-#define MALERT_ALARM	  2
+#define MALERT_CALM      0
+#define MALERT_ALERT    1
+#define MALERT_ALARM    2
 
 #define LIGHT           1
 #define MODERATE        2
 #define SERIOUS         3
 #define DEADLY          4
 
-#define QUEST_TIMER	15
+#define QUEST_TIMER  15
 
 #define OPT_USEC                  100000  /* 10 passes per second */
 #define PASSES_PER_SEC            (1000000 / OPT_USEC)

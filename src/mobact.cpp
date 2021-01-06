@@ -739,8 +739,8 @@ bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
 bool mobact_process_helper(struct char_data *ch) {
   struct char_data *vict = NULL;
   
-  /* Helper Mobs */
-  if (MOB_FLAGGED(ch, MOB_HELPER)) {
+  /* Helper Mobs - guards are always helpers */
+  if (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD)) {
     for (vict = ch->in_room->people; vict; vict = vict->next_in_room) {
       // Ensure we're neither of the fighting parties. This check should be redundant since no fighting NPC can proceed through mobile_activity().
       if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))

@@ -99,222 +99,322 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
 void totem_bonus(struct char_data *ch, int action, int type, int &target, int &skill)
 {
   extern struct time_info_data time_info;
-  if (GET_TOTEM(ch) == TOTEM_OWL)
-  {
+  if (GET_TOTEM(ch) == TOTEM_OWL) {
     if (time_info.hours > 6 && time_info.hours < 19)
       target += 2;
     else
       skill += 2;
-  } else if (GET_TOTEM(ch) == TOTEM_RAVEN)
-  {
+  } else if (GET_TOTEM(ch) == TOTEM_RAVEN) {
     if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS) || SECT(get_ch_in_room(ch)) == SPIRIT_HEARTH)
       target += 1;
-  } else if (GET_TOTEM(ch) == TOTEM_SNAKE && CH_IN_COMBAT(ch))
+  } else if (GET_TOTEM(ch) == TOTEM_SNAKE && CH_IN_COMBAT(ch)) {
     skill--;
-  else if ((GET_TOTEM(ch) == TOTEM_BAT || GET_TOTEM(ch) == TOTEM_PUMA)
-           && (time_info.hours > 6 && time_info.hours < 19) && OUTSIDE(ch))
+  } else if (GET_TOTEM(ch) == TOTEM_BAT || GET_TOTEM(ch) == TOTEM_PUMA) {
+    if (time_info.hours > 6 && time_info.hours < 19 && OUTSIDE(ch))
+      target += 2;
+  } else if (GET_TOTEM(ch) == TOTEM_WIND) {
+    if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS) || SECT(get_ch_in_room(ch)) == SPIRIT_HEARTH)
+      target += 2;
+  } else if (GET_TOTEM(ch) == TOTEM_PUMA && get_ch_in_room(ch)->crowd > 4) {
     target += 2;
-  else if (GET_TOTEM(ch) == TOTEM_PUMA && get_ch_in_room(ch)->crowd > 4)
+  } else if (GET_TOTEM(ch) == TOTEM_SCORPION && (time_info.hours > 6 && time_info.hours < 19)) {
     target += 2;
-  else if (GET_TOTEM(ch) == TOTEM_SCORPION && (time_info.hours > 6 && time_info.hours < 19))
-    target += 2;
-  else if (GET_TOTEM(ch) == TOTEM_SPIDER && OUTSIDE(ch))
+  } else if (GET_TOTEM(ch) == TOTEM_SPIDER && OUTSIDE(ch)) {
     target++;
+  }
 
   if (action == SPELLCASTING)
   {
     type = spells[type].category;
     switch (GET_TOTEM(ch)) {
-    case TOTEM_PRAIRIEDOG:
-      if (type == DETECTION)
-        skill += 2;
-      else if (type == ILLUSION)
-        skill++;
-      else if (type == COMBAT)
-        skill -= 2;
-      break;
-    case TOTEM_SPIDER:
-      if (type == ILLUSION)
-        skill += 2;
-      break;
-    case TOTEM_LEOPARD:
-      if (type == COMBAT || type == HEALTH)
-        skill += 2;
-      break;
-    case TOTEM_BEAR:
-    case TOTEM_HORSE:
-    case TOTEM_LIZARD: 
-    case TOTEM_PYTHON:
-     if (type == HEALTH)
-        skill += 2;
-      break;
-    case TOTEM_ELK:
-      if (type == HEALTH)
-        skill++;
-      else if (type == COMBAT)
-        skill -= 2;
-      break;
-    case TOTEM_TURTLE:
-      if (type == ILLUSION)
-        skill += 2;
-      else if (type == COMBAT)
-        skill -= 2;
-      break;
-    case TOTEM_BUFFALO:
-      if (type == HEALTH)
-        skill += 2;
-      else if (type == ILLUSION)
-        skill--;
-      break;
-    case TOTEM_PUMA:
-    case TOTEM_CAT:
-    case TOTEM_PARROT:
-      if (type == ILLUSION)
-        skill += 2;
-      break;
-    case TOTEM_DOG:
-    case TOTEM_EAGLE:
-      if (type == DETECTION)
-        skill += 2;
-      break;
-    case TOTEM_DOLPHIN:
-    case TOTEM_FISH:
-      if (type == DETECTION)
-        skill += 2;
-      else if (type == COMBAT)
-        skill--;
-      break;
-    case TOTEM_GATOR:
-      if (type == COMBAT || type == DETECTION)
-        skill += 2;
-      else if (type == ILLUSION)
-        skill--;
-      break;
-    case TOTEM_LION:
-    case TOTEM_HYENA:
-      if (type == COMBAT)
-        skill += 2;
-      else if (type == HEALTH)
-        skill--;
-      break;
-    case TOTEM_MOUSE:
-      if (type == DETECTION || type == HEALTH)
-        skill += 2;
-      else if (type == COMBAT)
-        skill -= 2;
-      break;
-    case TOTEM_RACCOON:
-    case TOTEM_MONKEY:
-      if (type == MANIPULATION)
-        skill += 2;
-      else if (type == COMBAT)
-        skill--;
-      break;
-    case TOTEM_RAT:
-    case TOTEM_JACKAL:
-      if (type == DETECTION || type == ILLUSION)
-        skill += 2;
-      else if (type == COMBAT)
-        skill--;
-      break;
-    case TOTEM_JAGUAR:
-      if (type == DETECTION)
-        skill += 2;
-      else if (type == HEALTH)
-        skill--;
-      break;
-    case TOTEM_RAVEN:
-      if (type == MANIPULATION)
-        skill += 2;
-      break;
-    case TOTEM_SHARK:
-    case TOTEM_WOLF:
-      if (type == COMBAT || type == DETECTION)
-        skill += 2;
-      break;
-    case TOTEM_SNAKE:
-      if (type == DETECTION || type == HEALTH || type == ILLUSION)
-        skill += 2;
-      break;
-    case TOTEM_CRAB:
-      if (type == ILLUSION)
-        skill--;
-      break;
-    case TOTEM_CROCODILE:
-      if (type == COMBAT)
-        skill += 2;
-      else if (type == ILLUSION)
-        skill++;
-      break;
-    case TOTEM_BOAR:
-    case TOTEM_WHALE:
-      if (type == ILLUSION)
-        skill--;
-      break;
-    case TOTEM_BADGER:
-      if (type == COMBAT)
-        skill += 2;
-      break;    
-    case TOTEM_CHEETAH:
-      if (type == COMBAT)
-        skill += 2;
-      else if (type == HEALTH)
-        skill--;
-      break;
-    case TOTEM_BAT:
-      if (type == DETECTION || type == MANIPULATION)
-        skill += 2;
-      break;
-    case TOTEM_BULL:
-      if (type == HEALTH)
-        skill +=2;
-      else if (type == COMBAT || type == DETECTION)
-        skill++;
-      break;
-    case TOTEM_SCORPION:
-    case TOTEM_COBRA:
-      if (type == COMBAT || type == ILLUSION)
-        skill += 2;
-      break;
-    case TOTEM_DOVE:
-      if (type == HEALTH)
-        skill += 2;
-      else if (type == DETECTION)
-        skill++;
-      break;
-    case TOTEM_GOOSE:
-      if (type == DETECTION)
-        skill += 2;
-      else if (type == COMBAT)
-        skill++;
-      break;
-    case TOTEM_FOX:
-    case TOTEM_OTTER:
-      if (type == ILLUSION)
-        skill += 2;
-      else if (type == COMBAT)
-        skill--;
-      break;
-    case TOTEM_GECKO:
-      if (type == GET_TOTEMSPIRIT(ch))
-        skill += 2;
-      else if (type == COMBAT)
-        skill--;
-      break;
-    case TOTEM_POLECAT:
-      if (type == COMBAT) {
-        skill++;
-        if (time_info.hours < 6 || time_info.hours > 19)     
+      case TOTEM_PRAIRIEDOG:
+        if (type == DETECTION)
+          skill += 2;
+        else if (type == ILLUSION)
           skill++;
-      } else if (type == HEALTH)
-        skill--;
-      break;
-    case TOTEM_STAG:
-      if (type == HEALTH || type == ILLUSION)
-        skill += 2;
-      else if (type == MANIPULATION)
-        skill--;
-      break;
+        else if (type == COMBAT)
+          skill -= 2;
+        break;
+      case TOTEM_SPIDER:
+        if (type == ILLUSION)
+          skill += 2;
+        break;
+      case TOTEM_LEOPARD:
+        if (type == COMBAT || type == HEALTH)
+          skill += 2;
+        break;
+      case TOTEM_BEAR:
+      case TOTEM_HORSE:
+      case TOTEM_LIZARD: 
+      case TOTEM_PYTHON:
+       if (type == HEALTH)
+          skill += 2;
+        break;
+      case TOTEM_ELK:
+        if (type == HEALTH)
+          skill++;
+        else if (type == COMBAT)
+          skill -= 2;
+        break;
+      case TOTEM_TURTLE:
+        if (type == ILLUSION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill -= 2;
+        break;
+      case TOTEM_BUFFALO:
+        if (type == HEALTH)
+          skill += 2;
+        else if (type == ILLUSION)
+          skill--;
+        break;
+      case TOTEM_PUMA:
+      case TOTEM_CAT:
+      case TOTEM_PARROT:
+        if (type == ILLUSION)
+          skill += 2;
+        break;
+      case TOTEM_DOG:
+      case TOTEM_EAGLE:
+        if (type == DETECTION)
+          skill += 2;
+        break;
+      case TOTEM_DOLPHIN:
+      case TOTEM_FISH:
+        if (type == DETECTION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill--;
+        break;
+      case TOTEM_GATOR:
+        if (type == COMBAT || type == DETECTION)
+          skill += 2;
+        else if (type == ILLUSION)
+          skill--;
+        break;
+      case TOTEM_LION:
+      case TOTEM_HYENA:
+        if (type == COMBAT)
+          skill += 2;
+        else if (type == HEALTH)
+          skill--;
+        break;
+      case TOTEM_MOUSE:
+        if (type == DETECTION || type == HEALTH)
+          skill += 2;
+        else if (type == COMBAT)
+          skill -= 2;
+        break;
+      case TOTEM_RACCOON:
+      case TOTEM_MONKEY:
+        if (type == MANIPULATION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill--;
+        break;
+      case TOTEM_RAT:
+      case TOTEM_JACKAL:
+        if (type == DETECTION || type == ILLUSION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill--;
+        break;
+      case TOTEM_JAGUAR:
+        if (type == DETECTION)
+          skill += 2;
+        else if (type == HEALTH)
+          skill--;
+        break;
+      case TOTEM_RAVEN:
+        if (type == MANIPULATION)
+          skill += 2;
+        break;
+      case TOTEM_SHARK:
+      case TOTEM_WOLF:
+        if (type == COMBAT || type == DETECTION)
+          skill += 2;
+        break;
+      case TOTEM_SNAKE:
+        if (type == DETECTION || type == HEALTH || type == ILLUSION)
+          skill += 2;
+        break;
+      case TOTEM_CRAB:
+        if (type == ILLUSION)
+          skill--;
+        break;
+      case TOTEM_CROCODILE:
+        if (type == COMBAT)
+          skill += 2;
+        else if (type == ILLUSION)
+          skill++;
+        break;
+      case TOTEM_BOAR:
+      case TOTEM_WHALE:
+        if (type == ILLUSION)
+          skill--;
+        break;
+      case TOTEM_BADGER:
+        if (type == COMBAT)
+          skill += 2;
+        break;    
+      case TOTEM_CHEETAH:
+        if (type == COMBAT)
+          skill += 2;
+        else if (type == HEALTH)
+          skill--;
+        break;
+      case TOTEM_BAT:
+        if (type == DETECTION || type == MANIPULATION)
+          skill += 2;
+        break;
+      case TOTEM_BULL:
+        if (type == HEALTH)
+          skill +=2;
+        else if (type == COMBAT || type == DETECTION)
+          skill++;
+        break;
+      case TOTEM_SCORPION:
+      case TOTEM_COBRA:
+        if (type == COMBAT || type == ILLUSION)
+          skill += 2;
+        break;
+      case TOTEM_DOVE:
+        if (type == HEALTH)
+          skill += 2;
+        else if (type == DETECTION)
+          skill++;
+        break;
+      case TOTEM_GOOSE:
+        if (type == DETECTION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill++;
+        break;
+      case TOTEM_FOX:
+      case TOTEM_OTTER:
+        if (type == ILLUSION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill--;
+        break;
+      case TOTEM_GECKO:
+        if (type == GET_TOTEMSPIRIT(ch))
+          skill += 2;
+        else if (type == COMBAT)
+          skill--;
+        break;
+      case TOTEM_POLECAT:
+        if (type == COMBAT) {
+          skill++;
+          if (time_info.hours < 6 || time_info.hours > 19)     
+            skill++;
+        } else if (type == HEALTH)
+          skill--;
+        break;
+      case TOTEM_STAG:
+        if (type == HEALTH || type == ILLUSION)
+          skill += 2;
+        else if (type == MANIPULATION)
+          skill--;
+        break;
+      case TOTEM_MOON:
+        if (type == ILLUSION || type == MANIPULATION || type == DETECTION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill -= 1;
+        break;
+      case TOTEM_MOUNTAIN:
+        if (type == MANIPULATION)
+          skill += 2;
+        else if (type == ILLUSION)
+          skill -= 1;
+        break;
+      case TOTEM_OAK:
+        if (type == HEALTH)
+          skill += 2;
+        break;
+      case TOTEM_SEA:
+        if (type == HEALTH || type == MANIPULATION)
+          skill += 2;
+        break;
+      case TOTEM_STREAM:
+        if (type == HEALTH)
+          skill += 2;
+        else if (type == COMBAT)
+          skill -= 1;
+        break;
+      case TOTEM_SUN:
+        if (type == COMBAT || type == DETECTION || type == HEALTH)
+          skill += 2;
+        break;
+      case TOTEM_WIND:
+        if (type == DETECTION)
+          skill += 2;
+        break;
+      case TOTEM_ADVERSARY:
+        if (type == COMBAT || type == MANIPULATION)
+          skill += 2;
+        break;
+      case TOTEM_BACCHUS:
+        if (type == ILLUSION)
+          skill += 2;
+        break;
+      case TOTEM_CREATOR:
+        if (type == COMBAT)
+          skill -= 1;
+        break;
+      case TOTEM_DARKKING:
+        if (type == HEALTH)
+          skill += 2;
+        break;
+      case TOTEM_DRAGONSLAYER:
+        if (type == COMBAT)
+          skill += 3;
+        else if (type == ILLUSION || type == DETECTION)
+          skill -= 1;
+        break;
+      case TOTEM_FIREBRINGER:
+        if (type == MANIPULATION || type == DETECTION)
+          skill += 2;
+        else if (type == ILLUSION)
+          skill -= 1;
+        break;
+      case TOTEM_HORNEDMAN:
+        if (type == COMBAT)
+          skill += 2;
+        break;
+      case TOTEM_LOVER:
+        if (type == ILLUSION || type == MANIPULATION)
+          skill += 2;
+        break;
+      case TOTEM_SEAKING:
+        if (type == MANIPULATION)
+          skill += 2;
+        else if (type == COMBAT)
+          skill -= 1;
+        break;
+      case TOTEM_SEDUCTRESS:
+        if (type == ILLUSION || type == MANIPULATION)
+          skill += 2;
+        break;
+      case TOTEM_SIREN:
+        if (type == ILLUSION || type == MANIPULATION)
+          skill += 2;
+        break;
+      case TOTEM_SKYFATHER:
+        if (type == DETECTION || type == MANIPULATION)
+          skill += 2;
+        break;
+      case TOTEM_WILDHUNTSMAN:
+        if (type == ILLUSION || type == DETECTION)
+          skill += 2;
+        break;
+      case TOTEM_WISEWARRIOR:
+        if (type == COMBAT || type == DETECTION)
+          skill += 2;
+        else if (type == ILLUSION)
+          skill -= 1;
+        break;
     }
   } else if (action == CONJURING)
   {
@@ -399,6 +499,87 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
     case TOTEM_OTTER:
     case TOTEM_TURTLE:
       if (GET_TOTEMSPIRIT(ch) == type)
+        skill += 2;
+      break;
+    case TOTEM_MOON:
+      if (type == SPIRIT_RIVER || type == SPIRIT_SEA || type == SPIRIT_LAKE)
+        skill += 1;
+      break;
+    case TOTEM_MOUNTAIN:
+      if (type == SPIRIT_MOUNTAIN)
+        skill += 2;
+      break;
+    case TOTEM_OAK:
+      if (type == SPIRIT_FOREST || type == SPIRIT_HEARTH)
+        skill += 2;
+      break;
+    case TOTEM_SEA:
+      if (type == SPIRIT_SEA || type == SPIRIT_HEARTH)
+        skill += 2;
+      break;
+    case TOTEM_STREAM:
+      if (type == SPIRIT_RIVER)
+        skill += 2;
+      break;
+    case TOTEM_SUN:
+      if (type == SPIRIT_FOREST || type == SPIRIT_DESERT || type == SPIRIT_MOUNTAIN || type == SPIRIT_PRAIRIE ||
+	      type == SPIRIT_MIST || type == SPIRIT_STORM || type == SPIRIT_RIVER || type == SPIRIT_SEA ||
+          type == SPIRIT_WIND || type == SPIRIT_LAKE || type == SPIRIT_SWAMP || type == SPIRIT_CITY ||
+          type == SPIRIT_FIELD)
+        skill += 2;
+      if (time_info.hours < 6 || time_info.hours > 19)
+        skill -= 2;
+      break;
+    case TOTEM_WIND:
+      if (type == SPIRIT_MIST || type == SPIRIT_STORM || type == SPIRIT_WIND)
+        skill += 2;
+      break;
+    case TOTEM_BACCHUS:
+      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
+        skill += 2;
+      break;
+    case TOTEM_CREATOR:
+      if (type == SPIRIT_CITY)
+        skill += 2;
+      break;
+    case TOTEM_DARKKING:
+      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
+        skill += 2;
+      break;
+    case TOTEM_DRAGONSLAYER:
+      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
+        skill += 1;
+      break;
+    case TOTEM_GREATMOTHER:
+      if (type == SPIRIT_FIELD || type == SPIRIT_FOREST || type == SPIRIT_SEA || type == SPIRIT_LAKE ||
+          type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
+        skill += 2;
+      break;
+    case TOTEM_HORNEDMAN:
+      if (type == SPIRIT_DESERT || type == SPIRIT_FOREST || type == SPIRIT_MOUNTAIN || type == SPIRIT_PRAIRIE)
+      break;
+    case TOTEM_LOVER:
+      if (type == SPIRIT_SEA || type == SPIRIT_LAKE || type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
+        skill += 2;
+      break;
+    case TOTEM_SEAKING:
+      if (type == SPIRIT_SEA || type == SPIRIT_LAKE || type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
+        skill += 2;
+      break;
+    case TOTEM_SEDUCTRESS:
+      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
+        skill += 2;
+      break;
+    case TOTEM_SIREN:
+      if (type == SPIRIT_SEA || type == SPIRIT_LAKE || type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
+        skill += 2;
+      break;
+    case TOTEM_SKYFATHER:
+      if (type == SPIRIT_STORM)
+        skill += 2;
+      break;
+    case TOTEM_WILDHUNTSMAN:
+      if (type == SPIRIT_STORM)
         skill += 2;
       break;
     }

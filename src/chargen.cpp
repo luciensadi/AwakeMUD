@@ -32,19 +32,15 @@ void init_char_sql(struct char_data *ch);
 void init_create_vars(struct descriptor_data *d);
 
 /*********
-
 EXPECTED FLOW:
-
 - name
 - password
 - pronouns
 - archetype or custom?
-
 ARCHETYPE:
 - brief descs of archetypes, then archetype selection menu
 - help available through arch selection menu
 - once selected, put into abbreviated chargen (basics, then special info) with all skills/etc already set, and a bail-out-and-play exit
-
 CUSTOM:
 - standard AW chargen tree
 */
@@ -196,16 +192,19 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     snprintf(buf, sizeof(buf), "Attempting to attach %lu %lu %lu...", archetypes[i]->weapon_top, archetypes[i]->weapon_barrel, archetypes[i]->weapon_under);
     log(buf);
     struct obj_data *weapon = read_object(archetypes[i]->weapon, VIRTUAL);
-    
+
     ATTACH_IF_EXISTS(archetypes[i]->weapon_top, ACCESS_ACCESSORY_LOCATION_TOP);
     ATTACH_IF_EXISTS(archetypes[i]->weapon_barrel, ACCESS_ACCESSORY_LOCATION_BARREL);
     ATTACH_IF_EXISTS(archetypes[i]->weapon_under, ACCESS_ACCESSORY_LOCATION_UNDER);
     equip_char(CH, weapon, WEAR_WIELD);
-    
+
     // Fill pockets.
     if (archetypes[i]->ammo_q && GET_EQ(CH, WEAR_WIELD))
       update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(GET_EQ(CH, WEAR_WIELD)), AMMO_NORMAL, archetypes[i]->ammo_q);
   }
+  
+  // Fill pockets.
+  update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(GET_EQ(CH, WEAR_WIELD)), AMMO_NORMAL, archetypes[i]->ammo_q);
   
   // Grant modulator (unbonded, unworn).
   if (archetypes[i]->modulator > 0) {
@@ -216,6 +215,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       mudlog(buf, CH, LOG_SYSLOG, TRUE);
     }
   }
+    
   
   // Equip worn items.
   for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++)
@@ -240,24 +240,24 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
     }
-    
+  
   // Give cyberdeck with software installed.
   if (archetypes[i]->cyberdeck > 0) {
     if ((temp_obj = read_object(archetypes[i]->cyberdeck, VIRTUAL))) {
       obj_to_char(temp_obj, CH);
     } else {
-      snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberdeck %ld specified for archetype %s.", 
+      snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberdeck %ld specified for archetype %s.",
                archetypes[i]->cyberdeck, archetypes[i]->name);
       mudlog(buf, CH, LOG_SYSLOG, TRUE);
     }
-    
+
     for (int j = 0; j < NUM_ARCHETYPE_SOFTWARE; j++) {
       struct obj_data *program;
       if ((program = read_object(archetypes[i]->software[j], VIRTUAL))) {
         GET_OBJ_VAL(program, 4)++;
         obj_to_obj(program, temp_obj);
       } else {
-        snprintf(buf, sizeof(buf), "SYSERR: Invalid software %ld specified for archetype %s.", 
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid software %ld specified for archetype %s.",
                  archetypes[i]->software[j], archetypes[i]->name);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
@@ -1270,6 +1270,61 @@ void create_parse(struct descriptor_data *d, const char *arg)
             return;
           }
           GET_REAL_CHA(CH) = 4;
+          GET_ATT_POINTS(CH) -= 4 - i;
+        }
+        break;
+		      case TOTEM_SUN:
+        i = GET_REAL_CHA(CH);
+        if (i < 4) {
+          if (GET_ATT_POINTS(CH) < 4 - i) {
+            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
+            return;
+          }
+          GET_REAL_CHA(CH) = 4;
+          GET_ATT_POINTS(CH) -= 4 - i;
+        }
+        break;
+      case TOTEM_LOVER:
+        i = GET_REAL_CHA(CH);
+        if (i < 6) {
+          if (GET_ATT_POINTS(CH) < 6 - i) {
+            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
+            return;
+          }
+          GET_REAL_CHA(CH) = 6;
+          GET_ATT_POINTS(CH) -= 6 - i;
+        }
+        break;
+      case TOTEM_SEDUCTRESS:
+        i = GET_REAL_CHA(CH);
+        if (i < 6) {
+          if (GET_ATT_POINTS(CH) < 6 - i) {
+            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
+            return;
+          }
+          GET_REAL_CHA(CH) = 6;
+          GET_ATT_POINTS(CH) -= 6 - i;
+        }
+        break;
+      case TOTEM_SIREN:
+        i = GET_REAL_CHA(CH);
+        if (i < 6) {
+          if (GET_ATT_POINTS(CH) < 6 - i) {
+            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
+            return;
+          }
+          GET_REAL_CHA(CH) = 6;
+          GET_ATT_POINTS(CH) -= 6 - i;
+        }
+        break;
+		      case TOTEM_OAK:
+        i = GET_REAL_BOD(CH);
+        if (i < 4) {
+          if (GET_ATT_POINTS(CH) < 4 - i) {
+            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
+            return;
+          }
+          GET_REAL_BOD(CH) = 4;
           GET_ATT_POINTS(CH) -= 4 - i;
         }
         break;
