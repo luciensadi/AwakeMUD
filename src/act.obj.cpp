@@ -454,6 +454,11 @@ ACMD(do_put)
       return;
     }
     
+    if (obj == cont) {
+      send_to_char(ch, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
+      return;
+    }
+    
     // Restriction: You can't wombo-combo non-ammo into ammo.
     if (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO) {
       send_to_char(ch, "%s will only accept the contents of other ammo boxes, and %s doesn't qualify.\r\n",
