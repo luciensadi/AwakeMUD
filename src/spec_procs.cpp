@@ -4357,7 +4357,7 @@ SPECIAL(chargen_unpractice_skill)
   if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
     
-  if (CMD_IS("nw")) {
+  if (CMD_IS("nw") || CMD_IS("northwest")) {
     if (GET_TRADITION(ch) == TRAD_MUNDANE) {
       send_to_char("You don't have the ability to learn magic.\r\n", ch);
       return TRUE;
