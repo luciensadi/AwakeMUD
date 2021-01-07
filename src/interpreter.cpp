@@ -1317,9 +1317,15 @@ void nonsensical_reply(struct char_data *ch, const char *arg)
   }
   // There must be an arg, and it must not be a number.
   if (arg && *arg && isalpha(*arg)) {
+    // Write it to the in-game log.
     char log_buf[1000];
     snprintf(log_buf, sizeof(log_buf), "Invalid command: '%s'.", arg);
     mudlog(log_buf, ch, LOG_FUCKUPLOG, TRUE);
+    
+    // Check to see if it's a staff command. We don't care to log these to the fuckups table, as they're not fuckups we can learn from.
+    for (int i = 0; *cmd_info[i].command != '\n'; i++)
+      if (cmd_info[i].minimum_level >= LVL_BUILDER && !str_str(cmd_info[i].command, arg))
+        return;
     
     // Log it to DB.
     snprintf(buf, sizeof(buf), "INSERT INTO command_fuckups (Name, Count) VALUES ('%s', 1) ON DUPLICATE KEY UPDATE Count = Count + 1;", 
@@ -2921,6 +2927,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("opend", "open");
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("lisy", "list");
+  
+  // Combat stuff.
+  COMMAND_ALIAS("attack", "kill");
+  COMMAND_ALIAS("stab", "kill");
   COMMAND_ALIAS("unload", "eject");
   
   // Misc aliases.
