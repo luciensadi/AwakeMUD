@@ -1469,7 +1469,9 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
           break;
 
     // this was added so we can make the special respond to any text they type
-    if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
+    if (*cmd_info[cmd].command == '\n' 
+        && ((cmd = fix_common_command_fuckups(arg, cmd_info)) == -1
+            || ((cmd_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, cmd_info[cmd].minimum_level)))) {
       nonsensical_reply(ch, arg);
       return;
     } else {
@@ -2897,6 +2899,17 @@ void nanny(struct descriptor_data * d, char *arg)
 #define COMMAND_ALIAS(typo, corrected)   if (strncmp(arg, (typo), strlen(arg)) == 0) { return find_command_in_x((corrected), cmd_info); }
 
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
+  // Doubled up and otherwise misspelled movement for those impatient-ass people.
+  COMMAND_ALIAS("nn", "north");
+  COMMAND_ALIAS("ee", "east");
+  COMMAND_ALIAS("ss", "south");
+  COMMAND_ALIAS("ww", "west");
+  COMMAND_ALIAS("ws", "southwest");
+  COMMAND_ALIAS("wn", "northwest");
+  COMMAND_ALIAS("en", "northeast");
+  COMMAND_ALIAS("ws", "southwest");
+  COMMAND_ALIAS("norht", "north"); // this one happened 18 times
+  
   // Common typos and fuckups.
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
@@ -2909,21 +2922,6 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("lisy", "list");
   COMMAND_ALIAS("unload", "eject");
-  
-  // Commands from other games.
-  COMMAND_ALIAS("bamfin", "poofin");
-  COMMAND_ALIAS("bamfout", "poofout");
-  COMMAND_ALIAS("sacrifice", "junk");
-  
-  // Common staff goofs.
-  COMMAND_ALIAS("odelete", "idelete");
-  COMMAND_ALIAS("oload", "iload");
-  COMMAND_ALIAS("oedit", "iedit");
-  COMMAND_ALIAS("olist", "ilist");
-  COMMAND_ALIAS("ostat", "vstat");
-  COMMAND_ALIAS("mstat", "vstat");
-  COMMAND_ALIAS("qstat", "vstat");
-  COMMAND_ALIAS("sstat", "vstat");
   
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
@@ -2950,16 +2948,20 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("pick", "bypass");
   COMMAND_ALIAS("hack", "bypass");
   
-  // Doubled up and otherwise misspelled movement for those impatient-ass people.
-  COMMAND_ALIAS("nn", "n");
-  COMMAND_ALIAS("ee", "e");
-  COMMAND_ALIAS("ss", "s");
-  COMMAND_ALIAS("ww", "w");
-  COMMAND_ALIAS("ws", "sw");
-  COMMAND_ALIAS("wn", "nw");
-  COMMAND_ALIAS("en", "ne");
-  COMMAND_ALIAS("ws", "sw");
-  COMMAND_ALIAS("norht", "n"); // this one happened 18 times
+  // Commands from other games.
+  COMMAND_ALIAS("bamfin", "poofin");
+  COMMAND_ALIAS("bamfout", "poofout");
+  COMMAND_ALIAS("sacrifice", "junk");
+  
+  // Common staff goofs.
+  COMMAND_ALIAS("odelete", "idelete");
+  COMMAND_ALIAS("oload", "iload");
+  COMMAND_ALIAS("oedit", "iedit");
+  COMMAND_ALIAS("olist", "ilist");
+  COMMAND_ALIAS("ostat", "vstat");
+  COMMAND_ALIAS("mstat", "vstat");
+  COMMAND_ALIAS("qstat", "vstat");
+  COMMAND_ALIAS("sstat", "vstat");
   
   // Found nothing, return the failure code.
   return -1;
