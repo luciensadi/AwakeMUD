@@ -4356,16 +4356,8 @@ SPECIAL(chargen_unpractice_skill)
 {
   if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
-    
-  if (CMD_IS("nw") || CMD_IS("northwest")) {
-    if (GET_TRADITION(ch) == TRAD_MUNDANE) {
-      send_to_char("You don't have the ability to learn magic.\r\n", ch);
-      return TRUE;
-    }
-    return FALSE;
-  }
   
-  else if (CMD_IS("unpractice")) {
+  if (CMD_IS("unpractice")) {
     skip_spaces(&argument);
     
     if (!*argument) {
@@ -4411,6 +4403,14 @@ SPECIAL(chargen_skill_annex)
 {
   if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
+    
+  if (CMD_IS("nw") || CMD_IS("northwest")) {
+    if (GET_TRADITION(ch) == TRAD_MUNDANE) {
+      send_to_char("You don't have the ability to learn magic.\r\n", ch);
+      return TRUE;
+    }
+    return FALSE;
+  }
   
   if ((CMD_IS("s") || CMD_IS("south")) && GET_SKILL_POINTS(ch) > 0) {
     send_to_char(ch, "You still have %d skill point%s to spend! You should finish ^WPRACTICE^n-ing your skills before you proceed.\r\n",
