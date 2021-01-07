@@ -1322,8 +1322,8 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     break;
   }
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " PC '%s'  IDNum: [%5ld], In room [%5ld]\r\n",
-          GET_CHAR_NAME(k), GET_IDNUM(k), k->in_room ? k->in_room->number : 0);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " PC '%s'  IDNum: [^c%5ld^n], In room [^c%5ld^n], WasIn [^c%5ld^n]\r\n",
+          GET_CHAR_NAME(k), GET_IDNUM(k), k->in_room ? k->in_room->number : 0, k->was_in_room ? k->was_in_room->number : 0);
   
   if (GET_PGROUP_MEMBER_DATA(k)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Rank ^c%d/%d^n member of group '^c%s^n' (^c%s^n), with privileges:\r\n  ^c%s^n\r\n",
@@ -1374,11 +1374,11 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
           buf1, buf2, k->player.time.played / 3600,
           ((k->player.time.played / 3600) % 60));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Last room: [%ld], Start room: [%ld], Speaking: [%s]\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Last room: [^y%ld^n], Start room: [^y%ld^n], Speaking: [%s]\r\n",
           k->player.last_room, GET_LOADROOM(k), skills[GET_LANGUAGE(k)].name);
 
   if (GET_QUEST(k))
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Quest: [%ld]\r\n", quest_table[GET_QUEST(k)].vnum);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Quest: [^G%ld^n]\r\n", quest_table[GET_QUEST(k)].vnum);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bod: [^c%d^n]  Qui: [^c%d^n]  Str: [^c%d^n]  Cha: [^c%d^n] Int: [^c%d^n]"
           "  Wil: [^c%d^n]  Mag: [^c%d^n]\r\nRea: [^c%d^n]  Ess: [^c%0.2f^n] Ast[^c%d^n]  Com[^c%d^n]  Mag[^c%d/%d/%d^n]  Hak[^c%d^n] Dod/Bod/Off[^c%d/%d/%d^n]\r\n",
@@ -1397,16 +1397,16 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
           (int)(GET_MENTAL(k) / 100), (int)(GET_MAX_MENTAL(k) / 100),
           ((float)GET_INDEX(k) / 100), (((float)GET_ESS(k) / 100) + 3));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Nuyen: [%9ld], Bank: [%9ld] (Total: %ld), Karma: [%0.2f]\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Nuyen: [^c%9ld^n], Bank: [^c%9ld^n] (Total: ^C%ld^n), Karma: [^c%0.2f^n]\r\n",
           GET_NUYEN(k), GET_BANK(k), GET_NUYEN(k) + GET_BANK(k),
           ((float)GET_KARMA(k) / 100));
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Armor: %d (%d) / %d (%d), I-Dice: %d, I-Roll: %d, Sus: %d, Foci: %d, TargMod: %d, Reach: %d\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Armor: ^W%d (%d) / %d (%d)^n, I-Dice: ^W%d^n, I-Roll: ^W%d^n, Sus: ^W%d^n, Foci: ^W%d^n, TargMod: ^W%d^n, Reach: ^W%d^n\r\n",
           GET_BALLISTIC(k), GET_TOTALBAL(k), GET_IMPACT(k), GET_TOTALIMP(k), GET_INIT_DICE(k), GET_INIT_ROLL(k),
           GET_SUSTAINED_NUM(k), GET_FOCI(k), GET_TARGET_MOD(k), GET_REACH(k));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Vision: %s Natural Vision: %s\r\n",
-          CURRENT_VISION(k) == NORMAL ? "Normal" : CURRENT_VISION(k) == THERMOGRAPHIC ? "Thermo" : "Low-Light",
-          NATURAL_VISION(k) == NORMAL ? "Normal" : NATURAL_VISION(k) == THERMOGRAPHIC ? "Thermo" : "Low-Light");
+          CURRENT_VISION(k) == NORMAL ? "^WNormal^n" : CURRENT_VISION(k) == THERMOGRAPHIC ? "^rThermo^n" : "^yLow-Light^n",
+          NATURAL_VISION(k) == NORMAL ? "^WNormal^n" : NATURAL_VISION(k) == THERMOGRAPHIC ? "^rThermo^n" : "^yLow-Light^n");
   sprinttype(GET_POS(k), position_types, buf2, sizeof(buf2));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Zone: %d, Pos: %s, Fighting: %s",
           k->player_specials->saved.zonenum, buf2,
