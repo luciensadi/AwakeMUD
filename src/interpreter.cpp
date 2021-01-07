@@ -2917,6 +2917,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("norht", "north"); // this one happened 18 times
   
   // Common typos and fuckups.
+  COMMAND_ALIAS("receieve", "receive");
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
   COMMAND_ALIAS("weild", "wield");
@@ -2927,6 +2928,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("opend", "open");
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("lisy", "list");
+  COMMAND_ALIAS("swith", "switch");
+  COMMAND_ALIAS("drie", "drive");
+  COMMAND_ALIAS("but", "put");
   
   // Combat stuff.
   COMMAND_ALIAS("attack", "kill");
@@ -2939,6 +2943,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("yes", "nod");
   COMMAND_ALIAS("setup", "unpack");
   COMMAND_ALIAS("ability", "abilities");
+  COMMAND_ALIAS("guest", "house");
+  COMMAND_ALIAS("unready", "ready");
+  COMMAND_ALIAS("strap", "holster"); // Not sure about this one.
   
   // Job interaction commands.
   COMMAND_ALIAS("endjob", "endrun");
@@ -2948,6 +2955,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("olok", "look");
   COMMAND_ALIAS("lok", "look");
   COMMAND_ALIAS("loko", "look");
+  COMMAND_ALIAS("loook", "look");
   
   // equipment seems to give people a lot of trouble
   COMMAND_ALIAS("unwield", "remove");

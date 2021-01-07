@@ -1089,6 +1089,7 @@ const char *log_types[] =
     "PGROUPLOG",
     "HELPLOG",
     "PURGELOG",
+    "FUCKUPLOG",
     "\n"
   };
 
