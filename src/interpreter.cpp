@@ -2019,23 +2019,25 @@ int special(struct char_data * ch, int cmd, char *arg)
         return 1;
 
   /* special in object present? */
-  FOR_ITEMS_AROUND_CH(ch, i)
-    if (GET_OBJ_SPEC(i) != NULL && !(ch->in_veh && ch->vfront != i->vfront))
-      if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
-        return 1;
-  /* special in mobile present? */
-  if (!veh)
-  {
-    struct char_data *k;
-    for (k = ch->in_room->people; k; k = k->next_in_room) {
-      if (GET_MOB_SPEC(k) != NULL)
-        if (GET_MOB_SPEC(k) (ch, k, cmd, arg))
+  if (ch->in_room || ch->in_veh) {
+    FOR_ITEMS_AROUND_CH(ch, i)
+      if (GET_OBJ_SPEC(i) != NULL && !(ch->in_veh && ch->vfront != i->vfront))
+        if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
           return 1;
-      if (mob_index[GET_MOB_RNUM(k)].sfunc != NULL)
-        if ((mob_index[GET_MOB_RNUM(k)].sfunc) (ch, k, cmd, arg))
-          return 1;
+    /* special in mobile present? */
+    if (!veh)
+    {
+      struct char_data *k;
+      for (k = ch->in_room->people; k; k = k->next_in_room) {
+        if (GET_MOB_SPEC(k) != NULL)
+          if (GET_MOB_SPEC(k) (ch, k, cmd, arg))
+            return 1;
+        if (mob_index[GET_MOB_RNUM(k)].sfunc != NULL)
+          if ((mob_index[GET_MOB_RNUM(k)].sfunc) (ch, k, cmd, arg))
+            return 1;
+      }
     }
-  }
+}
   return 0;
 }
 
