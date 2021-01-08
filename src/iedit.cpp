@@ -2822,6 +2822,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
  Modify this code for new obj formats
  */
 
+#define WRITE_IF_CHANGED(string, thing, default) if ((thing) != (default)) { fprintf(fp, (string), (thing)); }
+#define WRITE_IF_CHANGED_STR(string, thing, default) if (str_cmp((thing), (default))) { fprintf(fp, (string), (thing)); }
 void write_objs_to_disk(int zone)
 {
   int counter, counter2, realcounter, count = 0;
@@ -2863,31 +2865,23 @@ void write_objs_to_disk(int zone)
               obj->text.look_desc? cleanup(buf2, obj->text.look_desc)
               : "You see an uncreative object.\n");
       
-      fprintf(fp,
-              "Type:\t%s\n"
-              "WearFlags:\t%s\n"
-              "ExtraFlags:\t%s\n"
-              "AffFlags:\t%s\n"
-              "Material:\t%s\n",
-              item_types[(int)GET_OBJ_TYPE(obj)],
-              GET_OBJ_WEAR(obj).ToString(),
-              GET_OBJ_EXTRA(obj).ToString(),
-              obj->obj_flags.bitvector.ToString(),
-              material_names[(int)GET_OBJ_MATERIAL(obj)]);
+      fprintf(fp, "Type:\t%s\n", item_types[(int)GET_OBJ_TYPE(obj)]);
+              
+      WRITE_IF_CHANGED_STR("WearFlags:\t%s\n", GET_OBJ_WEAR(obj).ToString(), "0");
+      WRITE_IF_CHANGED_STR("ExtraFlags:\t%s\n", GET_OBJ_EXTRA(obj).ToString(), "0");
+      WRITE_IF_CHANGED_STR("AffFlags:\t%s\n", obj->obj_flags.bitvector.ToString(), "0");
+      WRITE_IF_CHANGED_STR("Material:\t%s\n", material_names[(int)GET_OBJ_MATERIAL(obj)], material_names[5]);
       
-      fprintf(fp,
-              "[POINTS]\n"
-              "\tWeight:\t%.2f\n"
-              "\tBarrier:\t%d\n"
-              "\tCost:\t%d\n"
-              "\tAvailTN:\t%d\n"
-              "\tAvailDay:\t%.2f\n"
-              "\tLegalNum:\t%d\n"
-              "\tLegalCode:\t%d\n"
-              "\tLegalPermit:\t%d\n"
-              "\tStreetIndex:\t%.2f\n",
-              GET_OBJ_WEIGHT(obj), GET_OBJ_BARRIER(obj), GET_OBJ_COST(obj), GET_OBJ_AVAILTN(obj), GET_OBJ_AVAILDAY(obj), 
-              GET_LEGAL_NUM(obj), GET_LEGAL_CODE(obj), GET_LEGAL_PERMIT(obj), GET_OBJ_STREET_INDEX(obj));
+      fprintf(fp, "[POINTS]\n");
+      WRITE_IF_CHANGED("\tWeight:\t%.2f\n", GET_OBJ_WEIGHT(obj), 0.0);
+      WRITE_IF_CHANGED("\tBarrier:\t%d\n", GET_OBJ_BARRIER(obj), 3);
+      WRITE_IF_CHANGED("\tCost:\t%d\n", GET_OBJ_COST(obj), 0);
+      WRITE_IF_CHANGED("\tAvailTN:\t%d\n", GET_OBJ_AVAILTN(obj), 0);  
+      WRITE_IF_CHANGED("\tAvailDay:\t%.2f\n", GET_OBJ_AVAILDAY(obj), 0);
+      WRITE_IF_CHANGED("\tLegalNum:\t%d\n", GET_LEGAL_NUM(obj), 0);
+      WRITE_IF_CHANGED("\tLegalCode:\t%d\n", GET_LEGAL_CODE(obj), 0);
+      WRITE_IF_CHANGED("\tLegalPermit:\t%d\n", GET_LEGAL_PERMIT(obj), 0);
+      WRITE_IF_CHANGED("\tStreetIndex:\t%.2f\n", GET_OBJ_STREET_INDEX(obj), 0.0);
       
       if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
         fprintf(fp, "\tInnateRecoilComp:\t%d\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));

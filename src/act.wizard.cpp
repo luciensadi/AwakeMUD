@@ -89,6 +89,7 @@ extern int num_elevators;
 
 extern int write_quests_to_disk(int zone);
 extern void write_world_to_disk(int vnum);
+extern void write_objs_to_disk(int zone);
 extern void alarm_handler(int signal);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern const char *render_door_type_string(struct room_direction_data *door);
@@ -5744,15 +5745,19 @@ ACMD(do_rewrite_world) {
   
   write_to_descriptor(ch->desc->descriptor, "Clearing alarm handler and rewriting all world files. This will take some time.\r\n");
   
-  mudlog("World rewriting initiated. Please hold...", ch, LOG_SYSLOG, TRUE);
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next)
+    write_to_descriptor(d->descriptor, "World rewriting initiated. Please hold...\r\n");
   
   // Clear our alarm handler.
   signal(SIGALRM, SIG_IGN);
   
   // Perform writing for all zones that have rooms.
   for (int i = 0; i <= top_of_zone_table; i++) {
+    snprintf(buf, sizeof(buf), "Writing zone %d...\r\n", zone_table[i].number);
+    write_to_descriptor(ch->desc->descriptor, buf);
     write_world_to_disk(zone_table[i].number);
     write_quests_to_disk(zone_table[i].number);
+    write_objs_to_disk(zone_table[i].number);
   }
   
   // Re-register our alarm handler.
