@@ -630,6 +630,8 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     if (buynum > max_things_you_can_purchase_at_once) {
       snprintf(buf, sizeof(buf), "%s I can't get that many in at once. Limit is %d.", GET_CHAR_NAME(ch), max_things_you_can_purchase_at_once);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      extract_obj(obj);
+      return;
     }
     
     // Calculate TNs, factoring in settings, powers, and racism.
