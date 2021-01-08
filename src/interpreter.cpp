@@ -1163,7 +1163,7 @@ struct command_info mtx_info[] =
     { "asist", 0, do_asist, 0, 0},
     { "bug", 0, do_gen_write, 0, SCMD_BUG},
     { "call", 0, do_comcall, 0, 0},
-    { "control", 0, do_control, 0, 0},
+  //{ "control", 0, do_control, 0, 0},     // This is a rigging command?
     { "commands", 0, do_commands, 0, SCMD_COMMANDS},
     { "crash", 0, do_crash, 0, 0},
     { "decrypt", 0, do_decrypt, 0, 0},

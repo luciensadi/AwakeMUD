@@ -1753,6 +1753,7 @@ void parse_object(File &fl, long nr)
           GET_OBJ_AVAILTN(obj) = 16;
           GET_OBJ_AVAILDAY(obj) = 30;
         }
+        GET_OBJ_WEIGHT(obj) = 0.02;
         break;
       case ITEM_SPELL_FORMULA:
         GET_OBJ_AVAILTN(obj) = GET_OBJ_VAL(obj, 0);

@@ -917,7 +917,7 @@ void game_loop(int mother_desc)
     }
     
     // Every 30 IRL seconds
-    if (!(pulse % (30 * PASSES_PER_SEC))) {
+    if (!(pulse % (SECONDS_BETWEEN_CONGREGATION_POOL_GAINS * PASSES_PER_SEC))) {
       increase_congregation_bonus_pools();
     }
     
