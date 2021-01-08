@@ -174,8 +174,8 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
       helpedit_disp_menu(d);
       break;
     case 'q': // Save the edit.
-      if (!HELPFILE->title || !*(HELPFILE->title) || !HELPFILE->body || !*(HELPFILE->body)) {
-        send_to_char("You must provide both a body and title for the helpfile to save. Otherwise, use the X option to discard your work.\r\n", CH);
+      if (!HELPFILE->body || !*(HELPFILE->body)) {
+        send_to_char("You must provide a body for the helpfile to save. Otherwise, use the X option to discard your work.\r\n", CH);
         return;
       }
       
