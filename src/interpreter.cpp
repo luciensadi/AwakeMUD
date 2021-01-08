@@ -438,7 +438,7 @@ struct command_info cmd_info[] =
     // Allows running an unattended test port where anyone can bump themselves up to level 9.
     { "advance"  , POS_DEAD    , do_self_advance, 0, 0 },
 #else
-    { "advance"  , POS_DEAD    , do_advance  , LVL_PRESIDENT, 0 },
+    { "advance"  , POS_DEAD    , do_advance  , LVL_VICEPRES, 0 },
 #endif
     { "alias"    , POS_DEAD    , do_alias    , 0, 0 },
     { "answer"   , POS_LYING   , do_phone    , 0, SCMD_ANSWER },
