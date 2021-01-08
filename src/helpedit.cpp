@@ -174,6 +174,11 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
       helpedit_disp_menu(d);
       break;
     case 'q': // Save the edit.
+      if (!HELPFILE->title || !*(HELPFILE->title) || !HELPFILE->body || !*(HELPFILE->body)) {
+        send_to_char("You must provide both a body and title for the helpfile to save. Otherwise, use the X option to discard your work.\r\n", CH);
+        return;
+      }
+      
       char query_buf[MAX_STRING_LENGTH];
       if (HELPFILE->title && HELPFILE->original_title && strcmp(HELPFILE->title, HELPFILE->original_title) != 0) {
         // Updated existing and changed name.
@@ -273,7 +278,7 @@ void helpedit_parse(struct descriptor_data *d, const char *arg) {
 }
 
 const char *generate_sql_for_helpfile(const char *name, const char *body) {
-  if (name == NULL) {
+  if (name == NULL || body == NULL) {
     mudlog("SYSERR: NULL name or body pointer passed to generate_sql_for_helpfile!", NULL, LOG_SYSLOG, TRUE);
     return "";
   }
