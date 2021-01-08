@@ -2877,7 +2877,7 @@ void write_objs_to_disk(int zone)
       WRITE_IF_CHANGED_STR("Material:\t%s\n", material_names[(int)GET_OBJ_MATERIAL(obj)], material_names[5]);
       
       fprintf(fp, "[POINTS]\n");
-      WRITE_IF_CHANGED("\tWeight:\t%.2f\n", GET_OBJ_WEIGHT(obj), 0.0);
+      WRITE_IF_CHANGED("\tWeight:\t%.2f\n", GET_OBJ_WEIGHT(obj), 0);
       WRITE_IF_CHANGED("\tBarrier:\t%d\n", GET_OBJ_BARRIER(obj), 3);
       WRITE_IF_CHANGED("\tCost:\t%d\n", GET_OBJ_COST(obj), 0);
       WRITE_IF_CHANGED("\tAvailTN:\t%d\n", GET_OBJ_AVAILTN(obj), 0);  
