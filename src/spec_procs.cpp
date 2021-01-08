@@ -153,7 +153,7 @@ int ability_cost(int abil, int level)
   case ADEPT_PAIN_RESISTANCE:
   case ADEPT_IMPROVED_PERCEPT:
   case ADEPT_HEALING:
-  case ADEPT_MYSTIC_ARMOUR:
+  case ADEPT_MYSTIC_ARMOR:
   case ADEPT_BLIND_FIGHTING:
   case ADEPT_IRONWILL:
   case ADEPT_IMPROVED_BOD:

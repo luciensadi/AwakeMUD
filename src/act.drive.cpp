@@ -533,8 +533,8 @@ ACMD(do_upgrade)
       case TYPE_DRIVEBYWIRE:
         target = 10 - veh->handling;
         break;
-      case TYPE_ARMOUR:
-      case TYPE_CONCEALEDARMOUR:
+      case TYPE_ARMOR:
+      case TYPE_CONCEALEDARMOR:
         target = (int)((GET_OBJ_VAL(mod, 2) + (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) ? GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 2) : 0))/ 3);
         break;
       case TYPE_ROLLBARS:
@@ -655,28 +655,28 @@ ACMD(do_upgrade)
       send_to_char("You can't use that part on this type of engine.\r\n", ch);
       return;
     }
-    if ((GET_OBJ_VAL(mod, 0) != TYPE_SEATS && GET_OBJ_VAL(mod, 0) != TYPE_ARMOUR && GET_OBJ_VAL(mod, 0) != TYPE_CONCEALEDARMOUR) && GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
+    if ((GET_OBJ_VAL(mod, 0) != TYPE_SEATS && GET_OBJ_VAL(mod, 0) != TYPE_ARMOR && GET_OBJ_VAL(mod, 0) != TYPE_CONCEALEDARMOR) && GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
       send_to_char(ch, "There is already a mod of that type installed.\r\n");
       return;
     }
-    if (GET_OBJ_VAL(mod, 0) == TYPE_ARMOUR || GET_OBJ_VAL(mod, 0) == TYPE_CONCEALEDARMOUR) {
+    if (GET_OBJ_VAL(mod, 0) == TYPE_ARMOR || GET_OBJ_VAL(mod, 0) == TYPE_CONCEALEDARMOR) {
       if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) && GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 0) != GET_OBJ_VAL(mod, 0)) {
-        send_to_char("You cannot mix normal and concealed armour.\r\n", ch);
+        send_to_char("You cannot mix normal and concealed armor.\r\n", ch);
         return;
       }
-      int totalarmour = GET_OBJ_VAL(mod, 2);
+      int totalarmor = GET_OBJ_VAL(mod, 2);
       if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
-        totalarmour += GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 2);
-      if (totalarmour > veh->body / 2) {
-        send_to_char("You can't put this much armour on that vehicle.\r\n", ch);
+        totalarmor += GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 2);
+      if (totalarmor > veh->body / 2) {
+        send_to_char("You can't put this much armor on that vehicle.\r\n", ch);
         return;
       }      
       if (!GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
         GET_MOD(veh, GET_OBJ_VAL(mod, 6)) = mod;      
       else  affect_veh(veh, mod->affected[0].location, -mod->affected[0].modifier);
       veh->usedload += GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1);
-      GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1) = (veh->body * veh->body) * totalarmour * 5;
-      mod->affected[0].modifier = totalarmour;
+      GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1) = (veh->body * veh->body) * totalarmor * 5;
+      mod->affected[0].modifier = totalarmor;
       affect_veh(veh, mod->affected[0].location, mod->affected[0].modifier);
       if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) != mod)
         extract_obj(mod);
@@ -721,7 +721,7 @@ void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
   for (int x = 0; x < NUM_MODS; x++) {
     if (!GET_MOD(veh, x))
       continue;
-    if ((x >= MOD_WHEELS && x <= MOD_ARMOUR) || x == MOD_EXHAUST) 
+    if ((x >= MOD_WHEELS && x <= MOD_ARMOR) || x == MOD_EXHAUST) 
       send_to_char(ch, "  %s\r\n", GET_OBJ_NAME(GET_MOD(veh, x)));
     else switch (x) {
       case MOD_INTAKE_FRONT:

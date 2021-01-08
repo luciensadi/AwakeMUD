@@ -972,7 +972,7 @@ void iedit_disp_val9_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WORN:
-      send_to_char("Armoured clothing set (0 for no set): ", CH);
+      send_to_char("Armored clothing set (0 for no set): ", CH);
       break;
     case ITEM_WEAPON:
       if (access_level(CH, LVL_ADMIN)) {
@@ -1236,7 +1236,7 @@ void iedit_disp_legality_menu(struct descriptor_data *d) {
                  "8) Heavy Weapon                             (H)\r\n"
                  "9) Explosive                                (J)\r\n"
                  "10) Military Weapon                         (K)\r\n"
-                 "11) Military Armour                         (L)\r\n"
+                 "11) Military Armor                          (L)\r\n"
                  "12) Military Ammunition                     (M)\r\n"
                  "13) Class A (Paralegal) Cyberware           (N)\r\n"
                  "14) Class B (Security Grade) Cyberware      (Q)\r\n"

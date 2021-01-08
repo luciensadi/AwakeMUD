@@ -1196,13 +1196,13 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     if (num < 1)
       strcat(buf, " a piece of clothing");
     else if (num < 4)
-      strcat(buf, " a lightly armoured piece of clothing");
+      strcat(buf, " a lightly armored piece of clothing");
     else if (num < 7)
-      strcat(buf, " a piece of light armour");
+      strcat(buf, " a piece of light armor");
     else if (num < 10)
-      strcat(buf, " a moderately rated piece of armour");
+      strcat(buf, " a moderately rated piece of armor");
     else
-      strcat(buf, " a piece of heavy armour");
+      strcat(buf, " a piece of heavy armor");
     if (GET_OBJ_VAL(obj, 1) > 5)
       strcat(buf, " designed for carrying ammunition");
     else if (GET_OBJ_VAL(obj, 4) > 3 && GET_OBJ_VAL(obj, 4) < 6)

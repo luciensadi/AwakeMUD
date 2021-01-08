@@ -268,7 +268,7 @@ ACMD(do_design)
   case SOFT_CLOAK:
   case SOFT_LOCKON:
   case SOFT_MEDIC:
-  case SOFT_ARMOUR:
+  case SOFT_ARMOR:
     skill = get_skill(ch, SKILL_PROGRAM_DEFENSIVE, target);
     break;
   case SOFT_BATTLETEC:

@@ -381,7 +381,7 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       else
         AFF_FLAGS(ch).RemoveBit(AFF_RESISTPAIN);
       break;
-    case SPELL_ARMOUR:
+    case SPELL_ARMOR:
       mod *= sust->force;
       GET_IMPACT(ch) += mod;
       GET_BALLISTIC(ch) += mod;
@@ -855,7 +855,7 @@ void affect_total(struct char_data * ch)
   if (GET_COMBAT(ch) < 0)
     GET_COMBAT(ch) = 0;
   if (GET_TRADITION(ch) == TRAD_ADEPT)
-    GET_IMPACT(ch) += GET_POWER(ch, ADEPT_MYSTIC_ARMOUR);
+    GET_IMPACT(ch) += GET_POWER(ch, ADEPT_MYSTIC_ARMOR);
   for (i = 0; i < (NUM_WEARS -1); i++)
     if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO)
     {

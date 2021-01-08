@@ -649,7 +649,7 @@ enum {
 #define SPELL_BALLLIGHTNING  48
 #define SPELL_CLOUT    49
 #define SPELL_POLTERGEIST  50
-#define SPELL_ARMOUR    51
+#define SPELL_ARMOR    51
 #define SPELL_PHYSICALBARRIER  52
 #define SPELL_ASTRALBARRIER  53
 #define SPELL_ICESHEET    54
@@ -863,7 +863,7 @@ enum {
 #define SKILL_BR_RIFLE            103
 #define SKILL_BR_HEAVYWEAPON      104
 #define SKILL_BR_SMG              105
-#define SKILL_BR_ARMOUR           106
+#define SKILL_BR_ARMOR           106
 #define SKILL_OFFHAND_EDGED       107
 #define SKILL_OFFHAND_CLUB        108
 #define SKILL_OFFHAND_CYBERIMPLANTS 109
@@ -932,7 +932,7 @@ enum {
 #define ADEPT_TRUE_SIGHT  24
 #define ADEPT_MISSILE_PARRY  25
 #define ADEPT_MISSILE_MASTERY  26
-#define ADEPT_MYSTIC_ARMOUR  27
+#define ADEPT_MYSTIC_ARMOR  27
 #define ADEPT_HEALING    28
 #define ADEPT_FREEFALL    29
 #define ADEPT_IRONWILL    30
@@ -1384,7 +1384,7 @@ enum {
 #define SOFT_BROWSE    17
 #define SOFT_READ    18
 #define SOFT_TRACK    19
-#define SOFT_ARMOUR    20
+#define SOFT_ARMOR    20
 #define SOFT_CAMO    21
 #define SOFT_CRASH    22
 #define SOFT_DEFUSE    23
@@ -1593,7 +1593,7 @@ enum {
 #define MOD_BODY_SPOILER  17
 #define MOD_BODY_WINDSCREEN  18
 #define MOD_BODY_WINDOWS  19
-#define MOD_ARMOUR    20
+#define MOD_ARMOR    20
 #define MOD_SEAT    21
 #define MOD_COMPUTER1    22
 #define MOD_COMPUTER2    23
@@ -1612,8 +1612,8 @@ enum {
 #define TYPE_IMPSUSP    7
 #define TYPE_MOTORBIKEGYRO  8
 #define TYPE_OFFROADSUS    9
-#define TYPE_ARMOUR    10
-#define TYPE_CONCEALEDARMOUR  11
+#define TYPE_ARMOR    10
+#define TYPE_CONCEALEDARMOR  11
 #define TYPE_CRASHCAGE    12
 #define TYPE_ROLLBARS    13
 #define TYPE_THERMALMASK  14
@@ -1989,7 +1989,7 @@ enum {
 #define HOST_CONTOLLER  5
 
 /* IC Options */
-#define IC_ARMOUR        1
+#define IC_ARMOR        1
 #define IC_CASCADE      2
 #define IC_EX_DEFENSE    3
 #define IC_EX_OFFENSE    4
@@ -2177,7 +2177,7 @@ enum {
 #define OBJ_TRANSYS_RIFFLE                 1140
 #define OBJ_RENRAKU_BYPASS                 6109
 #define OBJ_FOXFIRE_KITSUNE                1966
-#define OBJ_TRANSYS_ARMOUR                 1139
+#define OBJ_TRANSYS_ARMOR                 1139
 #define OBJ_MATRIX_SWORD                   387
 
 #define OBJ_CYB_CERAMIC_BONE_LACING        85066

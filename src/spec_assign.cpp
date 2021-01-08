@@ -51,7 +51,7 @@ struct teach_data teachers[] = {
                          SKILL_BR_PROJECTILES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do "
                          "your job safer.\r\n", AMATEUR },
                        { 1002, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, 
-                         SKILL_BR_ARMOUR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
+                         SKILL_BR_ARMOR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
                          "safer.\r\n", AMATEUR }, 
                        { 1003, { SKILL_SINGING, SKILL_CHANTING, SKILL_DANCING, SKILL_INSTRUMENT, SKILL_ACTING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", AMATEUR },
@@ -241,7 +241,7 @@ struct adept_data adepts[] = {
 struct spell_trainer spelltrainers[] = {
   /*
 //  { 60508, SPELL_DETECTLIFE, "Detect Life", 0, 6},
-  { 60508, SPELL_ARMOUR, "Armour", 0, 6},
+  { 60508, SPELL_ARMOR, "Armor", 0, 6},
   { 60508, SPELL_COMBATSENSE, "Combat Sense", 0, 6},
   { 60508, SPELL_HEAL, "Heal", 0, 6},
   { 60508, SPELL_INCATTR, "Increase Strength", STR, 6},
@@ -255,7 +255,7 @@ struct spell_trainer spelltrainers[] = {
   { 60508, SPELL_TREAT, "Treat", 0, 6},
   
 //{ 60509, SPELL_DETECTLIFE, "Detect Life", 0, 6},
-  { 60509, SPELL_ARMOUR, "Armour", 0, 6},
+  { 60509, SPELL_ARMOR, "Armor", 0, 6},
   { 60509, SPELL_COMBATSENSE, "Combat Sense", 0, 6},
   { 60509, SPELL_HEAL, "Heal", 0, 6},
   { 60509, SPELL_INCATTR, "Increase Strength", ATT_STR, 6},
@@ -324,7 +324,7 @@ struct spell_trainer spelltrainers[] = {
 //{60604, SPELL_PHYSICALBARRIER, "Physical Barrier", 0, 6},
 //{60604, SPELL_ASTRALBARRIER, "Astral Barrier", 0, 6},
   {60604, SPELL_ACIDSTREAM, "Acid Stream", 0, 6},
-  {60604, SPELL_ARMOUR, "Armour", 0, 6},
+  {60604, SPELL_ARMOR, "Armor", 0, 6},
   {60604, SPELL_CLOUT, "Clout", 0, 6},
   {60604, SPELL_FLAMETHROWER, "Flamethrower", 0, 6},
   {60604, SPELL_ICESHEET, "Icesheet", 0, 6},
@@ -396,7 +396,7 @@ struct spell_trainer spelltrainers[] = {
                             {10013, SPELL_BALLLIGHTNING, "Ball Lightning", 0, 50},
                             {10013, SPELL_CLOUT, "Clout", 0, 50},
                             {10013, SPELL_POLTERGEIST, "Poltergeist", 0, 50},
-                            {10013, SPELL_ARMOUR, "Armour", 0, 50},
+                            {10013, SPELL_ARMOR, "Armor", 0, 50},
                             {10013, SPELL_PHYSICALBARRIER, "Physical Barrier", 0, 50},
                             {10013, SPELL_ASTRALBARRIER, "Astral Barrier", 0, 50},
                             {10013, SPELL_ICESHEET, "Icesheet", 0, 50},

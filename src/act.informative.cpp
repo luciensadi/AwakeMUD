@@ -4850,7 +4850,7 @@ ACMD(do_status)
   if (GET_TOTALIMP(targ) > GET_QUI(targ))
     total += GET_TOTALIMP(targ) - GET_QUI(targ);
   if (total > 0) {
-    send_to_char("  Bulky Armour (", ch);
+    send_to_char("  Bulky Armor (", ch);
     if (total >= GET_QUI(targ))
       send_to_char("Insane)\r\n", ch);
     else if (total >= GET_QUI(targ) * 3/4)

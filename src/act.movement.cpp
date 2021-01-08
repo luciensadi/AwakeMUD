@@ -853,7 +853,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   if (GET_TOTALIMP(ch) > GET_QUI(ch))
     total += GET_TOTALIMP(ch) - GET_QUI(ch);
   if (total >= GET_QUI(ch)) {
-    send_to_char("You are wearing too much armour to move!\r\n", ch);
+    send_to_char("You are wearing too much armor to move!\r\n", ch);
     return 0;
   }
   if (AFF_FLAGGED(ch, AFF_BINDING)) {

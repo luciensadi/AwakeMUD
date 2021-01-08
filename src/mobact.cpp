@@ -879,8 +879,8 @@ bool mobact_process_self_buff(struct char_data *ch) {
   // Buff self, but only act one out of every 16 ticks (on average).
   if (number(0, 15) == 0) {
     // Apply armor to self.
-    if (!affected_by_spell(ch, SPELL_ARMOUR)) {
-      cast_manipulation_spell(ch, SPELL_ARMOUR, number(1, GET_MAG(ch)/100), NULL, ch);
+    if (!affected_by_spell(ch, SPELL_ARMOR)) {
+      cast_manipulation_spell(ch, SPELL_ARMOR, number(1, GET_MAG(ch)/100), NULL, ch);
       return TRUE;
     }
     

@@ -3057,7 +3057,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     } else if (damage == 0) {
       switch (number(1, 2)) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but your armour holds.^n", vehicle_message, buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n fires a %s^r at you but your armor holds.^n", vehicle_message, buf);
           snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
           snprintf(buf3, sizeof(buf3), "%s$n fires a %s^n at $N but it doesn't seem to hurt $M.", vehicle_message, buf);
           break;
@@ -3123,7 +3123,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     } else if (damage == 0) {
       switch (number(1, 2)) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but your armour holds.^n", buf);
+          snprintf(buf1, sizeof(buf1), "^r$n fires a %s^r at you but your armor holds.^n", buf);
           snprintf(buf2, sizeof(buf2), "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
           snprintf(buf3, sizeof(buf3), "$n fires a %s^n at $N but it doesn't seem to hurt $M.", buf);
           snprintf(buf4, sizeof(buf4), "$N fires a %s^n at $n but it doesn't seem to hurt $m.", buf);

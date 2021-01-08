@@ -537,7 +537,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       power -= targ->decker->hardening;
     else
       for (soft = targ->decker->software; soft; soft = soft->next_content)
-        if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOUR)
+        if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR)
           power -= GET_OBJ_VAL(soft, 1);
     bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
     GET_REM_HACKING(targ->decker->ch) = bod - targ->decker->bod;
@@ -554,7 +554,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       target += 2;
     else if (targ->ic.options.IsSet(IC_SHIFT))
       target += 2;
-    if (targ->ic.options.IsSet(IC_ARMOUR))
+    if (targ->ic.options.IsSet(IC_ARMOR))
       power -= 2;
     if (!icon->decker->ras)
       target += 4;
@@ -1264,7 +1264,7 @@ ACMD(do_analyze)
           if (ic->number) {
             send_to_icon(PERSONA, "%s is a %s-%d\r\n", CAP(ic->name), ic_type[ic->ic.type],
                          matrix[PERSONA->in_host].shutdown ? ic->ic.rating - 2 : ic->ic.rating);
-            if (ic->ic.options.AreAnySet(IC_ARMOUR, IC_CASCADE, IC_EX_OFFENSE, IC_EX_DEFENSE, IC_TRAP, IC_SHIELD, IC_SHIFT, ENDBIT)) {
+            if (ic->ic.options.AreAnySet(IC_ARMOR, IC_CASCADE, IC_EX_OFFENSE, IC_EX_DEFENSE, IC_TRAP, IC_SHIELD, IC_SHIFT, ENDBIT)) {
               ic->ic.options.PrintBits(buf1, MAX_STRING_LENGTH, ic_option_long, IC_TRAP + 1);
               buf1[strlen(buf1) - 2] = '\0';
               send_to_icon(PERSONA, "It has the following options: %s.\r\n", buf1);
@@ -1736,7 +1736,7 @@ ACMD(do_download)
           && GET_OBJ_TYPE(soft) != ITEM_PROGRAM) {
           int power = GET_DECK_ACCESSORY_FILE_RATING(soft);
           for (struct obj_data *prog = DECKER->software; prog; prog = prog->next_content)
-            if (GET_OBJ_VAL(prog, 0) == SOFT_ARMOUR) {
+            if (GET_OBJ_VAL(prog, 0) == SOFT_ARMOR) {
               power -= GET_OBJ_VAL(prog, 1);
               break;
             }

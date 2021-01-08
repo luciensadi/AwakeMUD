@@ -1382,7 +1382,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_BR_RIFLE:
         case SKILL_BR_HEAVYWEAPON:
         case SKILL_BR_SMG:
-        case SKILL_BR_ARMOUR:
+        case SKILL_BR_ARMOR:
           act("Enhanced Articulation skill increase: +1", 1, ch, NULL, NULL, TO_ROLLS);
           totalskill++;
           break;

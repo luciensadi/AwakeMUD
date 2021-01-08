@@ -1408,7 +1408,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   struct char_data *temp = vict;
   switch (spell)
   {
-  case SPELL_ARMOUR:
+  case SPELL_ARMOR:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
     success = success_test(skill, target + 6);

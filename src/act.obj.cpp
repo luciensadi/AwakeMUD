@@ -1183,8 +1183,8 @@ ACMD(do_get)
             case TYPE_DRIVEBYWIRE:
               target = 10 - veh->handling;
               break;
-            case TYPE_ARMOUR:
-            case TYPE_CONCEALEDARMOUR:
+            case TYPE_ARMOR:
+            case TYPE_CONCEALEDARMOR:
               target = (int)(GET_OBJ_VAL(cont, 2) / 3);
               break;
             case TYPE_ROLLBARS:

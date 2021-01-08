@@ -136,7 +136,7 @@ struct archetype_data *generate_adept() {
   ARCH_ADEPT_POWER(ADEPT_COUNTERSTRIKE, 2);
   ARCH_ADEPT_POWER(ADEPT_IMPROVED_QUI, 2);
   ARCH_ADEPT_POWER(ADEPT_IMPROVED_BOD, 2);
-  ARCH_ADEPT_POWER(ADEPT_MYSTIC_ARMOUR, 2);
+  ARCH_ADEPT_POWER(ADEPT_MYSTIC_ARMOR, 2);
   ARCH_ADEPT_POWER(ADEPT_SIDESTEP, 2);
   ARCH_ADEPT_POWER(ADEPT_MAGIC_RESISTANCE, 1);
   assert(i < NUM_ARCHETYPE_ABILITIES);
@@ -224,7 +224,7 @@ struct archetype_data *generate_shaman() {
   i = 0;
   ARCH_SPELL(SPELL_TREAT, 0, 3);
   ARCH_SPELL(SPELL_CLOUT, 0, 6);
-  ARCH_SPELL(SPELL_ARMOUR, 0, 3);
+  ARCH_SPELL(SPELL_ARMOR, 0, 3);
   ARCH_SPELL(SPELL_IMP_INVIS, 0, 1);
   ARCH_SPELL(SPELL_HEAL, 0, 6);
   ARCH_SPELL(SPELL_STUNBOLT, 0, 6);
@@ -305,7 +305,7 @@ struct archetype_data *generate_street_mage() {
   ARCH_SPELL(SPELL_COMBATSENSE, 0, 3);
   ARCH_SPELL(SPELL_FLAMETHROWER, 0, 6);
   ARCH_SPELL(SPELL_MINDLINK, 0, 1);
-  ARCH_SPELL(SPELL_ARMOUR, 0, 3);
+  ARCH_SPELL(SPELL_ARMOR, 0, 3);
   ARCH_SPELL(SPELL_IMP_INVIS, 0, 1);
   ARCH_SPELL(SPELL_STUNBOLT, 0, 6);
   
@@ -421,7 +421,7 @@ struct archetype_data *generate_decker() {
   arch->software[i++] = OBJ_TRANSYS_RIFFLE;
   arch->software[i++] = OBJ_RENRAKU_BYPASS;
   arch->software[i++] = OBJ_FOXFIRE_KITSUNE;
-  arch->software[i++] = OBJ_TRANSYS_ARMOUR;
+  arch->software[i++] = OBJ_TRANSYS_ARMOR;
   arch->software[i++] = OBJ_MATRIX_SWORD;
   assert(i < NUM_ARCHETYPE_SOFTWARE);
   
