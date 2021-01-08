@@ -2838,6 +2838,8 @@ void write_objs_to_disk(int zone)
   snprintf(buf, sizeof(buf), "%s/%d.obj", OBJ_PREFIX, zone_table[zone].number);
   fp = fopen(buf, "w+");
   
+  bool wrote_something = FALSE;
+  
   /* start running through all objects in this zone */
   for (counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top;
@@ -2850,6 +2852,8 @@ void write_objs_to_disk(int zone)
       
       if (!strcmp("an unfinished object", obj->text.name))
         continue;
+        
+      wrote_something = TRUE;
       
       fprintf(fp, "#%ld\n", GET_OBJ_VNUM(obj));
       
@@ -2940,5 +2944,8 @@ void write_objs_to_disk(int zone)
   fprintf(fp, "END\n");
   fclose(fp);
   
-  write_index_file("obj");
+  if (wrote_something)
+    write_index_file("obj");
+  else
+    remove(buf);
 }
