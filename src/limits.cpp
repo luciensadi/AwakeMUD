@@ -1083,20 +1083,30 @@ void update_paydata_market() {
     mudlog("SYSERR: Can't Open Consistency File For Write.", NULL, LOG_SYSLOG, FALSE);
     return;
   }
+  
   strncpy(buf, "Updating paydata markets:", sizeof(buf) - 1);
+  bool something_changed = FALSE;
+
   for (int m = 0; m < 5; m++) {
     int old_market = market[m];
     int proposed_market = market[m] + number(MIN_PAYDATA_MARKET_INCREASE_PER_TICK, MAX_PAYDATA_MARKET_INCREASE_PER_TICK);
     market[m] = MIN(get_paydata_market_maximum(m), proposed_market);
     if (market[m] < get_paydata_market_minimum(m))
       market[m] = get_paydata_market_minimum(m);
-      
-    if (market[m] != old_market)
+    
+    if (market[m] != old_market) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s^g: %d to %d.", host_sec[m], old_market, market[m]);
-    else
+      something_changed = TRUE;
+    }
+    else {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s^g: stays at %d.", host_sec[m], market[m]);
+    }
   }
-  mudlog(buf, NULL, LOG_ECONLOG, TRUE);
+  
+#ifdef LOG_PAYDATA_MARKET_CHANGES
+  if (something_changed)
+    mudlog(buf, NULL, LOG_ECONLOG, TRUE);
+#endif
   
   fprintf(fl, "[MARKET]\r\n");
   fprintf(fl, "\tBlue:\t%d\n", market[0]);

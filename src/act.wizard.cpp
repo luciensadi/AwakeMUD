@@ -288,7 +288,9 @@ ACMD(do_copyover)
   // Save vehicles.
   log("Saving vehicles.");
   save_vehicles();
-
+  
+  log("Closing database connection.");
+  mysql_close(mysql);
 
   snprintf(buf, sizeof(buf), "%d", port);
   snprintf(buf2, sizeof(buf2), "-o%d", mother_desc);
