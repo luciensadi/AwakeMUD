@@ -72,7 +72,7 @@ typedef SOCKET  socket_t;
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
 
 /* externs */
-extern int restrict;
+extern int restrict_mud;
 /* extern FILE *player_fl; */
 extern int DFLT_PORT;
 extern char *DFLT_DIR;
@@ -209,7 +209,7 @@ int main(int argc, char **argv)
         log("Syntax check mode enabled.");
         break;
       case 'r':
-        restrict = 1;
+        restrict_mud = 1;
         log("Restricting game -- no new players allowed.");
         break;
       case 'o':
@@ -2103,7 +2103,7 @@ void unrestrict_game(int Empty)
   mudlog("Received SIGUSR2 - completely unrestricting game (emergency)",
          NULL, LOG_SYSLOG, TRUE);
   ban_list = NULL;
-  restrict = 0;
+  restrict_mud = 0;
 }
 
 void free_up_memory(int Empty)

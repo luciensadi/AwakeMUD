@@ -56,7 +56,7 @@ extern class objList ObjList;
 
 /*   external vars  */
 extern FILE *player_fl;
-extern int restrict;
+extern int restrict_mud;
 
 /* for rooms */
 extern void House_save_all();
@@ -2713,35 +2713,39 @@ ACMD(do_dc)
 ACMD(do_wizlock)
 {
   int value;
-  const char *when;
+  bool changed = FALSE;
 
   one_argument(argument, arg);
   if (*arg) {
     value = atoi(arg);
     if (value < 0 || !access_level(ch, value)) {
-      send_to_char("Invalid wizlock value.\r\n", ch);
+      send_to_char(ch, "Invalid wizlock value. Enter a value between 0 and %d.\r\n", GET_REAL_LEVEL(ch));
       return;
     }
-    restrict = value;
-    when = "now";
-  } else
-    when = "currently";
-
-  switch (restrict) {
+    if (restrict_mud != value) {
+      restrict_mud = value;
+      changed = TRUE;
+    }
+  }
+    
+  switch (restrict_mud) {
   case 0:
-    snprintf(buf, sizeof(buf), "The game is %s completely open.\r\n", when);
+    snprintf(buf, sizeof(buf), "The game is %s completely open.\r\n", changed ? "now" : "currently");
     break;
   case 1:
-    snprintf(buf, sizeof(buf), "The game is %s closed to new players.\r\n", when);
+    snprintf(buf, sizeof(buf), "The game is %s closed to new players.\r\n", changed ? "now" : "currently");
     break;
   default:
     snprintf(buf, sizeof(buf), "Only level %d and above may enter the game %s.\r\n",
-            restrict, when);
+            restrict_mud, changed ? "now" : "currently");
     break;
   }
-  send_to_char(buf, ch);
-  snprintf(buf, sizeof(buf), "%s set wizlock to level %d.", GET_CHAR_NAME(ch), restrict);
-  mudlog(buf, ch, LOG_WIZLOG, TRUE);
+  
+  if (changed) {
+    send_to_char(buf, ch);
+    snprintf(buf, sizeof(buf), "%s set wizlock to level %d.", GET_CHAR_NAME(ch), restrict_mud);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+  }
 }
 
 ACMD(do_date)

@@ -50,7 +50,7 @@ extern const char *MENU;
 extern const char *QMENU;
 extern const char *WELC_MESSG;
 extern const char *START_MESSG;
-extern int restrict;
+extern int restrict_mud;
 
 /* external functions */
 void echo_on(struct descriptor_data * d);
@@ -2406,8 +2406,8 @@ void nanny(struct descriptor_data * d, char *arg)
         STATE(d) = CON_CLOSE;
         return;
       }
-      if (restrict) {
-        if (restrict == LVL_MAX)
+      if (restrict_mud) {
+        if (restrict_mud == LVL_MAX)
           SEND_TO_Q("The mud is being reconfigured.  Try again a bit later.\r\n", d);
         else
           SEND_TO_Q("Sorry, new players can't be created at the moment.\r\n", d);
@@ -2499,8 +2499,8 @@ void nanny(struct descriptor_data * d, char *arg)
         mudlog(buf, d->character, LOG_BANLOG, TRUE);
         return;
       }
-      if (!access_level(d->character, restrict)) {
-        if (restrict == LVL_MAX)
+      if (!access_level(d->character, restrict_mud)) {
+        if (restrict_mud == LVL_MAX)
           SEND_TO_Q("The mud is about to reboot. Please try again in a few minutes.\r\n", d);
         else
           SEND_TO_Q("The game is temporarily restricted.. try again later.\r\n", d);

@@ -134,7 +134,7 @@ int veh_chunk_size = 100;
 class objList ObjList;          // contains the global list of perm objects
 
 time_t boot_time = 0;           /* time of mud boot              */
-int restrict = 0;               /* level of game restriction     */
+int restrict_mud = 0;           /* level of game restriction     */
 rnum_t r_mortal_start_room;     /* rnum of mortal start room     */
 rnum_t r_immort_start_room;     /* rnum of immort start room     */
 rnum_t r_frozen_start_room;     /* rnum of frozen start room     */
