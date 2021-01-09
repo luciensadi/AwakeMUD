@@ -1083,7 +1083,7 @@ void update_paydata_market() {
     return;
   }
   for (int m = 0; m < 5; m++) {
-    market[m] = MIN(get_paydata_market_maximum(m), market[m] + number(-1, 4));
+    market[m] = MIN(get_paydata_market_maximum(m), market[m] + number(MIN_PAYDATA_MARKET_INCREASE_PER_TICK, MAX_PAYDATA_MARKET_INCREASE_PER_TICK));
     if (market[m] < 50)
       market[m] = 50;
   }

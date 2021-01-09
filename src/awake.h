@@ -2171,6 +2171,7 @@ enum {
 #define OBJ_NOVATECH_BURNER                1172
 #define OBJ_MITSUHAMA_Z4                   1847
 #define OBJ_LONDON_FOG_PROFESSIONAL        8439
+#define OBJ_THIGH_HOLSTER                  3494
 
 #define OBJ_CMT_AVATAR                     80004
 #define OBJ_NOVATECH_SIX_SENSORS           17116

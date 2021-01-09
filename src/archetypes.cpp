@@ -381,9 +381,7 @@ struct archetype_data *generate_decker() {
   
   // Inventory.
   arch->weapon = OBJ_SCK_MODEL_100;
-  arch->weapon_top = OBJ_TOP_MOUNTED_SMARTGUN_LINK;
   arch->weapon_barrel = OBJ_VENT_IV;
-  arch->weapon_under = OBJ_FOREGRIP;
   arch->ammo_q = 500;
   
   arch->nuyen = 22660;
@@ -397,6 +395,7 @@ struct archetype_data *generate_decker() {
   arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS;
   arch->worn[WEAR_LEGS] = OBJ_BLACK_BDU_PANTS;
   arch->worn[WEAR_FEET] = OBJ_PAIR_OF_WHITE_TRAINERS;
+  arch->worn[WEAR_THIGH_L] = OBJ_THIGH_HOLSTER;
 
   
   i = 0;

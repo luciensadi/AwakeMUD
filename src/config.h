@@ -27,6 +27,10 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define KARMA_GAIN_MULTIPLIER 2.0
 #define NUYEN_GAIN_MULTIPLIER 2.0
 
+// How well should markets regenerate over time? (currently every 2 mins)
+#define MAX_PAYDATA_MARKET_INCREASE_PER_TICK 250
+#define MIN_PAYDATA_MARKET_INCREASE_PER_TICK -5
+
 // What should the paydata markets cap out at?
 #define HOST_SECURITY_BLUE_MARKET_MAXIMUM   2000
 #define HOST_SECURITY_GREEN_MARKET_MAXIMUM  4000
