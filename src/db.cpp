@@ -1684,7 +1684,7 @@ void parse_object(File &fl, long nr)
   obj->obj_flags.material = data.LookupInt("Material", material_names, 5);
 
   // No such thing as a negative-weight object.
-  GET_OBJ_WEIGHT(obj) = MAX(0, data.GetFloat("POINTS/Weight", 5));
+  GET_OBJ_WEIGHT(obj) = MAX(0, data.GetFloat("POINTS/Weight", 0));
   GET_OBJ_BARRIER(obj) = data.GetInt("POINTS/Barrier", 3);
   GET_OBJ_CONDITION(obj) = GET_OBJ_BARRIER(obj);
 
