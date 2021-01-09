@@ -630,7 +630,7 @@ const char *preference_bits[] =
     "!PROMPT",
     "HELPLOG",
     "PURGELOG",
-    "AUTOKILL",
+    "!AUTOKILL",
     "NO_RADIO_NAMES",
     "FUCKUPLOG",
     "ECONLOG",
