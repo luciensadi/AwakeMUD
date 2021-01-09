@@ -4746,7 +4746,7 @@ ACMD(do_logwatch)
     if (PRF_FLAGGED(ch, PRF_ECONLOG)) {
       send_to_char("You no longer watch the EconLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_ECONLOG);
-    } else if (access_level(ch, LVL_PRESIDENT)) {
+    } else if (access_level(ch, LVL_VICEPRES)) {
       send_to_char("You will now see the EconLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_FUCKUPLOG);
     } else {
@@ -4781,7 +4781,7 @@ ACMD(do_logwatch)
       PRF_FLAGS(ch).SetBit(PRF_PURGELOG);
     if (!PRF_FLAGGED(ch, PRF_FUCKUPLOG) && access_level(ch, LVL_ARCHITECT))
       PRF_FLAGS(ch).SetBit(PRF_FUCKUPLOG);
-    if (!PRF_FLAGGED(ch, PRF_ECONLOG) && access_level(ch, LVL_PRESIDENT))
+    if (!PRF_FLAGGED(ch, PRF_ECONLOG) && access_level(ch, LVL_VICEPRES))
       PRF_FLAGS(ch).SetBit(PRF_ECONLOG);
     send_to_char("All available logs have been activated.\r\n", ch);
   } else if (is_abbrev(buf, "none")) {

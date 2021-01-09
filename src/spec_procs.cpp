@@ -2325,18 +2325,18 @@ SPECIAL(fence)
       act("$n says, \"I only buy datafiles, chummer.\"\n", FALSE, fence, 0, ch, TO_VICT);
       return(TRUE);
     }
-    int negotiated_value = negotiate(ch, fence, SKILL_DATA_BROKERAGE, market[GET_OBJ_VAL(obj, 4)], 2, FALSE);             
+    int negotiated_value = negotiate(ch, fence, SKILL_DATA_BROKERAGE, market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)], 2, FALSE);             
     value = negotiated_value / MAX(1, (time(0) - GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj)) / SECS_PER_MUD_DAY);
     GET_NUYEN(ch) += value;
     
-    snprintf(buf, sizeof(buf), "Paying %d nuyen for paydata from market %s (base %d, after nego %d, then time decayed). Market going from %d to ",
+    snprintf(buf, sizeof(buf), "Paying %d nuyen for paydata from market %s^g (base %d, after nego %d, then time decayed). Market going from %d to ",
              value, 
              host_sec[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)], 
              market[GET_OBJ_VAL(obj, 4)],
              negotiated_value,
              market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)]);
              
-    market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] -= (int)(market[GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj)] * ((float)(5 - GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj))/ 50));
+    market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] -= (int)(market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] * ((float)(5 - GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj))/ 50));
     if (market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] < get_paydata_market_minimum(GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)))
       market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] = get_paydata_market_minimum(GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj));
       
@@ -5576,5 +5576,23 @@ SPECIAL(archetype_chargen_reverse_magic_split) {
     return TRUE;
   }
     
+  return FALSE;
+}
+
+SPECIAL(nerpcorpolis_lobby) {
+  // I am requesting a room for private RP sessions, and agree that I will not use it as an apartment, storage, or for other in-game benefit.
+  skip_spaces(&argument);
+  if (!strcmp("I am requesting a room for private RP sessions, and agree that I will not use it as an apartment, storage, or for other in-game benefit.", argument)) {
+    char_from_room(ch);
+    char_to_room(ch, &world[real_room(RM_NERPCORPOLIS_RECEPTIONIST)]);
+    
+    send_to_char("You are ushered into the leasing office.\r\n", ch);
+    act("$n is ushered into the leasing office.", FALSE, ch, 0, 0, TO_ROOM);
+    
+    // If not screenreader, look.
+    if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0);
+  }
+  // We still want them to say whatever it is they're saying.
   return FALSE;
 }
