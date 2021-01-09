@@ -1095,7 +1095,7 @@ void update_paydata_market() {
   fprintf(fl, "\tBlack:\t%d\n", market[4]);
   fclose(fl);
   
-  snprintf(buf, sizeof(buf), "Paydata markets updating on tick. Current values: B-%d, G-%d, O-%d, R-%d, L-%d.", market[0], market[1], market[2], market[3], market[4]);
+  snprintf(buf, sizeof(buf), "Paydata markets updated. Current values: B-%d, G-%d, O-%d, R-%d, L-%d.", market[0], market[1], market[2], market[3], market[4]);
   mudlog(buf, NULL, LOG_ECONLOG, TRUE);
 }
 

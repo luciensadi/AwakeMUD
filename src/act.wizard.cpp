@@ -3368,6 +3368,7 @@ ACMD(do_show)
                { "storage",        LVL_BUILDER },
                { "anomalies",      LVL_BUILDER },
                { "roomflag",       LVL_BUILDER },
+               { "markets",        LVL_VICEPRES},
                { "\n", 0 }
              };
 
@@ -3840,6 +3841,9 @@ ACMD(do_show)
     send_to_char("Please specify a single roomflag from the following list:\r\n", ch);
     for (i = 0; i < ROOM_MAX; i++)
       send_to_char(ch, "  %s\r\n", room_bits[i]);
+    return;
+  case 23:
+    send_to_char(ch, "Current paydata market values: B-%d, G-%d, O-%d, R-%d, L-%d.\r\n", market[0], market[1], market[2], market[3], market[4]);
     return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
