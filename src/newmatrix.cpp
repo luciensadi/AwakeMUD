@@ -2966,3 +2966,14 @@ int get_paydata_market_maximum(int host_color) {
     default: return 0;
   }
 }
+
+int get_paydata_market_minimum(int host_color) {
+  switch (host_color) {
+    case HOST_SECURITY_BLUE:   return HOST_SECURITY_BLUE_MARKET_MINIMUM;
+    case HOST_SECURITY_GREEN:  return HOST_SECURITY_GREEN_MARKET_MINIMUM;
+    case HOST_SECURITY_ORANGE: return HOST_SECURITY_ORANGE_MARKET_MINIMUM;
+    case HOST_SECURITY_RED:    return HOST_SECURITY_RED_MARKET_MINIMUM;
+    case HOST_SECURITY_BLACK:  return HOST_SECURITY_BLACK_MARKET_MINIMUM;
+    default: return 0;
+  }
+}

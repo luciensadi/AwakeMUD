@@ -54,6 +54,7 @@ extern void wire_nuyen(struct char_data *ch, struct char_data *target, int amoun
 extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
 extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
+extern int get_paydata_market_minimum(int host_color);
 
 extern struct command_info cmd_info[];
 
@@ -2336,8 +2337,8 @@ SPECIAL(fence)
              market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)]);
              
     market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] -= (int)(market[GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj)] * ((float)(5 - GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj))/ 50));
-    if (market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] < 100)
-      market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] = 100;
+    if (market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] < get_paydata_market_minimum(GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)))
+      market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] = get_paydata_market_minimum(GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj));
       
     snprintf(ENDOF(buf), sizeof(buf), "%d.", market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)]);
     mudlog(buf, ch, LOG_ECONLOG, TRUE);
