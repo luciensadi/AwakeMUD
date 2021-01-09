@@ -631,6 +631,7 @@ const char *preference_bits[] =
     "HELPLOG",
     "PURGELOG",
     "AUTOKILL",
+    "NO_RADIO_NAMES",
     "FUCKUPLOG",
     "ECONLOG",
     "\n"

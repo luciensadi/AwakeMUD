@@ -45,6 +45,7 @@ extern void damage_equip(struct char_data *ch, struct char_data *victim, int pow
 extern void check_adrenaline(struct char_data *, int);
 extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 extern int get_paydata_market_maximum(int host_color);
+extern int get_paydata_market_minimum(int host_color);
 
 void mental_gain(struct char_data * ch)
 {
@@ -1083,9 +1084,10 @@ void update_paydata_market() {
     return;
   }
   for (int m = 0; m < 5; m++) {
-    market[m] = MIN(get_paydata_market_maximum(m), market[m] + number(MIN_PAYDATA_MARKET_INCREASE_PER_TICK, MAX_PAYDATA_MARKET_INCREASE_PER_TICK));
-    if (market[m] < 50)
-      market[m] = 50;
+    int proposed_market = market[m] + number(MIN_PAYDATA_MARKET_INCREASE_PER_TICK, MAX_PAYDATA_MARKET_INCREASE_PER_TICK);
+    market[m] = MIN(get_paydata_market_maximum(m), proposed_market);
+    if (market[m] < get_paydata_market_minimum(m))
+      market[m] = get_paydata_market_minimum(m);
   }
   fprintf(fl, "[MARKET]\r\n");
   fprintf(fl, "\tBlue:\t%d\n", market[0]);
