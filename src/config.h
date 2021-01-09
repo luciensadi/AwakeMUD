@@ -27,6 +27,13 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define KARMA_GAIN_MULTIPLIER 2.0
 #define NUYEN_GAIN_MULTIPLIER 2.0
 
+// What should the paydata markets cap out at?
+#define HOST_SECURITY_BLUE_MARKET_MAXIMUM   1000
+#define HOST_SECURITY_GREEN_MARKET_MAXIMUM  3000
+#define HOST_SECURITY_ORANGE_MARKET_MAXIMUM 5000
+#define HOST_SECURITY_RED_MARKET_MAXIMUM    7000
+#define HOST_SECURITY_BLACK_MARKET_MAXIMUM  10000
+
 // What maximum amount of karma per action do you want PCs < 100 TKE to have?
 #define MAX_NEWCHAR_GAIN  50
 

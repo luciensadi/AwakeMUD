@@ -12,6 +12,7 @@
 #include "newmatrix.h"
 #include "memory.h"
 #include "quest.h"
+#include "config.h"
 
 #define PERSONA ch->persona
 #define DECKER PERSONA->decker
@@ -2953,4 +2954,15 @@ bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) 
   }
   
   return FALSE;
+}
+
+int get_paydata_market_maximum(int host_color) {
+  switch (host_color) {
+    case HOST_SECURITY_BLUE:   return HOST_SECURITY_BLUE_MARKET_MAXIMUM;
+    case HOST_SECURITY_GREEN:  return HOST_SECURITY_GREEN_MARKET_MAXIMUM;
+    case HOST_SECURITY_ORANGE: return HOST_SECURITY_ORANGE_MARKET_MAXIMUM;
+    case HOST_SECURITY_RED:    return HOST_SECURITY_RED_MARKET_MAXIMUM;
+    case HOST_SECURITY_BLACK:  return HOST_SECURITY_BLACK_MARKET_MAXIMUM;
+    default: return 0;
+  }
 }

@@ -2324,12 +2324,24 @@ SPECIAL(fence)
       act("$n says, \"I only buy datafiles, chummer.\"\n", FALSE, fence, 0, ch, TO_VICT);
       return(TRUE);
     }
-    value = negotiate(ch, fence, SKILL_DATA_BROKERAGE, market[GET_OBJ_VAL(obj, 4)], 2, FALSE);
-    value /= MAX(1, (time(0) - GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj)) / SECS_PER_MUD_DAY);
+    int negotiated_value = negotiate(ch, fence, SKILL_DATA_BROKERAGE, market[GET_OBJ_VAL(obj, 4)], 2, FALSE);             
+    value = negotiated_value / MAX(1, (time(0) - GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj)) / SECS_PER_MUD_DAY);
     GET_NUYEN(ch) += value;
-    market[GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj)] -= (int)(market[GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj)] * ((float)(5 - GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj))/ 50));
+    
+    snprintf(buf, sizeof(buf), "Paying %d nuyen for paydata from market %s (base %d, after nego %d, then time decayed). Market going from %d to ",
+             value, 
+             host_sec[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)], 
+             market[GET_OBJ_VAL(obj, 4)],
+             negotiated_value,
+             market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)]);
+             
+    market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] -= (int)(market[GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj)] * ((float)(5 - GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj))/ 50));
     if (market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] < 100)
       market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] = 100;
+      
+    snprintf(ENDOF(buf), sizeof(buf), "%d.", market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)]);
+    mudlog(buf, ch, LOG_ECONLOG, TRUE);
+    
     obj_from_char(obj);
     extract_obj(obj);
     snprintf(buf, sizeof(buf), "%s says, \"Here's your %d creds.\"\r\n",

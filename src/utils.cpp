@@ -823,6 +823,9 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
         case LOG_FUCKUPLOG:
           check_log = PRF_FUCKUPLOG;
           break;
+        case LOG_ECONLOG:
+          check_log = PRF_ECONLOG;
+          break;
         default:
           char errbuf[500];
           snprintf(errbuf, sizeof(errbuf), "SYSERR: Attempting to display a message to log type %d, but that log type is not handled in utils.cpp's mudlog() function! Dumping to SYSLOG.", log);

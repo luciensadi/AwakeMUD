@@ -4565,9 +4565,27 @@ ACMD(do_set)
 ACMD(do_logwatch)
 {
   one_argument(argument, buf);
+  
+  /*    Code that needs to be finished in the future. Has mistaken assumptions in it. -LS
+  if (!*buf) {
+    strncpy(buf, "You are currently watching the following:\r\n", sizeof(buf));
+    for (int i = 0; i < NUM_LOGS; i++)
+      if (PRF_FLAGGED(ch, i))
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s\r\n", log_types[i]);
+
+    send_to_char(buf, ch);
+    return;
+  }
+  
+  for (int i = 0; i < NUM_LOGS; i++) {
+    if (is_abbrev(buf, log_types[i])) {
+      if (PRF_FLAGGED(ch, ...)) // This doesn't actually work, because there's no mapping between PRF and LOG yet. TODO.
+    }
+  }
+  */
 
   if (!*buf) {
-    snprintf(buf, sizeof(buf), "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+    snprintf(buf, sizeof(buf), "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
             (PRF_FLAGGED(ch, PRF_CONNLOG) ? "  ConnLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_DEATHLOG) ? "  DeathLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_MISCLOG) ? "  MiscLog\r\n" : ""),
@@ -4581,7 +4599,8 @@ ACMD(do_logwatch)
             (PRF_FLAGGED(ch, PRF_PGROUPLOG) ? "  PGroupLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_HELPLOG) ? "  HelpLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_PURGELOG) ? "  PurgeLog\r\n" : ""),
-            (PRF_FLAGGED(ch, PRF_FUCKUPLOG) ? "  FuckupLog\r\n" : ""));
+            (PRF_FLAGGED(ch, PRF_FUCKUPLOG) ? "  FuckupLog\r\n" : ""),
+            (PRF_FLAGGED(ch, PRF_ECONLOG) ? "  EconLog\r\n" : ""));
 
     send_to_char(buf, ch);
     return;
@@ -4719,6 +4738,16 @@ ACMD(do_logwatch)
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
+  } else if (is_abbrev(buf, "econlog")) {
+    if (PRF_FLAGGED(ch, PRF_ECONLOG)) {
+      send_to_char("You no longer watch the EconLog.\r\n", ch);
+      PRF_FLAGS(ch).RemoveBit(PRF_ECONLOG);
+    } else if (access_level(ch, LVL_PRESIDENT)) {
+      send_to_char("You will now see the EconLog.\r\n", ch);
+      PRF_FLAGS(ch).SetBit(PRF_FUCKUPLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
+    }
   } else if (is_abbrev(buf, "all")) {
     if (!PRF_FLAGGED(ch, PRF_CONNLOG))
       PRF_FLAGS(ch).SetBit(PRF_CONNLOG);
@@ -4748,11 +4777,14 @@ ACMD(do_logwatch)
       PRF_FLAGS(ch).SetBit(PRF_PURGELOG);
     if (!PRF_FLAGGED(ch, PRF_FUCKUPLOG) && access_level(ch, LVL_ARCHITECT))
       PRF_FLAGS(ch).SetBit(PRF_FUCKUPLOG);
+    if (!PRF_FLAGGED(ch, PRF_ECONLOG) && access_level(ch, LVL_PRESIDENT))
+      PRF_FLAGS(ch).SetBit(PRF_ECONLOG);
     send_to_char("All available logs have been activated.\r\n", ch);
   } else if (is_abbrev(buf, "none")) {
     PRF_FLAGS(ch).RemoveBits(PRF_CONNLOG, PRF_DEATHLOG, PRF_MISCLOG, PRF_WIZLOG,
                              PRF_SYSLOG, PRF_ZONELOG, PRF_CHEATLOG, PRF_BANLOG, PRF_GRIDLOG,
-                             PRF_WRECKLOG, PRF_PGROUPLOG, PRF_HELPLOG, PRF_PURGELOG, PRF_FUCKUPLOG, ENDBIT);
+                             PRF_WRECKLOG, PRF_PGROUPLOG, PRF_HELPLOG, PRF_PURGELOG, 
+                             PRF_FUCKUPLOG, PRF_ECONLOG, ENDBIT);
     send_to_char("All logs have been disabled.\r\n", ch);
   } else
     send_to_char("Watch what log?\r\n", ch);

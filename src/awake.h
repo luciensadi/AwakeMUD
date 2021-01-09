@@ -397,7 +397,8 @@ enum {
 #define PRF_NOAUTOKILL          48
 #define PRF_NO_RADIO_NAMES      49
 #define PRF_FUCKUPLOG           50
-#define PRF_MAX                 51
+#define PRF_ECONLOG             51
+#define PRF_MAX                 52
 
 /* log watch */
 
@@ -417,6 +418,8 @@ enum {
 #define LOG_HELPLOG        12
 #define LOG_PURGELOG       13
 #define LOG_FUCKUPLOG      14
+#define LOG_ECONLOG        15
+#define NUM_LOGS           16
 
 /* player conditions */
 
@@ -2348,5 +2351,11 @@ enum {
 #define STRING_MOB_KEYWORDS_UNFINISHED "mob unfinished"
 #define STRING_MOB_RDESC_UNFINISHED "An unfinished mob stands here."
 #define STRING_MOB_LDESC_UNFINISHED "It looks barely coherent as it waits to be created.\r\n"
+
+#define HOST_SECURITY_BLUE   0
+#define HOST_SECURITY_GREEN  1
+#define HOST_SECURITY_ORANGE 2
+#define HOST_SECURITY_RED    3
+#define HOST_SECURITY_BLACK  4
 
 #endif

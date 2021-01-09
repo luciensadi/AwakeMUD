@@ -2917,6 +2917,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("en", "northeast");
   COMMAND_ALIAS("ws", "southwest");
   COMMAND_ALIAS("norht", "north"); // this one happened 18 times
+  COMMAND_ALIAS("esat", "east"); // this one only 8
   
   // Common typos and fuckups.
   COMMAND_ALIAS("receieve", "receive");

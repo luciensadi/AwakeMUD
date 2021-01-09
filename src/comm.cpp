@@ -163,6 +163,7 @@ void update_buildrepair(void);
 void process_boost(void);
 class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
+extern void update_paydata_market();
 
 #ifdef USE_DEBUG_CANARIES
 void check_memory_canaries();
@@ -873,8 +874,10 @@ void game_loop(int mother_desc)
     }
     
     // Every 59 MUD minutes
-    if (!(pulse % (59 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC)))
+    if (!(pulse % (59 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
       save_vehicles();
+      update_paydata_market();
+    }
     
     // Every MUD hour
     if (!(pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC))) {

@@ -44,6 +44,7 @@ extern char *cleanup(char *dest, const char *src);
 extern void damage_equip(struct char_data *ch, struct char_data *victim, int power, int type);
 extern void check_adrenaline(struct char_data *, int);
 extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
+extern int get_paydata_market_maximum(int host_color);
 
 void mental_gain(struct char_data * ch)
 {
@@ -1071,14 +1072,18 @@ void save_vehicles(void)
     snprintf(buf, sizeof(buf), "SYSERR: LOST VEHICLES: %d != %d in save_vehicles, so some vehicles ARE NOT SAVED.", v, num_veh);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   }
+}
+
+void update_paydata_market() {
+  FILE *fl;
   
-  // Update paydata markets. Why this is here, IDK.
+  // Update paydata markets.
   if (!(fl = fopen("etc/consist", "w"))) {
     mudlog("SYSERR: Can't Open Consistency File For Write.", NULL, LOG_SYSLOG, FALSE);
     return;
   }
   for (int m = 0; m < 5; m++) {
-    market[m] = MIN(5000, market[m] + number(-1, 4));
+    market[m] = MIN(get_paydata_market_maximum(m), market[m] + number(-1, 4));
     if (market[m] < 50)
       market[m] = 50;
   }
@@ -1089,7 +1094,9 @@ void save_vehicles(void)
   fprintf(fl, "\tRed:\t%d\n", market[3]);
   fprintf(fl, "\tBlack:\t%d\n", market[4]);
   fclose(fl);
-  // process the objects in the object list
+  
+  snprintf(buf, sizeof(buf), "Paydata markets updating on tick. Current values: B-%d, G-%d, O-%d, R-%d, L-%d.", market[0], market[1], market[2], market[3], market[4]);
+  mudlog(buf, NULL, LOG_ECONLOG, TRUE);
 }
 
 void misc_update(void)
