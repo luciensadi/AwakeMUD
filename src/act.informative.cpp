@@ -1800,20 +1800,20 @@ void look_at_target(struct char_data * ch, char *arg)
   }
   
   // Look at vehicles, either in the back of a vehicle (look at inside ones) or outside of a vehicle.
-  if (!ch->in_veh || (ch->in_veh && !ch->vfront))
-  {
+  if (!ch->in_veh || (ch->in_veh && !ch->vfront)) {
     found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
-    
+  }
+  
+  if (ch->in_veh) {
     // Look at outside vehicles from within a vehicle.
-    if (!found_veh)
-      found_veh = get_veh_list(arg, (get_ch_in_room(ch))->vehicles, ch);
-      
-    if (found_veh) {
-      send_to_char(GET_VEH_DESC(found_veh), ch);
-      if (PLR_FLAGGED(ch, PLR_REMOTE))
-        ch->in_room = was_in;
-      return;
-    }
+    found_veh = get_veh_list(arg, (get_ch_in_room(ch))->vehicles, ch);
+  }
+  
+  if (found_veh) {
+    send_to_char(GET_VEH_DESC(found_veh), ch);
+    if (PLR_FLAGGED(ch, PLR_REMOTE))
+      ch->in_room = was_in;
+    return;
   }
   
   /* Is the target a character? */
@@ -2536,7 +2536,7 @@ ACMD(do_examine)
   int i, skill = 0;
   struct char_data *tmp_char;
   struct obj_data *tmp_object;
-  struct veh_data *found_veh;
+  struct veh_data *found_veh = NULL;
   one_argument(argument, arg);
   
   if (!*arg) {
@@ -2546,12 +2546,13 @@ ACMD(do_examine)
   if (subcmd == SCMD_EXAMINE)
     look_at_target(ch, arg);
   
-  if (!ch->in_veh || (ch->in_veh && !ch->vfront)) {
+  if (!ch->in_veh || (ch->in_veh && !ch->vfront))
     found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
-    if (!found_veh && ch->in_veh)
-      found_veh = get_veh_list(arg, (get_ch_in_room(ch))->vehicles, ch);
+    
+  if (!found_veh && ch->in_veh)
+    found_veh = get_veh_list(arg, (get_ch_in_room(ch))->vehicles, ch);
       
-    if (found_veh) {
+  if (found_veh) {
       if (subcmd == SCMD_PROBE) {
         // If they don't own the vehicle and the hood isn't open, they can't view the stats.
         if (GET_IDNUM(ch) != found_veh->owner && !found_veh->hood) {
@@ -2588,7 +2589,6 @@ ACMD(do_examine)
       look_at_veh(ch, found_veh, i);
       return;
     }
-  }
   
   // Look at self.
   if ((!str_cmp(arg, "self") || !str_cmp(arg, "me") || !str_cmp(arg, "myself"))) {
