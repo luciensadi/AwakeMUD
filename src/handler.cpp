@@ -2782,6 +2782,11 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
     } else if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
       return (FIND_OBJ_ROOM);
   }
+  if (IS_SET(bitvector, FIND_OBJ_VEH_ROOM))
+  {
+    if (ch->in_veh && (*tar_obj = get_obj_in_list_vis(ch, name, (get_ch_in_room(ch))->contents)))
+      return (FIND_OBJ_VEH_ROOM);
+  }
   if (IS_SET(bitvector, FIND_OBJ_WORLD))
   {
     if ((*tar_obj = get_obj_vis(ch, name))) {

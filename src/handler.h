@@ -111,6 +111,7 @@ int     generic_find(char *arg, int bitvector, struct char_data *ch,
 #define FIND_OBJ_ROOM     (1 << 3)
 #define FIND_OBJ_WORLD    (1 << 4)
 #define FIND_OBJ_EQUIP    (1 << 5)
+#define FIND_OBJ_VEH_ROOM (1 << 6)
 
 /* prototypes from fight.c */
 void    set_fighting(struct char_data *ch, struct char_data *victim, ...);

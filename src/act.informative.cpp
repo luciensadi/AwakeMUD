@@ -1783,8 +1783,9 @@ void look_at_target(struct char_data * ch, char *arg)
       ch->in_room = get_veh_in_room(ch->char_specials.rigging);
   
   bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
-                      FIND_CHAR_ROOM, ch, &found_char, &found_obj);
+                      FIND_CHAR_ROOM | FIND_OBJ_VEH_ROOM, ch, &found_char, &found_obj);
   
+  // Look at self.
   if ((!str_cmp(arg, "self") || !str_cmp(arg, "me") || !str_cmp(arg, "myself"))) {
     if (AFF_FLAGGED(ch, AFF_RIG))
     {
@@ -1798,9 +1799,15 @@ void look_at_target(struct char_data * ch, char *arg)
     }
   }
   
+  // Look at vehicles, either in the back of a vehicle (look at inside ones) or outside of a vehicle.
   if (!ch->in_veh || (ch->in_veh && !ch->vfront))
   {
     found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
+    
+    // Look at outside vehicles from within a vehicle.
+    if (!found_veh)
+      found_veh = get_veh_list(arg, (get_ch_in_room(ch))->vehicles, ch);
+      
     if (found_veh) {
       send_to_char(GET_VEH_DESC(found_veh), ch);
       if (PLR_FLAGGED(ch, PLR_REMOTE))
@@ -1808,6 +1815,7 @@ void look_at_target(struct char_data * ch, char *arg)
       return;
     }
   }
+  
   /* Is the target a character? */
   if (found_char != NULL)
   {
@@ -2540,6 +2548,9 @@ ACMD(do_examine)
   
   if (!ch->in_veh || (ch->in_veh && !ch->vfront)) {
     found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
+    if (!found_veh && ch->in_veh)
+      found_veh = get_veh_list(arg, (get_ch_in_room(ch))->vehicles, ch);
+      
     if (found_veh) {
       if (subcmd == SCMD_PROBE) {
         // If they don't own the vehicle and the hood isn't open, they can't view the stats.
@@ -2579,6 +2590,7 @@ ACMD(do_examine)
     }
   }
   
+  // Look at self.
   if ((!str_cmp(arg, "self") || !str_cmp(arg, "me") || !str_cmp(arg, "myself"))) {
     struct veh_data *target_veh = NULL;
     if (AFF_FLAGGED(ch, AFF_RIG))
@@ -2607,7 +2619,7 @@ ACMD(do_examine)
     return;
   } else {
     generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_CHAR_ROOM |
-                 FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
+                 FIND_OBJ_EQUIP | FIND_OBJ_VEH_ROOM, ch, &tmp_char, &tmp_object);
   }
   
   if (tmp_object) {

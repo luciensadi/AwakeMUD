@@ -203,9 +203,6 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(GET_EQ(CH, WEAR_WIELD)), AMMO_NORMAL, archetypes[i]->ammo_q);
   }
   
-  // Fill pockets.
-  update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(GET_EQ(CH, WEAR_WIELD)), AMMO_NORMAL, archetypes[i]->ammo_q);
-  
   // Grant modulator (unbonded, unworn).
   if (archetypes[i]->modulator > 0) {
     if ((temp_obj = read_object(archetypes[i]->modulator, VIRTUAL))) {
