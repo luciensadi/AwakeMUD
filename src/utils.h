@@ -128,8 +128,9 @@ bool invis_ok(struct char_data *ch, struct char_data *vict);
 #define MIN(x, y) (x < y ? x : y)
 #define MAX(x, y) (x > y ? x : y)
 #else
-int MAX(int a, int b);
-int MIN(int a, int b);
+// Word to the wise: If you use this with a float, etc: I will cut you. -LS
+int MAX(long a, long b);
+int MIN(long a, long b);
 #endif
 
 #define RM_BLOOD(rm) ((rm).blood)
