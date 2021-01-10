@@ -131,6 +131,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "slitch", "The Slitch Pit", 32660, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "planetary", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
     { "splat", "The SPLAT! Paintball Arena", 32653, TAXI_DEST_TYPE_OTHER, TRUE },
+    { "nerp", "^M(OOC / Roleplay Area)^W The NERPcorpolis^n", 6901, TAXI_DEST_TYPE_OTHER, TRUE },
 #endif
     { "\n", "", 0, 0, 0 } // this MUST be last
   };
@@ -668,19 +669,23 @@ SPECIAL(taxi)
     // Otherwise, process the incoming command.
     switch (GET_ACTIVE(driver)) {
       case ACT_REPLY_DEST:
-        if (destination_list == portland_taxi_destinations)
-          snprintf(say, sizeof(say), "%s?  Sure, that will be %d nuyen.",
-                  portland_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
-        else if (destination_list == caribbean_taxi_destinations)
-          snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
-                  caribbean_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
-        else
-          snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
-                  seattle_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
-        do_say(driver, say, 0, 0);
-        if (GET_EXTRA(driver) == 1) {
-          do_say(driver, "But seeing as you're new around here, I'll waive my usual fee, okay?", 0, 0);
-          GET_SPARE1(driver) = 0;
+        if (destination_list[GET_SPARE2(driver)].vnum == RM_NERPCORPOLIS_LOBBY)
+          do_say(ch, "The NERPcorpolis?  Sure, that ride is free.  Want to go there?", 0, 0);
+        else {
+          if (destination_list == portland_taxi_destinations)
+            snprintf(say, sizeof(say), "%s?  Sure, that will be %d nuyen.",
+                     portland_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+          else if (destination_list == caribbean_taxi_destinations)
+            snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+                     caribbean_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+          else
+            snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+                    seattle_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+          do_say(driver, say, 0, 0);
+          if (GET_EXTRA(driver) == 1) {
+            do_say(driver, "But seeing as you're new around here, I'll waive my usual fee, okay?", 0, 0);
+            GET_SPARE1(driver) = 0;
+          }
         }
         GET_EXTRA(driver) = 0;
         GET_ACTIVE(driver) = ACT_AWAIT_YESNO;
@@ -835,6 +840,11 @@ SPECIAL(taxi)
       GET_SPARE1(driver) = MAX_CAB_FARE;
     else
       GET_SPARE1(driver) = MIN(MAX_CAB_FARE, 5 + dist);
+      
+    // Rides to the NERPcorpolis are free.
+    if (destination_list[dest].vnum == RM_NERPCORPOLIS_LOBBY)
+      GET_SPARE1(driver) = 0;
+      
     GET_SPARE2(driver) = dest;
     GET_ACTIVE(driver) = ACT_REPLY_DEST;
     if (PLR_FLAGGED(ch, PLR_NEWBIE))

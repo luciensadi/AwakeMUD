@@ -93,6 +93,8 @@ struct social_type
 
 int fixers_need_save;
 
+#define NO_DRAG_BULLSHIT if (cmd && CMD_IS("drag")) { send_to_char("You can't drag people here.\r\n", ch); return TRUE; }
+
 /* ********************************************************************
 *  Special procedures for mobiles                                     *
 ******************************************************************** */
@@ -1518,8 +1520,9 @@ SPECIAL(car_dealer)
   return FALSE;
 }
 
-SPECIAL(pike)
-{
+SPECIAL(pike) {
+  NO_DRAG_BULLSHIT;
+  
   struct char_data *pike = (struct char_data *) me;
 
   if (CMD_IS("give")) {
@@ -1598,8 +1601,9 @@ SPECIAL(pike)
   return FALSE;
 }
 
-SPECIAL(jeff)
-{
+SPECIAL(jeff) {
+  NO_DRAG_BULLSHIT;
+
   struct char_data *jeff = (struct char_data *) me;
   if (!AWAKE(jeff))
     return FALSE;
@@ -1834,8 +1838,9 @@ SPECIAL(mugger_park)
   return FALSE;
 }
 
-SPECIAL(gate_guard_park)
-{
+SPECIAL(gate_guard_park) {
+  NO_DRAG_BULLSHIT;
+  
   struct char_data *guard = (char_data *) me;
 
   if (!AWAKE(guard) || FIGHTING(guard))
@@ -2153,8 +2158,9 @@ SPECIAL(worker)
   return FALSE;
 }
 
-SPECIAL(saeder_guard)
-{
+SPECIAL(saeder_guard) {
+  NO_DRAG_BULLSHIT;
+  
   struct char_data *guard = (char_data *) me;
   struct obj_data *obj;
   bool found = FALSE;
@@ -2177,8 +2183,9 @@ SPECIAL(saeder_guard)
   return(FALSE);
 }
 
-SPECIAL(crime_mall_guard)
-{
+SPECIAL(crime_mall_guard) {
+  NO_DRAG_BULLSHIT;
+  
   if (!cmd)
     return FALSE;
 
@@ -2548,8 +2555,9 @@ SPECIAL(doctor_scriptshaw)
   return FALSE;
 }
 
-SPECIAL(huge_troll)
-{
+SPECIAL(huge_troll) {
+  NO_DRAG_BULLSHIT;
+  
   struct char_data *troll = (struct char_data *) me;
   struct obj_data *obj;
 
@@ -2626,8 +2634,9 @@ SPECIAL(yukiya_dahoto)
   return FALSE;
 }
 
-SPECIAL(smiths_bouncer)
-{
+SPECIAL(smiths_bouncer) {
+  NO_DRAG_BULLSHIT;
+  
   struct char_data *wendigo = (char_data *) me;
   struct obj_data *obj;
   bool found = FALSE;
@@ -3091,15 +3100,12 @@ SPECIAL(oceansounds)
   return FALSE;
 }
 
-SPECIAL(neophyte_entrance)
-{
+SPECIAL(neophyte_entrance) {
+  NO_DRAG_BULLSHIT;
+  
   if (!cmd)
     return FALSE;
-
-  if (CMD_IS("drag")) {
-    send_to_char("You can't drag people here.\r\n", ch);
-    return TRUE;
-  }
+    
   if ((CMD_IS("south") || CMD_IS("enter")) && !PLR_FLAGGED(ch, PLR_NEWBIE)
       && !(IS_SENATOR(ch))) {
     send_to_char("The barrier prevents you from entering the guild.\r\n", ch);
@@ -3153,10 +3159,12 @@ SPECIAL(waterfall)
   return FALSE;
 }
 
-SPECIAL(crime_mall_blockade)
-{
+SPECIAL(crime_mall_blockade) {
+  NO_DRAG_BULLSHIT;
+  
   if (!cmd)
     return FALSE;
+    
   int found = 0;
   struct char_data *temp;
 
@@ -3172,8 +3180,9 @@ SPECIAL(crime_mall_blockade)
   return FALSE;
 }
 
-SPECIAL(circulation_fan)
-{
+SPECIAL(circulation_fan) {
+  NO_DRAG_BULLSHIT;
+  
   static bool running = true;
   room_data *room = (struct room_data *) me;
 
@@ -3884,8 +3893,9 @@ SPECIAL(painter)
 }
 #undef PAINTER_COST
 
-SPECIAL(multnomah_gate)
-{
+SPECIAL(multnomah_gate) {
+  NO_DRAG_BULLSHIT;
+  
   if (!cmd)
     return FALSE;
   long in_room = real_room(get_ch_in_room(ch)->number), to_room = 0;
@@ -4039,8 +4049,9 @@ SPECIAL(bouncer_gentle)
   return FALSE;
 }
 
-SPECIAL(bouncer_troll)
-{
+SPECIAL(bouncer_troll) {
+  NO_DRAG_BULLSHIT;
+  
   if (!cmd)
     return FALSE;
 
@@ -4347,8 +4358,9 @@ SPECIAL(chargen_untrain_attribute)
 }
 
 // Prevent people from moving south from trainer until they've spent all their attribute points.
-SPECIAL(chargen_south_from_trainer)
-{
+SPECIAL(chargen_south_from_trainer) {
+  NO_DRAG_BULLSHIT;
+  
   if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
   
@@ -4412,8 +4424,9 @@ SPECIAL(chargen_unpractice_skill)
 }
 
 // Prevent people from moving south from teachers until they've spent all their skill points.
-SPECIAL(chargen_skill_annex)
-{
+SPECIAL(chargen_skill_annex) {
+  NO_DRAG_BULLSHIT;
+  
   if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
     
@@ -4534,8 +4547,9 @@ SPECIAL(chargen_hopper)
 }
 
 // Build the exits of the room based on character's traditions.
-SPECIAL(chargen_career_archetype_paths)
-{
+SPECIAL(chargen_career_archetype_paths) {
+  NO_DRAG_BULLSHIT;
+  
   struct room_data *room = (struct room_data *) me;
   struct room_data *temp_to_room = NULL;
   
@@ -4852,8 +4866,9 @@ SPECIAL(orkish_truckdriver)
   return FALSE;
 }
 
-SPECIAL(Janis_Amer_Girl)
-{
+SPECIAL(Janis_Amer_Girl) {
+  NO_DRAG_BULLSHIT;
+  
   struct char_data *mob = (struct char_data *) me, *tch = mob->in_room->people;
   if (!AWAKE(mob))
     return FALSE;
@@ -4940,8 +4955,9 @@ SPECIAL(Janis_Amer_Jerry)
   return FALSE;
 }
 
-SPECIAL(Janis_Amer_Door)
-{
+SPECIAL(Janis_Amer_Door) {
+  NO_DRAG_BULLSHIT;
+  
   struct char_data *mob = (struct char_data *) me;
   if (!AWAKE(mob))
     return FALSE;
@@ -5277,8 +5293,9 @@ SPECIAL(mageskill_trainer)
   return FALSE;
 }
 
-SPECIAL(knightcenter_bouncer)
-{
+SPECIAL(knightcenter_bouncer) {
+  NO_DRAG_BULLSHIT;
+  
   struct char_data *wendigo = (char_data *) me;
   struct obj_data *obj;
   bool found = FALSE;
@@ -5393,8 +5410,9 @@ SPECIAL(sombrero_bridge)
   return FALSE;
 }
 
-SPECIAL(sombrero_infinity)
-{
+SPECIAL(sombrero_infinity) {
+  NO_DRAG_BULLSHIT;
+  
   if (!cmd)
     return FALSE;
   if (CMD_IS("west") && GET_LEVEL(ch) == LVL_MORTAL) {
@@ -5424,8 +5442,9 @@ SPECIAL(cybered_yakuza)
   return FALSE;
 }
 
-SPECIAL(airport_gate)
-{
+SPECIAL(airport_gate) {
+  NO_DRAG_BULLSHIT;
+  
   if (!cmd)
     return FALSE;
   struct room_data *in_room = ch->in_veh ? ch->in_veh->in_room : ch->in_room;
@@ -5526,6 +5545,8 @@ SPECIAL(axehead) {
 }
 
 SPECIAL(archetype_chargen_magic_split) {
+  NO_DRAG_BULLSHIT;
+  
   struct room_data *room = (struct room_data *) me;
   struct room_data *temp_to_room = NULL;
   
@@ -5553,6 +5574,8 @@ SPECIAL(archetype_chargen_magic_split) {
 }
 
 SPECIAL(archetype_chargen_reverse_magic_split) {
+  NO_DRAG_BULLSHIT;
+  
   struct room_data *room = (struct room_data *) me;
   struct room_data *temp_to_room = NULL;
   
@@ -5594,5 +5617,21 @@ SPECIAL(nerpcorpolis_lobby) {
       look_at_room(ch, 0);
   }
   // We still want them to say whatever it is they're saying.
+  return FALSE;
+}
+
+SPECIAL(troll_barrier) {
+  NO_DRAG_BULLSHIT;
+  
+  if (!cmd)
+    return FALSE;
+  
+  if (CMD_IS("west") || CMD_IS("w")) {
+    if (!(GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_CYCLOPS)) {
+      send_to_char("A massive troll blocks the way and keeps you from going any further.\r\n", ch);
+      act("$n stumbles into the immovable brick wall of a troll guard with an oof.", FALSE, ch, 0, 0, TO_ROOM);
+      return TRUE;
+    }
+  }
   return FALSE;
 }

@@ -889,6 +889,7 @@ void assign_rooms(void)
   SPECIAL(archetype_chargen_magic_split);
   SPECIAL(archetype_chargen_reverse_magic_split);
   SPECIAL(nerpcorpolis_lobby);
+  SPECIAL(troll_barrier);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -989,7 +990,10 @@ void assign_rooms(void)
   
   // Nerpcorpolis
 #ifdef USE_PRIVATE_CE_WORLD
-  ASSIGNROOM(6901, nerpcorpolis_lobby);
+  ASSIGNROOM(RM_NERPCORPOLIS_LOBBY, nerpcorpolis_lobby);
+  
+  // Wither's troll_barrier
+  ASSIGNROOM(15600, troll_barrier);
 #endif
 
   log("Assigning traffic messages...");
