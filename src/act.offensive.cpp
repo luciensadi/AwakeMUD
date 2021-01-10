@@ -717,23 +717,28 @@ ACMD(do_mode)
   } else {
     skip_spaces(&argument);
     two_arguments(argument, arg, buf1);
-    if (!str_cmp(arg, "SS") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS))
+    if ((!str_cmp(arg, "SS") || str_str(fire_mode[MODE_SS], arg)) && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS))
       mode = MODE_SS;
-    else if (!str_cmp(arg, "SA") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA))
+    else if ((!str_cmp(arg, "SA") || str_str(fire_mode[MODE_SA], arg)) && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA))
       mode = MODE_SA;
-    else if (!str_cmp(arg, "BF") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF))
+    else if ((!str_cmp(arg, "BF") || str_str(fire_mode[MODE_BF], arg)) && WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF))
       mode = MODE_BF;
-    else if (!str_cmp(arg, "FA") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
+    else if ((!str_cmp(arg, "FA") || str_str(fire_mode[MODE_FA], arg)) && WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
       mode = MODE_FA;
       if (*buf1)
         GET_WEAPON_FULL_AUTO_COUNT(weapon) = MIN(10, MAX(3, atoi(buf1)));
-      else
+      else {
         GET_WEAPON_FULL_AUTO_COUNT(weapon) = 10;
+        send_to_char("Using default FA value of 10. You can change this with 'mode FA X' where X is the number of bullets to fire.\r\n", ch);
+      }
     }
     if (!mode)
-      send_to_char(ch, "You can't set %s to that firing mode.\r\n", GET_OBJ_NAME(weapon));
+      send_to_char(ch, "You can't set %s to that firing mode. Try mode abbreviations like 'SS' or 'FA 10'.\r\n", GET_OBJ_NAME(weapon));
     else {
-      send_to_char(ch, "You set %s to %s.\r\n", GET_OBJ_NAME(weapon), fire_mode[mode]);
+      if (mode == MODE_FA)
+        send_to_char(ch, "You set %s to %s (%d rounds per firing).\r\n", GET_OBJ_NAME(weapon), fire_mode[mode], GET_WEAPON_FULL_AUTO_COUNT(weapon));
+      else
+        send_to_char(ch, "You set %s to %s.\r\n", GET_OBJ_NAME(weapon), fire_mode[mode]);
       GET_WEAPON_FIREMODE(weapon) = mode;
       act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
     }
