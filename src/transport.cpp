@@ -131,7 +131,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "slitch", "The Slitch Pit", 32660, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "planetary", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
     { "splat", "The SPLAT! Paintball Arena", 32653, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "nerp", "^M(OOC / RP Area)^W The NERPcorpolis^n", 6901, TAXI_DEST_TYPE_OTHER, TRUE },
+    { "nerp", "The NERPcorpolis", 6901, TAXI_DEST_TYPE_OOC, TRUE },
 #endif
     { "\n", "", 0, 0, 0 } // this MUST be last
   };
@@ -189,7 +189,8 @@ struct taxi_dest_type taxi_dest_type_info[] = {
   { "^bShopping", "^B" },
   { "^gAccommodation", "^G" },
   { "^rHospitals", "^R" },
-  { "^WEverything Else", "^W" }
+  { "^WEverything Else", "^W" },
+  { "^MOOC Areas", "^W"},
 };
 
 struct transport_type
@@ -278,8 +279,9 @@ SPECIAL(taxi_sign) {
   }
   
   // Set up our default string.
-  strcpy(buf, "The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n"
-              "-------------------------------------------------\r\n");
+  strncpy(buf, "The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n", sizeof(buf) - 1);
+  if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+    strncat(buf, "-------------------------------------------------\r\n", sizeof(buf) - strlen(buf) - 1);
   
   bool is_first_printed_dest_title = TRUE;
   
@@ -299,16 +301,25 @@ SPECIAL(taxi_sign) {
       continue;
     
     // We have something! Print the dest type's title to make the list ~~fancy~~. Extra carriage return before if we're not the first.
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s^n\r\n", is_first_printed_dest_title ? "" : "\r\n", taxi_dest_type_info[taxi_dest_type].title_string);
+    if (PRF_FLAGGED(ch, PRF_SCREENREADER))
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%sSection: %s^n:\r\n", is_first_printed_dest_title ? "" : "\r\n", taxi_dest_type_info[taxi_dest_type].title_string);
+    else
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s^n\r\n", is_first_printed_dest_title ? "" : "\r\n", taxi_dest_type_info[taxi_dest_type].title_string);
     is_first_printed_dest_title = FALSE;
     
     // Iterate through and populate the dest list with what we've got available.
     for (unsigned int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
       if (DEST_IS_VALID(dest_index, dest_data_list) && dest_data_list[dest_index].type == taxi_dest_type) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-35s - %s%s^n\r\n",
-                dest_data_list[dest_index].str,
-                taxi_dest_type_info[taxi_dest_type].entry_color_string,
-                capitalize(dest_data_list[dest_index].keyword));
+        if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s (keyword: %s)^n\r\n",
+                  dest_data_list[dest_index].str,
+                  capitalize(dest_data_list[dest_index].keyword));
+        } else {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-35s - %s%s^n\r\n",
+                  dest_data_list[dest_index].str,
+                  taxi_dest_type_info[taxi_dest_type].entry_color_string,
+                  capitalize(dest_data_list[dest_index].keyword));
+        }
       }
     }
   }

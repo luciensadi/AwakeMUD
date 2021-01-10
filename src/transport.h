@@ -39,7 +39,8 @@
 #define TAXI_DEST_TYPE_ACCOMMODATIONS             6
 #define TAXI_DEST_TYPE_HOSPITALS                  7
 #define TAXI_DEST_TYPE_OTHER                      8
-#define NUM_TAXI_DEST_TYPES                       9
+#define TAXI_DEST_TYPE_OOC                        9
+#define NUM_TAXI_DEST_TYPES                       10
 
 // Define to collapse validation logic for destinations. Input is an integer index in the destination list.
 #define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_connected_zone((dest_list)[(destination)].vnum))
