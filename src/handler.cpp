@@ -2738,6 +2738,8 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
   *tar_ch = NULL;
   *tar_obj = NULL;
   
+  /* Technically, this is intended to find characters outside of vehicles... but this is broken.
+     Fixing it lets you do stupid shit like manabolting from inside a car. -- LS */
   if (IS_SET(bitvector, FIND_CHAR_ROOM))
   {      /* Find person in room */
     if (ch->in_veh) {
@@ -2756,6 +2758,25 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
       if ((*tar_ch = get_char_room_vis(ch, name)))
         return (FIND_CHAR_ROOM);
     }
+  }
+  if (IS_SET(bitvector, FIND_CHAR_VEH_ROOM)) {
+    struct char_data *i;
+    int j = 0, number;
+    char tmpname[MAX_INPUT_LENGTH];
+    char *tmp = tmpname;
+    
+    /* 0.<name> means PC with name-- except here we're overriding that because I cannot be bothered right now. TODO. --LS */
+    strcpy(tmp, name);
+    number = MAX(1, get_number(&tmp));
+    
+    for (i = get_ch_in_room(ch)->people; i && j <= number; i = i->next_in_room)
+      if ((isname(tmp, GET_KEYWORDS(i)) ||
+           isname(tmp, GET_NAME(i)) || recog(ch, i, name)) &&
+          CAN_SEE(ch, i))
+        if (++j == number) {
+          *tar_ch = i;
+          return (FIND_CHAR_VEH_ROOM);
+        }
   }
   if (IS_SET(bitvector, FIND_CHAR_WORLD))
   {

@@ -1783,7 +1783,7 @@ void look_at_target(struct char_data * ch, char *arg)
       ch->in_room = get_veh_in_room(ch->char_specials.rigging);
   
   bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
-                      FIND_CHAR_ROOM | FIND_OBJ_VEH_ROOM, ch, &found_char, &found_obj);
+                      FIND_CHAR_ROOM | FIND_OBJ_VEH_ROOM | FIND_CHAR_VEH_ROOM, ch, &found_char, &found_obj);
   
   // Look at self.
   if ((!str_cmp(arg, "self") || !str_cmp(arg, "me") || !str_cmp(arg, "myself"))) {
@@ -2619,7 +2619,7 @@ ACMD(do_examine)
     return;
   } else {
     generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_CHAR_ROOM |
-                 FIND_OBJ_EQUIP | FIND_OBJ_VEH_ROOM, ch, &tmp_char, &tmp_object);
+                 FIND_OBJ_EQUIP | FIND_OBJ_VEH_ROOM | FIND_CHAR_VEH_ROOM, ch, &tmp_char, &tmp_object);
   }
   
   if (tmp_object) {

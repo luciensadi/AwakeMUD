@@ -105,13 +105,14 @@ int     find_all_dots(char *arg);
 int     generic_find(char *arg, int bitvector, struct char_data *ch,
                      struct char_data **tar_ch, struct obj_data **tar_obj);
 
-#define FIND_CHAR_ROOM    (1 << 0)
-#define FIND_CHAR_WORLD   (1 << 1)
-#define FIND_OBJ_INV      (1 << 2)
-#define FIND_OBJ_ROOM     (1 << 3)
-#define FIND_OBJ_WORLD    (1 << 4)
-#define FIND_OBJ_EQUIP    (1 << 5)
-#define FIND_OBJ_VEH_ROOM (1 << 6)
+#define FIND_CHAR_ROOM     (1 << 0)
+#define FIND_CHAR_WORLD    (1 << 1)
+#define FIND_OBJ_INV       (1 << 2)
+#define FIND_OBJ_ROOM      (1 << 3)
+#define FIND_OBJ_WORLD     (1 << 4)
+#define FIND_OBJ_EQUIP     (1 << 5)
+#define FIND_OBJ_VEH_ROOM  (1 << 6)
+#define FIND_CHAR_VEH_ROOM (1 << 7)
 
 /* prototypes from fight.c */
 void    set_fighting(struct char_data *ch, struct char_data *victim, ...);
