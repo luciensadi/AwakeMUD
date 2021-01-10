@@ -888,6 +888,7 @@ void assign_rooms(void)
   SPECIAL(chargen_spirit_combat_west);
   SPECIAL(archetype_chargen_magic_split);
   SPECIAL(archetype_chargen_reverse_magic_split);
+  SPECIAL(nerpcorpolis_lobby);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -985,6 +986,11 @@ void assign_rooms(void)
   
   // Junkyard
   ASSIGNROOM(70504, floor_has_glass_shards);
+  
+  // Nerpcorpolis
+#ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNROOM(6901, nerpcorpolis_lobby);
+#endif
 
   log("Assigning traffic messages...");
   for (long x = 0; x <= top_of_world; x++)
