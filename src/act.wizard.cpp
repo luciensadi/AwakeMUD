@@ -2741,8 +2741,9 @@ ACMD(do_wizlock)
     break;
   }
   
+  send_to_char(buf, ch);
+  
   if (changed) {
-    send_to_char(buf, ch);
     snprintf(buf, sizeof(buf), "%s set wizlock to level %d.", GET_CHAR_NAME(ch), restrict_mud);
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
   }
