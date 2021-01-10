@@ -57,8 +57,6 @@ struct archetype_data *generate_street_samurai() {
   
   arch->ammo_q = 500;
   
-  arch->subsidy_card = 30000;
-  
   arch->nuyen = 20460;
   
   arch->modulator = OBJ_DOCWAGON_PLATINUM_MODULATOR; // platinum
@@ -160,8 +158,6 @@ struct archetype_data *generate_adept() {
   arch->ammo_q = 500;
   
   arch->nuyen = 36550;
-  
-  arch->subsidy_card = 30000;
   
   arch->modulator = OBJ_DOCWAGON_GOLD_MODULATOR; // gold
   
@@ -525,6 +521,7 @@ struct archetype_data *generate_archetype(int index) {
 void generate_archetypes() {
   for (int i = 0; i < NUM_CCR_ARCHETYPES; i++) {
     archetypes[i] = generate_archetype(i);
+    archetypes[i]->subsidy_card = 30000;
     log_vfprintf("... %s.", archetypes[i]->name);
   }
 }
