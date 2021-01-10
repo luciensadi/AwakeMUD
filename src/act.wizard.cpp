@@ -3375,6 +3375,7 @@ ACMD(do_show)
                { "anomalies",      LVL_BUILDER },
                { "roomflag",       LVL_BUILDER },
                { "markets",        LVL_VICEPRES},
+               { "weight",         LVL_PRESIDENT},
                { "\n", 0 }
              };
 
@@ -3850,6 +3851,20 @@ ACMD(do_show)
     return;
   case 23:
     send_to_char(ch, "Current paydata market values: B-%d, G-%d, O-%d, R-%d, L-%d.\r\n", market[0], market[1], market[2], market[3], market[4]);
+    return;
+  case 24:
+    send_to_char("\r\n\r\nAnomalous Objects (weight 5.00) -----------\r\n", ch);
+    for (i = 0, j = 0; i <= top_of_objt; i++) {
+      if (GET_OBJ_WEIGHT(&obj_proto[i]) == 5 || GET_OBJ_WEIGHT(&obj_proto[i]) == 5.0) {
+        send_to_char(ch, "%4d) [%8ld] %s %s^n\r\n", 
+                     j++,
+                     GET_OBJ_VNUM(&obj_proto[i]),
+                     vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[i])) ? " " : "*",
+                     GET_OBJ_NAME(&obj_proto[i]));
+      }
+    }
+    if (j == 0)
+      send_to_char("...None.\r\n", ch);
     return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);

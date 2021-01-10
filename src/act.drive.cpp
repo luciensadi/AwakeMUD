@@ -15,6 +15,7 @@
 #include "constants.h"
 #include "limits.h"
 #include "act.drive.h"
+#include "config.h"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
@@ -1701,7 +1702,7 @@ void process_autonav(void)
       }
       
       int dir = 0;
-      for (int x = MAX((int)get_speed(veh) / 10, 1); x && dir >= 0 && veh->dest; x--) {
+      for (int x = MIN(MAX((int)get_speed(veh) / 10, 1), MAX_GRIDGUIDE_ROOMS_PER_PULSE); x && dir >= 0 && veh->dest; x--) {
         dir = find_first_step(real_room(veh->in_room->number), real_room(veh->dest->number));
         if (dir >= 0) {
           veh_moved = TRUE;
