@@ -106,4 +106,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How infrequently do you want your trideo units to display something?
 #define TRIDEO_TICK_DELAY 3
 
+// Wizlock message.
+// #define WIZLOCK_MSG "Sorry, new characters can't be created at the moment.\r\n"
+#define WIZLOCK_MSG "We're not open quite yet! The MUD will be open for new characters on January 15th, 2021, at 5pm Pacific. In the meantime, feel free to join our Discord at https://discord.gg/q5VCMkv!"
+
 #endif

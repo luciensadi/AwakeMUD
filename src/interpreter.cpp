@@ -2409,8 +2409,9 @@ void nanny(struct descriptor_data * d, char *arg)
       if (restrict_mud) {
         if (restrict_mud == LVL_MAX)
           SEND_TO_Q("The mud is being reconfigured.  Try again a bit later.\r\n", d);
-        else
-          SEND_TO_Q("Sorry, new players can't be created at the moment.\r\n", d);
+        else {
+          SEND_TO_Q(WIZLOCK_MSG, d);
+        }
         snprintf(buf, sizeof(buf), "Request for new char %s denied from %s (wizlock)",
                 GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
