@@ -2482,6 +2482,11 @@ ACMD(do_endrun) {
   for (phone = ch->carrying; phone; phone = phone->next_content)
     if (GET_OBJ_TYPE(phone) == ITEM_PHONE)
       break;
+  // Worn phones are OK.
+  if (!phone)
+    for (int x = 0; !phone && x < NUM_WEARS; x++)
+      if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_PHONE)
+        phone = GET_EQ(ch, x);
   // Cyberware phones are fine.
   if (!phone)
     for (phone = ch->cyberware; phone; phone = phone->next_content)

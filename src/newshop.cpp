@@ -174,13 +174,20 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
   if (*arg == '#' && atoi(arg+1) > 0)
   {
     int num = atoi(arg+1) - 1;
-    for (;sell; sell = sell->next, num--) {
+    for (;sell; sell = sell->next, num--) {      
       int real_obj = real_object(sell->vnum);
+      
       if (real_obj >= 0) {
-        if (obj_proto[real_obj].obj_flags.cost < 1)
+        // Can't sell it? Don't have it show up here.
+        if (!can_sell_object(read_object(real_obj, REAL), NULL, shop_nr)) {
           num++;
+          continue;
+        }
         if (num == 0)
           break;
+      } else {
+        num++;
+        continue;
       }
     }
     if (sell)
@@ -2259,48 +2266,49 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
 }
 
 bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr) {
-  if (obj) {
-    if (GET_OBJ_VNUM(obj) == OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC
-        || GET_OBJ_VNUM(obj) == OBJ_BLANK_MAGAZINE) {
-      snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to matching a forbidden vnum.",
-               shop_table[shop_nr].vnum,
-               GET_NAME(keeper),
-               GET_OBJ_NAME(obj),
-               GET_OBJ_VNUM(obj));
-      mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
-      extract_obj(obj);
-      return FALSE;
-    }
-    
-    if (GET_OBJ_COST(obj) < 1) {
-      snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to cost of %d.", 
-               shop_table[shop_nr].vnum, 
-               GET_NAME(keeper), 
-               GET_OBJ_NAME(obj),
-               GET_OBJ_VNUM(obj), 
-               GET_OBJ_COST(obj));
-      mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
-      extract_obj(obj);
-      return FALSE;
-    }
-    
-    if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA) {
+  if (!obj) {
+    snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Hiding nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
+    mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // Pre-compose our rejection string.
+  snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Hiding %s (%ld) from sale due to ",
+           shop_table[shop_nr].vnum,
+           keeper ? GET_NAME(keeper) : "masked",
+           GET_OBJ_NAME(obj),
+           GET_OBJ_VNUM(obj));
+  
+  // Don't allow sale of forbidden vnums.
+  if (GET_OBJ_VNUM(obj) == OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC
+      || GET_OBJ_VNUM(obj) == OBJ_BLANK_MAGAZINE) {
+    strncat(buf2, "matching a forbidden vnum.", sizeof(buf2) - strlen(buf2) - 1);
+    mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
+    extract_obj(obj);
+    return FALSE;
+  }
+  
+  // Don't allow sale of zero-cost items.
+  if (GET_OBJ_COST(obj) < 1) {
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "cost of %d.", GET_OBJ_COST(obj));
+    mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
+    extract_obj(obj);
+    return FALSE;
+  }
+  
+  // Checks based on item type.
+  switch (GET_OBJ_TYPE(obj)) {
+    // Don't allow sale of NERP spell formulae.
+    case ITEM_SPELL_FORMULA:
       if (spell_is_nerp(GET_SPELLFORMULA_SPELL(obj))) {
-        snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing %s (%ld) from sale due to having NERP spell %s.", 
-                 shop_table[shop_nr].vnum, 
-                 GET_NAME(keeper), 
-                 GET_OBJ_NAME(obj),
-                 GET_OBJ_VNUM(obj), 
-                 spells[GET_OBJ_VAL(obj, 1)].name);
+        snprintf(buf2, sizeof(buf2), "having NERP spell %s.", spells[GET_OBJ_VAL(obj, 1)].name);
         mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
         extract_obj(obj);
         return FALSE;
       }
-    }
-  } else {
-    snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Removing nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
-    mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
-    return FALSE;
+      break;
   }
+  
+  // Can sell it.
   return TRUE;
 }

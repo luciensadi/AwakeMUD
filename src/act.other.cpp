@@ -99,7 +99,6 @@ ACMD(do_quit)
       GET_LOADROOM(ch) = save_room->number;
     } else {
       // Your room was invalid for reloading in (not an apartment, etc).
-      ch->in_room = save_room;
       if (!GET_LOADROOM(ch)) {
         if (PLR_FLAGGED(ch, PLR_NEWBIE))
           GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;

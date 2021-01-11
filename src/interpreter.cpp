@@ -2255,7 +2255,7 @@ void nanny(struct descriptor_data * d, char *arg)
   extern vnum_t newbie_start_room;
   extern int max_bad_pws;
   extern bool House_can_enter(struct char_data *ch, vnum_t vnum);
-  long load_room;
+  long load_room = NOWHERE;
   bool dirty_password = FALSE;
 
   int parse_class(struct descriptor_data *d, char *arg);
@@ -2677,13 +2677,23 @@ void nanny(struct descriptor_data * d, char *arg)
       else if ((load_room = GET_LAST_IN(d->character)) != NOWHERE)
         load_room = real_room(load_room);
         
+      // Next: Characters who have load rooms rooms load in there.
+      else if ((load_room = GET_LOADROOM(d->character)) != NOWHERE)
+        load_room = real_room(load_room);
+        
+      // Fallthrough: No start room? Mortal start room. Functions like an ELSE to the above, but also catches invalid rooms from above.
+      if (load_room == NOWHERE)
+        load_room = real_room(mortal_start_room);
+        
       // Post-processing: Non-newbies don't get to start in the newbie loadroom-- rewrite their loadroom value.
-      if (load_room == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
-        load_room = mortal_start_room;
+      if (load_room == real_room(RM_NEWBIE_LOADROOM) && !PLR_FLAGGED(d->character, PLR_NEWBIE))
+        load_room = real_room(mortal_start_room);
 
+      /*
       // Post-processing: Staff with invalid or mort-start-room loadrooms instead load in at their defined loadroom.
       if (IS_SENATOR(d->character) && (load_room <= 0 || load_room == real_room(mortal_start_room)))
         load_room = real_room(GET_LOADROOM(d->character));
+      */
         
       // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
       if (ROOM_FLAGGED(&world[load_room], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room].number))

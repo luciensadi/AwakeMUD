@@ -760,8 +760,11 @@ void point_update(void)
           totaltime = order->timeavail - time(0);
           if (!order->sent && totaltime < 0) {
             int real_obj = real_object(order->item);
-            snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup.\r\n", real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
-                    shop_table[shop_nr].shopname);
+            snprintf(buf2, sizeof(buf2), "%s has arrived at %s and is ready for pickup for a total cost of %d nuyen.\r\n", 
+                     real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
+                     shop_table[shop_nr].shopname,
+                     order->price
+                    );
             int real_mob = real_mobile(shop_table[shop_nr].keeper);
             if (real_mob > 0)
               raw_store_mail(order->player, 0, mob_proto[real_mob].player.physical_text.name, (const char *) buf2);

@@ -881,7 +881,7 @@ ACMD(do_gen_comm)
     return;
   }
 
-  if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
+  if (subcmd == SCMD_SHOUT && !char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
 
   if (IS_ASTRAL(ch)) {

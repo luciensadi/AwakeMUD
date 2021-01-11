@@ -46,6 +46,8 @@ extern vnum_t newbie_start_room;
 extern int num_elevators;
 extern struct elevator_data *elevator;
 
+ACMD_DECLARE(do_prone);
+
 /* can_move determines if a character can move in the given direction, and
    generates the appropriate message if not */
 int can_move(struct char_data *ch, int dir, int extra)
@@ -1738,6 +1740,10 @@ ACMD(do_stand)
   if (IS_WORKING(ch)) {
     send_to_char(ch, "You stop working.\r\n");
     STOP_WORKING(ch);
+  }
+  if (AFF_FLAGGED(ch, AFF_PRONE)) {
+    do_prone(ch, argument, 0, 0);
+    return;
   }
   switch (GET_POS(ch)) {
   case POS_STANDING:
