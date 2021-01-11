@@ -54,7 +54,7 @@ int wear_bitvectors[] = {
                           ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
                           ITEM_WEAR_BELLY, ITEM_WEAR_WAIST, ITEM_WEAR_THIGH, ITEM_WEAR_THIGH,
                           ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET,
-                          ITEM_WEAR_MOUTH, };
+                          ITEM_WEAR_MOUTH };
 
 bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 {
