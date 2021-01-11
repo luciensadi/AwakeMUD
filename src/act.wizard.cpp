@@ -6048,6 +6048,13 @@ int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
     
+    // Flag mobs with high nuyen.
+    if (GET_NUYEN(mob) > 100 || GET_BANK(mob) > 100) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high grinding rewards (%ld/%ld)^n.\r\n", GET_NUYEN(mob), GET_BANK(mob));
+      printed = TRUE;
+      issues++;
+    }
+    
     // Flag mobs with no weight or height
     if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing vital statistics (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
