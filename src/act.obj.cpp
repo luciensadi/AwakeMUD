@@ -2461,7 +2461,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   }
   /* for neck wrist ankles and ears, fingers moved to next case */
   if ((where == WEAR_NECK_1) || (where == WEAR_WRIST_R) || (where == WEAR_LARM) ||
-      (where == WEAR_LANKLE) || (where == WEAR_EAR) || (where == WEAR_THIGH_R) || (where == WEAR_MOUTH))
+      (where == WEAR_LANKLE) || (where == WEAR_EAR) || (where == WEAR_THIGH_R))
     if (GET_EQ(ch, where))
       where++;
 
