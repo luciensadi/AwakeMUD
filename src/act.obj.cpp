@@ -45,7 +45,7 @@ void calc_weight(struct char_data *ch);
 SPECIAL(weapon_dominator);
 
 int wear_bitvectors[] = {
-                          ITEM_WEAR_TAKE, ITEM_WEAR_HEAD, ITEM_WEAR_EYES, ITEM_WEAR_EAR, ITEM_WEAR_MOUTH,
+                          ITEM_WEAR_TAKE, ITEM_WEAR_HEAD, ITEM_WEAR_EYES, ITEM_WEAR_EAR,
                           ITEM_WEAR_EAR, ITEM_WEAR_FACE, ITEM_WEAR_NECK, ITEM_WEAR_NECK,
                           ITEM_WEAR_BACK, ITEM_WEAR_ABOUT, ITEM_WEAR_BODY, ITEM_WEAR_UNDER,
                           ITEM_WEAR_ARMS, ITEM_WEAR_ARM, ITEM_WEAR_ARM, ITEM_WEAR_WRIST,
@@ -53,7 +53,8 @@ int wear_bitvectors[] = {
                           ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
                           ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
                           ITEM_WEAR_BELLY, ITEM_WEAR_WAIST, ITEM_WEAR_THIGH, ITEM_WEAR_THIGH,
-                          ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET };
+                          ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET,
+                          ITEM_WEAR_MOUTH, };
 
 bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 {
