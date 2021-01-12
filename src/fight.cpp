@@ -652,8 +652,8 @@ void death_penalty(struct char_data *ch)
     } while (attribute == CHA);
     GET_TKE(ch) -= 2*GET_REAL_ATT(ch, attribute);
     GET_REAL_ATT(ch, attribute)--;
-    snprintf(buf, sizeof(buf),"%s lost a point of attribute %d.  Total Karma Earned from %d to %d.",
-            GET_CHAR_NAME(ch), attribute, old_tke, GET_TKE( ch ) );
+    snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %d to %d.",
+            GET_CHAR_NAME(ch), short_attributes[attribute], old_tke, GET_TKE( ch ) );
     mudlog(buf, ch, LOG_DEATHLOG, TRUE);
     
   }
