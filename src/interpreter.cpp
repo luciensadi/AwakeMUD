@@ -2950,7 +2950,7 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   else if (ch->in_room)
     snprintf(location_buf, sizeof(location_buf), "%ld", GET_ROOM_VNUM(ch->in_room));
   else if (ch->in_veh)
-    snprintf(location_buf, sizeof(location_buf), "veh #%ld (%ld)", ch->in_veh->idnum, GET_VEH_NAME(ch->in_veh));
+    snprintf(location_buf, sizeof(location_buf), "veh #%ld (%ld)", ch->in_veh->idnum, ch->in_veh->vnum);
   
   // Compose name string.
   char name_buf[250];
