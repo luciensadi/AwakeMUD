@@ -785,7 +785,8 @@ const char *where[] =
     "<worn around ankle>  ",
     "<worn as socks>      ",
     "<worn on feet>       ",
-    "<patch>              "
+    "<patch>              ",
+    "<held in mouth>      "
   };
 
 
@@ -843,7 +844,8 @@ const char *short_where[] =
     "ANKLE2",
     "SOCK",
     "FEET",
-    "PATCH"
+    "PATCH",
+    "MOUTH"
   };
 
 /* ITEM_x (ordinal object types) */
@@ -925,6 +927,7 @@ const char *wear_bits[] =
     "FACE",
     "THIGH",
     "PATCH",
+    "MOUTH"
     "\n"
   };
 
