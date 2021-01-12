@@ -2946,11 +2946,11 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   // Extract location.
   char location_buf[500];
   if (PLR_FLAGGED(ch, PLR_MATRIX))
-    snprintf(location_buf, sizeof(location_buf), "mtx %ld", matrix[ch->persona->in_host].vnum, matrix[ch->persona->in_host].name);
+    snprintf(location_buf, sizeof(location_buf), "mtx %ld", matrix[ch->persona->in_host].vnum);
   else if (ch->in_room)
     snprintf(location_buf, sizeof(location_buf), "%ld", GET_ROOM_VNUM(ch->in_room));
   else if (ch->in_veh)
-    snprintf(location_buf, sizeof(location_buf), "veh #%ld (%ld)", ch->in_veh->idnum, ch->in_veh->vnum);
+    snprintf(location_buf, sizeof(location_buf), "veh #%ld (%ld)", ch->in_veh->idnum, GET_VEH_VNUM(ch->in_veh));
   
   // Compose name string.
   char name_buf[250];
