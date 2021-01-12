@@ -31,6 +31,8 @@ int get_minimum_attribute_points_for_race(int race);
 void init_char_sql(struct char_data *ch);
 void init_create_vars(struct descriptor_data *d);
 
+ACMD_DECLARE(do_help);
+
 /*********
 EXPECTED FLOW:
 - name
@@ -88,7 +90,7 @@ void ccr_archetype_selection_menu(struct descriptor_data *d) {
   
   SEND_TO_Q("\r\n\r\nC) Advanced (custom) creation for experienced players\r\n", d);
   
-  SEND_TO_Q("\r\n\r\nEnter the number of the archetype you'd like to play, or ? for more info: ", d);
+  SEND_TO_Q("\r\n\r\nEnter the number of the archetype you'd like to play, or 'help' for more info: ", d);
   
   d->ccr.mode = CCR_ARCHETYPE_SELECTION_MODE;
 }
@@ -125,14 +127,50 @@ if ((vnum) > 0) { \
   } \
 }
 
-void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
-  // Account for the incrementing we did when presenting the options.
-  int i = atoi(arg) - 1;
+void archetype_selection_parse(struct descriptor_data *d, const char *arg) {  
+  if (!*arg) {
+    ccr_archetype_selection_menu(d);
+    return;
+  }
   
   // Help mode.
   if (*arg == '?') {
-    // TODO
-    SEND_TO_Q("help wip", d);
+    SEND_TO_Q("\r\nYou can get help on any archetype by typing HELP <archetype>. If you have more questions, feel free to ask in our Discord channel, linked from https://awakemud.com!", d);
+    return;
+  }
+  if (!strncmp("help", arg, MIN(strlen("help"), strlen(arg)))) {
+    char helpbuf[100];
+    char non_const_arg[MAX_INPUT_LENGTH];
+    strncpy(non_const_arg, arg, sizeof(non_const_arg) - 1);
+    char *line = any_one_arg(non_const_arg, helpbuf);
+    if (!*line) {
+      strncpy(helpbuf, " archetypes", sizeof(helpbuf) - 1);
+      do_help(d->character, helpbuf, 0, 0);
+    } else {
+      // Check for numbers, like 'help 1'. Skip the first char of line since it's expected to be a space.
+      if (*(line) && *(line + 1)) {
+        switch ((int) (*(line + 1) - '0') - 1) {
+          case ARCHETYPE_STREET_SAMURAI:
+            strncpy(line, " street samurai", sizeof(line) - 1);
+            break;
+          case ARCHETYPE_ADEPT:
+            strncpy(line, " adepts", sizeof(line) - 1);
+            break;
+          case ARCHETYPE_SHAMANIC_MAGE:
+            strncpy(line, " shamans", sizeof(line) - 1);
+            break;
+          case ARCHETYPE_STREET_MAGE:
+            strncpy(line, " mages", sizeof(line) - 1);
+            break;
+          case ARCHETYPE_DECKER:
+            strncpy(line, " deckers", sizeof(line) - 1);
+            break;
+        }
+      }
+      
+      do_help(d->character, line, 0, 0);
+    }
+    SEND_TO_Q("\r\n\r\nYou can use 'HELP <topic>' to get more info on a topic, or hit return to see the list of archetypes again.\r\n", d);
     return;
   }
   
@@ -141,6 +179,9 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     ccr_confirm_switch_to_custom(d);
     return;
   }
+  
+  // Account for the incrementing we did when presenting the options.
+  int i = atoi(arg) - 1;
   
   // Selection mode.
   if (i < 0 || i >= NUM_CCR_ARCHETYPES) {

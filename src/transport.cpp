@@ -1533,11 +1533,17 @@ int process_elevator(struct room_data *room,
       if (room->dir_option[elevator[num].floor[number].doors]) {
         temp = room->rating + 1 - elevator[num].num_floors - elevator[num].start_floor;
         if (temp > 0)
-          send_to_char(ch, "You are already at B%d!\r\n", temp);
+          send_to_char(ch, "You are already at B%d, so the doors to the %s slide open.\r\n", 
+                       temp,
+                       fulldirs[elevator[num].floor[room->rating].doors]);
         else if (temp == 0)
-          send_to_char(ch, "You are already at the ground floor!\r\n");
+          send_to_char(ch, "You are already at the ground floor, so the doors to the %s slide open.\r\n",
+                       fulldirs[elevator[num].floor[room->rating].doors]);
         else
-          send_to_char(ch, "You are already at floor %d!\r\n", 0 - temp);
+          send_to_char(ch, "You are already at floor %d, so the doors to the %s slide open.\r\n", 
+                       0 - temp,
+                       fulldirs[elevator[num].floor[room->rating].doors]);
+        open_elevator_doors(room, num, room->rating);
       } else {
         snprintf(buf, sizeof(buf), "The elevator doors open to the %s.",
                 fulldirs[elevator[num].floor[room->rating].doors]);
