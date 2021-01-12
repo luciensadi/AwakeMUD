@@ -96,6 +96,8 @@ extern const char *render_door_type_string(struct room_direction_data *door);
 
 ACMD_DECLARE(do_goto);
 
+SPECIAL(fixer);
+
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
 
@@ -199,39 +201,53 @@ ACMD(do_copyover)
   
   skip_spaces(&argument);
   if (str_cmp(argument, "force") != 0) {
+    bool will_not_copyover = FALSE;
     if (num_questors > 0) {
-      send_to_char(ch, "Copyover aborted, there %s %d character%s doing autoruns right now. Use 'copyover force' to override this.\r\n%s^n.\r\n",
+      send_to_char(ch, "There %s %d character%s doing autoruns right now.\r\n%s^n.\r\n",
                    num_questors != 1 ? "are" : "is",
                    num_questors, 
                    num_questors != 1 ? "s" : "",
                    buf);
-      return;
+      will_not_copyover = TRUE;
     }
     
     // Check for PCs in non-playing states.
     if (fucky_states > 0) {
-      send_to_char(ch, "Copyover aborted, %d player%s not in the playing state. Check USERS for details. Use 'copyover force' to override this.\r\n",
+      send_to_char(ch, "%d player%s not in the playing state. Check USERS for details.\r\n",
                    fucky_states, fucky_states != 1 ? "s are" : " is");
-      return;
+      will_not_copyover = TRUE;
     }
     
     if (num_corpses) {
-      send_to_char(ch, "Copyover aborted, there %s %d player corpse%s out there with things still in them.\r\n", 
+      send_to_char(ch, "There %s %d player corpse%s out there with things still in them.\r\n", 
                    num_corpses != 1 ? "are" : "is",
                    num_corpses,
                    num_corpses != 1 ? "s" : "");
-      return;
+      will_not_copyover = TRUE;
     }
     
     if (cab_inhabitants) {
-      send_to_char(ch, "Copyover aborted, there %s %d %s.\r\n", 
+      send_to_char(ch, "There %s %d %s.\r\n", 
                    cab_inhabitants != 1 ? "are" : "is",
                    cab_inhabitants,
                    cab_inhabitants != 1 ? "people taking taxis" : "person taking a cab");
+      will_not_copyover = TRUE;
+    }
+    
+    for (struct char_data *i = character_list; i; i = i->next) {
+      if (IS_NPC(i) && (GET_MOB_SPEC(i) == fixer || GET_MOB_SPEC2(i) == fixer) && i->carrying) {
+        send_to_char("The repairman has unclaimed items.\r\n", ch);
+        will_not_copyover = TRUE;
+        break;
+      }
+    }
+      
+    if (will_not_copyover) {
+      send_to_char("Copyover aborted. Use 'copyover force' to override this.\r\n", ch);
       return;
     }
   } else if (ch->desc){
-    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, delete %d corpse%s, refund %d cab fare%s, and drop %d quest%s.\r\n",
+    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, delete %d corpse%s, refund %d cab fare%s, drop %d quest%s, and lose any repairman items.\r\n",
              fucky_states,    fucky_states    != 1 ? "s" : "",
              num_corpses,     num_corpses     != 1 ? "s" : "",
              cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
@@ -239,6 +255,11 @@ ACMD(do_copyover)
     write_to_descriptor(ch->desc->descriptor, buf);    
   } else {
     log("WTF, ch who initiated copyover had no desc? ;-;");
+  }
+  
+  if (str_cmp(argument, "check") == 0) {
+    send_to_char("Copyover is possible, no error conditions noted.\r\n", ch);
+    return;
   }
 
   snprintf(buf, sizeof(buf), "Copyover initiated by %s", GET_CHAR_NAME(ch));

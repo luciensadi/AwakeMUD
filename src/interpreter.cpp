@@ -2924,6 +2924,9 @@ void nanny(struct descriptor_data * d, char *arg)
 
 #ifdef LOG_COMMANDS
 void log_command(struct char_data *ch, const char *argument, const char *tcname) {
+  if (!ch || IS_NPC(ch))
+    return;
+    
   // Discard directional commands and other high-noise things that can't affect other players.
   const char *discard_commands[] = {
     "north", "south", "east", "west",
@@ -2960,7 +2963,7 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   
   // Compose name string.
   char name_buf[250];
-  if (ch->desc->original)
+  if (ch->desc && ch->desc->original)
     snprintf(name_buf, sizeof(name_buf), "%s (as %s)", GET_CHAR_NAME(ch->desc->original), GET_NAME(ch));
   else
     strncpy(name_buf, GET_CHAR_NAME(ch), sizeof(name_buf) - 1);
