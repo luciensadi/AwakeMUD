@@ -2033,6 +2033,8 @@ ACMD(do_wizload)
         0, 0, TO_ROOM);
     act("$n has created $N!", TRUE, ch, 0, mob, TO_ROOM);
     act("You create $N.", FALSE, ch, 0, mob, TO_CHAR);
+    snprintf(buf, sizeof(buf), "%s wizloaded mob #%d (%s).", GET_CHAR_NAME(ch), numb, GET_NAME(mob));
+    mudlog(buf, ch, LOG_CHEATLOG, TRUE);
   } else if (is_abbrev(buf, "obj")) {
     perform_wizload_object(ch, numb);
   } else
@@ -2304,6 +2306,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     send_to_char(victim, "%s has demoted you from %s to %s. Note that this has reset your skills, stats, karma, etc.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
     snprintf(buf3, sizeof(buf3), "%s has demoted %s from %s to %s.",
             GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
+    mudlog(buf3, ch, LOG_WIZLOG, TRUE);
     do_start(victim, TRUE);
     GET_LEVEL(victim) = newlevel;
   } else {
@@ -2324,6 +2327,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     send_to_char(victim, "%s has promoted you from %s to %s. Note that this has reset your skills, stats, chargen data, etc.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
     snprintf(buf3, sizeof(buf3), "%s has advanced %s from %s to %s.",
             GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
+    mudlog(buf3, ch, LOG_WIZLOG, TRUE);
     GET_LEVEL(victim) = newlevel;
     
     // Auto-restore them to set their skills, stats, etc.
@@ -2343,8 +2347,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     PRF_FLAGS(victim).SetBit(PRF_NOHASSLE);
     PRF_FLAGS(victim).SetBit(PRF_AUTOINVIS);
   }
-
-  mudlog(buf3, ch, LOG_WIZLOG, TRUE);
+  
   // We use INSERT IGNORE to cause it to not error out when updating someone who already had immort data.
   snprintf(buf, sizeof(buf), "INSERT IGNORE INTO pfiles_immortdata (idnum) VALUES (%ld);", GET_IDNUM(victim));
   mysql_wrapper(mysql, buf);

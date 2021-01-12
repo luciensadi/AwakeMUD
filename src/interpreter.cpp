@@ -2937,7 +2937,7 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     "enter", "leave",
     "score", "equipment", "inventory", "status", "affects",
     "look", "scan", "search", "who", "probe",
-    "alias",
+    "alias", "help",
     "hail", "push",
     "radio", "phone",
     "drive", "speed",
