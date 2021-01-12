@@ -2404,7 +2404,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
                               "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
                               "You already have something on each of your ankles.\r\n",
                               "You are already wearing something on your feet.\r\n",
-                              "You already have something in your mouth.\r\n",
+                              "You're already wearing something on your feet.\r\n",
+                              "You already have something in your mouth.\r\n"
                             };
 
   /* first, make sure that the wear position is valid. */
