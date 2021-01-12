@@ -1702,7 +1702,7 @@ struct char_data *give_find_vict(struct char_data * ch, char *arg)
     return NULL;
   } else if (IS_NPC(vict) && GET_MOB_SPEC(vict) && GET_MOB_SPEC(vict) == fixer)
   {
-    act("Do you really want to give $M stuff for free?!",
+    act("Do you really want to give $M stuff for free?! (Use the 'repair' command here.)",
         FALSE, ch, 0, vict, TO_CHAR);
     return NULL;
   } else

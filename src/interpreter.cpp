@@ -2931,12 +2931,18 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     "southeast", "se",
     "southwest", "sw",
     "northwest", "nw",
+    "enter", "leave",
     "score", "equipment", "inventory", "status", "affects",
-    "look", "scan",
+    "look", "scan", "search", "who", "probe",
     "alias",
-    "hail",
+    "hail", "push",
+    "radio", "phone",
     "drive", "speed",
     "stand", "sit",
+    "nod", "list", "info", 
+    "open", "close", "give", "receive", "buy", "sell",
+    "wear", "remove", "draw", "holster",
+    "cast", "kill", "hit", "shoot", "kick", "get", "put",
     "\n"
   };
   for (int i = 0; *discard_commands[i] != '\n'; i++)
