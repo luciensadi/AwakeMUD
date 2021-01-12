@@ -82,6 +82,10 @@ void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info);
 
+#ifdef LOG_COMMANDS
+void log_command(struct char_data *ch, const char *argument, const char *tcname);
+#endif
+
 // for spell creation
 void cedit_parse(struct descriptor_data *d, char *arg);
 
@@ -1388,6 +1392,10 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
   // They entered something? KaVir's protocol snippet says to clear their WriteOOB.
   if (ch->desc)
     ch->desc->pProtocol->WriteOOB = 0;
+    
+#ifdef LOG_COMMANDS
+  log_command(ch, argument, tcname);
+#endif
 
   /*
    * special case to handle one-character, non-alphanumeric commands;
@@ -2913,6 +2921,52 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   }
 }
+
+#ifdef LOG_COMMANDS
+void log_command(struct char_data *ch, const char *argument, const char *tcname) {
+  // Discard directional commands and other high-noise things that can't affect other players.
+  const char *discard_commands[] = {
+    "north", "south", "east", "west",
+    "northeast", "ne",
+    "southeast", "se",
+    "southwest", "sw",
+    "northwest", "nw",
+    "score", "equipment", "inventory", "status", "affects",
+    "look", "scan",
+    "alias",
+    "hail",
+    "drive", "speed",
+    "stand", "sit",
+    "\n"
+  };
+  for (int i = 0; *discard_commands[i] != '\n'; i++)
+    if (str_str(discard_commands[i], argument))
+      return;
+  
+  // Extract location.
+  char location_buf[500];
+  if (PLR_FLAGGED(ch, PLR_MATRIX))
+    snprintf(location_buf, sizeof(location_buf), "mtx %ld (%s)", matrix[ch->persona->in_host].vnum, matrix[ch->persona->in_host].name);
+  else if (ch->in_room)
+    strncpy(location_buf, GET_ROOM_NAME(ch->in_room), sizeof(location_buf) - 1);
+  else if (ch->in_veh)
+    snprintf(location_buf, sizeof(location_buf), "veh #%ld (%s)", ch->in_veh->idnum, GET_VEH_NAME(ch->in_veh));
+  
+  // Compose name string.
+  char name_buf[250];
+  if (ch->desc->original)
+    snprintf(name_buf, sizeof(name_buf), "%s (as %s)", GET_CHAR_NAME(ch->desc->original), GET_NAME(ch));
+  else
+    strncpy(name_buf, GET_CHAR_NAME(ch), sizeof(name_buf) - 1);
+
+  // Write the command to the buffer.
+  char cmd_buf[MAX_INPUT_LENGTH * 3];
+  snprintf(cmd_buf, sizeof(cmd_buf), "COMMANDLOG: %s @ %s: %s", name_buf, location_buf, argument);
+  
+  // TODO: Save to a file based on the PC's name.
+  log(cmd_buf);
+}
+#endif
 
 // Attempts to map common typos to their actual commands.
 #define COMMAND_ALIAS(typo, corrected)   if (strncmp(arg, (typo), strlen(arg)) == 0) { return find_command_in_x((corrected), cmd_info); }

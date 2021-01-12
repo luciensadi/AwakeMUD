@@ -2336,7 +2336,7 @@ SPECIAL(fence)
     value = negotiated_value / MAX(1, (time(0) - GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj)) / SECS_PER_MUD_DAY);
     GET_NUYEN(ch) += value;
     
-    snprintf(buf, sizeof(buf), "Paying %d nuyen for paydata from market %s^g (base %d, after nego %d, then time decayed). Market going from %d to ",
+    snprintf(buf, sizeof(buf), "Paying %d nuyen for %s^g paydata (base %d, after roll %d, then time decay). Market going from %d to ",
              value, 
              host_sec[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)], 
              market[GET_OBJ_VAL(obj, 4)],

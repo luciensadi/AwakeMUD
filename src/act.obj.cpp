@@ -1652,15 +1652,21 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
   }
-
-  if (!IS_NPC(ch) && IS_NPC(vict)) {
+  
+  // Group quest rewards.
+  if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master)) {
+    if (check_quest_delivery(ch->master, vict, obj))
+      extract_obj(obj);
+  } 
+  // Individual quest rewards.
+  else if (!IS_NPC(ch) && IS_NPC(vict)) {
     if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj))
       extract_obj(obj);
-    else if (GET_MOB_SPEC(ch) || GET_MOB_SPEC2(ch)) {
+    else if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
       // These specs handle objects, so don't mess with them.
-      if (GET_MOB_SPEC(ch) == fence || GET_MOB_SPEC(ch) == hacker || GET_MOB_SPEC(ch) == fixer || GET_MOB_SPEC(ch) == mageskill_herbie)
+      if (GET_MOB_SPEC(vict) == fence || GET_MOB_SPEC(vict) == hacker || GET_MOB_SPEC(vict) == fixer || GET_MOB_SPEC(vict) == mageskill_herbie)
         return 1;
-      if (GET_MOB_SPEC2(ch) == fence || GET_MOB_SPEC2(ch) == hacker || GET_MOB_SPEC2(ch) == fixer || GET_MOB_SPEC2(ch) == mageskill_herbie)
+      if (GET_MOB_SPEC2(vict) == fence || GET_MOB_SPEC2(vict) == hacker || GET_MOB_SPEC2(vict) == fixer || GET_MOB_SPEC2(vict) == mageskill_herbie)
         return 1;
     }
     else {
@@ -1671,10 +1677,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
       else
         obj_to_veh(obj, vict->in_veh);
     }
-  } else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
-           !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master))
-    if (check_quest_delivery(ch->master, vict, obj))
-      extract_obj(obj);
+  }
 
   return 1;
 }

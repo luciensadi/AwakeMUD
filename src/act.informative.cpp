@@ -4083,7 +4083,7 @@ ACMD(do_who)
       mudlog("SYSERR: Cannot open wholist for write", NULL, LOG_SYSLOG, FALSE);
       return;
     }
-    fprintf(fl, "<HTML><BODY bgcolor=#41494C><PRE>%s</PRE></BODY></HTML>\r\n", &buffer[0]);
+    fprintf(fl, "<HTML><BODY bgcolor=#11191C><PRE>%s</PRE></BODY></HTML>\r\n", &buffer[0]);
     fclose(fl);
   } else page_string(ch->desc, buf2, 1);
 }

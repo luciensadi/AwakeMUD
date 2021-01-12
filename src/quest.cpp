@@ -1414,7 +1414,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Give %ld to Johnson", QUEST->obj[i].vnum);
       break;
     case QOL_TARMOB_I:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Give %ld to M%d ", QUEST->obj[i].vnum,
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Add %ld to inventory of M%d ", QUEST->obj[i].vnum,
               QUEST->obj[i].l_data);
       if (QUEST->obj[i].l_data >= 0 &&
           QUEST->obj[i].l_data < QUEST->num_mobs &&
@@ -1423,6 +1423,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
       }
       else
         strcat(buf, "(null)");
+      strcat(buf, "(NOT A DELIVERY OBJECTIVE)");
       break;
 
     case QOL_TARMOB_E:
