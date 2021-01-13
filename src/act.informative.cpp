@@ -2781,7 +2781,7 @@ ACMD(do_examine)
         else
           send_to_char("It has been activated by someone else and ^ywill not function for you^n.\r\n\r\n", ch);
       } else {
-        send_to_char("It has not been BONDed yet, and ^ywill not function until it is^n.\r\n\r\n", ch);
+        send_to_char("It has not been ^WBOND^ned yet, and ^ywill not function until it is^n.\r\n\r\n", ch);
       }
     }
     if (GET_OBJ_VNUM(tmp_object) > 1) {

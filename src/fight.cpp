@@ -59,6 +59,7 @@ bool can_hurt(struct char_data *ch, struct char_data *victim);
 SPECIAL(johnson);
 SPECIAL(weapon_dominator);
 SPECIAL(landlord_spec);
+SPECIAL(pocket_sec);
 
 extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
@@ -1640,18 +1641,22 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     else if (ch && AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
              !IS_NPC(ch->master) && GET_QUEST(ch->master))
       check_quest_destroy(ch->master, obj);
-    for (temp = obj->contains; temp; temp = next) {
-      next = temp->next_content;
-      obj_from_obj(temp);
-      if ((IS_OBJ_STAT(obj, ITEM_CORPSE) && !GET_OBJ_VAL(obj, 4) &&
-           GET_OBJ_TYPE(temp) != ITEM_MONEY) || GET_OBJ_VNUM(obj) == 118)
-        extract_obj(temp);
-      else if (vict)
-        obj_to_char(temp, vict);
-      else if (obj->in_room)
-        obj_to_room(temp, obj->in_room);
-      else
-        extract_obj(temp);
+    
+    // Disgorge contents, except for pocsecs.
+    if (GET_OBJ_SPEC(obj) != pocket_sec) {
+      for (temp = obj->contains; temp; temp = next) {
+        next = temp->next_content;
+        obj_from_obj(temp);
+        if ((IS_OBJ_STAT(obj, ITEM_CORPSE) && !GET_OBJ_VAL(obj, 4) &&
+             GET_OBJ_TYPE(temp) != ITEM_MONEY) || GET_OBJ_VNUM(obj) == 118)
+          extract_obj(temp);
+        else if (vict)
+          obj_to_char(temp, vict);
+        else if (obj->in_room)
+          obj_to_room(temp, obj->in_room);
+        else
+          extract_obj(temp);
+      }
     }
     extract_obj(obj);
   }
