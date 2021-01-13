@@ -369,7 +369,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_REA(ch)           (GET_ATT((ch), REA))
 #define GET_MAG(ch)           ((ch)->aff_abils.mag)
 #define GET_ESS(ch)           ((ch)->aff_abils.ess)
-#define GET_ESSHOLE(ch)		((ch)->aff_abils.esshole)
+#define GET_ESSHOLE(ch)       ((ch)->real_abils.esshole)
 #define GET_INDEX(ch)         ((ch)->real_abils.bod_index)
 #define GET_HIGHEST_INDEX(ch)      ((ch)->real_abils.highestindex)
 #define GET_BIOOVER(ch)       (-((int)((GET_ESS((ch)) + 300) - GET_INDEX((ch))) / 100))

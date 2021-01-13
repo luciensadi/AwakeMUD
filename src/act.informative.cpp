@@ -2028,16 +2028,19 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_FIREWEAPON:
+      strncat(buf, "As a fireweapon, it is not currently implemented.\r\n", sizeof(buf) - strlen(buf) - 1);
+      /*
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that requires ^c%d^n strength to use in combat.\r\n",
               GET_OBJ_VAL(j, 5) == 0 ? "Bow" : "Crossbow", GET_OBJ_VAL(j, 6));
       if (GET_OBJ_VAL(j, 2)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a damage code of ^c(STR+%d)%s%s^n", GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)],
-                !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? "( stun)" : "");
+                !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a damage code of ^c(STR)%s%s^n", wound_arr[GET_OBJ_VAL(j, 1)],
                 !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
       }
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and requires the ^c%s^n skill to use.", skills[GET_OBJ_VAL(j, 4)].name);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and requires the ^c%s^n skill to use.", skills[GET_OBJ_VAL(j, 4)].name);
+      */
       break;
     case ITEM_WEAPON:
       // Ranged weapons first.

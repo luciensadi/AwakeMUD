@@ -252,8 +252,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         break;
     }
     if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
-      if (ch->real_abils.ess + ch->real_abils.esshole < (GET_TOTEM(ch) == TOTEM_EAGLE ?
-                                GET_OBJ_VAL(obj, 4) << 1 : GET_OBJ_VAL(obj, 4))) {
+      if (GET_REAL_ESS(ch) + GET_ESSHOLE(ch) < (GET_TOTEM(ch) == TOTEM_EAGLE ?
+                                GET_CYBERWARE_ESSENCE_COST(obj) << 1 : GET_CYBERWARE_ESSENCE_COST(obj))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return FALSE;
@@ -274,8 +274,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
             return FALSE;
           }
         }
-        if (GET_OBJ_VAL(obj, 0) != CYB_EYES && GET_OBJ_VAL(obj, 0) != CYB_FILTRATION
-            && GET_OBJ_VAL(obj, 0) != CYB_REACTIONENHANCE && GET_OBJ_VAL(check, 0) == GET_OBJ_VAL(obj, 0)) {
+        if (GET_OBJ_VAL(check, 0) == GET_OBJ_VAL(obj, 0) 
+            && (GET_OBJ_VAL(obj, 0) != CYB_EYES && GET_OBJ_VAL(obj, 0) != CYB_FILTRATION && GET_OBJ_VAL(obj, 0) != CYB_REACTIONENHANCE)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have a similar piece of cyberware.");
           do_say(keeper, buf, cmd_say, SCMD_SAYTO);
           return FALSE;
@@ -284,8 +284,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       int esscost = GET_CYBERWARE_ESSENCE_COST(obj);
       if (GET_TOTEM(ch) == TOTEM_EAGLE)
         esscost *= 2;
-      if (ch->real_abils.esshole < esscost) {
-        esscost = esscost - ch->real_abils.esshole;
+      if (GET_ESSHOLE(ch) < esscost) {
+        esscost = esscost - GET_ESSHOLE(ch);
         if (GET_TRADITION(ch) != TRAD_MUNDANE) {
           if (GET_REAL_MAG(ch) - esscost < 100) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That would take away the last of your magic!");
@@ -296,10 +296,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         }
         GET_ESSHOLE(ch) = 0;
         GET_REAL_ESS(ch) -= esscost;
-        GET_REAL_ESS(ch) = MAX(GET_REAL_ESS(ch), 0);
       } else {
         GET_ESSHOLE(ch) -= esscost;
-        GET_ESSHOLE(ch) = MAX(GET_ESSHOLE(ch), 0);
       }
       obj_to_cyberware(obj, ch);
     } else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
@@ -776,11 +774,11 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   {
     if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
       obj_from_bioware(obj);
-      GET_INDEX(ch) -= GET_OBJ_VAL(obj, 4);
+      GET_INDEX(ch) -= GET_CYBERWARE_ESSENCE_COST(obj);
       GET_INDEX(ch) = MAX(0, GET_INDEX(ch));
     } else {
       obj_from_cyberware(obj);
-      ch->real_abils.esshole += GET_OBJ_VAL(obj, 4);
+      GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);
     }
     act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
         FALSE, keeper, 0, ch, TO_NOTVICT);
@@ -2307,6 +2305,12 @@ bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr
         return FALSE;
       }
       break;
+    case ITEM_FIREWEAPON:
+    case ITEM_MISSILE:
+      strncat(buf, "being a fireweapon or fireweapon ammo.", sizeof(buf) - strlen(buf) - 1);
+      mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
+      extract_obj(obj);
+      return FALSE;
   }
   
   // Can sell it.
