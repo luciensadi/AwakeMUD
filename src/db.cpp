@@ -3653,7 +3653,7 @@ void reset_zone(int zone, int reboot)
           ZONE_ERROR(buf);
           zcmd_open_door(&world[ZCMD.arg1], ZCMD.arg2);
           if (opposite_room && REV_DOOR_STRUCT && (&world[ZCMD.arg1] == REV_DOOR_STRUCT->to_room))
-            zcmd_open_door(REV_DOOR_STRUCT->to_room, rev_dir[ZCMD.arg2]);
+            zcmd_open_door(opposite_room, rev_dir[ZCMD.arg2]);
           break;
         }
         

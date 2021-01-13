@@ -2305,12 +2305,14 @@ bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr
         return FALSE;
       }
       break;
+    /*
     case ITEM_FIREWEAPON:
     case ITEM_MISSILE:
       strncat(buf, "being a fireweapon or fireweapon ammo.", sizeof(buf) - strlen(buf) - 1);
       mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
       extract_obj(obj);
       return FALSE;
+    */
   }
   
   // Can sell it.
