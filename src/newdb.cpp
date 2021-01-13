@@ -1182,9 +1182,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   }
   if (GET_TRADITION(player) != TRAD_MUNDANE) {
     snprintf(buf, sizeof(buf), "UPDATE pfiles_magic SET Mag=%d, Pool_Casting=%d, Pool_SpellDefense=%d, Pool_Drain=%d, Pool_Reflecting=%d,"\
-                 "UsedGrade=%d, ExtraPower=%d, PowerPoints=%d, Sig=%d, Masking=%d WHERE idnum=%ld;", GET_REAL_MAG(player), GET_CASTING(player),
+                 "UsedGrade=%d, ExtraPower=%d, PowerPoints=%d, Sig=%d, Masking=%d, Totem=%d, TotemSpirit=%d, Aspect=%d WHERE idnum=%ld;", GET_REAL_MAG(player), GET_CASTING(player),
                  GET_SDEFENSE(player), GET_DRAIN(player), GET_REFLECT(player), GET_GRADE(player), player->points.extrapp, 
-                 GET_PP(player), GET_SIG(player), GET_MASKING(player), GET_IDNUM(player));
+                 GET_PP(player), GET_SIG(player), GET_MASKING(player), GET_TOTEM(player), GET_TOTEMSPIRIT(player), GET_ASPECT(player),
+                 GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
     if (GET_TRADITION(player) == TRAD_ADEPT) {
       snprintf(buf, sizeof(buf), "DELETE FROM pfiles_adeptpowers WHERE idnum=%ld", GET_IDNUM(player));

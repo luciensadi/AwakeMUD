@@ -2482,6 +2482,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
   }
   
+  if (GET_OBJ_VNUM(j) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(j) == OBJ_CARIBBEAN_VISA) {
+    if (GET_OBJ_VAL(j, 0) == GET_IDNUM(ch)) {
+      strncat(buf, "It has your picture on it.", sizeof(buf) - strlen(buf) - 1);
+    } else {
+      strncat(buf, "It has someone else's picture on it.", sizeof(buf) - strlen(buf) - 1);
+    }
+  }
+  
   if (GET_OBJ_AFFECT(j).IsSet(AFF_LASER_SIGHT) && has_smartlink) {
     strncat(buf, "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.", sizeof(buf) - strlen(buf) - 1);
   }

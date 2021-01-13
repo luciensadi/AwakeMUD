@@ -2125,6 +2125,7 @@ enum {
 // Objects, to remove the magic numbers from the code.
 #define OBJ_NEWBIE_RADIO                   60531
 #define OBJ_MULTNOMAH_VISA                 17513
+#define OBJ_CARIBBEAN_VISA                 62100
 #define OBJ_MAP_OF_SEATTLE                 2041
 #define OBJ_ELEVATOR_SHAFT_KEY             998
 #define OBJ_SEATTLE_TAXI_SIGN              600

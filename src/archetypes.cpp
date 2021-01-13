@@ -215,6 +215,8 @@ struct archetype_data *generate_shaman() {
   arch->magic = 600;
   arch->tradition = TRAD_SHAMANIC;
   arch->forcepoints = 25;
+  arch->totem = TOTEM_WOLF;
+  arch->totemspirit = SPIRIT_FOREST;
   
   // Spells.
   i = 0;

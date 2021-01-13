@@ -204,6 +204,12 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   GET_REAL_MAG(CH) = archetypes[i]->magic;
   GET_ASPECT(CH) = archetypes[i]->aspect;
   
+  if (GET_TRADITION(CH) == TRAD_SHAMANIC) {
+    GET_TOTEM(CH) = archetypes[i]->totem;
+    GET_TOTEMSPIRIT(CH) = archetypes[i]->totemspirit;
+  }
+    
+  
   // Grant forcepoints for bonding purposes.
   GET_FORCE_POINTS(CH) = archetypes[i]->forcepoints;
   
@@ -1026,20 +1032,20 @@ void create_parse(struct descriptor_data *d, const char *arg)
       available_attribute_points = MIN((int) (d->ccr.points / 2), get_maximum_attribute_points_for_race(GET_RACE(CH)));
       
     if (i < minimum_attribute_points) {
-      send_to_char(CH, "You need a minimum of %d points in attributes.\r\n"
-                   "Enter desired number of attribute points (^c%d^n available, minimum %d, maximum %d):",
-                   minimum_attribute_points, available_attribute_points, minimum_attribute_points, maximum_attribute_points);
-      break;
-    } else if (i * 2 > d->ccr.points) {
+      send_to_char(CH, "The minimum of attribute points for your race is %d.\r\n", minimum_attribute_points);
+      i = minimum_attribute_points;
+    }
+    
+    else if (i > maximum_attribute_points) {
+      send_to_char(CH, "The maximum number of attribute points for your race is %d.\r\n", maximum_attribute_points);
+      i = maximum_attribute_points;
+    }
+    
+    if (i * 2 > d->ccr.points) {
       send_to_char(CH, "You do not have enough points for that.\r\n"
                    "Enter desired number of attribute points (^c%d^n available, minimum %d, maximum %d):",
                    available_attribute_points, minimum_attribute_points, maximum_attribute_points);
       break;
-    }
-    
-    if (i > maximum_attribute_points) {
-      send_to_char(CH, "The maximum number of attribute points for your race is %d.\r\n", maximum_attribute_points);
-      i = maximum_attribute_points;
     }
   
     d->ccr.points -= d->ccr.pr[PO_ATTR] = i * 2;

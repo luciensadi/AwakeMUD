@@ -20,6 +20,9 @@ struct archetype_data {
   int magic;
   int tradition;
   int aspect;
+  int totem;
+  int totemspirit;
+  
   int powers[NUM_ARCHETYPE_ABILITIES][2]; // 0 is power, 1 is rating
   int spells[NUM_ARCHETYPE_SPELLS][3]; // 0 is spell ID, 1 is subtype, 2 is force
   int forcepoints; // for bonding foci

@@ -5475,7 +5475,7 @@ SPECIAL(airport_guard)
     skip_spaces(&argument);
     struct char_data *guard = (struct char_data *) me;
     struct obj_data *visa = get_obj_in_list_vis(ch, argument, ch->carrying);
-    if (visa && GET_OBJ_VNUM(visa) == 62100) {
+    if (visa && GET_OBJ_VNUM(visa) == OBJ_CARIBBEAN_VISA) {
       if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
         PLR_FLAGS(ch).SetBit(PLR_VISA);
         snprintf(arg, sizeof(arg), "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
