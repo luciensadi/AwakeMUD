@@ -953,9 +953,6 @@ void game_loop(int mother_desc)
     
     tics++;                     /* tics since last checkpoint signal */
   }
-  
-  log("Main loop ended. Closing database connection.");
-  mysql_close(mysql);
 }
 
 

@@ -94,6 +94,8 @@ extern void alarm_handler(int signal);
 extern bool can_edit_zone(struct char_data *ch, int zone);
 extern const char *render_door_type_string(struct room_direction_data *door);
 
+extern void DBFinalize();
+
 ACMD_DECLARE(do_goto);
 
 SPECIAL(fixer);
@@ -311,7 +313,7 @@ ACMD(do_copyover)
   save_vehicles();
   
   log("Closing database connection.");
-  mysql_close(mysql);
+  DBFinalize();
 
   snprintf(buf, sizeof(buf), "%d", port);
   snprintf(buf2, sizeof(buf2), "-o%d", mother_desc);

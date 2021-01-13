@@ -3129,6 +3129,37 @@ void log_zone_error(int zone, int cmd_no, const char *message)
   mudlog(buf, NULL, LOG_ZONELOG, TRUE);
 }
 
+void zcmd_close_door(struct room_data *room, int dir, bool set_locked) {
+  struct room_direction_data *door_struct = room->dir_option[dir];
+  
+  // Display a message if the door is neither hidden nor closed.
+  if (!IS_SET(door_struct->exit_info, EX_HIDDEN) && !IS_SET(door_struct->exit_info, EX_CLOSED)) {
+    snprintf(buf, sizeof(buf), "The %s to the %s closes.\r\n",
+            door_struct->keyword ? fname(door_struct->keyword) : "door",
+            fulldirs[dir]);
+    send_to_room(buf, room);
+  }
+  
+  SET_BIT(door_struct->exit_info, EX_CLOSED);
+  if (set_locked)
+    SET_BIT(door_struct->exit_info, EX_LOCKED);
+}
+
+void zcmd_open_door(struct room_data *room, int dir) {
+  struct room_direction_data *door_struct = room->dir_option[dir];
+  
+  // Display a message if the door is not hidden but is closed.
+  if (!IS_SET(door_struct->exit_info, EX_HIDDEN) && IS_SET(door_struct->exit_info, EX_CLOSED)) {
+    snprintf(buf, sizeof(buf), "The %s to the %s opens.\r\n",
+            door_struct->keyword ? fname(door_struct->keyword) : "door",
+            fulldirs[dir]);
+    send_to_room(buf, room);
+  }
+  
+  REMOVE_BIT(door_struct->exit_info, EX_CLOSED);
+  REMOVE_BIT(door_struct->exit_info, EX_LOCKED);
+}
+
 #define ZONE_ERROR(message) {log_zone_error(zone, cmd_no, message); last_cmd = 0;}
 
 /* execute the reset command table of a given zone */
@@ -3577,109 +3608,87 @@ void reset_zone(int zone, int reboot)
       }
       last_cmd = 1;
       break;
+#define DOOR_STRUCT world[ZCMD.arg1].dir_option[ZCMD.arg2]
+#define REV_DOOR_STRUCT opposite_room->dir_option[rev_dir[ZCMD.arg2]]
     case 'D':                 /* set state of door */
-      if (ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS ||
-          (world[ZCMD.arg1].dir_option[ZCMD.arg2] == NULL)) {
-        ZONE_ERROR("door does not exist");
-      } else {
+      {
+        if (ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS || (DOOR_STRUCT == NULL)) {
+          ZONE_ERROR("Exit does not exist.");
+        }
         bool ok = FALSE;
-        struct room_data *opposite_room = world[ZCMD.arg1].dir_option[ZCMD.arg2]->to_room;
-        if (!opposite_room->dir_option[rev_dir[ZCMD.arg2]]
-            || (&world[ZCMD.arg1] != opposite_room->dir_option[rev_dir[ZCMD.arg2]]->to_room)) {
-          snprintf(buf, sizeof(buf), "Note: Exits from %ld to %ld do not coincide (zone %d, line %d, cmd %d)",
-                  opposite_room->number, world[ZCMD.arg1].number, zone_table[zone].number,
+        struct room_data *opposite_room = DOOR_STRUCT->to_room;
+        if (!REV_DOOR_STRUCT || (&world[ZCMD.arg1] != REV_DOOR_STRUCT->to_room)) {
+          snprintf(buf, sizeof(buf), "Note: %s exit from %ld to %ld has no back-linked exit, so zone command to toggle its door will only work on one side. (zone %d, line %d, cmd %d)",
+                  capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number, zone_table[zone].number,
                   ZCMD.line, cmd_no);
-          ZCMD.command = '*';
+          mudlog(buf, NULL, LOG_ZONELOG, FALSE);
+        } else if (!IS_SET(REV_DOOR_STRUCT->exit_info, EX_ISDOOR)) {
+          snprintf(buf, sizeof(buf), "Note: %s exit from %ld to %ld: Reverse exit is not a door, so zone command to toggle its door will only work on one side. (zone %d, line %d, cmd %d)",
+                  capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number, zone_table[zone].number,
+                  ZCMD.line, cmd_no);
           mudlog(buf, NULL, LOG_ZONELOG, FALSE);
         } else
           ok = TRUE;
-        // here I set the hidden flag for the door if hidden > 0
-        if (world[ZCMD.arg1].dir_option[ZCMD.arg2]->hidden)
-          SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN);
-        if (ok && opposite_room->dir_option[rev_dir[ZCMD.arg2]]->hidden)
-          SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN);
-        // repair all damage
-        REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_DESTROYED);
-        world[ZCMD.arg1].dir_option[ZCMD.arg2]->condition =
-          world[ZCMD.arg1].dir_option[ZCMD.arg2]->barrier;
-        if (ok) {
-          opposite_room->dir_option[rev_dir[ZCMD.arg2]]->material = world[ZCMD.arg1].dir_option[ZCMD.arg2]->material;
-          opposite_room->dir_option[rev_dir[ZCMD.arg2]]->barrier = world[ZCMD.arg1].dir_option[ZCMD.arg2]->barrier;
-          opposite_room->dir_option[rev_dir[ZCMD.arg2]]->condition = world[ZCMD.arg1].dir_option[ZCMD.arg2]->condition;
-          REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_DESTROYED);
+          
+        if (!IS_SET(DOOR_STRUCT->exit_info, EX_ISDOOR)) {
+          ZONE_ERROR("Exit exists but is not set to be a door.");
+          zcmd_open_door(&world[ZCMD.arg1], ZCMD.arg2);
+          if (ok)
+            zcmd_open_door(opposite_room, rev_dir[ZCMD.arg2]);
+          break;
         }
+          
+        // here I set the hidden flag for the door if hidden > 0
+        if (DOOR_STRUCT->hidden)
+          SET_BIT(DOOR_STRUCT->exit_info, EX_HIDDEN);
+        if (ok && REV_DOOR_STRUCT->hidden)
+          SET_BIT(REV_DOOR_STRUCT->exit_info, EX_HIDDEN);
+          
+        // repair all damage
+        if (IS_SET(DOOR_STRUCT->exit_info, EX_DESTROYED)) {
+          snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.",
+                   DOOR_STRUCT->keyword,
+                   thedirs[ZCMD.arg2]);
+          send_to_room(buf, &world[ZCMD.arg1]);
+          REMOVE_BIT(DOOR_STRUCT->exit_info, EX_DESTROYED);
+        }
+        if (ok && IS_SET(REV_DOOR_STRUCT->exit_info, EX_DESTROYED)) {
+          snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.",
+                   REV_DOOR_STRUCT->keyword,
+                   thedirs[rev_dir[ZCMD.arg2]]);
+          send_to_room(buf, opposite_room);
+          REMOVE_BIT(REV_DOOR_STRUCT->exit_info, EX_DESTROYED);
+        }
+        
+        // Restore it to full condition on both sides of the barrier.
+        DOOR_STRUCT->condition = DOOR_STRUCT->barrier;
+        if (ok) {
+          REV_DOOR_STRUCT->material = DOOR_STRUCT->material;
+          REV_DOOR_STRUCT->barrier = DOOR_STRUCT->barrier;
+          REV_DOOR_STRUCT->condition = DOOR_STRUCT->condition;
+        }
+        
         switch (ZCMD.arg3) {
           // you now only have to set one side of a door
-        case 0:
-            if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
-                && IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
-              snprintf(buf, sizeof(buf), "The %s to the %s swings open.\r\n",
-                      world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword ? fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword) : "door",
-                      fulldirs[ZCMD.arg2]);
-              send_to_room(buf, &world[ZCMD.arg1]);
-            }
-          REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_LOCKED);
-          REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED);
-          if (ok) {
-            if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
-                && IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
-              snprintf(buf, sizeof(buf), "The %s to the %s swings open.\r\n",
-                      opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword ? fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword) : "door",
-                      fulldirs[rev_dir[ZCMD.arg2]]);
-              send_to_room(buf, opposite_room);
-            }
-            REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
-            REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
-          }
-          break;
-        case 1:
-            if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
-                && !IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
-              snprintf(buf, sizeof(buf), "The %s to the %s swings closed.\r\n",
-                      world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword ? fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword) : "door",
-                      fulldirs[ZCMD.arg2]);
-              send_to_room(buf, &world[ZCMD.arg1]);
-            }
-          SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED);
-          REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_LOCKED);
-          if (ok) {
-            if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
-                && !IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
-              snprintf(buf, sizeof(buf), "The %s to the %s swings closed.\r\n",
-                      opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword ? fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword) : "door",
-              fulldirs[rev_dir[ZCMD.arg2]]);
-              send_to_room(buf, opposite_room);
-            }
-            SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
-            REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
-          }
-          break;
-        case 2:
-            if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
-                && !IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
-              snprintf(buf, sizeof(buf), "The %s to the %s swings closed.\r\n",
-                      world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword ? fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword) : "door",
-                      fulldirs[ZCMD.arg2]);
-              send_to_room(buf, &world[ZCMD.arg1]);
-            }
-          SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_LOCKED);
-          SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED);
-          if (ok) {
-            if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
-                && !IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
-              snprintf(buf, sizeof(buf), "The %s to the %s swings closed.\r\n",
-                      opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword ? fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword) : "door",
-                      fulldirs[rev_dir[ZCMD.arg2]]);
-              send_to_room(buf, opposite_room);
-            }
-            SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
-            SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
-          }
-          break;
+          case 0: // Door is open.
+            zcmd_open_door(&world[ZCMD.arg1], ZCMD.arg2);
+            if (ok)
+              zcmd_open_door(opposite_room, rev_dir[ZCMD.arg2]);
+            break;
+          case 1: // Door is closed.
+          case 2: // Door is closed and locked.
+            zcmd_close_door(&world[ZCMD.arg1], ZCMD.arg2, (ZCMD.arg3 == 2));
+            if (ok)
+              zcmd_close_door(opposite_room, rev_dir[ZCMD.arg2], (ZCMD.arg3 == 2));
+              
+            break;
         }
       }
       last_cmd = 1;
       break;
+#undef REV_DOOR_STRUCT
+#undef DOOR_STRUCT
+
     default:
       snprintf(buf, sizeof(buf), "Unknown cmd '%c' in reset table; cmd disabled. Args were %ld %ld %ld.",
               ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);

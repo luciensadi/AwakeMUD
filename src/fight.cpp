@@ -693,7 +693,7 @@ ACMD(do_die)
   char buf[100];
   
   /* If they're still okay... */
-  if ( GET_PHYSICAL(ch) >= 100 ) {
+  if ( GET_PHYSICAL(ch) >= 100 && GET_MENTAL(ch) >= 100 ) {
     send_to_char("Your mother would be so sad.. :(\n\r",ch);
     return;
   }

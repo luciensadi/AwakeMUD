@@ -1539,12 +1539,13 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       switch (GET_POS(ch)) {
       case POS_DEAD:
         send_to_char("Lie still; you are DEAD!!! :-(\r\n", ch);
+        mudlog("WARNING: Dead character is still trying to perform actions.", ch, LOG_SYSLOG, TRUE);
         break;
       case POS_MORTALLYW:
-        send_to_char("You are in a pretty bad shape! You can either wait for help, or give up by typing DIE.\r\n", ch);
+        send_to_char("You are in a pretty bad shape! You can either wait for help, or give up by typing ^WDIE^n.\r\n", ch);
         break;
       case POS_STUNNED:
-        send_to_char("All you can do right now is think about the stars!\r\n", ch);
+        send_to_char("All you can do right now is think about the stars! You can either wait to recover, or give up by typing ^WDIE^n.\r\n", ch);
         break;
       case POS_SLEEPING:
         send_to_char("In your dreams, or what?\r\n", ch);
