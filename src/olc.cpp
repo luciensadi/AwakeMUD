@@ -1478,12 +1478,12 @@ ACMD(do_mclone)
     return;
   }
 
-  if (!can_edit_zone(ch, zone1) || !can_edit_zone(ch, zone2)) {
+  if (!can_edit_zone(ch, zone2)) { // Removed: !can_edit_zone(ch, zone1)
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
 
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
+  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zone2].connected) {
     send_to_char("You can't clone mobiles to a connected zone.\r\n", ch);
     return;
   }
