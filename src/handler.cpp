@@ -90,7 +90,7 @@ int isname(const char *str, const char *namelist)
   for (;;) {
     for (curstr = str;; curstr++, curname++) {
       if ((!*curstr && !isalpha(*curname)) || is_abbrev(curstr, curname))
-        //      if (!*curstr && !isalpha(*curname))
+      // if (!*curstr && !isalpha(*curname))
         return (1);
       
       if (!*curname)

@@ -2111,13 +2111,8 @@ ACMD(do_bond)
   struct spell_data *spell = GET_SPELLS(ch);
 
   // Find the object in their inventory or equipment.
-  for (obj = ch->carrying; obj; obj = obj->next_content)
-    if (isname(buf1, obj->text.keywords) || isname(buf2, GET_OBJ_NAME(obj)))
-      break;
-  if (!obj)
-    for (int i = 0; i < NUM_WEARS && !obj; i++)
-      if (GET_EQ(ch, i) && (isname(buf1, GET_EQ(ch, i)->text.keywords) || isname(buf1, GET_OBJ_NAME(GET_EQ(ch, i)))))
-        obj = GET_EQ(ch, i);
+  struct char_data *found_char = NULL;
+  generic_find(buf1, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &found_char, &obj);
         
   // No object-- failure case.
   if (!obj) {
@@ -2138,8 +2133,9 @@ ACMD(do_bond)
         ch, obj, 0, TO_CHAR);
     return;
   }
+  /*
   // If it's an unbonded magazine, we need to search for the weapon they selected.
-  if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
+  else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
     // Define aliases used for code readability; nobody likes juggling 'i' and 'obj'.
     struct obj_data *magazine = obj, *weapon = NULL;
     
@@ -2187,7 +2183,7 @@ ACMD(do_bond)
     return;
   }
   
-  if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
+  else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
     if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
       for (struct obj_data *i = ch->carrying; i; i = i->next_content) {
         if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(i, 0)) {
@@ -2208,7 +2204,9 @@ ACMD(do_bond)
       send_to_char(ch, "%s can't take magazines.\r\n", GET_OBJ_NAME(obj));
     return;
   }
-  if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
+  */
+  
+  else if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
     if (GET_TRADITION(ch) == TRAD_MUNDANE)
       send_to_char(ch, "You can't bond foci.\r\n");
     else if (GET_TRADITION(ch) == TRAD_ADEPT && GET_OBJ_VAL(obj, 0) != FOCI_WEAPON)
