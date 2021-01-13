@@ -345,7 +345,7 @@ ACMD(do_rclone)
     return;
   }
 
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
+  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zone2].connected) {
     send_to_char("You can't clone rooms to a connected zone.\r\n", ch);
     return;
   }
