@@ -1955,6 +1955,7 @@ ACMD(do_zswitch)
 
   // and set their zonenum to it
   ch->player_specials->saved.zonenum = number;
+  send_to_char("OK.\r\n", ch);
 }
 
 ACMD(do_zedit)

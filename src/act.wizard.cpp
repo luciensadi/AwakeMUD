@@ -3492,6 +3492,7 @@ ACMD(do_show)
 
     break;
   case 3:
+    send_to_char("Command not implemented.\r\n", ch);
     break;
   case 4:
     i = 0;
