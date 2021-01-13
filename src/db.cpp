@@ -4176,9 +4176,9 @@ int file_to_string_alloc(const char *name, char **buf)
 int file_to_string(const char *name, char *buf)
 {
   FILE *fl;
-  // Expanded from 128 to 129 so a max-length string (127 + '\0') after newline drop (126 + '\0\0') does not overrun when \r\n added (128 + overrun '\0')
-  char tmp[129];
-  memset(tmp, 0, sizeof(char) * 129);
+  // Made it hella long. It's 2020, let clients word wrap their own shit.
+  char tmp[2000];
+  memset(tmp, 0, sizeof(tmp));
 
   *buf = '\0';
 
@@ -4188,7 +4188,7 @@ int file_to_string(const char *name, char *buf)
     return (-1);
   }
   do {
-    fgets(tmp, 128, fl);
+    fgets(tmp, sizeof(tmp) - 1, fl);
     tmp[strlen(tmp) - 1] = '\0';/* take off the trailing \n */
     strcat(tmp, "\r\n");
 
