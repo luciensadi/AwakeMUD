@@ -5455,7 +5455,7 @@ SPECIAL(airport_gate) {
 
   if ((in_room->number == 62166 && CMD_IS("east")) || (in_room->number == 62173 && CMD_IS("west"))) {
     if (!PLR_FLAGGED(ch, PLR_VISA)) {
-      send_to_char("The guards won't let you pass.\r\n", ch);
+      send_to_char("The guards won't let you pass until you've shown your visa.\r\n", ch);
       return TRUE;
     } 
     send_to_char("You move through the checkpoint to the departure platform.\r\n", ch);
