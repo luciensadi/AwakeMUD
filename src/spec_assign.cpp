@@ -117,7 +117,7 @@ struct teach_data teachers[] = {
   { 60503, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
     SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
     SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE },
-    "Von Richter runs through basic conjugation and sentence structure with you.\r\n", NEWBIE },
+    "Von Richter runs through basic conjugation and sentence structure with you.\r\n", ADVANCED },
   
   { 60504, { SKILL_PILOT_BIKE, SKILL_PILOT_CAR, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
     SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -154,9 +154,10 @@ struct teach_data teachers[] = {
     "Steve roughly throws you a text book and tells you to read it, you feel like you've learned something.\r\n", NEWBIE},
   // End newbie teachers.
   
-   { 30700, { SKILL_ENGLISH, SKILL_JAPANESE, SKILL_CHINESE, SKILL_KOREAN,
-       SKILL_SPERETHIEL, SKILL_SALISH, SKILL_ITALIAN, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Socrates shows you the intricities "
-       "of the language and you emerge with a greater understanding.\r\n", AMATEUR },
+   { 30700, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
+     SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
+     SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE }, "Socrates shows you the intricities "
+       "of the language and you emerge with a greater understanding.\r\n", ADVANCED },
        
    { 13499, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_CYBERTERM, SKILL_CYBERTERM_DESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Brian explains some concepts you had yet to understand "
      "and\r\nyou feel like you've learned something.\r\n", AMATEUR },
@@ -201,7 +202,7 @@ struct teach_data teachers[] = {
      "You read through various technological journals.\r\n", LIBRARY },
      
      { 18313, { SKILL_ENGLISH, SKILL_SPERETHIEL, SKILL_SPANISH, SKILL_JAPANESE, SKILL_CHINESE,
-              SKILL_KOREAN, SKILL_ITALIAN, SKILL_RUSSIAN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You raid the teach yourself languages section.\r\n", LIBRARY },
+              SKILL_KOREAN, SKILL_ITALIAN, SKILL_RUSSIAN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "You raid the teach-yourself-languages section.\r\n", LIBRARY },
               
    { 778, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
      "The Master teaches you more than you thought possible.\r\n", ADVANCED },

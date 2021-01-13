@@ -2301,7 +2301,7 @@ bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr
     // Don't allow sale of NERP spell formulae.
     case ITEM_SPELL_FORMULA:
       if (spell_is_nerp(GET_SPELLFORMULA_SPELL(obj))) {
-        snprintf(buf2, sizeof(buf2), "having NERP spell %s.", spells[GET_OBJ_VAL(obj, 1)].name);
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "having NERP spell %s.", spells[GET_OBJ_VAL(obj, 1)].name);
         mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
         extract_obj(obj);
         return FALSE;

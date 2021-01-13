@@ -3145,8 +3145,18 @@ void zcmd_close_door(struct room_data *room, int dir, bool set_locked) {
     SET_BIT(door_struct->exit_info, EX_LOCKED);
 }
 
-void zcmd_open_door(struct room_data *room, int dir) {
+void zcmd_open_door(struct room_data *room, int dir) {  
+  if (!room) {
+    mudlog("SYSERR: zcmd_open_door received invalid room.", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   struct room_direction_data *door_struct = room->dir_option[dir];
+  
+  if (!door_struct) {
+    mudlog("SYSERR: zcmd_open_door received invalid dir.", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
   
   // Display a message if the door is not hidden but is closed.
   if (!IS_SET(door_struct->exit_info, EX_HIDDEN) && IS_SET(door_struct->exit_info, EX_CLOSED)) {
@@ -3158,6 +3168,19 @@ void zcmd_open_door(struct room_data *room, int dir) {
   
   REMOVE_BIT(door_struct->exit_info, EX_CLOSED);
   REMOVE_BIT(door_struct->exit_info, EX_LOCKED);
+}
+
+void zcmd_repair_door(struct room_data *room, int dir) {
+  struct room_direction_data *door_struct = room->dir_option[dir];
+  
+  if (IS_SET(door_struct->exit_info, EX_DESTROYED)) {
+    snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.",
+             door_struct->keyword,
+             thedirs[dir]);
+    send_to_room(buf, room);
+    REMOVE_BIT(door_struct->exit_info, EX_DESTROYED);
+  }
+  door_struct->condition = door_struct->barrier;
 }
 
 #define ZONE_ERROR(message) {log_zone_error(zone, cmd_no, message); last_cmd = 0;}
@@ -3612,31 +3635,45 @@ void reset_zone(int zone, int reboot)
 #define REV_DOOR_STRUCT opposite_room->dir_option[rev_dir[ZCMD.arg2]]
     case 'D':                 /* set state of door */
       {
-        if (ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS || (DOOR_STRUCT == NULL)) {
-          ZONE_ERROR("Exit does not exist.");
+        if (ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS) {
+          ZONE_ERROR("Invalid direction specified.");
+          break;
         }
-        bool ok = FALSE;
+        
+        if (DOOR_STRUCT == NULL) {
+          snprintf(buf, sizeof(buf), "%s exit from %ld does not exist.", capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number);
+          ZONE_ERROR(buf);
+          break;
+        }
+        
         struct room_data *opposite_room = DOOR_STRUCT->to_room;
-        if (!REV_DOOR_STRUCT || (&world[ZCMD.arg1] != REV_DOOR_STRUCT->to_room)) {
+        
+        if (!IS_SET(DOOR_STRUCT->exit_info, EX_ISDOOR)) {
+          snprintf(buf, sizeof(buf), "%s exit from %ld exists but is not set to be a door.", capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number);
+          ZONE_ERROR(buf);
+          zcmd_open_door(&world[ZCMD.arg1], ZCMD.arg2);
+          if (opposite_room && REV_DOOR_STRUCT && (&world[ZCMD.arg1] == REV_DOOR_STRUCT->to_room))
+            zcmd_open_door(REV_DOOR_STRUCT->to_room, rev_dir[ZCMD.arg2]);
+          break;
+        }
+        
+        bool ok = FALSE;
+        
+        if (!opposite_room || !REV_DOOR_STRUCT || (&world[ZCMD.arg1] != REV_DOOR_STRUCT->to_room)) {
           snprintf(buf, sizeof(buf), "Note: %s exit from %ld to %ld has no back-linked exit, so zone command to toggle its door will only work on one side. (zone %d, line %d, cmd %d)",
-                  capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number, zone_table[zone].number,
-                  ZCMD.line, cmd_no);
-          mudlog(buf, NULL, LOG_ZONELOG, FALSE);
-        } else if (!IS_SET(REV_DOOR_STRUCT->exit_info, EX_ISDOOR)) {
-          snprintf(buf, sizeof(buf), "Note: %s exit from %ld to %ld: Reverse exit is not a door, so zone command to toggle its door will only work on one side. (zone %d, line %d, cmd %d)",
                   capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number, zone_table[zone].number,
                   ZCMD.line, cmd_no);
           mudlog(buf, NULL, LOG_ZONELOG, FALSE);
         } else
           ok = TRUE;
           
-        if (!IS_SET(DOOR_STRUCT->exit_info, EX_ISDOOR)) {
-          ZONE_ERROR("Exit exists but is not set to be a door.");
-          zcmd_open_door(&world[ZCMD.arg1], ZCMD.arg2);
-          if (ok)
-            zcmd_open_door(opposite_room, rev_dir[ZCMD.arg2]);
-          break;
-        }
+        if (ok && !IS_SET(REV_DOOR_STRUCT->exit_info, EX_ISDOOR)) {
+          snprintf(buf, sizeof(buf), "Note: %s exit from %ld to %ld: Reverse exit is not a door. Overriding reverse exit to be a door. (zone %d, line %d, cmd %d)",
+                  capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number, zone_table[zone].number,
+                  ZCMD.line, cmd_no);
+          mudlog(buf, NULL, LOG_ZONELOG, FALSE);
+          REV_DOOR_STRUCT->exit_info = DOOR_STRUCT->exit_info;
+        } 
           
         // here I set the hidden flag for the door if hidden > 0
         if (DOOR_STRUCT->hidden)
@@ -3645,23 +3682,11 @@ void reset_zone(int zone, int reboot)
           SET_BIT(REV_DOOR_STRUCT->exit_info, EX_HIDDEN);
           
         // repair all damage
-        if (IS_SET(DOOR_STRUCT->exit_info, EX_DESTROYED)) {
-          snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.",
-                   DOOR_STRUCT->keyword,
-                   thedirs[ZCMD.arg2]);
-          send_to_room(buf, &world[ZCMD.arg1]);
-          REMOVE_BIT(DOOR_STRUCT->exit_info, EX_DESTROYED);
-        }
-        if (ok && IS_SET(REV_DOOR_STRUCT->exit_info, EX_DESTROYED)) {
-          snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.",
-                   REV_DOOR_STRUCT->keyword,
-                   thedirs[rev_dir[ZCMD.arg2]]);
-          send_to_room(buf, opposite_room);
-          REMOVE_BIT(REV_DOOR_STRUCT->exit_info, EX_DESTROYED);
-        }
+        zcmd_repair_door(&world[ZCMD.arg1], ZCMD.arg2);
+        if (ok)
+          zcmd_repair_door(opposite_room, rev_dir[ZCMD.arg2]);
         
-        // Restore it to full condition on both sides of the barrier.
-        DOOR_STRUCT->condition = DOOR_STRUCT->barrier;
+        // Clone the exit info across to the other side, if it exists.
         if (ok) {
           REV_DOOR_STRUCT->material = DOOR_STRUCT->material;
           REV_DOOR_STRUCT->barrier = DOOR_STRUCT->barrier;

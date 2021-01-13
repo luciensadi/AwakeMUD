@@ -4108,7 +4108,7 @@ ACMD(do_set)
     }
   }
 
-  if (!access_level(ch, LVL_ADMIN)) {
+  if (ch != vict && !access_level(ch, LVL_ADMIN)) {
     if (!IS_NPC(vict) && !access_level(ch, GET_LEVEL(vict)+1)) {
       send_to_char("Maybe that's not such a great idea...\r\n", ch);
 
