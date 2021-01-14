@@ -48,6 +48,8 @@ extern struct elevator_data *elevator;
 
 ACMD_DECLARE(do_prone);
 
+#define GET_DOOR_NAME(ch, door) (EXIT(ch, (door))->keyword ? (*(fname(EXIT(ch, (door))->keyword)) ? fname(EXIT(ch, (door))->keyword) : "door") : "door")
+
 /* can_move determines if a character can move in the given direction, and
    generates the appropriate message if not */
 int can_move(struct char_data *ch, int dir, int extra)
@@ -937,17 +939,32 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
       send_to_char(ch, "What is it you want to %s?\r\n", cmdname);
       return -1;
     }
+    
+    // Check for directionals.
+    char non_const_type[MAX_INPUT_LENGTH];
+    strncpy(non_const_type, type, sizeof(non_const_type));
+    if ((door = search_block(non_const_type, lookdirs, FALSE)) == -1) {       /* Partial Match */
+      // No direction? Check for keywords.
+      for (door = 0; door < NUM_OF_DIRS; door++)
+        if (EXIT(ch, door))
+          if (EXIT(ch, door)->keyword)
+            if (isname(type, EXIT(ch, door)->keyword) &&
+                !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) &&
+                !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
+              return door;
 
-    for (door = 0; door < NUM_OF_DIRS; door++)
-      if (EXIT(ch, door))
-        if (EXIT(ch, door)->keyword)
-          if (isname(type, EXIT(ch, door)->keyword) &&
-              !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) &&
-              !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
-            return door;
-
-    send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(type), type);
-    return -1;
+      send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(type), type);
+      return -1;
+    }
+    
+    door = convert_look[door];
+    
+    if (EXIT(ch, door) && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED) && !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN)) {
+      return door;
+    } else {
+      send_to_char(ch, "There doesn't appear to be a door to the %s.\r\n", dirs[door]);
+      return -1;
+    }
   }
 }
 
@@ -1046,7 +1063,7 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
     if (back)
       OPEN_DOOR(other_room, obj, rev_dir[door]);
     if (print_message)
-      send_to_char(OK, ch);
+      send_to_char(ch, "You %s the %s to %s.\r\n", scmd == SCMD_OPEN ? "open" : "close", GET_DOOR_NAME(ch, door), thedirs[door]);
     break;
   case SCMD_UNLOCK:
   case SCMD_LOCK:
@@ -1068,7 +1085,7 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
     }
     break;
   case SCMD_KNOCK:
-    send_to_char(OK, ch);
+    send_to_char(ch, "You knock on the %s to %s.\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
     break;
   }
 
@@ -1134,7 +1151,6 @@ ACMD_CONST(do_gen_door) {
   do_gen_door(ch, not_const, cmd, subcmd);
 }
 
-#define GET_DOOR_NAME(ch, door) (EXIT(ch, (door))->keyword ? (*(fname(EXIT(ch, (door))->keyword)) ? fname(EXIT(ch, (door))->keyword) : "door") : "door")
 ACMD(do_gen_door)
 {
   int door = -1, keynum, num = 0;;
@@ -1144,7 +1160,7 @@ ACMD(do_gen_door)
   struct veh_data *veh = NULL;
   
   if (IS_ASTRAL(ch)) {
-    send_to_char("You are not able to do that.\r\n", ch);
+    send_to_char("Astral projections tend to have a hard time interacting with doors.\r\n", ch);
     return;
   }
 
@@ -1158,6 +1174,8 @@ ACMD(do_gen_door)
   }
   two_arguments(argument, type, dir);
   RIG_VEH(ch, veh);
+  
+  // 'unlock 1' etc for subscribed vehs
   if (*type && is_number(type)) {
     num = atoi(type);
     bool has_deck = FALSE;
@@ -1176,9 +1194,13 @@ ACMD(do_gen_door)
           break;
     }
   }
+  
+  // Check for an object or vehicle nearby that matches the keyword.
   if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj) && !veh &&
            !(veh = get_veh_list(type, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))
     door = find_door(ch, type, dir, cmd_door[subcmd]);
+  
+  // Lock / unlock a vehicle. Can't open / close them.
   if (veh && subcmd != SCMD_OPEN && subcmd != SCMD_CLOSE) {
     if (GET_IDNUM(ch) != veh->owner) {
       if (access_level(ch, LVL_ADMIN)) {
@@ -1221,6 +1243,7 @@ ACMD(do_gen_door)
     }
   }
 
+  // You're doing an object or a door.
   if ((obj) || (door >= 0)) {
     keynum = DOOR_KEY(ch, obj, door);
     
