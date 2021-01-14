@@ -596,7 +596,7 @@ ACMD(do_broadcast)
   char buf3[MAX_STRING_LENGTH], buf4[MAX_STRING_LENGTH], voice[16] = "$v"; 
   bool cyberware = FALSE, vehicle = FALSE;
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    send_to_char("You must be Authorized to do that.\r\n", ch);
+    send_to_char("You must be Authorized to do that. Until then, you can use the ^WNEWBIE^n channel if you need help.\r\n", ch);
     return;
   }
   if (IS_ASTRAL(ch)) {
@@ -877,7 +877,7 @@ ACMD(do_gen_comm)
     return;
 
   if(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && subcmd != SCMD_NEWBIE) {
-    send_to_char(ch, "You must be Authorized to use that command.\r\n");
+    send_to_char(ch, "You must be Authorized to use that command. Until then, you can use the ^WNEWBIE^n channel if you need help.\r\n");
     return;
   }
 

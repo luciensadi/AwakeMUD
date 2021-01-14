@@ -450,7 +450,7 @@ struct command_info cmd_info[] =
     { "ask"      , POS_LYING   , do_spec_comm, 0, SCMD_ASK },
     { "award"    , POS_DEAD    , do_award    , LVL_FIXER, 0 },
     { "audit"    , POS_DEAD    , do_audit    , LVL_BUILDER, 0 },
-    { "authorize", POS_DEAD    , do_wizutil  , LVL_CONSPIRATOR, SCMD_AUTHORIZE },
+    { "authorize", POS_DEAD    , do_wizutil  , LVL_ADMIN, SCMD_AUTHORIZE },
     { "availoffset", POS_DEAD  , do_availoffset, 0, 0 },
 
     { "bond"     , POS_RESTING , do_bond     , 0, 0 },
