@@ -523,7 +523,13 @@ struct archetype_data *generate_archetype(int index) {
 void generate_archetypes() {
   for (int i = 0; i < NUM_CCR_ARCHETYPES; i++) {
     archetypes[i] = generate_archetype(i);
+    
+    // Give all archetypes a subsidy card with a month's rent on it.
     archetypes[i]->subsidy_card = 30000;
+    
+    // Give them all Brawling so they don't get facerolled by training dummies.
+    archetypes[i]->skills[SKILL_UNARMED_COMBAT] = 2;
+    
     log_vfprintf("... %s.", archetypes[i]->name);
   }
 }

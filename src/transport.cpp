@@ -1126,21 +1126,33 @@ static void open_elevator_doors(struct room_data *car, int num, int floor)
   vnum_t landing_rnum = real_room(elevator[num].floor[floor].vnum);
   struct room_data *landing = &world[landing_rnum];
   
-  REMOVE_BIT(car->dir_option[dir]->exit_info, EX_ISDOOR);
-  REMOVE_BIT(car->dir_option[dir]->exit_info, EX_CLOSED);
-  REMOVE_BIT(car->dir_option[dir]->exit_info, EX_LOCKED);
+  if (car->dir_option[dir]) {
+    REMOVE_BIT(car->dir_option[dir]->exit_info, EX_ISDOOR);
+    REMOVE_BIT(car->dir_option[dir]->exit_info, EX_CLOSED);
+    REMOVE_BIT(car->dir_option[dir]->exit_info, EX_LOCKED);
+  } else {
+    snprintf(buf, sizeof(buf), "WARNING: Invalid direction %s from car %ld (%s).",
+             dirs[dir], GET_ROOM_VNUM(car), GET_ROOM_NAME(car));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  }
   
   dir = rev_dir[dir];
   
-  REMOVE_BIT(landing->dir_option[dir]->exit_info, EX_ISDOOR);
-  REMOVE_BIT(landing->dir_option[dir]->exit_info, EX_CLOSED);
-  REMOVE_BIT(landing->dir_option[dir]->exit_info, EX_LOCKED);
+  if (landing->dir_option[dir]) {
+    REMOVE_BIT(landing->dir_option[dir]->exit_info, EX_ISDOOR);
+    REMOVE_BIT(landing->dir_option[dir]->exit_info, EX_CLOSED);
+    REMOVE_BIT(landing->dir_option[dir]->exit_info, EX_LOCKED);
+  } else {
+    snprintf(buf, sizeof(buf), "WARNING: Invalid direction %s from landing %ld (%s).",
+             dirs[dir], GET_ROOM_VNUM(landing), GET_ROOM_NAME(landing));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  }
   
   // Clean up.
   elevator[num].dir = UP - 1;
   
   snprintf(buf, sizeof(buf), "The elevator doors open to the %s.", fulldirs[dir]);
-  send_to_room(buf, &world[landing_rnum]);
+  send_to_room(buf, landing);
 }
 
 static void close_elevator_doors(struct room_data *room, int num, int floor)
@@ -1149,18 +1161,30 @@ static void close_elevator_doors(struct room_data *room, int num, int floor)
   vnum_t landing_rnum = real_room(elevator[num].floor[floor].vnum);
   struct room_data *landing = &world[landing_rnum];
 
-  // Close the doors between landing and car, but do not destroy or replace anything.
-  SET_BIT(room->dir_option[dir]->exit_info, EX_ISDOOR);
-  SET_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
-  SET_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
+  if (room->dir_option[dir]) {
+    // Close the doors between landing and car, but do not destroy or replace anything.
+    SET_BIT(room->dir_option[dir]->exit_info, EX_ISDOOR);
+    SET_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
+    SET_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
+  } else {
+    snprintf(buf, sizeof(buf), "WARNING: Invalid direction %s from car %ld (%s).",
+             dirs[dir], GET_ROOM_VNUM(room), GET_ROOM_NAME(room));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  }
 
   dir = rev_dir[dir];
-
-  SET_BIT(landing->dir_option[dir]->exit_info, EX_ISDOOR);
-  SET_BIT(landing->dir_option[dir]->exit_info, EX_CLOSED);
-  SET_BIT(landing->dir_option[dir]->exit_info, EX_LOCKED);
   
-  send_to_room("The elevator doors close.", &world[real_room(landing->number)]);
+  if (landing->dir_option[dir]) {
+    SET_BIT(landing->dir_option[dir]->exit_info, EX_ISDOOR);
+    SET_BIT(landing->dir_option[dir]->exit_info, EX_CLOSED);
+    SET_BIT(landing->dir_option[dir]->exit_info, EX_LOCKED);
+  } else {
+    snprintf(buf, sizeof(buf), "WARNING: Invalid direction %s from landing %ld (%s).",
+             dirs[dir], GET_ROOM_VNUM(landing), GET_ROOM_NAME(landing));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  }
+  
+  send_to_room("The elevator doors close.", landing);
 }
 
 // ______________________________

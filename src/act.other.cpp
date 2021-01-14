@@ -3817,32 +3817,59 @@ ACMD(do_cpool)
          (struct obj_data *) NULL;
   two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
          (struct obj_data *) NULL;
+         
   if (!one && !two) {
     if(has_cyberweapon(ch))
       low = GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
-    else low = GET_SKILL(ch, SKILL_UNARMED_COMBAT);
-  } else if (one) {
+    else 
+      low = GET_SKILL(ch, SKILL_UNARMED_COMBAT);
+  } 
+  
+  else if (one) {
     if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
       low = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-    else low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-  } else if (two) {
+    else 
+      low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
+  } 
+  
+  else if (two) {
     if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
       low = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-    else low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-  } else {
+    else 
+      low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
+  } 
+  
+  // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
+  else {
     if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
       if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
         low = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-      else low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
+      else 
+        low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
     } else {
       if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
         low = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-      else low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
+      else 
+        low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
     }
   }
-  total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, MIN(off, low));
-  if (total > 0)
+  
+  if (!one)
+    one = two;
+    
+  if (off > low) {
+    send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n",
+                 one ? GET_OBJ_NAME(one) : (has_cyberweapon(ch) ? "cyberweapons" : "your hands"),
+                 low);
+    off = low;
+  }
+  
+  total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);
+  if (total > 0) {
     GET_DEFENSE(ch) += total;
+    send_to_char(ch, "Putting the %d remaining dice in your dodge pool.\r\n", total);
+  }
+  
   send_to_char(ch, "Pools set as: Dodge-%d Body-%d Offense-%d\r\n", GET_DEFENSE(ch), GET_BODY(ch), GET_OFFENSE(ch));
 }
 

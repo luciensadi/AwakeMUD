@@ -646,6 +646,9 @@ ACMD(do_rdelete)
     send_to_char("The room must be empty before you delete it.\r\n", ch);
     return;
   }
+  
+  snprintf(buf, sizeof(buf), "%s deleted room %ld (%s).", GET_CHAR_NAME(ch), GET_ROOM_VNUM(&world[num]), GET_ROOM_NAME(&world[num]));
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
   // now Free the room
   if (world[num].name)
@@ -1153,6 +1156,9 @@ ACMD(do_idelete)
     return;
   }
   
+  snprintf(buf, sizeof(buf), "%s deleted obj %ld (%s).", GET_CHAR_NAME(ch), GET_OBJ_VNUM(&obj_proto[num]), GET_OBJ_NAME(&obj_proto[num]));
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    
   // Wipe it from saved database tables.
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE Vnum=%ld", obj_proto[num].item_number);
   mysql_wrapper(mysql, buf);
@@ -1509,6 +1515,7 @@ ACMD(do_mdelete)
     return;
   } else {
     snprintf(buf3, sizeof(buf3), "NPC '%s' (%ld) deleted.\r\n", GET_NAME(&mob_proto[num]), GET_MOB_VNUM(&mob_proto[num]));
+    mudlog(buf3, ch, LOG_WIZLOG, TRUE);
   }
 
   struct char_data *j, *temp, *next_char;
@@ -1982,7 +1989,10 @@ ACMD(do_zedit)
 }
 
 ACMD(do_zdelete)
-{}
+{
+  send_to_char(ch, "Not yet implemented.\r\n");
+  return;
+}
 
 ACMD(do_hedit)
 {
