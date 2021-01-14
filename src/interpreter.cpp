@@ -1309,7 +1309,7 @@ const char *reserved[] =
     "\n"
   };
 
-void nonsensical_reply(struct char_data *ch, const char *arg)
+void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode)
 {
   send_to_char(ch, "That is not a valid command.\r\n");
   if (ch->desc && ++ch->desc->invalid_command_counter >= 5) {
@@ -1323,7 +1323,7 @@ void nonsensical_reply(struct char_data *ch, const char *arg)
   if (arg && *arg && isalpha(*arg)) {
     // Write it to the in-game log.
     char log_buf[1000];
-    snprintf(log_buf, sizeof(log_buf), "Invalid command: '%s'.", arg);
+    snprintf(log_buf, sizeof(log_buf), "Invalid %s command: '%s'.", mode, arg);
     mudlog(log_buf, ch, LOG_FUCKUPLOG, TRUE);
     
     // Check to see if it's a staff command. We don't care to log these to the fuckups table, as they're not fuckups we can learn from.
@@ -1445,7 +1445,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       
       // Nothing was found? Give them the "wat" and bail.
       if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
-        nonsensical_reply(ch, arg);
+        nonsensical_reply(ch, arg, "matrix");
         return;
       }
       
@@ -1467,7 +1467,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       if (!strncmp(rig_info[cmd].command, arg, length))
         break;
     if (*rig_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, rig_info)) == -1) {
-      nonsensical_reply(ch, arg);
+      nonsensical_reply(ch, arg, "rigging");
       return;
     } else {
       ch->desc->invalid_command_counter = 0;
@@ -1486,7 +1486,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     if (*cmd_info[cmd].command == '\n' 
         && ((cmd = fix_common_command_fuckups(arg, cmd_info)) == -1
             || ((cmd_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, cmd_info[cmd].minimum_level)))) {
-      nonsensical_reply(ch, arg);
+      nonsensical_reply(ch, arg, "standard");
       return;
     } else {
       if (ch->desc)

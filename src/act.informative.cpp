@@ -4273,12 +4273,12 @@ ACMD(do_gen_ps)
   }
 }
 
-extern void nonsensical_reply(struct char_data *ch, const char *arg);
+extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
   /* DISABLED FOR MORTALS */
-  nonsensical_reply(ch, NULL);
+  nonsensical_reply(ch, NULL, "standard");
   return;
 }
 

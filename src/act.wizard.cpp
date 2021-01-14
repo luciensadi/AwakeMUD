@@ -81,7 +81,7 @@ extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
 
 extern const char *pgroup_print_privileges(Bitfield privileges);
-extern void nonsensical_reply(struct char_data *ch, const char *arg);
+extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
 
 extern struct elevator_data *elevator;
@@ -420,7 +420,7 @@ ACMD(do_echo)
       case SCMD_ECHO:
       case SCMD_AECHO:
         if (!PRF_FLAGGED(ch, PRF_QUESTOR) && (ch->desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : GET_LEVEL(ch)) < LVL_ARCHITECT) {
-          nonsensical_reply(ch, NULL);
+          nonsensical_reply(ch, NULL, "standard");
           return;
         }
         snprintf(buf, sizeof(buf), "%s", argument);
@@ -2519,7 +2519,7 @@ ACMD(do_restore)
   
   // Shifted here from interpreter to allow morts to use the restore command for the testing obj.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
-    nonsensical_reply(ch, NULL);
+    nonsensical_reply(ch, NULL, "standard");
     return;
   }
 

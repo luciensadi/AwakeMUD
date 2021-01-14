@@ -2788,9 +2788,9 @@ ACMD(do_photo)
 ACMD(do_boost)
 {
   int suc;
-  extern void nonsensical_reply(struct char_data *ch, const char *arg);
+  extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    nonsensical_reply(ch, NULL);
+    nonsensical_reply(ch, NULL, "standard");
     return;
   }
   skip_spaces(&argument);

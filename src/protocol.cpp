@@ -538,11 +538,11 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
    int i = 0, j = 0; /* Index values */
 
    protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
-   if ( pProtocol == NULL || apData == NULL )
+   if ( pProtocol == NULL || apData == NULL || !pProtocol->pVariables)
       return apData;
 
    /* Strip !!SOUND() triggers if they support MSP or are using sound */
-   if ( pProtocol->bMSP || pProtocol->pVariables[eMSDP_SOUND]->ValueInt )
+   if ( pProtocol->bMSP || (pProtocol->pVariables[eMSDP_SOUND] && pProtocol->pVariables[eMSDP_SOUND]->ValueInt) )
       bUseMSP = TRUE;
 
    for ( ; i < MAX_OUTPUT_BUFFER && apData[j] != '\0' && !bTerminate && 
@@ -656,20 +656,20 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                pCopyFrom = ColourRGB(apDescriptor, "F205");
                break;
             case '(': /* MXP link */
-               if ( !pProtocol->bBlockMXP && pProtocol->pVariables[eMSDP_MXP]->ValueInt ) {
+               if ( !pProtocol->bBlockMXP && (pProtocol->pVariables[eMSDP_MXP] && pProtocol->pVariables[eMSDP_MXP]->ValueInt) ) {
                     pCopyFrom = LinkStart;
                     p_is_color = FALSE;
                }
                break;
             case ')': /* MXP link */
-               if ( !pProtocol->bBlockMXP && pProtocol->pVariables[eMSDP_MXP]->ValueInt ) {
+               if ( !pProtocol->bBlockMXP && (pProtocol->pVariables[eMSDP_MXP] && pProtocol->pVariables[eMSDP_MXP]->ValueInt) ) {
                     pCopyFrom = LinkStop;
                     p_is_color = FALSE;
                }
                pProtocol->bBlockMXP = FALSE;
                break;
             case '<':
-               if ( !pProtocol->bBlockMXP && pProtocol->pVariables[eMSDP_MXP]->ValueInt )
+               if ( !pProtocol->bBlockMXP && (pProtocol->pVariables[eMSDP_MXP] && pProtocol->pVariables[eMSDP_MXP]->ValueInt) )
                {
                   pCopyFrom = MXPStart;
                   bUseMXP = TRUE;
@@ -722,7 +722,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                      snprintf( BugString, sizeof(BugString), "BUG: Unicode substitute '%s' truncated.  Missing ']'?\n", Buffer );
                      ReportBug( BugString );
                   }
-                  else if ( pProtocol->pVariables[eMSDP_UTF_8]->ValueInt )
+                  else if ( pProtocol->pVariables[eMSDP_UTF_8] && pProtocol->pVariables[eMSDP_UTF_8]->ValueInt )
                   {
                      pCopyFrom = UnicodeGet(Number);
                      p_is_color = FALSE;
@@ -1087,18 +1087,18 @@ const char *CopyoverGet( descriptor_t *apDescriptor )
          *pBuffer++ = 'A';
       if ( pProtocol->bMSP )
          *pBuffer++ = 'S';
-      if ( pProtocol->pVariables[eMSDP_MXP]->ValueInt )
+      if ( pProtocol->pVariables[eMSDP_MXP] && pProtocol->pVariables[eMSDP_MXP]->ValueInt )
          *pBuffer++ = 'X';
       if ( pProtocol->bMCCP )
       {
          *pBuffer++ = 'c';
          CompressEnd(apDescriptor);
       }
-      if ( pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt )
+      if ( pProtocol->pVariables[eMSDP_XTERM_256_COLORS] && pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt )
          *pBuffer++ = 'C';
       if ( pProtocol->bCHARSET )
          *pBuffer++ = 'H';
-      if ( pProtocol->pVariables[eMSDP_UTF_8]->ValueInt )
+      if ( pProtocol->pVariables[eMSDP_UTF_8] && pProtocol->pVariables[eMSDP_UTF_8]->ValueInt )
          *pBuffer++ = 'U';
    }
 
@@ -1210,9 +1210,9 @@ void MSDPUpdate( descriptor_t *apDescriptor )
 
    for ( i = eMSDP_NONE+1; i < eMSDP_MAX; ++i )
    {
-      if ( pProtocol->pVariables[i]->bReport )
+      if ( pProtocol->pVariables[i] && pProtocol->pVariables[i]->bReport )
       {
-         if ( pProtocol->pVariables[i]->bDirty )
+         if ( pProtocol->pVariables[i] && pProtocol->pVariables[i]->bDirty )
          {
             MSDPSend( apDescriptor, (variable_t)i );
             pProtocol->pVariables[i]->bDirty = FALSE;
@@ -1227,9 +1227,9 @@ void MSDPFlush( descriptor_t *apDescriptor, variable_t aMSDP )
    {
       protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
 
-      if ( pProtocol->pVariables[aMSDP]->bReport )
+      if ( pProtocol->pVariables[aMSDP] && pProtocol->pVariables[aMSDP]->bReport )
       {
-         if ( pProtocol->pVariables[aMSDP]->bDirty )
+         if ( pProtocol->pVariables[aMSDP] && pProtocol->pVariables[aMSDP]->bDirty )
          {
             MSDPSend( apDescriptor, aMSDP );
             pProtocol->pVariables[aMSDP]->bDirty = FALSE;
@@ -1410,7 +1410,7 @@ void MSDPSetNumber( descriptor_t *apDescriptor, variable_t aMSDP, int aValue )
    {
       if ( !VariableNameTable[aMSDP].bString )
       {
-         if ( pProtocol->pVariables[aMSDP]->ValueInt != aValue )
+         if ( pProtocol->pVariables[aMSDP] && pProtocol->pVariables[aMSDP]->ValueInt != aValue )
          {
             pProtocol->pVariables[aMSDP]->ValueInt = aValue;
             pProtocol->pVariables[aMSDP]->bDirty = TRUE;
@@ -1529,7 +1529,7 @@ const char *MXPCreateTag( descriptor_t *apDescriptor, const char *apTag )
 {
    protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
 
-   if ( pProtocol != NULL && pProtocol->pVariables[eMSDP_MXP]->ValueInt && 
+   if ( pProtocol != NULL && pProtocol->pVariables[eMSDP_MXP] && pProtocol->pVariables[eMSDP_MXP]->ValueInt && 
       strlen(apTag) < 1000 )
    {
       static char MXPBuffer [1024];
@@ -1548,7 +1548,7 @@ void MXPSendTag( descriptor_t *apDescriptor, const char *apTag )
 
    if ( pProtocol != NULL && apTag != NULL && strlen(apTag) < 1000 )
    {
-      if ( pProtocol->pVariables[eMSDP_MXP]->ValueInt )
+      if ( pProtocol->pVariables[eMSDP_MXP] && pProtocol->pVariables[eMSDP_MXP]->ValueInt )
       {
          char MXPBuffer [1024];
          snprintf(MXPBuffer, sizeof(MXPBuffer), "\033[1z%s\033[7z\r\n", apTag );
@@ -1587,7 +1587,7 @@ void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
    {
       protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
 
-      if ( pProtocol != NULL && pProtocol->pVariables[eMSDP_SOUND]->ValueInt )
+      if ( pProtocol != NULL && pProtocol->pVariables[eMSDP_SOUND] && pProtocol->pVariables[eMSDP_SOUND]->ValueInt )
       {
          if ( pProtocol->bMSDP || pProtocol->bATCP )
          {
@@ -1634,7 +1634,7 @@ const char *ColourRGB( descriptor_t *apDescriptor, const char *apRGB )
            Blue += 1;
         }
 
-         if ( pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt )
+         if ( pProtocol->pVariables[eMSDP_XTERM_256_COLORS] && pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt )
             return GetRGBColour( bBackground, Red, Green, Blue );
          else /* Use regular ANSI colour */
             return GetAnsiColour( bBackground, Red, Green, Blue );
