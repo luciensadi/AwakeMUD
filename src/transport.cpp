@@ -1710,22 +1710,37 @@ static void open_doors(int car, int to, int room, int from)
 
 static void close_doors(int car, int to, int room, int from)
 {
-  if (world[car].dir_option[to]->keyword)
-    delete [] world[car].dir_option[to]->keyword;
-  if (world[car].dir_option[to]->general_description)
-    delete [] world[car].dir_option[to]->general_description;
-  delete world[car].dir_option[to];
-  world[car].dir_option[to] = NULL;
+  if (car <= NOWHERE || car > top_of_world) {
+    snprintf(buf, sizeof(buf), "SYSERR: Nonexistent car rnum %d sent to close_doors().", car);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  } else if (!(world[car].dir_option[to])) {
+    snprintf(buf, sizeof(buf), "SYSERR: There is no %s exit from car %ld, close_doors() would have crashed.", dirs[to], GET_ROOM_VNUM(&world[car]));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  } else {
+    if (world[car].dir_option[to]->keyword)
+      delete [] world[car].dir_option[to]->keyword;
+    if (world[car].dir_option[to]->general_description)
+      delete [] world[car].dir_option[to]->general_description;
+    delete world[car].dir_option[to];
+    world[car].dir_option[to] = NULL;
+    send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[car]);
+  }
 
-  if (world[room].dir_option[from]->keyword)
-    delete [] world[room].dir_option[from]->keyword;
-  if (world[room].dir_option[from]->general_description)
-    delete [] world[room].dir_option[from]->general_description;
-  delete world[room].dir_option[from];
-  world[room].dir_option[from] = NULL;
-
-  send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[car]);
-  send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[room]);
+  if (room <= NOWHERE || room > top_of_world) {
+    snprintf(buf, sizeof(buf), "SYSERR: Nonexistent room rnum %d sent to close_doors().", room);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  } else if (!(world[room].dir_option[from])) {
+    snprintf(buf, sizeof(buf), "SYSERR: There is no %s exit from room %ld, close_doors() would have crashed.", dirs[from], GET_ROOM_VNUM(&world[room]));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  } else {
+    if (world[room].dir_option[from]->keyword)
+      delete [] world[room].dir_option[from]->keyword;
+    if (world[room].dir_option[from]->general_description)
+      delete [] world[room].dir_option[from]->general_description;
+    delete world[room].dir_option[from];
+    world[room].dir_option[from] = NULL;
+    send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[room]);
+  }
 }
 
 // ______________________________
