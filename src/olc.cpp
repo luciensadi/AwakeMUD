@@ -335,11 +335,6 @@ ACMD(do_rclone)
     return;
   }
 
-  if (!can_edit_zone(ch, zone1)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
   if (!can_edit_zone(ch, zone2)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
@@ -545,6 +540,11 @@ ACMD(do_dig)
 
   if (!can_edit_zone(ch, zone1) || !can_edit_zone(ch, zone2)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
+    return;
+  }
+  
+  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && (zone_table[zone1].connected || zone_table[zone2].connected)) {
+    send_to_char("You can't edit connected zones.\r\n", ch);
     return;
   }
   
@@ -1097,12 +1097,12 @@ ACMD(do_iclone)
     return;
   }
 
-  if (!can_edit_zone(ch, zone1) || !can_edit_zone(ch, zone2)) {
+  if (!can_edit_zone(ch, zone2)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
 
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
+  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zone2].connected) {
     send_to_char("You can't clone objects into a connected zone.\r\n", ch);
     return;
   }
@@ -1921,7 +1921,7 @@ ACMD(do_shedit)
 
 ACMD(do_zswitch)
 {
-  int counter = 0, number, zonenum;
+  int number, zonenum;
   char arg1[MAX_INPUT_LENGTH];
 
   // they must be flagged with olc to zswitch
@@ -1943,12 +1943,12 @@ ACMD(do_zswitch)
   zonenum = real_zone(number);
 
   // and see if they can edit it
-  if (!can_edit_zone(ch, counter)) {
+  if (!can_edit_zone(ch, zonenum)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
 
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
+  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zonenum].connected) {
     send_to_char("You can't switch to a connected zone.\r\n", ch);
     return;
   }
@@ -1961,7 +1961,7 @@ ACMD(do_zswitch)
 ACMD(do_zedit)
 {
   struct descriptor_data *d = ch->desc;
-  int counter = 0, number, zonenum;
+  int number, zonenum;
 
   bool add
     = FALSE;
@@ -1991,7 +1991,7 @@ ACMD(do_zedit)
     return;
   }
 
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
+  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zonenum].connected) {
     send_to_char("You can't edit rooms from a connected zone.\r\n", ch);
     return;
   }
