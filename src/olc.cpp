@@ -57,6 +57,18 @@ extern void redit_parse(struct descriptor_data * d, const char *arg);
 // mem class
 extern class memoryClass *Mem;
 
+#define REQUIRE_ZONE_EDIT_ACCESS(real_zonenum) {                                                                                               \
+  if (!can_edit_zone(ch, (real_zonenum))) {                                                                                                    \
+    send_to_char(ch, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);                                 \
+    return;                                                                                                                                    \
+  }                                                                                                                                            \
+                                                                                                                                               \
+  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].connected) {                              \
+    send_to_char(ch, "Sorry, zone %d is marked as connected to the game world, so you can't edit it.\r\n", zone_table[(real_zonenum)].number); \
+    return;                                                                                                                                    \
+  }                                                                                                                                            \
+}
+
 // Checks for OLC availability and advises you on how to fix it, assuming you're capable.
 bool is_olc_available(struct char_data *ch) {
   if (!olc_state) {
@@ -197,7 +209,6 @@ ACMD (do_redit)
   }
   for (counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
-      ch->desc->edit_zone = counter;
       found = 1;
       break;
     }
@@ -206,17 +217,10 @@ ACMD (do_redit)
     send_to_char ("Sorry, that number is not part of any zone!\r\n", ch);
     return;
   }
-
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't edit rooms from a connected zone.\r\n", ch);
-    return;
-  }
-
+  
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
+  
+  ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
@@ -334,16 +338,8 @@ ACMD(do_rclone)
     send_to_char("That number is not part of any zone.\r\n", ch);
     return;
   }
-
-  if (!can_edit_zone(ch, zone2)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zone2].connected) {
-    send_to_char("You can't clone rooms to a connected zone.\r\n", ch);
-    return;
-  }
+  
+  REQUIRE_ZONE_EDIT_ACCESS(zone2);
 
   num1 = real_room(arg1);
   num2 = real_room(arg2);
@@ -482,10 +478,7 @@ ACMD(do_dig)
       }
       
       // Check if they can edit this zone.
-      if (!can_edit_zone(ch, counter)) {
-        send_to_char(ch, "Sorry, you can't edit zone %d.\r\n", zone_table[counter].number);
-        return;
-      }
+      REQUIRE_ZONE_EDIT_ACCESS(counter);
       
       // Boilerplate things required by redit.
       PLR_FLAGS(ch).SetBit(PLR_EDITING);
@@ -537,16 +530,10 @@ ACMD(do_dig)
         world[room].number <= zone_table[counter].top)
       zone2 = counter;
   }
-
-  if (!can_edit_zone(ch, zone1) || !can_edit_zone(ch, zone2)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
   
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && (zone_table[zone1].connected || zone_table[zone2].connected)) {
-    send_to_char("You can't edit connected zones.\r\n", ch);
-    return;
-  }
+  // Dig is one of the only two-zone commands that requires edit access to both zones.
+  REQUIRE_ZONE_EDIT_ACCESS(zone1);
+  REQUIRE_ZONE_EDIT_ACCESS(zone2);
   
   /* send_to_char(ch, "DEBUG: Digging %s from %d (z %d) to %d (z %d): preexisting exit %d and %d.",
     dirs[dir],
@@ -647,16 +634,8 @@ ACMD(do_rdelete)
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
-
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't delete rooms from a connected zone.\r\n", ch);
-    return;
-  }
+  
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
 
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
@@ -814,7 +793,6 @@ ACMD (do_vedit)
   for (counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) &&
         (number <= (zone_table[counter].top))) {
-      ch->desc->edit_zone = counter;
       found = 1;
       break;
     }
@@ -824,16 +802,9 @@ ACMD (do_vedit)
     return;
   }
 
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
 
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't edit objects from a connected zone.\r\n", ch);
-    return;
-  }
-
+  ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
   /*
@@ -941,7 +912,6 @@ ACMD (do_iedit)
   for (counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) &&
         (number <= (zone_table[counter].top))) {
-      ch->desc->edit_zone = counter;
       found = 1;
       break;
     }
@@ -951,16 +921,9 @@ ACMD (do_iedit)
     return;
   }
 
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't edit objects from a connected zone.\r\n", ch);
-    return;
-  }
-
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
+  
+  ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
   /*
@@ -1097,15 +1060,7 @@ ACMD(do_iclone)
     return;
   }
 
-  if (!can_edit_zone(ch, zone2)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zone2].connected) {
-    send_to_char("You can't clone objects into a connected zone.\r\n", ch);
-    return;
-  }
+  REQUIRE_ZONE_EDIT_ACCESS(zone2);
 
   // now for the fun part
   // first duplicate the obj
@@ -1189,15 +1144,7 @@ ACMD(do_idelete)
     return;
   }
   
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't delete objects from a connected zone.\r\n", ch);
-    return;
-  }
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
 
   num = real_object(num);
   
@@ -1340,7 +1287,6 @@ ACMD(do_medit)
   //check zone numbers
   for (counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
-      ch->desc->edit_zone = counter;
       found = 1;
       break;
     }
@@ -1350,16 +1296,9 @@ ACMD(do_medit)
     return;
   }
   // only allow them to edit their zone
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't edit mobiles from a connected zone.\r\n", ch);
-    return;
-  }
-
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
+  
+  ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
 
@@ -1478,15 +1417,7 @@ ACMD(do_mclone)
     return;
   }
 
-  if (!can_edit_zone(ch, zone2)) { // Removed: !can_edit_zone(ch, zone1)
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zone2].connected) {
-    send_to_char("You can't clone mobiles to a connected zone.\r\n", ch);
-    return;
-  }
+  REQUIRE_ZONE_EDIT_ACCESS(zone2);
 
   mob_num1 = real_mobile(arg1);
   mob_num2 = real_mobile(arg2);
@@ -1568,15 +1499,7 @@ ACMD(do_mdelete)
     return;
   }
 
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't delete mobiles from a connected zone.\r\n", ch);
-    return;
-  }
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
 
   ch->player_specials->saved.zonenum = zone_table[counter].number;
   num = real_mobile(num);
@@ -1693,7 +1616,6 @@ ACMD(do_qedit)
   for (counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) &&
         (number <= (zone_table[counter].top))) {
-      ch->desc->edit_zone = counter;
       found = 1;
       break;
     }
@@ -1703,16 +1625,9 @@ ACMD(do_qedit)
     return;
   }
 
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't edit quests from a connected zone.\r\n", ch);
-    return;
-  }
-
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
+  
+  ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
@@ -1823,15 +1738,7 @@ ACMD(do_shedit)
     return;
   }
 
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't edit shops from a connected zone.\r\n", ch);
-    return;
-  }
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
 
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
@@ -1943,15 +1850,7 @@ ACMD(do_zswitch)
   zonenum = real_zone(number);
 
   // and see if they can edit it
-  if (!can_edit_zone(ch, zonenum)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zonenum].connected) {
-    send_to_char("You can't switch to a connected zone.\r\n", ch);
-    return;
-  }
+  REQUIRE_ZONE_EDIT_ACCESS(zonenum);
 
   // and set their zonenum to it
   ch->player_specials->saved.zonenum = number;
@@ -1986,15 +1885,7 @@ ACMD(do_zedit)
 
   zonenum = real_zone(ch->player_specials->saved.zonenum);
 
-  if (!can_edit_zone(ch, zonenum)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[zonenum].connected) {
-    send_to_char("You can't edit rooms from a connected zone.\r\n", ch);
-    return;
-  }
+  REQUIRE_ZONE_EDIT_ACCESS(zonenum);
 
   if (!*arg1) {
     PLR_FLAGS(ch).SetBit(PLR_EDITING);
@@ -2126,7 +2017,6 @@ ACMD(do_hedit)
   for (counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) &&
         (number <= (zone_table[counter].top))) {
-      ch->desc->edit_zone = counter;
       found = 1;
       break;
     }
@@ -2136,16 +2026,9 @@ ACMD(do_hedit)
     return;
   }
 
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't edit hosts from a connected zone.\r\n", ch);
-    return;
-  }
-
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
+  
+  ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
@@ -2258,7 +2141,6 @@ ACMD(do_icedit)
   for (counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) &&
         (number <= (zone_table[counter].top))) {
-      ch->desc->edit_zone = counter;
       found = 1;
       break;
     }
@@ -2268,16 +2150,9 @@ ACMD(do_icedit)
     return;
   }
 
-  if (!can_edit_zone(ch, counter)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
-    send_to_char("You can't edit hosts from a connected zone.\r\n", ch);
-    return;
-  }
-
+  REQUIRE_ZONE_EDIT_ACCESS(counter);
+  
+  ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
 
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
