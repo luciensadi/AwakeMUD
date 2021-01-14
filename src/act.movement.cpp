@@ -1062,8 +1062,12 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
     OPEN_DOOR(ch->in_room, obj, door);
     if (back)
       OPEN_DOOR(other_room, obj, rev_dir[door]);
-    if (print_message)
-      send_to_char(ch, "You %s the %s to %s.\r\n", scmd == SCMD_OPEN ? "open" : "close", GET_DOOR_NAME(ch, door), thedirs[door]);
+    if (print_message) {
+      if (obj)
+        send_to_char(ch, "You %s %s.\r\n", scmd == SCMD_OPEN ? "open" : "close", GET_OBJ_NAME(obj));
+      else
+        send_to_char(ch, "You %s the %s to %s.\r\n", scmd == SCMD_OPEN ? "open" : "close", GET_DOOR_NAME(ch, door), thedirs[door]);
+    }
     break;
   case SCMD_UNLOCK:
   case SCMD_LOCK:
@@ -1085,6 +1089,10 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
     }
     break;
   case SCMD_KNOCK:
+    if (obj) {
+      send_to_char(ch, "You knock experimentally on %s, but nothing happens.\r\n", GET_OBJ_NAME(obj));
+      return;
+    }
     send_to_char(ch, "You knock on the %s to %s.\r\n", GET_DOOR_NAME(ch, door), thedirs[door]);
     break;
   }
