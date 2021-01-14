@@ -98,6 +98,8 @@ CREATE TABLE `pfiles_chargendata` (
   `SkillPoints` tinyint(2) unsigned default '0', 
   `ForcePoints` tinyint(2) unsigned default '0', 
   `RestringPoints` tinyint(2) unsigned default '5', 
+  `archetypal` tinyint(2) unsigned default '0',
+  `archetype` tinyint(2) unsigned default '0',
   PRIMARY KEY (`idnum`) 
 ); 
 

@@ -27,7 +27,6 @@
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
 void death_cry(struct char_data * ch);
-int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg);
 void perform_fall(struct char_data *);
 bool check_fall(struct char_data *, int, bool need_to_send_fall_message);
 extern int modify_target(struct char_data *);

@@ -469,6 +469,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_SKILL_POINTS(ch)  	((ch)->player_specials->saved.skill_points)
 #define GET_FORCE_POINTS(ch)	  ((ch)->player_specials->saved.force_points)
 #define GET_RESTRING_POINTS(ch)	((ch)->player_specials->saved.restring_points)
+#define GET_ARCHETYPAL_TYPE(ch)	((ch)->player_specials->saved.archetype)
+#define GET_ARCHETYPAL_MODE(ch)	((ch)->player_specials->saved.archetypal)
 #define GET_TARGET_MOD(ch)	((ch)->char_specials.target_mod)
 #define LAST_HEAL(ch)		((ch)->char_specials.last_healed)
 #define GET_FOCI(ch)		((ch)->char_specials.foci)

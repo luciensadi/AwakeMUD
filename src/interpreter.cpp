@@ -99,6 +99,7 @@ ACMD_DECLARE(do_accept);
 ACMD_DECLARE(do_action);
 ACMD_DECLARE(do_activate);
 ACMD_DECLARE(do_advance);
+ACMD_DECLARE(do_afk);
 ACMD_DECLARE(do_alias);
 ACMD_DECLARE(do_ammo);
 ACMD_DECLARE(do_assist);
@@ -434,6 +435,7 @@ struct command_info cmd_info[] =
     { "accept"   , POS_LYING   , do_accept   , 0, 0 },
     { "addpoint" , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT },
     { "affects"  , POS_LYING   , do_status   , 0, 0 },
+    { "afk"      , POS_DEAD    , do_afk      , 0, 0 },
     { "ammo"     , POS_LYING   , do_ammo     , 0, 0 },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
     { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0 },
@@ -1382,7 +1384,11 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
   char *line;
 
   AFF_FLAGS(ch).RemoveBit(AFF_HIDE);
-  PRF_FLAGS(ch).RemoveBit(PRF_AFK);
+  
+  if (PRF_FLAGS(ch).IsSet(PRF_AFK)) {
+    send_to_char("You return from AFK.\r\n", ch);
+    PRF_FLAGS(ch).RemoveBit(PRF_AFK);
+  }
 
   /* just drop to next line for hitting CR */
   skip_spaces(&argument);
@@ -2637,6 +2643,26 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_MENU:                /* get selection from main menu  */
     switch (*arg) {
     case '0':
+      if (!GET_LEVEL(d->character)) {
+        // Copypasta of char init code to prevent them from showing up with no stats, paralyzed in front of Dante's.
+        if (GET_ARCHETYPAL_MODE(d->character)) {
+          load_room = real_room(archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room);
+          // Correct for invalid archetype start rooms.
+          if (load_room == NOWHERE) {
+            snprintf(buf, sizeof(buf), "WARNING: Start room %ld for archetype %s does not exist!", 
+                     archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room,
+                     archetypes[GET_ARCHETYPAL_TYPE(d->character)]->name);
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            load_room = real_room(newbie_start_room);
+          }
+          do_start(d->character, FALSE);
+        } else {
+          load_room = real_room(newbie_start_room);
+          do_start(d->character, TRUE);
+        }
+        
+        playerDB.SaveChar(d->character, load_room);
+      }
       close_socket(d);
       break;
 
@@ -2678,7 +2704,7 @@ void nanny(struct descriptor_data * d, char *arg)
         
       // Next: Unauthed (chargen) characters. They go to the start of their chargen areas.
       else if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
-        if (!d->ccr.archetypal || (load_room = real_room(archetypes[d->ccr.archetype]->start_room)) == NOWHERE)
+        if (!GET_ARCHETYPAL_MODE(d->character) || (load_room = real_room(archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room)) == NOWHERE)
           load_room = real_room(newbie_start_room);
       }
       
@@ -2718,13 +2744,13 @@ void nanny(struct descriptor_data * d, char *arg)
 
       // First-time login. This overrides the above, but it's for a good cause.
       if (!GET_LEVEL(d->character)) {
-        if (d->ccr.archetypal) {
-          load_room = real_room(archetypes[d->ccr.archetype]->start_room);
+        if (GET_ARCHETYPAL_MODE(d->character)) {
+          load_room = real_room(archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room);
           // Correct for invalid archetype start rooms.
           if (load_room == NOWHERE) {
             snprintf(buf, sizeof(buf), "WARNING: Start room %ld for archetype %s does not exist!", 
-                     archetypes[d->ccr.archetype]->start_room,
-                     archetypes[d->ccr.archetype]->name);
+                     archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room,
+                     archetypes[GET_ARCHETYPAL_TYPE(d->character)]->name);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
             load_room = real_room(newbie_start_room);
           }
@@ -2734,7 +2760,6 @@ void nanny(struct descriptor_data * d, char *arg)
           do_start(d->character, TRUE);
         }
         
-          
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
       } else {

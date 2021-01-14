@@ -413,8 +413,8 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   GET_OBJ_VAL(temp_obj, 1) = archetypes[i]->subsidy_card;
   obj_to_char(temp_obj, CH);
   
-  d->ccr.archetypal = TRUE;
-  d->ccr.archetype = i;
+  GET_ARCHETYPAL_MODE(CH) = TRUE;
+  GET_ARCHETYPAL_TYPE(CH) = i;
 
   // Wipe their remaining ccr data.
   init_create_vars(d);
@@ -831,8 +831,8 @@ void init_char_sql(struct char_data *ch)
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints) VALUES"\
-               "('%ld', '%d', '%d', '%d');", GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch));
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints, archetypal, archetype) VALUES"\
+               "('%ld', '%d', '%d', '%d', '%d', '%d');", GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch), GET_ARCHETYPAL_TYPE(ch));
     mysql_wrapper(mysql, buf);
   }
   if (GET_TRADITION(ch) != TRAD_MUNDANE) {

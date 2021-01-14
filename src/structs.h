@@ -510,6 +510,10 @@ struct player_special_data_saved
   unsigned char restring_points;
   int zonenum;
   
+  // Chargen data for archetypes.  
+  sh_int archetype;
+  bool archetypal;
+
   int system_points;
 };
 
@@ -782,11 +786,9 @@ struct txt_q
 struct ccreate_t
 {
   sh_int mode;
-  sh_int archetype;
   sh_int pr[NUM_CCR_PR_POINTS];
   sh_int force_points;
   sh_int temp;
-  bool archetypal;
   int points;
 };
 

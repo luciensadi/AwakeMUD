@@ -4241,3 +4241,9 @@ bool is_reloadable_weapon(struct obj_data *weapon, int ammotype) {
 ACMD(do_save) {
   send_to_char("Worry not! The game auto-saves all characters frequently, and also saves on quit and copyover, so there's no need to manually save.\r\n", ch);
 }
+
+ACMD(do_afk) {
+  char cmd_buf[50];
+  strncpy(cmd_buf, "afk", sizeof(cmd_buf) - 1);
+  do_toggle(ch, cmd_buf, 0, 0);
+}

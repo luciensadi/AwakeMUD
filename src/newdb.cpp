@@ -514,6 +514,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
       GET_SKILL_POINTS(ch) = atoi(row[2]);
       GET_FORCE_POINTS(ch) = atoi(row[3]);
       GET_RESTRING_POINTS(ch) = atoi(row[4]);
+      GET_ARCHETYPAL_MODE(ch) = (bool) atoi(row[5]);
+      GET_ARCHETYPAL_TYPE(ch) = atoi(row[6]);
     }
     mysql_free_result(res);
   }

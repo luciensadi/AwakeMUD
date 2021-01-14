@@ -2629,62 +2629,58 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
       "mouth",
       "\n"
     };
+    
+  if (arg && *arg && (where = search_block(arg, keywords, FALSE)) >= 0)
+    return where;
+  else
+    send_to_char(ch, "'%s' isn't a part of your body, so you decide to improvise.\r\n", arg);
 
-
-  if (!arg || !*arg)
-  {
-    if (CAN_WEAR(obj, ITEM_WEAR_FINGER))
-      where = WEAR_FINGER_R;
-    if (CAN_WEAR(obj, ITEM_WEAR_NECK))
-      where = WEAR_NECK_1;
-    if (CAN_WEAR(obj, ITEM_WEAR_BODY))
-      where = WEAR_BODY;
-    if (CAN_WEAR(obj, ITEM_WEAR_HEAD))
-      where = WEAR_HEAD;
-    if (CAN_WEAR(obj, ITEM_WEAR_LEGS))
-      where = WEAR_LEGS;
-    if (CAN_WEAR(obj, ITEM_WEAR_FEET))
-      where = WEAR_FEET;
-    if (CAN_WEAR(obj, ITEM_WEAR_HANDS))
-      where = WEAR_HANDS;
-    if (CAN_WEAR(obj, ITEM_WEAR_ARMS))
-      where = WEAR_ARMS;
-    if (CAN_WEAR(obj, ITEM_WEAR_SHIELD))
-      where = WEAR_SHIELD;
-    if (CAN_WEAR(obj, ITEM_WEAR_ABOUT))
-      where = WEAR_ABOUT;
-    if (CAN_WEAR(obj, ITEM_WEAR_WAIST))
-      where = WEAR_WAIST;
-    if (CAN_WEAR(obj, ITEM_WEAR_WRIST))
-      where = WEAR_WRIST_R;
-    if (CAN_WEAR(obj, ITEM_WEAR_EYES))
-      where = WEAR_EYES;
-    if (CAN_WEAR(obj, ITEM_WEAR_EAR))
-      where = WEAR_EAR;
-    if (CAN_WEAR(obj, ITEM_WEAR_UNDER))
-      where = WEAR_UNDER;
-    if (CAN_WEAR(obj, ITEM_WEAR_ANKLE))
-      where = WEAR_LANKLE;
-    if (CAN_WEAR(obj, ITEM_WEAR_SOCK))
-      where = WEAR_SOCK;
-    if (CAN_WEAR(obj, ITEM_WEAR_BACK))
-      where = WEAR_BACK;
-    if (CAN_WEAR(obj, ITEM_WEAR_BELLY))
-      where = WEAR_BELLY;
-    if (CAN_WEAR(obj, ITEM_WEAR_ARM))
-      where = WEAR_LARM;
-    if (CAN_WEAR(obj, ITEM_WEAR_FACE))
-      where = WEAR_FACE;
-    if (CAN_WEAR(obj, ITEM_WEAR_THIGH))
-      where = WEAR_THIGH_R;
-    if (CAN_WEAR(obj, ITEM_WEAR_MOUTH))
-      where = WEAR_MOUTH;
-  } else
-  {
-    if ((where = search_block(arg, keywords, FALSE)) < 0) {
-      send_to_char(ch, "'%s'?  What part of your body is THAT?\r\n", arg);
-    }
-  }
+  if (CAN_WEAR(obj, ITEM_WEAR_FINGER))
+    where = WEAR_FINGER_R;
+  if (CAN_WEAR(obj, ITEM_WEAR_NECK))
+    where = WEAR_NECK_1;
+  if (CAN_WEAR(obj, ITEM_WEAR_BODY))
+    where = WEAR_BODY;
+  if (CAN_WEAR(obj, ITEM_WEAR_HEAD))
+    where = WEAR_HEAD;
+  if (CAN_WEAR(obj, ITEM_WEAR_LEGS))
+    where = WEAR_LEGS;
+  if (CAN_WEAR(obj, ITEM_WEAR_FEET))
+    where = WEAR_FEET;
+  if (CAN_WEAR(obj, ITEM_WEAR_HANDS))
+    where = WEAR_HANDS;
+  if (CAN_WEAR(obj, ITEM_WEAR_ARMS))
+    where = WEAR_ARMS;
+  if (CAN_WEAR(obj, ITEM_WEAR_SHIELD))
+    where = WEAR_SHIELD;
+  if (CAN_WEAR(obj, ITEM_WEAR_ABOUT))
+    where = WEAR_ABOUT;
+  if (CAN_WEAR(obj, ITEM_WEAR_WAIST))
+    where = WEAR_WAIST;
+  if (CAN_WEAR(obj, ITEM_WEAR_WRIST))
+    where = WEAR_WRIST_R;
+  if (CAN_WEAR(obj, ITEM_WEAR_EYES))
+    where = WEAR_EYES;
+  if (CAN_WEAR(obj, ITEM_WEAR_EAR))
+    where = WEAR_EAR;
+  if (CAN_WEAR(obj, ITEM_WEAR_UNDER))
+    where = WEAR_UNDER;
+  if (CAN_WEAR(obj, ITEM_WEAR_ANKLE))
+    where = WEAR_LANKLE;
+  if (CAN_WEAR(obj, ITEM_WEAR_SOCK))
+    where = WEAR_SOCK;
+  if (CAN_WEAR(obj, ITEM_WEAR_BACK))
+    where = WEAR_BACK;
+  if (CAN_WEAR(obj, ITEM_WEAR_BELLY))
+    where = WEAR_BELLY;
+  if (CAN_WEAR(obj, ITEM_WEAR_ARM))
+    where = WEAR_LARM;
+  if (CAN_WEAR(obj, ITEM_WEAR_FACE))
+    where = WEAR_FACE;
+  if (CAN_WEAR(obj, ITEM_WEAR_THIGH))
+    where = WEAR_THIGH_R;
+  if (CAN_WEAR(obj, ITEM_WEAR_MOUTH))
+    where = WEAR_MOUTH;  
 
   return where;
 }
