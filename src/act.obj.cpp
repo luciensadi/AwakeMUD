@@ -3240,12 +3240,38 @@ ACMD(do_holster)
     send_to_char("Astral projections can't touch things.\r\n", ch);
     return;
   }
+  
   two_arguments(argument, buf, buf1);
-  if (!generic_find(buf, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &obj)) {
+  
+  if (!argument || !*argument) {
+    // Holster your wielded weapon.
+    if ((obj = GET_EQ(ch, WEAR_WIELD)) || (obj = GET_EQ(ch, WEAR_HOLD))) {
+      if (GET_OBJ_TYPE(obj) != ITEM_WEAPON) {
+        send_to_char(ch, "%s isn't a weapon.\r\n", capitalize(GET_OBJ_NAME(obj)));
+        return;
+      }
+    } else {
+      send_to_char("You're not wielding anything.\r\n", ch);
+      return;
+    }
+    
+    // Find a generic holster.
+    for (int x = 0; x < NUM_WEARS; x++) {
+      if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN && GET_EQ(ch, x)->contains) {
+        for (struct obj_data *temp = GET_EQ(ch, x)->contains; temp; temp = temp->next_content)
+          if (GET_OBJ_TYPE(temp) == ITEM_HOLSTER && !temp->contains) {
+            cont = temp;
+            break;
+          }
+      } else if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_HOLSTER && !GET_EQ(ch, x)->contains) {
+          cont = GET_EQ(ch, x);
+          break;
+      }
+    }
+  } else if (!generic_find(buf, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &obj)) {
     send_to_char(ch, "You're not carrying a '%s'.\r\n", buf);
     return;
-  }
-  if (!generic_find(buf1, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &cont)) {
+  } else if (!generic_find(buf1, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &cont)) {
     for (int x = 0; x < NUM_WEARS; x++) {
       if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN && GET_EQ(ch, x)->contains) {
         for (struct obj_data *temp = GET_EQ(ch, x)->contains; temp; temp = temp->next_content)
@@ -3259,31 +3285,44 @@ ACMD(do_holster)
       }
     }
   }
+  
   if (!cont) {
     send_to_char(ch, "You don't have any empty holsters that will fit %s.\r\n", GET_OBJ_NAME(obj));
     return;
   }
-  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON || GET_OBJ_TYPE(cont) != ITEM_HOLSTER) {
-    send_to_char(ch, "You don't have any empty holsters that will fit %s.\r\n", GET_OBJ_NAME(obj));
+  if (cont == obj) {
+    send_to_char(ch, "You can't put %s inside itself.\r\n", GET_OBJ_NAME(obj));
+    return;
+  }
+  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON) {
+    send_to_char(ch, "%s is not a holsterable weapon.\r\n", capitalize(GET_OBJ_NAME(obj)));
+    return;
+  }
+  if (GET_OBJ_TYPE(cont) != ITEM_HOLSTER) {
+    send_to_char(ch, "%s is not a holster.\r\n", capitalize(GET_OBJ_NAME(cont)));
     return;
   }
   if (cont->contains) {
-    send_to_char("There is already something in there.\r\n", ch);
+    send_to_char(ch, "There's already something in %s.\r\n", GET_OBJ_NAME(cont));
     return;
   }
 
+  const char *madefor = "<error, report to staff>";
   switch (GET_OBJ_VAL(cont, 0)) {
   case 0:
+    madefor = "pistols and SMGs";
     if (!IS_GUN(GET_OBJ_VAL(obj, 3)))
       dontfit++;
     else if (!(GET_OBJ_VAL(obj, 4) == SKILL_PISTOLS || GET_OBJ_VAL(obj, 4) == SKILL_SMG))
       dontfit++;
     break;
   case 1:
+    madefor = "melee weapons";
     if (IS_GUN(GET_OBJ_VAL(obj, 3)))
       dontfit++;
     break;
   case 2:
+    madefor = "rifles and other longarms";
     if (!IS_GUN(GET_OBJ_VAL(obj, 3)))
       dontfit++;
     else if (GET_OBJ_VAL(obj, 4) == SKILL_PISTOLS || GET_OBJ_VAL(obj, 4) == SKILL_SMG)
@@ -3291,7 +3330,7 @@ ACMD(do_holster)
     break;
   }
   if (dontfit) {
-    send_to_char(ch, "%s doesn't seem to fit in %s.\r\n", capitalize(GET_OBJ_NAME(obj)), GET_OBJ_NAME(cont));
+    send_to_char(ch, "%s is made for %s, so %s won't fit in it.\r\n", capitalize(GET_OBJ_NAME(cont)), madefor, GET_OBJ_NAME(obj));
     return;
   }
   
