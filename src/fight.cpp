@@ -3535,6 +3535,12 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
   }
   
+  // Remove closing flags if both are melee.
+  if (melee && !def->weapon_is_gun) {
+    AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
+    AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
+  }
+  
   // Setup: Height checks. Removed 'surprised ||' from the defender's check.
   att->too_tall = is_char_too_tall(att->ch);
   def->too_tall = is_char_too_tall(def->ch);
@@ -3544,7 +3550,11 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   def->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(def->ch, att->ch);
   
   // Early execution: Nerve strike doesn't require as much setup, so perform it here to save on resources.
-  if (melee && IS_NERVE(att->ch) && !(att->weapon) && !(IS_SPIRIT(def->ch) || IS_ELEMENTAL(def->ch))) {
+  if ((melee && IS_NERVE(att->ch)) 
+      && !(att->weapon 
+           || IS_SPIRIT(def->ch) 
+           || IS_ELEMENTAL(def->ch) 
+           || (IS_NPC(def->ch) && MOB_FLAGGED(def->ch, MOB_INANIMATE)))) {
     // Calculate and display pre-success-test information.
     snprintf(rbuf, sizeof(rbuf), "%s VS %s: Nerve Strike target is 4 + impact (%d) + modifiers: ",
              GET_CHAR_NAME(att->ch), 

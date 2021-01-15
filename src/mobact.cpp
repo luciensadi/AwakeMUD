@@ -527,8 +527,8 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
 
   // Attack vehicles (but not for aggr-to-race)
   if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
-    // Target selection. We disallow targeting of unowned vehicles so our guards don't Thunderdome each other before players even show up.
     for (tveh = in_room->vehicles; tveh; tveh = tveh->next_veh) {
+      // No attacking your own vehicle.
       if (tveh == ch->in_veh)
         continue;
         

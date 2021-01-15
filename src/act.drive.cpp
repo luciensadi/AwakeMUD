@@ -420,6 +420,16 @@ ACMD(do_ram)
 void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tveh, struct char_data *vict) {
   int skill = veh_skill(ch, veh), target = 0, vehm = 0, tvehm = 0;
   
+  if (tveh && tveh == veh) {
+    strncpy(buf, "SYSERR: do_raw_ram got veh = tveh!", sizeof(buf) - 1);
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    
+    if (vict)
+      tveh = NULL;
+    else
+      return;
+  }
+  
   if (tveh) {
     target = get_vehicle_modifier(veh) + veh->handling + modify_target(ch);
     vehm = get_maneuver(veh);
