@@ -532,7 +532,7 @@ SPECIAL(nerp_skills_teacher) {
   }
   
   if (!can_teach_skill[skill_num]) {
-    send_to_char(ch, "%s doesn't seem to know about that subject.\r\n", GET_NAME(master));
+    send_to_char(ch, "%s doesn't seem to know about %s.\r\n", GET_NAME(master), skills[skill_num].name);
     return TRUE;
   }
   
@@ -543,13 +543,13 @@ SPECIAL(nerp_skills_teacher) {
   
   // Deny some magic skills to mundane (different flavor from next block, same effect).
   if ((skill_num == SKILL_CENTERING || skill_num == SKILL_ENCHANTING) && GET_TRADITION(ch) == TRAD_MUNDANE) {
-    send_to_char("Without access to the astral plane you can't even begin to fathom the basics of that skill.\r\n", ch);
+    send_to_char(ch, "Without access to the astral plane you can't even begin to fathom the basics of %s.\r\n", skills[skill_num].name);
     return TRUE;
   }
   
   // Deny all magic skills to mundane.
   if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE) {
-    send_to_char("Without the ability to channel magic, that skill would be useless to you.\r\n", ch);
+    send_to_char(ch, "Without the ability to channel magic, %s would be useless to you.\r\n", skills[skill_num].name);
     return TRUE;
   }
   
@@ -561,7 +561,7 @@ SPECIAL(nerp_skills_teacher) {
   
   if (GET_KARMA(ch) < get_skill_price(ch, skill_num) * 100 &&
       GET_SKILL_POINTS(ch) <= 0) {
-    send_to_char("You don't have enough karma to improve that skill.\r\n", ch);
+    send_to_char(ch, "You don't have enough karma to improve %s.\r\n", skills[skill_num].name);
     return TRUE;
   }
   if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
@@ -1037,6 +1037,7 @@ SPECIAL(spell_trainer)
     do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
+  
   if (!*argument) {
     send_to_char("The following spells are available for you to learn: \r\n", ch);
     if (GET_ASPECT(ch) != ASPECT_CONJURER)
@@ -1063,6 +1064,8 @@ SPECIAL(spell_trainer)
       send_to_char(ch, "%d Force Point%s Remaining.\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
     } else
       send_to_char(ch, "%.2f Karma Available.\r\n", GET_KARMA(ch) / 100);
+      
+    send_to_char("\r\nLearning syntax:\r\n    ^WLEARN \"<spell name>\" <force between 1 and 6>^n\r\n    ^WLEARN FORCE^n\r\n    ^WLEARN CONJURING^n\r\n", ch);
   } else {
     char *s, buf[MAX_STRING_LENGTH], buf1[MAX_STRING_LENGTH];
     if (strtok(argument, "\"") && (s = strtok(NULL, "\""))) {
@@ -1084,8 +1087,9 @@ SPECIAL(spell_trainer)
           GET_FORCE_POINTS(ch)++;
         }
         return TRUE;
-      } else if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER &&
-                 !str_cmp(buf, "conjuring")) {
+      } 
+      
+      if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER && !str_cmp(buf, "conjuring")) {
         if (!(i = atoi(buf1)))
           send_to_char("What force of conjuring materials do you wish to buy?\r\n", ch);
         else if (GET_FORCE_POINTS(ch) < i)
@@ -1106,6 +1110,7 @@ SPECIAL(spell_trainer)
         return TRUE;
       }
     }
+    
     for (i = 0; spelltrainers[i].teacher; i++) {
       if ((GET_MOB_VNUM(trainer) != spelltrainers[i].teacher) ||
           (GET_ASPECT(ch) == ASPECT_ELEMFIRE && spells[spelltrainers[i].type].category != COMBAT) ||
@@ -1119,15 +1124,15 @@ SPECIAL(spell_trainer)
         if (skill < 1)
           continue;
       }
-      if (is_abbrev(buf, spells[spelltrainers[i].type].name))
+      if (is_abbrev(buf, spelltrainers[i].name))
         break;
     }
     if (!spelltrainers[i].teacher) {
-      send_to_char("That spell is not being offered here.\r\n", ch);
+      send_to_char(ch, "A spell called '%s' is not being offered here.\r\n", buf);
       return TRUE;
     }
     if (!(force = atoi(buf1)))
-      send_to_char("What force do you wish to learn this spell at?\r\n", ch);
+      send_to_char(ch, "Syntax: ^Wlearn \"%s\" <force between 1-6>^n\r\n", buf);
     else if (force > spelltrainers[i].force)
       send_to_char(ch, "%s doesn't know the spell at that high a force to teach you.\r\n", GET_NAME(trainer));
     else {
