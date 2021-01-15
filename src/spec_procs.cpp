@@ -5440,8 +5440,8 @@ SPECIAL(cybered_yakuza)
     skip_spaces(&argument);
 
     if (!str_cmp(argument, "door")) {
-      act("$n swears loudly in japanese and attacks.", FALSE, yakuza, 0, ch, TO_VICT);
-      act("$n swears loudly in japanese and attacks $N.", FALSE, yakuza, 0, ch, TO_NOTVICT);
+      act("$n swears loudly in Japanese and attacks.", FALSE, yakuza, 0, ch, TO_VICT);
+      act("$n swears loudly in Japanese and attacks $N.", FALSE, yakuza, 0, ch, TO_NOTVICT);
       set_fighting(yakuza, ch);
 
       return TRUE;
@@ -5468,7 +5468,7 @@ SPECIAL(airport_gate) {
       return TRUE;
     } 
     send_to_char("You move through the checkpoint to the departure platform.\r\n", ch);
-    act("$n move through the checkpoint to the departure platform.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+    act("$n moves through the checkpoint to the departure platform.\r\n", FALSE, ch, 0, 0, TO_ROOM);
     PLR_FLAGS(ch).RemoveBit(PLR_VISA);
     char_from_room(ch);
     char_to_room(ch, &world[to_room]);
@@ -5643,4 +5643,64 @@ SPECIAL(troll_barrier) {
     }
   }
   return FALSE;
+}
+
+SPECIAL(chargen_docwagon_checker) {
+  NO_DRAG_BULLSHIT;
+  
+  struct char_data *checker = (char_data *) me;
+  struct obj_data *obj;
+
+  if (!AWAKE(ch))
+    return(FALSE);
+
+  if (CMD_IS("south")) {
+    // Check inventory.
+    for (obj = ch->carrying; obj; obj = obj->next_content) {
+      if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
+        if (GET_DOCWAGON_BONDED_IDNUM(obj) != GET_IDNUM(ch)) {
+          act("$n holds up a hand, stopping $N. \"Hold on, chummer. You need to "
+              "^WWEAR^n and ^WBOND^n your modulator before you move on. It'll help keep you alive.\"",
+              FALSE, checker, 0, ch, TO_ROOM);
+          act("$n holds up a hand, stopping you. \"Hold on, chummer. You need to "
+              "^WWEAR^n and ^WBOND^n your modulator before you move on. It'll help keep you alive.\"",
+              FALSE, checker, 0, ch, TO_VICT);
+        } else {
+          act("$n holds up a hand, stopping $N. \"Hold on, chummer. You still need to "
+              "^WWEAR^n your modulator before you move on. It'll help keep you alive.\"",
+              FALSE, checker, 0, ch, TO_ROOM);
+          act("$n holds up a hand, stopping you. \"Hold on, chummer. You still need to "
+              "^WWEAR^n your modulator before you move on. It'll help keep you alive.\"",
+              FALSE, checker, 0, ch, TO_VICT);
+        }
+        return TRUE;
+      }
+    }
+    
+    // Check equipment.
+    for (int i = 0; i < NUM_WEARS; i++) {
+      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_DOCWAGON) {
+        if (GET_DOCWAGON_BONDED_IDNUM(GET_EQ(ch, i)) != GET_IDNUM(ch)) {
+          act("$n holds up a hand, stopping $N. \"Hold on, chummer. You still need to "
+              "^WBOND^n your modulator before you move on. It'll help keep you alive.\"",
+              FALSE, checker, 0, ch, TO_ROOM);
+          act("$n holds up a hand, stopping you. \"Hold on, chummer. You still need to "
+              "^WBOND^n your modulator before you move on. It'll help keep you alive.\"",
+              FALSE, checker, 0, ch, TO_VICT);
+          return TRUE;
+        } else {
+          // Good to go-- worn and bonded.
+          act ("$n looks you over, then nods approvingly and lets you by.", FALSE, checker, 0, ch, TO_VICT);
+          act ("$n looks $N over, then nods approvingly and lets $m by.", FALSE, checker, 0, ch, TO_ROOM);
+          return FALSE;
+        }
+      }
+    }
+    
+    // 
+    act("$n looks you over, then shakes $s head. \"No modulator's a risky way to live. You might want to sell some stuff and pick one up, or just prioritize getting one out in the Sprawl.\"", FALSE, checker, 0, ch, TO_VICT);
+    act("$n looks $N over, then shakes $s head. \"No modulator's a risky way to live. You might want to sell some stuff and pick one up, or just prioritize getting one out in the Sprawl.\"", FALSE, checker, 0, ch, TO_ROOM);
+  }
+
+  return(FALSE);
 }

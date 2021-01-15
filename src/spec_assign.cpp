@@ -540,6 +540,7 @@ void assign_mobiles(void)
   SPECIAL(cybered_yakuza);
   SPECIAL(airport_guard);
   SPECIAL(axehead);
+  SPECIAL(chargen_docwagon_checker);
 
   /* trainers */
   for (i = 0; trainers[i].vnum != 0; i++)
@@ -713,6 +714,9 @@ void assign_mobiles(void)
   /* Slitch Pit */
   ASSIGNMOB(62803, axehead);
   ASSIGNMOB(62807, receptionist);
+  
+  /* Neophyte expansion */
+  ASSIGNMOB(60599, chargen_docwagon_checker);
 #endif
 }
 
