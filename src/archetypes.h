@@ -7,6 +7,7 @@
 #define NUM_ARCHETYPE_BIOWARE   10
 #define NUM_ARCHETYPE_CARRIED   20
 #define NUM_ARCHETYPE_SOFTWARE  20
+#define NUM_ARCHETYPE_FOCI      10
 
 struct archetype_data {
   const char *name;
@@ -25,6 +26,7 @@ struct archetype_data {
   
   int powers[NUM_ARCHETYPE_ABILITIES][2]; // 0 is power, 1 is rating
   int spells[NUM_ARCHETYPE_SPELLS][3]; // 0 is spell ID, 1 is subtype, 2 is force
+  vnum_t foci[NUM_ARCHETYPE_FOCI][2]; // 0 is vnum, 1 is category type (NULL if n/a)
   int forcepoints; // for bonding foci
   
   vnum_t cyberdeck;

@@ -190,6 +190,7 @@ struct archetype_data *generate_adept() {
 
 // TODO
 #define ARCH_SPELL(spell, subtype, force) arch->spells[i][0] = (spell); arch->spells[i][1] = (subtype); arch->spells[i++][2] = (force);
+#define ARCH_FOCUS(vnum, type) arch->foci[i][0] = (vnum); arch->foci[i++][1] = (type);
 struct archetype_data *generate_shaman() {
   struct archetype_data *arch = new archetype_data;
   int i = 0;
@@ -254,9 +255,12 @@ struct archetype_data *generate_shaman() {
   arch->carried[i++] = OBJ_ELECTRONICS_KIT;
   arch->carried[i++] = OBJ_POCKET_SECRETARY;
   arch->carried[i++] = OBJ_CELL_PHONE;
-  arch->carried[i++] = OBJ_ASH_LEAF_ANKLET;
-  arch->carried[i++] = OBJ_ORICHALCUM_BRACELET;
   assert(i < NUM_ARCHETYPE_CARRIED);
+  
+  i = 0;
+  ARCH_FOCUS(OBJ_ASH_LEAF_ANKLET, SPELL_IMP_INVIS);
+  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_ARMOR);
+  assert(i < NUM_ARCHETYPE_FOCI);
   
   return arch;
 }
@@ -326,14 +330,18 @@ struct archetype_data *generate_street_mage() {
   arch->carried[i++] = OBJ_TITLE_TO_AMERICAR;
   arch->carried[i++] = OBJ_POCKET_SECRETARY;
   arch->carried[i++] = OBJ_CELL_PHONE;
-  arch->carried[i++] = OBJ_ASH_LEAF_ANKLET;
-  arch->carried[i++] = OBJ_ORICHALCUM_BRACELET;
-  arch->carried[i++] = OBJ_ORICHALCUM_BRACELET;
   assert(i < NUM_ARCHETYPE_CARRIED);
+  
+  i = 0;
+  ARCH_FOCUS(OBJ_ASH_LEAF_ANKLET, SPELL_IMP_INVIS);
+  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_ARMOR);
+  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_COMBATSENSE);
+  assert(i < NUM_ARCHETYPE_FOCI);
   
   return arch;
 }
 #undef ARCH_SPELL
+#undef ARCH_FOCUS
 
 // TODO
 struct archetype_data *generate_decker() {

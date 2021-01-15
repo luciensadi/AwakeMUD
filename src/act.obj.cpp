@@ -2369,7 +2369,7 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
   return TRUE;
 }
 
-void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
+void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool print_messages)
 {
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
   
@@ -2419,7 +2419,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   /* first, make sure that the wear position is valid. */
   if (!CAN_WEAR(obj, wear_bitvectors[where]))
   {
-    act("You can't wear $p there.", FALSE, ch, obj, 0, TO_CHAR);
+    if (print_messages)
+      act("You can't wear $p there.", FALSE, ch, obj, 0, TO_CHAR);
     return;
   }
   switch (GET_RACE(ch))
@@ -2429,7 +2430,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   case RACE_ELF:
   case RACE_NIGHTONE:
     if (IS_OBJ_STAT(obj, ITEM_NOELF)) {
-      send_to_char(ch, "%s isn't sized right for elves.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      if (print_messages)
+        send_to_char(ch, "%s isn't sized right for elves.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
@@ -2438,7 +2440,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   case RACE_GNOME:
   case RACE_KOBOROKURU:
     if (IS_OBJ_STAT(obj, ITEM_NODWARF)) {
-      send_to_char(ch, "%s isn't sized right for dwarfs.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      if (print_messages)
+        send_to_char(ch, "%s isn't sized right for dwarfs.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
@@ -2448,13 +2451,15 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   case RACE_FOMORI:
   case RACE_CYCLOPS:
     if (IS_OBJ_STAT(obj, ITEM_NOTROLL)) {
-      send_to_char(ch, "%s isn't sized right for trolls.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      if (print_messages)
+        send_to_char(ch, "%s isn't sized right for trolls.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
   case RACE_HUMAN:
     if (IS_OBJ_STAT(obj, ITEM_NOHUMAN)) {
-      send_to_char(ch, "%s isn't sized right for humans.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      if (print_messages)
+        send_to_char(ch, "%s isn't sized right for humans.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
@@ -2463,7 +2468,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   case RACE_OGRE:
   case RACE_HOBGOBLIN:
     if (IS_OBJ_STAT(obj, ITEM_NOORK)) {
-      send_to_char(ch, "%s isn't sized right for orks.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      if (print_messages) 
+        send_to_char(ch, "%s isn't sized right for orks.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
     break;
@@ -2486,7 +2492,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   if ((where == WEAR_WIELD || where == WEAR_HOLD) && IS_OBJ_STAT(obj, ITEM_TWOHANDS) &&
       (GET_EQ(ch, WEAR_SHIELD) || GET_EQ(ch, WEAR_HOLD) || GET_EQ(ch, WEAR_WIELD)))
   {
-    act("$p requires two free hands.", FALSE, ch, obj, 0, TO_CHAR);
+    if (print_messages)
+      act("$p requires two free hands.", FALSE, ch, obj, 0, TO_CHAR);
     return;
   }
 
@@ -2494,20 +2501,25 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   {
     if (!wielded) {
       if (!can_wield_both(ch, obj, GET_EQ(ch, WEAR_HOLD))) {
-        snprintf(buf, sizeof(buf), "You'll have a hard time wielding %s along with $p.", GET_OBJ_NAME(obj));
-        act(buf, FALSE, ch, GET_EQ(ch, WEAR_HOLD), 0, TO_CHAR);
+        if (print_messages) {
+          snprintf(buf, sizeof(buf), "You'll have a hard time wielding %s along with $p.", GET_OBJ_NAME(obj));
+          act(buf, FALSE, ch, GET_EQ(ch, WEAR_HOLD), 0, TO_CHAR);
+        }
         return;
       }
     } else {
       /* if attempting to wield a second weapon... */
       if (GET_EQ(ch, WEAR_HOLD) || GET_EQ(ch, WEAR_SHIELD)) {
-        send_to_char("Your hands are already full!\r\n", ch);
+        if (print_messages)
+          send_to_char("Your hands are already full!\r\n", ch);
         return;
       }
       where = WEAR_HOLD;
       if (!can_wield_both(ch, wielded, obj)) {
-        snprintf(buf, sizeof(buf), "You'll have a hard time wielding %s along with $p.", GET_OBJ_NAME(obj));
-        act(buf, FALSE, ch, wielded, 0, TO_CHAR);
+        if (print_messages) {
+          snprintf(buf, sizeof(buf), "You'll have a hard time wielding %s along with $p.", GET_OBJ_NAME(obj));
+          act(buf, FALSE, ch, wielded, 0, TO_CHAR);
+        }
         return;
       }
     }
@@ -2519,19 +2531,22 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
 
   if (GET_EQ(ch, WEAR_HOLD) && where == WEAR_SHIELD)
   {
-    act("$p requires at least one free hand.", FALSE, ch, obj, 0, TO_CHAR );
+    if (print_messages)
+      act("$p requires at least one free hand.", FALSE, ch, obj, 0, TO_CHAR );
     return;
   }
 
   if (GET_EQ(ch, WEAR_WIELD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_TWOHANDS) &&
       (where == WEAR_HOLD || where == WEAR_SHIELD))
   {
-    act("$p requires two free hands.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), 0, TO_CHAR);
+    if (print_messages)
+      act("$p requires two free hands.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), 0, TO_CHAR);
     return;
   } else if (GET_EQ(ch, WEAR_HOLD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HOLD), ITEM_TWOHANDS) &&
              (where == WEAR_WIELD || where == WEAR_SHIELD))
   {
-    act("$p requires two free hands.", FALSE, ch, GET_EQ(ch, WEAR_HOLD), 0, TO_CHAR);
+    if (print_messages)
+      act("$p requires two free hands.", FALSE, ch, GET_EQ(ch, WEAR_HOLD), 0, TO_CHAR);
     return;
   }
   
@@ -2549,37 +2564,43 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
     // If this item can't be worn with other armors, check to make sure we meet that restriction.
     if ((IS_OBJ_STAT(obj, ITEM_BLOCKS_ARMOR) || IS_OBJ_STAT(obj, ITEM_HARDENED_ARMOR)) &&
         (GET_WORN_IMPACT(worn_item) || GET_WORN_BALLISTIC(worn_item))) {
-      send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
+      if (print_messages)
+        send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
       return;
     }
     
     // If what they're wearing blocks other armors, and this item is armored, fail.
     if ((IS_OBJ_STAT(worn_item, ITEM_BLOCKS_ARMOR) || IS_OBJ_STAT(worn_item, ITEM_HARDENED_ARMOR)) &&
         (GET_WORN_IMPACT(obj) || GET_WORN_BALLISTIC(obj))) {
-      send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
+      if (print_messages)
+        send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
       return;
     }
   }
 
-  wear_message(ch, obj, where);
+  if (print_messages)
+    wear_message(ch, obj, where);
   if (obj->in_obj)
     obj_from_obj(obj);
   else
     obj_from_char(obj);
   equip_char(ch, obj, where);
   int total = 0;
-  if (GET_TOTALBAL(ch) > GET_QUI(ch))
-    total += GET_TOTALBAL(ch) - GET_QUI(ch);
-  else if (GET_TOTALIMP(ch) > GET_QUI(ch))
-    total += GET_TOTALIMP(ch) - GET_QUI(ch);
-  if (total >= GET_QUI(ch))
-    send_to_char("You are wearing so much armor that you can't move!\r\n", ch);
-  else if (total >= (float) GET_QUI(ch) * 3/4)
-    send_to_char("Your movement is severely restricted by your armor.\r\n", ch);
-  else if (total >= (float) GET_QUI(ch) / 2)
-    send_to_char("Your movement is restricted by your armor.\r\n", ch);
-  else if (total)
-    send_to_char("Your movement is mildly restricted by your armor.\r\n", ch);
+  
+  if (print_messages) {
+    if (GET_TOTALBAL(ch) > GET_QUI(ch))
+      total += GET_TOTALBAL(ch) - GET_QUI(ch);
+    else if (GET_TOTALIMP(ch) > GET_QUI(ch))
+      total += GET_TOTALIMP(ch) - GET_QUI(ch);
+    if (total >= GET_QUI(ch))
+      send_to_char("You are wearing so much armor that you can't move!\r\n", ch);
+    else if (total >= (float) GET_QUI(ch) * 3/4)
+      send_to_char("Your movement is severely restricted by your armor.\r\n", ch);
+    else if (total >= (float) GET_QUI(ch) / 2)
+      send_to_char("Your movement is restricted by your armor.\r\n", ch);
+    else if (total)
+      send_to_char("Your movement is mildly restricted by your armor.\r\n", ch);
+  }
 }
 
 int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
@@ -2716,7 +2737,7 @@ ACMD(do_wear)
       next_obj = obj->next_content;
       if (CAN_SEE_OBJ(ch, obj) && (where = find_eq_pos(ch, obj, 0)) >= 0) {
         items_worn++;
-        perform_wear(ch, obj, where);
+        perform_wear(ch, obj, where, TRUE);
       }
     }
     if (!items_worn)
@@ -2732,7 +2753,7 @@ ACMD(do_wear)
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg1, obj->next_content);
         if ((where = find_eq_pos(ch, obj, 0)) >= 0)
-          perform_wear(ch, obj, where);
+          perform_wear(ch, obj, where, TRUE);
         else
           act("You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
         obj = next_obj;
@@ -2742,7 +2763,7 @@ ACMD(do_wear)
       send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg1), arg1);
     } else {
       if ((where = find_eq_pos(ch, obj, arg2)) >= 0)
-        perform_wear(ch, obj, where);
+        perform_wear(ch, obj, where, TRUE);
       else if (!*arg2)
         act("You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
     }
@@ -2774,9 +2795,9 @@ ACMD(do_wield)
       if (!found)
         send_to_char(ch, "It's too heavy for you to wield effectively.\r\n");
       else
-        perform_wear(ch, obj, WEAR_WIELD);
+        perform_wear(ch, obj, WEAR_WIELD, TRUE);
     } else
-      perform_wear(ch, obj, WEAR_WIELD);
+      perform_wear(ch, obj, WEAR_WIELD, TRUE);
   }
 }
 
@@ -2792,15 +2813,15 @@ ACMD(do_grab)
     send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
   } else {
     if (GET_OBJ_TYPE(obj) == ITEM_LIGHT)
-      perform_wear(ch, obj, WEAR_LIGHT);
+      perform_wear(ch, obj, WEAR_LIGHT, TRUE);
     
     // Auto-wield if it's not holdable but is wieldable.
     else if (!CAN_WEAR(obj, wear_bitvectors[WEAR_HOLD]) && CAN_WEAR(obj, wear_bitvectors[WEAR_WIELD]))
-      perform_wear(ch, obj, WEAR_WIELD);
+      perform_wear(ch, obj, WEAR_WIELD, TRUE);
       
     // Hold.
     else
-      perform_wear(ch, obj, WEAR_HOLD);
+      perform_wear(ch, obj, WEAR_HOLD, TRUE);
   }
 }
 

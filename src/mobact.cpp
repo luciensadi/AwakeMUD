@@ -41,7 +41,7 @@ extern void cast_illusion_spell(struct char_data *ch, int spell, int force, char
 extern void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char *arg, char_data *mob);
 extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
 
-extern void perform_wear(struct char_data *, struct obj_data *, int);
+extern void perform_wear(struct char_data *, struct obj_data *, int, bool);
 extern void perform_remove(struct char_data *, int);
 
 extern bool is_escortee(struct char_data *mob);
@@ -1497,11 +1497,11 @@ void switch_weapons(struct char_data *mob, int pos)
 
   // We want to wield limited-ammo weapons first to burn those ammo counts down.
   if (limited_ammo_weapon)
-    perform_wear(mob, limited_ammo_weapon, pos);
+    perform_wear(mob, limited_ammo_weapon, pos, TRUE);
   else if (unlimited_ammo_weapon)
-    perform_wear(mob, unlimited_ammo_weapon, pos);
+    perform_wear(mob, unlimited_ammo_weapon, pos, TRUE);
   else if (melee_weapon)
-    perform_wear(mob, melee_weapon, pos);
+    perform_wear(mob, melee_weapon, pos, TRUE);
   else
     act("$n won't wield a new weapon- no alternative weapon found.", TRUE, mob, GET_EQ(mob, pos), NULL, TO_ROLLS);
 }

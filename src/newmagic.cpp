@@ -2089,6 +2089,10 @@ ACMD(do_unbond)
   }
   struct obj_data *obj = NULL;
   struct char_data *vict;
+  if (!argument || !*argument) {
+    send_to_char("You need to specify something to unbond.\r\n", ch);
+    return;
+  }
   if (!generic_find(argument,  FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &vict, &obj)) {
     send_to_char(ch, "You don't have a '%s'.\r\n", argument);
     return;
@@ -2109,6 +2113,11 @@ ACMD(do_bond)
   struct obj_data *obj;
   int karma = 0, spirit = 0;
   struct spell_data *spell = GET_SPELLS(ch);
+  
+  if (!argument || !*argument) {
+    send_to_char("You need to specify something to bond.\r\n", ch);
+    return;
+  }
 
   // Find the object in their inventory or equipment.
   struct char_data *found_char = NULL;
