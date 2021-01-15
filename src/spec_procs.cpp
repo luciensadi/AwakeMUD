@@ -677,7 +677,7 @@ SPECIAL(teacher)
           
         
         // Override max for language skills.
-        if (SKILL_IS_LANGUAGE(teachers[ind].s[i])) {
+        if (teachers[ind].type == NEWBIE && SKILL_IS_LANGUAGE(teachers[ind].s[i])) {
           max = 10;
         }
         
@@ -777,7 +777,7 @@ SPECIAL(teacher)
     return TRUE;
   }
 
-  if (GET_SKILL(ch, skill_num) >= (SKILL_IS_LANGUAGE(skill_num) ? 10 : max)) {
+  if (GET_SKILL(ch, skill_num) >= ((teachers[ind].type == NEWBIE && SKILL_IS_LANGUAGE(skill_num)) ? 10 : max)) {
     if (max == LIBRARY_SKILL)
       send_to_char("You can't find any books that tell you things you don't already know.\r\n", ch);
     else {
@@ -807,7 +807,7 @@ SPECIAL(teacher)
 
   send_to_char(teachers[ind].msg, ch);
   set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) + 1, TRUE);
-  if (GET_SKILL(ch, skill_num) >= max)
+  if (GET_SKILL(ch, skill_num) >= ((teachers[ind].type == NEWBIE && SKILL_IS_LANGUAGE(skill_num)) ? 10 : max))
     send_to_char("You have learnt all you can here.\r\n", ch);
 
   return TRUE;
