@@ -3479,6 +3479,19 @@ ACMD(do_chipload)
     else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACK)
       jack = obj;
   if (!memory || !jack) {
+    // Check to see if they were just trying to load a gun.
+    struct obj_data *weapon = NULL;
+    if ((weapon = get_obj_in_list_vis(ch, argument, ch->carrying)) 
+        || ((weapon = GET_EQ(ch, WEAR_WIELD)) 
+             && (isname(argument, weapon->text.keywords) 
+                 || isname(argument, weapon->text.name) 
+                 || (weapon->restring && isname(argument, weapon->restring))))) {
+      char cmd_buf[MAX_INPUT_LENGTH + 10];
+      snprintf(cmd_buf, sizeof(cmd_buf), " %s", argument);
+      do_reload(ch, argument, 0, 0);
+      return;
+    }
+    
     send_to_char("You need a chipjack and headware memory to load skillsofts into.\r\n", ch);
     return;
   }

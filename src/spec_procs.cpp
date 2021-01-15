@@ -5681,13 +5681,13 @@ SPECIAL(chargen_docwagon_checker) {
           return TRUE;
         } else {
           // Good to go-- worn and bonded.
-          act ("$n looks $N over, then nods approvingly and lets $m by.", FALSE, checker, 0, ch, TO_ROOM);
+          act ("$n looks $N over, then nods approvingly and lets $M by.", FALSE, checker, 0, ch, TO_ROOM);
           return FALSE;
         }
       }
     }
     
-    act("$n looks $N over, then shakes $s head. \"No modulator's a risky way to live. You might want to sell some stuff and pick one up, or just prioritize getting one out in the Sprawl.\"", FALSE, checker, 0, ch, TO_ROOM);
+    act("$n looks $N over on $S way past, then shakes $s head. \"No modulator's a risky way to live. You might want to sell some stuff and pick one up, or just prioritize getting one out in the Sprawl.\"\r\n", FALSE, checker, 0, ch, TO_ROOM);
   }
 
   return(FALSE);
