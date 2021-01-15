@@ -3470,7 +3470,7 @@ ACMD(do_cyberware)
   
   send_to_char("You have the following cyberware:\r\n", ch);
   for (obj = ch->cyberware; obj != NULL; obj = obj->next_content) {
-    snprintf(buf, sizeof(buf), "%-30s Essence: %0.2f\r\n",
+    snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f\r\n",
             GET_OBJ_NAME(obj), ((float)GET_OBJ_VAL(obj, 4) / 100));
     send_to_char(buf, ch);
   }
@@ -3487,7 +3487,7 @@ ACMD(do_bioware)
   
   send_to_char("You have the following bioware:\r\n", ch);
   for (obj = ch->bioware; obj != NULL; obj = obj->next_content) {
-    snprintf(buf, sizeof(buf), "%-30s Rating: %-2d     Body Index: %0.2f\r\n",
+    snprintf(buf, sizeof(buf), "%-40s Rating: %-2d     Body Index: %0.2f\r\n",
             GET_OBJ_NAME(obj),
             GET_OBJ_VAL(obj, 1), ((float)GET_OBJ_VAL(obj, 4) / 100));
     send_to_char(buf, ch);

@@ -24,6 +24,10 @@
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 extern void display_help(char *help, int help_len, const char *arg, struct char_data *ch);
+extern void initialize_pocket_secretary(struct obj_data *sec);
+extern void add_phone_to_list(struct obj_data *obj);
+
+SPECIAL(pocket_sec);
 
 static void start_game(descriptor_data *d);
 
@@ -279,6 +283,15 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   for (int carried = 0; carried < NUM_ARCHETYPE_CARRIED; carried++)
     if (archetypes[i]->carried[carried] > 0) {
       if ((temp_obj = read_object(archetypes[i]->carried[carried], VIRTUAL))) {
+        // Set up carried items, if needed.
+        if (GET_OBJ_SPEC(temp_obj) == pocket_sec)
+          initialize_pocket_secretary(temp_obj);
+          
+        if (GET_OBJ_TYPE(temp_obj) == ITEM_PHONE) {
+          GET_OBJ_VAL(temp_obj, 2) = 1;
+          add_phone_to_list(temp_obj);
+        }
+          
         obj_to_char(temp_obj, CH);
       } else {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid carried item %ld specified for archetype %s.", 

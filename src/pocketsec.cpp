@@ -38,6 +38,21 @@
 
 ACMD_DECLARE(do_phone);
 
+void initialize_pocket_secretary(struct obj_data *sec) {
+  struct obj_data *folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
+  folder->restring = str_dup("Mail");
+  obj_to_obj(folder, sec);
+  folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
+  folder->restring = str_dup("Notes");
+  obj_to_obj(folder, sec);
+  folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
+  folder->restring = str_dup("Phonebook");
+  obj_to_obj(folder, sec);
+  folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
+  folder->restring = str_dup("Files");
+  obj_to_obj(folder, sec);
+}
+
 void wire_nuyen(struct char_data *ch, struct char_data *targ, int amount, long isfile)
 {
   GET_BANK(ch) -= amount;
@@ -94,7 +109,7 @@ void pocketsec_menu(struct descriptor_data *d)
 {
   CLS(CH);
   if (!SEC->contains) {
-    send_to_char("This pocket secretary has not yet been initialised. Initialise? [Y/N]\r\n", CH);
+    send_to_char("This pocket secretary has not been initialized yet. Initialize? [Y/N]\r\n", CH);
     d->edit_mode = SEC_INIT;
   } else {
     send_to_char(CH, "^cMain Menu^n\r\n" 
@@ -423,18 +438,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_INIT:
       if (LOWER(*arg) == 'y') {
-        folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
-        folder->restring = str_dup("Mail");
-        obj_to_obj(folder, SEC);
-        folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
-        folder->restring = str_dup("Notes");
-        obj_to_obj(folder, SEC);
-        folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
-        folder->restring = str_dup("Phonebook");
-        obj_to_obj(folder, SEC);
-        folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
-        folder->restring = str_dup("Files");
-        obj_to_obj(folder, SEC);
+        initialize_pocket_secretary(SEC);
         send_to_char("Pocket Secretary Initialised.\r\n", CH);
         pocketsec_menu(d);
       } else {
