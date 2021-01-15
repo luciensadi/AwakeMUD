@@ -90,7 +90,7 @@ void ccr_archetype_selection_menu(struct descriptor_data *d) {
             "\r\n", d);
   
   for (int i = 0; i < NUM_CCR_ARCHETYPES; i++) {
-    snprintf(buf, sizeof(buf), "\r\n%d) %s", i + 1, archetypes[i]->name);
+    snprintf(buf, sizeof(buf), "\r\n%d) %-15s (%s)", i + 1, archetypes[i]->name, archetypes[i]->difficulty_rating);
     SEND_TO_Q(buf, d);
   }
   

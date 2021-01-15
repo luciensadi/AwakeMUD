@@ -1514,7 +1514,7 @@ ACMD(do_mdelete)
     send_to_char("No such mob.\r\n", ch);
     return;
   } else {
-    snprintf(buf3, sizeof(buf3), "NPC '%s' (%ld) deleted.\r\n", GET_NAME(&mob_proto[num]), GET_MOB_VNUM(&mob_proto[num]));
+    snprintf(buf3, sizeof(buf3), "NPC '%s' (%ld) deleted.", GET_NAME(&mob_proto[num]), GET_MOB_VNUM(&mob_proto[num]));
     mudlog(buf3, ch, LOG_WIZLOG, TRUE);
   }
 
@@ -1565,8 +1565,8 @@ ACMD(do_mdelete)
             ZCMD.arg1 = 0;
             ZCMD.arg2 = 0;
             ZCMD.arg3 = 0;
-          } else
-            ZCMD.arg1 = (ZCMD.arg1 > num ? ZCMD.arg1 - 1 : ZCMD.arg1);
+          } else if (ZCMD.arg1 > num)
+            ZCMD.arg1--;
           break;
         case 'E':
         case 'G':

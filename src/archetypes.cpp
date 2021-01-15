@@ -22,6 +22,7 @@ struct archetype_data *generate_street_samurai() {
   
   arch->name = str_dup("Street Samurai");
   arch->race = RACE_HUMAN; 
+  arch->difficulty_rating = str_dup("easiest to play");
   
   // correct for street sam
   arch->start_room = 90500;
@@ -112,6 +113,7 @@ struct archetype_data *generate_adept() {
   
   arch->name = str_dup("Adept");
   arch->race = RACE_ORK;
+  arch->difficulty_rating = str_dup("easy");
   
   arch->start_room = 90600;
   arch->auth_room = 90629;
@@ -199,6 +201,7 @@ struct archetype_data *generate_shaman() {
   
   arch->name = str_dup("Shaman");
   arch->race = RACE_ELF;
+  arch->difficulty_rating = str_dup("moderate");
   
   arch->start_room = 90700;
   arch->auth_room = 90738;
@@ -274,6 +277,7 @@ struct archetype_data *generate_street_mage() {
   
   arch->name = str_dup("Street Mage");
   arch->race = RACE_HUMAN;
+  arch->difficulty_rating = str_dup("moderate");
   
   // kosher for hermetic mage
   arch->start_room = 90700;
@@ -352,6 +356,7 @@ struct archetype_data *generate_decker() {
   
   arch->name = str_dup("Decker");
   arch->race = RACE_HUMAN;
+  arch->difficulty_rating = str_dup("difficult but rewarding");
   
   // correct for decker
   arch->start_room = 91000;

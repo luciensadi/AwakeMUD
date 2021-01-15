@@ -420,13 +420,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         for (temp_mob = character_list; temp_mob; temp_mob = temp_mob->next)
           if (GET_MOB_RNUM (temp_mob) >= d->edit_mob->nr)
             GET_MOB_RNUM (temp_mob)++;
-
-        /* free and replace old tables */
-        delete [] mob_proto;
-        delete [] mob_index;
-        mob_proto = new_mob_proto;
-        mob_index = new_mob_index;
-
+            
         /* RENUMBER ZONE TABLES HERE, only              *
         *   because I ADDED a mobile!                   *
         *   This code shamelessly ripped off from db.c */
@@ -437,10 +431,17 @@ void medit_parse(struct descriptor_data *d, const char *arg)
             switch (ZCMD.command) {
               case 'S':
               case 'M':
-                ZCMD.arg1 = (ZCMD.arg1 >= d->edit_mob->nr ? ZCMD.arg1 + 1 : ZCMD.arg1);
+                if (ZCMD.arg1 >= d->edit_mob->nr)
+                  ZCMD.arg1++;
                 break;
             }
           }
+
+        /* free and replace old tables */
+        delete [] mob_proto;
+        delete [] mob_index;
+        mob_proto = new_mob_proto;
+        mob_index = new_mob_index;
 
       } // finally done putting the mobile into memory
 
