@@ -656,6 +656,8 @@ SPECIAL(teacher)
     bool found_a_skill_already = FALSE;
     for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
       if (teachers[ind].s[i] > 0) {
+        int old_max = max;
+        
         // Mundanes can't learn magic skills.
         if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[teachers[ind].s[i]].requires_magic)
           continue;
@@ -672,8 +674,12 @@ SPECIAL(teacher)
         
         else if (GET_ASPECT(ch) == ASPECT_SORCERER && teachers[ind].s[i] == SKILL_CONJURING)
           continue;
+          
         
-        
+        // Override max for language skills.
+        if (SKILL_IS_LANGUAGE(teachers[ind].s[i])) {
+          max = 10;
+        }
         
         if (GET_SKILL_POINTS(ch) > 0) {
           // Add conditional messaging.
@@ -692,6 +698,9 @@ SPECIAL(teacher)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma %d nuyen)\r\n", skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
                   MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
         }
+        
+        // Reset max.
+        max = old_max;
       }
     }
     // Failure case.
@@ -768,7 +777,7 @@ SPECIAL(teacher)
     return TRUE;
   }
 
-  if (GET_SKILL(ch, skill_num) >= max) {
+  if (GET_SKILL(ch, skill_num) >= (SKILL_IS_LANGUAGE(skill_num) ? 10 : max)) {
     if (max == LIBRARY_SKILL)
       send_to_char("You can't find any books that tell you things you don't already know.\r\n", ch);
     else {
