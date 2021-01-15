@@ -4133,11 +4133,11 @@ bool init_cost(struct char_data *ch, bool spend)
     nuyencost = 825000;
   long tke = 0;
   if (karmacost > GET_KARMA(ch)) {
-    send_to_char("You do not have enough karma to initiate.\r\n", ch);
+    send_to_char(ch, "You do not have enough karma to initiate. It will cost you %d karma.\r\n", (int) (karmacost / 100));
     return FALSE;
   }
   if (nuyencost > GET_NUYEN(ch)) {
-    send_to_char("You do not have enough nuyen to initiate.\r\n", ch);
+    send_to_char(ch, "You do not have enough nuyen to initiate. It will cost you %d nuyen.\r\n", nuyencost);
     return FALSE;
   }
   switch (GET_GRADE(ch)+1) {
@@ -4155,7 +4155,7 @@ bool init_cost(struct char_data *ch, bool spend)
       break;
   }
   if (tke > GET_TKE(ch)) {
-    send_to_char("You do not have high enough TKE to initiate.\r\n", ch);
+    send_to_char(ch, "You do not have high enough TKE to initiate. You need %d TKE.\r\n", tke);
     return FALSE;
   }
   if (spend) {
