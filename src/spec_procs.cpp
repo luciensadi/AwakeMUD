@@ -1054,7 +1054,7 @@ SPECIAL(spell_trainer)
               continue;
           }
 
-          send_to_char(ch, "%-30s Force Max: %d\r\n", spells[spelltrainers[i].type].name, spelltrainers[i].force);
+          send_to_char(ch, "%-30s Force Max: %d\r\n", spelltrainers[i].name, spelltrainers[i].force);
         }
     if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
       if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER)
