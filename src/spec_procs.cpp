@@ -5662,16 +5662,10 @@ SPECIAL(chargen_docwagon_checker) {
           act("$n holds up a hand, stopping $N. \"Hold on, chummer. You need to "
               "^WWEAR^n and ^WBOND^n your modulator before you move on. It'll help keep you alive.\"",
               FALSE, checker, 0, ch, TO_ROOM);
-          act("$n holds up a hand, stopping you. \"Hold on, chummer. You need to "
-              "^WWEAR^n and ^WBOND^n your modulator before you move on. It'll help keep you alive.\"",
-              FALSE, checker, 0, ch, TO_VICT);
         } else {
           act("$n holds up a hand, stopping $N. \"Hold on, chummer. You still need to "
               "^WWEAR^n your modulator before you move on. It'll help keep you alive.\"",
               FALSE, checker, 0, ch, TO_ROOM);
-          act("$n holds up a hand, stopping you. \"Hold on, chummer. You still need to "
-              "^WWEAR^n your modulator before you move on. It'll help keep you alive.\"",
-              FALSE, checker, 0, ch, TO_VICT);
         }
         return TRUE;
       }
@@ -5684,21 +5678,15 @@ SPECIAL(chargen_docwagon_checker) {
           act("$n holds up a hand, stopping $N. \"Hold on, chummer. You still need to "
               "^WBOND^n your modulator before you move on. It'll help keep you alive.\"",
               FALSE, checker, 0, ch, TO_ROOM);
-          act("$n holds up a hand, stopping you. \"Hold on, chummer. You still need to "
-              "^WBOND^n your modulator before you move on. It'll help keep you alive.\"",
-              FALSE, checker, 0, ch, TO_VICT);
           return TRUE;
         } else {
           // Good to go-- worn and bonded.
-          act ("$n looks you over, then nods approvingly and lets you by.", FALSE, checker, 0, ch, TO_VICT);
           act ("$n looks $N over, then nods approvingly and lets $m by.", FALSE, checker, 0, ch, TO_ROOM);
           return FALSE;
         }
       }
     }
     
-    // 
-    act("$n looks you over, then shakes $s head. \"No modulator's a risky way to live. You might want to sell some stuff and pick one up, or just prioritize getting one out in the Sprawl.\"", FALSE, checker, 0, ch, TO_VICT);
     act("$n looks $N over, then shakes $s head. \"No modulator's a risky way to live. You might want to sell some stuff and pick one up, or just prioritize getting one out in the Sprawl.\"", FALSE, checker, 0, ch, TO_ROOM);
   }
 
