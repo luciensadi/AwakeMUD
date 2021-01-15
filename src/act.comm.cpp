@@ -521,7 +521,7 @@ ACMD(do_radio)
     }
 
   if (!radio) {
-    send_to_char("You have to have a radio to do that!\r\n", ch);
+    send_to_char("You don't have a radio.\r\n", ch);
     return;
   }
   any_one_arg(any_one_arg(argument, one), two);
@@ -584,6 +584,14 @@ ACMD(do_radio)
         GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))) = 0;
       }
     }
+  } else if (!str_cmp(one, "mode")) {
+    if (GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))) == -1)
+      send_to_char(ch, "Your radio is currently scanning all frequencies. You can change the mode with ^WRADIO CENTER <frequency>, or turn it off with ^WRADIO OFF^n^n.\r\n");
+    else if (!GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))))
+      send_to_char(ch, "Your radio is currently off. You can turn it on with ^WRADIO CENTER <frequency>^n or ^WRADIO SCAN^n.\r\n");
+    else
+      send_to_char(ch, "Your radio is currently centered at %d MHz. You can change the mode with ^WRADIO SCAN^n, or turn it off with ^WRADIO OFF^n.\r\n",
+                   GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))));
   } else
     send_to_char("That's not a valid option.\r\n", ch);
 }
