@@ -3662,9 +3662,56 @@ ACMD(do_powerdown)
 
 ACMD(do_deactivate)
 {
-  skip_spaces(&argument);
   struct obj_data *obj;
   int i;
+  
+  if (GET_TRADITION(ch) == TRAD_ADEPT && !str_str(argument, "pain editor") && !str_str(argument, "voice modulator")) {
+    char name[120], tokens[MAX_STRING_LENGTH], *s;
+    extern int ability_cost(int abil, int level);
+    strncpy(tokens, argument, sizeof(tokens) - 1);
+    if (strtok(tokens, "\"") && (s = strtok(NULL, "\""))) {
+      strncpy(name, s, sizeof(name) - 1);
+      if ((s = strtok(NULL, "\0"))) {
+        skip_spaces(&s);
+        strncpy(buf1, s, sizeof(buf1) - 1);
+      } else
+        *buf1 = '\0';
+      one_argument(argument, buf);
+    } else {
+      skip_spaces(&argument);
+      strncpy(name, argument, sizeof(name) - 1);
+    }
+      
+    // Find powers they have skill in first.
+    for (i = 0; i < ADEPT_NUMPOWER; i++)
+      if (GET_POWER_TOTAL(ch, i) && is_abbrev(name, adept_powers[i]))
+        break;
+    // Find powers they don't have skill in.
+    if (i >= ADEPT_NUMPOWER)
+      for (i = 0; i < ADEPT_NUMPOWER; i++)
+        if (is_abbrev(name, adept_powers[i]))
+          if (!GET_POWER_TOTAL(ch, i)) {
+            send_to_char(ch, "You haven't learned the %s power yet.\r\n", adept_powers[i]);
+            return;
+          }
+          
+    if (i < ADEPT_NUMPOWER) {
+      if (!GET_POWER_ACT(ch, i))
+        send_to_char(ch, "You don't have %s activated.\r\n", adept_powers[i]);
+      else {
+        int total = 0;
+        for (int q = GET_POWER_ACT(ch, i);q > 0; q--)
+          total += ability_cost(i, q);
+        GET_POWER_POINTS(ch) -= total;
+        deactivate_power(ch, i);
+        affect_total(ch);
+        send_to_char(ch, "You completely deactivate your %s power.\r\n", adept_powers[i]);
+      }
+      return;
+    }
+  }
+  skip_spaces(&argument);
+  
   if (is_abbrev(argument, "pain editor")) {
     for (obj = ch->bioware; obj; obj = obj->next_content)
       if (GET_OBJ_VAL(obj, 0) == BIO_PAINEDITOR) {
@@ -3678,6 +3725,7 @@ ACMD(do_deactivate)
         return;
       }
   }
+  
   if (is_abbrev(argument, "voice modulator")) {
     for (obj = ch->cyberware; obj; obj = obj->next_content)
       if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD) {
@@ -3690,38 +3738,7 @@ ACMD(do_deactivate)
         return;
       }
   }
-  if (GET_TRADITION(ch) == TRAD_ADEPT) {
-    char name[120], tokens[MAX_STRING_LENGTH], *s;
-    extern int ability_cost(int abil, int level);
-    strcpy(tokens, argument);
-    if (strtok(tokens, "\"") && (s = strtok(NULL, "\""))) {
-      strcpy(name, s);
-      if ((s = strtok(NULL, "\0"))) {
-        skip_spaces(&s);
-        strcpy(buf1, s);
-      } else
-        *buf1 = '\0';
-      one_argument(argument, buf);
-    } else strcpy(name, argument);
-      
-    for (i = 0; i < ADEPT_NUMPOWER; i++)
-      if (GET_POWER_TOTAL(ch, i) && is_abbrev(name, adept_powers[i]))
-        break;
-    if (i < ADEPT_NUMPOWER) {
-      if (!GET_POWER_ACT(ch, i))
-        send_to_char("You don't have that power activated.\r\n", ch);
-      else {
-        int total = 0;
-        for (int q = GET_POWER_ACT(ch, i);q > 0; q--)
-          total += ability_cost(i, q);
-        GET_POWER_POINTS(ch) -= total;
-        deactivate_power(ch, i);
-        affect_total(ch);
-        send_to_char(ch, "You completely deactivate your %s power.\r\n", adept_powers[i]);
-      }
-      return;
-    }
-  }
+  
   if (!(obj = get_object_in_equip_vis(ch, argument, ch->equipment, &i)) &&
       !(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
     send_to_char("Deactivate which focus or power?\r\n", ch);
@@ -4042,8 +4059,12 @@ ACMD(do_relieve)
 
 ACMD(do_nervestrike)
 {
-  if (GET_TRADITION(ch) != TRAD_ADEPT || !GET_POWER(ch, ADEPT_NERVE_STRIKE)) {
+  if (GET_TRADITION(ch) != TRAD_ADEPT) {
     send_to_char("You don't have the ability to do that.\r\n", ch);
+    return;
+  }
+  if (!GET_POWER(ch, ADEPT_NERVE_STRIKE)) {
+    send_to_char("You'll have to activate the Nerve Strike power first.\r\n", ch);
     return;
   }
   if (IS_NERVE(ch)) {

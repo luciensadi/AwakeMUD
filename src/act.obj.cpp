@@ -2910,16 +2910,16 @@ ACMD(do_activate)
     return;
   }
 
-  if (GET_TRADITION(ch) == TRAD_ADEPT && !str_str(argument, "Pain editor")) {
+  if (GET_TRADITION(ch) == TRAD_ADEPT && !str_str(argument, "Pain editor") && !str_str(argument, "voice modulator")) {
     char name[120], tokens[MAX_STRING_LENGTH], *s;
     extern int ability_cost(int abil, int level);
     int x;
-    strcpy(tokens, argument);
+    strncpy(tokens, argument, sizeof(tokens) - 1);
     if (strtok(tokens, "\"") && (s = strtok(NULL, "\""))) {
-      strcpy(name, s);
+      strncpy(name, s, sizeof(name) - 1);
       if ((s = strtok(NULL, "\0"))) {
         skip_spaces(&s);
-        strcpy(buf1, s);
+        strncpy(buf1, s, sizeof(buf1) - 1);
       } else
         *buf1 = '\0';
       one_argument(argument, buf);
@@ -2927,16 +2927,26 @@ ACMD(do_activate)
     } else {
       half_chop(argument, buf, buf1);
       if (!(x = atoi(buf))) {
-        strcpy(name, buf);
+        strncpy(name, buf, sizeof(name) - 1);
       } else {
         half_chop(buf1, buf2, buf1);
-        strcpy(name, buf2);
+        strncpy(name, buf2, sizeof(name) - 1);
       }
     }
 
+    // Find powers they have skill in first.
     for (i = 0; i < ADEPT_NUMPOWER; i++)
       if (GET_POWER_TOTAL(ch, i) && is_abbrev(name, adept_powers[i]))
         break;
+    // Find powers they don't have skill in.
+    if (i >= ADEPT_NUMPOWER)
+      for (i = 0; i < ADEPT_NUMPOWER; i++)
+        if (is_abbrev(name, adept_powers[i]))
+          if (!GET_POWER_TOTAL(ch, i)) {
+            send_to_char(ch, "You haven't learned the %s power yet.\r\n", adept_powers[i]);
+            return;
+          }
+          
     if (i < ADEPT_NUMPOWER) {
       if (x == 0)
         x = GET_POWER_TOTAL(ch, i);
