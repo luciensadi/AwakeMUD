@@ -3535,9 +3535,9 @@ SPECIAL(auth_room)
 {
   if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) && !IS_ASTRAL(ch)) {
     skip_spaces(&argument);
-    if (   !strcmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)
-        || !strcmp("\"I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Complete copy-paste with both quotes
-        || !strcmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument)) // Partial copy-paste with trailing quote.
+    if (   !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)
+        || !str_cmp("\"I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Complete copy-paste with both quotes
+        || !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument)) // Partial copy-paste with trailing quote.
     {
       PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
       GET_NUYEN(ch) = 0;
