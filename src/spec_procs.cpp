@@ -3566,6 +3566,10 @@ SPECIAL(auth_room)
       mysql_wrapper(mysql, buf);
       
       playerDB.SaveChar(ch);
+      
+      // Make them look.
+      if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+        look_at_room(ch, 0);
     }
   }
   return FALSE;
@@ -3944,7 +3948,8 @@ SPECIAL(multnomah_gate) {
       char_from_room(ch);
       char_to_room(ch, &world[to_room]);
     }
-    look_at_room(ch, 0);
+    if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0);
     return TRUE;
   }
 
