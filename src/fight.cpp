@@ -2705,7 +2705,7 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
         if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK) {
           if (GET_ACCESSORY_TYPE(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
             // Smartlink II with compatible cyberware.
-            return 4;
+            return 3;
           }
           // Smartlink I.
           return 2;
