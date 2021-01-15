@@ -2502,3 +2502,31 @@ const char *damage_type_names_must_subtract_300_first_and_must_not_be_greater_th
   "Dumpshock",
   "Blackic"
 };
+
+const char *pc_race_types[] =
+  {
+    "Undef",
+    "Undefined",
+    "Human",
+    "Dwarf",
+    "Elf",
+    "Ork",
+    "Troll",
+    "Cyclops",
+    "Koborokuru",
+    "Fomori",
+    "Menehune",
+    "Hobgoblin",
+    "Giant",
+    "Gnome",
+    "Oni",
+    "Wakyambi",
+    "Ogre",
+    "Minotaur",
+    "Satyr",
+    "Night-One",
+    "Dragon",
+    "Elemental",
+    "Spirit",
+    "\n"
+  };

@@ -4062,6 +4062,7 @@ ACMD(do_set)
                { "tke", LVL_VICEPRES, PC, NUMBER }, //70
                { "sysp", LVL_VICEPRES, PC, NUMBER },
                { "socializationbonus", LVL_ADMIN, PC,     NUMBER },
+               { "race", LVL_PRESIDENT, PC, NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4133,9 +4134,11 @@ ACMD(do_set)
 
   if (IS_NPC(vict) && fields[l].pcnpc == PC) {
     send_to_char("You can't do that to a mob!\r\n", ch);
+    SET_CLEANUP(false);
     return;
   } else if (!IS_NPC(vict) && fields[l].pcnpc == NPC) {
     send_to_char("That can only be done to mobs!\r\n", ch);
+    SET_CLEANUP(false);
     return;
   }
 
@@ -4420,8 +4423,10 @@ ACMD(do_set)
       strcpy(buf, "Must be 'off' or a room's virtual number.\r\n");
     break;
   case 38:
-    if (GET_IDNUM(ch) != 1 || !IS_NPC(vict))
+    if (GET_IDNUM(ch) != 1 || !IS_NPC(vict)) {
+      SET_CLEANUP(false);
       return;
+    }
     GET_IDNUM(vict) = value;
     break;
   case 39:
@@ -4499,6 +4504,7 @@ ACMD(do_set)
   case 47:
     if (GET_TRADITION(vict) != TRAD_SHAMANIC) {
       send_to_char("They're not a Shaman.\r\n", ch);
+      SET_CLEANUP(false);
       return;
     }
     RANGE(0, 53);
@@ -4518,9 +4524,11 @@ ACMD(do_set)
     set_pretitle(vict, val_arg);
     break;
   case 52:
-    if (strstr((const char *)val_arg, "^"))
+    if (strstr((const char *)val_arg, "^")) {
       send_to_char("Whotitles can't contain the ^ character.\r\n", ch);
-    else
+      SET_CLEANUP(false);
+      return;
+    } else
       set_whotitle(vict, val_arg);
     break;
   case 53:
@@ -4594,6 +4602,26 @@ ACMD(do_set)
   case 72:
     RANGE(0, MAX_CONGREGATION_BONUS);
     GET_CONGREGATION_BONUS(vict) = value;
+    break;
+  case 73: /* race */
+    {
+      bool successful = FALSE;
+      for (int i = RACE_HUMAN; i < NUM_RACES; i++) {
+        if (!str_cmp(pc_race_types[i], val_arg)) {
+          GET_RACE(vict) = i;
+          successful = TRUE;
+          snprintf(buf, sizeof(buf), "%s's race set to %s by %s.\r\n", GET_CHAR_NAME(vict), pc_race_types[i], GET_CHAR_NAME(ch));
+          mudlog(buf, ch, LOG_WIZLOG, TRUE);
+          break;
+        }
+      }
+      if (!successful) {
+        send_to_char(ch, "%s is not a valid race.\r\n", capitalize(val_arg));
+        SET_CLEANUP(false);
+        return;
+      } else
+        send_to_char("OK.\r\n", ch);
+    }
     break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");

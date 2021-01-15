@@ -442,34 +442,6 @@ void parse_pronouns(struct descriptor_data *d, const char *arg) {
 
 // BELOW THIS IS UNTOUCHED CODE.
 
-const char *pc_race_types[] =
-  {
-    "Undef",
-    "Undefined",
-    "Human",
-    "Dwarf",
-    "Elf",
-    "Ork",
-    "Troll",
-    "Cyclops",
-    "Koborokuru",
-    "Fomori",
-    "Menehune",
-    "Hobgoblin",
-    "Giant",
-    "Gnome",
-    "Oni",
-    "Wakyambi",
-    "Ogre",
-    "Minotaur",
-    "Satyr",
-    "Night-One",
-    "Dragon",
-    "Elemental",
-    "Spirit",
-    "\n"
-  };
-
 const char *assign_menu =
   "\r\nSelect a priority to assign:\r\n"
   "  [1] Attributes\r\n"

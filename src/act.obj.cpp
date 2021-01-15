@@ -2630,10 +2630,12 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
       "\n"
     };
     
-  if (arg && *arg && (where = search_block(arg, keywords, FALSE)) >= 0)
-    return where;
-  else
-    send_to_char(ch, "'%s' isn't a part of your body, so you decide to improvise.\r\n", arg);
+  if (arg && *arg) {
+    if ((where = search_block(arg, keywords, FALSE)) >= 0)
+      return where;
+    else
+      send_to_char(ch, "'%s' isn't a part of your body, so you decide to improvise.\r\n", arg);
+  }
 
   if (CAN_WEAR(obj, ITEM_WEAR_FINGER))
     where = WEAR_FINGER_R;

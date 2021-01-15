@@ -409,6 +409,12 @@ void raw_taxi_leaves(rnum_t real_room_num) {
 void do_taxi_leaves(rnum_t real_room_num) {
   struct char_data *temp;
   
+  if (real_room_num <= NOWHERE || real_room_num > top_of_world) {
+    snprintf(buf, sizeof(buf), "WARNING: Invalid taxi rnum %ld given to do_taxi_leaves().", real_room_num);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   // Skip taxis that are occupied by non-drivers.
   for (temp = world[real_room_num].people; temp; temp = temp->next_in_room)
     if (!(GET_MOB_SPEC(temp) 
@@ -432,10 +438,12 @@ void taxi_leaves(void)
     do_taxi_leaves(j);
   }
   
+#ifdef USE_PRIVATE_CE_WORLD
   int rr_last_caribean_cab = real_room(LAST_CARIBBEAN_CAB);
   for (int j = real_room(FIRST_CARIBBEAN_CAB); j <= rr_last_caribean_cab; j++) {
     do_taxi_leaves(j);
   }
+#endif
   
   int rr_last_portland_cab = real_room(LAST_PORTLAND_CAB);
   for (int j = real_room(FIRST_PORTLAND_CAB); j <= rr_last_portland_cab; j++) {
