@@ -3583,7 +3583,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
       
-    if (att->successes > 0) {
+    if (att->successes > 1) {
       GET_TEMP_QUI_LOSS(def->ch) += (int) (att->successes / 2); // This used to be * 2!
       affect_total(def->ch);
       if (GET_QUI(def->ch) <= 0) {
