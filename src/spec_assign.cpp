@@ -679,7 +679,7 @@ void assign_mobiles(void)
   ASSIGNMOB(38027, smiths_bouncer);
   ASSIGNMOB(31701, matchsticks);
   ASSIGNMOB(5029, orkish_truckdriver);
-  ASSIGNMOB(30701, receptionist);
+  // ASSIGNMOB(30701, receptionist);
   ASSIGNMOB(5031, Janis_Amer_Door);
   ASSIGNMOB(5032, Janis_Amer_Jerry);
   ASSIGNMOB(5033, Janis_Amer_Girl);
