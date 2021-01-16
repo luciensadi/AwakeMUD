@@ -569,7 +569,7 @@ char *str_dup(const char *source)
   // This shouldn't be needed, but just in case.
   // memset(New, 0, sizeof(char) * (strlen(source) + 1));
   
-  strncpy(New, source, sizeof(New) - 1);
+  strncpy(New, source, strlen(source) + 1);
   return New;
 }
 
@@ -1889,14 +1889,13 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
   return NULL;
 }
 
-void store_message_to_history(struct descriptor_data *d, int channel, const char *newd_message) {
+void store_message_to_history(struct descriptor_data *d, int channel, const char *message) {
   // We use our very own message buffer to ensure we'll never overwrite whatever buffer the caller is using.
-  static char log_message[256];
+  static char log_message[MAX_INPUT];
   
   // Precondition: No screwy pointers. Removed warning since we can be passed NPC descriptors (which we ignore).
-  if (d == NULL || newd_message == NULL) {
+  if (d == NULL || !message || !*message) {
     // mudlog("SYSERR: Null descriptor or message passed to store_message_to_history.", NULL, LOG_SYSLOG, TRUE);
-    DELETE_ARRAY_IF_EXTANT(newd_message);
     return;
   }
   
@@ -1904,11 +1903,12 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
   if (channel < 0 || channel >= NUM_COMMUNICATION_CHANNELS) {
     snprintf(log_message, sizeof(log_message), "SYSERR: Channel %d is not within bounds 0 <= channel < %d.", channel, NUM_COMMUNICATION_CHANNELS);
     mudlog(log_message, NULL, LOG_SYSLOG, TRUE);
-    DELETE_ARRAY_IF_EXTANT(newd_message);
     return;
   }
   
-  // Add the message to the descriptor's channel history.
+  // Add a clone of the message to the descriptor's channel history.
+  const char *newd_message = str_dup(message);
+  send_to_char(d->character, "'%s' from '%s'\r\n", newd_message, message);
   d->message_history[channel].AddItem(NULL, newd_message);
   
   // Constrain message history to the specified amount.

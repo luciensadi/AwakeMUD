@@ -64,7 +64,7 @@ ACMD(do_say)
         // Send the self-referencing message to the decker and store it in their history.
         snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", capitalize(argument));
         send_to_icon(ch->persona, buf);
-        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
+        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
         
         // Send the message to the rest of the host. Store it to the recipients' says history.
         snprintf(buf, sizeof(buf), "%s says, \"%s^n\"\r\n", ch->persona->name, capitalize(argument));
@@ -73,7 +73,7 @@ ACMD(do_say)
           if (ch->persona != i && i->decker && has_spotted(i, ch->persona)) {
             send_to_icon(i, buf);
             if (i->decker && i->decker->ch)
-              store_message_to_history(i->decker->ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
+              store_message_to_history(i->decker->ch->desc, COMM_CHANNEL_SAYS, buf);
           }
         }
       } else {
@@ -82,12 +82,12 @@ ACMD(do_say)
             // Send and store.
             snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(argument));
             send_to_char(buf, targ);
-            store_message_to_history(targ->desc, COMM_CHANNEL_SAYS, str_dup(buf));
+            store_message_to_history(targ->desc, COMM_CHANNEL_SAYS, buf);
           }
         // Send and store.
         snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(argument));
         send_to_char(buf, ch);
-        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
+        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
       }
       return;
     }
@@ -106,7 +106,7 @@ ACMD(do_say)
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
             // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, str_dup(perform_act(buf, ch, NULL, NULL, tmp)));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
           }
         }
       } else {
@@ -132,7 +132,7 @@ ACMD(do_say)
             if (IS_NPC(ch))
               snprintf(buf, sizeof(buf), "$z says%s, \"%s^n\"", (to ? buf2 : ""), capitalize(argument));
             // Note: includes act()
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
           }
       }
     } else {
@@ -143,7 +143,7 @@ ACMD(do_say)
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
             // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, str_dup(perform_act(buf, ch, NULL, NULL, tmp)));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
           }
         }
       } else {
@@ -169,7 +169,7 @@ ACMD(do_say)
             if (IS_NPC(ch))
               snprintf(buf, sizeof(buf), "$z says%s, \"%s^n\"", (to ? buf2 : ""), capitalize(argument));
             // Invokes act().
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
           }
       }
     }
@@ -181,14 +181,14 @@ ACMD(do_say)
       if(subcmd == SCMD_OSAY) {
         snprintf(buf, sizeof(buf), "You say ^mOOCly^n, \"%s^n\"\r\n", capitalize(argument));
         send_to_char(buf, ch);
-        store_message_to_history(ch->desc, COMM_CHANNEL_OSAYS, str_dup(buf));
+        store_message_to_history(ch->desc, COMM_CHANNEL_OSAYS, buf);
       } else {
         if (to)
           snprintf(buf2, MAX_STRING_LENGTH, " to %s", CAN_SEE(ch, to) ? (found_mem(GET_MEMORY(ch), to) ?
                                                      CAP(found_mem(GET_MEMORY(ch), to)->mem) : GET_NAME(to)) : "someone");
         snprintf(buf, sizeof(buf), "You say%s, \"%s^n\"\r\n", (to ? buf2 : ""), capitalize(argument));
         send_to_char(buf, ch);
-        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
+        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
       }
     }
   }
@@ -212,7 +212,7 @@ ACMD(do_exclaim)
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
         // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, str_dup(perform_act(buf, ch, NULL, NULL, tmp)));
+        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
       }
     }
   } else {
@@ -220,7 +220,7 @@ ACMD(do_exclaim)
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
         // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, str_dup(perform_act(buf, ch, NULL, NULL, tmp)));
+        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
       }
     }
   }
@@ -229,21 +229,21 @@ ACMD(do_exclaim)
   else {
     snprintf(buf, sizeof(buf), "You exclaim, \"%s!^n\"\r\n", capitalize(argument));
     send_to_char(buf, ch);
-    store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
+    store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
   }
 }
 
 void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
 {
   snprintf(buf, sizeof(buf), "^r$n tells you, '%s^r'^n", capitalize(arg));
-  store_message_to_history(vict->desc, COMM_CHANNEL_TELLS, str_dup(act(buf, FALSE, ch, 0, vict, TO_VICT | TO_SLEEP)));
+  store_message_to_history(vict->desc, COMM_CHANNEL_TELLS, act(buf, FALSE, ch, 0, vict, TO_VICT | TO_SLEEP));
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else
   {
     snprintf(buf, sizeof(buf), "^rYou tell $N, '%s'^n", capitalize(arg));
-    store_message_to_history(ch->desc, COMM_CHANNEL_TELLS, str_dup(act(buf, FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP)));
+    store_message_to_history(ch->desc, COMM_CHANNEL_TELLS, act(buf, FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP));
   }
 
   if (!IS_NPC(ch))
@@ -332,7 +332,7 @@ ACMD(do_ask)
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
         // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, str_dup(perform_act(buf, ch, NULL, NULL, tmp)));
+        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
       }
     }
   } else {
@@ -340,7 +340,7 @@ ACMD(do_ask)
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
         // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, str_dup(perform_act(buf, ch, NULL, NULL, tmp)));
+        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
       }
     }
   }
@@ -350,7 +350,7 @@ ACMD(do_ask)
     // TODO
     snprintf(buf, sizeof(buf), "You ask, \"%s?^n\"\r\n", capitalize(argument));
     send_to_char(buf, ch);
-    store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
+    store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
   }
 }
 
@@ -393,7 +393,7 @@ ACMD(do_spec_comm)
       }
       if (success > 0) {
         snprintf(buf, sizeof(buf), "You lean out towards $N and say, \"%s\"", capitalize(buf2));
-        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, vict, TO_CHAR)));
+        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_CHAR));
         suc = success_test(GET_SKILL(vict, GET_LANGUAGE(ch)), 4);
         if (suc > 0)
           snprintf(buf, sizeof(buf), "From within %s^n, $z says to you in %s, \"%s^n\"\r\n",
@@ -402,7 +402,7 @@ ACMD(do_spec_comm)
           snprintf(buf, sizeof(buf), "From within %s^n, $z speaks in a language you don't understand.\r\n", GET_VEH_NAME(last_veh));
       } else
         snprintf(buf, sizeof(buf), "$z mumbles incoherently from %s.\r\n", GET_VEH_NAME(last_veh));
-      store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, vict, TO_VICT)));
+      store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
     } else {
       send_to_char("You don't see them here.\r\n", ch);
     }
@@ -427,7 +427,7 @@ ACMD(do_spec_comm)
 
       snprintf(buf, sizeof(buf), "You lean into a %s and say, \"%s\"", GET_VEH_NAME(veh), capitalize(buf2));
       send_to_char(buf, ch);
-      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(buf));
+      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
       for (vict = veh->people; vict; vict = vict->next_in_veh) {
         if (success > 0) {
           suc = success_test(GET_SKILL(vict, GET_LANGUAGE(ch)), 4);
@@ -437,7 +437,7 @@ ACMD(do_spec_comm)
             snprintf(buf, sizeof(buf), "From outside, $z^n speaks into the vehicle in a language you don't understand.\r\n");
         } else
           snprintf(buf, sizeof(buf), "From outside, $z mumbles incoherently into the vehicle.\r\n");
-        store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, vict, TO_VICT)));
+        store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
       }
       return;
     }
@@ -451,12 +451,12 @@ ACMD(do_spec_comm)
         snprintf(buf, sizeof(buf), "$z %s you in a language you don't understand.\r\n", action_plur);
     } else
       snprintf(buf, sizeof(buf), "$z %s to you incoherently.\r\n", action_plur);
-    store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, 0, vict, TO_VICT)));
+    store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_VICT));
     if (PRF_FLAGGED(ch, PRF_NOREPEAT))
       send_to_char(OK, ch);
     else {
       snprintf(buf, sizeof(buf), "You %s $N, \"%s%s^n\"", action_sing, capitalize(buf2), (subcmd == SCMD_WHISPER) ? "" : "?");
-      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, 0, vict, TO_CHAR)));
+      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_CHAR));
     }
     // TODO: Should this be stored to message history? It's super nondescript.
     act(action_others, FALSE, ch, 0, vict, TO_NOTVICT);
@@ -480,11 +480,11 @@ ACMD(do_page)
         send_to_char("What's the point of that?\r\n", ch);
         return;
       }
-      store_message_to_history(vict->desc, COMM_CHANNEL_PAGES, str_dup(act(buf, FALSE, ch, 0, vict, TO_VICT)));
+      store_message_to_history(vict->desc, COMM_CHANNEL_PAGES, act(buf, FALSE, ch, 0, vict, TO_VICT));
       if (PRF_FLAGGED(ch, PRF_NOREPEAT))
         send_to_char(OK, ch);
       else
-        store_message_to_history(ch->desc, COMM_CHANNEL_PAGES, str_dup(act(buf, FALSE, ch, 0, vict, TO_CHAR)));
+        store_message_to_history(ch->desc, COMM_CHANNEL_PAGES, act(buf, FALSE, ch, 0, vict, TO_CHAR));
       return;
     } else
       send_to_char("There is no such person in the game!\r\n", ch);
@@ -727,7 +727,7 @@ ACMD(do_broadcast)
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else
-    store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, 0, TO_CHAR)));
+    store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, 0, TO_CHAR));
   if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF))
     for (d = descriptor_list; d; d = d->next) {
       if (!d->connected && d != ch->desc && d->character &&
@@ -788,30 +788,30 @@ ACMD(do_broadcast)
                 if (success > 0 || IS_NPC(ch))
                   if (suc > 0 || IS_NPC(ch))
                     if (ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO))
-                      store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf4, FALSE, ch, 0, d->character, TO_VICT)));
+                      store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf4, FALSE, ch, 0, d->character, TO_VICT));
                     else
-                      store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, d->character, TO_VICT)));
+                      store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, d->character, TO_VICT));
                   else
-                    store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf3, FALSE, ch, 0, d->character, TO_VICT)));
+                    store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
                 else
-                  store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf3, FALSE, ch, 0, d->character, TO_VICT)));
+                  store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
               } else {
                 if (success > 0 || IS_NPC(ch))
                   if (suc > 0 || IS_NPC(ch))
                     if (ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO))
-                      store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf4, FALSE, ch, 0, d->character, TO_VICT)));
+                      store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf4, FALSE, ch, 0, d->character, TO_VICT));
                     else 
-                      store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, d->character, TO_VICT)));
+                      store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, d->character, TO_VICT));
                   else
-                    store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf3, FALSE, ch, 0, d->character, TO_VICT)));
+                    store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
                 else
-                  store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf3, FALSE, ch, 0, d->character, TO_VICT)));
+                  store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
               }
             } else
-              store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf2, FALSE, ch, 0, d->character, TO_VICT)));
+              store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf2, FALSE, ch, 0, d->character, TO_VICT));
           }
         } else if (IS_SENATOR(d->character) && !PRF_FLAGGED(d->character, PRF_NORADIO))
-          store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, d->character, TO_VICT)));
+          store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, d->character, TO_VICT));
       }
     }
 
@@ -959,12 +959,12 @@ ACMD(do_gen_comm)
           snprintf(buf, sizeof(buf), "%s$z shouts, \"%s%s\"^n", com_msgs[subcmd][3], capitalize(argument), com_msgs[subcmd][3]);
         
         // Note that this line invokes act().
-        store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
+        store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
       }
 
     snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout, \"%s%s\"^n", com_msgs[subcmd][3], capitalize(argument), com_msgs[subcmd][3]);
     // Note that this line invokes act().
-    store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf1, FALSE, ch, 0, 0, TO_CHAR)));
+    store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
 
     was_in = ch->in_room;
     if (ch->in_veh) {
@@ -975,7 +975,7 @@ ACMD(do_gen_comm)
         // Replicate act() in a way that lets us capture the message.
         if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
           // They're a valid target, so send the message with a raw perform_act() call.
-          store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(perform_act(buf1, ch, NULL, NULL, tmp)));
+          store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp));
         }
       }
     } else {
@@ -985,7 +985,7 @@ ACMD(do_gen_comm)
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
             // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(perform_act(buf, ch, NULL, NULL, tmp)));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf, ch, NULL, NULL, tmp));
           }
         }
         ch->in_veh = NULL;
@@ -1009,7 +1009,7 @@ ACMD(do_gen_comm)
               snprintf(buf, sizeof(buf), "%s$z shouts, \"%s%s\"^n", com_msgs[subcmd][3], capitalize(argument), com_msgs[subcmd][3]);
             
             // If it sent successfully, store to their history.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
           }
         ch->in_room = was_in;
       }
@@ -1037,7 +1037,7 @@ ACMD(do_gen_comm)
       else
         snprintf(buf, sizeof(buf), "^m[^n%s^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch), capitalize(argument));
       
-      store_message_to_history(d, COMM_CHANNEL_OOC, str_dup(buf));
+      store_message_to_history(d, COMM_CHANNEL_OOC, buf);
       send_to_char(buf, d->character);
     }
 
@@ -1046,18 +1046,18 @@ ACMD(do_gen_comm)
     snprintf(buf, sizeof(buf), "%s%s ^W[^rRPE^W]^r %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     
     channel = COMM_CHANNEL_RPE;
-    store_message_to_history(ch->desc, channel, str_dup(buf));
+    store_message_to_history(ch->desc, channel, buf);
   } else if (subcmd == SCMD_HIREDTALK) {
     snprintf(buf, sizeof(buf), "%s%s ^y[^YHIRED^y]^Y %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     
     channel = COMM_CHANNEL_HIRED;
-    store_message_to_history(ch->desc, channel, str_dup(buf));
+    store_message_to_history(ch->desc, channel, buf);
   } else {
     snprintf(buf, sizeof(buf), "%s%s |]newbie[| %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     send_to_char(buf, ch);
     
     channel = COMM_CHANNEL_NEWBIE;
-    store_message_to_history(ch->desc, channel, str_dup(buf));
+    store_message_to_history(ch->desc, channel, buf);
   }
   
   for (i = descriptor_list; i; i = i->next) {
@@ -1091,7 +1091,7 @@ ACMD(do_gen_comm)
         break;
     }
     send_to_char(buf, i->character);
-    store_message_to_history(i, channel, str_dup(buf));
+    store_message_to_history(i, channel, buf);
   }
 
   /* now send all the strings out 
@@ -1114,7 +1114,7 @@ ACMD(do_gen_comm)
         continue;
       else {
         // Note that this invokes act().
-        store_message_to_history(i, channel, str_dup(act(buf, FALSE, ch, 0, i->character, TO_VICT | TO_SLEEP)));
+        store_message_to_history(i, channel, act(buf, FALSE, ch, 0, i->character, TO_VICT | TO_SLEEP));
       }
     } */
 }
@@ -1361,9 +1361,9 @@ ACMD(do_phone)
     }
     snprintf(buf3, MAX_STRING_LENGTH, "^YYou say, \"%s\"\r\n", capitalize(argument));
     send_to_char(buf3, ch);
-    store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, str_dup(buf3));
+    store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, buf3);
     if (phone->dest->persona && phone->dest->persona->decker && phone->dest->persona->decker->ch)
-      store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, str_dup(act(buf, FALSE, ch, 0, phone->dest->persona->decker->ch, TO_DECK)));
+      store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, phone->dest->persona->decker->ch, TO_DECK));
     else {
       tch = phone->dest->phone->carried_by;
       if (!tch)
@@ -1375,17 +1375,17 @@ ACMD(do_phone)
     }
     if (tch) {
       if (success_test(GET_SKILL(tch, GET_LANGUAGE(ch)), 4) > 0)
-        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, str_dup(act(buf, FALSE, ch, 0, tch, TO_VICT)));
+        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
       else
-        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, str_dup(act("^Y$v speaks in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT)));
+        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act("^Y$v speaks in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT));
     }
     if (!cyber) {
       for (tch = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
         if (tch != ch) {
           if (success_test(GET_SKILL(tch, GET_LANGUAGE(ch)), 4) > 0)
-            store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, str_dup(act(buf2, FALSE, ch, 0, tch, TO_VICT)));
+            store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act(buf2, FALSE, ch, 0, tch, TO_VICT));
           else
-            store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, str_dup(act("$z speaks into $s phone in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT)));
+            store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act("$z speaks into $s phone in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT));
         }
     }
   } else {

@@ -2474,9 +2474,9 @@ ACMD(do_talk)
     snprintf(buf, sizeof(buf), "^Y$v on the other end of the line says, \"%s\"", argument);
     snprintf(buf2, sizeof(buf2), "^YYou say, \"%s\"\r\n", argument);
     send_to_char(buf2, ch);
-    store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, str_dup(buf2));
+    store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, buf2);
     if (DECKER->phone->dest->persona && DECKER->phone->dest->persona->decker) {
-      store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, str_dup(act(buf, FALSE, ch, 0, tch, TO_DECK)));
+      store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_DECK));
     } else {
       tch = DECKER->phone->dest->phone->carried_by;
       if (!tch)
@@ -2487,7 +2487,7 @@ ACMD(do_talk)
         tch = DECKER->phone->dest->phone->in_obj->worn_by;
     }
     if (tch)
-      store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, str_dup(act(buf, FALSE, ch, 0, tch, TO_VICT)));
+      store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
   }
 }
 
