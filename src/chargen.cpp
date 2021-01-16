@@ -281,32 +281,6 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
     }
-    
-  // Bond and equip foci.
-  for (int focus = 0; focus < NUM_ARCHETYPE_FOCI; focus++) {
-    if (archetypes[i]->foci[focus][0] > 0) {
-      if ((temp_obj = read_object(archetypes[i]->foci[focus][0], VIRTUAL))) {
-        GET_OBJ_VAL(temp_obj, 2) = GET_IDNUM(CH);
-        GET_OBJ_VAL(temp_obj, 3) = (int) archetypes[i]->foci[focus][1];
-        GET_OBJ_VAL(temp_obj, 5) = GET_TRADITION(CH) == TRAD_HERMETIC ? 1 : 0;
-        GET_OBJ_VAL(temp_obj, 9) = 0;
-        obj_to_char(temp_obj, CH);
-        
-        int wearloc;
-        if ((wearloc = find_eq_pos(CH, temp_obj, NULL)) > -1)
-          perform_wear(CH, temp_obj, wearloc, FALSE);
-        else {
-          snprintf(buf, sizeof(buf), "SYSERR: Focus %ld specified for archetype %s's foci slot #%d cannot be worn in default position: No slot available.", 
-                   archetypes[i]->foci[focus][0], archetypes[i]->name, focus);
-          mudlog(buf, CH, LOG_SYSLOG, TRUE);
-        }
-      } else {
-        snprintf(buf, sizeof(buf), "SYSERR: Invalid focus %ld specified for archetype %s's foci slot #%d.", 
-                 archetypes[i]->foci[focus][0], archetypes[i]->name, focus);
-        mudlog(buf, CH, LOG_SYSLOG, TRUE);
-      }
-    }
-  }
   
   // Give carried items.
   for (int carried = 0; carried < NUM_ARCHETYPE_CARRIED; carried++)
@@ -454,6 +428,32 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   GET_OBJ_VAL(temp_obj, 0) = GET_IDNUM(CH);
   GET_OBJ_VAL(temp_obj, 1) = archetypes[i]->subsidy_card;
   obj_to_char(temp_obj, CH);
+  
+  // Bond and equip foci. Has to be after CreateChar so the idnum doesn't change.
+  for (int focus = 0; focus < NUM_ARCHETYPE_FOCI; focus++) {
+    if (archetypes[i]->foci[focus][0] > 0) {
+      if ((temp_obj = read_object(archetypes[i]->foci[focus][0], VIRTUAL))) {
+        GET_OBJ_VAL(temp_obj, 2) = GET_IDNUM(CH);
+        GET_OBJ_VAL(temp_obj, 3) = (int) archetypes[i]->foci[focus][1];
+        GET_OBJ_VAL(temp_obj, 5) = GET_TRADITION(CH) == TRAD_HERMETIC ? 1 : 0;
+        GET_OBJ_VAL(temp_obj, 9) = 0;
+        obj_to_char(temp_obj, CH);
+        
+        int wearloc;
+        if ((wearloc = find_eq_pos(CH, temp_obj, NULL)) > -1)
+          perform_wear(CH, temp_obj, wearloc, FALSE);
+        else {
+          snprintf(buf, sizeof(buf), "SYSERR: Focus %ld specified for archetype %s's foci slot #%d cannot be worn in default position: No slot available.", 
+                   archetypes[i]->foci[focus][0], archetypes[i]->name, focus);
+          mudlog(buf, CH, LOG_SYSLOG, TRUE);
+        }
+      } else {
+        snprintf(buf, sizeof(buf), "SYSERR: Invalid focus %ld specified for archetype %s's foci slot #%d.", 
+                 archetypes[i]->foci[focus][0], archetypes[i]->name, focus);
+        mudlog(buf, CH, LOG_SYSLOG, TRUE);
+      }
+    }
+  }
   
   GET_ARCHETYPAL_MODE(CH) = TRUE;
   GET_ARCHETYPAL_TYPE(CH) = i;

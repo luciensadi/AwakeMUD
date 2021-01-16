@@ -227,6 +227,7 @@ ACMD_DECLARE(do_metamagic);
 ACMD_DECLARE(do_mode);
 ACMD_DECLARE(do_move);
 ACMD_DECLARE(do_mlist);
+ACMD_DECLARE(do_new_echo);
 ACMD_DECLARE(do_nervestrike);
 ACMD_DECLARE(do_not_here);
 ACMD_DECLARE(do_oocdisable);
@@ -530,7 +531,7 @@ struct command_info cmd_info[] =
     { "echo"     , POS_SLEEPING, do_echo     , 0, SCMD_ECHO },
     { "eject"    , POS_RESTING , do_eject    , 0, 0 }, 
     { "elemental", POS_DEAD    , do_elemental, 0, 0 },
-    { "emote"    , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
+    { "emote"    , POS_LYING   , do_echo , 0, SCMD_EMOTE },
     { ":"        , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
     { "enter"    , POS_SITTING , do_enter    , 0, 0 },
     { "endrun"   , POS_RESTING , do_endrun   , 0, 0 },
