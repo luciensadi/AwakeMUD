@@ -741,6 +741,8 @@ const char *connected_types[] =
     "Trideo Message Adding",
     "Creating Ammo",
     "Asking name",
+    "Playergroup editing",
+    "Helpfile editing",
     "\n"
   };
 

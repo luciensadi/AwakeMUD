@@ -3298,10 +3298,10 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
       if (VEH_VNUM_RNUM(i) >= (zone_table[zone].number * 100))
         vehs++;
 
-    snprintf(bufptr, buf_size, "Zone %d (%d): %s\r\n"
+    snprintf(bufptr, buf_size, "Zone %d (%d): %s^n\r\n"
             "Age: %d, Commands: %d, Reset: %d (%d), Top: %d\r\n"
             "Rooms: %d, Mobiles: %d, Objects: %d, Shops: %d, Vehicles: %d\r\n"
-            "Security: %d, Status: %s\r\nJurisdiction: %s, Editors: ",
+            "Security: %d, Status: %s^n\r\nJurisdiction: %s^n, Editors: ",
             zone_table[zone].number, zone, zone_table[zone].name,
             zone_table[zone].age, zone_table[zone].num_cmds,
             zone_table[zone].lifespan, zone_table[zone].reset_mode,
