@@ -2369,7 +2369,7 @@ void nanny(struct descriptor_data * d, char *arg)
         if (d->invalid_name > 3)
           close_socket(d);
         else
-          SEND_TO_Q("Invalid name, please try another.\r\nName: ", d);
+          SEND_TO_Q("Invalid name, please try another. Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", d);
         return;
       }
       if (does_player_exist(tmp_name)) {

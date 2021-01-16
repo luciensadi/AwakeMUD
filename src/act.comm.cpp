@@ -397,11 +397,11 @@ ACMD(do_spec_comm)
         suc = success_test(GET_SKILL(vict, GET_LANGUAGE(ch)), 4);
         if (suc > 0)
           snprintf(buf, sizeof(buf), "From within %s^n, $z says to you in %s, \"%s^n\"\r\n",
-                  GET_VEH_NAME(ch->in_veh), skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
+                  GET_VEH_NAME(last_veh), skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
         else
-          snprintf(buf, sizeof(buf), "From within %s^n, $z speaks in a language you don't understand.\r\n", GET_VEH_NAME(ch->in_veh));
+          snprintf(buf, sizeof(buf), "From within %s^n, $z speaks in a language you don't understand.\r\n", GET_VEH_NAME(last_veh));
       } else
-        snprintf(buf, sizeof(buf), "$z mumbles incoherently from %s.\r\n", GET_VEH_NAME(ch->in_veh));
+        snprintf(buf, sizeof(buf), "$z mumbles incoherently from %s.\r\n", GET_VEH_NAME(last_veh));
       store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, vict, TO_VICT)));
     } else {
       send_to_char("You don't see them here.\r\n", ch);
