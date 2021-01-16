@@ -40,7 +40,7 @@ void qedit_disp_menu(struct descriptor_data *d);
 void format_tabs(struct descriptor_data *d);
 
 /* ************************************************************************
-*  modification of malloc'ed strings                                      *
+*  modification of new'ed strings                                      *
 ************************************************************************ */
 
 int add_spaces(char *str, int size, int from, int spaces)

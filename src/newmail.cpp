@@ -218,7 +218,7 @@ void postmaster_send_mail(struct char_data * ch, struct char_data *mailman, int 
   
   /* Ensure the setup completed properly. This will only fail if we're out of memory. */
   if (!ch->desc->str) {
-    mudlog("Malloc failure!", NULL, LOG_SYSLOG, TRUE);
+    mudlog("New failure!", NULL, LOG_SYSLOG, TRUE);
     exit(1);
   }
   

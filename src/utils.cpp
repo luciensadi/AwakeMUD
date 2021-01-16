@@ -564,12 +564,12 @@ char *str_dup(const char *source)
   if (!source)
     return NULL;
   
-  char *New = new char[strlen(source) + 1];
+  char *New = new char[strlen(source) + 2];
   
   // This shouldn't be needed, but just in case.
   // memset(New, 0, sizeof(char) * (strlen(source) + 1));
   
-  strcpy(New, source);
+  strncpy(New, source, sizeof(New) - 1);
   return New;
 }
 

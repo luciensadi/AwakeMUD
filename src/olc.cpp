@@ -248,7 +248,7 @@ ACMD (do_redit)
         room->dir_option[counter] = new room_direction_data;
         /* copy numbers over */
         *room->dir_option[counter] = *world[room_num].dir_option[counter];
-        /* malloc strings */
+        /* New'd strings */
         if (world[room_num].dir_option[counter]->general_description)
           room->dir_option[counter]->general_description =
             str_dup(world[room_num].dir_option[counter]->general_description);
@@ -374,7 +374,7 @@ ACMD(do_rclone)
       room->dir_option[counter] = new room_direction_data;
       /* copy numbers over */
       *room->dir_option[counter] = *world[num1].dir_option[counter];
-      /* malloc strings */
+      /* New'd strings */
       if (world[num1].dir_option[counter]->general_description)
         room->dir_option[counter]->general_description =
           str_dup(world[num1].dir_option[counter]->general_description);
