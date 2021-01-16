@@ -399,11 +399,12 @@ void raw_taxi_leaves(rnum_t real_room_num) {
         act(buf, FALSE, to->people, 0, 0, TO_ROOM);
         act(buf, FALSE, to->people, 0, 0, TO_CHAR);
       }
-      if (world[real_room_num].people)
+      if (world[real_room_num].people) {
         act("The door shuts as the taxi begins to accelerate.",
             FALSE, world[real_room_num].people, 0, 0, TO_ROOM);
         act("The door shuts as the taxi begins to accelerate.",
             FALSE, world[real_room_num].people, 0, 0, TO_CHAR);
+      }
     }
 }
 

@@ -787,21 +787,24 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         }
         if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher || mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
           // Mundanes can't see metamagic teachers' abilities.
-          if (GET_TRADITION(ch) != TRAD_MUNDANE)
+          if (GET_TRADITION(ch) != TRAD_MUNDANE) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), already_printed ? " also" : "");
             already_printed = TRUE;
+          }
         }
         if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
           // Adepts can't see adept trainers' abilities.
-          if (GET_TRADITION(ch) == TRAD_ADEPT)
+          if (GET_TRADITION(ch) == TRAD_ADEPT) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), already_printed ? " also" : "");
             already_printed = TRUE;
+          }
         }
         if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
           // Mundanes and adepts can't see spell trainers' abilities.
-          if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
+          if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), already_printed ? " also" : "");
             already_printed = TRUE;
+          }
         }
         if (mob_index[GET_MOB_RNUM(i)].func == johnson || mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), already_printed ? " also" : "");

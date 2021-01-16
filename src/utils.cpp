@@ -187,7 +187,7 @@ int light_level(struct room_data *room)
     else
       return LIGHT_PARTLIGHT;
   }
-  if ((time_info.hours < 6 && time_info.hours > 19) && (room->vision[0] > LIGHT_MINLIGHT || room->vision[0] <= LIGHT_NORMALNOLIT))
+  if ((time_info.hours < 6 || time_info.hours > 19) && (room->vision[0] > LIGHT_MINLIGHT || room->vision[0] <= LIGHT_NORMALNOLIT))
     return LIGHT_MINLIGHT;
   else
     return room->vision[0];
