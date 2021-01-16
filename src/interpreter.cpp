@@ -481,6 +481,7 @@ struct command_info cmd_info[] =
     { "connect"  , POS_RESTING , do_connect  , 0, 0 },
     { "contest"  , POS_SITTING , do_contest  , 0, 0 },
     { "control"  , POS_SITTING , do_control  , 0, 0 },
+    { "complete" , POS_LYING   , do_recap    , 0, 0 },
     { "copy"     , POS_SITTING , do_copy     , 0, 0 },
     { "copyover" , POS_DEAD    , do_copyover , LVL_ADMIN, 0 },
     { "commands" , POS_DEAD    , do_commands , 0, SCMD_COMMANDS },

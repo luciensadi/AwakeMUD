@@ -738,6 +738,13 @@ SPECIAL(johnson)
     } else {
       return FALSE;
     }
+  } else if (CMD_IS("complete")) {
+    if (GET_QUEST(ch)) {
+      do_say(ch, "I've finished the job.", 0, 0);
+      comm = CMD_JOB_DONE;
+    } else {
+      return FALSE;
+    }
   } else
     return FALSE;
   
