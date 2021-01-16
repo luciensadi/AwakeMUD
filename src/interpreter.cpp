@@ -3038,6 +3038,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("swith", "switch");
   COMMAND_ALIAS("drie", "drive");
   COMMAND_ALIAS("but", "put");
+  COMMAND_ALIAS("cyberwear", "cyberware");
+  COMMAND_ALIAS("biowear", "bioware");
   
   // Combat stuff.
   COMMAND_ALIAS("attack", "kill");
