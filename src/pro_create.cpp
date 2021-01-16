@@ -42,6 +42,9 @@ void pedit_disp_menu(struct descriptor_data *d)
 void pedit_disp_program_menu(struct descriptor_data *d)
 {
   CLS(CH);
+  
+  strncpy(buf, "", sizeof(buf) - 1);
+  
   bool screenreader_mode = PRF_FLAGGED(d->character, PRF_SCREENREADER);
   for (int counter = 1; counter < NUM_PROGRAMS; counter++)
   {
@@ -75,9 +78,9 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case '3':
       if (!GET_OBJ_VAL(d->edit_obj, 0))
-        send_to_char(CH, "Choose a program type first!\r\n");
+        send_to_char("Choose a program type first!\r\n", CH);
       else {
-        send_to_char(CH,"Enter Rating: ");
+        send_to_char("Enter Rating: ", CH);
         d->edit_mode = PEDIT_RATING;
       }
       break;

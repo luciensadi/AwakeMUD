@@ -2951,8 +2951,8 @@ ACMD(do_wiztell)
     return;
   }
 
-  snprintf(buf1, sizeof(buf1), "^c[%s]: %s\r\n", GET_CHAR_NAME(ch), argument);
-  snprintf(buf2, sizeof(buf2), "^c[Someone]: %s\r\n", argument);
+  snprintf(buf1, sizeof(buf1), "^c[%s] (wt), \"%s\"\r\n", GET_CHAR_NAME(ch), argument);
+  snprintf(buf2, sizeof(buf2), "^c[Someone] (wt), \"%s\"\r\n", argument);
 
   for (d = descriptor_list; d; d = d->next) {
     if ((!d->connected)
