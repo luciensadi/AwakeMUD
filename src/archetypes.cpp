@@ -541,8 +541,10 @@ void generate_archetypes() {
     archetypes[i]->subsidy_card = 30000;
     
     // Give them all Brawling so they don't get facerolled by training dummies.
-    archetypes[i]->skills[SKILL_UNARMED_COMBAT] = 2;
+    archetypes[i]->skills[SKILL_UNARMED_COMBAT] = MAX(2, archetypes[i]->skills[SKILL_UNARMED_COMBAT]);
     
+    // Give them all a driving skill.
+    archetypes[i]->skills[SKILL_PILOT_TRUCK] = MAX(1, archetypes[i]->skills[SKILL_PILOT_TRUCK]);
     log_vfprintf("... %s.", archetypes[i]->name);
   }
 }

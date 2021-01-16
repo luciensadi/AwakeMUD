@@ -2287,7 +2287,7 @@ ACMD(do_bond)
             break;
           }
         if (!spell) {
-          send_to_char("You don't know that spell to bond.\r\n", ch);
+          send_to_char(ch, "You don't know a spell called '%s' to bond.\r\n", buf2);
           return;
         }
         if (GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED && spells[spirit].duration != SUSTAINED) {
@@ -2430,13 +2430,13 @@ ACMD(do_cast)
     if (is_abbrev(spell_name, spell->name) && !(!str_cmp(spell_name, "heal") && spell->type == SPELL_HEALTHYGLOW))
       break;
   if (!spell) {
-    send_to_char("You don't know that spell.\r\n", ch);
+    send_to_char(ch, "You don't know a spell called '%s'.\r\n", spell_name);
     return;
   }
   if (!force)
     force = spell->force;
   else if (force > spell->force) {
-    send_to_char("You don't know that spell at that high a force.\r\n", ch);
+    send_to_char(ch, "You don't know '%s' at that high a force.\r\n", spell_name);
     return;
   }
   if (spells[spell->type].physical && IS_PROJECT(ch)) {

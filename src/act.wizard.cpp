@@ -4825,7 +4825,7 @@ ACMD(do_logwatch)
       PRF_FLAGS(ch).RemoveBit(PRF_ECONLOG);
     } else if (access_level(ch, LVL_VICEPRES)) {
       send_to_char("You will now see the EconLog.\r\n", ch);
-      PRF_FLAGS(ch).SetBit(PRF_FUCKUPLOG);
+      PRF_FLAGS(ch).SetBit(PRF_ECONLOG);
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }

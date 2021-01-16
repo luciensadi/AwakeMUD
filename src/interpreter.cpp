@@ -1329,9 +1329,11 @@ void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode)
     mudlog(log_buf, ch, LOG_FUCKUPLOG, TRUE);
     
     // Check to see if it's a staff command. We don't care to log these to the fuckups table, as they're not fuckups we can learn from.
+    /*
     for (int i = 0; *cmd_info[i].command != '\n'; i++)
       if (cmd_info[i].minimum_level >= LVL_BUILDER && !str_str(cmd_info[i].command, arg))
         return;
+    */
     
     // Log it to DB.
     snprintf(buf, sizeof(buf), "INSERT INTO command_fuckups (Name, Count) VALUES ('%s', 1) ON DUPLICATE KEY UPDATE Count = Count + 1;", 
@@ -3073,6 +3075,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("bamfin", "poofin");
   COMMAND_ALIAS("bamfout", "poofout");
   COMMAND_ALIAS("sacrifice", "junk");
+  COMMAND_ALIAS("inspect", "probe");
+  COMMAND_ALIAS("worth", "balance");
+  COMMAND_ALIAS("money", "balance");
+  COMMAND_ALIAS("nuyen", "balance");
   
   // Common staff goofs.
   COMMAND_ALIAS("odelete", "idelete");
