@@ -741,7 +741,6 @@ struct command_info cmd_info[] =
     { "send"     , POS_SLEEPING, do_send     , LVL_FIXER, 0 },
     { "sedit"    , POS_DEAD    , do_shedit   , LVL_BUILDER, 0 },
     { "set"      , POS_DEAD    , do_set      , LVL_DEVELOPER, 0 },
-    { "settings" , POS_DEAD    , do_toggle   , 0, 0 },
     { "settime"  , POS_DEAD    , do_settime  , LVL_DEVELOPER, 0 },
     { "sheath"   , POS_RESTING , do_holster  , 0, 0 },
     { "shout"    , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT },
@@ -3055,6 +3054,11 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unready", "ready");
   COMMAND_ALIAS("strap", "holster"); // Not sure about this one.
   COMMAND_ALIAS("deck", "software");
+  
+  // Toggles.
+  COMMAND_ALIAS("settings", "toggle");
+  COMMAND_ALIAS("preferences", "toggle");
+  COMMAND_ALIAS("options", "toggle");
   
   // Job interaction commands.
   COMMAND_ALIAS("endjob", "endrun");
