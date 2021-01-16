@@ -2369,15 +2369,13 @@ ACMD(do_release)
         return;
       }
   } else if (is_abbrev(buf, "all")) {
-    if (i > GET_SUSTAINED_NUM(ch))
-      send_to_char("You don't have that many spells sustained.\r\n", ch);
-    else {
-      for (sust = GET_SUSTAINED(ch); sust; sust = next) {
-        next = sust->next;
-        if (sust->caster && !sust->focus && !sust->spirit)
-          end_sustained_spell(ch, sust);
-      }
+    for (sust = GET_SUSTAINED(ch); sust; sust = next) {
+      next = sust->next;
+      // Removed checks for focus and spirit sustains. It does say 'all'...
+      if (sust->caster)
+        end_sustained_spell(ch, sust);
     }
+    send_to_char("OK.\r\n", ch);
     return;
   } else if ((i = atoi(buf)) > 0) {
     if (i > GET_SUSTAINED_NUM(ch))

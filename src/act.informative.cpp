@@ -1426,10 +1426,12 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
-    if (ch->in_room->night_desc && weather_info.sunlight == SUN_DARK)
-      send_to_char(ch->in_room->night_desc, ch);
-    else
-      send_to_char(ch->in_room->description, ch);
+    if (ignore_brief || !PRF_FLAGGED(ch, PRF_BRIEF)) {
+      if (ch->in_room->night_desc && weather_info.sunlight == SUN_DARK)
+        send_to_char(ch->in_room->night_desc, ch);
+      else
+        send_to_char(ch->in_room->description, ch);
+    }
   }
   
   /* autoexits */

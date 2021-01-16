@@ -260,7 +260,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 #endif
   if (ch->desc != NULL)
     look_at_room(ch, 0);
-    if (room_is_a_taxicab(was_in->number))
+    
+  if (room_is_a_taxicab(was_in->number))
     snprintf(buf2, sizeof(buf2), "$n gets out of the taxi.");
   else if (vict)
     snprintf(buf2, sizeof(buf2), "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);

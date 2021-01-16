@@ -398,7 +398,8 @@ enum {
 #define PRF_NO_RADIO_NAMES      49
 #define PRF_FUCKUPLOG           50
 #define PRF_ECONLOG             51
-#define PRF_MAX                 52
+#define PRF_BRIEF               52
+#define PRF_MAX                 53
 
 /* log watch */
 

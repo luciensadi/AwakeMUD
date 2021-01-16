@@ -1076,7 +1076,8 @@ const char *tog_messages[][2] = {
                              "You will no longer autokill NPCs, and will instead stop when they're downed.\r\n"},
                             {"You will now see names auto-appended to voices.\r\n",
                              "You will no longer see names auto-appended to voices.\r\n"},
-                            
+                            {"You will see room descriptions whem moving.\r\n",
+                             "You will no longer see room descriptions when moving.\r\n"},
                           };
 
 ACMD(do_toggle)
@@ -1269,6 +1270,9 @@ ACMD(do_toggle)
     } else if (IS_SENATOR(ch) && is_abbrev(argument, "radionames")) {
       result = PRF_TOG_CHK(ch, PRF_NO_RADIO_NAMES);
       mode = 33;
+    } else if (is_abbrev(argument, "brief") || is_abbrev(argument, "roomdescs")) {
+      result = PRF_TOG_CHK(ch, PRF_BRIEF);
+      mode = 34;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

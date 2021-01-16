@@ -476,7 +476,7 @@ const char *player_bits[] =
     "INIT",
     "DRIVEBY",
     "RPE",
-    "NOIDLEOUT",
+    "NOIDLEOUT"
     "\n"
   };
 
@@ -576,6 +576,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Voice Names" , FALSE, TRUE  },
   { "FuckupLog"   , TRUE , TRUE  },
   { "EconLog"     , TRUE , TRUE  },
+  { "Brief"       , TRUE , TRUE  },
   { "\n"          , 0    , 0     }
 };
 
@@ -634,6 +635,7 @@ const char *preference_bits[] =
     "NO_RADIO_NAMES",
     "FUCKUPLOG",
     "ECONLOG",
+    "BRIEF",
     "\n"
   };
 
