@@ -3051,6 +3051,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("guest", "house");
   COMMAND_ALIAS("unready", "ready");
   COMMAND_ALIAS("strap", "holster"); // Not sure about this one.
+  COMMAND_ALIAS("deck", "software");
   
   // Job interaction commands.
   COMMAND_ALIAS("endjob", "endrun");
@@ -3079,6 +3080,12 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("worth", "balance");
   COMMAND_ALIAS("money", "balance");
   COMMAND_ALIAS("nuyen", "balance");
+  COMMAND_ALIAS("suggest", "idea");
+  COMMAND_ALIAS("chat", "ooc");
+  COMMAND_ALIAS("purchase", "buy");
+  
+  // Alternate spellings.
+  COMMAND_ALIAS("customise", "customize");
   
   // Common staff goofs.
   COMMAND_ALIAS("odelete", "idelete");
