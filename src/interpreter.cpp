@@ -2273,7 +2273,7 @@ void nanny(struct descriptor_data * d, char *arg)
   extern vnum_t newbie_start_room;
   extern int max_bad_pws;
   extern bool House_can_enter(struct char_data *ch, vnum_t vnum);
-  long load_room = NOWHERE;
+  vnum_t load_room = NOWHERE;
   bool dirty_password = FALSE;
 
   int parse_class(struct descriptor_data *d, char *arg);
@@ -2649,18 +2649,18 @@ void nanny(struct descriptor_data * d, char *arg)
       if (!GET_LEVEL(d->character)) {
         // Copypasta of char init code to prevent them from showing up with no stats, paralyzed in front of Dante's.
         if (GET_ARCHETYPAL_MODE(d->character)) {
-          load_room = real_room(archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room);
+          load_room = archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room;
           // Correct for invalid archetype start rooms.
-          if (load_room == NOWHERE) {
+          if (real_room(load_room) == NOWHERE) {
             snprintf(buf, sizeof(buf), "WARNING: Start room %ld for archetype %s does not exist!", 
-                     archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room,
+                     load_room,
                      archetypes[GET_ARCHETYPAL_TYPE(d->character)]->name);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-            load_room = real_room(newbie_start_room);
+            load_room = newbie_start_room;
           }
           do_start(d->character, FALSE);
         } else {
-          load_room = real_room(newbie_start_room);
+          load_room = newbie_start_room;
           do_start(d->character, TRUE);
         }
         
@@ -2763,7 +2763,7 @@ void nanny(struct descriptor_data * d, char *arg)
           do_start(d->character, TRUE);
         }
         
-        playerDB.SaveChar(d->character, load_room);
+        playerDB.SaveChar(d->character, GET_ROOM_VNUM(&world[load_room]));
         send_to_char(START_MESSG, d->character);
       } else {
         send_to_char(WELC_MESSG, d->character);
@@ -3069,9 +3069,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unwear", "remove");
   COMMAND_ALIAS("unequip", "remove");
   
-  // Door-unlocking commands.
+  // Door-unlocking and manipulation commands.
   COMMAND_ALIAS("pick", "bypass");
   COMMAND_ALIAS("hack", "bypass");
+  COMMAND_ALIAS("poen", "open");
   
   // Commands from other games.
   COMMAND_ALIAS("bamfin", "poofin");
@@ -3084,6 +3085,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("suggest", "idea");
   COMMAND_ALIAS("chat", "ooc");
   COMMAND_ALIAS("purchase", "buy");
+  COMMAND_ALIAS("stats", "score");
+  COMMAND_ALIAS("attributes", "score");
   
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");

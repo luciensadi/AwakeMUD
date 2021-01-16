@@ -28,6 +28,7 @@ extern void initialize_pocket_secretary(struct obj_data *sec);
 extern void add_phone_to_list(struct obj_data *obj);
 extern void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool print_messages);
 extern int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg);
+extern void do_start(struct char_data * ch, bool wipe_skills);
 
 SPECIAL(pocket_sec);
 
@@ -459,6 +460,10 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Wipe their remaining ccr data.
   init_create_vars(d);
+  
+  // Set up the character and save them.
+  do_start(CH, FALSE);
+  playerDB.SaveChar(d->character, archetypes[i]->start_room);
 }
 
 #undef ATTACH_IF_EXISTS
