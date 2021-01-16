@@ -132,6 +132,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "planetary", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
     { "splat", "The SPLAT! Paintball Arena", 32653, TAXI_DEST_TYPE_OTHER, TRUE },
     { "nerp", "The NERPcorpolis", 6901, TAXI_DEST_TYPE_OOC, TRUE },
+    { "glenn", "Quiet Glenn Apartments", 32713, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
 #endif
     { "\n", "", 0, 0, 0 } // this MUST be last
   };
