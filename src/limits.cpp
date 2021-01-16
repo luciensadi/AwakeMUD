@@ -1202,22 +1202,24 @@ void misc_update(void)
             send_to_char("x + 2dy divided by 3 is... no wait CARRY THE 1!\r\n", ch);
             break;
           case 10:
-            send_to_char("A large troll carrying a panther assault cannon arrives from the north.\r\n", ch);
+            send_to_char("Skibby dibby dibby do-ah.\r\n", ch);
             break;
           case 11:
-            if (ch->carrying)
-              send_to_char(ch, "You complete the bonding ritual for %s.\r\n", GET_OBJ_NAME(ch->carrying));
+            send_to_char(ch, "You stare blankly at %s. What is it? What could it mean?\r\n", GET_OBJ_NAME(ch->carrying));
             break;
           case 12:
-            send_to_char("You don't have enough karma to do that!\r\n", ch);
+            send_to_char("The energies of the chaos spell continue to swirl around you.\r\n", ch);
             break;
           case 13:
-            send_to_char("You could do it with a needle!\r\n", ch);
+            send_to_char("You struggle to concentrate through the haze of the chaos spell.\r\n", ch);
             break;
           case 14:
-            send_to_char("Nothing seems to happen.\r\n", ch);
+            send_to_char("The chaos spell drags your attention away from what you're doing.\r\n", ch);
             break;
         }
+      }
+      if (number(0, 30)) {
+        // TODO: Make the chaos spell wear off.
       }
     }
     

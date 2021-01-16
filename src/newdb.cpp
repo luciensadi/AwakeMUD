@@ -470,9 +470,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_COST_BREAKUP(ch) = atoi(row[73]);
   GET_AVAIL_OFFSET(ch) = atoi(row[74]);
   ch->player_specials->saved.last_veh = atol(row[75]);
-  // note that pgroup is 76
-  GET_SYSTEM_POINTS(ch) = atoi(row[77]);
-  GET_CONGREGATION_BONUS(ch) = atoi(row[78]);
+  GET_SYSTEM_POINTS(ch) = atoi(row[76]);
+  GET_CONGREGATION_BONUS(ch) = atoi(row[77]);
+  // note that pgroup is 78
   mysql_free_result(res);
 
   if (GET_LEVEL(ch) > 0) {
@@ -2031,4 +2031,14 @@ void auto_repair_obj(struct obj_data *obj) {
       }
       break;
   }
+}
+
+// Allows you to supply an email address.
+ACMD(do_register) {
+  if (!argument || !*argument) {
+    send_to_char(ch, "Syntax: register <email address>\r\n");
+    return;
+  }
+  
+  // TODO: Implement this.
 }
