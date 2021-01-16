@@ -299,7 +299,7 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
     // If victim's equipment is illegal here, blast them.
     if (GET_EQ(vict, i) && violates_zsp(security_level, vict, i, ch)) {
       // Target found, stop processing.
-      snprintf(buf3, sizeof(buf3), guard_messages[number(0, NUM_GUARD_MESSAGES)], GET_CHAR_NAME(vict), GET_OBJ_NAME(GET_EQ(vict, i)));
+      snprintf(buf3, sizeof(buf3), guard_messages[number(0, NUM_GUARD_MESSAGES - 1)], GET_CHAR_NAME(vict), GET_OBJ_NAME(GET_EQ(vict, i)));
       do_say(ch, buf3, 0, SCMD_SAYTO);
       return TRUE;
     }

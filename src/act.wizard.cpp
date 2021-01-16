@@ -245,7 +245,8 @@ ACMD(do_copyover)
     }
       
     if (will_not_copyover) {
-      send_to_char("Copyover aborted. Use 'copyover force' to override this.\r\n", ch);
+      if (str_cmp(argument, "check") != 0)
+        send_to_char("Copyover aborted. Use 'copyover force' to override this.\r\n", ch);
       return;
     }
   } else if (ch->desc){
