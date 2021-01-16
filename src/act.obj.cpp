@@ -1660,8 +1660,10 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   } 
   // Individual quest rewards.
   else if (!IS_NPC(ch) && IS_NPC(vict)) {
-    if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj))
+    if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
+      act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
       extract_obj(obj);
+    }
     else if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
       // These specs handle objects, so don't mess with them.
       if (GET_MOB_SPEC(vict) == fence || GET_MOB_SPEC(vict) == hacker || GET_MOB_SPEC(vict) == fixer || GET_MOB_SPEC(vict) == mageskill_herbie)
