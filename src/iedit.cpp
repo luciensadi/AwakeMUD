@@ -1205,15 +1205,11 @@ void iedit_disp_aff_menu(struct descriptor_data *d)
 /* object wear flags */
 void iedit_disp_wear_menu(struct descriptor_data * d)
 {
-  int             counter;
-  
   CLS(CH);
-  for (counter = 0; counter < ITEM_WEAR_MAX; counter += 2)
-  {
+  for (int counter = 0; counter < ITEM_WEAR_MAX; counter += 2) {
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
                  counter + 1, wear_bits[counter],
-                 counter + 2, counter + 1 < ITEM_WEAR_MAX ?
-                 wear_bits[counter + 1] : "");
+                 counter + 2, counter + 1 < ITEM_WEAR_MAX ? wear_bits[counter + 1] : "");
   }
   
   GET_OBJ_WEAR(d->edit_obj).PrintBits(buf1, MAX_STRING_LENGTH,

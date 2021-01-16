@@ -1125,8 +1125,9 @@ enum {
 #define ITEM_WEAR_ARM    22
 #define ITEM_WEAR_FACE   23
 #define ITEM_WEAR_THIGH  24
-#define ITEM_WEAR_MOUTH  25
-#define ITEM_WEAR_MAX    26
+#define ITEM_WEAR_PATCH  25
+#define ITEM_WEAR_MOUTH  26
+#define ITEM_WEAR_MAX    27
 
 /* extra object flags: used by obj_data.obj_flags.extra_flags */
 /* see: https://github.com/luciensadi/AwakeMUD/wiki/Item-Extra-Flags */
