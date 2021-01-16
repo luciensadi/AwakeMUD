@@ -4964,7 +4964,7 @@ ACMD(do_tke){
   send_to_char(ch, "Your current TKE is %d.\r\n", GET_TKE(ch));
 }
 
-#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <tke|reputation|notoriety|nuyen|syspoints>\r\n"
+#define LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints\r\n"
 ACMD(do_leaderboard) {
   // leaderboard <tke|rep|notor|nuyen|sysp>
   skip_spaces(&argument);
