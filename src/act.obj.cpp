@@ -53,8 +53,7 @@ int wear_bitvectors[] = {
                           ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
                           ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
                           ITEM_WEAR_BELLY, ITEM_WEAR_WAIST, ITEM_WEAR_THIGH, ITEM_WEAR_THIGH,
-                          ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET,
-                          ITEM_WEAR_MOUTH };
+                          ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET };
 
 bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 {
@@ -2331,10 +2330,11 @@ void wear_message(struct char_data * ch, struct obj_data * obj, int where)
                                 "You wear $p on your feet."},
 
                                {"$n wears $p on $s feet.",
-                                "You put $p on your feet."},
-
+                                "You put $p on your feet."}
+                                
+                              /*
                                 {"$n sticks $p in $s mouth.",
-                                "You stick $p in your mouth."}
+                                "You stick $p in your mouth."}*/
                              };
 
   /* Should we add move waer types?*/
@@ -2413,7 +2413,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
                               "You already have something on each of your ankles.\r\n",
                               "You are already wearing something on your feet.\r\n",
                               "You're already wearing something on your feet.\r\n",
-                              "You already have something in your mouth.\r\n"
+                              /*"You already have something in your mouth.\r\n" */
                             };
 
   /* first, make sure that the wear position is valid. */
@@ -2647,7 +2647,7 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
       "!RESERVED!",
       "sock",
       "feet",
-      "mouth",
+      // "mouth",
       "\n"
     };
     
@@ -2702,8 +2702,10 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
     where = WEAR_FACE;
   if (CAN_WEAR(obj, ITEM_WEAR_THIGH))
     where = WEAR_THIGH_R;
+/*
   if (CAN_WEAR(obj, ITEM_WEAR_MOUTH))
     where = WEAR_MOUTH;  
+*/
 
   return where;
 }

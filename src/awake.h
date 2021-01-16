@@ -264,8 +264,7 @@ enum {
 #define WEAR_SOCK      36
 #define WEAR_FEET      37
 #define WEAR_PATCH     38
-#define WEAR_MOUTH     39
-#define NUM_WEARS      40
+#define NUM_WEARS      39
 
 /* player flags: used by char_data.char_specials.act */
 #define PLR_KILLER              0  /* Player is a player-killer              */
@@ -1125,9 +1124,7 @@ enum {
 #define ITEM_WEAR_ARM    22
 #define ITEM_WEAR_FACE   23
 #define ITEM_WEAR_THIGH  24
-#define ITEM_WEAR_PATCH  25
-#define ITEM_WEAR_MOUTH  26
-#define ITEM_WEAR_MAX    27
+#define ITEM_WEAR_MAX    25
 
 /* extra object flags: used by obj_data.obj_flags.extra_flags */
 /* see: https://github.com/luciensadi/AwakeMUD/wiki/Item-Extra-Flags */
