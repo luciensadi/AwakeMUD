@@ -1907,9 +1907,7 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
   }
   
   // Add a clone of the message to the descriptor's channel history.
-  const char *newd_message = str_dup(message);
-  send_to_char(d->character, "'%s' from '%s'\r\n", newd_message, message);
-  d->message_history[channel].AddItem(NULL, newd_message);
+  d->message_history[channel].AddItem(NULL, str_dup(message));
   
   // Constrain message history to the specified amount.
   if (d->message_history[channel].NumItems() > NUM_MESSAGES_TO_RETAIN) {
