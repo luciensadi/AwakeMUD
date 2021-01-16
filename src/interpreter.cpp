@@ -227,7 +227,7 @@ ACMD_DECLARE(do_metamagic);
 ACMD_DECLARE(do_mode);
 ACMD_DECLARE(do_move);
 ACMD_DECLARE(do_mlist);
-ACMD_DECLARE(do_new_echo);
+ACMD_DECLARE(do_echo);
 ACMD_DECLARE(do_nervestrike);
 ACMD_DECLARE(do_not_here);
 ACMD_DECLARE(do_oocdisable);
