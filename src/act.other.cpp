@@ -4264,3 +4264,7 @@ ACMD(do_afk) {
   strncpy(cmd_buf, "afk", sizeof(cmd_buf) - 1);
   do_toggle(ch, cmd_buf, 0, 0);
 }
+
+ACMD(do_map) {
+  send_to_char("We're actively working on building a map feature. In the meantime, please feel free to use the cab system to get around, or ask for directions in the Newbie or OOC channels!\r\n", ch);
+}

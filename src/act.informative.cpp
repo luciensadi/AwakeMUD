@@ -5010,9 +5010,10 @@ ACMD(do_leaderboard) {
   
   // Sanitization not required here-- they're constant strings.
   snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "
-               "  WHERE name != 'deleted' "
-               "  AND %s > 0 "
+               "  WHERE %s > 0 "
                "  AND rank = 1 "
+               "  AND TKE > 0 "
+               "  AND name != 'deleted' "
                "ORDER BY %s DESC LIMIT 10;", 
                query_string, query_string, query_string);
   

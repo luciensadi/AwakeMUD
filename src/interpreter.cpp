@@ -219,6 +219,7 @@ ACMD_DECLARE(do_link);
 ACMD_DECLARE(do_look);
 ACMD_DECLARE(do_logwatch);
 ACMD_DECLARE(do_manifest);
+ACMD_DECLARE(do_map);
 ACMD_DECLARE(do_masking);
 ACMD_DECLARE(do_memory);
 ACMD_DECLARE(do_message_history);
@@ -622,6 +623,7 @@ struct command_info cmd_info[] =
 
     { "man"      , POS_SITTING , do_man      , 0, 0 },
     { "manifest" , POS_RESTING , do_manifest , 0, 0 },
+    { "map"      , POS_DEAD    , do_map      , 0, 0 },
     { "memory"   , POS_SLEEPING, do_memory   , 0, 0 },
     { "metamagic", POS_DEAD    , do_metamagic, 0, 0 },
     { "mclone"   , POS_DEAD    , do_mclone   , LVL_BUILDER, 0 },
