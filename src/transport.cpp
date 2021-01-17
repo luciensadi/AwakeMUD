@@ -721,16 +721,6 @@ SPECIAL(taxi)
         GET_SPARE2(driver) = 0;
         GET_ACTIVE(driver) = ACT_AWAIT_CMD;
         break;
-      case ACT_REPLY_TOOBAD:
-        if (destination_list == portland_taxi_destinations)
-          do_say(driver, "Somewhere else then, chummer?", 0, 0);
-        else 
-          do_say(driver, "Whatever, chum.", 0, 0);
-        forget(driver, temp);
-        GET_SPARE1(driver) = 0;
-        GET_SPARE2(driver) = 0;
-        GET_ACTIVE(driver) = ACT_AWAIT_CMD;
-        break;
       case ACT_DRIVING:
         if (GET_SPARE1(driver) > 0)
           GET_SPARE1(driver)--;
@@ -800,7 +790,7 @@ SPECIAL(taxi)
         if (!DEST_IS_VALID(dest, destination_list))
           continue;
         
-        if ( str_str((const char *)argument, destination_list[dest].keyword)) {
+        if (str_str(destination_list[dest].keyword, (const char *)argument)) {
           comm = CMD_TAXI_DEST;
           found = TRUE;
           do_say(ch, argument, 0, 0);
@@ -809,12 +799,15 @@ SPECIAL(taxi)
           break;
         }
       }
+      
     if (!found) {
-      if (str_str(argument, "yes") || str_str(argument, "sure") || str_str(argument, "alright") ||
-          str_str(argument, "yeah") || str_str(argument, "okay") || str_str(argument, "yup")) {
-        comm = CMD_TAXI_YES;
-      } else if (str_str(argument, "no") || str_str(argument, "nah") || str_str(argument, "negative")) {
-        comm = CMD_TAXI_NO;
+      if (GET_ACTIVE(driver) == ACT_AWAIT_YESNO) {
+        if (str_str(argument, "yes") || str_str(argument, "sure") || str_str(argument, "alright") ||
+            str_str(argument, "yeah") || str_str(argument, "okay") || str_str(argument, "yup")) {
+          comm = CMD_TAXI_YES;
+        } else if (str_str(argument, "no") || str_str(argument, "nah") || str_str(argument, "negative")) {
+          comm = CMD_TAXI_NO;
+        }
       } else {
         do_say(ch, argument, 0, 0);
         if (destination_list == portland_taxi_destinations) {
@@ -885,9 +878,16 @@ SPECIAL(taxi)
     GET_ACTIVE(driver) = ACT_DRIVING;
 
     raw_taxi_leaves(real_room(GET_ROOM_VNUM(ch->in_room)));
-  } else if (comm == CMD_TAXI_NO && memory(driver, ch) &&
-             GET_ACTIVE(driver) == ACT_AWAIT_YESNO)
-    GET_ACTIVE(driver) = ACT_REPLY_TOOBAD;
+  } else if (comm == CMD_TAXI_NO && memory(driver, ch) && GET_ACTIVE(driver) == ACT_AWAIT_YESNO) {
+    if (destination_list == portland_taxi_destinations)
+      do_say(driver, "Somewhere else then, chummer?", 0, 0);
+    else 
+      do_say(driver, "Whatever, chum.", 0, 0);
+    forget(driver, ch);
+    GET_SPARE1(driver) = 0;
+    GET_SPARE2(driver) = 0;
+    GET_ACTIVE(driver) = ACT_AWAIT_CMD;
+  }
 
   return TRUE;
 }
