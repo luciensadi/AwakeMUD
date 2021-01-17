@@ -1126,7 +1126,10 @@ ACMD(do_language)
 
   if (!*arg) {
     send_to_char("You know the following languages:\r\n", ch);
-    for (i = SKILL_ENGLISH; i <= SKILL_FRENCH; i++)
+    for (i = SKILL_ENGLISH; i < MAX_SKILLS; i++)
+      if (!SKILL_IS_LANGUAGE(i))
+        continue;
+        
       if ((GET_SKILL(ch, i)) > 0) {
         snprintf(buf, sizeof(buf), "%-20s %-17s", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         if (GET_LANGUAGE(ch) == i)
@@ -1137,7 +1140,7 @@ ACMD(do_language)
     return;
   }
 
-  if ((lannum = find_skill_num(arg)) && (lannum >= SKILL_ENGLISH && lannum <= SKILL_FRENCH))
+  if ((lannum = find_skill_num(arg)) && SKILL_IS_LANGUAGE(lannum))
     if (GET_SKILL(ch, lannum) > 0) {
       GET_LANGUAGE(ch) = lannum;
       send_to_char(ch, "You will now speak %s.\r\n", skills[lannum].name);

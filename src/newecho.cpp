@@ -23,6 +23,11 @@ ACMD(do_highlight) {
     return;
   }
   
+  if (*argument != '^') {
+    send_to_char("You need to specify a color code. Example: 'highlight ^^r'\r\n", ch);
+    return;
+  }
+  
   DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
   SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(argument);
   send_to_char(ch, "OK, your highlight is now '%s' (%s*^n).\r\n", double_up_color_codes(GET_CHAR_COLOR_HIGHLIGHT(ch)), GET_CHAR_COLOR_HIGHLIGHT(ch));
@@ -66,6 +71,11 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
                viewer_highlight, 
                GET_CHAR_NAME(viewer),
                terminal_code);
+    else if (viewer->desc && viewer->desc->original)
+      snprintf(result_string, sizeof(result_string), "%s%s (you)%s", 
+               viewer_highlight, 
+               GET_NAME(viewer),
+               terminal_code);
     else
       snprintf(result_string, sizeof(result_string), "%s%s%s", 
                viewer_highlight, 
@@ -93,6 +103,7 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
 }
 
 //#define NEW_EMOTE_DEBUG
+char newecho_debug_buf[MAX_STRING_LENGTH];
 void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string) {
   int tag_index, i;
   struct char_data *target_ch = NULL;
@@ -112,7 +123,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 #endif
   
   // Scan the string for the actor's name. This is an easy check. In the process, convert echo_string into something mutable, and set i to skip over this new text.
-  if (str_str(echo_string, GET_CHAR_NAME(actor)) == NULL) {
+  if (strstr(echo_string, GET_CHAR_NAME(actor)) == NULL && str_str(echo_string, "@self") == NULL) {
     if (echo_string[0] == '\'' && echo_string[1] == 's') {
       snprintf(mutable_echo_string, sizeof(mutable_echo_string), "@self%s", echo_string);
     } else {
@@ -164,7 +175,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       target_ch = NULL;
 
       // Short-circuit check: @self.
-      bool self_mode = !str_cmp("self", tag_check_string) || !str_cmp("me", tag_check_string) || !str_cmp("myself", tag_check_string);
+      bool self_mode = at_mode && (!str_cmp("self", tag_check_string) || !str_cmp("me", tag_check_string) || !str_cmp("myself", tag_check_string));
       if (self_mode)
         target_ch = actor;
       
@@ -327,7 +338,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       continue;
     
     // It's a quote mark. Set up our vars and increment i by one so it's pointing at the start of the speech.
-    language_in_use = GET_LANGUAGE(actor);
+    language_in_use = IS_NPC(actor) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
     i++;
     
     // We only accept parenthetical language as the very first thing in the sentence.
@@ -356,7 +367,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       
       // Identify the language in use.
       int skill_num;
-      for (skill_num = SKILL_ENGLISH; skill_num <= SKILL_FRENCH; skill_num++) {
+      for (skill_num = SKILL_ENGLISH; skill_num < MAX_SKILLS; skill_num++) {
         if (!SKILL_IS_LANGUAGE(skill_num))
           continue;
           
@@ -368,11 +379,12 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       if (SKILL_IS_LANGUAGE(skill_num))
         language_in_use = skill_num;
       else
-        language_in_use = GET_LANGUAGE(actor);
+        language_in_use = IS_NPC(actor) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
         
-#ifdef NEW_EMOTE_DEBUG_SPEECH
-      send_to_char(actor, "\r\nLanguage in use is now %s (target: '%s').\r\n", skills[language_in_use].name, language_string);
-#endif
+//#ifdef NEW_EMOTE_DEBUG_SPEECH
+      snprintf(newecho_debug_buf, sizeof(newecho_debug_buf), "\r\nLanguage in use for $n is now %s (target: '%s').\r\n", skills[language_in_use].name, language_string);
+      act(newecho_debug_buf, FALSE, actor, 0, 0, TO_ROLLS);
+//#endif
         
       // Snip the language block from the mutable string. Handles a single space after the closing parens.
       if (language_idx + 1 < (int) strlen(mutable_echo_string) && isspace(mutable_echo_string[language_idx + 1]))
@@ -533,19 +545,15 @@ ACMD(do_new_echo) {
     return;
   }
   
-  // Scan for oversized words. Word length is limited by your skill level in the language.
+  // TODO: Scan for oversized words. Word length is limited by your skill level in the language.
   
-  // TODO: Handling for the various commands.
-  // emote -> echo, no change needed
-  // aecho -> echo with astral flag
-  bool astral_only = (subcmd == SCMD_AECHO);
   
   // Iterate over the viewers in the room.
   for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people; 
        viewer; 
        viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh) {
     // If the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
-    if (subcmd != SCMD_AECHO || IS_ASTRAL(viewer))
+    if (subcmd != SCMD_AECHO || (IS_ASTRAL(viewer) || IS_DUAL(viewer)))
       send_echo_to_char(ch, viewer, argument);
   }
 }

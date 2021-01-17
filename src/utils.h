@@ -516,7 +516,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define BOOST(ch)               ((ch)->char_specials.saved.boosted)
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
-#define SKILL_IS_LANGUAGE(skill) ((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH)
+#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH))
 
 #define GET_SKILL_DIRTY_BIT(ch)  ((ch)->char_specials.saved.dirty)
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
