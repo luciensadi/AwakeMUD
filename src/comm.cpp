@@ -2892,12 +2892,17 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     else
       next = to->next_in_room;
     if (to == next) {
-      snprintf(buf, sizeof(buf), "SYSERR: Encountered to=next infinite loop while looping over act string ''%s' for %s. Debug info: %s, type %d",
+      snprintf(buf, sizeof(buf), "SYSERR: Encountered to=next infinite loop while looping over act string ''%s' for %s. Setting their next to NULL, this may break someone. Debug info: %s, type %d",
               str, 
               GET_CHAR_NAME(ch), 
               to->in_veh ? "in veh" : "in room",
               type);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      if (to->in_veh)
+        to->next_in_veh = NULL;
+      else
+        to->next_in_room = NULL;
+        
       return NULL;
     }
     if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, to, type))

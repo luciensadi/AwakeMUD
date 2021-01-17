@@ -651,20 +651,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define SEE_ASTRAL(sub, obj)   (!IS_ASTRAL(obj) || IS_ASTRAL(sub) || \
                                 IS_DUAL(sub) || AFF_FLAGGED(obj, AFF_MANIFEST))
 
-/* Can subject see character "obj"? */
-#define CAN_SEE_ROOM_SPECIFIED(sub, obj, room_specified)      \
-( !(MOB_FLAGGED(obj, MOB_TOTALINVIS) && GET_LEVEL(sub) < LVL_BUILDER) \
-  && (SELF((sub), (obj)) \
-     || (SEE_ASTRAL((sub), (obj)) && LIGHT_OK_ROOM_SPECIFIED(sub, room_specified) && invis_ok(sub, obj) \
-        && (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj))))))
-
-#define CAN_SEE(sub, obj)      \
-( !(MOB_FLAGGED(obj, MOB_TOTALINVIS) && GET_LEVEL(sub) < LVL_BUILDER) \
-&& (SELF((sub), (obj)) \
-|| (SEE_ASTRAL((sub), (obj)) && LIGHT_OK(sub) && invis_ok((sub), (obj)) \
-&& (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj))))))
-
-/* End of CAN_SEE */
+// Replaced these macros so we can actually get stack traces on failures.
+bool CAN_SEE(struct char_data *subj, struct char_data *obj);
+bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struct room_data *room_specified);
 
 #define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_INVISIBLE) || \
    IS_AFFECTED((sub), AFF_DETECT_INVIS) || IS_ASTRAL(sub) || \
