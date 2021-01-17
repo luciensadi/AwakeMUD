@@ -1133,6 +1133,9 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   struct char_data *i;
   struct veh_data *veh;
   
+  if (!ch || !list)
+    return;
+  
   // Show vehicle's contents to character.
   if (ch->in_veh && !ch->in_room) {
     for (i = list; i; i = i->next_in_veh) {
@@ -1145,6 +1148,7 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   // Show room's characters to character. Done this way because list_char_to_char should have been split for vehicles but wasn't.
   for (i = list; i; i = i->next_in_room) {
     // Skip them if they're invisible to us, or if they're us and we're not rigging.
+    // TODO: Does this cause double printing if you're inside a nested vehicle and looking out at someone in the containing veh?
     if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging) || (ch->in_veh && i->in_veh == ch->in_veh)) {
       continue;
     }

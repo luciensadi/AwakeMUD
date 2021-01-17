@@ -1991,7 +1991,7 @@ struct room_data *get_ch_in_room(struct char_data *ch) {
   if (!ch) {
     snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room was passed a NULL character!");
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
-    return NULL;
+    return &world[0];
   }
   
   if (ch->in_room)
@@ -2004,7 +2004,7 @@ struct room_data *get_ch_in_room(struct char_data *ch) {
   snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room called on char %s, but they're not in a room or vehicle!", GET_CHAR_NAME(ch));
   mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
   
-  return NULL;
+  return &world[0];
 }
 
 struct room_data *get_obj_in_room(struct obj_data *obj) {
@@ -2012,7 +2012,7 @@ struct room_data *get_obj_in_room(struct obj_data *obj) {
   if (!obj) {
     snprintf(errbuf, sizeof(errbuf), "SYSERR: get_obj_in_room was passed a NULL object!");
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
-    return NULL;
+    return &world[0];
   }
   
   if (obj->in_room)
@@ -2035,12 +2035,30 @@ struct room_data *get_obj_in_room(struct obj_data *obj) {
   snprintf(errbuf, sizeof(errbuf), "SYSERR: get_obj_in_room called on obj %s, but it's not in a room or vehicle!", GET_OBJ_NAME(obj));
   mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
   
-  return NULL;
+  return &world[0];
 }
 
 bool invis_ok(struct char_data *ch, struct char_data *vict) {
-  // Staff member or astrally aware? You can see everything.
-  if (IS_SENATOR(ch) || IS_ASTRAL(ch) || IS_DUAL(ch))
+  // No room at all? Nope.
+  if (!get_ch_in_room(ch)) {
+    mudlog("invis_ok() received char with NO room!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // If they're in an invis staffer above your level, no.
+  if (GET_INVIS_LEV(vict) > 0 && !access_level(ch, GET_INVIS_LEV(vict)))
+    return FALSE;
+  
+  // Staff members see almost everything.
+  if (IS_SENATOR(ch))
+    return TRUE;
+  
+  // Totalinvis blocks mort sight.
+  if (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_TOTALINVIS))
+    return FALSE;
+  
+  // Astral perception sees most things.
+  if (IS_ASTRAL(ch) || IS_DUAL(ch))
     return TRUE;
   
   // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
@@ -3072,6 +3090,35 @@ char get_final_character_from_string(const char *str) {
       return str[i];
   
   return 0;
+}
+
+bool CAN_SEE(struct char_data *subj, struct char_data *obj) {
+  if (get_ch_in_room(subj) == NULL)
+    return FALSE;
+    
+  return CAN_SEE_ROOM_SPECIFIED(subj, obj, get_ch_in_room(subj));
+}
+
+bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struct room_data *room_specified) {
+  if (!subj || !obj)
+    return FALSE;
+    
+  if (subj == obj)
+    return TRUE;
+    
+  // Does the viewee have an astral state that makes them invisible to subj?
+  if (!SEE_ASTRAL(subj, obj))
+    return FALSE;
+    
+  // If your vision can't see in the ambient light, fail.
+  if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified))
+    return FALSE;
+    
+  // If they're in an invis state (spell or setting) you can't handle, fail.
+  if (!invis_ok(subj, obj))
+    return FALSE;
+    
+  return TRUE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

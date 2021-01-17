@@ -1478,13 +1478,13 @@ int process_elevator(struct room_data *room,
     else if (elevator[num].dir == UP || elevator[num].dir == DOWN) {
       temp = room->rating + 1 - elevator[num].num_floors - elevator[num].start_floor;
       if (temp > 0)
-        snprintf(buf, sizeof(buf), "The elevator stops at B%d, and the doors open to the %s.", temp,
+        snprintf(buf, sizeof(buf), "The elevator stops at B%d, and the doors open to the %s.\r\n", temp,
                 fulldirs[elevator[num].floor[room->rating].doors]);
       else if (temp == 0)
-        snprintf(buf, sizeof(buf), "The elevator stops at the ground floor, and the doors open to the %s.",
+        snprintf(buf, sizeof(buf), "The elevator stops at the ground floor, and the doors open to the %s.\r\n",
                 fulldirs[elevator[num].floor[room->rating].doors]);
       else
-        snprintf(buf, sizeof(buf), "The elevator stops at floor %d, and the doors open to the %s.",
+        snprintf(buf, sizeof(buf), "The elevator stops at floor %d, and the doors open to the %s.\r\n",
                 0 - temp, fulldirs[elevator[num].floor[room->rating].doors]);
       send_to_room(buf, &world[real_room(room->number)]);
       open_elevator_doors(room, num, room->rating);
