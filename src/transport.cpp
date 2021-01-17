@@ -790,7 +790,7 @@ SPECIAL(taxi)
         if (!DEST_IS_VALID(dest, destination_list))
           continue;
         
-        if (str_str(destination_list[dest].keyword, (const char *)argument)) {
+        if (str_str((const char *)argument, destination_list[dest].keyword)) {
           comm = CMD_TAXI_DEST;
           found = TRUE;
           do_say(ch, argument, 0, 0);
