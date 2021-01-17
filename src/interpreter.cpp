@@ -3057,6 +3057,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unready", "ready");
   COMMAND_ALIAS("strap", "holster"); // Not sure about this one.
   COMMAND_ALIAS("deck", "software");
+  COMMAND_ALIAS("clothing", "equipment");
+  COMMAND_ALIAS("armor", "equipment");
   
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");
