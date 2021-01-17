@@ -247,6 +247,7 @@ ACMD(do_pockets) {
     // Require they have an ammo box that matches quantity.
     for (ammobox = ch->carrying; ammobox; ammobox = ammobox->next_content)
       if (GET_OBJ_TYPE(ammobox) == ITEM_GUN_AMMO 
+          && GET_AMMOBOX_INTENDED_QUANTITY(ammobox) == 0 // Prevent creation of ammo and immediate pocketing.
           && GET_AMMOBOX_WEAPON(ammobox) == weapon
           && GET_AMMOBOX_TYPE(ammobox) == ammotype
           && GET_AMMOBOX_QUANTITY(ammobox) >= quantity)

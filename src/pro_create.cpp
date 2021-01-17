@@ -594,17 +594,17 @@ void update_buildrepair(void)
         act("$n finishes building the lodge.\r\n", FALSE, CH, 0, 0, TO_ROOM);
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
-      } else if (AFF_FLAGGED(CH, AFF_AMMOBUILD) && --GET_OBJ_VAL(PROG, 4) < 1) {
-        if (GET_OBJ_VAL(PROG, 4) <= -2) // --(-1) = -2; prevents penalizing people who ace the test.
+      } else if (AFF_FLAGGED(CH, AFF_AMMOBUILD) && --GET_AMMOBOX_TIME_TO_COMPLETION(PROG) < 1) {
+        if (GET_AMMOBOX_TIME_TO_COMPLETION(PROG) <= -2) // --(-1) = -2; prevents penalizing people who ace the test.
           send_to_char("You seem to have messed up the batch of ammo.\r\n", CH);
         else {
           send_to_char("You have completed a batch of ammo.\r\n", CH);
-          GET_OBJ_VAL(PROG, 0) += 10;
+          GET_AMMOBOX_QUANTITY(PROG) += 10;
         }
-        GET_OBJ_VAL(PROG, 3) -= 10;
-        if (!GET_OBJ_VAL(PROG, 3)) {
+        GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= 10;
+        if (!GET_AMMOBOX_INTENDED_QUANTITY(PROG)) {
           send_to_char(CH, "You have finished building %s.\r\n", GET_OBJ_NAME(PROG));
-          GET_OBJ_VAL(PROG, 9) = 0;
+          GET_AMMOBOX_CREATOR(PROG) = 0;
           STOP_WORKING(CH);
         } else ammo_test(CH, PROG);
       } else if (AFF_FLAGGED(CH, AFF_SPELLDESIGN) && --GET_OBJ_VAL(PROG, 6) < 1) {
