@@ -1130,19 +1130,20 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         strcat(buf, ". It comes standard with ");
         
       int real_obj;
-      if ((real_obj = real_object(GET_OBJ_VAL(obj, 7))) > 0) {
+      if (GET_OBJ_VAL(obj, 7) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, 7))) > 0) {
         strcat(buf, obj_proto[real_obj].text.name);
-        if ((GET_OBJ_VAL(obj, 8) > 0 && GET_OBJ_VAL(obj, 9) < 1) || (GET_OBJ_VAL(obj, 8) < 1 && GET_OBJ_VAL(obj, 9) > 0))
-          strcat(buf, " and ");
         if (GET_OBJ_VAL(obj, 8) > 0 && GET_OBJ_VAL(obj, 9) > 0)
           strcat(buf, ", ");
+        else if ((GET_OBJ_VAL(obj, 8) > 0 || GET_OBJ_VAL(obj, 9) > 0))
+          strcat(buf, " and ");
+        
       }
-      if ((real_obj = real_object(GET_OBJ_VAL(obj, 8))) > 0) {
+      if (GET_OBJ_VAL(obj, 8) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, 8))) > 0) {
         strcat(buf, obj_proto[real_obj].text.name);
         if (GET_OBJ_VAL(obj, 9) > 0)
           strcat(buf, " and ");
       }
-      if ((real_obj = real_object(GET_OBJ_VAL(obj, 7))) > 9) {
+      if (GET_OBJ_VAL(obj, 9) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, 9))) > 9) {
         strcat(buf, obj_proto[real_obj].text.name);
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It can hold a maximum of %d rounds.", GET_OBJ_VAL(obj, 5));

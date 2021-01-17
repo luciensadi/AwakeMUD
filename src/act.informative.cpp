@@ -828,7 +828,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == receptionist || mob_index[GET_MOB_RNUM(i)].sfunc == receptionist) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has bunks for rent.^n\r\n", HSSH(i), already_printed ? " also" : "");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.^n\r\n", HSSH(i), already_printed ? " also" : "", HASHAVE(i));
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == fixer || mob_index[GET_MOB_RNUM(i)].sfunc == fixer) {
