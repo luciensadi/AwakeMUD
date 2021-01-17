@@ -339,6 +339,7 @@ struct char_player_data
   char *poofin, *poofout;    /* PC's poofin/poofout                  */
   
   const char *highlight_color_code;
+  const char *email;
 
   byte sex;                  /* PC / NPC's sex                       */
   byte level;
@@ -354,7 +355,7 @@ struct char_player_data
   char_player_data() :
       char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
       prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), highlight_color_code(NULL),
-      tradition(2), host(NULL)
+      email(NULL), tradition(2), host(NULL)
   {}
 }
 ;

@@ -473,6 +473,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_SYSTEM_POINTS(ch) = atoi(row[76]);
   GET_CONGREGATION_BONUS(ch) = atoi(row[77]);
   // note that pgroup is 78
+  SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(row[79]);
+  SETTABLE_EMAIL(ch) = str_dup(row[80]);
   mysql_free_result(res);
 
   if (GET_LEVEL(ch) > 0) {
@@ -1101,7 +1103,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
-               "Inveh=%ld, rank=%d, gender=%d, SysPoints=%d, socialbonus=%d WHERE idnum=%ld;",
+               "Inveh=%ld, rank=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s' WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
                GET_REAL_STR(player), GET_REAL_CHA(player), GET_REAL_INT(player), GET_REAL_WIL(player),
@@ -1115,7 +1117,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
                SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
                inveh, GET_LEVEL(player), GET_SEX(player), GET_SYSTEM_POINTS(player), 
-               MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS), GET_IDNUM(player));
+               MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS), 
+               prepare_quotes(buf1, GET_EMAIL(player), sizeof(buf1) / sizeof(char)),
+               prepare_quotes(buf2, GET_CHAR_COLOR_HIGHLIGHT(player), sizeof(buf2) / sizeof(char)),
+               GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
@@ -2035,10 +2040,22 @@ void auto_repair_obj(struct obj_data *obj) {
 
 // Allows you to supply an email address.
 ACMD(do_register) {
-  if (!argument || !*argument) {
-    send_to_char(ch, "Syntax: register <email address>\r\n");
+  if (!argument) {
+    send_to_char(ch, "Syntax: register <email address>. Your current email is %s.\r\n", GET_EMAIL(ch));
     return;
   }
   
-  // TODO: Implement this.
+  skip_spaces(&argument);
+  
+  if (!*argument) {
+    send_to_char(ch, "Syntax: register <email address>. Your current email is %s.\r\n", GET_EMAIL(ch));
+    return;
+  }
+  
+  DELETE_ARRAY_IF_EXTANT(SETTABLE_EMAIL(ch));
+  SETTABLE_EMAIL(ch) = str_dup(prepare_quotes(buf, argument, sizeof(buf) * sizeof(buf[0])));
+  
+  send_to_char(ch, "OK, your email address has been set to '%s'.", GET_EMAIL(ch));
+  
+  playerDB.SaveChar(ch);
 }

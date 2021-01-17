@@ -424,9 +424,11 @@ void boot_world(void)
   log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
   require_that_sql_table_exists("pfiles_ammo", "SQL/bullet_pants.sql");
   require_that_sql_table_exists("command_fuckups", "SQL/fuckups.sql");
-  require_that_field_exists_in_table("socialbonus", "pfiles", "SQL/migrations/socialize.sql");
-  require_that_field_exists_in_table("archetype", "pfiles_chargendata", "SQL/migrations/archetypes.sql");
-  require_that_field_exists_in_table("archetypal", "pfiles_chargendata", "SQL/migrations/archetypes.sql");
+  require_that_field_exists_in_table("socialbonus", "pfiles", "SQL/Migrations/socialize.sql");
+  require_that_field_exists_in_table("archetype", "pfiles_chargendata", "SQL/Migrations/archetypes.sql");
+  require_that_field_exists_in_table("archetypal", "pfiles_chargendata", "SQL/Migrations/archetypes.sql");
+  require_that_field_exists_in_table("highlight", "pfiles", "SQL/Migrations/rp_upgrade.sql");
+  require_that_field_exists_in_table("email", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   
   log("Handling idle deletion.");
   idle_delete();
