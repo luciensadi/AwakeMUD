@@ -60,6 +60,7 @@ int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
+char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy);
 float   gen_size(int race, bool height, int size, int sex);
@@ -953,6 +954,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 // If d->edit_convert_color_codes is true, doubles up ^ marks to not print color codes to the user in the specified string. Uses a static buf, so only one invocation per snprintf()!
 #define DOUBLE_UP_COLOR_CODES_IF_NEEDED(str) (d ? (d->edit_convert_color_codes ? double_up_color_codes((str)) : (str)) : (str))
+
+#define GET_CHAR_COLOR_HIGHLIGHT(ch) ((ch)->player.highlight_color_code ? (ch)->player.highlight_color_code : "^n")
+#define SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) ((ch)->player.highlight_color_code)
 
 /*
  * Some systems such as Sun's don't have prototyping in their header files.

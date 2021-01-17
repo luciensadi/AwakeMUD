@@ -527,12 +527,31 @@ char *capitalize(const char *source)
 char *string_to_uppercase(const char *source) {
   static char dest[MAX_STRING_LENGTH];
   
-  int x = strlen(source);
-  for (int i = 0; i < x; i++){
+  int i, x = strlen(source);
+  for (i = 0; i < x; i++){
     if (isalpha(source[i])){
       dest[i] = toupper(source[i]);
+    } else {
+      dest[i] = source[i];
     }
   }
+  dest[i] = '\0';
+  
+  return dest;
+}
+
+char *string_to_lowercase(const char *source) {
+  static char dest[MAX_STRING_LENGTH];
+  
+  int i = 0, x = strlen(source);
+  for (i = 0; i < x; i++){
+    if (isalpha(source[i])){
+      dest[i] = tolower(source[i]);
+    } else {
+      dest[i] = source[i];
+    }
+  }
+  dest[i] = '\0';
   
   return dest;
 }

@@ -195,6 +195,7 @@ ACMD_DECLARE(do_heal);
 ACMD_DECLARE(do_help);
 ACMD_DECLARE(do_hide);
 ACMD_DECLARE(do_hit);
+ACMD_DECLARE(do_highlight);
 ACMD_DECLARE(do_house);
 ACMD_DECLARE(do_iclist);
 ACMD_DECLARE(do_ignore);
@@ -573,6 +574,7 @@ struct command_info cmd_info[] =
     { "helpedit" , POS_DEAD    , do_helpedit , LVL_DEVELOPER, 0 },
     { "helpexport",POS_DEAD    , do_helpexport, LVL_DEVELOPER, 0 },
     { "hit"      , POS_FIGHTING, do_hit      , 0, SCMD_HIT },
+    { "highlight", POS_DEAD    , do_highlight, 0, 0 },
     { "history"  , POS_DEAD    , do_message_history, 0, 0 },
     { "hlist"    , POS_DEAD    , do_hlist    , LVL_BUILDER, 0 },
     { "hold"     , POS_RESTING , do_grab     , 1, 0 },

@@ -337,6 +337,8 @@ struct char_player_data
   char *pretitle, *whotitle; /* PC's pre/whotitles                   */
   char *prompt, *matrixprompt;              /* PC's customized prompt               */
   char *poofin, *poofout;    /* PC's poofin/poofout                  */
+  
+  const char *highlight_color_code;
 
   byte sex;                  /* PC / NPC's sex                       */
   byte level;
@@ -351,7 +353,8 @@ struct char_player_data
 
   char_player_data() :
       char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
-      prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), tradition(2), host(NULL)
+      prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), highlight_color_code(NULL),
+      tradition(2), host(NULL)
   {}
 }
 ;

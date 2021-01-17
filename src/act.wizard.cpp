@@ -388,20 +388,54 @@ ACMD(do_zecho)
 }
 // End zecho code
 
-#define GET_CHAR_COLOR_HIGHLIGHT(ch) "^W"
-const char *generate_display_string_for_character(struct char_data *actor, struct char_data *viewer, struct char_data *target_ch) {
+ACMD(do_highlight) {
+  skip_spaces(&argument);
+  DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
+  SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(argument);
+  send_to_char(ch, "OK, your highlight is now %s*^n.\r\n", GET_CHAR_COLOR_HIGHLIGHT(ch));
+}
+
+const char *generate_display_string_for_character(struct char_data *actor, struct char_data *viewer, struct char_data *target_ch, bool terminate_with_actors_color_code) {
   static char result_string[MAX_STRING_LENGTH];
   struct remem *mem_record;
+  const char *terminal_code = "^n";
+  const char *viewer_highlight = GET_CHAR_COLOR_HIGHLIGHT(viewer);
+  
+  if (terminate_with_actors_color_code) {
+#ifdef SPEECH_COLOR_CODE_DEBUG
+    send_to_char(actor, "Terminating with your color code.\r\n");
+#endif
+    terminal_code = GET_CHAR_COLOR_HIGHLIGHT(actor);
+    
+    // Make sure there's differentiation between highlight colors.
+    if (target_ch == viewer && !strcmp(viewer_highlight, terminal_code)) {
+      if (!strcmp((viewer_highlight = string_to_uppercase(viewer_highlight)), terminal_code))
+        viewer_highlight = string_to_lowercase(viewer_highlight);
+#ifdef SPEECH_COLOR_CODE_DEBUG
+      send_to_char(actor, "Viewer code changed from %s*^n to %s*^n for %s.\r\n", 
+                   GET_CHAR_COLOR_HIGHLIGHT(viewer), viewer_highlight, GET_CHAR_NAME(viewer));
+#endif
+    }
+  }
   
   // If the target is the viewer, we don't process their name into a desc, but we do highlight.
   if (target_ch == viewer) {
     // Insert the color code sequence for the viewing character's speech color.
     if (IS_ASTRAL(viewer))
-      snprintf(result_string, sizeof(result_string), "%s%s's reflection^n", GET_CHAR_COLOR_HIGHLIGHT(viewer), GET_CHAR_NAME(viewer));
+      snprintf(result_string, sizeof(result_string), "%s%s's reflection%s", 
+               viewer_highlight, 
+               GET_CHAR_NAME(viewer),
+               terminal_code);
     else if (PLR_FLAGGED(viewer, PLR_MATRIX))
-      snprintf(result_string, sizeof(result_string), "%s%s's persona^n", GET_CHAR_COLOR_HIGHLIGHT(viewer), GET_CHAR_NAME(viewer));
+      snprintf(result_string, sizeof(result_string), "%s%s's persona%s", 
+               viewer_highlight, 
+               GET_CHAR_NAME(viewer),
+               terminal_code);
     else
-      snprintf(result_string, sizeof(result_string), "%s%s^n", GET_CHAR_COLOR_HIGHLIGHT(viewer), GET_CHAR_NAME(viewer));
+      snprintf(result_string, sizeof(result_string), "%s%s%s", 
+               viewer_highlight, 
+               GET_CHAR_NAME(viewer),
+               terminal_code);
   }
   
   // If the target is not the viewer, we process it as normal.
@@ -416,7 +450,7 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
     else
       display_string = GET_NAME(target_ch);
       
-    // Insert the display string into the mutable string in place of the tag.
+    // Insert the display string into the mutable string in place of the tag. No terminal_code here-- this always happens outside of speech.
     snprintf(result_string, sizeof(result_string), "%s^n", display_string);
   }
   
@@ -426,8 +460,10 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
 char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
 char storage_string[MAX_STRING_LENGTH];
+//#define NEW_EMOTE_DEBUG
 void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string) {
   int tag_index, i;
+  struct char_data *target_ch = NULL;
   
   // Sanity check.
   if (!actor || !viewer) {
@@ -439,34 +475,39 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   if (!viewer->desc)
     return;
   
-  send_to_char(actor, "\r\nBeginning evaluation for %s.\r\n", GET_CHAR_NAME(viewer));
+#ifdef NEW_EMOTE_DEBUG
+  send_to_char(actor, "\r\n\r\nBeginning evaluation for %s.\r\n", GET_CHAR_NAME(viewer));
+#endif
   
   // Scan the string for the actor's name. This is an easy check. In the process, convert echo_string into something mutable, and set i to skip over this new text.
   if (str_str(echo_string, GET_CHAR_NAME(actor)) == NULL) {
-    if (echo_string[0] == '\'' && echo_string[0] == 's') {
-      snprintf(mutable_echo_string, sizeof(mutable_echo_string), "%s%s", GET_CHAR_NAME(actor), echo_string);
-      i = strlen(GET_CHAR_NAME(actor));
+    if (echo_string[0] == '\'' && echo_string[1] == 's') {
+      snprintf(mutable_echo_string, sizeof(mutable_echo_string), "@self%s", echo_string);
     } else {
-      snprintf(mutable_echo_string, sizeof(mutable_echo_string), "%s %s", GET_CHAR_NAME(actor), echo_string);
-      i = strlen(GET_CHAR_NAME(actor)) + 1;
+      snprintf(mutable_echo_string, sizeof(mutable_echo_string), "@self %s", echo_string);
     }
   } else {
-    strncpy(mutable_echo_string, echo_string, sizeof(mutable_echo_string) - 1);
-    i = 0;
+    strlcpy(mutable_echo_string, echo_string, sizeof(mutable_echo_string));
   }
-  
+
+#ifdef NEW_EMOTE_DEBUG
   send_to_char(actor, "\r\nAfter first pass, mutable_echo_string is '%s'. Evaluating...\r\n", mutable_echo_string);
-  
+#endif  
+
   // Next, check capitalized words in it for highlighting purposes.
   // TODO: Skip this if they've disabled color or have disabled name highlighting.
   bool quote_mode = FALSE;
-  for (; i < (int) strlen(mutable_echo_string); i++) {
-    send_to_char(actor, "^y%c^n", mutable_echo_string[i]);
+  for (i = 0; i < (int) strlen(mutable_echo_string); i++) {
+#ifdef NEW_EMOTE_DEBUG
+    send_to_char(actor, "^y%c%s^n", mutable_echo_string[i], mutable_echo_string[i] == '^' ? "^" : "");
+#endif
     
     // Quote mark? Enable quote mode, which stops expansion of names and just does highlighting.
     if (mutable_echo_string[i] == '"') {
       quote_mode = !quote_mode;
+#ifdef NEW_EMOTE_DEBUG
       send_to_char(actor, "\r\nQuote mode is now %s.\r\n", quote_mode ? "on" : "off");
+#endif
       continue;
     }
     
@@ -483,37 +524,48 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       // Short names don't auto-match unless they're complete matches or explicit tags.
       bool require_exact_match = !at_mode && strlen(tag_check_string) < 5;
       
+#ifdef NEW_EMOTE_DEBUG
       if (require_exact_match)
         send_to_char(actor, "\r\nUsing exact mode for this evaluation due to non-at and low string length %d.", strlen(tag_check_string));
+#endif
+
+      target_ch = NULL;
+
+      // Short-circuit check: @self.
+      bool self_mode = !str_cmp("self", tag_check_string) || !str_cmp("me", tag_check_string) || !str_cmp("myself", tag_check_string);
+      if (self_mode)
+        target_ch = actor;
       
       // Compare it to bystanders' memorized names
-      struct char_data *target_ch = NULL;
-      for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
-           target_ch; 
-           target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
-      {
-        // No such thing as remembering an NPC.
-        if (IS_NPC(target_ch))
-          continue;
-          
-        // Can't target someone you can't see.
-        if (!CAN_SEE(actor, target_ch))
-          continue;
-          
-        struct remem *mem_record = found_mem(GET_MEMORY(actor), target_ch);
-        if (mem_record) {
-          if (require_exact_match) {
-            if (!str_cmp(mem_record->mem, tag_check_string))
-              break;
-          } else {
-            if (!strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string)))
-              break;
+      if (!target_ch) {
+        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
+             target_ch; 
+             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
+        {
+          // No such thing as remembering an NPC.
+          if (IS_NPC(target_ch))
+            continue;
+            
+          // Can't target someone you can't see.
+          if (!CAN_SEE(actor, target_ch))
+            continue;
+            
+          struct remem *mem_record = found_mem(GET_MEMORY(actor), target_ch);
+          if (mem_record) {
+            if (require_exact_match) {
+              if (!str_cmp(mem_record->mem, tag_check_string))
+                break;
+            } else {
+              if (!strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string)))
+                break;
+            }
           }
         }
+        #ifdef NEW_EMOTE_DEBUG
+              if (target_ch)
+                send_to_char(actor, "\r\nWith target string '%s', found %s by memory.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        #endif
       }
-      
-      if (target_ch)
-        send_to_char(actor, "\r\nWith target string '%s', found %s by memory.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
       
       // Didn't find anyone by that memorized name? Check PC names.
       if (!target_ch) {
@@ -521,25 +573,31 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
              target_ch; 
              target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
         {
+          // NPCs don't have player data to check.
+          if (IS_NPC(target_ch))
+            continue;
+            
           // Can't target someone you can't see.
           if (!CAN_SEE(actor, target_ch))
             continue;
             
           if (require_exact_match) {
             // In exact match mode, we must match the full and complete name. Happens if the name is too short.
-            if (!str_cmp(GET_NAME(target_ch), tag_check_string))
+            if (!str_cmp(target_ch->player.char_name, tag_check_string))
               break;
           } else {
             // Otherwise, we can match up to the length of tag_check_string.
-            if (!strn_cmp(GET_NAME(target_ch), tag_check_string, strlen(tag_check_string)))
+            if (!strn_cmp(target_ch->player.char_name, tag_check_string, strlen(tag_check_string)))
               break;
           }
         }
+#ifdef NEW_EMOTE_DEBUG
         if (target_ch)
           send_to_char(actor, "\r\nWith target string '%s', found %s by name.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+#endif
       }
       
-      // Didn't find anyone by memory? Check keywords (only if not in exact-match mode).
+      // Didn't find anyone by their PC name? Check keywords (only if not in exact-match mode).
       if (!target_ch && !require_exact_match) {
         for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
              target_ch; 
@@ -554,35 +612,67 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
             break;
           }
         }
+#ifdef NEW_EMOTE_DEBUG
         if (target_ch)
           send_to_char(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+#endif
+      }
+      
+      // Didn't find anyone by their keywords? Check in short description (only if not in exact-match mode).
+      if (!target_ch && !require_exact_match) {
+        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
+             target_ch; 
+             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
+        {
+          // Can't target someone you can't see.
+          if (!CAN_SEE(actor, target_ch))
+            continue;
+            
+          if (str_str(GET_NAME(target_ch), tag_check_string)) {
+            // Found someone, stop looking.
+            break;
+          }
+        }
+#ifdef NEW_EMOTE_DEBUG
+        if (target_ch)
+          send_to_char(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+#endif
       }
       
       // Found someone.
       if (target_ch) {
-        // If the viewer is the actor, just stop-- we don't self-highlight.
-        if (viewer == target_ch && viewer == actor)
-          break;
+        // If the viewer is the actor, and it's not @self, just stop-- we don't self-highlight.
+        if (viewer == target_ch && viewer == actor && !self_mode)
+          continue;
           
         // In quote mode, we only do viewer highlights.
         if (quote_mode && target_ch != viewer)
-          break;
+          continue;
           
         // Copy out the rest of the string-- we're inserting something here.
         strncpy(storage_string, mutable_echo_string + tag_index, sizeof(storage_string) - 1);
         
-        // Fetch the representation of this character.
-        const char *display_string = generate_display_string_for_character(actor, viewer, target_ch);
+        // Fetch the representation of this character. Edge case: actor is viewer and @self: just give your name.
+        const char *display_string;
+        if (self_mode && viewer == target_ch && viewer == actor)
+          display_string = GET_CHAR_NAME(actor);
+        else
+          display_string = generate_display_string_for_character(actor, viewer, target_ch, quote_mode);
         
         // Put it into the mutable echo string, replacing the tag, and then append the rest of the storage string.
         snprintf(mutable_echo_string + i - (at_mode ? 1 : 0), sizeof(mutable_echo_string), "%s%s", display_string, storage_string);
   
         // Since we added X known-good characters starting at i, increase i by X-- but decrement by 1 since we'll be incrementing on loop.
         i += strlen(display_string) - 1;
+#ifdef NEW_EMOTE_DEBUG
+        send_to_char(actor, "'%s' resolved to %s.\r\n", tag_check_string, display_string);
+#endif
       }
       
       else {
+#ifdef NEW_EMOTE_DEBUG
         send_to_char(actor, "\r\nTag string '%s' found nobody.\r\n", tag_check_string);
+#endif
         i += strlen(tag_check_string) - 1;
       }
       
@@ -590,40 +680,47 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     }
   }
   
+#ifdef NEW_EMOTE_DEBUG
   send_to_char(actor, "\r\nTagging pass of emote done. Now doing speech pass. Combine these later...");
+#endif
   
   // Next pass: Convert speech.
-  bool just_toggled_quote;
   int language_in_use = -1;
-  for (i = 0; i < (int) strlen(mutable_echo_string); i++) {    
+  for (i = 0; i < (int) strlen(mutable_echo_string); i++) {
+#ifdef NEW_EMOTE_DEBUG_SPEECH
+    send_to_char(actor, "^y%c%s^n", mutable_echo_string[i], mutable_echo_string[i] == '^' ? "^" : "");
+#endif
     // Skip everything that's not speech.
-    if (!quote_mode && mutable_echo_string[i] != '"')
+    if (mutable_echo_string[i] != '"')
       continue;
     
-    // Quote mark? Toggle quote mode, which globs speech together.
-    if (mutable_echo_string[i] == '"') {
-      quote_mode = !quote_mode;
-      just_toggled_quote = TRUE;
-      language_in_use = GET_LANGUAGE(actor);
-      send_to_char(actor, "\r\nQuote mode is now %s.\r\n", quote_mode ? "on" : "off");
-      continue;
-    }
-    
-    // If we got here, we're looking at text inside of a quote.
+    // It's a quote mark. Set up our vars and increment i by one so it's pointing at the start of the speech.
+    language_in_use = GET_LANGUAGE(actor);
+    i++;
     
     // We only accept parenthetical language as the very first thing in the sentence.
-    // test case: "(gaelic) hello";
-    if (just_toggled_quote && mutable_echo_string[i] == '(') {
+    if (mutable_echo_string[i] == '(') {
+      // i currently points to a parens, so we increment it by one. Remember this for when we chop the parens out later.
+      i++;
+      
       char language_string[100];
       int language_idx;
+      
       // Copy the language into the language_string buffer, stopping at the next parenthetical.
-      for (language_idx = i + 1; 
-           language_idx - i < 99 && mutable_echo_string[language_idx] != ')'; 
+      for (language_idx = i; 
+           language_idx - i < (int) sizeof(language_string) - 1 && mutable_echo_string[language_idx] != ')'; 
            language_idx++) 
         language_string[language_idx - i] = mutable_echo_string[language_idx];
       
       // Null-terminate language buffer.
       language_string[language_idx - i] = '\0';
+      
+      // We expect that the M_E_S pointer is at the closing parens. If this is not true, we ran out of buf
+      // space-- that means this is not a language! Bail out.
+      if (mutable_echo_string[language_idx] != ')') {
+        i = language_idx;
+        continue;
+      }
       
       // Identify the language in use.
       int skill_num;
@@ -641,20 +738,80 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       else
         language_in_use = GET_LANGUAGE(actor);
         
-      send_to_char(actor, "\r\nLanguage in use is now %s.\r\n", skills[language_in_use].name);
+#ifdef NEW_EMOTE_DEBUG_SPEECH
+      send_to_char(actor, "\r\nLanguage in use is now %s (target: '%s').\r\n", skills[language_in_use].name, language_string);
+#endif
         
-      // Snip the language block from the mutable string.
-      strlcpy(storage_string, mutable_echo_string + language_idx, sizeof(storage_string));
-      strlcpy(mutable_echo_string + i + 1, storage_string, sizeof(mutable_echo_string) - strlen(mutable_echo_string));
+      // Snip the language block from the mutable string. Handles a single space after the closing parens.
+      if (language_idx + 1 < (int) strlen(mutable_echo_string) && isspace(mutable_echo_string[language_idx + 1]))
+        strlcpy(storage_string, mutable_echo_string + language_idx + 2, sizeof(storage_string));
+      else
+        strlcpy(storage_string, mutable_echo_string + language_idx + 1, sizeof(storage_string));
+        
+      // Decrement i here to make it point at the area where the parens is.
+      i--;
+      
+      strlcpy(mutable_echo_string + i, storage_string, sizeof(mutable_echo_string) - i);
+      
+      // i now points to the character at the start of the speech.
     }
-    just_toggled_quote = FALSE;
     
-    // Now that
+#ifdef NEW_EMOTE_DEBUG_SPEECH
+    send_to_char(actor, "\r\nAfter language extraction (now %s), mutable string is: '%s'\r\n", skills[language_in_use].name, mutable_echo_string);
+#endif
+    
+    // We're now inside a quote block, with the language for the quote identified. 'i' is the start of the speech.
+    char speech_buf[MAX_STRING_LENGTH];
+    
+    // Copy the quote into the speech buf.
+    int speech_idx;
+    for (speech_idx = i; speech_idx < (int) strlen(mutable_echo_string) && mutable_echo_string[speech_idx] != '"'; speech_idx++)
+      speech_buf[speech_idx - i] = mutable_echo_string[speech_idx];
+    speech_buf[speech_idx - i] = '\0';
+    
+    // Got it? Good.
+#ifdef NEW_EMOTE_DEBUG_SPEECH
+    send_to_char(actor, "\r\nSpeech block: '%s'\r\n", speech_buf);
+#endif
+    
+    // If the speech ended with punct, we use that, otherwise we use a period.
+    const char *quote_termination;
+    if (ispunct(mutable_echo_string[speech_idx - 1])) {
+      quote_termination = "^n";
+    } else {
+      quote_termination = ".^n";
+    }
+    
+    snprintf(storage_string, sizeof(storage_string), "%s%s", quote_termination, mutable_echo_string + speech_idx);
+    
+    // If the listener can't understand you, mangle it.
+    if (GET_SKILL(viewer, language_in_use) <= 0) {
+      const char *replacement = "(something unintelligible)";
+      quote_termination = ".^n";
+      
+      snprintf(mutable_echo_string + i, sizeof(mutable_echo_string) - i, "%s%s%s", 
+               GET_CHAR_COLOR_HIGHLIGHT(actor),
+               replacement, 
+               storage_string);
+               
+      i += strlen(replacement) + strlen(GET_CHAR_COLOR_HIGHLIGHT(actor)) + strlen(quote_termination);
+    } else {
+      // Just highlight the speech.
+      snprintf(mutable_echo_string + i, sizeof(mutable_echo_string) - i, "%s%s%s", 
+               GET_CHAR_COLOR_HIGHLIGHT(actor),
+               speech_buf, 
+               storage_string);
+               
+      i = speech_idx + strlen(GET_CHAR_COLOR_HIGHLIGHT(actor)) + strlen(quote_termination);
+    }
+    i++;
   }
   
-  
+#ifdef NEW_EMOTE_DEBUG_SPEECH
+  send_to_char(actor, "Finished evaluation of emote projection for %s.\r\n\r\n", GET_CHAR_NAME(viewer));
+#endif
   // Finally(!), send it to the viewer.
-  send_to_char(viewer, mutable_echo_string);
+  send_to_char(viewer, capitalize(mutable_echo_string));
 }
 
 ACMD(do_new_echo) {

@@ -1228,7 +1228,7 @@ SPECIAL(call_elevator)
         return TRUE;
       }
       if (index < 0 || elevator[index].destination) {
-        send_to_char("You press the call button, but nothing seems to happen.\r\n", ch);
+        send_to_char("You press the call button, but the elevator's already headed somewhere else, so nothing happens.\r\n", ch);
         return TRUE;
       }
       rnum = real_room(elevator[index].room);
