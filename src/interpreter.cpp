@@ -263,6 +263,7 @@ ACMD_DECLARE(do_recap);
 ACMD_DECLARE(do_ready);
 ACMD_DECLARE(do_reboot);
 ACMD_DECLARE(do_reflex);
+ACMD_DECLARE(do_register);
 ACMD_DECLARE(do_release);
 ACMD_DECLARE(do_reload);
 ACMD_DECLARE(do_remember);
@@ -709,6 +710,7 @@ struct command_info cmd_info[] =
     { "rclone"   , POS_DEAD    , do_rclone   , LVL_BUILDER, 0},
     { "rdelete"  , POS_DEAD    , do_rdelete  , LVL_PRESIDENT, 0},
     { "reflex"   , POS_RESTING , do_reflex   , 0, 0 },
+    { "register" , POS_DEAD    , do_register , 0, 0 },
     { "rest"     , POS_LYING   , do_rest     , 0, 0 },
     { "read"     , POS_LYING   , do_look     , 0, SCMD_READ },
     { "ready"    , POS_LYING   , do_ready    , 0, 0 },
@@ -3060,6 +3062,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unready", "ready");
   COMMAND_ALIAS("strap", "holster"); // Not sure about this one.
   COMMAND_ALIAS("deck", "software");
+  COMMAND_ALIAS("email", "register");
   
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");

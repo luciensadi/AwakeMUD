@@ -4,16 +4,30 @@
 #include "comm.h"
 #include "constants.h"
 #include "handler.h"
+#include "newdb.h"
 
 char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
 char storage_string[MAX_STRING_LENGTH];
 
 ACMD(do_highlight) {
+  if (!argument) {
+    send_to_char("Syntax: highlight <a color code>. Example: highlight ^^Y\r\n", ch);
+    return;
+  }
+  
   skip_spaces(&argument);
+  
+  if (!*argument) {
+    send_to_char(ch, "Your current highlight code is '%s' (%s*^n).\r\n", double_up_color_codes(GET_CHAR_COLOR_HIGHLIGHT(ch)), GET_CHAR_COLOR_HIGHLIGHT(ch));
+    return;
+  }
+  
   DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
   SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(argument);
-  send_to_char(ch, "OK, your highlight is now %s*^n.\r\n", GET_CHAR_COLOR_HIGHLIGHT(ch));
+  send_to_char(ch, "OK, your highlight is now '%s' (%s*^n).\r\n", double_up_color_codes(GET_CHAR_COLOR_HIGHLIGHT(ch)), GET_CHAR_COLOR_HIGHLIGHT(ch));
+  
+  playerDB.SaveChar(ch);
 }
 
 const char *generate_display_string_for_character(struct char_data *actor, struct char_data *viewer, struct char_data *target_ch, bool terminate_with_actors_color_code) {
