@@ -4863,7 +4863,7 @@ SPECIAL(orkish_truckdriver)
     }
   }
   if (driver->in_room->number == 8198 && (time_info.hours < 2 || time_info.hours > 3)) {
-    act("$n says goodbye to the girl at the stand and hops into his truck. It's engine rumbles into life and it drives off into the distance.", FALSE, driver, 0, 0, TO_ROOM);
+    act("$n says goodbye to the girl at the stand and hops into his truck. Its engine rumbles into life and it drives off into the distance.", FALSE, driver, 0, 0, TO_ROOM);
     if (driver->in_room->dir_option[WEST]) {
       delete driver->in_room->dir_option[WEST];
       driver->in_room->dir_option[WEST] = NULL;

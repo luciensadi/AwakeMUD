@@ -3049,7 +3049,6 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
-  COMMAND_ALIAS("pickup", "get");
   COMMAND_ALIAS("yes", "nod");
   COMMAND_ALIAS("setup", "unpack");
   COMMAND_ALIAS("ability", "abilities");
@@ -3084,6 +3083,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("pick", "bypass");
   COMMAND_ALIAS("hack", "bypass");
   COMMAND_ALIAS("poen", "open");
+  
+  // Must be after 'pick'
+  COMMAND_ALIAS("pickup", "get");
   
   // Commands from other games.
   COMMAND_ALIAS("bamfin", "poofin");
