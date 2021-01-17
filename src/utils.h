@@ -626,9 +626,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 /* compound utilities and other macros **********************************/
 
 #define HSHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "his":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "its": "their"))
-#define HSSH(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "they"))
-#define HMHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "them"))
-#define HASHAVE(ch) (GET_SEX(ch) != SEX_NEUTRAL ?              "has"     : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "has": "have"))
+#define HSSH(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "they" ))
+#define HMHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "them" ))
+#define HASHAVE(ch) (GET_SEX(ch) != SEX_NEUTRAL ?              "has"     : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "has": "have" ))
+#define ISARE(ch)   (GET_SEX(ch) != SEX_NEUTRAL ?              "is"      : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "is" : "are"  ))
 #define HSSH_SHOULD_PLURAL(ch) (GET_SEX(ch) || (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)))
 
 #define ANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "An" : "A")

@@ -599,7 +599,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         }
       }
       if (IS_DUAL(i) && dual)
-        send_to_char(ch, "%s is dual.\r\n", CAP(HSSH(i)));
+        send_to_char(ch, "%s %s dual.\r\n", CAP(HSSH(i)), ISARE(i));
     }
   }
   if (!IS_NPC(i) && GET_LEVEL(ch) > LVL_MORTAL && i->player.background)
