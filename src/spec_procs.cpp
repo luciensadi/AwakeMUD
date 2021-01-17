@@ -4841,6 +4841,12 @@ extern void end_quest(struct char_data *ch);
 SPECIAL(orkish_truckdriver)
 {
   struct char_data *driver = (struct char_data *) me;
+  
+  if (!driver || !driver->in_room) {
+    mudlog("orkish_truckdriver would have crashed due to no in_room!", driver, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
   if (FIGHTING(driver)) {
     if (quest_table[GET_QUEST(FIGHTING(driver))].vnum == 5000) {
       send_to_char("The driver has been alerted! The run is a failure!\r\n", FIGHTING(driver));
