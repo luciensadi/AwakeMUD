@@ -4602,7 +4602,7 @@ ACMD(do_commands)
   }
   
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
-    for (no = 1, cmd_num = 1;;cmd_num++) {
+    for (no = 1, cmd_num = 1; *mtx_info[cmd_num].command != '\n';cmd_num++) {
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, mtx_info[cmd_num].command))
         continue;
@@ -4618,7 +4618,7 @@ ACMD(do_commands)
           }
     }
   } else if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
-    for (no = 1, cmd_num = 1;;cmd_num++) {
+    for (no = 1, cmd_num = 1; *rig_info[cmd_num].command != '\n';cmd_num++) {
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, rig_info[cmd_num].command))
         continue;
