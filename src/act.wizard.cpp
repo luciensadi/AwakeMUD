@@ -389,13 +389,19 @@ ACMD(do_zecho)
 // End zecho code
 
 #define GET_CHAR_COLOR_HIGHLIGHT(ch) "^W"
-const char *generate_display_string_for_character(struct char_data *viewer, struct char_data *target_ch) {
+const char *generate_display_string_for_character(struct char_data *actor, struct char_data *viewer, struct char_data *target_ch) {
   static char result_string[MAX_STRING_LENGTH];
+  struct remem *mem_record;
   
   // If the target is the viewer, we don't process their name into a desc, but we do highlight.
   if (target_ch == viewer) {
     // Insert the color code sequence for the viewing character's speech color.
-    snprintf(result_string, sizeof(result_string), "%s%s^n", GET_CHAR_COLOR_HIGHLIGHT(viewer), GET_NAME(viewer));
+    if (IS_ASTRAL(viewer))
+      snprintf(result_string, sizeof(result_string), "%s%s's reflection^n", GET_CHAR_COLOR_HIGHLIGHT(viewer), GET_CHAR_NAME(viewer));
+    else if (PLR_FLAGGED(viewer, PLR_MATRIX))
+      snprintf(result_string, sizeof(result_string), "%s%s's persona^n", GET_CHAR_COLOR_HIGHLIGHT(viewer), GET_CHAR_NAME(viewer));
+    else
+      snprintf(result_string, sizeof(result_string), "%s%s^n", GET_CHAR_COLOR_HIGHLIGHT(viewer), GET_CHAR_NAME(viewer));
   }
   
   // If the target is not the viewer, we process it as normal.
@@ -405,8 +411,8 @@ const char *generate_display_string_for_character(struct char_data *viewer, stru
     // Switch between display strings based on if the viewer can see and knows the target character.
     if (!CAN_SEE(viewer, target_ch))
       display_string = "someone";
-    else if (found_mem(GET_MEMORY(viewer), target_ch))
-      display_string = CAP(found_mem(GET_MEMORY(viewer), target_ch)->mem);
+    else if ((mem_record = found_mem(GET_MEMORY(viewer), target_ch)))
+      display_string = CAP(mem_record->mem);
     else
       display_string = GET_NAME(target_ch);
       
@@ -421,8 +427,7 @@ char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
 char storage_string[MAX_STRING_LENGTH];
 void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string) {
-  int tag_index;
-  bool has_actor_name = FALSE;
+  int tag_index, i;
   
   // Sanity check.
   if (!actor || !viewer) {
@@ -434,29 +439,40 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   if (!viewer->desc)
     return;
   
-  // Scan the string for the actor's name. This is an easy check. In the process, convert echo_string into something mutable.
+  send_to_char(actor, "\r\nBeginning evaluation for %s.\r\n", GET_CHAR_NAME(viewer));
+  
+  // Scan the string for the actor's name. This is an easy check. In the process, convert echo_string into something mutable, and set i to skip over this new text.
   if (str_str(echo_string, GET_CHAR_NAME(actor)) == NULL) {
-    if (echo_string[0] == '\'' && echo_string[0] == 's')
+    if (echo_string[0] == '\'' && echo_string[0] == 's') {
       snprintf(mutable_echo_string, sizeof(mutable_echo_string), "%s%s", GET_CHAR_NAME(actor), echo_string);
-    else
+      i = strlen(GET_CHAR_NAME(actor));
+    } else {
       snprintf(mutable_echo_string, sizeof(mutable_echo_string), "%s %s", GET_CHAR_NAME(actor), echo_string);
+      i = strlen(GET_CHAR_NAME(actor)) + 1;
+    }
   } else {
     strncpy(mutable_echo_string, echo_string, sizeof(mutable_echo_string) - 1);
+    i = 0;
   }
+  
+  send_to_char(actor, "\r\nAfter first pass, mutable_echo_string is '%s'. Evaluating...\r\n", mutable_echo_string);
   
   // Next, check capitalized words in it for highlighting purposes.
   // TODO: Skip this if they've disabled color or have disabled name highlighting.
-  for (int i = 0; i < (int) strlen(mutable_echo_string); i++) {
-    // Skip anything starting with an @ symbol. Those are handled later.
-    if (mutable_echo_string[i] == '@') {
-      while (isalpha(mutable_echo_string[++i]) && mutable_echo_string[i] != '\0');
-      // Gotta decrement i so it's pointing to the last char of the @-string. Continue will increment it for us.
-      i--;
+  bool quote_mode = FALSE;
+  for (; i < (int) strlen(mutable_echo_string); i++) {
+    send_to_char(actor, "^y%c^n", mutable_echo_string[i]);
+    
+    // Quote mark? Enable quote mode, which stops expansion of names and just does highlighting.
+    if (mutable_echo_string[i] == '"') {
+      quote_mode = !quote_mode;
+      send_to_char(actor, "\r\nQuote mode is now %s.\r\n", quote_mode ? "on" : "off");
       continue;
     }
     
-    // Identify anything starting with a capital letter.
-    if (isupper(mutable_echo_string[i])) {
+    bool at_mode = FALSE;
+    // Identify anything starting with a capital letter or @-symbol.
+    if (isupper(mutable_echo_string[i]) || ((at_mode = (mutable_echo_string[i] == '@')) && isalpha(mutable_echo_string[++i]))) {
       // Read it into a new string until we hit the end of the tag (no more alphabetical letters)
       for (tag_index = i; isalpha(mutable_echo_string[tag_index]); tag_index++)
         tag_check_string[tag_index - i] = mutable_echo_string[tag_index];
@@ -464,111 +480,177 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       // Null-terminate the tag check string.
       tag_check_string[tag_index - i] = '\0';
       
-      // Compare it to bystanders' names.
-      for (struct char_data *target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
-           target_ch; 
-           target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
-      {
-        if (!strn_cmp(GET_CHAR_NAME(target_ch), tag_check_string, strlen(tag_check_string))) {
-          // If the viewer is the actor, just stop-- we don't self-highlight.
-          if (viewer == target_ch && viewer == actor)
-            break;
-            
-          // Copy out the rest of the string-- we're inserting something here.
-          strncpy(storage_string, mutable_echo_string + tag_index, sizeof(storage_string) - 1);
-          
-          // Fetch the representation of this character.
-          const char *display_string = generate_display_string_for_character(viewer, target_ch);
-          
-          // Put it into the mutable echo string, replacing the tag, and then append the rest of the storage string.
-          snprintf(mutable_echo_string + i, sizeof(mutable_echo_string), "%s%s", display_string, storage_string);
-
-          // Since we added X known-good characters starting at i, increase i by X.
-          i += strlen(display_string);
-          
-          // Do no further processing on this tag.
-          break;
-        }
-      }
+      // Short names don't auto-match unless they're complete matches or explicit tags.
+      bool require_exact_match = !at_mode && strlen(tag_check_string) < 5;
       
-      // We're ready to move on. i has been incremented, and all necessary writing has been done.
-    }
-  }
-  
-  // Next, convert @-strings to match people. Much of this code is similar to what's above, just slightly different search logic.
-  /*
-  for (int i = 0; i < (int) strlen(mutable_echo_string); i++) {
-    // Identify anything starting with an '@'.
-    if (mutable_echo_string[i] == '@') {
-      // Read it into a new string until we hit the end of the tag (no more alphabetical letters)
-      for (tag_index = i; isalpha(mutable_echo_string[tag_index]); tag_index++)
-        tag_check_string[tag_index - i] = mutable_echo_string[tag_index];
-        
-      // Null-terminate the tag check string.
-      tag_check_string[tag_index - i] = '\0';
+      if (require_exact_match)
+        send_to_char(actor, "\r\nUsing exact mode for this evaluation due to non-at and low string length %d.", strlen(tag_check_string));
       
-      // I love it when things line up like this.
+      // Compare it to bystanders' memorized names
       struct char_data *target_ch = NULL;
-      struct obj_data *target_obj = NULL;
-      struct veh_data *target_veh = NULL;
-      
-      // Compare it to everyone in the room, looking for matching get_char_name.
       for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
            target_ch; 
            target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
       {
-        if (!strn_cmp(GET_CHAR_NAME(target_ch), tag_check_string, strlen(tag_check_string)))
+        // No such thing as remembering an NPC.
+        if (IS_NPC(target_ch))
+          continue;
+          
+        // Can't target someone you can't see.
+        if (!CAN_SEE(actor, target_ch))
+          continue;
+          
+        struct remem *mem_record = found_mem(GET_MEMORY(actor), target_ch);
+        if (mem_record) {
+          if (require_exact_match) {
+            if (!str_cmp(mem_record->mem, tag_check_string))
+              break;
+          } else {
+            if (!strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string)))
+              break;
+          }
+        }
+      }
+      
+      if (target_ch)
+        send_to_char(actor, "\r\nWith target string '%s', found %s by memory.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+      
+      // Didn't find anyone by that memorized name? Check PC names.
+      if (!target_ch) {
+        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
+             target_ch; 
+             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
+        {
+          // Can't target someone you can't see.
+          if (!CAN_SEE(actor, target_ch))
+            continue;
+            
+          if (require_exact_match) {
+            // In exact match mode, we must match the full and complete name. Happens if the name is too short.
+            if (!str_cmp(GET_NAME(target_ch), tag_check_string))
+              break;
+          } else {
+            // Otherwise, we can match up to the length of tag_check_string.
+            if (!strn_cmp(GET_NAME(target_ch), tag_check_string, strlen(tag_check_string)))
+              break;
+          }
+        }
+        if (target_ch)
+          send_to_char(actor, "\r\nWith target string '%s', found %s by name.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+      }
+      
+      // Didn't find anyone by memory? Check keywords (only if not in exact-match mode).
+      if (!target_ch && !require_exact_match) {
+        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
+             target_ch; 
+             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
+        {
+          // Can't target someone you can't see.
+          if (!CAN_SEE(actor, target_ch))
+            continue;
+            
+          if (str_str(GET_KEYWORDS(target_ch), tag_check_string)) {
+            // Found someone, stop looking.
+            break;
+          }
+        }
+        if (target_ch)
+          send_to_char(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+      }
+      
+      // Found someone.
+      if (target_ch) {
+        // If the viewer is the actor, just stop-- we don't self-highlight.
+        if (viewer == target_ch && viewer == actor)
           break;
-      }
-      
-      // No luck? Compare to everyone, looking for matching remembers.
-      if (!target_ch) {
-        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
-             target_ch; 
-             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
-        {
           
-        }
-      }
-      
-      // No luck? Compare to everyone, looking for matching keywords.
-      if (!target_ch) {
-        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
-             target_ch; 
-             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
-        {
+        // In quote mode, we only do viewer highlights.
+        if (quote_mode && target_ch != viewer)
+          break;
           
-        }
-      }
-      
-      // No luck? Compare to object keywords.
-      
-      // No luck? Compare to vehicle keywords.
-      
-      // No luck? Error out.
-      
-      // Compare it to the viewer's name.
-      if (!strn_cmp(GET_CHAR_NAME(viewer), tag_check_string, strlen(tag_check_string))) {
-        
-        // They're equal! Time to highlight. Copy out the rest of the string-- we're inserting something here.
+        // Copy out the rest of the string-- we're inserting something here.
         strncpy(storage_string, mutable_echo_string + tag_index, sizeof(storage_string) - 1);
         
-        // Insert the color code sequence for the viewing character's speech color.
-        #define GET_CHAR_COLOR_HIGHLIGHT(ch) "^W"
-        snprintf(mutable_echo_string + i, sizeof(mutable_echo_string), "%s%s^n%s", GET_CHAR_COLOR_HIGHLIGHT(viewer), tag_check_string, storage_string);
+        // Fetch the representation of this character.
+        const char *display_string = generate_display_string_for_character(actor, viewer, target_ch);
         
-        // Since we did some additional writing to the string, increment i by the amount of our color string plus color termination.
-        i += strlen(GET_CHAR_COLOR_HIGHLIGHT(ch)) + strlen("^n");
+        // Put it into the mutable echo string, replacing the tag, and then append the rest of the storage string.
+        snprintf(mutable_echo_string + i - (at_mode ? 1 : 0), sizeof(mutable_echo_string), "%s%s", display_string, storage_string);
+  
+        // Since we added X known-good characters starting at i, increase i by X-- but decrement by 1 since we'll be incrementing on loop.
+        i += strlen(display_string) - 1;
       }
       
-      // We're done evaluating the tag check string, so increase i by its length, skipping the trailing 0.
-      i += tag_index - i - 1;
+      else {
+        send_to_char(actor, "\r\nTag string '%s' found nobody.\r\n", tag_check_string);
+        i += strlen(tag_check_string) - 1;
+      }
       
       // We're ready to move on. i has been incremented, and all necessary writing has been done.
     }
   }
-  */
   
+  send_to_char(actor, "\r\nTagging pass of emote done. Now doing speech pass. Combine these later...");
+  
+  // Next pass: Convert speech.
+  bool just_toggled_quote;
+  int language_in_use = -1;
+  for (i = 0; i < (int) strlen(mutable_echo_string); i++) {    
+    // Skip everything that's not speech.
+    if (!quote_mode && mutable_echo_string[i] != '"')
+      continue;
+    
+    // Quote mark? Toggle quote mode, which globs speech together.
+    if (mutable_echo_string[i] == '"') {
+      quote_mode = !quote_mode;
+      just_toggled_quote = TRUE;
+      language_in_use = GET_LANGUAGE(actor);
+      send_to_char(actor, "\r\nQuote mode is now %s.\r\n", quote_mode ? "on" : "off");
+      continue;
+    }
+    
+    // If we got here, we're looking at text inside of a quote.
+    
+    // We only accept parenthetical language as the very first thing in the sentence.
+    // test case: "(gaelic) hello";
+    if (just_toggled_quote && mutable_echo_string[i] == '(') {
+      char language_string[100];
+      int language_idx;
+      // Copy the language into the language_string buffer, stopping at the next parenthetical.
+      for (language_idx = i + 1; 
+           language_idx - i < 99 && mutable_echo_string[language_idx] != ')'; 
+           language_idx++) 
+        language_string[language_idx - i] = mutable_echo_string[language_idx];
+      
+      // Null-terminate language buffer.
+      language_string[language_idx - i] = '\0';
+      
+      // Identify the language in use.
+      int skill_num;
+      for (skill_num = SKILL_ENGLISH; skill_num <= SKILL_FRENCH; skill_num++) {
+        if (!SKILL_IS_LANGUAGE(skill_num))
+          continue;
+          
+        if (!str_cmp(skills[skill_num].name, language_string))
+          break;
+      }
+      
+      // Language identified. TODO: Ensure actor has skill in language.
+      if (SKILL_IS_LANGUAGE(skill_num))
+        language_in_use = skill_num;
+      else
+        language_in_use = GET_LANGUAGE(actor);
+        
+      send_to_char(actor, "\r\nLanguage in use is now %s.\r\n", skills[language_in_use].name);
+        
+      // Snip the language block from the mutable string.
+      strlcpy(storage_string, mutable_echo_string + language_idx, sizeof(storage_string));
+      strlcpy(mutable_echo_string + i + 1, storage_string, sizeof(mutable_echo_string) - strlen(mutable_echo_string));
+    }
+    just_toggled_quote = FALSE;
+    
+    // Now that
+  }
   
   
   // Finally(!), send it to the viewer.
@@ -642,6 +724,27 @@ ACMD(do_new_echo) {
   // Can't speak? No emote speech for you.
   if (strchr(argument, '"') != NULL && !char_can_make_noise(ch))
     return;
+    
+  // Scan for mismatching quotes or mismatching parens. Reject if found.
+  int quotes = 0, parens = 0;
+  for (int i = 0; i < (int) strlen(argument); i++) {
+    if (argument[i] == '"')
+      quotes++;
+    else if (argument[i] == '(')
+      parens++;
+    else if (argument[i] == ')')
+      parens--;
+  }
+  if (quotes % 2) {
+    send_to_char("There's an error in your emote: You need to close a quote.\r\n", ch);
+    return;
+  }
+  if (parens != 0) {
+    send_to_char("There's an error in your emote: You need to close a parenthetical.\r\n", ch);
+    return;
+  }
+  
+  // Scan for oversized words. Word length is limited by your skill level in the language.
   
   // TODO: Handling for the various commands.
   // emote -> echo, no change needed
