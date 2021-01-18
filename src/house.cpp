@@ -89,6 +89,7 @@ bool House_load(struct house_control_rec *house)
     return FALSE;
   if (!(fl.Open(fname, "r+b"))) /* no file found */
     return FALSE;
+  log_vfprintf("Loading house file %s.", fname);
   VTable data;
   data.Parse(&fl);
   fl.Close();

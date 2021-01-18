@@ -4665,6 +4665,8 @@ void load_saved_veh()
     log("SYSERR: Could not open vfile for reading.");
     return;
   }
+  log_vfprintf("Loading vehicle file %s.", fname);
+  
   if (!get_line(fl, buf)) {
     log("SYSERR: Invalid Entry In Vfile.");
     return;
