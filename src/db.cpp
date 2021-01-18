@@ -4730,8 +4730,8 @@ void load_saved_veh()
                (attach = &obj_proto[real_obj])) {
               // The cost of the item was preserved, but nothing else was. Re-attach the item, then subtract its cost.
               // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-              GET_OBJ_VAL(obj, i) = 0;
-              attach_attachment_to_weapon(attach, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
+              GET_OBJ_VAL(obj, q) = 0;
+              attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
             }
         }
         snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
@@ -4920,8 +4920,8 @@ void load_consist(void)
               if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 &&
                   (attach = &obj_proto[real_obj])) {
                 // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-                GET_OBJ_VAL(obj, i) = 0;
-                attach_attachment_to_weapon(attach, obj, NULL, i - ACCESS_ACCESSORY_LOCATION_DELTA);
+                GET_OBJ_VAL(obj, q) = 0;
+                attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
               }
           }
           
