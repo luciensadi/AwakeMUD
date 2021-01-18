@@ -350,6 +350,11 @@ void list_veh_to_char(struct veh_data * list, struct char_data * ch)
 #define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
 
 bool items_are_visually_similar(struct obj_data *first, struct obj_data *second) {
+  if (!first || !second) {
+    mudlog("SYSERR: Received null object to items_are_visually_similar.", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
   // Biggest litmus test: Are they even the same thing?
   if (first->item_number != second->item_number)
     return FALSE;
@@ -1702,11 +1707,18 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
              (GET_OBJ_TYPE(obj) != ITEM_QUIVER) &&
              (GET_OBJ_TYPE(obj) != ITEM_HOLSTER) &&
              (GET_OBJ_TYPE(obj) != ITEM_WORN) &&
-             (GET_OBJ_TYPE(obj) != ITEM_KEYRING))
+             (GET_OBJ_TYPE(obj) != ITEM_KEYRING) &&
+             (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO)
+           )
     send_to_char("There's nothing inside that!\r\n", ch);
   else
   {
-    if (GET_OBJ_TYPE(obj) == ITEM_WORN) {
+    if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+      send_to_char(ch, "It contains %d %s.\r\n", 
+                   GET_AMMOBOX_QUANTITY(obj),
+                   get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
+      return;
+    } else if (GET_OBJ_TYPE(obj) == ITEM_WORN) {
       if (obj->contains) {
         send_to_char(GET_OBJ_NAME(obj), ch);
         switch (bits) {
