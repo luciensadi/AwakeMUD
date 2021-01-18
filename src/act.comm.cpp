@@ -62,7 +62,7 @@ ACMD(do_say)
   FAILURE_CASE(AFF_FLAGGED(ch, AFF_RIG), "You have no mouth.");
   
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
-    if (!has_required_language_ability_for_sentence(ch, argument, language))
+    if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, argument, language))
       return;
       
     if (ch->persona) {
@@ -108,7 +108,7 @@ ACMD(do_say)
   }
   
   // This is down here to handle speech after sayto. Note that matrix has no sayto, so we did it there as well.
-  if (!has_required_language_ability_for_sentence(ch, argument, language))
+  if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, argument, language))
     return;
     
   if (subcmd == SCMD_OSAY) {
@@ -1117,7 +1117,7 @@ ACMD(do_language)
 
   if (!*arg) {
     send_to_char("You know the following languages:\r\n", ch);
-    for (i = SKILL_ENGLISH; i < MAX_SKILLS; i++)
+    for (i = SKILL_ENGLISH; i < MAX_SKILLS; i++) {
       if (!SKILL_IS_LANGUAGE(i))
         continue;
         
@@ -1128,6 +1128,7 @@ ACMD(do_language)
         strcat(buf, "\r\n");
         send_to_char(buf, ch);
       }
+    }
     return;
   }
 

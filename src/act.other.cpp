@@ -1331,7 +1331,10 @@ ACMD(do_skills)
     else
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\nYou know the following languages that start with '%s':\r\n", arg);
     
-    for (i = SKILL_ENGLISH; i <= SKILL_FRENCH; i++) {
+    for (i = SKILL_ENGLISH; i < MAX_SKILLS; i++) {
+      if (!SKILL_IS_LANGUAGE(i))
+        continue;
+        
       if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
         continue;
       
