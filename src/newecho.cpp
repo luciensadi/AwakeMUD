@@ -41,23 +41,20 @@ ACMD(do_highlight) {
    Since linguistic parsing at that level is beyond what I'm willing to write in C (and
    also technically beyond most systems today), we're going with a rudimentary metric
    based on word length. Hey, it's quick.  -- LS */
-int max_allowable_word_length_at_language_level(int level) {
-  if (level == 0)
-    return 0;
-    
+int max_allowable_word_length_at_language_level(int level) {    
   switch (level) {
     case 0: return 0;
     case 1: return 3;
-    case 2: return 5;
-    case 3:
+    case 2: return 4;
+    case 3: return 5;
     case 4: return 6;
-    case 5:
-    case 6: return 7;
-    case 7: 
-    case 8: return 8;
-    case 9: return 10;
-    case 10: return 12;
-    case 11: return 15;
+    case 5: return 7;
+    case 6: return 8;
+    case 7: return 9;
+    case 8: return 10;
+    case 9: return 11;
+    case 10: return 14;
+    case 11: return 18;
     default: return 500;
   }
 }
