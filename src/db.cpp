@@ -4665,7 +4665,6 @@ void load_saved_veh()
     log("SYSERR: Could not open vfile for reading.");
     return;
   }
-  log_vfprintf("Loading vehicle file %s.", fname);
   
   if (!get_line(fl, buf)) {
     log("SYSERR: Invalid Entry In Vfile.");
@@ -4676,6 +4675,7 @@ void load_saved_veh()
   for (int i = 0; i < num_veh; i++) {
     File file;
     snprintf(buf, sizeof(buf), "veh/%07d", i);
+    log_vfprintf("Loading vehicle file %s.", buf);
     if (!(file.Open(buf, "r"))) {
       log_vfprintf("Warning: Unable to open vehfile %s for reading. Skipping.", buf);
       continue;
