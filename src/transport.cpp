@@ -280,7 +280,7 @@ SPECIAL(taxi_sign) {
   }
   
   // Set up our default string.
-  strncpy(buf, "The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n", sizeof(buf) - 1);
+  strncpy(buf, "The keyword for each location is listed after the location name.  ^WSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n", sizeof(buf) - 1);
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
     strncat(buf, "-------------------------------------------------\r\n", sizeof(buf) - strlen(buf) - 1);
   
@@ -327,6 +327,7 @@ SPECIAL(taxi_sign) {
   
   // Finally, tack on a newline and send it all to the character!
   strcat(buf, "\r\n");
+  strlcat(buf, "The keyword for each location is listed after the location name.  ^WWSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n", sizeof(buf));
   send_to_char(buf, ch);
   
   return TRUE;

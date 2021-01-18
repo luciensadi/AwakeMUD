@@ -1457,7 +1457,7 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
       if (totaltime < 0)
         strncat(buf, " AVAILABLE\r\n", sizeof(buf) - strlen(buf) - 1);
       else if (totaltime < 1 && (int)(24 * totaltime) == 0)
-        strncat(buf, " less than one hour", sizeof(buf) - strlen(buf) - 1);
+        strncat(buf, " less than one hour\r\n", sizeof(buf) - strlen(buf) - 1);
       else
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d %s\r\n", totaltime < 1 ? (int)(24 * totaltime) : (int)totaltime,
                 totaltime < 1 ? "hours" : (totaltime == 1 ? "day" : "days"));
