@@ -10,6 +10,8 @@ char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
 char storage_string[MAX_STRING_LENGTH];
 
+bool has_required_language_ability_for_sentence(struct char_data *ch, const char *message, int language_skill);
+
 ACMD(do_highlight) {
   if (!argument) {
     send_to_char("Syntax: highlight <a color code>. Example: highlight ^^Y\r\n", ch);
@@ -625,41 +627,14 @@ ACMD(do_new_echo) {
         return;
       }
       
-      int max_allowable = max_allowable_word_length_at_language_level(GET_SKILL(ch, language_in_use));
+      // Extract the spoken content and check it for length.
+      char *ptr = storage_string;
+      while (i < (int) strlen(argument) && argument[i] != '"')
+        *(ptr++) = argument[i++];
+      *ptr = '\0';
       
-      char current_word[500];
-      char too_long_words[MAX_STRING_LENGTH];
-      memset(too_long_words, '\0', sizeof(too_long_words));
-      
-      char *ptr = current_word;
-      
-      // TODO: Have some words that allow you to break the length-- common names, etc.
-      
-      while (i < (int) strlen(argument)) {
-        if (isalpha(argument[i])) {
-          *(ptr++) = argument[i];
-        }
-        else {
-          *ptr = '\0';
-          if ((int) strlen(current_word) > max_allowable) {
-            if (too_long_words[0] != '\0')
-              strlcat(too_long_words, ", ", sizeof(too_long_words));
-            strlcat(too_long_words, current_word, sizeof(too_long_words));
-          }
-          ptr = current_word;
-        }
-        if (argument[++i] == '"')
-          break;
-      }
-      
-      if (too_long_words[0] != '\0') {
-        send_to_char(ch, "The following words are too long for %s's understanding of %s: '%s'. Please limit your speech to words of length %d or fewer.\r\n",
-                     GET_CHAR_NAME(ch),
-                     skills[language_in_use].name,
-                     too_long_words,
-                     max_allowable);
+      if (!has_required_language_ability_for_sentence(ch, storage_string, language_in_use))
         return;
-      }
     }
   }
   
@@ -673,4 +648,47 @@ ACMD(do_new_echo) {
     if (subcmd != SCMD_AECHO || (IS_ASTRAL(viewer) || IS_DUAL(viewer)))
       send_echo_to_char(ch, viewer, argument, subcmd == SCMD_EMOTE);
   }
+}
+
+// TODO: Have some words that allow you to break the length-- common names, etc.
+bool has_required_language_ability_for_sentence(struct char_data *ch, const char *message, int language_skill) {
+  int max_allowable = max_allowable_word_length_at_language_level(GET_SKILL(ch, language_skill));
+  
+  char current_word[500];
+  char too_long_words[MAX_STRING_LENGTH];
+  memset(too_long_words, '\0', sizeof(too_long_words));
+  
+  char *ptr = current_word;
+  
+  // We specifically use <=, because we know this is null-terminated and we want to act on the null at the end.
+  for (int i = 0; i <= (int) strlen(message); i++) {
+    if (isalpha(message[i])) {
+      *(ptr++) = message[i];
+    }
+    else {
+      *ptr = '\0';
+      if ((int) strlen(current_word) > max_allowable) {
+        if (too_long_words[0] != '\0')
+          strlcat(too_long_words, ", ", sizeof(too_long_words));
+        strlcat(too_long_words, current_word, sizeof(too_long_words));
+      }
+      ptr = current_word;
+    }
+    
+    if (message[i] == '"')
+      break;
+  }
+
+  if (too_long_words[0] != '\0') {
+    send_to_char(ch, 
+                 "The following words are too long for %s's understanding of %s: '%s'.\r\n"
+                 "Please limit your speech to words of length %d or less.\r\n",
+                 GET_CHAR_NAME(ch),
+                 skills[language_skill].name,
+                 too_long_words,
+                 max_allowable);
+    return FALSE;
+  }
+  
+  return TRUE;
 }

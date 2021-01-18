@@ -737,10 +737,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->photo = str_dup(row[4]);
         for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
-        if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
+        if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
           add_phone_to_list(obj);
-        else if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
-          GET_OBJ_VAL(obj, 9) = 1;
         if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED)
           GET_OBJ_VAL(obj, 4) = 0;
         if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4))
@@ -807,7 +805,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           
         switch (GET_OBJ_TYPE(obj)) {
           case ITEM_PHONE:
-            if (GET_OBJ_VAL(obj, 2))
+            if (GET_ITEM_PHONE_SWITCHED_ON(obj))
               add_phone_to_list(obj);
             // TODO: What was the purpose of the broken if check to set the phone's value 9 to 1?
             break;

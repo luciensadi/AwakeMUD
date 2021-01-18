@@ -120,7 +120,7 @@ bool House_load(struct house_control_rec *house)
         snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
       }
-      if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
+      if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
         add_phone_to_list(obj);
       int real_obj;
       if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
