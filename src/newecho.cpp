@@ -35,6 +35,31 @@ ACMD(do_highlight) {
   playerDB.SaveChar(ch);
 }
 
+/* Technically, language is supposed to restrict the types of things you can understand.
+   Since linguistic parsing at that level is beyond what I'm willing to write in C (and
+   also technically beyond most systems today), we're going with a rudimentary metric
+   based on word length. Hey, it's quick.  -- LS */
+int max_allowable_word_length_at_language_level(int level) {
+  if (level == 0)
+    return 0;
+    
+  switch (level) {
+    case 0: return 0;
+    case 1: return 3;
+    case 2: return 5;
+    case 3:
+    case 4: return 6;
+    case 5:
+    case 6: return 7;
+    case 7: 
+    case 8: return 8;
+    case 9: return 10;
+    case 10: return 12;
+    case 11: return 15;
+    default: return 500;
+  }
+}
+
 const char *generate_display_string_for_character(struct char_data *actor, struct char_data *viewer, struct char_data *target_ch, bool terminate_with_actors_color_code) {
   static char result_string[MAX_STRING_LENGTH];
   struct remem *mem_record;
@@ -104,7 +129,7 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
 
 //#define NEW_EMOTE_DEBUG
 char newecho_debug_buf[MAX_STRING_LENGTH];
-void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string) {
+void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string, bool require_char_name) {
   int tag_index, i;
   struct char_data *target_ch = NULL;
   
@@ -123,7 +148,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 #endif
   
   // Scan the string for the actor's name. This is an easy check. In the process, convert echo_string into something mutable, and set i to skip over this new text.
-  if (strstr(echo_string, GET_CHAR_NAME(actor)) == NULL && str_str(echo_string, "@self") == NULL) {
+  if (require_char_name && strstr(echo_string, GET_CHAR_NAME(actor)) == NULL && str_str(echo_string, "@self") == NULL) {
     if (echo_string[0] == '\'' && echo_string[1] == 's') {
       snprintf(mutable_echo_string, sizeof(mutable_echo_string), "@self%s", echo_string);
     } else {
@@ -381,10 +406,10 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       else
         language_in_use = IS_NPC(actor) ? SKILL_ENGLISH : GET_LANGUAGE(actor);
         
-//#ifdef NEW_EMOTE_DEBUG_SPEECH
+#ifdef NEW_EMOTE_DEBUG_SPEECH
       snprintf(newecho_debug_buf, sizeof(newecho_debug_buf), "\r\nLanguage in use for $n is now %s (target: '%s').\r\n", skills[language_in_use].name, language_string);
       act(newecho_debug_buf, FALSE, actor, 0, 0, TO_ROLLS);
-//#endif
+#endif
         
       // Snip the language block from the mutable string. Handles a single space after the closing parens.
       if (language_idx + 1 < (int) strlen(mutable_echo_string) && isspace(mutable_echo_string[language_idx + 1]))
@@ -545,8 +570,100 @@ ACMD(do_new_echo) {
     return;
   }
   
-  // TODO: Scan for oversized words. Word length is limited by your skill level in the language.
+  // Scan the emote for language values. You can only use languages you know, and only up to certain word lengths.
+  if (!IS_NPC(ch)) {
+    int language_in_use = GET_LANGUAGE(ch);
+    for (int i = 0; i < (int) strlen(argument); i++) {
+      // Skip everything that's not speech.
+      if (argument[i] != '"')
+        continue;
+      
+      // We only accept parenthetical language as the very first thing in the sentence.
+      if (argument[++i] == '(') {
+        i++;
+        
+        char language_string[100];
+        int language_idx;
+        
+        // Copy the language into the language_string buffer, stopping at the next parenthetical.
+        for (language_idx = i; 
+             language_idx - i < (int) sizeof(language_string) - 1 && argument[language_idx] != ')'; 
+             language_idx++) 
+          language_string[language_idx - i] = argument[language_idx];
+        
+        // Null-terminate language buffer.
+        language_string[language_idx - i] = '\0';
+        
+        // We expect that the M_E_S pointer is at the closing parens. If this is not true, we ran out of buf
+        // space-- that means this is not a language! Just bail out.
+        if (argument[language_idx] != ')') {
+          continue;
+        }
+        
+        // Identify the language in use.
+        int skill_num;
+        for (skill_num = SKILL_ENGLISH; skill_num < MAX_SKILLS; skill_num++) {
+          if (!SKILL_IS_LANGUAGE(skill_num))
+            continue;
+            
+          if (!str_cmp(skills[skill_num].name, language_string))
+            break;
+        }
+        
+        // Language identified.
+        if (SKILL_IS_LANGUAGE(skill_num)) {
+          language_in_use = skill_num;
+          i = language_idx + 1;
+        } else {
+          send_to_char(ch, "'%s' is not a language.\r\n", language_string);
+          return;
+        }
+      }
+      
+      if (GET_SKILL(ch, language_in_use) <= 0) {
+        send_to_char(ch, "You don't know how to speak %s.\r\n", skills[language_in_use].name);
+        return;
+      }
+      
+      int max_allowable = max_allowable_word_length_at_language_level(GET_SKILL(ch, language_in_use));
+      
+      char current_word[500];
+      char too_long_words[MAX_STRING_LENGTH];
+      memset(too_long_words, '\0', sizeof(too_long_words));
+      
+      char *ptr = current_word;
+      
+      // TODO: Have some words that allow you to break the length-- common names, etc.
+      
+      while (i < (int) strlen(argument)) {
+        if (isalpha(argument[i])) {
+          *(ptr++) = argument[i];
+        }
+        else {
+          *ptr = '\0';
+          if ((int) strlen(current_word) > max_allowable) {
+            if (too_long_words[0] != '\0')
+              strlcat(too_long_words, ", ", sizeof(too_long_words));
+            strlcat(too_long_words, current_word, sizeof(too_long_words));
+          }
+          ptr = current_word;
+        }
+        if (argument[++i] == '"')
+          break;
+      }
+      
+      if (too_long_words[0] != '\0') {
+        send_to_char(ch, "The following words are too long for %s's understanding of %s: '%s'. Please limit your speech to words of length %d or fewer.\r\n",
+                     GET_CHAR_NAME(ch),
+                     skills[language_in_use].name,
+                     too_long_words,
+                     max_allowable);
+        return;
+      }
+    }
+  }
   
+  // All checks done, we're clear to emote.  
   
   // Iterate over the viewers in the room.
   for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people; 
@@ -554,6 +671,6 @@ ACMD(do_new_echo) {
        viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh) {
     // If the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
     if (subcmd != SCMD_AECHO || (IS_ASTRAL(viewer) || IS_DUAL(viewer)))
-      send_echo_to_char(ch, viewer, argument);
+      send_echo_to_char(ch, viewer, argument, subcmd == SCMD_EMOTE);
   }
 }
