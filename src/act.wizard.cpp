@@ -4536,7 +4536,7 @@ ACMD(do_set)
       SET_CLEANUP(false);
       return;
     }
-    RANGE(0, 53);
+    RANGE(0, NUM_TOTEMS - 1);
     GET_TOTEM(vict) = value;
     break;
   case 48:

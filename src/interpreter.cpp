@@ -197,6 +197,7 @@ ACMD_DECLARE(do_hide);
 ACMD_DECLARE(do_hit);
 ACMD_DECLARE(do_highlight);
 ACMD_DECLARE(do_house);
+ACMD_DECLARE(do_hp);
 ACMD_DECLARE(do_iclist);
 ACMD_DECLARE(do_ignore);
 ACMD_DECLARE(do_ilist);
@@ -583,6 +584,7 @@ struct command_info cmd_info[] =
     { "house"    , POS_LYING   , do_house    , 0, 0 },
     { "ht"       , POS_DEAD    , do_gen_comm , 0, SCMD_HIREDTALK },
     { "hts"      , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_HIRED },
+    { "hp"       , POS_DEAD    , do_hp       , 0, 0 },
 
     { "inventory", POS_DEAD    , do_inventory, 0, 0 },
     { "install"  , POS_RESTING , do_put      , 0, SCMD_INSTALL },
@@ -3054,7 +3056,6 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
-  COMMAND_ALIAS("pickup", "get");
   COMMAND_ALIAS("yes", "nod");
   COMMAND_ALIAS("setup", "unpack");
   COMMAND_ALIAS("ability", "abilities");
@@ -3090,6 +3091,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("pick", "bypass");
   COMMAND_ALIAS("hack", "bypass");
   COMMAND_ALIAS("poen", "open");
+  
+  // Must be after 'pick'
+  COMMAND_ALIAS("pickup", "get");
   
   // Commands from other games.
   COMMAND_ALIAS("bamfin", "poofin");

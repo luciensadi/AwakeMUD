@@ -98,8 +98,16 @@ ACMD(do_pockets) {
         bool found_something = FALSE;
         for (ammobox = ch->carrying; ammobox; ammobox = next_obj) {
           next_obj = ammobox->next_content;
-          if (GET_OBJ_TYPE(ammobox) == ITEM_GUN_AMMO && GET_AMMOBOX_QUANTITY(ammobox) > 0)
-            found_something |= ammobox_to_bulletpants(ch, ammobox);
+          
+          // Non-box or empty.
+          if (GET_OBJ_TYPE(ammobox) != ITEM_GUN_AMMO || GET_AMMOBOX_QUANTITY(ammobox) <= 0)
+            continue;
+          
+          // Unfinished box.
+          if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) || GET_AMMOBOX_TIME_TO_COMPLETION(ammobox) || GET_AMMOBOX_CREATOR(ammobox))
+            continue;
+          
+          found_something |= ammobox_to_bulletpants(ch, ammobox);
         }
         if (!found_something)
           send_to_char("You don't have any ammoboxes to fill your pockets from.\r\n", ch);
@@ -117,6 +125,12 @@ ACMD(do_pockets) {
         
         if ((quantity = GET_AMMOBOX_QUANTITY(ammobox)) <= 0) {
           send_to_char(ch, "%s is already empty.\r\n", capitalize(GET_OBJ_NAME(ammobox)));
+          return;
+        }
+        
+        // Unfinished box.
+        if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) || GET_AMMOBOX_TIME_TO_COMPLETION(ammobox) || GET_AMMOBOX_CREATOR(ammobox)) {
+          send_to_char(ch, "You'll need to finish building %s first.\r\n", GET_OBJ_NAME(ammobox));
           return;
         }
         
@@ -272,6 +286,12 @@ ACMD(do_pockets) {
     if (!ammobox) {
       send_to_char(ch, "You don't have an ammo box containing %d %s.\r\n",
                    quantity, get_ammo_representation(weapon, ammotype, quantity));
+      return;
+    }
+    
+    // Unfinished box.
+    if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) || GET_AMMOBOX_TIME_TO_COMPLETION(ammobox) || GET_AMMOBOX_CREATOR(ammobox)) {
+      send_to_char(ch, "You'll need to finish building %s first.\r\n", GET_OBJ_NAME(ammobox));
       return;
     }
     
@@ -683,6 +703,11 @@ bool ammobox_to_bulletpants(struct char_data *ch, struct obj_data *ammobox) {
   
   if (GET_OBJ_TYPE(ammobox) != ITEM_GUN_AMMO || (quantity = GET_AMMOBOX_QUANTITY(ammobox)) <= 0) {
     mudlog("SYSERR: Invalid ammobox to ammobox_to_bulletpants.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) || GET_AMMOBOX_TIME_TO_COMPLETION(ammobox) || GET_AMMOBOX_CREATOR(ammobox)) {
+    mudlog("SYSERR: Unfinished ammobox given to ammobox_to_bulletpants.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   

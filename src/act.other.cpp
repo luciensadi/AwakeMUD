@@ -1158,22 +1158,22 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "movegag")) {
       result = PRF_TOG_CHK(ch, PRF_MOVEGAG);
       mode = 6;
-    } else if (is_abbrev(argument, "noradio") && IS_SENATOR(ch)) {
+    } else if ((is_abbrev(argument, "noradio") || is_abbrev(argument, "radio")) && IS_SENATOR(ch)) {
       result = PRF_TOG_CHK(ch, PRF_NORADIO);
       mode = 7;
     } else if (is_abbrev(argument, "nohassle") && IS_SENATOR(ch)) {
       result = PRF_TOG_CHK(ch, PRF_NOHASSLE);
       mode = 8;
-    } else if (is_abbrev(argument, "nonewbie") && (IS_SENATOR(ch) || PRF_FLAGGED(ch, PRF_NEWBIEHELPER))) {
+    } else if (is_abbrev(argument, "nonewbie") || is_abbrev(argument, "newbie")) {
       result = PRF_TOG_CHK(ch, PRF_NONEWBIE);
       mode = 9;
-    } else if (is_abbrev(argument, "noshout")) {
+    } else if (is_abbrev(argument, "noshout") || is_abbrev(argument, "shout")) {
       result = PRF_TOG_CHK(ch, PRF_DEAF);
       mode = 10;
-    } else if (is_abbrev(argument, "notell") && IS_SENATOR(ch)) {
+    } else if ((is_abbrev(argument, "notell") || is_abbrev(argument, "tell")) && IS_SENATOR(ch)) {
       result = PRF_TOG_CHK(ch, PRF_NOTELL);
       mode = 11;
-    } else if (is_abbrev(argument, "ooc")) {
+    } else if (is_abbrev(argument, "ooc") || is_abbrev(argument, "noooc")) {
       result = PRF_TOG_CHK(ch, PRF_NOOOC);
       mode = 18;
     } else if (is_abbrev(argument, "menugag")) {
@@ -1214,10 +1214,10 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "autoassist")) {
       result = PRF_TOG_CHK(ch, PRF_ASSIST);
       mode = 20;
-    } else if (is_abbrev(argument, "norpe")) {
+    } else if (is_abbrev(argument, "norpe") || is_abbrev(argument, "rpe")) {
       result = PRF_TOG_CHK(ch, PRF_NORPE);
       mode = 21;
-    } else if (is_abbrev(argument, "nohired")) {
+    } else if (is_abbrev(argument, "nohired") || is_abbrev(argument, "hired")) {
       result = PRF_TOG_CHK(ch, PRF_NOHIRED);
       mode = 22;
     } else if (is_abbrev(argument, "pacify") && IS_SENATOR(ch)) {

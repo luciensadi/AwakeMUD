@@ -350,6 +350,11 @@ void list_veh_to_char(struct veh_data * list, struct char_data * ch)
 #define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
 
 bool items_are_visually_similar(struct obj_data *first, struct obj_data *second) {
+  if (!first || !second) {
+    mudlog("SYSERR: Received null object to items_are_visually_similar.", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
   // Biggest litmus test: Are they even the same thing?
   if (first->item_number != second->item_number)
     return FALSE;
@@ -599,7 +604,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         }
       }
       if (IS_DUAL(i) && dual)
-        send_to_char(ch, "%s is dual.\r\n", CAP(HSSH(i)));
+        send_to_char(ch, "%s %s dual.\r\n", CAP(HSSH(i)), ISARE(i));
     }
   }
   if (!IS_NPC(i) && GET_LEVEL(ch) > LVL_MORTAL && i->player.background)
@@ -1702,11 +1707,18 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
              (GET_OBJ_TYPE(obj) != ITEM_QUIVER) &&
              (GET_OBJ_TYPE(obj) != ITEM_HOLSTER) &&
              (GET_OBJ_TYPE(obj) != ITEM_WORN) &&
-             (GET_OBJ_TYPE(obj) != ITEM_KEYRING))
+             (GET_OBJ_TYPE(obj) != ITEM_KEYRING) &&
+             (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO)
+           )
     send_to_char("There's nothing inside that!\r\n", ch);
   else
   {
-    if (GET_OBJ_TYPE(obj) == ITEM_WORN) {
+    if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+      send_to_char(ch, "It contains %d %s.\r\n", 
+                   GET_AMMOBOX_QUANTITY(obj),
+                   get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
+      return;
+    } else if (GET_OBJ_TYPE(obj) == ITEM_WORN) {
       if (obj->contains) {
         send_to_char(GET_OBJ_NAME(obj), ch);
         switch (bits) {
@@ -2989,6 +3001,10 @@ const char *get_plaintext_score_health(struct char_data *ch) {
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Physical damage overflow: %d\r\n", (int)(physical / 100) * -1);
   
   return buf2;
+}
+
+ACMD(do_hp) {
+  get_plaintext_score_health(ch);
 }
 
 const char *get_plaintext_score_stats(struct char_data *ch) {
@@ -4602,7 +4618,7 @@ ACMD(do_commands)
   }
   
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
-    for (no = 1, cmd_num = 1;;cmd_num++) {
+    for (no = 1, cmd_num = 1; *mtx_info[cmd_num].command != '\n';cmd_num++) {
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, mtx_info[cmd_num].command))
         continue;
@@ -4618,7 +4634,7 @@ ACMD(do_commands)
           }
     }
   } else if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
-    for (no = 1, cmd_num = 1;;cmd_num++) {
+    for (no = 1, cmd_num = 1; *rig_info[cmd_num].command != '\n';cmd_num++) {
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, rig_info[cmd_num].command))
         continue;

@@ -704,7 +704,7 @@ SPECIAL(johnson)
 
   bool need_to_speak = FALSE;
   bool need_to_act = FALSE;
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) {
     if (str_str(argument, "quit"))
       comm = CMD_JOB_QUIT;
     else if (str_str(argument, "collect") || str_str(argument, "complete") || str_str(argument, "done") || str_str(argument, "finish") || str_str(argument, "pay"))
@@ -887,7 +887,7 @@ SPECIAL(johnson)
       }
       
       // Precondition: You may not have an active quest.
-      if (GET_QUEST(ch)) {
+      if (GET_QUEST(ch)) {          
         do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
         send_to_char("(OOC note: You're currently on another run. You can hit RECAP to see the details for it.)\r\n", ch);
         return TRUE;
@@ -962,6 +962,10 @@ SPECIAL(johnson)
       
       // Precondition: You may not have an active quest.
       if (GET_QUEST(ch)) {
+        // If it's the same quest, just bail out without a message.
+        if (GET_QUEST(ch) == GET_SPARE2(johnson))
+          return TRUE;
+          
         do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
         send_to_char("(OOC note: You're currently on another run. You can hit RECAP to see the details for it.)\r\n", ch);
         return TRUE;

@@ -2046,7 +2046,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
   
   // If they're in an invis staffer above your level, no.
-  if (GET_INVIS_LEV(vict) > 0 && !access_level(ch, GET_INVIS_LEV(vict)))
+  if (!IS_NPC(vict) && !IS_NPC(ch) && GET_INVIS_LEV(vict) > 0 && !access_level(ch, GET_INVIS_LEV(vict)))
     return FALSE;
   
   // Staff members see almost everything.
