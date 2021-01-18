@@ -1671,14 +1671,13 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
       if (GET_MOB_SPEC2(vict) == fence || GET_MOB_SPEC2(vict) == hacker || GET_MOB_SPEC2(vict) == fixer || GET_MOB_SPEC2(vict) == mageskill_herbie)
         return 1;
     }
-    else {
-      act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
-      obj_from_char(obj);
-      if (vict->in_room)
-        obj_to_room(obj, vict->in_room);
-      else
-        obj_to_veh(obj, vict->in_veh);
-    }
+  
+    act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
+    obj_from_char(obj);
+    if (vict->in_room)
+      obj_to_room(obj, vict->in_room);
+    else
+      obj_to_veh(obj, vict->in_veh);
   }
 
   return 1;
