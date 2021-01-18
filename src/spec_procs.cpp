@@ -2893,7 +2893,9 @@ SPECIAL(bank)
     else
       send_to_char("Your account is empty!\r\n", ch);
     return 1;
-  } else if (CMD_IS("deposit")) {
+  } 
+  
+  else if (CMD_IS("deposit")) {
     if ((amount = atoi(argument)) <= 0) {
       send_to_char("How much do you want to deposit?\r\n", ch);
       return 1;
@@ -2909,7 +2911,9 @@ SPECIAL(bank)
     send_to_char(ch, "You deposit %d nuyen.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
-  } else if (CMD_IS("withdraw")) {
+  } 
+  
+  else if (CMD_IS("withdraw")) {
     if ((amount = atoi(argument)) <= 0) {
       send_to_char("How much do you want to withdraw?\r\n", ch);
       return 1;
@@ -2925,7 +2929,9 @@ SPECIAL(bank)
     send_to_char(ch, "The ATM ejects %d nuyen and updates your bank account.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
-  } else if (CMD_IS("transfer")) {
+  } 
+  
+  else if (CMD_IS("transfer")) {
     any_one_arg(any_one_arg(argument, buf), buf1);
     if ( ((amount = atoi(buf)) <= 0) && (str_cmp(buf,"all")) ) {
       send_to_char("How much do you want to transfer?\r\n", ch);
@@ -2943,6 +2949,10 @@ SPECIAL(bank)
         act("$p doesn't even have that much!", FALSE, ch, credstick, 0, TO_CHAR);
         return TRUE;
       }
+      if (amount == 0) {
+        send_to_char(ch, "%s is already empty.\r\n", capitalize(GET_OBJ_NAME(credstick)));
+        return TRUE;
+      }
       GET_OBJ_VAL(credstick, 0) -= amount;
       GET_BANK(ch) += amount;
       snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to your account.", amount);
@@ -2952,6 +2962,10 @@ SPECIAL(bank)
       }
       if (GET_BANK(ch) < amount) {
         send_to_char("You don't have that much deposited!\r\n", ch);
+        return TRUE;
+      }
+      if (amount == 0) {
+        send_to_char("You don't have any nuyen in the bank.\r\n", ch);
         return TRUE;
       }
       GET_OBJ_VAL(credstick, 0) += amount;
@@ -2964,7 +2978,9 @@ SPECIAL(bank)
     act(buf, FALSE, ch, credstick, 0, TO_CHAR);
     act("$n accesses the ATM.", TRUE, ch, 0, 0, TO_ROOM);
     return TRUE;
-  } else if (CMD_IS("wire")) {
+  } 
+  
+  else if (CMD_IS("wire")) {
     any_one_arg(any_one_arg(argument, buf), buf1);
     if ((amount = atoi(buf)) <= 0)
       send_to_char("How much do you wish to wire?\r\n", ch);

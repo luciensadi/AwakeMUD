@@ -2586,14 +2586,14 @@ struct obj_data *get_first_credstick(struct char_data *ch, const char *arg)
   struct obj_data *obj;
   int i;
   
+  for (obj = ch->carrying; obj; obj = obj->next_content)
+    if (belongs_to(ch, obj) && isname(arg, obj->text.keywords))
+      return obj;
+      
   for (i = 0; i < NUM_WEARS - 1; i++)
     if (GET_EQ(ch, i) && belongs_to(ch, GET_EQ(ch, i)) &&
         isname(arg, GET_EQ(ch, i)->text.keywords))
       return GET_EQ(ch, i);
-  
-  for (obj = ch->carrying; obj; obj = obj->next_content)
-    if (belongs_to(ch, obj) && isname(arg, obj->text.keywords))
-      return obj;
   
   return NULL;
 }
