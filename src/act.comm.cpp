@@ -65,6 +65,8 @@ ACMD(do_say)
     if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, argument, language))
       return;
       
+    // We specifically do not use color highlights in the Matrix. Some people want their mtx persona distinct from their normal one.
+      
     if (ch->persona) {
       // Send the self-referencing message to the decker and store it in their history.
       snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", capitalize(argument));
@@ -112,6 +114,7 @@ ACMD(do_say)
     return;
     
   if (subcmd == SCMD_OSAY) {
+    // No color highlights for osay.
     snprintf(buf, sizeof(buf), "%s says ^mOOCly^n, \"%s^n\"\r\n",GET_NAME(ch), capitalize(argument));
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
       // Replicate act() in a way that lets us capture the message.
@@ -135,8 +138,13 @@ ACMD(do_say)
       }
       
       if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-        snprintf(buf, sizeof(buf), "$z says%s in %s, \"%s^n\"",
-                (to ? buf2 : ""), skills[GET_LANGUAGE(ch)].name, capitalize(argument));
+        snprintf(buf, sizeof(buf), "$z says%s in %s, \"%s%s%s^n\"",
+                (to ? buf2 : ""), 
+                skills[GET_LANGUAGE(ch)].name, 
+                GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                capitalize(argument),
+                ispunct(get_final_character_from_string(argument)) ? "" : "."
+              );
       else
         snprintf(buf, sizeof(buf), "$z speaks%s in a language you don't understand.", (to ? buf2 : ""));
         
@@ -161,7 +169,11 @@ ACMD(do_say)
       if (to)
         snprintf(buf2, MAX_STRING_LENGTH, " to %s", CAN_SEE(ch, to) ? (found_mem(GET_MEMORY(ch), to) ?
                                                    CAP(found_mem(GET_MEMORY(ch), to)->mem) : GET_NAME(to)) : "someone");
-      snprintf(buf, sizeof(buf), "You say%s, \"%s^n\"\r\n", (to ? buf2 : ""), capitalize(argument));
+      snprintf(buf, sizeof(buf), "You say%s, \"%s%s%s^n\"\r\n", 
+               (to ? buf2 : ""), 
+               GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(argument),
+               ispunct(get_final_character_from_string(argument)) ? "" : ".");
       send_to_char(buf, ch);
       store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     }
@@ -184,7 +196,9 @@ ACMD(do_exclaim)
   if (!has_required_language_ability_for_sentence(ch, argument, language))
     return;
   
-  snprintf(buf, sizeof(buf), "$z ^nexclaims, \"%s!^n\"", capitalize(argument));
+  snprintf(buf, sizeof(buf), "$z ^nexclaims, \"%s%s!^n\"", 
+           GET_CHAR_COLOR_HIGHLIGHT(ch), 
+           capitalize(argument));
   
   for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); 
        tmp; 
@@ -200,7 +214,9 @@ ACMD(do_exclaim)
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else {
-    snprintf(buf, sizeof(buf), "You exclaim, \"%s!^n\"\r\n", capitalize(argument));
+    snprintf(buf, sizeof(buf), "You exclaim, \"%s%s!^n\"\r\n", 
+             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(argument));
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
   }
@@ -303,7 +319,9 @@ ACMD(do_ask)
   if (!has_required_language_ability_for_sentence(ch, argument, language))
     return;
   
-  snprintf(buf, sizeof(buf), "$z asks, \"%s?^n\"", capitalize(argument));
+  snprintf(buf, sizeof(buf), "$z asks, \"%s%s?^n\"", 
+           GET_CHAR_COLOR_HIGHLIGHT(ch), 
+           capitalize(argument));
   
   for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
     // Replicate act() in a way that lets us capture the message.
@@ -317,7 +335,9 @@ ACMD(do_ask)
     send_to_char(OK, ch);
   else {
     // TODO
-    snprintf(buf, sizeof(buf), "You ask, \"%s?^n\"\r\n", capitalize(argument));
+    snprintf(buf, sizeof(buf), "You ask, \"%s%s?^n\"\r\n", 
+             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(argument));
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
   }
@@ -376,12 +396,19 @@ ACMD(do_spec_comm)
       return;
     }
     
-    snprintf(buf, sizeof(buf), "You lean out towards $N and say, \"%s\"", capitalize(buf2));
+    snprintf(buf, sizeof(buf), "You lean out towards $N and say, \"%s%s%s\"", 
+             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(buf2),
+             ispunct(get_final_character_from_string(buf2)) ? "" : ".");
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_CHAR));
     
     if (IS_NPC(vict) || GET_SKILL(vict, language) > 0)
-      snprintf(buf, sizeof(buf), "From within %s^n, $z says to you in %s, \"%s^n\"\r\n",
-              GET_VEH_NAME(last_veh), skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
+      snprintf(buf, sizeof(buf), "From within %s^n, $z says to you in %s, \"%s%s%s^n\"\r\n",
+              GET_VEH_NAME(last_veh), 
+              skills[GET_LANGUAGE(ch)].name, 
+              GET_CHAR_COLOR_HIGHLIGHT(ch), 
+              capitalize(buf2),
+              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
     else
       snprintf(buf, sizeof(buf), "From within %s^n, $z speaks in a language you don't understand.\r\n", decapitalize_a_an(GET_VEH_NAME(last_veh)));
       
@@ -417,12 +444,20 @@ ACMD(do_spec_comm)
       return;
     }
 
-    snprintf(buf, sizeof(buf), "You lean into %s and say, \"%s\"", decapitalize_a_an(GET_VEH_NAME(veh)), capitalize(buf2));
+    snprintf(buf, sizeof(buf), "You lean into %s and say, \"%s%s%s\"", 
+             decapitalize_a_an(GET_VEH_NAME(veh)), 
+             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(buf2),
+             ispunct(get_final_character_from_string(buf2)) ? "" : ".");
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     for (vict = veh->people; vict; vict = vict->next_in_veh) {
       if (IS_NPC(vict) || GET_SKILL(vict, language) > 0)
-        snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s^n\"\r\n", skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
+        snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s%s%s^n\"\r\n", 
+                 skills[GET_LANGUAGE(ch)].name, 
+                 GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                 capitalize(buf2),
+                 ispunct(get_final_character_from_string(buf2)) ? "" : ".");
       else
         snprintf(buf, sizeof(buf), "From outside, $z^n speaks into the vehicle in a language you don't understand.\r\n");
       
@@ -432,7 +467,12 @@ ACMD(do_spec_comm)
   }
   
   if (IS_NPC(vict) || GET_SKILL(vict, language) > 0)
-    snprintf(buf, sizeof(buf), "$z %s you in %s, \"%s^n\"\r\n", action_plur, skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
+    snprintf(buf, sizeof(buf), "$z %s you in %s, \"%s%s%s^n\"\r\n", 
+             action_plur, 
+             skills[GET_LANGUAGE(ch)].name, 
+             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(buf2),
+             ispunct(get_final_character_from_string(buf2)) ? "" : ".");
   else
     snprintf(buf, sizeof(buf), "$z %s you something in a language you don't understand.\r\n", action_plur);
   
@@ -441,7 +481,11 @@ ACMD(do_spec_comm)
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else {
-    snprintf(buf, sizeof(buf), "You %s $N, \"%s%s^n\"", action_sing, capitalize(buf2), (subcmd == SCMD_WHISPER) ? "" : "?");
+    snprintf(buf, sizeof(buf), "You %s $N, \"%s%s%s^n\"", 
+             action_sing, 
+             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(buf2), 
+             (subcmd == SCMD_WHISPER) ? (ispunct(get_final_character_from_string(buf2)) ? "" : ".") : "?");
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_CHAR));
   }
   
@@ -584,6 +628,8 @@ ACMD(do_radio)
 
 ACMD(do_broadcast)
 {
+  // No color highlights over the radio. It's already colored.
+  
   struct obj_data *obj, *radio = NULL;
   struct descriptor_data *d;
   int i, j, frequency, to_room, crypt, decrypt;
@@ -682,19 +728,19 @@ ACMD(do_broadcast)
       break;
     }
     
-  snprintf(buf3, MAX_STRING_LENGTH, "*static* %s", buf4);
+  snprintf(buf3, MAX_STRING_LENGTH, "*static* %s%s", capitalize(buf4), ispunct(get_final_character_from_string(buf4)) ? "" : ".");
   if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NO_RADIO))
     strcpy(argument, buf3);
 
   
   if ( frequency > 0 ) {
     if(crypt) {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, crypt, capitalize(argument));
+      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s%s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
       snprintf(buf2, MAX_STRING_LENGTH, "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***^N", frequency, crypt);
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[%d MHz, Unknown](CRYPTO-%d): %s", frequency, crypt, capitalize(buf3));
+      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[%d MHz, Unknown](CRYPTO-%d): %s", frequency, crypt, buf3);
       snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown](CRYPTO-%d): (something incoherent...)^N", voice, frequency, crypt);
     } else {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s]: %s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, capitalize(argument));
+      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s]: %s%s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
       snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown]: %s^N", voice, frequency, capitalize(argument));
       snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[%d MHz, Unknown]: %s", frequency, capitalize(buf3));
       snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown]: (something incoherent...)^N", voice, frequency);
@@ -702,12 +748,12 @@ ACMD(do_broadcast)
 
   } else {
     if(crypt) {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[GET_LANGUAGE(ch)].name, crypt, capitalize(argument));
+      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s%s^N", voice, skills[GET_LANGUAGE(ch)].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
       snprintf(buf2, MAX_STRING_LENGTH, "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***^N", crypt);
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown](CRYPTO-%d): %s", crypt, capitalize(buf3));
+      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown](CRYPTO-%d): %s", crypt, buf3);
       snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown](CRYPTO-%d): (something incoherent...)^N", voice, crypt);
     } else {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[GET_LANGUAGE(ch)].name, capitalize(argument));
+      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s]: %s%s^N", voice, skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
       snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown]: %s^N", voice, capitalize(argument));
       snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown]: %s", capitalize(buf3));
       snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown]: (something incoherent...)^N", voice);
@@ -814,6 +860,7 @@ extern int _NO_OOC_;
 
 ACMD(do_gen_comm)
 {
+  // No color highlights over these channels. They're either OOC or already colored.
   struct veh_data *veh;
   struct descriptor_data *i;
   struct descriptor_data *d;
@@ -942,7 +989,7 @@ ACMD(do_gen_comm)
     for (tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
       if (tmp != ch) {
         if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-          snprintf(buf, sizeof(buf), "%s$z shouts in %s, \"%s%s\"^n", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, capitalize(argument), com_msgs[subcmd][3]);
+          snprintf(buf, sizeof(buf), "%s$z shouts in %s, \"%s%s%s\"^n", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : "!", com_msgs[subcmd][3]);
         else
           snprintf(buf, sizeof(buf), "%s$z shouts in a language you don't understand.", com_msgs[subcmd][3]);
         
@@ -951,7 +998,7 @@ ACMD(do_gen_comm)
       }
     }
 
-    snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout, \"%s%s\"^n", com_msgs[subcmd][3], capitalize(argument), com_msgs[subcmd][3]);
+    snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout, \"%s%s%s\"^n", com_msgs[subcmd][3], capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : "!", com_msgs[subcmd][3]);
     // Note that this line invokes act().
     store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
 
@@ -960,7 +1007,7 @@ ACMD(do_gen_comm)
       ch->in_room = get_ch_in_room(ch);
       for (tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
         if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-          snprintf(buf1, sizeof(buf1), "%sFrom inside %s, $z shouts in %s, \"%s%s\"^n", com_msgs[subcmd][3], decapitalize_a_an(GET_VEH_NAME(ch->in_veh)), skills[GET_LANGUAGE(ch)].name, capitalize(argument), com_msgs[subcmd][3]);
+          snprintf(buf1, sizeof(buf1), "%sFrom inside %s, $z shouts in %s, \"%s%s%s\"^n", com_msgs[subcmd][3], decapitalize_a_an(GET_VEH_NAME(ch->in_veh)), skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : "!", com_msgs[subcmd][3]);
         else
           snprintf(buf1, sizeof(buf1), "%sFrom inside %s, $z shouts in a language you don't understand.", com_msgs[subcmd][3], decapitalize_a_an(GET_VEH_NAME(ch->in_veh)));
           
@@ -983,11 +1030,6 @@ ACMD(do_gen_comm)
         ch->in_veh = NULL;
       }
     }
-    
-    // TODO: Stopped here. I'm removing the success tests and replacing them with simple checks: If you speak
-    // the language, you understand it, otherwise you don't. Later I'll add more checks. Pay attention to which
-    // buf is being used here, they switch frequently. You'll need to review the old changed code for buf switches
-    // as well as copypastas of your language check due to this.
 
     for (int door = 0; door < NUM_OF_DIRS; door++)
       if (CAN_GO(ch, door)) {
@@ -995,7 +1037,7 @@ ACMD(do_gen_comm)
         for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch) {
             if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-              snprintf(buf, sizeof(buf), "%s$z shouts in %s, \"%s%s\"^n", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, capitalize(argument), com_msgs[subcmd][3]);
+              snprintf(buf, sizeof(buf), "%s$z shouts in %s, \"%s%s%s\"^n", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : "!", com_msgs[subcmd][3]);
             else
               snprintf(buf, sizeof(buf), "%s$z shouts in a language you don't understand.", com_msgs[subcmd][3]);
             
@@ -1022,7 +1064,8 @@ ACMD(do_gen_comm)
               || PRF_FLAGGED( d->character, PRF_NOOOC) 
               || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)))
         continue;
-
+      
+      // No autopunct for channels.
       if (!access_level(d->character, GET_INCOG_LEV(ch)))
         snprintf(buf, sizeof(buf), "^m[^nSomeone^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", capitalize(argument));
       else
@@ -1354,10 +1397,10 @@ ACMD(do_phone)
       if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3))
         snprintf(voice, VOICE_BUF_SIZE, "A masked voice");
     
-    snprintf(buf, sizeof(buf), "^Y%s on the other end of the line says in %s, \"%s\"", voice, skills[GET_LANGUAGE(ch)].name, capitalize(argument));
-    snprintf(buf2, MAX_STRING_LENGTH, "$z says into $s phone in %s, \"%s\"", skills[GET_LANGUAGE(ch)].name, capitalize(argument));
+    snprintf(buf, sizeof(buf), "^Y%s on the other end of the line says in %s, \"%s%s\"", voice, skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+    snprintf(buf2, MAX_STRING_LENGTH, "$z says into $s phone in %s, \"%s%s\"", skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
         
-    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone, \"%s\"\r\n", capitalize(argument));
+    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone, \"%s%s\"\r\n", capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
     send_to_char(buf3, ch);
     
     store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, buf3);
