@@ -392,7 +392,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         // Prevent taking more than you can carry.
         current_obj_weight += GET_OBJ_WEIGHT(obj);
         if (IS_CARRYING_W(ch) + current_obj_weight > CAN_CARRY_W(ch)) {
-          send_to_char(ch, "You can only carry %d of that.", bought);
+          send_to_char(ch, "You can only carry %d of that.\r\n", --bought);
           break;
         }
           
@@ -411,7 +411,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         // Update its quantity and weight to match the increased ammo load. Cost already done above.
         GET_AMMOBOX_QUANTITY(obj) *= bought;
         GET_OBJ_WEIGHT(obj) *= bought;
-        
+       
+        // In theory this is dead code now after the 'you can only carry x' code change above. Will see.
         if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
           send_to_char("You start gathering up the ammo you paid for, but realize you can't carry it all! The shopkeeper gives you a /look/, then refunds you in cash.\r\n", ch);
           GET_NUYEN(ch) += price * bought;
@@ -450,6 +451,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           } else {
             snprintf(buf2, sizeof(buf2), "You now have %s.", GET_OBJ_NAME(obj));
           }
+          // buf2 is sent to the character with a newline appended at the end of the function.
           
           obj_to_char(obj, ch);
         }
@@ -524,7 +526,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), buf3);
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
   if (bought > 1 && print_multiples_at_end)
-    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (x%d)\r\n", bought);
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (x%d)", bought);
   send_to_char(buf2, ch);
   send_to_char("\r\n", ch);
   return TRUE;
