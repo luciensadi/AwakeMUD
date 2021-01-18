@@ -195,6 +195,7 @@ ACMD_DECLARE(do_help);
 ACMD_DECLARE(do_hide);
 ACMD_DECLARE(do_hit);
 ACMD_DECLARE(do_house);
+ACMD_DECLARE(do_hp);
 ACMD_DECLARE(do_iclist);
 ACMD_DECLARE(do_ignore);
 ACMD_DECLARE(do_ilist);
@@ -579,6 +580,7 @@ struct command_info cmd_info[] =
     { "house"    , POS_LYING   , do_house    , 0, 0 },
     { "ht"       , POS_DEAD    , do_gen_comm , 0, SCMD_HIREDTALK },
     { "hts"      , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_HIRED },
+    { "hp"       , POS_DEAD    , do_hp       , 0, 0 },
 
     { "inventory", POS_DEAD    , do_inventory, 0, 0 },
     { "install"  , POS_RESTING , do_put      , 0, SCMD_INSTALL },

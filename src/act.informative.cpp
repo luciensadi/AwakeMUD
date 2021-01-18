@@ -3003,6 +3003,10 @@ const char *get_plaintext_score_health(struct char_data *ch) {
   return buf2;
 }
 
+ACMD(do_hp) {
+  get_plaintext_score_health(ch);
+}
+
 const char *get_plaintext_score_stats(struct char_data *ch) {
   if (GET_BOD(ch) != GET_REAL_BOD(ch))
     snprintf(buf2, sizeof(buf2), "Body: %d (base body %d)\r\n", GET_BOD(ch), GET_REAL_BOD(ch));
