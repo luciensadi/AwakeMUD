@@ -383,7 +383,7 @@ ACMD(do_spec_comm)
       snprintf(buf, sizeof(buf), "From within %s^n, $z says to you in %s, \"%s^n\"\r\n",
               GET_VEH_NAME(last_veh), skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
     else
-      snprintf(buf, sizeof(buf), "From within %s^n, $z speaks in a language you don't understand.\r\n", GET_VEH_NAME(last_veh));
+      snprintf(buf, sizeof(buf), "From within %s^n, $z speaks in a language you don't understand.\r\n", decapitalize_a_an(GET_VEH_NAME(last_veh)));
       
     store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
     
@@ -417,7 +417,7 @@ ACMD(do_spec_comm)
       return;
     }
 
-    snprintf(buf, sizeof(buf), "You lean into a %s and say, \"%s\"", GET_VEH_NAME(veh), capitalize(buf2));
+    snprintf(buf, sizeof(buf), "You lean into %s and say, \"%s\"", decapitalize_a_an(GET_VEH_NAME(veh)), capitalize(buf2));
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     for (vict = veh->people; vict; vict = vict->next_in_veh) {
@@ -434,7 +434,7 @@ ACMD(do_spec_comm)
   if (IS_NPC(vict) || GET_SKILL(vict, language) > 0)
     snprintf(buf, sizeof(buf), "$z %s you in %s, \"%s^n\"\r\n", action_plur, skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
   else
-    snprintf(buf, sizeof(buf), "$z %s you in a language you don't understand.\r\n", action_plur);
+    snprintf(buf, sizeof(buf), "$z %s you something in a language you don't understand.\r\n", action_plur);
   
   store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_VICT));
   
@@ -960,9 +960,9 @@ ACMD(do_gen_comm)
       ch->in_room = get_ch_in_room(ch);
       for (tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
         if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-          snprintf(buf1, sizeof(buf1), "%sFrom inside %s, $z shouts in %s, \"%s%s\"^n", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh), skills[GET_LANGUAGE(ch)].name, capitalize(argument), com_msgs[subcmd][3]);
+          snprintf(buf1, sizeof(buf1), "%sFrom inside %s, $z shouts in %s, \"%s%s\"^n", com_msgs[subcmd][3], decapitalize_a_an(GET_VEH_NAME(ch->in_veh)), skills[GET_LANGUAGE(ch)].name, capitalize(argument), com_msgs[subcmd][3]);
         else
-          snprintf(buf1, sizeof(buf1), "%sFrom inside %s, $z shouts in a language you don't understand.", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh));
+          snprintf(buf1, sizeof(buf1), "%sFrom inside %s, $z shouts in a language you don't understand.", com_msgs[subcmd][3], decapitalize_a_an(GET_VEH_NAME(ch->in_veh)));
           
         // Replicate act() in a way that lets us capture the message.
         if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
@@ -1356,7 +1356,7 @@ ACMD(do_phone)
     snprintf(buf, sizeof(buf), "^Y%s on the other end of the line says in %s, \"%s\"", voice, skills[GET_LANGUAGE(ch)].name, capitalize(argument));
     snprintf(buf2, MAX_STRING_LENGTH, "$z says into $s phone in %s, \"%s\"", skills[GET_LANGUAGE(ch)].name, capitalize(argument));
         
-    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say, \"%s\"\r\n", capitalize(argument));
+    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone, \"%s\"\r\n", capitalize(argument));
     send_to_char(buf3, ch);
     
     store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, buf3);
@@ -1376,7 +1376,7 @@ ACMD(do_phone)
       if (IS_NPC(tch) || GET_SKILL(tch, language) > 0)
         store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
       else
-        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act("^Y$v speaks in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT));
+        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act("^YOn the other end of the line, $v speaks in a language you don't understand.", FALSE, ch, NULL, tch, TO_VICT));
     }
     if (!cyber) {
       for (tch = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
