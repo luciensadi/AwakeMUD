@@ -723,7 +723,7 @@ void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
   struct obj_data *mounted_weapon = NULL;
   for (struct obj_data *mount = veh->mount; mount; mount = mount->next_content) {
     if ((mounted_weapon = get_mount_weapon(mount))) {
-      send_to_char(ch, "%s mounted on %s.\r\n", CAP(GET_OBJ_NAME(mount->contains)), GET_OBJ_NAME(mount));
+      send_to_char(ch, "%s mounted on %s.\r\n", CAP(GET_OBJ_NAME(mounted_weapon)), GET_OBJ_NAME(mount));
     } else if (GET_OBJ_VAL(mount, 1) != 0 && GET_OBJ_VAL(mount, 1) != 2 && mount->contains) {
       send_to_char(ch, "%s attached to %s.\r\n", CAP(GET_OBJ_NAME(mount->contains)), GET_OBJ_NAME(mount));
     }
@@ -1385,20 +1385,21 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
   // Modeall: fire everything at them.
   if (modeall) {
     for (obj = veh->mount; obj; obj = obj->next_content) {
-      if (obj->contains && !obj->worn_by) {
+      struct obj_data *weapon = get_mount_weapon(obj);
+      if (weapon && !obj->worn_by) {
         if (vict) {
           set_fighting(ch, vict);
           if (obj->tveh)
             obj->tveh = NULL;
           obj->targ = vict;
           set_fighting(vict, veh);
-          send_to_char(ch, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), PERS(vict, ch));
+          send_to_char(ch, "You target %s towards %s.\r\n", GET_OBJ_NAME(weapon), PERS(vict, ch));
         } else if (tveh) {
           set_fighting(ch, tveh);
           if (obj->targ)
             obj->targ = NULL;
           obj->tveh = tveh;
-          send_to_char(ch, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), GET_VEH_NAME(tveh));
+          send_to_char(ch, "You target %s towards %s.\r\n", GET_OBJ_NAME(weapon), GET_VEH_NAME(tveh));
         } else {
           mudlog("SYSERR: Reached end of do_raw_target (mode all) with no valid target.", ch, LOG_SYSLOG, TRUE);
         }
@@ -1417,7 +1418,10 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
       obj->tveh = NULL;
     obj->targ = vict;
     set_fighting(vict, veh);
-    act("You target $p towards $N.", FALSE, ch, obj->contains, vict, TO_CHAR);
+    struct obj_data *weapon = get_mount_weapon(obj);
+    if (!weapon)
+      return;
+    act("You target $p towards $N.", FALSE, ch, weapon, vict, TO_CHAR);
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       snprintf(buf, sizeof(buf), "%s's $p swivels towards you.\r\n", GET_VEH_NAME(ch->in_veh));
       act(buf, FALSE, ch, obj, vict, TO_VICT);
@@ -1429,7 +1433,10 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
     if (obj->targ)
       obj->targ = NULL;
     obj->tveh = tveh;
-    send_to_char(ch, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), GET_VEH_NAME(tveh));
+    struct obj_data *weapon = get_mount_weapon(obj);
+    if (!weapon)
+      return;
+    send_to_char(ch, "You target %s towards %s.\r\n", GET_OBJ_NAME(weapon), GET_VEH_NAME(tveh));
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       snprintf(buf, sizeof(buf), "%s's %s swivels towards your ride.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
       send_to_veh(buf, tveh, 0, TRUE);

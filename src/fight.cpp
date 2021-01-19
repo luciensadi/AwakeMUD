@@ -2617,15 +2617,11 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
         return TRUE;
       
       // It's a player. Look through their gun and locate any ammo boxes in there.
-      for (struct obj_data *obj = wielded->in_obj->contains; obj; obj = obj->next_content) {
-        if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-          // It's an ammo box. If it also has enough ammo for us, return true.
-          if (GET_AMMOBOX_QUANTITY(obj) > 0) {
-            if (deduct_one_round)
-              update_ammobox_ammo_quantity(obj, -1);
-            return TRUE;
-          }
-        }
+      struct obj_data *ammobox = get_mount_ammo(wielded->in_obj);
+      if (ammobox && GET_AMMOBOX_QUANTITY(ammobox) > 0) {
+        if (deduct_one_round)
+          update_ammobox_ammo_quantity(ammobox, -1);
+        return TRUE;
       }
       
       // No ammo boxes found, or the ones that were found were empty. Click it.

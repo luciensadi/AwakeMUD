@@ -2939,7 +2939,8 @@ ACMD(do_activate)
     extern int ability_cost(int abil, int level);
     int x;
     strncpy(tokens, argument, sizeof(tokens) - 1);
-    if (strtok(tokens, "\"") && (s = strtok(NULL, "\""))) {
+    if ((strtok(tokens, "\"") && (s = strtok(NULL, "\"")))
+        || (strtok(tokens, "'") && (s = strtok(NULL, "'")))) {
       strncpy(name, s, sizeof(name) - 1);
       if ((s = strtok(NULL, "\0"))) {
         skip_spaces(&s);

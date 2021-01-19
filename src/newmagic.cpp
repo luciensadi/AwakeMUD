@@ -2406,7 +2406,8 @@ ACMD(do_cast)
     return;
   }
   strcpy(tokens, argument);
-  if (strtok(tokens, "\"") && (s = strtok(NULL, "\""))) {
+  if ((strtok(tokens, "\"") && (s = strtok(NULL, "\"")))
+      || (strtok(tokens, "'") && (s = strtok(NULL, "'")))) {
     strcpy(spell_name, s);
     if ((s = strtok(NULL, "\0"))) {
       skip_spaces(&s);
@@ -3676,7 +3677,8 @@ ACMD(do_deactivate)
     char name[120], tokens[MAX_STRING_LENGTH], *s;
     extern int ability_cost(int abil, int level);
     strncpy(tokens, argument, sizeof(tokens) - 1);
-    if (strtok(tokens, "\"") && (s = strtok(NULL, "\""))) {
+    if ((strtok(tokens, "\"") && (s = strtok(NULL, "\"")))
+        || (strtok(tokens, "'") && (s = strtok(NULL, "'")))) {
       strncpy(name, s, sizeof(name) - 1);
       if ((s = strtok(NULL, "\0"))) {
         skip_spaces(&s);
