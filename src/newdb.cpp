@@ -1894,6 +1894,44 @@ char *get_player_name(vnum_t id)
   return x;
 }
 
+bool _get_flag_is_set_by_idnum(int flag, vnum_t id, int mode) {
+  char buf[MAX_STRING_LENGTH];
+  
+  switch (mode) {
+    case 0: snprintf(buf, sizeof(buf), "SELECT PlrFlags FROM pfiles WHERE idnum=%ld;", id); break;
+    case 1: snprintf(buf, sizeof(buf), "SELECT PrfFlags FROM pfiles WHERE idnum=%ld;", id); break;
+    case 2: snprintf(buf, sizeof(buf), "SELECT AffFlags FROM pfiles WHERE idnum=%ld;", id); break;
+    default: return FALSE;
+  }
+  
+  mysql_wrapper(mysql, buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  if (!row && mysql_field_count(mysql)) {
+    mysql_free_result(res);
+    return FALSE;
+  }
+  
+  Bitfield flags;
+  flags.FromString(row[0]);
+  
+  mysql_free_result(res);
+  
+  return flags.IsSet(flag);
+}
+
+bool get_plr_flag_is_set_by_idnum(int flag, vnum_t id) {
+  return _get_flag_is_set_by_idnum(flag, id, 0);
+}
+
+bool get_prf_flag_is_set_by_idnum(int flag, vnum_t id) {
+  return _get_flag_is_set_by_idnum(flag, id, 1);
+}
+
+bool get_aff_flag_is_set_by_idnum(int flag, vnum_t id) {
+  return _get_flag_is_set_by_idnum(flag, id, 2);
+}
+
 void DeleteChar(long idx)
 {
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_immortdata WHERE idnum=%ld", idx);

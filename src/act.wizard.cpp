@@ -1645,6 +1645,17 @@ ACMD(do_stat)
     if (!*buf2)
       send_to_char("Stats on which player?\r\n", ch);
     else {
+      vnum_t idnum;
+      if ((idnum = atoi(buf2)) > 0) {
+        const char *char_name = get_player_name(idnum);
+        if (char_name) {
+          strcpy(buf2, char_name);
+          delete [] char_name;
+        } else {
+          send_to_char("There is no such player.\r\n", ch);
+          return;
+        }
+      }
       if (!(does_player_exist(buf2)))
         send_to_char("There is no such player.\r\n", ch);
       else {

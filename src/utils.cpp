@@ -538,6 +538,7 @@ char *string_to_uppercase(const char *source) {
 }
 
 // decapitalize a string that starts with A or An, now allows for color strings at the beginning
+// Also takes care of 'the'.
 char *decapitalize_a_an(const char *source)
 {
   static char dest[MAX_STRING_LENGTH];
@@ -553,6 +554,9 @@ char *decapitalize_a_an(const char *source)
     if (index < len-1 && (*(source + index+1) == ' ' || (*(source + index+1) == 'n' && index < len-2 && *(source + index+2) == ' '))) {
       *(dest + index) = 'a';
     }
+  } else if (*(source + index) == 'T') {
+    if (index < len-3 && *(source + index + 1) == 'h' && *(source + index + 2) == 'e' && *(source + index + 3) == ' ')
+      *(dest + index) = 't';
   }
   
   return dest;
@@ -3035,6 +3039,7 @@ void destroy_door(struct room_data *room, int dir) {
 
 bool spell_is_nerp(int spell_num) {
   switch (spell_num) {
+    case SPELL_DEATHTOUCH:
     case SPELL_MANABALL:
     case SPELL_POWERBALL:
     case SPELL_STUNBALL:
