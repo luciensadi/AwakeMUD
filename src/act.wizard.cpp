@@ -4092,6 +4092,7 @@ ACMD(do_set)
                { "sysp", LVL_VICEPRES, PC, NUMBER },
                { "socializationbonus", LVL_ADMIN, PC,     NUMBER },
                { "race", LVL_PRESIDENT, PC, NUMBER },
+               { "rolls", LVL_PRESIDENT, PC, BINARY },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4651,6 +4652,11 @@ ACMD(do_set)
       } else
         send_to_char("OK.\r\n", ch);
     }
+    break;
+  case 74: /* rolls for morts */
+    SET_OR_REMOVE(PRF_FLAGS(vict), PRF_ROLLS);
+    snprintf(buf, sizeof(buf),"%s changed %s's rolls flag setting.", GET_CHAR_NAME(ch), GET_NAME(vict));
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
