@@ -1015,7 +1015,7 @@ ACMD(do_repair)
   shop = find_workshop(ch, TYPE_VEHICLE);
   if (!shop) {
     if (veh->damage >= VEH_DAMAGE_NEEDS_WORKSHOP) {
-      send_to_char("You'd better get it to a garage before you try and fix this much damage.\r\n", ch);
+      send_to_char("You'll need a garage with a vehicle workshop unpacked in it to fix this much damage.\r\n", ch);
       return;
     }
     target += 2;
