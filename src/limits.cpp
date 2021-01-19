@@ -1205,7 +1205,8 @@ void misc_update(void)
             send_to_char("Skibby dibby dibby do-ah.\r\n", ch);
             break;
           case 11:
-            send_to_char(ch, "You stare blankly at %s. What is it? What could it mean?\r\n", GET_OBJ_NAME(ch->carrying));
+            if (ch->carrying)
+              send_to_char(ch, "You stare blankly at %s. What is it? What could it mean?\r\n", GET_OBJ_NAME(ch->carrying));
             break;
           case 12:
             send_to_char("The energies of the chaos spell continue to swirl around you.\r\n", ch);
