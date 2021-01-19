@@ -2765,10 +2765,16 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
 // TODO: stopped partway through editing this func, it is nonfunctional.
 bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type) {
 #define SENDOK(ch) ((ch)->desc && AWAKE(ch) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
+  bool remote;
   
+  if ((remote = (type & TO_REMOTE)))
+    type &= ~TO_REMOTE;
+    
   return SENDOK(to)
           && !(hide_invisible && ch && !CAN_SEE(to, ch))
-          && (to != ch) && !(PLR_FLAGGED(to, PLR_REMOTE) || PLR_FLAGGED(to, PLR_MATRIX))
+          && (to != ch) 
+          && (remote || !PLR_FLAGGED(to, PLR_REMOTE)) 
+          && !PLR_FLAGGED(to, PLR_MATRIX)
           && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj));
   
 #undef SENDOK
@@ -2781,6 +2787,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
 {
   struct char_data *to, *next;
   int sleep;
+  bool remote;
   
 #define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
   
@@ -2799,13 +2806,16 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   /* check if TO_SLEEP is there, and remove it if it is. */
   if ((sleep = (type & TO_SLEEP)))
     type &= ~TO_SLEEP;
+    
+  if ((remote = (type & TO_REMOTE)))
+    type &= ~TO_REMOTE;
   
   if ( type == TO_ROLLS )
     sleep = 1;
   
   if (type == TO_CHAR)
   {
-    if (ch && SENDOK(ch) && !(PLR_FLAGGED(ch, PLR_REMOTE) || PLR_FLAGGED(ch, PLR_MATRIX)))
+    if (ch && SENDOK(ch) && (remote || !PLR_FLAGGED(ch, PLR_REMOTE)) && !PLR_FLAGGED(ch, PLR_MATRIX))
       return perform_act(str, ch, obj, vict_obj, ch);
     return NULL;
   }
@@ -2816,7 +2826,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     if (!to || !SENDOK(to))
       return NULL;
     
-    if ((PLR_FLAGGED(to, PLR_REMOTE) || PLR_FLAGGED(to, PLR_MATRIX)) && !sleep)
+    if (((!remote && PLR_FLAGGED(to, PLR_REMOTE)) || PLR_FLAGGED(to, PLR_MATRIX)) && !sleep)
       return NULL;
       
     if (hide_invisible && ch && !CAN_SEE(to, ch))

@@ -1511,6 +1511,7 @@ ACMD(do_reload)
             GET_AMMOBOX_QUANTITY(ammo) = 0;
             update_ammobox_ammo_quantity(ammo, max);
             update_ammobox_ammo_quantity(i, -max);
+            ammo->restring = str_dup(get_ammobox_default_restring(ammo));
             obj_to_obj(ammo, m);
             send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
             return;

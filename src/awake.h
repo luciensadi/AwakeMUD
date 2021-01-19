@@ -1939,7 +1939,8 @@ enum {
 #define TO_CHAR_FORCE          10
 #define TO_VICT_INCLUDE_RIGGER 11
 #define TO_VICT_FORCE          12
-#define TO_SLEEP               128     /* to char, even if sleeping */
+#define TO_SLEEP               (1 << 5)     /* to char, even if sleeping */
+#define TO_REMOTE              (1 << 6)
 
 /* Boards */
 

@@ -2607,7 +2607,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
   if (GET_OBJ_TYPE(wielded) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded)))
   {
     // First, check if they're manning a turret-- if they are, special handling is required.
-    if (AFF_FLAGGED(ch, AFF_MANNING))  {
+    if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))  {
       // NPCs don't care about ammo in their mounts. No deduction needed here.
       if (IS_NPC(ch))
         return TRUE;
@@ -3095,7 +3095,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       }
     }
     act(buf1, FALSE, ch, weapon, victim, TO_VICT);
-    act(buf2, FALSE, ch, weapon, victim, TO_CHAR);
+    act(buf2, FALSE, ch, weapon, victim, TO_CHAR | TO_REMOTE);
     act(buf3, FALSE, ch, weapon, victim, ch->in_veh ? TO_VEH_ROOM : TO_NOTVICT);
     // End same-room messaging.
   } else {
@@ -3168,7 +3168,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       }
     }
     act(buf1, FALSE, ch, weapon, victim, TO_VICT);
-    act(buf2, FALSE, ch, weapon, victim, TO_CHAR);
+    act(buf2, FALSE, ch, weapon, victim, TO_CHAR | TO_REMOTE);
     act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
     act(buf4, FALSE, victim, weapon, ch, TO_ROOM);
     // End ranged messaging.

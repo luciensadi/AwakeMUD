@@ -780,12 +780,8 @@ ACMD(do_control)
     send_to_char("While driving? Now that would be a neat trick.\r\n", ch);
     return;
   }
-  if (!jack) {
-    send_to_char("You need a datajack to do that.\r\n", ch);
-    return;
-  }
-  if (!has_rig) {
-    send_to_char("You need a vehicle control rig to do that.\r\n", ch);
+  if (!jack || !has_rig) {
+    send_to_char("You need both a datajack and a vehicle control rig to do that.\r\n", ch);
     return;
   }
 
