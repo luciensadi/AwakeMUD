@@ -1816,7 +1816,7 @@ struct obj_data *get_mount_weapon(struct obj_data *mount) {
 // Retrieve the ammobox from a given mount.
 struct obj_data *get_mount_ammo(struct obj_data *mount) {
   if (mount == NULL) {
-    mudlog("SYSERR: Attempting to retrieve weapon for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
+    mudlog("SYSERR: Attempting to retrieve ammo for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
   
