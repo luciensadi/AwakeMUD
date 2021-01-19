@@ -1411,6 +1411,9 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
 {
   int size = strlen(unmodified_txt);
   
+  if (t == NULL)
+    return;
+  
   // Process text per KaVir's protocol snippet.
   const char *txt = ProtocolOutput(t, unmodified_txt, &size);
   if (t->pProtocol->WriteOOB > 0)
@@ -2580,6 +2583,10 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   char temp[MAX_STRING_LENGTH];
   buf = lbuf;
   vict = (struct char_data *) vict_obj;
+  
+  // No need to go through all this junk if the to-char has no descriptor.
+  if (!to || !to->desc)
+    return NULL;
   
   for (;;)
   {

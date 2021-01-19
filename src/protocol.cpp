@@ -293,6 +293,7 @@ protocol_t *ProtocolCreate( void )
    }
 
    pProtocol = new protocol_t;
+   memset(pProtocol, 0, sizeof(protocol_t));
    pProtocol->WriteOOB = 0;
    for ( i = eNEGOTIATED_TTYPE; i < eNEGOTIATED_MAX; ++i )
       pProtocol->Negotiated[i] = FALSE;
@@ -318,7 +319,7 @@ protocol_t *ProtocolCreate( void )
    pProtocol->pLastTTYPE = NULL;
    pProtocol->pVariables = new MSDP_t*[eMSDP_MAX];
 
-   for ( i = eMSDP_NONE+1; i < eMSDP_MAX; ++i )
+   for ( i = 0; i < eMSDP_MAX; ++i )
    {
       pProtocol->pVariables[i] = new MSDP_t;
       pProtocol->pVariables[i]->bReport = FALSE;
