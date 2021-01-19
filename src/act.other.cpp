@@ -1331,7 +1331,10 @@ ACMD(do_skills)
     else
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\nYou know the following languages that start with '%s':\r\n", arg);
     
-    for (i = SKILL_ENGLISH; i <= SKILL_FRENCH; i++) {
+    for (i = SKILL_ENGLISH; i < MAX_SKILLS; i++) {
+      if (!SKILL_IS_LANGUAGE(i))
+        continue;
+        
       if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
         continue;
       
@@ -1508,6 +1511,7 @@ ACMD(do_reload)
             GET_AMMOBOX_QUANTITY(ammo) = 0;
             update_ammobox_ammo_quantity(ammo, max);
             update_ammobox_ammo_quantity(i, -max);
+            ammo->restring = str_dup(get_ammobox_default_restring(ammo));
             obj_to_obj(ammo, m);
             send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
             return;
