@@ -580,7 +580,16 @@ ACMD_CONST(do_flee) {
 
 ACMD(do_flee)
 {
-  // You get six tries to escape per flee command.
+  if (AFF_FLAGGED(ch, AFF_PRONE)) {
+    send_to_char("It's a struggle to flee while prone!\r\n", ch);
+    return;
+  }
+  
+  // You get six tries to escape per flee command... unless you're up against an unkillable.
+  int max_tries = 6;
+  if (FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))
+    max_tries = 100;
+    
   for (int tries = 0; tries < 6; tries++) {
     int attempt = number(0, NUM_OF_DIRS - 2);       /* Select a random direction */
     if (CAN_GO(ch, attempt) && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[attempt]->to_room, ROOM_NOMOB))) {
@@ -589,8 +598,9 @@ ACMD(do_flee)
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
       
       // If the character is fighting in melee combat, they must pass a test to escape.
-      if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
-        if (!success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)))) {
+      if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
+        if (!(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))
+            && !success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)))) {
           act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
           act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
           act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
