@@ -317,6 +317,7 @@ protocol_t *ProtocolCreate( void )
    pProtocol->ScreenHeight = 0;
    pProtocol->pMXPVersion = AllocString("Unknown");
    pProtocol->pLastTTYPE = NULL;
+   pProtocol->canary = 31337;
    pProtocol->pVariables = new MSDP_t*[eMSDP_MAX];
 
    for ( i = 0; i < eMSDP_MAX; ++i )
@@ -538,10 +539,19 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
 #endif /* COLOUR_CHAR */
    int i = 0, j = 0; /* Index values */
 
+   if (apDescriptor && apDescriptor->canary != 31337) {
+     mudlog("SYSERR: apDescriptor canary was invalid! Handing back unaltered data.", NULL, LOG_SYSLOG, TRUE);
+     return apData;
+   }
+   
    protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
    if ( pProtocol == NULL || apData == NULL)
       return apData;
-      
+  
+   if (pProtocol->canary != 31337) {
+     mudlog("SYSERR: pprotocol canary was invalid! Handing back unaltered data.", apDescriptor->character, LOG_SYSLOG, TRUE);
+     return apData;
+   }
    if (!pProtocol->pVariables)
       return apData;
 
