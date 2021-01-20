@@ -137,6 +137,9 @@ ACMD(do_say)
                   : GET_NAME(to)) : "someone");
       }
       
+      // TODO: A lot of the code in here writes the line once and sends it to everyone. With toggleable highlights, we need two versions:
+      // highlighted and not, which are then sent to viewers depending on their highlights.
+      
       if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
         snprintf(buf, sizeof(buf), "$z says%s in %s, \"%s%s%s^n\"",
                 (to ? buf2 : ""), 

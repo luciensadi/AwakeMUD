@@ -399,7 +399,8 @@ enum {
 #define PRF_FUCKUPLOG           50
 #define PRF_ECONLOG             51
 #define PRF_BRIEF               52
-#define PRF_MAX                 53
+#define PRF_NOHIGHLIGHT         53
+#define PRF_MAX                 54
 
 /* log watch */
 

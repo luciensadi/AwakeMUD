@@ -1078,6 +1078,8 @@ const char *tog_messages[][2] = {
                              "You will no longer see names auto-appended to voices.\r\n"},
                             {"You will see room descriptions whem moving.\r\n",
                              "You will no longer see room descriptions when moving.\r\n"},
+                            {"You will now see text highlights from characters.\r\n",
+                             "You will no longer see text highlights from characters.\r\n"},
                           };
 
 ACMD(do_toggle)
@@ -1273,6 +1275,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "brief") || is_abbrev(argument, "roomdescs")) {
       result = PRF_TOG_CHK(ch, PRF_BRIEF);
       mode = 34;
+    } else if (is_abbrev(argument, "highlights") || is_abbrev(argument, "nohighlights")) {
+      result = PRF_TOG_CHK(ch, PRF_NOHIGHLIGHT);
+      mode = 35;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

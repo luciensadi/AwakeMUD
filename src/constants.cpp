@@ -577,6 +577,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "FuckupLog"   , TRUE , TRUE  },
   { "EconLog"     , TRUE , TRUE  },
   { "Brief"       , TRUE , TRUE  },
+  { "Highlights"  , TRUE , TRUE  },
   { "\n"          , 0    , 0     }
 };
 
@@ -636,6 +637,7 @@ const char *preference_bits[] =
     "FUCKUPLOG",
     "ECONLOG",
     "BRIEF",
+    "HIGHLIGHTS",
     "\n"
   };
 
