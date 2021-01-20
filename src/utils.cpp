@@ -2025,7 +2025,7 @@ struct room_data *get_obj_in_room(struct obj_data *obj) {
 
 bool invis_ok(struct char_data *ch, struct char_data *vict) {
   // No room at all? Nope.
-  if (!get_ch_in_room(ch)) {
+  if (!ch || !get_ch_in_room(ch)) {
     mudlog("invis_ok() received char with NO room!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
