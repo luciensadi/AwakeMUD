@@ -257,7 +257,7 @@ void    update_pos(struct char_data *victim);
 #define IS_ASTRAL(ch) (IS_NPC(ch) && MOB_FLAGS(ch).IsSet(MOB_ASTRAL))
 #define IS_DUAL(ch)   ((IS_NPC(ch) && MOB_FLAGS(ch).IsSet(MOB_DUAL_NATURE)) || \
                (!IS_NPC(ch) && (PLR_FLAGS(ch).IsSet(PLR_PERCEIVE) || access_level(ch, LVL_ADMIN))))
-#define IS_SENATOR(ch) (GET_LEVEL(ch) >= LVL_BUILDER)
+#define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
 // ONLY for use on non-Bitfield bitvectors:
 #define IS_SET(set, flag)     ((set) & (flag))
