@@ -3060,6 +3060,8 @@ bool spell_is_nerp(int spell_num) {
     case SPELL_BALLLIGHTNING:
     case SPELL_PHYSICALBARRIER:
     case SPELL_ASTRALBARRIER:
+    case SPELL_HEALTHYGLOW:
+    case SPELL_TOXICWAVE:
       return TRUE;
   }
   

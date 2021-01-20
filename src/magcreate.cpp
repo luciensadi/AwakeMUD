@@ -40,7 +40,7 @@ void spedit_disp_spell_type(struct descriptor_data *d)
   int x = 1;
   for (int i = 0; i < MAX_SPELLS; i++) 
     if (spells[i].category == GET_OBJ_VAL(SPELL, 9)) {
-      send_to_char(CH, "%d) %s\r\n", x, spells[i].name, spell_is_nerp(i) ? "  ^y(not implemented)^n" : "");
+      send_to_char(CH, "%d) %s%s\r\n", x, spells[i].name, spell_is_nerp(i) ? "  ^y(not implemented)^n" : "");
       x++;
     }
   send_to_char("Enter spell type: ", CH);
@@ -150,7 +150,11 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
       if (number < 1 || number > 5)
         send_to_char("Please select from the list. Enter Category: ", CH);
       else {
-        GET_OBJ_VAL(SPELL, 9) = number;
+        if (GET_OBJ_VAL(SPELL, 9) != number) {
+          GET_OBJ_VAL(SPELL, 1) = 0;
+          GET_OBJ_VAL(SPELL, 3) = 0;
+          GET_OBJ_VAL(SPELL, 9) = number;
+        }
         spedit_disp_menu(d);
       }
       break;
