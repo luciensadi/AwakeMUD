@@ -1876,7 +1876,7 @@ ACMD(do_tow)
     send_to_char("The vehicle has to be off for you to tow it.\r\n", ch);
   else if (veh->type == VEH_DRONE && tveh->type != VEH_DRONE)
     send_to_char("Drones can only tow other drones.\r\n", ch);
-  else if (veh->type == VEH_DRONE && veh->load < tveh->load)
+  else if (veh->type == VEH_DRONE && veh->load <= tveh->load)
     send_to_char("Drones can only tow drones that are lighter than them.\r\n", ch);
   else {
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));

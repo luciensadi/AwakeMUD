@@ -539,7 +539,10 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
    int i = 0, j = 0; /* Index values */
 
    protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
-   if ( pProtocol == NULL || apData == NULL || !pProtocol->pVariables)
+   if ( pProtocol == NULL || apData == NULL)
+      return apData;
+      
+   if (!pProtocol->pVariables)
       return apData;
 
    /* Strip !!SOUND() triggers if they support MSP or are using sound */
