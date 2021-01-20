@@ -293,6 +293,7 @@ protocol_t *ProtocolCreate( void )
    }
 
    pProtocol = new protocol_t;
+   memset(pProtocol, 0, sizeof(protocol_t));
    pProtocol->WriteOOB = 0;
    for ( i = eNEGOTIATED_TTYPE; i < eNEGOTIATED_MAX; ++i )
       pProtocol->Negotiated[i] = FALSE;
@@ -318,7 +319,7 @@ protocol_t *ProtocolCreate( void )
    pProtocol->pLastTTYPE = NULL;
    pProtocol->pVariables = new MSDP_t*[eMSDP_MAX];
 
-   for ( i = eMSDP_NONE+1; i < eMSDP_MAX; ++i )
+   for ( i = 0; i < eMSDP_MAX; ++i )
    {
       pProtocol->pVariables[i] = new MSDP_t;
       pProtocol->pVariables[i]->bReport = FALSE;
@@ -538,7 +539,10 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
    int i = 0, j = 0; /* Index values */
 
    protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
-   if ( pProtocol == NULL || apData == NULL || !pProtocol->pVariables)
+   if ( pProtocol == NULL || apData == NULL)
+      return apData;
+      
+   if (!pProtocol->pVariables)
       return apData;
 
    /* Strip !!SOUND() triggers if they support MSP or are using sound */

@@ -659,9 +659,11 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     }
     
     // Calculate their skill level, including bioware.
+    bool pheremones = FALSE;
     int skill = get_skill(ch, shop_table[shop_nr].ettiquete, target);
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
       if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEREMONES) {
+        pheremones = TRUE;
         skill += GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
         break;
       }
@@ -671,6 +673,20 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     
     // Failure case.
     if (success < 1) {
+      if (GET_SKILL(ch, shop_table[shop_nr].ettiquete) == 0) {
+        if (pheremones)
+          snprintf(buf, sizeof(buf), "Not even your tailored pheremones can soothe $N's annoyance at your lack of %s.\r\n",
+                   skills[shop_table[shop_nr].ettiquete].name);
+        else
+          snprintf(buf, sizeof(buf), "$N seems annoyed that you don't even know the basics of %s.\r\n",
+                   skills[shop_table[shop_nr].ettiquete].name);
+      } else {
+        snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sbut $N shakes $S head after calling a few contacts.\r\n", 
+                 skills[shop_table[shop_nr].ettiquete].name,
+                 pheremones ? "aided by your tailored pheremones, " : "");
+      }
+      act(buf, FALSE, ch, 0, keeper, TO_CHAR);
+      
       snprintf(buf, sizeof(buf), "%s I can't get ahold of that one for a while.", GET_CHAR_NAME(ch));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       
@@ -682,6 +698,17 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
       extract_obj(obj);
       return;
     } 
+    
+    if (GET_SKILL(ch, shop_table[shop_nr].ettiquete) == 0) {
+      snprintf(buf, sizeof(buf), "$N seems annoyed that you don't even know the basics of %s, but %syou convince $M to call a few contacts anyways.\r\n", 
+              skills[shop_table[shop_nr].ettiquete].name,
+              pheremones ? "aided by your tailored pheremones, " : "");
+    } else {
+      snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sand $N nods to you after calling a few contacts.\r\n", 
+               skills[shop_table[shop_nr].ettiquete].name,
+               pheremones ? "aided by your tailored pheremones, " : "");
+    }
+    act(buf, FALSE, ch, 0, keeper, TO_CHAR);
     
     // Placed order successfully.
     float totaltime = ((GET_OBJ_AVAILDAY(obj) * buynum) / success) + (2 * GET_AVAIL_OFFSET(ch));

@@ -3122,6 +3122,12 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("qstat", "vstat");
   COMMAND_ALIAS("sstat", "vstat");
   
+  COMMAND_ALIAS("health", "hp");
+  
+  COMMAND_ALIAS("powers", "abilities");
+  
+  COMMAND_ALIAS("scna", "scan");
+  
   // Found nothing, return the failure code.
   return -1;
 }

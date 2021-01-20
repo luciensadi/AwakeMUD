@@ -765,7 +765,8 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   
   if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
-    if (success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) && (CAN_GO(ch, dir) && (!IS_NPC(ch) ||
+    bool succeeded = (!(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))) ? success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) : TRUE;
+    if (succeeded && (CAN_GO(ch, dir) && (!IS_NPC(ch) ||
         !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB)))) {
       act("$n searches for a quick escape!", TRUE, ch, 0, 0, TO_ROOM);
       send_to_char("You start moving away for a clever escape.\r\n", ch);

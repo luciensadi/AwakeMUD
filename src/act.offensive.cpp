@@ -20,6 +20,7 @@
 #include "newmagic.h"
 #include "awake.h"
 #include "constants.h"
+#include "newdb.h"
 
 /* extern variables */
 extern struct room_data *world;
@@ -290,9 +291,28 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       }
     }
     
-    if (!PRF_FLAGGED(ch, PRF_PKER) && veh->owner && GET_IDNUM(ch) != veh->owner) {
-      PLR_FLAGS(ch).SetBit(PLR_KILLER);
-      send_to_char(KILLER_FLAG_MESSAGE, ch);
+    if (veh->owner && GET_IDNUM(ch) != veh->owner) {
+      bool has_valid_vict = FALSE;
+      for (struct char_data *killer_check = veh->people; killer_check; killer_check = killer_check->next_in_veh) {
+        if ((PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(killer_check, PRF_PKER)) || PLR_FLAGGED(killer_check, PLR_KILLER)) {
+          has_valid_vict = TRUE;
+          break;
+        }
+      }
+      
+      if (!has_valid_vict) {
+        if (!PRF_FLAGGED(ch, PRF_PKER) && !get_plr_flag_is_set_by_idnum(PLR_KILLER, veh->owner)) {
+          send_to_char("That's a player-owned vehicle. Better leave it alone.\r\n", ch);
+          return TRUE;
+        }
+        
+        if (!get_prf_flag_is_set_by_idnum(PRF_PKER, veh->owner)) {
+          send_to_char("The owner of that vehicle is not flagged PK. Better leave it alone.\r\n", ch);
+          return TRUE;
+        }
+      }
+      // PLR_FLAGS(ch).SetBit(PLR_KILLER);
+      // send_to_char(KILLER_FLAG_MESSAGE, ch);
     }
     
     if (!FIGHTING(ch)) {
@@ -560,7 +580,16 @@ ACMD_CONST(do_flee) {
 
 ACMD(do_flee)
 {
-  // You get six tries to escape per flee command.
+  if (AFF_FLAGGED(ch, AFF_PRONE)) {
+    send_to_char("It's a struggle to flee while prone!\r\n", ch);
+    return;
+  }
+  
+  // You get six tries to escape per flee command... unless you're up against an unkillable.
+  int max_tries = 6;
+  if (FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))
+    max_tries = 100;
+    
   for (int tries = 0; tries < 6; tries++) {
     int attempt = number(0, NUM_OF_DIRS - 2);       /* Select a random direction */
     if (CAN_GO(ch, attempt) && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[attempt]->to_room, ROOM_NOMOB))) {
@@ -569,8 +598,9 @@ ACMD(do_flee)
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
       
       // If the character is fighting in melee combat, they must pass a test to escape.
-      if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
-        if (!success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)))) {
+      if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
+        if (!(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))
+            && !success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)))) {
           act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
           act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
           act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);

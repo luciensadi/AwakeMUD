@@ -632,10 +632,10 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
         // Aggros don't care about road/garage status, so they act as if always alarmed.
         if (vehicle_is_valid_mob_target(veh, TRUE)) {
           stop_fighting(ch);
-          snprintf(buf, sizeof(buf), "$n glares at %s, preparing to attack it!", GET_VEH_NAME(veh));
+          snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
           act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
           send_to_char(ch, "You prepare to attack %s!", GET_VEH_NAME(veh));
-          snprintf(buf, sizeof(buf), "%s glares at your vehicle, preparing to attack!", GET_CHAR_NAME(ch));
+          snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
           send_to_veh(buf, veh, NULL, TRUE);
           set_fighting(ch, veh);
           return TRUE;
@@ -688,9 +688,10 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   
   // Message the PC.
   if (net_succ > 0) {
-    if (pc->in_room == mob->in_room)
-      act("^y$n glares at you, preparing to attack!^n", TRUE, mob, NULL, pc, TO_VICT);
-    else {
+    if (pc->in_room == mob->in_room) {
+      snprintf(buf, sizeof(buf), "^y%s$n glares at you, preparing to attack!^n", GET_MOBALERT(mob) == MALERT_ALARM ? "Searching for more aggressors, " : "");
+      act(buf, TRUE, mob, NULL, pc, TO_VICT);
+    } else {
       if (GET_EQ(mob, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(mob, WEAR_WIELD)) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(mob, WEAR_WIELD)))) {
         send_to_char("^yThe glint of a scope aiming your way catches your eye!^n\r\n", pc);
       } else {
@@ -837,10 +838,10 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
       // If the room we're in is neither a road nor a garage, attack any vehicles we see.
       if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM)) {
         stop_fighting(ch);
-        snprintf(buf, sizeof(buf), "$n glares at %s, preparing to attack it for security infractions!", GET_VEH_NAME(veh));
+        snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
         act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
         send_to_char(ch, "You prepare to attack %s for security infractions!", GET_VEH_NAME(veh));
-        snprintf(buf, sizeof(buf), "%s glares at your vehicle, preparing to attack over security infractions!", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack over security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
         send_to_veh(buf, veh, NULL, TRUE);
         set_fighting(ch, veh);
         return TRUE;
