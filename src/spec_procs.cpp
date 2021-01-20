@@ -5024,7 +5024,7 @@ SPECIAL(Janis_Meet)
   struct char_data *mob = (struct char_data *) me;
   if (!AWAKE(mob))
     return FALSE;
-  if ((CMD_IS("say") || CMD_IS("'")) && !IS_ASTRAL(ch) && *argument) {
+  if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto")) && !IS_ASTRAL(ch) && *argument) {
     skip_spaces(&argument);
     if (!str_cmp(argument, "Blue-eyes sent me")) {
       if (GET_RACE(ch) != RACE_HUMAN || GET_SEX(ch) != SEX_MALE || !(GET_EQ(ch, WEAR_BODY) && GET_OBJ_VNUM(GET_EQ(ch, WEAR_BODY)) == 5032))  {
@@ -5076,7 +5076,7 @@ SPECIAL(mageskill_hermes)
         break;
     if (!*argument)
       return FALSE;
-    if (!str_cmp(argument, "recommendation") && recom && GET_OBJ_VAL(recom, 0) == GET_IDNUM(ch)) {
+    if (str_str(argument, "recommendation") && recom && GET_OBJ_VAL(recom, 0) == GET_IDNUM(ch)) {
       if (GET_OBJ_VAL(recom, 1) && GET_OBJ_VAL(recom, 2) >= 3 && GET_OBJ_VAL(recom, 3) && GET_OBJ_VAL(recom, 4) >= 2) {
         snprintf(arg, sizeof(arg), "%s So you have the recommendation from the other four. I guess that only leaves me. You put in the effort to get the other recommendations so you have mine.", GET_CHAR_NAME(ch));
         do_say(mage, arg, 0, SCMD_SAYTO);
@@ -5133,7 +5133,7 @@ SPECIAL(mageskill_moore)
     return FALSE;
   if (CMD_IS("say") || CMD_IS("'")) {
     skip_spaces(&argument);
-    if (!*argument || str_cmp(argument, "recommendation"))
+    if (!*argument || !str_str(argument, "recommendation"))
       return(FALSE);
     for (recom = ch->carrying; recom; recom = recom->next_content)
       if (GET_OBJ_VNUM(recom) == 5735)
@@ -5167,7 +5167,7 @@ SPECIAL(mageskill_herbie)
     return FALSE;
   if (CMD_IS("say") || CMD_IS("'")) {
     skip_spaces(&argument);
-    if (!*argument || str_cmp(argument, "recommendation"))
+    if (!*argument || !str_str(argument, "recommendation"))
       return(FALSE);
     if (GET_OBJ_VAL(recom, 2) >= 3) {
       snprintf(arg, sizeof(arg), "%s You have my recommendation, I can help you no further.", GET_CHAR_NAME(ch));
@@ -5212,7 +5212,7 @@ SPECIAL(mageskill_anatoly)
   struct obj_data *recom = NULL;
   if (CMD_IS("say") || CMD_IS("'")) {
     skip_spaces(&argument);
-    if (!*argument || str_cmp(argument, "recommendation"))
+    if (!*argument || !str_str(argument, "recommendation"))
       return FALSE;
     for (recom = ch->carrying; recom; recom = recom->next_content)
       if (GET_OBJ_VNUM(recom) == 5735)
@@ -5272,7 +5272,7 @@ SPECIAL(mageskill_nightwing)
   }
   if (CMD_IS("say") || CMD_IS("'")) {
     skip_spaces(&argument);
-    if (!*argument || str_cmp(argument, "recommendation"))
+    if (!*argument || !str_str(argument, "recommendation"))
       return FALSE;
     for (recom = ch->carrying; recom; recom = recom->next_content)
       if (GET_OBJ_VNUM(recom) == 5735)
@@ -5309,7 +5309,7 @@ SPECIAL(mageskill_trainer)
   struct obj_data *chain = NULL;
   if (CMD_IS("say") || CMD_IS("'")) {
     skip_spaces(&argument);
-    if (!*argument || str_cmp(argument, "training"))
+    if (!*argument || !str_str(argument, "training"))
       return FALSE;
     for (int i = 0; i < NUM_WEARS && !chain; i++)
       if (GET_EQ(ch, i) && GET_OBJ_VNUM(GET_EQ(ch, i)) == 5734)
