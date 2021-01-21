@@ -1574,11 +1574,11 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
         return;
       }
       
-      bool use_credstick = cred && shop_table[shop_nr].type != SHOP_BLACK ? 0 : 1;
-      if (!use_credstick)
+      bool use_cash = shop_table[shop_nr].type == SHOP_BLACK || !cred;
+      if (use_cash)
         cred = NULL;
       
-      if (shop_receive(ch, keeper, arg, order->number, use_credstick, NULL, obj, cred, order->price, shop_nr)) {
+      if (shop_receive(ch, keeper, arg, order->number, use_cash, NULL, obj, cred, order->price, shop_nr)) {
         struct shop_order_data *temp;
         REMOVE_FROM_LIST(order, shop_table[shop_nr].order, next);
         delete order;
