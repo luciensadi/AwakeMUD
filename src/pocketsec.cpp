@@ -113,13 +113,16 @@ void pocketsec_menu(struct descriptor_data *d)
     d->edit_mode = SEC_INIT;
   } else {
     send_to_char(CH, "^cMain Menu^n\r\n" 
-                 "   [^c1^n]^c%sMail^n\r\n"
+                 "   [^c1^n]^c%sMail%s^n\r\n"
                  "   [^c2^n] ^cNotes^n\r\n"
                  "   [^c3^n] ^cPhonebook^n\r\n"
                  "   [^c4^n] ^cFiles^n\r\n"
                  "   [^c5^n] ^cBanking^n\r\n"
                  "   [^c6^n] ^c%sock^n\r\n"
-                 "   [^c0^n] ^cQuit^n\r\n", amount_of_mail_waiting(CH) > 0 ? " ^R" : " ", GET_OBJ_VAL(SEC, 1) ? "Unl" : "L");
+                 "   [^c0^n] ^cQuit^n\r\n", 
+                 amount_of_mail_waiting(CH) > 0 ? " ^R" : " ", 
+                 amount_of_mail_waiting(CH) > 0 ? " (unread messages)" : "",
+                 GET_OBJ_VAL(SEC, 1) ? "Unl" : "L");
     d->edit_mode = SEC_MENU;
   }
 }

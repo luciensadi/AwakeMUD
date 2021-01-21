@@ -1711,14 +1711,27 @@ ACMD(do_attach)
     return;
   }
   
+  if (GET_OBJ_TYPE(item) != ITEM_GUN_ACCESSORY) {
+    send_to_char(ch, "%s is not a weapon accessory.\r\n", capitalize(GET_OBJ_NAME(item)));
+    return;
+  }
+  
   if (!(item2 = get_obj_in_list_vis(ch, buf2, ch->carrying))) {
     if (!(item2 = get_obj_in_list_vis(ch, buf2, GET_EQ(ch, WEAR_WIELD))) && !(item2 = get_obj_in_list_vis(ch, buf2, GET_EQ(ch, WEAR_HOLD)))) {
       send_to_char(ch, "You don't seem to have any '%s'.\r\n", buf2);
+      return;
+    } else if (GET_OBJ_TYPE(item2) != ITEM_WEAPON) {
+      send_to_char(ch, "%s is not a firearm.\r\n", capitalize(GET_OBJ_NAME(item)));
       return;
     } else {
       send_to_char(ch, "You'll have a hard time attaching anything to %s while you're wielding it.\r\n", GET_OBJ_NAME(item2));
       return;
     }
+  }
+  
+  if (GET_OBJ_TYPE(item2) != ITEM_WEAPON) {
+    send_to_char(ch, "%s is not a firearm.\r\n", capitalize(GET_OBJ_NAME(item)));
+    return;
   }
 
   // If we failed to attach it, don't destroy the attachment.
