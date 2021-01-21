@@ -58,7 +58,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_SKILL_LEVEL_FOR_IMMS   100
 
 // What do you want the newbie karma threshold to be? Above this, you lose the newbie flag.
-#define NEWBIE_KARMA_THRESHOLD  25
+#define NEWBIE_KARMA_THRESHOLD  50
 
 // How many syspoints should someone spend to restring an item?
 #define SYSP_RESTRING_COST  2

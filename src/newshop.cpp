@@ -457,6 +457,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           
           obj_to_char(obj, ch);
         }
+        // TODO: Handle decrementing shop amounts here (->stock). Currently, shop items are not decremented on sale for these item types.
       } 
       
       // Give them the item (it's parts or conjuring materials)

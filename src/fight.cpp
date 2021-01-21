@@ -415,12 +415,12 @@ void make_corpse(struct char_data * ch)
   if (IS_NPC(ch))
   {
     snprintf(buf, sizeof(buf), "corpse %s", ch->player.physical_text.keywords);
-    snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", GET_NAME(ch));
+    snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", decapitalize_a_an(GET_NAME(ch)));
     snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", GET_NAME(ch));
   } else
   {
     snprintf(buf, sizeof(buf), "belongings %s", ch->player.physical_text.keywords);
-    snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", GET_NAME(ch));
+    snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(GET_NAME(ch)));
     snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", GET_NAME(ch));
   }
   corpse->text.keywords = str_dup(buf);
