@@ -4445,6 +4445,18 @@ ACMD(do_consider)
   }
   
   if (IS_NPC(victim)) {
+    if (MOB_FLAGGED(victim, MOB_NOKILL) 
+        || vnum_from_non_connected_zone(GET_MOB_VNUM(victim))
+        || mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
+        || mob_index[GET_MOB_RNUM(victim)].func == johnson 
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
+        || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec) {
+      send_to_char("This NPC has been made unkillable by staff.\r\n", ch);
+      return;
+    }
+    
     diff = (GET_BALLISTIC(victim) - GET_BALLISTIC(ch));
     diff += (GET_IMPACT(victim) - GET_IMPACT(ch));
     diff += (GET_BOD(victim) - GET_BOD(ch));
