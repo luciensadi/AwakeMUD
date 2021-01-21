@@ -131,11 +131,14 @@ struct deck_info {
   struct phone_data *phone;
   deck_info():
     mpcp(0), bod(0), sensor(0), evasion(0), masking(0), hardening(0), active(0), 
-    storage(0), response(0), res_det(0), res_test(0),
+    storage(0), response(0), io(0), res_det(0), res_test(0), ras(0), reality(0), iccm(0),
     tally(0), last_trigger(0), scout(0), located(FALSE),
-    redirect(0), redirectedon(NULL), hitcher(NULL), software(NULL), deck(NULL),
+    redirect(0), redirectedon(NULL), mxp(0), hitcher(NULL), software(NULL), deck(NULL),
     seen(NULL), ch(NULL), phone(NULL)
-   {} 
+   {
+     asist[0] = 0;
+     asist[1] = 0;
+   } 
 };
 
 struct matrix_icon {

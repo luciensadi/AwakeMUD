@@ -716,8 +716,9 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
     if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
       act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
     else {
-      if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-           || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
+      if ( (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) 
+            || IS_OBJ_STAT(obj, ITEM_WIZLOAD) 
+            || (cont->obj_flags.extra_flags.IsSet(ITEM_CORPSE) && GET_OBJ_BARRIER(cont) == PC_CORPSE_BARRIER)) {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s",
                 GET_CHAR_NAME(ch),
@@ -801,6 +802,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         act("$n gets $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
       else
         act("$n uninstalls $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
+      
       obj_from_obj(obj);
       obj_to_char(obj, ch);
       get_check_money(ch, obj);

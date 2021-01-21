@@ -474,40 +474,54 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           obj_to_char(obj, ch);
         }
       }
-    } else
-      while(obj && (bought < buynum && IS_CARRYING_N(ch) < CAN_CARRY_N(ch) && IS_CARRYING_W(ch) +
-                    GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch) && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price)) {
-        if (GET_OBJ_VNUM(obj) == 17513 || GET_OBJ_VNUM(obj) == 62100)
+    } else {
+      while (obj && (bought < buynum 
+                     && IS_CARRYING_N(ch) < CAN_CARRY_N(ch) 
+                     && IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch) 
+                     && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price)) {
+        // Visas are ID-locked to the purchaser.
+        if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
           GET_OBJ_VAL(obj, 0) = GET_IDNUM(ch);
+          
         obj_to_char(obj, ch);
+        obj = NULL;
         bought++;
+        
         if (sell) {
-          obj = NULL;
-          if (sell->type == SELL_BOUGHT) {
-            sell->stock--;
-            if (sell->stock == 0) {
-              struct shop_sell_data *temp;
-              REMOVE_FROM_LIST(sell, shop_table[shop_nr].selling, next);
-              delete sell;
-              sell = NULL;
-            } else
+          switch (sell->type) {
+            case SELL_BOUGHT:
+              if (--(sell->stock) == 0) {
+                struct shop_sell_data *temp = NULL;
+                REMOVE_FROM_LIST(sell, shop_table[shop_nr].selling, next);
+                DELETE_AND_NULL(sell);
+              } else
+                obj = read_object(sell->vnum, VIRTUAL);
+              break;
+            case SELL_STOCK:
+              sell->stock--;
+              if (sell->stock > 0)
+                obj = read_object(sell->vnum, VIRTUAL);
+              break;
+            default:
               obj = read_object(sell->vnum, VIRTUAL);
-          } else if (sell->type == SELL_STOCK) {
-            sell->stock--;
-            if (sell->stock > 0)
-              obj = read_object(sell->vnum, VIRTUAL);
-          } else
-            obj = read_object(sell->vnum, VIRTUAL);
+              break;
+          }  
         } else {
           obj = read_object(obj->item_number, REAL);
         }
-        if (obj)
-          extract_obj(obj);
+        
+        // Deduct the cost.
         if (cred)
           GET_OBJ_VAL(cred, 0) -= price;
         else
           GET_NUYEN(ch) -= price;
       }
+      if (obj) {
+        // Obj was loaded but not given to the character.
+        extract_obj(obj);
+      }
+    }
+    
     if (bought < buynum) {
       strcpy(buf, GET_CHAR_NAME(ch));
       if (cash ? GET_NUYEN(ch) : GET_OBJ_VAL(cred, 0) < price)

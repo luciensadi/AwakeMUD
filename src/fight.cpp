@@ -446,7 +446,7 @@ void make_corpse(struct char_data * ch)
     GET_OBJ_VAL(corpse, 4) = 1;
     GET_OBJ_VAL(corpse, 5) = GET_IDNUM(ch);
     /* make 'em bullet proof...(anti-twink measure) */
-    GET_OBJ_BARRIER(corpse) = 75;
+    GET_OBJ_BARRIER(corpse) = PC_CORPSE_BARRIER;
     
     // Drain their pockets of ammo and put it on the corpse.
     for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
@@ -517,6 +517,12 @@ void make_corpse(struct char_data * ch)
     extern struct char_data *mob_proto;
     mob_proto[GET_MOB_RNUM(ch)].mob_specials.value_death_nuyen += credits + nuyen;
     mob_proto[GET_MOB_RNUM(ch)].mob_specials.value_death_items += corpse_value;
+  } else {
+    // Log it so we can help people recover their stuff.
+    const char *need_delete = generate_new_loggable_representation(corpse);
+    snprintf(buf, sizeof(buf), "Corpse generated for %s: %s", GET_CHAR_NAME(ch), need_delete);
+    delete [] need_delete;
+    mudlog(buf, ch, LOG_GRIDLOG, TRUE);
   }
   
   ch->carrying = NULL;

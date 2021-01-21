@@ -1476,6 +1476,7 @@ ACMD(do_connect)
   }
   PERSONA = icon;
   DECKER = new deck_info;
+  memset(DECKER, 0, sizeof(deck_info));
   if (GET_OBJ_VNUM(cyberdeck) == OBJ_CUSTOM_CYBERDECK_SHELL) {
     struct obj_data *parts = cyberdeck->contains;
     for (; parts; parts = parts->next_content)

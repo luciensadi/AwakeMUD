@@ -2067,6 +2067,14 @@ void extract_veh(struct veh_data * veh)
     veh->towing = NULL;
   }
   
+  // Remove its gridguide info.
+  while (veh->grid) {
+    struct grid_data *grid = veh->grid;
+    veh->grid = veh->grid->next;
+    DELETE_ARRAY_IF_EXTANT(grid->name);
+    delete grid;
+  }
+  
   // Perform actual vehicle extraction.
   REMOVE_FROM_LIST(veh, veh_list, next);
   if (veh->in_room)

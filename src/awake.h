@@ -2366,4 +2366,6 @@ enum {
 #define HOST_SECURITY_RED    3
 #define HOST_SECURITY_BLACK  4
 
+#define PC_CORPSE_BARRIER 75
+
 #endif

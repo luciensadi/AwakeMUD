@@ -2531,9 +2531,9 @@ const char *ACTNULL = "<NULL>";
 // Uses NEW-- make sure you delete!
 char* strip_ending_punctuation_new(const char* orig) {
   int len = strlen(orig);
-  char* stripped = new char[len];
+  char* stripped = new char[len + 1];
   
-  strcpy(stripped, orig);
+  strlcpy(stripped, orig, len + 1);
   
   char* c = stripped + len - 1;
   
@@ -2744,7 +2744,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
                   i = temp;
                   
                   // Voice deleted here.
-                  delete voice;
+                  delete [] voice;
                 }
               }
             }
