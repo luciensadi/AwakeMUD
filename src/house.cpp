@@ -162,20 +162,33 @@ bool House_load(struct house_control_rec *house)
   return TRUE;
 }
 
-void House_save(struct house_control_rec *house, FILE *fl, long rnum)
+#define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
+  if (obj_val != proto_val)                                        \
+    fprintf(fl, (sectname), (obj_val));                            \
+}
+#define FILEBUF_SIZE 8192
+
+void House_save(struct house_control_rec *house, const char *file_name, long rnum)
 {
-  int level = 0, o = 0;
+  int level = 0;
   struct obj_data *obj = NULL;
   
-#define FILEBUF_SIZE 8192
+  FILE *fl;
+  
+  // Can't open the house file? Oof.
+  if (!file_name || !*file_name || !(fl = fopen(file_name, "wb"))) {
+    perror("SYSERR: Error saving house file");
+    return;
+  }
+  
   char print_buffer[FILEBUF_SIZE];
+  memset(print_buffer, 0, sizeof(print_buffer));
   setvbuf(fl, print_buffer, _IOFBF, FILEBUF_SIZE);
-#undef FILEBUF_SIZE
   
   // Are we saving an apartment? If so, store guest list.
   if (house) {    
     fprintf(fl, "[GUESTS]\n");
-    for (o = 0; o < MAX_GUESTS; o++) {
+    for (int o = 0; o < MAX_GUESTS; o++) {
       // Don't write out empty guest slots.
       if (house->guests[o])
         fprintf(fl, "\tGuest%d:\t%ld\n", o, house->guests[o]);
@@ -185,15 +198,9 @@ void House_save(struct house_control_rec *house, FILE *fl, long rnum)
   obj = world[rnum].contents;
   
   fprintf(fl, "[HOUSE]\n");
-  o = 0;
-  
-#define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
-  if (obj_val != proto_val)                                        \
-    fprintf(fl, (sectname), (obj_val));                            \
-}
   
   struct obj_data *prototype = NULL;
-  for (;obj;)
+  for (int o = 0; obj;)
   {
     prototype = &obj_proto[real_object(GET_OBJ_VNUM(obj))];
     if (!IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_KEY) {
@@ -234,7 +241,11 @@ void House_save(struct house_control_rec *house, FILE *fl, long rnum)
     if (obj)
       obj = obj->next_content;
   }
+  
+  fclose(fl);
 }
+#undef FILEBUF_SIZE
+#undef PRINT_TO_FILE_IF_CHANGED
 
 struct house_control_rec *find_house(vnum_t vnum)
 {
@@ -254,7 +265,6 @@ void House_crashsave(vnum_t vnum)
 {
   int rnum;
   char buf[MAX_STRING_LENGTH];
-  FILE *fp;
   struct house_control_rec *house = NULL;
   struct obj_data *obj = NULL;
 
@@ -299,15 +309,8 @@ void House_crashsave(vnum_t vnum)
     return;
   }
     
-  // Can't open the house file? Oof.
-  if (!(fp = fopen(buf, "wb"))) {
-    perror("SYSERR: Error saving house file");
-    return;
-  }
-  
   // Save it.
-  House_save(find_house(vnum), fp, rnum);
-  fclose(fp);
+  House_save(find_house(vnum), buf, rnum);
 }
 
 /* Delete a house save file */
