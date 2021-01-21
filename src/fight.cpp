@@ -3652,7 +3652,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   // Setup for ranged combat.
   if (!melee) {
     // Setup: Find the character's gyroscopic stabilizer (if any).
-    if (!(PLR_FLAGGED(att->ch, PLR_REMOTE) || !AFF_FLAGGED(att->ch, AFF_RIG) || !AFF_FLAGGED(att->ch, AFF_MANNING))) {
+    if (!PLR_FLAGGED(att->ch, PLR_REMOTE) && !AFF_FLAGGED(att->ch, AFF_RIG) && !AFF_FLAGGED(att->ch, AFF_MANNING)) {
       for (int q = 0; q < NUM_WEARS; q++) {
         if (GET_EQ(att->ch, q) && GET_OBJ_TYPE(GET_EQ(att->ch, q)) == ITEM_GYRO) {
           att->gyro = GET_EQ(att->ch, q);
@@ -3694,7 +3694,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       
       // Setup: Compute recoil.
       att->recoil_comp = check_recoil(att->ch, att->weapon);
-      att->modifiers[COMBAT_MOD_RECOIL] += MAX(0, att->burst_count - att->recoil_comp);
+      
+      // SR3 p151
+      int att_burst_after_veh_mount_reduction = att->burst_count;
+      if (PLR_FLAGGED(att->ch, PLR_REMOTE) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_MANNING))
+        att_burst_after_veh_mount_reduction /= 2;
+        
+      att->modifiers[COMBAT_MOD_RECOIL] += MAX(0, att_burst_after_veh_mount_reduction - att->recoil_comp);
       switch (GET_WEAPON_SKILL(att->weapon)) {
         case SKILL_SHOTGUNS:
         case SKILL_MACHINE_GUNS:

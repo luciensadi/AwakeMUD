@@ -1417,7 +1417,6 @@ ACMD(do_reload)
     return;
   }
   
-  // TODO: I stopped halfway through editing this. It is BROKEN.
   {
     // In-vehicle reloading with mounts.
     if (ch->in_veh) {
@@ -1497,7 +1496,12 @@ ACMD(do_reload)
               update_ammobox_ammo_quantity(i, -max);
               GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
               GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
-              send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
+              if (GET_AMMOBOX_QUANTITY(i) == 0 && !i->restring && !(*i->restring)) {
+                send_to_char(ch, "You insert %d rounds of ammunition into %s, then junk the empty %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)), GET_OBJ_NAME(i));
+                extract_obj(i);
+              } else {
+                send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)));
+              }
               return;
             }            
           } 
@@ -1513,7 +1517,14 @@ ACMD(do_reload)
             update_ammobox_ammo_quantity(i, -max);
             ammo->restring = str_dup(get_ammobox_default_restring(ammo));
             obj_to_obj(ammo, m);
-            send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
+            
+            if (GET_AMMOBOX_QUANTITY(i) == 0 && !i->restring && !(*i->restring)) {
+              send_to_char(ch, "You insert %d rounds of ammunition into %s, then junk the empty %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)), GET_OBJ_NAME(i));
+              extract_obj(i);
+            } else {
+              send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)));
+            }
+            
             return;
           }
         }
