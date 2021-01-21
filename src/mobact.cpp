@@ -450,10 +450,6 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
     return FALSE;
   }
   
-  snprintf(buf, sizeof(buf), "guard %s: ch = %s, tveh = %s, vict = %s", AFF_FLAGGED(ch, AFF_PILOT) ? "driver" : "gunner",
-          GET_NAME(ch), tveh ? tveh->name : "none", vict ? GET_NAME(vict) : "none");
-  mudlog(buf, ch, LOG_SYSLOG, TRUE);
-  
   // Driver? It's rammin' time.
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
 #ifdef MOBACT_DEBUG
@@ -556,10 +552,6 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
 #endif
     return FALSE;
   }
-  
-  snprintf(buf, sizeof(buf), "aggro %s: ch = %s, tveh = %s, vict = %s", AFF_FLAGGED(ch, AFF_PILOT) ? "driver" : "gunner",
-          GET_NAME(ch), tveh ? tveh->name : "none", vict ? GET_NAME(vict) : "none");
-  mudlog(buf, ch, LOG_SYSLOG, TRUE);
   
   // Driver? It's rammin' time.
   if (AFF_FLAGGED(ch, AFF_PILOT)) {

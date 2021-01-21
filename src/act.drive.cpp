@@ -239,15 +239,16 @@ ACMD(do_drive)
     send_to_veh(buf1, VEH, ch, FALSE);
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("The wheel is in your hands.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s takes the wheel.\r\n", GET_NAME(ch));
+    snprintf(buf1, sizeof(buf1), "%s takes the wheel.\r\n", capitalize(GET_NAME(ch)));
+    send_to_veh(buf1, VEH, ch, FALSE);
   } else {
     AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
     send_to_char("You relinquish the driver's seat.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", GET_NAME(ch));
+    snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
+    send_to_veh(buf1, VEH, ch, FALSE);
     stop_chase(VEH);
     if (!VEH->dest)
       VEH->cspeed = SPEED_OFF;
-    send_to_veh(buf1, VEH, ch, FALSE);
   }
   return;
 }
@@ -323,7 +324,8 @@ ACMD(do_rig)
     send_to_veh(buf1, VEH, ch, TRUE);
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("As you jack in, your perception shifts.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s jacks into the vehicle control system.\r\n", GET_NAME(ch));
+    snprintf(buf1, sizeof(buf1), "%s jacks into the vehicle control system.\r\n", capitalize(GET_NAME(ch)));
+    send_to_veh(buf1, VEH, ch, FALSE);
   } else {
     if (!AFF_FLAGGED(ch, AFF_RIG)) {
       send_to_char("But you're not rigging.\r\n", ch);
@@ -334,7 +336,7 @@ ACMD(do_rig)
       VEH->cspeed = SPEED_OFF;
     stop_chase(VEH);
     send_to_char("You return to your senses.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s returns to their senses.\r\n", GET_NAME(ch));
+    snprintf(buf1, sizeof(buf1), "%s returns to their senses.\r\n", capitalize(GET_NAME(ch)));
     send_to_veh(buf1, VEH, ch, FALSE);
     stop_fighting(ch);
   }
@@ -353,7 +355,7 @@ ACMD(do_vemote)
     return;
   }
   RIG_VEH(ch, veh)
-  snprintf(buf, sizeof(buf), "%s%s.\r\n", GET_VEH_NAME(veh), argument);
+  snprintf(buf, sizeof(buf), "%s%s.\r\n", capitalize(GET_VEH_NAME(veh)), argument);
   if (veh->in_room)
     send_to_room(buf, veh->in_room);
   else

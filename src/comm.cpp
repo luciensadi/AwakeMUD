@@ -1428,7 +1428,7 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   /* if we have enough space, just write to buffer and that's it! */
   if (t->bufspace >= size)
   {
-    strcpy(t->output + t->bufptr, txt);
+    strlcpy(t->output + t->bufptr, txt, t->bufspace);
     t->bufspace -= size;
     t->bufptr += size;
     return;
@@ -1460,9 +1460,9 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
     buf_largecount++;
   }
   
-  strcpy(t->large_outbuf->text, t->output);     /* copy to big buffer */
+  strlcpy(t->large_outbuf->text, t->output, LARGE_BUFSIZE);     /* copy to big buffer */
   t->output = t->large_outbuf->text;    /* make big buffer primary */
-  strcat(t->output, txt);       /* now add new text */
+  strlcat(t->output, txt, LARGE_BUFSIZE);       /* now add new text */
   
   /* calculate how much space is left in the buffer */
   t->bufspace = LARGE_BUFSIZE - 1 - strlen(t->output);
