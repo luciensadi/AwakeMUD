@@ -443,7 +443,7 @@ SPECIAL(landlord_spec)
     }
     room_record = find_room(arg, lord->rooms, recep);
     if (!room_record)
-      do_say(recep, "Which room is that?", 0, 0);
+      return TRUE;
     else if (room_record->owner != GET_IDNUM(ch))
       do_say(recep, "I would get fired if I did that.", 0, 0);
     else {

@@ -179,10 +179,12 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
       
       if (real_obj >= 0) {
         // Can't sell it? Don't have it show up here.
-        if (!can_sell_object(read_object(real_obj, REAL), NULL, shop_nr)) {
+        struct obj_data *temp_obj = read_object(real_obj, REAL);
+        if (!can_sell_object(temp_obj, NULL, shop_nr)) {
           num++;
           continue;
         }
+        extract_obj(temp_obj);
         if (num == 0)
           break;
       } else {
@@ -498,6 +500,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         } else {
           obj = read_object(obj->item_number, REAL);
         }
+        if (obj)
+          extract_obj(obj);
         if (cred)
           GET_OBJ_VAL(cred, 0) -= price;
         else
@@ -740,6 +744,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
       order->number = buynum;
       order->price = price;
       order->next = shop_table[shop_nr].order;
+      order->sent = FALSE;
       shop_table[shop_nr].order = order;
     }
     

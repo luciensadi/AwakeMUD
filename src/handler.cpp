@@ -1465,18 +1465,18 @@ void obj_from_cyberware(struct obj_data * cyber)
   cyber->next_content = NULL;
 }
 
-void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
+bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)
 {
   int j;
   
   if (!obj) {
     mudlog("SYSERR: Null object passed to equip_char.", ch, LOG_SYSLOG, TRUE);
-    return;
+    return FALSE;
   }
   
   if (!ch) {
     mudlog("SYSERR: Null character passed to equip_char.", ch, LOG_SYSLOG, TRUE);
-    return;
+    return FALSE;
   }
   
   if (GET_EQ(ch, pos))
@@ -1485,17 +1485,17 @@ void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
     snprintf(errbuf, sizeof(errbuf), "SYSERR: Char is already equipped: %s, %s",
                  GET_NAME(ch), obj->text.name);
     mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
-    return;
+    return FALSE;
   }
   if (obj->carried_by)
   {
     mudlog("SYSERR: EQUIP: Obj is carried_by when equip.", ch, LOG_SYSLOG, TRUE);
-    return;
+    return FALSE;
   }
   if (obj->in_room)
   {
       mudlog("SYSERR: EQUIP: Obj is in_room when equip.", ch, LOG_SYSLOG, TRUE);
-    return;
+    return FALSE;
   }
   if (IS_OBJ_STAT(obj, ITEM_GODONLY) && !IS_NPC(ch) && !IS_SENATOR(ch))
   {
@@ -1503,7 +1503,7 @@ void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
     act("$n is zapped by $p and instantly lets go of it.", FALSE, ch, obj, 0, TO_ROOM);
     obj_to_room(obj, get_ch_in_room(ch));     /* changed to drop in inventory instead of
                                * ground */  // and now I've changed it back, who wants morts running around with god-only keys
-    return;
+    return FALSE;
   }
   
   GET_EQ(ch, pos) = obj;
@@ -1525,6 +1525,7 @@ void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
   
   affect_total(ch);
   calc_weight(ch);
+  return TRUE;
 }
 
 struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)

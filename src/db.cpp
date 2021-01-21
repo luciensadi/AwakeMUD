@@ -3515,8 +3515,7 @@ void reset_zone(int zone, int reboot)
           ZONE_ERROR("invalid equipment pos number");
         } else {
           obj = read_object(ZCMD.arg1, REAL);
-          equip_char(mob, obj, ZCMD.arg3);
-          if (GET_EQ(mob, ZCMD.arg3) != obj) {
+          if (!equip_char(mob, obj, ZCMD.arg3) || GET_EQ(mob, ZCMD.arg3) != obj) {
             // Equip failure; destroy the object.
             extract_obj(obj);
             last_cmd = 0;

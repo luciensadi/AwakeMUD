@@ -40,7 +40,7 @@ int find_spell_num(char *name);
 void    obj_to_char(struct obj_data *object, struct char_data *ch);
 void    obj_from_char(struct obj_data *object);
 
-void    equip_char(struct char_data *ch, struct obj_data *obj, int pos);
+bool    equip_char(struct char_data *ch, struct obj_data *obj, int pos);
 struct obj_data *unequip_char(struct char_data *ch, int pos, bool focus);
 
 struct obj_data *get_obj_in_list(char *name, struct obj_data *list);

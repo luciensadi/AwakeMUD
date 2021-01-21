@@ -1626,11 +1626,11 @@ int process_output(struct descriptor_data *t) {
     t->large_outbuf->next = bufpool;
     bufpool = t->large_outbuf;
     t->large_outbuf = NULL;
-    t->output = t->small_outbuf;
   }
   /* reset total bufspace back to that of a small buffer */
   t->bufspace = SMALL_BUFSIZE - 1;
   t->bufptr = 0;
+  t->output = t->small_outbuf;
   *(t->output) = '\0';
   
   return result;
@@ -2641,7 +2641,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
               i = make_desc(to, ch, buf, TRUE, TRUE);
           } else {
             if (IS_SENATOR(ch))
-              i = "an invisible staff member";
+              i = GET_CHAR_NAME(ch);
             else
               i = "someone";
           }
