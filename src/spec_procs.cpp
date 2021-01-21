@@ -402,10 +402,11 @@ SPECIAL(metamagic_teacher)
     send_to_char("You aren't close enough to the astral plane to learn that.\r\n", ch);
     return TRUE;
   }
+  /* "Hey, I have an idea!" "What?" "Let's arbitrarily restrict who can train where so that the builders have to do more work!"
   if (GET_GRADE(ch) >= (GET_MAG(master) / 100) - 6) {
     send_to_char(ch, "%s is not powerful enough to teach you that technique.\r\n", GET_NAME(master));
     return TRUE;
-  }
+  } */
 
   for (; x < NUM_TEACHER_SKILLS; x++)
     if (metamagict[ind].s[x] == i)
