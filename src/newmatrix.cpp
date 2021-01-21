@@ -1512,6 +1512,7 @@ ACMD(do_connect)
   DECKER->hardening = GET_OBJ_VAL(cyberdeck, 1);
   DECKER->active = GET_OBJ_VAL(cyberdeck, 2);
   DECKER->response = GET_OBJ_VAL(cyberdeck, 6);
+  DECKER->ras = GET_OBJ_VNUM(cyberdeck) == ITEM_CUSTOM_DECK ? FALSE : TRUE;
   affect_total(ch);
   GET_REM_HACKING(ch) = GET_HACKING(ch);
   GET_MAX_HACKING(ch) = (int)(GET_HACKING(ch) / 3);
