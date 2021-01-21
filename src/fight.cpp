@@ -786,7 +786,7 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
   
   share = gain_karma(ch, share, FALSE, TRUE, TRUE);
   
-  if ( share >= 100 * KARMA_GAIN_MULTIPLIER || access_level(ch, LVL_BUILDER) )
+  if ( share >= (100 * KARMA_GAIN_MULTIPLIER) || access_level(ch, LVL_BUILDER) )
   {
     snprintf(buf, sizeof(buf),"%s gains %.2f karma from killing %s.", GET_CHAR_NAME(ch),
             (double)share/100.0, GET_CHAR_NAME(victim));
