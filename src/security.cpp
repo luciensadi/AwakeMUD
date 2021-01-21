@@ -15,10 +15,10 @@ void hash_and_store_password(const char* password, char* array_to_write_to) {
   strcpy(array_to_write_to, password);
 }
 bool validate_password(const char* password, const char* hashed_password) {
-  return strncmp(password, hashed_password) != NULL;
+  return strncmp(password, hashed_password, strlen(password)) == 0;
 }
 bool validate_and_update_password(const char* password, char* hashed_password) {
-  return strncmp(password, hashed_password) != NULL;
+  return strncmp(password, hashed_password, strlen(password)) == 0;
 }
 #else
 
