@@ -153,7 +153,11 @@ void pocketsec_mailmenu(struct descriptor_data *d)
   send_to_char(CH, "^LShadowland Mail Network^n\r\n");
   for (mail = folder->contains; mail; mail = mail->next_content) {
     i++;
-    send_to_char(CH, " %2d >%s%s\r\n", i, !GET_OBJ_VAL(mail, 0) ? " ^R" : " ", GET_OBJ_NAME(mail));
+    send_to_char(CH, " %2d >%s%s%s\r\n", 
+                 i, 
+                 !GET_OBJ_VAL(mail, 0) ? " ^R" : " ", 
+                 GET_OBJ_NAME(mail),
+                 !GET_OBJ_VAL(mail, 0) ? " (unread)" : "");
   }
   send_to_char("\r\n[^cR^n]^cead Mail^n     [^cD^n]^celete Mail^n     [^cS^n]^cend mail^n     [^cB^n]^cack^n\r\n", CH);
   d->edit_mode = SEC_MAILMENU;
