@@ -247,8 +247,8 @@ void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
   else
   {
     snprintf(buf, sizeof(buf), "^cYou tell %s%s ^mOOCly^c, '%s^c'^n", 
-             GET_CHAR_NAME(ch), 
-             IS_SENATOR(ch) ? " (staff)" : "",
+             GET_CHAR_NAME(vict), 
+             IS_SENATOR(vict) ? " (staff)" : "",
              capitalize(arg));
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_TELLS, buf);
