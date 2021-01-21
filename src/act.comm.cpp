@@ -235,7 +235,7 @@ ACMD(do_exclaim)
 
 void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
 {
-  snprintf(buf, sizeof(buf), "^c%s%s tells you ^mOOCly^c, '%s^c'^n", 
+  snprintf(buf, sizeof(buf), "^c%s%s tells you ^mOOCly^c, '%s^c'^n\r\n", 
            GET_CHAR_NAME(ch), 
            IS_SENATOR(ch) ? " (staff)" : "",
            capitalize(arg));
@@ -246,7 +246,7 @@ void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
     send_to_char(OK, ch);
   else
   {
-    snprintf(buf, sizeof(buf), "^cYou tell %s%s ^mOOCly^c, '%s^c'^n", 
+    snprintf(buf, sizeof(buf), "^cYou tell %s%s ^mOOCly^c, '%s^c'^n\r\n", 
              GET_CHAR_NAME(vict), 
              IS_SENATOR(vict) ? " (staff)" : "",
              capitalize(arg));
