@@ -417,7 +417,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     {
           
       // Deduct money up to the amount they can afford. Update the object's cost to match.
-      float current_obj_weight = 0.0;
+      float current_obj_weight = GET_OBJ_WEIGHT(obj);
       while (bought < buynum && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price) {
         bought++;
         
