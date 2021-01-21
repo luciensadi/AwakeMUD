@@ -2421,8 +2421,9 @@ ACMD(do_cast)
     if (!(force = atoi(buf))) {
       strcpy(spell_name, buf);
     } else {
-      half_chop(buf1, buf2, buf1);
-      strcpy(spell_name, buf2);
+      half_chop(buf1, buf2, buf3);
+      strlcpy(buf1, buf3, sizeof(buf1));
+      strlcpy(spell_name, buf2, sizeof(spell_name));
     }
   }
   for (;spell; spell = spell->next)
