@@ -2718,6 +2718,35 @@ int find_spell_num(char *name)
   return -1;
 }
 
+int find_ability_num(char *name)
+{
+  int index = 0, ok;
+  char *temp, *temp2;
+  char first[256], first2[256], powername[256];
+  
+  strlcpy(powername, adept_powers[index], sizeof(powername));
+  
+  while (++index < ADEPT_NUMPOWER) {
+    if (is_abbrev(name, adept_powers[index]))
+      return index;
+    
+    ok = 1;
+    temp = any_one_arg(powername, first);
+    temp2 = any_one_arg(name, first2);
+    while (*first && *first2 && ok) {
+      if (!is_abbrev(first2, first))
+        ok = 0;
+      temp = any_one_arg(temp, first);
+      temp2 = any_one_arg(temp2, first2);
+    }
+    
+    if (ok && !*first2)
+      return index;
+  }
+  
+  return -1;
+}
+
 
 /* Generic Find, designed to find any object/character                    */
 /* Calling :                                                              */

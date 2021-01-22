@@ -95,6 +95,7 @@ extern void ccr_pronoun_menu(struct descriptor_data *d);
 
 /* prototypes for all do_x functions. */
 ACMD_DECLARE(do_olcon);
+ACMD_DECLARE(do_abilityset);
 ACMD_DECLARE(do_accept);
 ACMD_DECLARE(do_action);
 ACMD_DECLARE(do_activate);
@@ -433,6 +434,7 @@ struct command_info cmd_info[] =
 
     /* now, the main list -- note that spec-proc commands and socials come after this list. */
     { "abilities", POS_SLEEPING, do_skills   , 0, SCMD_ABILITIES },
+    { "abilityset", POS_SLEEPING, do_abilityset , LVL_DEVELOPER, 0 },
     { "activate" , POS_LYING   , do_activate , 0, 0 },
     { "aecho"    , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO },
     { "accept"   , POS_LYING   , do_accept   , 0, 0 },

@@ -1586,20 +1586,15 @@ int process_output(struct descriptor_data *t) {
   /* If the descriptor is NULL, just return */
   if ( !t )
     return 0;
-  
-  /* we may need this \r\n for later -- see below */
-  strcpy(i, "\r\n");
-  
-  /* now, append the 'real' output */
-  strcpy(i + 2, t->output);
-  
-  /* if we're in the overflow state, notify the user */
-  if (t->bufptr < 0)
-    strcat(i, "**OVERFLOW**");
-  
-  /* add the extra CRLF if the person isn't in compact mode */
-  if (!t->connected && t->character)
-    strcat(i + 2, "\r\n");
+    
+  memset(i, 0, sizeof(i));
+    
+  // Write out a newline, the contents of the output buffer, and the overflow warning if needed.
+  // Add an extra CRLF if the person isn't in compact mode.
+  snprintf(i, sizeof(i), "\r\n%s%s%s", 
+           t->output, 
+           t->bufptr < 0 ? "**OVERFLOW**" : "",            // <- overflow mode check: bufptr < 0
+           !t->connected && t->character ? "\r\n" : "");   // <- 'compact mode' check
   
   /*
    * now, send the output.  If this is an 'interruption', use the prepended
@@ -2396,6 +2391,7 @@ void send_to_char(struct char_data * ch, const char * const messg, ...)
     return;
   
   char internal_buffer[MAX_STRING_LENGTH];
+  memset(internal_buffer, 0, sizeof(internal_buffer));
   
   va_list argptr;
   va_start(argptr, messg);
