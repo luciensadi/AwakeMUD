@@ -4619,8 +4619,8 @@ void purge_unowned_vehs() {
       if (veh->in_room) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Transferring to room %ld.", veh->in_room->number);
         log(buf);
-        veh_from_room(vict_veh);
         veh_to_room(vict_veh, veh->in_room);
+        continue;
       }
       
       // If the vehicle is in another vehicle instead, disgorge there.
@@ -4629,6 +4629,7 @@ void purge_unowned_vehs() {
                 veh->in_veh->short_description, veh->in_veh->idnum);
         log(buf);
         veh_to_veh(vict_veh, veh->in_veh);
+        continue;
       }
       
       // Failure case: Vehicle was in neither a room nor another vehicle.
@@ -4641,6 +4642,7 @@ void purge_unowned_vehs() {
                 veh->in_room ? veh->in_room->number : -1);
         log(buf);
         veh_to_room(vict_veh, &world[real_room(RM_DANTES_GARAGE)]);
+        continue;
       }
     }
     

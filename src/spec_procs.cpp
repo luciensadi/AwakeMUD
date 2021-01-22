@@ -2762,7 +2762,7 @@ SPECIAL(hand_held_scanner)
   struct obj_data *scanner = (struct obj_data *) me;
   int i, dir;
 
-  if (!cmd || !scanner->worn_by || number(1, 10) > 4)
+  if (!cmd || !scanner->worn_by || !ch->in_room || number(1, 10) > 4)
     return FALSE;
 
   if (CMD_IS("north"))
