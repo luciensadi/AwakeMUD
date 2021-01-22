@@ -415,6 +415,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         || (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING)
         || (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO))
     {
+      bought = 0;
           
       // Deduct money up to the amount they can afford. Update the object's cost to match.
       float current_obj_weight = GET_OBJ_WEIGHT(obj);
@@ -424,8 +425,13 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         // Prevent taking more than you can carry.
         current_obj_weight += GET_OBJ_WEIGHT(obj);
         if (IS_CARRYING_W(ch) + current_obj_weight > CAN_CARRY_W(ch)) {
-          send_to_char(ch, "You can only carry %d of that.\r\n", --bought);
-          break;
+          if (--bought <= 0) {
+            send_to_char("It weighs too much.\r\n", ch);
+            return FALSE;
+          } else {
+            send_to_char(ch, "You can only carry %d of that.\r\n");
+            break;
+          }
         }
           
         if (cred)
@@ -433,6 +439,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         else
           GET_NUYEN(ch) -= price;
       }
+      
+      if (bought == 0) {
+        send_to_char("You can't afford that.\r\n", ch);
+        return FALSE;
+      }
+      
       GET_OBJ_COST(obj) = GET_OBJ_COST(obj) * bought;
       
       // Give them the item (it's gun ammo)
