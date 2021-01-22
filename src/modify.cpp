@@ -705,6 +705,11 @@ ACMD(do_skillset)
     send_to_char("You can't set NPC skills.\r\n", ch);
     return;
   }
+  if (GET_SKILL(vict, skill) == value) {
+    send_to_char(ch, "%s's %s is already at %d.\r\n", capitalize(GET_CHAR_NAME(vict)), skills[skill].name, value);
+    return;
+  }
+  
   snprintf(buf2, sizeof(buf2), "%s changed %s's %s from %d to %d.",
           GET_CHAR_NAME(ch), GET_NAME(vict),
           skills[skill].name,
@@ -728,8 +733,8 @@ ACMD(do_abilityset)
     send_to_char("Syntax: abilityset <name> '<skill>' <value>\r\n", ch);
     strcpy(help, "Ability being one of the following:\r\n");
     for (i = 1; i < ADEPT_NUMPOWER; i++) {
-      snprintf(ENDOF(help), sizeof(help) - strlen(help), "%18s", adept_powers[i]);
-      if (i % 4 == 3 || PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+      snprintf(ENDOF(help), sizeof(help) - strlen(help), "%32s", adept_powers[i]);
+      if (i % 3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER)) {
         strlcat(help, "\r\n", sizeof(help));
         send_to_char(help, ch);
         *help = '\0';
@@ -796,15 +801,21 @@ ACMD(do_abilityset)
     send_to_char("You can't set NPC abilities.\r\n", ch);
     return;
   }
+  if (GET_POWER_TOTAL(vict, ability) == value) {
+    send_to_char(ch, "%s's %s is already at %d.\r\n", capitalize(GET_CHAR_NAME(vict)), adept_powers[ability], value);
+    return;
+  }
+  
   snprintf(buf2, sizeof(buf2), "%s changed %s's %s from %d to %d.",
           GET_CHAR_NAME(ch), GET_NAME(vict),
           adept_powers[ability],
           GET_POWER_TOTAL(vict, ability), 
           value);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-
+  
   send_to_char(ch, "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
-  send_to_char(vict, "Your abilities in %s has been altered by the game's administration.\r\n", adept_powers[ability]);
+  send_to_char(vict, "Your abilities in %s has been altered by the game's administration (%d to %d).\r\n", 
+               adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
   GET_POWER_TOTAL(vict, ability) = value;
 }
 
