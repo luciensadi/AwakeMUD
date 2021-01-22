@@ -1143,8 +1143,10 @@ struct combat_data
     
     if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_PILOT))
       weapon_skill = SKILL_GUNNERY;
-    else
+    else if (weapon)
       weapon_skill = GET_WEAPON_SKILL(weapon);
+    else
+      weapon_skill = SKILL_UNARMED_COMBAT;
   }
 };
 
