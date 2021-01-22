@@ -2512,7 +2512,7 @@ ACMD(do_conjure)
       if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
         if (GET_OBJ_VAL(obj, 0) == TYPE_LIBRARY_CONJURE) {
           if (GET_OBJ_VAL(obj, 1) < force) {
-            send_to_char("Your library isn't of a high enough rating to conjure that elemental.\r\n", ch);
+            send_to_char(ch, "Your library isn't of a high enough rating to conjure that elemental. The maximum you can conjure with %s is %d.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)), GET_OBJ_VAL(obj, 1));
             return;
           }
           library = TRUE;
@@ -2680,7 +2680,12 @@ ACMD(do_learn)
   struct obj_data *obj = ch->carrying;
   struct spell_data *spell = NULL;
   int force, oldforce = 0;
-  if (!*buf || !(obj = get_obj_in_list_vis(ch, buf, ch->carrying))) {
+  if (!*buf) {
+    send_to_char("What spell formula would you like to learn from?\r\n", ch);
+    return;
+  }
+    
+  if (!(obj = get_obj_in_list_vis(ch, buf, ch->carrying))) {
     send_to_char(ch, "You're not carrying any '%s' to learn from.\r\n", buf);
     return;
   }

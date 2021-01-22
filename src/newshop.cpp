@@ -1560,32 +1560,28 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     return;
   char buf[MAX_STRING_LENGTH];
   int number = atoi(arg);
-	if (number == 0) {
+	if (number <= 0) {
 		send_to_char(ch, "Unrecognized selection. Syntax: RECEIVE [number].\r\n");
 		return;
 	}
-  for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next)
+  for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next) {
     if (order->player == GET_IDNUM(ch) && order->timeavail < time(0) && !--number)
     {
       struct obj_data *obj = read_object(order->item, VIRTUAL), *cred = get_first_credstick(ch, "credstick");
-      
       if (!cred && shop_table[shop_nr].type == SHOP_LEGAL) {
-        snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return;
       }
-      
-      bool use_cash = shop_table[shop_nr].type == SHOP_BLACK || !cred;
-      if (use_cash)
-        cred = NULL;
-      
-      if (shop_receive(ch, keeper, arg, order->number, use_cash, NULL, obj, cred, order->price, shop_nr)) {
+      if (shop_receive(ch, keeper, arg, order->number, cred && shop_table[shop_nr].type != SHOP_BLACK? 0 : 1, NULL, obj,
+                       shop_table[shop_nr].type == SHOP_BLACK ? NULL : cred, order->price, shop_nr)) {
         struct shop_order_data *temp;
         REMOVE_FROM_LIST(order, shop_table[shop_nr].order, next);
         delete order;
       }
       return;
     }
+  }
   snprintf(buf, sizeof(buf), "%s I don't have anything for you.", GET_CHAR_NAME(ch));
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
 }

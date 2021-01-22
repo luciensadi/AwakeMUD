@@ -3662,7 +3662,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       
       // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
       if (!att->gyro && !IS_NPC(att->ch)
-          && (GET_WEAPON_SKILL(att->weapon) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL(att->weapon) <= SKILL_ASSAULT_CANNON)
+          && (att->weapon_skill >= SKILL_MACHINE_GUNS && att->weapon_skill <= SKILL_ASSAULT_CANNON)
           && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
           && !(AFF_FLAGGED(att->ch, AFF_PRONE)))
       {
@@ -3701,7 +3701,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         att_burst_after_veh_mount_reduction /= 2;
         
       att->modifiers[COMBAT_MOD_RECOIL] += MAX(0, att_burst_after_veh_mount_reduction - att->recoil_comp);
-      switch (GET_WEAPON_SKILL(att->weapon)) {
+      switch (att->weapon_skill) {
         case SKILL_SHOTGUNS:
         case SKILL_MACHINE_GUNS:
         case SKILL_ASSAULT_CANNON:
@@ -3814,14 +3814,14 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
     
     // Calculate the attacker's total skill (this modifies TN)
-    att->dice = get_skill(att->ch, GET_WEAPON_SKILL(att->weapon), att->tn);
+    att->dice = get_skill(att->ch, att->weapon_skill, att->tn);
     
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nThus, attacker's TN is: %d.", att->tn);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // Execute skill test
     if (!att->too_tall) {
-      int bonus = MIN(GET_SKILL(att->ch, GET_WEAPON_SKILL(att->weapon)), GET_OFFENSE(att->ch));
+      int bonus = MIN(GET_SKILL(att->ch, att->weapon_skill), GET_OFFENSE(att->ch));
       snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->dice, bonus);
       att->dice += bonus;
     } else {
@@ -4022,7 +4022,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       }
       
       // Increment character's shots_fired.
-      if (GET_SKILL(att->ch, GET_WEAPON_SKILL(att->weapon)) >= 8 && !SHOTS_TRIGGERED(att->ch))
+      if (GET_SKILL(att->ch, att->weapon_skill) >= 8 && !SHOTS_TRIGGERED(att->ch))
         SHOTS_FIRED(att->ch)++;
     }
     // Melee weapon.
@@ -4173,8 +4173,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   if (att->weapon 
       && !IS_NPC(att->ch) 
       && !att->gyro 
-      && GET_WEAPON_SKILL(att->weapon) >= SKILL_MACHINE_GUNS 
-      && GET_WEAPON_SKILL(att->weapon) <= SKILL_ASSAULT_CANNON
+      && att->weapon_skill >= SKILL_MACHINE_GUNS 
+      && att->weapon_skill <= SKILL_ASSAULT_CANNON
       && !(PLR_FLAGGED(att->ch, PLR_REMOTE) 
            || AFF_FLAGGED(att->ch, AFF_RIG) 
            || AFF_FLAGGED(att->ch, AFF_MANNING)))

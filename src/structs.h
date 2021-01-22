@@ -1102,6 +1102,7 @@ struct combat_data
   bool weapon_has_bayonet;
   int burst_count;
   int recoil_comp;
+  int weapon_skill;
   
   // Cyberware data.
   int climbingclaws;
@@ -1139,6 +1140,11 @@ struct combat_data
                          && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
     if (weapon_is_gun)
       magazine = weapon->contains;
+    
+    if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_PILOT))
+      weapon_skill = SKILL_GUNNERY;
+    else
+      weapon_skill = GET_WEAPON_SKILL(weapon);
   }
 };
 
