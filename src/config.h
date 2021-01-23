@@ -115,4 +115,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // Wizlock message.
 #define WIZLOCK_MSG "Sorry, new characters can't be created at the moment. In the meantime, join our Discord at https://discord.gg/q5VCMkv!"
 
+// Discord server URL. Comment out if you don't have one.
+#define DISCORD_SERVER_URL "https://discord.gg/q5VCMkv"
+
 #endif

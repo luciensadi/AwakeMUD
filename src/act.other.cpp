@@ -4296,3 +4296,11 @@ ACMD(do_afk) {
 ACMD(do_map) {
   send_to_char("We're actively working on building a map feature. In the meantime, please feel free to use the cab system to get around, or ask for directions in the Newbie or OOC channels!\r\n", ch);
 }
+
+ACMD(do_discord) {
+#ifdef DISCORD_SERVER_URL
+  send_to_char(ch, "Our Discord server can be found at %s. Looking forward to seeing you there!\r\n", DISCORD_SERVER_URL);
+#else
+  send_to_char(ch, "This game does not have a Discord server configured. Ask the staff to make one.\r\n");
+#endif
+}

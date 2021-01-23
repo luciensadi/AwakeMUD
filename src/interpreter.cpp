@@ -154,6 +154,7 @@ ACMD_DECLARE(do_dice);
 ACMD_DECLARE(do_dig);
 ACMD_DECLARE(do_diagnose);
 ACMD_DECLARE(do_die);
+ACMD_DECLARE(do_discord);
 ACMD_DECLARE(do_dispell);
 ACMD_DECLARE(do_display);
 ACMD_DECLARE(do_domain);
@@ -521,6 +522,7 @@ struct command_info cmd_info[] =
     { "dig"      , POS_RESTING , do_dig      , LVL_BUILDER, SCMD_DIG },
     { "dispell"  , POS_SITTING , do_dispell  , 0, 0 },
     { "display"  , POS_DEAD    , do_display  , 0, 0 },
+    { "discord"  , POS_DEAD    , do_discord  , 0, 0 },
     { "domain"   , POS_LYING   , do_domain   , 0, 0 },
     { "donate"   , POS_RESTING , do_drop     , 0, SCMD_DONATE },
     { "drag"     , POS_STANDING, do_drag     , 0, 0 },
@@ -822,7 +824,7 @@ struct command_info cmd_info[] =
     { "untrain"  , POS_RESTING , do_train    , 1, SCMD_UNTRAIN },
     { "unlearn"  , POS_DEAD    , do_forget   , 0, 0 },
     { "upgrade"  , POS_SITTING , do_upgrade  , 0 , 0 },
-    { "uptime"   , POS_DEAD    , do_date     , LVL_BUILDER, SCMD_UPTIME },
+    { "uptime"   , POS_DEAD    , do_date     , 0, SCMD_UPTIME },
     { "use"      , POS_SITTING , do_use      , 1, SCMD_USE },
     { "users"    , POS_DEAD    , do_users    , LVL_BUILDER, 0 },
 
