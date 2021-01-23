@@ -35,12 +35,13 @@ int recog(struct char_data *ch, struct char_data *i, char *name);
 void phone_check();
 int find_skill_num(char *name);
 int find_spell_num(char *name);
+int find_ability_num(char *name);
 /* ******** objects *********** */
 
 void    obj_to_char(struct obj_data *object, struct char_data *ch);
 void    obj_from_char(struct obj_data *object);
 
-void    equip_char(struct char_data *ch, struct obj_data *obj, int pos);
+bool    equip_char(struct char_data *ch, struct obj_data *obj, int pos);
 struct obj_data *unequip_char(struct char_data *ch, int pos, bool focus);
 
 struct obj_data *get_obj_in_list(char *name, struct obj_data *list);

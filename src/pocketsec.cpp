@@ -53,19 +53,39 @@ void initialize_pocket_secretary(struct obj_data *sec) {
   obj_to_obj(folder, sec);
 }
 
-void wire_nuyen(struct char_data *ch, struct char_data *targ, int amount, long isfile)
-{
+void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
+{  
+  // First, scan the game to see if the target character is online.
+  struct char_data *targ = NULL;
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    targ = d->original ? d->original : d->character;
+    
+    if (targ && GET_IDNUM(targ) == character_id)
+      break;
+    
+    targ = NULL;
+  }
+  
+  // Deduct from the sender.
   GET_BANK(ch) -= amount;
-  if (isfile) {
-    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, isfile);
-    mysql_wrapper(mysql, buf);
-    GET_EXTRA(ch) = 0;
-  } else
+  playerDB.SaveChar(ch);
+  
+  // Add to the receiver.
+  if (targ) {
     GET_BANK(targ) += amount;
+    playerDB.SaveChar(targ);
+  } else {
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, character_id);
+    mysql_wrapper(mysql, buf);
+  }
+  
+  // Mail it.
   snprintf(buf, sizeof(buf), "%s has wired %d nuyen to your account.\r\n", GET_CHAR_NAME(ch), amount);
-  store_mail(targ ? GET_IDNUM(targ) : isfile, ch, buf);
-  char *player_name = NULL;
-  snprintf(buf, sizeof(buf), "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : (player_name = get_player_name(isfile)));
+  store_mail(character_id, ch, buf);
+  
+  // Log it.
+  char *player_name = targ ? NULL : get_player_name(character_id);
+  snprintf(buf, sizeof(buf), "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : player_name);
   DELETE_ARRAY_IF_EXTANT(player_name);
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 }
@@ -113,13 +133,16 @@ void pocketsec_menu(struct descriptor_data *d)
     d->edit_mode = SEC_INIT;
   } else {
     send_to_char(CH, "^cMain Menu^n\r\n" 
-                 "   [^c1^n]^c%sMail^n\r\n"
+                 "   [^c1^n]^c%sMail%s^n\r\n"
                  "   [^c2^n] ^cNotes^n\r\n"
                  "   [^c3^n] ^cPhonebook^n\r\n"
                  "   [^c4^n] ^cFiles^n\r\n"
                  "   [^c5^n] ^cBanking^n\r\n"
                  "   [^c6^n] ^c%sock^n\r\n"
-                 "   [^c0^n] ^cQuit^n\r\n", amount_of_mail_waiting(CH) > 0 ? " ^R" : " ", GET_OBJ_VAL(SEC, 1) ? "Unl" : "L");
+                 "   [^c0^n] ^cQuit^n\r\n", 
+                 amount_of_mail_waiting(CH) > 0 ? " ^R" : " ", 
+                 amount_of_mail_waiting(CH) > 0 ? " (unread messages)" : "",
+                 GET_OBJ_VAL(SEC, 1) ? "Unl" : "L");
     d->edit_mode = SEC_MENU;
   }
 }
@@ -150,7 +173,11 @@ void pocketsec_mailmenu(struct descriptor_data *d)
   send_to_char(CH, "^LShadowland Mail Network^n\r\n");
   for (mail = folder->contains; mail; mail = mail->next_content) {
     i++;
-    send_to_char(CH, " %2d >%s%s\r\n", i, !GET_OBJ_VAL(mail, 0) ? " ^R" : " ", GET_OBJ_NAME(mail));
+    send_to_char(CH, " %2d >%s%s%s\r\n", 
+                 i, 
+                 !GET_OBJ_VAL(mail, 0) ? " ^R" : " ", 
+                 GET_OBJ_NAME(mail),
+                 !GET_OBJ_VAL(mail, 0) ? " (unread)" : "");
   }
   send_to_char("\r\n[^cR^n]^cead Mail^n     [^cD^n]^celete Mail^n     [^cS^n]^cend mail^n     [^cB^n]^cack^n\r\n", CH);
   d->edit_mode = SEC_MAILMENU;
@@ -363,8 +390,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           name = get_player_name(GET_EXTRA(CH));
           send_to_char(CH, "You wire %d nuyen to %s's account.\r\n", x, capitalize(name));
           delete [] name;
-          wire_nuyen(CH, d->edit_mob, x, GET_EXTRA(CH));
-          d->edit_mob = NULL;
+          wire_nuyen(CH, x, GET_EXTRA(CH));
           pocketsec_bankmenu(d);
         }
         return;

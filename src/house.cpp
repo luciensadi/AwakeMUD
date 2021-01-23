@@ -29,6 +29,7 @@ extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
+
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
 
@@ -141,6 +142,38 @@ bool House_load(struct house_control_rec *house)
       // At this point, the cost is restored to a positive value. MAX() guards against edge case of attachment being edited after it was attached.
       GET_OBJ_COST(obj) += MAX(0, data.GetInt(buf, GET_OBJ_COST(obj)));
       snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
+      
+      if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
+        // Invalid belongings.
+        if (GET_OBJ_VAL(obj, 5) <= 0) {
+          extract_obj(obj);
+          continue;
+        }
+        
+        const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
+        if (!player_name || !strcmp(player_name, "deleted")) {
+          // Whoops, it belongs to a deleted character. RIP.
+          extract_obj(obj);
+          continue;
+        }
+          
+        // Set up special corpse values. This will probably cause a memory leak. We use name instead of desc.
+        snprintf(buf, sizeof(buf), "belongings %s", player_name);
+        snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(player_name));
+        snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", player_name);
+        strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
+        obj->text.keywords = str_dup(buf);
+        obj->text.room_desc = str_dup(buf1);
+        obj->text.name = str_dup(buf2);
+        obj->text.look_desc = str_dup(buf3);
+        
+        GET_OBJ_VAL(obj, 4) = 1;
+        GET_OBJ_BARRIER(obj) = PC_CORPSE_BARRIER;
+        GET_OBJ_CONDITION(obj) = 100;
+        
+        delete [] player_name;
+      }
+      
       inside = data.GetInt(buf, 0);
       if (inside > 0) {
         if (inside == last_in)
@@ -159,23 +192,37 @@ bool House_load(struct house_control_rec *house)
       last_obj = obj;
     }
   }
+  
   return TRUE;
 }
 
-void House_save(struct house_control_rec *house, FILE *fl, long rnum)
+#define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
+  if (obj_val != proto_val)                                        \
+    fprintf(fl, (sectname), (obj_val));                            \
+}
+#define FILEBUF_SIZE 8192
+
+void House_save(struct house_control_rec *house, const char *file_name, long rnum)
 {
-  int level = 0, o = 0;
+  int level = 0;
   struct obj_data *obj = NULL;
   
-#define FILEBUF_SIZE 8192
+  FILE *fl;
+  
+  // Can't open the house file? Oof.
+  if (!file_name || !*file_name || !(fl = fopen(file_name, "wb"))) {
+    perror("SYSERR: Error saving house file");
+    return;
+  }
+  
   char print_buffer[FILEBUF_SIZE];
+  memset(print_buffer, 0, sizeof(print_buffer));
   setvbuf(fl, print_buffer, _IOFBF, FILEBUF_SIZE);
-#undef FILEBUF_SIZE
   
   // Are we saving an apartment? If so, store guest list.
   if (house) {    
     fprintf(fl, "[GUESTS]\n");
-    for (o = 0; o < MAX_GUESTS; o++) {
+    for (int o = 0; o < MAX_GUESTS; o++) {
       // Don't write out empty guest slots.
       if (house->guests[o])
         fprintf(fl, "\tGuest%d:\t%ld\n", o, house->guests[o]);
@@ -185,17 +232,19 @@ void House_save(struct house_control_rec *house, FILE *fl, long rnum)
   obj = world[rnum].contents;
   
   fprintf(fl, "[HOUSE]\n");
-  o = 0;
-  
-#define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
-  if (obj_val != proto_val)                                        \
-    fprintf(fl, (sectname), (obj_val));                            \
-}
   
   struct obj_data *prototype = NULL;
-  for (;obj;)
+  int real_obj;
+  for (int o = 0; obj;)
   {
-    prototype = &obj_proto[real_object(GET_OBJ_VNUM(obj))];
+    if ((real_obj = real_object(GET_OBJ_VNUM(obj))) == -1) {
+      snprintf(buf, sizeof(buf), "Warning: Will lose house item %s due to nonexistent rnum.", GET_OBJ_NAME(obj));
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      obj = obj->next_content;
+      continue;
+    }
+      
+    prototype = &obj_proto[real_obj];
     if (!IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_KEY) {
       fprintf(fl, "\t[Object %d]\n", o);
       o++;
@@ -234,7 +283,11 @@ void House_save(struct house_control_rec *house, FILE *fl, long rnum)
     if (obj)
       obj = obj->next_content;
   }
+  
+  fclose(fl);
 }
+#undef FILEBUF_SIZE
+#undef PRINT_TO_FILE_IF_CHANGED
 
 struct house_control_rec *find_house(vnum_t vnum)
 {
@@ -254,7 +307,6 @@ void House_crashsave(vnum_t vnum)
 {
   int rnum;
   char buf[MAX_STRING_LENGTH];
-  FILE *fp;
   struct house_control_rec *house = NULL;
   struct obj_data *obj = NULL;
 
@@ -299,15 +351,8 @@ void House_crashsave(vnum_t vnum)
     return;
   }
     
-  // Can't open the house file? Oof.
-  if (!(fp = fopen(buf, "wb"))) {
-    perror("SYSERR: Error saving house file");
-    return;
-  }
-  
   // Save it.
-  House_save(find_house(vnum), fp, rnum);
-  fclose(fp);
+  House_save(find_house(vnum), buf, rnum);
 }
 
 /* Delete a house save file */
@@ -443,7 +488,7 @@ SPECIAL(landlord_spec)
     }
     room_record = find_room(arg, lord->rooms, recep);
     if (!room_record)
-      do_say(recep, "Which room is that?", 0, 0);
+      return TRUE;
     else if (room_record->owner != GET_IDNUM(ch))
       do_say(recep, "I would get fired if I did that.", 0, 0);
     else {

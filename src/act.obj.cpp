@@ -35,6 +35,11 @@ extern void check_quest_delivery(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 
+// Corpse saving externs.
+extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
+extern void write_world_to_disk(int vnum);
+extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
+
 extern SPECIAL(fence);
 extern SPECIAL(hacker);
 extern SPECIAL(fixer);
@@ -716,8 +721,9 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
     if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
       act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
     else {
-      if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-           || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
+      if ( (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) 
+            || IS_OBJ_STAT(obj, ITEM_WIZLOAD) 
+            || (cont->obj_flags.extra_flags.IsSet(ITEM_CORPSE) && GET_OBJ_VAL(cont, 4))) {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s",
                 GET_CHAR_NAME(ch),
@@ -801,9 +807,49 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         act("$n gets $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
       else
         act("$n uninstalls $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
+      
       obj_from_obj(obj);
       obj_to_char(obj, ch);
       get_check_money(ch, obj);
+      
+      if (cont->obj_flags.extra_flags.IsSet(ITEM_CORPSE) && GET_OBJ_VAL(cont, 4) && !cont->contains) {
+        if (ROOM_FLAGGED(cont->in_room, ROOM_CORPSE_SAVE_HACK)) {
+          bool should_clear_flag = TRUE;
+          
+          // Iterate through items in room, making sure there are no other corpses.
+          for (struct obj_data *tmp_obj = cont->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
+            if (tmp_obj != cont && IS_OBJ_STAT(tmp_obj, ITEM_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
+              should_clear_flag = FALSE;
+              break;
+            }
+          }
+          
+          if (should_clear_flag) {
+            snprintf(buf, sizeof(buf), "Removing storage flag from %s (%ld) due to no more player corpses being in it.",
+                     GET_ROOM_NAME(cont->in_room),
+                     GET_ROOM_VNUM(cont->in_room));
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            
+            // No more? Remove storage flag and save.
+            cont->in_room->room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
+            cont->in_room->room_flags.RemoveBit(ROOM_STORAGE);
+            
+            // Save the change.
+            for (int counter = 0; counter <= top_of_zone_table; counter++) {
+              if ((GET_ROOM_VNUM(cont->in_room) >= (zone_table[counter].number * 100)) 
+                  && (GET_ROOM_VNUM(cont->in_room) <= (zone_table[counter].top))) 
+              {
+                write_world_to_disk(zone_table[counter].number);
+                break;
+              }
+            }
+          }
+        }
+        
+        act("$n takes the last of the items from $p.", TRUE, ch, cont, NULL, TO_ROOM);
+        act("You take the last of the items from $p.", TRUE, ch, cont, NULL, TO_CHAR);
+        extract_obj(cont);
+      }
     }
   }
 }
@@ -2566,7 +2612,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
     
     // If this item can't be worn with other armors, check to make sure we meet that restriction.
     if ((IS_OBJ_STAT(obj, ITEM_BLOCKS_ARMOR) || IS_OBJ_STAT(obj, ITEM_HARDENED_ARMOR)) &&
-        (GET_WORN_IMPACT(worn_item) || GET_WORN_BALLISTIC(worn_item))) {
+        (GET_OBJ_TYPE(worn_item) == ITEM_WORN && (GET_WORN_IMPACT(worn_item) || GET_WORN_BALLISTIC(worn_item)))) {
       if (print_messages)
         send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
       return;
@@ -2574,7 +2620,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
     
     // If what they're wearing blocks other armors, and this item is armored, fail.
     if ((IS_OBJ_STAT(worn_item, ITEM_BLOCKS_ARMOR) || IS_OBJ_STAT(worn_item, ITEM_HARDENED_ARMOR)) &&
-        (GET_WORN_IMPACT(obj) || GET_WORN_BALLISTIC(obj))) {
+        (GET_OBJ_TYPE(worn_item) == ITEM_WORN && (GET_WORN_IMPACT(obj) || GET_WORN_BALLISTIC(obj)))) {
       if (print_messages)
         send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
       return;

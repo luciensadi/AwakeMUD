@@ -552,7 +552,8 @@ enum {
 #define ROOM_NO_TRAFFIC             30 // Prevents display of traffic atmospheric messages.
 #define ROOM_ELEVATOR_SHAFT         31 // Don't set this manually
 #define ROOM_ENCOURAGE_CONGREGATION 32
-#define ROOM_MAX                    33
+#define ROOM_CORPSE_SAVE_HACK       33
+#define ROOM_MAX                    34
 
 #define NORMAL    0
 #define LOWLIGHT  1
@@ -2132,6 +2133,7 @@ enum {
 #define OBJ_SEATTLE_TAXI_SIGN              600
 #define OBJ_PORTLAND_TAXI_SIGN             699
 #define OBJ_CARIBBEAN_TAXI_SIGN            610
+#define OBJ_SPECIAL_PC_CORPSE              43
 #define OBJ_COLT_M23                       838
 #define OBJ_NICAMI_SCOPE                   28702
 #define OBJ_VENT_IV                        80403
@@ -2366,5 +2368,7 @@ enum {
 #define HOST_SECURITY_ORANGE 2
 #define HOST_SECURITY_RED    3
 #define HOST_SECURITY_BLACK  4
+
+#define PC_CORPSE_BARRIER 75
 
 #endif

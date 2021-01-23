@@ -227,15 +227,23 @@ ACMD(do_exclaim)
 
 void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
 {
-  snprintf(buf, sizeof(buf), "^r$n tells you, '%s^r'^n", capitalize(arg));
-  store_message_to_history(vict->desc, COMM_CHANNEL_TELLS, act(buf, FALSE, ch, 0, vict, TO_VICT | TO_SLEEP));
+  snprintf(buf, sizeof(buf), "^c%s%s tells you ^mOOCly^c, '%s^c'^n\r\n", 
+           GET_CHAR_NAME(ch), 
+           IS_SENATOR(ch) ? " (staff)" : "",
+           capitalize(arg));
+  send_to_char(buf, vict);
+  store_message_to_history(vict->desc, COMM_CHANNEL_TELLS, buf);
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else
   {
-    snprintf(buf, sizeof(buf), "^rYou tell $N, '%s'^n", capitalize(arg));
-    store_message_to_history(ch->desc, COMM_CHANNEL_TELLS, act(buf, FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP));
+    snprintf(buf, sizeof(buf), "^cYou tell %s%s ^mOOCly^c, '%s^c'^n\r\n", 
+             GET_CHAR_NAME(vict), 
+             IS_SENATOR(vict) ? " (staff)" : "",
+             capitalize(arg));
+    send_to_char(buf, ch);
+    store_message_to_history(ch->desc, COMM_CHANNEL_TELLS, buf);
   }
 
   if (!IS_NPC(ch))
@@ -247,6 +255,7 @@ void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
 ACMD(do_tell)
 {
   struct char_data *vict = NULL;
+  struct char_data *source = ch->desc && ch->desc->original ? ch->desc->original : ch;
   SPECIAL(johnson);
 
   half_chop(argument, buf, buf2);
@@ -255,28 +264,44 @@ ACMD(do_tell)
     send_to_char("Who do you wish to tell what??\r\n", ch);
     return;
   }
+  
   if (!(vict = get_player_vis(ch, buf, 0))) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return;
   }
-  if (!IS_NPC(vict) && !vict->desc)      /* linkless */
+  
+  if (!IS_NPC(vict) && !vict->desc) {      /* linkless */
     act("$E's linkless at the moment.", FALSE, ch, 0, vict, TO_CHAR);
+    return;
+  }
+    
+  /*
   if (!IS_SENATOR(ch) && !IS_SENATOR(vict)) {
     send_to_char("Tell is for communicating with immortals only.\r\n", ch);
     return;
   }
+  */
 
-  if (PRF_FLAGGED(vict, PRF_NOTELL))
-    act("$E can't hear you.", FALSE, ch, 0, vict, TO_CHAR);
-  else if (PLR_FLAGGED(vict, PLR_WRITING) ||
-           PLR_FLAGGED(vict, PLR_MAILING))
+  if (PRF_FLAGGED(vict, PRF_NOTELL) || found_mem(GET_IGNORE(vict), source)) {
+    act("$E has disabled tells.", FALSE, ch, 0, vict, TO_CHAR);
+    return;
+  }
+  
+  if (PLR_FLAGGED(vict, PLR_WRITING) || PLR_FLAGGED(vict, PLR_MAILING)) {
     act("$E's writing a message right now; try again later.", FALSE, ch, 0, vict, TO_CHAR);
-  else if (PRF_FLAGGED(vict, PRF_AFK))
-    act("$E's AFK at the moment.", FALSE, ch, 0, vict, TO_CHAR);
-  else if (PLR_FLAGGED(vict, PLR_EDITING))
+    return;
+  }
+  
+  else if (PLR_FLAGGED(vict, PLR_EDITING)) {
     act("$E's editing right now, try again later.", FALSE, ch, 0, vict, TO_CHAR);
-  else
-    perform_tell(ch, vict, buf2);
+    return;
+  }
+  
+  if (PRF_FLAGGED(vict, PRF_AFK)) {
+    act("$E's AFK, so your message may be missed.", FALSE, ch, 0, vict, TO_CHAR);
+  }
+  
+  perform_tell(ch, vict, buf2);
 }
 
 ACMD(do_reply)
@@ -299,10 +324,17 @@ ACMD(do_reply)
       if (!IS_NPC(tch) && GET_IDNUM(tch) == GET_LAST_TELL(ch))
         break;
 
-    if (tch == NULL || (tch && GET_IDNUM(tch) != GET_LAST_TELL(ch)))
+    if (tch == NULL || (tch && GET_IDNUM(tch) != GET_LAST_TELL(ch))) {
       send_to_char("They are no longer playing.\r\n", ch);
-    else
-      perform_tell(ch, tch, argument);
+      return;
+    }
+    
+    if (PRF_FLAGGED(tch, PRF_NOTELL) || found_mem(GET_IGNORE(tch), ch->desc && ch->desc->original ? ch->desc->original : ch)) {
+      act("$E has disabled tells.", FALSE, ch, 0, tch, TO_CHAR);
+      return;
+    }
+    
+    perform_tell(ch, tch, argument);
   }
 }
 
@@ -1590,20 +1622,20 @@ ACMD(do_ignore)
     skip_spaces(&argument);
     if (struct char_data *tch = get_player_vis(ch, argument, FALSE)) {
       if (GET_LEVEL(tch) > LVL_MORTAL)
-        send_to_char("You can't ignore immortals.\r\n", ch);
+        send_to_char("You can't ignore staff members.\r\n", ch);
       else if ((list = found_mem(GET_IGNORE(ch), tch))) {
         struct remem *temp;
         REMOVE_FROM_LIST(list, GET_IGNORE(ch), next);
         DELETE_AND_NULL(list);
-        send_to_char(ch, "You can now hear %s.\r\n", GET_CHAR_NAME(tch));
+        send_to_char(ch, "You can now hear %s on OOC and in tells.\r\n", GET_CHAR_NAME(tch));
       } else {
         list = new remem;
         list->idnum = GET_IDNUM(tch);
         list->next = GET_IGNORE(ch);
         GET_IGNORE(ch) = list;
-        send_to_char(ch, "You will no longer hear %s.\r\n", GET_CHAR_NAME(tch));
+        send_to_char(ch, "You will no longer hear %s on OOC and in tells.\r\n", GET_CHAR_NAME(tch));
       }
-    } else send_to_char("They are not logged on.\r\n", ch);
+    } else send_to_char("That character is not logged on.\r\n", ch);
   }  
 }
 

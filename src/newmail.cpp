@@ -52,11 +52,14 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
   // Note: We trust that whoever is calling this has already validated that the message fits in the query buffer.
   
   char prepared_quote_buf[2 * strlen(message_pointer) + 1];
-  prepare_quotes(prepared_quote_buf, message_pointer, sizeof(prepared_quote_buf) / sizeof(prepared_quote_buf[0]));
+  char prepared_name_buf[2 * strlen(from_name) + 1];
+  
+  prepare_quotes(prepared_quote_buf, message_pointer, sizeof(prepared_quote_buf));
+  prepare_quotes(prepared_name_buf, from_name, sizeof(prepared_name_buf));
   
   snprintf(mail_query_buf, sizeof(mail_query_buf), "INSERT INTO pfiles_mail (sender_id, sender_name, recipient, text) VALUES (%ld, '%s', %ld, '%s');",
           from_id,
-          from_name,
+          prepared_name_buf,
           to,
           prepared_quote_buf);
   

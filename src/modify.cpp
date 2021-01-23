@@ -106,6 +106,7 @@ void format_string(struct descriptor_data *d, int indent)
     }
   
   char *format = new char[d->max_str];
+  memset(format, '\0', d->max_str * sizeof(char));
   snprintf(format, d->max_str, "%s%s\r\n", indent ? "   " : "", *d->str);
   int q = 0;
   for (k = 0; strlen(format) > (u_int) k && q < 1023; q++)
@@ -536,7 +537,7 @@ ACMD(do_spellset)
     *(argument + qend) = LOWER(*(argument + qend));
   
   if (*(argument + qend) != '\'') {
-    send_to_char("Skill must be enclosed in: ''\r\n", ch);
+    send_to_char("Spell must be enclosed in: ''\r\n", ch);
     return;
   }
   strcpy(help, (argument + 1));
@@ -704,6 +705,11 @@ ACMD(do_skillset)
     send_to_char("You can't set NPC skills.\r\n", ch);
     return;
   }
+  if (GET_SKILL(vict, skill) == value) {
+    send_to_char(ch, "%s's %s is already at %d.\r\n", capitalize(GET_CHAR_NAME(vict)), skills[skill].name, value);
+    return;
+  }
+  
   snprintf(buf2, sizeof(buf2), "%s changed %s's %s from %d to %d.",
           GET_CHAR_NAME(ch), GET_NAME(vict),
           skills[skill].name,
@@ -713,6 +719,104 @@ ACMD(do_skillset)
   send_to_char(ch, "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), skills[skill].name, GET_SKILL(vict, skill), value);
   send_to_char(vict, "Your skill in %s has been altered by the game's administration.\r\n", skills[skill].name);
   set_character_skill(vict, skill, value, TRUE);
+}
+
+ACMD(do_abilityset)
+{
+  struct char_data *vict;
+  char name[100], buf2[100], buf[100], help[MAX_STRING_LENGTH];
+  int ability, value, i, qend;
+
+  argument = one_argument(argument, name);
+
+  if (!*name) {                 /* no arguments. print an informative text */
+    send_to_char("Syntax: abilityset <name> '<skill>' <value>\r\n", ch);
+    strcpy(help, "Ability being one of the following:\r\n");
+    for (i = 1; i < ADEPT_NUMPOWER; i++) {
+      snprintf(ENDOF(help), sizeof(help) - strlen(help), "%32s", adept_powers[i]);
+      if (i % 3 == 2 || PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+        strlcat(help, "\r\n", sizeof(help));
+        send_to_char(help, ch);
+        *help = '\0';
+      }
+    }
+    if (*help)
+      send_to_char(help, ch);
+    send_to_char("\r\n", ch);
+    return;
+  }
+  if (!(vict = get_char_vis(ch, name))) {
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", name);
+    return;
+  }
+  
+  if (GET_TRADITION(vict) != TRAD_ADEPT) {
+    send_to_char(ch, "%s is not an Adept.\r\n", capitalize(GET_CHAR_NAME(vict)));
+    return;
+  }
+  
+  skip_spaces(&argument);
+
+  /* If there is no chars in argument */
+  if (!*argument) {
+    send_to_char("Ability name expected.\r\n", ch);
+    return;
+  }
+  if (*argument != '\'') {
+    send_to_char("Ability must be enclosed in single quotes (').\r\n", ch);
+    return;
+  }
+  /* Locate the last quote && lowercase the magic words (if any) */
+
+  for (qend = 1; *(argument + qend) && (*(argument + qend) != '\''); qend++)
+    *(argument + qend) = LOWER(*(argument + qend));
+
+  if (*(argument + qend) != '\'') {
+    send_to_char("Ability must be enclosed in single quotes (').\r\n", ch);
+    return;
+  }
+  strcpy(help, (argument + 1));
+  help[qend - 1] = '\0';
+  if ((ability = find_ability_num(help)) <= 0) {
+    send_to_char("Unrecognized ability.\r\n", ch);
+    return;
+  }
+  argument += qend + 1;         /* skip to next parameter */
+  argument = one_argument(argument, buf);
+
+  if (!*buf) {
+    send_to_char("Learned value expected.\r\n", ch);
+    return;
+  }
+  value = atoi(buf);
+  if (value < 0) {
+    send_to_char("Minimum value for learned is 0.\r\n", ch);
+    return;
+  }
+  if (value > 50) {
+    send_to_char(ch, "Max value for learned is %d.\r\n", 50);
+    return;
+  }
+  if (IS_NPC(vict)) {
+    send_to_char("You can't set NPC abilities.\r\n", ch);
+    return;
+  }
+  if (GET_POWER_TOTAL(vict, ability) == value) {
+    send_to_char(ch, "%s's %s is already at %d.\r\n", capitalize(GET_CHAR_NAME(vict)), adept_powers[ability], value);
+    return;
+  }
+  
+  snprintf(buf2, sizeof(buf2), "%s changed %s's %s from %d to %d.",
+          GET_CHAR_NAME(ch), GET_NAME(vict),
+          adept_powers[ability],
+          GET_POWER_TOTAL(vict, ability), 
+          value);
+  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+  
+  send_to_char(ch, "You change %s's %s from %d to %d.\r\n", GET_NAME(vict), adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
+  send_to_char(vict, "Your abilities in %s has been altered by the game's administration (%d to %d).\r\n", 
+               adept_powers[ability], GET_POWER_TOTAL(vict, ability), value);
+  GET_POWER_TOTAL(vict, ability) = value;
 }
 
 

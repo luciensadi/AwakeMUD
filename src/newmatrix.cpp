@@ -1476,6 +1476,7 @@ ACMD(do_connect)
   }
   PERSONA = icon;
   DECKER = new deck_info;
+  memset(DECKER, 0, sizeof(deck_info));
   if (GET_OBJ_VNUM(cyberdeck) == OBJ_CUSTOM_CYBERDECK_SHELL) {
     struct obj_data *parts = cyberdeck->contains;
     for (; parts; parts = parts->next_content)
@@ -1511,6 +1512,7 @@ ACMD(do_connect)
   DECKER->hardening = GET_OBJ_VAL(cyberdeck, 1);
   DECKER->active = GET_OBJ_VAL(cyberdeck, 2);
   DECKER->response = GET_OBJ_VAL(cyberdeck, 6);
+  DECKER->ras = GET_OBJ_VNUM(cyberdeck) == ITEM_CUSTOM_DECK ? FALSE : TRUE;
   affect_total(ch);
   GET_REM_HACKING(ch) = GET_HACKING(ch);
   GET_MAX_HACKING(ch) = (int)(GET_HACKING(ch) / 3);

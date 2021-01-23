@@ -856,6 +856,7 @@ struct descriptor_data
   
   Playergroup *edit_pgroup; /* playergroups */
   
+  int canary;
   protocol_t *pProtocol;
   
   // this is for spell creation
@@ -866,7 +867,7 @@ struct descriptor_data
       snoop_by(NULL), next(NULL), invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
-      edit_helpfile(NULL), edit_pgroup(NULL), pProtocol(NULL)
+      edit_helpfile(NULL), edit_pgroup(NULL), canary(31337), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
@@ -1105,6 +1106,7 @@ struct combat_data
   bool weapon_has_bayonet;
   int burst_count;
   int recoil_comp;
+  int weapon_skill;
   
   // Cyberware data.
   int climbingclaws;
@@ -1142,6 +1144,13 @@ struct combat_data
                          && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
     if (weapon_is_gun)
       magazine = weapon->contains;
+    
+    if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_PILOT))
+      weapon_skill = SKILL_GUNNERY;
+    else if (weapon)
+      weapon_skill = GET_WEAPON_SKILL(weapon);
+    else
+      weapon_skill = SKILL_UNARMED_COMBAT;
   }
 };
 

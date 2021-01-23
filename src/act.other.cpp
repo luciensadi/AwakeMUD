@@ -1422,7 +1422,6 @@ ACMD(do_reload)
     return;
   }
   
-  // TODO: I stopped halfway through editing this. It is BROKEN.
   {
     // In-vehicle reloading with mounts.
     if (ch->in_veh) {
@@ -1502,7 +1501,12 @@ ACMD(do_reload)
               update_ammobox_ammo_quantity(i, -max);
               GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
               GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
-              send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
+              if (GET_AMMOBOX_QUANTITY(i) == 0 && !i->restring && !(*i->restring)) {
+                send_to_char(ch, "You insert %d rounds of ammunition into %s, then junk the empty %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)), GET_OBJ_NAME(i));
+                extract_obj(i);
+              } else {
+                send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)));
+              }
               return;
             }            
           } 
@@ -1518,7 +1522,14 @@ ACMD(do_reload)
             update_ammobox_ammo_quantity(i, -max);
             ammo->restring = str_dup(get_ammobox_default_restring(ammo));
             obj_to_obj(ammo, m);
-            send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
+            
+            if (GET_AMMOBOX_QUANTITY(i) == 0 && !i->restring && !(*i->restring)) {
+              send_to_char(ch, "You insert %d rounds of ammunition into %s, then junk the empty %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)), GET_OBJ_NAME(i));
+              extract_obj(i);
+            } else {
+              send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)));
+            }
+            
             return;
           }
         }
@@ -1705,14 +1716,27 @@ ACMD(do_attach)
     return;
   }
   
+  if (GET_OBJ_TYPE(item) != ITEM_GUN_ACCESSORY) {
+    send_to_char(ch, "%s is not a weapon accessory.\r\n", capitalize(GET_OBJ_NAME(item)));
+    return;
+  }
+  
   if (!(item2 = get_obj_in_list_vis(ch, buf2, ch->carrying))) {
     if (!(item2 = get_obj_in_list_vis(ch, buf2, GET_EQ(ch, WEAR_WIELD))) && !(item2 = get_obj_in_list_vis(ch, buf2, GET_EQ(ch, WEAR_HOLD)))) {
       send_to_char(ch, "You don't seem to have any '%s'.\r\n", buf2);
+      return;
+    } else if (GET_OBJ_TYPE(item2) != ITEM_WEAPON) {
+      send_to_char(ch, "%s is not a firearm.\r\n", capitalize(GET_OBJ_NAME(item)));
       return;
     } else {
       send_to_char(ch, "You'll have a hard time attaching anything to %s while you're wielding it.\r\n", GET_OBJ_NAME(item2));
       return;
     }
+  }
+  
+  if (GET_OBJ_TYPE(item2) != ITEM_WEAPON) {
+    send_to_char(ch, "%s is not a firearm.\r\n", capitalize(GET_OBJ_NAME(item)));
+    return;
   }
 
   // If we failed to attach it, don't destroy the attachment.
@@ -4276,4 +4300,12 @@ ACMD(do_afk) {
 
 ACMD(do_map) {
   send_to_char("We're actively working on building a map feature. In the meantime, please feel free to use the cab system to get around, or ask for directions in the Newbie or OOC channels!\r\n", ch);
+}
+
+ACMD(do_discord) {
+#ifdef DISCORD_SERVER_URL
+  send_to_char(ch, "Our Discord server can be found at %s. Looking forward to seeing you there!\r\n", DISCORD_SERVER_URL);
+#else
+  send_to_char(ch, "This game does not have a Discord server configured. Ask the staff to make one.\r\n");
+#endif
 }

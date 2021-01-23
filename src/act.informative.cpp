@@ -1440,7 +1440,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   } else {
     send_to_char(ch, "^C%s^n%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
                  ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
@@ -4445,37 +4445,92 @@ ACMD(do_consider)
   }
   
   if (IS_NPC(victim)) {
+    if (MOB_FLAGGED(victim, MOB_NOKILL) 
+        || vnum_from_non_connected_zone(GET_MOB_VNUM(victim))
+        || mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
+        || mob_index[GET_MOB_RNUM(victim)].func == johnson 
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
+        || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
+        || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec) {
+      send_to_char("This NPC has been made unkillable by staff.\r\n", ch);
+      return;
+    }
+    
+    // Pick out the victim's cyberware, if any. TODO: Player cyberware.
+    bool use_cyber_implants = FALSE;
+    int unarmed_dangerliciousness_boost = 0;
+    for (struct obj_data *obj = victim->cyberware; obj; obj = obj->next_content) {
+      if (!GET_CYBERWARE_IS_DISABLED(obj)) {
+        switch (GET_CYBERWARE_TYPE(obj)) {
+          case CYB_CLIMBINGCLAWS:
+          case CYB_FIN:
+          case CYB_HANDBLADE:
+          case CYB_HANDRAZOR:
+          case CYB_HANDSPUR:
+          case CYB_FOOTANCHOR:
+            use_cyber_implants = TRUE;
+            break;
+        }
+      } else if (GET_CYBERWARE_TYPE(obj) == CYB_BONELACING) {
+        switch (GET_CYBERWARE_LACING_TYPE(obj)) {
+          case BONE_PLASTIC:
+            unarmed_dangerliciousness_boost = MAX(unarmed_dangerliciousness_boost, 2);
+            break;
+          case BONE_ALUMINIUM:
+          case BONE_CERAMIC:
+            unarmed_dangerliciousness_boost = MAX(unarmed_dangerliciousness_boost, 3);
+            break;
+          case BONE_TITANIUM:
+            unarmed_dangerliciousness_boost = MAX(unarmed_dangerliciousness_boost, 4);
+            break;
+        }
+      }
+    }
+    
+    // Armor comparisons.
     diff = (GET_BALLISTIC(victim) - GET_BALLISTIC(ch));
     diff += (GET_IMPACT(victim) - GET_IMPACT(ch));
+    
+    // Stat comparisons.
     diff += (GET_BOD(victim) - GET_BOD(ch));
     diff += (GET_QUI(victim) - GET_QUI(ch));
     diff += (GET_STR(victim) - GET_STR(ch));
-    diff += (GET_COMBAT(victim) - GET_COMBAT(ch));
     diff += (GET_REA(victim) - GET_REA(ch));
     diff += (GET_INIT_DICE(victim) - GET_INIT_DICE(ch));
+    
     if (GET_MAG(victim) >= 100) {
       diff += (int)((GET_MAG(victim) - GET_MAG(ch)) / 100);
       diff += GET_SKILL(victim, SKILL_SORCERY);
     }
+    
+    // Pool comparisons.
+    diff += (GET_COMBAT(victim) - GET_COMBAT(ch));
+    
+    // Skill comparisons.
     if (GET_MAG(ch) >= 100 && (IS_NPC(ch) || (GET_TRADITION(ch) == TRAD_HERMETIC ||
                                               GET_TRADITION(ch) == TRAD_SHAMANIC)))
       diff -= GET_SKILL(ch, SKILL_SORCERY);
+    
     if (GET_EQ(victim, WEAR_WIELD))
       diff += GET_SKILL(victim, GET_OBJ_VAL(GET_EQ(victim, WEAR_WIELD), 4));
+    else if (use_cyber_implants)
+      diff += GET_SKILL(victim, SKILL_CYBER_IMPLANTS);
     else
-      diff += GET_SKILL(victim, SKILL_UNARMED_COMBAT);
+      diff += GET_SKILL(victim, SKILL_UNARMED_COMBAT) + unarmed_dangerliciousness_boost;
+      
     if (GET_EQ(ch, WEAR_WIELD))
       diff -= GET_SKILL(ch, GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 4));
     else
       diff -= GET_SKILL(ch, SKILL_UNARMED_COMBAT);
     
-    if (diff <= -18)
+    if (diff <= -25)
       send_to_char("Now where did that chicken go?\r\n", ch);
-    else if (diff <= -12)
+    else if (diff <= -15)
       send_to_char("You could kill it with a needle!\r\n", ch);
-    else if (diff <= -6)
+    else if (diff <= -8)
       send_to_char("Easy.\r\n", ch);
-    else if (diff <= -3)
+    else if (diff <= -4)
       send_to_char("Fairly easy.\r\n", ch);
     else if (diff == 0)
       send_to_char("The perfect match!\r\n", ch);
@@ -4725,6 +4780,11 @@ ACMD(do_scan)
   if (!specific) {
     for (i = 0; i < NUM_OF_DIRS; ++i) {
       if (CAN_GO(ch, i)) {
+        if (EXIT(ch, i)->to_room == get_ch_in_room(ch)) {
+          send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
+          continue;
+        }
+        
         onethere = FALSE;
         if (!((!infra && light_level(EXIT(ch, i)->to_room) == LIGHT_FULLDARK) ||
               ((!infra || !lowlight) && (light_level(EXIT(ch, i)->to_room) == LIGHT_MINLIGHT || light_level(EXIT(ch, i)->to_room) == LIGHT_PARTLIGHT)))) {

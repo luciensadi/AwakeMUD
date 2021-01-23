@@ -926,7 +926,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       if (is_abbrev(buf, wound_name[basedamage]))
         break;
     if (basedamage > 4 || basedamage == 0) {
-      send_to_char("That is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", ch);
+      send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
       return;
     }
   }
@@ -1381,7 +1381,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (is_abbrev(buf, wound_name[basedamage]))
           break;
       if (basedamage > 4 || basedamage == 0) {
-        send_to_char("That is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", ch);
+        send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
         return;
       }
     }
@@ -2421,8 +2421,9 @@ ACMD(do_cast)
     if (!(force = atoi(buf))) {
       strcpy(spell_name, buf);
     } else {
-      half_chop(buf1, buf2, buf1);
-      strcpy(spell_name, buf2);
+      half_chop(buf1, buf2, buf3);
+      strlcpy(buf1, buf3, sizeof(buf1));
+      strlcpy(spell_name, buf2, sizeof(spell_name));
     }
   }
   for (;spell; spell = spell->next)
@@ -2511,7 +2512,7 @@ ACMD(do_conjure)
       if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
         if (GET_OBJ_VAL(obj, 0) == TYPE_LIBRARY_CONJURE) {
           if (GET_OBJ_VAL(obj, 1) < force) {
-            send_to_char("Your library isn't of a high enough rating to conjure that elemental.\r\n", ch);
+            send_to_char(ch, "Your library isn't of a high enough rating to conjure that elemental. The maximum you can conjure with %s is %d.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)), GET_OBJ_VAL(obj, 1));
             return;
           }
           library = TRUE;
@@ -2679,7 +2680,12 @@ ACMD(do_learn)
   struct obj_data *obj = ch->carrying;
   struct spell_data *spell = NULL;
   int force, oldforce = 0;
-  if (!*buf || !(obj = get_obj_in_list_vis(ch, buf, ch->carrying))) {
+  if (!*buf) {
+    send_to_char("What spell formula would you like to learn from?\r\n", ch);
+    return;
+  }
+    
+  if (!(obj = get_obj_in_list_vis(ch, buf, ch->carrying))) {
     send_to_char(ch, "You're not carrying any '%s' to learn from.\r\n", buf);
     return;
   }
@@ -4005,7 +4011,7 @@ ACMD(do_heal)
       if (is_abbrev(buf, wound_name[basedamage]))
         break;
     if (basedamage > 4 || basedamage == 0) {
-      send_to_char("That is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", ch);
+      send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
       return;
     }
     int success = success_test(GET_MAG(ch) / 100, 10 - (GET_ESS(vict) / 100));

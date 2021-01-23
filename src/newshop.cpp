@@ -154,14 +154,16 @@ int sell_price(struct obj_data *obj, vnum_t shop_nr)
   return cost;
 }
 
-int transaction_amt(char *arg)
+int transaction_amt(char *arg, size_t arg_len)
 {
   int num;
   one_argument(arg, buf);
   if (*buf)
     if ((is_number(buf))) {
       num = atoi(buf);
-      strcpy(arg, arg + strlen(buf) + 1);
+      char temp_buf[strlen(arg)];
+      strlcpy(temp_buf, arg + strlen(buf) + 1, sizeof(temp_buf));
+      strlcpy(arg, temp_buf, arg_len);
       return (num);
     }
   return (1);
@@ -179,10 +181,12 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
       
       if (real_obj >= 0) {
         // Can't sell it? Don't have it show up here.
-        if (!can_sell_object(read_object(real_obj, REAL), NULL, shop_nr)) {
+        struct obj_data *temp_obj = read_object(real_obj, REAL);
+        if (!can_sell_object(temp_obj, NULL, shop_nr)) {
           num++;
           continue;
         }
+        extract_obj(temp_obj);
         if (num == 0)
           break;
       } else {
@@ -217,28 +221,37 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   int bought = 0;
   bool print_multiples_at_end = TRUE;
   
+  // Item must be available in the store.
   if (sell && sell->type == SELL_STOCK && sell->stock < 1)
   {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That item isn't currently available.");
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return FALSE;
   }
+  
+  // Character must have enough nuyen for it.
   if ((cred && GET_OBJ_VAL(cred, 0) < price) || (!cred && GET_NUYEN(ch) < price))
   {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].not_enough_nuyen);
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return FALSE;
   }
+  
+  // Pre-compose our string.
   snprintf(buf2, sizeof(buf2), "You now have %s.", GET_OBJ_NAME(obj));
 
-  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
-  {
+  // Cyberware / bioware doctor.
+  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
     struct obj_data *check;
+    
+    // Max one of any cyber / bio.
     if (buynum != 1) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only have one of those installed!");
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       return FALSE;
     }
+    
+    // Item must be compatible with your current gear.
     switch (GET_OBJ_TYPE(obj)) {
       case ITEM_CYBERWARE:
         for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
@@ -251,6 +264,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
              return FALSE;
         break;
     }
+    
+    // You must have the essence to support it.
     if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
       if (GET_REAL_ESS(ch) + GET_ESSHOLE(ch) < (GET_TOTEM(ch) == TOTEM_EAGLE ?
                                 GET_CYBERWARE_ESSENCE_COST(obj) << 1 : GET_CYBERWARE_ESSENCE_COST(obj))) {
@@ -300,7 +315,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         GET_ESSHOLE(ch) -= esscost;
       }
       obj_to_cyberware(obj, ch);
-    } else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
+    } 
+    
+    // You must have the index to support it.
+    else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
       int esscost = GET_OBJ_VAL(obj, 4); 
       if (GET_INDEX(ch) + esscost > 900) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
@@ -342,25 +360,32 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       }
       obj_to_bioware(obj, ch);
     }
+    
+    // Send installation messages.
     act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
         FALSE, keeper, 0, ch, TO_NOTVICT);
     snprintf(buf, sizeof(buf), "%s Relax...this won't hurt a bit.", GET_CHAR_NAME(ch));
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-    if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
-      GET_PHYSICAL(ch) = 100;
-      GET_MENTAL(ch) = 100;
-    }
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);    
     act("You delicately install $p into $N's body.",
         FALSE, keeper, obj, ch, TO_CHAR);
     act("$n performs a delicate procedure on $N.",
         FALSE, keeper, 0, ch, TO_NOTVICT);
     act("$n delicately installs $p into your body.",
         FALSE, keeper, obj, ch, TO_VICT);
+        
+    // If this isn't a newbie shop, damage them like they're just coming out of surgery.
+    if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+      GET_PHYSICAL(ch) = 100;
+      GET_MENTAL(ch) = 100;
+    }
+    
     bought = 1;
+    
     if (cred)
       GET_OBJ_VAL(cred, 0) -= price;
     else
       GET_NUYEN(ch) -= price;
+      
     if (sell) {
       if (sell->type == SELL_BOUGHT && !--sell->stock) {
         struct shop_sell_data *temp;
@@ -372,8 +397,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     }
     if (GET_BIOOVER(ch) > 0)
       send_to_char("You don't feel too well.\r\n", ch);
-  } else
-  {
+  } 
+  
+  // Neither cyber nor bioware. Handle as normal object.
+  else {
     if (IS_CARRYING_N(ch) + 1 > CAN_CARRY_N(ch)) {
       send_to_char("You can't carry any more items.\r\n", ch);
       return FALSE;
@@ -382,26 +409,42 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       send_to_char("It weighs too much!\r\n", ch);
       return FALSE;
     }
-    if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS) ||
-        (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING) ||
-        (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO)) {
+    
+    // Special handling for stackable things. TODO: Review this to make sure sell struct etc is updated appropriately.
+    if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS)
+        || (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING)
+        || (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO))
+    {
+      bought = 0;
           
       // Deduct money up to the amount they can afford. Update the object's cost to match.
-      float current_obj_weight = 0.0;
+      float current_obj_weight = GET_OBJ_WEIGHT(obj);
       while (bought < buynum && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price) {
+        bought++;
+        
         // Prevent taking more than you can carry.
         current_obj_weight += GET_OBJ_WEIGHT(obj);
         if (IS_CARRYING_W(ch) + current_obj_weight > CAN_CARRY_W(ch)) {
-          send_to_char(ch, "You can only carry %d of that.\r\n", --bought);
-          break;
+          if (--bought <= 0) {
+            send_to_char("It weighs too much.\r\n", ch);
+            return FALSE;
+          } else {
+            send_to_char(ch, "You can only carry %d of that.\r\n");
+            break;
+          }
         }
           
         if (cred)
           GET_OBJ_VAL(cred, 0) -= price;
         else
           GET_NUYEN(ch) -= price;
-        bought++;
       }
+      
+      if (bought == 0) {
+        send_to_char("You can't afford that.\r\n", ch);
+        return FALSE;
+      }
+      
       GET_OBJ_COST(obj) = GET_OBJ_COST(obj) * bought;
       
       // Give them the item (it's gun ammo)
@@ -455,6 +498,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           
           obj_to_char(obj, ch);
         }
+        // TODO: Handle decrementing shop amounts here (->stock). Currently, shop items are not decremented on sale for these item types.
       } 
       
       // Give them the item (it's parts or conjuring materials)
@@ -471,38 +515,57 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           obj_to_char(obj, ch);
         }
       }
-    } else
-      while(obj && (bought < buynum && IS_CARRYING_N(ch) < CAN_CARRY_N(ch) && IS_CARRYING_W(ch) +
-                    GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch) && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price)) {
-        if (GET_OBJ_VNUM(obj) == 17513 || GET_OBJ_VNUM(obj) == 62100)
+    } 
+    
+    // Non-stackable things.
+    else {
+      while (obj && (bought < buynum 
+                     && IS_CARRYING_N(ch) < CAN_CARRY_N(ch) 
+                     && IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch) 
+                     && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price)) {
+        // Visas are ID-locked to the purchaser.
+        if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
           GET_OBJ_VAL(obj, 0) = GET_IDNUM(ch);
+          
         obj_to_char(obj, ch);
         bought++;
+        
         if (sell) {
           obj = NULL;
-          if (sell->type == SELL_BOUGHT) {
-            sell->stock--;
-            if (sell->stock == 0) {
-              struct shop_sell_data *temp;
-              REMOVE_FROM_LIST(sell, shop_table[shop_nr].selling, next);
-              delete sell;
-              sell = NULL;
-            } else
+          switch (sell->type) {
+            case SELL_BOUGHT:
+              if (--(sell->stock) == 0) {
+                struct shop_sell_data *temp = NULL;
+                REMOVE_FROM_LIST(sell, shop_table[shop_nr].selling, next);
+                DELETE_AND_NULL(sell);
+              } else
+                obj = read_object(sell->vnum, VIRTUAL);
+              break;
+            case SELL_STOCK:
+              sell->stock--;
+              if (sell->stock > 0)
+                obj = read_object(sell->vnum, VIRTUAL);
+              break;
+            default:
               obj = read_object(sell->vnum, VIRTUAL);
-          } else if (sell->type == SELL_STOCK) {
-            sell->stock--;
-            if (sell->stock > 0)
-              obj = read_object(sell->vnum, VIRTUAL);
-          } else
-            obj = read_object(sell->vnum, VIRTUAL);
+              break;
+          }  
         } else {
           obj = read_object(obj->item_number, REAL);
         }
+        
+        // Deduct the cost.
         if (cred)
           GET_OBJ_VAL(cred, 0) -= price;
         else
           GET_NUYEN(ch) -= price;
       }
+      if (obj) {
+        // Obj was loaded but not given to the character.
+        extract_obj(obj);
+      }
+    }
+    
     if (bought < buynum) {
       strcpy(buf, GET_CHAR_NAME(ch));
       if (cash ? GET_NUYEN(ch) : GET_OBJ_VAL(cred, 0) < price)
@@ -532,7 +595,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   return TRUE;
 }
 
-void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
+void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
 {
   char buf[MAX_STRING_LENGTH];
   if (!is_open(keeper, shop_nr))
@@ -545,7 +608,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   bool cash = FALSE;
   
   // Prevent negative transactions.
-  if ((buynum = transaction_amt(arg)) < 0)
+  if ((buynum = transaction_amt(arg, arg_len)) < 0)
   {
     snprintf(buf, sizeof(buf), "%s A negative amount?  Try selling me something.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -740,6 +803,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
       order->number = buynum;
       order->price = price;
       order->next = shop_table[shop_nr].order;
+      order->sent = FALSE;
       shop_table[shop_nr].order = order;
     }
     
@@ -1508,16 +1572,16 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     return;
   char buf[MAX_STRING_LENGTH];
   int number = atoi(arg);
-	if (number == 0) {
+	if (number <= 0) {
 		send_to_char(ch, "Unrecognized selection. Syntax: RECEIVE [number].\r\n");
 		return;
 	}
-  for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next)
+  for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next) {
     if (order->player == GET_IDNUM(ch) && order->timeavail < time(0) && !--number)
     {
       struct obj_data *obj = read_object(order->item, VIRTUAL), *cred = get_first_credstick(ch, "credstick");
       if (!cred && shop_table[shop_nr].type == SHOP_LEGAL) {
-        snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return;
       }
@@ -1529,6 +1593,7 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
       }
       return;
     }
+  }
   snprintf(buf, sizeof(buf), "%s I don't have anything for you.", GET_CHAR_NAME(ch));
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
 }
@@ -1613,7 +1678,7 @@ SPECIAL(shop_keeper)
 
   skip_spaces(&argument);
   if (CMD_IS("buy"))
-    shop_buy(argument, ch, keeper, shop_nr);
+    shop_buy(argument, sizeof(argument), ch, keeper, shop_nr);
   else if (CMD_IS("sell"))
     shop_sell(argument, ch, keeper, shop_nr);
   else if (CMD_IS("list"))

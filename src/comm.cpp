@@ -1428,7 +1428,7 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   /* if we have enough space, just write to buffer and that's it! */
   if (t->bufspace >= size)
   {
-    strcpy(t->output + t->bufptr, txt);
+    strlcpy(t->output + t->bufptr, txt, t->bufspace);
     t->bufspace -= size;
     t->bufptr += size;
     return;
@@ -1460,9 +1460,9 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
     buf_largecount++;
   }
   
-  strcpy(t->large_outbuf->text, t->output);     /* copy to big buffer */
+  strlcpy(t->large_outbuf->text, t->output, LARGE_BUFSIZE);     /* copy to big buffer */
   t->output = t->large_outbuf->text;    /* make big buffer primary */
-  strcat(t->output, txt);       /* now add new text */
+  strlcat(t->output, txt, LARGE_BUFSIZE);       /* now add new text */
   
   /* calculate how much space is left in the buffer */
   t->bufspace = LARGE_BUFSIZE - 1 - strlen(t->output);
@@ -1477,6 +1477,8 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
 void init_descriptor (struct descriptor_data *newd, int desc)
 {
   static int last_desc = 0;  /* last descriptor number */
+  
+  newd->canary = 31337;
   
   newd->descriptor = desc;
   newd->connected = CON_GET_NAME;
@@ -1584,20 +1586,15 @@ int process_output(struct descriptor_data *t) {
   /* If the descriptor is NULL, just return */
   if ( !t )
     return 0;
-  
-  /* we may need this \r\n for later -- see below */
-  strcpy(i, "\r\n");
-  
-  /* now, append the 'real' output */
-  strcpy(i + 2, t->output);
-  
-  /* if we're in the overflow state, notify the user */
-  if (t->bufptr < 0)
-    strcat(i, "**OVERFLOW**");
-  
-  /* add the extra CRLF if the person isn't in compact mode */
-  if (!t->connected && t->character)
-    strcat(i + 2, "\r\n");
+    
+  memset(i, 0, sizeof(i));
+    
+  // Write out a newline, the contents of the output buffer, and the overflow warning if needed.
+  // Add an extra CRLF if the person isn't in compact mode.
+  snprintf(i, sizeof(i), "\r\n%s%s%s", 
+           t->output, 
+           t->bufptr < 0 ? "**OVERFLOW**" : "",            // <- overflow mode check: bufptr < 0
+           !t->connected && t->character ? "\r\n" : "");   // <- 'compact mode' check
   
   /*
    * now, send the output.  If this is an 'interruption', use the prepended
@@ -1624,11 +1621,11 @@ int process_output(struct descriptor_data *t) {
     t->large_outbuf->next = bufpool;
     bufpool = t->large_outbuf;
     t->large_outbuf = NULL;
-    t->output = t->small_outbuf;
   }
   /* reset total bufspace back to that of a small buffer */
   t->bufspace = SMALL_BUFSIZE - 1;
   t->bufptr = 0;
+  t->output = t->small_outbuf;
   *(t->output) = '\0';
   
   return result;
@@ -2394,6 +2391,7 @@ void send_to_char(struct char_data * ch, const char * const messg, ...)
     return;
   
   char internal_buffer[MAX_STRING_LENGTH];
+  memset(internal_buffer, 0, sizeof(internal_buffer));
   
   va_list argptr;
   va_start(argptr, messg);
@@ -2529,9 +2527,9 @@ const char *ACTNULL = "<NULL>";
 // Uses NEW-- make sure you delete!
 char* strip_ending_punctuation_new(const char* orig) {
   int len = strlen(orig);
-  char* stripped = new char[len];
+  char* stripped = new char[len + 1];
   
-  strcpy(stripped, orig);
+  strlcpy(stripped, orig, len + 1);
   
   char* c = stripped + len - 1;
   
@@ -2639,7 +2637,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
               i = make_desc(to, ch, buf, TRUE, TRUE);
           } else {
             if (IS_SENATOR(ch))
-              i = "an invisible staff member";
+              i = GET_CHAR_NAME(ch);
             else
               i = "someone";
           }
@@ -2742,7 +2740,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
                   i = temp;
                   
                   // Voice deleted here.
-                  delete voice;
+                  delete [] voice;
                 }
               }
             }

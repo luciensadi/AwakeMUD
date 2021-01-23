@@ -24,6 +24,7 @@
 // extern vars
 extern class helpList Help;
 extern class helpList WizHelp;
+extern void write_world_to_disk(int vnum);
 
 // extern funcs
 extern void print_object_location(int, struct obj_data *, struct char_data *, int);
@@ -331,6 +332,39 @@ void objList::UpdateCounters(void)
         else if (temp->data->in_room && temp->data->in_room->people) {
           act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
           act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+          
+          if (ROOM_FLAGGED(temp->data->in_room, ROOM_CORPSE_SAVE_HACK)) {
+            bool should_clear_flag = FALSE;
+            
+            // Iterate through items in room, making sure there are no other corpses.
+            for (struct obj_data *tmp_obj = temp->data->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
+              if (tmp_obj != temp->data && IS_OBJ_STAT(tmp_obj, ITEM_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
+                should_clear_flag = TRUE;
+                break;
+              }
+            }
+            
+            if (should_clear_flag) {
+              snprintf(buf, sizeof(buf), "Removing storage flag from %s (%ld) due to no more player corpses being in it.",
+                       GET_ROOM_NAME(temp->data->in_room),
+                       GET_ROOM_VNUM(temp->data->in_room));
+              mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+              
+              // No more? Remove storage flag and save.
+              temp->data->in_room->room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
+              temp->data->in_room->room_flags.RemoveBit(ROOM_STORAGE);
+              
+              // Save the change.
+              for (int counter = 0; counter <= top_of_zone_table; counter++) {
+                if ((GET_ROOM_VNUM(temp->data->in_room) >= (zone_table[counter].number * 100)) 
+                    && (GET_ROOM_VNUM(temp->data->in_room) <= (zone_table[counter].top))) 
+                {
+                  write_world_to_disk(zone_table[counter].number);
+                  return;
+                }
+              }
+            }
+          }
         }
         // here we make sure to remove all items from the object
         struct obj_data *next_thing, *temp2;

@@ -282,6 +282,7 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest)
     *temp++ = *str++;
   }
   *temp = '\0';
+  dest[size_of_dest - 1] = '\0';
   return dest; 
 }
 

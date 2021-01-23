@@ -50,7 +50,7 @@ extern void reset_zone(int zone, int reboot);
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern int find_sight(struct char_data *ch);
 extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
-extern void wire_nuyen(struct char_data *ch, struct char_data *target, int amount, bool isfile);
+extern void wire_nuyen(struct char_data *ch, int amount, vnum_t idnum);
 extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
 extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
@@ -402,10 +402,11 @@ SPECIAL(metamagic_teacher)
     send_to_char("You aren't close enough to the astral plane to learn that.\r\n", ch);
     return TRUE;
   }
+  /* "Hey, I have an idea!" "What?" "Let's arbitrarily restrict who can train where so that the builders have to do more work!"
   if (GET_GRADE(ch) >= (GET_MAG(master) / 100) - 6) {
     send_to_char(ch, "%s is not powerful enough to teach you that technique.\r\n", GET_NAME(master));
     return TRUE;
-  }
+  } */
 
   for (; x < NUM_TEACHER_SKILLS; x++)
     if (metamagict[ind].s[x] == i)
@@ -2761,7 +2762,7 @@ SPECIAL(hand_held_scanner)
   struct obj_data *scanner = (struct obj_data *) me;
   int i, dir;
 
-  if (!cmd || !scanner->worn_by || number(1, 10) > 4)
+  if (!cmd || !scanner->worn_by || !ch->in_room || number(1, 10) > 4)
     return FALSE;
 
   if (CMD_IS("north"))
@@ -2989,12 +2990,12 @@ SPECIAL(bank)
     else if (!*buf1)
       send_to_char("Who do you want to wire funds to?\r\n", ch);
     else {
-      long isfile = FALSE;
+      vnum_t isfile = -1;
       if ((isfile = get_player_id(buf1)) == -1) {
         send_to_char("It won't let you transfer to that account.\r\n", ch);
         return TRUE;
       }
-      wire_nuyen(ch, NULL, amount, isfile);
+      wire_nuyen(ch, amount, isfile);
       char *cname = get_player_name(isfile);
       send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, cname);
       delete [] cname;
@@ -3573,6 +3574,18 @@ SPECIAL(auth_room)
       char_from_room(ch);
       char_to_room(ch, &world[real_room(RM_NEWBIE_LOBBY)]);
       send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
+      
+      for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
+        if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY) {
+          if (obj->contains) {
+            while (obj->contains) {
+              ch->char_specials.saved.skills[GET_OBJ_VAL(obj->contains, 0)][1] = 0;
+              extract_obj(obj->contains);
+            }
+            send_to_char(ch, "A brief tingle runs through you as %s is wiped clean.\r\n", GET_OBJ_NAME(obj));
+          }
+        }
+          
       if (real_object(OBJ_NEWBIE_RADIO)>-1)
       {
         struct obj_data *radio = read_object(OBJ_NEWBIE_RADIO, VIRTUAL);
