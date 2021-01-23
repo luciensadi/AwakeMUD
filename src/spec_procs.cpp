@@ -3574,6 +3574,18 @@ SPECIAL(auth_room)
       char_from_room(ch);
       char_to_room(ch, &world[real_room(RM_NEWBIE_LOBBY)]);
       send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
+      
+      for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
+        if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY) {
+          if (obj->contains) {
+            while (obj->contains) {
+              ch->char_specials.saved.skills[GET_OBJ_VAL(obj->contains, 0)][1] = 0;
+              extract_obj(obj->contains);
+            }
+            send_to_char(ch, "A brief tingle runs through you as %s is wiped clean.\r\n", GET_OBJ_NAME(obj));
+          }
+        }
+          
       if (real_object(OBJ_NEWBIE_RADIO)>-1)
       {
         struct obj_data *radio = read_object(OBJ_NEWBIE_RADIO, VIRTUAL);
