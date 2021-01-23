@@ -50,7 +50,7 @@ extern void reset_zone(int zone, int reboot);
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern int find_sight(struct char_data *ch);
 extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
-extern void wire_nuyen(struct char_data *ch, struct char_data *target, int amount, bool isfile);
+extern void wire_nuyen(struct char_data *ch, int amount, vnum_t idnum);
 extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
 extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
@@ -2990,12 +2990,12 @@ SPECIAL(bank)
     else if (!*buf1)
       send_to_char("Who do you want to wire funds to?\r\n", ch);
     else {
-      long isfile = FALSE;
+      vnum_t isfile = -1;
       if ((isfile = get_player_id(buf1)) == -1) {
         send_to_char("It won't let you transfer to that account.\r\n", ch);
         return TRUE;
       }
-      wire_nuyen(ch, NULL, amount, isfile);
+      wire_nuyen(ch, amount, isfile);
       char *cname = get_player_name(isfile);
       send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, cname);
       delete [] cname;

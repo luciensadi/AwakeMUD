@@ -24,6 +24,7 @@
 #include "quest.h"
 #include "bullet_pants.h"
 #include "bitfield.h"
+#include "config.h"
 
 ACMD_DECLARE(do_say);
 
@@ -1011,7 +1012,7 @@ bool mobact_process_movement(struct char_data *ch) {
       return FALSE;
       
     // NPC standing outside an elevator? Maybe they want to call it.
-    if (ch->in_room->func == call_elevator && number(0, 6) == 0) {
+    if (ch->in_room->func == call_elevator && number(0, ELEVATOR_BUTTON_PRESS_CHANCE) == 0) {
       char argument[500];
       strcpy(argument, "button");
       ch->in_room->func(ch, ch->in_room, find_command("push"), argument);

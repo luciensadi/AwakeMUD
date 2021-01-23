@@ -29,6 +29,7 @@ extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
+
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
 
@@ -141,6 +142,38 @@ bool House_load(struct house_control_rec *house)
       // At this point, the cost is restored to a positive value. MAX() guards against edge case of attachment being edited after it was attached.
       GET_OBJ_COST(obj) += MAX(0, data.GetInt(buf, GET_OBJ_COST(obj)));
       snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
+      
+      if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
+        // Invalid belongings.
+        if (GET_OBJ_VAL(obj, 5) <= 0) {
+          extract_obj(obj);
+          continue;
+        }
+        
+        const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
+        if (!player_name || !strcmp(player_name, "deleted")) {
+          // Whoops, it belongs to a deleted character. RIP.
+          extract_obj(obj);
+          continue;
+        }
+          
+        // Set up special corpse values. This will probably cause a memory leak. We use name instead of desc.
+        snprintf(buf, sizeof(buf), "belongings %s", player_name);
+        snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(player_name));
+        snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", player_name);
+        strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
+        obj->text.keywords = str_dup(buf);
+        obj->text.room_desc = str_dup(buf1);
+        obj->text.name = str_dup(buf2);
+        obj->text.look_desc = str_dup(buf3);
+        
+        GET_OBJ_VAL(obj, 4) = 1;
+        GET_OBJ_BARRIER(obj) = PC_CORPSE_BARRIER;
+        GET_OBJ_CONDITION(obj) = 100;
+        
+        delete [] player_name;
+      }
+      
       inside = data.GetInt(buf, 0);
       if (inside > 0) {
         if (inside == last_in)
@@ -159,6 +192,7 @@ bool House_load(struct house_control_rec *house)
       last_obj = obj;
     }
   }
+  
   return TRUE;
 }
 
@@ -200,9 +234,17 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   fprintf(fl, "[HOUSE]\n");
   
   struct obj_data *prototype = NULL;
+  int real_obj;
   for (int o = 0; obj;)
   {
-    prototype = &obj_proto[real_object(GET_OBJ_VNUM(obj))];
+    if ((real_obj = real_object(GET_OBJ_VNUM(obj))) == -1) {
+      snprintf(buf, sizeof(buf), "Warning: Will lose house item %s due to nonexistent rnum.", GET_OBJ_NAME(obj));
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      obj = obj->next_content;
+      continue;
+    }
+      
+    prototype = &obj_proto[real_obj];
     if (!IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_KEY) {
       fprintf(fl, "\t[Object %d]\n", o);
       o++;

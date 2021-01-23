@@ -109,8 +109,10 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How many rooms can gridguide go at max speed? Too high, and vehicles will teleport.
 #define MAX_GRIDGUIDE_ROOMS_PER_PULSE 10
 
+// How often do NPCs press elevator buttons? 1:x ratio, where X is the number you put here.
+#define ELEVATOR_BUTTON_PRESS_CHANCE 20
+
 // Wizlock message.
-// #define WIZLOCK_MSG "Sorry, new characters can't be created at the moment.\r\n"
-#define WIZLOCK_MSG "We're not open quite yet! The MUD will be open for new characters on January 15th, 2021, at 5pm Pacific. In the meantime, feel free to join our Discord at https://discord.gg/q5VCMkv!"
+#define WIZLOCK_MSG "Sorry, new characters can't be created at the moment. In the meantime, join our Discord at https://discord.gg/q5VCMkv!"
 
 #endif

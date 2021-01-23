@@ -220,6 +220,7 @@ ACMD(do_copyover)
       will_not_copyover = TRUE;
     }
     
+    /* Check no longer needed since we now save PC corpses.
     if (num_corpses) {
       send_to_char(ch, "There %s %d player corpse%s out there with things still in them.\r\n", 
                    num_corpses != 1 ? "are" : "is",
@@ -227,6 +228,7 @@ ACMD(do_copyover)
                    num_corpses != 1 ? "s" : "");
       will_not_copyover = TRUE;
     }
+    */
     
     if (cab_inhabitants) {
       send_to_char(ch, "There %s %d %s.\r\n", 

@@ -2341,6 +2341,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
     snprintf(buf, sizeof(buf), "SYSERR: Attempt to unattach item from invalid location %d on '%s' (%ld).",
             location, GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+    return NULL;
   }
   
   if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON) {
@@ -2405,7 +2406,17 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   weight_change_object(weapon, -GET_OBJ_WEIGHT(attachment));
   
   // Subtract the attachment's cost from the weapon's cost.
-  GET_OBJ_COST(weapon) = MAX(0, GET_OBJ_COST(weapon) - GET_OBJ_COST(attachment));
+  int cost_delta = GET_OBJ_COST(weapon) - GET_OBJ_COST(attachment);
+  if (cost_delta < 0) {
+    GET_OBJ_COST(weapon) = 0;
+    GET_OBJ_COST(attachment) += cost_delta;
+    if (GET_OBJ_COST(attachment) < 0) {
+      snprintf(buf, sizeof(buf), "BUILD ERROR: Weapon %s (%ld) had crazy-high attachment nuyen value - %s (%ld) would have had negative cost.", 
+               GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon), GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
+    }
+  } else {
+    GET_OBJ_COST(weapon) -= cost_delta;
+  }
   
   // Cycle through all the viable attachment affect flags.
   for (int waff_index = 0; acceptable_weapon_attachment_affects[waff_index] != -1; waff_index++) {

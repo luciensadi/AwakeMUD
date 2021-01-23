@@ -84,6 +84,11 @@ extern void mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
 extern char *get_player_name(vnum_t id);
 
+// Corpse saving externs.
+extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
+extern void write_world_to_disk(int vnum);
+extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
+
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
 
@@ -402,7 +407,7 @@ void make_corpse(struct char_data * ch)
   struct obj_data *create_nuyen(int amount);
   struct obj_data *create_credstick(struct char_data *ch, int amount);
   
-  struct obj_data *corpse, *o, *obj;
+  struct obj_data *corpse;
   struct obj_data *money;
   int i, nuyen, credits, corpse_value = 0;
   if (PLR_FLAGGED(ch, PLR_NEWBIE))
@@ -417,19 +422,22 @@ void make_corpse(struct char_data * ch)
     snprintf(buf, sizeof(buf), "corpse %s", ch->player.physical_text.keywords);
     snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", decapitalize_a_an(GET_NAME(ch)));
     snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", GET_NAME(ch));
+    strlcpy(buf3, "What once was living is no longer. Poor sap.\r\n", sizeof(buf3));
   } else
   {
     snprintf(buf, sizeof(buf), "belongings %s", ch->player.physical_text.keywords);
     snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(GET_NAME(ch)));
     snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", GET_NAME(ch));
+    strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
+    corpse->item_number = real_object(OBJ_SPECIAL_PC_CORPSE);
   }
   corpse->text.keywords = str_dup(buf);
   corpse->text.room_desc = str_dup(buf1);
   corpse->text.name = str_dup(buf2);
-  corpse->text.look_desc = str_dup("What once was living is no longer. Poor sap.\r\n");
+  corpse->text.look_desc = str_dup(buf3);
   GET_OBJ_TYPE(corpse) = ITEM_CONTAINER;
-  (corpse)->obj_flags.wear_flags.SetBits(ITEM_WEAR_TAKE, ENDBIT);
-  (corpse)->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT,
+  // (corpse)->obj_flags.wear_flags.SetBits(ITEM_WEAR_TAKE, ENDBIT);
+  (corpse)->obj_flags.extra_flags.SetBits(ITEM_NODONATE, // ITEM_NORENT,
                                           ITEM_CORPSE, ENDBIT);
   
   GET_OBJ_VAL(corpse, 0) = 0;   /* You can't store stuff in a corpse */
@@ -450,23 +458,28 @@ void make_corpse(struct char_data * ch)
     
     // Drain their pockets of ammo and put it on the corpse.
     for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
-      for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
+      for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
+        struct obj_data *o = NULL;
         if (GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) > 0
             && (o = generate_ammobox_from_pockets(ch, wp, am, GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am)))) {
           obj_to_obj(o, corpse);
         }
+      }
   }
   
   /* transfer character's inventory to the corpse */
-  for (o = ch->carrying; o; o = obj)
   {
-    obj = o->next_content;
-    obj_from_char(o);
-    if (GET_OBJ_TYPE(o) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(o, 1))
-      extract_obj(o);
-    else {
-      obj_to_obj(o, corpse);
-      corpse_value += GET_OBJ_COST( o );
+    struct obj_data *obj = NULL;
+    for (struct obj_data *o = ch->carrying; o; o = obj)
+    {
+      obj = o->next_content;
+      obj_from_char(o);
+      if (GET_OBJ_TYPE(o) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(o, 1))
+        extract_obj(o);
+      else {
+        obj_to_obj(o, corpse);
+        corpse_value += GET_OBJ_COST( o );
+      }
     }
   }
   
@@ -529,11 +542,51 @@ void make_corpse(struct char_data * ch)
   IS_CARRYING_N(ch) = 0;
   IS_CARRYING_W(ch) = 0;
   
+  // Empty player belongings? Pointless.
+  if (GET_OBJ_VAL(corpse, 4) == 1 && !corpse->contains) {
+    extract_obj(corpse);
+    return;
+  }
+  
   if (ch->in_veh) {
     obj_to_veh(corpse, ch->in_veh);
     corpse->vfront = ch->vfront;
-  } else
+  } else {
     obj_to_room(corpse, ch->in_room);
+    
+    if (GET_OBJ_VNUM(corpse) == OBJ_SPECIAL_PC_CORPSE
+        && !ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) 
+        && !ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+      snprintf(buf, sizeof(buf), "Setting storage flag for %s (%ld) due to player corpse being in it.",
+               GET_ROOM_NAME(ch->in_room),
+               GET_ROOM_VNUM(ch->in_room));
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      
+      ch->in_room->room_flags.SetBit(ROOM_CORPSE_SAVE_HACK);
+      ch->in_room->room_flags.SetBit(ROOM_STORAGE);
+      
+      for (int counter = 0; counter <= top_of_zone_table; counter++) {
+        if ((GET_ROOM_VNUM(ch->in_room) >= (zone_table[counter].number * 100)) 
+            && (GET_ROOM_VNUM(ch->in_room) <= (zone_table[counter].top))) 
+        {
+          write_world_to_disk(zone_table[counter].number);
+          
+          if (!Storage_get_filename(GET_ROOM_VNUM(ch->in_room), buf, sizeof(buf))) {
+            mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
+            send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
+            return;
+          }
+          
+          House_save(NULL, buf, real_room(GET_ROOM_VNUM(ch->in_room)));
+          return;
+        }
+      }
+      
+      // Saving failed.
+      mudlog("WARNING: Failed to make room into a save room for corpse - did not find zone!", ch, LOG_SYSLOG, TRUE);
+      send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
+    }
+  }
 }
 
 void death_cry(struct char_data * ch)
@@ -586,6 +639,8 @@ void raw_kill(struct char_data * ch)
     }
   } else
   {
+    struct room_data *in_room = get_ch_in_room(ch);
+    
     death_cry(ch);
     
     if (!(IS_SPIRIT(ch) || IS_ELEMENTAL(ch)))
@@ -611,7 +666,7 @@ void raw_kill(struct char_data * ch)
       GET_DRUG_AFFECT(ch) = GET_DRUG_DURATION(ch) = GET_DRUG_STAGE(ch) = 0;
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
         i = real_room(RM_CHARGEN_START_ROOM);
-      else switch (GET_JURISDICTION(ch->in_room)) {
+      else switch (GET_JURISDICTION(in_room)) {
         case ZONE_SEATTLE:
           i = real_room(RM_SEATTLE_DOCWAGON);
           break;
@@ -626,8 +681,8 @@ void raw_kill(struct char_data * ch)
           break;
         default:
           snprintf(buf, sizeof(buf), "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld).",
-                  GET_JURISDICTION(ch->in_room),
-                  ch->in_room->number,
+                  GET_JURISDICTION(in_room),
+                  in_room->number,
                   GET_CHAR_NAME(ch), GET_IDNUM(ch));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
           i = real_room(RM_ENTRANCE_TO_DANTES);
@@ -707,9 +762,11 @@ ACMD(do_die)
   send_to_char("You give up the will to live..\n\r",ch);
   
   /* log it */
-  snprintf(buf, sizeof(buf),"%s gave up the will to live. {%s (%ld)}",
+  snprintf(buf, sizeof(buf),"%s gave up the will to live. {%s%s (%ld)}",
           GET_CHAR_NAME(ch),
-          ch->in_room->name, ch->in_room->number );
+          ch->in_veh ? "in veh at " : "",
+          GET_ROOM_NAME(get_ch_in_room(ch)), 
+          GET_ROOM_VNUM(get_ch_in_room(ch)));
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
   
   /* Now we just kill them, MuHahAhAhahhaAHhaAHaA!!...or something */
@@ -1835,9 +1892,9 @@ void check_adrenaline(struct char_data *ch, int mode)
 }
 
 #define WRITE_DEATH_MESSAGE(format_string) \
-  snprintf(buf2, sizeof(buf2), format_string, GET_CHAR_NAME(vict), GET_ROOM_NAME(vict->in_room), GET_ROOM_VNUM(vict->in_room))
+  snprintf(buf2, sizeof(buf2), format_string, GET_CHAR_NAME(vict), vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh), GET_ROOM_VNUM(get_ch_in_room(vict)))
 #define WRITE_DEATH_MESSAGE_WITH_AGGRESSOR(format_string) \
-  snprintf(buf2, sizeof(buf2), format_string, GET_CHAR_NAME(vict), ch == vict ? "Misadventure(?)" : GET_NAME(ch), GET_ROOM_NAME(vict->in_room), GET_ROOM_VNUM(vict->in_room))
+  snprintf(buf2, sizeof(buf2), format_string, GET_CHAR_NAME(vict), ch == vict ? "Misadventure(?)" : GET_NAME(ch), vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh), GET_ROOM_VNUM(get_ch_in_room(vict)))
 void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
 {
   switch (attacktype)
@@ -1866,8 +1923,8 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
         case 0:
           snprintf(buf2, sizeof(buf2), "%s blew %s to pieces. {%s (%ld)}",
                   ch == vict ? "???" : GET_NAME(ch), GET_CHAR_NAME(vict),
-                  vict->in_room->name,
-                  vict->in_room->number);
+                  vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
+                  GET_ROOM_VNUM(get_ch_in_room(vict)));
           break;
         case 1:
           WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s was blown to bits. [%s] {%s (%ld)}");
@@ -1894,14 +1951,14 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
         case 2:
           snprintf(buf2, sizeof(buf2), "Oops....%s just blew %s's head off. {%s (%ld)}",
                   ch == vict ? "???" : GET_NAME(ch), GET_CHAR_NAME(vict),
-                  vict->in_room->name,
-                  vict->in_room->number);
+                  vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
+                  GET_ROOM_VNUM(get_ch_in_room(vict)));
           break;
         case 3:
           snprintf(buf2, sizeof(buf2), "%s's stray bullet caught %s in the heart. What a shame. {%s (%ld)}",
                   ch == vict ? "???" : GET_NAME(ch), GET_CHAR_NAME(vict),
-                  vict->in_room->name,
-                  vict->in_room->number);
+                  vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
+                  GET_ROOM_VNUM(get_ch_in_room(vict)));
           break;
         case 4:
           WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("A random bullet killed a random person -- poor %s. [%s] {%s (%ld)}");
@@ -1952,7 +2009,8 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           snprintf(buf2, sizeof(buf2), "%s just hasn't been taking %s medication.  Oops. "
                   "{%s (%ld)}", GET_CHAR_NAME(vict), GET_SEX(vict) == SEX_MALE ?
                   "his" : (GET_SEX(vict) == SEX_FEMALE ? "her" : "its"),
-                  vict->in_room->name, vict->in_room->number);
+                  vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
+                  GET_ROOM_VNUM(get_ch_in_room(vict)));
           break;
         case 1:
           WRITE_DEATH_MESSAGE("%s was killed in a bioware rebellion. {%s (%ld)}");
@@ -1976,7 +2034,8 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
         case 1:
           snprintf(buf2, sizeof(buf2), "%s lopped off %s own head.  Oops. {%s (%ld)}",
                   GET_CHAR_NAME(vict), HSHR(vict),
-                  vict->in_room->name, vict->in_room->number);
+                  vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
+                  GET_ROOM_VNUM(get_ch_in_room(vict)));
           break;
         case 2:
           WRITE_DEATH_MESSAGE("%s, watch out for your whi....nevermind. {%s (%ld)}");
@@ -1987,7 +2046,8 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
         case 4:
           snprintf(buf2, sizeof(buf2), "%s's whip didn't agree with %s. {%s (%ld)}",
                   GET_CHAR_NAME(vict), HMHR(vict),
-                  vict->in_room->name, vict->in_room->number);
+                  vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
+                  GET_ROOM_VNUM(get_ch_in_room(vict)));
           break;
       }
       break;
@@ -2011,7 +2071,8 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
         case 0:
           snprintf(buf2, sizeof(buf2), "%s forgot to wear %s seatbelt. {%s (%ld)}",
                   GET_CHAR_NAME(vict), HSHR(vict),
-                  vict->in_room->name, vict->in_room->number);
+                  vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
+                  GET_ROOM_VNUM(get_ch_in_room(vict)));
           break;
         case 1:
           WRITE_DEATH_MESSAGE("%s become one with the dashboard. {%s (%ld)}");
@@ -2022,7 +2083,8 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
       if (ch == vict)
         snprintf(buf2, sizeof(buf2), "%s died (cause uncertain-- damage type %d). {%s (%ld)}",
                 GET_CHAR_NAME(vict), attacktype,
-                vict->in_room->name, vict->in_room->number);
+                vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
+                GET_ROOM_VNUM(get_ch_in_room(vict)));
       else
         switch (number(0, 5)) {
           case 0:
@@ -2084,7 +2146,7 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
   
   if (!IS_NPC(vict) &&
       !PLR_FLAGS(vict).AreAnySet(PLR_KILLER, ENDBIT) &&
-      !(ROOM_FLAGGED(ch->in_room, ROOM_ARENA) && ROOM_FLAGGED(vict->in_room, ROOM_ARENA)) &&
+      !(ROOM_FLAGGED(get_ch_in_room(ch), ROOM_ARENA) && ROOM_FLAGGED(get_ch_in_room(vict), ROOM_ARENA)) &&
       (!PRF_FLAGGED(attacker, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
       !PLR_FLAGGED(attacker, PLR_KILLER) && attacker != vict && !IS_SENATOR(attacker))
   {
@@ -2400,12 +2462,12 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   } else if (dam > 0 && attacktype == TYPE_FALL) {
     if (dam > 5) {
       send_to_char(victim, "^RYou slam into the %s at speed, the impact reshaping your body in ways you do not appreciate.^n\r\n",
-                   ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
-      snprintf(buf3, sizeof(buf3), "^R$n slams into the %s at speed, the impact reshaping $s body in horrific ways.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
+                   ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
+      snprintf(buf3, sizeof(buf3), "^R$n slams into the %s at speed, the impact reshaping $s body in horrific ways.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
       act(buf3, FALSE, victim, 0, 0, TO_ROOM);
     } else {
-      send_to_char(victim, "^rYou hit the %s with brusing force.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
-      snprintf(buf3, sizeof(buf3), "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
+      send_to_char(victim, "^rYou hit the %s with brusing force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
+      snprintf(buf3, sizeof(buf3), "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
       act(buf3, FALSE, victim, 0, 0, TO_ROOM);
     }
   }
@@ -2804,7 +2866,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   {
     PLR_FLAGS(ch->desc->original).SetBit(PLR_KILLER);
     snprintf(buf, sizeof(buf), "PC Killer bit set on %s (astral) for initiating attack on %s at %s.",
-            GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), vict->in_room->name);
+            GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), GET_ROOM_NAME(get_ch_in_room(vict)));
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
     send_to_char("If you want to be a PLAYER KILLER, so be it...\r\n", ch);
   }
@@ -4187,9 +4249,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
   // Set the violence background count.
-  if (att->ch->in_room && !GET_BACKGROUND_COUNT(att->ch->in_room)) {
-    GET_SETTABLE_BACKGROUND_COUNT(att->ch->in_room) = 1;
-    GET_SETTABLE_BACKGROUND_AURA(att->ch->in_room) = AURA_PLAYERCOMBAT;
+  struct room_data *room = get_ch_in_room(att->ch);
+  if (room && !GET_BACKGROUND_COUNT(room)) {
+    GET_SETTABLE_BACKGROUND_COUNT(room) = 1;
+    GET_SETTABLE_BACKGROUND_AURA(room) = AURA_PLAYERCOMBAT;
   }
   
 }

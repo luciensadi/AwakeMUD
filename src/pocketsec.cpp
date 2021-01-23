@@ -53,19 +53,39 @@ void initialize_pocket_secretary(struct obj_data *sec) {
   obj_to_obj(folder, sec);
 }
 
-void wire_nuyen(struct char_data *ch, struct char_data *targ, int amount, long isfile)
-{
+void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
+{  
+  // First, scan the game to see if the target character is online.
+  struct char_data *targ = NULL;
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    targ = d->original ? d->original : d->character;
+    
+    if (targ && GET_IDNUM(targ) == character_id)
+      break;
+    
+    targ = NULL;
+  }
+  
+  // Deduct from the sender.
   GET_BANK(ch) -= amount;
-  if (isfile) {
-    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, isfile);
-    mysql_wrapper(mysql, buf);
-    GET_EXTRA(ch) = 0;
-  } else
+  playerDB.SaveChar(ch);
+  
+  // Add to the receiver.
+  if (targ) {
     GET_BANK(targ) += amount;
+    playerDB.SaveChar(targ);
+  } else {
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, character_id);
+    mysql_wrapper(mysql, buf);
+  }
+  
+  // Mail it.
   snprintf(buf, sizeof(buf), "%s has wired %d nuyen to your account.\r\n", GET_CHAR_NAME(ch), amount);
-  store_mail(targ ? GET_IDNUM(targ) : isfile, ch, buf);
-  char *player_name = NULL;
-  snprintf(buf, sizeof(buf), "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : (player_name = get_player_name(isfile)));
+  store_mail(character_id, ch, buf);
+  
+  // Log it.
+  char *player_name = targ ? NULL : get_player_name(character_id);
+  snprintf(buf, sizeof(buf), "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : player_name);
   DELETE_ARRAY_IF_EXTANT(player_name);
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 }
@@ -370,8 +390,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           name = get_player_name(GET_EXTRA(CH));
           send_to_char(CH, "You wire %d nuyen to %s's account.\r\n", x, capitalize(name));
           delete [] name;
-          wire_nuyen(CH, d->edit_mob, x, GET_EXTRA(CH));
-          d->edit_mob = NULL;
+          wire_nuyen(CH, x, GET_EXTRA(CH));
           pocketsec_bankmenu(d);
         }
         return;

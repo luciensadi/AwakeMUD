@@ -1440,7 +1440,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   } else {
     send_to_char(ch, "^C%s^n%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
                  ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) ? " (Storage)" : "",
+                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
                  ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
@@ -4780,6 +4780,11 @@ ACMD(do_scan)
   if (!specific) {
     for (i = 0; i < NUM_OF_DIRS; ++i) {
       if (CAN_GO(ch, i)) {
+        if (EXIT(ch, i)->to_room == get_ch_in_room(ch)) {
+          send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
+          continue;
+        }
+        
         onethere = FALSE;
         if (!((!infra && light_level(EXIT(ch, i)->to_room) == LIGHT_FULLDARK) ||
               ((!infra || !lowlight) && (light_level(EXIT(ch, i)->to_room) == LIGHT_MINLIGHT || light_level(EXIT(ch, i)->to_room) == LIGHT_PARTLIGHT)))) {

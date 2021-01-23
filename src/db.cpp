@@ -71,6 +71,7 @@ extern void clearMemory(struct char_data * ch);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void generate_archetypes();
 extern void populate_mobact_aggression_octets();
+extern void write_world_to_disk(int vnum);
 
 
 /**************************************************************************
@@ -4313,7 +4314,7 @@ void clear_icon(struct matrix_icon *icon)
 
 /* returns the real number of the room with given virtual number */
 long real_room(long virt)
-{
+{  
   long bot, top, mid;
 
   bot = 0;
@@ -4340,7 +4341,7 @@ long real_room(long virt)
 
 /* returns the real number of the monster with given virtual number */
 long real_mobile(long virt)
-{
+{  
   int bot, top, mid;
 
   bot = 0;
@@ -4507,6 +4508,13 @@ long real_object(long virt)
 
 char *short_object(int virt, int what)
 {
+  if (virt < 0) {
+    static char error[50];
+    snprintf(error, sizeof(error), "ERROR");
+    mudlog("SYSERR: short_object received negative virt!", NULL, LOG_SYSLOG, TRUE);
+    return error;
+  } 
+  
   int bot, top, mid;
 
   bot = 0;
@@ -4743,6 +4751,38 @@ void load_saved_veh()
         obj->vfront = data.GetInt(buf, TRUE);
         snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
         GET_OBJ_TIMER(obj) = data.GetInt(buf, TRUE);
+        
+        if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
+          // Invalid belongings.
+          if (GET_OBJ_VAL(obj, 5) <= 0) {
+            extract_obj(obj);
+            continue;
+          }
+          
+          const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
+          if (!player_name || !strcmp(player_name, "deleted")) {
+            // Whoops, it belongs to a deleted character. RIP.
+            extract_obj(obj);
+            continue;
+          }
+            
+          // Set up special corpse values. This will probably cause a memory leak. We use name instead of desc.
+          snprintf(buf, sizeof(buf), "belongings %s", player_name);
+          snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(player_name));
+          snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", player_name);
+          strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
+          obj->text.keywords = str_dup(buf);
+          obj->text.room_desc = str_dup(buf1);
+          obj->text.name = str_dup(buf2);
+          obj->text.look_desc = str_dup(buf3);
+          
+          GET_OBJ_VAL(obj, 4) = 1;
+          GET_OBJ_BARRIER(obj) = PC_CORPSE_BARRIER;
+          GET_OBJ_CONDITION(obj) = 100;
+          
+          delete [] player_name;
+        }
+        
         if (inside > 0) {
           if (inside == last_in)
             last_obj = last_obj->in_obj;
@@ -4877,74 +4917,128 @@ void load_consist(void)
   struct obj_data *attach;
   File file;
   
-  for (int nr = 0; nr <= top_of_world; nr++)
+  for (int nr = 0; nr <= top_of_world; nr++) {
     if (ROOM_FLAGGED(&world[nr], ROOM_STORAGE)) {
       snprintf(buf, sizeof(buf), "storage/%ld", world[nr].number);
-      if (!(file.Open(buf, "r")))
-        continue;
-      log_vfprintf("Restoring storage contents for room %ld (%s)...", world[nr].number, buf);
-      VTable data;
-      data.Parse(&file);
-      file.Close();
-      struct obj_data *obj = NULL, *last_obj = NULL;
-      int inside = 0, last_in = 0, num_objs = data.NumSubsections("HOUSE");
-      long vnum;
-      for (int i = 0; i < num_objs; i++) {
-        const char *sect_name = data.GetIndexSection("HOUSE", i);
-        snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
-        vnum = data.GetLong(buf, 0);
-        if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
-          snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-          obj->restring = str_dup(data.GetString(buf, NULL));
-          snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
-          obj->photo = str_dup(data.GetString(buf, NULL));
-          for (int x = 0; x < NUM_VALUES; x++) {
-            snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
-            GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
-          }
-          if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
-            add_phone_to_list(obj);
-          snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
-          GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
-          snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
-          GET_OBJ_TIMER(obj) = data.GetInt(buf, GET_OBJ_TIMER(obj));
-          snprintf(buf, sizeof(buf), "%s/Attempt", sect_name);
-          GET_OBJ_ATTEMPT(obj) = data.GetInt(buf, 0);
-          snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
-          GET_OBJ_COST(obj) = data.GetInt(buf, GET_OBJ_COST(obj));
-          snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
-          
-          // Handle weapon attachments.
-          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
-            int real_obj;
-            for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
-              if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 &&
-                  (attach = &obj_proto[real_obj])) {
-                // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
-                GET_OBJ_VAL(obj, q) = 0;
-                attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
+      if ((file.Open(buf, "r"))) {
+        log_vfprintf("Restoring storage contents for room %ld (%s)...", world[nr].number, buf);
+        VTable data;
+        data.Parse(&file);
+        file.Close();
+        struct obj_data *obj = NULL, *last_obj = NULL;
+        int inside = 0, last_in = 0, num_objs = data.NumSubsections("HOUSE");
+        long vnum;
+        for (int i = 0; i < num_objs; i++) {
+          const char *sect_name = data.GetIndexSection("HOUSE", i);
+          snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
+          vnum = data.GetLong(buf, 0);
+          if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
+            snprintf(buf, sizeof(buf), "%s/Name", sect_name);
+            obj->restring = str_dup(data.GetString(buf, NULL));
+            snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
+            obj->photo = str_dup(data.GetString(buf, NULL));
+            for (int x = 0; x < NUM_VALUES; x++) {
+              snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
+              GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
+            }
+            if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
+              add_phone_to_list(obj);
+            snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
+            GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
+            snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
+            GET_OBJ_TIMER(obj) = data.GetInt(buf, GET_OBJ_TIMER(obj));
+            snprintf(buf, sizeof(buf), "%s/Attempt", sect_name);
+            GET_OBJ_ATTEMPT(obj) = data.GetInt(buf, 0);
+            snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
+            GET_OBJ_COST(obj) = data.GetInt(buf, GET_OBJ_COST(obj));
+            snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
+            
+            // Handle weapon attachments.
+            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
+              int real_obj;
+              for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
+                if (GET_OBJ_VAL(obj, q) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, q))) > 0 &&
+                    (attach = &obj_proto[real_obj])) {
+                  // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
+                  GET_OBJ_VAL(obj, q) = 0;
+                  attach_attachment_to_weapon(attach, obj, NULL, q - ACCESS_ACCESSORY_LOCATION_DELTA);
+                }
+            }
+            
+            else if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
+              // Invalid belongings.
+              if (GET_OBJ_VAL(obj, 5) <= 0) {
+                extract_obj(obj);
+                continue;
               }
-          }
-          
-          inside = data.GetInt(buf, 0);
-          if (inside > 0) {
-            if (inside == last_in)
-              last_obj = last_obj->in_obj;
-            else if (inside < last_in)
-              while (inside <= last_in) {
+              
+              const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
+              if (!player_name) {
+                // Whoops, it belongs to a deleted character. RIP.
+                extract_obj(obj);
+                continue;
+              }
+                
+              // Set up special corpse values. This will probably cause a memory leak. We use name instead of desc.
+              snprintf(buf, sizeof(buf), "belongings %s", player_name);
+              snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(player_name));
+              snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", player_name);
+              strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
+              obj->text.keywords = str_dup(buf);
+              obj->text.room_desc = str_dup(buf1);
+              obj->text.name = str_dup(buf2);
+              obj->text.look_desc = str_dup(buf3);
+              
+              GET_OBJ_VAL(obj, 4) = 1;
+              GET_OBJ_BARRIER(obj) = PC_CORPSE_BARRIER;
+              GET_OBJ_CONDITION(obj) = 100;
+              
+              delete [] player_name;
+            }
+            
+            inside = data.GetInt(buf, 0);
+            if (inside > 0) {
+              if (inside == last_in)
                 last_obj = last_obj->in_obj;
-                last_in--;
-              }
-            if (last_obj)
-              obj_to_obj(obj, last_obj);
-          } else
-            obj_to_room(obj, &world[nr]);
+              else if (inside < last_in)
+                while (inside <= last_in) {
+                  last_obj = last_obj->in_obj;
+                  last_in--;
+                }
+              if (last_obj)
+                obj_to_obj(obj, last_obj);
+            } else
+              obj_to_room(obj, &world[nr]);
 
-          last_in = inside;
-          last_obj = obj;
+            last_in = inside;
+            last_obj = obj;
+          }
         }
       }
     }
+    
+    // Verify that any hack-flagged room has a PC corpse in it. If not, remove the flag and save it.
+    if (ROOM_FLAGGED(&world[nr], ROOM_CORPSE_SAVE_HACK)) {
+      bool keep_flag = FALSE;
+      for (struct obj_data *tmp_obj = world[nr].contents; tmp_obj; tmp_obj = tmp_obj->next_content)
+        if ((keep_flag = (GET_OBJ_VNUM(tmp_obj) == OBJ_SPECIAL_PC_CORPSE)))
+          break;
+          
+      if (!keep_flag) {
+        world[nr].room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
+        world[nr].room_flags.RemoveBit(ROOM_STORAGE);
+        
+        for (int counter = 0; counter <= top_of_zone_table; counter++) {
+          if ((GET_ROOM_VNUM(&world[nr]) >= (zone_table[counter].number * 100)) 
+              && (GET_ROOM_VNUM(&world[nr]) <= (zone_table[counter].top))) 
+          {
+            write_world_to_disk(zone_table[counter].number);
+            break;
+          }
+        }
+      }
+    }
+  }
   
   if (!(file.Open("etc/consist", "r"))) {
     log("PAYDATA CONSISTENCY FILE NOT FOUND");

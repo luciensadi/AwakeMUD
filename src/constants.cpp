@@ -270,6 +270,7 @@ const char *room_bits[] =
     "!TRAFFIC",
     "ELEVATOR_SHAFT",
     "SOCIALIZE!",
+    "CORPSE_SAVE_HACK",
     "\n"
   };
 

@@ -1866,10 +1866,8 @@ ACMD(do_tow)
     send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
     return;
   }
-  if (tveh->type == VEH_TRUCK)
-    send_to_char("Trucks are too heavy to tow.\r\n", ch);
-  else if (tveh->type == VEH_BIKE)
-    send_to_char("Try as you might, you can't seem to balance it.\r\n", ch);
+  if (tveh->type == VEH_BIKE)
+    send_to_char("Try as you might, you can't seem to balance it. You'll have to ^WPUSH^n that into the back instead.\r\n", ch);
   else if (tveh->locked && tveh->type != VEH_DRONE)
     send_to_char("That vehicle won't budge until it's unlocked.\r\n", ch);
   else if (tveh->people)
@@ -1880,6 +1878,8 @@ ACMD(do_tow)
     send_to_char("Drones can only tow other drones.\r\n", ch);
   else if (veh->type == VEH_DRONE && veh->load <= tveh->load)
     send_to_char("Drones can only tow drones that are lighter than them.\r\n", ch);
+  else if (veh->towing)
+    send_to_char("Towing a vehicle that's towing another vehicle isn't very safe!\r\n", ch);
   else {
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));
     strcpy(buf3, GET_VEH_NAME(veh));
