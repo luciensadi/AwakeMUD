@@ -628,6 +628,9 @@ ACMD(do_new_echo) {
 
 // TODO: Have some words that allow you to break the length-- common names, etc.
 bool has_required_language_ability_for_sentence(struct char_data *ch, const char *message, int language_skill) {
+  if (IS_NPC(ch))
+    return TRUE;
+  
   int max_allowable = max_allowable_word_length_at_language_level(GET_SKILL(ch, language_skill));
   
   char current_word[500];
