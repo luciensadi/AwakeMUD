@@ -3,6 +3,7 @@
 #include "lexicons.h"
 
 int lexicon_sizes[NUM_LEXICONS];
+int lexicon_last_used[NUM_LEXICONS][NUM_LEXICON_WORDS_BEFORE_REPEAT];
 
 int get_lexicon_number_for_language(int language_skill) {
   switch (language_skill) {
@@ -44,8 +45,26 @@ void populate_lexicon_size_table() {
 
 const char *get_random_word_from_lexicon(int language_skill) {
   int lexicon_number = get_lexicon_number_for_language(language_skill);
+  int random_number;
   
-  return lexicons[lexicon_number][number(0, lexicon_sizes[lexicon_number])];
+  bool break_condition;
+  do {
+    break_condition = TRUE;
+    
+    random_number = number(0, lexicon_sizes[lexicon_number]);
+    
+    for (int i = 0; i < NUM_LEXICON_WORDS_BEFORE_REPEAT; i++)
+      if (lexicon_last_used[lexicon_number][i] == random_number) {
+        break_condition = FALSE;
+        break;
+      }
+        
+  } while (!break_condition);
+  
+  for (int i = NUM_LEXICON_WORDS_BEFORE_REPEAT - 1; i > 0; i--)
+    lexicon_last_used[lexicon_number][i] = lexicon_last_used[lexicon_number][i - 1];
+  
+  return lexicons[lexicon_number][random_number];
 }
 
 const char **lexicons[] = {
@@ -142,7 +161,7 @@ const char *lexicon_navajo[] = {
 };
 
 const char *lexicon_german[] = {
-  "german",
+  "Licht", "Leiche", "Leichen", "Leichenhalle", "Strasse", "spiel", "Klavier", "sagt", "sagen", "spreche", "aussbern", "Zeugen", "meinen", "toten", "Hose", "Hosen", "schatten", "lauf", "reinheitsgebot", "fluchtiger", "Nachtflugel", "shlagt", "Schlacht", "rein", "reiter", "das", "die", "der", "Geil", "Affengeil", "Gesselschaft", "Deer", "Bulle", "Alter", "Bolkstoff", "Junge", "Madchen", "kleine", "Kleiner", "Kumpel", "Mann", "Herr", "Fraulein", "Land", "Lander", "Dokter", "abbrant", "galerie", "hafen", "saugmagen", "Ich", "gehe", "gehen", "gehst", "gehen", "geht", "sitze", "sitzt", "sitzen", "finde", "findest", "findet", "finden", "handele", "handelst", "handelt", "handeln", "kommen", "kommt", "wissen", "weiss", "nehmen", "nimmt", "sollen", "soll", "haben", "hat", "konnen", "kann", "werden", "wird", "denken", "denkt", "heissen", "heisst", "bleiben", "bleibt", "mussen", "muss", "tun", "tut", "machen", "macht", "geben", "gibt", "liegen", "liegt", "wollen", "will", "lassen", "lasst", "lerne", "lernen", "Schule", "Schulen", "Schatz", "grosse", "keine", "ein", "zwei", "zwo", "drei", "funf", "sechs", "seiben", "ache", "neun", "zehn", "links", "gegen", "gege", "Mutter", "Vater", "Stadt", "Neonlicht", "wunder", "wunderschone", "wunderschones", "klatschen", "applaudieren", "klopfen", "Nacht", "Morgen", "Stern", "schimmerndes", "und", "wenn", "anbricht", "aus", "auf", "allein", "alleine", "verlassen", "einsam", "durchgefuhrt", "Vogel", "Hunde", "Katze", "Modell", "sind", "Schaufensterpuppen", "puppe", "puppen", "dunke", "dunkel", "Kraftwerk", "Kamera", "Agrippa", "Marchen", "Currywurst", "Maschine", "Menschen", "Mensch", "Manner", "Frau", "arsch", "Maus", "Fahren", "Lenkung", "antreibend", "Auge", "Augen", "Wellenlange", "Wilde", "Zeite", "Zeiten", "Alter", "Vor", "Vorhang", "Fahrer", "Fahrerin", "Krank", "schwartz", "blau", "rot", "ubel", "lecken", "schleken", "blausen", "warten", "dedienen", "Strassedoktor", "zu", "kampf", "kampfen", "streit", "Geschlecht", "Geschlechtsverkehr", "schlagen", "knall", "Popmusik", "Musik", "hass", "hast", "Brot", "Benzin", "trage", "tragen", "aufzug", "Fahrstuhl", "Kafig", "rammen", "strossen", "zwangen", "stampfen", "belastigen", "verlieren", "verpassen", "vergessen", "brennt", "Magie", "Zauber", "Zauberei", "schnell",
   "\n"
 };
 

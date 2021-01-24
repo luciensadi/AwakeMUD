@@ -23,6 +23,8 @@
 #define LEXICON_FRENCH     19
 #define NUM_LEXICONS       20
 
+#define NUM_LEXICON_WORDS_BEFORE_REPEAT 5
+
 extern const char **lexicons[];
 extern const char *lexicon_english[];
 extern const char *lexicon_sperethiel[];
