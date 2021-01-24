@@ -5,12 +5,15 @@
 #include "constants.h"
 #include "handler.h"
 #include "newdb.h"
+#include "lexicons.h"
 
 char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
 char storage_string[MAX_STRING_LENGTH];
 
 bool has_required_language_ability_for_sentence(struct char_data *ch, const char *message, int language_skill);
+const char *get_random_word_from_lexicon(int language_skill);
+const char *generate_random_lexicon_sentence(int language_skill, int length);
 
 // #define NEW_EMOTE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define NEW_EMOTE_DEBUG(...)
@@ -54,7 +57,8 @@ ACMD(do_highlight) {
 /* Technically, language is supposed to restrict the types of things you can understand.
    Since linguistic parsing at that level is beyond what I'm willing to write in C (and
    also technically beyond most systems today), we're going with a rudimentary metric
-   based on word length. Hey, it's quick.  -- LS */
+   based on word length. Hey, it's quick. -- LS */
+
 int max_allowable_word_length_at_language_level(int level) {    
   switch (level) {
     case 0: return 0;
@@ -670,4 +674,92 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
   }
   
   return TRUE;
+}
+
+const char *generate_random_lexicon_sentence(int language_skill, int length) {
+  static char message_buf[MAX_STRING_LENGTH];
+  *message_buf = '\0';
+  
+  bool need_caps = FALSE;
+  while ((int) strlen(message_buf) < length) {
+    if (!(*message_buf))
+      need_caps = TRUE;
+    else {
+      need_caps = FALSE;
+      
+      if (!number(0, 10))
+        strlcat(message_buf, (need_caps = number(0,2)) ? ". " : ", ", sizeof(message_buf));
+      else 
+        strlcat(message_buf, " ", sizeof(message_buf));
+    }
+    
+    if (need_caps) {
+      strlcat(message_buf, capitalize(get_random_word_from_lexicon(language_skill)), sizeof(message_buf));
+    } else {
+      strlcat(message_buf, get_random_word_from_lexicon(language_skill), sizeof(message_buf));
+    }
+  }
+  
+  // We specifically do not want to end in a period.
+  // strlcat(message_buf, ".", sizeof(message_buf));
+    
+  return message_buf;
+}
+
+// When listening, you get too-long words replaced with random ones.
+const char *replace_too_long_words(struct char_data *ch, const char *message, int language_skill) {
+  static char replaced_message[MAX_STRING_LENGTH];
+  static char storage_buf[MAX_STRING_LENGTH];
+  int max_allowable = max_allowable_word_length_at_language_level(GET_SKILL(ch, language_skill));
+  
+  bool screenreader = PRF_FLAGGED(ch, PRF_SCREENREADER);
+  
+  if (IS_NPC(ch))
+    return message;
+    
+  strlcpy(replaced_message, message, sizeof(replaced_message));
+    
+  // We specifically use <=, because we know this is null-terminated and we want to act on the null at the end.
+  for (char *ptr = replaced_message; ptr && (ptr - replaced_message) <= (int) strlen(replaced_message); ptr++) {
+    if (isalpha(*ptr)) {
+      // Skip capitalized words. This preserves things like names.
+      bool yelling = isupper(*ptr) && isupper(*(ptr + 1));
+      if (isupper(*ptr) && !yelling) {
+        while (isalpha(*(++ptr)));
+        continue;
+      }
+      
+      char *word_ptr = ptr;
+      while (isalpha(*(++word_ptr)));
+      // word_ptr now points at the character after the end of the word.
+      
+      int len = word_ptr - ptr;
+      if (len > max_allowable) {
+        // Terminate the replaced message string at the beginning of the invalid word.
+        *ptr = 0;
+        
+        const char *random_word;
+        
+        if (screenreader) 
+          random_word = "...";
+        else
+          random_word = get_random_word_from_lexicon(language_skill);
+        
+        // Replace the word in the sentence and dump it to storage_buf.
+        snprintf(storage_buf, sizeof(storage_buf), "%s%s%s", 
+                 replaced_message,  // Message up to beginning of invalid word.
+                 yelling ? string_to_uppercase(random_word) : random_word, // a random word in the language
+                 word_ptr);         // the rest of the owl-- I mean, the rest of the sentence from the end of the word.
+        
+        // Write over replaced_message with storage_buf.
+        strlcpy(replaced_message, storage_buf, sizeof(replaced_message));
+        
+        ptr += strlen(random_word) - 1;
+      } else {
+        ptr = word_ptr - 1;
+      }
+    }
+  }
+  
+  return replaced_message;
 }

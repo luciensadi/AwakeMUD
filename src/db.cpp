@@ -56,6 +56,7 @@
 #include <new>
 #include "transport.h"
 #include "bullet_pants.h"
+#include "lexicons.h"
 
 extern void calc_weight(struct char_data *ch);
 extern void read_spells(struct char_data *ch);
@@ -430,6 +431,9 @@ void boot_world(void)
   require_that_field_exists_in_table("archetypal", "pfiles_chargendata", "SQL/Migrations/archetypes.sql");
   require_that_field_exists_in_table("highlight", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   require_that_field_exists_in_table("email", "pfiles", "SQL/Migrations/rp_upgrade.sql");
+  
+  log("Calculating lexicon data.");
+  populate_lexicon_size_table();
   
   log("Handling idle deletion.");
   idle_delete();
