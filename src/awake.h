@@ -896,8 +896,10 @@ enum {
 #define SKILL_BRACERGUN           130
 #define SKILL_BLOWGUN             131
 #define SKILL_PHARMA              132
+#define SKILL_HEBREW              133
+#define SKILL_ALGONQUIN           134
 
-#define MAX_SKILLS      133
+#define MAX_SKILLS      135
 
 // Skill type definitions.
 #define SKILL_TYPE_ACTIVE         0
