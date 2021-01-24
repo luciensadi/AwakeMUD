@@ -3101,6 +3101,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("worth", "balance");
   COMMAND_ALIAS("money", "balance");
   COMMAND_ALIAS("nuyen", "balance");
+  COMMAND_ALIAS("cash", "balance");
+  COMMAND_ALIAS("gold", "balance");
   COMMAND_ALIAS("suggest", "idea");
   COMMAND_ALIAS("chat", "ooc");
   COMMAND_ALIAS("purchase", "buy");
@@ -3125,6 +3127,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("powers", "abilities");
   
   COMMAND_ALIAS("scna", "scan");
+  
+  COMMAND_ALIAS("speak", "language");
   
   // Found nothing, return the failure code.
   return -1;
