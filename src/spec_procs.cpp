@@ -26,6 +26,7 @@
 #include "limits.h"
 #include "config.h"
 #include "transport.h"
+#include "newmatrix.h"
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);
@@ -3579,7 +3580,9 @@ SPECIAL(auth_room)
         if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY) {
           if (obj->contains) {
             while (obj->contains) {
-              ch->char_specials.saved.skills[GET_OBJ_VAL(obj->contains, 0)][1] = 0;
+              GET_OBJ_VAL(obj, 5) -= GET_OBJ_VAL(obj->contains, 2) + GET_OBJ_VAL(obj->contains, 8);
+              if (GET_OBJ_VAL(obj->contains, 9)) 
+                ch->char_specials.saved.skills[GET_OBJ_VAL(obj->contains, 0)][1] = 0;
               extract_obj(obj->contains);
             }
             send_to_char(ch, "A brief tingle runs through you as %s is wiped clean.\r\n", GET_OBJ_NAME(obj));
