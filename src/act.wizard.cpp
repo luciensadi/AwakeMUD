@@ -317,6 +317,9 @@ ACMD(do_copyover)
   
   log("Closing database connection.");
   DBFinalize();
+  
+  log("Clearing alarm handler.");
+  signal(SIGALRM, SIG_IGN);
 
   snprintf(buf, sizeof(buf), "%d", port);
   snprintf(buf2, sizeof(buf2), "-o%d", mother_desc);
