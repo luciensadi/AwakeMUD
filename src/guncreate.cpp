@@ -35,6 +35,7 @@ void create_ammo(struct char_data *ch)
   STATE(ch->desc) = CON_AMMO_CREATE;
   GET_AMMOBOX_WEAPON(ammo) = WEAP_HOLDOUT;
   GET_AMMOBOX_INTENDED_QUANTITY(ammo) = 10;
+  GET_AMMOBOX_QUANTITY(ammo) = 0;
   ch->desc->edit_obj = ammo;
   aedit_disp_menu(ch->desc);
 }
@@ -110,7 +111,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
   case AEDIT_QUANTITY:
    if (number < 0)
      number = 0;
-   GET_AMMOBOX_INTENDED_QUANTITY(OBJ) = (number / 10) * 10;
+   GET_AMMOBOX_INTENDED_QUANTITY(OBJ) = number - (number % 10);
    aedit_disp_menu(d);
    break;
   }

@@ -602,7 +602,7 @@ void update_buildrepair(void)
           GET_AMMOBOX_QUANTITY(PROG) += 10;
         }
         GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= 10;
-        if (!GET_AMMOBOX_INTENDED_QUANTITY(PROG)) {
+        if (GET_AMMOBOX_INTENDED_QUANTITY(PROG) <= 0) {
           send_to_char(CH, "You have finished building %s.\r\n", GET_OBJ_NAME(PROG));
           GET_AMMOBOX_CREATOR(PROG) = 0;
           STOP_WORKING(CH);
