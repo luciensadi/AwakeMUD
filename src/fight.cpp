@@ -1758,7 +1758,7 @@ void docwagon(struct char_data *ch)
   int i, creds;
   struct obj_data *docwagon = NULL;
   
-  if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
+  if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD)
     return;
   
   // Find the best docwagon contract they're wearing.
