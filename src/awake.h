@@ -897,7 +897,7 @@ enum {
 #define SKILL_BLOWGUN             131
 #define SKILL_PHARMA              132
 #define SKILL_HEBREW              133
-#define SKILL_ALGONQUIN           134
+#define SKILL_IROQUOIS            134
 
 #define MAX_SKILLS      135
 

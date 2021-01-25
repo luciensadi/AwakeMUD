@@ -1463,7 +1463,7 @@ struct skill_data skills[] =
     {"Blowgun", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Pharmaceuticals", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Hebrew", INT, SKILL_TYPE_KNOWLEDGE, FALSE},
-    {"Algonquin", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
+    {"Iroquois", INT, SKILL_TYPE_KNOWLEDGE, FALSE}
   };
 
 int rev_dir[] =

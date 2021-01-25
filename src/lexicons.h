@@ -22,7 +22,7 @@
 #define LEXICON_GAELIC     18
 #define LEXICON_FRENCH     19
 #define LEXICON_HEBREW     20
-#define LEXICON_ALGONQUIN  21
+#define LEXICON_IROQUOIS   21
 #define NUM_LEXICONS       22
 
 #define NUM_LEXICON_WORDS_BEFORE_REPEAT 5
@@ -49,7 +49,7 @@ extern const char *lexicon_latin[];
 extern const char *lexicon_gaelic[];
 extern const char *lexicon_french[];
 extern const char *lexicon_hebrew[];
-extern const char *lexicon_algonquin[];
+extern const char *lexicon_iroquois[];
 
 extern void populate_lexicon_size_table();
 extern const char *get_random_word_from_lexicon(int language_skill);
