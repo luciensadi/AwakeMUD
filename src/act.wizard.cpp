@@ -3957,7 +3957,7 @@ ACMD(do_vset)
   }
 
   half_chop(buf, field, val_arg);
-  snprintf(buf, sizeof(buf), "Chose either ^rowner^n or ^rlocked^n.\r\n");
+  snprintf(buf, sizeof(buf), "Choose ^rowner^n, ^rlocked^n, or ^rsubscribed^n.\r\n");
 
   if (is_abbrev(field, "owner")) {
     value = atoi(val_arg);
@@ -6602,4 +6602,18 @@ ACMD(do_audit) {
   
   send_to_char(ch, "\r\nDone. Found a total of %d potential issue%s. Note that something being in this list does not disqualify the zone from approval-- it just requires extra scrutiny. Conversely, something not being flagged here doesn't mean it's kosher, it just means we didn't write a coded check for it yet.\r\n", 
                issues, issues != 1 ? "s" : "");
+}
+
+void create_dump(void)
+{
+    if(!fork()) {
+        // Crash the app in your favorite way here
+        raise(SIGABRT);
+    }
+}
+
+ACMD(do_coredump) {
+  send_to_char("Creating core dump...\r\n", ch);
+  create_dump();
+  send_to_char("Done.\r\n", ch);
 }

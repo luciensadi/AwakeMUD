@@ -141,6 +141,7 @@ ACMD_DECLARE(do_create);
 ACMD_DECLARE(do_credits);
 ACMD_DECLARE(do_customize);
 ACMD_DECLARE(do_cyberware);
+ACMD_DECLARE(do_coredump);
 ACMD_DECLARE(do_date);
 ACMD_DECLARE(do_dc);
 ACMD_DECLARE(do_deactivate);
@@ -494,6 +495,7 @@ struct command_info cmd_info[] =
     { "compress" , POS_LYING   , do_compact  , 0, 0 },
     { "cook"     , POS_SITTING , do_cook     , 0, 0 },
     { "costtime" , POS_DEAD    , do_costtime , 0, 0 },
+    { "coredump" , POS_DEAD    , do_coredump , LVL_PRESIDENT, 0 },
     { "cpool"    , POS_DEAD    , do_cpool    , 0, 0 },
     { "crack"    , POS_RESTING , do_crack    , 0, 0 },
     { "crashmu"  , POS_STANDING, do_crash_mud, LVL_PRESIDENT, SCMD_NOOP },
