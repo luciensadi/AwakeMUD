@@ -1481,6 +1481,9 @@ void init_descriptor (struct descriptor_data *newd, int desc)
   static int last_desc = 0;  /* last descriptor number */
   
   newd->canary = 31337;
+  newd->small_outbuf_canary = 31337;
+  newd->inbuf_canary = 31337;
+  newd->last_input_canary = 31337;
   
   newd->descriptor = desc;
   newd->connected = CON_GET_NAME;
