@@ -141,6 +141,7 @@ ACMD_DECLARE(do_create);
 ACMD_DECLARE(do_credits);
 ACMD_DECLARE(do_customize);
 ACMD_DECLARE(do_cyberware);
+ACMD_DECLARE(do_coredump);
 ACMD_DECLARE(do_date);
 ACMD_DECLARE(do_dc);
 ACMD_DECLARE(do_deactivate);
@@ -497,6 +498,7 @@ struct command_info cmd_info[] =
     { "compress" , POS_LYING   , do_compact  , 0, 0 },
     { "cook"     , POS_SITTING , do_cook     , 0, 0 },
     { "costtime" , POS_DEAD    , do_costtime , 0, 0 },
+    { "coredump" , POS_DEAD    , do_coredump , LVL_PRESIDENT, 0 },
     { "cpool"    , POS_DEAD    , do_cpool    , 0, 0 },
     { "crack"    , POS_RESTING , do_crack    , 0, 0 },
     { "crashmu"  , POS_STANDING, do_crash_mud, LVL_PRESIDENT, SCMD_NOOP },
@@ -3107,6 +3109,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("worth", "balance");
   COMMAND_ALIAS("money", "balance");
   COMMAND_ALIAS("nuyen", "balance");
+  COMMAND_ALIAS("cash", "balance");
+  COMMAND_ALIAS("gold", "balance");
   COMMAND_ALIAS("suggest", "idea");
   COMMAND_ALIAS("chat", "ooc");
   COMMAND_ALIAS("purchase", "buy");
@@ -3131,6 +3135,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("powers", "abilities");
   
   COMMAND_ALIAS("scna", "scan");
+  
+  COMMAND_ALIAS("speak", "language");
   
   // Found nothing, return the failure code.
   return -1;

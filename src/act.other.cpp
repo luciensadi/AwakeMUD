@@ -32,6 +32,7 @@
 #include "awake.h"
 #include "constants.h"
 #include "bullet_pants.h"
+#include "config.h"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>

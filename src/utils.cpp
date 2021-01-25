@@ -512,7 +512,7 @@ int return_general(int skill_num)
 char *capitalize(const char *source)
 {
   static char dest[MAX_STRING_LENGTH];
-  strcpy(dest, source);
+  strlcpy(dest, source, sizeof(dest));
   
   int len = strlen(source);
   int index = 0;

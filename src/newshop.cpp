@@ -213,8 +213,10 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
   return sell;
 }
 
+// Yes, it's a monstrosity. No, I don't want to hear about it. YOU refactor it.
 bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int buynum, bool cash,
-                  struct shop_sell_data *sell, struct obj_data *obj, struct obj_data *cred, int price, vnum_t shop_nr)
+                  struct shop_sell_data *sell, struct obj_data *obj, struct obj_data *cred, int price, 
+                  vnum_t shop_nr, struct shop_order_data *order)
 {
   char buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH];
   strcpy(buf, GET_CHAR_NAME(ch));
@@ -429,7 +431,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
             send_to_char("It weighs too much.\r\n", ch);
             return FALSE;
           } else {
-            send_to_char(ch, "You can only carry %d of that.\r\n");
+            // send_to_char(ch, "You can only carry %d of that.\r\n", bought);
+            // ^-- the shopkeeper will tell them this.
             break;
           }
         }
@@ -568,12 +571,14 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     
     if (bought < buynum) {
       strcpy(buf, GET_CHAR_NAME(ch));
-      if (cash ? GET_NUYEN(ch) : GET_OBJ_VAL(cred, 0) < price)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only afford %d.", bought);
-      else if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
+      if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
       else if (GET_OBJ_WEIGHT(ch->carrying) + IS_CARRYING_W(ch) > CAN_CARRY_W(ch))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
+      else if (cash ? GET_NUYEN(ch) : GET_OBJ_VAL(cred, 0) < price)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only afford %d.", bought);
+      else
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I'm only willing to give you %d.", bought); // Error case.
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
   }
@@ -592,6 +597,18 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (x%d)", bought);
   send_to_char(buf2, ch);
   send_to_char("\r\n", ch);
+  
+  if (order) {
+    order->number -= bought;
+    if (order->number == 0) {
+      struct shop_order_data *temp;
+      REMOVE_FROM_LIST(order, shop_table[shop_nr].order, next);
+      delete order;
+    } else if (order->number < 0) {
+      mudlog("SYSERR: Purchased quantity greater than ordered quantity in shop_receive()!", ch, LOG_SYSLOG, TRUE);
+    }
+  }
+  
   return TRUE;
 }
 
@@ -637,9 +654,14 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   if (!str_cmp(buf, "cash"))
   {
     if (shop_table[shop_nr].type == SHOP_LEGAL) {
-      snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
-      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-      return;
+      if (access_level(ch, LVL_ADMIN)) {
+        send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
+                     GET_NAME(keeper), HSSH(keeper));
+      } else {
+        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+        return;
+      }
     }
     
     arg = any_one_arg(arg, buf);
@@ -651,9 +673,14 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   else if (!cred)
   {
     if (shop_table[shop_nr].type == SHOP_LEGAL) {
-      snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
-      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-      return;
+      if (access_level(ch, LVL_ADMIN)) {
+        send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
+                     GET_NAME(keeper), HSSH(keeper));
+      } else {
+        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+        return;
+      }
     }
     send_to_char("Lacking an activated credstick, you choose to deal in cash.\r\n", ch );
     cash = TRUE;
@@ -775,6 +802,12 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     
     // Placed order successfully.
     float totaltime = ((GET_OBJ_AVAILDAY(obj) * buynum) / success) + (2 * GET_AVAIL_OFFSET(ch));
+    
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char(ch, "You use your staff powers to greatly accelerate the ordering process (was %.2f days).\r\n", totaltime);
+      totaltime = 0.0;
+    }
+    
     if (totaltime < 1) {
       int hours = MAX(1, (int)(24 * totaltime));
       snprintf(buf, sizeof(buf), "%s That will take about %d hour%s to come in.", GET_CHAR_NAME(ch), hours, hours == 1 ? "" : "s");
@@ -812,7 +845,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   } else
   {
     // Give them the thing without fanfare.
-    shop_receive(ch, keeper, arg, buynum, cash, sell, obj, shop_table[shop_nr].type == SHOP_BLACK ? NULL : cred, price, shop_nr);
+    shop_receive(ch, keeper, arg, buynum, cash, sell, obj, shop_table[shop_nr].type == SHOP_BLACK ? NULL : cred, price, shop_nr, NULL);
   }
 }
 
@@ -828,7 +861,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   struct shop_sell_data *sell = shop_table[shop_nr].selling;
   if (!*arg)
   {
-    send_to_char(ch, "What item do you want to sell?\r\n");
+    send_to_char("What item do you want to sell?\r\n", ch);
     return;
   }
   strcpy(buf, GET_CHAR_NAME(ch));
@@ -883,10 +916,13 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         FALSE, keeper, 0, ch, TO_NOTVICT);
     act("$n delicately removes $p from your body.",
         FALSE, keeper, obj, ch, TO_VICT);
+        
+    // If this isn't a newbie shop, damage them like they're just coming out of surgery.
     if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
       GET_PHYSICAL(ch) = 100;
       GET_MENTAL(ch) = 100;
     }
+    
     affect_total(ch);
     if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY)
       for (struct obj_data *chip = obj->contains; chip; chip = chip->next_content)
@@ -1098,20 +1134,20 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   struct obj_data *obj;
   if (!*arg)
   {
-    send_to_char(ch, "What item do you want valued?\r\n");
+    send_to_char("What item do you want valued?\r\n", ch);
     return;
   }
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
   {
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->cyberware))
         || !(obj = get_obj_in_list_vis(ch, arg, ch->bioware))) {
-      send_to_char(ch, "You don't seem to have that item.\r\n");
+      send_to_char(ch, "You don't seem to have a '%s'.\r\n", arg);
       return;
     }
   } else
   {
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-      send_to_char(ch, "You don't seem to have that item.\r\n");
+      send_to_char(ch, "You don't seem to have a '%s'.\r\n", arg);
       return;
     }
   }
@@ -1169,7 +1205,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   skip_spaces(&arg);
   
   if (!*arg) {
-    send_to_char(ch, "Syntax: INFO <item>\r\n");
+    send_to_char("Syntax: INFO <item>\r\n", ch);
     return;
   }
   
@@ -1573,7 +1609,7 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   char buf[MAX_STRING_LENGTH];
   int number = atoi(arg);
 	if (number <= 0) {
-		send_to_char(ch, "Unrecognized selection. Syntax: RECEIVE [number].\r\n");
+		send_to_char("Unrecognized selection. Syntax: RECEIVE [number].\r\n", ch);
 		return;
 	}
   for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next) {
@@ -1581,16 +1617,17 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     {
       struct obj_data *obj = read_object(order->item, VIRTUAL), *cred = get_first_credstick(ch, "credstick");
       if (!cred && shop_table[shop_nr].type == SHOP_LEGAL) {
-        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
-        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-        return;
+        if (access_level(ch, LVL_ADMIN)) {
+          send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
+                       GET_NAME(keeper), HSSH(keeper));
+        } else {
+          sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+          do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+          return;
+        }
       }
-      if (shop_receive(ch, keeper, arg, order->number, cred && shop_table[shop_nr].type != SHOP_BLACK? 0 : 1, NULL, obj,
-                       shop_table[shop_nr].type == SHOP_BLACK ? NULL : cred, order->price, shop_nr)) {
-        struct shop_order_data *temp;
-        REMOVE_FROM_LIST(order, shop_table[shop_nr].order, next);
-        delete order;
-      }
+      shop_receive(ch, keeper, arg, order->number, cred && shop_table[shop_nr].type != SHOP_BLACK? 0 : 1, NULL, obj,
+                       shop_table[shop_nr].type == SHOP_BLACK ? NULL : cred, order->price, shop_nr, order);
       return;
     }
   }
@@ -1886,7 +1923,7 @@ void shedit_disp_text_menu(struct descriptor_data *d)
   send_to_char(CH, "5) Doesn't Buy: ^c%s^n\r\n", SHOP->doesnt_buy);
   send_to_char(CH, "6) Buy: ^c%s^n\r\n", SHOP->buy);
   send_to_char(CH, "7) Sell: ^c%s^n\r\n", SHOP->sell);
-  send_to_char(CH, "q) Return to Main Menu\r\nEnter Your Choice: ");
+  send_to_char(    "q) Return to Main Menu\r\nEnter Your Choice: ", CH);
   d->edit_mode = SHEDIT_TEXT_MENU;
 }
 
