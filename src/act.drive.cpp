@@ -1971,7 +1971,7 @@ ACMD(do_push)
       strcpy(buf3, GET_VEH_NAME(veh));
       send_to_char(ch, "You push %s out of the back.\r\n", buf3);
       snprintf(buf, sizeof(buf), "$n pushes %s out of the back.", buf3);
-      snprintf(buf2, sizeof(buf2), "$N pushes %s out of the back of %s.", buf3, GET_VEH_NAME(ch->in_veh));
+      snprintf(buf2, sizeof(buf2), "$n pushes %s out of the back of %s.", buf3, GET_VEH_NAME(ch->in_veh));
       act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
       if (ch->in_veh->in_room) {
         act(buf2, FALSE, ch, 0, 0, TO_VEH_ROOM);

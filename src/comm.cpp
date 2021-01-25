@@ -2643,7 +2643,9 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           }
           break;
         case 'N':
-          if (to == vict)
+          if (!vict)
+            i = "someone";
+          else if (to == vict)
             i = "you";
           else if (CAN_SEE(to, vict)) {
             if (IS_SENATOR(to) && !IS_NPC(vict))
