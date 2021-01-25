@@ -811,9 +811,11 @@ struct descriptor_data
   long mail_to;                 /* name for mail system                 */
   int   prompt_mode;              /* control of prompt-printing         */
   char inbuf[MAX_RAW_INPUT_LENGTH];  /* buffer for raw input            */
+  int inbuf_canary;
   char last_input[MAX_INPUT_LENGTH]; /* the last input                  */
-  char last_tell[MAX_INPUT_LENGTH];
+  int last_input_canary;
   char small_outbuf[SMALL_BUFSIZE];  /* standard output buffer          */
+  int small_outbuf_canary;
   char *output;                 /* ptr to the current output buffer     */
   int bufptr;                     /* ptr to end of current output               */
   int bufspace;                 /* space left in the output buffer      */
@@ -858,8 +860,9 @@ struct descriptor_data
   // this is for spell creation
 
   descriptor_data() :
-      showstr_head(NULL), showstr_point(NULL), str(NULL), output(NULL),
-      large_outbuf(NULL), character(NULL), original(NULL), snooping(NULL),
+      showstr_head(NULL), showstr_point(NULL), str(NULL), inbuf_canary(31337),
+      last_input_canary(31337), small_outbuf_canary(31337),
+      output(NULL), large_outbuf(NULL), character(NULL), original(NULL), snooping(NULL),
       snoop_by(NULL), next(NULL), invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
