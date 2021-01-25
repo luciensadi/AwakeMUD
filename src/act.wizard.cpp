@@ -6609,9 +6609,9 @@ int create_dump(void)
   int procnum = fork();
   if(!procnum) {
     // We are the child, so crash.
-    raise(SIGABRT);
+    raise(SIGSEGV);
   }
-  
+
   return procnum;
 }
 
