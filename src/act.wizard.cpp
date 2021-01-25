@@ -6604,16 +6604,19 @@ ACMD(do_audit) {
                issues, issues != 1 ? "s" : "");
 }
 
-void create_dump(void)
+int create_dump(void)
 {
-    if(!fork()) {
-        // Crash the app in your favorite way here
-        raise(SIGABRT);
-    }
+  int procnum = fork();
+  if(!procnum) {
+    // We are the child, so crash.
+    raise(SIGABRT);
+  }
+  
+  return procnum;
 }
 
 ACMD(do_coredump) {
   send_to_char("Creating core dump...\r\n", ch);
-  create_dump();
-  send_to_char("Done.\r\n", ch);
+  int procnum = create_dump();
+  send_to_char(ch, "Done. Child process %d has been created and crashed.\r\n", procnum);
 }

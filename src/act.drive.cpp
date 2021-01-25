@@ -236,7 +236,6 @@ ACMD(do_drive)
     AFF_FLAGS(ch).SetBit(AFF_PILOT);
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
-    send_to_veh(buf1, VEH, ch, FALSE);
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("The wheel is in your hands.\r\n", ch);
     snprintf(buf1, sizeof(buf1), "%s takes the wheel.\r\n", capitalize(GET_NAME(ch)));
