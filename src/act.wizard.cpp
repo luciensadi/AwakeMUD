@@ -4718,7 +4718,7 @@ ACMD(do_logwatch)
       send_to_char("You will now see the ConnLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_CONNLOG);
     }
-  } else if (is_abbrev(buf, "deathlog") && access_level(ch, LVL_FIXER) ) {
+  } else if (is_abbrev(buf, "deathlog")) {
     if (PRF_FLAGGED(ch, PRF_DEATHLOG)) {
       send_to_char("You no longer watch the DeathLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_DEATHLOG);
@@ -4726,7 +4726,7 @@ ACMD(do_logwatch)
       send_to_char("You will now see the DeathLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_DEATHLOG);
     }
-  } else if (is_abbrev(buf, "misclog") && access_level( ch, LVL_FIXER)) {
+  } else if (is_abbrev(buf, "misclog")) {
     if (PRF_FLAGGED(ch, PRF_MISCLOG)) {
       send_to_char("You no longer watch the MiscLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_MISCLOG);
@@ -4734,7 +4734,7 @@ ACMD(do_logwatch)
       send_to_char("You will now see the MiscLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_MISCLOG);
     }
-  } else if (is_abbrev(buf, "wizlog") && access_level(ch, LVL_VICEPRES)) {
+  } else if (is_abbrev(buf, "wizlog")) {
     if (PRF_FLAGGED(ch, PRF_WIZLOG)) {
       send_to_char("You no longer watch the WizLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_WIZLOG);
@@ -4744,7 +4744,7 @@ ACMD(do_logwatch)
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
-  } else if (is_abbrev(buf, "syslog") && access_level(ch, LVL_ADMIN)) {
+  } else if (is_abbrev(buf, "syslog")) {
     if (PRF_FLAGGED(ch, PRF_SYSLOG)) {
       send_to_char("You no longer watch the SysLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_SYSLOG);
@@ -4754,17 +4754,17 @@ ACMD(do_logwatch)
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
-  } else if (is_abbrev(buf, "zonelog") && access_level(ch, LVL_BUILDER)) {
+  } else if (is_abbrev(buf, "zonelog")) {
     if (PRF_FLAGGED(ch, PRF_ZONELOG)) {
       send_to_char("You no longer watch the ZoneLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_ZONELOG);
-    } else if (access_level(ch, LVL_ADMIN)) {
+    } else if (access_level(ch, LVL_BUILDER)) {
       send_to_char("You will now see the ZoneLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_ZONELOG);
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
-  } else if (is_abbrev(buf, "cheatlog") && access_level(ch, LVL_VICEPRES)) {
+  } else if (is_abbrev(buf, "cheatlog")) {
     if (PRF_FLAGGED(ch, PRF_CHEATLOG)) {
       send_to_char("You no longer watch the CheatLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_CHEATLOG);
