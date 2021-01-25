@@ -4754,7 +4754,7 @@ ACMD(do_logwatch)
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
-  } else if (is_abbrev(buf, "zonelog") && access_level(ch, LVL_ADMIN)) {
+  } else if (is_abbrev(buf, "zonelog") && access_level(ch, LVL_BUILDER)) {
     if (PRF_FLAGGED(ch, PRF_ZONELOG)) {
       send_to_char("You no longer watch the ZoneLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_ZONELOG);
