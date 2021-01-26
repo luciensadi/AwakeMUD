@@ -881,10 +881,10 @@ void game_loop(int mother_desc)
           continue;
           
         struct char_data *last_tch = veh->people;
-        for (struct char_data *tch = last_tch->next; tch; tch = tch->next_in_veh) {
+        for (struct char_data *tch = last_tch->next_in_veh; tch; tch = tch->next_in_veh) {
           if (tch->in_veh != veh) {
             mudlog("Warning: Character is in a vehicle's people list, but not in that vehicle. Rectifying.", tch, LOG_SYSLOG, TRUE);
-            last_tch->next = tch->next;
+            last_tch->next_in_veh = tch->next_in_veh;
           }
           last_tch = tch;
         }
