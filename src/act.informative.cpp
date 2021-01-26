@@ -77,6 +77,8 @@ extern float get_bulletpants_weight(struct char_data *ch);
 
 extern struct teach_data teachers[];
 
+extern const char *pc_readable_extra_bits[];
+
 extern struct elevator_data *elevator;
 extern int num_elevators;
 
@@ -2217,7 +2219,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             }
             
             if (strcmp(GET_OBJ_EXTRA(access).ToString(), "0") != 0) {
-              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);
+              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
             }
           }
@@ -2541,7 +2543,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     GET_OBJ_EXTRA(j).RemoveBit(ITEM_DONT_TOUCH);
     
   if (strcmp(GET_OBJ_EXTRA(j).ToString(), "0") != 0) {
-    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);      
+    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);  
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object has the following extra features: ^c%s^n\r\n", buf2);
   }
   
