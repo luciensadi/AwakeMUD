@@ -2197,6 +2197,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_DECK_ACCESSORY:
+          if (GET_OBJ_VAL(OBJ, 0) == TYPE_FILE) {
+            if (number <= 0)
+              send_to_char("Size must be greater than 0. File size in megapulses: ", CH);
+              return;
+          }
           switch (GET_OBJ_VAL(OBJ, 1)) {
             case 0:
               if (number < 1 || number > 15) {

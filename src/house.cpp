@@ -431,9 +431,11 @@ void display_room_list_to_character(struct char_data *ch, struct landlord *lord)
   send_to_char(ch, "Name     Class     Price      Name     Class     Price\r\n");
   send_to_char(ch, "-----    ------    ------     -----    ------    -----\r\n");
   
+  bool found_any = FALSE;
   bool on_first_entry_in_column = TRUE;
   for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
     if (!room_record->owner) {
+      found_any = TRUE;
       if (on_first_entry_in_column) {
         snprintf(buf, sizeof(buf), "%-5s    %-6s    %-8d",
                 room_record->name,
@@ -455,7 +457,12 @@ void display_room_list_to_character(struct char_data *ch, struct landlord *lord)
     strcat(buf, "\r\n\n");
   else
     strcpy(buf, "\r\n");
-  send_to_char(buf, ch);
+    
+  if (!found_any) {
+    send_to_char("It looks like all the rooms here have been claimed.\r\n", ch);
+  } else {
+    send_to_char(buf, ch);
+  }
 }
 
 SPECIAL(landlord_spec)
