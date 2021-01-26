@@ -873,6 +873,24 @@ void game_loop(int mother_desc)
       taxi_leaves();
     }
     
+    // Every 29 MUD minutes
+    if (!(pulse % (29 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
+      // Run through vehicles and rectify their occupancy.
+      for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+        if (!veh->people)
+          continue;
+          
+        struct char_data *last_tch = veh->people;
+        for (struct char_data *tch = last_tch->next_in_veh; tch; tch = tch->next_in_veh) {
+          if (tch->in_veh != veh) {
+            mudlog("Warning: Character is in a vehicle's people list, but not in that vehicle. Rectifying.", tch, LOG_SYSLOG, TRUE);
+            last_tch->next_in_veh = tch->next_in_veh;
+          }
+          last_tch = tch;
+        }
+      }
+    }
+    
     // Every 59 MUD minutes
     if (!(pulse % (59 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
       save_vehicles();
@@ -1429,6 +1447,7 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   if (t->bufspace >= size)
   {
     strlcpy(t->output + t->bufptr, txt, t->bufspace);
+    assert(t->small_outbuf_canary == 31337);
     t->bufspace -= size;
     t->bufptr += size;
     return;
@@ -1463,6 +1482,7 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   strlcpy(t->large_outbuf->text, t->output, LARGE_BUFSIZE);     /* copy to big buffer */
   t->output = t->large_outbuf->text;    /* make big buffer primary */
   strlcat(t->output, txt, LARGE_BUFSIZE);       /* now add new text */
+  assert(t->small_outbuf_canary == 31337);
   
   /* calculate how much space is left in the buffer */
   t->bufspace = LARGE_BUFSIZE - 1 - strlen(t->output);
@@ -1479,6 +1499,9 @@ void init_descriptor (struct descriptor_data *newd, int desc)
   static int last_desc = 0;  /* last descriptor number */
   
   newd->canary = 31337;
+  newd->small_outbuf_canary = 31337;
+  newd->inbuf_canary = 31337;
+  newd->last_input_canary = 31337;
   
   newd->descriptor = desc;
   newd->connected = CON_GET_NAME;
@@ -1709,6 +1732,7 @@ int process_input(struct descriptor_data *t) {
     
     // Push the data for processing through KaVir's protocol code. Resize bytes_read to account for the stripped control chars.
     ProtocolInput(t, temporary_buffer, bytes_read, t->inbuf);
+    assert(t->inbuf_canary == 31337);
 #ifdef DEBUG_PROTOCOL
     log_vfprintf("Parsed '%s' to '%s', changing length from %d to %lu.",
                  temporary_buffer, t->inbuf + buf_length, bytes_read, strlen(t->inbuf + buf_length));
@@ -1726,6 +1750,7 @@ int process_input(struct descriptor_data *t) {
     
     read_point += bytes_read;
     space_left -= bytes_read;
+    assert(t->inbuf_canary == 31337);
     
     /*
      * on some systems such as AIX, POSIX-standard nonblocking I/O is broken,
@@ -1803,7 +1828,8 @@ int process_input(struct descriptor_data *t) {
       if (!(failed_subst = perform_subst(t, t->last_input, tmp)))
         strcpy(t->last_input, tmp);
     } else
-      strcpy(t->last_input, tmp);
+      strlcpy(t->last_input, tmp, MAX_INPUT_LENGTH);
+    assert(t->last_input_canary == 31337);
     
     if (!failed_subst)
       write_to_q(tmp, &t->input, 0);
@@ -1824,6 +1850,8 @@ int process_input(struct descriptor_data *t) {
   while (*read_point)
     *(write_point++) = *(read_point++);
   *write_point = '\0';
+  
+  assert(t->inbuf_canary == 31337);
 
   return 1;
 }

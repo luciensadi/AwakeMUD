@@ -3857,6 +3857,12 @@ ACMD(do_cpool)
   }
   half_chop(argument, arg, buf);
   dodge = atoi(arg);
+  
+  if (dodge == 0 && *arg != '0') {
+    send_to_char("Syntax: ^WCPOOL <dodge> <body> <offense>^n, where each value is a number. Ex: CPOOL 1 5 4\r\n", ch);
+    return;
+  }
+  
   half_chop(buf, argument, arg);
   bod = atoi(argument);
   off = atoi(arg);
@@ -3864,49 +3870,53 @@ ACMD(do_cpool)
   total -= ch->real_abils.defense_pool = GET_DEFENSE(ch) = MIN(dodge, total);
   total -= ch->real_abils.body_pool = GET_BODY(ch) = MIN(bod, total);
   
-  one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
-         (struct obj_data *) NULL;
-  two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
-         (struct obj_data *) NULL;
-         
-  if (!one && !two) {
-    if(has_cyberweapon(ch))
-      low = GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
-    else 
-      low = GET_SKILL(ch, SKILL_UNARMED_COMBAT);
-  } 
-  
-  else if (one) {
-    if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-      low = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-    else 
-      low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-  } 
-  
-  else if (two) {
-    if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-      low = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-    else 
-      low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
-  } 
-  
-  // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
-  else {
-    if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
+  if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    low = GET_SKILL(ch, SKILL_GUNNERY);
+  } else {
+    one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
+           (struct obj_data *) NULL;
+    two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
+           (struct obj_data *) NULL;
+           
+    if (!one && !two) {
+      if(has_cyberweapon(ch))
+        low = GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
+      else 
+        low = GET_SKILL(ch, SKILL_UNARMED_COMBAT);
+    } 
+    
+    else if (one) {
       if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
         low = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
       else 
         low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
-    } else {
+    } 
+    
+    else if (two) {
       if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
         low = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
       else 
         low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
+    } 
+    
+    // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
+    else {
+      if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
+        if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
+          low = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
+        else 
+          low = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
+      } else {
+        if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
+          low = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
+        else 
+          low = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
+      }
     }
+    
+    if (!one)
+      one = two;
   }
-  
-  if (!one)
-    one = two;
     
   if (off > low) {
     send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n",
@@ -3928,7 +3938,18 @@ ACMD(do_spool)
 {
   int cast = 0, drain = 0, def = 0, reflect = 0, total = GET_MAGIC(ch);
   half_chop(argument, arg, buf);
+  if (!*arg) {
+    do_pool(ch, argument, 0, 0);
+    return;
+  }
+
   cast = atoi(arg);
+  
+  if (cast == 0 && *arg != '0') {
+    send_to_char("Syntax: ^WSPOOL <casting> <drain> <defence>^n, where each value is a number. Ex: SPOOL 1 5 4\r\n", ch);
+    return;
+  }
+  
   half_chop(buf, argument, arg);
   drain = atoi(argument);
   half_chop(arg, argument, buf);

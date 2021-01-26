@@ -2898,16 +2898,13 @@ SPECIAL(bank)
   } 
   
   else if (CMD_IS("deposit")) {
-    if ((amount = atoi(argument)) <= 0) {
+    if ((amount = atoi(argument)) <= 0 && str_cmp(buf, "all")) {
       send_to_char("How much do you want to deposit?\r\n", ch);
       return 1;
     }
-    if (!str_cmp(buf, "all"))
+    if (!str_cmp(buf, "all") || GET_NUYEN(ch) < amount)
       amount = GET_NUYEN(ch);
-    if (GET_NUYEN(ch) < amount) {
-      send_to_char("You aren't carrying that much!\r\n", ch);
-      return 1;
-    }
+      
     GET_NUYEN(ch) -= amount;
     GET_BANK(ch) += amount;
     send_to_char(ch, "You deposit %d nuyen.\r\n", amount);
@@ -2916,16 +2913,13 @@ SPECIAL(bank)
   } 
   
   else if (CMD_IS("withdraw")) {
-    if ((amount = atoi(argument)) <= 0) {
+    if ((amount = atoi(argument)) <= 0 && str_cmp(buf, "all")) {
       send_to_char("How much do you want to withdraw?\r\n", ch);
       return 1;
     }
-    if (!str_cmp(buf, "all"))
+    if (!str_cmp(buf, "all") || GET_BANK(ch) < amount)
       amount = GET_BANK(ch);
-    if (GET_BANK(ch) < amount) {
-      send_to_char("You don't have that much deposited!\r\n", ch);
-      return 1;
-    }
+      
     GET_NUYEN(ch) += amount;
     GET_BANK(ch) -= amount;
     send_to_char(ch, "The ATM ejects %d nuyen and updates your bank account.\r\n", amount);
@@ -2944,14 +2938,10 @@ SPECIAL(bank)
       return TRUE;
     }
     if (!str_cmp(buf1, "account")) {
-      if (!str_cmp(buf,"all")) {
+      if (!str_cmp(buf,"all") || GET_OBJ_VAL(credstick, 0) < amount) {
         amount = GET_OBJ_VAL(credstick, 0);
       }
-      if (GET_OBJ_VAL(credstick, 0) < amount) {
-        act("$p doesn't even have that much!", FALSE, ch, credstick, 0, TO_CHAR);
-        return TRUE;
-      }
-      if (amount == 0) {
+      if (GET_OBJ_VAL(credstick, 0) == 0) {
         send_to_char(ch, "%s is already empty.\r\n", capitalize(GET_OBJ_NAME(credstick)));
         return TRUE;
       }
@@ -2959,14 +2949,10 @@ SPECIAL(bank)
       GET_BANK(ch) += amount;
       snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to your account.", amount);
     } else if (!str_cmp(buf1, "credstick")) {
-      if (!str_cmp(buf,"all")) {
+      if (!str_cmp(buf,"all") || GET_BANK(ch) < amount) {
         amount = GET_BANK(ch);
       }
-      if (GET_BANK(ch) < amount) {
-        send_to_char("You don't have that much deposited!\r\n", ch);
-        return TRUE;
-      }
-      if (amount == 0) {
+      if (GET_BANK(ch) == 0) {
         send_to_char("You don't have any nuyen in the bank.\r\n", ch);
         return TRUE;
       }
@@ -3020,7 +3006,7 @@ SPECIAL(toggled_invis)
         AFF_FLAGS(obj->worn_by).RemoveBit(AFF_INVISIBLE);
         obj->obj_flags.bitvector.RemoveBit(AFF_INVISIBLE);
         send_to_char(ch, "You feel the static fade as the ruthenium polymers in %s power down.\r\n", GET_OBJ_NAME(obj));
-        act("The air shimmers briefly as $n fades into view.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        act("The air shimmers briefly as $n fades into view.", FALSE, ch, 0, 0, TO_ROOM);
         return TRUE;
       } else {
         send_to_char(ch, "%s is already deactivated.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -3037,7 +3023,7 @@ SPECIAL(toggled_invis)
         AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
         obj->obj_flags.bitvector.SetBit(AFF_INVISIBLE);
         send_to_char(ch, "You feel a tiny static charge as the ruthenium polymers in %s power up.\r\n", GET_OBJ_NAME(obj));
-        act("The world bends around $n as they vanish from sight.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        act("The world bends around $n as they vanish from sight.", FALSE, ch, 0, 0, TO_ROOM);
         return TRUE;
       } else {
         send_to_char(ch, "%s is already activated.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -3560,7 +3546,10 @@ SPECIAL(auth_room)
     skip_spaces(&argument);
     if (   !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)
         || !str_cmp("\"I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Complete copy-paste with both quotes
-        || !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument)) // Partial copy-paste with trailing quote.
+        || !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Partial copy-paste with trailing quote.
+        || !str_cmp("I have read the rules and policies, understand them, and agree to abideby them during my stay here.", argument) // Replaced linewrap carriage return with nothing.
+        || !str_cmp("\"I have read the rules and policies, understand them, and agree to abideby them during my stay here.\"", argument) // Complete copy-paste with both quotes and linewrap space.
+        || !str_cmp("I have read the rules and policies, understand them, and agree to abideby them during my stay here.\"", argument)) // Partial copy-paste with trailing quote and linewrap space.
     {
       PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
       GET_NUYEN(ch) = 0;

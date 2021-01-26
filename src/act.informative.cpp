@@ -77,6 +77,8 @@ extern float get_bulletpants_weight(struct char_data *ch);
 
 extern struct teach_data teachers[];
 
+extern const char *pc_readable_extra_bits[];
+
 extern struct elevator_data *elevator;
 extern int num_elevators;
 
@@ -2217,7 +2219,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             }
             
             if (strcmp(GET_OBJ_EXTRA(access).ToString(), "0") != 0) {
-              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);
+              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
             }
           }
@@ -2464,7 +2466,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       
       // Val 5
-      sprintbit(GET_OBJ_VAL(j, 5), engine_type, buf2);
+      sprintbit(GET_OBJ_VAL(j, 5), engine_type, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is compatible with the following engine types:\r\n^c  %s^n", buf2);
       
       // Vals 4 and 6
@@ -2541,7 +2543,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     GET_OBJ_EXTRA(j).RemoveBit(ITEM_DONT_TOUCH);
     
   if (strcmp(GET_OBJ_EXTRA(j).ToString(), "0") != 0) {
-    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);      
+    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, pc_readable_extra_bits, ITEM_EXTRA_MAX);  
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This object has the following extra features: ^c%s^n\r\n", buf2);
   }
   
@@ -4778,9 +4780,10 @@ ACMD(do_scan)
   if (!infra && IS_ASTRAL(ch))
     infra = TRUE;
   if (!specific) {
+    struct room_data *in_room = get_ch_in_room(ch);
     for (i = 0; i < NUM_OF_DIRS; ++i) {
       if (CAN_GO(ch, i)) {
-        if (EXIT(ch, i)->to_room == get_ch_in_room(ch)) {
+        if (EXIT(ch, i)->to_room == in_room) {
           send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
           continue;
         }

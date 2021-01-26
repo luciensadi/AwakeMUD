@@ -2642,7 +2642,7 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
     if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) <= 20)
       continue;
     
-    sprint_obj_mods( &obj_proto[nr], xbuf );
+    sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
     
     ++found;
     snprintf(buf, sizeof(buf), "[%5ld -%2d] %2d %d %s%s%s\r\n",
@@ -2664,7 +2664,7 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
       if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) != total)
         continue;
       
-      sprint_obj_mods( &obj_proto[nr], xbuf );
+      sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf) );
       
       ++found;
       snprintf(buf, sizeof(buf), "[%5ld -%2d] %2d %d %s%s\r\n",
@@ -2783,7 +2783,7 @@ int vnum_object_affectloc(int type, struct char_data * ch)
           if (obj_proto[nr].affected[i].modifier > mod && mod != 11)
             continue;
 
-          sprint_obj_mods( &obj_proto[nr], xbuf );
+          sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
 
           ++found;
           snprintf(buf, sizeof(buf), "[%5ld -%2d] %s%s%s\r\n",
@@ -2811,7 +2811,7 @@ int vnum_object_affects(struct char_data *ch) {
     
     for (int i = 0; i < MAX_OBJ_AFFECT; i++) {
       if (obj_proto[nr].affected[i].modifier != 0 ) {
-        sprint_obj_mods( &obj_proto[nr], xbuf );
+        sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
         
         ++found;
         snprintf(buf, sizeof(buf), "[%5ld -%2d] %s%s%s\r\n",

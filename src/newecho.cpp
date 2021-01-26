@@ -445,7 +445,10 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     // If the listener can't understand you, mangle it.
     const char *replacement = NULL;
     if (GET_SKILL(viewer, language_in_use) <= 0) {
-      replacement = generate_random_lexicon_sentence(language_in_use, strlen(speech_buf));
+      if (PRF_FLAGGED(viewer, PRF_SCREENREADER))
+        replacement = "(something unintelligble)";
+      else
+        replacement = generate_random_lexicon_sentence(language_in_use, strlen(speech_buf));
       
       char candidate_ch = get_final_character_from_string(speech_buf);
       if (ispunct(candidate_ch)) {

@@ -968,6 +968,38 @@ const char *extra_bits[] =
     "DONT_TOUCH",
     "\n"
   };
+  
+const char *pc_readable_extra_bits[] =
+  {
+    "Glowing",
+    "Humming",
+    "Can't be Kept",
+    "Can't be Donated",
+    "Can't be Made Invis",
+    "Invisible",
+    "Looks Magic when Assensed",
+    "Can't be Dropped",
+    "Form-Fitting",
+    "Can't be Sold",
+    "It's a Corpse",
+    "Staff-Only Item",
+    "Requires Two Hands",
+    "Complex Burst (NERP)",
+    "Volatile (NERP)",
+    "Loaded by Staff (!)",
+    "Can't be Used by Trolls or Troll Metatypes",
+    "Can't be Used by Elves or Elf Metatypes",
+    "Can't be Used by Dwarves or Dwarf Metatypes",
+    "Can't be Used by Orks or Ork Metatypes",
+    "Can't be Used by Humans",
+    "Sniper Rifle (same-room combat penalty)",
+    "Loaded by Staff (!!)",
+    "No Coded Effect (NERP)",
+    "Prevents Wearing Other Armor",
+    "Hardened Armor (NERP)",
+    "Derived from Template Item",
+    "\n"
+  };
 
 /* APPLY_x */
 const char *apply_types[] =

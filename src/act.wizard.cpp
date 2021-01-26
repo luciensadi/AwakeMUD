@@ -1074,7 +1074,7 @@ void do_stat_room(struct char_data * ch)
         strcpy(buf1, " ^cNONE^n");
       else
         snprintf(buf1, sizeof(buf1), "^c%8ld^n", rm->dir_option[i]->to_room->number);
-      sprintbit(rm->dir_option[i]->exit_info, exit_bits, buf2);
+      sprintbit(rm->dir_option[i]->exit_info, exit_bits, buf2, sizeof(buf2));
       snprintf(buf, sizeof(buf), "Exit ^c%-5s^n:  To: [^c%s^n], Key: [^c%8ld^n], Keyword: "
               "^c%s^n, Type: ^c%s^n\r\n ", dirs[i], buf1, rm->dir_option[i]->key,
               rm->dir_option[i]->keyword ? rm->dir_option[i]->keyword : "None", buf2);
