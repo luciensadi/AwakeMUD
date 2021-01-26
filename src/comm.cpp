@@ -873,6 +873,24 @@ void game_loop(int mother_desc)
       taxi_leaves();
     }
     
+    // Every 29 MUD minutes
+    if (!(pulse % (29 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
+      // Run through vehicles and rectify their occupancy.
+      for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+        if (!veh->people)
+          continue;
+          
+        struct char_data *last_tch = veh->people;
+        for (struct char_data *tch = last_tch->next; tch; tch = tch->next_in_veh) {
+          if (tch->in_veh != veh) {
+            mudlog("Warning: Character is in a vehicle's people list, but not in that vehicle. Rectifying.", tch, LOG_SYSLOG, TRUE);
+            last_tch->next = tch->next;
+          }
+          last_tch = tch;
+        }
+      }
+    }
+    
     // Every 59 MUD minutes
     if (!(pulse % (59 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
       save_vehicles();
