@@ -502,6 +502,9 @@ int return_general(int skill_num)
     case SKILL_POLE_ARMS:
     case SKILL_WHIPS_FLAILS:
     case SKILL_CLUBS:
+    case SKILL_CYBER_IMPLANTS:
+    case SKILL_PROJECTILES:
+    case SKILL_THROWING_WEAPONS:
       return (SKILL_ARMED_COMBAT);
     default:
       return (skill_num);
@@ -1260,13 +1263,9 @@ int get_skill(struct char_data *ch, int skill, int &target)
   
   // TODO: Adept power Improved Ability. This ability is not currently in the game, but would be factored in here. See Core p169 for details.
   
-  // Convert NPCs so that they can use Armed Combat in place of any weapon skill except unarmed combat.
-  if (IS_NPC(ch) && ((skill >= SKILL_ARMED_COMBAT && skill <= SKILL_CLUBS)
-                     || (skill >= SKILL_CYBER_IMPLANTS && skill <= SKILL_ORALSTRIKE)
-                     || (skill == SKILL_THROWING_WEAPONS))) {
-    if (GET_SKILL(ch, skill) < GET_SKILL(ch, SKILL_ARMED_COMBAT))
-      skill = SKILL_ARMED_COMBAT;
-  }
+  // Convert NPCs so that they use the correct base skill for fighting.
+  if (IS_NPC(ch))
+    skill = GET_SKILL(ch, skill) > GET_SKILL(ch, return_general(skill)) ? skill : return_general(skill);
   
   if (GET_SKILL(ch, skill))
   {

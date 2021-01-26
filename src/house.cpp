@@ -238,7 +238,10 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   for (int o = 0; obj;)
   {
     if ((real_obj = real_object(GET_OBJ_VNUM(obj))) == -1) {
-      snprintf(buf, sizeof(buf), "Warning: Will lose house item %s due to nonexistent rnum.", GET_OBJ_NAME(obj));
+      snprintf(buf, sizeof(buf), "Warning: Will lose house item %s from %s (%ld) due to nonexistent rnum.", 
+               GET_OBJ_NAME(obj),
+               GET_ROOM_NAME(obj->in_room),
+               GET_ROOM_VNUM(obj->in_room));
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
       obj = obj->next_content;
       continue;

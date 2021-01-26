@@ -3546,7 +3546,10 @@ SPECIAL(auth_room)
     skip_spaces(&argument);
     if (   !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)
         || !str_cmp("\"I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Complete copy-paste with both quotes
-        || !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument)) // Partial copy-paste with trailing quote.
+        || !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Partial copy-paste with trailing quote.
+        || !str_cmp("I have read the rules and policies, understand them, and agree to abideby them during my stay here.", argument) // Replaced linewrap carriage return with nothing.
+        || !str_cmp("\"I have read the rules and policies, understand them, and agree to abideby them during my stay here.\"", argument) // Complete copy-paste with both quotes and linewrap space.
+        || !str_cmp("I have read the rules and policies, understand them, and agree to abideby them during my stay here.\"", argument)) // Partial copy-paste with trailing quote and linewrap space.
     {
       PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
       GET_NUYEN(ch) = 0;

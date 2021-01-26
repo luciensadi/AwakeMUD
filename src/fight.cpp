@@ -20,6 +20,7 @@
 #include "memory.h"
 #include "newmatrix.h"
 #include "newmagic.h"
+#include "bullet_pants.h"
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
@@ -791,15 +792,15 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   if ((GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_ELEMENTAL) && GET_IDNUM(ch) == GET_ACTIVE(vict))
     return 0;
   
-  base = (int)((1.2 * (GET_REAL_BOD(vict) + GET_BALLISTIC(vict) + GET_IMPACT(vict))) +
-               (GET_REAL_QUI(vict) + (int)(vict->real_abils.mag / 100) +
-                GET_REAL_STR(vict) + GET_REAL_WIL(vict) + GET_REAL_REA(vict)));
+  base = (int)((1.2 * (GET_BOD(vict) + GET_BALLISTIC(vict) + GET_IMPACT(vict))) +
+               (GET_QUI(vict) + (int)(GET_MAG(vict) / 100) +
+                GET_STR(vict) + GET_WIL(vict) + GET_REA(vict) + GET_INIT_DICE(vict)));
   
   for (i = MIN_SKILLS; i < MAX_SKILLS; i++)
     if (GET_SKILL(vict, i) > 0)
     {
       if (i == SKILL_SORCERY && GET_MAG(vict) > 0)
-        base += (int)(1.15 * GET_SKILL(vict, i));
+        base += (int)(1.2 * GET_SKILL(vict, i));
       else if (return_general(i) == SKILL_FIREARMS ||
                return_general(i) == SKILL_UNARMED_COMBAT ||
                return_general(i) == SKILL_ARMED_COMBAT)
@@ -809,13 +810,36 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   if (GET_RACE(vict) == RACE_SPIRIT || GET_RACE(vict) == RACE_ELEMENTAL)
     base = (int)(base * 1.15);
   
+  struct obj_data *weapon = NULL;
+  if (!((weapon = GET_EQ(vict, WEAR_WIELD)) && GET_OBJ_TYPE(weapon) == ITEM_WEAPON)
+      && !((weapon = GET_EQ(vict, WEAR_HOLD)) && GET_OBJ_TYPE(weapon) == ITEM_WEAPON)) 
+  {
+    for (weapon = vict->carrying; weapon; weapon = weapon->next_content)
+      if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON)
+        break;
+  }
+  
+  if (weapon) {
+    base += GET_WEAPON_POWER(weapon) * GET_WEAPON_DAMAGE_CODE(weapon);
+    
+    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+      int rnum = real_mobile(GET_MOB_VNUM(vict));
+      for (int index = 0; index < NUM_AMMOTYPES; index++) {
+        if (GET_BULLETPANTS_AMMO_AMOUNT(&mob_proto[rnum], GET_WEAPON_ATTACK_TYPE(weapon), npc_ammo_usage_preferences[index]) > 0) {
+          int ammo_value = AMMO_NORMAL - index; // APDS = 3, EX = 2, Explosive = 1, Normal = 0, Gel -1, Flechette -2... see bullet_pants.cpp
+          base += ammo_value * 10;
+        }
+      }
+    }
+  }
+  
   bonus_karma = MIN( GET_KARMA(vict), base );
   base += bonus_karma;
   
   if (PLR_FLAGGED(ch, PLR_NEWBIE))
-    base -= (int)(GET_NOT(ch) / 5);
+    base -= (int)(GET_NOT(ch) / 7);
   else
-    base -= (int)(GET_NOT(ch) / 3);
+    base -= (int)(GET_NOT(ch) / 5);
   
   //now to randomize it a bit
   base += (!ch ? 0 : (!number(0,2) ? number(0,5) :
@@ -3731,6 +3755,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         send_to_char("You can't lift the barrel high enough to fire.\r\n", att->ch);
         return;
       }
+    } else {
+      // Gunnery modifiers.
     }
     
     // Setup: Cyclops suffer a +2 ranged-combat modifier.
@@ -3773,11 +3799,17 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // Setup: Modify recoil based on vehicular stats.
     if (att->veh) {
-      if (AFF_FLAGGED(att->ch, AFF_MANNING) || AFF_FLAGGED(att->ch, AFF_RIG)) {
-        att->modifiers[COMBAT_MOD_RECOIL] += MAX(0, att->modifiers[COMBAT_MOD_RECOIL] - 2);
-      } else {
-        // Core p153: Unmounted weapons get +2 TN.
+      if (!(AFF_FLAGGED(att->ch, AFF_MANNING) || AFF_FLAGGED(att->ch, AFF_RIG) || PLR_FLAGGED(att->ch, PLR_REMOTE))) {
+        // Core p152: Unmounted weapons get +2 TN.
         att->modifiers[COMBAT_MOD_MOVEMENT] += 2;
+      } else {
+        // TODO: Sensor stuff. It's a bitch to write due to all the various things that go into it, so it'll be done later.
+        
+        // Sensor tests per Core p152 and p135.
+        
+        // TN modifiers for sensor test per Core p154.
+        
+        // Success? You get half the sensor rating, rounded down, added to your dice.
       }
       
       // We assume all targets are standing still.

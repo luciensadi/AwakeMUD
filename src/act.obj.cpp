@@ -974,59 +974,68 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
 
 int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool download)
 {
-  if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
-    switch (GET_OBJ_VAL(obj, 0))
-    {
-    case TYPE_COMPUTER:
-      for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
-        if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj) {
-          if (vict == ch)
-            send_to_char(ch, "You are using %s already.\r\n", GET_OBJ_NAME(obj));
-          else
-            act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
+  if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY) {
+    switch (GET_OBJ_VAL(obj, 0)) {
+      case TYPE_COMPUTER:
+        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
+          if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj) {
+            if (vict == ch)
+              send_to_char(ch, "You are using %s already.\r\n", GET_OBJ_NAME(obj));
+            else
+              act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
+            return FALSE;
+          }
+        break;
+      case TYPE_COOKER:
+        if (GET_OBJ_VAL(obj, 9)) {
+          send_to_char(ch, "%s is in the middle of encoding a chip, leave it alone.\r\n", capitalize(GET_OBJ_NAME(obj)));
           return FALSE;
         }
-      break;
-    case TYPE_COOKER:
-      if (GET_OBJ_VAL(obj, 9)) {
-        send_to_char(ch, "%s is in the middle of encoding a chip, leave it alone.\r\n", capitalize(GET_OBJ_NAME(obj)));
-        return FALSE;
-      }
-      break;
+        break;
     }
-  if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) > 1 && (GET_OBJ_VAL(obj, 2) || GET_OBJ_VAL(obj, 3)))
-    send_to_char(ch, "You may wish to pack %s up first.\r\n", GET_OBJ_NAME(obj));
-  else if (can_take_obj(ch, obj))
-  {
-    if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP)
-      for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)
-         if (AFF_FLAGGED(tmp, AFF_PACKING)) {
-           if (tmp == ch)
-             send_to_char(ch, "You're already working on %s.\r\n", GET_OBJ_NAME(obj));
-           else
-             send_to_char(ch, "Someone is working on %s.\r\n", GET_OBJ_NAME(obj));
-           return FALSE;
-         }
-    if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-         || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
-      char *representation = generate_new_loggable_representation(obj);
-      snprintf(buf, sizeof(buf), "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
-      mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
-      delete [] representation;
-    }
-    obj_from_room(obj);
-    obj_to_char(obj, ch);
-    act("You get $p.", FALSE, ch, obj, 0, TO_CHAR);
-    if (ch->in_veh) {
-      snprintf(buf, sizeof(buf), "%s gets %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj));
-      send_to_veh(buf, ch->in_veh, ch, FALSE);
-    } else
-      act("$n gets $p.", FALSE, ch, obj, 0, TO_ROOM);
-    get_check_money(ch, obj);
-    affect_total(ch);
-    return 1;
   }
-  return 0;
+  
+  if (!can_take_obj(ch, obj)) {
+    return FALSE;
+  }
+  
+  if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) > 1 && (GET_OBJ_VAL(obj, 2) || GET_OBJ_VAL(obj, 3))) {
+    send_to_char(ch, "You may wish to pack %s up first.\r\n", GET_OBJ_NAME(obj));
+    return FALSE;
+  }
+  
+  
+  if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP) {
+    for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)
+       if (AFF_FLAGGED(tmp, AFF_PACKING)) {
+         if (tmp == ch)
+           send_to_char(ch, "You're already working on %s.\r\n", GET_OBJ_NAME(obj));
+         else
+           send_to_char(ch, "Someone is working on %s.\r\n", GET_OBJ_NAME(obj));
+         return FALSE;
+       }
+  }
+  
+  if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
+       || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) 
+  {
+    char *representation = generate_new_loggable_representation(obj);
+    snprintf(buf, sizeof(buf), "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
+    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    delete [] representation;
+  }
+  
+  obj_from_room(obj);
+  obj_to_char(obj, ch);
+  act("You get $p.", FALSE, ch, obj, 0, TO_CHAR);
+  if (ch->in_veh) {
+    snprintf(buf, sizeof(buf), "%s gets %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj));
+    send_to_veh(buf, ch->in_veh, ch, FALSE);
+  } else
+    act("$n gets $p.", FALSE, ch, obj, 0, TO_ROOM);
+  get_check_money(ch, obj);
+  affect_total(ch);
+  return 1;
 }
 
 void get_from_room(struct char_data * ch, char *arg, bool download)

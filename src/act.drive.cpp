@@ -859,6 +859,13 @@ ACMD(do_control)
   act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
   PLR_FLAGS(ch).SetBit(PLR_REMOTE);
   send_to_char(ch, "You take control of %s.\r\n", GET_VEH_NAME(veh));
+  
+  // Reallocate pools.
+  int max_offense = MIN(GET_SKILL(ch, SKILL_GUNNERY), GET_COMBAT(ch));
+  int remainder = MAX(0, GET_COMBAT(ch) - max_offense);
+  GET_OFFENSE(ch) = max_offense;
+  GET_BODY(ch) = 0;
+  GET_DEFENSE(ch) = remainder;
 }
 
 

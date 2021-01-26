@@ -804,46 +804,48 @@ void affect_total(struct char_data * ch)
     GET_TARGET_MOD(ch) += 4;
   }
   
-  one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
-  (struct obj_data *) NULL;
-  two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
-  (struct obj_data *) NULL;
-  
-  /* fixes a bug where unarmed combat was used instead of cyber-weapons - python */
-  if (!one && !two) /* unarmed, so use cyber-weapons or unarmed combat */
-  {
-    if(has_cyberweapon(ch))
-    {
-      skill = REAL_SKILL(ch, SKILL_CYBER_IMPLANTS);
-    } else
-    {
-      skill = REAL_SKILL(ch, SKILL_UNARMED_COMBAT);
-    }
-  }
-  else if (one)
-  {
-    if (!REAL_SKILL(ch, GET_OBJ_VAL(one, 4)))
-      skill = REAL_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-    else
-      skill = REAL_SKILL(ch, GET_OBJ_VAL(one, 4));
-  } else if (two)
-  {
-    if (!REAL_SKILL(ch, GET_OBJ_VAL(two, 4)))
-      skill = REAL_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-    else
-      skill = REAL_SKILL(ch, GET_OBJ_VAL(two, 4));
-  } else
-  {
-    if (REAL_SKILL(ch, GET_OBJ_VAL(one, 4)) <= REAL_SKILL(ch, GET_OBJ_VAL(two, 4))) {
-      if (!REAL_SKILL(ch, GET_OBJ_VAL(one, 4)))
-        skill = REAL_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
-      else
-        skill = REAL_SKILL(ch, GET_OBJ_VAL(one, 4));
-    } else {
+  if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    skill = GET_SKILL(ch, SKILL_GUNNERY);
+  } else {
+    one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
+           (struct obj_data *) NULL;
+    two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
+           (struct obj_data *) NULL;
+           
+    if (!one && !two) {
+      if(has_cyberweapon(ch))
+        skill = GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
+      else 
+        skill = GET_SKILL(ch, SKILL_UNARMED_COMBAT);
+    } 
+    
+    else if (one) {
+      if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
+        skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
+      else 
+        skill = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
+    } 
+    
+    else if (two) {
       if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-        skill = REAL_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
-      else
-        skill = REAL_SKILL(ch, GET_OBJ_VAL(two, 4));
+        skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
+      else 
+        skill = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
+    } 
+    
+    // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
+    else {
+      if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
+        if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
+          skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(one, 4)));
+        else 
+          skill = GET_SKILL(ch, GET_OBJ_VAL(one, 4));
+      } else {
+        if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
+          skill = GET_SKILL(ch, return_general(GET_OBJ_VAL(two, 4)));
+        else 
+          skill = GET_SKILL(ch, GET_OBJ_VAL(two, 4));
+      }
     }
   }
   

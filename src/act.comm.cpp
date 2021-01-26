@@ -235,6 +235,8 @@ ACMD(do_exclaim)
 
 void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
 {
+  delete_doubledollar(arg);
+  
   snprintf(buf, sizeof(buf), "^c%s%s tells you ^mOOCly^c, '%s^c'^n\r\n", 
            GET_CHAR_NAME(ch), 
            IS_SENATOR(ch) ? " (staff)" : "",

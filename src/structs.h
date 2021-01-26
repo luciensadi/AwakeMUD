@@ -1144,7 +1144,7 @@ struct combat_data
     if (weapon_is_gun)
       magazine = weapon->contains;
     
-    if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_PILOT))
+    if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
       weapon_skill = SKILL_GUNNERY;
     else if (weapon)
       weapon_skill = GET_WEAPON_SKILL(weapon);
