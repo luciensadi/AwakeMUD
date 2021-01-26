@@ -61,6 +61,8 @@ ACMD(do_highlight) {
    based on word length. Hey, it's quick. -- LS */
 
 int max_allowable_word_length_at_language_level(int level) {    
+  return (level * 2) + 1; // 0, 3, 5, 7, 9, 11, 13...
+  /*
   switch (level) {
     case 0: return 0;
     case 1: return 3;
@@ -76,6 +78,7 @@ int max_allowable_word_length_at_language_level(int level) {
     case 11: return 18;
     default: return 500;
   }
+  */
 }
 
 const char *generate_display_string_for_character(struct char_data *actor, struct char_data *viewer, struct char_data *target_ch, bool terminate_with_actors_color_code) {

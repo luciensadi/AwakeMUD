@@ -2642,6 +2642,28 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
         send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
       }
     }
+    // Language messaging.
+    else if (SKILL_IS_LANGUAGE(skill_num)) {
+      if (new_value == 0) {
+        send_to_char(ch, "You completely forget your skills in %s.\r\n", skills[skill_num].name);
+      } else if (new_value == 1) {
+        send_to_char(ch, "^cYou have been introduced to the basics.^n\r\n");
+      } else if (new_value <= 4) {
+        send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
+      } else if (new_value <= 5) {
+        send_to_char(ch, "^cYou have attained average proficiency.^n\r\n");
+      } else if (new_value == 6) {
+        send_to_char(ch, "^CYou are now considered fluent at a high-school level.^n\r\n");
+      } else if (new_value == 7) {
+        send_to_char(ch, "^CYou have achieved bachelor's-degree-level fluency.^n\r\n");
+      } else if (new_value == 8) {
+        send_to_char(ch, "^CYou have achieved master's-degree-level fluency.^n\r\n");
+      } else if (new_value == 9) {
+        send_to_char(ch, "^CYou have achieved doctorate-degree-level fluency.^n\r\n");
+      } else {
+        send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
+      }
+    }
     // Knowledge skill messaging.
     else {
       if (new_value == 0) {
@@ -2665,7 +2687,7 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
       } else {
         send_to_char(ch, "^GYou further hone your knowledge towards perfection.^n\r\n");
       }
-     }
+    }
   }
   
   // Update their skill.
