@@ -3020,7 +3020,7 @@ SPECIAL(toggled_invis)
         AFF_FLAGS(obj->worn_by).RemoveBit(AFF_INVISIBLE);
         obj->obj_flags.bitvector.RemoveBit(AFF_INVISIBLE);
         send_to_char(ch, "You feel the static fade as the ruthenium polymers in %s power down.\r\n", GET_OBJ_NAME(obj));
-        act("The air shimmers briefly as $n fades into view.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        act("The air shimmers briefly as $n fades into view.", FALSE, ch, 0, 0, TO_ROOM);
         return TRUE;
       } else {
         send_to_char(ch, "%s is already deactivated.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -3037,7 +3037,7 @@ SPECIAL(toggled_invis)
         AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
         obj->obj_flags.bitvector.SetBit(AFF_INVISIBLE);
         send_to_char(ch, "You feel a tiny static charge as the ruthenium polymers in %s power up.\r\n", GET_OBJ_NAME(obj));
-        act("The world bends around $n as they vanish from sight.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+        act("The world bends around $n as they vanish from sight.", FALSE, ch, 0, 0, TO_ROOM);
         return TRUE;
       } else {
         send_to_char(ch, "%s is already activated.\r\n", capitalize(GET_OBJ_NAME(obj)));

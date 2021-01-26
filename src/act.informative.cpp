@@ -2464,7 +2464,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       
       // Val 5
-      sprintbit(GET_OBJ_VAL(j, 5), engine_type, buf2);
+      sprintbit(GET_OBJ_VAL(j, 5), engine_type, buf2, sizeof(buf2));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is compatible with the following engine types:\r\n^c  %s^n", buf2);
       
       // Vals 4 and 6
