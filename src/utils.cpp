@@ -2804,19 +2804,19 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
     return str_dup(log_string);
   }
   
-  snprintf(log_string, sizeof(log_string), "(obj %ld) %s%s",
+  snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g%s",
           GET_OBJ_VNUM(obj),
           obj->text.name,
           IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? " [wizloaded]" : "");
     
   if (obj->restring)
-    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s]", obj->restring);
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s^g]", obj->restring);
   
   if (obj->contains) {
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
     for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
       char *representation = generate_new_loggable_representation(temp);
-      snprintf(buf3, sizeof(buf3), " %s%s%s",
+      snprintf(buf3, sizeof(buf3), " %s%s^g%s",
               (!temp->next_content && temp != obj->contains) ? "and " : "",
               representation,
               temp->next_content ? ";" : "");
@@ -2859,9 +2859,12 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
   }
   
   if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
-    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", bonded to character id %d with %d nuyen on it", 
+    const char *name = get_player_name(GET_OBJ_VAL(obj, 0));
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", bonded to character %s (%d) with %d nuyen on it", 
+             name,
              GET_OBJ_VAL(obj, 0),
              GET_OBJ_VAL(obj, 1));
+    DELETE_ARRAY_IF_EXTANT(name);
   }
   
   return str_dup(log_string);

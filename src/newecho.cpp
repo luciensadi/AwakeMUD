@@ -14,6 +14,7 @@ char storage_string[MAX_STRING_LENGTH];
 bool has_required_language_ability_for_sentence(struct char_data *ch, const char *message, int language_skill);
 const char *get_random_word_from_lexicon(int language_skill);
 const char *generate_random_lexicon_sentence(int language_skill, int length);
+const char *replace_too_long_words(struct char_data *ch, const char *message, int language_skill);
 
 // #define NEW_EMOTE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define NEW_EMOTE_DEBUG(...)
@@ -147,6 +148,7 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
 char newecho_debug_buf[MAX_STRING_LENGTH];
 void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string, bool require_char_name) {
   int tag_index, i;
+  char punct_replacement[10];
   struct char_data *target_ch = NULL;
   
   // Sanity check.
@@ -424,6 +426,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       speech_buf[speech_idx - i] = mutable_echo_string[speech_idx];
     speech_buf[speech_idx - i] = '\0';
     
+    // Write the rest of the emote into the storage string.
+    strlcpy(storage_string, mutable_echo_string + speech_idx, sizeof(storage_string));
+    
     NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nSpeech block: '%s'\r\n", speech_buf);
     
     // If the speech ended with punct, we use that, otherwise we use a period.
@@ -434,28 +439,48 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       quote_termination = ".^n";
     }
     
-    snprintf(storage_string, sizeof(storage_string), "%s%s", quote_termination, mutable_echo_string + speech_idx);
-    
     // If the listener can't understand you, mangle it.
+    const char *replacement = NULL;
     if (GET_SKILL(viewer, language_in_use) <= 0) {
-      const char *replacement = "(something unintelligible)";
-      quote_termination = ".^n";
+      replacement = generate_random_lexicon_sentence(language_in_use, strlen(speech_buf));
       
-      snprintf(mutable_echo_string + i, sizeof(mutable_echo_string) - i, "%s%s%s", 
+      char candidate_ch = get_final_character_from_string(speech_buf);
+      if (ispunct(candidate_ch)) {
+        snprintf(punct_replacement, sizeof(punct_replacement), "%c^n", candidate_ch);
+        quote_termination = punct_replacement;
+      } else {
+        quote_termination = ".^n";
+      }
+    } else {
+      replacement = replace_too_long_words(viewer, speech_buf, language_in_use);
+      
+      if (!strcmp(replacement, speech_buf)) {
+        replacement = NULL;
+      } else if (!ispunct(get_final_character_from_string(replacement))){
+        quote_termination = ".^n";
+      }
+    }
+    
+    if (replacement) {
+      // Insert the replacement.
+      snprintf(mutable_echo_string + i, sizeof(mutable_echo_string) - i, "%s%s%s%s", 
                should_highlight ? GET_CHAR_COLOR_HIGHLIGHT(actor) : "",
                capitalize(replacement), 
+               quote_termination,
                storage_string);
                
       i += strlen(replacement) + strlen(GET_CHAR_COLOR_HIGHLIGHT(actor)) + strlen(quote_termination);
     } else {
       // Just highlight the speech.
-      snprintf(mutable_echo_string + i, sizeof(mutable_echo_string) - i, "%s%s%s", 
+      snprintf(mutable_echo_string + i, sizeof(mutable_echo_string) - i, "%s%s%s%s", 
                should_highlight ? GET_CHAR_COLOR_HIGHLIGHT(actor) : "",
                capitalize(speech_buf), 
+               quote_termination,
                storage_string);
                
       i = speech_idx + strlen(should_highlight ? GET_CHAR_COLOR_HIGHLIGHT(actor) : "") + strlen(quote_termination);
     }
+    
     i++;
   }
   
