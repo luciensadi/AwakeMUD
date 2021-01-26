@@ -1970,7 +1970,7 @@ struct room_data *get_veh_in_room(struct veh_data *veh) {
   return veh->in_room;
 }
 
-struct room_data *get_ch_in_room(struct char_data *ch) {
+struct room_data *get_ch_in_room(struct char_data *ch) {  
   char errbuf[500];
   if (!ch) {
     snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room was passed a NULL character!");

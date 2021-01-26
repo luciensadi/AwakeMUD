@@ -4780,9 +4780,10 @@ ACMD(do_scan)
   if (!infra && IS_ASTRAL(ch))
     infra = TRUE;
   if (!specific) {
+    struct room_data *in_room = get_ch_in_room(ch);
     for (i = 0; i < NUM_OF_DIRS; ++i) {
       if (CAN_GO(ch, i)) {
-        if (EXIT(ch, i)->to_room == get_ch_in_room(ch)) {
+        if (EXIT(ch, i)->to_room == in_room) {
           send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
           continue;
         }
