@@ -320,6 +320,11 @@ ACMD(do_pockets) {
       return;
     }
     
+    if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype) <= 0) {
+      send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapon, ammotype, 0));
+      return;
+    }
+    
     // We must have that much ammo to begin with.
     if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype) < quantity) {
       quantity = GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype);

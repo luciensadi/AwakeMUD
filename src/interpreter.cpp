@@ -318,6 +318,7 @@ ACMD_DECLARE(do_stand);
 ACMD_DECLARE(do_stat);
 ACMD_DECLARE(do_status);
 ACMD_DECLARE(do_steal);
+ACMD_DECLARE(do_stop);
 ACMD_DECLARE(do_survey);
 ACMD_DECLARE(do_switch);
 ACMD_DECLARE(do_switched_message_history);
@@ -784,6 +785,7 @@ struct command_info cmd_info[] =
     { "stat"     , POS_DEAD    , do_stat     , LVL_BUILDER, 0 },
     { "status"   , POS_LYING   , do_status   , 0, 0 },
     { "steal"    , POS_STANDING, do_steal    , 0, 0 },
+    { "stop"     , POS_LYING   , do_stop     , 0, 0 },
     { "subscribe", POS_SITTING , do_subscribe, 0, 0 },
     { "subpoint" , POS_DEAD    , do_subpoint , LVL_ARCHITECT, 0 },
     { "survey"   , POS_LYING   , do_survey   , 0, 0 },

@@ -4310,3 +4310,31 @@ ACMD(do_discord) {
   send_to_char(ch, "This game does not have a Discord server configured. Ask the staff to make one.\r\n");
 #endif
 }
+
+ACMD(do_stop) {
+  if (FIGHTING(ch)) {
+    send_to_char("You can't stop in the middle of a fight-- you'll have to ^WFLEE^n instead!\r\n", ch);
+    return;
+  }
+  
+  if (IS_WORKING(ch)) {
+    STOP_WORKING(ch);
+    send_to_char("You stop working.\r\n", ch);
+    return;
+  }
+  
+  if (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh = NULL;
+    RIG_VEH(ch, veh);
+    
+    if (SPEED_IDLE < veh->cspeed) {
+      send_to_char("You bring the vehicle to a halt.\r\n", ch);
+      send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
+    } else {
+      send_to_char("Your vehicle isn't moving.\r\n", ch);
+    }
+    return;
+  }
+  
+  send_to_char("You're not doing anything that the stop command recognizes. Feel free to use the ^WIDEA^n command to suggest another stoppable thing!\r\n", ch);
+}
