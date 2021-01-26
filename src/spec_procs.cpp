@@ -2898,16 +2898,13 @@ SPECIAL(bank)
   } 
   
   else if (CMD_IS("deposit")) {
-    if ((amount = atoi(argument)) <= 0) {
+    if ((amount = atoi(argument)) <= 0 && str_cmp(buf, "all")) {
       send_to_char("How much do you want to deposit?\r\n", ch);
       return 1;
     }
-    if (!str_cmp(buf, "all"))
+    if (!str_cmp(buf, "all") || GET_NUYEN(ch) < amount)
       amount = GET_NUYEN(ch);
-    if (GET_NUYEN(ch) < amount) {
-      send_to_char("You aren't carrying that much!\r\n", ch);
-      return 1;
-    }
+      
     GET_NUYEN(ch) -= amount;
     GET_BANK(ch) += amount;
     send_to_char(ch, "You deposit %d nuyen.\r\n", amount);
@@ -2916,16 +2913,13 @@ SPECIAL(bank)
   } 
   
   else if (CMD_IS("withdraw")) {
-    if ((amount = atoi(argument)) <= 0) {
+    if ((amount = atoi(argument)) <= 0 && str_cmp(buf, "all")) {
       send_to_char("How much do you want to withdraw?\r\n", ch);
       return 1;
     }
-    if (!str_cmp(buf, "all"))
+    if (!str_cmp(buf, "all") || GET_BANK(ch) < amount)
       amount = GET_BANK(ch);
-    if (GET_BANK(ch) < amount) {
-      send_to_char("You don't have that much deposited!\r\n", ch);
-      return 1;
-    }
+      
     GET_NUYEN(ch) += amount;
     GET_BANK(ch) -= amount;
     send_to_char(ch, "The ATM ejects %d nuyen and updates your bank account.\r\n", amount);
@@ -2944,14 +2938,10 @@ SPECIAL(bank)
       return TRUE;
     }
     if (!str_cmp(buf1, "account")) {
-      if (!str_cmp(buf,"all")) {
+      if (!str_cmp(buf,"all") || GET_OBJ_VAL(credstick, 0) < amount) {
         amount = GET_OBJ_VAL(credstick, 0);
       }
-      if (GET_OBJ_VAL(credstick, 0) < amount) {
-        act("$p doesn't even have that much!", FALSE, ch, credstick, 0, TO_CHAR);
-        return TRUE;
-      }
-      if (amount == 0) {
+      if (GET_OBJ_VAL(credstick, 0) == 0) {
         send_to_char(ch, "%s is already empty.\r\n", capitalize(GET_OBJ_NAME(credstick)));
         return TRUE;
       }
@@ -2959,14 +2949,10 @@ SPECIAL(bank)
       GET_BANK(ch) += amount;
       snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to your account.", amount);
     } else if (!str_cmp(buf1, "credstick")) {
-      if (!str_cmp(buf,"all")) {
+      if (!str_cmp(buf,"all") || GET_BANK(ch) < amount) {
         amount = GET_BANK(ch);
       }
-      if (GET_BANK(ch) < amount) {
-        send_to_char("You don't have that much deposited!\r\n", ch);
-        return TRUE;
-      }
-      if (amount == 0) {
+      if (GET_BANK(ch) == 0) {
         send_to_char("You don't have any nuyen in the bank.\r\n", ch);
         return TRUE;
       }
