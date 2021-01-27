@@ -689,7 +689,7 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
   for (int i = 0; i <= (int) strlen(message); i++) {
     if (isalpha(message[i])) {
       // Skip capitalized words like Aztechnology.
-      if (isupper(message[i]) && (i+1 < (int) strlen(message) && !isupper(message[i+1]))) {
+      if (isupper(message[i]) && (i+1 < (int) strlen(message) && isalpha(message[i+1]) && !isupper(message[i+1]))) {
         while (isalpha(message[++i]) && i < (int) strlen(message));
         continue;
       } else {
@@ -758,7 +758,10 @@ const char *generate_random_lexicon_sentence(int language_skill, int length) {
   return message_buf;
 }
 
+// TODO: Fix the name bug below, and also make highlights appear in the text for character's name. (ugh) don't forget to restore color like radio etc
+
 // When listening, you get too-long words replaced with random ones.
+// Known bug: 'Sentence. Name sentence' will lose Name.
 const char *replace_too_long_words(struct char_data *ch, const char *message, int language_skill) {
   static char replaced_message[MAX_STRING_LENGTH];
   static char storage_buf[MAX_STRING_LENGTH];
@@ -772,18 +775,60 @@ const char *replace_too_long_words(struct char_data *ch, const char *message, in
   strlcpy(replaced_message, message, sizeof(replaced_message));
     
   // We specifically use <=, because we know this is null-terminated and we want to act on the null at the end.
+  bool at_start_of_new_sentence = TRUE;
+  bool need_caps = FALSE;
   for (char *ptr = replaced_message; ptr && (ptr - replaced_message) <= (int) strlen(replaced_message); ptr++) {
+    send_to_char(ch, "^y%c^n", *ptr);
     if (isalpha(*ptr)) {
       // Skip capitalized words. This preserves things like names.
       bool yelling = isupper(*ptr) && isupper(*(ptr + 1));
-      if (isupper(*ptr) && !yelling) {
-        while (isalpha(*(++ptr)));
+      if (at_start_of_new_sentence) {
+        at_start_of_new_sentence = FALSE;
+        need_caps = TRUE;
+      } 
+      
+      // Word starting with a capital letter. Could be a name, let's check for highlights.
+      else if (isupper(*ptr) && isalpha(*(ptr + 1)) && !yelling) {
+        int storage_idx = 0;
+        storage_buf[storage_idx] = *ptr;
+        
+        while (isalpha((storage_buf[++storage_idx] = *(++ptr))));
+        storage_buf[storage_idx] = 0;
+        
+        // Check to see if we're at the end of a sentence.
+        if (*(ptr) == '.' || *(ptr) == '!') {          
+          if (!strcmp("Mr", storage_buf) || !strcmp("Ms", storage_buf) || !strcmp("Mrs", storage_buf) || !strcmp("Mz", storage_buf)) {
+            at_start_of_new_sentence = FALSE;
+          } else {
+            at_start_of_new_sentence = TRUE;
+          }
+            
+          send_to_char(ch, "\r\nAfter '%s' (v1), sentence mode is now %s\r\n", storage_buf, at_start_of_new_sentence ? "on" : "off");
+        }
+        
         continue;
       }
       
       char *word_ptr = ptr;
       while (isalpha(*(++word_ptr)));
       // word_ptr now points at the character after the end of the word.
+      
+      // Check to see if we're at the end of a sentence.
+      if (*(word_ptr) == '.' || *(word_ptr) == '!') {
+        // Possibly. Make sure word is not a common title.
+        int storage_idx = 0;
+        for (; storage_idx < (word_ptr - ptr); storage_idx++) {
+          storage_buf[storage_idx] = *(ptr + storage_idx);
+        }
+        storage_buf[storage_idx] = 0;
+        
+        if (!strcmp("Mr", storage_buf) || !strcmp("Ms", storage_buf) || !strcmp("Mrs", storage_buf) || !strcmp("Mz", storage_buf))
+          at_start_of_new_sentence = FALSE;
+        else
+          at_start_of_new_sentence = TRUE;
+          
+        send_to_char(ch, "\r\nAfter '%s' (v2), sentence mode is now %s\r\n", storage_buf, at_start_of_new_sentence ? "on" : "off");
+      }
       
       int len = word_ptr - ptr;
       if (len > max_allowable) {
@@ -795,7 +840,9 @@ const char *replace_too_long_words(struct char_data *ch, const char *message, in
         if (screenreader) 
           random_word = "...";
         else
-          random_word = get_random_word_from_lexicon(language_skill);
+          random_word = need_caps ? capitalize(get_random_word_from_lexicon(language_skill)) : get_random_word_from_lexicon(language_skill);
+          
+        need_caps = FALSE;
         
         // Replace the word in the sentence and dump it to storage_buf.
         snprintf(storage_buf, sizeof(storage_buf), "%s%s%s", 

@@ -149,11 +149,11 @@ ACMD(do_say)
                 ispunct(get_final_character_from_string(argument)) ? "" : "."
               );
       else
-        snprintf(buf, sizeof(buf), "$z^n says%s in an unknown language, \"%s%s.^n\"",
+        snprintf(buf, sizeof(buf), "$z^n says%s in an unknown language, \"%s%s^n\"",
                 (to ? buf2 : ""), 
                 (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
                 PRF_FLAGGED(tmp, PRF_SCREENREADER) ? "(something unintelligible)" : 
-                                                     capitalize(generate_random_lexicon_sentence(language, strlen(argument)))
+                                                     capitalize(replace_too_long_words(tmp, argument, language))
               );
         
       // Note: includes act()
