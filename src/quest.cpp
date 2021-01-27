@@ -368,16 +368,18 @@ void check_quest_delivery(struct char_data *ch, struct obj_data *obj)
     return;
 
   int i;
-
-  for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
-    if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION &&
-        GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
-        ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
-    {
-      ch->player_specials->obj_complete[i] = 1;
-      return;
+  if (ch->in_room) {
+    for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
+      if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION &&
+          GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
+          ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
+      {
+        ch->player_specials->obj_complete[i] = 1;
+        return;
+      }
     }
-  if (ch->persona && quest_table[GET_QUEST(ch)].obj[i].objective == QOO_UPLOAD &&
+  }
+  if (ch->persona && ch->persona->in_host && quest_table[GET_QUEST(ch)].obj[i].objective == QOO_UPLOAD &&
       GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
       matrix[ch->persona->in_host].vnum == quest_table[GET_QUEST(ch)].obj[i].o_data)
   {
