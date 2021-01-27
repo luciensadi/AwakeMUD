@@ -61,24 +61,22 @@ ACMD(do_highlight) {
    based on word length. Hey, it's quick. -- LS */
 
 int max_allowable_word_length_at_language_level(int level) {    
-  return (level * 2) + 1; // 0, 3, 5, 7, 9, 11, 13...
-  /*
+  
   switch (level) {
     case 0: return 0;
     case 1: return 3;
     case 2: return 4;
     case 3: return 5;
     case 4: return 6;
-    case 5: return 7;
-    case 6: return 8;
-    case 7: return 9;
-    case 8: return 10;
-    case 9: return 11;
-    case 10: return 14;
+    case 5: return 8;
+    case 6: return 10;
+    case 7: return 11;
+    case 8: return 12;
+    case 9: return 14;
+    case 10: return 16;
     case 11: return 18;
     default: return 500;
   }
-  */
 }
 
 const char *generate_display_string_for_character(struct char_data *actor, struct char_data *viewer, struct char_data *target_ch, bool terminate_with_actors_color_code) {
@@ -88,8 +86,6 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
   bool should_highlight = !PRF_FLAGGED(viewer, PRF_NOHIGHLIGHT) && !PRF_FLAGGED(viewer, PRF_NOCOLOR);
   const char *viewer_highlight = should_highlight ? GET_CHAR_COLOR_HIGHLIGHT(viewer) : "";
   
-  
-  // todo: highlight toggle
   
   if (terminate_with_actors_color_code && should_highlight) {
     SPEECH_COLOR_CODE_DEBUG(actor, "Terminating with your color code.\r\n");
@@ -396,7 +392,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
           break;
       }
       
-      // Language identified. TODO: Ensure actor has skill in language.
+      // Language identified.
       if (SKILL_IS_LANGUAGE(skill_num))
         language_in_use = skill_num;
       else
@@ -661,7 +657,6 @@ ACMD(do_new_echo) {
   }
 }
 
-// TODO: Have some words that allow you to break the length-- common names, etc.
 bool has_required_language_ability_for_sentence(struct char_data *ch, const char *message, int language_skill) {
   if (IS_NPC(ch))
     return TRUE;
@@ -673,6 +668,7 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
   memset(too_long_words, '\0', sizeof(too_long_words));
   
   char *ptr = current_word;
+  int num_words = 0;
   
   // We specifically use <=, because we know this is null-terminated and we want to act on the null at the end.
   for (int i = 0; i <= (int) strlen(message); i++) {
@@ -683,8 +679,9 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
       *ptr = '\0';
       if ((int) strlen(current_word) > max_allowable) {
         if (too_long_words[0] != '\0')
-          strlcat(too_long_words, ", ", sizeof(too_long_words));
+          strlcat(too_long_words, "', '", sizeof(too_long_words));
         strlcat(too_long_words, current_word, sizeof(too_long_words));
+        num_words++;
       }
       ptr = current_word;
     }
@@ -695,8 +692,9 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
 
   if (too_long_words[0] != '\0') {
     send_to_char(ch, 
-                 "The following words are too long for %s's understanding of %s: '%s'.\r\n"
+                 "The following word%s too long for %s's understanding of %s: '%s'.\r\n"
                  "Please limit your speech to words of length %d or less.\r\n",
+                 num_words != 1 ? "s are" : " is",
                  GET_CHAR_NAME(ch),
                  skills[language_skill].name,
                  too_long_words,

@@ -28,11 +28,6 @@ using namespace std;
 #include "newdb.h"
 #include "constants.h"
 
-/* TODO:
- - radio
- - highlight removal
-*/
-
 /* extern variables */
 extern struct skill_data skills[];
 
@@ -145,22 +140,20 @@ ACMD(do_say)
                   : GET_NAME(to)) : "someone");
       }
       
-      // TODO: A lot of the code in here writes the line once and sends it to everyone. With toggleable highlights, we need two versions:
-      // highlighted and not, which are then sent to viewers depending on their highlights.
-      
       if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
         snprintf(buf, sizeof(buf), "$z^n says%s in %s, \"%s%s%s^n\"",
                 (to ? buf2 : ""), 
                 skills[language].name, 
-                GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
                 capitalize(replace_too_long_words(tmp, argument, language)),
                 ispunct(get_final_character_from_string(argument)) ? "" : "."
               );
       else
         snprintf(buf, sizeof(buf), "$z^n says%s in an unknown language, \"%s%s.^n\"",
                 (to ? buf2 : ""), 
-                GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                capitalize(generate_random_lexicon_sentence(language, strlen(argument)))
+                (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                PRF_FLAGGED(tmp, PRF_SCREENREADER) ? "(something unintelligible)" : 
+                                                     capitalize(generate_random_lexicon_sentence(language, strlen(argument)))
               );
         
       // Note: includes act()
@@ -187,7 +180,7 @@ ACMD(do_say)
       snprintf(buf, sizeof(buf), "You say%s in %s, \"%s%s%s^n\"\r\n", 
                (to ? buf2 : ""), 
                skills[language].name,
-               GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
                capitalize(argument),
                ispunct(get_final_character_from_string(argument)) ? "" : ".");
       send_to_char(buf, ch);
@@ -221,12 +214,13 @@ ACMD(do_exclaim)
       if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
         snprintf(buf, sizeof(buf), "$z^n exclaims in %s, \"%s%s!^n\"", 
                  skills[language].name,
-                 GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                 (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
                  capitalize(replace_too_long_words(tmp, argument, language)));
       else
         snprintf(buf, sizeof(buf), "$z^n exclaims in an unknown language, \"%s%s!^n\"",
-                GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                capitalize(generate_random_lexicon_sentence(language, strlen(argument)))
+                (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                PRF_FLAGGED(tmp, PRF_SCREENREADER) ? "(something unintelligible)" :
+                                                     capitalize(generate_random_lexicon_sentence(language, strlen(argument)))
               );
       
                
@@ -240,7 +234,7 @@ ACMD(do_exclaim)
   else {
     snprintf(buf, sizeof(buf), "You exclaim in %s, \"%s%s!^n\"\r\n", 
              skills[language].name,
-             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
              capitalize(argument));
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
@@ -384,13 +378,13 @@ ACMD(do_ask)
       if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
         snprintf(buf, sizeof(buf), "$z^n asks in %s, \"%s%s?^n\"", 
                  skills[language].name,
-                 GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                 (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
                  capitalize(replace_too_long_words(tmp, argument, language)));
       else
         snprintf(buf, sizeof(buf), "$z^n asks in an unknown language, \"%s%s?^n\"",
-                GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                capitalize(generate_random_lexicon_sentence(language, strlen(argument)))
-                );
+                (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                PRF_FLAGGED(tmp, PRF_SCREENREADER) ? "(something unintelligible)" : 
+                                                     capitalize(generate_random_lexicon_sentence(language, strlen(argument))));
                
       // They're a valid target, so send the message with a raw perform_act() call.
       store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
@@ -400,9 +394,8 @@ ACMD(do_ask)
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else {
-    // TODO
     snprintf(buf, sizeof(buf), "You ask, \"%s%s?^n\"\r\n", 
-             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
              capitalize(argument));
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
@@ -464,7 +457,7 @@ ACMD(do_spec_comm)
     
     snprintf(buf, sizeof(buf), "You lean out towards $N^n and say in %s, \"%s%s%s\"", 
              skills[language].name,
-             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
              capitalize(buf2),
              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_CHAR));
@@ -473,14 +466,15 @@ ACMD(do_spec_comm)
       snprintf(buf, sizeof(buf), "From within %s^n, $z^n says to you in %s, \"%s%s%s^n\"\r\n",
               GET_VEH_NAME(last_veh), 
               skills[GET_LANGUAGE(ch)].name, 
-              GET_CHAR_COLOR_HIGHLIGHT(ch), 
+              (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
               capitalize(replace_too_long_words(vict, buf2, language)),
               ispunct(get_final_character_from_string(buf2)) ? "" : ".");
     else
       snprintf(buf, sizeof(buf), "From within %s^n, $z^n says to you in an unknown language, \"%s%s.^n\".\r\n", 
                decapitalize_a_an(GET_VEH_NAME(last_veh)),
-               GET_CHAR_COLOR_HIGHLIGHT(ch), 
-               capitalize(generate_random_lexicon_sentence(language, strlen(buf2))));
+               (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               PRF_FLAGGED(vict, PRF_SCREENREADER) ? "(something unintelligible)" : 
+                                                     capitalize(generate_random_lexicon_sentence(language, strlen(buf2))));
       
     store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
     
@@ -517,7 +511,7 @@ ACMD(do_spec_comm)
     snprintf(buf, sizeof(buf), "You lean into %s^n and say in %s, \"%s%s%s\"", 
              skills[language].name,
              decapitalize_a_an(GET_VEH_NAME(veh)), 
-             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
              capitalize(buf2),
              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
     send_to_char(buf, ch);
@@ -526,13 +520,14 @@ ACMD(do_spec_comm)
       if (IS_NPC(vict) || GET_SKILL(vict, language) > 0)
         snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s%s%s^n\"\r\n", 
                  skills[GET_LANGUAGE(ch)].name, 
-                 GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                 (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
                  capitalize(replace_too_long_words(vict, buf2, language)),
                  ispunct(get_final_character_from_string(buf2)) ? "" : ".");
       else
         snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in an unknown language, \"%s%s.^n\".\r\n", 
-                 GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                 capitalize(generate_random_lexicon_sentence(language, strlen(buf2))));
+                 (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+                 PRF_FLAGGED(vict, PRF_SCREENREADER) ? "(something unintelligible)" : 
+                                                       capitalize(generate_random_lexicon_sentence(language, strlen(buf2))));
       
       store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
     }
@@ -543,14 +538,15 @@ ACMD(do_spec_comm)
     snprintf(buf, sizeof(buf), "$z^n %s you in %s, \"%s%s%s^n\"\r\n", 
              action_plur, 
              skills[GET_LANGUAGE(ch)].name, 
-             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
              capitalize(replace_too_long_words(vict, buf2, language)),
              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
   else
     snprintf(buf, sizeof(buf), "$z^n %s you in an unknown language, \"%s%s.^n\"\r\n", 
              action_plur,
-             GET_CHAR_COLOR_HIGHLIGHT(ch), 
-             capitalize(generate_random_lexicon_sentence(language, strlen(buf2))));
+             (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             PRF_FLAGGED(vict, PRF_SCREENREADER) ? "(something unintelligible)" : 
+                                                   capitalize(generate_random_lexicon_sentence(language, strlen(buf2))));
   
   store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_VICT));
   
@@ -560,7 +556,7 @@ ACMD(do_spec_comm)
     snprintf(buf, sizeof(buf), "You %s $N^n in %s, \"%s%s%s^n\"", 
              action_sing, 
              skills[language].name,
-             GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
              capitalize(buf2), 
              (subcmd == SCMD_WHISPER) ? (ispunct(get_final_character_from_string(buf2)) ? "" : ".") : "?");
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_CHAR));
@@ -710,7 +706,7 @@ ACMD(do_broadcast)
   struct obj_data *obj, *radio = NULL;
   struct descriptor_data *d;
   int i, j, frequency, to_room, crypt, decrypt;
-  char buf3[MAX_STRING_LENGTH], buf4[MAX_STRING_LENGTH], voice[16] = "$v"; 
+  char voice[16] = "$v"; 
   bool cyberware = FALSE, vehicle = FALSE;
   
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
@@ -792,65 +788,40 @@ ACMD(do_broadcast)
     crypt = GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3)));
   else
     crypt = 0;
-
-  strcpy(buf4, argument);
-  // Starting at end of buf, work backwards and fuzz out the message.
-  for (int len = strlen(buf4) - 1; len >= 0; len--)
-    switch (number(0, 2)) {
-    case 1:
-      buf4[len] = '.';
-      break;
-    case 2:
-      buf4[len] = ' ';
-      break;
-    }
     
-  snprintf(buf3, MAX_STRING_LENGTH, "*static* %s%s", capitalize(buf4), ispunct(get_final_character_from_string(buf4)) ? "" : ".");
-  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NO_RADIO))
-    strcpy(argument, buf3);
-
-  
-  if ( frequency > 0 ) {
-    if(crypt) {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s%s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***^N", frequency, crypt);
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[%d MHz, Unknown](CRYPTO-%d): %s", frequency, crypt, buf3);
-      snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown](CRYPTO-%d): (something incoherent...)^N", voice, frequency, crypt);
-    } else {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s]: %s%s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown]: %s^N", voice, frequency, capitalize(argument));
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[%d MHz, Unknown]: %s", frequency, capitalize(buf3));
-      snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown]: (something incoherent...)^N", voice, frequency);
-    }
-
+  char untouched_message[MAX_STRING_LENGTH];
+  if (frequency > 0) {
+    if (crypt)
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s%s^N", voice, frequency, skills[language].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+    else
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s]: %s%s^N", voice, frequency, skills[language].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
   } else {
-    if(crypt) {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s%s^N", voice, skills[GET_LANGUAGE(ch)].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***^N", crypt);
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown](CRYPTO-%d): %s", crypt, buf3);
-      snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown](CRYPTO-%d): (something incoherent...)^N", voice, crypt);
-    } else {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s]: %s%s^N", voice, skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown]: %s^N", voice, capitalize(argument));
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown]: %s", capitalize(buf3));
-      snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown]: (something incoherent...)^N", voice);
-    }
+    if (crypt)
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s%s^N", voice, skills[language].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+    else
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s]: %s%s^N", 
+               voice, 
+               skills[language].name, 
+               capitalize(argument), 
+               ispunct(get_final_character_from_string(argument)) ? "" : ".");
   }
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else
-    store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, 0, TO_CHAR));
+    store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, 0, TO_CHAR));
     
-  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF))
+  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF)) {
     for (d = descriptor_list; d; d = d->next) {
       if (!d->connected && d != ch->desc && d->character &&
           !PLR_FLAGS(d->character).AreAnySet(PLR_WRITING,
                                              PLR_MAILING,
-                                             PLR_EDITING, PLR_MATRIX, ENDBIT)
+                                             PLR_EDITING, 
+                                             PLR_MATRIX, ENDBIT)
           && !IS_PROJECT(d->character) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
-          !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT)) {
+          !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT)) 
+      {
         if (!IS_NPC(d->character) && !IS_SENATOR(d->character)) {
           radio = NULL;
           cyberware = FALSE;
@@ -859,68 +830,145 @@ ACMD(do_broadcast)
           if (d->character->in_veh && (radio = GET_MOD(d->character->in_veh, MOD_RADIO)))
             vehicle = TRUE;
 
-          for (obj = d->character->cyberware; obj && !radio; obj = obj->next_content)
-            if (GET_OBJ_VAL(obj, 0) == CYB_RADIO) {
-              radio = obj;
-              cyberware = 1;
-            }
+          if (!radio) {
+            for (obj = d->character->cyberware; obj && !radio; obj = obj->next_content)
+              if (GET_OBJ_VAL(obj, 0) == CYB_RADIO) {
+                radio = obj;
+                cyberware = 1;
+              }
+          }
 
-          for (obj = d->character->carrying; obj && !radio; obj = obj->next_content)
-            if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
-              radio = obj;
+          if (!radio) {
+            for (obj = d->character->carrying; obj && !radio; obj = obj->next_content)
+              if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+                radio = obj;
+          }
 
-          for (i = 0; !radio && i < NUM_WEARS; i++)
-            if (GET_EQ(d->character, i)) {
-              if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_RADIO)
-                radio = GET_EQ(d->character, i);
-              else if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_WORN
-                       && GET_EQ(d->character, i)->contains)
-                for (struct obj_data *obj2 = GET_EQ(d->character, i)->contains;
-                     obj2; obj2 = obj2->next_content)
-                  if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
-                    radio = obj2;
-            }
+          if (!radio) {
+            for (i = 0; !radio && i < NUM_WEARS; i++)
+              if (GET_EQ(d->character, i)) {
+                if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_RADIO)
+                  radio = GET_EQ(d->character, i);
+                else if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_WORN
+                         && GET_EQ(d->character, i)->contains)
+                  for (struct obj_data *obj2 = GET_EQ(d->character, i)->contains;
+                       obj2; obj2 = obj2->next_content)
+                    if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
+                      radio = obj2;
+              }
+          }
+          
           FOR_ITEMS_AROUND_CH(ch, obj) {
             if (GET_OBJ_TYPE(obj) == ITEM_RADIO && !CAN_WEAR(obj, ITEM_WEAR_TAKE))
               radio = obj;
           }
+          
+          if (!radio)
+            continue;
 
-          if (radio) {
-            if (CAN_WEAR(radio, ITEM_WEAR_EAR) || cyberware || vehicle)
-              to_room = 0;
-            else
-              to_room = 1;
+          if (CAN_WEAR(radio, ITEM_WEAR_EAR) || cyberware || vehicle)
+            to_room = 0;
+          else
+            to_room = 1;
 
-            i = GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0)));
-            j = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 2 : 1)));
-            decrypt = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)));
-            if (i == 0 || ((i != -1 && frequency != -1) && !(frequency >= (i - j) && frequency <= (i + j))))
-              continue;
-            if (decrypt >= crypt) {
-              if (to_room) {
-                if (IS_NPC(d->character) || GET_SKILL(d->character, language) > 0)
-                  if (ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO))
-                    store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf4, FALSE, ch, 0, d->character, TO_VICT));
-                  else
-                    store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, d->character, TO_VICT));
-                else
-                  store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
-              } else {
-                if (IS_NPC(d->character) || GET_SKILL(d->character, language) > 0)
-                  if (ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO))
-                    store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf4, FALSE, ch, 0, d->character, TO_VICT));
-                  else 
-                    store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, d->character, TO_VICT));
-                else
-                  store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
-              }
-            } else
-              store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf2, FALSE, ch, 0, d->character, TO_VICT));
+          i = GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))); // Centered frequency.
+          j = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 2 : 1))); // Frequency range.
+          decrypt = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)));
+          if (i == 0 || ((i != -1 && frequency != -1) && !(frequency >= (i - j) && frequency <= (i + j))))
+            continue;
+          
+          char message[MAX_STRING_LENGTH];
+          char radio_string[1000];
+          
+          // If char's decrypt is insufficient, just give them the static.
+          if (decrypt < crypt) {
+            if (frequency <= 0) {
+              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", crypt);
+            } else {
+              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", frequency, crypt);
+            }
+            store_message_to_history(d, COMM_CHANNEL_RADIO, act(message, FALSE, ch, 0, d->character, TO_VICT));
+            continue;
           }
-        } else if (IS_SENATOR(d->character) && !PRF_FLAGGED(d->character, PRF_NORADIO))
-          store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, d->character, TO_VICT));
+          
+          // Otherwise, if the listener doesn't speak the language at all, give them junk.
+          if (GET_SKILL(d->character, language) <= 0) {
+            strlcpy(message, PRF_FLAGGED(d->character, PRF_SCREENREADER) ? "(something unintelligible)" : 
+                                                                           capitalize(generate_random_lexicon_sentence(language, strlen(argument))),
+                    sizeof(message));
+          } 
+          
+          // Otherwise, give them the message, mangled appropriately.
+          else {
+            snprintf(message, sizeof(message), "%s%s",
+                     capitalize(replace_too_long_words(d->character, argument, language)),
+                     ispunct(get_final_character_from_string(argument)) ? "" : ".");
+          }
+          
+          // Add in interference if there is any.
+          bool bad_reception;
+          if ((bad_reception = (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NO_RADIO) || ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO)))) {
+            // Compose the voice portion of the string.
+            strlcpy(radio_string, "^y\\Unintelligible Voice^y/", sizeof(radio_string));
+            
+            // Starting at end of buf, work backwards and fuzz out the message.
+            for (int len = strlen(message) - 1; len >= 0; len--) {
+              switch (number(0, 2)) {
+                // case 0 does nothing here- leave the letter intact.
+                case 1:
+                  message[len] = '.';
+                  break;
+                case 2:
+                  message[len] = ' ';
+                  break;
+              }
+            }
+          } else {
+            snprintf(radio_string, sizeof(radio_string), "^y\\%s^y/", voice);
+          }
+            
+          // Append frequency info to radio string.
+          if (frequency <= 0) {
+            strlcat(radio_string, "[All Frequencies, ", sizeof(radio_string));
+          } else {
+            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "[%d MHz, ", frequency);
+          }
+          
+          // Append language info to radio string.
+          if (GET_SKILL(d->character, language) > 0) {
+            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "%s]", skills[language].name);
+          } else {
+            strlcat(radio_string, "Unknown]", sizeof(radio_string));
+          }
+        
+          // Append crypt info to radio string (if any).
+          if (crypt) {
+            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "(CRYPTO-%d)", crypt);
+          }
+          
+          // If we have bad reception, add the static modifier.
+          if (bad_reception)
+            strlcat(radio_string, ": *static* ", sizeof(radio_string));
+          else
+            strlcat(radio_string, ": ", sizeof(radio_string));
+            
+          // Finally(!), add the message itself.
+          strlcat(radio_string, message, sizeof(radio_string));
+          
+          // Punctuate it and seal off any color code leakage.
+          if (!ispunct(get_final_character_from_string(radio_string)))
+            strlcat(radio_string, ".^n", sizeof(radio_string));
+          else
+            strlcat(radio_string, "^n", sizeof(radio_string));
+          
+          store_message_to_history(d, COMM_CHANNEL_RADIO, act(radio_string, FALSE, ch, 0, d->character, TO_VICT));
+          
+        } else if (IS_SENATOR(d->character) && !PRF_FLAGGED(d->character, PRF_NORADIO)) {
+          store_message_to_history(d, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, d->character, TO_VICT));
+        }
       }
     }
+  }
 
   for (d = descriptor_list; d; d = d->next)
     if (!d->connected &&
@@ -1545,8 +1593,9 @@ ACMD(do_phone)
           else {
             char buf4[MAX_STRING_LENGTH];
             snprintf(buf4, sizeof(buf4), "$z^n says into $s phone in an unknown language, \"%s%s.^n\"", 
-                     GET_CHAR_COLOR_HIGHLIGHT(ch),
-                     capitalize(generate_random_lexicon_sentence(language, strlen(argument))));
+                     (PRF_FLAGGED(tch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
+                     PRF_FLAGGED(tch, PRF_SCREENREADER) ? "(something unintelligible)" : 
+                                                          capitalize(generate_random_lexicon_sentence(language, strlen(argument))));
             store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act(buf4, FALSE, ch, 0, tch, TO_VICT));
           }
         }
