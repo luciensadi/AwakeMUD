@@ -3849,7 +3849,7 @@ extern ACMD_DECLARE(do_pool);
 ACMD(do_cpool)
 {
   int dodge = 0, bod = 0, off = 0, total = GET_COMBAT(ch), low = 0;
-  struct obj_data *one, *two;
+  struct obj_data *one = NULL, *two = NULL;
 
   if (!*argument) {
     do_pool(ch, argument, 0, 0);
