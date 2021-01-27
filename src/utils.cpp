@@ -515,7 +515,13 @@ int return_general(int skill_num)
 char *capitalize(const char *source)
 {
   static char dest[MAX_STRING_LENGTH];
-  strlcpy(dest, source, sizeof(dest));
+  if (source)
+    strlcpy(dest, source, sizeof(dest));
+  else {
+    strlcpy(dest, "(Error)", sizeof(dest));
+    mudlog("SYSERR: Received NULL string to capitalize().", NULL, LOG_SYSLOG, TRUE);
+    return dest;
+  }
   
   int len = strlen(source);
   int index = 0;
