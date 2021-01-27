@@ -1118,7 +1118,7 @@ ACMD(do_gen_comm)
                    com_msgs[subcmd][3], 
                    com_msgs[subcmd][3],
                    skills[GET_LANGUAGE(ch)].name, 
-                   capitalize(argument), 
+                   capitalize(replace_too_long_words(tmp, argument, strlen(argument))), 
                    ispunct(get_final_character_from_string(argument)) ? "" : "!", 
                    com_msgs[subcmd][3]);
         else
@@ -1151,7 +1151,7 @@ ACMD(do_gen_comm)
                    com_msgs[subcmd][3], 
                    decapitalize_a_an(GET_VEH_NAME(ch->in_veh)), 
                    skills[GET_LANGUAGE(ch)].name, 
-                   capitalize(argument), 
+                   capitalize(replace_too_long_words(tmp, argument, language)), 
                    ispunct(get_final_character_from_string(argument)) ? "" : "!", 
                    com_msgs[subcmd][3]);
         else
@@ -1190,7 +1190,7 @@ ACMD(do_gen_comm)
               snprintf(buf, sizeof(buf), "%s$z^n shouts in %s, \"%s%s%s\"^n", 
                        com_msgs[subcmd][3], 
                        skills[GET_LANGUAGE(ch)].name, 
-                       capitalize(argument), 
+                       capitalize(replace_too_long_words(tmp, argument, language)), 
                        ispunct(get_final_character_from_string(argument)) ? "" : "!", 
                        com_msgs[subcmd][3]);
             else
@@ -1554,11 +1554,11 @@ ACMD(do_phone)
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
       if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3))
         snprintf(voice, VOICE_BUF_SIZE, "A masked voice");
-    
-    snprintf(buf, sizeof(buf), "^Y%s^Y on the other end of the line says in %s, \"%s%s^Y\"", voice, skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
-    snprintf(buf2, MAX_STRING_LENGTH, "$z^n says into $s phone in %s, \"%s%s^n\"", skills[GET_LANGUAGE(ch)].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
         
-    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone, \"%s%s^Y\"\r\n", capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone, \"%s%s^Y\"\r\n", 
+             capitalize(argument), 
+             ispunct(get_final_character_from_string(argument)) ? "" : ".");
+             
     send_to_char(buf3, ch);
     
     store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, buf3);
@@ -1575,9 +1575,14 @@ ACMD(do_phone)
         tch = phone->dest->phone->in_obj->worn_by;
     }
     if (tch) {
-      if (IS_NPC(tch) || GET_SKILL(tch, language) > 0)
+      if (IS_NPC(tch) || GET_SKILL(tch, language) > 0) {
+        snprintf(buf, sizeof(buf), "^Y%s^Y on the other end of the line says in %s, \"%s%s^Y\"", 
+                voice, 
+                skills[GET_LANGUAGE(ch)].name, 
+                capitalize(replace_too_long_words(tch, argument, language)), 
+                ispunct(get_final_character_from_string(argument)) ? "" : ".");                
         store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
-      else {
+      } else {
         char buf4[MAX_STRING_LENGTH];
         snprintf(buf4, sizeof(buf4), "^Y%s^Y on the other end of the line says in an unknown language, \"%s.^Y\"", 
                  voice, 
@@ -1588,9 +1593,13 @@ ACMD(do_phone)
     if (!cyber) {
       for (tch = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
         if (tch != ch) {
-          if (IS_NPC(tch) || GET_SKILL(tch, language) > 0)
+          if (IS_NPC(tch) || GET_SKILL(tch, language) > 0) {
+            snprintf(buf2, MAX_STRING_LENGTH, "$z^n says into $s phone in %s, \"%s%s^n\"", 
+                    skills[GET_LANGUAGE(ch)].name, 
+                    capitalize(replace_too_long_words(tch, argument, language)), 
+                    ispunct(get_final_character_from_string(argument)) ? "" : ".");
             store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act(buf2, FALSE, ch, 0, tch, TO_VICT));
-          else {
+          } else {
             char buf4[MAX_STRING_LENGTH];
             snprintf(buf4, sizeof(buf4), "$z^n says into $s phone in an unknown language, \"%s%s.^n\"", 
                      (PRF_FLAGGED(tch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),

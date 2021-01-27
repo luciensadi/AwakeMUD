@@ -25,6 +25,13 @@ const char *replace_too_long_words(struct char_data *ch, const char *message, in
 // #define SPEECH_COLOR_CODE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define SPEECH_COLOR_CODE_DEBUG(...)
 
+
+
+/*
+ TODO:
+ - capital words in speech should be allowed: ex Aztechnology, but not AZTECHNOLOGY or aztechnology
+*/
+
 ACMD(do_highlight) {
   if (!argument) {
     send_to_char("Syntax: highlight <a color code>. Example: highlight ^^Y\r\n", ch);
@@ -34,7 +41,12 @@ ACMD(do_highlight) {
   skip_spaces(&argument);
   
   if (!*argument) {
-    send_to_char(ch, "Your current highlight code is '%s' (%s*^n).\r\n", double_up_color_codes(GET_CHAR_COLOR_HIGHLIGHT(ch)), GET_CHAR_COLOR_HIGHLIGHT(ch));
+    if (GET_CHAR_COLOR_HIGHLIGHT(ch) && *GET_CHAR_COLOR_HIGHLIGHT(ch))
+      send_to_char(ch, "Your current highlight code is '%s' (%s*^n).\r\n", double_up_color_codes(GET_CHAR_COLOR_HIGHLIGHT(ch)), GET_CHAR_COLOR_HIGHLIGHT(ch));
+    
+    else
+      send_to_char("You haven't set a highlight yet. You can do so with ^WHIGHLIGHT <color code>^n, for example ^WHIGHLIGHT ^^Y^n.\r\n", ch);
+
     return;
   }
   
@@ -488,6 +500,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   
   NEW_EMOTE_DEBUG_SPEECH(actor, "Finished evaluation of emote projection for %s.\r\n\r\n", GET_CHAR_NAME(viewer));
   
+  // Add a newline.
+  strlcat(mutable_echo_string, "\r\n", sizeof(mutable_echo_string));
+  
   // Finally(!), send it to the viewer.
   send_to_char(viewer, capitalize(mutable_echo_string));
 }
@@ -673,8 +688,16 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
   // We specifically use <=, because we know this is null-terminated and we want to act on the null at the end.
   for (int i = 0; i <= (int) strlen(message); i++) {
     if (isalpha(message[i])) {
-      *(ptr++) = message[i];
+      // Skip capitalized words like Aztechnology.
+      if (isupper(message[i]) && (i+1 < (int) strlen(message) && !isupper(message[i+1]))) {
+        while (isalpha(message[++i]) && i < (int) strlen(message));
+        continue;
+      } else {
+        // Yelling or not capitalized? Start evaluating.
+        *(ptr++) = message[i];
+      }
     }
+    
     else {
       *ptr = '\0';
       if ((int) strlen(current_word) > max_allowable) {
