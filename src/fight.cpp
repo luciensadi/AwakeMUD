@@ -422,13 +422,13 @@ void make_corpse(struct char_data * ch)
   {
     snprintf(buf, sizeof(buf), "corpse %s", ch->player.physical_text.keywords);
     snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", decapitalize_a_an(GET_NAME(ch)));
-    snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", GET_NAME(ch));
+    snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", decapitalize_a_an(GET_NAME(ch)));
     strlcpy(buf3, "What once was living is no longer. Poor sap.\r\n", sizeof(buf3));
   } else
   {
     snprintf(buf, sizeof(buf), "belongings %s", ch->player.physical_text.keywords);
     snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(GET_NAME(ch)));
-    snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", GET_NAME(ch));
+    snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", decapitalize_a_an(GET_NAME(ch)));
     strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
     corpse->item_number = real_object(OBJ_SPECIAL_PC_CORPSE);
   }

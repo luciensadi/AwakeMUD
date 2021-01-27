@@ -899,9 +899,8 @@ void sprint_obj_mods(struct obj_data *obj, char *result, size_t result_size)
   if (obj->obj_flags.bitvector.GetNumSet() > 0)
   {
     char xbuf[MAX_STRING_LENGTH];
-    obj->obj_flags.bitvector.PrintBits(xbuf, MAX_STRING_LENGTH,
-                                       affected_bits, AFF_MAX);
-    snprintf(result, result_size, "%s %s", result, xbuf);
+    obj->obj_flags.bitvector.PrintBits(xbuf, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
+    strlcpy(result, xbuf, result_size);
   }
   
   for (int i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -909,8 +908,8 @@ void sprint_obj_mods(struct obj_data *obj, char *result, size_t result_size)
     {
       char xbuf[MAX_STRING_LENGTH];
       sprinttype(obj->affected[i].location, apply_types, xbuf, sizeof(xbuf));
-      snprintf(result, result_size, "%s (%+d %s)",
-              result, obj->affected[i].modifier, xbuf);
+      snprintf(ENDOF(result), result_size - strlen(result), " (%+d %s)",
+               obj->affected[i].modifier, xbuf);
     }
   return;
 }

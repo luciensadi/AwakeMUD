@@ -1393,6 +1393,10 @@ void renum_world(void)
 #define ZCMD zone_table[zone].cmd[cmd_no]
 
 bool can_load_this_thing_in_zone_commands(DBIndex::rnum_t rnum, int zone, int cmd_no) {
+  if (rnum < 0) {
+    log_zone_error(zone, cmd_no, "Negative rnum.");
+    return FALSE;
+  }
   if (GET_OBJ_TYPE(&obj_proto[rnum]) == ITEM_MONEY) {
     // Zoneloading money is forbidden.
     log_zone_error(zone, cmd_no, "Money cannot be loaded in zone commands.");
