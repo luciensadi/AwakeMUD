@@ -29,9 +29,11 @@ extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
+extern void auto_repair_obj(struct obj_data *obj);
 
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
+
 
 void House_delete_file(vnum_t vnum, char *name);
 
@@ -174,12 +176,14 @@ bool House_load(struct house_control_rec *house)
         delete [] player_name;
       }
       
+      auto_repair_obj(obj);
+      
       inside = data.GetInt(buf, 0);
       if (inside > 0) {
         if (inside == last_in)
           last_obj = last_obj->in_obj;
         else if (inside < last_in)
-          while (inside <= last_in) {
+          while (inside <= last_in && last_obj) {
             last_obj = last_obj->in_obj;
             last_in--;
           }

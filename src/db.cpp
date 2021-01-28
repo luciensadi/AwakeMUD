@@ -74,6 +74,8 @@ extern void generate_archetypes();
 extern void populate_mobact_aggression_octets();
 extern void write_world_to_disk(int vnum);
 
+extern void auto_repair_obj(struct obj_data *obj);
+
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -770,8 +772,10 @@ void index_boot(int mode)
     memset((char *) obj_proto, 0, (sizeof(struct obj_data) *
                                    (rec_count + obj_chunk_size)));
                                    
+#ifdef USE_DEBUG_CANARIES
     for (int i = 0; i < rec_count + obj_chunk_size; i++)
       obj_proto[i].canary = CANARY_VALUE;
+#endif
 
     obj_index = new struct index_data[rec_count + obj_chunk_size];
     memset((char *) obj_index, 0, (sizeof(struct index_data) *
@@ -4796,11 +4800,13 @@ void load_saved_veh()
           delete [] player_name;
         }
         
+        auto_repair_obj(obj);
+        
         if (inside > 0) {
           if (inside == last_in)
             last_obj = last_obj->in_obj;
           else if (inside < last_in)
-            while (inside <= last_in) {
+            while (inside <= last_in && last_obj) {
               last_obj = last_obj->in_obj;
               last_in--;
             }
@@ -4852,6 +4858,7 @@ void load_saved_veh()
         snprintf(buf, sizeof(buf), "%s/AmmoWeap", sect_name);
         GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
         ammo->restring = str_dup(get_ammobox_default_restring(ammo));
+        auto_repair_obj(ammo);
         obj_to_obj(ammo, obj);
       }
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
@@ -4866,6 +4873,7 @@ void load_saved_veh()
           snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
         }
+        auto_repair_obj(weapon);
         obj_to_obj(weapon, obj);
         veh->usedload += GET_OBJ_WEIGHT(weapon);
       }
@@ -5009,12 +5017,14 @@ void load_consist(void)
               delete [] player_name;
             }
             
+            auto_repair_obj(obj);
+            
             inside = data.GetInt(buf, 0);
             if (inside > 0) {
               if (inside == last_in)
                 last_obj = last_obj->in_obj;
               else if (inside < last_in)
-                while (inside <= last_in) {
+                while (inside <= last_in && last_obj) {
                   last_obj = last_obj->in_obj;
                   last_in--;
                 }

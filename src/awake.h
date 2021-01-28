@@ -2253,7 +2253,7 @@ enum {
    - Add a string for it in message_history_channels[] in constants.cpp.
  */
 
-#define NUM_MESSAGES_TO_RETAIN     20
+#define NUM_MESSAGES_TO_RETAIN     50
 
 #define COMM_CHANNEL_HIRED         0
 #define COMM_CHANNEL_NEWBIE        1
@@ -2267,8 +2267,9 @@ enum {
 #define COMM_CHANNEL_SHOUTS        9
 #define COMM_CHANNEL_TELLS         10
 #define COMM_CHANNEL_WTELLS        11
+#define COMM_CHANNEL_EMOTES        12
 
-#define NUM_COMMUNICATION_CHANNELS 12
+#define NUM_COMMUNICATION_CHANNELS 13
 
 
 /* Error codes. */
