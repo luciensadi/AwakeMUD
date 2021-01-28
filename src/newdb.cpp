@@ -2088,14 +2088,14 @@ void auto_repair_obj(struct obj_data *obj) {
         prior_data = (field);                                                                                     \
         (field) = MIN((maxv), MAX((minv), (field)));                                                              \
         if (prior_data != (field)) {                                                                              \
-          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose ## (fieldname) ## was %d.", \
+          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #fieldname " was %d.", \
                    GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), prior_data);                                             \
           mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                         \
         }
         
         #define FORCE_PROTO_VALUE(value, proto_value)                                                                   \
         if (proto_value != value) {                                                                                     \
-          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose ## value ## was %d (becomes %d)", \
+          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #value  " was %d (becomes %d)", \
                    GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), value, proto_value);                                           \
           mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                               \
         }
