@@ -2127,10 +2127,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               strncat(buf, "pierces through enemy ballistic armor, halving its value.", sizeof(buf) - strlen(buf) - 1);
               break;
             case AMMO_EX:
-              strncat(buf, "increases power by one and ", sizeof(buf) - strlen(buf) - 1);
-              // fall through
+              strncat(buf, "increases power by two.", sizeof(buf) - strlen(buf) - 1);
+              break;
             case AMMO_EXPLOSIVE:
-              strncat(buf, "ignores one point of enemy ballistic armor.", sizeof(buf) - strlen(buf) - 1);
+              strncat(buf, "increases power by one.", sizeof(buf) - strlen(buf) - 1);
               break;
             case AMMO_FLECHETTE:
               strncat(buf, "deals more damage to fully unarmored targets.", sizeof(buf) - strlen(buf) - 1);
@@ -2788,7 +2788,7 @@ ACMD(do_examine)
           strcpy(buf, "Custom Components:\r\n");
           for (struct obj_data *soft = tmp_object->contains; soft; soft = soft->next_content)
             if (GET_OBJ_TYPE(soft) == ITEM_PART)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-30s Type: %-24s Rating: %d\r\n",
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-40s  Type: %-24s  Rating: %d\r\n",
                       GET_OBJ_NAME(soft),
                       parts[GET_OBJ_VAL(soft, 0)].name,
                       GET_PART_RATING(soft));

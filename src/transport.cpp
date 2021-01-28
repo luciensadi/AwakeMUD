@@ -347,6 +347,7 @@ void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi, sby
   room->dir_option[dir]->barrier = 8;
   room->dir_option[dir]->condition = 8;
   room->dir_option[dir]->material = 8;
+  room->dir_option[dir]->canary = CANARY_VALUE;
 
   dir = rev_dir[dir];
 
@@ -357,6 +358,7 @@ void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi, sby
   taxi->dir_option[dir]->barrier = 8;
   taxi->dir_option[dir]->condition = 8;
   taxi->dir_option[dir]->material = 8;
+  taxi->dir_option[dir]->canary = CANARY_VALUE;
   
   // Optionally set the taxi's room rating so it waits a few ticks before trying to drive off again.
   taxi->rating = rating;
@@ -943,6 +945,10 @@ void make_elevator_door(vnum_t rnum_to, vnum_t rnum_from, int direction_from) {
   
   if (!DOOR->barrier || DOOR->barrier < 8)
     DOOR->barrier = 8;
+    
+#ifdef USE_DEBUG_CANARIES
+    DOOR->canary = CANARY_VALUE;
+#endif
   
   // Set up the door's flags.
   SET_BIT(DOOR->exit_info, EX_ISDOOR);
@@ -1101,10 +1107,16 @@ static void init_elevators(void)
         DOOR(j - 1, DOWN) = new room_direction_data;
         memset((char *) DOOR(j - 1, DOWN), 0, sizeof(struct room_direction_data));
         DOOR(j - 1, DOWN)->to_room = &world[real_room(elevator[i].floor[j].shaft_vnum)];
+#ifdef USE_DEBUG_CANARIES
+        DOOR(j - 1, DOWN)->canary = CANARY_VALUE;
+#endif
         
         DOOR(j, UP) = new room_direction_data;
         memset((char *) DOOR(j, UP), 0, sizeof(struct room_direction_data));
         DOOR(j, UP)->to_room = &world[real_room(elevator[i].floor[j - 1].shaft_vnum)];
+#ifdef USE_DEBUG_CANARIES
+        DOOR(j, UP)->canary = CANARY_VALUE;
+#endif
 #undef DOOR
       }
       
@@ -1726,6 +1738,9 @@ static void open_doors(int car, int to, int room, int from)
     world[car].dir_option[to]->barrier = 8;
     world[car].dir_option[to]->condition = 8;
     world[car].dir_option[to]->material = 8;
+#ifdef USE_DEBUG_CANARIES
+    world[car].dir_option[to]->canary = CANARY_VALUE;
+#endif
   }
   if (!world[room].dir_option[from]) {
     world[room].dir_option[from] = new room_direction_data;
@@ -1736,6 +1751,9 @@ static void open_doors(int car, int to, int room, int from)
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
+#ifdef USE_DEBUG_CANARIES
+    world[room].dir_option[from]->canary = CANARY_VALUE;
+#endif
   }
   snprintf(buf, sizeof(buf), "The monorail stops and the doors open to %s.\r\n", thedirs[to]);
   send_to_room(buf, &world[car]);
@@ -1876,6 +1894,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
     world[ferry].dir_option[to]->barrier = 8;
     world[ferry].dir_option[to]->condition = 8;
     world[ferry].dir_option[to]->material = 8;
+    world[ferry].dir_option[to]->canary = CANARY_VALUE;
   }
   if (!world[room].dir_option[from]) {
     world[room].dir_option[from] = new room_direction_data;
@@ -1886,6 +1905,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
+    world[room].dir_option[from]->canary = CANARY_VALUE;
   }
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[ferry]);
@@ -1980,6 +2000,7 @@ void open_busdoor(int bus, int to, int room, int from)
     world[bus].dir_option[to]->barrier = 8;
     world[bus].dir_option[to]->condition = 8;
     world[bus].dir_option[to]->material = 8;
+    world[bus].dir_option[to]->canary = CANARY_VALUE;
   }
   if (!world[room].dir_option[from]) {
     world[room].dir_option[from] = new room_direction_data;
@@ -1990,6 +2011,7 @@ void open_busdoor(int bus, int to, int room, int from)
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
+    world[room].dir_option[from]->canary = CANARY_VALUE;
   }
   send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[room]);
   send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[bus]);
@@ -2071,6 +2093,7 @@ void camas_extend(int bus, int to, int room, int from)
     world[bus].dir_option[to]->barrier = 8;
     world[bus].dir_option[to]->condition = 8;
     world[bus].dir_option[to]->material = 8;
+    world[bus].dir_option[to]->canary = CANARY_VALUE;
   }
   if (!world[room].dir_option[from]) {
     world[room].dir_option[from] = new room_direction_data;
@@ -2081,6 +2104,7 @@ void camas_extend(int bus, int to, int room, int from)
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
+    world[room].dir_option[from]->canary = CANARY_VALUE;
   }
   send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[room]);
   send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[bus]);
@@ -2166,6 +2190,7 @@ void open_lightraildoor(int lightrail, int to, int room, int from)
     world[lightrail].dir_option[to]->barrier = 8;
     world[lightrail].dir_option[to]->condition = 8;
     world[lightrail].dir_option[to]->material = 8;
+    world[lightrail].dir_option[to]->canary = CANARY_VALUE;
   }
   if (!world[room].dir_option[from]) {
     world[room].dir_option[from] = new room_direction_data;
@@ -2176,6 +2201,7 @@ void open_lightraildoor(int lightrail, int to, int room, int from)
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
+    world[room].dir_option[from]->canary = CANARY_VALUE;
   }
   send_to_room("The incoming lightrail grinds to a halt and its doors slide open with a hiss.\r\n", &world[room]);
   send_to_room("The lightrail grinds to a halt and the doors hiss open.\r\n", &world[lightrail]);
@@ -2294,6 +2320,7 @@ void extend_walkway(int ferry, int to, int room, int from)
     world[ferry].dir_option[to]->barrier = 8;
     world[ferry].dir_option[to]->condition = 8;
     world[ferry].dir_option[to]->material = 8;
+    world[ferry].dir_option[to]->canary = CANARY_VALUE;
   }
   if (!world[room].dir_option[from]) {
     world[room].dir_option[from] = new room_direction_data;
@@ -2304,6 +2331,7 @@ void extend_walkway(int ferry, int to, int room, int from)
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
+    world[room].dir_option[from]->canary = CANARY_VALUE;
   }
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[room]);
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[ferry]);
@@ -2493,6 +2521,7 @@ void grenada_extend(int bus, int to, int room, int from)
     world[bus].dir_option[to]->barrier = 8;
     world[bus].dir_option[to]->condition = 8;
     world[bus].dir_option[to]->material = 8;
+    world[bus].dir_option[to]->canary = CANARY_VALUE;
   }
   if (!world[room].dir_option[from]) {
     world[room].dir_option[from] = new room_direction_data;
@@ -2503,6 +2532,7 @@ void grenada_extend(int bus, int to, int room, int from)
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
+    world[room].dir_option[from]->canary = CANARY_VALUE;
   }
   send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", &world[room]);
   send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", &world[bus]);

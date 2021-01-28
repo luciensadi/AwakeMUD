@@ -27,6 +27,7 @@ using namespace std;
 #include "newmatrix.h"
 #include "newdb.h"
 #include "constants.h"
+#include "newecho.h"
 
 /* extern variables */
 extern struct skill_data skills[];
@@ -34,11 +35,7 @@ extern struct skill_data skills[];
 extern void respond(struct char_data *ch, struct char_data *mob, char *str);
 extern bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type);
 extern char *how_good(int skill, int percent);
-extern bool has_required_language_ability_for_sentence(struct char_data *ch, const char *message, int language_skill);
 int find_skill_num(char *name);
-
-extern const char *replace_too_long_words(struct char_data *ch, const char *message, int language_skill);
-extern const char *generate_random_lexicon_sentence(int language_skill, int length);
 
 
 ACMD_DECLARE(do_say);
@@ -211,19 +208,11 @@ ACMD(do_exclaim)
   {
     // Replicate act() in a way that lets us capture the message.
     if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
-      if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-        snprintf(buf, sizeof(buf), "$z^n exclaims in %s, \"%s%s!^n\"", 
-                 skills[language].name,
-                 (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                 capitalize(replace_too_long_words(tmp, argument, language)));
-      else
-        snprintf(buf, sizeof(buf), "$z^n exclaims in an unknown language, \"%s%s!^n\"",
-                (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                PRF_FLAGGED(tmp, PRF_SCREENREADER) ? "(something unintelligible)" :
-                                                     capitalize(generate_random_lexicon_sentence(language, strlen(argument)))
-              );
+      snprintf(buf, sizeof(buf), "$z^n exclaims in %s, \"%s%s!^n\"", 
+               (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
+               (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(tmp, argument, language)));
       
-               
       // They're a valid target, so send the message with a raw perform_act() call.
       store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
     }
@@ -375,16 +364,10 @@ ACMD(do_ask)
   for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
     // Replicate act() in a way that lets us capture the message.
     if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
-      if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-        snprintf(buf, sizeof(buf), "$z^n asks in %s, \"%s%s?^n\"", 
-                 skills[language].name,
-                 (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                 capitalize(replace_too_long_words(tmp, argument, language)));
-      else
-        snprintf(buf, sizeof(buf), "$z^n asks in an unknown language, \"%s%s?^n\"",
-                (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                PRF_FLAGGED(tmp, PRF_SCREENREADER) ? "(something unintelligible)" : 
-                                                     capitalize(generate_random_lexicon_sentence(language, strlen(argument))));
+      snprintf(buf, sizeof(buf), "$z^n asks in %s, \"%s%s?^n\"", 
+               (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
+               (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(tmp, argument, language)));
                
       // They're a valid target, so send the message with a raw perform_act() call.
       store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
@@ -455,26 +438,22 @@ ACMD(do_spec_comm)
       return;
     }
     
+    // Message the whisper-er.
     snprintf(buf, sizeof(buf), "You lean out towards $N^n and say in %s, \"%s%s%s\"", 
              skills[language].name,
              (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
              capitalize(buf2),
              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
+             
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_CHAR));
     
-    if (IS_NPC(vict) || GET_SKILL(vict, language) > 0)
-      snprintf(buf, sizeof(buf), "From within %s^n, $z^n says to you in %s, \"%s%s%s^n\"\r\n",
-              GET_VEH_NAME(last_veh), 
-              skills[GET_LANGUAGE(ch)].name, 
-              (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-              capitalize(replace_too_long_words(vict, buf2, language)),
-              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
-    else
-      snprintf(buf, sizeof(buf), "From within %s^n, $z^n says to you in an unknown language, \"%s%s.^n\".\r\n", 
-               decapitalize_a_an(GET_VEH_NAME(last_veh)),
-               (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-               PRF_FLAGGED(vict, PRF_SCREENREADER) ? "(something unintelligible)" : 
-                                                     capitalize(generate_random_lexicon_sentence(language, strlen(buf2))));
+    // Message the whisper-ee.
+    snprintf(buf, sizeof(buf), "From within %s^n, $z^n says to you in %s, \"%s%s%s^n\"\r\n",
+            GET_VEH_NAME(last_veh), 
+            (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+            (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+            capitalize(replace_too_long_words(vict, buf2, language)),
+            ispunct(get_final_character_from_string(buf2)) ? "" : ".");
       
     store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
     
@@ -517,36 +496,23 @@ ACMD(do_spec_comm)
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     for (vict = veh->people; vict; vict = vict->next_in_veh) {
-      if (IS_NPC(vict) || GET_SKILL(vict, language) > 0)
-        snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s%s%s^n\"\r\n", 
-                 skills[GET_LANGUAGE(ch)].name, 
-                 (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                 capitalize(replace_too_long_words(vict, buf2, language)),
-                 ispunct(get_final_character_from_string(buf2)) ? "" : ".");
-      else
-        snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in an unknown language, \"%s%s.^n\".\r\n", 
-                 (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-                 PRF_FLAGGED(vict, PRF_SCREENREADER) ? "(something unintelligible)" : 
-                                                       capitalize(generate_random_lexicon_sentence(language, strlen(buf2))));
+      snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s%s%s^n\"\r\n", 
+               (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+               (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(vict, buf2, language)),
+               ispunct(get_final_character_from_string(buf2)) ? "" : ".");
       
       store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
     }
     return;
   }
   
-  if (IS_NPC(vict) || GET_SKILL(vict, language) > 0)
-    snprintf(buf, sizeof(buf), "$z^n %s you in %s, \"%s%s%s^n\"\r\n", 
-             action_plur, 
-             skills[GET_LANGUAGE(ch)].name, 
-             (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-             capitalize(replace_too_long_words(vict, buf2, language)),
-             ispunct(get_final_character_from_string(buf2)) ? "" : ".");
-  else
-    snprintf(buf, sizeof(buf), "$z^n %s you in an unknown language, \"%s%s.^n\"\r\n", 
-             action_plur,
-             (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
-             PRF_FLAGGED(vict, PRF_SCREENREADER) ? "(something unintelligible)" : 
-                                                   capitalize(generate_random_lexicon_sentence(language, strlen(buf2))));
+  snprintf(buf, sizeof(buf), "$z^n %s you in %s, \"%s%s%s^n\"\r\n", 
+           action_plur, 
+           (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+           (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+           capitalize(replace_too_long_words(vict, buf2, language)),
+           ispunct(get_final_character_from_string(buf2)) ? "" : ".");
   
   store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_VICT));
   
@@ -891,19 +857,10 @@ ACMD(do_broadcast)
             continue;
           }
           
-          // Otherwise, if the listener doesn't speak the language at all, give them junk.
-          if (GET_SKILL(d->character, language) <= 0) {
-            strlcpy(message, PRF_FLAGGED(d->character, PRF_SCREENREADER) ? "(something unintelligible)" : 
-                                                                           capitalize(generate_random_lexicon_sentence(language, strlen(argument))),
-                    sizeof(message));
-          } 
-          
-          // Otherwise, give them the message, mangled appropriately.
-          else {
-            snprintf(message, sizeof(message), "%s%s",
-                     capitalize(replace_too_long_words(d->character, argument, language)),
-                     ispunct(get_final_character_from_string(argument)) ? "" : ".");
-          }
+          // Copy in the message body, mangling it as needed for language skill issues.
+          snprintf(message, sizeof(message), "%s%s",
+                   capitalize(replace_too_long_words(d->character, argument, language, "^y")),
+                   ispunct(get_final_character_from_string(argument)) ? "" : ".");
           
           // Add in interference if there is any.
           bool bad_reception;
@@ -1113,20 +1070,13 @@ ACMD(do_gen_comm)
     
     for (tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
       if (tmp != ch) {
-        if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-          snprintf(buf, sizeof(buf), "%s$z%s shouts in %s, \"%s%s%s\"^n", 
-                   com_msgs[subcmd][3], 
-                   com_msgs[subcmd][3],
-                   skills[GET_LANGUAGE(ch)].name, 
-                   capitalize(replace_too_long_words(tmp, argument, strlen(argument))), 
-                   ispunct(get_final_character_from_string(argument)) ? "" : "!", 
-                   com_msgs[subcmd][3]);
-        else
-          snprintf(buf, sizeof(buf), "%s$z%s shouts in an unknown language, \"%s!%s\"^n", 
-                   com_msgs[subcmd][3], 
-                   com_msgs[subcmd][3],
-                   capitalize(generate_random_lexicon_sentence(language, strlen(argument))),
-                   com_msgs[subcmd][3]);
+        snprintf(buf, sizeof(buf), "%s$z%s shouts in %s, \"%s%s%s\"^n", 
+                 com_msgs[subcmd][3], 
+                 com_msgs[subcmd][3],
+                 (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+                 capitalize(replace_too_long_words(tmp, argument, strlen(argument), com_msgs[subcmd][3])), 
+                 ispunct(get_final_character_from_string(argument)) ? "" : "!", 
+                 com_msgs[subcmd][3]);
         
         // Note that this line invokes act().
         store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
@@ -1146,19 +1096,12 @@ ACMD(do_gen_comm)
     if (ch->in_veh) {
       ch->in_room = get_ch_in_room(ch);
       for (tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
-        if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-          snprintf(buf1, sizeof(buf1), "%sFrom inside %s^n, $z^n shouts in %s, \"%s%s%s\"^n", 
-                   com_msgs[subcmd][3], 
-                   decapitalize_a_an(GET_VEH_NAME(ch->in_veh)), 
-                   skills[GET_LANGUAGE(ch)].name, 
-                   capitalize(replace_too_long_words(tmp, argument, language)), 
-                   ispunct(get_final_character_from_string(argument)) ? "" : "!", 
-                   com_msgs[subcmd][3]);
-        else
-        snprintf(buf1, sizeof(buf1), "%sFrom inside %s^n, $z^n shouts in an unknown language, \"%s!%s\"^n", 
+        snprintf(buf1, sizeof(buf1), "%sFrom inside %s^n, $z^n shouts in %s, \"%s%s%s\"^n", 
                  com_msgs[subcmd][3], 
-                 decapitalize_a_an(GET_VEH_NAME(ch->in_veh)),
-                 capitalize(generate_random_lexicon_sentence(language, strlen(argument))),
+                 decapitalize_a_an(GET_VEH_NAME(ch->in_veh)), 
+                 (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+                 capitalize(replace_too_long_words(tmp, argument, language, com_msgs[subcmd][3])), 
+                 ispunct(get_final_character_from_string(argument)) ? "" : "!", 
                  com_msgs[subcmd][3]);
           
         // Replicate act() in a way that lets us capture the message.
@@ -1186,17 +1129,11 @@ ACMD(do_gen_comm)
         ch->in_room = ch->in_room->dir_option[door]->to_room;
         for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch) {
-            if (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0)
-              snprintf(buf, sizeof(buf), "%s$z^n shouts in %s, \"%s%s%s\"^n", 
-                       com_msgs[subcmd][3], 
-                       skills[GET_LANGUAGE(ch)].name, 
-                       capitalize(replace_too_long_words(tmp, argument, language)), 
-                       ispunct(get_final_character_from_string(argument)) ? "" : "!", 
-                       com_msgs[subcmd][3]);
-            else
-            snprintf(buf, sizeof(buf), "%s$z^n shouts in an unknown language, \"%s!%s\"^n", 
-                     com_msgs[subcmd][3],
-                     capitalize(generate_random_lexicon_sentence(language, strlen(argument))), 
+            snprintf(buf, sizeof(buf), "%s$z^n shouts in %s, \"%s%s%s\"^n", 
+                     com_msgs[subcmd][3], 
+                     (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+                     capitalize(replace_too_long_words(tmp, argument, language, com_msgs[subcmd][3])), 
+                     ispunct(get_final_character_from_string(argument)) ? "" : "!", 
                      com_msgs[subcmd][3]);
             
             // Store to their history.
@@ -1575,39 +1512,25 @@ ACMD(do_phone)
         tch = phone->dest->phone->in_obj->worn_by;
     }
     if (tch) {
-      if (IS_NPC(tch) || GET_SKILL(tch, language) > 0) {
-        snprintf(buf, sizeof(buf), "^Y%s^Y on the other end of the line says in %s, \"%s%s^Y\"", 
-                voice, 
-                skills[GET_LANGUAGE(ch)].name, 
-                capitalize(replace_too_long_words(tch, argument, language)), 
-                ispunct(get_final_character_from_string(argument)) ? "" : ".");                
-        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
-      } else {
-        char buf4[MAX_STRING_LENGTH];
-        snprintf(buf4, sizeof(buf4), "^Y%s^Y on the other end of the line says in an unknown language, \"%s.^Y\"", 
-                 voice, 
-                 capitalize(generate_random_lexicon_sentence(language, strlen(argument))));
-        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf4, FALSE, ch, NULL, tch, TO_VICT));
-      }
+      snprintf(buf, sizeof(buf), "^Y%s^Y on the other end of the line says in %s, \"%s%s^Y\"", 
+              voice, 
+              (IS_NPC(tch) || GET_SKILL(tch, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+              capitalize(replace_too_long_words(tch, argument, language, "^Y")), 
+              ispunct(get_final_character_from_string(argument)) ? "" : ".");    
+                          
+      store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
     }
     if (!cyber) {
-      for (tch = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
+      for (tch = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room) {
         if (tch != ch) {
-          if (IS_NPC(tch) || GET_SKILL(tch, language) > 0) {
-            snprintf(buf2, MAX_STRING_LENGTH, "$z^n says into $s phone in %s, \"%s%s^n\"", 
-                    skills[GET_LANGUAGE(ch)].name, 
-                    capitalize(replace_too_long_words(tch, argument, language)), 
-                    ispunct(get_final_character_from_string(argument)) ? "" : ".");
-            store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act(buf2, FALSE, ch, 0, tch, TO_VICT));
-          } else {
-            char buf4[MAX_STRING_LENGTH];
-            snprintf(buf4, sizeof(buf4), "$z^n says into $s phone in an unknown language, \"%s%s.^n\"", 
-                     (PRF_FLAGGED(tch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-                     PRF_FLAGGED(tch, PRF_SCREENREADER) ? "(something unintelligible)" : 
-                                                          capitalize(generate_random_lexicon_sentence(language, strlen(argument))));
-            store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act(buf4, FALSE, ch, 0, tch, TO_VICT));
-          }
+          snprintf(buf2, MAX_STRING_LENGTH, "$z^n says into $s phone in %s, \"%s%s^n\"", 
+                  (IS_NPC(tch) || GET_SKILL(tch, language) > 0) ? skills[language].name : "an unknown language", 
+                  capitalize(replace_too_long_words(tch, argument, language)), 
+                  ispunct(get_final_character_from_string(argument)) ? "" : ".");
+                  
+          store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act(buf2, FALSE, ch, 0, tch, TO_VICT));
         }
+      }
     }
   } else {
     any_one_arg(argument, arg);
