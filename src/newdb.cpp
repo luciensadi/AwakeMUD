@@ -2083,12 +2083,14 @@ void auto_repair_obj(struct obj_data *obj) {
       break;
     case ITEM_WEAPON:
       {
+        int prior_data;
+        
         // We perform extensive clamping and checks on weapons due to prior issues with corrupted weapon data.
         #define CLAMP_WEAPON_VALUE(field, minv, maxv, fieldname)                                                  \
         prior_data = (field);                                                                                     \
         (field) = MIN((maxv), MAX((minv), (field)));                                                              \
         if (prior_data != (field)) {                                                                              \
-          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #fieldname " was %d.", \
+          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #fieldname " was %d.",    \
                    GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), prior_data);                                             \
           mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                         \
         }
@@ -2098,6 +2100,7 @@ void auto_repair_obj(struct obj_data *obj) {
           snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #value  " was %d (becomes %d)", \
                    GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), value, proto_value);                                           \
           mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                               \
+          value = proto_value;                                                                                          \
         }
         
         rnum = real_object(GET_OBJ_VNUM(obj));
@@ -2115,9 +2118,12 @@ void auto_repair_obj(struct obj_data *obj) {
         FORCE_PROTO_VALUE(GET_WEAPON_MAX_AMMO(obj), GET_WEAPON_MAX_AMMO(&obj_proto[rnum]));
         FORCE_PROTO_VALUE(GET_WEAPON_REACH(obj), GET_WEAPON_REACH(&obj_proto[rnum]));
         FORCE_PROTO_VALUE(GET_WEAPON_POSSIBLE_FIREMODES(obj), GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_FIREMODE(obj), GET_WEAPON_FIREMODE(&obj_proto[rnum]));
+        // FORCE_PROTO_VALUE(GET_WEAPON_FIREMODE(obj), GET_WEAPON_FIREMODE(&obj_proto[rnum]));
         FORCE_PROTO_VALUE(GET_WEAPON_INTEGRAL_RECOIL_COMP(obj), GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_FULL_AUTO_COUNT(obj), GET_WEAPON_FULL_AUTO_COUNT(&obj_proto[rnum]));
+        // FORCE_PROTO_VALUE(GET_WEAPON_FULL_AUTO_COUNT(obj), GET_WEAPON_FULL_AUTO_COUNT(&obj_proto[rnum]));
+        
+        CLAMP_WEAPON_VALUE(GET_WEAPON_FIREMODE(obj), MODE_SS, MODE_FA, "firemode");
+        CLAMP_WEAPON_VALUE(GET_WEAPON_FULL_AUTO_COUNT(obj), 0, 10, "full auto count");
         
         int attach_rnum;
         
