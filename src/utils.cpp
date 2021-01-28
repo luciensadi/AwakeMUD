@@ -515,7 +515,13 @@ int return_general(int skill_num)
 char *capitalize(const char *source)
 {
   static char dest[MAX_STRING_LENGTH];
-  strlcpy(dest, source, sizeof(dest));
+  if (source)
+    strlcpy(dest, source, sizeof(dest));
+  else {
+    strlcpy(dest, "(Error)", sizeof(dest));
+    mudlog("SYSERR: Received NULL string to capitalize().", NULL, LOG_SYSLOG, TRUE);
+    return dest;
+  }
   
   int len = strlen(source);
   int index = 0;
@@ -912,9 +918,8 @@ void sprint_obj_mods(struct obj_data *obj, char *result, size_t result_size)
   if (obj->obj_flags.bitvector.GetNumSet() > 0)
   {
     char xbuf[MAX_STRING_LENGTH];
-    obj->obj_flags.bitvector.PrintBits(xbuf, MAX_STRING_LENGTH,
-                                       affected_bits, AFF_MAX);
-    snprintf(result, result_size, "%s %s", result, xbuf);
+    obj->obj_flags.bitvector.PrintBits(xbuf, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
+    strlcpy(result, xbuf, result_size);
   }
   
   for (int i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -922,8 +927,8 @@ void sprint_obj_mods(struct obj_data *obj, char *result, size_t result_size)
     {
       char xbuf[MAX_STRING_LENGTH];
       sprinttype(obj->affected[i].location, apply_types, xbuf, sizeof(xbuf));
-      snprintf(result, result_size, "%s (%+d %s)",
-              result, obj->affected[i].modifier, xbuf);
+      snprintf(ENDOF(result), result_size - strlen(result), " (%+d %s)",
+               obj->affected[i].modifier, xbuf);
     }
   return;
 }

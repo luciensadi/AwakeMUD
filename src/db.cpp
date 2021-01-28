@@ -769,6 +769,9 @@ void index_boot(int mode)
     obj_proto = new struct obj_data[rec_count + obj_chunk_size];
     memset((char *) obj_proto, 0, (sizeof(struct obj_data) *
                                    (rec_count + obj_chunk_size)));
+                                   
+    for (int i = 0; i < rec_count + obj_chunk_size; i++)
+      obj_proto[i].canary = CANARY_VALUE;
 
     obj_index = new struct index_data[rec_count + obj_chunk_size];
     memset((char *) obj_index, 0, (sizeof(struct index_data) *
@@ -1399,6 +1402,10 @@ void renum_world(void)
 #define ZCMD zone_table[zone].cmd[cmd_no]
 
 bool can_load_this_thing_in_zone_commands(DBIndex::rnum_t rnum, int zone, int cmd_no) {
+  if (rnum < 0) {
+    log_zone_error(zone, cmd_no, "Negative rnum.");
+    return FALSE;
+  }
   if (GET_OBJ_TYPE(&obj_proto[rnum]) == ITEM_MONEY) {
     // Zoneloading money is forbidden.
     log_zone_error(zone, cmd_no, "Money cannot be loaded in zone commands.");

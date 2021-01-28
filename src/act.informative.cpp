@@ -344,9 +344,22 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
 void list_veh_to_char(struct veh_data * list, struct char_data * ch)
 {
   struct veh_data *i;
-  for (i = list; i; i = i->next_veh)
+  for (i = list; i; i = i->next_veh) {
     if (ch->in_veh != i && ch->char_specials.rigging != i)
       show_veh_to_char(i, ch);
+    
+    if (i == i->next_veh) {
+      char errbuf[1000];
+      snprintf(errbuf, sizeof(errbuf), "SYSERR: Infinite loop in list_veh_to_char for %s (%ld) at %s (%ld). Breaking the list.",
+               GET_VEH_NAME(i),
+               i->veh_number,
+               GET_ROOM_NAME(get_veh_in_room(i)),
+               GET_ROOM_VNUM(get_veh_in_room(i)));
+      i->next = NULL;
+      mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+      break;
+    }
+  }
 }
 
 #define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
