@@ -2086,13 +2086,13 @@ void auto_repair_obj(struct obj_data *obj) {
         int prior_data;
         
         // We perform extensive clamping and checks on weapons due to prior issues with corrupted weapon data.
-        #define CLAMP_WEAPON_VALUE(field, minv, maxv, fieldname)                                                  \
-        prior_data = (field);                                                                                     \
-        (field) = MIN((maxv), MAX((minv), (field)));                                                              \
-        if (prior_data != (field)) {                                                                              \
-          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #fieldname " was %d.",    \
-                   GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), prior_data);                                             \
-          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                         \
+        #define CLAMP_WEAPON_VALUE(field, minv, maxv, fieldname)                                                        \
+        prior_data = (field);                                                                                           \
+        (field) = MIN((maxv), MAX((minv), (field)));                                                                    \
+        if (prior_data != (field)) {                                                                                    \
+          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose " #fieldname " was %d (now %d).", \
+                   GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), prior_data, field);                                            \
+          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                               \
         }
         
         #define FORCE_PROTO_VALUE(value, proto_value)                                                                   \
@@ -2115,37 +2115,39 @@ void auto_repair_obj(struct obj_data *obj) {
         FORCE_PROTO_VALUE(GET_WEAPON_STR_BONUS(obj), GET_WEAPON_STR_BONUS(&obj_proto[rnum]));
         FORCE_PROTO_VALUE(GET_WEAPON_ATTACK_TYPE(obj), GET_WEAPON_ATTACK_TYPE(&obj_proto[rnum]));
         FORCE_PROTO_VALUE(GET_WEAPON_SKILL(obj), GET_WEAPON_SKILL(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_MAX_AMMO(obj), GET_WEAPON_MAX_AMMO(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_REACH(obj), GET_WEAPON_REACH(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_POSSIBLE_FIREMODES(obj), GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[rnum]));
-        // FORCE_PROTO_VALUE(GET_WEAPON_FIREMODE(obj), GET_WEAPON_FIREMODE(&obj_proto[rnum]));
-        FORCE_PROTO_VALUE(GET_WEAPON_INTEGRAL_RECOIL_COMP(obj), GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[rnum]));
-        // FORCE_PROTO_VALUE(GET_WEAPON_FULL_AUTO_COUNT(obj), GET_WEAPON_FULL_AUTO_COUNT(&obj_proto[rnum]));
         
-        CLAMP_WEAPON_VALUE(GET_WEAPON_FIREMODE(obj), MODE_SS, MODE_FA, "firemode");
-        CLAMP_WEAPON_VALUE(GET_WEAPON_FULL_AUTO_COUNT(obj), 0, 10, "full auto count");
-        
-        int attach_rnum;
-        
-        if (GET_WEAPON_ATTACH_TOP_VNUM(obj) != 0) {
-          attach_rnum = real_object(GET_WEAPON_ATTACH_TOP_VNUM(obj));
-          if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
-            FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_TOP_VNUM(obj), GET_WEAPON_ATTACH_TOP_VNUM(&obj_proto[rnum]));
+        if (IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
+          FORCE_PROTO_VALUE(GET_WEAPON_MAX_AMMO(obj), GET_WEAPON_MAX_AMMO(&obj_proto[rnum]));
+          FORCE_PROTO_VALUE(GET_WEAPON_POSSIBLE_FIREMODES(obj), GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[rnum]));
+          FORCE_PROTO_VALUE(GET_WEAPON_INTEGRAL_RECOIL_COMP(obj), GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[rnum]));
+          
+          CLAMP_WEAPON_VALUE(GET_WEAPON_FIREMODE(obj), MODE_SS, MODE_FA, "firemode");
+          CLAMP_WEAPON_VALUE(GET_WEAPON_FULL_AUTO_COUNT(obj), 0, 10, "full auto count");
+          
+          int attach_rnum;
+          
+          if (GET_WEAPON_ATTACH_TOP_VNUM(obj) != 0) {
+            attach_rnum = real_object(GET_WEAPON_ATTACH_TOP_VNUM(obj));
+            if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
+              FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_TOP_VNUM(obj), GET_WEAPON_ATTACH_TOP_VNUM(&obj_proto[rnum]));
+            }
           }
-        }
-        
-        if (GET_WEAPON_ATTACH_BARREL_VNUM(obj) != 0) {
-          attach_rnum = real_object(GET_WEAPON_ATTACH_BARREL_VNUM(obj));
-          if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
-            FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_BARREL_VNUM(obj), GET_WEAPON_ATTACH_BARREL_VNUM(&obj_proto[rnum]));
+          
+          if (GET_WEAPON_ATTACH_BARREL_VNUM(obj) != 0) {
+            attach_rnum = real_object(GET_WEAPON_ATTACH_BARREL_VNUM(obj));
+            if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
+              FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_BARREL_VNUM(obj), GET_WEAPON_ATTACH_BARREL_VNUM(&obj_proto[rnum]));
+            }
           }
-        }
-        
-        if (GET_WEAPON_ATTACH_UNDER_VNUM(obj) != 0) {
-          attach_rnum = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(obj));
-          if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
-            FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_UNDER_VNUM(obj), GET_WEAPON_ATTACH_UNDER_VNUM(&obj_proto[rnum]));
+          
+          if (GET_WEAPON_ATTACH_UNDER_VNUM(obj) != 0) {
+            attach_rnum = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(obj));
+            if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
+              FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_UNDER_VNUM(obj), GET_WEAPON_ATTACH_UNDER_VNUM(&obj_proto[rnum]));
+            }
           }
+        } else {
+          FORCE_PROTO_VALUE(GET_WEAPON_REACH(obj), GET_WEAPON_REACH(&obj_proto[rnum]));
         }
       }
     break;
