@@ -683,6 +683,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
         else if (GET_OBJ_VAL(obj, 2) == 4 && GET_OBJ_VAL(obj, 7))
           GET_OBJ_VAL(obj, 9) = 1;
         inside = atoi(row[17]);
+        
+        auto_repair_obj(obj);
+        
         if (inside > 0) {
           if (inside == last_in)
             last_obj = last_obj->in_obj;
@@ -767,6 +770,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
         
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);
+        
+        auto_repair_obj(obj);
+        
         if (inside > 0) {
           if (inside == last_in)
             last_obj = last_obj->in_obj;
@@ -847,6 +853,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
         
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
+        
+        auto_repair_obj(obj);
+        
         if (inside > 0) {
           if (inside == last_in)
             last_obj = last_obj->in_obj;
@@ -2051,11 +2060,14 @@ void auto_repair_obj(struct obj_data *obj) {
     auto_repair_obj(contents);
   }
   
+  
+  int rnum, old_storage;
+  
   // Now that any changes have bubbled up, rectify this object too.
   switch(GET_OBJ_TYPE(obj)) {
     case ITEM_CYBERDECK:
       // Rectify the memory.
-      int old_storage = GET_CYBERDECK_USED_STORAGE(obj);
+      old_storage = GET_CYBERDECK_USED_STORAGE(obj);
       GET_CYBERDECK_USED_STORAGE(obj) = 0;
       for (struct obj_data *installed = obj->contains; installed; installed = installed->next_content) {
         GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
@@ -2069,6 +2081,68 @@ void auto_repair_obj(struct obj_data *obj) {
         mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
       }
       break;
+    case ITEM_WEAPON:
+      {
+        // We perform extensive clamping and checks on weapons due to prior issues with corrupted weapon data.
+        #define CLAMP_WEAPON_VALUE(field, minv, maxv, fieldname)                                                  \
+        prior_data = (field);                                                                                     \
+        (field) = MIN((maxv), MAX((minv), (field)));                                                              \
+        if (prior_data != (field)) {                                                                              \
+          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose ## (fieldname) ## was %d.", \
+                   GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), prior_data);                                             \
+          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                         \
+        }
+        
+        #define FORCE_PROTO_VALUE(value, proto_value)                                                                   \
+        if (proto_value != value) {                                                                                     \
+          snprintf(buf, sizeof(buf), "INFO: System self-healed weapon %s (%ld), whose ## value ## was %d (becomes %d)", \
+                   GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), value, proto_value);                                           \
+          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                               \
+        }
+        
+        rnum = real_object(GET_OBJ_VNUM(obj));
+        
+        if (rnum < 0) {
+          mudlog("SYSERR: Received INVALID rnum when loading object!", NULL, LOG_SYSLOG, TRUE);
+          return;
+        }
+        
+        FORCE_PROTO_VALUE(GET_WEAPON_POWER(obj), GET_WEAPON_POWER(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_DAMAGE_CODE(obj), GET_WEAPON_DAMAGE_CODE(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_STR_BONUS(obj), GET_WEAPON_STR_BONUS(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_ATTACK_TYPE(obj), GET_WEAPON_ATTACK_TYPE(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_SKILL(obj), GET_WEAPON_SKILL(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_MAX_AMMO(obj), GET_WEAPON_MAX_AMMO(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_REACH(obj), GET_WEAPON_REACH(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_POSSIBLE_FIREMODES(obj), GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_FIREMODE(obj), GET_WEAPON_FIREMODE(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_INTEGRAL_RECOIL_COMP(obj), GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE(GET_WEAPON_FULL_AUTO_COUNT(obj), GET_WEAPON_FULL_AUTO_COUNT(&obj_proto[rnum]));
+        
+        int attach_rnum;
+        
+        if (GET_WEAPON_ATTACH_TOP_VNUM(obj) != 0) {
+          attach_rnum = real_object(GET_WEAPON_ATTACH_TOP_VNUM(obj));
+          if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
+            FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_TOP_VNUM(obj), GET_WEAPON_ATTACH_TOP_VNUM(&obj_proto[rnum]));
+          }
+        }
+        
+        if (GET_WEAPON_ATTACH_BARREL_VNUM(obj) != 0) {
+          attach_rnum = real_object(GET_WEAPON_ATTACH_BARREL_VNUM(obj));
+          if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
+            FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_BARREL_VNUM(obj), GET_WEAPON_ATTACH_BARREL_VNUM(&obj_proto[rnum]));
+          }
+        }
+        
+        if (GET_WEAPON_ATTACH_UNDER_VNUM(obj) != 0) {
+          attach_rnum = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(obj));
+          if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
+            FORCE_PROTO_VALUE(GET_WEAPON_ATTACH_UNDER_VNUM(obj), GET_WEAPON_ATTACH_UNDER_VNUM(&obj_proto[rnum]));
+          }
+        }
+      }
+    break;
   }
 }
 
