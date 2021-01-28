@@ -860,8 +860,8 @@ struct descriptor_data
   // this is for spell creation
 
   descriptor_data() :
-      showstr_head(NULL), showstr_point(NULL), str(NULL), inbuf_canary(31337),
-      last_input_canary(31337), small_outbuf_canary(31337),
+      showstr_head(NULL), showstr_point(NULL), str(NULL), inbuf_canary(CANARY_VALUE),
+      last_input_canary(CANARY_VALUE), small_outbuf_canary(CANARY_VALUE),
       output(NULL), large_outbuf(NULL), character(NULL), original(NULL), snooping(NULL),
       snoop_by(NULL), next(NULL), invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),

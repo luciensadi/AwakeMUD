@@ -763,6 +763,9 @@ void index_boot(int mode)
     obj_proto = new struct obj_data[rec_count + obj_chunk_size];
     memset((char *) obj_proto, 0, (sizeof(struct obj_data) *
                                    (rec_count + obj_chunk_size)));
+                                   
+    for (int i = 0; i < rec_count + obj_chunk_size; i++)
+      obj_proto[i].canary = CANARY_VALUE;
 
     obj_index = new struct index_data[rec_count + obj_chunk_size];
     memset((char *) obj_index, 0, (sizeof(struct index_data) *

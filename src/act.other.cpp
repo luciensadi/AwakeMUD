@@ -1472,8 +1472,9 @@ ACMD(do_reload)
       ammo = get_mount_ammo(m);
       
       for (i = ch->carrying; i; i = i->next_content) {
-        if (GET_OBJ_TYPE(i) == ITEM_GUN_AMMO &&
-            GET_AMMOBOX_WEAPON(i) == GET_WEAPON_ATTACK_TYPE(gun)) {
+        if (GET_OBJ_TYPE(i) == ITEM_GUN_AMMO
+            && GET_AMMOBOX_WEAPON(i) == GET_WEAPON_ATTACK_TYPE(gun)
+            && GET_AMMOBOX_QUANTITY(i) > 0) {
           int max = GET_WEAPON_MAX_AMMO(gun) * 2;   
           
           // Reload an ammo box directly.

@@ -82,6 +82,8 @@ void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info);
 
+void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, const char *section);
+
 #ifdef LOG_COMMANDS
 void log_command(struct char_data *ch, const char *argument, const char *tcname);
 #endif
@@ -1479,8 +1481,13 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       if (ch->persona && ch->persona->decker->hitcher) {
         send_to_char(ch->persona->decker->hitcher, "^y<OUTGOING> %s^n\r\n", argument);
       }
-      if (!special(ch, cmd, line))
+      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "pre-matrix");
+      if (!special(ch, cmd, line)) {
         ((*mtx_info[cmd].command_pointer) (ch, line, cmd, mtx_info[cmd].subcmd));
+        verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "matrix");
+      } else {
+        verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "matrix special");
+      }
     }
   } else if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))
   {
@@ -1493,8 +1500,13 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     } else {
       ch->desc->invalid_command_counter = 0;
     }
-    if (!special(ch, cmd, line))
+    verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "pre-rig");
+    if (!special(ch, cmd, line)) {
       ((*rig_info[cmd].command_pointer) (ch, line, cmd, rig_info[cmd].subcmd));
+      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "rig");
+    } else {
+      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "rig special");
+    }
   } else
   {
     for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
@@ -1585,8 +1597,14 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       return;
     }
     
-    if (no_specials || !special(ch, cmd, line))
+    verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "pre-command");
+    
+    if (no_specials || !special(ch, cmd, line)) {
       ((*cmd_info[cmd].command_pointer) (ch, line, cmd, cmd_info[cmd].subcmd));
+      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "command");
+    } else {
+      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "command special");
+    }
   }
 }
 

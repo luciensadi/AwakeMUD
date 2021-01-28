@@ -18,6 +18,24 @@
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
 
+// We're looking to verify that everything is kosher. Validate canaries, etc.
+void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, const char *section) {
+  // Called by a character doing something.
+  if (ch) {
+    // Check character's canaries.
+    
+    
+    // Check their gear's canaries.
+    
+    // Check their descriptor's canaries.
+  }
+  
+  // Called on a tick. This is a more thorough validation. If it fails, we know to look at the command logs in the last while.
+  else {
+    
+  }
+}
+
 void do_pgroup_debug(struct char_data *ch, char *argument) {
   static char arg1[MAX_INPUT_LENGTH];
   static char arg2[MAX_INPUT_LENGTH];
