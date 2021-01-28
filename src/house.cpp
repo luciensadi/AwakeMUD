@@ -183,7 +183,7 @@ bool House_load(struct house_control_rec *house)
         if (inside == last_in)
           last_obj = last_obj->in_obj;
         else if (inside < last_in)
-          while (inside <= last_in) {
+          while (inside <= last_in && last_obj) {
             last_obj = last_obj->in_obj;
             last_in--;
           }

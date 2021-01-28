@@ -843,6 +843,7 @@ void assign_objects(void)
   #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(70605, desktop);
   ASSIGNOBJ(10036, restoration_button);
+  ASSIGNOBJ(39799, bank);
   #endif
   
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);

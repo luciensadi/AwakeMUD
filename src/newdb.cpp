@@ -690,7 +690,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           if (inside == last_in)
             last_obj = last_obj->in_obj;
           else if (inside < last_in)
-            while (inside <= last_in) {
+            while (inside <= last_in && last_obj) {
               last_obj = last_obj->in_obj;
               last_in--;
             }
@@ -777,7 +777,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           if (inside == last_in)
             last_obj = last_obj->in_obj;
           else if (inside < last_in)
-            while (inside <= last_in) {
+            while (inside <= last_in && last_obj) {
               last_obj = last_obj->in_obj;
               last_in--;
             }
@@ -860,7 +860,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           if (inside == last_in)
             last_obj = last_obj->in_obj;
           else if (inside < last_in)
-            while (inside <= last_in) {
+            while (inside <= last_in && last_obj) {
               last_obj = last_obj->in_obj;
               last_in--;
             }
