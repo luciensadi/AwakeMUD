@@ -682,7 +682,7 @@ ACMD(do_new_echo) {
   }
   
   // Only questors and staff can echo without their names.
-  bool can_echo_without_name = access_level(ch, LVL_BUILDER) || PRF_FLAGGED(ch, PRF_QUESTOR);
+  bool must_echo_with_name = !(access_level(ch, LVL_BUILDER) || PRF_FLAGGED(ch, PRF_QUESTOR));
   
   // All checks done, we're clear to emote.  
   
@@ -696,7 +696,7 @@ ACMD(do_new_echo) {
     
     // If the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
     if (subcmd != SCMD_AECHO || (IS_ASTRAL(viewer) || IS_DUAL(viewer)))
-      send_echo_to_char(ch, viewer, argument, can_echo_without_name);
+      send_echo_to_char(ch, viewer, argument, must_echo_with_name);
   }
 }
 
