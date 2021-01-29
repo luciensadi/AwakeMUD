@@ -1216,6 +1216,10 @@ void mobile_activity(void)
                 break;
               }
               
+              // No shooting into peaceful rooms.
+              if (ROOM_FLAGGED(current_room, ROOM_PEACEFUL))
+                continue;
+              
               // Aggro sniper.
               if ((has_acted = mobact_process_aggro(ch, current_room))) {
                 break;
