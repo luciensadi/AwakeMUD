@@ -1733,10 +1733,12 @@ ACMD(do_download)
         success -= GET_OBJ_VAL(soft, 6);
       if (success > 0) {
         if (GET_DECK_ACCESSORY_FILE_PROTECTION(soft) == FILE_PROTECTION_SCRAMBLED
-            && GET_OBJ_TYPE(soft) != ITEM_PROGRAM) {
+            && GET_OBJ_TYPE(soft) != ITEM_PROGRAM) 
+        {
           send_to_icon(PERSONA, "A Scramble IC blocks your attempts to download the file.\r\n");
         } else if (GET_OBJ_VAL(soft, 5) > FILE_PROTECTION_SCRAMBLED // file bomb
-          && GET_OBJ_TYPE(soft) != ITEM_PROGRAM) {
+                   && GET_OBJ_TYPE(soft) != ITEM_PROGRAM) 
+        {
           int power = GET_DECK_ACCESSORY_FILE_RATING(soft);
           for (struct obj_data *prog = DECKER->software; prog; prog = prog->next_content)
             if (GET_OBJ_VAL(prog, 0) == SOFT_ARMOR) {

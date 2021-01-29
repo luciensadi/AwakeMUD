@@ -6606,6 +6606,52 @@ ACMD(do_audit) {
   zonenum = real_zone(number);
   
   if (zonenum == 0) {
+    if (!str_cmp(arg1, "rooms")) {
+      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
+        audit_zone_rooms(ch, zonenum, TRUE);
+      return;
+    }
+    else if (!str_cmp(arg1, "mobs")) {
+      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
+        audit_zone_mobs(ch, zonenum, TRUE);
+      return;
+    }
+    else if (!str_cmp(arg1, "objs")) {
+      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
+        audit_zone_objects(ch, zonenum, TRUE);
+      return;
+    }
+    else if (!str_cmp(arg1, "quests") || !str_cmp(arg1, "jobs")) {
+      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
+        audit_zone_quests(ch, zonenum, TRUE);
+      return;
+    }
+    else if (!str_cmp(arg1, "shops")) {
+      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
+        audit_zone_shops(ch, zonenum, TRUE);
+      return;
+    }
+    else if (!str_cmp(arg1, "vehs") || !str_cmp(arg1, "vehicles")) {
+      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
+        audit_zone_vehicles(ch, zonenum, TRUE);
+      return;
+    }
+    else if (!str_cmp(arg1, "hosts")) {
+      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
+        audit_zone_hosts(ch, zonenum, TRUE);
+      return;
+    }
+    else if (!str_cmp(arg1, "ics")) {
+      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
+        audit_zone_ics(ch, zonenum, TRUE);
+      return;
+    }
+    else if (!str_cmp(arg1, "commands") || !str_cmp(arg1, "cmds")) {
+      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
+        audit_zone_commands(ch, zonenum, TRUE);
+      return;
+    }
+    
     send_to_char("That's not a valid zone number.\r\n", ch);
     return;
   }

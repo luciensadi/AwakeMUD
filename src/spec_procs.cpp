@@ -3985,9 +3985,12 @@ SPECIAL(multnomah_gate) {
 SPECIAL(multnomah_guard)
 {
   if (cmd && CMD_IS("show")) {
-    skip_spaces(&argument);
+    strlcpy(buf, argument, sizeof(buf));
+    char *no_seriously_fuck_pointers = buf;
+    skip_spaces(&no_seriously_fuck_pointers);
+    any_one_arg(buf, buf2);
     struct char_data *guard = (struct char_data *) me;
-    struct obj_data *visa = get_obj_in_list_vis(ch, argument, ch->carrying);
+    struct obj_data *visa = get_obj_in_list_vis(ch, buf2, ch->carrying);
     if (visa && GET_OBJ_VNUM(visa) == OBJ_MULTNOMAH_VISA) {
       if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
         PLR_FLAGS(ch).SetBit(PLR_VISA);
@@ -3999,7 +4002,7 @@ SPECIAL(multnomah_guard)
         do_say(guard, arg, 0, SCMD_SAYTO);
       }
       return TRUE;
-    } else return FALSE;
+    }
   }
   return FALSE;
 }

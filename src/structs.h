@@ -1144,8 +1144,17 @@ struct combat_data
                      && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) 
                      && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
                          && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
-    if (weapon_is_gun)
-      magazine = weapon->contains;
+                         
+    if (weapon_is_gun) {
+      /* if (PLR_FLAGGED(att->ch, PLR_REMOTE) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_MANNING))
+        magazine = get_mount_ammo(get_mount_manned_by_ch(att->ch));
+        
+        // TODO asdf this needs to be fixed, it has no way to handle a rigged veh with multiple mounts in it
+        */
+      
+      if (!magazine)
+        magazine = weapon->contains;
+    }
     
     if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
       weapon_skill = SKILL_GUNNERY;

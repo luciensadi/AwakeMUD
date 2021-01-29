@@ -23,6 +23,8 @@
 
 extern void ammo_build(struct char_data *ch, struct obj_data *obj);
 
+ACMD_DECLARE(do_sit);
+
 bool part_can_have_its_rating_set(struct obj_data *part) {
   switch (GET_PART_TYPE(part)) {
     case PART_RESPONSE:
@@ -488,8 +490,11 @@ ACMD(do_build) {
       return;
     }
     if (GET_POS(ch) > POS_SITTING) {
+      do_sit(ch, NULL, 0, 0);
+      if (GET_POS(ch) > POS_SITTING) {
         send_to_char(ch, "You have to be sitting to do that.\r\n");
         return;
+      }
     }
     if (IS_WORKING(ch)) {
         send_to_char(TOOBUSY, ch);

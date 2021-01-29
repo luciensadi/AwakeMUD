@@ -756,38 +756,6 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
   return TRUE;
 }
 
-/*
-const char *generate_random_lexicon_sentence(int language_skill, int length) {
-  static char message_buf[MAX_STRING_LENGTH];
-  *message_buf = '\0';
-  
-  bool need_caps = FALSE;
-  while ((int) strlen(message_buf) < length) {
-    if (!(*message_buf))
-      need_caps = TRUE;
-    else {
-      need_caps = FALSE;
-      
-      if (!number(0, 10))
-        strlcat(message_buf, (need_caps = number(0,2)) ? ". " : ", ", sizeof(message_buf));
-      else 
-        strlcat(message_buf, " ", sizeof(message_buf));
-    }
-    
-    if (need_caps) {
-      strlcat(message_buf, capitalize(get_random_word_from_lexicon(language_skill)), sizeof(message_buf));
-    } else {
-      strlcat(message_buf, get_random_word_from_lexicon(language_skill), sizeof(message_buf));
-    }
-  }
-  
-  // We specifically do not want to end in a period.
-  // strlcat(message_buf, ".", sizeof(message_buf));
-    
-  return message_buf;
-}
-*/
-
 // When listening, you get too-long words replaced with random ones.
 // Known bug: 'Sentence. Non-name sentence' will lose non-name.
 const char *replace_too_long_words(struct char_data *ch, struct char_data *speaker, const char *message, int language_skill, const char *terminal_code) {
@@ -840,6 +808,7 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
   bool need_caps = FALSE;
   for (char *ptr = replaced_message; ptr && (ptr - replaced_message) <= (int) strlen(replaced_message); ptr++) {
     random_word = NULL;
+    need_caps = FALSE;
     // send_to_char(ch, "^y%c^n", *ptr);
     
     // We only care about characters commonly found in words.
