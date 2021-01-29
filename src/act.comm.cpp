@@ -115,7 +115,7 @@ ACMD(do_say)
     
   if (subcmd == SCMD_OSAY) {
     // No color highlights for osay.
-    snprintf(buf, sizeof(buf), "%s^n says ^mOOCly^n, \"%s^n\"\r\n",GET_NAME(ch), capitalize(argument));
+    snprintf(buf, sizeof(buf), "$n^n says ^mOOCly^n, \"%s^n\"\r\n", capitalize(argument));
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
