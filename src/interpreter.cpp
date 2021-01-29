@@ -3020,9 +3020,17 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   
   // Extract location.
   char location_buf[500];
-  if (PLR_FLAGGED(ch, PLR_MATRIX))
-    snprintf(location_buf, sizeof(location_buf), "mtx %ld", matrix[ch->persona->in_host].vnum);
-  else if (ch->in_room)
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    strlcpy(location_buf, "hitching unknown", sizeof(location_buf));
+    
+    if (ch->persona && ch->persona->in_host)
+      snprintf(location_buf, sizeof(location_buf), "mtx %ld", matrix[ch->persona->in_host].vnum);
+    else if (get_ch_in_room(ch)) {
+      for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room)
+        if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX))
+          snprintf(location_buf, sizeof(location_buf), "hitching %s", GET_CHAR_NAME(targ));
+    }
+  } else if (ch->in_room)
     snprintf(location_buf, sizeof(location_buf), "%ld", GET_ROOM_VNUM(ch->in_room));
   else if (ch->in_veh)
     snprintf(location_buf, sizeof(location_buf), "veh #%ld (%ld)", ch->in_veh->idnum, GET_VEH_VNUM(ch->in_veh));
