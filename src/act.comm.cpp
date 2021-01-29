@@ -56,7 +56,7 @@ ACMD(do_say)
   
   FAILURE_CASE(!*argument, "Yes, but WHAT do you want to say?");
   
-  FAILURE_CASE(subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !char_can_make_noise(ch),
+  FAILURE_CASE(subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !IS_NPC(ch) && !char_can_make_noise(ch),
                "You can't seem to make any noise.");
                
   FAILURE_CASE(AFF_FLAGGED(ch, AFF_RIG), "You have no mouth.");
