@@ -1050,14 +1050,16 @@ void char_from_room(struct char_data * ch)
     ch->in_room = NULL;
     ch->next_in_room = NULL;
     CHAR_X(ch) = CHAR_Y(ch) = 0;
-  } else  {
+  }
+  
+  if (ch->in_veh) {
     // Character is in a vehicle. Remove them from it.
     REMOVE_FROM_LIST(ch, ch->in_veh->people, next_in_veh);
     stop_manning_weapon_mounts(ch, TRUE);
     ch->in_veh->seating[ch->vfront]++;
     ch->in_veh = NULL;
     ch->next_in_veh = NULL;
-    AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
+    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
   }
 }
 

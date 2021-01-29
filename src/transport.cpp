@@ -338,27 +338,55 @@ SPECIAL(taxi_sign) {
 // utility funcs
 // ______________________________
 
+void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b) {  
+  if (!world[rnum_a].dir_option[dir_a]) {
+    world[rnum_a].dir_option[dir_a] = new room_direction_data;
+    memset((char *) world[rnum_a].dir_option[dir_a], 0,
+           sizeof(struct room_direction_data));
+    world[rnum_a].dir_option[dir_a]->to_room = &world[rnum_b];
+    world[rnum_a].dir_option[dir_a]->to_room_vnum = world[rnum_b].number;
+    world[rnum_a].dir_option[dir_a]->barrier = 8;
+    world[rnum_a].dir_option[dir_a]->condition = 8;
+    world[rnum_a].dir_option[dir_a]->material = 8;
+#ifdef USE_DEBUG_CANARIES
+    world[rnum_a].dir_option[dir_a]->canary = CANARY_VALUE;
+#endif
+  }
+  if (!world[rnum_b].dir_option[dir_b]) {
+    world[rnum_b].dir_option[dir_b] = new room_direction_data;
+    memset((char *) world[rnum_b].dir_option[dir_b], 0,
+           sizeof(struct room_direction_data));
+    world[rnum_b].dir_option[dir_b]->to_room = &world[rnum_a];
+    world[rnum_b].dir_option[dir_b]->to_room_vnum = world[rnum_a].number;
+    world[rnum_b].dir_option[dir_b]->barrier = 8;
+    world[rnum_b].dir_option[dir_b]->condition = 8;
+    world[rnum_b].dir_option[dir_b]->material = 8;
+#ifdef USE_DEBUG_CANARIES
+    world[rnum_b].dir_option[dir_b]->canary = CANARY_VALUE;
+#endif
+  }
+}
+
+void delete_exit(int bus, int to) {
+  if (world[bus].dir_option[to]->keyword)
+    delete [] world[bus].dir_option[to]->keyword;
+    
+  if (world[bus].dir_option[to]->general_description)
+    delete [] world[bus].dir_option[to]->general_description;
+    
+  delete world[bus].dir_option[to];
+  
+  world[bus].dir_option[to] = NULL;
+}
+
+void delete_linked_exit(int bus, int to, int room, int from) {
+  delete_exit(bus, to);
+  delete_exit(room, from);
+}
+
 void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi, sbyte rating=0)
 {
-  room->dir_option[dir] = new room_direction_data;
-  memset((char *) room->dir_option[dir], 0,
-         sizeof (struct room_direction_data));
-  room->dir_option[dir]->to_room = &world[real_room(taxi->number)];
-  room->dir_option[dir]->barrier = 8;
-  room->dir_option[dir]->condition = 8;
-  room->dir_option[dir]->material = 8;
-  room->dir_option[dir]->canary = CANARY_VALUE;
-
-  dir = rev_dir[dir];
-
-  taxi->dir_option[dir] = new room_direction_data;
-  memset((char *) taxi->dir_option[dir], 0,
-         sizeof (struct room_direction_data));
-  taxi->dir_option[dir]->to_room = &world[real_room(room->number)];
-  taxi->dir_option[dir]->barrier = 8;
-  taxi->dir_option[dir]->condition = 8;
-  taxi->dir_option[dir]->material = 8;
-  taxi->dir_option[dir]->canary = CANARY_VALUE;
+  create_linked_exit(real_room(GET_ROOM_VNUM(room)), dir, real_room(GET_ROOM_VNUM(taxi)), rev_dir[dir]);
   
   // Optionally set the taxi's room rating so it waits a few ticks before trying to drive off again.
   taxi->rating = rating;
@@ -1729,32 +1757,8 @@ void EscalatorProcess(void)
 
 static void open_doors(int car, int to, int room, int from)
 {
-  if (!world[car].dir_option[to]) {
-    world[car].dir_option[to] = new room_direction_data;
-    memset((char *) world[car].dir_option[to], 0,
-           sizeof(struct room_direction_data));
-    world[car].dir_option[to]->to_room = &world[room];
-    world[car].dir_option[to]->to_room_vnum = world[room].number;
-    world[car].dir_option[to]->barrier = 8;
-    world[car].dir_option[to]->condition = 8;
-    world[car].dir_option[to]->material = 8;
-#ifdef USE_DEBUG_CANARIES
-    world[car].dir_option[to]->canary = CANARY_VALUE;
-#endif
-  }
-  if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
-    memset((char *) world[room].dir_option[from], 0,
-           sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = &world[car];
-    world[room].dir_option[from]->to_room_vnum = world[car].number;
-    world[room].dir_option[from]->barrier = 8;
-    world[room].dir_option[from]->condition = 8;
-    world[room].dir_option[from]->material = 8;
-#ifdef USE_DEBUG_CANARIES
-    world[room].dir_option[from]->canary = CANARY_VALUE;
-#endif
-  }
+  create_linked_exit(car, to, room, from);
+
   snprintf(buf, sizeof(buf), "The monorail stops and the doors open to %s.\r\n", thedirs[to]);
   send_to_room(buf, &world[car]);
   snprintf(buf, sizeof(buf), "The monorail stops and the doors open to %s.\r\n", thedirs[from]);
@@ -1770,12 +1774,7 @@ static void close_doors(int car, int to, int room, int from)
     snprintf(buf, sizeof(buf), "SYSERR: There is no %s exit from car %ld, close_doors() would have crashed.", dirs[to], GET_ROOM_VNUM(&world[car]));
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   } else {
-    if (world[car].dir_option[to]->keyword)
-      delete [] world[car].dir_option[to]->keyword;
-    if (world[car].dir_option[to]->general_description)
-      delete [] world[car].dir_option[to]->general_description;
-    delete world[car].dir_option[to];
-    world[car].dir_option[to] = NULL;
+    delete_exit(car, to);
     send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[car]);
   }
 
@@ -1786,12 +1785,7 @@ static void close_doors(int car, int to, int room, int from)
     snprintf(buf, sizeof(buf), "SYSERR: There is no %s exit from room %ld, close_doors() would have crashed.", dirs[from], GET_ROOM_VNUM(&world[room]));
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   } else {
-    if (world[room].dir_option[from]->keyword)
-      delete [] world[room].dir_option[from]->keyword;
-    if (world[room].dir_option[from]->general_description)
-      delete [] world[room].dir_option[from]->general_description;
-    delete world[room].dir_option[from];
-    world[room].dir_option[from] = NULL;
+    delete_exit(room, from);
     send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[room]);
   }
 }
@@ -1885,28 +1879,8 @@ void extend_walkway_st(int ferry, int to, int room, int from)
   assert(ferry > 0);
   assert(room > 0);
   
-  if (!world[ferry].dir_option[to]) {
-    world[ferry].dir_option[to] = new room_direction_data;
-    memset((char *) world[ferry].dir_option[to], 0,
-           sizeof(struct room_direction_data));
-    world[ferry].dir_option[to]->to_room = &world[room];
-    world[ferry].dir_option[to]->to_room_vnum = world[room].number;
-    world[ferry].dir_option[to]->barrier = 8;
-    world[ferry].dir_option[to]->condition = 8;
-    world[ferry].dir_option[to]->material = 8;
-    world[ferry].dir_option[to]->canary = CANARY_VALUE;
-  }
-  if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
-    memset((char *) world[room].dir_option[from], 0,
-           sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = &world[ferry];
-    world[room].dir_option[from]->to_room_vnum = world[ferry].number;
-    world[room].dir_option[from]->barrier = 8;
-    world[room].dir_option[from]->condition = 8;
-    world[room].dir_option[from]->material = 8;
-    world[room].dir_option[from]->canary = CANARY_VALUE;
-  }
+  create_linked_exit(ferry, to, room, from);
+  
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[ferry]);
 }
@@ -1915,18 +1889,8 @@ void contract_walkway_st(int ferry, int to, int room, int from)
   assert(ferry > 0);
   assert(room > 0);
 
-  if (world[ferry].dir_option[to]->keyword)
-    delete [] world[ferry].dir_option[to]->keyword;
-  if (world[ferry].dir_option[to]->general_description)
-    delete [] world[ferry].dir_option[to]->general_description;
-  delete world[ferry].dir_option[to];
-  world[ferry].dir_option[to] = NULL;
-  if (world[room].dir_option[from]->keyword)
-    delete [] world[room].dir_option[from]->keyword;
-  if (world[room].dir_option[from]->general_description)
-    delete [] world[room].dir_option[from]->general_description;
-  delete world[room].dir_option[from];
-  world[room].dir_option[from] = NULL;
+  delete_linked_exit(ferry, to, room, from);
+  
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
@@ -1991,46 +1955,16 @@ struct transport_type hellhound[2] =
 
 void open_busdoor(int bus, int to, int room, int from)
 {
-  if (!world[bus].dir_option[to]) {
-    world[bus].dir_option[to] = new room_direction_data;
-    memset((char *) world[bus].dir_option[to], 0,
-           sizeof(struct room_direction_data));
-    world[bus].dir_option[to]->to_room = &world[room];
-    world[bus].dir_option[to]->to_room_vnum = world[room].number;
-    world[bus].dir_option[to]->barrier = 8;
-    world[bus].dir_option[to]->condition = 8;
-    world[bus].dir_option[to]->material = 8;
-    world[bus].dir_option[to]->canary = CANARY_VALUE;
-  }
-  if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
-    memset((char *) world[room].dir_option[from], 0,
-           sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = &world[bus];
-    world[room].dir_option[from]->to_room_vnum = world[bus].number;
-    world[room].dir_option[from]->barrier = 8;
-    world[room].dir_option[from]->condition = 8;
-    world[room].dir_option[from]->material = 8;
-    world[room].dir_option[from]->canary = CANARY_VALUE;
-  }
+  create_linked_exit(bus, to, room, from);
+  
   send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[room]);
   send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[bus]);
 }
 
 void close_busdoor(int bus, int to, int room, int from)
 {
-  if (world[bus].dir_option[to]->keyword)
-    delete [] world[bus].dir_option[to]->keyword;
-  if (world[bus].dir_option[to]->general_description)
-    delete [] world[bus].dir_option[to]->general_description;
-  delete world[bus].dir_option[to];
-  world[bus].dir_option[to] = NULL;
-  if (world[room].dir_option[from]->keyword)
-    delete [] world[room].dir_option[from]->keyword;
-  if (world[room].dir_option[from]->general_description)
-    delete [] world[room].dir_option[from]->general_description;
-  delete world[room].dir_option[from];
-  world[room].dir_option[from] = NULL;
+  delete_linked_exit(bus, to, room, from);
+  
   send_to_room("The bus door shuts, the driver yells \"^Wall aboard!^n\", and begins driving.\r\n", &world[room]);
   send_to_room("The bus door shuts, the driver yells \"^Wall aboard!^n\", and begins driving.\r\n", &world[bus]);
 }
@@ -2084,46 +2018,16 @@ struct transport_type camas[2] =
 
 void camas_extend(int bus, int to, int room, int from)
 {
-  if (!world[bus].dir_option[to]) {
-    world[bus].dir_option[to] = new room_direction_data;
-    memset((char *) world[bus].dir_option[to], 0,
-           sizeof(struct room_direction_data));
-    world[bus].dir_option[to]->to_room = &world[room];
-    world[bus].dir_option[to]->to_room_vnum = world[room].number;
-    world[bus].dir_option[to]->barrier = 8;
-    world[bus].dir_option[to]->condition = 8;
-    world[bus].dir_option[to]->material = 8;
-    world[bus].dir_option[to]->canary = CANARY_VALUE;
-  }
-  if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
-    memset((char *) world[room].dir_option[from], 0,
-           sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = &world[bus];
-    world[room].dir_option[from]->to_room_vnum = world[bus].number;
-    world[room].dir_option[from]->barrier = 8;
-    world[room].dir_option[from]->condition = 8;
-    world[room].dir_option[from]->material = 8;
-    world[room].dir_option[from]->canary = CANARY_VALUE;
-  }
+  create_linked_exit(bus, to, room, from);
+  
   send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[room]);
   send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[bus]);
 }
 
 void camas_retract(int bus, int to, int room, int from)
 {
-  if (world[bus].dir_option[to]->keyword)
-    delete [] world[bus].dir_option[to]->keyword;
-  if (world[bus].dir_option[to]->general_description)
-    delete [] world[bus].dir_option[to]->general_description;
-  delete world[bus].dir_option[to];
-  world[bus].dir_option[to] = NULL;
-  if (world[room].dir_option[from]->keyword)
-    delete [] world[room].dir_option[from]->keyword;
-  if (world[room].dir_option[from]->general_description)
-    delete [] world[room].dir_option[from]->general_description;
-  delete world[room].dir_option[from];
-  world[room].dir_option[from] = NULL;
+  delete_linked_exit(bus, to, room, from);
+  
   send_to_room("The stairs retract and the Lear-Cessna Platinum II taxis along the runway before taking flight.\r\n", &world[room]);
   send_to_room("The stairs retract and the Lear-Cessna Platinum II taxis along the runway before taking flight.\r\n", &world[bus]);
 }
@@ -2181,46 +2085,16 @@ struct transport_type lightrail[4] =
 
 void open_lightraildoor(int lightrail, int to, int room, int from)
 {
-  if (!world[lightrail].dir_option[to]) {
-    world[lightrail].dir_option[to] = new room_direction_data;
-    memset((char *) world[lightrail].dir_option[to], 0,
-           sizeof(struct room_direction_data));
-    world[lightrail].dir_option[to]->to_room = &world[room];
-    world[lightrail].dir_option[to]->to_room_vnum = world[room].number;
-    world[lightrail].dir_option[to]->barrier = 8;
-    world[lightrail].dir_option[to]->condition = 8;
-    world[lightrail].dir_option[to]->material = 8;
-    world[lightrail].dir_option[to]->canary = CANARY_VALUE;
-  }
-  if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
-    memset((char *) world[room].dir_option[from], 0,
-           sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = &world[lightrail];
-    world[room].dir_option[from]->to_room_vnum = world[lightrail].number;
-    world[room].dir_option[from]->barrier = 8;
-    world[room].dir_option[from]->condition = 8;
-    world[room].dir_option[from]->material = 8;
-    world[room].dir_option[from]->canary = CANARY_VALUE;
-  }
+  create_linked_exit(lightrail, to, room, from);
+  
   send_to_room("The incoming lightrail grinds to a halt and its doors slide open with a hiss.\r\n", &world[room]);
   send_to_room("The lightrail grinds to a halt and the doors hiss open.\r\n", &world[lightrail]);
 }
 
 void close_lightraildoor(int lightrail, int to, int room, int from)
 {
-  if (world[lightrail].dir_option[to]->keyword)
-    delete [] world[lightrail].dir_option[to]->keyword;
-  if (world[lightrail].dir_option[to]->general_description)
-    delete [] world[lightrail].dir_option[to]->general_description;
-  delete world[lightrail].dir_option[to];
-  world[lightrail].dir_option[to] = NULL;
-  if (world[room].dir_option[from]->keyword)
-    delete [] world[room].dir_option[from]->keyword;
-  if (world[room].dir_option[from]->general_description)
-    delete [] world[room].dir_option[from]->general_description;
-  delete world[room].dir_option[from];
-  world[room].dir_option[from] = NULL;
+  delete_linked_exit(lightrail, to, room, from);
+  
   send_to_room("The lightrail's doors slide shut and a tone emanates around the platform, signaling its departure.\r\n", &world[room]);
   send_to_room("The lightrail's doors slide shut and a tone signals as it begins moving.\r\n", &world[lightrail]);
 }
@@ -2311,28 +2185,8 @@ void extend_walkway(int ferry, int to, int room, int from)
   assert(ferry > 0);
   assert(room > 0);
   
-  if (!world[ferry].dir_option[to]) {
-    world[ferry].dir_option[to] = new room_direction_data;
-    memset((char *) world[ferry].dir_option[to], 0,
-           sizeof(struct room_direction_data));
-    world[ferry].dir_option[to]->to_room = &world[room];
-    world[ferry].dir_option[to]->to_room_vnum = world[room].number;
-    world[ferry].dir_option[to]->barrier = 8;
-    world[ferry].dir_option[to]->condition = 8;
-    world[ferry].dir_option[to]->material = 8;
-    world[ferry].dir_option[to]->canary = CANARY_VALUE;
-  }
-  if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
-    memset((char *) world[room].dir_option[from], 0,
-           sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = &world[ferry];
-    world[room].dir_option[from]->to_room_vnum = world[ferry].number;
-    world[room].dir_option[from]->barrier = 8;
-    world[room].dir_option[from]->condition = 8;
-    world[room].dir_option[from]->material = 8;
-    world[room].dir_option[from]->canary = CANARY_VALUE;
-  }
+  create_linked_exit(ferry, to, room, from);
+  
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[room]);
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[ferry]);
 }
@@ -2342,18 +2196,8 @@ void contract_walkway(int ferry, int to, int room, int from)
   assert(ferry > 0);
   assert(room > 0);
   
-  if (world[ferry].dir_option[to]->keyword)
-    delete [] world[ferry].dir_option[to]->keyword;
-  if (world[ferry].dir_option[to]->general_description)
-    delete [] world[ferry].dir_option[to]->general_description;
-  delete world[ferry].dir_option[to];
-  world[ferry].dir_option[to] = NULL;
-  if (world[room].dir_option[from]->keyword)
-    delete [] world[room].dir_option[from]->keyword;
-  if (world[room].dir_option[from]->general_description)
-    delete [] world[room].dir_option[from]->general_description;
-  delete world[room].dir_option[from];
-  world[room].dir_option[from] = NULL;
+  delete_linked_exit(ferry, to, room, from);
+  
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
@@ -2512,46 +2356,16 @@ struct transport_type grenada[2] =
 
 void grenada_extend(int bus, int to, int room, int from)
 {
-  if (!world[bus].dir_option[to]) {
-    world[bus].dir_option[to] = new room_direction_data;
-    memset((char *) world[bus].dir_option[to], 0,
-           sizeof(struct room_direction_data));
-    world[bus].dir_option[to]->to_room = &world[room];
-    world[bus].dir_option[to]->to_room_vnum = world[room].number;
-    world[bus].dir_option[to]->barrier = 8;
-    world[bus].dir_option[to]->condition = 8;
-    world[bus].dir_option[to]->material = 8;
-    world[bus].dir_option[to]->canary = CANARY_VALUE;
-  }
-  if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
-    memset((char *) world[room].dir_option[from], 0,
-           sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = &world[bus];
-    world[room].dir_option[from]->to_room_vnum = world[bus].number;
-    world[room].dir_option[from]->barrier = 8;
-    world[room].dir_option[from]->condition = 8;
-    world[room].dir_option[from]->material = 8;
-    world[room].dir_option[from]->canary = CANARY_VALUE;
-  }
+  create_linked_exit(bus, to, room, from);
+  
   send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", &world[room]);
   send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", &world[bus]);
 }
 
 void grenada_retract(int bus, int to, int room, int from)
 {
-  if (world[bus].dir_option[to]->keyword)
-    delete [] world[bus].dir_option[to]->keyword;
-  if (world[bus].dir_option[to]->general_description)
-    delete [] world[bus].dir_option[to]->general_description;
-  delete world[bus].dir_option[to];
-  world[bus].dir_option[to] = NULL;
-  if (world[room].dir_option[from]->keyword)
-    delete [] world[room].dir_option[from]->keyword;
-  if (world[room].dir_option[from]->general_description)
-    delete [] world[room].dir_option[from]->general_description;
-  delete world[room].dir_option[from];
-  world[room].dir_option[from] = NULL;
+  delete_linked_exit(bus, to, room, from);
+  
   send_to_room("The airplane taxis into position on the runway before throttling up and taking off.\r\n", &world[room]);
   send_to_room("The airplane taxis into position on the runway before throttling up and taking off.\r\n", &world[bus]);
 }

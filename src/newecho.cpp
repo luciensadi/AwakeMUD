@@ -444,7 +444,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     }
     
     // If the listener can't understand you, mangle it.
-    const char *replacement = replace_too_long_words(viewer, speech_buf, language_in_use);
+    const char *replacement = replace_too_long_words(viewer, actor, speech_buf, language_in_use, GET_CHAR_COLOR_HIGHLIGHT(actor));
     if (!strcmp(replacement, speech_buf)) {
       replacement = NULL;
     } else if (!ispunct(get_final_character_from_string(replacement))){
@@ -481,6 +481,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   
   // Finally(!), send it to the viewer.
   send_to_char(viewer, capitalize(mutable_echo_string));
+  
+  // And put it in their emote history.
+  store_message_to_history(viewer->desc, COMM_CHANNEL_EMOTES, mutable_echo_string);
 }
 
 ACMD(do_new_echo) {
@@ -736,11 +739,9 @@ const char *generate_random_lexicon_sentence(int language_skill, int length) {
 }
 */
 
-// TODO: Fix the name bug below, and also make highlights appear in the text for character's name. (ugh) don't forget to restore color like radio etc
-
 // When listening, you get too-long words replaced with random ones.
-// Known bug: 'Sentence. Name sentence' will lose Name.
-const char *replace_too_long_words(struct char_data *ch, const char *message, int language_skill, const char *terminal_code) {
+// Known bug: 'Sentence. Non-name sentence' will lose non-name.
+const char *replace_too_long_words(struct char_data *ch, struct char_data *speaker, const char *message, int language_skill, const char *terminal_code) {
   static char replaced_message[MAX_STRING_LENGTH];
   static char storage_buf[MAX_STRING_LENGTH];
   char name_buf[100];
@@ -755,7 +756,12 @@ const char *replace_too_long_words(struct char_data *ch, const char *message, in
   // NPCs get no processing, so let's short-circuit and just bail out.
   if (IS_NPC(ch))
     return message;
-    
+  
+  const char *viewer_highlight = GET_CHAR_COLOR_HIGHLIGHT(ch);
+  
+  if (!strcmp((viewer_highlight = string_to_uppercase(viewer_highlight)), terminal_code))
+    viewer_highlight = string_to_lowercase(viewer_highlight);
+      
   if (!message) {
     mudlog("SYSERR: Received NULL message to replace_too_long_words().", ch, LOG_SYSLOG, TRUE);
     return message;
@@ -785,13 +791,20 @@ const char *replace_too_long_words(struct char_data *ch, const char *message, in
   bool need_caps = FALSE;
   for (char *ptr = replaced_message; ptr && (ptr - replaced_message) <= (int) strlen(replaced_message); ptr++) {
     random_word = NULL;
-    send_to_char(ch, "^y%c^n", *ptr);
+    // send_to_char(ch, "^y%c^n", *ptr);
     
-    // We only care about alphabetical characters.
-    if (isalpha(*ptr)) {
+    // We only care about characters commonly found in words.
+    if (isalpha(*ptr) || *ptr == '\'' || *ptr == '-') {
       // Capitalized words are flagged for further checking.
       bool yelling = isupper(*ptr) && isupper(*(ptr + 1));
       bool capital_word = !yelling && isupper(*ptr) && isalpha(*(ptr + 1));
+      
+      /*
+      if (capital_word)
+        send_to_char(ch, "^r^^^n", *ptr);
+      if (yelling)
+        send_to_char(ch, "^M!^n", *ptr);
+      */
       
       if (at_start_of_new_sentence) {
         at_start_of_new_sentence = FALSE;
@@ -800,11 +813,14 @@ const char *replace_too_long_words(struct char_data *ch, const char *message, in
       
       // Skim to the end of the word.
       char *word_ptr = ptr;
-      while (isalpha(*(++word_ptr)));
+      while (isalpha(*(word_ptr)) || *word_ptr == '\'' || *word_ptr == '-') {
+        word_ptr++;
+        // send_to_char(ch, "^g%c^n", *word_ptr);
+      }
       // word_ptr now points at the character after the end of the word.
       
       // Check to see if we're at the end of a sentence or dealing with a capital word.
-      if (capital_word || *(word_ptr) == '.' || *(word_ptr) == '!') {
+      if (capital_word || *(word_ptr) == '.' || *(word_ptr) == '!' || *(word_ptr) == '?') {
         // Possibly. Make sure word is not a common title. This means we actually care about the contents of the word, so clone it out.
         int storage_idx = 0;
         for (; storage_idx < (word_ptr - ptr); storage_idx++) {
@@ -816,30 +832,43 @@ const char *replace_too_long_words(struct char_data *ch, const char *message, in
         // Could be a name, let's check.
         if (capital_word) {
           // If they allow highlights, and the name matches theirs...
+          bool should_highlight = FALSE;
           if (!PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) && !PRF_FLAGGED(ch, PRF_NOCOLOR) 
               && (!strcmp(tag_check_string, GET_CHAR_NAME(ch)))) // Eventual todo: add a memory check of the speaker, so 'remem x buttface' will highlight buttface for the listener.
           {
-            // It is! We get to swap out the replacement word with our highlighted name and go about our day.
+            should_highlight = TRUE;
+          } 
+          
+          // Go through memory.
+          if (!should_highlight) {
+            struct remem *mem_record = found_mem(GET_MEMORY(speaker), ch);
+            if (mem_record && !str_cmp(mem_record->mem, tag_check_string))
+              should_highlight = TRUE;
+          }
+          
+          if (should_highlight) {
+            // It's their name! We get to swap out the replacement word with our highlighted name and go about our day.
             snprintf(name_buf, sizeof(name_buf), "%s%s%s",
-                    GET_CHAR_COLOR_HIGHLIGHT(ch),
+                    viewer_highlight,
                     tag_check_string,
                     terminal_code);
+            random_word = name_buf;
+          } else {
+            if (!need_caps)
+              random_word = tag_check_string;
           }
         }
         
         // End of sentence, or just an abbreviated title like 'Mr'?
         if (*(word_ptr) == '.' || *(word_ptr) == '!' || *(word_ptr) == '?') {
+          at_start_of_new_sentence = TRUE;
           if (*(word_ptr) == '.') {
             for (int i = 0; *allowed_abbreviations[i] != '\n' && at_start_of_new_sentence; i++)
               if (!strcmp(allowed_abbreviations[i], tag_check_string))
                 at_start_of_new_sentence = FALSE;
           }
-          if (!strcmp("Mr", tag_check_string) || !strcmp("Ms", tag_check_string) || !strcmp("Mrs", tag_check_string) || !strcmp("Mz", tag_check_string))
-            at_start_of_new_sentence = FALSE;
-          else
-            at_start_of_new_sentence = TRUE;
             
-          send_to_char(ch, "\r\nAfter '%s' (v2), sentence mode is now %s\r\n", tag_check_string, at_start_of_new_sentence ? "on" : "off");
+          // send_to_char(ch, "\r\nAfter '%s' (v2), sentence mode is now %s\r\n", tag_check_string, at_start_of_new_sentence ? "on" : "off");
         }
       }
       

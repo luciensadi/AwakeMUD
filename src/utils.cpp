@@ -2053,6 +2053,11 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
     return FALSE;
   }
   
+  if (!vict || !get_ch_in_room(vict)) {
+    mudlog("invis_ok() received vict with NO room!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
   // If they're in an invis staffer above your level, no.
   if (!IS_NPC(vict) && !IS_NPC(ch) && GET_INVIS_LEV(vict) > 0 && !access_level(ch, GET_INVIS_LEV(vict)))
     return FALSE;
