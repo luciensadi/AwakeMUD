@@ -154,6 +154,7 @@ char newecho_debug_buf[MAX_STRING_LENGTH];
 void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string, bool require_char_name) {
   int tag_index, i;
   struct char_data *target_ch = NULL;
+  struct remem *mem_record = NULL;
   
   // Sanity check.
   if (!actor || !viewer) {
@@ -170,7 +171,29 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   NEW_EMOTE_DEBUG(actor, "\r\n\r\nBeginning evaluation for %s.\r\n", GET_CHAR_NAME(viewer));
   
   // Scan the string for the actor's name. This is an easy check. In the process, convert echo_string into something mutable, and set i to skip over this new text.
-  if (require_char_name && strstr(echo_string, GET_CHAR_NAME(actor)) == NULL && str_str(echo_string, "@self") == NULL) {
+  bool must_prepend_name = TRUE;
+  if (require_char_name) {    
+    // Check the string for '@self' without an alphabetical after it.
+    const char *self_ptr = strstr(echo_string, "@self");
+    while (self_ptr && isalpha(*(self_ptr + strlen("@self"))))
+      self_ptr = strstr(self_ptr + 1, "@self");
+    if (self_ptr)
+      must_prepend_name = FALSE;
+    
+    // Check the string for the actor's name in the same manner.
+    if (must_prepend_name) {
+      const char *name_ptr = strstr(echo_string, GET_CHAR_NAME(actor));
+      while (name_ptr && isalpha(*(name_ptr + strlen(GET_CHAR_NAME(actor)))))
+        name_ptr = strstr(name_ptr + 1, GET_CHAR_NAME(actor));
+      if (name_ptr)
+        must_prepend_name = FALSE;
+    }
+  } else {
+    must_prepend_name = FALSE;
+  }
+  
+  // If we didn't find it, we have to put their name at the beginning.
+  if (must_prepend_name) {
     if (echo_string[0] == '\'' && echo_string[1] == 's') {
       snprintf(mutable_echo_string, sizeof(mutable_echo_string), "@self%s", echo_string);
     } else {
@@ -179,6 +202,13 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   } else {
     strlcpy(mutable_echo_string, echo_string, sizeof(mutable_echo_string));
   }
+  
+  const char *name_ptr; 
+  if (require_char_name 
+      && ((name_ptr = strstr(echo_string, GET_CHAR_NAME(actor))) == NULL || !isalpha(*(name_ptr + strlen(GET_CHAR_NAME(actor)))))
+      && str_str(echo_string, "@self") == NULL) {
+    
+  } 
 
   NEW_EMOTE_DEBUG(actor, "\r\nAfter first pass, mutable_echo_string is '%s'. Evaluating...\r\n", mutable_echo_string);
 
@@ -217,61 +247,73 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       if (self_mode)
         target_ch = actor;
       
-      // Compare it to bystanders' memorized names
+      // Compare it to bystanders' memorized names. Try for exact matches first.
       if (!target_ch) {
         for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
              target_ch; 
              target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
         {
-          // No such thing as remembering an NPC.
-          if (IS_NPC(target_ch))
+          // No such thing as remembering an NPC, and you can't target someone you can't see.
+          if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
             continue;
             
-          // Can't target someone you can't see.
-          if (!CAN_SEE(actor, target_ch))
-            continue;
-            
-          struct remem *mem_record = found_mem(GET_MEMORY(actor), target_ch);
-          if (mem_record) {
-            if (require_exact_match) {
-              if (!str_cmp(mem_record->mem, tag_check_string))
-                break;
-            } else {
-              if (!strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string)))
-                break;
-            }
-          }
+          // Check for exact match with memory.
+          if ((mem_record = found_mem(GET_MEMORY(actor), target_ch)) && !str_cmp(mem_record->mem, tag_check_string))
+            break;
         }
         if (target_ch)
-          NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by memory.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+          NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by memory (exact).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
       }
       
-      // Didn't find anyone by that memorized name? Check PC names.
+      // Compare it to bystanders' memorized names. Now that exact matches mode is out of the way, go for imprecise.
+      if (!target_ch && !require_exact_match) {
+        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
+             target_ch; 
+             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
+        {
+          // No such thing as remembering an NPC, and you can't target someone you can't see.
+          if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
+            continue;
+            
+          // Check for imprecise match with memory.
+          if ((mem_record = found_mem(GET_MEMORY(actor), target_ch)) && !strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string)))
+            break;
+        }
+        if (target_ch)
+          NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by memory (approximate).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+      }
+      
+      // Didn't find anyone by that memorized name? Check PC names, trying for exact match first.
       if (!target_ch) {
         for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
              target_ch; 
              target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
         {
-          // NPCs don't have player data to check.
-          if (IS_NPC(target_ch))
+          // NPCs don't have player data to check, and you can't target someone you can't see.
+          if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
             continue;
             
-          // Can't target someone you can't see.
-          if (!CAN_SEE(actor, target_ch))
-            continue;
-            
-          if (require_exact_match) {
-            // In exact match mode, we must match the full and complete name. Happens if the name is too short.
-            if (!str_cmp(target_ch->player.char_name, tag_check_string))
-              break;
-          } else {
-            // Otherwise, we can match up to the length of tag_check_string.
-            if (!strn_cmp(target_ch->player.char_name, tag_check_string, strlen(tag_check_string)))
-              break;
-          }
+          if (!str_cmp(target_ch->player.char_name, tag_check_string))
+            break;
         }
         if (target_ch)
-          NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by name.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+          NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by name (exact).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+      }
+      
+      if (!target_ch && !require_exact_match) {
+        for (target_ch = actor->in_room ? actor->in_room->people : actor->in_veh->people; 
+             target_ch; 
+             target_ch = actor->in_room ? target_ch->next_in_room : target_ch->next_in_veh) 
+        {
+          // NPCs don't have player data to check, and you can't target someone you can't see.
+          if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
+            continue;
+            
+          if (!strn_cmp(target_ch->player.char_name, tag_check_string, strlen(tag_check_string)))
+            break;
+        }
+        if (target_ch)
+          NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by name (approximate).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
       }
       
       // Didn't find anyone by their PC name? Check keywords (only if not in exact-match mode).
