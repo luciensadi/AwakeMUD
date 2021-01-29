@@ -2555,6 +2555,11 @@ ACMD(do_comcall)
     DECKER->phone->dest = NULL;
     send_to_icon(PERSONA, "You cut the connection.\r\n");
   } else {
+    if (DECKER->phone->dest) {
+      send_to_icon(PERSONA, "You already have a call connected.\r\n");
+      return;
+    }
+    
     int ring;
     any_one_arg(argument, arg);
     if (!*arg)

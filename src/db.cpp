@@ -3194,7 +3194,7 @@ void zcmd_repair_door(struct room_data *room, int dir) {
   struct room_direction_data *door_struct = room->dir_option[dir];
   
   if (IS_SET(door_struct->exit_info, EX_DESTROYED)) {
-    snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.",
+    snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.\r\n",
              door_struct->keyword,
              thedirs[dir]);
     send_to_room(buf, room);
