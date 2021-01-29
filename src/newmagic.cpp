@@ -926,7 +926,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       if (is_abbrev(buf, wound_name[basedamage]))
         break;
     if (basedamage > 4 || basedamage == 0) {
-      send_to_char("That is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", ch);
+      send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
       return;
     }
   }
@@ -1381,7 +1381,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         if (is_abbrev(buf, wound_name[basedamage]))
           break;
       if (basedamage > 4 || basedamage == 0) {
-        send_to_char("That is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", ch);
+        send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
         return;
       }
     }
@@ -4011,7 +4011,7 @@ ACMD(do_heal)
       if (is_abbrev(buf, wound_name[basedamage]))
         break;
     if (basedamage > 4 || basedamage == 0) {
-      send_to_char("That is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", ch);
+      send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
       return;
     }
     int success = success_test(GET_MAG(ch) / 100, 10 - (GET_ESS(vict) / 100));

@@ -398,167 +398,192 @@ ACMD(do_echo)
   struct char_data *vict;
   struct veh_data *veh;
   skip_spaces(&argument);
+  
+  // Reject anyone who can't use the thing they're trying to use.
+  if ((subcmd == SCMD_ECHO || subcmd == SCMD_AECHO)
+      && (!PRF_FLAGGED(ch, PRF_QUESTOR) && (ch->desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : GET_LEVEL(ch)) < LVL_ARCHITECT)) {
+    send_to_char("Sorry, only Questors and staff can do that.\r\n", ch);
+    return;
+  }
+  
+  // Reject hitchers.
+  if (PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona) {
+    send_to_char(ch, "You can't do that while hitching.\r\n");
+    return;
+  }
 
-  if (!*argument) {
+  // Require an argument.
+  if (!*argument) {      
     send_to_char("Yes.. but what?\r\n", ch);
     return;
   }
-  else {
-    if (PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona) {
-      send_to_char(ch, "You can't do that while hitching.\r\n");
-      return;
-    }
-    memset(buf, '\0', sizeof(buf));
-    switch (subcmd) {
-      case SCMD_EMOTE:
-        if (argument[0] == '\'' && argument[1] == 's' ) {
-          if (PLR_FLAGGED(ch, PLR_MATRIX))
-            snprintf(buf, sizeof(buf), "%s%s", ch->persona->name, argument);
-          else
-            snprintf(buf, sizeof(buf), "$n%s", argument);
-        } else {
-          if (PLR_FLAGGED(ch, PLR_MATRIX))
-            snprintf(buf, sizeof(buf), "%s %s", ch->persona->name, argument);
-          else
-            snprintf(buf, sizeof(buf), "$n %s", argument);
-        }
-        break;
-      case SCMD_ECHO:
-      case SCMD_AECHO:
-        if (!PRF_FLAGGED(ch, PRF_QUESTOR) && (ch->desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : GET_LEVEL(ch)) < LVL_ARCHITECT) {
-          nonsensical_reply(ch, NULL, "standard");
-          return;
-        }
-        snprintf(buf, sizeof(buf), "%s", argument);
-        break;
-    }
-
-    if (subcmd == SCMD_AECHO) {
-      if (ch->in_room) {
-        for (vict = ch->in_room->people; vict; vict = vict->next_in_room)
-          if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
-            act(buf, FALSE, ch, 0, vict, TO_VICT);
+  
+  memset(buf, '\0', sizeof(buf));
+  
+  switch (subcmd) {
+    case SCMD_EMOTE:
+      // Possessive? We omit the starting space.
+      if (argument[0] == '\'' && argument[1] == 's' ) {
+        if (PLR_FLAGGED(ch, PLR_MATRIX))
+          snprintf(buf, sizeof(buf), "%s%s", ch->persona->name, argument);
+        else
+          snprintf(buf, sizeof(buf), "$n%s", argument);
       } else {
-        for (vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
-          if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
-            act(buf, FALSE, ch, 0, vict, TO_VICT);
+        if (PLR_FLAGGED(ch, PLR_MATRIX))
+          snprintf(buf, sizeof(buf), "%s %s", ch->persona->name, argument);
+        else
+          snprintf(buf, sizeof(buf), "$n %s", argument);
       }
+      break;
+    case SCMD_ECHO:
+    case SCMD_AECHO:
+      // Just write the entire argument into the buf verbatim.
+      strncpy(buf, argument, sizeof(buf) - 1);
+      break;
+  }
+  
+  // send_to_char(ch, "Buf is: '%s'\r\n", buf);
+
+  if (subcmd == SCMD_AECHO) {
+    if (ch->in_room) {
+      for (vict = ch->in_room->people; vict; vict = vict->next_in_room)
+        if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
+          act(buf, FALSE, ch, 0, vict, TO_VICT);
     } else {
-      if (PLR_FLAGGED(ch, PLR_MATRIX))
-        send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
-      else {
-        /*
-        const char *parse_emote_by_x_for_y(const char *emote, struct char_data *ch, struct char_data *targ) {
-          char tmp_name[strlen(emote) + 1];
-          int tmp_index, buf2_index;
-          struct char_data *tmp_vict;
-          
-          // Actor is recipient? Skip (they're handled elsewhere in logic).
-          if (targ == ch)
-            return NULL;
-          
-          // Actor is intangible and invisible to recipient? Skip.
-          if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))
-            return NULL;
-          
-          // Scan the emote for @ character, which indicates targeting.
-          for (int i = 0; emote[i]; i++) {
-            if (emote[i] == '@') {
-              // Found an @. Set up for evaluation, and store current 'i' as marker.
-              tmp_index = 0;
-              marker = i;
-              
-              // Copy out the target's name, null-terminating it.
-              while (isalpha(emote[++i]))
-                tmp_name[tmp_index++] = i;
-              tmp_name[tmp_index] = '\0';
-              
-              // Move 'i' back one character so it is pointing at the last character of the @-name.
-              i--;
-              
-              // Search the room for the target.
-              tmp_vict = get_char_room_vis(ch, tmp_name);
-              if (tmp_vict == targ) {
-                // Check for "@'s" -> "your"
-                if (i <= strlen(emote) - 3 && emote[i+1] == '\'' && emote[i+2] == 's') {
-                  i += 1; // Advance to the "s".
-                  snprintf(tmp_name, sizeof(tmp_name), "your");
-                } else {
-                  snprintf(tmp_name, sizeof(tmp_name), "you");
-                }
-              } // End of targ == vict
-              else if (tmp_vict) {
-                // Check for visibility.
-                if (CAN_SEE(targ, vict)) {
-                  if (found_mem(GET_MEMORY(targ), vict)) {
-                    strcpy(tmp_name, CAP(found_mem(GET_MEMORY(targ), vict)->mem));
-                  } else {
-                    strcpy(tmp_name, GET_NAME(vict));
-                  }
-                } else {
-                  strcpy(tmp_name, "someone");
-                }
-              } // End of targ != vict
-              else {
-                // todo
-                broken compile here
+      for (vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
+        if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
+          act(buf, FALSE, ch, 0, vict, TO_VICT);
+    }
+  } else {
+    if (PLR_FLAGGED(ch, PLR_MATRIX))
+      send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
+    else {
+      /*
+      const char *parse_emote_by_x_for_y(const char *emote, struct char_data *ch, struct char_data *targ) {
+        char tmp_name[strlen(emote) + 1];
+        int tmp_index, buf2_index;
+        struct char_data *tmp_vict;
+        
+        // Actor is recipient? Skip (they're handled elsewhere in logic).
+        if (targ == ch)
+          return NULL;
+        
+        // Actor is intangible and invisible to recipient? Skip.
+        if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))
+          return NULL;
+        
+        // Scan the emote for @ character, which indicates targeting.
+        for (int i = 0; emote[i]; i++) {
+          if (emote[i] == '@') {
+            // Found an @. Set up for evaluation, and store current 'i' as marker.
+            tmp_index = 0;
+            marker = i;
+            
+            // Copy out the target's name, null-terminating it.
+            while (isalpha(emote[++i]))
+              tmp_name[tmp_index++] = i;
+            tmp_name[tmp_index] = '\0';
+            
+            // Move 'i' back one character so it is pointing at the last character of the @-name.
+            i--;
+            
+            // Search the room for the target.
+            tmp_vict = get_char_room_vis(ch, tmp_name);
+            if (tmp_vict == targ) {
+              // Check for "@'s" -> "your"
+              if (i <= strlen(emote) - 3 && emote[i+1] == '\'' && emote[i+2] == 's') {
+                i += 1; // Advance to the "s".
+                snprintf(tmp_name, sizeof(tmp_name), "your");
+              } else {
+                snprintf(tmp_name, sizeof(tmp_name), "you");
               }
-            } // End of char == '@'
+            } // End of targ == vict
+            else if (tmp_vict) {
+              // Check for visibility.
+              if (CAN_SEE(targ, vict)) {
+                if (found_mem(GET_MEMORY(targ), vict)) {
+                  strcpy(tmp_name, CAP(found_mem(GET_MEMORY(targ), vict)->mem));
+                } else {
+                  strcpy(tmp_name, GET_NAME(vict));
+                }
+              } else {
+                strcpy(tmp_name, "someone");
+              }
+            } // End of targ != vict
             else {
-              // No special character, copy it 1:1.
-              buf2[buf2_index++] = emote[i];
+              // todo
+              broken compile here
+            }
+          } // End of char == '@'
+          else {
+            // No special character, copy it 1:1.
+            buf2[buf2_index++] = emote[i];
+          }
+        }
+      }
+       */
+      struct char_data *vict;
+      for (struct char_data *targ = ch->in_veh ? ch->in_veh->people : ch->in_room->people; targ; targ = ch->in_veh ? targ->next_in_veh : targ->next_in_room) {
+        if (targ != ch) {
+          if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))
+            continue;
+          int i = 0, newn = 0;
+          memset(buf2, '\0', sizeof(buf2));
+          for (; buf[i]; i++) {
+            if (buf[i] == '@') {
+              int i_at_char = i;
+              char check[1024];
+              int checkn = 0;
+              memset(check, '\0', sizeof(check));
+              for (i++; buf[i]; i++, checkn++)
+                if (buf[i] == ' ' || buf[i] == '\'' || buf[i] == '.' || buf[i] == ',') {
+                  i--;
+                  break;
+                } else check[checkn] = buf[i];
+              if (!str_cmp(check, "self"))
+                vict = ch;
+              else
+                vict = get_char_room_vis(ch, check);
+              if (vict == targ)
+                if (ch == vict) {
+                  // First-character occurrence is actor.
+                  if (i_at_char == 0)
+                    strncpy(check, GET_CHAR_NAME(ch), sizeof(check) - 1);
+                  else
+                    strncpy(check, "yourself", sizeof(check) - 1);
+                }
+                else
+                  strncpy(check, "you", sizeof(check) - 1);
+              else if (vict)
+                snprintf(check, sizeof(check), "%s", CAN_SEE(targ, vict) ? (found_mem(GET_MEMORY(targ), vict) ? CAP(found_mem(GET_MEMORY(targ), vict)->mem)
+                        : GET_NAME(vict)) : "someone");
+              snprintf(buf2 + newn, sizeof(buf) - newn, "%s", check);
+              newn += strlen(check);
+            } else {
+              buf2[newn] = buf[i];
+              newn++;
             }
           }
+          act(buf2, FALSE, ch, 0, targ, TO_VICT);
         }
-         */
-        for (struct char_data *targ = ch->in_veh ? ch->in_veh->people : ch->in_room->people; targ; targ = ch->in_veh ? targ->next_in_veh : targ->next_in_room)
-          if (targ != ch) {
-            if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))
-              continue;
-            int i = 0, newn = 0;
-            memset(buf2, '\0', sizeof(buf2));
-            for (; buf[i]; i++)
-              if (buf[i] == '@') {
-                char check[1024];
-                int checkn = 0;
-                memset(check, '\0', sizeof(check));
-                for (i++; buf[i]; i++, checkn++)
-                  if (buf[i] == ' ' || buf[i] == '\'' || buf[i] == '.' || buf[i] == ',') {
-                    i--;
-                    break;
-                  } else check[checkn] = buf[i];
-                struct char_data *vict = get_char_room_vis(ch, check);
-                if (vict == targ)
-                  snprintf(check, sizeof(check), "you");
-                else if (vict)
-                  snprintf(check, sizeof(check), "%s", CAN_SEE(targ, vict) ? (found_mem(GET_MEMORY(targ), vict) ? CAP(found_mem(GET_MEMORY(targ), vict)->mem)
-                          : GET_NAME(vict)) : "someone");
-                snprintf(buf2 + newn, sizeof(buf) - newn, "%s", check);
-                newn += strlen(check);
-              } else {
-                buf2[newn] = buf[i];
-                newn++;
-              }
-            act(buf2, FALSE, ch, 0, targ, TO_VICT);
-          }
-        if (!ch->in_veh)
-          for (veh = ch->in_room->vehicles; veh; veh = veh->next_veh)
-            if (veh->type == VEH_DRONE && veh->rigger)
-              act(buf, FALSE, ch, 0, veh->rigger, TO_VICT);
       }
+      if (!ch->in_veh)
+        for (veh = ch->in_room->vehicles; veh; veh = veh->next_veh)
+          if (veh->type == VEH_DRONE && veh->rigger)
+            act(buf, FALSE, ch, 0, veh->rigger, TO_VICT);
     }
-    if (PRF_FLAGGED(ch, PRF_NOREPEAT))
-      send_to_char(OK, ch);
-    else if (subcmd == SCMD_EMOTE)
-      send_to_char(ch, "%s %s\r\n", GET_CHAR_NAME(ch), argument);
-    else
-      act(buf, FALSE, ch, 0, 0, TO_CHAR);
+  }
+  if (PRF_FLAGGED(ch, PRF_NOREPEAT))
+    send_to_char(OK, ch);
+  else if (subcmd == SCMD_EMOTE)
+    send_to_char(ch, "%s %s\r\n", GET_CHAR_NAME(ch), argument);
+  else
+    act(buf, FALSE, ch, 0, 0, TO_CHAR);
 
-    if ( subcmd == SCMD_ECHO || subcmd == SCMD_AECHO) {
-      snprintf(buf2, sizeof(buf2), "%s echoed %s at #%ld",
-              GET_CHAR_NAME(ch), buf, ch->in_room ? GET_ROOM_VNUM(ch->in_room) : -1);
-      mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-    }
+  if ( subcmd == SCMD_ECHO || subcmd == SCMD_AECHO) {
+    snprintf(buf2, sizeof(buf2), "%s echoed %s at #%ld",
+            GET_CHAR_NAME(ch), buf, ch->in_room ? GET_ROOM_VNUM(ch->in_room) : -1);
+    mudlog(buf2, ch, LOG_WIZLOG, TRUE);
   }
 }
 
@@ -1363,6 +1388,9 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
             GET_PGROUP(k)->get_name(), GET_PGROUP(k)->get_alias(),
             pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges));
   }
+  
+  if (!IS_NPC(k))
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n\r\n", GET_EMAIL(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Title: %s\r\n", (k->player.title ? k->player.title : "<None>"));
 

@@ -27,6 +27,7 @@ using namespace std;
 #include "newmatrix.h"
 #include "newdb.h"
 #include "constants.h"
+#include "newecho.h"
 
 /* extern variables */
 extern struct skill_data skills[];
@@ -45,151 +46,134 @@ ACMD_CONST(do_say) {
   do_say(ch, not_const, cmd, subcmd);
 }
 
-ACMD(do_say)
+ACMD(do_say) 
 {
-  int success, suc;
   struct char_data *tmp, *to = NULL;
   
+  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  
   skip_spaces(&argument);
-  if (!*argument)
-    send_to_char(ch, "Yes, but WHAT do you want to say?\r\n");
-  else if (subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !char_can_make_noise(ch))
-    send_to_char("You can't seem to make any noise.\r\n", ch);
-  else {
-    if (AFF_FLAGGED(ch, AFF_RIG)) {
-      send_to_char(ch, "You have no mouth.\r\n");
+  
+  FAILURE_CASE(!*argument, "Yes, but WHAT do you want to say?");
+  
+  FAILURE_CASE(subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !char_can_make_noise(ch),
+               "You can't seem to make any noise.");
+               
+  FAILURE_CASE(AFF_FLAGGED(ch, AFF_RIG), "You have no mouth.");
+  
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, argument, language))
       return;
-    } else if (PLR_FLAGGED(ch, PLR_MATRIX)) {
-      if (ch->persona) {
-        // Send the self-referencing message to the decker and store it in their history.
-        snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", capitalize(argument));
-        send_to_icon(ch->persona, buf);
-        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
-        
-        // Send the message to the rest of the host. Store it to the recipients' says history.
-        snprintf(buf, sizeof(buf), "%s says, \"%s^n\"\r\n", ch->persona->name, capitalize(argument));
-        // send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
-        for (struct matrix_icon *i = matrix[ch->persona->in_host].icons; i; i = i->next_in_host) {
-          if (ch->persona != i && i->decker && has_spotted(i, ch->persona)) {
-            send_to_icon(i, buf);
-            if (i->decker && i->decker->ch)
-              store_message_to_history(i->decker->ch->desc, COMM_CHANNEL_SAYS, buf);
-          }
+      
+    // We specifically do not use color highlights in the Matrix. Some people want their mtx persona distinct from their normal one.
+      
+    if (ch->persona) {
+      // Send the self-referencing message to the decker and store it in their history.
+      snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", capitalize(argument));
+      send_to_icon(ch->persona, buf);
+      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
+      
+      // Send the message to the rest of the host. Store it to the recipients' says history.
+      snprintf(buf, sizeof(buf), "%s^n says, \"%s^n\"\r\n", ch->persona->name, capitalize(argument));
+      // send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
+      for (struct matrix_icon *i = matrix[ch->persona->in_host].icons; i; i = i->next_in_host) {
+        if (ch->persona != i && i->decker && has_spotted(i, ch->persona)) {
+          send_to_icon(i, buf);
+          if (i->decker && i->decker->ch)
+            store_message_to_history(i->decker->ch->desc, COMM_CHANNEL_SAYS, buf);
         }
-      } else {
-        for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room)
-          if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX)) {
-            // Send and store.
-            snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(argument));
-            send_to_char(buf, targ);
-            store_message_to_history(targ->desc, COMM_CHANNEL_SAYS, buf);
-          }
-        // Send and store.
-        snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(argument));
-        send_to_char(buf, ch);
-        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
-      }
-      return;
-    }
-    if (subcmd == SCMD_SAYTO) {
-      half_chop(argument, buf, buf2);
-      strcpy(argument, buf2);
-      if (ch->in_veh)
-        to = get_char_veh(ch, buf, ch->in_veh);
-      else
-        to = get_char_room_vis(ch, buf);
-    }
-    if (ch->in_veh) {
-      if(subcmd == SCMD_OSAY) {
-        snprintf(buf, sizeof(buf), "%s says ^mOOCly^n, \"%s^n\"\r\n",GET_NAME(ch), capitalize(argument));
-        for (tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh) {
-          // Replicate act() in a way that lets us capture the message.
-          if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
-            // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
-          }
-        }
-      } else {
-        success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-        for (tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh)
-          if (tmp != ch) {
-            if (to) {
-              if (to == tmp)
-                snprintf(buf2, MAX_STRING_LENGTH, " to you");
-              else
-                snprintf(buf2, MAX_STRING_LENGTH, " to %s", CAN_SEE(tmp, to) ? (found_mem(GET_MEMORY(tmp), to) ? CAP(found_mem(GET_MEMORY(tmp), to)->mem)
-                        : GET_NAME(to)) : "someone");
-            }
-            if (success > 0) {
-              suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
-              if (suc > 0 || IS_NPC(tmp))
-                snprintf(buf, sizeof(buf), "$z says%s in %s, \"%s^n\"",
-                        (to ? buf2 : ""), skills[GET_LANGUAGE(ch)].name, capitalize(argument));
-              else
-                snprintf(buf, sizeof(buf), "$z speaks%s in a language you don't understand.", (to ? buf2 : ""));
-            } else
-              snprintf(buf, sizeof(buf), "$z mumbles incoherently.");
-            if (IS_NPC(ch))
-              snprintf(buf, sizeof(buf), "$z says%s, \"%s^n\"", (to ? buf2 : ""), capitalize(argument));
-            // Note: includes act()
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
-          }
       }
     } else {
-      /** new code by WASHU **/
-      if(subcmd == SCMD_OSAY) {
-        snprintf(buf, sizeof(buf), "$z ^nsays ^mOOCly^n, \"%s^n\"", capitalize(argument));
-        for (tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
-          // Replicate act() in a way that lets us capture the message.
-          if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
-            // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
-          }
+      for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room)
+        if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX)) {
+          // Send and store.
+          snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(argument));
+          send_to_char(buf, targ);
+          store_message_to_history(targ->desc, COMM_CHANNEL_SAYS, buf);
         }
-      } else {
-        success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-        for (tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room))
-          if (tmp != ch && !(IS_ASTRAL(ch) && !CAN_SEE(tmp, ch))) {
-            if (to) {
-              if (to == tmp)
-                snprintf(buf2, MAX_STRING_LENGTH, " to you");
-              else
-                snprintf(buf2, MAX_STRING_LENGTH, " to %s", CAN_SEE(tmp, to) ? (found_mem(GET_MEMORY(tmp), to) ? CAP(found_mem(GET_MEMORY(tmp), to)->mem)
-                        : GET_NAME(to)) : "someone");
-            }
-            if (success > 0) {
-              suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
-              if (suc > 0 || IS_NPC(tmp))
-                snprintf(buf, sizeof(buf), "$z says%s in %s, \"%s^n\"",
-                        (to ? buf2 : ""), skills[GET_LANGUAGE(ch)].name, capitalize(argument));
-              else
-                snprintf(buf, sizeof(buf), "$z speaks%s in a language you don't understand.", (to ? buf2 : ""));
-            } else
-              snprintf(buf, sizeof(buf), "$z mumbles incoherently.");
-            if (IS_NPC(ch))
-              snprintf(buf, sizeof(buf), "$z says%s, \"%s^n\"", (to ? buf2 : ""), capitalize(argument));
-            // Invokes act().
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
-          }
+      // Send and store.
+      snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(argument));
+      send_to_char(buf, ch);
+      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
+    }
+    return;
+  }
+  
+  if (subcmd == SCMD_SAYTO) {
+    half_chop(argument, buf, buf2);
+    strcpy(argument, buf2);
+      
+    if (ch->in_veh)
+      to = get_char_veh(ch, buf, ch->in_veh);
+    else
+      to = get_char_room_vis(ch, buf);
+  }
+  
+  // This is down here to handle speech after sayto. Note that matrix has no sayto, so we did it there as well.
+  if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, argument, language))
+    return;
+    
+  if (subcmd == SCMD_OSAY) {
+    // No color highlights for osay.
+    snprintf(buf, sizeof(buf), "%s^n says ^mOOCly^n, \"%s^n\"\r\n",GET_NAME(ch), capitalize(argument));
+    for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
+      // Replicate act() in a way that lets us capture the message.
+      if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+        // They're a valid target, so send the message with a raw perform_act() call.
+        store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
       }
     }
-    // Acknowledge transmission of message.
-    if (PRF_FLAGGED(ch, PRF_NOREPEAT))
-      send_to_char(OK, ch);
-    else {
-      delete_doubledollar(argument);
-      if(subcmd == SCMD_OSAY) {
-        snprintf(buf, sizeof(buf), "You say ^mOOCly^n, \"%s^n\"\r\n", capitalize(argument));
-        send_to_char(buf, ch);
-        store_message_to_history(ch->desc, COMM_CHANNEL_OSAYS, buf);
-      } else {
-        if (to)
-          snprintf(buf2, MAX_STRING_LENGTH, " to %s", CAN_SEE(ch, to) ? (found_mem(GET_MEMORY(ch), to) ?
-                                                     CAP(found_mem(GET_MEMORY(ch), to)->mem) : GET_NAME(to)) : "someone");
-        snprintf(buf, sizeof(buf), "You say%s, \"%s^n\"\r\n", (to ? buf2 : ""), capitalize(argument));
-        send_to_char(buf, ch);
-        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
+  } else {
+    for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
+      if (tmp == ch)
+        continue;
+        
+      // Generate prepend for sayto.
+      if (to) {
+        if (to == tmp)
+          snprintf(buf2, MAX_STRING_LENGTH, " to you");
+        else
+          snprintf(buf2, MAX_STRING_LENGTH, " to %s^n", CAN_SEE(tmp, to) ? (found_mem(GET_MEMORY(tmp), to) ? CAP(found_mem(GET_MEMORY(tmp), to)->mem)
+                  : GET_NAME(to)) : "someone");
       }
+      
+      snprintf(buf, sizeof(buf), "$z^n says%s in %s, \"%s%s%s^n\"",
+              (to ? buf2 : ""), 
+              (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language", 
+              (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+              capitalize(replace_too_long_words(tmp, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+              ispunct(get_final_character_from_string(argument)) ? "" : "."
+            );
+        
+      // Note: includes act()
+      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
+    }
+  }
+  
+  // Acknowledge transmission of message.
+  if (PRF_FLAGGED(ch, PRF_NOREPEAT))
+    send_to_char(OK, ch);
+    
+  else {
+    delete_doubledollar(argument);
+    if(subcmd == SCMD_OSAY) {
+      snprintf(buf, sizeof(buf), "You say ^mOOCly^n, \"%s^n\"\r\n", capitalize(argument));
+      send_to_char(buf, ch);
+      store_message_to_history(ch->desc, COMM_CHANNEL_OSAYS, buf);
+    } 
+    
+    else {
+      if (to)
+        snprintf(buf2, MAX_STRING_LENGTH, " to %s^n", CAN_SEE(ch, to) ? (found_mem(GET_MEMORY(ch), to) ?
+                                                   CAP(found_mem(GET_MEMORY(ch), to)->mem) : GET_NAME(to)) : "someone");
+      snprintf(buf, sizeof(buf), "You say%s in %s, \"%s%s%s^n\"\r\n", 
+               (to ? buf2 : ""), 
+               skills[language].name,
+               (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(argument),
+               ispunct(get_final_character_from_string(argument)) ? "" : ".");
+      send_to_char(buf, ch);
+      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     }
   }
 }
@@ -205,29 +189,34 @@ ACMD(do_exclaim)
   
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
+    
+  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  if (!has_required_language_ability_for_sentence(ch, argument, language))
+    return;
   
-  snprintf(buf, sizeof(buf), "$z ^nexclaims, \"%s!^n\"", capitalize(argument));
-  if (ch->in_veh) {
-    for (struct char_data *tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh) {
-      // Replicate act() in a way that lets us capture the message.
-      if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
-        // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
-      }
-    }
-  } else {
-    for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
-      // Replicate act() in a way that lets us capture the message.
-      if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
-        // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
-      }
+  for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); 
+       tmp; 
+       tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) 
+  {
+    // Replicate act() in a way that lets us capture the message.
+    if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+      snprintf(buf, sizeof(buf), "$z^n exclaims in %s, \"%s%s!^n\"", 
+               (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
+               (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(tmp, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
+      
+      // They're a valid target, so send the message with a raw perform_act() call.
+      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
     }
   }
+  
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else {
-    snprintf(buf, sizeof(buf), "You exclaim, \"%s!^n\"\r\n", capitalize(argument));
+    snprintf(buf, sizeof(buf), "You exclaim in %s, \"%s%s!^n\"\r\n", 
+             skills[language].name,
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(argument));
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
   }
@@ -237,7 +226,7 @@ void perform_tell(struct char_data *ch, struct char_data *vict, char *arg)
 {
   delete_doubledollar(arg);
   
-  snprintf(buf, sizeof(buf), "^c%s%s tells you ^mOOCly^c, '%s^c'^n\r\n", 
+  snprintf(buf, sizeof(buf), "^c%s%s^c tells you ^mOOCly^c, '%s^c'^n\r\n", 
            GET_CHAR_NAME(ch), 
            IS_SENATOR(ch) ? " (staff)" : "",
            capitalize(arg));
@@ -359,30 +348,30 @@ ACMD(do_ask)
   
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
+    
+  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  if (!has_required_language_ability_for_sentence(ch, argument, language))
+    return;
   
-  snprintf(buf, sizeof(buf), "$z asks, \"%s?^n\"", capitalize(argument));
-  if (ch->in_veh) {
-    for (struct char_data *tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh) {
-      // Replicate act() in a way that lets us capture the message.
-      if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
-        // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
-      }
-    }
-  } else {
-    for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
-      // Replicate act() in a way that lets us capture the message.
-      if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
-        // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
-      }
+  for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
+    // Replicate act() in a way that lets us capture the message.
+    if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+      snprintf(buf, sizeof(buf), "$z^n asks in %s, \"%s%s?^n\"", 
+               (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
+               (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(tmp, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
+               
+      // They're a valid target, so send the message with a raw perform_act() call.
+      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
     }
   }
+  
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else {
-    // TODO
-    snprintf(buf, sizeof(buf), "You ask, \"%s?^n\"\r\n", capitalize(argument));
+    snprintf(buf, sizeof(buf), "You ask, \"%s%s?^n\"\r\n", 
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(argument));
     send_to_char(buf, ch);
     store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
   }
@@ -393,7 +382,6 @@ ACMD(do_spec_comm)
   struct veh_data *veh = NULL;
   struct char_data *vict;
   const char *action_sing, *action_plur, *action_others;
-  int success, suc;
   if (subcmd == SCMD_WHISPER) {
     action_sing = "whisper to";
     action_plur = "whispers to";
@@ -405,96 +393,135 @@ ACMD(do_spec_comm)
   }
 
   half_chop(argument, buf, buf2);
-  success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-
+  
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
   
   if (!*buf || !*buf2) {
     send_to_char(ch, "Whom do you want to %s... and what??\r\n", action_sing);
-  } else if (ch->in_veh) {
+    return;
+  }  
+    
+  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  if (!has_required_language_ability_for_sentence(ch, buf2, language))
+    return;
+  
+  if (ch->in_veh) {
     if (ch->in_veh->cspeed > SPEED_IDLE) {
       send_to_char("You're going to hit your head on a lamppost if you try that.\r\n", ch);
       return;
     }
+    
     ch->in_room = ch->in_veh->in_room;
     struct veh_data *last_veh = ch->in_veh;
     ch->in_veh = ch->in_veh->in_veh;
-    if ((vict = get_char_room_vis(ch, buf))) {
-      if (vict == ch) {
-        send_to_char(ch, "Why would you want to %s yourself?\r\n", action_sing);
-        return;
-      }
-      if (success > 0) {
-        snprintf(buf, sizeof(buf), "You lean out towards $N and say, \"%s\"", capitalize(buf2));
-        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_CHAR));
-        suc = success_test(GET_SKILL(vict, GET_LANGUAGE(ch)), 4);
-        if (suc > 0)
-          snprintf(buf, sizeof(buf), "From within %s^n, $z says to you in %s, \"%s^n\"\r\n",
-                  GET_VEH_NAME(last_veh), skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
-        else
-          snprintf(buf, sizeof(buf), "From within %s^n, $z speaks in a language you don't understand.\r\n", GET_VEH_NAME(last_veh));
-      } else
-        snprintf(buf, sizeof(buf), "$z mumbles incoherently from %s.\r\n", GET_VEH_NAME(last_veh));
-      store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
-    } else {
+    
+    if (!(vict = get_char_room_vis(ch, buf))) {
       send_to_char("You don't see them here.\r\n", ch);
-    }
-    ch->in_room = NULL;
-    ch->in_veh = last_veh;
-  } else if (!(vict = get_char_room_vis(ch, buf)) &&
-             !((veh = get_veh_list(buf, ch->in_room->vehicles, ch)) && subcmd == SCMD_WHISPER))
-    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", capitalize(buf));
-  else if (vict == ch)
-    send_to_char("You can't get your mouth close enough to your ear...\r\n", ch);
-  else if (IS_ASTRAL(ch) && vict &&
-           !(IS_ASTRAL(vict) ||
-             PLR_FLAGGED(vict, PLR_PERCEIVE) ||
-             IS_DUAL(vict)))
-    send_to_char("That is most assuredly not possible.\r\n", ch);
-  else {
-    if (veh) {
-      if (veh->cspeed > SPEED_IDLE) {
-        send_to_char(ch, "It's moving too fast for you to lean in.\r\n");
-        return;
-      }
-
-      snprintf(buf, sizeof(buf), "You lean into a %s and say, \"%s\"", GET_VEH_NAME(veh), capitalize(buf2));
-      send_to_char(buf, ch);
-      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
-      for (vict = veh->people; vict; vict = vict->next_in_veh) {
-        if (success > 0) {
-          suc = success_test(GET_SKILL(vict, GET_LANGUAGE(ch)), 4);
-          if (suc > 0)
-            snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s^n\"\r\n", skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
-          else
-            snprintf(buf, sizeof(buf), "From outside, $z^n speaks into the vehicle in a language you don't understand.\r\n");
-        } else
-          snprintf(buf, sizeof(buf), "From outside, $z mumbles incoherently into the vehicle.\r\n");
-        store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
-      }
+      ch->in_room = NULL;
+      ch->in_veh = last_veh;
       return;
     }
-    if (success > 0) {
-      suc = success_test(GET_SKILL(vict, GET_LANGUAGE(ch)), 4);
-      if (suc > 1)
-        snprintf(buf, sizeof(buf), "$z %s you in %s, \"%s^n\"\r\n", action_plur, skills[GET_LANGUAGE(ch)].name, capitalize(buf2));
-      else if (suc == 1)
-        snprintf(buf, sizeof(buf), "$z %s in %s, but you don't understand.\r\n", action_plur, skills[GET_LANGUAGE(ch)].name);
-      else
-        snprintf(buf, sizeof(buf), "$z %s you in a language you don't understand.\r\n", action_plur);
-    } else
-      snprintf(buf, sizeof(buf), "$z %s to you incoherently.\r\n", action_plur);
-    store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_VICT));
-    if (PRF_FLAGGED(ch, PRF_NOREPEAT))
-      send_to_char(OK, ch);
-    else {
-      snprintf(buf, sizeof(buf), "You %s $N, \"%s%s^n\"", action_sing, capitalize(buf2), (subcmd == SCMD_WHISPER) ? "" : "?");
-      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_CHAR));
+    
+    if (vict == ch) {
+      send_to_char(ch, "Why would you want to %s yourself?\r\n", action_sing);
+      ch->in_room = NULL;
+      ch->in_veh = last_veh;
+      return;
     }
-    // TODO: Should this be stored to message history? It's super nondescript.
-    act(action_others, FALSE, ch, 0, vict, TO_NOTVICT);
+    
+    // Message the whisper-er.
+    snprintf(buf, sizeof(buf), "You lean out towards $N^n and say in %s, \"%s%s%s\"", 
+             skills[language].name,
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(buf2),
+             ispunct(get_final_character_from_string(buf2)) ? "" : ".");
+             
+    store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_CHAR));
+    
+    // Message the whisper-ee.
+    snprintf(buf, sizeof(buf), "From within %s^n, $z^n says to you in %s, \"%s%s%s^n\"\r\n",
+            GET_VEH_NAME(last_veh), 
+            (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+            (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+            capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+            ispunct(get_final_character_from_string(buf2)) ? "" : ".");
+      
+    store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
+    
+    ch->in_room = NULL;
+    ch->in_veh = last_veh;
+    return;
+  } 
+  
+  if (!(vict = get_char_room_vis(ch, buf))
+      && !((veh = get_veh_list(buf, ch->in_room->vehicles, ch)) && subcmd == SCMD_WHISPER)) {
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", capitalize(buf));
+    return;
   }
+  
+  if (vict == ch) {
+    send_to_char("You can't get your mouth close enough to your ear...\r\n", ch);
+    return;
+  }
+  
+  if (IS_ASTRAL(ch) && vict &&
+           !(IS_ASTRAL(vict) ||
+             PLR_FLAGGED(vict, PLR_PERCEIVE) ||
+             IS_DUAL(vict))) {
+    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
+    return;
+  }
+
+  if (veh) {
+    if (veh->cspeed > SPEED_IDLE) {
+      send_to_char(ch, "It's moving too fast for you to lean in.\r\n");
+      return;
+    }
+
+    snprintf(buf, sizeof(buf), "You lean into %s^n and say in %s, \"%s%s%s\"", 
+             skills[language].name,
+             decapitalize_a_an(GET_VEH_NAME(veh)), 
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(buf2),
+             ispunct(get_final_character_from_string(buf2)) ? "" : ".");
+    send_to_char(buf, ch);
+    store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
+    for (vict = veh->people; vict; vict = vict->next_in_veh) {
+      snprintf(buf, sizeof(buf), "From outside, $z^n says into the vehicle in %s, \"%s%s%s^n\"\r\n", 
+               (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+               (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+               capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+               ispunct(get_final_character_from_string(buf2)) ? "" : ".");
+      
+      store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, NULL, vict, TO_VICT));
+    }
+    return;
+  }
+  
+  snprintf(buf, sizeof(buf), "$z^n %s you in %s, \"%s%s%s^n\"\r\n", 
+           action_plur, 
+           (IS_NPC(vict) || GET_SKILL(vict, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+           (PRF_FLAGGED(vict, PRF_NOHIGHLIGHT) || PRF_FLAGGED(vict, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+           capitalize(replace_too_long_words(vict, ch, buf2, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+           ispunct(get_final_character_from_string(buf2)) ? "" : ".");
+  
+  store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_VICT));
+  
+  if (PRF_FLAGGED(ch, PRF_NOREPEAT))
+    send_to_char(OK, ch);
+  else {
+    snprintf(buf, sizeof(buf), "You %s $N^n in %s, \"%s%s%s^n\"", 
+             action_sing, 
+             skills[language].name,
+             (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch), 
+             capitalize(buf2), 
+             (subcmd == SCMD_WHISPER) ? (ispunct(get_final_character_from_string(buf2)) ? "" : ".") : "?");
+    store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, act(buf, FALSE, ch, 0, vict, TO_CHAR));
+  }
+  
+  // TODO: Should this be stored to message history? It's super nondescript.
+  act(action_others, FALSE, ch, 0, vict, TO_NOTVICT);
 }
 
 ACMD(do_page)
@@ -504,11 +531,11 @@ ACMD(do_page)
   half_chop(argument, arg, buf2);
 
   if (IS_NPC(ch))
-    send_to_char("Monsters can't page.. go away.\r\n", ch);
+    send_to_char("NPCs can't page.. go away.\r\n", ch);
   else if (!*arg)
     send_to_char("Whom do you wish to page?\r\n", ch);
   else {
-    snprintf(buf, sizeof(buf), "\007\007*%s* %s", GET_CHAR_NAME(ch), buf2);
+    snprintf(buf, sizeof(buf), "\007\007Page from *%s*: %s", GET_CHAR_NAME(ch), buf2);
     if ((vict = get_char_vis(ch, arg)) != NULL) {
       if (vict == ch) {
         send_to_char("What's the point of that?\r\n", ch);
@@ -632,15 +659,19 @@ ACMD(do_radio)
 
 ACMD(do_broadcast)
 {
+  // No color highlights over the radio. It's already colored.
+  
   struct obj_data *obj, *radio = NULL;
   struct descriptor_data *d;
-  int i, j, frequency, to_room, crypt, decrypt, success, suc;
-  char buf3[MAX_STRING_LENGTH], buf4[MAX_STRING_LENGTH], voice[16] = "$v"; 
+  int i, j, frequency, to_room, crypt, decrypt;
+  char voice[16] = "$v"; 
   bool cyberware = FALSE, vehicle = FALSE;
+  
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     send_to_char("You must be Authorized to do that. Until then, you can use the ^WNEWBIE^n channel if you need help.\r\n", ch);
     return;
   }
+  
   if (IS_ASTRAL(ch)) {
     send_to_char("You can't manipulate electronics from the astral plane.\r\n", ch);
     return;
@@ -706,71 +737,49 @@ ACMD(do_broadcast)
 
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
+    
+  int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+  if (!has_required_language_ability_for_sentence(ch, argument, language))
+    return;
 
   if (radio && GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))))
     crypt = GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3)));
   else
     crypt = 0;
-
-  success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-
-  strcpy(buf4, argument);
-  // Starting at end of buf, work backwards and fuzz out the message.
-  for (int len = strlen(buf4) - 1; len >= 0; len--)
-    switch (number(0, 2)) {
-    case 1:
-      buf4[len] = '.';
-      break;
-    case 2:
-      buf4[len] = ' ';
-      break;
-    }
-  snprintf(buf3, MAX_STRING_LENGTH, "*static* %s", buf4);
-  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NO_RADIO))
-    strcpy(argument, buf3);
-
-  
-  if ( frequency > 0 ) {
-    if(crypt) {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, crypt, capitalize(argument));
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***^N", frequency, crypt);
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[%d MHz, Unknown](CRYPTO-%d): %s", frequency, crypt, capitalize(buf3));
-      snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown](CRYPTO-%d): (something incoherent...)^N", voice, frequency, crypt);
-    } else {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[%d MHz, %s]: %s^N", voice, frequency, skills[GET_LANGUAGE(ch)].name, capitalize(argument));
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown]: %s^N", voice, frequency, capitalize(argument));
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[%d MHz, Unknown]: %s", frequency, capitalize(buf3));
-      snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[%d MHz, Unknown]: (something incoherent...)^N", voice, frequency);
-    }
-
+    
+  char untouched_message[MAX_STRING_LENGTH];
+  if (frequency > 0) {
+    if (crypt)
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s%s^N", voice, frequency, skills[language].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+    else
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s]: %s%s^N", voice, frequency, skills[language].name, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
   } else {
-    if(crypt) {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[GET_LANGUAGE(ch)].name, crypt, capitalize(argument));
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***^N", crypt);
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown](CRYPTO-%d): %s", crypt, capitalize(buf3));
-      snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown](CRYPTO-%d): (something incoherent...)^N", voice, crypt);
-    } else {
-      snprintf(buf, sizeof(buf), "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[GET_LANGUAGE(ch)].name, capitalize(argument));
-      snprintf(buf2, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown]: %s^N", voice, capitalize(argument));
-      snprintf(buf4, MAX_STRING_LENGTH, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown]: %s", capitalize(buf3));
-      snprintf(buf3, MAX_STRING_LENGTH, "^y\\%s^y/[All Frequencies, Unknown]: (something incoherent...)^N", voice);
-    }
+    if (crypt)
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s%s^N", voice, skills[language].name, crypt, capitalize(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+    else
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s]: %s%s^N", 
+               voice, 
+               skills[language].name, 
+               capitalize(argument), 
+               ispunct(get_final_character_from_string(argument)) ? "" : ".");
   }
-
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else
-    store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, 0, TO_CHAR));
-  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF))
+    store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, 0, TO_CHAR));
+    
+  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF)) {
     for (d = descriptor_list; d; d = d->next) {
       if (!d->connected && d != ch->desc && d->character &&
           !PLR_FLAGS(d->character).AreAnySet(PLR_WRITING,
                                              PLR_MAILING,
-                                             PLR_EDITING, PLR_MATRIX, ENDBIT)
+                                             PLR_EDITING, 
+                                             PLR_MATRIX, ENDBIT)
           && !IS_PROJECT(d->character) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
-          !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT)) {
+          !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT)) 
+      {
         if (!IS_NPC(d->character) && !IS_SENATOR(d->character)) {
           radio = NULL;
           cyberware = FALSE;
@@ -779,75 +788,136 @@ ACMD(do_broadcast)
           if (d->character->in_veh && (radio = GET_MOD(d->character->in_veh, MOD_RADIO)))
             vehicle = TRUE;
 
-          for (obj = d->character->cyberware; obj && !radio; obj = obj->next_content)
-            if (GET_OBJ_VAL(obj, 0) == CYB_RADIO) {
-              radio = obj;
-              cyberware = 1;
-            }
+          if (!radio) {
+            for (obj = d->character->cyberware; obj && !radio; obj = obj->next_content)
+              if (GET_OBJ_VAL(obj, 0) == CYB_RADIO) {
+                radio = obj;
+                cyberware = 1;
+              }
+          }
 
-          for (obj = d->character->carrying; obj && !radio; obj = obj->next_content)
-            if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
-              radio = obj;
+          if (!radio) {
+            for (obj = d->character->carrying; obj && !radio; obj = obj->next_content)
+              if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+                radio = obj;
+          }
 
-          for (i = 0; !radio && i < NUM_WEARS; i++)
-            if (GET_EQ(d->character, i)) {
-              if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_RADIO)
-                radio = GET_EQ(d->character, i);
-              else if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_WORN
-                       && GET_EQ(d->character, i)->contains)
-                for (struct obj_data *obj2 = GET_EQ(d->character, i)->contains;
-                     obj2; obj2 = obj2->next_content)
-                  if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
-                    radio = obj2;
-            }
+          if (!radio) {
+            for (i = 0; !radio && i < NUM_WEARS; i++)
+              if (GET_EQ(d->character, i)) {
+                if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_RADIO)
+                  radio = GET_EQ(d->character, i);
+                else if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_WORN
+                         && GET_EQ(d->character, i)->contains)
+                  for (struct obj_data *obj2 = GET_EQ(d->character, i)->contains;
+                       obj2; obj2 = obj2->next_content)
+                    if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
+                      radio = obj2;
+              }
+          }
+          
           FOR_ITEMS_AROUND_CH(ch, obj) {
             if (GET_OBJ_TYPE(obj) == ITEM_RADIO && !CAN_WEAR(obj, ITEM_WEAR_TAKE))
               radio = obj;
           }
+          
+          if (!radio)
+            continue;
 
-          if (radio) {
-            suc = success_test(GET_SKILL(d->character, GET_LANGUAGE(ch)), 4);
-            if (CAN_WEAR(radio, ITEM_WEAR_EAR) || cyberware || vehicle)
-              to_room = 0;
-            else
-              to_room = 1;
+          if (CAN_WEAR(radio, ITEM_WEAR_EAR) || cyberware || vehicle)
+            to_room = 0;
+          else
+            to_room = 1;
 
-            i = GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0)));
-            j = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 2 : 1)));
-            decrypt = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)));
-            if (i == 0 || ((i != -1 && frequency != -1) && !(frequency >= (i - j) && frequency <= (i + j))))
-              continue;
-            if (decrypt >= crypt) {
-              if (to_room) {
-                if (success > 0 || IS_NPC(ch))
-                  if (suc > 0 || IS_NPC(ch))
-                    if (ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO))
-                      store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf4, FALSE, ch, 0, d->character, TO_VICT));
-                    else
-                      store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, d->character, TO_VICT));
-                  else
-                    store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
-                else
-                  store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
-              } else {
-                if (success > 0 || IS_NPC(ch))
-                  if (suc > 0 || IS_NPC(ch))
-                    if (ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO))
-                      store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf4, FALSE, ch, 0, d->character, TO_VICT));
-                    else 
-                      store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, d->character, TO_VICT));
-                  else
-                    store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
-                else
-                  store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf3, FALSE, ch, 0, d->character, TO_VICT));
-              }
-            } else
-              store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf2, FALSE, ch, 0, d->character, TO_VICT));
+          i = GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))); // Centered frequency.
+          j = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 2 : 1))); // Frequency range.
+          decrypt = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)));
+          if (i == 0 || ((i != -1 && frequency != -1) && !(frequency >= (i - j) && frequency <= (i + j))))
+            continue;
+          
+          char message[MAX_STRING_LENGTH];
+          char radio_string[1000];
+          
+          // If char's decrypt is insufficient, just give them the static.
+          if (decrypt < crypt) {
+            if (frequency <= 0) {
+              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", crypt);
+            } else {
+              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", frequency, crypt);
+            }
+            store_message_to_history(d, COMM_CHANNEL_RADIO, act(message, FALSE, ch, 0, d->character, TO_VICT));
+            continue;
           }
-        } else if (IS_SENATOR(d->character) && !PRF_FLAGGED(d->character, PRF_NORADIO))
-          store_message_to_history(d, COMM_CHANNEL_RADIO, act(buf, FALSE, ch, 0, d->character, TO_VICT));
+          
+          // Copy in the message body, mangling it as needed for language skill issues.
+          snprintf(message, sizeof(message), "%s%s",
+                   capitalize(replace_too_long_words(d->character, ch, argument, language, "^y")),
+                   ispunct(get_final_character_from_string(argument)) ? "" : ".");
+          
+          // Add in interference if there is any.
+          bool bad_reception;
+          if ((bad_reception = (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NO_RADIO) || ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO)))) {
+            // Compose the voice portion of the string.
+            strlcpy(radio_string, "^y\\Unintelligible Voice^y/", sizeof(radio_string));
+            
+            // Starting at end of buf, work backwards and fuzz out the message.
+            for (int len = strlen(message) - 1; len >= 0; len--) {
+              switch (number(0, 2)) {
+                // case 0 does nothing here- leave the letter intact.
+                case 1:
+                  message[len] = '.';
+                  break;
+                case 2:
+                  message[len] = ' ';
+                  break;
+              }
+            }
+          } else {
+            snprintf(radio_string, sizeof(radio_string), "^y\\%s^y/", voice);
+          }
+            
+          // Append frequency info to radio string.
+          if (frequency <= 0) {
+            strlcat(radio_string, "[All Frequencies, ", sizeof(radio_string));
+          } else {
+            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "[%d MHz, ", frequency);
+          }
+          
+          // Append language info to radio string.
+          if (GET_SKILL(d->character, language) > 0) {
+            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "%s]", skills[language].name);
+          } else {
+            strlcat(radio_string, "Unknown]", sizeof(radio_string));
+          }
+        
+          // Append crypt info to radio string (if any).
+          if (crypt) {
+            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "(CRYPTO-%d)", crypt);
+          }
+          
+          // If we have bad reception, add the static modifier.
+          if (bad_reception)
+            strlcat(radio_string, ": *static* ", sizeof(radio_string));
+          else
+            strlcat(radio_string, ": ", sizeof(radio_string));
+            
+          // Finally(!), add the message itself.
+          strlcat(radio_string, message, sizeof(radio_string));
+          
+          // Punctuate it and seal off any color code leakage.
+          if (!ispunct(get_final_character_from_string(radio_string)))
+            strlcat(radio_string, ".^n", sizeof(radio_string));
+          else
+            strlcat(radio_string, "^n", sizeof(radio_string));
+          
+          store_message_to_history(d, COMM_CHANNEL_RADIO, act(radio_string, FALSE, ch, 0, d->character, TO_VICT));
+          
+        } else if (IS_SENATOR(d->character) && !PRF_FLAGGED(d->character, PRF_NORADIO)) {
+          store_message_to_history(d, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, d->character, TO_VICT));
+        }
       }
     }
+  }
 
   for (d = descriptor_list; d; d = d->next)
     if (!d->connected &&
@@ -864,6 +934,7 @@ extern int _NO_OOC_;
 
 ACMD(do_gen_comm)
 {
+  // No color highlights over these channels. They're either OOC or already colored.
   struct veh_data *veh;
   struct descriptor_data *i;
   struct descriptor_data *d;
@@ -922,9 +993,21 @@ ACMD(do_gen_comm)
     send_to_char(ch, "You must be Authorized to use that command. Until then, you can use the ^WNEWBIE^n channel if you need help.\r\n");
     return;
   }
-
-  if (subcmd == SCMD_SHOUT && !char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
-    return;
+  
+  if (subcmd == SCMD_SHOUT) {
+    if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
+      return;
+      
+    if (PLR_FLAGGED(ch, PLR_NOSHOUT)) {
+      send_to_char(com_msgs[subcmd][0], ch);
+      return;
+    }
+      
+    if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF)) {
+      send_to_char("The walls seem to absorb your words.\r\n", ch);
+      return;
+    }
+  }
 
   if (IS_ASTRAL(ch)) {
     send_to_char(ch, "Astral beings cannot %s.\r\n", com_msgs[subcmd][1]);
@@ -936,16 +1019,10 @@ ACMD(do_gen_comm)
     return;
   }
 
-  if ((PLR_FLAGGED(ch, PLR_NOSHOUT) && subcmd == SCMD_SHOUT) ||
-      (PLR_FLAGGED(ch, PLR_NOOOC) && subcmd == SCMD_OOC) ||
-      (!(PLR_FLAGGED(ch, PLR_RPE) || IS_SENATOR(ch))  && subcmd == SCMD_RPETALK) ||
-      (!(PRF_FLAGGED(ch, PRF_QUEST) || IS_SENATOR(ch))  && subcmd == SCMD_HIREDTALK)) {
+  if ((subcmd == SCMD_OOC && PLR_FLAGGED(ch, PLR_NOOOC)) 
+       || (subcmd == SCMD_RPETALK && !(PLR_FLAGGED(ch, PLR_RPE) || IS_SENATOR(ch))) 
+       || (subcmd == SCMD_HIREDTALK && !(PRF_FLAGGED(ch, PRF_QUEST) || IS_SENATOR(ch)))) {
     send_to_char(com_msgs[subcmd][0], ch);
-    return;
-  }
-
-  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT) {
-    send_to_char("The walls seem to absorb your words.\r\n", ch);
     return;
   }
 
@@ -978,34 +1055,47 @@ ACMD(do_gen_comm)
   else if (subcmd == SCMD_SHOUT) {
     struct room_data *was_in = NULL;
     struct char_data *tmp;
-    int success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-    for (tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room))
+    
+    int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+    if (!has_required_language_ability_for_sentence(ch, argument, language))
+      return;
+    
+    for (tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
       if (tmp != ch) {
-        if (success > 0) {
-          int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
-          if (suc > 0 || IS_NPC(tmp))
-            snprintf(buf, sizeof(buf), "%s$z shouts in %s, \"%s%s\"^n", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, capitalize(argument), com_msgs[subcmd][3]);
-          else
-            snprintf(buf, sizeof(buf), "%s$z shouts in a language you don't understand.", com_msgs[subcmd][3]);
-        } else
-          strncpy(buf, "$z shouts incoherently.", sizeof(buf));
-        if (IS_NPC(ch))
-          snprintf(buf, sizeof(buf), "%s$z shouts, \"%s%s\"^n", com_msgs[subcmd][3], capitalize(argument), com_msgs[subcmd][3]);
+        snprintf(buf, sizeof(buf), "%s$z%s shouts in %s, \"%s%s%s\"^n", 
+                 com_msgs[subcmd][3], 
+                 com_msgs[subcmd][3],
+                 (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+                 capitalize(replace_too_long_words(tmp, ch, argument, strlen(argument), com_msgs[subcmd][3])), 
+                 ispunct(get_final_character_from_string(argument)) ? "" : "!", 
+                 com_msgs[subcmd][3]);
         
         // Note that this line invokes act().
         store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
       }
+    }
 
-    snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout, \"%s%s\"^n", com_msgs[subcmd][3], capitalize(argument), com_msgs[subcmd][3]);
+    snprintf(buf1, MAX_STRING_LENGTH,  "%sYou shout in %s, \"%s%s%s\"^n", 
+            com_msgs[subcmd][3], 
+            skills[language].name,
+            capitalize(argument), 
+            ispunct(get_final_character_from_string(argument)) ? "" : "!", 
+            com_msgs[subcmd][3]);
     // Note that this line invokes act().
     store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, act(buf1, FALSE, ch, 0, 0, TO_CHAR));
 
     was_in = ch->in_room;
     if (ch->in_veh) {
       ch->in_room = get_ch_in_room(ch);
-      snprintf(buf1, MAX_STRING_LENGTH,  "%sFrom inside %s, $z %sshouts, \"%s%s\"^n", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh),
-              com_msgs[subcmd][3], capitalize(argument), com_msgs[subcmd][3]);
       for (tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
+        snprintf(buf1, sizeof(buf1), "%sFrom inside %s^n, $z^n shouts in %s, \"%s%s%s\"^n", 
+                 com_msgs[subcmd][3], 
+                 decapitalize_a_an(GET_VEH_NAME(ch->in_veh)), 
+                 (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+                 capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])), 
+                 ispunct(get_final_character_from_string(argument)) ? "" : "!", 
+                 com_msgs[subcmd][3]);
+          
         // Replicate act() in a way that lets us capture the message.
         if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
           // They're a valid target, so send the message with a raw perform_act() call.
@@ -1031,18 +1121,14 @@ ACMD(do_gen_comm)
         ch->in_room = ch->in_room->dir_option[door]->to_room;
         for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch) {
-            if (success > 0) {
-              int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
-              if (suc > 0 || IS_NPC(tmp))
-                snprintf(buf, sizeof(buf), "%s$z shouts in %s, \"%s%s\"^n", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, capitalize(argument), com_msgs[subcmd][3]);
-              else
-                snprintf(buf, sizeof(buf), "%s$z shouts in a language you don't understand.", com_msgs[subcmd][3]);
-            } else
-              strncpy(buf, "$z shouts incoherently.", sizeof(buf));
-            if (IS_NPC(ch))
-              snprintf(buf, sizeof(buf), "%s$z shouts, \"%s%s\"^n", com_msgs[subcmd][3], capitalize(argument), com_msgs[subcmd][3]);
+            snprintf(buf, sizeof(buf), "%s$z^n shouts in %s, \"%s%s%s\"^n", 
+                     com_msgs[subcmd][3], 
+                     (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+                     capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])), 
+                     ispunct(get_final_character_from_string(argument)) ? "" : "!", 
+                     com_msgs[subcmd][3]);
             
-            // If it sent successfully, store to their history.
+            // Store to their history.
             store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, act(buf, FALSE, ch, NULL, tmp, TO_VICT));
           }
         ch->in_room = was_in;
@@ -1065,7 +1151,8 @@ ACMD(do_gen_comm)
               || PRF_FLAGGED( d->character, PRF_NOOOC) 
               || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)))
         continue;
-
+      
+      // No autopunct for channels.
       if (!access_level(d->character, GET_INCOG_LEV(ch)))
         snprintf(buf, sizeof(buf), "^m[^nSomeone^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", capitalize(argument));
       else
@@ -1160,7 +1247,10 @@ ACMD(do_language)
 
   if (!*arg) {
     send_to_char("You know the following languages:\r\n", ch);
-    for (i = SKILL_ENGLISH; i <= SKILL_FRENCH; i++)
+    for (i = SKILL_ENGLISH; i < MAX_SKILLS; i++) {
+      if (!SKILL_IS_LANGUAGE(i))
+        continue;
+        
       if ((GET_SKILL(ch, i)) > 0) {
         snprintf(buf, sizeof(buf), "%-20s %-17s", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         if (GET_LANGUAGE(ch) == i)
@@ -1168,10 +1258,11 @@ ACMD(do_language)
         strcat(buf, "\r\n");
         send_to_char(buf, ch);
       }
+    }
     return;
   }
 
-  if ((lannum = find_skill_num(arg)) && (lannum >= SKILL_ENGLISH && lannum <= SKILL_FRENCH))
+  if ((lannum = find_skill_num(arg)) && SKILL_IS_LANGUAGE(lannum))
     if (GET_SKILL(ch, lannum) > 0) {
       GET_LANGUAGE(ch) = lannum;
       send_to_char(ch, "You will now speak %s.\r\n", skills[lannum].name);
@@ -1286,14 +1377,16 @@ ACMD(do_phone)
         break;
 
     if (!k) {
-      send_to_char("The phone is picked up and a polite female voice says, \"This number is not in"
-                   " service, please check your number and try again.\"\r\n", ch);
+      send_to_char("The phone is picked up and a polite female voice says, \"The number you have dialed is not in"
+                   " service. Please check your number and try again.\"\r\n", ch);
       return;
     }
+    
     if (k == phone) {
       send_to_char("Why would you want to call yourself?\r\n", ch);
       return;
     }
+    
     if (k->dest) {
       send_to_char("You hear the busy signal.\r\n", ch);
       return;
@@ -1310,20 +1403,15 @@ ACMD(do_phone)
         tch = k->phone->in_obj->carried_by ? k->phone->in_obj->carried_by : k->phone->in_obj->worn_by;
       if (tch) {
         if (GET_POS(tch) == POS_SLEEPING) {
-          if (success_test(GET_WIL(tch), 4)) { // Why does it take a successful Willpower test to hear your phone?
-            GET_POS(tch) = POS_RESTING;
-            send_to_char("You are woken by your phone ringing.\r\n", tch);
-            if (!GET_OBJ_VAL(k->phone, 3))
-              act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
-          } else if (!GET_OBJ_VAL(k->phone, 3))
-            act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
+          GET_POS(tch) = POS_RESTING;
+          send_to_char("You are woken by your phone ringing.\r\n", tch);
+          if (!GET_OBJ_VAL(k->phone, 3))
+            act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
         } else if (!GET_OBJ_VAL(k->phone, 3)) {
           act("Your phone rings.", FALSE, tch, 0, 0, TO_CHAR);
           act("$n's phone rings.", FALSE, tch, NULL, NULL, TO_ROOM);
-        } else {
-          if (GET_OBJ_TYPE(k->phone) == ITEM_CYBERWARE || success_test(GET_INT(tch), 4))
-            act("You feel your phone ring.", FALSE, tch, 0, 0, TO_CHAR);
-        }
+        } else
+          act("You feel your phone ring.", FALSE, tch, 0, 0, TO_CHAR);
       } else {
         snprintf(buf, sizeof(buf), "%s rings.", GET_OBJ_NAME(k->phone));
         if (k->phone->in_room || k->phone->in_veh)
@@ -1380,22 +1468,30 @@ ACMD(do_phone)
       return;
     
     skip_spaces(&argument);
+    
+    if (!*argument) {
+      send_to_char("Yes, but what do you want to say?\r\n", ch);
+      return;
+    }
+    
+    int language = GET_LANGUAGE(ch) != 0 ? GET_LANGUAGE(ch) : SKILL_ENGLISH;
+    if (!has_required_language_ability_for_sentence(ch, argument, language))
+      return;
+    
     #define VOICE_BUF_SIZE 20
     char voice[VOICE_BUF_SIZE] = "$v";
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
       if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3))
         snprintf(voice, VOICE_BUF_SIZE, "A masked voice");
-    
-    if (success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4) > 0) {
-      snprintf(buf, sizeof(buf), "^Y%s on the other end of the line says in %s, \"%s\"", voice, skills[GET_LANGUAGE(ch)].name, capitalize(argument));
-      snprintf(buf2, MAX_STRING_LENGTH, "$z says into $s phone in %s, \"%s\"", skills[GET_LANGUAGE(ch)].name, capitalize(argument));
-    } else {
-      snprintf(buf, sizeof(buf), "^Y$v on the other end of the line mumbles incoherently.");
-      snprintf(buf2, MAX_STRING_LENGTH, "$z mumbles incoherently into $s phone.\r\n");
-    }
-    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say, \"%s\"\r\n", capitalize(argument));
+        
+    snprintf(buf3, MAX_STRING_LENGTH, "^YYou say into your phone, \"%s%s^Y\"\r\n", 
+             capitalize(argument), 
+             ispunct(get_final_character_from_string(argument)) ? "" : ".");
+             
     send_to_char(buf3, ch);
+    
     store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, buf3);
+    
     if (phone->dest->persona && phone->dest->persona->decker && phone->dest->persona->decker->ch)
       store_message_to_history(ch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, phone->dest->persona->decker->ch, TO_DECK));
     else {
@@ -1408,19 +1504,26 @@ ACMD(do_phone)
         tch = phone->dest->phone->in_obj->worn_by;
     }
     if (tch) {
-      if (success_test(GET_SKILL(tch, GET_LANGUAGE(ch)), 4) > 0)
-        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
-      else
-        store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act("^Y$v speaks in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT));
+      snprintf(buf, sizeof(buf), "^Y%s^Y on the other end of the line says in %s, \"%s%s^Y\"", 
+              voice, 
+              (IS_NPC(tch) || GET_SKILL(tch, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
+              capitalize(replace_too_long_words(tch, ch, argument, language, "^Y")), 
+              ispunct(get_final_character_from_string(argument)) ? "" : ".");    
+                          
+      store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, act(buf, FALSE, ch, 0, tch, TO_VICT));
     }
     if (!cyber) {
-      for (tch = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
+      for (tch = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room) {
         if (tch != ch) {
-          if (success_test(GET_SKILL(tch, GET_LANGUAGE(ch)), 4) > 0)
-            store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act(buf2, FALSE, ch, 0, tch, TO_VICT));
-          else
-            store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act("$z speaks into $s phone in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT));
+          snprintf(buf2, MAX_STRING_LENGTH, "$z^n says into $s phone in %s, \"%s%s%s^n\"",
+                  (IS_NPC(tch) || GET_SKILL(tch, language) > 0) ? skills[language].name : "an unknown language", 
+                  (PRF_FLAGGED(tch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
+                  capitalize(replace_too_long_words(tch, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))), 
+                  ispunct(get_final_character_from_string(argument)) ? "" : ".");
+                  
+          store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, act(buf2, FALSE, ch, 0, tch, TO_VICT));
         }
+      }
     }
   } else {
     any_one_arg(argument, arg);
@@ -1541,26 +1644,17 @@ void phone_check()
         tch = k->phone->in_obj->worn_by;
       if (tch) {
         if (GET_POS(tch) == POS_SLEEPING) {
-          if (GET_POS(tch) == POS_SLEEPING) {
-            if (success_test(GET_WIL(tch), 4)) { // Why does it take a successful Willpower test to hear your phone?
-              GET_POS(tch) = POS_RESTING;
-              send_to_char("You are woken by your phone ringing.\r\n", tch);
-              if (!GET_OBJ_VAL(k->phone, 3))
-                act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
-            } else if (!GET_OBJ_VAL(k->phone, 3))
-              act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
-          } else if (!GET_OBJ_VAL(k->phone, 3)) {
-            act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
-            continue;
-          } else
-            continue;
+          GET_POS(tch) = POS_RESTING;
+          send_to_char("You are woken by your phone ringing.\r\n", tch);
+          if (!GET_OBJ_VAL(k->phone, 3))
+            act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
+          continue;
         }
         if (!GET_OBJ_VAL(k->phone, 3)) {
           act("Your phone rings.", FALSE, tch, 0, 0, TO_CHAR);
           act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
         } else {
-          if (GET_OBJ_TYPE(k->phone) == ITEM_CYBERWARE || success_test(GET_INT(tch), 4))
-            act("You feel your phone ring.", FALSE, tch, 0, 0, TO_CHAR);
+          act("You feel your phone ring.", FALSE, tch, 0, 0, TO_CHAR);
         }
       } else {
         snprintf(buf, sizeof(buf), "%s rings.", GET_OBJ_NAME(k->phone));
@@ -1592,13 +1686,13 @@ ACMD(do_ignore)
         struct remem *temp;
         REMOVE_FROM_LIST(list, GET_IGNORE(ch), next);
         DELETE_AND_NULL(list);
-        send_to_char(ch, "You can now hear %s on OOC and in tells.\r\n", GET_CHAR_NAME(tch));
+        send_to_char(ch, "You can now hear %s on OOC and over tells, and you can see their emotes again.\r\n", GET_CHAR_NAME(tch));
       } else {
         list = new remem;
         list->idnum = GET_IDNUM(tch);
         list->next = GET_IGNORE(ch);
         GET_IGNORE(ch) = list;
-        send_to_char(ch, "You will no longer hear %s on OOC and in tells.\r\n", GET_CHAR_NAME(tch));
+        send_to_char(ch, "You will no longer hear %s on OOC or over tells, and you won't see their emotes.\r\n", GET_CHAR_NAME(tch));
       }
     } else send_to_char("That character is not logged on.\r\n", ch);
   }  

@@ -77,6 +77,9 @@ CREATE TABLE `pfiles` (
   `Inveh` int(8) unsigned default '0',
   `SysPoints` int(8) default 0,
   `socialbonus` mediumint(5) unsigned default '0',
+  `pgroup` mediumint(5) unsigned default '0',
+  `highlight` varchar(15) default '^n',
+  `email` varchar(200),
   PRIMARY KEY (`idnum`), 
   KEY (`name`) 
 ); 
