@@ -681,15 +681,22 @@ ACMD(do_new_echo) {
     }
   }
   
+  // Only questors and staff can echo without their names.
+  bool can_echo_without_name = access_level(ch, LVL_BUILDER) || PRF_FLAGGED(ch, PRF_QUESTOR);
+  
   // All checks done, we're clear to emote.  
   
   // Iterate over the viewers in the room.
   for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people; 
        viewer; 
        viewer = ch->in_room ? viewer->next_in_room : viewer->next_in_veh) {
+    // If they've ignored you, no luck.
+    if (found_mem(GET_IGNORE(viewer), ch))
+      continue;
+    
     // If the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
     if (subcmd != SCMD_AECHO || (IS_ASTRAL(viewer) || IS_DUAL(viewer)))
-      send_echo_to_char(ch, viewer, argument, subcmd == SCMD_EMOTE);
+      send_echo_to_char(ch, viewer, argument, can_echo_without_name);
   }
 }
 
@@ -823,8 +830,8 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
   // Calculate their max allowable word length.
   int max_allowable = max_allowable_word_length_at_language_level(GET_SKILL(ch, language_skill));
   
-  // Figure out if they're using a screenreader or not.
-  bool screenreader = PRF_FLAGGED(ch, PRF_SCREENREADER);
+  // If they don't want pseudolanguage strings, reflect that here.
+  bool no_pseudolanguage = PRF_FLAGGED(ch, PRF_NOPSEUDOLANGUAGE);
     
   strlcpy(replaced_message, message, sizeof(replaced_message));
     
@@ -921,7 +928,7 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
         
         if (!random_word) {
           // Grab our replacement word.
-          if (screenreader) 
+          if (no_pseudolanguage) 
             random_word = "...";
           else
             random_word = need_caps ? capitalize(get_random_word_from_lexicon(language_skill)) : get_random_word_from_lexicon(language_skill);

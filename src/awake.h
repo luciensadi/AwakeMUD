@@ -400,7 +400,8 @@ enum {
 #define PRF_ECONLOG             51
 #define PRF_BRIEF               52
 #define PRF_NOHIGHLIGHT         53
-#define PRF_MAX                 54
+#define PRF_NOPSEUDOLANGUAGE    54
+#define PRF_MAX                 55
 
 /* log watch */
 

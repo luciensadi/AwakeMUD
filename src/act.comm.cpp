@@ -1686,13 +1686,13 @@ ACMD(do_ignore)
         struct remem *temp;
         REMOVE_FROM_LIST(list, GET_IGNORE(ch), next);
         DELETE_AND_NULL(list);
-        send_to_char(ch, "You can now hear %s on OOC and in tells.\r\n", GET_CHAR_NAME(tch));
+        send_to_char(ch, "You can now hear %s on OOC and over tells, and you can see their emotes again.\r\n", GET_CHAR_NAME(tch));
       } else {
         list = new remem;
         list->idnum = GET_IDNUM(tch);
         list->next = GET_IGNORE(ch);
         GET_IGNORE(ch) = list;
-        send_to_char(ch, "You will no longer hear %s on OOC and in tells.\r\n", GET_CHAR_NAME(tch));
+        send_to_char(ch, "You will no longer hear %s on OOC or over tells, and you won't see their emotes.\r\n", GET_CHAR_NAME(tch));
       }
     } else send_to_char("That character is not logged on.\r\n", ch);
   }  

@@ -1067,8 +1067,8 @@ const char *tog_messages[][2] = {
                              "You will now display your playergroup affiliation in the wholist.\r\n"},
                             {"You will no longer receive the keepalive pulses from the MUD.\r\n",
                              "You will now receive keepalive pulses from the MUD.\r\n"},
-                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR and TOGGLE NOPROMPT settings have not been altered.\r\n",
-                             "Screenreader mode enabled. Extraneous text will be reduced. Color and prompts have been disabled too, you may TOGGLE NOCOLOR and TOGGLE NOPROMPT to restore them.\r\n"},
+                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR, TOGGLE NOPROMPT, and TOGGLE NOPSEUDOLANGUAGE settings have not been altered.\r\n",
+                             "Screenreader mode enabled. Extraneous text will be reduced. Color, prompts, and pseudolanguage strings have been disabled for you, you may TOGGLE NOCOLOR, TOGGLE NOPROMPT, and TOGGLE NOPSEUDOLANGUAGE respectively to restore them.\r\n"},
                             {"You will now receive ANSI color codes again.\r\n",
                              "You will no longer receive ANSI color codes.\r\n"},
                             {"You will now receive prompts.\r\n",
@@ -1081,6 +1081,8 @@ const char *tog_messages[][2] = {
                              "You will no longer see room descriptions when moving.\r\n"},
                             {"You will now see text highlights from characters.\r\n",
                              "You will no longer see text highlights from characters.\r\n"},
+                            {"You will now see pseudolanguage strings.\r\n",
+                             "You will no longer see pseudolanguage strings.\r\n"},
                           };
 
 ACMD(do_toggle)
@@ -1259,6 +1261,7 @@ ACMD(do_toggle)
       if (result) {
         PRF_FLAGS(ch).SetBit(PRF_NOCOLOR);
         PRF_FLAGS(ch).SetBit(PRF_NOPROMPT);
+        PRF_FLAGS(ch).SetBit(PRF_NOPSEUDOLANGUAGE);
       }
       mode = 29;
     } else if (is_abbrev(argument, "nocolors") || is_abbrev(argument, "colors") || is_abbrev(argument, "colours")) {
@@ -1279,6 +1282,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "highlights") || is_abbrev(argument, "nohighlights")) {
       result = PRF_TOG_CHK(ch, PRF_NOHIGHLIGHT);
       mode = 35;
+    } else if (is_abbrev(argument, "pseudolanguage") || is_abbrev(argument, "nopseudolanguage")) {
+      result = PRF_TOG_CHK(ch, PRF_NOPSEUDOLANGUAGE);
+      mode = 36;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
