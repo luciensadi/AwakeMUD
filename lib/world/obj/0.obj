@@ -6,19 +6,8 @@ An unnamed object sits here.~
 LookDesc:$
 You see an uncreative object.~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	brick
 [POINTS]
 	Weight:	0.01
-	Barrier:	3
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #1
 Keywords:	formula spell blank
@@ -30,18 +19,10 @@ Cryptic writing covers the paper.
 ~
 Type:	Spell Formula
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	0.01
-	Barrier:	3
-	Cost:	0
-	AvailTN:	0
 	AvailDay:	7.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #2
 Keywords:	hide puff
@@ -55,17 +36,11 @@ make you dizzy.
 Type:	Worn
 WearFlags:	10000000001
 ExtraFlags:	100000000001
-AffFlags:	0
 Material:	adv. plastics
 [POINTS]
 	Weight:	1.00
 	Barrier:	32
 	Cost:	1000000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val5:	15
 	Val6:	15
@@ -81,19 +56,10 @@ black apple is faintly visible on its cover, and a series of technologically
 archaic ports lines the back. 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	electronics
 [POINTS]
 	Weight:	3.00
 	Barrier:	8
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #4
 Keywords:	oldschool school bulletin board
@@ -104,19 +70,9 @@ LookDesc:$
 This terminal is used for job posts and resume posts. 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #5
 Keywords:	scroll dark blue
@@ -130,7 +86,6 @@ else is undecipherable to the mundane.
 Type:	Spell Formula
 WearFlags:	1
 ExtraFlags:	1000001
-AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	2.00
@@ -138,9 +93,6 @@ Material:	paper
 	Cost:	6000
 	AvailTN:	6
 	AvailDay:	7.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	6
 	Val1:	48
@@ -157,17 +109,10 @@ rends your flesh.
 Type:	Weapon
 WearFlags:	10000000000001
 ExtraFlags:	1001010010
-AffFlags:	0
 Material:	orichalcum
 [POINTS]
 	Weight:	3.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	4
 	Val2:	4
@@ -189,17 +134,10 @@ A blood red robe, worn by an arcanist.
 Type:	Worn
 WearFlags:	10000000001
 ExtraFlags:	1010000
-AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	6.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val5:	50
 	Val6:	50
@@ -224,12 +162,6 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #9
 Keywords:	cannon big
@@ -247,12 +179,6 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	50
 	Val1:	4
@@ -275,17 +201,9 @@ You wonder where the skin that made them was procured...
 Type:	Worn
 WearFlags:	100001
 ExtraFlags:	100000011010
-AffFlags:	0
 Material:	leather
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #11
 Keywords:	claw silver
@@ -298,17 +216,9 @@ It's silver, clawlike and deadly!
 Type:	Weapon
 WearFlags:	1
 ExtraFlags:	11000
-AffFlags:	0
 Material:	stone
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	2
 	Val2:	3
@@ -326,19 +236,10 @@ LookDesc:$
 What?  You really shouldn't be seeing this.
 ~
 Type:	Other
-WearFlags:	0
 ExtraFlags:	100000000000
-AffFlags:	0
 Material:	computers
 [POINTS]
-	Weight:	0.00
 	Barrier:	4
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #13
 Keywords:	Root's pager
@@ -350,18 +251,9 @@ It looks pretty much like a normal alphanumeric pager.
 ~
 Type:	Other
 WearFlags:	100000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	adv. plastics
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [AFFECT 0]
 	Location:	Combat Pool
 	Modifier:	100
@@ -391,18 +283,10 @@ reading.
 ~
 Type:	Other
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	3.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #15
 Keywords:	cookie frosting covered
@@ -417,18 +301,9 @@ that?
 ~
 Type:	Food
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	organic
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	30
 BREAK
@@ -442,18 +317,9 @@ It's a lot of nuyen.
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	25000
 BREAK
@@ -467,18 +333,10 @@ It's a pretty generic credstick.
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	0.21
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	25000
 	Val1:	1
@@ -493,19 +351,10 @@ LookDesc:$
 It's a standard computer terminal, though modified to fit FJ's needs ;) 
 ~
 Type:	UNDEFINED
-WearFlags:	0
 ExtraFlags:	101000001000
-AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #20
 Keywords:	terminal computer board state art
@@ -516,19 +365,9 @@ LookDesc:$
 You shouldn't be seeing this. 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	electronics
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #21
 Keywords:	terminal sgi workstation computer
@@ -539,19 +378,11 @@ LookDesc:$
 Hey!  You shouldnt be seeing this! 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	10000.00
 	Barrier:	1
 	Cost:	1090000000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #22
 Keywords:	terminal computer alpha server
@@ -562,19 +393,11 @@ LookDesc:$
 You shouldn't be seeing this unless something is b0rked. 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	adv. plastics
 [POINTS]
 	Weight:	2147483648.00
 	Barrier:	1
 	Cost:	2147483647
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #23
 Keywords:	terminal cabinet street fighter
@@ -590,19 +413,9 @@ screen saver runs showing clips from the old game and a modified control deck
 has a keyboard for typing messages. 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	electronics
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #24
 Keywords:	tux tshirt t-shirt linux penguin
@@ -615,17 +428,11 @@ The infamous image of Tux the Linux Penguin adorns this black t-shirt.
 Type:	Worn
 WearFlags:	1001
 ExtraFlags:	101000000000
-AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	2.00
 	Barrier:	32
 	Cost:	2147483647
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val5:	1000
 	Val6:	1000
@@ -641,17 +448,11 @@ A black custom-fit baseball hat, with the SF logo on it.
 Type:	Worn
 WearFlags:	10001
 ExtraFlags:	101000000000
-AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	2.00
 	Barrier:	32
 	Cost:	2147483647
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #26
 Keywords:	terminal dumb console computer shadowland access portal
@@ -663,19 +464,11 @@ A cursor blinks idly.  The terminal is not connected to the mainframe. There
 is a problem here and it needs to be reported to an immortal. 
 ~
 Type:	Other
-WearFlags:	0
 ExtraFlags:	10
-AffFlags:	0
 Material:	computers
 [POINTS]
 	Weight:	10.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #27
 Keywords:	book scieno diagnetix dianetics hubbard scientology huckster huxter lies garbage
@@ -689,18 +482,10 @@ up brainwashing you.  It's garbage, chuck it.
 ~
 Type:	Other
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	3.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #28
 Keywords:	computer terminal apple macintosh
@@ -711,19 +496,11 @@ LookDesc:$
 What?  You shouldn't see this!  It's bug report time baby yeah! 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	computers
 [POINTS]
 	Weight:	1000000000.00
 	Barrier:	32
 	Cost:	2147483647
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #29
 Keywords:	book
@@ -735,18 +512,9 @@ test object.  read page1, page2, page3
 ~
 Type:	Other
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #30
 Keywords:	server case pieces computer parts broken
@@ -760,18 +528,10 @@ about nine hard drives attached amongst various other pieces of hardware.
 ~
 Type:	Other
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	3.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #31
 Keywords:	terminal computer tactical system board
@@ -782,19 +542,10 @@ LookDesc:$
 If you are seeing this, either the spec-code isn't in yet or THERE IS A BUG! 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	computers
 [POINTS]
 	Weight:	1000000000.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #32
 Keywords:	badge lone star
@@ -807,18 +558,9 @@ an inscription saying "Detective".
 ~
 Type:	Other
 WearFlags:	100000000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.00
 	Barrier:	24
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #33
 Keywords:	mask face facemask abraham lincoln
@@ -832,17 +574,9 @@ go around the back of your head. weee i'm abraham lincon!
 Type:	Worn
 WearFlags:	100000000000000000000001
 ExtraFlags:	1000000000
-AffFlags:	0
 Material:	plastic
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #34
 Keywords:	fastjack head pike
@@ -854,18 +588,9 @@ Fastjack's head on a pike.
 ~
 Type:	Other
 WearFlags:	100000000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #35
 Keywords:	Antique OpenBSD laptop
@@ -880,18 +605,9 @@ comes with a full sized keyboard.
 ~
 Type:	Other
 WearFlags:	100000000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	computers
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #36
 Keywords:	straw mcdonalds
@@ -903,18 +619,9 @@ A basic McDonalds straw that has some white powder on it.
 ~
 Type:	Other
 WearFlags:	100000000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #37
 Keywords:	mirror stained cocaine powder
@@ -926,18 +633,9 @@ A basic mirror with some white powder covering the surface.
 ~
 Type:	Other
 WearFlags:	100000000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	glass
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #38
 Keywords:	testtube pipe methamphetamine resin
@@ -950,18 +648,9 @@ smoking.
 ~
 Type:	Other
 WearFlags:	110000000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #39
 Keywords:	spoon
@@ -975,18 +664,9 @@ handle.
 ~
 Type:	Other
 WearFlags:	110000000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #40
 Keywords:	moonsilver chainmail armor
@@ -1004,17 +684,10 @@ almost forgotten, echoed in legend as Avalon and ancient Tir Na Nog.
 Type:	Worn
 WearFlags:	1001
 ExtraFlags:	111010000000001000000
-AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val5:	7
 	Val6:	12
@@ -1028,19 +701,9 @@ LookDesc:$
 Perfect for summoning an elevator. Why don't you ^WPUSH^n it? 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #42
 Keywords:	panel
@@ -1051,19 +714,24 @@ LookDesc:$
 You shouldn't be able to look at this. Please alert staff. 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
+BREAK
+#43
+Keywords:	corpse
+Name:	corpse
+RoomDesc:$
+corpse~
+LookDesc:$
+corpse 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	10000000000
+Material:	metal
+[POINTS]
+	Barrier:	32
 BREAK
 #50
 Keywords:	flat panel display monitor terminal board floating
@@ -1074,19 +742,11 @@ LookDesc:$
 You shouldn't see this description.  There is a bug.  Report it. 
 ~
 Type:	UNDEFINED
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	2147483648.00
 	Barrier:	1
 	Cost:	2147483647
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #66
 Keywords:	An X-Box hooked up with Linux
@@ -1098,18 +758,9 @@ An X-Box hooked up with Linux
 ~
 Type:	UNDEFINED
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #81
 Keywords:	blue light saber
@@ -1122,17 +773,11 @@ Hot damn, it's a blue light saber
 Type:	Weapon
 WearFlags:	10000000000001
 ExtraFlags:	101000000011
-AffFlags:	0
 Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	32
 	Cost:	50000000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	50
 	Val1:	4
@@ -1150,18 +795,10 @@ A wad of nuyen is here
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	25000
 BREAK
@@ -1176,18 +813,11 @@ transactions.  A 10-digit keypad decorates part of it.
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	adv. plastics
 [POINTS]
 	Weight:	0.21
 	Barrier:	4
 	Cost:	125
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	1
 	Val2:	1
@@ -1202,18 +832,11 @@ Much like the plastic version, only more durable.
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	0.25
 	Barrier:	6
 	Cost:	275
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	1
 	Val2:	1
@@ -1229,18 +852,11 @@ thumbprint pad instead of a 10-digit keypad.
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	0.25
 	Barrier:	6
 	Cost:	1250
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	1
 	Val2:	2
@@ -1256,18 +872,11 @@ is the most durable model of all.
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	0.25
 	Barrier:	12
 	Cost:	2500
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	1
 	Val2:	2
@@ -1283,18 +892,11 @@ requires a successful retinal scan to access an account.
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	0.25
 	Barrier:	6
 	Cost:	9250
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	1
 	Val2:	3
@@ -1310,18 +912,11 @@ the emerald credstick is much more stylish.
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
 Material:	stone
 [POINTS]
 	Weight:	0.25
 	Barrier:	6
 	Cost:	12750
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	1
 	Val2:	3
@@ -1337,18 +932,10 @@ secret information you shouldn't be reading.
 ~
 Type:	Decking Accessory
 WearFlags:	100000000000001
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	adv. plastics
 [POINTS]
 	Weight:	0.02
-	Barrier:	3
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val2:	1
 BREAK
@@ -1363,18 +950,11 @@ contains the designs to an as of yet unmade program.
 ~
 Type:	Program Design
 WearFlags:	1
-ExtraFlags:	1000000000
-AffFlags:	0
+ExtraFlags:	100000000000000001000000000
 Material:	adv. plastics
 [POINTS]
 	Weight:	0.02
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #108
 Keywords:	optical chip
@@ -1386,18 +966,12 @@ It's an optical chip, probably storing some wiz new program for you to use.
 ~
 Type:	Program
 WearFlags:	1
-ExtraFlags:	1000000000
-AffFlags:	0
+ExtraFlags:	100000000000000001000000000
 Material:	electronics
 [POINTS]
 	Weight:	0.02
-	Barrier:	3
-	Cost:	0
 	AvailTN:	2
 	AvailDay:	7.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #109
 Keywords:	blank photo
@@ -1410,18 +984,10 @@ most terrifying thing you could ever imagine.
 ~
 Type:	Decking Accessory
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	paper
 [POINTS]
 	Weight:	0.01
-	Barrier:	3
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	15
 	Val2:	1
@@ -1436,18 +1002,10 @@ It's a roll of nuyen, just ready for you to grab and run.
 ~
 Type:	Money
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #111
 Keywords:	mail paper letter
@@ -1460,18 +1018,11 @@ not something you will easily forget.
 ~
 Type:	Other
 WearFlags:	100000000000001
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
 	Cost:	30
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #112
 Keywords:	blank part design
@@ -1483,18 +1034,10 @@ It contains the plans for a cyberdeck part.
 ~
 Type:	Deck Part
 WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	paper
 [POINTS]
-	Weight:	0.00
 	Barrier:	1
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #113
 Keywords:	non-descript cyberdeck deck
@@ -1506,15 +1049,10 @@ It is a featureless cyberdeck.
 ~
 Type:	Custom Deck
 WearFlags:	10001000100000000000001
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	computers
 [POINTS]
-	Weight:	0.00
 	Barrier:	6
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
@@ -1531,19 +1069,10 @@ Filled with all manner of nik-naks and various magic and semi-magic artifacts,
 this lodge has been set up by a shaman. 
 ~
 Type:	Magic Tool
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	fabric
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	3
 BREAK
@@ -1558,19 +1087,10 @@ elaborate design, drawn in chalk that takes up most of the floor space in the
 room. 
 ~
 Type:	Magic Tool
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	stone
 [POINTS]
-	Weight:	0.00
 	Barrier:	16
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	2
 BREAK
@@ -1585,18 +1105,11 @@ and air. Very useful to any mage trying to conjure elementals.
 ~
 Type:	Magic Tool
 WearFlags:	1
-ExtraFlags:	1000000000
-AffFlags:	0
+ExtraFlags:	100000000000000001000000000
 Material:	organic
 [POINTS]
 	Weight:	2.00
 	Barrier:	4
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	4
 BREAK
@@ -1610,18 +1123,11 @@ It's a blank spell formula.
 ~
 Type:	Spell Formula
 WearFlags:	100000000000001
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	fabric
 [POINTS]
 	Weight:	0.10
-	Barrier:	3
-	Cost:	0
-	AvailTN:	0
 	AvailDay:	7.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #118
 Keywords:	folder
@@ -1633,18 +1139,10 @@ It's a folder off of a pocket secretary. How are you looking at it?
 ~
 Type:	Other
 WearFlags:	10000000000001
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	metal
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #119
 Keywords:	neophyte guild housing card
@@ -1657,18 +1155,11 @@ housing.
 ~
 Type:	Other
 WearFlags:	1
-ExtraFlags:	1000001000
-AffFlags:	0
+ExtraFlags:	100000000000000001000001000
 Material:	metal
 [POINTS]
 	Weight:	0.75
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #120
 Keywords:	grafitti
@@ -1679,42 +1170,31 @@ LookDesc:$
 It's just paint. 
 ~
 Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
+ExtraFlags:	100000000000000000000000000
 Material:	concrete
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #121
-Keywords:	ammo box ammunition
-Name:	a blank ammo box
+Keywords:	metal ammo ammunition box normal edged weapon 10-round rounds
+Name:	a 10-round box of normal edged weapon ammunition
 RoomDesc:$
-Someone has left a box of ammunition here.~
+A metal box of normal edged weapon rounds has been left here.~
 LookDesc:$
-It is a box of ammo. 
-~
+A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.~
 Type:	Ammo Box
 WearFlags:	1
-ExtraFlags:	1000001000
-AffFlags:	0
+ExtraFlags:	100000000000000001000001000
 Material:	metal
 [POINTS]
-	Weight:	0.00
+	Weight:	0.25
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
+	Cost:	20
+	AvailTN:	2
+	AvailDay:	1.00
+	StreetIndex:	0.75
+[VALUES]
+	Val0:	10
 BREAK
 #122
 Keywords:	armor jacket ucas army dress uniform overcoat
@@ -1728,18 +1208,11 @@ and impact protection.
 ~
 Type:	Worn
 WearFlags:	10000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	4.00
 	Barrier:	8
 	Cost:	15000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	2
 	Val1:	6
@@ -1761,17 +1234,10 @@ arcane and ancient tongues.
 Type:	Worn
 WearFlags:	10001
 ExtraFlags:	1
-AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #124
 Keywords:	white cloak alien keyn jraye
@@ -1786,17 +1252,10 @@ quality, soft, but somewhat odd linen.
 Type:	Worn
 WearFlags:	10000000001
 ExtraFlags:	1
-AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val5:	2
 	Val6:	1
@@ -1812,18 +1271,9 @@ odd, as if its not made of anything... earthly.
 ~
 Type:	Worn
 WearFlags:	100001
-ExtraFlags:	0
-AffFlags:	0
 Material:	fabric
 [POINTS]
-	Weight:	0.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #126
 Keywords:	silver cord
@@ -1835,18 +1285,10 @@ A fine silver rope cord.
 ~
 Type:	Worn
 WearFlags:	100000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #127
 Keywords:	blank empty magazine clip
@@ -1860,18 +1302,11 @@ structure of a magazine that best fits the selected weapon.
 ~
 Type:	Gun Magazine
 WearFlags:	1
-ExtraFlags:	100
-AffFlags:	0
+ExtraFlags:	100000000000000000000000100
 Material:	metal
 [POINTS]
 	Weight:	0.05
 	Barrier:	4
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	22
 BREAK
@@ -1886,7 +1321,6 @@ A sniper rifle with a huge scope on it, and shock pads to counter recoil.
 Type:	Weapon
 WearFlags:	10000000000001
 ExtraFlags:	1000000001000000000000
-AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	9.00
@@ -1896,7 +1330,6 @@ Material:	metal
 	AvailDay:	30.00
 	LegalNum:	2
 	LegalCode:	9
-	LegalPermit:	0
 [VALUES]
 	Val0:	14
 	Val1:	3
@@ -1920,18 +1353,11 @@ these lousy cybereyes."
 ~
 Type:	Worn
 WearFlags:	1001
-ExtraFlags:	0
-AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.00
 	Barrier:	2
 	Cost:	50
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 #155
 Keywords:	mister jingles mr mouse
@@ -1944,18 +1370,9 @@ size of a half dollar, and is quite quick.
 ~
 Type:	Food
 WearFlags:	100000000000001
-ExtraFlags:	0
-AffFlags:	0
 Material:	organic
 [POINTS]
 	Weight:	1.00
-	Barrier:	3
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	30
 	Val3:	5
@@ -1982,17 +1399,11 @@ and emits a soft humming sound.
 Type:	Weapon
 WearFlags:	10000000000001
 ExtraFlags:	11
-AffFlags:	0
 Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	32
 	Cost:	1000000000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val1:	3
 	Val2:	3
@@ -2021,12 +1432,6 @@ Material:	metal
 [POINTS]
 	Weight:	5.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	50
 	Val1:	4
@@ -2052,12 +1457,6 @@ Material:	metal
 [POINTS]
 	Weight:	50.00
 	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 [VALUES]
 	Val0:	6
 	Val1:	6
@@ -2079,16 +1478,8 @@ This is a gold wedding ring, with the inscription "Zack and Emily."
 Type:	Worn
 WearFlags:	1
 ExtraFlags:	1000001000
-AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.00
-	Barrier:	3
 	Cost:	1000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
 BREAK
 END

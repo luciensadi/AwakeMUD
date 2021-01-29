@@ -89,6 +89,7 @@ extern char *get_player_name(vnum_t id);
 extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
 extern void write_world_to_disk(int vnum);
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
+extern bool House_get_filename(vnum_t vnum, char *filename, int filename_size);
 
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
@@ -555,37 +556,49 @@ void make_corpse(struct char_data * ch)
   } else {
     obj_to_room(corpse, ch->in_room);
     
-    if (GET_OBJ_VNUM(corpse) == OBJ_SPECIAL_PC_CORPSE
-        && !ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) 
-        && !ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
-      snprintf(buf, sizeof(buf), "Setting storage flag for %s (%ld) due to player corpse being in it.",
-               GET_ROOM_NAME(ch->in_room),
-               GET_ROOM_VNUM(ch->in_room));
-      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    if (GET_OBJ_VNUM(corpse) == OBJ_SPECIAL_PC_CORPSE) {
+      char filename[500];
+      filename[0] = 0;
       
-      ch->in_room->room_flags.SetBit(ROOM_CORPSE_SAVE_HACK);
-      ch->in_room->room_flags.SetBit(ROOM_STORAGE);
-      
-      for (int counter = 0; counter <= top_of_zone_table; counter++) {
-        if ((GET_ROOM_VNUM(ch->in_room) >= (zone_table[counter].number * 100)) 
-            && (GET_ROOM_VNUM(ch->in_room) <= (zone_table[counter].top))) 
-        {
-          write_world_to_disk(zone_table[counter].number);
-          
-          if (!Storage_get_filename(GET_ROOM_VNUM(ch->in_room), buf, sizeof(buf))) {
-            mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
-            send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
-            return;
+      if (!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+        snprintf(buf, sizeof(buf), "Setting storage flag for %s (%ld) due to player corpse being in it.",
+                 GET_ROOM_NAME(ch->in_room),
+                 GET_ROOM_VNUM(ch->in_room));
+        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+        
+        ch->in_room->room_flags.SetBit(ROOM_CORPSE_SAVE_HACK);
+        ch->in_room->room_flags.SetBit(ROOM_STORAGE);
+        
+        // Save the new flag.
+        for (int counter = 0; counter <= top_of_zone_table; counter++) {
+          if ((GET_ROOM_VNUM(ch->in_room) >= (zone_table[counter].number * 100)) 
+              && (GET_ROOM_VNUM(ch->in_room) <= (zone_table[counter].top))) 
+          {
+            write_world_to_disk(zone_table[counter].number);
+            break;
           }
-          
-          House_save(NULL, buf, real_room(GET_ROOM_VNUM(ch->in_room)));
-          return;
         }
       }
       
-      // Saving failed.
-      mudlog("WARNING: Failed to make room into a save room for corpse - did not find zone!", ch, LOG_SYSLOG, TRUE);
-      send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
+      if (ROOM_FLAGGED(ch->in_room, ROOM_STORAGE)) {
+        if (!Storage_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
+          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
+          send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
+          return;
+        }
+      } else if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+        if (!House_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
+          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
+          send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
+          return;
+        }
+      } else {
+        mudlog("WARNING: Failed to make room into a save room for corpse - flag not set!!", ch, LOG_SYSLOG, TRUE);
+        send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
+        return;
+      }
+      
+      House_save(NULL, filename, real_room(GET_ROOM_VNUM(ch->in_room)));
     }
   }
 }

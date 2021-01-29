@@ -1651,7 +1651,7 @@ ACMD(do_load)
     }
   } else
     for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content)
-      if ((isname(argument, soft->text.keywords) || isname(argument, soft->restring))
+      if ((isname(argument, soft->text.keywords) || isname(argument, soft->restring) || isname(argument, soft->text.name))
           && (GET_OBJ_VAL(soft, 0) > SOFT_SENSOR ||
               (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE))) {
         if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 2) > DECKER->active) {

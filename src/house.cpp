@@ -176,7 +176,9 @@ bool House_load(struct house_control_rec *house)
         delete [] player_name;
       }
       
-      auto_repair_obj(obj);
+      // Don't auto-repair cyberdecks until they're fully loaded.
+      if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
+        auto_repair_obj(obj);
       
       inside = data.GetInt(buf, 0);
       if (inside > 0) {

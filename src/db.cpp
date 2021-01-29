@@ -4800,7 +4800,9 @@ void load_saved_veh()
           delete [] player_name;
         }
         
-        auto_repair_obj(obj);
+        // Don't auto-repair cyberdecks until they're fully loaded.
+        if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
+          auto_repair_obj(obj);
         
         if (inside > 0) {
           if (inside == last_in)
@@ -5017,7 +5019,9 @@ void load_consist(void)
               delete [] player_name;
             }
             
-            auto_repair_obj(obj);
+            // Don't auto-repair cyberdecks until they're fully loaded.
+            if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
+              auto_repair_obj(obj);
             
             inside = data.GetInt(buf, 0);
             if (inside > 0) {

@@ -4329,9 +4329,18 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
-  /* DISABLED FOR MORTALS */
-  nonsensical_reply(ch, NULL, "standard");
-  return;
+  strcpy(buf, "Players in socialization rooms\r\n-------\r\n");
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (!d->connected) {
+      struct char_data *i = (d->original ? d->original : d->character);
+      if (i && i->in_room && ROOM_FLAGGED(i->in_room, ROOM_ENCOURAGE_CONGREGATION) && CAN_SEE(ch, i)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - %s^n\r\n",
+                GET_CHAR_NAME(i),
+                GET_ROOM_NAME(i->in_room));
+      }
+    }
+  }
+  page_string(ch->desc, buf, 1);
 }
 
 void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
