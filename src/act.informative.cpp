@@ -4329,7 +4329,8 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
-  strcpy(buf, "Players in socialization rooms\r\n-------\r\n");
+  strlcpy(buf, "Players in socialization rooms\r\n-------\r\n", sizeof(buf));
+  bool found_someone = FALSE;
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
     if (!d->connected) {
       struct char_data *i = (d->original ? d->original : d->character);
@@ -4337,8 +4338,12 @@ void perform_mortal_where(struct char_data * ch, char *arg)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-20s - %s^n\r\n",
                 GET_CHAR_NAME(i),
                 GET_ROOM_NAME(i->in_room));
+        found_someone = TRUE;
       }
     }
+  }
+  if (!found_someone) {
+    strlcat(buf, "Nobody :(\r\n", sizeof(buf));
   }
   page_string(ch->desc, buf, 1);
 }
