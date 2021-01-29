@@ -4094,7 +4094,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
             att->power++;
             // fall through
           case AMMO_EXPLOSIVE:
-            att->power -= GET_BALLISTIC(def->ch) - 1;
+            att->power++;
+            att->power -= GET_BALLISTIC(def->ch);
             break;
           case AMMO_FLECHETTE:
             if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))

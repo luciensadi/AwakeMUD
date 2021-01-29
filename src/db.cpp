@@ -56,6 +56,7 @@
 #include <new>
 #include "transport.h"
 #include "bullet_pants.h"
+#include "lexicons.h"
 
 extern void calc_weight(struct char_data *ch);
 extern void read_spells(struct char_data *ch);
@@ -427,9 +428,14 @@ void boot_world(void)
   log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
   require_that_sql_table_exists("pfiles_ammo", "SQL/bullet_pants.sql");
   require_that_sql_table_exists("command_fuckups", "SQL/fuckups.sql");
-  require_that_field_exists_in_table("socialbonus", "pfiles", "SQL/migrations/socialize.sql");
-  require_that_field_exists_in_table("archetype", "pfiles_chargendata", "SQL/migrations/archetypes.sql");
-  require_that_field_exists_in_table("archetypal", "pfiles_chargendata", "SQL/migrations/archetypes.sql");
+  require_that_field_exists_in_table("socialbonus", "pfiles", "SQL/Migrations/socialize.sql");
+  require_that_field_exists_in_table("archetype", "pfiles_chargendata", "SQL/Migrations/archetypes.sql");
+  require_that_field_exists_in_table("archetypal", "pfiles_chargendata", "SQL/Migrations/archetypes.sql");
+  require_that_field_exists_in_table("highlight", "pfiles", "SQL/Migrations/rp_upgrade.sql");
+  require_that_field_exists_in_table("email", "pfiles", "SQL/Migrations/rp_upgrade.sql");
+  
+  log("Calculating lexicon data.");
+  populate_lexicon_size_table();
   
   log("Handling idle deletion.");
   idle_delete();
@@ -3188,7 +3194,7 @@ void zcmd_repair_door(struct room_data *room, int dir) {
   struct room_direction_data *door_struct = room->dir_option[dir];
   
   if (IS_SET(door_struct->exit_info, EX_DESTROYED)) {
-    snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.",
+    snprintf(buf, sizeof(buf), "A po-faced passerby installs a new %s to the %s.\r\n",
              door_struct->keyword,
              thedirs[dir]);
     send_to_room(buf, room);
@@ -4741,7 +4747,7 @@ void load_saved_veh()
           snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
         }
-        if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
+        if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
           add_phone_to_list(obj);
         if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3))) {
           int real_obj;

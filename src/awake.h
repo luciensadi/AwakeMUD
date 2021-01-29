@@ -399,7 +399,9 @@ enum {
 #define PRF_FUCKUPLOG           50
 #define PRF_ECONLOG             51
 #define PRF_BRIEF               52
-#define PRF_MAX                 53
+#define PRF_NOHIGHLIGHT         53
+#define PRF_NOPSEUDOLANGUAGE    54
+#define PRF_MAX                 55
 
 /* log watch */
 
@@ -895,8 +897,10 @@ enum {
 #define SKILL_BRACERGUN           130
 #define SKILL_BLOWGUN             131
 #define SKILL_PHARMA              132
+#define SKILL_HEBREW              133
+#define SKILL_IROQUOIS            134
 
-#define MAX_SKILLS      133
+#define MAX_SKILLS      135
 
 // Skill type definitions.
 #define SKILL_TYPE_ACTIVE         0

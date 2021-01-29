@@ -60,6 +60,7 @@ int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
 char *  string_to_uppercase(const char *source);
+char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy);
 float   gen_size(int race, bool height, int size, int sex);
@@ -339,6 +340,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_WHOTITLE(ch) ((ch)->player.whotitle)
 #define GET_LEVEL(ch)   ((ch)->player.level)
 #define GET_PASSWD(ch)  ((ch)->player.passwd)
+#define GET_EMAIL(ch)   ((ch)->player.email ? (ch)->player.email : "not set")
+#define SETTABLE_EMAIL(ch)   ((ch)->player.email)
 
 /*
  * I wonder if this definition of GET_REAL_LEVEL should be the definition
@@ -513,7 +516,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define BOOST(ch)               ((ch)->char_specials.saved.boosted)
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
-#define SKILL_IS_LANGUAGE(skill) ((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH)
+#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS))
 
 #define GET_SKILL_DIRTY_BIT(ch)  ((ch)->char_specials.saved.dirty)
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
@@ -943,6 +946,9 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 // If d->edit_convert_color_codes is true, doubles up ^ marks to not print color codes to the user in the specified string. Uses a static buf, so only one invocation per snprintf()!
 #define DOUBLE_UP_COLOR_CODES_IF_NEEDED(str) (d ? (d->edit_convert_color_codes ? double_up_color_codes((str)) : (str)) : (str))
+
+#define GET_CHAR_COLOR_HIGHLIGHT(ch) ((ch)->player.highlight_color_code ? (ch)->player.highlight_color_code : "^n")
+#define SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) ((ch)->player.highlight_color_code)
 
 /*
  * Some systems such as Sun's don't have prototyping in their header files.

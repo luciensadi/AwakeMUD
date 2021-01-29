@@ -1059,7 +1059,7 @@ void char_from_room(struct char_data * ch)
     ch->in_veh->seating[ch->vfront]++;
     ch->in_veh = NULL;
     ch->next_in_veh = NULL;
-    AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
+    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
   }
 }
 

@@ -1067,8 +1067,8 @@ const char *tog_messages[][2] = {
                              "You will now display your playergroup affiliation in the wholist.\r\n"},
                             {"You will no longer receive the keepalive pulses from the MUD.\r\n",
                              "You will now receive keepalive pulses from the MUD.\r\n"},
-                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR and TOGGLE NOPROMPT settings have not been altered.\r\n",
-                             "Screenreader mode enabled. Extraneous text will be reduced. Color and prompts have been disabled too, you may TOGGLE NOCOLOR and TOGGLE NOPROMPT to restore them.\r\n"},
+                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR, TOGGLE NOPROMPT, and TOGGLE NOPSEUDOLANGUAGE settings have not been altered.\r\n",
+                             "Screenreader mode enabled. Extraneous text will be reduced. Color, prompts, and pseudolanguage strings have been disabled for you, you may TOGGLE NOCOLOR, TOGGLE NOPROMPT, and TOGGLE NOPSEUDOLANGUAGE respectively to restore them.\r\n"},
                             {"You will now receive ANSI color codes again.\r\n",
                              "You will no longer receive ANSI color codes.\r\n"},
                             {"You will now receive prompts.\r\n",
@@ -1079,6 +1079,10 @@ const char *tog_messages[][2] = {
                              "You will no longer see names auto-appended to voices.\r\n"},
                             {"You will see room descriptions whem moving.\r\n",
                              "You will no longer see room descriptions when moving.\r\n"},
+                            {"You will now see text highlights from characters.\r\n",
+                             "You will no longer see text highlights from characters.\r\n"},
+                            {"You will now see pseudolanguage strings.\r\n",
+                             "You will no longer see pseudolanguage strings.\r\n"},
                           };
 
 ACMD(do_toggle)
@@ -1257,6 +1261,7 @@ ACMD(do_toggle)
       if (result) {
         PRF_FLAGS(ch).SetBit(PRF_NOCOLOR);
         PRF_FLAGS(ch).SetBit(PRF_NOPROMPT);
+        PRF_FLAGS(ch).SetBit(PRF_NOPSEUDOLANGUAGE);
       }
       mode = 29;
     } else if (is_abbrev(argument, "nocolors") || is_abbrev(argument, "colors") || is_abbrev(argument, "colours")) {
@@ -1274,6 +1279,12 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "brief") || is_abbrev(argument, "roomdescs")) {
       result = PRF_TOG_CHK(ch, PRF_BRIEF);
       mode = 34;
+    } else if (is_abbrev(argument, "highlights") || is_abbrev(argument, "nohighlights")) {
+      result = PRF_TOG_CHK(ch, PRF_NOHIGHLIGHT);
+      mode = 35;
+    } else if (is_abbrev(argument, "pseudolanguage") || is_abbrev(argument, "nopseudolanguage")) {
+      result = PRF_TOG_CHK(ch, PRF_NOPSEUDOLANGUAGE);
+      mode = 36;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -4326,4 +4337,32 @@ ACMD(do_discord) {
 #else
   send_to_char(ch, "This game does not have a Discord server configured. Ask the staff to make one.\r\n");
 #endif
+}
+
+ACMD(do_stop) {
+  if (FIGHTING(ch)) {
+    send_to_char("You can't stop in the middle of a fight-- you'll have to ^WFLEE^n instead!\r\n", ch);
+    return;
+  }
+  
+  if (IS_WORKING(ch)) {
+    STOP_WORKING(ch);
+    send_to_char("You stop working.\r\n", ch);
+    return;
+  }
+  
+  if (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh = NULL;
+    RIG_VEH(ch, veh);
+    
+    if (SPEED_IDLE < veh->cspeed) {
+      send_to_char("You bring the vehicle to a halt.\r\n", ch);
+      send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
+    } else {
+      send_to_char("Your vehicle isn't moving.\r\n", ch);
+    }
+    return;
+  }
+  
+  send_to_char("You're not doing anything that the stop command recognizes. Feel free to use the ^WIDEA^n command to suggest another stoppable thing!\r\n", ch);
 }

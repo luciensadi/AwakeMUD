@@ -167,6 +167,7 @@ ACMD_DECLARE(do_drive);
 ACMD_DECLARE(do_drop);
 ACMD_DECLARE(do_eat);
 ACMD_DECLARE(do_echo);
+ACMD_DECLARE(do_new_echo);
 ACMD_DECLARE(do_eject);
 ACMD_DECLARE(do_elemental);
 ACMD_DECLARE(do_enter);
@@ -199,6 +200,7 @@ ACMD_DECLARE(do_heal);
 ACMD_DECLARE(do_help);
 ACMD_DECLARE(do_hide);
 ACMD_DECLARE(do_hit);
+ACMD_DECLARE(do_highlight);
 ACMD_DECLARE(do_house);
 ACMD_DECLARE(do_hp);
 ACMD_DECLARE(do_iclist);
@@ -267,6 +269,7 @@ ACMD_DECLARE(do_recap);
 ACMD_DECLARE(do_ready);
 ACMD_DECLARE(do_reboot);
 ACMD_DECLARE(do_reflex);
+ACMD_DECLARE(do_register);
 ACMD_DECLARE(do_release);
 ACMD_DECLARE(do_reload);
 ACMD_DECLARE(do_remember);
@@ -317,6 +320,7 @@ ACMD_DECLARE(do_stand);
 ACMD_DECLARE(do_stat);
 ACMD_DECLARE(do_status);
 ACMD_DECLARE(do_steal);
+ACMD_DECLARE(do_stop);
 ACMD_DECLARE(do_survey);
 ACMD_DECLARE(do_switch);
 ACMD_DECLARE(do_switched_message_history);
@@ -440,7 +444,7 @@ struct command_info cmd_info[] =
     { "abilities", POS_SLEEPING, do_skills   , 0, SCMD_ABILITIES },
     { "abilityset", POS_SLEEPING, do_abilityset , LVL_DEVELOPER, 0 },
     { "activate" , POS_LYING   , do_activate , 0, 0 },
-    { "aecho"    , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO },
+    { "aecho"    , POS_SLEEPING, do_new_echo , LVL_ARCHITECT, SCMD_AECHO },
     { "accept"   , POS_LYING   , do_accept   , 0, 0 },
     { "addpoint" , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT },
     { "affects"  , POS_LYING   , do_status   , 0, 0 },
@@ -537,11 +541,11 @@ struct command_info cmd_info[] =
     { "driveby"  , POS_SITTING , do_driveby  , 0, 0 },
 
     { "eat"      , POS_RESTING , do_eat      , 0, SCMD_EAT },
-    { "echo"     , POS_SLEEPING, do_echo     , 0, SCMD_ECHO },
+    { "echo"     , POS_SLEEPING, do_new_echo , 0, SCMD_ECHO },
     { "eject"    , POS_RESTING , do_eject    , 0, 0 }, 
     { "elemental", POS_DEAD    , do_elemental, 0, 0 },
-    { "emote"    , POS_LYING   , do_echo , 0, SCMD_EMOTE },
-    { ":"        , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
+    { "emote"    , POS_LYING   , do_new_echo , 0, SCMD_EMOTE },
+    { ":"        , POS_LYING   , do_new_echo , 0, SCMD_EMOTE },
     { "enter"    , POS_SITTING , do_enter    , 0, 0 },
     { "endrun"   , POS_RESTING , do_endrun   , 0, 0 },
     { "equipment", POS_SLEEPING, do_equipment, 0, 0 },
@@ -581,6 +585,7 @@ struct command_info cmd_info[] =
     { "helpedit" , POS_DEAD    , do_helpedit , LVL_DEVELOPER, 0 },
     { "helpexport",POS_DEAD    , do_helpexport, LVL_DEVELOPER, 0 },
     { "hit"      , POS_FIGHTING, do_hit      , 0, SCMD_HIT },
+    { "highlight", POS_DEAD    , do_highlight, 0, 0 },
     { "history"  , POS_DEAD    , do_message_history, 0, 0 },
     { "hlist"    , POS_DEAD    , do_hlist    , LVL_BUILDER, 0 },
     { "hold"     , POS_RESTING , do_grab     , 1, 0 },
@@ -716,6 +721,7 @@ struct command_info cmd_info[] =
     { "rclone"   , POS_DEAD    , do_rclone   , LVL_BUILDER, 0},
     { "rdelete"  , POS_DEAD    , do_rdelete  , LVL_PRESIDENT, 0},
     { "reflex"   , POS_RESTING , do_reflex   , 0, 0 },
+    { "register" , POS_DEAD    , do_register , 0, 0 },
     { "rest"     , POS_LYING   , do_rest     , 0, 0 },
     { "read"     , POS_LYING   , do_look     , 0, SCMD_READ },
     { "ready"    , POS_LYING   , do_ready    , 0, 0 },
@@ -781,6 +787,7 @@ struct command_info cmd_info[] =
     { "stat"     , POS_DEAD    , do_stat     , LVL_BUILDER, 0 },
     { "status"   , POS_LYING   , do_status   , 0, 0 },
     { "steal"    , POS_STANDING, do_steal    , 0, 0 },
+    { "stop"     , POS_LYING   , do_stop     , 0, 0 },
     { "subscribe", POS_SITTING , do_subscribe, 0, 0 },
     { "subpoint" , POS_DEAD    , do_subpoint , LVL_ARCHITECT, 0 },
     { "survey"   , POS_LYING   , do_survey   , 0, 0 },
@@ -3092,6 +3099,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unready", "ready");
   COMMAND_ALIAS("strap", "holster"); // Not sure about this one.
   COMMAND_ALIAS("deck", "software");
+  COMMAND_ALIAS("email", "register");
   COMMAND_ALIAS("clothing", "equipment");
   COMMAND_ALIAS("armor", "equipment");
   

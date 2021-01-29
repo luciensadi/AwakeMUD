@@ -536,12 +536,31 @@ char *capitalize(const char *source)
 char *string_to_uppercase(const char *source) {
   static char dest[MAX_STRING_LENGTH];
   
-  int x = strlen(source);
-  for (int i = 0; i < x; i++){
+  int i, x = strlen(source);
+  for (i = 0; i < x; i++){
     if (isalpha(source[i])){
       dest[i] = toupper(source[i]);
+    } else {
+      dest[i] = source[i];
     }
   }
+  dest[i] = '\0';
+  
+  return dest;
+}
+
+char *string_to_lowercase(const char *source) {
+  static char dest[MAX_STRING_LENGTH];
+  
+  int i = 0, x = strlen(source);
+  for (i = 0; i < x; i++){
+    if (isalpha(source[i])){
+      dest[i] = tolower(source[i]);
+    } else {
+      dest[i] = source[i];
+    }
+  }
+  dest[i] = '\0';
   
   return dest;
 }
@@ -2034,6 +2053,11 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
     return FALSE;
   }
   
+  if (!vict || !get_ch_in_room(vict)) {
+    mudlog("invis_ok() received vict with NO room!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
   // If they're in an invis staffer above your level, no.
   if (!IS_NPC(vict) && !IS_NPC(ch) && GET_INVIS_LEV(vict) > 0 && !access_level(ch, GET_INVIS_LEV(vict)))
     return FALSE;
@@ -2627,6 +2651,28 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
         send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
       }
     }
+    // Language messaging.
+    else if (SKILL_IS_LANGUAGE(skill_num)) {
+      if (new_value == 0) {
+        send_to_char(ch, "You completely forget your skills in %s.\r\n", skills[skill_num].name);
+      } else if (new_value == 1) {
+        send_to_char(ch, "^cYou have been introduced to the basics.^n\r\n");
+      } else if (new_value <= 4) {
+        send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
+      } else if (new_value <= 5) {
+        send_to_char(ch, "^cYou have attained average proficiency.^n\r\n");
+      } else if (new_value == 6) {
+        send_to_char(ch, "^CYou are now considered fluent at a high-school level.^n\r\n");
+      } else if (new_value == 7) {
+        send_to_char(ch, "^CYou have achieved bachelor's-degree-level fluency.^n\r\n");
+      } else if (new_value == 8) {
+        send_to_char(ch, "^CYou have achieved master's-degree-level fluency.^n\r\n");
+      } else if (new_value == 9) {
+        send_to_char(ch, "^CYou have achieved doctorate-degree-level fluency.^n\r\n");
+      } else {
+        send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
+      }
+    }
     // Knowledge skill messaging.
     else {
       if (new_value == 0) {
@@ -2650,7 +2696,7 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
       } else {
         send_to_char(ch, "^GYou further hone your knowledge towards perfection.^n\r\n");
       }
-     }
+    }
   }
   
   // Update their skill.
@@ -2789,19 +2835,19 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
     return str_dup(log_string);
   }
   
-  snprintf(log_string, sizeof(log_string), "(obj %ld) %s%s",
+  snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g%s",
           GET_OBJ_VNUM(obj),
           obj->text.name,
           IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? " [wizloaded]" : "");
     
   if (obj->restring)
-    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s]", obj->restring);
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s^g]", obj->restring);
   
   if (obj->contains) {
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
     for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
       char *representation = generate_new_loggable_representation(temp);
-      snprintf(buf3, sizeof(buf3), " %s%s%s",
+      snprintf(buf3, sizeof(buf3), " %s%s^g%s",
               (!temp->next_content && temp != obj->contains) ? "and " : "",
               representation,
               temp->next_content ? ";" : "");
@@ -2844,9 +2890,12 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
   }
   
   if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
-    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", bonded to character id %d with %d nuyen on it", 
+    const char *name = get_player_name(GET_OBJ_VAL(obj, 0));
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", bonded to character %s (%d) with %d nuyen on it", 
+             name,
              GET_OBJ_VAL(obj, 0),
              GET_OBJ_VAL(obj, 1));
+    DELETE_ARRAY_IF_EXTANT(name);
   }
   
   return str_dup(log_string);

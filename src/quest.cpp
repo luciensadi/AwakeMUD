@@ -1874,10 +1874,12 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Enter decline text: ", d->character);
       d->edit_mode = QEDIT_DECLINE;
       break;
+#ifdef USE_QUEST_LOCATION_CODE
     case '0':
       send_to_char("Enter a description of the Johnson's location (ex: 'a booth on the second level of Dante's Inferno'): ", d->character);
       d->edit_mode = QEDIT_LOCATION;
       break;
+#endif
     case 'a':
     case 'A':
       send_to_char("Enter quit text: ", d->character);

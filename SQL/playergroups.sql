@@ -39,5 +39,3 @@ CREATE TABLE `pgroup_logs` (
   `redacted` BOOL NOT NULL,
   KEY (`idnum`)
 );
-
-ALTER TABLE `pfiles` ADD `pgroup` mediumint(5) unsigned default '0';
