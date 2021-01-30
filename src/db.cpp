@@ -5452,7 +5452,7 @@ void price_cyber(struct obj_data *obj)
       break;
     case CYB_ENCEPHALON:
       GET_CYBERWARE_ESSENCE_COST(obj) = 75 * GET_OBJ_VAL(obj, 1);
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) > 1 ? 115000 : 4000;
+      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) > 1 ? 115000 : 40000;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 12;
       break;
