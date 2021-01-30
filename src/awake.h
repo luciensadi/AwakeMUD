@@ -663,7 +663,15 @@ enum {
 #define SPELL_IGNITE    55
 #define SPELL_LIGHT    56
 #define SPELL_SHADOW    57
-#define MAX_SPELLS    58
+#define SPELL_LASER    58
+#define SPELL_NOVA    59
+#define SPELL_STEAM    60
+#define SPELL_SMOKECLOUD    61
+#define SPELL_THUNDERBOLT    62
+#define SPELL_THUNDERCLAP    63
+#define SPELL_WATERBOLT    64
+#define SPELL_SPLASH    65
+#define MAX_SPELLS    66
 
 #define META_ANCHORING    0
 #define META_CENTERING    1
