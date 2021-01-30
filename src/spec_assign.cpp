@@ -334,6 +334,10 @@ struct spell_trainer spelltrainers[] = {
   {60604, SPELL_LIGHTNINGBOLT, "Lightning Bolt", 0, 6},
   {60604, SPELL_POLTERGEIST, "Poltergeist", 0, 6},
   {60604, SPELL_SHADOW, "Shadow", 0, 6},
+  {60604, SPELL_LASER, "Laser", 0, 6},
+  {60604, SPELL_STEAM, "Steam", 0, 6},
+  {60604, SPELL_THUNDERBOLT, "Thunderbolt", 0, 6},
+  {60604, SPELL_WATERBOLT, "Waterbolt", 0, 6},
   
   // A throwaway spell teacher slot for Jarmine so it can let people learn force.
   { 60531, SPELL_MANABOLT, "Manabolt", 0, 6 },
@@ -396,6 +400,11 @@ struct spell_trainer spelltrainers[] = {
                             {10013, SPELL_LIGHTNINGBOLT, "Lightning Bolt", 0, 50},
                             {10013, SPELL_BALLLIGHTNING, "Ball Lightning", 0, 50},
                             {10013, SPELL_CLOUT, "Clout", 0, 50},
+                            {10013, SPELL_LASER, "Laser", 0, 50},
+                            {10013, SPELL_NOVA, "Nova", 0, 50},
+                            {10013, SPELL_STEAM, "Steam", 0, 50},
+                            {10013, SPELL_THUNDERBOLT, "Thunderclap", 0, 50},
+                            {10013, SPELL_THUNDERCLAP, "Thunderclap", 0, 50},
                             {10013, SPELL_POLTERGEIST, "Poltergeist", 0, 50},
                             {10013, SPELL_ARMOR, "Armor", 0, 50},
                             {10013, SPELL_PHYSICALBARRIER, "Physical Barrier", 0, 50},
