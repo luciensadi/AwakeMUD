@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <assert.h>
 #include <string.h>
+#include <sys/time.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <process.h>
@@ -34,8 +35,8 @@
 #include "newshop.h"
 #include "newmagic.h"
 #include "newmail.h"
-#include <sys/time.h>
 #include "config.h"
+#include "transport.h"
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
@@ -395,7 +396,18 @@ void check_idling(void)
       ch->char_specials.timer++;
       if (!(IS_SENATOR(ch) || IS_WORKING(ch) || PLR_FLAGGED(ch, PLR_NO_IDLE_OUT)) || !ch->desc) {
         if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
-          GET_WAS_IN(ch) = ch->in_room;
+          // No idling out in cabs.
+          if (ROOM_VNUM_IS_CAB(GET_ROOM_VNUM(ch->in_room))) {
+            send_to_char("The cabdriver stops off at Dante's long enough to kick you out.\r\n", ch);
+            int rnum = real_room(RM_ENTRANCE_TO_DANTES);
+            if (rnum >= 0)
+              GET_WAS_IN(ch) = &world[rnum];
+            else
+              GET_WAS_IN(ch) = &world[1];
+          } else {
+            GET_WAS_IN(ch) = ch->in_room;
+          }
+            
           if (FIGHTING(ch))
             stop_fighting(FIGHTING(ch));
           if (CH_IN_COMBAT(ch))

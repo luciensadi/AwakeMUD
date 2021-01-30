@@ -661,9 +661,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         break;
       }
       if (lethal)
-        resist = GET_BOD(targ->decker->ch) + GET_DEFENSE(targ->decker->ch);
+        resist = GET_BOD(targ->decker->ch);
       else
-        resist = GET_WIL(targ->decker->ch) + GET_DEFENSE(targ->decker->ch);
+        resist = GET_WIL(targ->decker->ch);
       success -= targ->decker->iccm ? MAX(success_test(GET_WIL(targ->decker->ch), power), success_test(GET_BOD(targ->decker->ch), power))
                  : success_test(resist, power);
       dam = convert_damage(stage(success, dam));
