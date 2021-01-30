@@ -640,7 +640,7 @@ const char *preference_bits[] =
     "ECONLOG",
     "BRIEF",
     "!HIGHLIGHTS",
-    "!PSEUDOLANGUAGE"
+    "!PSEUDOLANGUAGE",
     "\n"
   };
 
@@ -934,7 +934,7 @@ const char *wear_bits[] =
     "ARM",
     "FACE",
     "THIGH",
-    "PATCH"
+    "PATCH",
     "\n"
   };
 

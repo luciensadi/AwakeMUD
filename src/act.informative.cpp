@@ -4778,6 +4778,8 @@ ACMD(do_commands)
   send_to_char(buf, ch);
 }
 
+// TODO: rscan, which is like scan but just shows room names
+
 ACMD(do_scan)
 {
   struct char_data *list;

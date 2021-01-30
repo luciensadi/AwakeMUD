@@ -2205,8 +2205,26 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       return false;
       
     // Quest target protection.
-    if (victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM(ch))
-      return false;
+    if (victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM(ch)) {
+      // If grouped, check to see if anyone in the group is the mob's owner.
+      if (AFF_FLAGGED(ch, AFF_GROUP)) {
+        bool found_group_member = FALSE;
+        for (struct follow_type *f = ch->followers; f && found_group_member; f = f->next)
+          if (!IS_NPC(f->follower)
+              && AFF_FLAGGED(f->follower, AFF_GROUP) 
+              && GET_IDNUM(f->follower) == victim->mob_specials.quest_id)
+            found_group_member = TRUE;
+        
+        // How about the group master?
+        if (!found_group_member && ch->master && !IS_NPC(ch->master)) {
+          found_group_member = victim->mob_specials.quest_id == GET_IDNUM(ch->master);
+        }
+        
+        if (!found_group_member)
+          return false;
+      } else
+        return false;
+    }
       
     // Special NPC protection.
     if (include_func_protections
@@ -3988,6 +4006,11 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Calculate the net reach.
     int net_reach = GET_REACH(att->ch) - GET_REACH(def->ch);
     
+    if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+      // MitS 149: Ignore reach modifiers.
+      net_reach = 0;
+    }
+    
     // Reach is always used offensively. TODO: Add option to use it defensively instead.
     if (net_reach > 0)
       att->modifiers[COMBAT_MOD_REACH] -= net_reach;
@@ -4054,6 +4077,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
     if (net_successes < 0) {
+      if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+        // MitS 149: You cannot be counterstriked while using distance strike.
+        net_successes = 0;
+      }
       // This messaging gets a little annoying.
       act("You successfully counter $N's attack!", FALSE, def->ch, 0, att->ch, TO_CHAR);
       act("$n deflects your attack and counterstrikes!", FALSE, def->ch, 0, att->ch, TO_VICT);

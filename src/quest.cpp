@@ -598,8 +598,13 @@ void new_quest(struct char_data *mob, bool force_assignation=FALSE)
 
   for (i = 0;;)
   {
+    bool allow_disconnected = vnum_from_non_connected_zone(quest_table[i].johnson);
     if (quest_table[i].johnson == GET_MOB_VNUM(mob) &&
-        (force_assignation || (!number(0, num - 1) && !(num > 1 && GET_SPARE2(mob) == i)))) {
+        (force_assignation || (!number(0, num - 1) 
+                               && !(num > 1 
+                                    && GET_SPARE2(mob) == i 
+                                    && (allow_disconnected 
+                                        || !vnum_from_non_connected_zone(quest_table[i].vnum)))))) {
       GET_SPARE2(mob) = i;
       return;
     }
