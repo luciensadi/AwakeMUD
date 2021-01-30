@@ -5932,7 +5932,7 @@ ACMD(do_rewrite_world) {
   send_to_char("Done. Alarm handler has been restored.\r\n", ch);
 }
 
-int audit_zone_rooms(struct char_data *ch, int zone_num, bool verbose) {
+int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
   int real_rm, issues = 0;
   struct room_data *room;
   bool printed = FALSE;
@@ -6094,7 +6094,7 @@ int audit_zone_rooms(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
+int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, total_stats, real_mob, k;
   bool printed = FALSE;
   char candidate;
@@ -6226,7 +6226,7 @@ int audit_zone_mobs(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-int audit_zone_objects(struct char_data *ch, int zone_num, bool verbose) {
+int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_obj;
   struct obj_data *obj;
   bool printed = FALSE;
@@ -6333,7 +6333,7 @@ int audit_zone_objects(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-int audit_zone_quests(struct char_data *ch, int zone_num, bool verbose) {
+int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_qst;
   struct quest_data *quest;  // qwest?  (^_^) 0={=====>
   bool printed = FALSE;
@@ -6353,8 +6353,8 @@ int audit_zone_quests(struct char_data *ch, int zone_num, bool verbose) {
     
     printed = FALSE;
     
-    payout_karma += quest_table[real_qst].karma;
-    payout_nuyen += quest_table[real_qst].nuyen;
+    payout_karma = quest_table[real_qst].karma;
+    payout_nuyen = quest_table[real_qst].nuyen;
              
     // Flag invalid Johnsons
     if (quest->johnson <= 0 || real_mobile(quest->johnson) <= 0) {
@@ -6462,14 +6462,14 @@ int audit_zone_quests(struct char_data *ch, int zone_num, bool verbose) {
     
     // Flag high payouts - karma.
     if (payout_karma * KARMA_GAIN_MULTIPLIER > 250) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - karma payout is ^c%.2f^n.\r\n", ((float) payout_karma) / 100);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - karma payout is at least ^c%.2f^n.\r\n", ((float) payout_karma) / 100);
       printed = TRUE;
       issues++;
     }
     
     // Flag high payouts - nuyen.
     if (payout_nuyen * NUYEN_GAIN_MULTIPLIER > 5000) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - nuyen payout is ^c%d^n.\r\n", payout_nuyen);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - nuyen payout is at least ^c%d^n.\r\n", payout_nuyen);
       printed = TRUE;
       issues++;
     }
@@ -6526,7 +6526,7 @@ int audit_zone_quests(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-int audit_zone_shops(struct char_data *ch, int zone_num, bool verbose) {
+int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_shp;
   struct shop_data *shop;
   bool printed = FALSE;
@@ -6567,7 +6567,7 @@ int audit_zone_shops(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-int audit_zone_vehicles(struct char_data *ch, int zone_num, bool verbose) {
+int audit_zone_vehicles_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_veh;
   struct veh_data *veh;
   bool printed = FALSE;
@@ -6610,7 +6610,7 @@ int audit_zone_vehicles(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-int audit_zone_hosts(struct char_data *ch, int zone_num, bool verbose) {
+int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_hst;
   struct host_data *host;
   bool printed = FALSE;
@@ -6653,7 +6653,7 @@ int audit_zone_hosts(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-int audit_zone_ics(struct char_data *ch, int zone_num, bool verbose) {
+int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_num;
   struct matrix_icon *ic;
   bool printed = FALSE;
@@ -6696,7 +6696,7 @@ int audit_zone_ics(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-int audit_zone_commands(struct char_data *ch, int zone_num, bool verbose) {
+int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0;
   
   if (verbose)
@@ -6721,52 +6721,26 @@ ACMD(do_audit) {
   // find the real zone number
   zonenum = real_zone(number);
   
+  #define AUDIT_ALL_ZONES(func_suffix)                           \
+  if (!str_cmp(arg1, #func_suffix)) {                            \
+    for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++) { \
+      if (!zone_table[zonenum].connected)                        \
+        continue;                                                \
+      audit_zone_ ## func_suffix ## _(ch, zonenum, TRUE);        \
+    }                                                            \
+    return;                                                      \
+  }
+  
   if (zonenum == 0) {
-    if (!str_cmp(arg1, "rooms")) {
-      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
-        audit_zone_rooms(ch, zonenum, TRUE);
-      return;
-    }
-    else if (!str_cmp(arg1, "mobs")) {
-      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
-        audit_zone_mobs(ch, zonenum, TRUE);
-      return;
-    }
-    else if (!str_cmp(arg1, "objs")) {
-      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
-        audit_zone_objects(ch, zonenum, TRUE);
-      return;
-    }
-    else if (!str_cmp(arg1, "quests") || !str_cmp(arg1, "jobs")) {
-      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
-        audit_zone_quests(ch, zonenum, TRUE);
-      return;
-    }
-    else if (!str_cmp(arg1, "shops")) {
-      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
-        audit_zone_shops(ch, zonenum, TRUE);
-      return;
-    }
-    else if (!str_cmp(arg1, "vehs") || !str_cmp(arg1, "vehicles")) {
-      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
-        audit_zone_vehicles(ch, zonenum, TRUE);
-      return;
-    }
-    else if (!str_cmp(arg1, "hosts")) {
-      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
-        audit_zone_hosts(ch, zonenum, TRUE);
-      return;
-    }
-    else if (!str_cmp(arg1, "ics")) {
-      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
-        audit_zone_ics(ch, zonenum, TRUE);
-      return;
-    }
-    else if (!str_cmp(arg1, "commands") || !str_cmp(arg1, "cmds")) {
-      for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++)
-        audit_zone_commands(ch, zonenum, TRUE);
-      return;
-    }
+    AUDIT_ALL_ZONES(rooms);
+    AUDIT_ALL_ZONES(mobs);
+    AUDIT_ALL_ZONES(objects);
+    AUDIT_ALL_ZONES(quests);
+    AUDIT_ALL_ZONES(shops);
+    AUDIT_ALL_ZONES(vehicles);
+    AUDIT_ALL_ZONES(hosts);
+    AUDIT_ALL_ZONES(ics);
+    AUDIT_ALL_ZONES(commands);
     
     send_to_char("That's not a valid zone number.\r\n", ch);
     return;
@@ -6780,15 +6754,15 @@ ACMD(do_audit) {
   
   // Perform auditing of the zone.
   int issues = 0;
-  issues += audit_zone_rooms(ch, zonenum, TRUE);
-  issues += audit_zone_mobs(ch, zonenum, TRUE);
-  issues += audit_zone_objects(ch, zonenum, TRUE);
-  issues += audit_zone_quests(ch, zonenum, TRUE);
-  issues += audit_zone_shops(ch, zonenum, TRUE);
-  issues += audit_zone_vehicles(ch, zonenum, TRUE);
-  issues += audit_zone_hosts(ch, zonenum, TRUE);
-  issues += audit_zone_ics(ch, zonenum, TRUE);
-  issues += audit_zone_commands(ch, zonenum, TRUE);
+  issues += audit_zone_rooms_(ch, zonenum, TRUE);
+  issues += audit_zone_mobs_(ch, zonenum, TRUE);
+  issues += audit_zone_objects_(ch, zonenum, TRUE);
+  issues += audit_zone_quests_(ch, zonenum, TRUE);
+  issues += audit_zone_shops_(ch, zonenum, TRUE);
+  issues += audit_zone_vehicles_(ch, zonenum, TRUE);
+  issues += audit_zone_hosts_(ch, zonenum, TRUE);
+  issues += audit_zone_ics_(ch, zonenum, TRUE);
+  issues += audit_zone_commands_(ch, zonenum, TRUE);
   
   send_to_char(ch, "\r\nDone. Found a total of %d potential issue%s. Note that something being in this list does not disqualify the zone from approval-- it just requires extra scrutiny. Conversely, something not being flagged here doesn't mean it's kosher, it just means we didn't write a coded check for it yet.\r\n", 
                issues, issues != 1 ? "s" : "");
