@@ -6549,19 +6549,32 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
     snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n", shop->vnum);
     
     printed = FALSE;
-             
-    // Flag invalid sell multipliers
-    if (shop->profit_buy < 1.0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - too-low buy profit %0.2f < 1.0^n.\r\n", shop->profit_buy);
-      printed = TRUE;
-      issues++;
-    }
     
-    // Flag invalid strings
-    if (shop->profit_sell > 0.100001) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - too-high sell profit %0.2f > 0.1^n.\r\n", shop->profit_sell);
+    if (real_mobile(shop->keeper) <= -1) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid shopkeeper.\r\n");
       printed = TRUE;
       issues++;
+    } else {
+      // Flag invalid sell multipliers
+      if (shop->profit_buy < 1.0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - too-low buy profit ^c%0.2f^n < 1.0^n.\r\n", shop->profit_buy);
+        printed = TRUE;
+        issues++;
+      }
+      
+      // Flag invalid strings
+      if (shop->profit_sell > 0.100001) {
+        bool buys_anything = FALSE;
+        for (int type = 1; type < NUM_ITEMS && !buys_anything; type++)
+          if (shop->buytypes.IsSet(type))
+            buys_anything = TRUE;
+        
+        if (buys_anything) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high sell profit ^c%0.2f^n > 0.1^n.\r\n", shop->profit_sell);
+          printed = TRUE;
+          issues++;
+        }
+      }
     }
     
     if (printed) {
