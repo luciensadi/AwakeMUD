@@ -74,6 +74,7 @@ extern SPECIAL(fixer);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 extern float get_bulletpants_weight(struct char_data *ch);
+extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 
 extern struct teach_data teachers[];
 
@@ -281,6 +282,10 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (IS_OBJ_STAT(object, ITEM_HUM)) {
       strcat(buf, " ^c(humming)");
     }
+    
+    if (object->obj_flags.quest_id && object->obj_flags.quest_id == GET_IDNUM(ch)) {
+      strcat(buf, " ^Y(Yours)^n");
+    }
   }
   strcat(buf, "^N\r\n");
   send_to_char(buf, ch);
@@ -372,6 +377,10 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
   
   // Biggest litmus test: Are they even the same thing?
   if (first->item_number != second->item_number)
+    return FALSE;
+    
+  // Quest items don't visually stack.
+  if (first->obj_flags.quest_id != second->obj_flags.quest_id)
     return FALSE;
     
   // If the names don't match, they're not similar.
@@ -784,6 +793,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strcpy(buf, "*");
     else
       *buf = '\0';
+    
+    // Note quest or nokill protection.
+    if (i->mob_specials.quest_id) {
+      if (i->mob_specials.quest_id == GET_IDNUM(ch)) {
+        strcat(buf, "^Y(Quest)^n ");
+      }
+    }
+    
     if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
       if (IS_ASTRAL(i))
         strcat(buf, "(astral) ");
@@ -4474,14 +4491,7 @@ ACMD(do_consider)
   }
   
   if (IS_NPC(victim)) {
-    if (MOB_FLAGGED(victim, MOB_NOKILL) 
-        || vnum_from_non_connected_zone(GET_MOB_VNUM(victim))
-        || mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
-        || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
-        || mob_index[GET_MOB_RNUM(victim)].func == johnson 
-        || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
-        || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
-        || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec) {
+    if (!can_hurt(ch, victim, 0, TRUE)) {
       send_to_char("This NPC has been made unkillable by staff.\r\n", ch);
       return;
     }

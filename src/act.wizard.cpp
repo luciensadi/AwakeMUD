@@ -1397,7 +1397,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   switch (GET_TRADITION(k))
   {
   case TRAD_ADEPT:
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Adept, Grade: ^c%d^n AddPoint Used: %d/%d", GET_GRADE(k), k->points.extrapp, (int)(GET_REP(k) / 50) + 1);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Adept, Grade: ^c%d^n AddPoint Used: %d/%d", GET_GRADE(k), k->points.extrapp, (int)(GET_TKE(k) / 50) + 1);
     if (BOOST(ch)[BOD][0] || BOOST(ch)[STR][0] || BOOST(ch)[QUI][0])
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[Boosts: BOD ^c%d^n STR ^c%d^c QUI ^c%d^n]", BOOST(ch)[BOD][1], BOOST(ch)[STR][1], BOOST(ch)[QUI][1]);
     break;
@@ -6337,6 +6337,8 @@ int audit_zone_quests(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_qst;
   struct quest_data *quest;  // qwest?  (^_^) 0={=====>
   bool printed = FALSE;
+  int payout_karma = 0;
+  int payout_nuyen = 0;
   
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing quests for zone %d...^n\r\n", zone_table[zone_num].number);
@@ -6350,10 +6352,124 @@ int audit_zone_quests(struct char_data *ch, int zone_num, bool verbose) {
     snprintf(buf, sizeof(buf), "^c[%8ld]^n:\r\n", quest->vnum);
     
     printed = FALSE;
+    
+    payout_karma += quest_table[real_qst].karma;
+    payout_nuyen += quest_table[real_qst].nuyen;
              
     // Flag invalid Johnsons
     if (quest->johnson <= 0 || real_mobile(quest->johnson) <= 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - invalid Johnson %ld^n.\r\n", quest->johnson);
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag invalid object objectives  
+    for (int obj_idx = 0; obj_idx < quest->num_objs; obj_idx++) {
+      payout_nuyen += quest->obj[obj_idx].nuyen;
+      payout_karma += quest->obj[obj_idx].karma;
+          
+      // invalid object
+      if (real_object(quest->obj[obj_idx].vnum) <= -1) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid object %ld^n.\r\n", obj_idx, quest->obj[obj_idx].vnum);
+        printed = TRUE;
+        issues++;
+      }
+      
+      // Invalid mob targets for initialization
+      switch (quest->obj[obj_idx].load) {
+        case QOL_TARMOB_I:
+        case QOL_TARMOB_E:
+        case QOL_TARMOB_C:
+          if (quest->obj[obj_idx].l_data < 0 
+              || quest->obj[obj_idx].l_data >= quest->num_mobs 
+              || real_mobile(quest->mob[quest->obj[obj_idx].l_data].vnum) <= -1) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid load mobile M%d^n.\r\n", obj_idx, quest->obj[obj_idx].l_data);
+            printed = TRUE;
+            issues++;
+          }
+          break;
+      }
+      
+      // Invalid mob targets for delivery
+      switch (quest->obj[obj_idx].objective) {
+        case QOO_TAR_MOB:
+          if (quest->obj[obj_idx].o_data < 0 
+              || quest->obj[obj_idx].o_data >= quest->num_mobs 
+              || real_mobile(quest->mob[quest->obj[obj_idx].o_data].vnum) <= -1) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid dest mobile M%d^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
+            printed = TRUE;
+            issues++;
+          }
+          break;
+        case QOO_LOCATION:
+          if (real_room(quest->obj[obj_idx].o_data) <= -1) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid room %d^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
+            printed = TRUE;
+            issues++;
+          }
+          break;
+        case QOO_RETURN_PAY:
+        case QOO_UPLOAD:
+          if (real_host(quest->obj[obj_idx].o_data) <= -1) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid host %d^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
+            printed = TRUE;
+            issues++;
+          }
+          break;
+      }
+    }
+    
+    // Flag invalid mob objectives
+    for (int mob_idx = 0; mob_idx < quest->num_mobs; mob_idx++) {
+      payout_karma += quest->mob[mob_idx].karma;
+      payout_nuyen += quest->mob[mob_idx].nuyen;
+      
+      // Check for invalid mob.
+      if (real_mobile(quest->mob[mob_idx].vnum) <= -1) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid mobile %ld^n.\r\n", mob_idx, quest->mob[mob_idx].vnum);
+        printed = TRUE;
+        issues++;
+      }
+      
+      // Check for invalid load conditions.
+      switch (quest->mob[mob_idx].load) {
+        case QML_LOCATION:
+          if (real_room(quest->mob[mob_idx].l_data) <= -1) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid load room %d^n.\r\n", mob_idx, quest->mob[mob_idx].l_data);
+            printed = TRUE;
+            issues++;
+          }
+          break;
+      }
+      
+      switch (quest->mob[i].objective) {
+        case QMO_LOCATION:
+          if (real_room(quest->mob[mob_idx].o_data) <= -1) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid destination room %d^n.\r\n", mob_idx, quest->mob[mob_idx].o_data);
+            printed = TRUE;
+            issues++;
+          }
+          break;
+        case QMO_KILL_ESCORTEE:
+          if (real_room(quest->mob[mob_idx].o_data) <= -1) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid escortee %d^n.\r\n", mob_idx, quest->mob[mob_idx].o_data);
+            printed = TRUE;
+            issues++;
+          }
+          break;
+      }
+    }
+    
+    // Flag high payouts - karma.
+    if (payout_karma * KARMA_GAIN_MULTIPLIER > 250) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - karma payout is ^c%.2f^n.\r\n", ((float) payout_karma) / 100);
+      printed = TRUE;
+      issues++;
+    }
+    
+    // Flag high payouts - nuyen.
+    if (payout_nuyen * NUYEN_GAIN_MULTIPLIER > 5000) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - nuyen payout is ^c%d^n.\r\n", payout_nuyen);
       printed = TRUE;
       issues++;
     }

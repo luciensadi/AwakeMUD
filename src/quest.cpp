@@ -162,6 +162,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           case QOL_TARMOB_I:
             obj = read_object(rnum, REAL);
             obj->obj_flags.quest_id = GET_IDNUM(ch);
+            obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
             obj_to_char(obj, mob);
             break;
           case QOL_TARMOB_E:
@@ -170,12 +171,14 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
               obj = read_object(rnum, REAL);
               obj->obj_flags.quest_id = GET_IDNUM(ch);
+              obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
               equip_char(mob, obj, pos);
             }
             break;
           case QOL_TARMOB_C:
             obj = read_object(rnum, REAL);
             obj->obj_flags.quest_id = GET_IDNUM(ch);
+            obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
                 GET_ESS(mob) > GET_OBJ_VAL(obj, 1)) {
               obj_to_cyberware(obj, mob);
@@ -201,6 +204,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           case QOL_TARMOB_I:
             obj = read_object(rnum, REAL);
             obj->obj_flags.quest_id = GET_IDNUM(ch);
+            obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
             obj_to_char(obj, mob);
             break;
           case QOL_TARMOB_E:
@@ -209,12 +213,14 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
               obj = read_object(rnum, REAL);
               obj->obj_flags.quest_id = GET_IDNUM(ch);
+              obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
               equip_char(mob, obj, pos);
             }
             break;
           case QOL_TARMOB_C:
             obj = read_object(rnum, REAL);
             obj->obj_flags.quest_id = GET_IDNUM(ch);
+            obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
                 GET_ESS(mob) > GET_OBJ_VAL(obj, 1)) {
               obj_to_cyberware(obj, mob);
@@ -240,6 +246,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
           obj = read_object(rnum, REAL);
           obj->obj_flags.quest_id = GET_IDNUM(ch);
+          obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
           obj_to_room(obj, &world[room]);
         }
         obj = NULL;
@@ -248,6 +255,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
           obj = read_object(rnum, REAL);
           obj->obj_flags.quest_id = GET_IDNUM(ch);
+          obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
           GET_OBJ_VAL(obj, 7) = GET_IDNUM(ch);
           GET_OBJ_VAL(obj, 9) = 1;
           obj->next_content = matrix[room].file;
@@ -258,6 +266,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
       case QOL_JOHNSON:
         obj = read_object(rnum, REAL);
         obj->obj_flags.quest_id = GET_IDNUM(ch);
+        obj->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT, ITEM_NOSELL, ENDBIT);
         obj_to_char(obj, johnson);
         if (!perform_give(johnson, ch, obj)) {
           char buf[512];
@@ -1541,7 +1550,7 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
               QUEST->mob[i].l_data);
       break;
     case QML_FOLQUESTER:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) at and follow quester",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) and follow quester",
               QUEST->mob[i].vnum,
               (rnum = real_mobile(QUEST->mob[i].vnum)) > -1 ?
               GET_NAME(mob_proto+rnum) : "null");

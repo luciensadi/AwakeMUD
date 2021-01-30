@@ -55,12 +55,13 @@ void target_explode(struct char_data *ch, struct obj_data *weapon,
 void forget(struct char_data * ch, struct char_data * victim);
 void remember(struct char_data * ch, struct char_data * victim);
 void order_list(bool first,...);
-bool can_hurt(struct char_data *ch, struct char_data *victim);
+bool can_hurt(struct char_data *ch, struct char_data *victim, bool include_func_protections);
 
 SPECIAL(johnson);
 SPECIAL(weapon_dominator);
 SPECIAL(landlord_spec);
 SPECIAL(pocket_sec);
+SPECIAL(receptionist);
 
 extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
@@ -2193,40 +2194,54 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
 }
 
 // Basically ripped the logic from damage(). Used to adjust combat messages for edge cases.
-bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype) {
-  if (IS_NPC(victim)) {
-    // Shopkeeper protection.
-    if (IS_NPC(victim) 
-        && (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
-            || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
-            || mob_index[GET_MOB_RNUM(victim)].func == johnson
-            || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
-            || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
-            || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec))
-      return false;
+bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections) {
+  // Corpse protection.
+  if (GET_POS(victim) <= POS_DEAD)
+    return false;
     
+  if (IS_NPC(victim)) {
     // Nokill protection.
     if (MOB_FLAGGED(victim,MOB_NOKILL))
       return false;
+      
+    // Quest target protection.
+    if (victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM(ch))
+      return false;
+      
+    // Special NPC protection.
+    if (include_func_protections
+        && (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
+            || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
+            || mob_index[GET_MOB_RNUM(victim)].func == johnson 
+            || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
+            || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
+            || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec
+            || mob_index[GET_MOB_RNUM(victim)].func == receptionist
+            || mob_index[GET_MOB_RNUM(victim)].sfunc == receptionist))
+    {
+      return false;
+    }
+      
+    // If ch is staff lower than admin, or ch is a charmie of a staff lower than admin, and the target is connected, no kill.
+    if (( (!IS_NPC(ch)
+          && IS_SENATOR(ch)
+          && !access_level(ch, LVL_ADMIN))
+        || (IS_NPC(ch)
+            && ch->master
+            && AFF_FLAGGED(ch, AFF_CHARM)
+            && !IS_NPC(ch->master)
+            && IS_SENATOR(ch->master)
+            && !access_level(ch->master, LVL_ADMIN)))
+        && IS_NPC(victim)
+        && !vnum_from_non_connected_zone(GET_MOB_VNUM(victim))) 
+    {
+      return false;
+    }
     
     // Some things can't be exploded.
     if (attacktype == TYPE_EXPLOSION && (IS_ASTRAL(victim) || MOB_FLAGGED(victim, MOB_IMMEXPLODE)))
       return false;
-    
-    // Whatever the hell protection this is.
-    if (( (!IS_NPC(ch)
-           && IS_SENATOR(ch)
-           && !access_level(ch, LVL_ADMIN))
-         || (IS_NPC(ch)
-             && ch->master
-             && AFF_FLAGGED(ch, AFF_CHARM)
-             && !IS_NPC(ch->master)
-             && IS_SENATOR(ch->master)
-             && !access_level(ch->master, LVL_ADMIN)))
-        && !vnum_from_non_connected_zone(GET_MOB_VNUM(victim)))
-    {
-      return false;
-    }
+      
   } else {
     // Known ignored edge case: if the player is not a killer but would become a killer because of this action.
     if (ch != victim && would_become_killer(ch, victim))
@@ -2260,10 +2275,11 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     return FALSE;
   }
   
-  if (GET_POS(victim) <= POS_DEAD)
-  {
-    log("SYSERR: Attempt to damage a corpse.");
-    return 0;                   /* -je, 7/7/92 */
+  if (!can_hurt(ch, victim, attacktype, TRUE)) {
+    dam = -1;
+    buf_mod(rbuf, sizeof(rbuf), "Can'tHurt",dam);
+    if (ch)
+      send_to_char(ch, "^m(OOC Notice: You are unable to damage %s.)^n\r\n", GET_CHAR_NAME(victim));
   }
   
   if (attacktype <= TYPE_BLACKIC)
@@ -2272,45 +2288,6 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   else
     snprintf(rbuf, sizeof(rbuf),"Damage (%s vs %s, %s %d): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
             wound_name[MIN(DEADLY, MAX(0, dam))], attacktype);
-  if (( (!IS_NPC(ch)
-         && IS_SENATOR(ch)
-         && !access_level(ch, LVL_ADMIN))
-       || (IS_NPC(ch)
-           && ch->master
-           && AFF_FLAGGED(ch, AFF_CHARM)
-           && !IS_NPC(ch->master)
-           && IS_SENATOR(ch->master)
-           && !access_level(ch->master, LVL_ADMIN)))
-      && IS_NPC(victim)
-      && dam > 0
-      && !vnum_from_non_connected_zone(GET_MOB_VNUM(victim)))
-  {
-    dam = -1;
-    buf_mod(rbuf, sizeof(rbuf), "Invalid",dam);
-    if (ch)
-      send_to_char(ch, "^m(OOC Notice: %s has been made unkillable by the game's administration.)^n\r\n", GET_CHAR_NAME(victim));
-  }
-  
-  /* shopkeeper protection */
-  else if (IS_NPC(victim) && (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper 
-                              || mob_index[GET_MOB_RNUM(victim)].sfunc == shop_keeper
-                              || mob_index[GET_MOB_RNUM(victim)].func == johnson 
-                              || mob_index[GET_MOB_RNUM(victim)].sfunc == johnson
-                              || mob_index[GET_MOB_RNUM(victim)].func == landlord_spec
-                              || mob_index[GET_MOB_RNUM(victim)].sfunc == landlord_spec))
-  {
-    dam = -1;
-    buf_mod(rbuf, sizeof(rbuf), "Keeper",dam);
-    if (ch)
-      send_to_char(ch, "^m(OOC Notice: %s has been made unkillable by the game's administration.)^n\r\n", GET_CHAR_NAME(victim));
-  }
-  else if (IS_NPC(victim) && MOB_FLAGGED(victim,MOB_NOKILL))
-  {
-    dam =-1;
-    buf_mod(rbuf, sizeof(rbuf), "NoKill",dam);
-    if (ch)
-      send_to_char(ch, "^m(OOC Notice: %s has been made unkillable by the game's administration.)^n\r\n", GET_CHAR_NAME(victim));
-  }
   
   if (victim != ch)
   {
@@ -4252,7 +4229,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   int staged_damage = 0;
   
   // Adjust messaging for unkillable entities.
-  if (can_hurt(att->ch, def->ch, att->dam_type))
+  if (can_hurt(att->ch, def->ch, att->dam_type, TRUE))
     staged_damage = stage(att->successes, att->damage_level);
   else {
     staged_damage = -1;

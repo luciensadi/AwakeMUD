@@ -632,6 +632,9 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
   {
     act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
+  } else if (obj->obj_flags.quest_id && obj->obj_flags.quest_id != GET_IDNUM(ch)) {
+    act("$p is someone else's quest item.", FALSE, ch, obj, 0, TO_CHAR);
+    return 0;
   }
   return 1;
 }
