@@ -1837,7 +1837,7 @@ void parse_object(File &fl, long nr)
         // Set the strings-- we want all these things to match for simplicity's sake.
         type_as_string = get_weapon_ammo_name_as_string(GET_AMMOBOX_WEAPON(obj));
         
-        if (GET_AMMOBOX_TYPE(obj)) {
+        if (GET_AMMOBOX_WEAPON(obj)) {
           snprintf(buf, sizeof(buf), "metal ammo ammunition box %s %s %d-%s %s%s",
                   GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
                   weapon_type[GET_AMMOBOX_WEAPON(obj)],
@@ -1852,7 +1852,7 @@ void parse_object(File &fl, long nr)
         DELETE_ARRAY_IF_EXTANT(obj->text.keywords);
         obj->text.keywords = str_dup(buf);
         
-        if (GET_AMMOBOX_TYPE(obj)) {
+        if (GET_AMMOBOX_WEAPON(obj)) {
           snprintf(buf, sizeof(buf), "a %d-%s box of %s %s ammunition",
                   GET_AMMOBOX_QUANTITY(obj),
                   type_as_string,
@@ -1866,7 +1866,7 @@ void parse_object(File &fl, long nr)
         obj->text.name = str_dup(buf);
         
         
-        if (GET_AMMOBOX_TYPE(obj)) {
+        if (GET_AMMOBOX_WEAPON(obj)) {
           snprintf(buf, sizeof(buf), "A metal box of %s %s %s%s has been left here.",
                   GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
                   weapon_type[GET_AMMOBOX_WEAPON(obj)],
