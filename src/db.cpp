@@ -2763,7 +2763,7 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
       snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s +%2d %s^n%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
               foci_type[GET_OBJ_VAL(&obj_proto[nr], 0)],
               GET_OBJ_VAL(&obj_proto[nr], VALUE_FOCUS_RATING),
               obj_proto[nr].text.name,
@@ -2788,7 +2788,7 @@ int vnum_object_type(int type, struct char_data * ch)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s %s^n%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
               obj_proto[nr].text.name,
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
     }
@@ -2929,7 +2929,7 @@ int vnum_object(char *searchname, struct char_data * ch)
       snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
               obj_proto[nr].text.name,
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       send_to_char(buf, ch);

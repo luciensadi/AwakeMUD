@@ -3595,7 +3595,7 @@ ACMD(do_show)
       if (ROOM_FLAGGED(&world[i], ROOM_DEATH))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s %s\r\n", ++j,
                 world[i].number,
-                vnum_from_non_connected_zone(world[i].number) ? " " : "*",
+                vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                 world[i].name);
     send_to_char(buf, ch);
     break;
@@ -3606,7 +3606,7 @@ ACMD(do_show)
     for (i = 0, j = 0; i <= zone_table[real_zone(GOD_ROOMS_ZONE)].top; i++)
       if (world[i].zone == GOD_ROOMS_ZONE && i > 1 && !(i >= 8 && i <= 12))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s %s\r\n", j++, world[i].number,
-                vnum_from_non_connected_zone(world[i].number) ? " " : "*",
+                vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                 world[i].name);
     send_to_char(buf, ch);
     break;
@@ -3768,7 +3768,7 @@ ACMD(do_show)
       if (!room_has_any_exits(&world[i])) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s\r\n", ++j,
                 world[i].number,
-                vnum_from_non_connected_zone(world[i].number) ? " " : "*",
+                vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                 world[i].name);
       }
     }
@@ -3783,7 +3783,7 @@ ACMD(do_show)
           if (!room_has_any_exits(world[i].dir_option[dir]->to_room)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s: %s\r\n", ++j,
                     world[i].number,
-                    vnum_from_non_connected_zone(world[i].number) ? " " : "*",
+                    vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                     world[i].name,
                     dirs[dir]);
             break;
@@ -3812,7 +3812,7 @@ ACMD(do_show)
       if (ROOM_FLAGGED(&world[i], ROOM_STORAGE))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%8ld] %s %s\r\n", ++j,
                 world[i].number,
-                vnum_from_non_connected_zone(world[i].number) ? " " : "*",
+                vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                 world[i].name);
     send_to_char(buf, ch);
     break;
@@ -3824,7 +3824,7 @@ ACMD(do_show)
         if (world[i].dir_option[k] && world[i].dir_option[k]->hidden > ANOMALOUS_HIDDEN_RATING_THRESHOLD) {
           send_to_char(ch, "%4d: [%8ld] %s %s^n: %s exit has hidden rating %d > %d\r\n", ++j,
                   world[i].number,
-                  vnum_from_non_connected_zone(world[i].number) ? " " : "*",
+                  vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                   world[i].name,
                   dirs[k],
                   world[i].dir_option[k]->hidden,
@@ -3853,7 +3853,7 @@ ACMD(do_show)
       
       snprintf(buf, sizeof(buf), "%4d: [%8ld] %s %s^n", ++j,
                GET_MOB_VNUM(&mob_proto[i]),
-               vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[i])) ? " " : "*",
+               vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[i])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                GET_CHAR_NAME(&mob_proto[i]));
                
       // Flag mobs with crazy stats
@@ -3911,7 +3911,7 @@ ACMD(do_show)
             if (ROOM_FLAGGED(&world[k], i))
               send_to_char(ch, "%4d: [%8ld] %s %s\r\n", ++j,
                            world[k].number,
-                           vnum_from_non_connected_zone(world[k].number) ? " " : "*",
+                           vnum_from_non_connected_zone(world[k].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                            world[k].name);
           return;
         }
@@ -3932,7 +3932,7 @@ ACMD(do_show)
         send_to_char(ch, "%4d) [%8ld] %s %s^n\r\n", 
                      j++,
                      GET_OBJ_VNUM(&obj_proto[i]),
-                     vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[i])) ? " " : "*",
+                     vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[i])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                      GET_OBJ_NAME(&obj_proto[i]));
       }
     }
@@ -5443,7 +5443,7 @@ ACMD(do_slist)
     if (shop_table[nr].vnum >= first)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,
               shop_table[nr].vnum,
-              vnum_from_non_connected_zone(shop_table[nr].keeper) ? " " : "*",
+              vnum_from_non_connected_zone(shop_table[nr].keeper) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
               (real_mob = real_mobile(shop_table[nr].keeper)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
               shop_table[nr].keeper);
 
@@ -5950,7 +5950,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     
     snprintf(buf, sizeof(buf), "^c[%8ld]^n %s %s^n:\r\n",
              room->number,
-             vnum_from_non_connected_zone(room->number) ? " " : "*",
+             vnum_from_non_connected_zone(room->number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
              room->name);
     
     // Check its strings.
@@ -6116,7 +6116,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     
     snprintf(buf, sizeof(buf), "^c[%8ld]^n %s %s^n:\r\n",
              GET_MOB_VNUM(mob),
-             vnum_from_non_connected_zone(GET_MOB_VNUM(mob)) ? " " : "*",
+             vnum_from_non_connected_zone(GET_MOB_VNUM(mob)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
              GET_CHAR_NAME(mob));
     
     printed = FALSE;
@@ -6245,7 +6245,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     
     snprintf(buf, sizeof(buf), "^c[%8ld]^n %s %s^n:\r\n",
              GET_OBJ_VNUM(obj),
-             vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) ? " " : "*",
+             vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
              GET_OBJ_NAME(obj));
     
     printed = FALSE;

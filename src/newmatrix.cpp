@@ -2071,8 +2071,8 @@ ACMD(do_software)
       strcpy(buf2, "Custom Components:\r\n");
     for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
       if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-30s^n Rating: %2d %c\r\n", GET_OBJ_NAME(soft),
-                GET_OBJ_VAL(soft, 1), GET_OBJ_VAL(soft, 4) ? '*' : ' ');
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-30s^n Rating: %2d %s\r\n", GET_OBJ_NAME(soft),
+                GET_OBJ_VAL(soft, 1), GET_OBJ_VAL(soft, 4) ? (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(defaulted)" : "*") : " ");
       } else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", GET_OBJ_NAME(soft));
       else if (GET_OBJ_TYPE(soft) == ITEM_PART)
