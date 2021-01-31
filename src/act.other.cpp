@@ -841,6 +841,9 @@ ACMD(do_gen_write)
   case SCMD_IDEA:
     filename = IDEA_FILE;
     break;
+  case SCMD_PRAISE:
+    filename = PRAISE_FILE;
+    break;
   default:
     return;
   }
@@ -1227,6 +1230,12 @@ ACMD(do_toggle)
       mode = 22;
     } else if (is_abbrev(argument, "pacify") && IS_SENATOR(ch)) {
       result = PRF_TOG_CHK(ch, PRF_PACIFY);
+      if (ch->in_room) {
+        if (result)
+          ch->in_room->peaceful++;
+        else
+          ch->in_room->peaceful--;
+      }
       mode = 23;
    } else if (is_abbrev(argument, "longweapon")) {
       result = PRF_TOG_CHK(ch, PRF_LONGWEAPON);
@@ -2573,7 +2582,7 @@ int recog(struct char_data *ch, struct char_data *i, char *name)
   if (!(mem = found_mem(GET_MEMORY(ch), i)))
     return 0;
 
-  if (!str_cmp(name, mem->mem))
+  if (!strn_cmp(name, mem->mem, strlen(name)))
     return 1;
 
   return 0;
@@ -3622,8 +3631,14 @@ ACMD(do_memory)
     int i = 0;
     for (struct obj_data *obj = memory->contains; obj; obj = obj->next_content) {
       i++;
-      send_to_char(ch, "  %d) %s%-40s^n (%d MP) %s\r\n", i, GET_OBJ_VAL(obj, 8) ? "^r" : "", GET_OBJ_NAME(obj), 
-                       GET_OBJ_VAL(obj, 2) - GET_OBJ_VAL(obj, 8), GET_OBJ_VAL(obj, 9) ? "^Y<LINKED>^N" : "");
+      send_to_char(ch, "  %d) %s%-40s^n (%d MP) %s%s\r\n", 
+                   i, 
+                   GET_CHIP_COMPRESSION_FACTOR(obj) ? "^r" : "", 
+                   GET_OBJ_NAME(obj), 
+                   GET_CHIP_SIZE(obj) - GET_CHIP_COMPRESSION_FACTOR(obj), 
+                   GET_CHIP_LINKED(obj) ? "^Y<LINKED>^N" : "",
+                   GET_CHIP_COMPRESSION_FACTOR(obj) ? "^y<COMPRESSED>^N" : ""
+                 );
     }
   }
 }
@@ -3646,7 +3661,7 @@ ACMD(do_delete)
   if (!obj)
     send_to_char("You don't have that many files in your memory.\r\n", ch);
   else {
-    send_to_char(ch, "You delete %s from your headware memory.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You %sdelete %s from your headware memory.\r\n", GET_OBJ_VAL(obj, 9) ? "unlink and " : "", GET_OBJ_NAME(obj));
     if (GET_OBJ_VAL(obj, 9))
       ch->char_specials.saved.skills[GET_OBJ_VAL(obj, 0)][1] = 0;
     obj_from_obj(obj);

@@ -633,7 +633,7 @@ ACMD(do_radio)
         act(buf, FALSE, ch, radio, 0, TO_CHAR);
       }
       else {
-        send_to_char(ch, "Crypt mode enabled at rating %d..\r\n", max_crypt);
+        send_to_char(ch, "Crypt mode enabled at rating %d.\r\n", i);
         GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))) = i;
       }
     }

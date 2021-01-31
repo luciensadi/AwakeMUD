@@ -2861,7 +2861,7 @@ ACMD(do_compact)
 {
   skip_spaces(&argument);
   if (!*argument) {
-    send_to_char(ch, "What do you wish to %scompress.\r\n", subcmd ? "de" : "");
+    send_to_char(ch, "What do you wish to %scompress?\r\n", subcmd ? "de" : "");
     return;
   }
   struct obj_data *mem = NULL, *compact = NULL, *obj = NULL;
@@ -2882,25 +2882,26 @@ ACMD(do_compact)
     send_to_char("You don't have that file.\r\n", ch);
     return;
   }
-  if (GET_OBJ_VAL(obj, 9))
+  
+  if (GET_CHIP_LINKED(obj))
     send_to_char("You cannot compress a file that is in use.\r\n", ch);
-  else if (subcmd && !GET_OBJ_VAL(obj, 8))
+  else if (subcmd && !GET_CHIP_COMPRESSION_FACTOR(obj))
     send_to_char("That file isn't compressed.\r\n", ch);
-  else if (!subcmd && GET_OBJ_VAL(obj, 8))
+  else if (!subcmd && GET_CHIP_COMPRESSION_FACTOR(obj))
     send_to_char("That file is already compressed.\r\n", ch);
   else if (subcmd) {
-    if (GET_OBJ_VAL(mem, 3) - GET_OBJ_VAL(mem, 5) - GET_OBJ_VAL(obj, 8) < 0) {
+    if (GET_OBJ_VAL(mem, 3) - GET_OBJ_VAL(mem, 5) - GET_CHIP_COMPRESSION_FACTOR(obj) < 0) {
       send_to_char("You don't have enough free memory to decompress this.\r\n", ch);
       return;
     }
-    GET_OBJ_VAL(mem, 5) += GET_OBJ_VAL(obj, 8);
     send_to_char(ch, "You decompress %s.\r\n", GET_OBJ_NAME(obj));
-    GET_OBJ_VAL(obj, 8) = 0;
+    GET_OBJ_VAL(mem, 5) += GET_CHIP_COMPRESSION_FACTOR(obj);
+    GET_CHIP_COMPRESSION_FACTOR(obj) = 0;
   } else {
     int size = (int)(((float)GET_OBJ_VAL(obj, 2) / 100) * (GET_OBJ_VAL(compact, 1) * 20));
-    GET_OBJ_VAL(mem, 5) -= size;
+    GET_CHIP_COMPRESSION_FACTOR(obj) = size;
+    GET_OBJ_VAL(mem, 5) -= GET_CHIP_COMPRESSION_FACTOR(obj);
     send_to_char(ch, "You compress %s, saving %d MP of space.\r\n", GET_OBJ_NAME(obj), size);
-    GET_OBJ_VAL(obj, 8) = size;
   }
 }
 

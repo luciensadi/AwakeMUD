@@ -918,6 +918,11 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 // ITEM_RCDECK convenience defines
 
 // ITEM_CHIP convenience defines
+#define GET_CHIP_SKILL(chip)                 (GET_OBJ_VAL((chip), 0))
+#define GET_CHIP_RATING(chip)                (GET_OBJ_VAL((chip), 1))
+#define GET_CHIP_SIZE(chip)                  (GET_OBJ_VAL((chip), 2))
+#define GET_CHIP_COMPRESSION_FACTOR(chip)    (GET_OBJ_VAL((chip), 8))
+#define GET_CHIP_LINKED(chip)                (GET_OBJ_VAL((chip), 9))
 
 // ITEM_MOD convenience defines
 #define GET_VEHICLE_MOD_TYPE(mod)            (GET_OBJ_VAL((mod), 0))

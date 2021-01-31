@@ -334,18 +334,18 @@ void objList::UpdateCounters(void)
           act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
           
           if (ROOM_FLAGGED(temp->data->in_room, ROOM_CORPSE_SAVE_HACK)) {
-            bool should_clear_flag = FALSE;
+            bool should_clear_flag = TRUE;
             
             // Iterate through items in room, making sure there are no other corpses.
             for (struct obj_data *tmp_obj = temp->data->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
               if (tmp_obj != temp->data && IS_OBJ_STAT(tmp_obj, ITEM_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
-                should_clear_flag = TRUE;
+                should_clear_flag = FALSE;
                 break;
               }
             }
             
             if (should_clear_flag) {
-              snprintf(buf, sizeof(buf), "Removing storage flag from %s (%ld) due to no more player corpses being in it.",
+              snprintf(buf, sizeof(buf), "Cleanup: Auto-removing storage flag from %s (%ld) due to no more player corpses being in it.",
                        GET_ROOM_NAME(temp->data->in_room),
                        GET_ROOM_VNUM(temp->data->in_room));
               mudlog(buf, NULL, LOG_SYSLOG, TRUE);

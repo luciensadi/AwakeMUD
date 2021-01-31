@@ -3325,6 +3325,51 @@ int draw_weapon(struct char_data *ch)
   return i;
 }
 
+bool holster_can_fit(struct obj_data *holster, struct obj_data *weapon) {
+  bool small_weapon = GET_OBJ_VAL(weapon, 4) == SKILL_PISTOLS || GET_OBJ_VAL(weapon, 4) == SKILL_SMG;
+  switch (GET_OBJ_VAL(holster, 0)) {
+    case 0:
+      return IS_GUN(GET_OBJ_VAL(weapon, 3)) && small_weapon;
+    case 1:
+      return !IS_GUN(GET_OBJ_VAL(weapon, 3));
+    case 2:
+      return IS_GUN(GET_OBJ_VAL(weapon, 3)) && !small_weapon;
+  }
+  
+  return FALSE;
+}
+
+struct obj_data *find_holster_that_fits_weapon(struct char_data *ch, struct obj_data *weapon) {
+  // Look at their worn items. We exclude inventory here.
+  for (int x = 0; x < NUM_WEARS; x++) {
+    // Is it a holster?
+    if (GET_EQ(ch, x) 
+        && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_HOLSTER 
+        && !GET_EQ(ch, x)->contains 
+        && holster_can_fit(GET_EQ(ch, x), weapon))
+    {
+      return GET_EQ(ch, x);
+    }
+    
+    // Does it contain a holster?
+    if (GET_EQ(ch, x) 
+        && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN
+        && GET_EQ(ch, x)->contains) 
+    {
+      for (struct obj_data *temp = GET_EQ(ch, x)->contains; temp; temp = temp->next_content) {
+        if (GET_OBJ_TYPE(temp) == ITEM_HOLSTER 
+            && !temp->contains 
+            && holster_can_fit(temp, weapon)) 
+        {
+          return temp;
+        }
+      }
+    }
+  }
+  
+  return NULL;
+}
+
 ACMD(do_holster)
 { // Holster <gun> <holster>
   struct obj_data *obj = NULL, *cont = NULL;
@@ -3351,42 +3396,32 @@ ACMD(do_holster)
     }
     
     // Find a generic holster.
-    for (int x = 0; x < NUM_WEARS; x++) {
-      if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN && GET_EQ(ch, x)->contains) {
-        for (struct obj_data *temp = GET_EQ(ch, x)->contains; temp; temp = temp->next_content)
-          if (GET_OBJ_TYPE(temp) == ITEM_HOLSTER && !temp->contains) {
-            cont = temp;
-            break;
-          }
-      } else if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_HOLSTER && !GET_EQ(ch, x)->contains) {
-          cont = GET_EQ(ch, x);
-          break;
-      }
+    cont = find_holster_that_fits_weapon(ch, obj);
+  } 
+  
+  // Something was specified.
+  else {
+    // Find weapon.
+    if (!generic_find(buf, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &obj)) {
+      send_to_char(ch, "You're not carrying a '%s'.\r\n", buf);
+      return;
+    } 
+    
+    // Find holster.
+    if (!*buf1 || !generic_find(buf1, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &cont)) {
+      cont = find_holster_that_fits_weapon(ch, obj);
     }
-  } else if (!generic_find(buf, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &obj)) {
-    send_to_char(ch, "You're not carrying a '%s'.\r\n", buf);
-    return;
-  } else if (!generic_find(buf1, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &cont)) {
-    for (int x = 0; x < NUM_WEARS; x++) {
-      if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN && GET_EQ(ch, x)->contains) {
-        for (struct obj_data *temp = GET_EQ(ch, x)->contains; temp; temp = temp->next_content)
-          if (GET_OBJ_TYPE(temp) == ITEM_HOLSTER && !temp->contains) {
-            cont = temp;
-            break;
-          }
-      } else if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_HOLSTER && !GET_EQ(ch, x)->contains) {
-          cont = GET_EQ(ch, x);
-          break;
-      }
-    }
-  }
+  } 
+  
+  
+  
   
   if (!cont) {
-    send_to_char(ch, "You don't have any empty holsters that will fit %s.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You don't have any empty %s that will fit %s.\r\n", !IS_GUN(GET_OBJ_VAL(obj, 3)) ? "sheaths" : "holsters", decapitalize_a_an(GET_OBJ_NAME(obj)));
     return;
   }
   if (cont == obj) {
-    send_to_char(ch, "You can't put %s inside itself.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You can't put %s inside itself.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
     return;
   }
   if (GET_OBJ_TYPE(obj) != ITEM_WEAPON) {
@@ -3398,7 +3433,7 @@ ACMD(do_holster)
     return;
   }
   if (cont->contains) {
-    send_to_char(ch, "There's already something in %s.\r\n", GET_OBJ_NAME(cont));
+    send_to_char(ch, "There's already something in %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(cont)));
     return;
   }
 
@@ -3425,7 +3460,7 @@ ACMD(do_holster)
     break;
   }
   if (dontfit) {
-    send_to_char(ch, "%s is made for %s, so %s won't fit in it.\r\n", capitalize(GET_OBJ_NAME(cont)), madefor, GET_OBJ_NAME(obj));
+    send_to_char(ch, "%s is made for %s, so %s won't fit in it.\r\n", capitalize(GET_OBJ_NAME(cont)), madefor, decapitalize_a_an(GET_OBJ_NAME(obj)));
     return;
   }
   
@@ -3438,7 +3473,7 @@ ACMD(do_holster)
   else
     obj_from_char(obj);
   obj_to_obj(obj, cont);
-  send_to_char(ch, "You slip %s into %s and ready it for a quick draw.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+  send_to_char(ch, "You slip %s into %s and ready it for a quick draw.\r\n", GET_OBJ_NAME(obj), decapitalize_a_an(GET_OBJ_NAME(cont)));
   act("$n slips $p into $P.", FALSE, ch, obj, cont, TO_ROOM);
   GET_HOLSTER_READY_STATUS(cont) = 1;
   return;

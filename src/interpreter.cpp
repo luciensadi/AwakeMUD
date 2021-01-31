@@ -694,6 +694,7 @@ struct command_info cmd_info[] =
     { "position" , POS_DEAD    , do_position , 0, 0 },
     { "possess"  , POS_DEAD    , do_wizpossess, LVL_FIXER, 0 },
     { "powerdown", POS_DEAD    , do_powerdown, 0, 0 },
+    { "praise"   , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE },
     { "press"    , POS_SITTING , do_push     , 0, 0 },
     { "prompt"   , POS_DEAD    , do_display  , 0, 0 },
     { "project"  , POS_LYING   , do_astral   , 0, SCMD_PROJECT },

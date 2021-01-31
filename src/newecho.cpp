@@ -150,6 +150,28 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
   return result_string;
 }
 
+// Finds the first occurrence of standalone word 'str' in string.
+const char *strstr_isolated(const char *string, const char *search_string) {
+  const char *ptr = strstr(string, search_string);
+  int search_len = strlen(search_string);
+  
+  while (ptr && isalpha(*(ptr + search_len)))
+    ptr = strstr(ptr + 1, search_string);
+    
+  return ptr;
+}
+
+// Finds the first occurrence of standalone word 'str' in string (ignores case)
+const char *str_str_isolated(const char *string, const char *search_string) {
+  const char *ptr = str_str(string, search_string);
+  int search_len = strlen(search_string);
+  
+  while (ptr && isalpha(*(ptr + search_len)))
+    ptr = str_str(ptr + 1, search_string);
+    
+  return ptr;
+}
+
 char newecho_debug_buf[MAX_STRING_LENGTH];
 void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string, bool require_char_name) {
   int tag_index, i;
@@ -172,22 +194,59 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   
   // Scan the string for the actor's name. This is an easy check. In the process, convert echo_string into something mutable, and set i to skip over this new text.
   bool must_prepend_name = TRUE;
-  if (require_char_name) {    
-    // Check the string for '@self' without an alphabetical after it.
-    const char *self_ptr = strstr(echo_string, "@self");
-    while (self_ptr && isalpha(*(self_ptr + strlen("@self"))))
-      self_ptr = strstr(self_ptr + 1, "@self");
-    if (self_ptr)
-      must_prepend_name = FALSE;
+  if (require_char_name) {
+    // We're finding all characters up to the first quote mark, and checking those for the name.
+    const char *quote_ptr = strchr(echo_string, '"');
+    const char *start_of_block = echo_string;
     
-    // Check the string for the actor's name in the same manner.
-    if (must_prepend_name) {
-      const char *name_ptr = strstr(echo_string, GET_CHAR_NAME(actor));
-      while (name_ptr && isalpha(*(name_ptr + strlen(GET_CHAR_NAME(actor)))))
-        name_ptr = strstr(name_ptr + 1, GET_CHAR_NAME(actor));
-      if (name_ptr)
-        must_prepend_name = FALSE;
+    while (quote_ptr) {
+      memset(storage_string, 0, sizeof(storage_string));
+      strncpy(storage_string, start_of_block, quote_ptr - start_of_block);
+      // send_to_char(actor, "Storage string: '%s' (quote_ptr = %c, start_of_block = %c)\r\n", storage_string, *quote_ptr, *start_of_block);
+      
+      // Check the string for '@self'.
+      if (!(must_prepend_name = !str_str_isolated(storage_string, "@self"))) {
+        // send_to_char("Found @self outside of quotes.\r\n", actor);
+        break;
+      }
+      
+      // Check the string for the capitalized character's name.
+      if (!(must_prepend_name = !strstr_isolated(storage_string, capitalize(GET_CHAR_NAME(actor))))) {
+        // send_to_char("Found name outside of quotes.\r\n", actor);
+        break;
+      }
+      
+      // Since we're before a quote (outside of dialogue), we want to advance to the next quote.
+      if (!(quote_ptr = strchr(quote_ptr + 1, '"'))) {
+        // send_to_char("No more quotes.\r\n", actor);
+        break;
+      }
+      
+      // If the next character is a null character, we're at the end of the emote.
+      if (!(start_of_block = quote_ptr + 1)) {
+        // send_to_char("Null character after quote.\r\n", actor);
+        break;
+      }
+      
+      // Finally, advance to the quote at the beginning of the next dialogue, or re-evaluate if there is no more dialogue.
+      if (!(quote_ptr = strchr(start_of_block, '"'))) {
+        // send_to_char("Breaking out of while loop, no more quotes.\r\n", actor);
+        break;
+      }
     }
+    
+    if (start_of_block && *start_of_block) {
+      // send_to_char(actor, "Last attempt. Evaluating '%s'.\r\n", start_of_block);
+      if (!(must_prepend_name = !str_str_isolated(start_of_block, "@self"))) {
+        // send_to_char("Found @self in final analysis.\r\n", actor);
+      }
+      
+      // Check the string for the capitalized character's name.
+      else if (!(must_prepend_name = !strstr_isolated(start_of_block, capitalize(GET_CHAR_NAME(actor))))) {
+        // send_to_char("Found name in final analysis.\r\n", actor);
+      }
+    }
+    
   } else {
     must_prepend_name = FALSE;
   }

@@ -1765,6 +1765,7 @@ enum {
 #define SCMD_BUG        0
 #define SCMD_TYPO       1
 #define SCMD_IDEA       2
+#define SCMD_PRAISE     3
 
 /* do_look */
 #define SCMD_LOOK       0

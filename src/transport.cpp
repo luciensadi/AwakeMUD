@@ -327,7 +327,8 @@ SPECIAL(taxi_sign) {
   
   // Finally, tack on a newline and send it all to the character!
   strcat(buf, "\r\n");
-  strlcat(buf, "The keyword for each location is listed after the location name.  ^WSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n", sizeof(buf));
+  strlcat(buf, "The keyword for each location is listed after the location name.  ^WSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n"
+               "Gotten stuck? ^WSAY STUCK^n.\r\n", sizeof(buf));
   send_to_char(buf, ch);
   
   return TRUE;
@@ -828,6 +829,29 @@ SPECIAL(taxi)
           strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
           do_echo(driver, buf2, 0, SCMD_EMOTE);
           break;
+        }
+        
+        if (str_str((const char *)argument, "stuck")) {
+          for (int i = 0; i < NUM_OF_DIRS; i++)
+            if (EXIT(ch, i) && CAN_GO(ch, i)) {
+              send_to_char(ch, "^M(OOC: There's an exit to the %s, try heading in that direction.)^n\r\n", fulldirs[i]);
+              return TRUE;
+            }
+            
+          send_to_char(ch, "^M(OOC: Sorry you're stuck! We'll send you to Dante's Inferno. This will be logged for staff review.)^n\r\n");
+          mudlog("^YUsing stuck command to get out of taxi.^g", ch, LOG_GRIDLOG, TRUE);
+          char_from_room(ch);
+          
+          int rnum = real_room(RM_ENTRANCE_TO_DANTES);
+          if (rnum > -1)
+            char_to_room(ch, &world[rnum]);
+          else
+            char_to_room(ch, &world[1]);
+          
+          act("$n is ejected from a taxi.", TRUE, ch, 0, 0, TO_ROOM);
+          
+          look_at_room(ch, 0);
+          return TRUE;
         }
       }
       

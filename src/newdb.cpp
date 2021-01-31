@@ -943,18 +943,21 @@ bool load_char(const char *name, char_data *ch, bool logon)
         if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE) 
           max = GET_OBJ_VAL(wire, 1);
       for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content)
-        ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = skills[GET_OBJ_VAL(chip, 0)].type ? GET_OBJ_VAL(chip, 1) 
-                                                                                         : MIN(max, GET_OBJ_VAL(chip, 1));
-      break;
+        ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = skills[GET_OBJ_VAL(chip, 0)].type ? GET_CHIP_SKILL(chip)
+                                                                                                    : MIN(max, GET_CHIP_SKILL(chip));
     } else if (GET_OBJ_VAL(jack, 0) == CYB_MEMORY) {
       int max = 0;
-      for (struct obj_data *wire = ch->cyberware; wire; wire = wire->next_content) 
+      for (struct obj_data *wire = ch->cyberware; wire; wire = wire->next_content) {
         if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE) 
           max = GET_OBJ_VAL(wire, 1);
-      for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content)
-        ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = skills[GET_OBJ_VAL(chip, 0)].type ? GET_OBJ_VAL(chip, 1)
-                                                                                         : MIN(max, GET_OBJ_VAL(chip, 1));
-      break;
+      }
+      
+      GET_OBJ_VAL(jack, 5) = 0;
+      for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content) {
+        ch->char_specials.saved.skills[GET_CHIP_SKILL(chip)][1] = skills[GET_CHIP_SKILL(chip)].type ? GET_CHIP_SKILL(chip)
+                                                                                                    : MIN(max, GET_CHIP_SKILL(chip));
+        GET_OBJ_VAL(jack, 5) += GET_CHIP_SIZE(chip) - GET_CHIP_COMPRESSION_FACTOR(chip);
+      }
     }
     
   // Self-repair their gear. Don't worry about contents- it's recursive.

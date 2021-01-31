@@ -43,6 +43,7 @@
 #define IDEA_FILE       "text/ideas"/* for the 'idea'-command       */
 #define TYPO_FILE       "text/typos"/*         'typo'               */
 #define BUG_FILE        "text/bugs" /*         'bug'                */
+#define PRAISE_FILE     "text/praise" /*       'praise'             */
 #define MESS_FILE       "misc/messages" /* damage messages              */
 #define SOCMESS_FILE    "misc/socials"  /* messgs for social acts       */
 

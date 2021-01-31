@@ -609,7 +609,8 @@ void death_cry(struct char_data * ch)
   int door;
   struct room_data *was_in = NULL;
   
-  act("$n cries out $s last breath as $e dies!", FALSE, ch, 0, 0, TO_ROOM);
+  snprintf(buf3, sizeof(buf3), "$n cries out $s last breath as $e die%s!", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+  act(buf3, FALSE, ch, 0, 0, TO_ROOM);
   was_in = ch->in_room;
   
   for (door = 0; door < NUM_OF_DIRS; door++)
@@ -2205,7 +2206,7 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       return false;
       
     // Quest target protection.
-    if (victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM(ch)) {
+    if (!IS_NPC(ch) && victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM(ch)) {
       // If grouped, check to see if anyone in the group is the mob's owner.
       if (AFF_FLAGGED(ch, AFF_GROUP)) {
         bool found_group_member = FALSE;
@@ -2498,7 +2499,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       snprintf(buf3, sizeof(buf3), "^R$n slams into the %s at speed, the impact reshaping $s body in horrific ways.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
       act(buf3, FALSE, victim, 0, 0, TO_ROOM);
     } else {
-      send_to_char(victim, "^rYou hit the %s with brusing force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
+      send_to_char(victim, "^rYou hit the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
       snprintf(buf3, sizeof(buf3), "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
       act(buf3, FALSE, victim, 0, 0, TO_ROOM);
     }

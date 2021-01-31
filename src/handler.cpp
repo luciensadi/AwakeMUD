@@ -2445,12 +2445,16 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
     if ((i = get_char_veh(ch, name, ch->in_veh)))
       return i;
   
-  for (i = ch->in_veh ? ch->in_veh->people : ch->in_room->people; i && j <= number; i = ch->in_veh ? i->next_in_veh : i->next_in_room)
-    if ((isname(tmp, GET_KEYWORDS(i)) ||
-         isname(tmp, GET_NAME(i)) || recog(ch, i, name)) &&
-        CAN_SEE(ch, i))
+  for (i = ch->in_veh ? ch->in_veh->people : ch->in_room->people; i && j <= number; i = ch->in_veh ? i->next_in_veh : i->next_in_room) {
+    if ((isname(tmp, GET_KEYWORDS(i)) 
+          || isname(tmp, GET_NAME(i)) 
+          || recog(ch, i, name)) 
+        && CAN_SEE(ch, i))
+    {
       if (++j == number)
         return i;
+    }
+  }
   
   return NULL;
 }

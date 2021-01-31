@@ -2612,6 +2612,9 @@ ACMD(do_conjure)
         struct char_data *mob = create_elemental(ch, spirit, force, spirdata->id, TRAD_SHAMANIC);
         send_to_char("The spirit hears your call and comes forth from the metaplanes.\r\n", ch);
         act("$n fades into existance on the astral plane.", TRUE, mob, 0, 0, TO_ROOM);
+        
+        AFF_FLAGS(ch).SetBit(AFF_GROUP);
+        AFF_FLAGS(mob).SetBit(AFF_GROUP);
       }
     }
   }
@@ -3411,6 +3414,8 @@ POWER(spirit_attack)
   else {
     check_killer(ch, tch);
     set_fighting(spirit, tch);
+    if (!FIGHTING(tch) && CAN_SEE(tch, spirit))
+      set_fighting(tch, spirit);
     spiritdata->services--;
   }
 }
