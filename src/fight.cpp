@@ -3436,11 +3436,29 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   // TODO: Why would someone handling a vehicle or manning a turret negate visibility penalties?
   // !(ch->in_veh || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))
   int modifier = 0;
+  
+  // Can't see them at all? 8 TN penalty.
   if (!CAN_SEE(ch, victim)) {
     modifier = 8;
-    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) || GET_POWER(ch, ADEPT_BLIND_FIGHTING))
-      modifier = 4;
   }
+  
+  // Check to see if they're partially visible due to compensation.
+  // SR3 p282: Reduces modifiers by half, round up.
+  bool det_invis = AFF_FLAGGED(ch, AFF_DETECT_INVIS);
+  int blind_fighting_level = GET_POWER(ch, ADEPT_BLIND_FIGHTING);
+  if (det_invis || blind_fighting_level) {
+    AFF_FLAGS(ch).RemoveBit(AFF_DETECT_INVIS);
+    GET_POWER_ACT(ch, ADEPT_BLIND_FIGHTING) = 0;
+    
+    if (!CAN_SEE(ch, victim))
+      modifier = 4; 
+      
+    if (det_invis)
+      AFF_FLAGS(ch).SetBit(AFF_DETECT_INVIS);
+    if (blind_fighting_level)
+      GET_POWER_ACT(ch, ADEPT_BLIND_FIGHTING) = blind_fighting_level;
+  }
+  
   return modifier;
 }
 
@@ -3849,7 +3867,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
     if (!AWAKE(def->ch))
       att->modifiers[COMBAT_MOD_POSITION] -= 6;
-    else if (AFF_FLAGGED(def->ch, AFF_PRONE))
+    else if (AFF_FLAGGED(def->ch, AFF_PRONE) && def->ch->in_room == att->ch->in_room)
       att->modifiers[COMBAT_MOD_POSITION]--;
     
     // Setup: Determine distance penalties.

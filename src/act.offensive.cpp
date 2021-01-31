@@ -598,7 +598,10 @@ ACMD(do_flee)
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
       
       // If the character is fighting in melee combat, they must pass a test to escape.
-      if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
+      if (GET_POS(ch) >= POS_FIGHTING 
+          && FIGHTING(ch) 
+          && ch->in_room == FIGHTING(ch)->in_room
+          && !(AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))) {
         if (!(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))
             && !success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)))) {
           act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
