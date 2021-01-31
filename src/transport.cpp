@@ -630,6 +630,7 @@ struct dest_data *get_dest_data_list_for_zone(int zone_num) {
   switch (zone_num) {
     case 13:
     case 15:
+    case 16:
     case 20:
     case 22:
     case 23:
