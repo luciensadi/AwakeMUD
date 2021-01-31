@@ -3173,6 +3173,14 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
   return TRUE;
 }
 
+float get_proto_weight(struct obj_data *obj) {
+  int rnum = real_object(GET_OBJ_VNUM(obj));
+  if (rnum <= -1)
+    return 0.00;
+  else
+    return GET_OBJ_WEIGHT(&obj_proto[rnum]);
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

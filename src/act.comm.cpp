@@ -780,7 +780,7 @@ ACMD(do_broadcast)
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT)) 
       {
-        if (!IS_NPC(d->character) && !IS_SENATOR(d->character)) {
+        if (!IS_NPC(d->character) && !access_level(d->character, LVL_FIXER)) {
           radio = NULL;
           cyberware = FALSE;
           vehicle = FALSE;
@@ -912,7 +912,7 @@ ACMD(do_broadcast)
           
           store_message_to_history(d, COMM_CHANNEL_RADIO, act(radio_string, FALSE, ch, 0, d->character, TO_VICT));
           
-        } else if (IS_SENATOR(d->character) && !PRF_FLAGGED(d->character, PRF_NORADIO)) {
+        } else if (access_level(d->character, LVL_FIXER) && !PRF_FLAGGED(d->character, PRF_NORADIO)) {
           store_message_to_history(d, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, d->character, TO_VICT));
         }
       }

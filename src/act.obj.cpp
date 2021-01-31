@@ -197,7 +197,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       return;
     }
     */
-  } else if (GET_OBJ_WEIGHT(cont) + GET_OBJ_WEIGHT(obj) > GET_OBJ_VAL(cont, 0)) {
+  } else if (GET_OBJ_WEIGHT(cont) + GET_OBJ_WEIGHT(obj) > (GET_OBJ_VAL(cont, 0) + get_proto_weight(cont))) {
     act("$p won't fit in $P.", FALSE, ch, obj, cont, TO_CHAR);
     return;
   }

@@ -2409,8 +2409,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               spells[GET_OBJ_VAL(j, 1)].name, GET_OBJ_VAL(j, 2) ? "Shamanic" : "Hermetic");
       break;
     case ITEM_PART:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n designed for MPCP ^c%d^n decks.", AN(parts[GET_OBJ_VAL(j, 0)].name),
-              parts[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s %s^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.", 
+               AN(parts[GET_OBJ_VAL(j, 0)].name),
+               !GET_PART_DESIGN_COMPLETION(j) ? "not-yet-designed " : "",
+               parts[GET_OBJ_VAL(j, 0)].name, 
+               GET_OBJ_VAL(j, 2),
+               GET_PART_PART_COST(j),
+               GET_PART_CHIP_COST(j)
+             );
       break;
     case ITEM_CUSTOM_DECK:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");
@@ -2710,18 +2716,15 @@ ACMD(do_examine)
       if (!tmp_object->contains)
         send_to_char("Looking inside reveals it to be empty.\r\n", ch);
       else {
-        struct obj_data *exobj = NULL;
-        if (GET_OBJ_VNUM(tmp_object) > 0)
-          exobj = read_object(GET_OBJ_RNUM(tmp_object), REAL);
-        if (exobj) {
-          int q = GET_OBJ_VAL(tmp_object, 0) - (int)(GET_OBJ_WEIGHT(exobj)), x = (int)(GET_OBJ_WEIGHT(tmp_object) - GET_OBJ_WEIGHT(exobj));
-          extract_obj(exobj);
-          if (x >= q * .9)
-            send_to_char("It is bursting at the seams.\r\n", ch);
-          else if (x >= q / 2)
-            send_to_char("It is more than half full.\r\n", ch);
-          else send_to_char("It is less than half full.\r\n", ch);
-        }
+        float weight_when_full =get_proto_weight(tmp_object) + GET_OBJ_VAL(tmp_object, 0);
+        
+        if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full * .9)
+          send_to_char("It is bursting at the seams.\r\n", ch);
+        else if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full / 2)
+          send_to_char("It is more than half full.\r\n", ch);
+        else 
+          send_to_char("It is less than half full.\r\n", ch);
+        
         send_to_char("When you look inside, you see:\r\n", ch);
         look_in_obj(ch, arg, TRUE);
       }

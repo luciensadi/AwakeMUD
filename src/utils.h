@@ -598,6 +598,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_OBJ_WEAR(obj)       ((obj)->obj_flags.wear_flags)
 #define GET_OBJ_VAL(obj, val)   ((obj)->obj_flags.value[(val)])
 #define GET_OBJ_WEIGHT(obj)     ((obj)->obj_flags.weight)
+float get_proto_weight(struct obj_data *obj);
 #define GET_OBJ_TIMER(obj)      ((obj)->obj_flags.timer)
 #define GET_OBJ_ATTEMPT(obj)    ((obj)->obj_flags.attempt)
 #define GET_OBJ_RNUM(obj)       ((obj)->item_number)
