@@ -2907,7 +2907,10 @@ void purgelog(struct veh_data *veh) {
   const char *representation = NULL;
   
   // Begin the purgelog entry.
-  snprintf(internal_buffer, sizeof(internal_buffer), "- Writing purgelog for vehicle %s (rnum %ld, idnum %ld, owned by %ld).", GET_VEH_NAME(veh), GET_VEH_RNUM(veh), veh->idnum, veh->owner);
+  snprintf(internal_buffer, sizeof(internal_buffer), "- Writing purgelog for vehicle %s (vnum %ld, idnum %ld, owned by %ld).", 
+           GET_VEH_NAME(veh), 
+           veh_index[GET_VEH_RNUM(veh)].vnum, 
+           veh->idnum, veh->owner);
   mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
   
   // Log its mounts.
