@@ -698,7 +698,7 @@ ACMD(do_upgrade)
       GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1) = (veh->body * veh->body) * totalarmor * 5;
       mod->affected[0].modifier = totalarmor;
       affect_veh(veh, mod->affected[0].location, mod->affected[0].modifier);
-      if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) != mod)
+      if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
         need_extract = TRUE;
       else
         obj_from_char(mod);
