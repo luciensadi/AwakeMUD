@@ -1231,12 +1231,13 @@ enum {
 #define SHFT(ch) (GET_LEVEL(ch))
 
 /* vehicle flag table */
-#define VFLAG_NONE  0
-#define VFLAG_CAN_FLY  1
-#define VFLAG_AMPHIB  2
-#define VFLAG_WORKSHOP  3
-#define VFLAG_NEWBIE  4
-#define NUM_VFLAGS      5
+#define VFLAG_NONE       0
+#define VFLAG_CAN_FLY    1
+#define VFLAG_AMPHIB     2
+#define VFLAG_WORKSHOP   3
+#define VFLAG_NEWBIE     4
+#define VFLAG_ULTRASOUND 5
+#define NUM_VFLAGS       6
 /* vehicle speed table */
 #define SPEED_OFF 0
 #define SPEED_IDLE 1
@@ -1610,7 +1611,7 @@ enum {
 #define MOD_PHONE    25
 #define MOD_RADIO    26
 #define MOD_MOUNT    27
-#define NUM_MODS    29
+#define NUM_MODS    28
 
 #define TYPE_ENGINECUST    1
 #define TYPE_NOS    2

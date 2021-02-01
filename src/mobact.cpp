@@ -628,7 +628,7 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
           snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
           act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
           send_to_char(ch, "You prepare to attack %s!", GET_VEH_NAME(veh));
-          snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
+          snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
           send_to_veh(buf, veh, NULL, TRUE);
           set_fighting(ch, veh);
           return TRUE;
@@ -834,7 +834,7 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
         snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
         act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
         send_to_char(ch, "You prepare to attack %s for security infractions!", GET_VEH_NAME(veh));
-        snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack over security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s%s glares at your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
         send_to_veh(buf, veh, NULL, TRUE);
         set_fighting(ch, veh);
         return TRUE;

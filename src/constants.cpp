@@ -1647,7 +1647,8 @@ const char *veh_flag[] =
     "Can Fly",
     "Amphibious",
     "Workshop",
-    "Newbie"
+    "Newbie",
+    "Ultrasound"
   };
 
 const char *jurid[] =

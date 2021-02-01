@@ -292,7 +292,8 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   ch->next_fighting = combat_list;
   combat_list = ch;
   
-  GET_INIT_ROLL(ch) = 0;
+  // GET_INIT_ROLL(ch) = 0;
+  roll_individual_initiative(ch);
   FIGHTING(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
@@ -311,6 +312,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     if (!GET_EQ(ch, WEAR_WIELD) && !GET_EQ(ch, WEAR_HOLD))
       AFF_FLAGS(ch).SetBit(AFF_APPROACH);
   }
+  
   check_killer(ch, vict);
   AFF_FLAGS(ch).RemoveBit(AFF_BANISH);
   AFF_FLAGS(vict).RemoveBit(AFF_BANISH);
@@ -3432,6 +3434,20 @@ bool is_char_too_tall(struct char_data *ch) {
 #endif
 }
 
+bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
+  if (!veh)
+    return FALSE;
+    
+  if (VEH_FLAGGED(*veh, VFLAG_ULTRASOUND))
+    return TRUE;
+    
+  for (int i = 0; i < NUM_MODS; i++)
+    if (GET_MOD(veh, i) && GET_MOD(veh, i)->obj_flags.bitvector.IsSet(AFF_DETECT_INVIS))
+      return TRUE;
+      
+  return FALSE;
+}
+
 #define INVIS_CODE_STAFF 321
 #define INVIS_CODE_TOTALINVIS 123
 #define BLIND_FIGHTING_MAX 4
@@ -3452,9 +3468,11 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || CURRENT_VISION(ch) == THERMOGRAPHIC;
   bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
   
-  // EXCEPT: If you're rigging, things change.
+  // EXCEPT: If you're rigging (not manning), things change.
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    ch_has_ultrasound = FALSE; // Eventually, we'll have ultrasonic sensors on vehicles too.
+    struct veh_data *veh = NULL;
+    RIG_VEH(ch, veh);
+    ch_has_ultrasound = vehicle_has_ultrasound_sensors(veh); // Eventually, we'll have ultrasonic sensors on vehicles too.
     ch_has_thermographic = TRUE;
     ch_sees_astral = FALSE;
   }

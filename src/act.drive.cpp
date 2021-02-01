@@ -967,6 +967,14 @@ ACMD(do_subscribe)
     send_to_char("That is already part of your subscriber list.\r\n", ch);
     return;
   }
+  for (struct veh_data *sveh = ch->char_specials.subscribe; sveh; sveh = sveh->next_sub)
+    if (sveh == veh) {
+      send_to_char("That is already part of your subscriber list.\r\n", ch);
+      sveh->sub = TRUE;
+      mudlog("SYSERR: Almost-successful attempt to add duplicate vehicle to subscriber list.", ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+  
   veh->sub = TRUE;
   veh->next_sub = ch->char_specials.subscribe;
   if (ch->char_specials.subscribe)

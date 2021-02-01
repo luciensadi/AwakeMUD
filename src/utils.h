@@ -269,7 +269,7 @@ void    update_pos(struct char_data *victim);
 #define MOB_FLAGGED(ch, flag) (IS_NPC(ch) && MOB_FLAGS(ch).IsSet((flag)))
 #define PLR_FLAGGED(ch, flag) (!IS_NPC(ch) && PLR_FLAGS(ch).IsSet((flag)))
 #define AFF_FLAGGED(ch, flag) (AFF_FLAGS(ch).IsSet((flag)))
-#define VEH_FLAGGED(ch, flag) (VEH_FLAGS(ch).IsSet((flag))
+#define VEH_FLAGGED(ch, flag) (VEH_FLAGS(ch).IsSet((flag)))
 #define PRF_FLAGGED(ch, flag) \
   ((ch->desc && ch->desc->original) \
    ? PRF_FLAGS(ch->desc->original).IsSet((flag)) \
