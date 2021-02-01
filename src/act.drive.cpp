@@ -668,9 +668,12 @@ ACMD(do_upgrade)
       send_to_char("You can't use that part on this type of engine.\r\n", ch);
       return;
     }
-    if ((GET_OBJ_VAL(mod, 0) != TYPE_SEATS 
-         && GET_OBJ_VAL(mod, 0) != TYPE_ARMOR 
-         && GET_OBJ_VAL(mod, 0) != TYPE_CONCEALEDARMOR) && GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
+    if (GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
+      /* Prior logic included this: (GET_OBJ_VAL(mod, 0) != TYPE_SEATS 
+           && GET_OBJ_VAL(mod, 0) != TYPE_ARMOR 
+           && GET_OBJ_VAL(mod, 0) != TYPE_CONCEALEDARMOR)
+           
+        but it wasn't actually done in a way that would make it save across reboot, so it's stripped out. */
       send_to_char(ch, "There is already a mod of that type installed.\r\n");
       return;
     }

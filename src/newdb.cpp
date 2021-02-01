@@ -1558,18 +1558,74 @@ bool PCIndex::Save()
   return true;
 }
 
-char_data *CreateChar(char_data *ch)
-{
+// You motherfuckers better sanitize your queries that you pass to this, because it's going in RAW.
+// Only used for idnums right now, so -1 is the error code.
+vnum_t get_one_number_from_query(const char *query) {
+  vnum_t value = -1;
+  
   char buf[MAX_STRING_LENGTH];
-  strcpy(buf, "SELECT idnum FROM pfiles ORDER BY idnum DESC;");
+  strcpy(buf, query);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
-  if (!row && mysql_field_count(mysql)) {
+  if (row && mysql_field_count(mysql)) {
+    value = atol(row[0]);
+  }
+  mysql_free_result(res);
+  
+  return value;
+}
+
+vnum_t get_highest_idnum_in_use() {
+  char buf[MAX_STRING_LENGTH];
+  
+  const char *tables[] = {
+    "pfiles_adeptpowers",
+    "pfiles_alias",
+    "pfiles_ammo",
+    "pfiles_bioware",
+    "pfiles_chargendata",
+    "pfiles_cyberware",
+    "pfiles_drugdata",
+    "pfiles_drugs",
+    "pfiles_ignore",
+    "pfiles_immortdata",
+    "pfiles_inv",
+    "pfiles_magic",
+    "pfiles_mail",
+    "pfiles_memory",
+    "pfiles_metamagic",
+    "pfiles_playergroups",
+    "pfiles_quests",
+    "pfiles_skills",
+    "pfiles_spells",
+    "pfiles_spirits",
+    "pfiles_worn",
+  };
+  
+  #define NUM_IDNUM_TABLES 21
+  
+  vnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
+  
+  for (int i = 0; i < NUM_IDNUM_TABLES; i++) {
+    snprintf(buf, sizeof(buf), "SELECT idnum FROM %s ORDER BY idnum DESC LIMIT 1;", tables[i]);
+    vnum_t new_number = get_one_number_from_query(buf);
+    if (highest_pfiles_idnum < new_number) {
+      mudlog("^RSYSERR: SQL database corruption (pfiles idnum lower than supporting table idnum). Will attempt to recover.^g", NULL, LOG_SYSLOG, TRUE);
+      highest_pfiles_idnum = new_number;
+    }
+  }
+  
+  return highest_pfiles_idnum;
+}
+
+char_data *CreateChar(char_data *ch)
+{
+  vnum_t highest_idnum_in_use = get_highest_idnum_in_use();
+  
+  if (highest_idnum_in_use <= -1) {
     log_vfprintf("%s promoted to %s by virtue of first-come, first-serve.",
         GET_CHAR_NAME(ch), status_ratings[LVL_MAX]);
-    
-    // TODO: Add NODELETE, OLC on
 
     for (int i = 0; i < 3; i++)
       GET_COND(ch, i) = (char) -1;
@@ -1587,9 +1643,8 @@ char_data *CreateChar(char_data *ch)
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
     PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
-    GET_IDNUM(ch) = MAX(playerDB.find_open_id(), atol(row[0]) + 1);
+    GET_IDNUM(ch) = MAX(playerDB.find_open_id(), highest_idnum_in_use + 1);
   }
-  mysql_free_result(res);
 
   init_char(ch);
   init_char_strings(ch);
@@ -1597,6 +1652,7 @@ char_data *CreateChar(char_data *ch)
   return ch;
 }
 
+/*
 char_data *PCIndex::CreateChar(char_data *ch)
 {
   if (entry_cnt >= entry_size)
@@ -1659,6 +1715,7 @@ char_data *PCIndex::CreateChar(char_data *ch)
 
   return ch;
 }
+*/
 
 char_data *PCIndex::LoadChar(const char *name, bool logon)
 {
