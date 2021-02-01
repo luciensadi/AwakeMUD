@@ -3447,11 +3447,19 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_TOTALINVIS))
     return INVIS_CODE_TOTALINVIS;
     
-  // Pre-calculate the things we care about here.
+  // Pre-calculate the things we care about here. First, character vision info.
   bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_DETECT_INVIS);
   bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || CURRENT_VISION(ch) == THERMOGRAPHIC;
   bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
   
+  // EXCEPT: If you're rigging, things change.
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    ch_has_ultrasound = FALSE; // Eventually, we'll have ultrasonic sensors on vehicles too.
+    ch_has_thermographic = TRUE;
+    ch_sees_astral = FALSE;
+  }
+  
+  // Next, vict invis info.
   bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS) || IS_AFFECTED(victim, AFF_SPELLIMPINVIS);
   bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE) || IS_AFFECTED(victim, AFF_SPELLINVIS);
   bool vict_is_inanimate = IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE);
@@ -3471,7 +3479,8 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   
   // Ultrasound reduces all vision penalties by half (some restrictions apply, see store for details; SR3 p282)
   if (ch_has_ultrasound) {
-    if (vict_is_imp_invis || (!ch_has_thermographic && vict_is_just_invis)) {
+    // Improved invisibility works against tech sensors. Regular invis does not, so we don't account for it here.
+    if (vict_is_imp_invis) {
       // Invisibility penalty, we're at the full +8 from not being able to see them. This overwrites weather effects etc.
       modifier = BLIND_FIRE_PENALTY;
     }
@@ -3489,12 +3498,23 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     modifier /= 2;
   }
   
-  // No ultrasound. Check for standard invis. This includes ruthenium, which currently has no rating and is just treated like the invis spell.
-  else if (vict_is_just_invis) {
-    if (!ch_has_thermographic && !AFF_FLAGGED(ch, AFF_RIG) && !PLR_FLAGGED(ch, PLR_REMOTE)) {
-      // Char has no thermographic vision either? They're gonna have a bad time.
-      modifier = BLIND_FIRE_PENALTY;
-    }
+  // No ultrasound. Check for thermographic vision.
+  else if (ch_has_thermographic) {
+    // Improved invis? You can't see them.
+    if (vict_is_imp_invis)
+      modifier = 8;
+    
+    // Standard invis? (This includes ruthenium, which currently has no rating and is just treated like the invis spell.)
+    // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
+    // This deviates from canon, where thermographic can see through standard invis.
+    else if (vict_is_just_invis)
+      modifier = 2;
+  }
+  
+  // Low-light and normal vision aren't any help here.
+  else {
+    if (vict_is_imp_invis || vict_is_just_invis)
+      modifier = 8;
   }
   
   // MitS p148: Penalty is capped to +4 with Blind Fighting. We also cap it to +8 without, since that's Blind Fire.
