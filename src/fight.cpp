@@ -615,11 +615,22 @@ void death_cry(struct char_data * ch)
   act(buf3, FALSE, ch, 0, 0, TO_ROOM);
   was_in = ch->in_room;
   
+  for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
+    if (IS_NPC(listener)) {
+      GET_MOBALERTTIME(listener) = 30;
+      GET_MOBALERT(listener) = MALERT_ALARM;
+    }
+  
   for (door = 0; door < NUM_OF_DIRS; door++)
   {
     if (CAN_GO(ch, door)) {
       ch->in_room = was_in->dir_option[door]->to_room;
       act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
+      for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
+        if (IS_NPC(listener)) {
+          GET_MOBALERTTIME(listener) = 30;
+          GET_MOBALERT(listener) = MALERT_ALERT;
+        }
       ch->in_room = was_in;
     }
   }
@@ -3094,6 +3105,7 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
           && !CH_IN_COMBAT(tch)
           && !(FIGHTING(ch) ? (IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)) : TRUE)) {
         if (number(0, 6) >= 2) {
+          GET_MOBALERTTIME(tch) = 30;
           GET_MOBALERT(tch) = MALERT_ALARM;
           struct room_data *was_in = tch->in_room;
           if (ranged_response(ch, tch) && tch->in_room == was_in) {
@@ -3949,8 +3961,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
     if (!AWAKE(def->ch))
       att->modifiers[COMBAT_MOD_POSITION] -= 6;
-    else if (AFF_FLAGGED(def->ch, AFF_PRONE) && def->ch->in_room == att->ch->in_room)
-      att->modifiers[COMBAT_MOD_POSITION]--;
+    else if (AFF_FLAGGED(def->ch, AFF_PRONE)) {
+      // Prone next to you is a bigger target, prone far away is a smaller one.
+      if (def->ch->in_room == att->ch->in_room)
+        att->modifiers[COMBAT_MOD_POSITION]--;
+      else
+        att->modifiers[COMBAT_MOD_POSITION]++;
+    }
     
     // Setup: Determine distance penalties.
     if (!att->veh && att->ch->in_room != def->ch->in_room) {
