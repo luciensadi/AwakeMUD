@@ -489,6 +489,7 @@ ACMD(do_upgrade)
   struct veh_data *veh;
   struct obj_data *mod, *obj, *shop = NULL;
   int j = 0, skill = 0, target = 0, kit = 0;
+  bool need_extract = FALSE;
 
   half_chop(argument, buf1, buf2);
 
@@ -667,7 +668,9 @@ ACMD(do_upgrade)
       send_to_char("You can't use that part on this type of engine.\r\n", ch);
       return;
     }
-    if ((GET_OBJ_VAL(mod, 0) != TYPE_SEATS && GET_OBJ_VAL(mod, 0) != TYPE_ARMOR && GET_OBJ_VAL(mod, 0) != TYPE_CONCEALEDARMOR) && GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
+    if ((GET_OBJ_VAL(mod, 0) != TYPE_SEATS 
+         && GET_OBJ_VAL(mod, 0) != TYPE_ARMOR 
+         && GET_OBJ_VAL(mod, 0) != TYPE_CONCEALEDARMOR) && GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
       send_to_char(ch, "There is already a mod of that type installed.\r\n");
       return;
     }
@@ -685,14 +688,17 @@ ACMD(do_upgrade)
       }      
       if (!GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
         GET_MOD(veh, GET_OBJ_VAL(mod, 6)) = mod;      
-      else  affect_veh(veh, mod->affected[0].location, -mod->affected[0].modifier);
+      else  
+        affect_veh(veh, mod->affected[0].location, -mod->affected[0].modifier);
+        
       veh->usedload += GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1);
       GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1) = (veh->body * veh->body) * totalarmor * 5;
       mod->affected[0].modifier = totalarmor;
       affect_veh(veh, mod->affected[0].location, mod->affected[0].modifier);
       if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) != mod)
-        extract_obj(mod);
-      else obj_from_char(mod);
+        need_extract = TRUE;
+      else
+        obj_from_char(mod);
     } else {
       if (veh->load - veh->usedload < GET_OBJ_VAL(mod, 1)) {
         send_to_char(ch, "Try as you might, you just can't fit it in.\r\n");
@@ -703,7 +709,7 @@ ACMD(do_upgrade)
         affect_veh(veh, mod->affected[j].location, mod->affected[j].modifier);
       if (GET_OBJ_VAL(mod, 0) == TYPE_SEATS && GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
         GET_MOD(veh, GET_OBJ_VAL(mod, 6))->affected[0].modifier++;
-        extract_obj(mod);
+        need_extract = TRUE;
       } else {
         if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
           extract_obj(GET_MOD(veh, GET_OBJ_VAL(mod, 6)));
@@ -716,6 +722,9 @@ ACMD(do_upgrade)
   snprintf(buf, sizeof(buf), "$n goes to work on %s and installs %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(mod));
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
   send_to_char(ch, "You go to work on %s and install %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(mod));
+  
+  if (need_extract)
+    extract_obj(mod);
 }
 
 void disp_mod(struct veh_data *veh, struct char_data *ch, int i)

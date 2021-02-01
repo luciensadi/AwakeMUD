@@ -1328,12 +1328,23 @@ ACMD(do_get)
           } else {
             veh->usedload -= GET_OBJ_VAL(cont, 1);
             GET_MOD(veh, found) = NULL;
-            for (found = 0; found < MAX_OBJ_AFFECT; found++)
-              if (cont->affected[found].location == VAFF_SEN || cont->affected[found].location == VAFF_AUTO ||
-                  cont->affected[found].location == VAFF_PILOT)
-                affect_veh(veh, cont->affected[found].location, 0);
-              else
-                affect_veh(veh, cont->affected[found].location, -(cont->affected[found].modifier));
+            for (found = 0; found < MAX_OBJ_AFFECT; found++) {
+              int rnum = real_vehicle(GET_VEH_VNUM(veh));
+              if (rnum > 0) {
+                switch (cont->affected[found].location) {
+                  case VAFF_SEN:
+                    affect_veh(veh, cont->affected[found].location, veh_proto[rnum].sensor);
+                  case VAFF_AUTO:
+                    affect_veh(veh, cont->affected[found].location, veh_proto[rnum].autonav);
+                  case VAFF_PILOT:
+                    affect_veh(veh, cont->affected[found].location, veh_proto[rnum].pilot);
+                  default:
+                    affect_veh(veh, cont->affected[found].location, -(cont->affected[found].modifier));
+                }
+              } else {
+                send_to_char(ch, "Bro, your vehicle is _fucked_. Contact staff.\r\n");
+              }
+            }
           }
           obj_to_char(cont, ch);
           return;

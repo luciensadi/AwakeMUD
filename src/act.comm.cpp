@@ -580,6 +580,11 @@ ACMD(do_radio)
       radio = obj;
       cyberware = 1;
     }
+    
+  if (ch->in_room)
+    for (obj = ch->in_room->contents; obj && !radio; obj = obj->next_content)
+      if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+        radio = obj;
 
   if (!radio) {
     send_to_char("You don't have a radio.\r\n", ch);
@@ -657,13 +662,59 @@ ACMD(do_radio)
     send_to_char("That's not a valid option.\r\n", ch);
 }
 
+struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular) {
+  struct obj_data *obj;
+  
+  if (!ch)
+    return NULL;
+    
+  *is_cyberware = FALSE;
+  *is_vehicular = FALSE;
+    
+  // If you've got a vehicle radio installed, we use that.
+  if (ch->in_veh && GET_MOD(ch->in_veh, MOD_RADIO)) {
+    *is_vehicular = TRUE;
+    return GET_MOD(ch->in_veh, MOD_RADIO);
+  }
+
+  // Check your inventory.
+  for (obj = ch->carrying; obj; obj = obj->next_content)
+    if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+      return obj;
+
+  // Check your gear.
+  for (int i = 0; i < NUM_WEARS; i++)
+    if (GET_EQ(ch, i)) {
+      if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_RADIO) {
+        return GET_EQ(ch, i);
+      } else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN && GET_EQ(ch, i)->contains) {
+        for (struct obj_data *obj = GET_EQ(ch, i)->contains; obj; obj = obj->next_content)
+          if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+            return obj;
+      }
+    }
+    
+  for (obj = ch->cyberware; obj; obj = obj->next_content)
+    if (GET_OBJ_VAL(obj, 0) == CYB_RADIO) {
+      *is_cyberware = TRUE;
+      return obj;
+    }
+      
+  if (ch->in_room)
+    for (obj = ch->in_room->contents; obj; obj = obj->next_content)
+      if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
+        return obj;
+  
+  return NULL;
+}
+
 ACMD(do_broadcast)
 {
   // No color highlights over the radio. It's already colored.
   
-  struct obj_data *obj, *radio = NULL;
+  struct obj_data *radio = NULL;
   struct descriptor_data *d;
-  int i, j, frequency, to_room, crypt, decrypt;
+  int i, j, frequency, crypt, decrypt;
   char voice[16] = "$v"; 
   bool cyberware = FALSE, vehicle = FALSE;
   
@@ -676,28 +727,11 @@ ACMD(do_broadcast)
     send_to_char("You can't manipulate electronics from the astral plane.\r\n", ch);
     return;
   }
+  
+  radio = find_radio(ch, &cyberware, &vehicle);
 
-  if (ch->in_veh && (radio = GET_MOD(ch->in_veh, MOD_RADIO)))
-    vehicle = TRUE;
-
-  for (obj = ch->carrying; !radio && obj; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
-      radio = obj;
-
-  for (i = 0; !radio && i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i)) {
-      if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_RADIO)
-        radio = GET_EQ(ch, i);
-      else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN && GET_EQ(ch, i)->contains)
-        for (struct obj_data *obj2 = GET_EQ(ch, i)->contains; obj2; obj2 = obj2->next_content)
-          if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
-            radio = obj2;
-    }
-  for (obj = ch->cyberware; obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_RADIO && !radio) {
-      radio = obj;
-      cyberware = 1;
-    } else if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3))
+  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
+    if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3))
       snprintf(voice, sizeof(voice), "A masked voice");
 
   if (IS_NPC(ch) || IS_SENATOR(ch)) {
@@ -780,54 +814,16 @@ ACMD(do_broadcast)
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT)) 
       {
-        if (!IS_NPC(d->character) && !access_level(d->character, LVL_FIXER)) {
-          radio = NULL;
-          cyberware = FALSE;
-          vehicle = FALSE;
-
-          if (d->character->in_veh && (radio = GET_MOD(d->character->in_veh, MOD_RADIO)))
-            vehicle = TRUE;
-
-          if (!radio) {
-            for (obj = d->character->cyberware; obj && !radio; obj = obj->next_content)
-              if (GET_OBJ_VAL(obj, 0) == CYB_RADIO) {
-                radio = obj;
-                cyberware = 1;
-              }
-          }
-
-          if (!radio) {
-            for (obj = d->character->carrying; obj && !radio; obj = obj->next_content)
-              if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
-                radio = obj;
-          }
-
-          if (!radio) {
-            for (i = 0; !radio && i < NUM_WEARS; i++)
-              if (GET_EQ(d->character, i)) {
-                if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_RADIO)
-                  radio = GET_EQ(d->character, i);
-                else if (GET_OBJ_TYPE(GET_EQ(d->character, i)) == ITEM_WORN
-                         && GET_EQ(d->character, i)->contains)
-                  for (struct obj_data *obj2 = GET_EQ(d->character, i)->contains;
-                       obj2; obj2 = obj2->next_content)
-                    if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
-                      radio = obj2;
-              }
-          }
-          
-          FOR_ITEMS_AROUND_CH(ch, obj) {
-            if (GET_OBJ_TYPE(obj) == ITEM_RADIO && !CAN_WEAR(obj, ITEM_WEAR_TAKE))
-              radio = obj;
-          }
-          
-          if (!radio)
+        if (!IS_NPC(d->character) && !access_level(d->character, LVL_FIXER)) {          
+          if (!(radio = find_radio(d->character, &cyberware, &vehicle)))
             continue;
 
+          /*
           if (CAN_WEAR(radio, ITEM_WEAR_EAR) || cyberware || vehicle)
             to_room = 0;
           else
             to_room = 1;
+          */
 
           i = GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))); // Centered frequency.
           j = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 2 : 1))); // Frequency range.
