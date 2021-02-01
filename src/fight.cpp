@@ -3432,35 +3432,79 @@ bool is_char_too_tall(struct char_data *ch) {
 #endif
 }
 
+#define INVIS_CODE_STAFF 321
+#define INVIS_CODE_TOTALINVIS 123
+#define BLIND_FIGHTING_MAX 4
+#define BLIND_FIRE_PENALTY 8
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
-  // TODO: Why would someone handling a vehicle or manning a turret negate visibility penalties?
-  // !(ch->in_veh || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))
   int modifier = 0;
   
-  // Can't see them at all? 8 TN penalty.
-  if (!CAN_SEE(ch, victim)) {
-    modifier = 8;
-  }
-  
-  // Check to see if they're partially visible due to compensation.
-  // SR3 p282: Reduces modifiers by half, round up.
-  bool det_invis = AFF_FLAGGED(ch, AFF_DETECT_INVIS);
-  int blind_fighting_level = GET_POWER(ch, ADEPT_BLIND_FIGHTING);
-  if (det_invis || blind_fighting_level) {
-    AFF_FLAGS(ch).RemoveBit(AFF_DETECT_INVIS);
-    GET_POWER_ACT(ch, ADEPT_BLIND_FIGHTING) = 0;
+  // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
+  if (!IS_NPC(victim) && !IS_NPC(ch) && GET_INVIS_LEV(victim) > 0 && !access_level(ch, GET_INVIS_LEV(victim)))
+    return INVIS_CODE_STAFF;
     
-    if (!CAN_SEE(ch, victim))
-      modifier = 4; 
-      
-    if (det_invis)
-      AFF_FLAGS(ch).SetBit(AFF_DETECT_INVIS);
-    if (blind_fighting_level)
-      GET_POWER_ACT(ch, ADEPT_BLIND_FIGHTING) = blind_fighting_level;
+  // If they're flagged totalinvis (library mobs etc), you shouldn't be fighting them anyways.
+  if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_TOTALINVIS))
+    return INVIS_CODE_TOTALINVIS;
+    
+  // Pre-calculate the things we care about here.
+  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_DETECT_INVIS);
+  bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || CURRENT_VISION(ch) == THERMOGRAPHIC;
+  bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
+  
+  bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS) || IS_AFFECTED(victim, AFF_SPELLIMPINVIS);
+  bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE) || IS_AFFECTED(victim, AFF_SPELLINVIS);
+  bool vict_is_inanimate = IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE);
+    
+  if (ch_sees_astral) {
+    // If you're astrally perceiving, you see anything living with no vision penalty.
+    // (You get penalties from perceiving, that's handled elsewhere.)
+    if (!vict_is_inanimate)
+      return 0;
+  } else if (IS_ASTRAL(victim) && !AFF_FLAGGED(victim, AFF_MANIFEST)) {
+    // You're not astrally perceiving, and your victim is a non-manifested astral being. Blind fire.
+    return GET_POWER(ch, ADEPT_BLIND_FIGHTING) ? BLIND_FIGHTING_MAX : BLIND_FIRE_PENALTY;
   }
   
-  return modifier;
+  // We are deliberately not handling anything to do with light penalties here.
+  // That's handled in modify_target_rbuf_raw().
+  
+  // Ultrasound reduces all vision penalties by half (some restrictions apply, see store for details; SR3 p282)
+  if (ch_has_ultrasound) {
+    if (vict_is_imp_invis || (!ch_has_thermographic && vict_is_just_invis)) {
+      // Invisibility penalty, we're at the full +8 from not being able to see them. This overwrites weather effects etc.
+      modifier = BLIND_FIRE_PENALTY;
+    }
+    
+    // Silence level is the highest of the room's silence or the victim's stealth. Stealth in AwakeMUD is a hybrid of
+    //  the silence and stealth spells, so it's a little OP but whatever.
+    int silence_level = MAX(get_ch_in_room(ch)->silence[0], get_ch_in_room(victim)->silence[0]);
+    silence_level = MAX(silence_level, get_spell_affected_successes(victim, SPELL_STEALTH));
+    
+    // SR3 p196: Silence spell increases hearing perception test TN up to the lower of its successes or the spell's rating.
+    // We don't have that test, so it seems reasonable to just shoehorn the TN increase in here.
+    modifier += silence_level;
+    
+    // Finally, apply ultrasound division.
+    modifier /= 2;
+  }
+  
+  // No ultrasound. Check for standard invis. This includes ruthenium, which currently has no rating and is just treated like the invis spell.
+  else if (vict_is_just_invis) {
+    if (!ch_has_thermographic && !AFF_FLAGGED(ch, AFF_RIG) && !PLR_FLAGGED(ch, PLR_REMOTE)) {
+      // Char has no thermographic vision either? They're gonna have a bad time.
+      modifier = BLIND_FIRE_PENALTY;
+    }
+  }
+  
+  // MitS p148: Penalty is capped to +4 with Blind Fighting. We also cap it to +8 without, since that's Blind Fire.
+  if (GET_POWER(ch, ADEPT_BLIND_FIGHTING))
+    return MIN(modifier, BLIND_FIGHTING_MAX);
+  else
+    return MIN(modifier, BLIND_FIRE_PENALTY);
 }
+#undef INVIS_CODE_STAFF
+#undef INVIS_CODE_TOTALINVIS
 
 //todo: single shot weaps can only be fired once per combat phase-- what does this mean for us?
 
