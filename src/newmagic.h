@@ -11,6 +11,7 @@ extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
 extern void stop_spirit_power(struct char_data *spirit, int type);
 extern char_data *find_spirit_by_id(int spiritid, long playerid);
 extern void elemental_fulfilled_services(struct char_data *ch, struct char_data *mob, struct spirit_data *spirit);
+extern int get_spell_affected_successes(struct char_data * ch, int type);
 
 #define DAMOBJ_NONE                     0
 #define DAMOBJ_ACID                     1

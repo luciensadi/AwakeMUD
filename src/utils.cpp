@@ -411,7 +411,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     }
     // The maximum visibility penalty we apply is +8 TN to avoid things like an invisible person in a smoky pitch-black room getting +24 to hit TN.
     if (light_target + smoke_target + current_visibility_penalty > 8) {
-      buf_mod(rbuf, rbuf_len, "ButVisPenaltyMaxIs8", (8 - current_visibility_penalty) - light_target + smoke_target);
+      buf_mod(rbuf, rbuf_len, "ButVisPenaltyMaxIs8", (8 - current_visibility_penalty) - (light_target + smoke_target));
       base_target += 8 - current_visibility_penalty;
     } else
       base_target += light_target + smoke_target;

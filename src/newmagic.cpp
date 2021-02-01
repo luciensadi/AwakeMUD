@@ -4468,3 +4468,15 @@ ACMD(do_think)
   act(buf, FALSE, ch, 0, ch->char_specials.mindlink, TO_VICT);
   send_to_char(ch, "You think, \"%s\"\r\n", argument);
 }
+
+int get_spell_affected_successes(struct char_data * ch, int type)
+{
+  if (!GET_SUSTAINED(ch))
+    return 0;
+    
+  for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next)
+    if ((hjp->spell == type) && (hjp->caster == FALSE))
+      return MIN(hjp->success, hjp->force);
+  
+  return FALSE;
+}
