@@ -85,6 +85,7 @@ extern SPECIAL(shop_keeper);
 extern void mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
 extern char *get_player_name(vnum_t id);
+extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 
 // Corpse saving externs.
 extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
@@ -2220,24 +2221,27 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       
     // Quest target protection.
     if (!IS_NPC(ch) && victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM(ch)) {
-      // If grouped, check to see if anyone in the group is the mob's owner.
-      if (AFF_FLAGGED(ch, AFF_GROUP)) {
-        bool found_group_member = FALSE;
-        for (struct follow_type *f = ch->followers; f && found_group_member; f = f->next)
-          if (!IS_NPC(f->follower)
-              && AFF_FLAGGED(f->follower, AFF_GROUP) 
-              && GET_IDNUM(f->follower) == victim->mob_specials.quest_id)
-            found_group_member = TRUE;
-        
-        // How about the group master?
-        if (!found_group_member && ch->master && !IS_NPC(ch->master)) {
-          found_group_member = victim->mob_specials.quest_id == GET_IDNUM(ch->master);
-        }
-        
-        if (!found_group_member)
+      // Aggro mobs don't get this protection.
+      if (!mob_is_aggressive(victim, TRUE)) {
+        // If grouped, check to see if anyone in the group is the mob's owner.
+        if (AFF_FLAGGED(ch, AFF_GROUP)) {
+          bool found_group_member = FALSE;
+          for (struct follow_type *f = ch->followers; f && found_group_member; f = f->next)
+            if (!IS_NPC(f->follower)
+                && AFF_FLAGGED(f->follower, AFF_GROUP) 
+                && GET_IDNUM(f->follower) == victim->mob_specials.quest_id)
+              found_group_member = TRUE;
+          
+          // How about the group master?
+          if (!found_group_member && ch->master && !IS_NPC(ch->master)) {
+            found_group_member = victim->mob_specials.quest_id == GET_IDNUM(ch->master);
+          }
+          
+          if (!found_group_member)
+            return false;
+        } else
           return false;
-      } else
-        return false;
+      }
     }
       
     // Special NPC protection.

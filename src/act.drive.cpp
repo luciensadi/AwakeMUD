@@ -505,6 +505,13 @@ ACMD(do_upgrade)
     send_to_char(ch, "You don't see a vehicle called '%s' here.\r\n", buf1);
     return;
   }
+  
+  if (veh->owner != GET_IDNUM(ch) && veh->locked) {
+    snprintf(buf, sizeof(buf), "%s anti-theft measures beep loudly.\r\n", GET_VEH_NAME(veh));
+    act(buf, FALSE, ch, 0, 0, TO_ROOM);
+    send_to_char(buf, ch);
+    return;
+  }
 
   if (!*buf2) {
     send_to_char("You have to upgrade it with something!\r\n", ch);
@@ -698,7 +705,7 @@ ACMD(do_upgrade)
       GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1) = (veh->body * veh->body) * totalarmor * 5;
       mod->affected[0].modifier = totalarmor;
       affect_veh(veh, mod->affected[0].location, mod->affected[0].modifier);
-      if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
+      if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) != mod)
         need_extract = TRUE;
       else
         obj_from_char(mod);

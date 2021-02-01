@@ -1195,19 +1195,22 @@ ACMD(do_get)
           send_to_char("It's moving a little fast...\r\n", ch);
           return;
         }
-        for (found = 0; found < NUM_MODS; found++)
-          if (GET_MOD(veh, found))
+        for (found = 0; found < NUM_MODS; found++) {
+          if (GET_MOD(veh, found)) {
             if (isname(arg1, GET_MOD(veh, found)->text.name)) {
               cont = GET_MOD(veh, found);
               break;
             }
-        if (!cont && veh->mount)
+          }
+        }
+        if (!cont && veh->mount) {
           for (obj = veh->mount; obj; obj = obj->next_content)
             if (isname(arg1, obj->text.name)) {
               cont = obj;
               cont_dotmode = 1;
               break;
             }
+        }
         if (!cont) {
           send_to_char(ch, "There doesn't seem to be a %s installed on %s.\r\n", arg1, GET_VEH_NAME(veh));
           return;
@@ -1328,7 +1331,7 @@ ACMD(do_get)
           } else {
             veh->usedload -= GET_OBJ_VAL(cont, 1);
             GET_MOD(veh, found) = NULL;
-            int rnum = real_vehicle(GET_VEH_VNUM(veh));
+            int rnum = GET_VEH_RNUM(veh);
             if (rnum <= -1)
               send_to_char(ch, "Bro, your vehicle is _fucked_. Contact staff.\r\n");
             for (found = 0; found < MAX_OBJ_AFFECT; found++) {
