@@ -1328,21 +1328,19 @@ ACMD(do_get)
           } else {
             veh->usedload -= GET_OBJ_VAL(cont, 1);
             GET_MOD(veh, found) = NULL;
+            int rnum = real_vehicle(GET_VEH_VNUM(veh));
+            if (rnum <= -1)
+              send_to_char(ch, "Bro, your vehicle is _fucked_. Contact staff.\r\n");
             for (found = 0; found < MAX_OBJ_AFFECT; found++) {
-              int rnum = real_vehicle(GET_VEH_VNUM(veh));
-              if (rnum > 0) {
-                switch (cont->affected[found].location) {
-                  case VAFF_SEN:
-                    affect_veh(veh, cont->affected[found].location, veh_proto[rnum].sensor);
-                  case VAFF_AUTO:
-                    affect_veh(veh, cont->affected[found].location, veh_proto[rnum].autonav);
-                  case VAFF_PILOT:
-                    affect_veh(veh, cont->affected[found].location, veh_proto[rnum].pilot);
-                  default:
-                    affect_veh(veh, cont->affected[found].location, -(cont->affected[found].modifier));
-                }
-              } else {
-                send_to_char(ch, "Bro, your vehicle is _fucked_. Contact staff.\r\n");
+              switch (cont->affected[found].location) {
+                case VAFF_SEN:
+                  affect_veh(veh, VAFF_SEN, rnum >= 0 ? veh_proto[rnum].sensor : 0);
+                case VAFF_AUTO:
+                  affect_veh(veh, VAFF_AUTO, rnum >= 0 ? veh_proto[rnum].autonav : 0);
+                case VAFF_PILOT:
+                  affect_veh(veh, VAFF_PILOT, rnum >= 0 ? veh_proto[rnum].pilot : 0);
+                default:
+                  affect_veh(veh, cont->affected[found].location, -(cont->affected[found].modifier));
               }
             }
           }

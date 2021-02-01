@@ -5047,7 +5047,7 @@ ACMD(do_status)
         if (sust->spell == SPELL_INCATTR || sust->spell == SPELL_INCCYATTR ||
             sust->spell == SPELL_DECATTR || sust->spell == SPELL_DECCYATTR)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
-        send_to_char(ch, "%d) %s ", i, buf);
+        send_to_char(ch, "%d) %s (%d successes)", i, buf, sust->success);
         if (sust->focus)
           send_to_char(ch, "(Sustained by %s)", GET_OBJ_NAME(sust->focus));
         if (sust->spirit && sust->spirit != ch)

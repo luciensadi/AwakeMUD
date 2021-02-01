@@ -3512,8 +3512,8 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     // We don't have that test, so it seems reasonable to just shoehorn the TN increase in here.
     modifier += silence_level;
     
-    // Finally, apply ultrasound division.
-    modifier /= 2;
+    // Finally, apply ultrasound division. We add one since the system expects us to round up and we're using truncating integer math.
+    modifier = (modifier + 1) / 2;
   }
   
   // No ultrasound. Check for thermographic vision.
