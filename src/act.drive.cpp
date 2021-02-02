@@ -507,7 +507,7 @@ ACMD(do_upgrade)
   }
   
   if (veh->owner != GET_IDNUM(ch) && veh->locked) {
-    snprintf(buf, sizeof(buf), "%s anti-theft measures beep loudly.\r\n", GET_VEH_NAME(veh));
+    snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", GET_VEH_NAME(veh));
     act(buf, FALSE, ch, 0, 0, TO_ROOM);
     send_to_char(buf, ch);
     return;

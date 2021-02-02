@@ -869,6 +869,7 @@ ACMD(do_gen_write)
 
   if (stat(filename, &fbuf) < 0) {
     perror("Error statting file");
+    send_to_char("Okay. Thanks!\r\n", ch);
     return;
   }
   if (fbuf.st_size >= max_filesize) {

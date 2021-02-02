@@ -2051,6 +2051,8 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
           k->sig, k->pilot);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n slots in its autonav and carrying capacity of ^c%d^n (%d in use).\r\n",
           k->autonav, (int)k->load, (int)k->usedload);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n.\r\n",
+                  engine_type[k->engine]);
   send_to_char(buf, ch);
 }
 

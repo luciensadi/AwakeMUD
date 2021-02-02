@@ -339,36 +339,60 @@ SPECIAL(taxi_sign) {
 // utility funcs
 // ______________________________
 
-void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b) {  
-  if (!world[rnum_a].dir_option[dir_a]) {
-    world[rnum_a].dir_option[dir_a] = new room_direction_data;
-    memset((char *) world[rnum_a].dir_option[dir_a], 0,
-           sizeof(struct room_direction_data));
-    world[rnum_a].dir_option[dir_a]->to_room = &world[rnum_b];
-    world[rnum_a].dir_option[dir_a]->to_room_vnum = world[rnum_b].number;
-    world[rnum_a].dir_option[dir_a]->barrier = 8;
-    world[rnum_a].dir_option[dir_a]->condition = 8;
-    world[rnum_a].dir_option[dir_a]->material = 8;
-#ifdef USE_DEBUG_CANARIES
-    world[rnum_a].dir_option[dir_a]->canary = CANARY_VALUE;
-#endif
+void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b, const char *source) {  
+  if (rnum_a <= -1) {
+    mudlog("WARNING: Got negative rnum for create_linked_exit()!", NULL, LOG_SYSLOG, TRUE);
+  } else {
+    if (!world[rnum_a].dir_option[dir_a]) {
+      world[rnum_a].dir_option[dir_a] = new room_direction_data;
+      memset((char *) world[rnum_a].dir_option[dir_a], 0,
+             sizeof(struct room_direction_data));
+      world[rnum_a].dir_option[dir_a]->to_room = &world[rnum_b];
+      world[rnum_a].dir_option[dir_a]->to_room_vnum = world[rnum_b].number;
+      world[rnum_a].dir_option[dir_a]->barrier = 8;
+      world[rnum_a].dir_option[dir_a]->condition = 8;
+      world[rnum_a].dir_option[dir_a]->material = 8;
+  #ifdef USE_DEBUG_CANARIES
+      world[rnum_a].dir_option[dir_a]->canary = CANARY_VALUE;
+  #endif
+    } else {
+      snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!", 
+               source, dirs[dir_a], GET_ROOM_VNUM(&world[rnum_a]));
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    }
   }
-  if (!world[rnum_b].dir_option[dir_b]) {
-    world[rnum_b].dir_option[dir_b] = new room_direction_data;
-    memset((char *) world[rnum_b].dir_option[dir_b], 0,
-           sizeof(struct room_direction_data));
-    world[rnum_b].dir_option[dir_b]->to_room = &world[rnum_a];
-    world[rnum_b].dir_option[dir_b]->to_room_vnum = world[rnum_a].number;
-    world[rnum_b].dir_option[dir_b]->barrier = 8;
-    world[rnum_b].dir_option[dir_b]->condition = 8;
-    world[rnum_b].dir_option[dir_b]->material = 8;
-#ifdef USE_DEBUG_CANARIES
-    world[rnum_b].dir_option[dir_b]->canary = CANARY_VALUE;
-#endif
+
+  if (rnum_b <= -1) {
+    mudlog("WARNING: Got negative rnum for create_linked_exit()!", NULL, LOG_SYSLOG, TRUE);
+  } else {
+    if (!world[rnum_b].dir_option[dir_b]) {
+      world[rnum_b].dir_option[dir_b] = new room_direction_data;
+      memset((char *) world[rnum_b].dir_option[dir_b], 0,
+             sizeof(struct room_direction_data));
+      world[rnum_b].dir_option[dir_b]->to_room = &world[rnum_a];
+      world[rnum_b].dir_option[dir_b]->to_room_vnum = world[rnum_a].number;
+      world[rnum_b].dir_option[dir_b]->barrier = 8;
+      world[rnum_b].dir_option[dir_b]->condition = 8;
+      world[rnum_b].dir_option[dir_b]->material = 8;
+  #ifdef USE_DEBUG_CANARIES
+      world[rnum_b].dir_option[dir_b]->canary = CANARY_VALUE;
+  #endif
+    } else {
+      snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!", 
+               source, dirs[dir_b], GET_ROOM_VNUM(&world[rnum_b]));
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    }
   }
 }
 
-void delete_exit(int bus, int to) {
+void delete_exit(int bus, int to, const char *source) {
+  if (!world[bus].dir_option[to]) {
+    snprintf(buf, sizeof(buf), "WARNING: delete_exit() for %s got invalid exit %s from %ld!", 
+             source, dirs[to], GET_ROOM_VNUM(&world[bus]));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   if (world[bus].dir_option[to]->keyword)
     delete [] world[bus].dir_option[to]->keyword;
     
@@ -380,14 +404,14 @@ void delete_exit(int bus, int to) {
   world[bus].dir_option[to] = NULL;
 }
 
-void delete_linked_exit(int bus, int to, int room, int from) {
-  delete_exit(bus, to);
-  delete_exit(room, from);
+void delete_linked_exit(int bus, int to, int room, int from, const char *source) {
+  delete_exit(bus, to, source);
+  delete_exit(room, from, source);
 }
 
 void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi, sbyte rating=0)
 {
-  create_linked_exit(real_room(GET_ROOM_VNUM(room)), dir, real_room(GET_ROOM_VNUM(taxi)), rev_dir[dir]);
+  create_linked_exit(real_room(GET_ROOM_VNUM(room)), dir, real_room(GET_ROOM_VNUM(taxi)), rev_dir[dir], "open taxi door");
   
   // Optionally set the taxi's room rating so it waits a few ticks before trying to drive off again.
   taxi->rating = rating;
@@ -395,21 +419,31 @@ void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi, sby
 
 void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
 {
-  if (room->dir_option[dir]->keyword)
-    delete [] room->dir_option[dir]->keyword;
-  if (room->dir_option[dir]->general_description)
-    delete [] room->dir_option[dir]->general_description;
-  delete room->dir_option[dir];
-  room->dir_option[dir] = NULL;
+  if (!room || !room->dir_option[dir]) {
+    snprintf(buf, sizeof(buf), "WARNING: Taxi had invalid room or exit! (first block - %s's %s)", room ? GET_ROOM_NAME(room) : "NO ROOM", dirs[dir]);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  } else {
+    if (room->dir_option[dir]->keyword)
+      delete [] room->dir_option[dir]->keyword;
+    if (room->dir_option[dir]->general_description)
+      delete [] room->dir_option[dir]->general_description;
+    delete room->dir_option[dir];
+    room->dir_option[dir] = NULL;
+  }
 
   dir = rev_dir[dir];
 
-  if (taxi->dir_option[dir]->keyword)
-    delete [] taxi->dir_option[dir]->keyword;
-  if (taxi->dir_option[dir]->general_description)
-    delete [] taxi->dir_option[dir]->general_description;
-  delete taxi->dir_option[dir];
-  taxi->dir_option[dir] = NULL;
+  if (!taxi || !taxi->dir_option[dir]) {
+    snprintf(buf, sizeof(buf), "WARNING: Taxi had invalid room or exit! (second block - %s's %s)", taxi ? GET_ROOM_NAME(taxi) : "NO ROOM", dirs[dir]);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  } else {
+    if (taxi->dir_option[dir]->keyword)
+      delete [] taxi->dir_option[dir]->keyword;
+    if (taxi->dir_option[dir]->general_description)
+      delete [] taxi->dir_option[dir]->general_description;
+    delete taxi->dir_option[dir];
+    taxi->dir_option[dir] = NULL;
+  }
 }
 
 void raw_taxi_leaves(rnum_t real_room_num) {
@@ -1782,7 +1816,7 @@ void EscalatorProcess(void)
 
 static void open_doors(int car, int to, int room, int from)
 {
-  create_linked_exit(car, to, room, from);
+  create_linked_exit(car, to, room, from, "monorail open_doors");
 
   snprintf(buf, sizeof(buf), "The monorail stops and the doors open to %s.\r\n", thedirs[to]);
   send_to_room(buf, &world[car]);
@@ -1799,7 +1833,7 @@ static void close_doors(int car, int to, int room, int from)
     snprintf(buf, sizeof(buf), "SYSERR: There is no %s exit from car %ld, close_doors() would have crashed.", dirs[to], GET_ROOM_VNUM(&world[car]));
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   } else {
-    delete_exit(car, to);
+    delete_exit(car, to, "close_doors p1");
     send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[car]);
   }
 
@@ -1810,7 +1844,7 @@ static void close_doors(int car, int to, int room, int from)
     snprintf(buf, sizeof(buf), "SYSERR: There is no %s exit from room %ld, close_doors() would have crashed.", dirs[from], GET_ROOM_VNUM(&world[room]));
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   } else {
-    delete_exit(room, from);
+    delete_exit(room, from, "close_doors p2");
     send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[room]);
   }
 }
@@ -1904,7 +1938,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
   assert(ferry > 0);
   assert(room > 0);
   
-  create_linked_exit(ferry, to, room, from);
+  create_linked_exit(ferry, to, room, from, "extend_walkway_st");
   
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[ferry]);
@@ -1914,7 +1948,7 @@ void contract_walkway_st(int ferry, int to, int room, int from)
   assert(ferry > 0);
   assert(room > 0);
 
-  delete_linked_exit(ferry, to, room, from);
+  delete_linked_exit(ferry, to, room, from, "contract_walkway_st");
   
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
@@ -1980,7 +2014,7 @@ struct transport_type hellhound[2] =
 
 void open_busdoor(int bus, int to, int room, int from)
 {
-  create_linked_exit(bus, to, room, from);
+  create_linked_exit(bus, to, room, from, "open_busdoor");
   
   send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[room]);
   send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[bus]);
@@ -1988,7 +2022,7 @@ void open_busdoor(int bus, int to, int room, int from)
 
 void close_busdoor(int bus, int to, int room, int from)
 {
-  delete_linked_exit(bus, to, room, from);
+  delete_linked_exit(bus, to, room, from, "close_busdoor");
   
   send_to_room("The bus door shuts, the driver yells \"^Wall aboard!^n\", and begins driving.\r\n", &world[room]);
   send_to_room("The bus door shuts, the driver yells \"^Wall aboard!^n\", and begins driving.\r\n", &world[bus]);
@@ -2043,7 +2077,7 @@ struct transport_type camas[2] =
 
 void camas_extend(int bus, int to, int room, int from)
 {
-  create_linked_exit(bus, to, room, from);
+  create_linked_exit(bus, to, room, from, "camas_extend");
   
   send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[room]);
   send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[bus]);
@@ -2051,7 +2085,7 @@ void camas_extend(int bus, int to, int room, int from)
 
 void camas_retract(int bus, int to, int room, int from)
 {
-  delete_linked_exit(bus, to, room, from);
+  delete_linked_exit(bus, to, room, from, "camas_retract");
   
   send_to_room("The stairs retract and the Lear-Cessna Platinum II taxis along the runway before taking flight.\r\n", &world[room]);
   send_to_room("The stairs retract and the Lear-Cessna Platinum II taxis along the runway before taking flight.\r\n", &world[bus]);
@@ -2110,7 +2144,7 @@ struct transport_type lightrail[4] =
 
 void open_lightraildoor(int lightrail, int to, int room, int from)
 {
-  create_linked_exit(lightrail, to, room, from);
+  create_linked_exit(lightrail, to, room, from, "open_lightraildoor");
   
   send_to_room("The incoming lightrail grinds to a halt and its doors slide open with a hiss.\r\n", &world[room]);
   send_to_room("The lightrail grinds to a halt and the doors hiss open.\r\n", &world[lightrail]);
@@ -2118,7 +2152,7 @@ void open_lightraildoor(int lightrail, int to, int room, int from)
 
 void close_lightraildoor(int lightrail, int to, int room, int from)
 {
-  delete_linked_exit(lightrail, to, room, from);
+  delete_linked_exit(lightrail, to, room, from, "close_lightraildoor");
   
   send_to_room("The lightrail's doors slide shut and a tone emanates around the platform, signaling its departure.\r\n", &world[room]);
   send_to_room("The lightrail's doors slide shut and a tone signals as it begins moving.\r\n", &world[lightrail]);
@@ -2210,7 +2244,7 @@ void extend_walkway(int ferry, int to, int room, int from)
   assert(ferry > 0);
   assert(room > 0);
   
-  create_linked_exit(ferry, to, room, from);
+  create_linked_exit(ferry, to, room, from, "extend_walkway");
   
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[room]);
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[ferry]);
@@ -2221,7 +2255,7 @@ void contract_walkway(int ferry, int to, int room, int from)
   assert(ferry > 0);
   assert(room > 0);
   
-  delete_linked_exit(ferry, to, room, from);
+  delete_linked_exit(ferry, to, room, from, "contract_walkway");
   
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
@@ -2381,7 +2415,7 @@ struct transport_type grenada[2] =
 
 void grenada_extend(int bus, int to, int room, int from)
 {
-  create_linked_exit(bus, to, room, from);
+  create_linked_exit(bus, to, room, from, "grenada_extend");
   
   send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", &world[room]);
   send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", &world[bus]);
@@ -2389,7 +2423,7 @@ void grenada_extend(int bus, int to, int room, int from)
 
 void grenada_retract(int bus, int to, int room, int from)
 {
-  delete_linked_exit(bus, to, room, from);
+  delete_linked_exit(bus, to, room, from, "grenada_retract");
   
   send_to_room("The airplane taxis into position on the runway before throttling up and taking off.\r\n", &world[room]);
   send_to_room("The airplane taxis into position on the runway before throttling up and taking off.\r\n", &world[bus]);
