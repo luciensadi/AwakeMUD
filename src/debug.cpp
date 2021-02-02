@@ -14,6 +14,8 @@
 #include "utils.h"
 #include "playergroup_classes.h"
 #include "playergroups.h"
+#include "structs.h"
+#include "handler.h"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -101,5 +103,21 @@ ACMD(do_debug) {
   
   if (strn_cmp(arg1, "pgroups", strlen(arg1)) == 0) {
     do_pgroup_debug(ch, rest_of_argument);
+  }
+  
+  if (access_level(ch, LVL_PRESIDENT) && strn_cmp(arg1, "void", strlen(arg1)) == 0) {
+    skip_spaces(&rest_of_argument);
+    struct obj_data *obj = get_obj_in_list_vis(ch, rest_of_argument, ch->carrying);
+    if (obj) {
+      send_to_char(ch, "OK, now sending %s beyond time and space...\r\n", GET_OBJ_NAME(obj));
+      obj->in_room = NULL;
+      obj->in_veh = NULL;
+      obj->carried_by = NULL;
+      obj->worn_by = NULL;
+      obj->in_obj = NULL;
+      send_to_char(ch, "Done. %s has had all of its location pointers wiped. The game will now crash when your character is extracted. Enjoy!\r\n", GET_OBJ_NAME(obj));
+    } else {
+      send_to_char(ch, "You don't seem to have anything called '%s' in your inventory.\r\n", rest_of_argument);
+    }
   }
 }
