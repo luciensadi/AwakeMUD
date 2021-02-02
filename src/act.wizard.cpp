@@ -198,9 +198,6 @@ ACMD(do_copyover)
       cab_inhabitants++;
   }
   
-  // Check for PC corpses with things still in them.
-  int num_corpses = ObjList.CountPlayerCorpses();
-  
   skip_spaces(&argument);
   if (str_cmp(argument, "force") != 0) {
     bool will_not_copyover = FALSE;
@@ -252,9 +249,8 @@ ACMD(do_copyover)
       return;
     }
   } else if (ch->desc){
-    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, delete %d corpse%s, refund %d cab fare%s, drop %d quest%s, and lose any repairman items.\r\n",
+    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, refund %d cab fare%s, drop %d quest%s, and lose any repairman items.\r\n",
              fucky_states,    fucky_states    != 1 ? "s" : "",
-             num_corpses,     num_corpses     != 1 ? "s" : "",
              cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
              num_questors,    num_questors    != 1 ? "s" : "");
     write_to_descriptor(ch->desc->descriptor, buf);    
@@ -5765,9 +5761,57 @@ ACMD(do_perfmon) {
     }
 }
 
+ACMD(do_setfind)
+{
+  int number;
+
+  one_argument(argument, buf2);
+
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+    return;
+  }
+  
+  if (!*buf2) {
+    send_to_char(ch, "Sets 1 to 999:\r\n");
+    for (int i = 1; i < 1000; i++) {
+      for (int obj_idx = 0; obj_idx <= top_of_objt; obj_idx++) {
+        if (GET_OBJ_TYPE(&obj_proto[obj_idx]) == ITEM_WORN && GET_WORN_MATCHED_SET(&obj_proto[obj_idx]) == i) {
+          send_to_char(ch, "[%5ld] Set ^y%3d^n: ^c%3db %3di^n %s^n%s\r\n",
+                  OBJ_VNUM_RNUM(obj_idx),
+                  i,
+                  GET_WORN_BALLISTIC(&obj_proto[obj_idx]) / 100,
+                  GET_WORN_IMPACT(&obj_proto[obj_idx]) / 100,
+                  obj_proto[obj_idx].text.name,
+                  obj_proto[obj_idx].source_info ? "  ^g(canon)^n" : "");
+        }
+      }
+    }
+    return;
+  }
+  
+  if ((number = atoi(buf2)) < 0) {
+    send_to_char("A NEGATIVE number??\r\n", ch);
+    return;
+  }
+  
+  for (int obj_idx = 0; obj_idx <= top_of_objt; obj_idx++) {
+    if (GET_OBJ_TYPE(&obj_proto[obj_idx]) == ITEM_WORN && GET_WORN_MATCHED_SET(&obj_proto[obj_idx]) == number) {
+      send_to_char(ch, "[%5ld] Set ^y%3d^n: ^c%3db %3di^n %s^n%s\r\n",
+              OBJ_VNUM_RNUM(obj_idx),
+              number,
+              GET_WORN_BALLISTIC(&obj_proto[obj_idx]) / 100,
+              GET_WORN_IMPACT(&obj_proto[obj_idx]) / 100,
+              obj_proto[obj_idx].text.name,
+              obj_proto[obj_idx].source_info ? "  ^g(canon)^n" : "");
+    }
+  }
+}
+
 ACMD(do_shopfind)
 {
   int number;
+  vnum_t location;
 
   one_argument(argument, buf2);
 
@@ -5806,17 +5850,28 @@ ACMD(do_shopfind)
         continue;
       
       if (number) {
+        location = -1;
+        for (struct char_data *i = character_list; i; i = i->next)
+          if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room)
+            location = GET_ROOM_VNUM(i->in_room);
+              
         if (sell->vnum == number) {
-          send_to_char(ch, "%3d)  Shop %8ld (%s)\r\n", 
+          send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld)\r\n", 
                        ++index,
                        shop_table[shop_nr].vnum, 
-                       mob_proto[real_mob].player.physical_text.name);
+                       mob_proto[real_mob].player.physical_text.name,
+                       location);
         }
       } else if (isname(buf2, obj_proto[real_obj].text.name) || isname(buf2, obj_proto[real_obj].text.keywords)) {
-        send_to_char(ch, "%3d)  Shop %8ld (%s) sells %s (%ld)\r\n", 
+        for (struct char_data *i = character_list; i; i = i->next)
+          if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room)
+            location = GET_ROOM_VNUM(i->in_room);
+            
+        send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld) sells %s (%ld)\r\n", 
                      ++index,
                      shop_table[shop_nr].vnum, 
                      mob_proto[real_mob].player.physical_text.name,
+                     location,
                      GET_OBJ_NAME(&obj_proto[real_obj]),
                      GET_OBJ_VNUM(&obj_proto[real_obj]));
       }

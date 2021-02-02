@@ -298,6 +298,7 @@ ACMD_DECLARE(do_search);
 ACMD_DECLARE(do_send);
 ACMD_DECLARE(do_set);
 ACMD_DECLARE(do_settime);
+ACMD_DECLARE(do_setfind);
 ACMD_DECLARE(do_shedit);
 ACMD_DECLARE(do_shopfind);
 ACMD_DECLARE(do_shoot);
@@ -759,6 +760,7 @@ struct command_info cmd_info[] =
     { "send"     , POS_SLEEPING, do_send     , LVL_FIXER, 0 },
     { "sedit"    , POS_DEAD    , do_shedit   , LVL_BUILDER, 0 },
     { "set"      , POS_DEAD    , do_set      , LVL_DEVELOPER, 0 },
+    { "setfind"  , POS_DEAD    , do_setfind , LVL_VICEPRES, 0 },
     { "settime"  , POS_DEAD    , do_settime  , LVL_DEVELOPER, 0 },
     { "sheath"   , POS_RESTING , do_holster  , 0, 0 },
     { "shout"    , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT },

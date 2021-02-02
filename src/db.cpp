@@ -2676,11 +2676,11 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
     sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
     
     ++found;
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %2d %d %s^n%s%s\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
             OBJ_VNUM_RNUM(nr),
             ObjList.CountObj(nr),
-            GET_OBJ_VAL(&obj_proto[nr], 0),
-            GET_OBJ_VAL(&obj_proto[nr], 1),
+            GET_WORN_MATCHED_SET(&obj_proto[nr]) ? GET_WORN_BALLISTIC(&obj_proto[nr]) / 100 : GET_WORN_BALLISTIC(&obj_proto[nr]),
+            GET_WORN_MATCHED_SET(&obj_proto[nr]) ? GET_WORN_IMPACT(&obj_proto[nr]) / 100 : GET_WORN_IMPACT(&obj_proto[nr]),
             obj_proto[nr].text.name,
             xbuf,
             obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
@@ -2697,13 +2697,14 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
       sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf) );
       
       ++found;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %2d %d %s^n%s\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              GET_OBJ_VAL(&obj_proto[nr], 0),
-              GET_OBJ_VAL(&obj_proto[nr], 1),
+              GET_WORN_BALLISTIC(&obj_proto[nr]),
+              GET_WORN_IMPACT(&obj_proto[nr]),
               obj_proto[nr].text.name,
-              xbuf);
+              xbuf,
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
     }
   }
   
@@ -4810,7 +4811,7 @@ void load_saved_veh()
           }
           
           const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
-          if (!player_name || !strcmp(player_name, "deleted")) {
+          if (!player_name || !str_cmp(player_name, "deleted")) {
             // Whoops, it belongs to a deleted character. RIP.
             extract_obj(obj);
             continue;

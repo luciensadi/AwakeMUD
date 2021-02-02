@@ -153,7 +153,7 @@ bool House_load(struct house_control_rec *house)
         }
         
         const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
-        if (!player_name || !strcmp(player_name, "deleted")) {
+        if (!player_name || !str_cmp(player_name, "deleted")) {
           // Whoops, it belongs to a deleted character. RIP.
           extract_obj(obj);
           continue;

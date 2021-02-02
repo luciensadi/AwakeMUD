@@ -436,6 +436,7 @@ void perform_fall(struct char_data *ch)
           ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT) ? "bottom of the shaft" : (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) ? "floor" : "ground"));
 
   // run a loop and drop them through each room
+  // known bug: you can fall through closed doors, this is used in some zones for hidden features
   while (EXIT(ch, DOWN) && ROOM_FLAGGED(ch->in_room, ROOM_FALL) && levels < 20)
   {
     // Compose the message that check_fall will send if they succeed.

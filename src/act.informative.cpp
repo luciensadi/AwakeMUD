@@ -2332,11 +2332,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       bal = GET_WORN_BALLISTIC(j);
       imp = GET_WORN_IMPACT(j);
       if (GET_WORN_MATCHED_SET(j)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is part of matched set number ^c%d^n. Wear all the matched items to receive its full value.\r\n", GET_WORN_MATCHED_SET(j));
         bal = (int)(GET_WORN_BALLISTIC(j) / 100);
         imp = (int)(GET_WORN_IMPACT(j) / 100);
       }
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. Its concealability rating is ^c%d^n.",
-              bal, imp, GET_WORN_CONCEAL_RATING(j));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. "
+                                                      "People have a ^c%d^n target number when trying to see under it.\r\n", bal, imp, GET_WORN_CONCEAL_RATING(j));
       break;
     case ITEM_DOCWAGON:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
@@ -4381,12 +4382,26 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
   
   if (obj->in_room)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld] %s\r\n", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
-  else if (obj->carried_by)
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "carried by %s\r\n", PERS(obj->carried_by, ch));
-  else if (obj->worn_by)
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "worn by %s\r\n", PERS(obj->worn_by, ch));
-  else if (obj->in_obj)
-  {
+  else if (obj->carried_by) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "carried by %s", GET_CHAR_NAME(obj->carried_by));
+    if (obj->carried_by->in_room) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)", GET_ROOM_VNUM(obj->carried_by->in_room), GET_ROOM_NAME(obj->carried_by->in_room));
+    } else if (obj->carried_by->in_veh) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)", GET_VEH_VNUM(obj->carried_by->in_veh), GET_VEH_NAME(obj->carried_by->in_veh));
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^Rnowhere^n");
+    }
+  }
+  else if (obj->worn_by) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "worn by %s", GET_CHAR_NAME(obj->worn_by));
+    if (obj->worn_by->in_room) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)", GET_ROOM_VNUM(obj->worn_by->in_room), GET_ROOM_NAME(obj->worn_by->in_room));
+    } else if (obj->worn_by->in_veh) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)", GET_VEH_VNUM(obj->worn_by->in_veh), GET_VEH_NAME(obj->worn_by->in_veh));
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^Rnowhere^n");
+    }
+  } else if (obj->in_obj) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "inside %s%s\r\n",
             GET_OBJ_NAME(obj->in_obj), (recur ? ", which is" : " "));
     if (recur)

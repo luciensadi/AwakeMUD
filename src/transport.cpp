@@ -1103,7 +1103,7 @@ static void init_elevators(void)
             // Set up the combat options.
             world[shaft_rnum].x = MAX(2, world[shaft_rnum].x);
             world[shaft_rnum].y = MAX(2, world[shaft_rnum].y);
-            world[shaft_rnum].z = MAX(5.0, world[shaft_rnum].z);
+            world[shaft_rnum].z = 5.0; // Override the existing values, since this factors into fall rating.
           } else {
             snprintf(buf, sizeof(buf), "Fatal error: Nonexistent elevator shaft vnum %ld.", elevator[i].floor[j].shaft_vnum);
             log(buf);
