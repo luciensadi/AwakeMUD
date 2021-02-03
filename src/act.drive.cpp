@@ -2090,3 +2090,19 @@ ACMD(do_transfer)
   }
 }
  
+int calculate_vehicle_entry_load(struct veh_data *veh) {
+  int mult;
+  switch (veh->type) {
+    case VEH_DRONE:
+      mult = 100;
+      break;
+    case VEH_TRUCK:
+      mult = 1500;
+      break;
+    default:
+      mult = 500;
+      break;
+  }
+  
+  return veh->body * mult;
+}

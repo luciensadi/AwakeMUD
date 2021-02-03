@@ -2278,6 +2278,19 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
         return FALSE;
       }
     }
+    
+    // Vents on weapons with integral recoil.
+    if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
+      if (GET_ACCESSORY_RATING(attachment) < GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon)) {
+        send_to_char(ch, "That would make it perform worse! The integral recoil comp is already better than the vent's rating.\r\n");
+        return FALSE;
+      }
+      
+      if (GET_ACCESSORY_RATING(attachment) == GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon)) {
+        send_to_char(ch, "That wouldn't provide any benefit. The integral recoil comp is already equal to the vent's rating.\r\n");
+        return FALSE;
+      }
+    }
   }
   
   // Transfer the first (and only the first) applies-affect from the attachment to the weapon.

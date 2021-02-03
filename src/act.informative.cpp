@@ -55,6 +55,7 @@ extern const char *dist_name[];
 extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
+extern int calculate_vehicle_entry_load(struct veh_data *veh);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -2051,8 +2052,8 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
           k->sig, k->pilot);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n slots in its autonav and carrying capacity of ^c%d^n (%d in use).\r\n",
           k->autonav, (int)k->load, (int)k->usedload);
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n.\r\n",
-                  engine_type[k->engine]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n. If loaded into another vehicle, it takes up ^c%d^n load.\r\n",
+                  engine_type[k->engine], calculate_vehicle_entry_load(k));
   send_to_char(buf, ch);
 }
 
@@ -2640,7 +2641,7 @@ ACMD(do_examine)
   if (found_veh) {
       if (subcmd == SCMD_PROBE) {
         // If they don't own the vehicle and the hood isn't open, they can't view the stats.
-        if (GET_IDNUM(ch) != found_veh->owner && !found_veh->hood) {
+        if (!access_level(ch, LVL_ADMIN) && GET_IDNUM(ch) != found_veh->owner && !found_veh->hood) {
           send_to_char("You can only see the OOC stats for vehicles you own or vehicles that have popped hoods.\r\n", ch);
           return;
         }

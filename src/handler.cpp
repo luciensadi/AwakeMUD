@@ -39,6 +39,7 @@ extern int skill_web(struct char_data *, int);
 extern int return_general(int skill_num);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern int max_ability(int i);
+extern int calculate_vehicle_entry_load(struct veh_data *veh);
 
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
@@ -1106,19 +1107,7 @@ void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
     veh->next_veh = dest->carriedvehs;
     veh->in_veh = dest;
     dest->carriedvehs = veh;
-    int mult;
-    switch (veh->type) {
-      case VEH_DRONE:
-        mult = 100;
-        break;
-      case VEH_TRUCK:
-        mult = 1500;
-        break;
-      default:
-        mult = 500;
-        break;
-    }
-    dest->usedload += veh->body * mult;
+    dest->usedload += calculate_vehicle_entry_load(veh);
   }
 }
 void icon_to_host(struct matrix_icon *icon, vnum_t to_host)

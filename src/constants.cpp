@@ -2020,7 +2020,8 @@ const char *foci_type[] =
     "spirit",
     "power",
     "sustaining",
-    "weapon"
+    "weapon",
+    "defensive"
   };
 
 const char *ranges[4] =

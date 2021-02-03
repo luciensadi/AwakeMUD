@@ -871,6 +871,7 @@ SPECIAL(taxi)
           do_say(ch, argument, 0, 0);
           strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
           do_echo(driver, buf2, 0, SCMD_EMOTE);
+          forget(driver, ch);
           break;
         }
         
@@ -928,30 +929,32 @@ SPECIAL(taxi)
     return FALSE;
 
   /* I would like to extend a personal and heartfelt 'fuck you' to whomever thought that using the anonymously-named 'i' as both an rnum and a direction was a good idea. - LS */
-  if (comm == CMD_TAXI_DEST && !memory(driver, ch) &&
-      real_room(GET_LASTROOM(ch)) > -1 &&
-      GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
-    for (int dir = NORTH; dir < UP; dir++)
-      if (ch->in_room->dir_option[dir]) {
-        temp_room = ch->in_room->dir_option[dir]->to_room;
-        break;
-      }
-    int dist = 0;
-    while (temp_room) {
-      int x = find_first_step(real_room(temp_room->number), real_room(destination_list[dest].vnum));
-      if (x == -2)
-        break;
-      else if (x < 0) {
-        temp_room = NULL;
-        break;
-      }
-      temp_room = temp_room->dir_option[x]->to_room;
-      dist++;
-    }
-    if (!temp_room)
+  if (comm == CMD_TAXI_DEST && !memory(driver, ch) && GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
+    if (real_room(GET_LASTROOM(ch)) <= -1) {
       GET_SPARE1(driver) = MAX_CAB_FARE;
-    else
-      GET_SPARE1(driver) = MIN(MAX_CAB_FARE, 5 + dist);
+    } else {
+      for (int dir = NORTH; dir < UP; dir++)
+        if (ch->in_room->dir_option[dir]) {
+          temp_room = ch->in_room->dir_option[dir]->to_room;
+          break;
+        }
+      int dist = 0;
+      while (temp_room) {
+        int x = find_first_step(real_room(temp_room->number), real_room(destination_list[dest].vnum));
+        if (x == -2)
+          break;
+        else if (x < 0) {
+          temp_room = NULL;
+          break;
+        }
+        temp_room = temp_room->dir_option[x]->to_room;
+        dist++;
+      }
+      if (!temp_room)
+        GET_SPARE1(driver) = MAX_CAB_FARE;
+      else
+        GET_SPARE1(driver) = MIN(MAX_CAB_FARE, 5 + dist);
+    }
       
     // Rides to the NERPcorpolis are free.
     if (destination_list[dest].vnum == RM_NERPCORPOLIS_LOBBY)

@@ -890,7 +890,14 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 // ITEM_SPELL_FORMULA convenience defines
 #define GET_SPELLFORMULA_SPELL(formula)          (GET_OBJ_VAL((formula), 1))
 
-// ITEM_FOCUS convenience defines
+// ITEM_FOCUS convenience defines, search term GET_FOCI
+#define GET_FOCUS_TYPE(focus)                    (GET_OBJ_VAL((focus), 0))
+#define GET_FOCUS_FORCE(focus)                   (GET_OBJ_VAL((focus), 1))
+#define GET_FOCUS_BONDED_TO(focus)               (GET_OBJ_VAL((focus), 2))
+#define GET_FOCUS_BONDED_SPIRIT_OR_SPELL(focus)  (GET_OBJ_VAL((focus), 3))
+#define GET_FOCUS_ACTIVATED(focus)               (GET_OBJ_VAL((focus), 4))
+#define GET_FOCUS_TRADITION(focus)               (GET_OBJ_VAL((focus), 5))
+#define GET_FOCUS_BOND_TIME_REMAINING(focus)     (GET_OBJ_VAL((focus), 9))
 
 // ITEM_PATCH convenience defines
 

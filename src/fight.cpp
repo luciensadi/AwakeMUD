@@ -55,7 +55,7 @@ void target_explode(struct char_data *ch, struct obj_data *weapon,
 void forget(struct char_data * ch, struct char_data * victim);
 void remember(struct char_data * ch, struct char_data * victim);
 void order_list(bool first,...);
-bool can_hurt(struct char_data *ch, struct char_data *victim, bool include_func_protections);
+bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 
 SPECIAL(johnson);
 SPECIAL(weapon_dominator);
@@ -1294,7 +1294,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
           !number(0, total - 1))
         break;
     
-    if (vict && (IS_NPC(vict) || (!IS_NPC(vict) && vict->desc))) {
+    if (vict && (IS_NPC(vict) || (!IS_NPC(vict) && vict->desc)) && can_hurt(ch, vict, TYPE_SCATTERING, TRUE)) {
       snprintf(buf, sizeof(buf), "A %s flies in from nowhere, hitting you!", ammo_type);
       act(buf, FALSE, vict, 0, 0, TO_CHAR);
       snprintf(buf, sizeof(buf), "A %s hums into the room and hits $n!", ammo_type);
@@ -2847,6 +2847,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
 {
   struct obj_data *obj;
   int i, rnum, comp = 0;
+  bool gasvent = FALSE;
   
   if (!gun || GET_OBJ_TYPE(gun) != ITEM_WEAPON)
     return 0;
@@ -2858,8 +2859,10 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
     if (GET_OBJ_VAL(gun, i) > 0 &&
         (rnum = real_object(GET_OBJ_VAL(gun, i))) > -1 &&
         (obj = &obj_proto[rnum]) && GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY) {
-      if (GET_OBJ_VAL(obj, 1) == ACCESS_GASVENT)
+      if (GET_OBJ_VAL(obj, 1) == ACCESS_GASVENT) {
         comp += 0 - GET_OBJ_VAL(obj, 2);
+        gasvent = TRUE;
+      }
       else if (GET_OBJ_VAL(obj, 1) == ACCESS_SHOCKPAD)
         comp++;
       else if (AFF_FLAGGED(ch, AFF_PRONE)) {
@@ -2870,7 +2873,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
       }
       
       // Add in integral recoil compensation.
-      if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
+      if (!gasvent && GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
         comp += GET_WEAPON_INTEGRAL_RECOIL_COMP(obj);
     }
   }

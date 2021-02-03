@@ -37,6 +37,7 @@ extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 extern void death_penalty(struct char_data *ch);
 extern int get_vehicle_modifier(struct veh_data *veh);
+extern int calculate_vehicle_entry_load(struct veh_data *veh);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -1408,23 +1409,12 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   }
   
   if (inveh && (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
-    int mult;
-    switch (inveh->type) {
-      case VEH_DRONE:
-        mult = 100;
-        break;
-      case VEH_TRUCK:
-        mult = 1500;
-        break;
-      default:
-        mult = 500;
-        break;
-    }
+    
     if (inveh->in_veh)
       send_to_char("You are already inside a vehicle.\r\n", ch);
     else if (inveh == found_veh)
       send_to_char("It'll take a smarter mind than yours to figure out how to park your vehicle inside itself.\r\n", ch);
-    else if (found_veh->load - found_veh->usedload < inveh->body * mult)
+    else if (found_veh->load - found_veh->usedload < calculate_vehicle_entry_load(inveh))
       send_to_char("There is not enough room in there for that.\r\n", ch);
     else {
       strcpy(buf3, GET_VEH_NAME(inveh));

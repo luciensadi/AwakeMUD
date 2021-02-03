@@ -1557,6 +1557,7 @@ enum {
 #define FOCI_POWER    4
 #define FOCI_SUSTAINED    5
 #define FOCI_WEAPON    6
+#define FOCI_SPELL_DEFENSE 7
 
 #define ACCESS_SMARTLINK  1
 #define ACCESS_SCOPE    2
@@ -2301,7 +2302,7 @@ enum {
 #define MATERIAL_METAL        8
 #define MATERIAL_ORICHALCUM   9
 #define MATERIAL_ELECTRONICS  10
-#define MATERIAL_COMPUETERS   11
+#define MATERIAL_COMPUTERS    11
 #define MATERIAL_TOXIC_WASTES 12
 #define MATERIAL_ORGANIC      13
 #define MATERIAL_STONE        14
