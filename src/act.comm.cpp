@@ -591,6 +591,8 @@ ACMD(do_radio)
     return;
   }
   any_one_arg(any_one_arg(argument, one), two);
+  
+  int max_crypt = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)));
 
   if (!*one) {
     act("$p:", FALSE, ch, radio, 0, TO_CHAR);
@@ -602,10 +604,10 @@ ACMD(do_radio)
       send_to_char(ch, "  Mode: center @ %d MHz\r\n",
                    GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))));
     if (GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))))
-      send_to_char(ch, "  Crypt: on (level %d)\r\n",
+      send_to_char(ch, "  Crypt (max %d): on (level %d)\r\n", max_crypt,
                    GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))));
     else
-      send_to_char("  Crypt: off\r\n", ch);
+      send_to_char(ch, "  Crypt (max %d): off\r\n", max_crypt);
     return;
   } else if (!str_cmp(one, "off")) {
     act("You turn $p off.", FALSE, ch, radio, 0, TO_CHAR);
@@ -632,7 +634,6 @@ ACMD(do_radio)
     }
   } else if (!str_cmp(one, "crypt")) {
     if ((i = atoi(two))) {
-      int max_crypt = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)));
       if (i > max_crypt) {
         snprintf(buf, sizeof(buf), "$p's max crypt rating is %d.", max_crypt);
         act(buf, FALSE, ch, radio, 0, TO_CHAR);
