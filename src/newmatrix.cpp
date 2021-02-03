@@ -2318,6 +2318,8 @@ void matrix_violence()
             REMOVE_FROM_LIST(icon, matrix[icon->in_host].fighting, next_fighting);
         }
       }
+    } else {
+      host.pass = 0;
     }
 }
 

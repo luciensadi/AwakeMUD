@@ -470,6 +470,9 @@ void affect_total(struct char_data * ch)
   
   if (IS_PROJECT(ch))
     return;
+    
+  int old_max_hacking = GET_MAX_HACKING(ch);
+  int old_rem_hacking = GET_REM_HACKING(ch);
   
   /* effects of used equipment */
   for (i = 0; i < (NUM_WEARS - 1); i++)
@@ -518,9 +521,7 @@ void affect_total(struct char_data * ch)
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
-      
-  int old_max_hacking = GET_MAX_HACKING(ch);
-  int old_rem_hacking = GET_REM_HACKING(ch);
+  
   ch->aff_abils = ch->real_abils;
   
   /* calculate reaction before you add eq, cyberware, etc so that things *
