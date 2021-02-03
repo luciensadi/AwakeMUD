@@ -420,7 +420,11 @@ void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi, sby
 void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
 {
   if (!room || !room->dir_option[dir]) {
-    snprintf(buf, sizeof(buf), "WARNING: Taxi had invalid room or exit! (first block - %s's %s)", room ? GET_ROOM_NAME(room) : "NO ROOM", dirs[dir]);
+    snprintf(buf, sizeof(buf), "WARNING: Taxi %ld had invalid room or exit! (first block - %s (%ld)'s %s)", 
+             taxi ? GET_ROOM_VNUM(taxi) : -1,
+             room ? GET_ROOM_NAME(room) : "NO ROOM",
+             room ? GET_ROOM_VNUM(room) : -1,
+             dirs[dir]);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   } else {
     if (room->dir_option[dir]->keyword)
@@ -434,7 +438,11 @@ void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
   dir = rev_dir[dir];
 
   if (!taxi || !taxi->dir_option[dir]) {
-    snprintf(buf, sizeof(buf), "WARNING: Taxi had invalid room or exit! (second block - %s's %s)", taxi ? GET_ROOM_NAME(taxi) : "NO ROOM", dirs[dir]);
+    snprintf(buf, sizeof(buf), "WARNING: Taxi %ld had invalid room or exit! (first block - %s (%ld)'s %s)", 
+             taxi ? GET_ROOM_VNUM(taxi) : -1,
+             taxi ? GET_ROOM_NAME(taxi) : "NO ROOM",
+             taxi ? GET_ROOM_VNUM(taxi) : -1,
+             dirs[dir]);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   } else {
     if (taxi->dir_option[dir]->keyword)
