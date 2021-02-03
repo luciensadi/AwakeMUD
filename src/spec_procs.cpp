@@ -3594,8 +3594,8 @@ SPECIAL(auth_room)
       playerDB.SaveChar(ch);
       
       // Make them look.
-      if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-        look_at_room(ch, 0);
+      // if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0);
     }
   }
   return FALSE;

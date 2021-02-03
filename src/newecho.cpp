@@ -644,6 +644,7 @@ ACMD(do_new_echo) {
   }
   
   skip_spaces(&argument);
+  delete_doubledollar(argument);
   
   // Require an argument.
   if (!*argument) {      
