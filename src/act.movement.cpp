@@ -724,7 +724,7 @@ void move_vehicle(struct char_data *ch, int dir)
   if (PLR_FLAGGED(ch, PLR_REMOTE))
     was_in = ch->in_room;
   ch->in_room = veh->in_room;
-  if (!veh->dest)
+  if (!veh->dest && !PRF_FLAGGED(ch, PRF_BRIEF))
     look_at_room(ch, 0);
   for (tch = veh->in_room->people; tch; tch = tch->next_in_room)
     if (IS_NPC(tch) && AWAKE(tch) && MOB_FLAGGED(tch, MOB_AGGRESSIVE) &&
