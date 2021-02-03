@@ -1748,6 +1748,23 @@ int process_elevator(struct room_data *room,
               "elevator is currently at floor %d.\r\n", 0 - temp);
     send_to_char(buf, ch);
     return TRUE;
+  } else if (CMD_IS("leave")) {
+    if (!IS_ASTRAL(ch)) {
+      send_to_char("You can't get to the access panel's lock from in here. Looks like you'll have to send the car elsewhere, then break into the shaft from the landing.\r\n", ch);
+      return TRUE;
+    } else {
+      int rnum = real_room(elevator[num].floor[room->rating].shaft_vnum);
+      if (rnum >= 0) {
+        send_to_char(ch, "You phase out of the %selevator car.\r\n", elevator[num].is_moving ? "moving " : "");
+        char_from_room(ch);
+        char_to_room(ch, &world[rnum]);
+        act("$n phases out through the wall.\r\n", TRUE, ch, NULL, NULL, TO_ROOM);
+      } else {
+        send_to_char(ch, "Something went wrong.\r\n");
+        mudlog("SYSERR: Invalid elevator shaft vnum.", ch, LOG_SYSLOG, TRUE);
+      }
+    }
+    return TRUE;
   }
   return FALSE;
 }

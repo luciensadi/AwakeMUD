@@ -826,7 +826,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   }
   
   // Don't let people move past elevator cars.
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_ELEVATOR_SHAFT)) {
+  if (!IS_ASTRAL(ch) && ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_ELEVATOR_SHAFT)) {
     bool to_room_found = FALSE, in_room_found = FALSE;
     for (int index = 0; !(to_room_found && in_room_found) && index < num_elevators; index++) {
       int car_rating = world[real_room(elevator[index].room)].rating;
@@ -1588,20 +1588,51 @@ ACMD(do_enter)
 
 
     send_to_char(ch, "There is no %s here.\r\n", buf);
-  } else if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))
-    send_to_char("You are already indoors.\r\n", ch);
-  else {
-    /* try to locate an entrance */
-    for (door = 0; door < NUM_OF_DIRS; door++)
-      if (EXIT(ch, door))
-        if (EXIT(ch, door)->to_room)
-          if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) &&
-              ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_INDOORS)) {
-            perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
+  } 
+  
+  // Is there an elevator car here?
+  if (ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT)) {
+    // Iterate through elevators to find one that contains this shaft.
+    for (int index = 0; index < num_elevators; index++) {
+      int car_rating = world[real_room(elevator[index].room)].rating;
+      // Check for the car being at this floor.
+      if (elevator[index].floor[car_rating].shaft_vnum == ch->in_room->number) {
+        if (IS_ASTRAL(ch)) {
+          send_to_char(ch, "You phase into the %selevator car.\r\n", elevator[index].is_moving ? "moving " : "");
+          char_from_room(ch);
+          char_to_room(ch, &world[real_room(elevator[index].room)]);
+          act("$n phases in through the wall.\r\n", TRUE, ch, NULL, NULL, TO_ROOM);
+        } else {
+          if (elevator[index].is_moving) {
+            send_to_char("You can't enter a moving elevator car!\r\n", ch);
             return;
           }
-    send_to_char("You can't seem to find anything to enter.\r\n", ch);
+          
+          send_to_char("You jimmy open the access hatch and drop into the elevator car. The hatch locks closed behind you.\r\n", ch);
+          char_from_room(ch);
+          char_to_room(ch, &world[real_room(elevator[index].room)]);
+          act("The access hatch in the ceiling squeaks briefly open and $n drops into the car.", FALSE, ch, NULL, NULL, TO_ROOM);
+        }
+        return;
+      }
+    }
   }
+  
+  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
+    send_to_char("You are already indoors.\r\n", ch);
+    return;
+  }
+
+  /* try to locate an entrance */
+  for (door = 0; door < NUM_OF_DIRS; door++)
+    if (EXIT(ch, door))
+      if (EXIT(ch, door)->to_room)
+        if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) &&
+            ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_INDOORS)) {
+          perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
+          return;
+        }
+  send_to_char("You can't seem to find anything to enter.\r\n", ch);
 }
 
 void leave_veh(struct char_data *ch)
@@ -1696,6 +1727,9 @@ ACMD(do_leave)
     send_to_char("Maybe you should get on your feet first?\r\n", ch);
     return;
   }
+  
+  // Leaving an elevator shaft is handled in the button panel's spec proc code. See transport.cpp.
+  
   if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
     send_to_char("You are outside.. where do you want to go?\r\n", ch);
     return;
