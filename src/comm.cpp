@@ -2625,14 +2625,18 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           CHECK_NULL(vict_obj, SANA((struct obj_data *) vict_obj));
           break;
         case 'e':
-          if (CAN_SEE(to, ch))
+          if (to == ch)
+            i = "you";
+          else if (CAN_SEE(to, ch))
             i = HSSH(ch);
           else
             i = "it";
           break;
         case 'E':
           if (vict_obj) {
-            if (CAN_SEE(to, vict))
+            if (to == vict)
+              i = "you";
+            else if (CAN_SEE(to, vict))
               i = HSSH(vict);
             else
               i = "it";
@@ -2642,18 +2646,22 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           CHECK_NULL(vict_obj, fname((char *) vict_obj));
           break;
         case 'm':
+          if (to == vict)
+            i = "you";
           if (CAN_SEE(to, ch))
             i = HMHR(ch);
           else
             i = "them";
           break;
         case 'M':
-          if (vict_obj) {
-            if (CAN_SEE(to, vict))
-              i = HMHR(vict);
-            else
-              i = "them";
-          }
+          if (!vict)
+            i = "someone";
+          else if (to == vict)
+            i = "you";
+          else if (CAN_SEE(to, vict))
+            i = HMHR(vict);
+          else
+            i = "them";
           break;
         case 'n':
           if (to == ch)
@@ -2700,14 +2708,18 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           CHECK_NULL(vict_obj, OBJS((struct obj_data *) vict_obj, to));
           break;
         case 's':
-          if (CAN_SEE(to, ch))
+          if (to == ch)
+            i = "your";
+          else if (CAN_SEE(to, ch))
             i = HSHR(ch);
           else
             i = "their";
           break;
         case 'S':
           if (vict_obj) {
-            if (CAN_SEE(to, vict))
+            if (to == vict)
+              i = "your";
+            else if (CAN_SEE(to, vict))
               i = HSHR(vict);
             else
               i = "their";

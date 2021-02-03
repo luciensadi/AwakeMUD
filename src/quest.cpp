@@ -548,23 +548,36 @@ void reward(struct char_data *ch, struct char_data *johnson)
   {
     num = 1;
     for (f = ch->followers; f; f = f->next)
-      if (AFF_FLAGGED(f->follower, AFF_GROUP) && !(rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch))))
+      if (!IS_NPC(f->follower) && AFF_FLAGGED(f->follower, AFF_GROUP) && !(rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch))))
         num++;
 
     nuyen = (int)(nuyen / num);
     karma = (int)(karma / num);
 
-    for (f = ch->followers; f; f = f->next)
+    for (f = ch->followers; f; f = f->next) {
+      if (IS_NPC(f->follower))
+        continue;
+        
       if (AFF_FLAGGED(f->follower, AFF_GROUP) && !(rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch)))) {
-        old = (int)(GET_KARMA(f->follower) / 100);
-        GET_NUYEN(f->follower) += nuyen;
-        int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
-        send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
+        if (f->follower->in_room != ch->in_room) {
+          snprintf(buf, sizeof(buf), "^YGroup room mismatch for %s and %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(f->follower));
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        } else {
+          old = (int)(GET_KARMA(f->follower) / 100);
+          GET_NUYEN(f->follower) += nuyen;
+          int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
+          send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
+        }
+      } else if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+        send_to_char(ch, "^y(OOC note: %s wasn't grouped, so didn't get a cut of the pay.)^n\r\n",
+                     GET_CHAR_NAME(f->follower), HSSH(f->follower));
+        send_to_char("^y(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)^n\r\n", f->follower);
       } else {
         send_to_char(ch, "^y(OOC note: %s didn't meet the qualifications for this run, so %s didn't get a cut of the pay.)^n\r\n",
                      GET_CHAR_NAME(f->follower), HSSH(f->follower));
         send_to_char("^y(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)^n\r\n", f->follower);
       }
+    }
   }
   GET_NUYEN(ch) += nuyen;
   int gained = gain_karma(ch, karma, TRUE, FALSE, TRUE);
