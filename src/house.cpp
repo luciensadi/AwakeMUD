@@ -185,17 +185,30 @@ bool House_load(struct house_control_rec *house)
         if (inside == last_in)
           last_obj = last_obj->in_obj;
         else if (inside < last_in)
-          while (inside <= last_in && last_obj) {
+          while (inside <= last_in) {
+            if (!last_obj) {
+              snprintf(buf2, sizeof(buf2), "Load error: Nested-item save failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
+              mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+              break;
+            }
             last_obj = last_obj->in_obj;
             last_in--;
           }
         if (last_obj)
           obj_to_obj(obj, last_obj);
+        else
+          obj_to_room(obj, &world[rnum]);
       } else
         obj_to_room(obj, &world[rnum]);
 
       last_in = inside;
       last_obj = obj;
+    } else {
+      snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.", 
+               vnum,
+               data.GetString("HOUSE/Name", "no restring"),
+               data.GetString("HOUSE/Photo", "no photo"));
+      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
   }
   
