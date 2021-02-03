@@ -1049,7 +1049,7 @@ struct program_data programs[] =
     {"Evasion", 3 },
     {"Masking", 2 },
     {"Sensor", 2 },
-    {"Attack", 0 },
+    {"Attack", 1 },
     {"Slow", 4 },
     {"Medic", 4 },
     {"Snooper", 2 },
@@ -1082,7 +1082,7 @@ struct program_data programs[] =
     {"Icon Chip", 2 },
     {"MPCP", 8 },
     {"Reality Filter", 10 },
-    {"Response Increase", 0 }
+    {"Response Increase", 1 }
   };
 
 int attack_multiplier[] = { 0, 2, 3, 4, 5 };
@@ -2567,8 +2567,10 @@ const char *pc_race_types[] =
     "Minotaur",
     "Satyr",
     "Night-One",
+    "Dryad",
     "Dragon",
     "Elemental",
     "Spirit",
     "\n"
   };
+  

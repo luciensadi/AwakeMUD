@@ -3207,21 +3207,21 @@ ACMD(do_assense)
         }
         strcat(buf, ".\r\n");
       } else {
-        snprintf(buf2, sizeof(buf2), " has %.2f essence", ((float)GET_ESS(vict) / 100));
+        snprintf(buf2, sizeof(buf2), " has %.2f essence and ", ((float)GET_ESS(vict) / 100));
         strcat(buf, buf2);
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s spirit of force %d", spirits[GET_SPARE1(vict)].name, GET_LEVEL(vict));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "is a %s of force %d", spirits[GET_SPARE1(vict)].name, GET_LEVEL(vict));
           else if (IS_ELEMENTAL(vict))
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s elemental of force %d", elements[GET_SPARE1(vict)].name, GET_LEVEL(vict));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "is a %s elemental of force %d", elements[GET_SPARE1(vict)].name, GET_LEVEL(vict));
           else if (GET_MAG(vict) > 0)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and has %d magic", (int)(GET_MAG(vict) / 100));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "has %d magic", (int)(GET_MAG(vict) / 100));
           else
-            strcat(buf, " and is mundane");
+            strcat(buf, "is mundane");
         } else if (GET_TRADITION(vict) != TRAD_MUNDANE && !comp)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and %d magic", (int)(mag / 100));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d magic", (int)(mag / 100));
         else
-          strcat(buf, " and is mundane");
+          strcat(buf, " is mundane");
         if (vict->cyberware) {
           strcat(buf, ". ");
           strcat(buf, CAP(HSSH(vict)));
