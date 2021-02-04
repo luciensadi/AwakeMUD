@@ -799,6 +799,18 @@ void House_boot(void)
 
 /* "House Control" functions */
 
+int count_objects(struct obj_data *obj) {
+  if (!obj)
+    return 0;
+    
+  int total = 1; // self
+  
+  for (struct obj_data *contents = obj->contains; contents; contents = contents->next_content)
+    total += count_objects(contents);
+    
+  return total;
+}
+
 const char *HCONTROL_FORMAT =
   "Usage:  hcontrol destroy <house vnum>\r\n"
   "       hcontrol show\r\n";
@@ -806,19 +818,32 @@ void hcontrol_list_houses(struct char_data *ch)
 {
   char *own_name;
 
-  strcpy(buf, "Address  Atrium  Guests  Owner\r\n");
-  strcat(buf, "-------  ------  ------  ------------\r\n");
+  strcpy(buf, "Address  Atrium  Guests  Owner           Crap Count\r\n");
+  strcat(buf, "-------  ------  ------  --------------  -----------\r\n");
   send_to_char(buf, ch);
 
   for (struct landlord *llord = landlords; llord; llord = llord->next)
     for (struct house_control_rec *house = llord->rooms; house; house = house->next)
       if (house->owner)
       {
+        int house_rnum = real_room(house->vnum);
+        int total = 0;
+        if (house_rnum > -1) {
+          for (struct obj_data *obj = world[house_rnum].contents; obj; obj = obj->next_content)
+            total += count_objects(obj);
+          for (struct veh_data *veh = world[house_rnum].vehicles; veh; veh = veh->next_veh) {
+            total += 1;
+            for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content)
+              total += count_objects(obj);
+          }
+        } else
+          total = -1;
+          
         own_name = get_player_name(house->owner);
         if (!own_name)
           own_name = str_dup("<UNDEF>");
-        snprintf(buf, sizeof(buf), "%7ld %7ld    0     %-12s\r\n",
-                house->vnum, world[house->atrium].number, CAP(own_name));
+        snprintf(buf, sizeof(buf), "%7ld %7ld    0     %-14s  %d\r\n",
+                house->vnum, world[house->atrium].number, CAP(own_name), total);
         send_to_char(buf, ch);
         DELETE_ARRAY_IF_EXTANT(own_name);
       }

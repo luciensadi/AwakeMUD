@@ -1182,7 +1182,13 @@ ACMD(do_driveby)
   for (int i = 2; i > 0; i--) {
     for (pass = list; pass && vict->in_room == ch->in_veh->in_room; pass = pass->next_fighting) {
       if (GET_INIT_ROLL(pass) >= 0) {
-        hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL);
+        if (AFF_FLAGGED(pass, AFF_MANNING)) {
+          struct obj_data *mount = get_mount_manned_by_ch(ch);
+          struct obj_data *ammo = get_mount_ammo(mount);
+          hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL, ammo);
+        } else
+          hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL, NULL);
+          
         GET_INIT_ROLL(pass) -= 10;
       }
     }
@@ -1497,6 +1503,7 @@ ACMD(do_mount)
 
   send_to_char(ch, "%s is mounting the following:\r\n", CAP(GET_VEH_NAME(veh)));
   for (obj = veh->mount; obj; obj = obj->next_content) {
+    gun = NULL; ammo = NULL;
     for (struct obj_data *x = obj->contains; x; x = x->next_content)
       if (GET_OBJ_TYPE(x) == ITEM_GUN_AMMO)
         ammo = x;

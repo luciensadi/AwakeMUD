@@ -3661,8 +3661,8 @@ int get_melee_skill(struct combat_data *cd) {
   return skill;
 }
 
-void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap)
-{  
+void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo)
+{
   // Initialize our data structures for holding this round's fight-related data.
   struct combat_data attacker_data(attacker, weap);
   struct combat_data defender_data(victim, vict_weap);
@@ -3899,13 +3899,18 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
     if (att->burst_count) {
-      if (att->magazine) {
-        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
-        GET_MAGAZINE_AMMO_COUNT(att->magazine)++;
+      if (weap_ammo || att->magazine) {
+        int ammo_available = weap_ammo ? GET_AMMOBOX_QUANTITY(weap_ammo) : GET_MAGAZINE_AMMO_COUNT(weap_ammo);
         
         // Cap their burst to their magazine's ammo.
-        att->burst_count = MIN(att->burst_count, GET_MAGAZINE_AMMO_COUNT(att->magazine));
-        GET_MAGAZINE_AMMO_COUNT(att->magazine) -= att->burst_count;
+        att->burst_count = MIN(att->burst_count, ammo_available);
+        
+        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
+        if (weap_ammo) {
+          update_ammobox_ammo_quantity(weap_ammo, -(att->burst_count - 1));
+        } else {
+          GET_MAGAZINE_AMMO_COUNT(att->magazine) -= (att->burst_count - 1);
+        }
       }
       
       // Setup: Compute recoil.
@@ -4842,8 +4847,8 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       hit(ch,
           vict,
           (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)),
-          (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD))
-          );
+          (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)),
+          NULL);
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
       return;
     }
@@ -4862,8 +4867,8 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         hit(ch,
             vict,
             (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)),
-            (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD))
-            );
+            (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)),
+            NULL);
         ranged_response(ch, vict);
       } else
         send_to_char("*Click*\r\n", ch);
@@ -5382,14 +5387,14 @@ void perform_violence(void)
       hit(ch,
           FIGHTING(ch),
           GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD),
-          GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD)
-          );
+          GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
+          NULL);
       if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) && FIGHTING(ch))
         hit(ch,
             FIGHTING(ch),
             GET_EQ(ch, WEAR_HOLD),
-            GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD)
-            );
+            GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
+            NULL);
     }
     
     if (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_SPEC) &&
@@ -5988,7 +5993,7 @@ void mount_fire(struct char_data *ch)
     
     // Got a target and a gun? Fire.
     if (mount->targ && (gun = get_mount_weapon(mount)))
-      hit(ch, mount->targ, gun, NULL);
+      hit(ch, mount->targ, gun, NULL, get_mount_ammo(mount));
     else
       vcombat(ch, mount->tveh);
     
@@ -6001,7 +6006,7 @@ void mount_fire(struct char_data *ch)
       if (!mount->worn_by && (gun = get_mount_weapon(mount))) {
         // Fire at the enemy, assuming we're fighting it.
         if (mount->targ && FIGHTING(ch) == mount->targ)
-          hit(ch, mount->targ, gun, NULL);
+          hit(ch, mount->targ, gun, NULL, get_mount_ammo(mount));
         else if (mount->tveh && FIGHTING_VEH(ch) == mount->tveh)
           vcombat(ch, mount->tveh);
       }
