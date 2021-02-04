@@ -1734,14 +1734,14 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       int dam = convert_damage(stage(success, basedamage));
       if (!AWAKE(vict)) {
         act("$n's body recoils in pain as the laser beam finds its mark.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel an uncomfortably painful burning sensation where the beam struck.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+        send_to_char("You feel an extremely uncomfortable and painful burning sensation.\r\n", vict);
+      } else if (GET_PHYSICAL(vict) - (dam * 100) <= 0) {
         act("$n is cleanly pierced by the laser beam, the hole cut in $s body smoking as they drop like a rock.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel your body cleanly pierced by the laser beam, which leaves a smoking hole in your body.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+      } else if (GET_PHYSICAL(vict) - (dam * 100) <= 300) {
         act("$n is almost pierced by the laser beam, pain filling $s body as a thin wisp of smoke rises from $m.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Your body is filled with intense pain as the laser beam strikes you, inflicting a cauterized wound.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+      } else if (GET_PHYSICAL(vict) - (dam * 100) <= 700) {
         act("$n jolts back as the laser strikes $m, $s body shuddering in pain as the laser beam dissipates.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Pain flashes through your body as the laser strikes, your body shuddering at the intense heat.\r\n", vict);
       } else if (dam > 0) {
@@ -1752,7 +1752,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("Your body absorbs the laser beam without injury.\r\n", vict);
       }
       for (int i = 0; i < NUM_WEARS; i++)
-        if (GET_EQ(vict, i) && (GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 10 || GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 11))
+        if (!number(0, 50))
           damage_obj(vict, GET_EQ(vict, i), force, DAMOBJ_PIERCE);
       damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL);
       if (IS_NPC(vict) && !IS_NPC(ch))
@@ -2004,7 +2004,7 @@ void mob_magic(struct char_data *ch)
       case 15:
         spell = SPELL_THUNDERBOLT;
         break;
-	  case 16:
+      case 16:
         spell = SPELL_WATERBOLT;
         break;
     }
