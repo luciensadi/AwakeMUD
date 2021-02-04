@@ -5857,8 +5857,9 @@ ACMD(do_shopfind)
       if (real_obj < 0)
         continue;
       
+      location = -1;
+      
       if (number) {
-        location = -1;
         for (struct char_data *i = character_list; i; i = i->next)
           if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room)
             location = GET_ROOM_VNUM(i->in_room);

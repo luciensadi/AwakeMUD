@@ -979,7 +979,7 @@ const char *pc_readable_extra_bits[] =
     "Can't be Donated",
     "Can't be Made Invis",
     "Invisible",
-    "Looks Magic when Assensed",
+    "Looks Magical when Perceiving",
     "Can't be Dropped",
     "Form-Fitting",
     "Can't be Sold",

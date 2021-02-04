@@ -3207,17 +3207,17 @@ ACMD(do_assense)
         }
         strcat(buf, ".\r\n");
       } else {
-        snprintf(buf2, sizeof(buf2), " has %.2f essence and ", ((float)GET_ESS(vict) / 100));
+        snprintf(buf2, sizeof(buf2), " has %.2f essence and", ((float)GET_ESS(vict) / 100));
         strcat(buf, buf2);
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "is a %s of force %d", spirits[GET_SPARE1(vict)].name, GET_LEVEL(vict));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s of force %d", spirits[GET_SPARE1(vict)].name, GET_LEVEL(vict));
           else if (IS_ELEMENTAL(vict))
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "is a %s elemental of force %d", elements[GET_SPARE1(vict)].name, GET_LEVEL(vict));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s elemental of force %d", elements[GET_SPARE1(vict)].name, GET_LEVEL(vict));
           else if (GET_MAG(vict) > 0)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "has %d magic", (int)(GET_MAG(vict) / 100));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has %d magic", (int)(GET_MAG(vict) / 100));
           else
-            strcat(buf, "is mundane");
+            strcat(buf, " is mundane");
         } else if (GET_TRADITION(vict) != TRAD_MUNDANE && !comp)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d magic", (int)(mag / 100));
         else
@@ -3895,6 +3895,10 @@ ACMD(do_cpool)
   
   if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     low = GET_SKILL(ch, SKILL_GUNNERY);
+    if (off > low) {
+      send_to_char(ch, "You're not skilled enough with gunnery, so your offense pool is capped at %d.\r\n", low);
+      off = low;
+    }
   } else {
     one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
            (struct obj_data *) NULL;
@@ -3939,13 +3943,13 @@ ACMD(do_cpool)
     
     if (!one)
       one = two;
-  }
-    
-  if (off > low) {
-    send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n",
-                 one ? GET_OBJ_NAME(one) : (has_cyberweapon(ch) ? "cyberweapons" : "your hands"),
-                 low);
-    off = low;
+      
+    if (off > low) {
+      send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n",
+                   one ? GET_OBJ_NAME(one) : (has_cyberweapon(ch) ? "cyberweapons" : "your hands"),
+                   low);
+      off = low;
+    }
   }
   
   total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);

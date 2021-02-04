@@ -1102,77 +1102,76 @@ if (mob_index[GET_MOB_RNUM(i)].func == (function) || mob_index[GET_MOB_RNUM(i)].
     strcat(buf, ", surrounded by flames,");
   
   if (GET_QUI(i) <= 0)
-    strcat(buf, " is here, seemingly paralyzed.");
+    strlcat(buf, " is here, seemingly paralyzed.", sizeof(buf));
   else if (PLR_FLAGGED(i, PLR_MATRIX))
-    strcat(buf, " is here, jacked into a cyberdeck.");
+    strlcat(buf, " is here, jacked into a cyberdeck.", sizeof(buf));
   else if (PLR_FLAGGED(i, PLR_REMOTE))
-    strcat(buf, " is here, jacked into a remote control deck.");
+    strlcat(buf, " is here, jacked into a remote control deck.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_DESIGN) || AFF_FLAGGED(i, AFF_PROGRAM))
-    strcat(buf, " is here, typing away at a computer.");
+    strlcat(buf, " is here, typing away at a computer.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PART_DESIGN) || AFF_FLAGGED(i, AFF_PART_BUILD))
-    strcat(buf, " is here, working on a cyberdeck.");
+    strlcat(buf, " is here, working on a cyberdeck.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_SPELLDESIGN))
-    strcat(buf, " is here, working on a spell design.");
+    strlcat(buf, " is here, working on a spell design.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_CONJURE))
-    strcat(buf, " is here, performing a conjuring ritual.");
+    strlcat(buf, " is here, performing a conjuring ritual.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_LODGE))
-    strcat(buf, " is here, building a shamanic lodge.");
+    strlcat(buf, " is here, building a shamanic lodge.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_CIRCLE))
-    strcat(buf, " is here, drawing a hermetic circle.");
+    strlcat(buf, " is here, drawing a hermetic circle.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PACKING))
-    strcat(buf, " is here, working on a workshop.");
+    strlcat(buf, " is here, working on a workshop.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_BONDING))
-    strcat(buf, " is here, performing a bonding ritual.");
+    strlcat(buf, " is here, performing a bonding ritual.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PRONE))
-    strcat(buf, " is laying prone here.");
+    strlcat(buf, " is laying prone here.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PILOT))
   {
     if (AFF_FLAGGED(i, AFF_RIG))
-      strcat(buf, " is plugged into the dashboard.");
+      strlcat(buf, " is plugged into the dashboard.", sizeof(buf));
     else
-      strcat(buf, " is sitting in the drivers seat.");
+      strlcat(buf, " is sitting in the drivers seat.", sizeof(buf));
   } else if ((obj = get_mount_manned_by_ch(i))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is manning %s.", GET_OBJ_NAME(obj));
   } else if (GET_POS(i) != POS_FIGHTING)
   {
-    strcat(buf, positions[(int) GET_POS(i)]);
     if (GET_DEFPOS(i))
-      snprintf(buf2, sizeof(buf2), ", %s.", GET_DEFPOS(i));
+      snprintf(buf2, sizeof(buf2), " %s^n", GET_DEFPOS(i));
     else
-      strncpy(buf2, ".", sizeof(buf2));
-    strcat(buf, buf2);
+      snprintf(buf2, sizeof(buf2), " %s^n.", positions[(int) GET_POS(i)]);
+    strlcat(buf, buf2, sizeof(buf));
   } else
   {
     if (FIGHTING(i)) {
       if (AFF_FLAGGED(ch, AFF_BANISH))
-        strcat(buf, " is here, attempting to banish ");
+        strlcat(buf, " is here, attempting to banish ", sizeof(buf));
       else
-        strcat(buf, " is here, fighting ");
+        strlcat(buf, " is here, fighting ", sizeof(buf));
       if (FIGHTING(i) == ch)
-        strcat(buf, "YOU!");
+        strlcat(buf, "YOU!", sizeof(buf));
       else {
         if (i->in_room == FIGHTING(i)->in_room)
-          strcat(buf, PERS(FIGHTING(i), ch));
+          strlcat(buf, PERS(FIGHTING(i), ch), sizeof(buf));
         else
-          strcat(buf, "someone in the distance");
-        strcat(buf, "!");
+          strlcat(buf, "someone in the distance", sizeof(buf));
+        strlcat(buf, "!", sizeof(buf));
       }
     } else if (FIGHTING_VEH(i)) {
-      strcat(buf, " is here, fighting ");
+      strlcat(buf, " is here, fighting ", sizeof(buf));
       if ((ch->in_veh && ch->in_veh == FIGHTING_VEH(i)) || (ch->char_specials.rigging && ch->char_specials.rigging == FIGHTING_VEH(i)))
-        strcat(buf, "YOU!");
+        strlcat(buf, "YOU!", sizeof(buf));
       else {
         if (i->in_room == FIGHTING_VEH(i)->in_room)
-          strcat(buf, GET_VEH_NAME(FIGHTING_VEH(i)));
+          strlcat(buf, GET_VEH_NAME(FIGHTING_VEH(i)), sizeof(buf));
         else
-          strcat(buf, "someone in the distance");
-        strcat(buf, "!");
+          strlcat(buf, "someone in the distance", sizeof(buf));
+        strlcat(buf, "!", sizeof(buf));
       }
     } else                      /* NIL fighting pointer */
-      strcat(buf, " is here struggling with thin air.");
+      strlcat(buf, " is here struggling with thin air.", sizeof(buf));
   }
   
-  strcat(buf, "\r\n");
+  strlcat(buf, "\r\n", sizeof(buf));
   
   send_to_char(buf, ch);
 }
@@ -1885,11 +1884,13 @@ void look_at_target(struct char_data * ch, char *arg)
   if (found_char != NULL)
   {
     look_at_char(found_char, ch);
+    /*
     if (ch != found_char && !ch->char_specials.rigging) {
       if (CAN_SEE(found_char, ch))
         act("$n looks at you.", TRUE, ch, 0, found_char, TO_VICT);
       act("$n looks at $N.", TRUE, ch, 0, found_char, TO_NOTVICT);
     }
+    */
     ch->in_room = was_in;
     return;
   } else if (ch->in_veh)
@@ -5010,7 +5011,7 @@ ACMD(do_position)
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
   GET_DEFPOS(ch) = str_dup(argument);
-  send_to_char(ch, "Position set.\r\n");
+  send_to_char(ch, "Position set. You will appear as '(your character) %s^n'\r\n", GET_DEFPOS(ch));
 }
 
 ACMD(do_status)
