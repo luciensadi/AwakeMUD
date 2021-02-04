@@ -3126,6 +3126,10 @@ bool spell_is_nerp(int spell_num) {
     case SPELL_ASTRALBARRIER:
     case SPELL_HEALTHYGLOW:
     case SPELL_TOXICWAVE:
+    case SPELL_NOVA:
+    case SPELL_SMOKECLOUD:
+    case SPELL_THUNDERCLAP:
+    case SPELL_SPLASH:
       return TRUE;
   }
   
