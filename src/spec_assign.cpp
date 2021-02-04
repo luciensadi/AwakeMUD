@@ -403,7 +403,7 @@ struct spell_trainer spelltrainers[] = {
                             {10013, SPELL_LASER, "Laser", 0, 50},
                             {10013, SPELL_NOVA, "Nova", 0, 50},
                             {10013, SPELL_STEAM, "Steam", 0, 50},
-                            {10013, SPELL_THUNDERBOLT, "Thunderclap", 0, 50},
+                            {10013, SPELL_THUNDERBOLT, "Thunderbolt", 0, 50},
                             {10013, SPELL_THUNDERCLAP, "Thunderclap", 0, 50},
                             {10013, SPELL_POLTERGEIST, "Poltergeist", 0, 50},
                             {10013, SPELL_ARMOR, "Armor", 0, 50},
