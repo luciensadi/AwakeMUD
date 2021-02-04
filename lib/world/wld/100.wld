@@ -7,20 +7,9 @@ the faintest scent of lemon, offsetting the otherwise-sterile atmosphere.
 ~
 Flags:	1000010000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
 RoomType:	9
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	15
 [EXIT north]
 	Keywords:	door armored firing range
 	Desc:$
@@ -36,27 +25,15 @@ Range.'
 	LockRating:	50
 [EXIT east]
 	ToVnum:	10004
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	10021
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10013
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	10018
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10001
@@ -69,25 +46,10 @@ the target is attacked.
 ~
 Flags:	1000000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	15
 [EXIT north]
 	ToVnum:	10019
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Desc:$
@@ -113,9 +75,6 @@ Laboratory.'
 	LockRating:	50
 [EXIT west]
 	ToVnum:	10014
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10002
@@ -126,20 +85,8 @@ guards whose sole purpose is to return fire.
 ~
 Flags:	1000000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	15
 [EXIT west]
 	Keywords:	partition door
 	Desc:$
@@ -162,25 +109,13 @@ Hermetic tradition.
 ~
 Flags:	100001000010000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
 RoomType:	9
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	2
 	BackgroundType:	13
 [EXIT south]
 	ToVnum:	10004
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10004
@@ -193,37 +128,17 @@ pristine copy of Richard Bartle's "Designing Virtual Worlds."
 ~
 Flags:	1000010000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	10003
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	10005
-	Flags:	0
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10000
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10005
@@ -236,18 +151,9 @@ doors, each leading to a reserveable room to build your Shamanic lodge in.
 ~
 Flags:	1000010000010000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
 RoomType:	9
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	2
 	BackgroundType:	13
 [EXIT north]
@@ -258,7 +164,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10004
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 [EXIT northeast]
@@ -269,7 +174,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10006
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 [EXIT east]
@@ -280,7 +184,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10007
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 [EXIT southeast]
@@ -291,7 +194,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10008
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 [EXIT south]
@@ -302,7 +204,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10009
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 [EXIT southwest]
@@ -313,7 +214,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10010
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 [EXIT west]
@@ -324,7 +224,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10011
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 [EXIT northwest]
@@ -335,7 +234,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10012
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 BREAK
@@ -346,18 +244,8 @@ Desc:$
 ~
 Flags:	1000010000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	2
 	BackgroundType:	13
 [EXIT southwest]
@@ -368,7 +256,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10005
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 BREAK
@@ -379,18 +266,8 @@ Desc:$
 ~
 Flags:	1000010000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	2
 	BackgroundType:	13
 [EXIT west]
@@ -401,7 +278,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10005
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 BREAK
@@ -412,18 +288,8 @@ Desc:$
 ~
 Flags:	1000010000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	2
 	BackgroundType:	13
 [EXIT northwest]
@@ -434,7 +300,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10005
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 BREAK
@@ -445,18 +310,8 @@ Desc:$
 ~
 Flags:	1000010000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	2
 	BackgroundType:	13
 [EXIT north]
@@ -467,7 +322,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10005
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 BREAK
@@ -478,18 +332,8 @@ Desc:$
 ~
 Flags:	1000010000000100000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	2
 	BackgroundType:	13
 [EXIT northeast]
@@ -500,7 +344,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10005
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 BREAK
@@ -511,18 +354,8 @@ Desc:$
 ~
 Flags:	1000010000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	2
 	BackgroundType:	13
 [EXIT east]
@@ -533,7 +366,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10005
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 BREAK
@@ -544,18 +376,8 @@ Desc:$
 ~
 Flags:	1000010000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	2
 	BackgroundType:	13
 [EXIT southeast]
@@ -566,7 +388,6 @@ A simple wooden door has been installed here.
 	ToVnum:	10005
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	10010
 	LockRating:	1
 BREAK
@@ -589,24 +410,10 @@ Trace:	0
 RTG:	1100
 JackID:	0
 Address:	An undisclosed location
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10000
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10014
@@ -616,31 +423,13 @@ Desc:$
 ~
 Flags:	1000000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10001
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10015
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10015
@@ -650,31 +439,13 @@ Desc:$
 ~
 Flags:	1000000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10014
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10016
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10016
@@ -684,31 +455,13 @@ Desc:$
 ~
 Flags:	1000000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10015
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10017
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10017
@@ -718,25 +471,10 @@ Desc:$
 ~
 Flags:	1000000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10016
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10018
@@ -749,20 +487,10 @@ what lies beyond.
 ~
 Flags:	1000010000000000000011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	0
 Y:	0
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	vault door sealed
 	Desc:$
@@ -774,24 +502,15 @@ A sealed vault door prevents NPCs from escaping.
 	Barrier:	32
 	KeyVnum:	0
 	LockRating:	50
-	HiddenRating:	50
+	HiddenRating:	10
 [EXIT east]
 	ToVnum:	10027
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	10028
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	10000
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10019
@@ -804,25 +523,12 @@ ammunition workshop for handloading rounds.
 ~
 Flags:	100001000000000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	0
 Y:	0
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	10001
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10020
@@ -833,25 +539,12 @@ Vehicles that are zoneloaded here will be available for purchase in room
 ~
 Flags:	1110000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	100
 Y:	100
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	10021
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10021
@@ -864,25 +557,12 @@ allows the purchase of vehicles.
 ~
 Flags:	100001110000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	50
 Y:	50
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	10000
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Keywords:	door wooden office
@@ -891,8 +571,9 @@ A wooden door leads to an office.
 ~
 	ToVnum:	10022
 	Flags:	1
-	Material:	brick
-	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35500
 	KeyVnum:	0
 BREAK
 #10022
@@ -904,20 +585,10 @@ administration and more a den of controlled mechanical chaos.
 ~
 Flags:	1000000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	50
 Y:	50
 Z:	20.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	Keywords:	door wooden
 	Desc:$
@@ -925,8 +596,6 @@ A wooden door leads back out to the garage.
 ~
 	ToVnum:	10021
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10023
@@ -939,7 +608,6 @@ circumstances.
 ~
 Flags:	1000000000000000000001000
 SecType:	Inside
-MatrixExit:	0
 Crowd:	4
 Cover:	4
 X:	10
@@ -947,23 +615,11 @@ Y:	10
 Z:	2.00
 RoomType:	9
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	10025
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	10026
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	vault sealed door
@@ -976,12 +632,9 @@ A vault door prevents NPCs from escaping.
 	Barrier:	32
 	KeyVnum:	0
 	LockRating:	50
-	HiddenRating:	50
+	HiddenRating:	10
 [EXIT northwest]
 	ToVnum:	10024
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10024
@@ -993,7 +646,6 @@ track for driving NPCs.
 ~
 Flags:	1010000000000000000000000
 SecType:	Inside
-MatrixExit:	0
 Crowd:	4
 Cover:	4
 X:	10
@@ -1001,29 +653,14 @@ Y:	10
 Z:	2.00
 RoomType:	9
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10025
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	10023
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10026
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10025
@@ -1035,7 +672,6 @@ track for driving NPCs.
 ~
 Flags:	1010000000000000000000000
 SecType:	Inside
-MatrixExit:	0
 Crowd:	4
 Cover:	4
 X:	10
@@ -1043,29 +679,14 @@ Y:	10
 Z:	2.00
 RoomType:	9
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	16
 [EXIT east]
 	ToVnum:	10026
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	10023
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10024
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10026
@@ -1077,7 +698,6 @@ track for driving NPCs.
 ~
 Flags:	1010000000000000000000000
 SecType:	Inside
-MatrixExit:	0
 Crowd:	4
 Cover:	4
 X:	10
@@ -1085,29 +705,14 @@ Y:	10
 Z:	2.00
 RoomType:	9
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10024
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	10023
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10025
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10027
@@ -1118,25 +723,12 @@ margins to so many items the MUD crashes.
 ~
 Flags:	1000000000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	10
 Y:	10
 Z:	10.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	10018
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10028
@@ -1147,25 +739,12 @@ magic.
 ~
 Flags:	1000000000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	10
 Y:	10
 Z:	10.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	10018
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	doors shaft
@@ -1180,15 +759,9 @@ A pair of elevator doors allows access to the liftway.
 	LockRating:	8
 [EXIT up]
 	ToVnum:	10029
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	10030
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10029
@@ -1199,20 +772,10 @@ magic.
 ~
 Flags:	1000000000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	10
 Y:	10
 Z:	10.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	doors shaft
 	Desc:$
@@ -1226,9 +789,6 @@ A pair of elevator doors allows access to the liftway.
 	LockRating:	8
 [EXIT down]
 	ToVnum:	10028
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10030
@@ -1239,20 +799,10 @@ magic.
 ~
 Flags:	1000000000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	10
 Y:	10
 Z:	10.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	doors shaft
 	Desc:$
@@ -1266,9 +816,6 @@ A pair of elevator doors allows access to the liftway.
 	LockRating:	8
 [EXIT up]
 	ToVnum:	10028
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10031
@@ -1278,20 +825,10 @@ Will it go up, though? Will it go down? Does it even work?
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	0
 Y:	0
 Z:	50.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	doors shaft
 	Desc:$
@@ -1311,20 +848,11 @@ Will it go up, though? Will it go down? Does it even work?
 ~
 Flags:	10000000001010000000000000011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	50.00
-RoomType:	0
+X:	2
+Y:	2
+Z:	5.00
 [POINTS]
-	SpecIdx:	0
 	Rating:	6
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	doors shaft
 	Desc:$
@@ -1332,15 +860,14 @@ A pair of elevator doors allows access to the liftway.
 ~
 	ToVnum:	10030
 	Flags:	1
-	Material:	brick
-	Barrier:	4
+	Material:	metal
+	Barrier:	8
 	KeyVnum:	998
 	LockRating:	8
 [EXIT up]
-	ToVnum:	10033
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	ToVnum:	0
+	Material:	paper
+	Barrier:	0
 	KeyVnum:	0
 BREAK
 #10033
@@ -1350,20 +877,11 @@ Will it go up, though? Will it go down? Does it even work?
 ~
 Flags:	10000000001010000000000000011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	50.00
-RoomType:	0
+X:	2
+Y:	2
+Z:	5.00
 [POINTS]
-	SpecIdx:	0
 	Rating:	6
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	doors shaft
 	Desc:$
@@ -1372,20 +890,18 @@ A pair of elevator doors allows access to the liftway.
 	ToVnum:	0
 	Flags:	1
 	Material:	metal
-	Barrier:	6
+	Barrier:	8
 	KeyVnum:	998
 	LockRating:	8
 [EXIT up]
-	ToVnum:	10034
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	ToVnum:	0
+	Material:	paper
+	Barrier:	0
 	KeyVnum:	0
 [EXIT down]
-	ToVnum:	10032
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	ToVnum:	0
+	Material:	paper
+	Barrier:	0
 	KeyVnum:	0
 BREAK
 #10034
@@ -1395,25 +911,15 @@ Will it go up, though? Will it go down? Does it even work?
 ~
 Flags:	10000000001010000000000000011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	50.00
-RoomType:	0
+X:	2
+Y:	2
+Z:	5.00
 [POINTS]
-	SpecIdx:	0
 	Rating:	6
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
-	ToVnum:	10033
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	ToVnum:	0
+	Material:	paper
+	Barrier:	0
 	KeyVnum:	0
 BREAK
 END

@@ -754,9 +754,16 @@ ACMD(do_new_echo) {
     if (found_mem(GET_IGNORE(viewer), ch))
       continue;
     
-    // If the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
-    if (subcmd != SCMD_AECHO || (IS_ASTRAL(viewer) || IS_DUAL(viewer)))
-      send_echo_to_char(ch, viewer, argument, must_echo_with_name);
+    // If it's aecho, only send to people who see astral.
+    if (subcmd == SCMD_AECHO && !(IS_ASTRAL(viewer) || IS_DUAL(viewer)))
+      continue;
+      
+    // If they're insensate, nvm.
+    if (!AWAKE(viewer) || PLR_FLAGGED(viewer, PLR_REMOTE) || PLR_FLAGGED(viewer, PLR_MATRIX))
+      continue;
+    
+    // Since the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
+    send_echo_to_char(ch, viewer, argument, must_echo_with_name);
   }
 }
 

@@ -12,43 +12,21 @@ underground garage.
 ~
 Flags:	10000000000010000000000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	35699
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35501
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	35698
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	32661
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	10021
 	KeyVnum:	0
 BREAK
 #35501
@@ -63,37 +41,15 @@ interior of the club reads, "Abandon all hope, oh ye who enter."
 ~
 Flags:	10000000000000001100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	8301
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35502
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35502
@@ -107,31 +63,12 @@ of screams fill the air.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35501
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35503
@@ -147,37 +84,15 @@ down at the crowd.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35504
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35507
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35502
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35504
@@ -193,37 +108,15 @@ the vicinity, seemingly engulfing the habitues of Dante's Inferno in flames.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35505
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35508
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35505
@@ -238,43 +131,18 @@ regularly cover the floor and drift away.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35512
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	35509
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35504
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35506
@@ -289,31 +157,12 @@ sounds that fill the club.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35510
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35505
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35507
@@ -326,25 +175,9 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35508
@@ -357,25 +190,9 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35504
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35509
@@ -388,25 +205,9 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northwest]
 	ToVnum:	35505
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35510
@@ -422,37 +223,15 @@ beneath you.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35517
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35511
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35511
@@ -467,37 +246,15 @@ tortured souls, imps, and daemons.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35518
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35510
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35513
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35512
@@ -511,25 +268,9 @@ and imps.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	35505
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35513
@@ -543,37 +284,15 @@ obsidian with gargoyles and pseudo-incantations in 'hieroglyphic' form.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35519
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35511
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35514
@@ -590,55 +309,24 @@ is set up to the northwest, and a restaurant is set up to the west.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35520
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35513
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	8302
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35515
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35516
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	35521
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35515
@@ -651,31 +339,12 @@ colored lights hit the dancers in the club, creating an 'engulfed' affect.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35522
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35516
@@ -690,25 +359,9 @@ wearing a chef's hat, and using a small pitchfork as a spatula.
 ~
 Flags:	11100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35517
@@ -730,24 +383,9 @@ Trace:	0
 RTG:	1100
 JackID:	92060660
 Address:	Dante's Inferno, Second Floor, Seattle
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35510
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35518
@@ -760,25 +398,9 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35511
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35519
@@ -791,25 +413,9 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35513
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35520
@@ -822,25 +428,9 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	11100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35521
@@ -863,36 +453,15 @@ Trace:	0
 RTG:	1100
 JackID:	92060661
 Address:	Dante's Inferno, Second Floor, Seattle
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35692
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	35514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35524
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35522
@@ -907,37 +476,15 @@ while breathing steam as their eyes glow red.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35515
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35523
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35527
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35523
@@ -951,37 +498,15 @@ Torches are arranged along the walls.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35525
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35528
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35522
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35524
@@ -993,25 +518,9 @@ out-of-character.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	35521
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35525
@@ -1027,37 +536,15 @@ light.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35526
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35529
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35523
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35526
@@ -1071,37 +558,15 @@ more frenetically charged clientele.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35530
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35525
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35531
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35527
@@ -1114,25 +579,9 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35522
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35528
@@ -1146,25 +595,9 @@ spilled on the table.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35523
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35529
@@ -1178,25 +611,9 @@ etched on the table.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35525
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35530
@@ -1210,25 +627,9 @@ this booth darkened.
 ~
 Flags:	10000000000001100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35526
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35531
@@ -1242,31 +643,12 @@ steps, crawling down from the third level to the fourth below.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	35526
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35532
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35532
@@ -1280,31 +662,19 @@ beams move rhythmically to the music.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
 Crowd:	7
 Cover:	1
-X:	20
 Y:	30
 Z:	4.00
 RoomType:	7
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
 	Background:	1
 	BackgroundType:	12
 [EXIT southwest]
 	ToVnum:	35533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35531
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35533
@@ -1318,31 +688,12 @@ red^n color.  The music is very loud, but none of the clientele seems to mind.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	35532
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35534
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35534
@@ -1357,37 +708,15 @@ cast to create an 'engulfing' effect on the crowd on the dance floor.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35539
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35535
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35535
@@ -1405,43 +734,18 @@ look that could only be called bloodlust.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35538
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35534
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35577
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35536
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35536
@@ -1458,37 +762,15 @@ wounds - just the sort of thing true Dante's devotees live for.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35535
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35578
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	35537
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35537
@@ -1506,31 +788,12 @@ with blood-red paint - at least, you have to hope it's just paint.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	35542
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	35536
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35538
@@ -1546,37 +809,15 @@ tripping over them than looking.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35539
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35535
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35540
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35539
@@ -1590,37 +831,15 @@ simsense music hit.  The lead singer, Jan LaRoan is up above you now.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35534
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35538
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35540
@@ -1636,31 +855,12 @@ display conjure up a chorus line of skeletons to rave to the noise.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35538
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35541
@@ -1679,31 +879,12 @@ bloodfalls in random patches.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	35540
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35539
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35542
@@ -1720,37 +901,15 @@ you've spent way too much time in Dante's.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	35543
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35544
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	35537
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35543
@@ -1768,31 +927,12 @@ wings, the barkeep.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	35544
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	35542
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35544
@@ -1807,56 +947,32 @@ reading the poetry a little eye-straining for the unaccustomed.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	8303
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35545
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35542
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	35543
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	Emily Dickenson~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Keywords:	Edgar Allan Poe~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Desc:$
-Because I could not stop for Death
- He kindly stopped for me;
- The carriage held but just ourselves 
- And immortality. 
- We slowly
-drove, he knew no haste, 
- And I had put away 
- My labor, and my leisure too, 
- For his civility.
+For the moon never beams without bringing me dreams
+ Of the beautiful Annabel Lee;
+ And the stars never rise but I feel the
+bright eyes
+ Of the beautiful Annabel Lee;
+ And so, all the night-time, I lie down by the side
+ Of my darling - my
+darling - my life and my bride,
+ In the sepulchre there by the sea,
+ In her tomb by the sounding sea.
  
 ~
 [EXTRADESC 1]
@@ -1880,18 +996,17 @@ Abyss.
  
 ~
 [EXTRADESC 2]
-	Keywords:	Edgar Allan Poe~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Keywords:	Emily Dickenson~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Desc:$
-For the moon never beams without bringing me dreams
- Of the beautiful Annabel Lee;
- And the stars never rise but I feel the
-bright eyes
- Of the beautiful Annabel Lee;
- And so, all the night-time, I lie down by the side
- Of my darling - my
-darling - my life and my bride,
- In the sepulchre there by the sea,
- In her tomb by the sounding sea.
+Because I could not stop for Death
+ He kindly stopped for me;
+ The carriage held but just ourselves 
+ And immortality. 
+ We slowly
+drove, he knew no haste, 
+ And I had put away 
+ My labor, and my leisure too, 
+ For his civility.
  
 ~
 BREAK
@@ -1907,31 +1022,12 @@ heard here only dully, muted as it is by the bar area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	35544
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35546
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35546
@@ -1950,31 +1046,12 @@ natural device could make a sound like that.
 ~
 Flags:	10000000000001100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	35545
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35547
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35547
@@ -1988,31 +1065,12 @@ enter, you must walk between its teeth, into the gaping maw of Hell.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35548
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35546
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35548
@@ -2029,49 +1087,21 @@ skimpy furs are more common than leather.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35547
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	35552
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35549
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35555
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35556
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35549
@@ -2087,37 +1117,15 @@ slightest bit fainter here.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35550
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35554
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35548
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35550
@@ -2132,43 +1140,18 @@ appearance of constantly reforming sheets of ice.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35551
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35553
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35549
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	35552
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35551
@@ -2183,31 +1166,12 @@ cloud of fog being blown across the shaft opening.
 ~
 Flags:	10000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	35550
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35557
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35552
@@ -2227,31 +1191,12 @@ half-frozen into the wall... at least until he moves.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	35550
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	35548
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35553
@@ -2280,24 +1225,9 @@ Trace:	0
 RTG:	1100
 JackID:	9206
 Address:	Dante's Inferno, Fifth Floor, Seattle
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35550
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35554
@@ -2317,25 +1247,9 @@ plastic and glass to look like a stalactite.
 ~
 Flags:	111000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35549
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35555
@@ -2355,25 +1269,9 @@ plastic and glass to look like a stalactite.
 ~
 Flags:	111000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35548
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35556
@@ -2393,25 +1291,9 @@ plastic and glass to look like a stalactite.
 ~
 Flags:	111000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35548
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35557
@@ -2426,31 +1308,12 @@ human skulls with flames inside them.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	35551
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35558
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35558
@@ -2467,31 +1330,12 @@ the seventh.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35559
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35557
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35559
@@ -2505,31 +1349,12 @@ blood covering the skeletons glow ^Rbright red^n, as their eyes glow ^rdull red^
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35560
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35558
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35560
@@ -2542,31 +1367,12 @@ glows softly in the black lights.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	35561
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35559
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35561
@@ -2579,31 +1385,12 @@ downward from here.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	35560
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35562
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35562
@@ -2617,31 +1404,12 @@ intervals.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	35561
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35563
@@ -2656,31 +1424,12 @@ music.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35564
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35562
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35564
@@ -2694,31 +1443,12 @@ to be the where the elite go to party.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35565
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35565
@@ -2733,31 +1463,12 @@ don't have clearance to be at this level.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35564
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	35566
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35566
@@ -2773,49 +1484,21 @@ a peek at the famous.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35567
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	35568
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	35576
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35575
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	35565
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35567
@@ -2829,25 +1512,9 @@ glass.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35566
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35568
@@ -2862,31 +1529,12 @@ this their home away from penthouse in Dante's.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35569
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	35566
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35569
@@ -2900,37 +1548,15 @@ you hear it at the Epicenter or Club Penumbra.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35570
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35568
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	35571
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35570
@@ -2944,31 +1570,12 @@ the infamous Formula 666 is brewed as well.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35572
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35569
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35571
@@ -2981,31 +1588,12 @@ wall here.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	35569
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35574
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
 	Keywords:	warning sign~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3026,37 +1614,15 @@ view of the rest of the level.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	8304
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35573
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35570
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35573
@@ -3070,25 +1636,9 @@ the ceiling with what looks like hanging men swaying on their nooses.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35572
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35574
@@ -3103,31 +1653,12 @@ a dull red light coming from above.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	35571
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35580
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35575
@@ -3140,25 +1671,9 @@ light.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35566
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35576
@@ -3181,24 +1696,9 @@ Trace:	0
 RTG:	1100
 JackID:	92060663
 Address:	Dante's Inferno, Seventh Floor, Seattle
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northwest]
 	ToVnum:	35566
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35577
@@ -3211,25 +1711,9 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35535
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35578
@@ -3242,25 +1726,9 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35536
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35579
@@ -3273,20 +1741,7 @@ table is a red glowing orb, resembling a small ball of magma.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #35580
 Name:	The Eighth Hell
@@ -3299,31 +1754,12 @@ before you reach the anarchy of the ninth level.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35581
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35574
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35581
@@ -3337,31 +1773,12 @@ amenities or booths to hide out in.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35580
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35582
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35582
@@ -3375,31 +1792,12 @@ DJ Infernis.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35581
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35583
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35583
@@ -3415,31 +1813,12 @@ crime, where Yakuza and Mafia alike can recruit.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35582
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35584
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35584
@@ -3454,31 +1833,12 @@ many other levels of Dante's.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	35583
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35585
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35585
@@ -3492,43 +1852,18 @@ struck down here as well.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35586
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35604
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35594
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35584
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35586
@@ -3543,31 +1878,12 @@ form to violate that neutrality with violence.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35587
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35585
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35587
@@ -3582,43 +1898,18 @@ expensive trid unit is embedded in an outcrop overhead, humming softly.
 ~
 Flags:	10000000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35588
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35592
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35586
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35590
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35588
@@ -3634,31 +1925,12 @@ corporate world.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35589
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35587
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35589
@@ -3674,20 +1946,7 @@ systems he is compromising.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	private door
 	Desc:$
@@ -3695,26 +1954,15 @@ A private room is north of you.
 ~
 	ToVnum:	35614
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35588
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35590
@@ -3728,31 +1976,12 @@ face down here, except to cut a deal.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35587
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35591
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35591
@@ -3767,37 +1996,15 @@ engaged in shadow wars.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35601
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35590
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35600
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	Keywords:	private door
@@ -3806,8 +2013,6 @@ A door leads into a private room.
 ~
 	ToVnum:	35611
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35592
@@ -3823,31 +2028,12 @@ anybody on this level, save for those in the private rooms.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35593
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35587
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35593
@@ -3865,25 +2051,9 @@ the best.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35606
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Keywords:	private door
@@ -3892,20 +2062,12 @@ The door leads into a private room.
 ~
 	ToVnum:	35617
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35605
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35592
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35594
@@ -3921,31 +2083,12 @@ much in the way of consumables.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35585
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	35600
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35595
@@ -3958,25 +2101,10 @@ screams.  Below you at the very bottom of this abyss is a portal somewhere.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	2
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	3124
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35596
@@ -3989,25 +2117,10 @@ screams.  Below you at the very bottom of this abyss is a portal somewhere.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	2
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	3124
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35597
@@ -4020,25 +2133,10 @@ screams.  Below you at the very bottom of this abyss is a portal somewhere.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	2
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	3124
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35598
@@ -4051,25 +2149,10 @@ screams.  Below you at the very bottom of this abyss is a portal somewhere.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	2
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	3124
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35599
@@ -4082,25 +2165,10 @@ screams.  Below you at the very bottom of this abyss is a portal somewhere.
 ~
 Flags:	0
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
 	Rating:	2
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	3124
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35600
@@ -4113,31 +2181,12 @@ leading into a private room that has been cut into the bedrock.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35591
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	35594
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	Keywords:	private door
@@ -4146,8 +2195,6 @@ A private room's doorway.
 ~
 	ToVnum:	35610
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35601
@@ -4163,31 +2210,12 @@ found.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	35602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35591
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	Keywords:	private door
@@ -4196,8 +2224,6 @@ A door leads into a private room.
 ~
 	ToVnum:	35612
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35602
@@ -4211,20 +2237,7 @@ the floors are rock instead of glass.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	private door
 	Desc:$
@@ -4232,26 +2245,15 @@ A private room is to the north, shut out by a door.
 ~
 	ToVnum:	35613
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	35589
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35603
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	35601
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35603
@@ -4263,31 +2265,12 @@ is the first level of the club, a means to get you there with speed.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	8305
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35604
@@ -4304,31 +2287,12 @@ the taking.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	35605
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35585
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35605
@@ -4344,25 +2308,9 @@ the place for paydata, and this is the place to make a name for yourself.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	35593
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Keywords:	private door
@@ -4371,14 +2319,9 @@ A private room is to the east
 ~
 	ToVnum:	35618
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	35604
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35606
@@ -4392,20 +2335,7 @@ scum and villainy, to plagiarize a certain movie character.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	Keywords:	private door
 	Desc:$
@@ -4413,20 +2343,12 @@ A private room is here.  Through the window you can tell the lights are on.
 ~
 	ToVnum:	35616
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35593
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	35607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35607
@@ -4439,20 +2361,7 @@ a BBS center, where a terminal connects to Shadowland.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	private door
 	Desc:$
@@ -4460,26 +2369,15 @@ A private room is north of here.
 ~
 	ToVnum:	35615
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	35608
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	35606
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35589
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35608
@@ -4494,31 +2392,12 @@ graffiti on it.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35609
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	35607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35609
@@ -4540,24 +2419,9 @@ Trace:	0
 RTG:	1100
 JackID:	92066665
 Address:	Dante's Inferno, Ninth Floor, Seattle
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	35608
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35610
@@ -4573,20 +2437,7 @@ law enforcement eyes.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	Keywords:	door
 	Desc:$
@@ -4594,8 +2445,6 @@ The doorway goes back to the club.
 ~
 	ToVnum:	35600
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35611
@@ -4611,20 +2460,7 @@ law enforcement eyes.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	Keywords:	door private
 	Desc:$
@@ -4632,8 +2468,6 @@ A door leads to the club.
 ~
 	ToVnum:	35591
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	Keywords:	door
@@ -4643,7 +2477,7 @@ A door leads to the club.
 	Barrier:	32
 	KeyVnum:	64901
 	LockRating:	50
-	HiddenRating:	50
+	HiddenRating:	10
 BREAK
 #35612
 Name:	Private Room
@@ -4667,19 +2501,7 @@ Trace:	0
 RTG:	1100
 JackID:	92060666
 Address:	Dante's Inferno, Ninth Floor, Seattle
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	Keywords:	door private
 	Desc:$
@@ -4687,8 +2509,6 @@ The door leads back into the club.
 ~
 	ToVnum:	35601
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35613
@@ -4704,20 +2524,7 @@ law enforcement eyes.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	door private
 	Desc:$
@@ -4725,8 +2532,6 @@ Going south, the door opens to the club.
 ~
 	ToVnum:	35602
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35614
@@ -4742,20 +2547,7 @@ law enforcement eyes.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	false wall
 	Desc:$
@@ -4763,7 +2555,6 @@ A false wall fools most who pass by here.
 ~
 	ToVnum:	9354
 	Flags:	1
-	Material:	brick
 	Barrier:	32
 	KeyVnum:	0
 	LockRating:	12
@@ -4775,8 +2566,6 @@ The club is to the south.
 ~
 	ToVnum:	35589
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35615
@@ -4792,20 +2581,7 @@ law enforcement eyes.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	door private
 	Desc:$
@@ -4813,8 +2589,6 @@ The club is south.
 ~
 	ToVnum:	35607
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35616
@@ -4830,20 +2604,7 @@ law enforcement eyes.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	Keywords:	door private club
 	Desc:$
@@ -4851,8 +2612,6 @@ The door leads back into the club.
 ~
 	ToVnum:	35606
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35617
@@ -4868,20 +2627,7 @@ law enforcement eyes.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	Keywords:	door private
 	Desc:$
@@ -4889,8 +2635,6 @@ The door goes back to the club.
 ~
 	ToVnum:	35593
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35618
@@ -4906,20 +2650,7 @@ law enforcement eyes.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	Keywords:	door private
 	Desc:$
@@ -4927,8 +2658,6 @@ The door leads back into the club.
 ~
 	ToVnum:	35605
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35619
@@ -4944,20 +2673,7 @@ law enforcement eyes.
 ~
 Flags:	10011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #35620
 Name:	Before the Elevator - Ground Floor
@@ -4972,25 +2688,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35501
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35621
@@ -5006,25 +2706,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35622
@@ -5040,25 +2724,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northwest]
 	ToVnum:	35514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35623
@@ -5074,25 +2742,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35526
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35624
@@ -5108,25 +2760,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35544
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35625
@@ -5142,25 +2778,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35552
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35626
@@ -5176,25 +2796,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	35560
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35627
@@ -5210,25 +2814,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	35572
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35628
@@ -5244,25 +2832,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	35583
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35629
@@ -5278,25 +2850,9 @@ screaming noises in the caves of Pandaemonia.
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	35603
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35631
@@ -5311,20 +2867,7 @@ sits above the panel.
 ~
 Flags:	101000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXTRADESC 0]
 	Keywords:	sign~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Desc:$
@@ -5346,20 +2889,7 @@ the inside of Dante's reverberates through the halls.
 ~
 Flags:	10000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	doorway
 	Desc:$
@@ -5368,14 +2898,9 @@ Inferno.
 ~
 	ToVnum:	35693
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	35521
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35693
@@ -5389,25 +2914,9 @@ while an entranceway leads into the Second Hell.
 ~
 Flags:	110000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35694
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	doorway
@@ -5416,14 +2925,9 @@ A doorway leads to the inside of Dante's Inferno.
 ~
 	ToVnum:	35692
 	Flags:	1
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35699
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35694
@@ -5435,31 +2939,12 @@ smell of brimstone fills the air.
 ~
 Flags:	110000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	35695
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	35693
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35695
@@ -5472,31 +2957,12 @@ headlights.
 ~
 Flags:	110000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	35696
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	35694
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35696
@@ -5510,25 +2976,9 @@ wall, consisting of an eastern dragon toasting a modern city in flames.
 ~
 Flags:	110000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	35695
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Keywords:	garage door
@@ -5537,12 +2987,9 @@ RoomType:	0
 	Material:	metal
 	Barrier:	32
 	KeyVnum:	4600
-	HiddenRating:	12
+	HiddenRating:	10
 [EXIT west]
 	ToVnum:	35697
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35697
@@ -5555,31 +3002,12 @@ nostrils.
 ~
 Flags:	110000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	35696
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	35698
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35698
@@ -5594,31 +3022,12 @@ indecipherable is painted on the wall in orange.
 ~
 Flags:	10000010000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northwest]
 	ToVnum:	35500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35697
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #35699
@@ -5632,31 +3041,12 @@ blood red glow that fluctuates in luminocity.
 ~
 Flags:	10000010000000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	35500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	35693
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 END

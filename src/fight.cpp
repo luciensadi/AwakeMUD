@@ -3900,16 +3900,16 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
     if (att->burst_count) {
       if (weap_ammo || att->magazine) {
-        int ammo_available = weap_ammo ? GET_AMMOBOX_QUANTITY(weap_ammo) : GET_MAGAZINE_AMMO_COUNT(att->magazine);
+        int ammo_available = weap_ammo ? ++GET_AMMOBOX_QUANTITY(weap_ammo) : ++GET_MAGAZINE_AMMO_COUNT(att->magazine);
         
         // Cap their burst to their magazine's ammo.
         att->burst_count = MIN(att->burst_count, ammo_available);
         
         // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
         if (weap_ammo) {
-          update_ammobox_ammo_quantity(weap_ammo, -(att->burst_count - 1));
+          update_ammobox_ammo_quantity(weap_ammo, -(att->burst_count));
         } else {
-          GET_MAGAZINE_AMMO_COUNT(att->magazine) -= (att->burst_count - 1);
+          GET_MAGAZINE_AMMO_COUNT(att->magazine) -= (att->burst_count);
         }
       }
       
