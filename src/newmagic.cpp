@@ -1382,6 +1382,14 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   int basedamage = 0;
   switch (spell)
   {
+  case SPELL_LASER:
+  case SPELL_NOVA:
+  case SPELL_STEAM:
+  case SPELL_SMOKECLOUD:
+  case SPELL_THUNDERBOLT:
+  case SPELL_THUNDERCLAP:
+  case SPELL_WATERBOLT:
+  case SPELL_SPLASH:
   case SPELL_ACIDSTREAM:
   case SPELL_TOXICWAVE:
   case SPELL_FLAMETHROWER:
@@ -1721,6 +1729,205 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     }
     spell_drain(reflected ? vict : ch, spell, force, basedamage);
     break;
+  case SPELL_LASER:
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+    check_killer(ch, vict);
+    if (!AWAKE(vict))
+      target -= 2;
+    else {
+      // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+    }
+    act("A thin laser beam is emitted from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
+      success = -1;
+    else success += success_test(skill, target + 4);
+    if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target + 4, success))) {
+      vict = ch;
+      ch = temp;      
+    }
+    if (success <= 0) {
+      act("$n easily dodges it, and the beam flickers and vanishes.", FALSE, vict, 0, 0, TO_ROOM);
+      send_to_char("You easily dodge it!\r\n", vict);
+    } else {
+      success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+      int dam = convert_damage(stage(success, basedamage));
+      if (!AWAKE(vict)) {
+        act("$n's body recoils in pain as the laser beam finds its mark.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You feel an extremely uncomfortable and painful burning sensation.\r\n", vict);
+      } else if (GET_PHYSICAL(vict) - (dam * 100) <= 0) {
+        act("$n is cleanly pierced by the laser beam, the hole cut in $s body smoking as they drop like a rock.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You feel your body cleanly pierced by the laser beam, which leaves a smoking hole in your body.\r\n", vict);
+      } else if (GET_PHYSICAL(vict) - (dam * 100) <= 300) {
+        act("$n is almost pierced by the laser beam, pain filling $s body as a thin wisp of smoke rises from $m.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("Your body is filled with intense pain as the laser beam strikes you, inflicting a cauterized wound.\r\n", vict);
+      } else if (GET_PHYSICAL(vict) - (dam * 100) <= 700) {
+        act("$n jolts back as the laser strikes $m, $s body shuddering in pain as the laser beam dissipates.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("Pain flashes through your body as the laser strikes, your body shuddering at the intense heat.\r\n", vict);
+      } else if (dam > 0) {
+        act("$n visibly flinches as the laser connects, but otherwise seems fine.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You flinch as the laser strikes you, feeling an intense heat for a moment.\r\n", vict);
+      } else {
+        act("The laser beam strikes $n, but seems to be easily absorbed.", FALSE, vict, 0, ch, TO_ROOM);
+        send_to_char("Your body absorbs the laser beam without injury.\r\n", vict);
+      }
+      for (int i = 0; i < NUM_WEARS; i++)
+        if (!number(0, 50))
+          damage_obj(vict, GET_EQ(vict, i), force, DAMOBJ_PIERCE);
+      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL);
+      if (IS_NPC(vict) && !IS_NPC(ch))
+        GET_LASTHIT(vict) = GET_IDNUM(ch);
+    }
+    spell_drain(reflected ? vict : ch, spell, force, basedamage);
+    break;
+  case SPELL_STEAM:
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+    check_killer(ch, vict);
+    if (!AWAKE(vict))
+      target -= 2;
+    else {
+      // Dodge test: You must be awake.
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+    }
+    success += success_test(skill, 4 + target);
+      
+    send_to_char("You see a cloud of steam vapours rush towards you!\r\n", vict);
+      
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
+      success = -1;
+    
+    if (success <= 0) {
+      act("Your steam spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
+      send_to_char("You easily dodge it!\r\n", vict);
+      act("$n dodges out of the way of a cloud of steam.", TRUE, vict, 0, ch, TO_NOTVICT);
+    } else {
+      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - GET_IMPACT(vict));
+      int dam = convert_damage(stage(success, basedamage));
+      if (!AWAKE(vict)) {
+        act("$n's body reels from the blast of steam.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You feel lightheaded from the blast of steam.\r\n", vict);
+      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+        act("$n chokes and collapses to the ground, unconscious, from the steam vapours.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("It slams into you and robs the breath from your lungs, choking you into unconsciousness.\r\n", vict);
+      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+        act("$n flounders backwards, almost losing $s footing, as $e is choked by the steam cloud.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You flounder backwards, feeling lightheaded as the steam threatens to choke you.\r\n", vict);
+      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+        act("$n steps back and coughs a few times to catch their breath.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You step back as the steam hits you, feeling a little short on oxygen.\r\n", vict);
+      } else if (dam > 0) {
+        act("$n blanches as they're exposed briefly to the steam.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You blanch as the feeling of hot steam washes over your face.\r\n", vict);
+      } else {
+        send_to_char("It rushes past you, not causing any damage.\r\n", vict);
+        act("$n doesn't seem hurt by your steam spell.", FALSE, vict, 0, ch, TO_VICT);
+      }
+      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL);
+      if (IS_NPC(vict) && !IS_NPC(ch))
+        GET_LASTHIT(vict) = GET_IDNUM(ch);
+    }
+    spell_drain(ch, spell, force, basedamage);
+    break;
+  case SPELL_THUNDERBOLT:
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+    check_killer(ch, vict);
+    if (!AWAKE(vict))
+      target -= 2;
+    else {
+      // Dodge test: You must be awake.
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+    }
+    success += success_test(skill, 4 + target);
+      
+    send_to_char("The air around you explodes into a deafening roar!\r\n", vict);
+      
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
+      success = -1;
+    
+    if (success <= 0) {
+      act("Your thunderbolt spell harmlessly echoes as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
+      send_to_char("You easily dodge it!\r\n", vict);
+      act("$n dodges out of the way of the concussive blast.", TRUE, vict, 0, ch, TO_NOTVICT);
+    } else {
+      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - GET_IMPACT(vict));
+      int dam = convert_damage(stage(success, basedamage));
+      if (!AWAKE(vict)) {
+        act("$n's shudders from the concussive blast.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You feel dizzy from the concussive blast.\r\n", vict);
+      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+        act("$n is violently thrown to the ground, rendered unconscious from the blast.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("It slams into you and rattles your brain and organs, rendering you unconsciousness.\r\n", vict);
+      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+        act("$n is shoved backwards, almost losing $s footing as the blast washes over them.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You're shoved backwards from the intensity of the concussive blast.\r\n", vict);
+      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+        act("$n is shoved back and has to shake their head to get their bearings.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You're shoved back as the concussive blast hits you, feeling a bit shaken up.\r\n", vict);
+      } else if (dam > 0) {
+        act("$n flinches as the blast passes by them.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You flinch as the blast passes by you.\r\n", vict);
+      } else {
+        send_to_char("It rolls past you, not causing any damage.\r\n", vict);
+        act("$n doesn't seem hurt by your thunderbolt spell.", FALSE, vict, 0, ch, TO_VICT);
+      }
+      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL);
+      if (IS_NPC(vict) && !IS_NPC(ch))
+        GET_LASTHIT(vict) = GET_IDNUM(ch);
+    }
+    spell_drain(ch, spell, force, basedamage);
+    break
+  case SPELL_WATERBOLT:
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+    check_killer(ch, vict);
+    if (!AWAKE(vict))
+      target -= 2;
+    else {
+      // Dodge test: You must be awake.
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf, sizeof(buf)));
+    }
+    success += success_test(skill, 4 + target);
+      
+    send_to_char("You see a bolt of water head towards you!\r\n", vict);
+      
+    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
+      success = -1;
+    
+    if (success <= 0) {
+      act("Your waterbolt spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
+      send_to_char("You easily dodge it!\r\n", vict);
+      act("$n dodges out of the way of the bolt of water.", TRUE, vict, 0, ch, TO_NOTVICT);
+    } else {
+      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - GET_IMPACT(vict));
+      int dam = convert_damage(stage(success, basedamage));
+      if (!AWAKE(vict)) {
+        act("$n's stumbles as they're splashed with water.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You stumble back as the bolt of water connects.\r\n", vict);
+      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+        act("$n is knocked to the ground, unconscious, from the force of the rushing water.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("It slams into you like a sack of bricks, knocking you to the ground, unconscious.\r\n", vict);
+      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+        act("$n stumbles backwards, almost losing $s footing, as $e is hit by the bolt of water.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You stumble backwards, absolutely drenched as the water slams into you at full force.\r\n", vict);
+      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+        act("$n steps back, and shakes $s limbs to dry off.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You step back as the water hits you, feeling like you swam a mile.\r\n", vict);
+      } else if (dam > 0) {
+        act("$n stumbles, knocked off balance by the water bolt.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You feel the water bolt strike you and splash across your face.\r\n", vict);
+      } else {
+        send_to_char("It rushes past you, not causing any damage.\r\n", vict);
+        act("$n doesn't seem hurt by your waterbolt spell.", FALSE, vict, 0, ch, TO_VICT);
+      }
+      damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL);
+      if (IS_NPC(vict) && !IS_NPC(ch))
+        GET_LASTHIT(vict) = GET_IDNUM(ch);
+    }
+    spell_drain(ch, spell, force, basedamage);
+    break;
   }
 }
 
@@ -1809,6 +2016,18 @@ void mob_magic(struct char_data *ch)
         if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && !ch->points.fire[0])
           spell = SPELL_IGNITE;
         break;
+      case 13:
+        spell = SPELL_LASER;
+        break;
+      case 14:
+        spell = SPELL_STEAM;
+        break;
+      case 15:
+        spell = SPELL_THUNDERBOLT;
+        break;
+      case 16:
+        spell = SPELL_WATERBOLT;
+        break;
     }
   }
   switch (spell) {
@@ -1819,6 +2038,10 @@ void mob_magic(struct char_data *ch)
     case SPELL_ACIDSTREAM:
     case SPELL_LIGHTNINGBOLT:
     case SPELL_CLOUT:
+    case SPELL_LASER:
+    case SPELL_STEAM:
+    case SPELL_THUNDERBOLT:
+    case SPELL_WATERBOLT:
       snprintf(buf, sizeof(buf), "%s %s", wound_name[number(1, 4)], GET_CHAR_NAME(FIGHTING(ch)));
       break;
     default:
