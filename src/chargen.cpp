@@ -412,6 +412,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   GET_LOADROOM(d->character) = archetypes[i]->start_room;
 
   init_char_sql(d->character);
+  GET_CHAR_MULTIPLIER(d->character) = 100;
   snprintf(buf, sizeof(buf), "%s [%s] new character (archetypal %s).", GET_CHAR_NAME(d->character), d->host, archetypes[i]->name);
   mudlog(buf, d->character, LOG_CONNLOG, TRUE);
   SEND_TO_Q(motd, d);
