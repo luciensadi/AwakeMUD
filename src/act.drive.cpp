@@ -615,50 +615,56 @@ ACMD(do_upgrade)
     send_to_char(ch, "That part won't fit on.\r\n");
     return;
   }
-  if (GET_OBJ_VAL(mod, 0) == TYPE_MOUNT) {
+  if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_MOUNT) {
     skill = 0;
-    for (obj = veh->mount; obj; obj = obj->next_content)
-      switch (GET_OBJ_VAL(obj, 3)) {
-      case 0:
-      case 1:
-        j++;
-        break;
-      case 2:
-      case 3:
-      case 5:
-        j += 2;
-        break;
-      case 4:
-        j += 4;
-        break;
+    // Total up the existing mounts.
+    for (obj = veh->mount; obj; obj = obj->next_content) {
+      if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_MOUNT) {
+        switch (GET_VEHICLE_MOD_MOUNT_TYPE(obj)) {
+          case MOUNT_FIRMPOINT_INTERNAL:
+          case MOUNT_FIRMPOINT_EXTERNAL:
+            j++;
+            break;
+          case MOUNT_HARDPOINT_INTERNAL:
+          case MOUNT_HARDPOINT_EXTERNAL:
+          case MOUNT_MINITURRET:
+            j += 2;
+            break;
+          case MOUNT_TURRET:
+            j += 4;
+            break;
+        }
       }
-    switch (GET_OBJ_VAL(mod, 1)) {
-    case 1:
-      skill = 1;
-      // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
-      // fall through
-    case 0:
-      j++;
-      target = 10;
-      break;
-    case 3:
-      skill = 1;
-      // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
-      // fall through
-    case 2:
-      j += 2;
-      target = 10;
-      break;
-    case 4:
-      skill = 1;
-      j += 4;
-      target = 100;
-      break;
-    case 5:
-      skill = 1;
-      j += 2;
-      target = 25;
-      break;
+    }
+    
+    // Add the new mount's data.
+    switch (GET_VEHICLE_MOD_MOUNT_TYPE(mod)) {
+      case MOUNT_FIRMPOINT_EXTERNAL:
+        skill = 1;
+        // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
+        // fall through
+      case MOUNT_FIRMPOINT_INTERNAL:
+        j++;
+        target = 10;
+        break;
+      case MOUNT_HARDPOINT_EXTERNAL:
+        skill = 1;
+        // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
+        // fall through
+      case MOUNT_HARDPOINT_INTERNAL:
+        j += 2;
+        target = 10;
+        break;
+      case MOUNT_TURRET:
+        skill = 1;
+        j += 4;
+        target = 100;
+        break;
+      case MOUNT_MINITURRET:
+        skill = 1;
+        j += 2;
+        target = 25;
+        break;
     }
     if (j > veh->body || (veh->usedload + target) > veh->load) {
       send_to_char("Try as you might, you just can't fit it on.\r\n", ch);

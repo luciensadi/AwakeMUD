@@ -936,6 +936,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 // ITEM_MOD convenience defines
 #define GET_VEHICLE_MOD_TYPE(mod)            (GET_OBJ_VAL((mod), 0))
+#define GET_VEHICLE_MOD_MOUNT_TYPE(mod)      (GET_OBJ_VAL((mod), 1))
 
 // ITEM_HOLSTER convenience defines
 #define GET_HOLSTER_READY_STATUS(holster)    (GET_OBJ_VAL((holster), 3))

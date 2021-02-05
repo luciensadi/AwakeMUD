@@ -3967,8 +3967,14 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(att->ch, att->weapon);
     
     // Setup: Trying to fire a sniper rifle at close range is tricky. This is non-canon to reduce twinkery.
-    if (IS_OBJ_STAT(att->weapon, ITEM_SNIPER) && att->ch->in_room == def->ch->in_room)
+    if (IS_OBJ_STAT(att->weapon, ITEM_SNIPER) 
+        && ((att->ch->in_room == def->ch->in_room)
+            || AFF_FLAGGED(att->ch, AFF_MANNING) 
+            || AFF_FLAGGED(att->ch, AFF_RIG) 
+            || PLR_FLAGGED(att->ch, PLR_REMOTE)))
+    {
       att->modifiers[COMBAT_MOD_DISTANCE] += 6;
+    }
     
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
     if (!AWAKE(def->ch))
