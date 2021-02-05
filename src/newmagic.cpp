@@ -1878,7 +1878,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     }
     spell_drain(ch, spell, force, basedamage);
-    break
+    break;
   case SPELL_WATERBOLT:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;

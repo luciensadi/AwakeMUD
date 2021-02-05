@@ -433,6 +433,7 @@ void boot_world(void)
   require_that_field_exists_in_table("archetypal", "pfiles_chargendata", "SQL/Migrations/archetypes.sql");
   require_that_field_exists_in_table("highlight", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   require_that_field_exists_in_table("email", "pfiles", "SQL/Migrations/rp_upgrade.sql");
+  require_that_field_exists_in_table("multiplier", "pfiles", "SQL/Migrations/multipliers.sql");
   
   log("Calculating lexicon data.");
   populate_lexicon_size_table();

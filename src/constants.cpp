@@ -1908,7 +1908,7 @@ struct spell_types spells[] =
     { "Shadow", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
     { "Laser", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, -2 },
     { "Nova", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
-    { "Steam", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -2 }
+    { "Steam", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -2 },
     { "Smoke Cloud", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
     { "Thunderbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -2 },
     { "Thunderclap", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },

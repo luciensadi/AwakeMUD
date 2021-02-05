@@ -225,8 +225,8 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
   
   // If we've gotten here, it's a player. Mult it up.
   if (multiplier)
-    gain *= KARMA_GAIN_MULTIPLIER;
-  
+    gain *= KARMA_GAIN_MULTIPLIER * ((float) GET_CHAR_MULTIPLIER(ch) / 100);
+    
   if (gain != 0) {
     if (limits) {
       if (GET_TKE(ch) >= 0 && GET_TKE(ch) < 100) {

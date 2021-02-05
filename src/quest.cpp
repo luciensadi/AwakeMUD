@@ -542,7 +542,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
       act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
     }
   }
-  nuyen = negotiate(ch, johnson, 0, nuyen, 0, FALSE) * NUYEN_GAIN_MULTIPLIER;
+  nuyen = negotiate(ch, johnson, 0, nuyen, 0, FALSE) * NUYEN_GAIN_MULTIPLIER * GET_CHAR_MULTIPLIER(ch);
 
   if (AFF_FLAGGED(ch, AFF_GROUP))
   {

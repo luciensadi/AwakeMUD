@@ -1393,8 +1393,8 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
             pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges));
   }
   
-  if (!IS_NPC(k))
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n\r\n", GET_EMAIL(k));
+  if (!IS_NPC(k) && access_level(ch, LVL_ADMIN))
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n  Multiplier: ^c%.2f^n\r\n", GET_EMAIL(k), (float) GET_CHAR_MULTIPLIER(k) / 100);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Title: %s\r\n", (k->player.title ? k->player.title : "<None>"));
 
@@ -4113,6 +4113,7 @@ ACMD(do_set)
                { "socializationbonus", LVL_ADMIN, PC,     NUMBER },
                { "race", LVL_PRESIDENT, PC, NUMBER },
                { "rolls", LVL_PRESIDENT, PC, BINARY },
+               { "multiplier", LVL_PRESIDENT, PC, NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4676,6 +4677,12 @@ ACMD(do_set)
   case 74: /* rolls for morts */
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_ROLLS);
     snprintf(buf, sizeof(buf),"%s changed %s's rolls flag setting.", GET_CHAR_NAME(ch), GET_NAME(vict));
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 75: /* multiplier */
+    RANGE(0, 10000);
+    GET_CHAR_MULTIPLIER(vict) = value;
+    snprintf(buf, sizeof(buf),"%s changed %s's multiplier to %.2f.", GET_CHAR_NAME(ch), GET_NAME(vict), (float) GET_CHAR_MULTIPLIER(vict) / 100);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   default:
