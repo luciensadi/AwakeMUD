@@ -253,13 +253,13 @@ void medit_disp_att_menu(struct descriptor_data *d)
 {
 
   CLS(CH);
-  send_to_char(CH, "1) Body:       %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_BOD(MOB), CCNRM(CH, C_CMP));
-  send_to_char(CH, "2) Quickness:  %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_QUI(MOB), CCNRM(CH, C_CMP));
-  send_to_char(CH, "3) Strength:   %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_STR(MOB), CCNRM(CH, C_CMP));
-  send_to_char(CH, "4) Charisma:   %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_CHA(MOB), CCNRM(CH, C_CMP));
-  send_to_char(CH, "5) Intel.:     %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_INT(MOB), CCNRM(CH, C_CMP));
-  send_to_char(CH, "6) Willpower:  %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_WIL(MOB), CCNRM(CH, C_CMP));
-  send_to_char(CH, "7) Magic:      %s%d%s\r\n", CCCYN(CH, C_CMP), MOB->real_abils.mag / 100,
+  send_to_char(CH, "1) Body:         %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_BOD(MOB), CCNRM(CH, C_CMP));
+  send_to_char(CH, "2) Quickness:    %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_QUI(MOB), CCNRM(CH, C_CMP));
+  send_to_char(CH, "3) Strength:     %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_STR(MOB), CCNRM(CH, C_CMP));
+  send_to_char(CH, "4) Charisma:     %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_CHA(MOB), CCNRM(CH, C_CMP));
+  send_to_char(CH, "5) Intelligence: %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_INT(MOB), CCNRM(CH, C_CMP));
+  send_to_char(CH, "6) Willpower:    %s%d%s\r\n", CCCYN(CH, C_CMP), GET_REAL_WIL(MOB), CCNRM(CH, C_CMP));
+  send_to_char(CH, "7) Magic:        %s%d%s\r\n", CCCYN(CH, C_CMP), MOB->real_abils.mag / 100,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "q) Quit\r\n");
 

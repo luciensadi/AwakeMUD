@@ -816,19 +816,34 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       bool already_printed = FALSE;
       if (mob_index[GET_MOB_RNUM(i)].func || mob_index[GET_MOB_RNUM(i)].sfunc) {
         if (mob_index[GET_MOB_RNUM(i)].func == trainer || mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to train you.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to train you.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "",
+                   HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == teacher || mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you practice your skills.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+          if (MOB_FLAGGED(i, MOB_INANIMATE)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...it%s can be used to help you practice your skills.%s^n\r\n",
+                     already_printed ? " also" : "",
+                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+          } else {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you practice your skills.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
+                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+          }
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher || mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train in metamagic techniques.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
@@ -836,7 +851,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train your powers.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
@@ -844,43 +862,63 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you learn new spells.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLEARN^y command to begin." : "");
             already_printed = TRUE;
           }
         }
         if (mob_index[GET_MOB_RNUM(i)].func == johnson || mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP JOB^y for instructions." : "");
           already_printed = TRUE;
         }
         if ((mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis)
             || (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].sfunc == terell_davis)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.%s^n\r\n", HSSH(i), already_printed ? " also" : "", HASHAVE(i),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "", 
+                   HASHAVE(i),
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLIST^y command to see them." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec || mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP APARTMENTS^y for details." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == fence || mob_index[GET_MOB_RNUM(i)].sfunc == fence) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == hacker || mob_index[GET_MOB_RNUM(i)].sfunc == hacker) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- you can ^YGIVE^y them to %s.^n\r\n", HSSH(i), already_printed ? " also" : "", HMHR(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- you can ^YGIVE^y them to %s.^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "", 
+                   HMHR(i));
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == receptionist || mob_index[GET_MOB_RNUM(i)].sfunc == receptionist) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.%s^n\r\n", HSSH(i), already_printed ? " also" : "", HASHAVE(i),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "", 
+                   HASHAVE(i),
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == fixer || mob_index[GET_MOB_RNUM(i)].sfunc == fixer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n",
+                   HSSH(i), 
+                   already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YREPAIR^y command to proceed." : "");
           already_printed = TRUE;
         }

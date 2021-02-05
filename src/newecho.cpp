@@ -643,6 +643,32 @@ ACMD(do_new_echo) {
     return;
   }
   
+  // Prevent forgery of the dice command.
+  bool is_carat = FALSE;
+  bool has_valid_content = FALSE;
+  for (const char *ptr = storage_buf; *ptr; ptr++) {
+    if (is_carat) {
+      is_carat = FALSE;
+      continue;
+    }
+    
+    if (isdigit(*ptr)) {
+      send_to_char(ch, "The first word of your emote cannot contain a digit.\r\n");
+      return;
+    }
+    
+    if (*ptr == '^')
+      is_carat = TRUE;
+    else if (*ptr == ' ')
+      break;
+    else if (isalpha(*ptr))
+      has_valid_content = TRUE;
+  }
+  if (!has_valid_content) {
+    send_to_char(ch, "You can't begin your emote with blank space.\r\n");
+    return;
+  }
+  
   // Scan the emote for language values. You can only use languages you know, and only up to certain word lengths.
   if (!IS_NPC(ch)) {
     int language_in_use = GET_LANGUAGE(ch);
