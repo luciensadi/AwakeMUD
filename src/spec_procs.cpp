@@ -2297,7 +2297,7 @@ SPECIAL(hacker)
       return TRUE;
 
     if (GET_OBJ_VAL(obj, 2) == 1)
-      amount = (int)(GET_OBJ_VAL(obj, 0) / 8);
+      amount = (int)(GET_OBJ_VAL(obj, 0) / 7);
     else if (GET_OBJ_VAL(obj, 2) == 2)
       amount = (int)(GET_OBJ_VAL(obj, 0) / 5);
     else
@@ -2306,8 +2306,8 @@ SPECIAL(hacker)
     nuyen = GET_OBJ_VAL(obj, 0) - amount;
     GET_BANK(hacker) += amount;
     GET_BANK(ch) += nuyen;
-    snprintf(buf1, sizeof(buf1), "%s Updated.  %d nuyen transferred to your bank account.",
-            GET_CHAR_NAME(ch), nuyen);
+    snprintf(buf1, sizeof(buf1), "%s Updated. %d nuyen transferred to your bank account, I took a cut of %d.",
+            GET_CHAR_NAME(ch), nuyen, amount);
     do_say(hacker, buf1, 0, SCMD_SAYTO);
     extract_obj(obj);
     return TRUE;
