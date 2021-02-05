@@ -269,6 +269,10 @@ ACMD(do_tell)
     return;
   }
   
+  if ((PLR_FLAGGED(ch, PLR_NOSHOUT) || PLR_FLAGGED(ch, PLR_TELLS_MUTED)) && !IS_SENATOR(vict)) {
+    send_to_char(ch, "You can only send tells to staff.\r\n");
+  }
+  
   if (!IS_NPC(vict) && !vict->desc) {      /* linkless */
     act("$E's linkless at the moment.", FALSE, ch, 0, vict, TO_CHAR);
     return;
@@ -276,13 +280,13 @@ ACMD(do_tell)
     
   // Prevent chargen reaching people with tells.
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && !IS_SENATOR(vict)) {
-    send_to_char("You'll need to wait until you're Authorized to send tells to players.\r\n", ch);
+    send_to_char("You'll need to finish the tutorial to send tells to other players.\r\n", ch);
     return;
   }
   
   // Prevent people reaching chargen with tells.
   if (PLR_FLAGGED(vict, PLR_NOT_YET_AUTHED) && !IS_SENATOR(ch)) {
-    send_to_char("You can't send tells to them until they're Authorized.\r\n", ch);
+    send_to_char("You can't send tells to them until they finish character creation.\r\n", ch);
     return;
   }
 

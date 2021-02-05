@@ -731,6 +731,9 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       return;
     }
     
+    // TODO: If their nuyen is less than half of the list cost, reject. 
+    // Otherwise, deduct half of the list cost from them for the order value (they get it back if they cancel, and it's applied to purchase price if they receive it.)
+    
     // Calculate TNs, factoring in settings, powers, and racism.
     int target = GET_OBJ_AVAILTN(obj) - GET_AVAIL_OFFSET(ch);
     target = MAX(0, target - GET_POWER(ch, ADEPT_KINESICS));

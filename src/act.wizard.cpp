@@ -3232,6 +3232,14 @@ ACMD(do_wizutil)
         strcat(buf, "\r\n");
         send_to_char(buf, ch);
         break;
+      case SCMD_SQUELCHTELLS:
+        result = PLR_TOG_CHK(vict, PLR_TELLS_MUTED);
+        snprintf(buf, sizeof(buf), "Squelch(tells) %s for %s by %s.", ONOFF(result),
+                GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        strcat(buf, "\r\n");
+        send_to_char(buf, ch);
+        break;
       case SCMD_RPE:
         result = PLR_TOG_CHK(vict, PLR_RPE);
         snprintf(buf, sizeof(buf), "RPE toggled %s for %s by %s.", ONOFF(result),

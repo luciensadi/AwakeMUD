@@ -653,6 +653,7 @@ struct command_info cmd_info[] =
     { "mask"     , POS_RESTING , do_masking  , 0, 0 },
     { "mute"     , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCH },
     { "muteooc"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHOOC },
+    { "mutetells", POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHTELLS },
     { "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
     
     { "newbie"   , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE },

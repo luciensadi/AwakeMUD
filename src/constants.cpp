@@ -477,7 +477,8 @@ const char *player_bits[] =
     "INIT",
     "DRIVEBY",
     "RPE",
-    "NOIDLEOUT"
+    "NOIDLEOUT",
+    "TELLS_MUTED"
     "\n"
   };
 

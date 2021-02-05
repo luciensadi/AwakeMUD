@@ -302,7 +302,8 @@ enum {
 #define PLR_DRIVEBY             36
 #define PLR_RPE                 37
 #define PLR_NO_IDLE_OUT         38 /* Player will not idle out (morts- for test chars) */
-#define PLR_MAX                 39
+#define PLR_TELLS_MUTED         39 /* Remove their ability to send tells. */
+#define PLR_MAX                 40
 
 
 
@@ -1710,17 +1711,18 @@ enum {
 #define SCMD_WHOAMI     10
 
 /* do_wizutil */
-#define SCMD_PARDON     0
-#define SCMD_NOTITLE    1
-#define SCMD_SQUELCH    2
-#define SCMD_FREEZE     3
-#define SCMD_THAW       4
-#define SCMD_UNAFFECT   5
-#define SCMD_SQUELCHOOC 6
-#define SCMD_INITIATE   7
-#define SCMD_RPE   8
-#define SCMD_POWERPOINT 9
-#define SCMD_AUTHORIZE  10
+#define SCMD_PARDON       0
+#define SCMD_NOTITLE      1
+#define SCMD_SQUELCH      2
+#define SCMD_FREEZE       3
+#define SCMD_THAW         4
+#define SCMD_UNAFFECT     5
+#define SCMD_SQUELCHOOC   6
+#define SCMD_INITIATE     7
+#define SCMD_RPE          8
+#define SCMD_POWERPOINT   9
+#define SCMD_AUTHORIZE    10
+#define SCMD_SQUELCHTELLS 11
 
 /* do_say */
 #define SCMD_SAY        0
