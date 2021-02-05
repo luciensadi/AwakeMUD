@@ -5742,3 +5742,60 @@ SPECIAL(chargen_docwagon_checker) {
 
   return(FALSE);
 }
+
+SPECIAL(nerpcorpolis_button) {
+  struct obj_data *obj = (struct obj_data *) me;
+  
+  struct char_data *tmp_char;
+  struct obj_data *tmp_object;
+  
+  // No argument given, no character available, no problem. Skip it.
+  if (!*argument || !ch || ch->in_veh)
+    return FALSE;
+  
+  // If it's not a command that would reveal this sign's data, skip it.
+  if (!(CMD_IS("push") || CMD_IS("press") || CMD_IS("use") || CMD_IS("activate")))
+    return FALSE;
+  
+  // Search the room and find something that matches me.
+  generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &tmp_object);
+  
+  // Senpai didn't notice me? Skip it, he's not worth it.
+  if (!tmp_object || tmp_object != obj)
+    return FALSE;
+  
+  // Select our destination list based on our room's vnum.
+  struct room_data *room = get_obj_in_room(obj);
+  if (!room)
+    return FALSE;
+    
+  vnum_t teleport_to = -1;
+  
+  switch (GET_ROOM_VNUM(room)) {
+    case 1003:
+      teleport_to = 6901;
+      break;
+    case 6901:
+      teleport_to = 1003;
+      break;
+    default:
+      snprintf(buf, sizeof(buf), "SYSERR: Invalid room %ld for teleport button.", GET_ROOM_VNUM(room));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return FALSE;
+  }
+  
+  int teleport_rnum = real_room(teleport_to);
+  if (teleport_rnum <= -1) {
+    snprintf(buf, sizeof(buf), "SYSERR: Invalid destination %ld for teleport button in %ld.", teleport_to, GET_ROOM_VNUM(room));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  send_to_char("Your surroundings blur and shift.\r\n", ch);
+  act("$n presses the button and disappears.", TRUE, ch, 0, 0, TO_ROOM);
+  char_from_room(ch);
+  char_to_room(ch, &world[teleport_rnum]);
+  act("$n appears from the teleporter.", TRUE, ch, 0, 0, TO_ROOM);
+  
+  return TRUE;
+}

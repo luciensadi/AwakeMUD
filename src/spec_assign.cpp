@@ -754,6 +754,7 @@ void assign_objects(void)
   SPECIAL(trideo);
   SPECIAL(spraypaint);
   SPECIAL(restoration_button);
+  SPECIAL(nerpcorpolis_button);
 
   ASSIGNOBJ(3, gen_board);  /* Rift's Board */
   ASSIGNOBJ(4, gen_board);  /* Pook's Board */
@@ -853,8 +854,9 @@ void assign_objects(void)
   ASSIGNOBJ(10033, quest_debug_scanner);
   #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(70605, desktop);
-  ASSIGNOBJ(10036, restoration_button);
+  // ASSIGNOBJ(10036, restoration_button);
   ASSIGNOBJ(39799, bank);
+  ASSIGNOBJ(6997, nerpcorpolis_button);
   #endif
   
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
