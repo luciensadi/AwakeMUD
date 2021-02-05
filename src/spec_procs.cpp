@@ -3844,6 +3844,16 @@ SPECIAL(quest_debug_scanner)
       }
     }
     
+    for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+      room = get_veh_in_room(veh);
+      for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
+        if (IS_NPC(tch))
+          continue;
+        
+        send_to_char(ch, "%-20s - in %s at [%6ld] %s^n\r\n", GET_CHAR_NAME(tch), GET_VEH_NAME(veh), room ? GET_ROOM_VNUM(room) : -1, room ? GET_ROOM_NAME(room) : "nowhere");
+      }
+    }
+    
     return TRUE;
   }
   
