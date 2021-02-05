@@ -274,14 +274,20 @@ ACMD(do_tell)
     return;
   }
     
-  /*
-  if (!IS_SENATOR(ch) && !IS_SENATOR(vict)) {
-    send_to_char("Tell is for communicating with immortals only.\r\n", ch);
+  // Prevent chargen reaching people with tells.
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && !IS_SENATOR(vict)) {
+    send_to_char("You'll need to wait until you're Authorized to send tells to players.\r\n", ch);
     return;
   }
-  */
+  
+  // Prevent people reaching chargen with tells.
+  if (PLR_FLAGGED(vict, PLR_NOT_YET_AUTHED) && !IS_SENATOR(ch)) {
+    send_to_char("You can't send tells to them until they're Authorized.\r\n", ch);
+    return;
+  }
 
-  if (PRF_FLAGGED(vict, PRF_NOTELL) || found_mem(GET_IGNORE(vict), source)) {
+  // Enable blocking of tells from everyone except staff.
+  if ((!access_level(ch, LVL_BUILDER) && PRF_FLAGGED(vict, PRF_NOTELL)) || found_mem(GET_IGNORE(vict), source)) {
     act("$E has disabled tells.", FALSE, ch, 0, vict, TO_CHAR);
     return;
   }

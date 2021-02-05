@@ -41,6 +41,8 @@ extern void cast_manipulation_spell(struct char_data *ch, int spell, int force, 
 extern void cast_illusion_spell(struct char_data *ch, int spell, int force, char *arg, char_data *mob);
 extern void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char *arg, char_data *mob);
 extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
+extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+
 
 extern void perform_wear(struct char_data *, struct obj_data *, int, bool);
 extern void perform_remove(struct char_data *, int);
@@ -241,8 +243,7 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
     
-  // If NPC is aggro or alarmed, or...
-  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM || (mob_is_aggressive(ch, FALSE) && (
+  if (MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) || (mob_is_aggressive(ch, FALSE) && (
       // If NPC is aggro towards elves, and victim is an elf subrace, or...
       (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
        (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
@@ -269,6 +270,15 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
              (MOB_FLAGGED(ch, MOB_AGGR_ORK)   && (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ? "anti-ork" : "",
              (MOB_FLAGGED(ch, MOB_AGGR_TROLL) && (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)) ? "anti-troll" : "",
              GET_CHAR_NAME(vict));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return TRUE;
+  }
+  
+  // We allow alarmed, non-aggro NPCs to attack, but only if the victim could otherwise hurt them.
+  if (GET_MOBALERT(ch) == MALERT_ALARM && can_hurt(vict, ch, 0, TRUE)) {
+#ifdef MOBACT_DEBUG
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: I am alarmed and %s can hurt me, so they are a valid aggro target.", GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
 #endif
     return TRUE;
@@ -828,8 +838,8 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   // Check vehicles, but only if they're in the same room as the guard.
   if (ch->in_room == room) {
     for (veh = room->vehicles; veh; veh = veh->next_veh) {
-      // If the room we're in is neither a road nor a garage, attack any vehicles we see.
-      if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM)) {
+      // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.
+      if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE))) {
         stop_fighting(ch);
         snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
         act(buf, TRUE, ch, NULL, NULL, TO_ROOM);

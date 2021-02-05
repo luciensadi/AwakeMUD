@@ -1179,7 +1179,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "noshout") || is_abbrev(argument, "shout")) {
       result = PRF_TOG_CHK(ch, PRF_DEAF);
       mode = 10;
-    } else if ((is_abbrev(argument, "notell") || is_abbrev(argument, "tell")) && IS_SENATOR(ch)) {
+    } else if ((is_abbrev(argument, "notell") || is_abbrev(argument, "tell"))) {
       result = PRF_TOG_CHK(ch, PRF_NOTELL);
       mode = 11;
     } else if (is_abbrev(argument, "ooc") || is_abbrev(argument, "noooc")) {
