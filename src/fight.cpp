@@ -4094,22 +4094,6 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->successes -= def->successes;
       
       snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.", def->dice, def->tn, def->successes, att->successes);
-    
-      // Monowhip?
-      int rnum = -1;
-      if (att->weapon 
-          && (rnum = real_object(GET_OBJ_VNUM(att->weapon)) >= 0)
-          && obj_index[rnum].wfunc == monowhip) {
-        int target = 6, dam_total, skill = get_skill(att->ch, SKILL_WHIPS_FLAILS, target);
-        if (!success_test(skill, target)) {
-          act("Your monowhip flails out of control, striking you instead of $N!", FALSE, att->ch, 0, def->ch, TO_CHAR);
-          act("$n's monowhip completely misses and recoils to hit $m!", TRUE, att->ch, 0, 0, TO_ROOM);
-          dam_total = convert_damage(stage(-1 * success_test(GET_BOD(att->ch) + GET_DEFENSE(att->ch), 10), SERIOUS));
-    
-          damage(att->ch, att->ch, dam_total, TYPE_RECOIL, PHYSICAL);
-          return;
-        }
-      }
     } else {
       att->successes = MAX(att->successes, 1);
       snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, successes confirmed as %d.", att->successes);
@@ -4454,6 +4438,25 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->burst_count);
   
   damage(att->ch, def->ch, damage_total, att->dam_type, att->is_physical);
+  
+  int rnum;
+  if (damage_total <= 0
+      && att->weapon 
+      && (rnum = real_object(GET_OBJ_VNUM(att->weapon)) >= 0)
+      && obj_index[rnum].wfunc == monowhip
+      && number(0, 1)) 
+  {
+    int target = 6, dam_total, skill = get_skill(att->ch, SKILL_WHIPS_FLAILS, target);
+    int successes = success_test(skill, target);
+    if (successes <= 0) {
+      act("Your monowhip flails out of control, striking you instead of $N!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+      act("$n's monowhip completely misses and recoils to hit $m!", TRUE, att->ch, 0, 0, TO_ROOM);
+      dam_total = convert_damage(stage(-1 * success_test(GET_BOD(att->ch) + (successes == 0 ? GET_DEFENSE(att->ch) : 0), 10), SERIOUS));
+
+      damage(att->ch, att->ch, dam_total, TYPE_RECOIL, PHYSICAL);
+      return;
+    }
+  }
   
   if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
     GET_LASTHIT(def->ch) = GET_IDNUM(att->ch);
@@ -4945,7 +4948,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         act(buf, TRUE, vict, 0, 0, TO_ROOM);
         act(buf, TRUE, vict, 0, 0, TO_CHAR);
         return;
-      } else if (!success_test(temp + GET_OFFENSE(ch), 6)) {
+      } else if (success_test(temp + GET_OFFENSE(ch), 6) <= 0) {
         left = -1;
         right = -1;
         if (dir < UP) {

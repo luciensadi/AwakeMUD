@@ -437,7 +437,7 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           success_test_tn = 3;
         }
         
-        if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn))
+        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0)
           continue;
       }
     } else if (ch->in_veh && i->in_room && i->in_room == ch->in_veh->in_room) {
@@ -454,7 +454,7 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           success_test_tn = 4;
         }
         
-        if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn))
+        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0)
           continue;
       }
     }
@@ -1245,22 +1245,22 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
       bool failed = FALSE;
       if (veh->cspeed > SPEED_IDLE) {
         if (get_speed(veh) >= 200) {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7)) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) <= 0) {
             failed = TRUE;
           }
         }
         else if (get_speed(veh) >= 120) {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6)) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) <= 0) {
             failed = TRUE;
           }
         }
         else if (get_speed(veh) >= 60) {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5)) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) <= 0) {
             failed = TRUE;
           }
         }
         else {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4)) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) <= 0) {
             failed = TRUE;
           }
         }
@@ -1692,7 +1692,7 @@ void look_in_direction(struct char_data * ch, int dir)
   if (EXIT(ch, dir))
   {
     if (IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN)) {
-      if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, dir)->hidden)) {
+      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, dir)->hidden) <= 0) {
         send_to_char("You see nothing special.\r\n", ch);
         return;
       } else {

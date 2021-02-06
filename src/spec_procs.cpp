@@ -2700,7 +2700,7 @@ WSPEC(monowhip)
 
   if (dam < 1 && !number(0, 1)) {
     skill = get_skill(ch, SKILL_WHIPS_FLAILS, target);
-    if (!success_test(skill, target)) {
+    if (success_test(skill, target) <= 0) {
       act("Your whip flails out of control, striking you instead of $N!", FALSE, ch, 0, vict, TO_CHAR);
       act("$n's whip completely misses and recoils to hit $m!", TRUE, ch, 0, 0, TO_ROOM);
       dam_total = convert_damage(stage(-(success_test(GET_BOD(ch) + GET_DEFENSE(ch),
@@ -3609,7 +3609,7 @@ SPECIAL(room_damage_radiation)
   if (!ch)
     for (struct char_data *vict = room->people; next; vict = next) {
       next = vict->next_in_room;
-      if (!success_test(GET_BOD(vict), 8) && number(1, 3) == 3) {
+      if (success_test(GET_BOD(vict), 8) <= 0 && number(1, 3) == 3) {
         rad_dam = number(1,3);
         if (rad_dam == 3) {
           act("Your entire body is wracked with an intense inner heat as your nose begins to bleed and blood pours freely from your mouth.", FALSE, vict, 0, 0, TO_CHAR);

@@ -1136,7 +1136,7 @@ ACMD(do_get)
       send_to_char("You don't have a tooth compartment.\r\n", ch);
     else if (!cont->contains)
       send_to_char("There's nothing in there.\r\n", ch);
-    else if (!success_test(GET_QUI(ch), 4))
+    else if (success_test(GET_QUI(ch), 4) <= 0)
       send_to_char("You can't seem to get it out.\r\n", ch);
     else {
       obj = cont->contains;

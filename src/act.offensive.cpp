@@ -41,6 +41,8 @@ extern void damage_door(struct char_data *ch, struct room_data *room, int dir, i
 extern void perform_get_from_container(struct char_data *, struct obj_data *, struct obj_data *, int);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void draw_weapon(struct char_data *);
+extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+
 
 ACMD(do_assist)
 {
@@ -587,7 +589,7 @@ ACMD(do_flee)
   
   // You get twenty tries to escape per flee command... unless you're up against an unkillable.
   int max_tries = 20;
-  if (FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))
+  if (FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && !can_hurt(ch, FIGHTING(ch), TRUE, 0))
     max_tries = 200;
     
   for (int tries = 0; tries < max_tries; tries++) {
@@ -602,8 +604,8 @@ ACMD(do_flee)
           && FIGHTING(ch) 
           && ch->in_room == FIGHTING(ch)->in_room
           && !(AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))) {
-        if (!(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))
-            && !success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)))) {
+        if (can_hurt(ch, FIGHTING(ch), TRUE, 0)
+            && success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) <= 0) {
           act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
           act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
           act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
