@@ -4299,8 +4299,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     else {      
 #ifdef USE_MONOWHIP_CODE
       if (att->weapon 
-          && (rnum = real_object(GET_OBJ_VNUM(att->weapon)) >= 0)
-          && obj_index[rnum].wfunc == monowhip) {
+          && GET_OBJ_RNUM(att->weapon) >= 0
+          && obj_index[GET_OBJ_RNUM(att->weapon)].wfunc == monowhip) {
         att->power = 10;
         att->damage_level = SERIOUS;
         
@@ -4453,7 +4453,6 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
 #ifdef USE_MONOWHIP_CODE
   {
-    int rnum;
     struct obj_data *weapon = defender_tests_for_backlash ? def->weapon : att->weapon;
     struct char_data *attacker = defender_tests_for_backlash ? def->ch : att->ch;
     struct char_data *defender = defender_tests_for_backlash ? att->ch : def->ch;
