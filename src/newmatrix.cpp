@@ -2102,14 +2102,33 @@ void process_upload(struct matrix_icon *persona)
             GET_OBJ_VAL(persona->decker->deck, 5) -= GET_OBJ_VAL(soft, 2);
             GET_OBJ_VAL(soft, 8) = 0;
             if (GET_QUEST(persona->decker->ch)) {
-              for (int i = 0; i < quest_table[GET_QUEST(persona->decker->ch)].num_objs; i++)
-                if (quest_table[GET_QUEST(persona->decker->ch)].obj[i].objective == QOO_UPLOAD &&
-                  GET_OBJ_VNUM(soft) == quest_table[GET_QUEST(persona->decker->ch)].obj[i].vnum &&
-                  matrix[persona->in_host].vnum == quest_table[GET_QUEST(persona->decker->ch)].obj[i].o_data)
-                  {
-                    persona->decker->ch->player_specials->obj_complete[i] = 1;
-                    break;
-                  }
+              bool potential_failure = FALSE;
+              for (int i = 0; i < quest_table[GET_QUEST(persona->decker->ch)].num_objs; i++) {
+                if (quest_table[GET_QUEST(persona->decker->ch)].obj[i].objective != QOO_UPLOAD)
+                  continue;
+                
+                if (GET_OBJ_VNUM(soft) != quest_table[GET_QUEST(persona->decker->ch)].obj[i].vnum)
+                  continue;
+                  
+                if (matrix[persona->in_host].vnum == quest_table[GET_QUEST(persona->decker->ch)].obj[i].o_data) {
+                  send_to_icon(persona, "You feel a small bit of satisfaction at having completed this part of your job.\r\n");
+                  persona->decker->ch->player_specials->obj_complete[i] = 1;
+                  potential_failure = FALSE;
+                  break;
+                } else {
+                  potential_failure = TRUE;
+                }
+              }
+              if (potential_failure) {
+                send_to_icon(persona, "Something doesn't seem quite right. You're suddenly unsure if this is the right host for the job.\r\n");
+                snprintf(buf, sizeof(buf), "%s tried host %s (%ld) for job %ld, but it was incorrect. Rephrasing needed?",
+                         GET_CHAR_NAME(persona->decker->ch),
+                         matrix[persona->in_host].name,
+                         matrix[persona->in_host].vnum,
+                         quest_table[GET_QUEST(persona->decker->ch)].vnum
+                       );
+                mudlog(buf, persona->decker->ch, LOG_SYSLOG, TRUE);
+              }
             }
           } else {
             struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL);
