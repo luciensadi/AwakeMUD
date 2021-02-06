@@ -253,7 +253,10 @@ ACMD(do_copyover)
              fucky_states,    fucky_states    != 1 ? "s" : "",
              cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
              num_questors,    num_questors    != 1 ? "s" : "");
-    write_to_descriptor(ch->desc->descriptor, buf);    
+    if (write_to_descriptor(ch->desc->descriptor, buf) < 0) {
+      // Rofl, the copyover initiatior disconnected? Um.
+      close_socket(ch->desc);
+    }
   } else {
     log("WTF, ch who initiated copyover had no desc? ;-;");
   }

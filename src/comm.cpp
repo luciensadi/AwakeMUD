@@ -123,7 +123,7 @@ void nonblock(int s);
 int perform_subst(struct descriptor_data * t, char *orig, char *subst);
 int perform_alias(struct descriptor_data * d, char *orig);
 void record_usage(void);
-void make_prompt(struct descriptor_data * point);
+int make_prompt(struct descriptor_data * point);
 void check_idle_passwords(void);
 void init_descriptor (struct descriptor_data *newd, int desc);
 char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
@@ -812,14 +812,19 @@ void game_loop(int mother_desc)
     /* give each descriptor an appropriate prompt */
     {
       PERF_PROF_SCOPE(pr_send_prompt_, "send prompts");
-      for (d = descriptor_list; d; d = d->next) {
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
+        
         /* KaVir's protocol snippet. The last sent data was OOB, so do NOT draw the prompt */
         if (d->pProtocol->WriteOOB)
           continue;
         
         if (d->prompt_mode) {
-          make_prompt(d);
-          d->prompt_mode = 0;
+          if (make_prompt(d)) {
+            close_socket(d);
+          } else {
+            d->prompt_mode = 0;
+          }
         }
       }
     }
@@ -1103,25 +1108,27 @@ void send_keepalives() {
       keepalive(d);
 }
 
-void make_prompt(struct descriptor_data * d)
+int make_prompt(struct descriptor_data * d)
 {
   char *prompt;
   
+  const char *data = NULL;
+  
   if (d->str) {
     if (D_PRF_FLAGGED(d, PRF_SCREENREADER)) {
-      write_to_descriptor(d->descriptor, "Compose mode, write the at symbol on new line to quit. ");
+      data = "Compose mode, write the at symbol on new line to quit. ";
     } else {
-      write_to_descriptor(d->descriptor, "Compose mode, write @ on new line to quit]: ");
+      data = "Compose mode, write @ on new line to quit]: ";
     }
   }
   else if (d->showstr_point)
-    write_to_descriptor(d->descriptor, " Press [return] to continue, [q] to quit ");
+    data = " Press [return] to continue, [q] to quit ";
   else if (D_PRF_FLAGGED(d, PRF_NOPROMPT)) {
     // Anything below this line won't render for noprompters.
-    return;
+    return 0;
   }
   else if (STATE(d) == CON_POCKETSEC)
-    write_to_descriptor(d->descriptor, " > ");
+    data = " > ";
   
   else if (!d->connected)
   {
@@ -1135,10 +1142,9 @@ void make_prompt(struct descriptor_data * d)
       ch = d->character;
     }
     if (!prompt || !*prompt)
-      write_to_descriptor(d->descriptor, "> ");
+      data = "> ";
     else if (!strchr(prompt, '@')) {
-      prompt = colorize(d, prompt);
-      write_to_descriptor(d->descriptor, prompt);
+      data = colorize(d, prompt);
     } else {
       char temp[MAX_INPUT_LENGTH], str[11];
       int i = 0, j, physical;
@@ -1364,9 +1370,19 @@ void make_prompt(struct descriptor_data * d)
       temp[i] = '\0';
       int size = strlen(temp);
       const char *final_str = ProtocolOutput(d, temp, &size);
-      write_to_descriptor(d->descriptor, final_str);
+      data = final_str;
     }
   }
+  
+  if (data) {
+    // We let our caller handle the error here.
+    if (write_to_descriptor(d->descriptor, data) < 0) {
+      mudlog("Error writing prompt to descriptor, aborting.", d->character, LOG_SYSLOG, TRUE);
+      return -1;
+    }
+  }
+  
+  return 0;
 }
 
 void write_to_q(const char *txt, struct txt_q * queue, int aliased)
@@ -1555,8 +1571,8 @@ int new_descriptor(int s)
   
   if (sockets_connected >= max_players)
   {
-    write_to_descriptor(desc, "Sorry, Awakened Worlds is full right now... try again later!  :-)\r\n");
-    close(desc);
+    if (write_to_descriptor(desc, "Sorry, Awakened Worlds is full right now... try again later!  :-)\r\n") >= 0)
+      close(desc);
     return 0;
   }
   /* create a new descriptor */
@@ -1623,6 +1639,7 @@ int process_output(struct descriptor_data *t) {
    * now, send the output.  If this is an 'interruption', use the prepended
    * CRLF, otherwise send the straight output sans CRLF.
    */
+   // Result is saved and handed up.
   if (!t->prompt_mode)          /* && !t->connected) */
     result = write_to_descriptor(t->descriptor, i);
   else
@@ -1657,6 +1674,8 @@ int process_output(struct descriptor_data *t) {
 int write_to_descriptor(int desc, const char *txt) {
   int total, bytes_written;
   
+  assert(txt != NULL);
+  
   total = strlen(txt);
   
   do {
@@ -1670,6 +1689,7 @@ int write_to_descriptor(int desc, const char *txt) {
         log("process_output: socket write would block, about to close");
       else
         perror("Write to socket");
+      
       return -1;
     } else {
       txt += bytes_written;
@@ -1812,6 +1832,8 @@ int process_input(struct descriptor_data *t) {
       char buffer[MAX_INPUT_LENGTH + 64];
       
       snprintf(buffer, sizeof(buffer), "Line too long.  Truncated to:\r\n%s\r\n", tmp);
+      
+      // The calling function can handle this.
       if (write_to_descriptor(t->descriptor, buffer) < 0)
         return -1;
     }
@@ -2177,6 +2199,8 @@ void termsig(int Empty)
  *
  * SunOS Release 4.0.2 (sun386) needs this too, according to Tim Aldric.
  */
+ 
+ // This code is ANCIENT and does not work on Ubuntu. -- LS.
 
 
 #if defined(NeXT) || defined(sun386) || (defined(WIN32) && !defined(__CYGWIN__))
@@ -2205,10 +2229,11 @@ void signal_setup(void)
 {
   my_signal(SIGINT, hupsig);
   my_signal(SIGTERM, hupsig);
+  
+  signal(SIGPIPE, SIG_IGN); // If this is causing you compilation errors, comment it out and uncomment the below version.
 #if !defined(WIN32) || defined(__CYGWIN__)
   
-  my_signal(SIGPIPE, SIG_IGN);
-  my_signal(SIGALRM, SIG_IGN);
+  // my_signal(SIGPIPE, SIG_IGN);
 #endif
 }
 

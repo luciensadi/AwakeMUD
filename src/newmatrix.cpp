@@ -30,6 +30,8 @@ extern void create_deck(struct char_data *ch);
 extern void create_spell(struct char_data *ch);
 extern void create_ammo(struct char_data *ch);
 
+struct matrix_icon *find_icon_by_id(vnum_t idnum);
+
 #define IS_PROACTIVE(IC) ((IC)->ic.type != 2 && (IC)->ic.type != 3 && (IC)->ic.type != 4 && (IC)->ic.type != 10 && (IC)->ic.type != 5)
 #define HOST matrix[host]
 void make_seen(struct matrix_icon *icon, int idnum)
@@ -146,6 +148,23 @@ void dumpshock(struct matrix_icon *icon)
     send_to_char(icon->decker->ch, "You are dumped from the matrix!\r\n");
     snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", icon->name);
     send_to_host(icon->in_host, buf, icon, FALSE);
+    
+    // Clean up their uploads.
+    if (icon->decker->deck) {
+      for (struct obj_data *soft = icon->decker->deck->contains; soft; soft = soft->next_content)
+        if (GET_OBJ_TYPE(soft) != ITEM_PART && GET_OBJ_VAL(soft, 9) > 0 && GET_OBJ_VAL(soft, 8) == 1)
+          GET_OBJ_VAL(soft, 9) = GET_OBJ_VAL(soft, 8) = 0;
+    }
+          
+    // Clean out downloads involving them.
+    for (struct obj_data *file = matrix[icon->in_host].file; file; file = file->next_content) {
+      if (GET_DECK_ACCESSORY_FILE_REMAINING(file)
+          && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == icon) 
+      {
+        GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
+      }
+    }
+    
     int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security);
     int dam = convert_damage(stage(resist, matrix[icon->in_host].colour));
     for (struct obj_data *cyber = icon->decker->ch->cyberware; cyber; cyber = cyber->next_content)
@@ -1375,6 +1394,23 @@ ACMD(do_logoff)
   }
   snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", PERSONA->name);
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
+  
+  // Clean up their uploads.
+  if (PERSONA->decker->deck) {
+    for (struct obj_data *soft = PERSONA->decker->deck->contains; soft; soft = soft->next_content)
+      if (GET_OBJ_TYPE(soft) != ITEM_PART && GET_OBJ_VAL(soft, 9) > 0 && GET_OBJ_VAL(soft, 8) == 1)
+        GET_OBJ_VAL(soft, 9) = GET_OBJ_VAL(soft, 8) = 0;
+  }
+        
+  // Clean out downloads involving them.
+  for (struct obj_data *file = matrix[PERSONA->in_host].file; file; file = file->next_content) {
+    if (GET_DECK_ACCESSORY_FILE_REMAINING(file)
+        && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == PERSONA) 
+    {
+      GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
+    }
+  }
+  
   extract_icon(PERSONA);
   PERSONA = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
@@ -1660,14 +1696,21 @@ ACMD(do_load)
           send_to_icon(PERSONA, "Your deck is not powerful enough to run that program.\r\n");
         } else {
           int success = 1;
-          if (subcmd == SCMD_UPLOAD)
+          if (subcmd == SCMD_UPLOAD) {
+            if (GET_OBJ_VAL(soft, 8)) {
+              send_to_char(ch, "%s is already being uploaded.", GET_OBJ_NAME(soft));
+              return;
+            }
+              
             success = system_test(PERSONA->in_host, ch, TEST_FILES, SOFT_READ, 0);
+          }
           if (success > 0) {
             // TODO: This is accurately transcribed, but feels like a bug.
             GET_OBJ_VAL(soft, 9) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
-            if (subcmd == SCMD_UPLOAD)
+            if (subcmd == SCMD_UPLOAD) {
               GET_OBJ_VAL(soft, 8) = 1;
-            else
+              GET_OBJ_ATTEMPT(soft) = matrix[PERSONA->in_host].vnum;
+            } else
               DECKER->active -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
             send_to_icon(PERSONA, "You begin to upload %s to %s.\r\n", GET_OBJ_NAME(soft), (subcmd ? "the host" : "your icon"));
           } else
@@ -2090,6 +2133,15 @@ void process_upload(struct matrix_icon *persona)
     for (struct obj_data *soft = persona->decker->deck->contains; soft; soft = soft->next_content)
       if (GET_OBJ_TYPE(soft) != ITEM_PART && GET_OBJ_VAL(soft, 9) > 0)
       {
+        // Require that we're on the same host as we started the upload on.
+        if (GET_OBJ_VAL(soft, 8) == 1) {
+          if (GET_OBJ_ATTEMPT(soft) != matrix[persona->in_host].vnum) {
+            send_to_icon(persona, "Your connection to the host was interrupted, so %s fails to upload.\r\n", GET_OBJ_NAME(soft));
+            GET_OBJ_VAL(soft, 9) = GET_OBJ_VAL(soft, 8) = 0;
+            continue;
+          }
+        }
+        
         GET_OBJ_VAL(soft, 9) -= persona->decker->io;
         if (GET_OBJ_VAL(soft, 9) <= 0) {
           send_to_icon(persona, "%s has finished uploading to %s.\r\n", CAP(GET_OBJ_NAME(soft)),
@@ -2099,6 +2151,8 @@ void process_upload(struct matrix_icon *persona)
             if (matrix[persona->in_host].file)
               soft->next_content = matrix[persona->in_host].file;
             matrix[persona->in_host].file = soft;
+            // Make it seen by them.
+            GET_OBJ_VAL(soft, 7) = GET_IDNUM(persona->decker->ch);
             GET_OBJ_VAL(persona->decker->deck, 5) -= GET_OBJ_VAL(soft, 2);
             GET_OBJ_VAL(soft, 8) = 0;
             if (GET_QUEST(persona->decker->ch)) {
