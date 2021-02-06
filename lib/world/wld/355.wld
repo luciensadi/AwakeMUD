@@ -961,18 +961,17 @@ SecType:	Inside
 	ToVnum:	35543
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	Edgar Allan Poe~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Keywords:	Emily Dickenson~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Desc:$
-For the moon never beams without bringing me dreams
- Of the beautiful Annabel Lee;
- And the stars never rise but I feel the
-bright eyes
- Of the beautiful Annabel Lee;
- And so, all the night-time, I lie down by the side
- Of my darling - my
-darling - my life and my bride,
- In the sepulchre there by the sea,
- In her tomb by the sounding sea.
+Because I could not stop for Death
+ He kindly stopped for me;
+ The carriage held but just ourselves 
+ And immortality. 
+ We slowly
+drove, he knew no haste, 
+ And I had put away 
+ My labor, and my leisure too, 
+ For his civility.
  
 ~
 [EXTRADESC 1]
@@ -996,17 +995,18 @@ Abyss.
  
 ~
 [EXTRADESC 2]
-	Keywords:	Emily Dickenson~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Keywords:	Edgar Allan Poe~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Desc:$
-Because I could not stop for Death
- He kindly stopped for me;
- The carriage held but just ourselves 
- And immortality. 
- We slowly
-drove, he knew no haste, 
- And I had put away 
- My labor, and my leisure too, 
- For his civility.
+For the moon never beams without bringing me dreams
+ Of the beautiful Annabel Lee;
+ And the stars never rise but I feel the
+bright eyes
+ Of the beautiful Annabel Lee;
+ And so, all the night-time, I lie down by the side
+ Of my darling - my
+darling - my life and my bride,
+ In the sepulchre there by the sea,
+ In her tomb by the sounding sea.
  
 ~
 BREAK

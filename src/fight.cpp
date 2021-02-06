@@ -3686,6 +3686,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   struct combat_data *att = &attacker_data;
   struct combat_data *def = &defender_data;
   
+  // Monowhip code.
+  bool defender_tests_for_backlash = FALSE;
+  
   // Set the base TNs to accommodate get_skill() changing the TNs like the special snowflake it is.
   att->tn = 4;
   def->tn = 4;
@@ -4112,7 +4115,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // But wait-- there's more! Next we jump down to dealing damage.
   }
   // Melee combat.
-  else {
+  else {  // todo asdf this whole setup is wrong, what about counterstriking someone who's wielding a ranged weapon? You never get your melee setup, so you're attacking, what, barehanded? And then the weapon code below could potentially just fall back to using your gun anyways
     // Decide what skills we'll be using for our tests.
     att->skill = get_melee_skill(att);
     def->skill = get_melee_skill(def);
@@ -4217,9 +4220,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
              def->successes != 1 ? "s" : "",
              def->dice,
              def->tn);
-    if (net_successes < 0)
+    if (net_successes < 0) {
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^yNet successes is ^W%d^y, which will cause a counterattack.^n\r\n", net_successes);
-    else
+      defender_tests_for_backlash = TRUE;
+    } else
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Net successes is ^W%d^n.\r\n", net_successes);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
@@ -4239,6 +4243,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       struct combat_data *temp_att = att;
       att = def;
       def = temp_att;
+      
+      // We must be in melee mode now that they've counterattacked.
+      melee = TRUE;
       
       att->successes = -1 * net_successes;
     } else
@@ -4290,7 +4297,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
     // Melee weapon.
     else {      
-      int rnum = -1;
+#ifdef USE_MONOWHIP_CODE
       if (att->weapon 
           && (rnum = real_object(GET_OBJ_VNUM(att->weapon)) >= 0)
           && obj_index[rnum].wfunc == monowhip) {
@@ -4303,6 +4310,11 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         att->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
         att->power -= GET_IMPACT(def->ch);
       }
+#else
+      att->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
+      att->power -= GET_IMPACT(def->ch);
+#endif
+        
     }
     
     // Core p113.
@@ -4439,24 +4451,36 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
   damage(att->ch, def->ch, damage_total, att->dam_type, att->is_physical);
   
-  int rnum;
-  if (damage_total <= 0
-      && att->weapon 
-      && (rnum = real_object(GET_OBJ_VNUM(att->weapon)) >= 0)
-      && obj_index[rnum].wfunc == monowhip
-      && number(0, 1)) 
+#ifdef USE_MONOWHIP_CODE
   {
-    int target = 6, dam_total, skill = get_skill(att->ch, SKILL_WHIPS_FLAILS, target);
-    int successes = success_test(skill, target);
-    if (successes <= 0) {
-      act("Your monowhip flails out of control, striking you instead of $N!", FALSE, att->ch, 0, def->ch, TO_CHAR);
-      act("$n's monowhip completely misses and recoils to hit $m!", TRUE, att->ch, 0, 0, TO_ROOM);
-      dam_total = convert_damage(stage(-1 * success_test(GET_BOD(att->ch) + (successes == 0 ? GET_DEFENSE(att->ch) : 0), 10), SERIOUS));
+    int rnum;
+    struct obj_data *weapon = defender_tests_for_backlash ? def->weapon : att->weapon;
+    struct char_data *attacker = defender_tests_for_backlash ? def->ch : att->ch;
+    struct char_data *defender = defender_tests_for_backlash ? att->ch : def->ch;
+    
+    if (weapon)
+      log_vfprintf("Checking monowhip test for %s against %s wielding %s.", GET_CHAR_NAME(attacker), GET_CHAR_NAME(defender), weapon ? GET_OBJ_NAME(weapon) : "nothing");
+    if ((damage_total <= 0 || defender_tests_for_backlash)
+        && weapon 
+        && obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) 
+    {
+      int target = 6, dam_total, skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
+      int successes = success_test(skill, target);
+      log_vfprintf("Skill of %d, target of %d, successes is %d.", skill, target, successes);
+      if (successes <= 0) {
+        act("Your monowhip flails out of control, striking you instead of $N!", FALSE, attacker, 0, defender, TO_CHAR);
+        act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
+        dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
 
-      damage(att->ch, att->ch, dam_total, TYPE_RECOIL, PHYSICAL);
-      return;
+        damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL);
+        return;
+      }
+    } else {
+      if (weapon)
+        log_vfprintf("Monowhip failure: rnum %d, spec %s", GET_OBJ_RNUM(weapon), GET_OBJ_RNUM(weapon) >= 0 ? (obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip ? "whip" : "?") : "n/a");
     }
   }
+#endif
   
   if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
     GET_LASTHIT(def->ch) = GET_IDNUM(att->ch);

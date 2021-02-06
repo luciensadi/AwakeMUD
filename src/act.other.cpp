@@ -4165,7 +4165,7 @@ ACMD(do_ammo) {
                    MIN(GET_WEAPON_MAX_AMMO(secondary), GET_OBJ_VAL(secondary->contains, 9)),
                    GET_WEAPON_MAX_AMMO(secondary));
     } else {
-      send_to_char(ch, "Secondary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(primary));
+      send_to_char(ch, "Secondary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(secondary));
     }
     sent_a_message = TRUE;
   } else if (secondary) {
