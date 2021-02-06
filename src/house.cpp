@@ -215,6 +215,25 @@ bool House_load(struct house_control_rec *house)
   return TRUE;
 }
 
+// Require that all objects link back to each other.
+void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
+  if (!obj)
+    return;
+    
+  if (in_obj && obj->in_obj != in_obj) {
+    snprintf(buf3, sizeof(buf3), "^YSYSERR: in_obj mismatch for %s (%ld) in %ld! Rectifying...", 
+             GET_OBJ_NAME(obj),
+             GET_OBJ_VNUM(obj),
+             get_obj_in_room(obj) ? GET_ROOM_VNUM(get_obj_in_room(obj)) : -1);
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    obj->in_obj = in_obj;
+  }
+  
+  for (struct obj_data *tmp_obj = obj->contains; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    validate_in_obj_pointers(tmp_obj, obj);
+  }
+}
+
 #define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
   if (obj_val != proto_val)                                        \
     fprintf(fl, (sectname), (obj_val));                            \
@@ -232,6 +251,8 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   if (!file_name || !*file_name || !(fl = fopen(file_name, "wb"))) {
     perror("SYSERR: Error saving house file");
     return;
+  } else {
+    log_vfprintf("Saving house %s.", file_name);
   }
   
   char print_buffer[FILEBUF_SIZE];
@@ -250,14 +271,19 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
 
   obj = world[rnum].contents;
   
+  for (struct obj_data *tmp_obj = obj; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    validate_in_obj_pointers(tmp_obj, NULL);
+  }
+  
   fprintf(fl, "[HOUSE]\n");
   
   struct obj_data *prototype = NULL;
   int real_obj;
+  
   for (int o = 0; obj;)
   {
     if ((real_obj = real_object(GET_OBJ_VNUM(obj))) == -1) {
-      snprintf(buf, sizeof(buf), "Warning: Will lose house item %s^g from %s^g (%ld) due to nonexistent rnum.", 
+      snprintf(buf, sizeof(buf), "^YWarning: Will lose house item %s^g from %s^g (%ld) due to nonexistent rnum. [house_error_grep_string]", 
                GET_OBJ_NAME(obj),
                GET_ROOM_NAME(obj->in_room),
                GET_ROOM_VNUM(obj->in_room));
@@ -267,7 +293,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     }
       
     prototype = &obj_proto[real_obj];
-    if (!IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_KEY) {
+    if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
       fprintf(fl, "\t[Object %d]\n", o);
       o++;
       fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(obj));
@@ -290,13 +316,25 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
         fprintf(fl, "\t\tName:\t%s\n", obj->restring);
       if (obj->photo)
         fprintf(fl, "\t\tPhoto:$\n%s~\n", cleanup(buf2, obj->photo));
+        
+      if (obj->contains) {
+        obj = obj->contains;
+        level++;
+        continue;
+      }
+    } else {
+      log_vfprintf("Discarding house item %s (%ld) from %s because it is !RENT. [house_error_grep_string]",
+                   GET_OBJ_NAME(obj),
+                   GET_OBJ_VNUM(obj),
+                   file_name);
+    }
+    
+    if (obj->next_content) {
+      obj = obj->next_content;
+      continue;
     }
 
-    if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
-      obj = obj->contains;
-      level++;
-      continue;
-    } else if (!obj->next_content && obj->in_obj)
+    if (obj->in_obj)
       while (obj && !obj->next_content && level >= 0) {
         obj = obj->in_obj;
         level--;
