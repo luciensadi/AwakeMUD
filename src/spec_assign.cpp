@@ -868,6 +868,7 @@ void assign_objects(void)
   WSPEC(monowhip);
 
   ASSIGNWEAPON(660, monowhip);
+  ASSIGNWEAPON(80108, monowhip);
 }
 
 /* assign special procedures to rooms */

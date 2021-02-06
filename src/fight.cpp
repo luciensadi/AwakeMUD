@@ -62,6 +62,7 @@ SPECIAL(weapon_dominator);
 SPECIAL(landlord_spec);
 SPECIAL(pocket_sec);
 SPECIAL(receptionist);
+WSPEC(monowhip);
 
 extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
@@ -4093,6 +4094,22 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->successes -= def->successes;
       
       snprintf(rbuf, sizeof(rbuf), "Dodge: Dice %d, TN %d, Successes %d.  This means attacker's net successes = %d.", def->dice, def->tn, def->successes, att->successes);
+    
+      // Monowhip?
+      int rnum = -1;
+      if (att->weapon 
+          && (rnum = real_object(GET_OBJ_VNUM(att->weapon)) >= 0)
+          && obj_index[rnum].wfunc == monowhip) {
+        int target = 6, dam_total, skill = get_skill(att->ch, SKILL_WHIPS_FLAILS, target);
+        if (!success_test(skill, target)) {
+          act("Your monowhip flails out of control, striking you instead of $N!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+          act("$n's monowhip completely misses and recoils to hit $m!", TRUE, att->ch, 0, 0, TO_ROOM);
+          dam_total = convert_damage(stage(-1 * success_test(GET_BOD(att->ch) + GET_DEFENSE(att->ch), 10), SERIOUS));
+    
+          damage(att->ch, att->ch, dam_total, TYPE_RECOIL, PHYSICAL);
+          return;
+        }
+      }
     } else {
       att->successes = MAX(att->successes, 1);
       snprintf(rbuf, sizeof(rbuf), "Opponent unable to dodge, successes confirmed as %d.", att->successes);
@@ -4101,7 +4118,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // If the attack failed, print the relevant message and terminate.
     if (att->successes < 1) {
-      snprintf(rbuf, sizeof(rbuf), "%s failed to roll any successes, so we're bailing out.", GET_CHAR_NAME(attacker));
+      snprintf(rbuf, sizeof(rbuf), "%s failed to have net successes, so we're bailing out.", GET_CHAR_NAME(attacker));
       act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
       
       combat_message(att->ch, def->ch, att->weapon, -1, att->burst_count);
@@ -4288,9 +4305,20 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         SHOTS_FIRED(att->ch)++;
     }
     // Melee weapon.
-    else {
-      att->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
-      att->power -= GET_IMPACT(def->ch);
+    else {      
+      int rnum = -1;
+      if (att->weapon 
+          && (rnum = real_object(GET_OBJ_VNUM(att->weapon)) >= 0)
+          && obj_index[rnum].wfunc == monowhip) {
+        att->power = 10;
+        att->damage_level = SERIOUS;
+        
+        att->power -= GET_IMPACT(def->ch) / 2;
+      }
+      else {
+        att->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
+        att->power -= GET_IMPACT(def->ch);
+      }
     }
     
     // Core p113.
@@ -4422,7 +4450,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
           damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
   
-  if (!melee)
+  if (!(att->weapon_is_gun))
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->burst_count);
   
   damage(att->ch, def->ch, damage_total, att->dam_type, att->is_physical);
