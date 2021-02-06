@@ -4434,7 +4434,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
           damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
   
-  if (!(att->weapon_is_gun))
+  if (att->weapon_is_gun)
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->burst_count);
   
   damage(att->ch, def->ch, damage_total, att->dam_type, att->is_physical);
