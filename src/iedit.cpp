@@ -325,7 +325,7 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
       break;
     case ITEM_FOCUS:
       send_to_char("  0) Expendable Spell\r\n  1) Specific Spell\r\n  2) Spell Category\r\n  3) Spirit\r\n"
-                   "  4) Power\r\n  5) Sustaining\r\n  6) Weapon\r\nFocus type: ", CH);
+                   "  4) Power\r\n  5) Sustaining\r\n  6) Weapon\r\n  7) Spell Defense\r\nFocus type: ", CH);
       break;
     case ITEM_CLIMBING:
       send_to_char("Enter rating (1-3): ", CH);
@@ -1959,7 +1959,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             number--;
           break;
         case ITEM_FOCUS:
-          if (number < 0 || number > 6) {
+          if (number < 0 || number > FOCI_SPELL_DEFENSE) {
             send_to_char("Invalid option.\r\nFocus type: ", CH);
             return;
           }

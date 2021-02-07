@@ -153,7 +153,7 @@ bool House_load(struct house_control_rec *house)
         }
         
         const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
-        if (!player_name || !strcmp(player_name, "deleted")) {
+        if (!player_name || !str_cmp(player_name, "deleted")) {
           // Whoops, it belongs to a deleted character. RIP.
           extract_obj(obj);
           continue;
@@ -185,21 +185,53 @@ bool House_load(struct house_control_rec *house)
         if (inside == last_in)
           last_obj = last_obj->in_obj;
         else if (inside < last_in)
-          while (inside <= last_in && last_obj) {
+          while (inside <= last_in) {
+            if (!last_obj) {
+              snprintf(buf2, sizeof(buf2), "Load error: Nested-item save failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
+              mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+              break;
+            }
             last_obj = last_obj->in_obj;
             last_in--;
           }
         if (last_obj)
           obj_to_obj(obj, last_obj);
+        else
+          obj_to_room(obj, &world[rnum]);
       } else
         obj_to_room(obj, &world[rnum]);
 
       last_in = inside;
       last_obj = obj;
+    } else {
+      snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.", 
+               vnum,
+               data.GetString("HOUSE/Name", "no restring"),
+               data.GetString("HOUSE/Photo", "no photo"));
+      mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
   }
   
   return TRUE;
+}
+
+// Require that all objects link back to each other.
+void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
+  if (!obj)
+    return;
+    
+  if (in_obj && obj->in_obj != in_obj) {
+    snprintf(buf3, sizeof(buf3), "^YSYSERR: in_obj mismatch for %s (%ld) in %ld! Rectifying...", 
+             GET_OBJ_NAME(obj),
+             GET_OBJ_VNUM(obj),
+             get_obj_in_room(obj) ? GET_ROOM_VNUM(get_obj_in_room(obj)) : -1);
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    obj->in_obj = in_obj;
+  }
+  
+  for (struct obj_data *tmp_obj = obj->contains; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    validate_in_obj_pointers(tmp_obj, obj);
+  }
 }
 
 #define PRINT_TO_FILE_IF_CHANGED(sectname, obj_val, proto_val) { \
@@ -219,6 +251,8 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   if (!file_name || !*file_name || !(fl = fopen(file_name, "wb"))) {
     perror("SYSERR: Error saving house file");
     return;
+  } else {
+    log_vfprintf("Saving house %s.", file_name);
   }
   
   char print_buffer[FILEBUF_SIZE];
@@ -237,14 +271,19 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
 
   obj = world[rnum].contents;
   
+  for (struct obj_data *tmp_obj = obj; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    validate_in_obj_pointers(tmp_obj, NULL);
+  }
+  
   fprintf(fl, "[HOUSE]\n");
   
   struct obj_data *prototype = NULL;
   int real_obj;
+  
   for (int o = 0; obj;)
   {
     if ((real_obj = real_object(GET_OBJ_VNUM(obj))) == -1) {
-      snprintf(buf, sizeof(buf), "Warning: Will lose house item %s^g from %s^g (%ld) due to nonexistent rnum.", 
+      snprintf(buf, sizeof(buf), "^YWarning: Will lose house item %s^g from %s^g (%ld) due to nonexistent rnum. [house_error_grep_string]", 
                GET_OBJ_NAME(obj),
                GET_ROOM_NAME(obj->in_room),
                GET_ROOM_VNUM(obj->in_room));
@@ -254,7 +293,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     }
       
     prototype = &obj_proto[real_obj];
-    if (!IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_KEY) {
+    if (!IS_OBJ_STAT(obj, ITEM_NORENT)) {
       fprintf(fl, "\t[Object %d]\n", o);
       o++;
       fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(obj));
@@ -277,13 +316,25 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
         fprintf(fl, "\t\tName:\t%s\n", obj->restring);
       if (obj->photo)
         fprintf(fl, "\t\tPhoto:$\n%s~\n", cleanup(buf2, obj->photo));
+        
+      if (obj->contains) {
+        obj = obj->contains;
+        level++;
+        continue;
+      }
+    } else {
+      log_vfprintf("Discarding house item %s (%ld) from %s because it is !RENT. [house_error_grep_string]",
+                   GET_OBJ_NAME(obj),
+                   GET_OBJ_VNUM(obj),
+                   file_name);
+    }
+    
+    if (obj->next_content) {
+      obj = obj->next_content;
+      continue;
     }
 
-    if (obj->contains && !IS_OBJ_STAT(obj, ITEM_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
-      obj = obj->contains;
-      level++;
-      continue;
-    } else if (!obj->next_content && obj->in_obj)
+    if (obj->in_obj)
       while (obj && !obj->next_content && level >= 0) {
         obj = obj->in_obj;
         level--;
@@ -786,6 +837,18 @@ void House_boot(void)
 
 /* "House Control" functions */
 
+int count_objects(struct obj_data *obj) {
+  if (!obj)
+    return 0;
+    
+  int total = 1; // self
+  
+  for (struct obj_data *contents = obj->contains; contents; contents = contents->next_content)
+    total += count_objects(contents);
+    
+  return total;
+}
+
 const char *HCONTROL_FORMAT =
   "Usage:  hcontrol destroy <house vnum>\r\n"
   "       hcontrol show\r\n";
@@ -793,19 +856,32 @@ void hcontrol_list_houses(struct char_data *ch)
 {
   char *own_name;
 
-  strcpy(buf, "Address  Atrium  Guests  Owner\r\n");
-  strcat(buf, "-------  ------  ------  ------------\r\n");
+  strcpy(buf, "Address  Atrium  Guests  Owner           Crap Count\r\n");
+  strcat(buf, "-------  ------  ------  --------------  -----------\r\n");
   send_to_char(buf, ch);
 
   for (struct landlord *llord = landlords; llord; llord = llord->next)
     for (struct house_control_rec *house = llord->rooms; house; house = house->next)
       if (house->owner)
       {
+        int house_rnum = real_room(house->vnum);
+        int total = 0;
+        if (house_rnum > -1) {
+          for (struct obj_data *obj = world[house_rnum].contents; obj; obj = obj->next_content)
+            total += count_objects(obj);
+          for (struct veh_data *veh = world[house_rnum].vehicles; veh; veh = veh->next_veh) {
+            total += 1;
+            for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content)
+              total += count_objects(obj);
+          }
+        } else
+          total = -1;
+          
         own_name = get_player_name(house->owner);
         if (!own_name)
           own_name = str_dup("<UNDEF>");
-        snprintf(buf, sizeof(buf), "%7ld %7ld    0     %-12s\r\n",
-                house->vnum, world[house->atrium].number, CAP(own_name));
+        snprintf(buf, sizeof(buf), "%7ld %7ld    0     %-14s  %d\r\n",
+                house->vnum, world[house->atrium].number, CAP(own_name), total);
         send_to_char(buf, ch);
         DELETE_ARRAY_IF_EXTANT(own_name);
       }

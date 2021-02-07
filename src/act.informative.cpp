@@ -55,6 +55,7 @@ extern const char *dist_name[];
 extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
+extern int calculate_vehicle_entry_load(struct veh_data *veh);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -436,7 +437,7 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           success_test_tn = 3;
         }
         
-        if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn))
+        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0)
           continue;
       }
     } else if (ch->in_veh && i->in_room && i->in_room == ch->in_veh->in_room) {
@@ -453,7 +454,7 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           success_test_tn = 4;
         }
         
-        if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn))
+        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn) <= 0)
           continue;
       }
     }
@@ -815,19 +816,34 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       bool already_printed = FALSE;
       if (mob_index[GET_MOB_RNUM(i)].func || mob_index[GET_MOB_RNUM(i)].sfunc) {
         if (mob_index[GET_MOB_RNUM(i)].func == trainer || mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to train you.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to train you.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "",
+                   HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == teacher || mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you practice your skills.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
-                   GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+          if (MOB_FLAGGED(i, MOB_INANIMATE)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...it%s can be used to help you practice your skills.%s^n\r\n",
+                     already_printed ? " also" : "",
+                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+          } else {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you practice your skills.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
+                     GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YPRACTICE^y command to begin." : "");
+          }
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher || mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train in metamagic techniques.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train in metamagic techniques.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
@@ -835,7 +851,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you train your powers.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train your powers.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
             already_printed = TRUE;
           }
@@ -843,43 +862,63 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks willing to help you learn new spells.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you learn new spells.%s^n\r\n", 
+                     HSSH(i), 
+                     already_printed ? " also" : "",
+                     HSSH_SHOULD_PLURAL(i) ? "looks" : "look",
                      GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLEARN^y command to begin." : "");
             already_printed = TRUE;
           }
         }
         if (mob_index[GET_MOB_RNUM(i)].func == johnson || mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP JOB^y for instructions." : "");
           already_printed = TRUE;
         }
         if ((mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis)
             || (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].sfunc == terell_davis)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.%s^n\r\n", HSSH(i), already_printed ? " also" : "", HASHAVE(i),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "", 
+                   HASHAVE(i),
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLIST^y command to see them." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec || mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP APARTMENTS^y for details." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == fence || mob_index[GET_MOB_RNUM(i)].sfunc == fence) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == hacker || mob_index[GET_MOB_RNUM(i)].sfunc == hacker) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- you can ^YGIVE^y them to %s.^n\r\n", HSSH(i), already_printed ? " also" : "", HMHR(i));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- you can ^YGIVE^y them to %s.^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "", 
+                   HMHR(i));
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == receptionist || mob_index[GET_MOB_RNUM(i)].sfunc == receptionist) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.%s^n\r\n", HSSH(i), already_printed ? " also" : "", HASHAVE(i),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.%s^n\r\n", 
+                   HSSH(i), 
+                   already_printed ? " also" : "", 
+                   HASHAVE(i),
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
           already_printed = TRUE;
         }
         if (mob_index[GET_MOB_RNUM(i)].func == fixer || mob_index[GET_MOB_RNUM(i)].sfunc == fixer) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n", HSSH(i), already_printed ? " also" : "",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n",
+                   HSSH(i), 
+                   already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YREPAIR^y command to proceed." : "");
           already_printed = TRUE;
         }
@@ -1101,77 +1140,76 @@ if (mob_index[GET_MOB_RNUM(i)].func == (function) || mob_index[GET_MOB_RNUM(i)].
     strcat(buf, ", surrounded by flames,");
   
   if (GET_QUI(i) <= 0)
-    strcat(buf, " is here, seemingly paralyzed.");
+    strlcat(buf, " is here, seemingly paralyzed.", sizeof(buf));
   else if (PLR_FLAGGED(i, PLR_MATRIX))
-    strcat(buf, " is here, jacked into a cyberdeck.");
+    strlcat(buf, " is here, jacked into a cyberdeck.", sizeof(buf));
   else if (PLR_FLAGGED(i, PLR_REMOTE))
-    strcat(buf, " is here, jacked into a remote control deck.");
+    strlcat(buf, " is here, jacked into a remote control deck.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_DESIGN) || AFF_FLAGGED(i, AFF_PROGRAM))
-    strcat(buf, " is here, typing away at a computer.");
+    strlcat(buf, " is here, typing away at a computer.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PART_DESIGN) || AFF_FLAGGED(i, AFF_PART_BUILD))
-    strcat(buf, " is here, working on a cyberdeck.");
+    strlcat(buf, " is here, working on a cyberdeck.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_SPELLDESIGN))
-    strcat(buf, " is here, working on a spell design.");
+    strlcat(buf, " is here, working on a spell design.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_CONJURE))
-    strcat(buf, " is here, performing a conjuring ritual.");
+    strlcat(buf, " is here, performing a conjuring ritual.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_LODGE))
-    strcat(buf, " is here, building a shamanic lodge.");
+    strlcat(buf, " is here, building a shamanic lodge.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_CIRCLE))
-    strcat(buf, " is here, drawing a hermetic circle.");
+    strlcat(buf, " is here, drawing a hermetic circle.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PACKING))
-    strcat(buf, " is here, working on a workshop.");
+    strlcat(buf, " is here, working on a workshop.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_BONDING))
-    strcat(buf, " is here, performing a bonding ritual.");
+    strlcat(buf, " is here, performing a bonding ritual.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PRONE))
-    strcat(buf, " is laying prone here.");
+    strlcat(buf, " is laying prone here.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PILOT))
   {
     if (AFF_FLAGGED(i, AFF_RIG))
-      strcat(buf, " is plugged into the dashboard.");
+      strlcat(buf, " is plugged into the dashboard.", sizeof(buf));
     else
-      strcat(buf, " is sitting in the drivers seat.");
+      strlcat(buf, " is sitting in the drivers seat.", sizeof(buf));
   } else if ((obj = get_mount_manned_by_ch(i))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is manning %s.", GET_OBJ_NAME(obj));
   } else if (GET_POS(i) != POS_FIGHTING)
   {
-    strcat(buf, positions[(int) GET_POS(i)]);
     if (GET_DEFPOS(i))
-      snprintf(buf2, sizeof(buf2), ", %s.", GET_DEFPOS(i));
+      snprintf(buf2, sizeof(buf2), " %s^n", GET_DEFPOS(i));
     else
-      strncpy(buf2, ".", sizeof(buf2));
-    strcat(buf, buf2);
+      snprintf(buf2, sizeof(buf2), " %s^n.", positions[(int) GET_POS(i)]);
+    strlcat(buf, buf2, sizeof(buf));
   } else
   {
     if (FIGHTING(i)) {
       if (AFF_FLAGGED(ch, AFF_BANISH))
-        strcat(buf, " is here, attempting to banish ");
+        strlcat(buf, " is here, attempting to banish ", sizeof(buf));
       else
-        strcat(buf, " is here, fighting ");
+        strlcat(buf, " is here, fighting ", sizeof(buf));
       if (FIGHTING(i) == ch)
-        strcat(buf, "YOU!");
+        strlcat(buf, "YOU!", sizeof(buf));
       else {
         if (i->in_room == FIGHTING(i)->in_room)
-          strcat(buf, PERS(FIGHTING(i), ch));
+          strlcat(buf, PERS(FIGHTING(i), ch), sizeof(buf));
         else
-          strcat(buf, "someone in the distance");
-        strcat(buf, "!");
+          strlcat(buf, "someone in the distance", sizeof(buf));
+        strlcat(buf, "!", sizeof(buf));
       }
     } else if (FIGHTING_VEH(i)) {
-      strcat(buf, " is here, fighting ");
+      strlcat(buf, " is here, fighting ", sizeof(buf));
       if ((ch->in_veh && ch->in_veh == FIGHTING_VEH(i)) || (ch->char_specials.rigging && ch->char_specials.rigging == FIGHTING_VEH(i)))
-        strcat(buf, "YOU!");
+        strlcat(buf, "YOU!", sizeof(buf));
       else {
         if (i->in_room == FIGHTING_VEH(i)->in_room)
-          strcat(buf, GET_VEH_NAME(FIGHTING_VEH(i)));
+          strlcat(buf, GET_VEH_NAME(FIGHTING_VEH(i)), sizeof(buf));
         else
-          strcat(buf, "someone in the distance");
-        strcat(buf, "!");
+          strlcat(buf, "someone in the distance", sizeof(buf));
+        strlcat(buf, "!", sizeof(buf));
       }
     } else                      /* NIL fighting pointer */
-      strcat(buf, " is here struggling with thin air.");
+      strlcat(buf, " is here struggling with thin air.", sizeof(buf));
   }
   
-  strcat(buf, "\r\n");
+  strlcat(buf, "\r\n", sizeof(buf));
   
   send_to_char(buf, ch);
 }
@@ -1207,22 +1245,22 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
       bool failed = FALSE;
       if (veh->cspeed > SPEED_IDLE) {
         if (get_speed(veh) >= 200) {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7)) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) <= 0) {
             failed = TRUE;
           }
         }
         else if (get_speed(veh) >= 120) {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6)) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) <= 0) {
             failed = TRUE;
           }
         }
         else if (get_speed(veh) >= 60) {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5)) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) <= 0) {
             failed = TRUE;
           }
         }
         else {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4)) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) <= 0) {
             failed = TRUE;
           }
         }
@@ -1654,7 +1692,7 @@ void look_in_direction(struct char_data * ch, int dir)
   if (EXIT(ch, dir))
   {
     if (IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN)) {
-      if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, dir)->hidden)) {
+      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), EXIT(ch, dir)->hidden) <= 0) {
         send_to_char("You see nothing special.\r\n", ch);
         return;
       } else {
@@ -1884,11 +1922,13 @@ void look_at_target(struct char_data * ch, char *arg)
   if (found_char != NULL)
   {
     look_at_char(found_char, ch);
+    /*
     if (ch != found_char && !ch->char_specials.rigging) {
       if (CAN_SEE(found_char, ch))
         act("$n looks at you.", TRUE, ch, 0, found_char, TO_VICT);
       act("$n looks at $N.", TRUE, ch, 0, found_char, TO_NOTVICT);
     }
+    */
     ch->in_room = was_in;
     return;
   } else if (ch->in_veh)
@@ -2051,6 +2091,8 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
           k->sig, k->pilot);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n slots in its autonav and carrying capacity of ^c%d^n (%d in use).\r\n",
           k->autonav, (int)k->load, (int)k->usedload);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n. If loaded into another vehicle, it takes up ^c%d^n load.\r\n",
+                  engine_type[k->engine], calculate_vehicle_entry_load(k));
   send_to_char(buf, ch);
 }
 
@@ -2332,11 +2374,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       bal = GET_WORN_BALLISTIC(j);
       imp = GET_WORN_IMPACT(j);
       if (GET_WORN_MATCHED_SET(j)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is part of matched set number ^c%d^n. Wear all the matched items to receive its full value.\r\n", GET_WORN_MATCHED_SET(j));
         bal = (int)(GET_WORN_BALLISTIC(j) / 100);
         imp = (int)(GET_WORN_IMPACT(j) / 100);
       }
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. Its concealability rating is ^c%d^n.",
-              bal, imp, GET_WORN_CONCEAL_RATING(j));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. "
+                                                      "People have a ^c%d^n target number when trying to see under it.\r\n", bal, imp, GET_WORN_CONCEAL_RATING(j));
       break;
     case ITEM_DOCWAGON:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
@@ -2409,8 +2452,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               spells[GET_OBJ_VAL(j, 1)].name, GET_OBJ_VAL(j, 2) ? "Shamanic" : "Hermetic");
       break;
     case ITEM_PART:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n designed for MPCP ^c%d^n decks.", AN(parts[GET_OBJ_VAL(j, 0)].name),
-              parts[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s %s^c%s^n designed for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.", 
+               AN(parts[GET_OBJ_VAL(j, 0)].name),
+               !GET_PART_DESIGN_COMPLETION(j) ? "not-yet-designed " : "",
+               parts[GET_OBJ_VAL(j, 0)].name, 
+               GET_OBJ_VAL(j, 2),
+               GET_PART_PART_COST(j),
+               GET_PART_CHIP_COST(j)
+             );
       break;
     case ITEM_CUSTOM_DECK:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");
@@ -2442,7 +2491,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its rating is ^c%d^n.", GET_OBJ_VAL(j, 0));
       break;
     case ITEM_CHIP:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It grants the skill ^c%s^n at rating ^c%d^n.", skills[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 1));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It grants the skill ^c%s^n at rating ^c%d^n.", skills[GET_CHIP_SKILL(j)].name, GET_CHIP_RATING(j));
       break;
     case ITEM_HOLSTER:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is designed for a ^c%s^n.", holster_types[GET_OBJ_VAL(j, 0)]);
@@ -2631,7 +2680,7 @@ ACMD(do_examine)
   if (found_veh) {
       if (subcmd == SCMD_PROBE) {
         // If they don't own the vehicle and the hood isn't open, they can't view the stats.
-        if (GET_IDNUM(ch) != found_veh->owner && !found_veh->hood) {
+        if (!access_level(ch, LVL_ADMIN) && GET_IDNUM(ch) != found_veh->owner && !found_veh->hood) {
           send_to_char("You can only see the OOC stats for vehicles you own or vehicles that have popped hoods.\r\n", ch);
           return;
         }
@@ -2710,18 +2759,15 @@ ACMD(do_examine)
       if (!tmp_object->contains)
         send_to_char("Looking inside reveals it to be empty.\r\n", ch);
       else {
-        struct obj_data *exobj = NULL;
-        if (GET_OBJ_VNUM(tmp_object) > 0)
-          exobj = read_object(GET_OBJ_RNUM(tmp_object), REAL);
-        if (exobj) {
-          int q = GET_OBJ_VAL(tmp_object, 0) - (int)(GET_OBJ_WEIGHT(exobj)), x = (int)(GET_OBJ_WEIGHT(tmp_object) - GET_OBJ_WEIGHT(exobj));
-          extract_obj(exobj);
-          if (x >= q * .9)
-            send_to_char("It is bursting at the seams.\r\n", ch);
-          else if (x >= q / 2)
-            send_to_char("It is more than half full.\r\n", ch);
-          else send_to_char("It is less than half full.\r\n", ch);
-        }
+        float weight_when_full =get_proto_weight(tmp_object) + GET_OBJ_VAL(tmp_object, 0);
+        
+        if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full * .9)
+          send_to_char("It is bursting at the seams.\r\n", ch);
+        else if (GET_OBJ_WEIGHT(tmp_object) >= weight_when_full / 2)
+          send_to_char("It is more than half full.\r\n", ch);
+        else 
+          send_to_char("It is less than half full.\r\n", ch);
+        
         send_to_char("When you look inside, you see:\r\n", ch);
         look_in_obj(ch, arg, TRUE);
       }
@@ -4378,16 +4424,32 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
   
   if (obj->in_room)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld] %s\r\n", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
-  else if (obj->carried_by)
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "carried by %s\r\n", PERS(obj->carried_by, ch));
-  else if (obj->worn_by)
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "worn by %s\r\n", PERS(obj->worn_by, ch));
-  else if (obj->in_obj)
-  {
+  else if (obj->carried_by) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "carried by %s", GET_CHAR_NAME(obj->carried_by));
+    if (obj->carried_by->in_room) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)\r\n", GET_ROOM_VNUM(obj->carried_by->in_room), GET_ROOM_NAME(obj->carried_by->in_room));
+    } else if (obj->carried_by->in_veh) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)\r\n", GET_VEH_VNUM(obj->carried_by->in_veh), GET_VEH_NAME(obj->carried_by->in_veh));
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^Rnowhere^n\r\n");
+    }
+  }
+  else if (obj->worn_by) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "worn by %s", GET_CHAR_NAME(obj->worn_by));
+    if (obj->worn_by->in_room) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ room %ld (%s)\r\n", GET_ROOM_VNUM(obj->worn_by->in_room), GET_ROOM_NAME(obj->worn_by->in_room));
+    } else if (obj->worn_by->in_veh) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " @ veh %ld (%s)\r\n", GET_VEH_VNUM(obj->worn_by->in_veh), GET_VEH_NAME(obj->worn_by->in_veh));
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^Rnowhere^n\r\n");
+    }
+  } else if (obj->in_obj) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "inside %s%s\r\n",
             GET_OBJ_NAME(obj->in_obj), (recur ? ", which is" : " "));
     if (recur)
       print_object_location(0, obj->in_obj, ch, recur);
+  } else if (obj->in_veh) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in %s @ %ld%s", GET_VEH_NAME(obj->in_veh), GET_ROOM_VNUM(get_obj_in_room(obj)), obj->in_veh->in_veh ? " (nested veh)" : "");
   } else
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "in an unknown location\r\n");
 }
@@ -4778,6 +4840,8 @@ ACMD(do_commands)
   send_to_char(buf, ch);
 }
 
+// TODO: rscan, which is like scan but just shows room names
+
 ACMD(do_scan)
 {
   struct char_data *list;
@@ -4985,7 +5049,7 @@ ACMD(do_position)
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
   GET_DEFPOS(ch) = str_dup(argument);
-  send_to_char(ch, "Position set.\r\n");
+  send_to_char(ch, "Position set. You will appear as '(your character) %s^n'\r\n", GET_DEFPOS(ch));
 }
 
 ACMD(do_status)
@@ -5042,7 +5106,7 @@ ACMD(do_status)
         if (sust->spell == SPELL_INCATTR || sust->spell == SPELL_INCCYATTR ||
             sust->spell == SPELL_DECATTR || sust->spell == SPELL_DECCYATTR)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
-        send_to_char(ch, "%d) %s ", i, buf);
+        send_to_char(ch, "%d) %s (%d successes)", i, buf, sust->success);
         if (sust->focus)
           send_to_char(ch, "(Sustained by %s)", GET_OBJ_NAME(sust->focus));
         if (sust->spirit && sust->spirit != ch)

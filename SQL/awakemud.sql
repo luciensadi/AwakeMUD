@@ -80,6 +80,7 @@ CREATE TABLE `pfiles` (
   `pgroup` mediumint(5) unsigned default '0',
   `highlight` varchar(15) default '^n',
   `email` varchar(200),
+  `multiplier` smallint(5) unsigned default 100,
   PRIMARY KEY (`idnum`), 
   KEY (`name`) 
 ); 

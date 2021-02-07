@@ -302,7 +302,8 @@ enum {
 #define PLR_DRIVEBY             36
 #define PLR_RPE                 37
 #define PLR_NO_IDLE_OUT         38 /* Player will not idle out (morts- for test chars) */
-#define PLR_MAX                 39
+#define PLR_TELLS_MUTED         39 /* Remove their ability to send tells. */
+#define PLR_MAX                 40
 
 
 
@@ -1239,12 +1240,13 @@ enum {
 #define SHFT(ch) (GET_LEVEL(ch))
 
 /* vehicle flag table */
-#define VFLAG_NONE  0
-#define VFLAG_CAN_FLY  1
-#define VFLAG_AMPHIB  2
-#define VFLAG_WORKSHOP  3
-#define VFLAG_NEWBIE  4
-#define NUM_VFLAGS      5
+#define VFLAG_NONE       0
+#define VFLAG_CAN_FLY    1
+#define VFLAG_AMPHIB     2
+#define VFLAG_WORKSHOP   3
+#define VFLAG_NEWBIE     4
+#define VFLAG_ULTRASOUND 5
+#define NUM_VFLAGS       6
 /* vehicle speed table */
 #define SPEED_OFF 0
 #define SPEED_IDLE 1
@@ -1564,6 +1566,7 @@ enum {
 #define FOCI_POWER    4
 #define FOCI_SUSTAINED    5
 #define FOCI_WEAPON    6
+#define FOCI_SPELL_DEFENSE 7
 
 #define ACCESS_SMARTLINK  1
 #define ACCESS_SCOPE    2
@@ -1618,7 +1621,7 @@ enum {
 #define MOD_PHONE    25
 #define MOD_RADIO    26
 #define MOD_MOUNT    27
-#define NUM_MODS    29
+#define NUM_MODS    28
 
 #define TYPE_ENGINECUST    1
 #define TYPE_NOS    2
@@ -1708,17 +1711,18 @@ enum {
 #define SCMD_WHOAMI     10
 
 /* do_wizutil */
-#define SCMD_PARDON     0
-#define SCMD_NOTITLE    1
-#define SCMD_SQUELCH    2
-#define SCMD_FREEZE     3
-#define SCMD_THAW       4
-#define SCMD_UNAFFECT   5
-#define SCMD_SQUELCHOOC 6
-#define SCMD_INITIATE   7
-#define SCMD_RPE   8
-#define SCMD_POWERPOINT 9
-#define SCMD_AUTHORIZE  10
+#define SCMD_PARDON       0
+#define SCMD_NOTITLE      1
+#define SCMD_SQUELCH      2
+#define SCMD_FREEZE       3
+#define SCMD_THAW         4
+#define SCMD_UNAFFECT     5
+#define SCMD_SQUELCHOOC   6
+#define SCMD_INITIATE     7
+#define SCMD_RPE          8
+#define SCMD_POWERPOINT   9
+#define SCMD_AUTHORIZE    10
+#define SCMD_SQUELCHTELLS 11
 
 /* do_say */
 #define SCMD_SAY        0
@@ -1773,6 +1777,7 @@ enum {
 #define SCMD_BUG        0
 #define SCMD_TYPO       1
 #define SCMD_IDEA       2
+#define SCMD_PRAISE     3
 
 /* do_look */
 #define SCMD_LOOK       0
@@ -2307,7 +2312,7 @@ enum {
 #define MATERIAL_METAL        8
 #define MATERIAL_ORICHALCUM   9
 #define MATERIAL_ELECTRONICS  10
-#define MATERIAL_COMPUETERS   11
+#define MATERIAL_COMPUTERS    11
 #define MATERIAL_TOXIC_WASTES 12
 #define MATERIAL_ORGANIC      13
 #define MATERIAL_STONE        14
@@ -2380,6 +2385,13 @@ enum {
 #define HOST_SECURITY_ORANGE 2
 #define HOST_SECURITY_RED    3
 #define HOST_SECURITY_BLACK  4
+
+#define MOUNT_FIRMPOINT_INTERNAL 0
+#define MOUNT_FIRMPOINT_EXTERNAL 1
+#define MOUNT_HARDPOINT_INTERNAL 2
+#define MOUNT_HARDPOINT_EXTERNAL 3
+#define MOUNT_TURRET             4
+#define MOUNT_MINITURRET         5
 
 #define PC_CORPSE_BARRIER 75
 

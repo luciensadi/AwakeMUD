@@ -476,6 +476,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   // note that pgroup is 78
   SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(row[79]);
   SETTABLE_EMAIL(ch) = str_dup(row[80]);
+  GET_CHAR_MULTIPLIER(ch) = atoi(row[81]);
   mysql_free_result(res);
 
   if (GET_LEVEL(ch) > 0) {
@@ -943,18 +944,21 @@ bool load_char(const char *name, char_data *ch, bool logon)
         if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE) 
           max = GET_OBJ_VAL(wire, 1);
       for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content)
-        ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = skills[GET_OBJ_VAL(chip, 0)].type ? GET_OBJ_VAL(chip, 1) 
-                                                                                         : MIN(max, GET_OBJ_VAL(chip, 1));
-      break;
+        ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = skills[GET_OBJ_VAL(chip, 0)].type ? GET_CHIP_RATING(chip)
+                                                                                                    : MIN(max, GET_CHIP_RATING(chip));
     } else if (GET_OBJ_VAL(jack, 0) == CYB_MEMORY) {
       int max = 0;
-      for (struct obj_data *wire = ch->cyberware; wire; wire = wire->next_content) 
+      for (struct obj_data *wire = ch->cyberware; wire; wire = wire->next_content) {
         if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE) 
           max = GET_OBJ_VAL(wire, 1);
-      for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content)
-        ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = skills[GET_OBJ_VAL(chip, 0)].type ? GET_OBJ_VAL(chip, 1)
-                                                                                         : MIN(max, GET_OBJ_VAL(chip, 1));
-      break;
+      }
+      
+      GET_OBJ_VAL(jack, 5) = 0;
+      for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content) {
+        ch->char_specials.saved.skills[GET_CHIP_SKILL(chip)][1] = skills[GET_CHIP_SKILL(chip)].type ? GET_CHIP_RATING(chip)
+                                                                                                    : MIN(max, GET_CHIP_RATING(chip));
+        GET_OBJ_VAL(jack, 5) += GET_CHIP_SIZE(chip) - GET_CHIP_COMPRESSION_FACTOR(chip);
+      }
     }
     
   // Self-repair their gear. Don't worry about contents- it's recursive.
@@ -1111,7 +1115,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
-               "Inveh=%ld, rank=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s' WHERE idnum=%ld;",
+               "Inveh=%ld, rank=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
+               "multiplier=%d WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
                GET_REAL_STR(player), GET_REAL_CHA(player), GET_REAL_INT(player), GET_REAL_WIL(player),
@@ -1128,7 +1133,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS), 
                prepare_quotes(buf1, GET_EMAIL(player), sizeof(buf1) / sizeof(char)),
                prepare_quotes(buf2, GET_CHAR_COLOR_HIGHLIGHT(player), sizeof(buf2) / sizeof(char)),
-               GET_IDNUM(player));
+               GET_CHAR_MULTIPLIER(player), GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
@@ -1555,18 +1560,74 @@ bool PCIndex::Save()
   return true;
 }
 
-char_data *CreateChar(char_data *ch)
-{
+// You motherfuckers better sanitize your queries that you pass to this, because it's going in RAW.
+// Only used for idnums right now, so -1 is the error code.
+vnum_t get_one_number_from_query(const char *query) {
+  vnum_t value = -1;
+  
   char buf[MAX_STRING_LENGTH];
-  strcpy(buf, "SELECT idnum FROM pfiles ORDER BY idnum DESC;");
+  strcpy(buf, query);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
-  if (!row && mysql_field_count(mysql)) {
+  if (row && mysql_field_count(mysql)) {
+    value = atol(row[0]);
+  }
+  mysql_free_result(res);
+  
+  return value;
+}
+
+vnum_t get_highest_idnum_in_use() {
+  char buf[MAX_STRING_LENGTH];
+  
+  const char *tables[] = {
+    "pfiles_adeptpowers",
+    "pfiles_alias",
+    "pfiles_ammo",
+    "pfiles_bioware",
+    "pfiles_chargendata",
+    "pfiles_cyberware",
+    "pfiles_drugdata",
+    "pfiles_drugs",
+    "pfiles_ignore",
+    "pfiles_immortdata",
+    "pfiles_inv",
+    "pfiles_magic",
+    "pfiles_mail",
+    "pfiles_memory",
+    "pfiles_metamagic",
+    "pfiles_playergroups",
+    "pfiles_quests",
+    "pfiles_skills",
+    "pfiles_spells",
+    "pfiles_spirits",
+    "pfiles_worn",
+  };
+  
+  #define NUM_IDNUM_TABLES 21
+  
+  vnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
+  
+  for (int i = 0; i < NUM_IDNUM_TABLES; i++) {
+    snprintf(buf, sizeof(buf), "SELECT idnum FROM %s ORDER BY idnum DESC LIMIT 1;", tables[i]);
+    vnum_t new_number = get_one_number_from_query(buf);
+    if (highest_pfiles_idnum < new_number) {
+      mudlog("^RSYSERR: SQL database corruption (pfiles idnum lower than supporting table idnum). Will attempt to recover.^g", NULL, LOG_SYSLOG, TRUE);
+      highest_pfiles_idnum = new_number;
+    }
+  }
+  
+  return highest_pfiles_idnum;
+}
+
+char_data *CreateChar(char_data *ch)
+{
+  vnum_t highest_idnum_in_use = get_highest_idnum_in_use();
+  
+  if (highest_idnum_in_use <= -1) {
     log_vfprintf("%s promoted to %s by virtue of first-come, first-serve.",
         GET_CHAR_NAME(ch), status_ratings[LVL_MAX]);
-    
-    // TODO: Add NODELETE, OLC on
 
     for (int i = 0; i < 3; i++)
       GET_COND(ch, i) = (char) -1;
@@ -1584,9 +1645,8 @@ char_data *CreateChar(char_data *ch)
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
     PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
-    GET_IDNUM(ch) = MAX(playerDB.find_open_id(), atol(row[0]) + 1);
+    GET_IDNUM(ch) = MAX(playerDB.find_open_id(), highest_idnum_in_use + 1);
   }
-  mysql_free_result(res);
 
   init_char(ch);
   init_char_strings(ch);
@@ -1594,6 +1654,7 @@ char_data *CreateChar(char_data *ch)
   return ch;
 }
 
+/*
 char_data *PCIndex::CreateChar(char_data *ch)
 {
   if (entry_cnt >= entry_size)
@@ -1656,6 +1717,7 @@ char_data *PCIndex::CreateChar(char_data *ch)
 
   return ch;
 }
+*/
 
 char_data *PCIndex::LoadChar(const char *name, bool logon)
 {

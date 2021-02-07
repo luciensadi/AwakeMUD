@@ -681,7 +681,10 @@ ACMD(do_skillset)
   }
   strcpy(help, (argument + 1));
   help[qend - 1] = '\0';
-  if ((skill = find_skill_num(help)) <= 0) {
+  
+  if (!strn_cmp(help, "orzet", strlen("orzet"))) {
+    skill = SKILL_ORZET;
+  } else if ((skill = find_skill_num(help)) <= 0) {
     send_to_char("Unrecognized skill.\r\n", ch);
     return;
   }

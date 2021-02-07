@@ -39,6 +39,7 @@ extern int skill_web(struct char_data *, int);
 extern int return_general(int skill_num);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern int max_ability(int i);
+extern int calculate_vehicle_entry_load(struct veh_data *veh);
 
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
@@ -469,6 +470,9 @@ void affect_total(struct char_data * ch)
   
   if (IS_PROJECT(ch))
     return;
+    
+  int old_max_hacking = GET_MAX_HACKING(ch);
+  int old_rem_hacking = GET_REM_HACKING(ch);
   
   /* effects of used equipment */
   for (i = 0; i < (NUM_WEARS - 1); i++)
@@ -517,9 +521,7 @@ void affect_total(struct char_data * ch)
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
-      
-  int old_max_hacking = GET_MAX_HACKING(ch);
-  int old_rem_hacking = GET_REM_HACKING(ch);
+  
   ch->aff_abils = ch->real_abils;
   
   /* calculate reaction before you add eq, cyberware, etc so that things *
@@ -1106,19 +1108,7 @@ void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
     veh->next_veh = dest->carriedvehs;
     veh->in_veh = dest;
     dest->carriedvehs = veh;
-    int mult;
-    switch (veh->type) {
-      case VEH_DRONE:
-        mult = 100;
-        break;
-      case VEH_TRUCK:
-        mult = 1500;
-        break;
-      default:
-        mult = 500;
-        break;
-    }
-    dest->usedload += veh->body * mult;
+    dest->usedload += calculate_vehicle_entry_load(veh);
   }
 }
 void icon_to_host(struct matrix_icon *icon, vnum_t to_host)
@@ -2445,12 +2435,16 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
     if ((i = get_char_veh(ch, name, ch->in_veh)))
       return i;
   
-  for (i = ch->in_veh ? ch->in_veh->people : ch->in_room->people; i && j <= number; i = ch->in_veh ? i->next_in_veh : i->next_in_room)
-    if ((isname(tmp, GET_KEYWORDS(i)) ||
-         isname(tmp, GET_NAME(i)) || recog(ch, i, name)) &&
-        CAN_SEE(ch, i))
+  for (i = ch->in_veh ? ch->in_veh->people : ch->in_room->people; i && j <= number; i = ch->in_veh ? i->next_in_veh : i->next_in_room) {
+    if ((isname(tmp, GET_KEYWORDS(i)) 
+          || isname(tmp, GET_NAME(i)) 
+          || recog(ch, i, name)) 
+        && CAN_SEE(ch, i))
+    {
       if (++j == number)
         return i;
+    }
+  }
   
   return NULL;
 }

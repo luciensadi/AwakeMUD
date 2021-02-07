@@ -489,6 +489,7 @@ ACMD(do_upgrade)
   struct veh_data *veh;
   struct obj_data *mod, *obj, *shop = NULL;
   int j = 0, skill = 0, target = 0, kit = 0;
+  bool need_extract = FALSE;
 
   half_chop(argument, buf1, buf2);
 
@@ -502,6 +503,13 @@ ACMD(do_upgrade)
   }
   if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
     send_to_char(ch, "You don't see a vehicle called '%s' here.\r\n", buf1);
+    return;
+  }
+  
+  if (veh->owner != GET_IDNUM(ch) && veh->locked) {
+    snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", GET_VEH_NAME(veh));
+    act(buf, FALSE, ch, 0, 0, TO_ROOM);
+    send_to_char(buf, ch);
     return;
   }
 
@@ -607,50 +615,56 @@ ACMD(do_upgrade)
     send_to_char(ch, "That part won't fit on.\r\n");
     return;
   }
-  if (GET_OBJ_VAL(mod, 0) == TYPE_MOUNT) {
+  if (GET_VEHICLE_MOD_TYPE(mod) == TYPE_MOUNT) {
     skill = 0;
-    for (obj = veh->mount; obj; obj = obj->next_content)
-      switch (GET_OBJ_VAL(obj, 3)) {
-      case 0:
-      case 1:
-        j++;
-        break;
-      case 2:
-      case 3:
-      case 5:
-        j += 2;
-        break;
-      case 4:
-        j += 4;
-        break;
+    // Total up the existing mounts.
+    for (obj = veh->mount; obj; obj = obj->next_content) {
+      if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_MOUNT) {
+        switch (GET_VEHICLE_MOD_MOUNT_TYPE(obj)) {
+          case MOUNT_FIRMPOINT_INTERNAL:
+          case MOUNT_FIRMPOINT_EXTERNAL:
+            j++;
+            break;
+          case MOUNT_HARDPOINT_INTERNAL:
+          case MOUNT_HARDPOINT_EXTERNAL:
+          case MOUNT_MINITURRET:
+            j += 2;
+            break;
+          case MOUNT_TURRET:
+            j += 4;
+            break;
+        }
       }
-    switch (GET_OBJ_VAL(mod, 1)) {
-    case 1:
-      skill = 1;
-      // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
-      // fall through
-    case 0:
-      j++;
-      target = 10;
-      break;
-    case 3:
-      skill = 1;
-      // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
-      // fall through
-    case 2:
-      j += 2;
-      target = 10;
-      break;
-    case 4:
-      skill = 1;
-      j += 4;
-      target = 100;
-      break;
-    case 5:
-      skill = 1;
-      j += 2;
-      target = 25;
-      break;
+    }
+    
+    // Add the new mount's data.
+    switch (GET_VEHICLE_MOD_MOUNT_TYPE(mod)) {
+      case MOUNT_FIRMPOINT_EXTERNAL:
+        skill = 1;
+        // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
+        // fall through
+      case MOUNT_FIRMPOINT_INTERNAL:
+        j++;
+        target = 10;
+        break;
+      case MOUNT_HARDPOINT_EXTERNAL:
+        skill = 1;
+        // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
+        // fall through
+      case MOUNT_HARDPOINT_INTERNAL:
+        j += 2;
+        target = 10;
+        break;
+      case MOUNT_TURRET:
+        skill = 1;
+        j += 4;
+        target = 100;
+        break;
+      case MOUNT_MINITURRET:
+        skill = 1;
+        j += 2;
+        target = 25;
+        break;
     }
     if (j > veh->body || (veh->usedload + target) > veh->load) {
       send_to_char("Try as you might, you just can't fit it on.\r\n", ch);
@@ -667,7 +681,12 @@ ACMD(do_upgrade)
       send_to_char("You can't use that part on this type of engine.\r\n", ch);
       return;
     }
-    if ((GET_OBJ_VAL(mod, 0) != TYPE_SEATS && GET_OBJ_VAL(mod, 0) != TYPE_ARMOR && GET_OBJ_VAL(mod, 0) != TYPE_CONCEALEDARMOR) && GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
+    if (GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
+      /* Prior logic included this: (GET_OBJ_VAL(mod, 0) != TYPE_SEATS 
+           && GET_OBJ_VAL(mod, 0) != TYPE_ARMOR 
+           && GET_OBJ_VAL(mod, 0) != TYPE_CONCEALEDARMOR)
+           
+        but it wasn't actually done in a way that would make it save across reboot, so it's stripped out. */
       send_to_char(ch, "There is already a mod of that type installed.\r\n");
       return;
     }
@@ -685,14 +704,17 @@ ACMD(do_upgrade)
       }      
       if (!GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
         GET_MOD(veh, GET_OBJ_VAL(mod, 6)) = mod;      
-      else  affect_veh(veh, mod->affected[0].location, -mod->affected[0].modifier);
+      else  
+        affect_veh(veh, mod->affected[0].location, -mod->affected[0].modifier);
+        
       veh->usedload += GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1);
       GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(mod, 6)), 1) = (veh->body * veh->body) * totalarmor * 5;
       mod->affected[0].modifier = totalarmor;
       affect_veh(veh, mod->affected[0].location, mod->affected[0].modifier);
       if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)) != mod)
-        extract_obj(mod);
-      else obj_from_char(mod);
+        need_extract = TRUE;
+      else
+        obj_from_char(mod);
     } else {
       if (veh->load - veh->usedload < GET_OBJ_VAL(mod, 1)) {
         send_to_char(ch, "Try as you might, you just can't fit it in.\r\n");
@@ -703,7 +725,7 @@ ACMD(do_upgrade)
         affect_veh(veh, mod->affected[j].location, mod->affected[j].modifier);
       if (GET_OBJ_VAL(mod, 0) == TYPE_SEATS && GET_MOD(veh, GET_OBJ_VAL(mod, 6))) {
         GET_MOD(veh, GET_OBJ_VAL(mod, 6))->affected[0].modifier++;
-        extract_obj(mod);
+        need_extract = TRUE;
       } else {
         if (GET_MOD(veh, GET_OBJ_VAL(mod, 6)))
           extract_obj(GET_MOD(veh, GET_OBJ_VAL(mod, 6)));
@@ -716,6 +738,9 @@ ACMD(do_upgrade)
   snprintf(buf, sizeof(buf), "$n goes to work on %s and installs %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(mod));
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
   send_to_char(ch, "You go to work on %s and install %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(mod));
+  
+  if (need_extract)
+    extract_obj(mod);
 }
 
 void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
@@ -958,6 +983,14 @@ ACMD(do_subscribe)
     send_to_char("That is already part of your subscriber list.\r\n", ch);
     return;
   }
+  for (struct veh_data *sveh = ch->char_specials.subscribe; sveh; sveh = sveh->next_sub)
+    if (sveh == veh) {
+      send_to_char("That is already part of your subscriber list.\r\n", ch);
+      sveh->sub = TRUE;
+      mudlog("SYSERR: Almost-successful attempt to add duplicate vehicle to subscriber list.", ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+  
   veh->sub = TRUE;
   veh->next_sub = ch->char_specials.subscribe;
   if (ch->char_specials.subscribe)
@@ -1155,7 +1188,13 @@ ACMD(do_driveby)
   for (int i = 2; i > 0; i--) {
     for (pass = list; pass && vict->in_room == ch->in_veh->in_room; pass = pass->next_fighting) {
       if (GET_INIT_ROLL(pass) >= 0) {
-        hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL);
+        if (AFF_FLAGGED(pass, AFF_MANNING)) {
+          struct obj_data *mount = get_mount_manned_by_ch(ch);
+          struct obj_data *ammo = get_mount_ammo(mount);
+          hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL, ammo);
+        } else
+          hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL, NULL);
+          
         GET_INIT_ROLL(pass) -= 10;
       }
     }
@@ -1470,6 +1509,7 @@ ACMD(do_mount)
 
   send_to_char(ch, "%s is mounting the following:\r\n", CAP(GET_VEH_NAME(veh)));
   for (obj = veh->mount; obj; obj = obj->next_content) {
+    gun = NULL; ammo = NULL;
     for (struct obj_data *x = obj->contains; x; x = x->next_content)
       if (GET_OBJ_TYPE(x) == ITEM_GUN_AMMO)
         ammo = x;
@@ -2063,3 +2103,19 @@ ACMD(do_transfer)
   }
 }
  
+int calculate_vehicle_entry_load(struct veh_data *veh) {
+  int mult;
+  switch (veh->type) {
+    case VEH_DRONE:
+      mult = 100;
+      break;
+    case VEH_TRUCK:
+      mult = 1500;
+      break;
+    default:
+      mult = 500;
+      break;
+  }
+  
+  return veh->body * mult;
+}

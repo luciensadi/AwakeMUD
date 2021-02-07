@@ -411,7 +411,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     }
     // The maximum visibility penalty we apply is +8 TN to avoid things like an invisible person in a smoky pitch-black room getting +24 to hit TN.
     if (light_target + smoke_target + current_visibility_penalty > 8) {
-      buf_mod(rbuf, rbuf_len, "ButVisPenaltyMaxIs8", (8 - current_visibility_penalty) - light_target + smoke_target);
+      buf_mod(rbuf, rbuf_len, "ButVisPenaltyMaxIs8", (8 - current_visibility_penalty) - (light_target + smoke_target));
       base_target += 8 - current_visibility_penalty;
     } else
       base_target += light_target + smoke_target;
@@ -2059,7 +2059,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
   
   // If they're in an invis staffer above your level, no.
-  if (!IS_NPC(vict) && !IS_NPC(ch) && GET_INVIS_LEV(vict) > 0 && !access_level(ch, GET_INVIS_LEV(vict)))
+  if (!IS_NPC(vict) && (IS_NPC(ch) ? GET_INVIS_LEV(vict) > 0 : !access_level(ch, GET_INVIS_LEV(vict))))
     return FALSE;
   
   // Staff members see almost everything.
@@ -2275,6 +2275,19 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
                   GET_OBJ_VNUM(weapon));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
         }
+        return FALSE;
+      }
+    }
+    
+    // Vents on weapons with integral recoil.
+    if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
+      if (GET_ACCESSORY_RATING(attachment) < GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon)) {
+        send_to_char(ch, "That would make it perform worse! The integral recoil comp is already better than the vent's rating.\r\n");
+        return FALSE;
+      }
+      
+      if (GET_ACCESSORY_RATING(attachment) == GET_WEAPON_INTEGRAL_RECOIL_COMP(weapon)) {
+        send_to_char(ch, "That wouldn't provide any benefit. The integral recoil comp is already equal to the vent's rating.\r\n");
         return FALSE;
       }
     }
@@ -2907,7 +2920,10 @@ void purgelog(struct veh_data *veh) {
   const char *representation = NULL;
   
   // Begin the purgelog entry.
-  snprintf(internal_buffer, sizeof(internal_buffer), "- Writing purgelog for vehicle %s (vnum %ld, idnum %ld, owned by %ld).", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), veh->idnum, veh->owner);
+  snprintf(internal_buffer, sizeof(internal_buffer), "- Writing purgelog for vehicle %s (vnum %ld, idnum %ld, owned by %ld).", 
+           GET_VEH_NAME(veh), 
+           veh_index[GET_VEH_RNUM(veh)].vnum, 
+           veh->idnum, veh->owner);
   mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
   
   // Log its mounts.
@@ -3175,6 +3191,14 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
     return FALSE;
     
   return TRUE;
+}
+
+float get_proto_weight(struct obj_data *obj) {
+  int rnum = real_object(GET_OBJ_VNUM(obj));
+  if (rnum <= -1)
+    return 0.00;
+  else
+    return GET_OBJ_WEIGHT(&obj_proto[rnum]);
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

@@ -477,7 +477,8 @@ const char *player_bits[] =
     "INIT",
     "DRIVEBY",
     "RPE",
-    "NOIDLEOUT"
+    "NOIDLEOUT",
+    "TELLS_MUTED"
     "\n"
   };
 
@@ -640,7 +641,7 @@ const char *preference_bits[] =
     "ECONLOG",
     "BRIEF",
     "!HIGHLIGHTS",
-    "!PSEUDOLANGUAGE"
+    "!PSEUDOLANGUAGE",
     "\n"
   };
 
@@ -934,7 +935,7 @@ const char *wear_bits[] =
     "ARM",
     "FACE",
     "THIGH",
-    "PATCH"
+    "PATCH",
     "\n"
   };
 
@@ -979,7 +980,7 @@ const char *pc_readable_extra_bits[] =
     "Can't be Donated",
     "Can't be Made Invis",
     "Invisible",
-    "Looks Magic when Assensed",
+    "Looks Magical when Perceiving",
     "Can't be Dropped",
     "Form-Fitting",
     "Can't be Sold",
@@ -1049,7 +1050,7 @@ struct program_data programs[] =
     {"Evasion", 3 },
     {"Masking", 2 },
     {"Sensor", 2 },
-    {"Attack", 0 },
+    {"Attack", 1 },
     {"Slow", 4 },
     {"Medic", 4 },
     {"Snooper", 2 },
@@ -1082,7 +1083,7 @@ struct program_data programs[] =
     {"Icon Chip", 2 },
     {"MPCP", 8 },
     {"Reality Filter", 10 },
-    {"Response Increase", 0 }
+    {"Response Increase", 1 }
   };
 
 int attack_multiplier[] = { 0, 2, 3, 4, 5 };
@@ -1647,7 +1648,8 @@ const char *veh_flag[] =
     "Can Fly",
     "Amphibious",
     "Workshop",
-    "Newbie"
+    "Newbie",
+    "Ultrasound"
   };
 
 const char *jurid[] =
@@ -1907,7 +1909,7 @@ struct spell_types spells[] =
     { "Shadow", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
     { "Laser", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 1, -2 },
     { "Nova", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
-    { "Steam", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -2 }
+    { "Steam", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -2 },
     { "Smoke Cloud", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
     { "Thunderbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, -2 },
     { "Thunderclap", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, -1 },
@@ -2027,7 +2029,8 @@ const char *foci_type[] =
     "spirit",
     "power",
     "sustaining",
-    "weapon"
+    "weapon",
+    "defensive"
   };
 
 const char *ranges[4] =
@@ -2574,8 +2577,10 @@ const char *pc_race_types[] =
     "Minotaur",
     "Satyr",
     "Night-One",
+    "Dryad",
     "Dragon",
     "Elemental",
     "Spirit",
     "\n"
   };
+  

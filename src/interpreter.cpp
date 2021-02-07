@@ -298,6 +298,7 @@ ACMD_DECLARE(do_search);
 ACMD_DECLARE(do_send);
 ACMD_DECLARE(do_set);
 ACMD_DECLARE(do_settime);
+ACMD_DECLARE(do_setfind);
 ACMD_DECLARE(do_shedit);
 ACMD_DECLARE(do_shopfind);
 ACMD_DECLARE(do_shoot);
@@ -652,6 +653,7 @@ struct command_info cmd_info[] =
     { "mask"     , POS_RESTING , do_masking  , 0, 0 },
     { "mute"     , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCH },
     { "muteooc"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHOOC },
+    { "mutetells", POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHTELLS },
     { "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
     
     { "newbie"   , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE },
@@ -694,6 +696,7 @@ struct command_info cmd_info[] =
     { "position" , POS_DEAD    , do_position , 0, 0 },
     { "possess"  , POS_DEAD    , do_wizpossess, LVL_FIXER, 0 },
     { "powerdown", POS_DEAD    , do_powerdown, 0, 0 },
+    { "praise"   , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE },
     { "press"    , POS_SITTING , do_push     , 0, 0 },
     { "prompt"   , POS_DEAD    , do_display  , 0, 0 },
     { "project"  , POS_LYING   , do_astral   , 0, SCMD_PROJECT },
@@ -758,6 +761,7 @@ struct command_info cmd_info[] =
     { "send"     , POS_SLEEPING, do_send     , LVL_FIXER, 0 },
     { "sedit"    , POS_DEAD    , do_shedit   , LVL_BUILDER, 0 },
     { "set"      , POS_DEAD    , do_set      , LVL_DEVELOPER, 0 },
+    { "setfind"  , POS_DEAD    , do_setfind , LVL_VICEPRES, 0 },
     { "settime"  , POS_DEAD    , do_settime  , LVL_DEVELOPER, 0 },
     { "sheath"   , POS_RESTING , do_holster  , 0, 0 },
     { "shout"    , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT },
@@ -1221,7 +1225,7 @@ struct command_info mtx_info[] =
     { "read", 0, do_not_here, 0, 0},
     { "redirect", 0, do_redirect, 0, 0},
     { "remove", 0, do_not_here, 0, 0},
-    { "reply", 0, do_not_here, 0, 0},
+    { "reply", 0, do_reply, 0, 0 },
     { "restrict", 0, do_restrict, 0, 0},
     { "reveal", 0, do_reveal, 0, 0},
     { "run", 0, do_run, 0, 0},
@@ -1287,6 +1291,7 @@ struct command_info rig_info[] =
     { "ram", 0, do_ram, 0, 0},
     { "rig", POS_SITTING , do_rig, 0, 0 },
     { "return", 0, do_return, 0, 0},
+    { "reply", 0, do_reply, 0, 0 },
     { "rt", 0, do_gen_comm, 0, SCMD_RPETALK},
     { "score", 0, do_score, 0, 0},
     { "scan", 0, do_scan, 0, 0},
@@ -3033,7 +3038,7 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   } else if (ch->in_room)
     snprintf(location_buf, sizeof(location_buf), "%ld", GET_ROOM_VNUM(ch->in_room));
   else if (ch->in_veh)
-    snprintf(location_buf, sizeof(location_buf), "veh #%ld (%ld)", ch->in_veh->idnum, GET_VEH_VNUM(ch->in_veh));
+    snprintf(location_buf, sizeof(location_buf), "veh #%ld (%ld)", ch->in_veh->idnum, veh_index[GET_VEH_RNUM(ch->in_veh)].vnum);
   
   // Compose name string.
   char name_buf[250];

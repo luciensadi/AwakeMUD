@@ -841,6 +841,9 @@ ACMD(do_gen_write)
   case SCMD_IDEA:
     filename = IDEA_FILE;
     break;
+  case SCMD_PRAISE:
+    filename = PRAISE_FILE;
+    break;
   default:
     return;
   }
@@ -866,6 +869,7 @@ ACMD(do_gen_write)
 
   if (stat(filename, &fbuf) < 0) {
     perror("Error statting file");
+    send_to_char("Okay. Thanks!\r\n", ch);
     return;
   }
   if (fbuf.st_size >= max_filesize) {
@@ -1175,7 +1179,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "noshout") || is_abbrev(argument, "shout")) {
       result = PRF_TOG_CHK(ch, PRF_DEAF);
       mode = 10;
-    } else if ((is_abbrev(argument, "notell") || is_abbrev(argument, "tell")) && IS_SENATOR(ch)) {
+    } else if ((is_abbrev(argument, "notell") || is_abbrev(argument, "tell"))) {
       result = PRF_TOG_CHK(ch, PRF_NOTELL);
       mode = 11;
     } else if (is_abbrev(argument, "ooc") || is_abbrev(argument, "noooc")) {
@@ -1227,6 +1231,12 @@ ACMD(do_toggle)
       mode = 22;
     } else if (is_abbrev(argument, "pacify") && IS_SENATOR(ch)) {
       result = PRF_TOG_CHK(ch, PRF_PACIFY);
+      if (ch->in_room) {
+        if (result)
+          ch->in_room->peaceful++;
+        else
+          ch->in_room->peaceful--;
+      }
       mode = 23;
    } else if (is_abbrev(argument, "longweapon")) {
       result = PRF_TOG_CHK(ch, PRF_LONGWEAPON);
@@ -2573,7 +2583,7 @@ int recog(struct char_data *ch, struct char_data *i, char *name)
   if (!(mem = found_mem(GET_MEMORY(ch), i)))
     return 0;
 
-  if (!str_cmp(name, mem->mem))
+  if (!strn_cmp(name, mem->mem, strlen(name)))
     return 1;
 
   return 0;
@@ -3197,21 +3207,21 @@ ACMD(do_assense)
         }
         strcat(buf, ".\r\n");
       } else {
-        snprintf(buf2, sizeof(buf2), " has %.2f essence", ((float)GET_ESS(vict) / 100));
+        snprintf(buf2, sizeof(buf2), " has %.2f essence and", ((float)GET_ESS(vict) / 100));
         strcat(buf, buf2);
         if (IS_NPC(vict)) {
           if (IS_SPIRIT(vict))
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s spirit of force %d", spirits[GET_SPARE1(vict)].name, GET_LEVEL(vict));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s of force %d", spirits[GET_SPARE1(vict)].name, GET_LEVEL(vict));
           else if (IS_ELEMENTAL(vict))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is a %s elemental of force %d", elements[GET_SPARE1(vict)].name, GET_LEVEL(vict));
           else if (GET_MAG(vict) > 0)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and has %d magic", (int)(GET_MAG(vict) / 100));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has %d magic", (int)(GET_MAG(vict) / 100));
           else
-            strcat(buf, " and is mundane");
+            strcat(buf, " is mundane");
         } else if (GET_TRADITION(vict) != TRAD_MUNDANE && !comp)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and %d magic", (int)(mag / 100));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d magic", (int)(mag / 100));
         else
-          strcat(buf, " and is mundane");
+          strcat(buf, " is mundane");
         if (vict->cyberware) {
           strcat(buf, ". ");
           strcat(buf, CAP(HSSH(vict)));
@@ -3622,8 +3632,14 @@ ACMD(do_memory)
     int i = 0;
     for (struct obj_data *obj = memory->contains; obj; obj = obj->next_content) {
       i++;
-      send_to_char(ch, "  %d) %s%-40s^n (%d MP) %s\r\n", i, GET_OBJ_VAL(obj, 8) ? "^r" : "", GET_OBJ_NAME(obj), 
-                       GET_OBJ_VAL(obj, 2) - GET_OBJ_VAL(obj, 8), GET_OBJ_VAL(obj, 9) ? "^Y<LINKED>^N" : "");
+      send_to_char(ch, "  %d) %s%-40s^n (%d MP) %s%s\r\n", 
+                   i, 
+                   GET_CHIP_COMPRESSION_FACTOR(obj) ? "^r" : "", 
+                   GET_OBJ_NAME(obj), 
+                   GET_CHIP_SIZE(obj) - GET_CHIP_COMPRESSION_FACTOR(obj), 
+                   GET_CHIP_LINKED(obj) ? "^Y<LINKED>^N" : "",
+                   GET_CHIP_COMPRESSION_FACTOR(obj) ? "^y<COMPRESSED>^N" : ""
+                 );
     }
   }
 }
@@ -3646,7 +3662,7 @@ ACMD(do_delete)
   if (!obj)
     send_to_char("You don't have that many files in your memory.\r\n", ch);
   else {
-    send_to_char(ch, "You delete %s from your headware memory.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You %sdelete %s from your headware memory.\r\n", GET_OBJ_VAL(obj, 9) ? "unlink and " : "", GET_OBJ_NAME(obj));
     if (GET_OBJ_VAL(obj, 9))
       ch->char_specials.saved.skills[GET_OBJ_VAL(obj, 0)][1] = 0;
     obj_from_obj(obj);
@@ -3879,6 +3895,10 @@ ACMD(do_cpool)
   
   if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     low = GET_SKILL(ch, SKILL_GUNNERY);
+    if (off > low) {
+      send_to_char(ch, "You're not skilled enough with gunnery, so your offense pool is capped at %d.\r\n", low);
+      off = low;
+    }
   } else {
     one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
            (struct obj_data *) NULL;
@@ -3923,13 +3943,13 @@ ACMD(do_cpool)
     
     if (!one)
       one = two;
-  }
-    
-  if (off > low) {
-    send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n",
-                 one ? GET_OBJ_NAME(one) : (has_cyberweapon(ch) ? "cyberweapons" : "your hands"),
-                 low);
-    off = low;
+      
+    if (off > low) {
+      send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n",
+                   one ? GET_OBJ_NAME(one) : (has_cyberweapon(ch) ? "cyberweapons" : "your hands"),
+                   low);
+      off = low;
+    }
   }
   
   total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);
@@ -4145,7 +4165,7 @@ ACMD(do_ammo) {
                    MIN(GET_WEAPON_MAX_AMMO(secondary), GET_OBJ_VAL(secondary->contains, 9)),
                    GET_WEAPON_MAX_AMMO(secondary));
     } else {
-      send_to_char(ch, "Secondary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(primary));
+      send_to_char(ch, "Secondary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(secondary));
     }
     sent_a_message = TRUE;
   } else if (secondary) {

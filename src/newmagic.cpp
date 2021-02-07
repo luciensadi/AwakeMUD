@@ -24,6 +24,8 @@ extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, in
 extern void check_killer(struct char_data * ch, struct char_data * vict);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 
+bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
+
 struct char_data *find_spirit_by_id(int spiritid, long playerid)
 {
   for (struct char_data *ch = character_list; ch; ch = ch->next)
@@ -755,14 +757,19 @@ void create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
 {
   struct obj_data *focus = NULL;
   for (int i = 0; !focus && i < NUM_WEARS; i++)
-    if (GET_EQ(vict, i) && GET_OBJ_TYPE(GET_EQ(vict, i)) == ITEM_FOCUS && !GET_OBJ_VAL(GET_EQ(vict, i), 4) &&
-        GET_OBJ_VAL(GET_EQ(vict, i), 3) == spell && GET_OBJ_VAL(GET_EQ(vict, i), 1) >= force && !GET_OBJ_VAL(GET_EQ(vict, i), 9))
-      focus = GET_EQ(vict, i);
+    if (GET_EQ(ch, i) 
+        && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS
+        && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SUSTAINED
+        && !GET_FOCUS_ACTIVATED(GET_EQ(ch, i)) 
+        && GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)) == spell 
+        && GET_FOCUS_FORCE(GET_EQ(ch, i)) >= force 
+        && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
+      focus = GET_EQ(ch, i);
   GET_SUSTAINED_NUM(ch)++;
   if (focus)
   {
     GET_SUSTAINED_FOCI(ch)++;
-    GET_OBJ_VAL(focus, 4)++;
+    GET_FOCUS_ACTIVATED(focus)++;
     GET_FOCI(ch)++;
   }
   struct sustain_data *sust = new sustain_data;
@@ -773,7 +780,7 @@ void create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
   sust->other = vict;
   sust->caster = TRUE;
   sust->drain = drain;
-  sust->idnum = number(0, 1000);
+  sust->idnum = number(0, 100000);
   sust->next = GET_SUSTAINED(ch);
   sust->focus = focus;
   GET_SUSTAINED(ch) = sust;
@@ -811,28 +818,30 @@ void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
         }
       }
   }
-  int origskill = skill;
+  int max_specific_spell = 0;
+  int max_spell_category = 0;
+  bool used_expendable = FALSE;
   if (GET_FOCI(ch) > 0)
   {
-    for (int i = 0; i < NUM_WEARS && skill == origskill; i++)
-      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS)
-        switch (GET_OBJ_VAL(GET_EQ(ch, i), 0)) {
-        case FOCI_EXPENDABLE:
-          if (spells[spell].category == GET_OBJ_VAL(GET_EQ(ch, i), 3)) {
-            skill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
-            extract_obj(GET_EQ(ch, i));
-          }
-          break;
-        case FOCI_SPEC_SPELL:
-          if (spell == GET_OBJ_VAL(GET_EQ(ch, i), 3))
-            skill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
-          break;
-        case FOCI_SPELL_CAT:
-          if (spells[spell].category == GET_OBJ_VAL(GET_EQ(ch, i), 3))
-            skill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
-          break;
+    for (int i = 0; i < NUM_WEARS; i++)
+      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
+        switch (GET_FOCUS_TYPE(GET_EQ(ch, i))) {
+          case FOCI_EXPENDABLE:
+            if (!used_expendable && spells[spell].category == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i))) {
+              skill += GET_FOCUS_FORCE(GET_EQ(ch, i));
+              send_to_char(ch, "Its energies expended, %s crumbles away.", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, i))));
+              extract_obj(GET_EQ(ch, i));
+              used_expendable = TRUE;
+            }
+          case FOCI_SPEC_SPELL:
+            if (spell == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)))
+              max_specific_spell = MAX(max_specific_spell, GET_FOCUS_FORCE(GET_EQ(ch, i)));
+          case FOCI_SPELL_CAT:
+            if (spells[spell].category == GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)))
+              max_spell_category = MAX(max_spell_category, GET_FOCUS_FORCE(GET_EQ(ch, i)));
         }
   }
+  skill += max_spell_category + max_specific_spell;
 }
 
 bool find_duplicate_spell(struct char_data *ch, struct char_data *vict, int spell, int sub)
@@ -905,6 +914,18 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
       skill += GET_POWER(ch, ADEPT_SPELL_SHROUD);
     if (GET_POWER(ch, ADEPT_TRUE_SIGHT) && spells[spell].category == ILLUSION)
       skill += GET_POWER(ch, ADEPT_TRUE_SIGHT);
+    
+    if (GET_FOCI(ch) > 0) {
+      for (int i = 0; i < NUM_WEARS; i++) {
+        if (GET_EQ(ch, i) 
+            && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS 
+            && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SPELL_DEFENSE
+            && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
+        {
+          skill += GET_FOCUS_FORCE(GET_EQ(ch, i));
+        }
+      }
+    }
   }
   skill += GET_SDEFENSE(ch);
   return success_test(skill, force);
@@ -1857,7 +1878,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         GET_LASTHIT(vict) = GET_IDNUM(ch);
     }
     spell_drain(ch, spell, force, basedamage);
-    break
+    break;
   case SPELL_WATERBOLT:
     if (!check_spell_victim(ch, vict, spell, arg))
       return;
@@ -2247,21 +2268,28 @@ ACMD(do_contest)
   }
   int chskill = GET_SKILL(ch, SKILL_CONJURING), caskill = GET_SKILL(ch, SKILL_CONJURING) + GET_CHA(ch);
   for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 0) == FOCI_SPIRIT
-        && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch) && GET_OBJ_VAL(GET_EQ(ch, i), 3) == GET_SPARE1(mob) &&
-        GET_OBJ_VAL(GET_EQ(ch, i), 4)) {
+    if (GET_EQ(ch, i) 
+        && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS 
+        && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SPIRIT
+        && focus_is_usable_by_ch(GET_EQ(ch, i), ch)
+        && GET_OBJ_VAL(GET_EQ(ch, i), 3) == GET_SPARE1(mob) 
+        && GET_OBJ_VAL(GET_EQ(ch, i), 4)) {
       chskill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
       break;
     }
   for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(caster, i) && GET_OBJ_TYPE(GET_EQ(caster, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(caster, i), 0) == FOCI_SPIRIT
-        && GET_OBJ_VAL(GET_EQ(caster, i), 2) == GET_IDNUM(ch) && GET_OBJ_VAL(GET_EQ(caster, i), 3) == GET_SPARE1(mob) &&
-        GET_OBJ_VAL(GET_EQ(caster, i), 4)) {
-      chskill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
+    if (GET_EQ(caster, i) 
+        && GET_OBJ_TYPE(GET_EQ(caster, i)) == ITEM_FOCUS 
+        && GET_FOCUS_TYPE(GET_EQ(caster, i)) == FOCI_SPIRIT
+        && focus_is_usable_by_ch(GET_EQ(caster, i), caster)
+        && GET_OBJ_VAL(GET_EQ(caster, i), 3) == GET_SPARE1(mob) 
+        && GET_OBJ_VAL(GET_EQ(caster, i), 4)) {
+      caskill += GET_OBJ_VAL(GET_EQ(caster, i), 1);
       break;
     }
 
-  int chsuc = success_test(chskill, GET_LEVEL(mob)), casuc = success_test(caskill, GET_LEVEL(mob));
+  int chsuc = success_test(chskill, GET_LEVEL(mob));
+  int casuc = success_test(caskill, GET_LEVEL(mob));
   struct spirit_data *temp;
   if (chsuc < 1 && casuc < 1) {
     for (struct spirit_data *sdata = GET_SPIRIT(caster); sdata; sdata = sdata->next)
@@ -2299,7 +2327,7 @@ ACMD(do_contest)
     conjuring_drain(ch, GET_LEVEL(mob));
   } else {
     send_to_char("You fail to gain control!\r\n", ch);
-    snprintf(buf, sizeof(buf), "$n tries to steal control of %s.", GET_NAME(mob));
+    snprintf(buf, sizeof(buf), "$n tries to steal control of %s!", GET_NAME(mob));
     act(buf, FALSE, ch, 0, caster, TO_VICT);
     conjuring_drain(ch, GET_LEVEL(mob));
   }
@@ -2320,10 +2348,12 @@ ACMD(do_unbond)
     send_to_char(ch, "You don't have a '%s'.\r\n", argument);
     return;
   }
-  if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 2)) {
+  if (GET_OBJ_TYPE(obj) == ITEM_FOCUS 
+      && GET_FOCUS_BONDED_TO(obj)) {
     send_to_char("You sever the focus's bond with the astral plane.\r\n", ch);
-    GET_OBJ_VAL(obj, 2) = GET_OBJ_VAL(obj, 3) = GET_OBJ_VAL(obj, 5) = 0;
-  } else send_to_char("You can't unbond that.\r\n", ch);
+    GET_FOCUS_BONDED_TO(obj) = GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = GET_FOCUS_TRADITION(obj) = 0;
+  } else 
+    send_to_char("You can't unbond that.\r\n", ch);
 }
 
 ACMD(do_bond)
@@ -2441,15 +2471,17 @@ ACMD(do_bond)
   else if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
     if (GET_TRADITION(ch) == TRAD_MUNDANE)
       send_to_char(ch, "You can't bond foci.\r\n");
-    else if (GET_TRADITION(ch) == TRAD_ADEPT && GET_OBJ_VAL(obj, 0) != FOCI_WEAPON)
+    else if (GET_TRADITION(ch) == TRAD_ADEPT && GET_FOCUS_TYPE(obj) != FOCI_WEAPON)
       send_to_char("Adepts can only bond weapon foci.\r\n", ch);
+    else if (GET_FOCUS_BONDED_TO(obj) && GET_FOCUS_BONDED_TO(obj) != GET_IDNUM(ch))
+      send_to_char(ch, "%s is already bonded to someone else.\r\n", capitalize(GET_OBJ_NAME(obj)));
     else if (IS_WORKING(ch))
       send_to_char(TOOBUSY, ch);
     else if (GET_POS(ch) > POS_SITTING)
       send_to_char("You must be sitting to perform a bonding ritual.\r\n", ch);
-    else if (GET_OBJ_VAL(obj, 2) == GET_IDNUM(ch)) {
-      if (GET_OBJ_VAL(obj, 9)) {
-        GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 1) * 60;
+    else if (GET_FOCUS_BONDED_TO(obj) == GET_IDNUM(ch)) {
+      if (GET_FOCUS_BOND_TIME_REMAINING(obj)) {
+        GET_FOCUS_BOND_TIME_REMAINING(obj) = GET_FOCUS_FORCE(obj) * 60;
         send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
         act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
         AFF_FLAGS(ch).SetBit(AFF_BONDING);
@@ -2457,51 +2489,59 @@ ACMD(do_bond)
       } else
         send_to_char("You have already bonded this focus.\r\n", ch);
     } else {
-      switch (GET_OBJ_VAL(obj, 0)) {
-      case FOCI_SPEC_SPELL:
-        karma = GET_OBJ_VAL(obj, 1);
-        break;
-      case FOCI_EXPENDABLE:
-      case FOCI_SPELL_CAT:
-        if (!*buf2) {
-          send_to_char("Bond which spell category?\r\n", ch);
-          return;
-        }
-        for (; spirit <= MANIPULATION; spirit++)
-          if (is_abbrev(buf2, spell_category[spirit]))
-            break;
-        if (spirit > MANIPULATION) {
-          send_to_char("That is not a valid category.\r\n", ch);
-          return;
-        }
-        if (GET_OBJ_VAL(obj, 0) == FOCI_SPELL_CAT)
-          karma = GET_OBJ_VAL(obj, 1) * 3;
-        break;
-      case FOCI_SPIRIT:
-        if (!*buf2) {
-          send_to_char(ch, "Bond which %s type?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-          return;
-        }
-        if (GET_TRADITION(ch) == TRAD_HERMETIC) {
-          for (; spirit < NUM_ELEMENTS; spirit++)
-            if (is_abbrev(buf2, elements[spirit].name))
+      switch (GET_FOCUS_TYPE(obj)) {
+        case FOCI_SPEC_SPELL:
+          karma = GET_FOCUS_FORCE(obj);
+          break;
+        case FOCI_EXPENDABLE:
+        case FOCI_SPELL_CAT:
+          if (!*buf2) {
+            send_to_char("Bond which spell category?\r\n", ch);
+            return;
+          }
+          for (; spirit <= MANIPULATION; spirit++)
+            if (is_abbrev(buf2, spell_category[spirit]))
               break;
-        } else
-          for (; spirit < NUM_SPIRITS; spirit++)
-            if (is_abbrev(buf2, spirits[spirit].name))
-              break;
-        if (GET_TRADITION(ch) == TRAD_HERMETIC ? spirit == NUM_ELEMENTS : spirit == NUM_SPIRITS) {
-          send_to_char(ch, "That is not a valid %s.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-          return;
-        }
-        karma = GET_OBJ_VAL(obj, 1) * 2;
-        break;
-      case FOCI_POWER:
-        karma = GET_OBJ_VAL(obj, 1) * 5;
-        break;
-      case FOCI_SUSTAINED:
-        karma = GET_OBJ_VAL(obj, 1);
-        break;
+          if (spirit > MANIPULATION) {
+            send_to_char("That is not a valid category.\r\n", ch);
+            return;
+          }
+          if (GET_FOCUS_TYPE(obj) == FOCI_SPELL_CAT)
+            karma = GET_FOCUS_FORCE(obj) * 3;
+          break;
+        case FOCI_SPIRIT:
+          if (!*buf2) {
+            send_to_char(ch, "Bond which %s type?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+            return;
+          }
+          if (GET_TRADITION(ch) == TRAD_HERMETIC) {
+            for (; spirit < NUM_ELEMENTS; spirit++)
+              if (is_abbrev(buf2, elements[spirit].name))
+                break;
+          } else
+            for (; spirit < NUM_SPIRITS; spirit++)
+              if (is_abbrev(buf2, spirits[spirit].name))
+                break;
+          if (GET_TRADITION(ch) == TRAD_HERMETIC ? spirit == NUM_ELEMENTS : spirit == NUM_SPIRITS) {
+            send_to_char(ch, "That is not a valid %s.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+            return;
+          }
+          karma = GET_FOCUS_FORCE(obj) * 2;
+          break;
+        case FOCI_POWER:
+          karma = GET_FOCUS_FORCE(obj) * 5;
+          break;
+        case FOCI_SUSTAINED:
+          karma = GET_FOCUS_FORCE(obj);
+          break;
+        case FOCI_SPELL_DEFENSE:
+          karma = GET_FOCUS_FORCE(obj) * 3;
+          break;
+        default:
+          snprintf(buf, sizeof(buf), "SYSERR: Unknown focus type %d in bonding switch.", GET_FOCUS_TYPE(obj));
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          karma = 10000000;
+          break;
       }
       if (GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED || GET_OBJ_VAL(obj, 0) == FOCI_SPEC_SPELL) {
         for (;spell; spell = spell->next)
@@ -2513,29 +2553,35 @@ ACMD(do_bond)
           send_to_char(ch, "You don't know a spell called '%s' to bond.\r\n", buf2);
           return;
         }
-        if (GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED && spells[spirit].duration != SUSTAINED) {
-          send_to_char("You don't need to bond a sustaining foci for this spell.\r\n", ch);
+        if (GET_FOCUS_TYPE(obj) == FOCI_SUSTAINED && spells[spirit].duration != SUSTAINED) {
+          send_to_char("You don't need to bond a sustaining focus for this spell.\r\n", ch);
           return;
         }
       }
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         if (GET_FORCE_POINTS(ch) < karma) {
-          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the talismonger or the spell trainers and typing LEARN FORCE.\r\n", karma);
+          send_to_char(ch, "You don't have enough force points to bond that (Need %d). You can get more force points by returning to the talismonger or the spell trainers and typing ^WLEARN FORCE^n.\r\n", karma);
           return;
         }
         GET_FORCE_POINTS(ch) -= karma;
-        GET_OBJ_VAL(obj, 9) = 1;
+        GET_FOCUS_BOND_TIME_REMAINING(obj) = 1;
       } else {
         if (GET_KARMA(ch) < karma * 100) {
           send_to_char(ch, "You don't have enough karma to bond that (Need %d).\r\n", karma);
           return;
         }
         GET_KARMA(ch) -= karma * 100;
-        GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 1) * 60;
+        GET_FOCUS_BOND_TIME_REMAINING(obj) = GET_FOCUS_FORCE(obj) * 60;
       }
-      GET_OBJ_VAL(obj, 2) = GET_IDNUM(ch);
-      GET_OBJ_VAL(obj, 3) = spirit;
-      GET_OBJ_VAL(obj, 5) = GET_TRADITION(ch) == TRAD_HERMETIC ? 1 : 0;
+      GET_FOCUS_BONDED_TO(obj) = GET_IDNUM(ch);
+      GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj) = spirit;
+      GET_FOCUS_TRADITION(obj) = GET_TRADITION(ch) == TRAD_HERMETIC ? 1 : 0;
+      
+      if (access_level(ch, LVL_BUILDER)) {
+        send_to_char(ch, "You use your staff powers to greatly accelerate the bonding ritual.\r\n");
+        GET_FOCUS_BOND_TIME_REMAINING(obj) = 1;
+      }
+      
       send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
       act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
       AFF_FLAGS(ch).SetBit(AFF_BONDING);
@@ -2812,8 +2858,11 @@ ACMD(do_conjure)
       return;
     }
     for (int i = 0; i < NUM_WEARS; i++)
-      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 0) == FOCI_SPIRIT
-          && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch) && GET_OBJ_VAL(GET_EQ(ch, i), 3) == ch->char_specials.conjure[0]
+      if (GET_EQ(ch, i) 
+          && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS 
+          && GET_OBJ_VAL(GET_EQ(ch, i), 0) == FOCI_SPIRIT
+          && focus_is_usable_by_ch(GET_EQ(ch, i), ch)
+          && GET_OBJ_VAL(GET_EQ(ch, i), 3) == ch->char_specials.conjure[0]
           && GET_OBJ_VAL(GET_EQ(ch, i), 4)) {
         skill += GET_OBJ_VAL(GET_EQ(ch, i), 1);
         break;
@@ -2835,6 +2884,9 @@ ACMD(do_conjure)
         struct char_data *mob = create_elemental(ch, spirit, force, spirdata->id, TRAD_SHAMANIC);
         send_to_char("The spirit hears your call and comes forth from the metaplanes.\r\n", ch);
         act("$n fades into existance on the astral plane.", TRUE, mob, 0, 0, TO_ROOM);
+        
+        AFF_FLAGS(ch).SetBit(AFF_GROUP);
+        AFF_FLAGS(mob).SetBit(AFF_GROUP);
       }
     }
   }
@@ -3634,6 +3686,8 @@ POWER(spirit_attack)
   else {
     check_killer(ch, tch);
     set_fighting(spirit, tch);
+    if (!FIGHTING(tch) && CAN_SEE(tch, spirit))
+      set_fighting(tch, spirit);
     spiritdata->services--;
   }
 }
@@ -3983,9 +4037,13 @@ ACMD(do_deactivate)
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
-    if (GET_OBJ_VAL(obj, 4) < 1)
+    if (GET_FOCUS_ACTIVATED(obj) < 1)
       send_to_char(ch, "%s isn't activated.\r\n", GET_OBJ_NAME(obj));
     else {
+      if (GET_FOCUS_TYPE(obj) == FOCI_SUSTAINED) {
+        send_to_char(ch, "The only way to deactivate %s is to release the spell it's sustaining.\r\n", GET_OBJ_NAME(obj));
+        return;
+      }
       GET_OBJ_VAL(obj, 4) = 0;
       GET_FOCI(ch)--;
       affect_total(ch);
@@ -4091,7 +4149,9 @@ ACMD(do_track)
   }
   if (obj) {
     vict = NULL;
-    if (GET_OBJ_TYPE(obj) != ITEM_FOCUS && !(GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE))) {
+    if (GET_OBJ_TYPE(obj) != ITEM_FOCUS 
+        && !(GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL 
+        && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE))) {
       send_to_char(ch, "There is no astral signature present on %s.\r\n", GET_OBJ_NAME(obj));
       return;
     }
@@ -4348,7 +4408,9 @@ void disp_geas_menu(struct descriptor_data *d)
   CLS(CH);
   int x = 0;
   for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(CH, i) && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH))
+    if (GET_EQ(CH, i) 
+        && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS 
+        && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH))
       send_to_char(CH, "%d) %s\r\n", x++, GET_OBJ_NAME(GET_EQ(CH, i)));
   send_to_char("q) Quit Initiation\r\nSelect geas to shed: ", CH);
   d->edit_mode = INIT_GEAS;
@@ -4495,7 +4557,10 @@ void init_parse(struct descriptor_data *d, char *arg)
         send_to_char("Invalid Response. Select geas to shed: ", CH);
       } else {
         for (i = 0; i < NUM_WEARS; i++)
-          if (GET_EQ(CH, i) && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH) && --number < 0) {
+          if (GET_EQ(CH, i) 
+              && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS 
+              && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH) 
+              && --number < 0) {
             obj = GET_EQ(CH, i);
             break;
           }
@@ -4685,4 +4750,36 @@ ACMD(do_think)
   snprintf(buf, sizeof(buf), "^rYou hear $v in your mind say, \"%s\"", argument);
   act(buf, FALSE, ch, 0, ch->char_specials.mindlink, TO_VICT);
   send_to_char(ch, "You think, \"%s\"\r\n", argument);
+}
+
+int get_spell_affected_successes(struct char_data * ch, int type)
+{
+  if (!GET_SUSTAINED(ch))
+    return 0;
+    
+  for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next)
+    if ((hjp->spell == type) && (hjp->caster == FALSE))
+      return MIN(hjp->success, hjp->force);
+  
+  return FALSE;
+}
+
+bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch) {
+  // Focus or character does not exist.
+  if (!focus || !ch)
+    return FALSE;
+    
+  // Focus is not a focus.
+  if (GET_OBJ_TYPE(focus) != ITEM_FOCUS)
+    return FALSE;
+    
+  // Focus not bonded to character.
+  if (GET_FOCUS_BONDED_TO(focus) != GET_IDNUM(ch))
+    return FALSE;
+    
+  // Focus still being bonded.
+  if (GET_FOCUS_BOND_TIME_REMAINING(focus))
+    return FALSE;
+    
+  return TRUE;
 }

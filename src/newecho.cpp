@@ -150,6 +150,28 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
   return result_string;
 }
 
+// Finds the first occurrence of standalone word 'str' in string.
+const char *strstr_isolated(const char *string, const char *search_string) {
+  const char *ptr = strstr(string, search_string);
+  int search_len = strlen(search_string);
+  
+  while (ptr && isalpha(*(ptr + search_len)))
+    ptr = strstr(ptr + 1, search_string);
+    
+  return ptr;
+}
+
+// Finds the first occurrence of standalone word 'str' in string (ignores case)
+const char *str_str_isolated(const char *string, const char *search_string) {
+  const char *ptr = str_str(string, search_string);
+  int search_len = strlen(search_string);
+  
+  while (ptr && isalpha(*(ptr + search_len)))
+    ptr = str_str(ptr + 1, search_string);
+    
+  return ptr;
+}
+
 char newecho_debug_buf[MAX_STRING_LENGTH];
 void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string, bool require_char_name) {
   int tag_index, i;
@@ -172,22 +194,59 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   
   // Scan the string for the actor's name. This is an easy check. In the process, convert echo_string into something mutable, and set i to skip over this new text.
   bool must_prepend_name = TRUE;
-  if (require_char_name) {    
-    // Check the string for '@self' without an alphabetical after it.
-    const char *self_ptr = strstr(echo_string, "@self");
-    while (self_ptr && isalpha(*(self_ptr + strlen("@self"))))
-      self_ptr = strstr(self_ptr + 1, "@self");
-    if (self_ptr)
-      must_prepend_name = FALSE;
+  if (require_char_name) {
+    // We're finding all characters up to the first quote mark, and checking those for the name.
+    const char *quote_ptr = strchr(echo_string, '"');
+    const char *start_of_block = echo_string;
     
-    // Check the string for the actor's name in the same manner.
-    if (must_prepend_name) {
-      const char *name_ptr = strstr(echo_string, GET_CHAR_NAME(actor));
-      while (name_ptr && isalpha(*(name_ptr + strlen(GET_CHAR_NAME(actor)))))
-        name_ptr = strstr(name_ptr + 1, GET_CHAR_NAME(actor));
-      if (name_ptr)
-        must_prepend_name = FALSE;
+    while (quote_ptr) {
+      memset(storage_string, 0, sizeof(storage_string));
+      strncpy(storage_string, start_of_block, quote_ptr - start_of_block);
+      // send_to_char(actor, "Storage string: '%s' (quote_ptr = %c, start_of_block = %c)\r\n", storage_string, *quote_ptr, *start_of_block);
+      
+      // Check the string for '@self'.
+      if (!(must_prepend_name = !str_str_isolated(storage_string, "@self"))) {
+        // send_to_char("Found @self outside of quotes.\r\n", actor);
+        break;
+      }
+      
+      // Check the string for the capitalized character's name.
+      if (!(must_prepend_name = !strstr_isolated(storage_string, capitalize(GET_CHAR_NAME(actor))))) {
+        // send_to_char("Found name outside of quotes.\r\n", actor);
+        break;
+      }
+      
+      // Since we're before a quote (outside of dialogue), we want to advance to the next quote.
+      if (!(quote_ptr = strchr(quote_ptr + 1, '"'))) {
+        // send_to_char("No more quotes.\r\n", actor);
+        break;
+      }
+      
+      // If the next character is a null character, we're at the end of the emote.
+      if (!(start_of_block = quote_ptr + 1)) {
+        // send_to_char("Null character after quote.\r\n", actor);
+        break;
+      }
+      
+      // Finally, advance to the quote at the beginning of the next dialogue, or re-evaluate if there is no more dialogue.
+      if (!(quote_ptr = strchr(start_of_block, '"'))) {
+        // send_to_char("Breaking out of while loop, no more quotes.\r\n", actor);
+        break;
+      }
     }
+    
+    if (start_of_block && *start_of_block) {
+      // send_to_char(actor, "Last attempt. Evaluating '%s'.\r\n", start_of_block);
+      if (!(must_prepend_name = !str_str_isolated(start_of_block, "@self"))) {
+        // send_to_char("Found @self in final analysis.\r\n", actor);
+      }
+      
+      // Check the string for the capitalized character's name.
+      else if (!(must_prepend_name = !strstr_isolated(start_of_block, capitalize(GET_CHAR_NAME(actor))))) {
+        // send_to_char("Found name in final analysis.\r\n", actor);
+      }
+    }
+    
   } else {
     must_prepend_name = FALSE;
   }
@@ -529,54 +588,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 }
 
 ACMD(do_new_echo) {
-  /* 
-  
-  Echos (which is what all this stuff really is, just reflavored echoes) can be flagged as astral-only. If not flagged as such, they go to all characters in the room.
-  
-  No more first person. It's all done by character name. Saves us a ton of grammatical transformations.
-  
-  If you're tagged in an emote, your character name is highlighted.
-  
-  You can set speech auto-color for your character. Other people can configure this to not show for them.
-  
-  Since we've already figured out speech detection above, we can tie in pseudolanguage here as well.
-  
-  (done) Speech in silent rooms is suppressed. If you emote with speech in a silent room, you get an error.
-  
-  We allow the following special things to happen in echos, emotes, etc:
-  
-    > emote With a sigh, Lucien steps up to the bar.
-    
-    Auto-flags Lucien as self, echos appropriately.
-    
-    > emote The ceiling falls.
-    
-    Without special privileges like 'questor', fails and requires you to put your character name in it.
-    
-    > emote nods to Testmort, then glances at @scruffy. "What's up?"
-    
-    As Testmort is capitalized, this takes Testmort's name as a tag. Otherwise, you can @-tag and it will look 
-      for name->memory->keyword in that order. Failure to resolve an @ means your emote won't send.
-      
-    > emote A sharp whistle lets Lucien grab Testmort's attention, and he points in @scruffy's direction.
-    
-    The possessive is not consumed by the tag. Any non-letter breaks the tag immediately, so the possessive remains.
-    
-    > emote 's eyebrow raises.
-    
-    The possessive is contracted against the actor's name.
-    
-  things to watch for: forged rolls and other forged output with this command.
-  */
-  
-  /* Logic for the above:
-  
-    for each character in room, analyze string, finding tags and replacing them with the appropriate rendering of the character.
-    
-    I'd love to do the analysis in one pass and have an arbitrary set of tags and speech that can be processed more easily,
-      but I don't have a method for doing that in mind right now. Something to revisit later.
-      
-  */
+  char storage_buf[MAX_INPUT_LENGTH * 2 + 1];
   
   // Reject hitchers. They have no body and would break things.
   if (PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona) {
@@ -585,6 +597,7 @@ ACMD(do_new_echo) {
   }
   
   skip_spaces(&argument);
+  delete_doubledollar(argument);
   
   // Require an argument.
   if (!*argument) {      
@@ -596,14 +609,29 @@ ACMD(do_new_echo) {
   if (strchr(argument, '"') != NULL && !char_can_make_noise(ch))
     return;
     
+  // Double up percentages.
+  char *pct_reader = argument;
+  char *pct_writer = storage_buf;
+  while (*pct_reader && (pct_writer - storage_buf) < (int) sizeof(storage_buf)) {
+    if (*pct_reader == '%')
+      *(pct_writer++) = '%';
+    *(pct_writer++) = *(pct_reader++);
+  }
+  if ((pct_writer - storage_buf) >= (int) sizeof(storage_buf)) {
+    send_to_char(ch, "Sorry, your emote was too long. Please shorten it.\r\n");
+    return;
+  } else {
+    *pct_writer = '\0';
+  }
+    
   // Scan for mismatching quotes or mismatching parens. Reject if found.
   int quotes = 0, parens = 0;
-  for (int i = 0; i < (int) strlen(argument); i++) {
-    if (argument[i] == '"')
+  for (int i = 0; i < (int) strlen(storage_buf); i++) {
+    if (storage_buf[i] == '"')
       quotes++;
-    else if (argument[i] == '(')
+    else if (storage_buf[i] == '(')
       parens++;
-    else if (argument[i] == ')')
+    else if (storage_buf[i] == ')')
       parens--;
   }
   if (quotes % 2) {
@@ -615,16 +643,42 @@ ACMD(do_new_echo) {
     return;
   }
   
+  // Prevent forgery of the dice command.
+  bool is_carat = FALSE;
+  bool has_valid_content = FALSE;
+  for (const char *ptr = storage_buf; *ptr; ptr++) {
+    if (is_carat) {
+      is_carat = FALSE;
+      continue;
+    }
+    
+    if (isdigit(*ptr)) {
+      send_to_char(ch, "The first word of your emote cannot contain a digit.\r\n");
+      return;
+    }
+    
+    if (*ptr == '^')
+      is_carat = TRUE;
+    else if (*ptr == ' ')
+      break;
+    else if (isalpha(*ptr))
+      has_valid_content = TRUE;
+  }
+  if (!has_valid_content) {
+    send_to_char(ch, "You can't begin your emote with blank space.\r\n");
+    return;
+  }
+  
   // Scan the emote for language values. You can only use languages you know, and only up to certain word lengths.
   if (!IS_NPC(ch)) {
     int language_in_use = GET_LANGUAGE(ch);
-    for (int i = 0; i < (int) strlen(argument); i++) {
+    for (int i = 0; i < (int) strlen(storage_buf); i++) {
       // Skip everything that's not speech.
-      if (argument[i] != '"')
+      if (storage_buf[i] != '"')
         continue;
       
       // We only accept parenthetical language as the very first thing in the sentence.
-      if (argument[++i] == '(') {
+      if (storage_buf[++i] == '(') {
         i++;
         
         char language_string[100];
@@ -632,16 +686,16 @@ ACMD(do_new_echo) {
         
         // Copy the language into the language_string buffer, stopping at the next parenthetical.
         for (language_idx = i; 
-             language_idx - i < (int) sizeof(language_string) - 1 && argument[language_idx] != ')'; 
+             language_idx - i < (int) sizeof(language_string) - 1 && storage_buf[language_idx] != ')'; 
              language_idx++) 
-          language_string[language_idx - i] = argument[language_idx];
+          language_string[language_idx - i] = storage_buf[language_idx];
         
         // Null-terminate language buffer.
         language_string[language_idx - i] = '\0';
         
         // We expect that the M_E_S pointer is at the closing parens. If this is not true, we ran out of buf
         // space-- that means this is not a language! Just bail out.
-        if (argument[language_idx] != ')') {
+        if (storage_buf[language_idx] != ')') {
           continue;
         }
         
@@ -672,8 +726,8 @@ ACMD(do_new_echo) {
       
       // Extract the spoken content and check it for length.
       char *ptr = storage_string;
-      while (i < (int) strlen(argument) && argument[i] != '"')
-        *(ptr++) = argument[i++];
+      while (i < (int) strlen(storage_buf) && storage_buf[i] != '"')
+        *(ptr++) = storage_buf[i++];
       *ptr = '\0';
       
       if (!has_required_language_ability_for_sentence(ch, storage_string, language_in_use))
@@ -684,7 +738,9 @@ ACMD(do_new_echo) {
   // Only questors and staff can echo without their names.
   bool must_echo_with_name = !(access_level(ch, LVL_BUILDER) || PRF_FLAGGED(ch, PRF_QUESTOR));
   
-  // All checks done, we're clear to emote.  
+  // All checks done, we're clear to emote. We know that storage_buf gets reused later, so let's save our emote from that fate.
+  char emote_buf[strlen(storage_buf) + 1];
+  strlcpy(emote_buf, storage_buf, sizeof(emote_buf));
   
   // Iterate over the viewers in the room.
   for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people; 
@@ -694,9 +750,16 @@ ACMD(do_new_echo) {
     if (found_mem(GET_IGNORE(viewer), ch))
       continue;
     
-    // If the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
-    if (subcmd != SCMD_AECHO || (IS_ASTRAL(viewer) || IS_DUAL(viewer)))
-      send_echo_to_char(ch, viewer, argument, must_echo_with_name);
+    // If it's aecho, only send to people who see astral.
+    if (subcmd == SCMD_AECHO && !(IS_ASTRAL(viewer) || IS_DUAL(viewer)))
+      continue;
+      
+    // If they're insensate, nvm.
+    if (!AWAKE(viewer) || PLR_FLAGGED(viewer, PLR_REMOTE) || PLR_FLAGGED(viewer, PLR_MATRIX))
+      continue;
+    
+    // Since the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
+    send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name);
   }
 }
 

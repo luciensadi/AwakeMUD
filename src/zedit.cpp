@@ -486,7 +486,10 @@ void zedit_disp_command_menu(struct descriptor_data *d)
 // MAIN LOOP!
 void zedit_parse(struct descriptor_data *d, const char *arg)
 {
-  int number, i = 0, zone;
+  int number;
+#ifdef RESTRICT_ZONE_LOADING_TO_EDITORS
+  int i = 0, zone;
+#endif
 
   switch (d->edit_mode)
   {
@@ -942,12 +945,15 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case 'V':
     case 'O':
       COM->arg3 = MAX(0, real_room(number));
+#ifdef RESTRICT_ZONE_LOADING_TO_EDITORS
       if (!access_level(CH, LVL_ADMIN) && !(number >= (ZONENUM * 100) &&
                                             number <= zone_table[real_zone(ZONENUM)].top))
         COM->arg3 = 0;
+#endif
       break;
     case 'P':
       COM->arg3 = MAX(0, real_object(number));
+#ifdef RESTRICT_ZONE_LOADING_TO_EDITORS
       if (!access_level(CH, LVL_ADMIN) && (number < 600 || number > 699)) {
         for (zone = 0; zone <= top_of_zone_table; zone++)
           if (number >= (zone_table[zone].number * 100) && number <= zone_table[zone].top)
@@ -961,6 +967,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       }
       if (i >= 5)
         COM->arg3 = 0;
+#endif
       break;
     case 'N':
       COM->arg3 = MIN(25, MAX(0, number));
@@ -993,9 +1000,11 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
   case ZEDIT_REMOVE_ROOM:
     number = atoi(arg);
     COM->arg1 = MAX(0, real_room(number));
+#ifdef RESTRICT_ZONE_LOADING_TO_EDITORS
     if (!access_level(CH, LVL_ADMIN) && !(number >= (ZONENUM * 100) &&
                                           number <= zone_table[real_zone(ZONENUM)].top))
       COM->arg1 = 0;
+#endif
     zedit_disp_command_menu(d);
     break;
 
@@ -1032,6 +1041,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     } else {
       if (COM->command == 'M' || COM->command == 'S') {
         COM->arg1 = MAX(0, real_mobile(number));
+#ifdef RESTRICT_ZONE_LOADING_TO_EDITORS
         if (!access_level(CH, LVL_ADMIN)) {
           for (zone = 0; zone <= top_of_zone_table; zone++)
             if (number >= (zone_table[zone].number * 100) && number <= zone_table[zone].top)
@@ -1045,11 +1055,13 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
         }
         if (i >= 5)
           COM->arg1 = 0;
+#endif
       } else {
         if (COM->command == 'R')
           COM->arg2 = MAX(0, real_object(number));
         else
           COM->arg1 = MAX(0, real_object(number));
+#ifdef RESTRICT_ZONE_LOADING_TO_EDITORS
         if (!access_level(CH, LVL_ADMIN) && (number < 300 || number > 699 || (number > 499 && number < 600))) {
           for (zone = 0; zone <= top_of_zone_table; zone++)
             if (number >= (zone_table[zone].number * 100) && number <= zone_table[zone].top)
@@ -1067,6 +1079,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
           else
             COM->arg1 = 0;
         }
+#endif
       }
     }
     zedit_disp_command_menu(d);

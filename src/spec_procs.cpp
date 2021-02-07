@@ -2297,7 +2297,7 @@ SPECIAL(hacker)
       return TRUE;
 
     if (GET_OBJ_VAL(obj, 2) == 1)
-      amount = (int)(GET_OBJ_VAL(obj, 0) / 8);
+      amount = (int)(GET_OBJ_VAL(obj, 0) / 7);
     else if (GET_OBJ_VAL(obj, 2) == 2)
       amount = (int)(GET_OBJ_VAL(obj, 0) / 5);
     else
@@ -2306,8 +2306,8 @@ SPECIAL(hacker)
     nuyen = GET_OBJ_VAL(obj, 0) - amount;
     GET_BANK(hacker) += amount;
     GET_BANK(ch) += nuyen;
-    snprintf(buf1, sizeof(buf1), "%s Updated.  %d nuyen transferred to your bank account.",
-            GET_CHAR_NAME(ch), nuyen);
+    snprintf(buf1, sizeof(buf1), "%s Updated. %d nuyen transferred to your bank account, I took a cut of %d.",
+            GET_CHAR_NAME(ch), nuyen, amount);
     do_say(hacker, buf1, 0, SCMD_SAYTO);
     extract_obj(obj);
     return TRUE;
@@ -2700,7 +2700,7 @@ WSPEC(monowhip)
 
   if (dam < 1 && !number(0, 1)) {
     skill = get_skill(ch, SKILL_WHIPS_FLAILS, target);
-    if (!success_test(skill, target)) {
+    if (success_test(skill, target) <= 0) {
       act("Your whip flails out of control, striking you instead of $N!", FALSE, ch, 0, vict, TO_CHAR);
       act("$n's whip completely misses and recoils to hit $m!", TRUE, ch, 0, 0, TO_ROOM);
       dam_total = convert_damage(stage(-(success_test(GET_BOD(ch) + GET_DEFENSE(ch),
@@ -3594,8 +3594,8 @@ SPECIAL(auth_room)
       playerDB.SaveChar(ch);
       
       // Make them look.
-      if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-        look_at_room(ch, 0);
+      // if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0);
     }
   }
   return FALSE;
@@ -3609,7 +3609,7 @@ SPECIAL(room_damage_radiation)
   if (!ch)
     for (struct char_data *vict = room->people; next; vict = next) {
       next = vict->next_in_room;
-      if (!success_test(GET_BOD(vict), 8) && number(1, 3) == 3) {
+      if (success_test(GET_BOD(vict), 8) <= 0 && number(1, 3) == 3) {
         rad_dam = number(1,3);
         if (rad_dam == 3) {
           act("Your entire body is wracked with an intense inner heat as your nose begins to bleed and blood pours freely from your mouth.", FALSE, vict, 0, 0, TO_CHAR);
@@ -3841,6 +3841,16 @@ SPECIAL(quest_debug_scanner)
           continue;
         
         send_to_char(ch, "%-20s - [%6ld] %s^n\r\n", GET_CHAR_NAME(tch), GET_ROOM_VNUM(room), GET_ROOM_NAME(room));
+      }
+    }
+    
+    for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+      room = get_veh_in_room(veh);
+      for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
+        if (IS_NPC(tch))
+          continue;
+        
+        send_to_char(ch, "%-20s - in %s at [%6ld] %s^n\r\n", GET_CHAR_NAME(tch), GET_VEH_NAME(veh), room ? GET_ROOM_VNUM(room) : -1, room ? GET_ROOM_NAME(room) : "nowhere");
       }
     }
     
@@ -5731,4 +5741,61 @@ SPECIAL(chargen_docwagon_checker) {
   }
 
   return(FALSE);
+}
+
+SPECIAL(nerpcorpolis_button) {
+  struct obj_data *obj = (struct obj_data *) me;
+  
+  struct char_data *tmp_char;
+  struct obj_data *tmp_object;
+  
+  // No argument given, no character available, no problem. Skip it.
+  if (!*argument || !ch || ch->in_veh)
+    return FALSE;
+  
+  // If it's not a command that would reveal this sign's data, skip it.
+  if (!(CMD_IS("push") || CMD_IS("press") || CMD_IS("use") || CMD_IS("activate")))
+    return FALSE;
+  
+  // Search the room and find something that matches me.
+  generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &tmp_object);
+  
+  // Senpai didn't notice me? Skip it, he's not worth it.
+  if (!tmp_object || tmp_object != obj)
+    return FALSE;
+  
+  // Select our destination list based on our room's vnum.
+  struct room_data *room = get_obj_in_room(obj);
+  if (!room)
+    return FALSE;
+    
+  vnum_t teleport_to = -1;
+  
+  switch (GET_ROOM_VNUM(room)) {
+    case 1003:
+      teleport_to = 6901;
+      break;
+    case 6901:
+      teleport_to = 1003;
+      break;
+    default:
+      snprintf(buf, sizeof(buf), "SYSERR: Invalid room %ld for teleport button.", GET_ROOM_VNUM(room));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return FALSE;
+  }
+  
+  int teleport_rnum = real_room(teleport_to);
+  if (teleport_rnum <= -1) {
+    snprintf(buf, sizeof(buf), "SYSERR: Invalid destination %ld for teleport button in %ld.", teleport_to, GET_ROOM_VNUM(room));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  send_to_char("Your surroundings blur and shift.\r\n", ch);
+  act("$n presses the button and disappears.", TRUE, ch, 0, 0, TO_ROOM);
+  char_from_room(ch);
+  char_to_room(ch, &world[teleport_rnum]);
+  act("$n appears from the teleporter.", TRUE, ch, 0, 0, TO_ROOM);
+  
+  return TRUE;
 }

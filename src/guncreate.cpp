@@ -109,11 +109,13 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
    }
    break; 
   case AEDIT_QUANTITY:
-   if (number < 0)
-     number = 0;
-   GET_AMMOBOX_INTENDED_QUANTITY(OBJ) = number - (number % 10);
-   aedit_disp_menu(d);
-   break;
+    if (number < 0)
+      number = 0;
+    if (number > 1000)
+      number = 1000;
+    GET_AMMOBOX_INTENDED_QUANTITY(OBJ) = number - (number % 10);
+    aedit_disp_menu(d);
+    break;
   }
 }
 

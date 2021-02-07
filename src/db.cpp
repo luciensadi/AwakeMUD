@@ -433,6 +433,7 @@ void boot_world(void)
   require_that_field_exists_in_table("archetypal", "pfiles_chargendata", "SQL/Migrations/archetypes.sql");
   require_that_field_exists_in_table("highlight", "pfiles", "SQL/Migrations/rp_upgrade.sql");
   require_that_field_exists_in_table("email", "pfiles", "SQL/Migrations/rp_upgrade.sql");
+  require_that_field_exists_in_table("multiplier", "pfiles", "SQL/Migrations/multipliers.sql");
   
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -1837,31 +1838,44 @@ void parse_object(File &fl, long nr)
         // Set the strings-- we want all these things to match for simplicity's sake.
         type_as_string = get_weapon_ammo_name_as_string(GET_AMMOBOX_WEAPON(obj));
         
-        snprintf(buf, sizeof(buf), "metal ammo ammunition box %s %s %d-%s %s%s",
-                GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
-                weapon_type[GET_AMMOBOX_WEAPON(obj)],
-                GET_AMMOBOX_QUANTITY(obj),
-                type_as_string,
-                type_as_string,
-                GET_AMMOBOX_QUANTITY(obj) > 1 ? "s" : "");
+        if (GET_AMMOBOX_WEAPON(obj)) {
+          snprintf(buf, sizeof(buf), "metal ammo ammunition box %s %s %d-%s %s%s",
+                  GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
+                  weapon_type[GET_AMMOBOX_WEAPON(obj)],
+                  GET_AMMOBOX_QUANTITY(obj),
+                  type_as_string,
+                  type_as_string,
+                  GET_AMMOBOX_QUANTITY(obj) > 1 ? "s" : "");
+        } else {
+          strlcpy(buf, "metal ammo ammunition box nondescript", sizeof(buf));
+        }
         // log_vfprintf("Changing %s to %s for %ld.", obj->text.keywords, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.keywords);
         obj->text.keywords = str_dup(buf);
         
-        snprintf(buf, sizeof(buf), "a %d-%s box of %s %s ammunition",
-                GET_AMMOBOX_QUANTITY(obj),
-                type_as_string,
-                GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
-                weapon_type[GET_AMMOBOX_WEAPON(obj)]);
+        if (GET_AMMOBOX_WEAPON(obj)) {
+          snprintf(buf, sizeof(buf), "a %d-%s box of %s %s ammunition",
+                  GET_AMMOBOX_QUANTITY(obj),
+                  type_as_string,
+                  GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
+                  weapon_type[GET_AMMOBOX_WEAPON(obj)]);
+        } else {
+          strlcpy(buf, "a nondescript box of ammunition", sizeof(buf));
+        }
         // log_vfprintf("Changing %s to %s for %ld.", obj->text.name, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.name);
         obj->text.name = str_dup(buf);
         
-        snprintf(buf, sizeof(buf), "A metal box of %s %s %s%s has been left here.",
-                GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
-                weapon_type[GET_AMMOBOX_WEAPON(obj)],
-                type_as_string,
-                GET_AMMOBOX_QUANTITY(obj) > 1 ? "s" : "");
+        
+        if (GET_AMMOBOX_WEAPON(obj)) {
+          snprintf(buf, sizeof(buf), "A metal box of %s %s %s%s has been left here.",
+                  GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
+                  weapon_type[GET_AMMOBOX_WEAPON(obj)],
+                  type_as_string,
+                  GET_AMMOBOX_QUANTITY(obj) > 1 ? "s" : "");
+        } else {
+          strlcpy(buf, "A metal box of ammunition has been left here.", sizeof(buf));
+        }
         // log_vfprintf("Changing %s to %s for %ld.", obj->text.room_desc, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.room_desc);
         obj->text.room_desc = str_dup(buf);
@@ -2625,7 +2639,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
             continue;
 
           ++found;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %2d%s +%d %s %s %d%s\r\n",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%2d%s ^y+%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n)%s\r\n",
                   OBJ_VNUM_RNUM(nr),
                   ObjList.CountObj(nr),
                   GET_OBJ_VAL(&obj_proto[nr], 0),
@@ -2634,6 +2648,10 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
                   obj_proto[nr].text.name,
                   weapon_type[GET_OBJ_VAL(&obj_proto[nr], 3)],
                   GET_OBJ_VAL(&obj_proto[nr], 5),
+                  WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
+                  WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
+                  WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
+                  WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
                   obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
         }
       }
@@ -2643,8 +2661,11 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
 
 int vnum_object_armors(char *searchname, struct char_data * ch)
 {
+  char buf[MAX_STRING_LENGTH*8];
   char xbuf[MAX_STRING_LENGTH];
   int nr, found = 0;
+  
+  buf[0] = 0;
   
   // List everything above 20 combined ballistic and impact.
   for (nr = 0; nr <= top_of_objt; nr++) {
@@ -2656,15 +2677,14 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
     sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
     
     ++found;
-    snprintf(buf, sizeof(buf), "[%5ld -%2d] %2d %d %s%s%s\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
             OBJ_VNUM_RNUM(nr),
             ObjList.CountObj(nr),
-            GET_OBJ_VAL(&obj_proto[nr], 0),
-            GET_OBJ_VAL(&obj_proto[nr], 1),
+            GET_WORN_MATCHED_SET(&obj_proto[nr]) ? GET_WORN_BALLISTIC(&obj_proto[nr]) / 100 : GET_WORN_BALLISTIC(&obj_proto[nr]),
+            GET_WORN_MATCHED_SET(&obj_proto[nr]) ? GET_WORN_IMPACT(&obj_proto[nr]) / 100 : GET_WORN_IMPACT(&obj_proto[nr]),
             obj_proto[nr].text.name,
             xbuf,
             obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
-    send_to_char(buf, ch);
   }
   
   // List everything with 20 or less combined ballistic and impact, descending.
@@ -2678,16 +2698,18 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
       sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf) );
       
       ++found;
-      snprintf(buf, sizeof(buf), "[%5ld -%2d] %2d %d %s%s\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              GET_OBJ_VAL(&obj_proto[nr], 0),
-              GET_OBJ_VAL(&obj_proto[nr], 1),
+              GET_WORN_BALLISTIC(&obj_proto[nr]),
+              GET_WORN_IMPACT(&obj_proto[nr]),
               obj_proto[nr].text.name,
-              xbuf);
-      send_to_char(buf, ch);
+              xbuf,
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
     }
   }
+  
+  page_string(ch->desc, buf, 1);
   
   return (found);
 }
@@ -2718,7 +2740,7 @@ int vnum_object_magazines(char *searchname, struct char_data * ch)
           continue;
 
         ++found;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d wt %f] %2d %3d %s%s\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d wt %f] %2d %3d %s^n%s\r\n",
                 OBJ_VNUM_RNUM(nr),
                 ObjList.CountObj(nr),
                 GET_OBJ_WEIGHT(&obj_proto[nr]),
@@ -2740,10 +2762,10 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
   {
     if (GET_OBJ_TYPE(&obj_proto[nr]) == ITEM_FOCUS
         && !vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr))) {
-      snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s +%2d %s%s\r\n", ++found,
+      snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s +%2d %s^n%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
               foci_type[GET_OBJ_VAL(&obj_proto[nr], 0)],
               GET_OBJ_VAL(&obj_proto[nr], VALUE_FOCUS_RATING),
               obj_proto[nr].text.name,
@@ -2756,21 +2778,24 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
 
 int vnum_object_type(int type, struct char_data * ch)
 {
+  char buf[MAX_STRING_LENGTH * 8];
   int nr, found = 0;
+  
+  buf[0] = 0;
 
   for (nr = 0; nr <= top_of_objt; nr++)
   {
     if (GET_OBJ_TYPE(&obj_proto[nr]) == type) {
       ++found;
-      snprintf(buf, sizeof(buf), "[%5ld -%2d] %s %s%s\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s %s^n%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
               obj_proto[nr].text.name,
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
-      send_to_char(buf, ch);
     }
   }
+  page_string(ch->desc, buf, 1);
   return (found);
 }
 
@@ -2797,7 +2822,7 @@ int vnum_object_affectloc(int type, struct char_data * ch)
           sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
 
           ++found;
-          snprintf(buf, sizeof(buf), "[%5ld -%2d] %s%s%s\r\n",
+          snprintf(buf, sizeof(buf), "[%5ld -%2d] %s^n%s%s\r\n",
                   OBJ_VNUM_RNUM(nr),
                   ObjList.CountObj(nr),
                   obj_proto[nr].text.name,
@@ -2811,31 +2836,41 @@ int vnum_object_affectloc(int type, struct char_data * ch)
 }
 
 int vnum_object_affects(struct char_data *ch) {
+  char buf[MAX_STRING_LENGTH * 8];
   char xbuf[MAX_STRING_LENGTH];
   int nr, found = 0;
+  
+  buf[0] = 0;
   
   for (nr = 0; nr <= top_of_objt; nr++) {
     if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
       continue;
     if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
       continue;
+      
+    // If it can't be used in the first place, skip it.
+    if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_GUN_ACCESSORY
+        && GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_CYBERWARE
+        && GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_BIOWARE
+        && !str_cmp(obj_proto[nr].obj_flags.wear_flags.ToString(), "1"))
+      continue;
     
-    for (int i = 0; i < MAX_OBJ_AFFECT; i++) {
+    for (int i = 0; i < MAX_OBJ_AFFECT; i++) {        
       if (obj_proto[nr].affected[i].modifier != 0 ) {
         sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
         
         ++found;
-        snprintf(buf, sizeof(buf), "[%5ld -%2d] %s%s%s\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s^n%s%s\r\n",
                 OBJ_VNUM_RNUM(nr),
                 ObjList.CountObj(nr),
                 obj_proto[nr].text.name,
                 xbuf,
                 obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
-        page_string(ch->desc, buf, 1);
         break;
       }
     }
   }
+  page_string(ch->desc, buf, 1);
   return (found);
 }
 
@@ -2846,7 +2881,7 @@ int vnum_object_affflag(int type, struct char_data * ch)
   for (nr = 0; nr <= top_of_objt; nr++)
     if (obj_proto[nr].obj_flags.bitvector.IsSet(type))
     {
-      snprintf(buf, sizeof(buf), "[%5ld -%2d] %s%s\r\n",
+      snprintf(buf, sizeof(buf), "[%5ld -%2d] %s^n%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
               obj_proto[nr].text.name,
@@ -2896,7 +2931,7 @@ int vnum_object(char *searchname, struct char_data * ch)
       snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
               obj_proto[nr].text.name,
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       send_to_char(buf, ch);
@@ -4777,7 +4812,7 @@ void load_saved_veh()
           }
           
           const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
-          if (!player_name || !strcmp(player_name, "deleted")) {
+          if (!player_name || !str_cmp(player_name, "deleted")) {
             // Whoops, it belongs to a deleted character. RIP.
             extract_obj(obj);
             continue;
@@ -4996,7 +5031,7 @@ void load_consist(void)
               }
               
               const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
-              if (!player_name) {
+              if (!player_name || !str_cmp(player_name, "deleted")) {
                 // Whoops, it belongs to a deleted character. RIP.
                 extract_obj(obj);
                 continue;
@@ -5028,17 +5063,30 @@ void load_consist(void)
               if (inside == last_in)
                 last_obj = last_obj->in_obj;
               else if (inside < last_in)
-                while (inside <= last_in && last_obj) {
+                while (inside <= last_in) {
+                  if (!last_obj) {
+                    snprintf(buf2, sizeof(buf2), "Load error: Nested-item save failed for %s. Disgorging to room.", GET_OBJ_NAME(obj));
+                    mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
+                    break;
+                  }
                   last_obj = last_obj->in_obj;
                   last_in--;
                 }
               if (last_obj)
                 obj_to_obj(obj, last_obj);
+              else
+                obj_to_room(obj, &world[nr]);
             } else
               obj_to_room(obj, &world[nr]);
 
             last_in = inside;
             last_obj = obj;
+          } else {
+            snprintf(buf2, sizeof(buf2), "Losing object %ld (%s / %s; )- it's not a valid object.", 
+                     vnum,
+                     data.GetString("HOUSE/Name", "no restring"),
+                     data.GetString("HOUSE/Photo", "no photo"));
+            mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
           }
         }
       }

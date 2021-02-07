@@ -120,7 +120,7 @@ void    set_fighting(struct char_data *ch, struct char_data *victim, ...);
 void    set_fighting(struct char_data *ch, struct veh_data *victim);
 void    stop_fighting(struct char_data *ch);
 void    stop_follower(struct char_data *ch);
-void    hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, struct obj_data *vweapon);
+void    hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, struct obj_data *vweapon, struct obj_data *ammobox);
 void    forget(struct char_data *ch, struct char_data *victim);
 void    remember(struct char_data *ch, struct char_data *victim);
 bool    damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype,

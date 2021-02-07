@@ -412,6 +412,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   GET_LOADROOM(d->character) = archetypes[i]->start_room;
 
   init_char_sql(d->character);
+  GET_CHAR_MULTIPLIER(d->character) = 100;
   snprintf(buf, sizeof(buf), "%s [%s] new character (archetypal %s).", GET_CHAR_NAME(d->character), d->host, archetypes[i]->name);
   mudlog(buf, d->character, LOG_CONNLOG, TRUE);
   SEND_TO_Q(motd, d);
@@ -841,8 +842,8 @@ void init_char_sql(struct char_data *ch)
   char buf2[MAX_STRING_LENGTH];
   snprintf(buf, sizeof(buf), "INSERT INTO pfiles (idnum, name, password, race, gender, Rank, Voice,"\
                "Physical_Keywords, Physical_Name, Whotitle, Height, Weight, Host,"\
-               "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD) VALUES ('%ld', '%s', '%s', %d, '%d',"\
-               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld);", GET_IDNUM(ch),
+               "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD, multiplier) VALUES ('%ld', '%s', '%s', %d, '%d',"\
+               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld, 100);", GET_IDNUM(ch),
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_SEX(ch), MAX(1, GET_LEVEL(ch)),
                prepare_quotes(buf2, ch->player.physical_text.room_desc, sizeof(buf2) / sizeof(buf2[0])), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
                GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
@@ -881,6 +882,7 @@ static void start_game(descriptor_data *d)
   GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
 
   init_char_sql(d->character);
+  GET_CHAR_MULTIPLIER(d->character) = 100;
   if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
     snprintf(buf, sizeof(buf), "%s [%s] new character.",
             GET_CHAR_NAME(d->character), d->host);

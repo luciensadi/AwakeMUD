@@ -269,7 +269,7 @@ void    update_pos(struct char_data *victim);
 #define MOB_FLAGGED(ch, flag) (IS_NPC(ch) && MOB_FLAGS(ch).IsSet((flag)))
 #define PLR_FLAGGED(ch, flag) (!IS_NPC(ch) && PLR_FLAGS(ch).IsSet((flag)))
 #define AFF_FLAGGED(ch, flag) (AFF_FLAGS(ch).IsSet((flag)))
-#define VEH_FLAGGED(ch, flag) (VEH_FLAGS(ch).IsSet((flag))
+#define VEH_FLAGGED(ch, flag) (VEH_FLAGS(ch).IsSet((flag)))
 #define PRF_FLAGGED(ch, flag) \
   ((ch->desc && ch->desc->original) \
    ? PRF_FLAGS(ch->desc->original).IsSet((flag)) \
@@ -327,7 +327,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : (veh)->short_description))
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
-#define GET_VEH_VNUM(veh) ((veh)->veh_number)
+#define GET_VEH_RNUM(veh) ((veh)->veh_number)
+#define GET_VEH_VNUM(veh) (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
 #define GET_OBJ_NAME(obj) ((obj)->restring ? (obj)->restring : (obj)->text.name)
 #define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
 #define GET_KEYWORDS(ch)  ((ch)->player.physical_text.keywords)
@@ -342,6 +343,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_PASSWD(ch)  ((ch)->player.passwd)
 #define GET_EMAIL(ch)   ((ch)->player.email ? (ch)->player.email : "not set")
 #define SETTABLE_EMAIL(ch)   ((ch)->player.email)
+#define GET_CHAR_MULTIPLIER(ch) ((ch)->player.multiplier)
 
 /*
  * I wonder if this definition of GET_REAL_LEVEL should be the definition
@@ -598,6 +600,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_OBJ_WEAR(obj)       ((obj)->obj_flags.wear_flags)
 #define GET_OBJ_VAL(obj, val)   ((obj)->obj_flags.value[(val)])
 #define GET_OBJ_WEIGHT(obj)     ((obj)->obj_flags.weight)
+float get_proto_weight(struct obj_data *obj);
 #define GET_OBJ_TIMER(obj)      ((obj)->obj_flags.timer)
 #define GET_OBJ_ATTEMPT(obj)    ((obj)->obj_flags.attempt)
 #define GET_OBJ_RNUM(obj)       ((obj)->item_number)
@@ -888,7 +891,14 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 // ITEM_SPELL_FORMULA convenience defines
 #define GET_SPELLFORMULA_SPELL(formula)          (GET_OBJ_VAL((formula), 1))
 
-// ITEM_FOCUS convenience defines
+// ITEM_FOCUS convenience defines, search term GET_FOCI
+#define GET_FOCUS_TYPE(focus)                    (GET_OBJ_VAL((focus), 0))
+#define GET_FOCUS_FORCE(focus)                   (GET_OBJ_VAL((focus), 1))
+#define GET_FOCUS_BONDED_TO(focus)               (GET_OBJ_VAL((focus), 2))
+#define GET_FOCUS_BONDED_SPIRIT_OR_SPELL(focus)  (GET_OBJ_VAL((focus), 3))
+#define GET_FOCUS_ACTIVATED(focus)               (GET_OBJ_VAL((focus), 4))
+#define GET_FOCUS_TRADITION(focus)               (GET_OBJ_VAL((focus), 5))
+#define GET_FOCUS_BOND_TIME_REMAINING(focus)     (GET_OBJ_VAL((focus), 9))
 
 // ITEM_PATCH convenience defines
 
@@ -918,9 +928,15 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 // ITEM_RCDECK convenience defines
 
 // ITEM_CHIP convenience defines
+#define GET_CHIP_SKILL(chip)                 (GET_OBJ_VAL((chip), 0))
+#define GET_CHIP_RATING(chip)                (GET_OBJ_VAL((chip), 1))
+#define GET_CHIP_SIZE(chip)                  (GET_OBJ_VAL((chip), 2))
+#define GET_CHIP_COMPRESSION_FACTOR(chip)    (GET_OBJ_VAL((chip), 8))
+#define GET_CHIP_LINKED(chip)                (GET_OBJ_VAL((chip), 9))
 
 // ITEM_MOD convenience defines
 #define GET_VEHICLE_MOD_TYPE(mod)            (GET_OBJ_VAL((mod), 0))
+#define GET_VEHICLE_MOD_MOUNT_TYPE(mod)      (GET_OBJ_VAL((mod), 1))
 
 // ITEM_HOLSTER convenience defines
 #define GET_HOLSTER_READY_STATUS(holster)    (GET_OBJ_VAL((holster), 3))

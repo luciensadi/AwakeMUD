@@ -484,7 +484,7 @@ ACMD(do_build) {
     if (!*argument) {
       if (IS_WORKING(ch)) {
         STOP_WORKING(ch);
-        send_to_char("You stop work.\r\n", ch);
+        send_to_char("You stop working.\r\n", ch);
       } else
         send_to_char(ch, "What do you want to build?\r\n");
       return;
@@ -688,7 +688,7 @@ ACMD(do_build) {
                     }
                 if (GET_OBJ_VAL(obj, 8)) {
                     if (!part) {
-                        send_to_char(ch, "You don't have enough materials for that part.\r\n");
+                        send_to_char(ch, "You don't have enough materials for that part; you need %d nuyen's worth in the same container.\r\n", GET_OBJ_VAL(obj, 8));
                         return;
                     } else {
                         GET_OBJ_COST(part) -= GET_OBJ_VAL(obj, 8);
@@ -697,7 +697,7 @@ ACMD(do_build) {
                     }
                 } else if (GET_OBJ_VAL(obj, 9)) {
                     if (!chips) {
-                        send_to_char(ch, "You don't have enough optical chips for that part.\r\n");
+                        send_to_char(ch, "You don't have enough optical chips for that part; you need %d nuyen's worth in the same container.\r\n", GET_OBJ_VAL(obj, 9));
                         return;
                     } else {
                         GET_OBJ_COST(chips) -= GET_OBJ_VAL(obj, 9);

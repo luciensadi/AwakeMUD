@@ -41,6 +41,8 @@ extern void damage_door(struct char_data *ch, struct room_data *room, int dir, i
 extern void perform_get_from_container(struct char_data *, struct obj_data *, struct obj_data *, int);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void draw_weapon(struct char_data *);
+extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+
 
 ACMD(do_assist)
 {
@@ -585,12 +587,12 @@ ACMD(do_flee)
     return;
   }
   
-  // You get six tries to escape per flee command... unless you're up against an unkillable.
-  int max_tries = 6;
-  if (FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))
-    max_tries = 100;
+  // You get twenty tries to escape per flee command... unless you're up against an unkillable.
+  int max_tries = 20;
+  if (FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && !can_hurt(ch, FIGHTING(ch), TRUE, 0))
+    max_tries = 200;
     
-  for (int tries = 0; tries < 6; tries++) {
+  for (int tries = 0; tries < max_tries; tries++) {
     int attempt = number(0, NUM_OF_DIRS - 2);       /* Select a random direction */
     if (CAN_GO(ch, attempt) && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[attempt]->to_room, ROOM_NOMOB))) {
       // Supply messaging and put the character into a wait state to match wait state in perform_move.
@@ -598,9 +600,12 @@ ACMD(do_flee)
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
       
       // If the character is fighting in melee combat, they must pass a test to escape.
-      if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
-        if (!(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))
-            && !success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)))) {
+      if (GET_POS(ch) >= POS_FIGHTING 
+          && FIGHTING(ch) 
+          && ch->in_room == FIGHTING(ch)->in_room
+          && !(AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))) {
+        if (can_hurt(ch, FIGHTING(ch), TRUE, 0)
+            && success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) <= 0) {
           act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
           act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
           act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);

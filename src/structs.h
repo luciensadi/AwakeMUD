@@ -340,6 +340,8 @@ struct char_player_data
   
   const char *highlight_color_code;
   const char *email;
+  
+  int multiplier;
 
   byte sex;                  /* PC / NPC's sex                       */
   byte level;

@@ -225,8 +225,8 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
   
   // If we've gotten here, it's a player. Mult it up.
   if (multiplier)
-    gain *= KARMA_GAIN_MULTIPLIER;
-  
+    gain *= KARMA_GAIN_MULTIPLIER * ((float) GET_CHAR_MULTIPLIER(ch) / 100);
+    
   if (gain != 0) {
     if (limits) {
       if (GET_TKE(ch) >= 0 && GET_TKE(ch) < 100) {
@@ -591,13 +591,20 @@ void point_update(void)
   struct char_data *i, *next_char;
   FILE *fl;
   extern struct time_info_data time_info;
+  
+  // Generate the wholist file.
   ACMD_CONST(do_who);
   if (character_list)
     do_who(character_list, "", 0, 1);
+    
   /* characters */
+  bool is_npc = FALSE;
   for (i = character_list; i; i = next_char) {
     next_char = i->next;
-    if (!IS_NPC(i)) {
+    
+    is_npc = IS_NPC(i);
+    
+    if (!is_npc) {
       playerDB.SaveChar(i, GET_LOADROOM(i));
       
       AFF_FLAGS(i).RemoveBit(AFF_DAMAGED);
@@ -716,7 +723,7 @@ void point_update(void)
         }
       }
     }
-    if (IS_PROJECT(i)) {
+    if (i->desc && IS_PROJECT(i)) {
       if (AFF_FLAGGED(i->desc->original, AFF_TRACKING) && HUNTING(i->desc->original) && !--HOURS_LEFT_TRACK(i->desc->original)) {
         act("The astral signature leads you to $N.", FALSE, i, 0, HUNTING(i->desc->original), TO_CHAR);
         char_from_room(i);
@@ -745,7 +752,7 @@ void point_update(void)
       } else if (GET_ESS(i) <= 100)
         send_to_char("You feel memories of your physical body slipping away.\r\n", i);
     }
-    if (IS_NPC(i) || !PLR_FLAGGED(i, PLR_JUST_DIED)) {
+    if (is_npc || !PLR_FLAGGED(i, PLR_JUST_DIED)) {
       if (LAST_HEAL(i) > 0)
         LAST_HEAL(i)--;
       else if (LAST_HEAL(i) < 0)

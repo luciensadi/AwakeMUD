@@ -55,13 +55,14 @@ void target_explode(struct char_data *ch, struct obj_data *weapon,
 void forget(struct char_data * ch, struct char_data * victim);
 void remember(struct char_data * ch, struct char_data * victim);
 void order_list(bool first,...);
-bool can_hurt(struct char_data *ch, struct char_data *victim, bool include_func_protections);
+bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 
 SPECIAL(johnson);
 SPECIAL(weapon_dominator);
 SPECIAL(landlord_spec);
 SPECIAL(pocket_sec);
 SPECIAL(receptionist);
+WSPEC(monowhip);
 
 extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
@@ -85,6 +86,7 @@ extern SPECIAL(shop_keeper);
 extern void mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
 extern char *get_player_name(vnum_t id);
+extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 
 // Corpse saving externs.
 extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
@@ -292,7 +294,8 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   ch->next_fighting = combat_list;
   combat_list = ch;
   
-  GET_INIT_ROLL(ch) = 0;
+  // GET_INIT_ROLL(ch) = 0;
+  roll_individual_initiative(ch);
   FIGHTING(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
@@ -311,6 +314,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     if (!GET_EQ(ch, WEAR_WIELD) && !GET_EQ(ch, WEAR_HOLD))
       AFF_FLAGS(ch).SetBit(AFF_APPROACH);
   }
+  
   check_killer(ch, vict);
   AFF_FLAGS(ch).RemoveBit(AFF_BANISH);
   AFF_FLAGS(vict).RemoveBit(AFF_BANISH);
@@ -609,14 +613,26 @@ void death_cry(struct char_data * ch)
   int door;
   struct room_data *was_in = NULL;
   
-  act("$n cries out $s last breath as $e dies!", FALSE, ch, 0, 0, TO_ROOM);
+  snprintf(buf3, sizeof(buf3), "$n cries out $s last breath as $e die%s!", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+  act(buf3, FALSE, ch, 0, 0, TO_ROOM);
   was_in = ch->in_room;
+  
+  for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
+    if (IS_NPC(listener)) {
+      GET_MOBALERTTIME(listener) = 30;
+      GET_MOBALERT(listener) = MALERT_ALARM;
+    }
   
   for (door = 0; door < NUM_OF_DIRS; door++)
   {
     if (CAN_GO(ch, door)) {
       ch->in_room = was_in->dir_option[door]->to_room;
       act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
+      for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
+        if (IS_NPC(listener)) {
+          GET_MOBALERTTIME(listener) = 30;
+          GET_MOBALERT(listener) = MALERT_ALERT;
+        }
       ch->in_room = was_in;
     }
   }
@@ -721,18 +737,32 @@ void death_penalty(struct char_data *ch)
   
   if(!IS_NPC(ch)
      && !PLR_FLAGGED(ch, PLR_NEWBIE)
-     && GET_REAL_BOD(ch) > 1
-     && !(success_test(GET_REAL_BOD(ch),4) >= 1 ))
+     && !number(0, 24)) // a 1:25 chance of incurring death penalty.
   {
-    do {
+    bool kosher = FALSE;
+    for (int limiter = 20; limiter > 0; limiter--) {
       attribute = number(0,5);
-    } while (attribute == CHA);
+      
+      if (attribute != CHA 
+          && (GET_REAL_ATT(ch, attribute) > MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attribute]))) {
+        kosher = TRUE;
+        break;
+      }
+    }
+    // No penalty for you today.
+    if (!kosher)
+      return;    
+    
+    // We can safely knock down the attribute since we've guaranteed it's above their racial minimum.
     GET_TKE(ch) -= 2*GET_REAL_ATT(ch, attribute);
     GET_REAL_ATT(ch, attribute)--;
     snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %d to %d.",
             GET_CHAR_NAME(ch), short_attributes[attribute], old_tke, GET_TKE( ch ) );
     mudlog(buf, ch, LOG_DEATHLOG, TRUE);
     
+    send_to_char(ch, "^yThere are some things even the DocWagon can't fix :(^n\r\n"
+                     "You've lost a point of %s from that death. You can re-train it at a trainer.\r\n",
+                     attributes[attribute]);
   }
 }
 
@@ -1279,7 +1309,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
           !number(0, total - 1))
         break;
     
-    if (vict && (IS_NPC(vict) || (!IS_NPC(vict) && vict->desc))) {
+    if (vict && (IS_NPC(vict) || (!IS_NPC(vict) && vict->desc)) && can_hurt(ch, vict, TYPE_SCATTERING, TRUE)) {
       snprintf(buf, sizeof(buf), "A %s flies in from nowhere, hitting you!", ammo_type);
       act(buf, FALSE, vict, 0, 0, TO_CHAR);
       snprintf(buf, sizeof(buf), "A %s hums into the room and hits $n!", ammo_type);
@@ -2205,8 +2235,29 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       return false;
       
     // Quest target protection.
-    if (victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM(ch))
-      return false;
+    if (!IS_NPC(ch) && victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM(ch)) {
+      // Aggro mobs don't get this protection.
+      if (!mob_is_aggressive(victim, TRUE)) {
+        // If grouped, check to see if anyone in the group is the mob's owner.
+        if (AFF_FLAGGED(ch, AFF_GROUP)) {
+          bool found_group_member = FALSE;
+          for (struct follow_type *f = ch->followers; f && found_group_member; f = f->next)
+            if (!IS_NPC(f->follower)
+                && AFF_FLAGGED(f->follower, AFF_GROUP) 
+                && GET_IDNUM(f->follower) == victim->mob_specials.quest_id)
+              found_group_member = TRUE;
+          
+          // How about the group master?
+          if (!found_group_member && ch->master && !IS_NPC(ch->master)) {
+            found_group_member = victim->mob_specials.quest_id == GET_IDNUM(ch->master);
+          }
+          
+          if (!found_group_member)
+            return false;
+        } else
+          return false;
+      }
+    }
       
     // Special NPC protection.
     if (include_func_protections
@@ -2480,7 +2531,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       snprintf(buf3, sizeof(buf3), "^R$n slams into the %s at speed, the impact reshaping $s body in horrific ways.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
       act(buf3, FALSE, victim, 0, 0, TO_ROOM);
     } else {
-      send_to_char(victim, "^rYou hit the %s with brusing force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
+      send_to_char(victim, "^rYou hit the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
       snprintf(buf3, sizeof(buf3), "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(get_ch_in_room(victim), ROOM_INDOORS) ? "floor" : "ground");
       act(buf3, FALSE, victim, 0, 0, TO_ROOM);
     }
@@ -2811,6 +2862,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
 {
   struct obj_data *obj;
   int i, rnum, comp = 0;
+  bool gasvent = FALSE;
   
   if (!gun || GET_OBJ_TYPE(gun) != ITEM_WEAPON)
     return 0;
@@ -2822,8 +2874,10 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
     if (GET_OBJ_VAL(gun, i) > 0 &&
         (rnum = real_object(GET_OBJ_VAL(gun, i))) > -1 &&
         (obj = &obj_proto[rnum]) && GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY) {
-      if (GET_OBJ_VAL(obj, 1) == ACCESS_GASVENT)
+      if (GET_OBJ_VAL(obj, 1) == ACCESS_GASVENT) {
         comp += 0 - GET_OBJ_VAL(obj, 2);
+        gasvent = TRUE;
+      }
       else if (GET_OBJ_VAL(obj, 1) == ACCESS_SHOCKPAD)
         comp++;
       else if (AFF_FLAGGED(ch, AFF_PRONE)) {
@@ -2834,7 +2888,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
       }
       
       // Add in integral recoil compensation.
-      if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
+      if (!gasvent && GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
         comp += GET_WEAPON_INTEGRAL_RECOIL_COMP(obj);
     }
   }
@@ -3073,6 +3127,7 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
           && !CH_IN_COMBAT(tch)
           && !(FIGHTING(ch) ? (IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)) : TRUE)) {
         if (number(0, 6) >= 2) {
+          GET_MOBALERTTIME(tch) = 30;
           GET_MOBALERT(tch) = MALERT_ALARM;
           struct room_data *was_in = tch->in_room;
           if (ranged_response(ch, tch) && tch->in_room == was_in) {
@@ -3413,17 +3468,115 @@ bool is_char_too_tall(struct char_data *ch) {
 #endif
 }
 
-int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
-  // TODO: Why would someone handling a vehicle or manning a turret negate visibility penalties?
-  // !(ch->in_veh || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))
-  int modifier = 0;
-  if (!CAN_SEE(ch, victim)) {
-    modifier = 8;
-    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) || GET_POWER(ch, ADEPT_BLIND_FIGHTING))
-      modifier = 4;
-  }
-  return modifier;
+bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
+  if (!veh)
+    return FALSE;
+    
+  if (VEH_FLAGGED(*veh, VFLAG_ULTRASOUND))
+    return TRUE;
+    
+  for (int i = 0; i < NUM_MODS; i++)
+    if (GET_MOD(veh, i) && GET_MOD(veh, i)->obj_flags.bitvector.IsSet(AFF_DETECT_INVIS))
+      return TRUE;
+      
+  return FALSE;
 }
+
+#define INVIS_CODE_STAFF 321
+#define INVIS_CODE_TOTALINVIS 123
+#define BLIND_FIGHTING_MAX 4
+#define BLIND_FIRE_PENALTY 8
+int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
+  int modifier = 0;
+  
+  // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
+  if (!IS_NPC(victim) && !IS_NPC(ch) && GET_INVIS_LEV(victim) > 0 && !access_level(ch, GET_INVIS_LEV(victim)))
+    return INVIS_CODE_STAFF;
+    
+  // If they're flagged totalinvis (library mobs etc), you shouldn't be fighting them anyways.
+  if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_TOTALINVIS))
+    return INVIS_CODE_TOTALINVIS;
+    
+  // Pre-calculate the things we care about here. First, character vision info.
+  bool ch_has_ultrasound = AFF_FLAGGED(ch, AFF_DETECT_INVIS);
+  bool ch_has_thermographic = AFF_FLAGGED(ch, AFF_INFRAVISION) || CURRENT_VISION(ch) == THERMOGRAPHIC;
+  bool ch_sees_astral = IS_ASTRAL(ch) || IS_DUAL(ch);
+  
+  // EXCEPT: If you're rigging (not manning), things change.
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh = NULL;
+    RIG_VEH(ch, veh);
+    ch_has_ultrasound = vehicle_has_ultrasound_sensors(veh); // Eventually, we'll have ultrasonic sensors on vehicles too.
+    ch_has_thermographic = TRUE;
+    ch_sees_astral = FALSE;
+  }
+  
+  // Next, vict invis info.
+  bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS) || IS_AFFECTED(victim, AFF_SPELLIMPINVIS);
+  bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE) || IS_AFFECTED(victim, AFF_SPELLINVIS);
+  bool vict_is_inanimate = IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE);
+    
+  if (ch_sees_astral) {
+    // If you're astrally perceiving, you see anything living with no vision penalty.
+    // (You get penalties from perceiving, that's handled elsewhere.)
+    if (!vict_is_inanimate)
+      return 0;
+  } else if (IS_ASTRAL(victim) && !AFF_FLAGGED(victim, AFF_MANIFEST)) {
+    // You're not astrally perceiving, and your victim is a non-manifested astral being. Blind fire.
+    return GET_POWER(ch, ADEPT_BLIND_FIGHTING) ? BLIND_FIGHTING_MAX : BLIND_FIRE_PENALTY;
+  }
+  
+  // We are deliberately not handling anything to do with light penalties here.
+  // That's handled in modify_target_rbuf_raw().
+  
+  // Ultrasound reduces all vision penalties by half (some restrictions apply, see store for details; SR3 p282)
+  if (ch_has_ultrasound) {
+    // Improved invisibility works against tech sensors. Regular invis does not, so we don't account for it here.
+    if (vict_is_imp_invis) {
+      // Invisibility penalty, we're at the full +8 from not being able to see them. This overwrites weather effects etc.
+      modifier = BLIND_FIRE_PENALTY;
+    }
+    
+    // Silence level is the highest of the room's silence or the victim's stealth. Stealth in AwakeMUD is a hybrid of
+    //  the silence and stealth spells, so it's a little OP but whatever.
+    int silence_level = MAX(get_ch_in_room(ch)->silence[0], get_ch_in_room(victim)->silence[0]);
+    silence_level = MAX(silence_level, get_spell_affected_successes(victim, SPELL_STEALTH));
+    
+    // SR3 p196: Silence spell increases hearing perception test TN up to the lower of its successes or the spell's rating.
+    // We don't have that test, so it seems reasonable to just shoehorn the TN increase in here.
+    modifier += silence_level;
+    
+    // Finally, apply ultrasound division. We add one since the system expects us to round up and we're using truncating integer math.
+    modifier = (modifier + 1) / 2;
+  }
+  
+  // No ultrasound. Check for thermographic vision.
+  else if (ch_has_thermographic) {
+    // Improved invis? You can't see them.
+    if (vict_is_imp_invis)
+      modifier = 8;
+    
+    // Standard invis? (This includes ruthenium, which currently has no rating and is just treated like the invis spell.)
+    // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
+    // This deviates from canon, where thermographic can see through standard invis.
+    else if (vict_is_just_invis)
+      modifier = 2;
+  }
+  
+  // Low-light and normal vision aren't any help here.
+  else {
+    if (vict_is_imp_invis || vict_is_just_invis)
+      modifier = 8;
+  }
+  
+  // MitS p148: Penalty is capped to +4 with Blind Fighting. We also cap it to +8 without, since that's Blind Fire.
+  if (GET_POWER(ch, ADEPT_BLIND_FIGHTING))
+    return MIN(modifier, BLIND_FIGHTING_MAX);
+  else
+    return MIN(modifier, BLIND_FIRE_PENALTY);
+}
+#undef INVIS_CODE_STAFF
+#undef INVIS_CODE_TOTALINVIS
 
 //todo: single shot weaps can only be fired once per combat phase-- what does this mean for us?
 
@@ -3523,8 +3676,8 @@ int get_melee_skill(struct combat_data *cd) {
   return skill;
 }
 
-void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap)
-{  
+void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo)
+{
   // Initialize our data structures for holding this round's fight-related data.
   struct combat_data attacker_data(attacker, weap);
   struct combat_data defender_data(victim, vict_weap);
@@ -3532,6 +3685,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   // Allows for switching roles, which can happen during melee counterattacks.
   struct combat_data *att = &attacker_data;
   struct combat_data *def = &defender_data;
+  
+  // Monowhip code.
+  bool defender_tests_for_backlash = FALSE;
   
   // Set the base TNs to accommodate get_skill() changing the TNs like the special snowflake it is.
   att->tn = 4;
@@ -3761,13 +3917,18 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
     if (att->burst_count) {
-      if (att->magazine) {
-        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
-        GET_MAGAZINE_AMMO_COUNT(att->magazine)++;
+      if (weap_ammo || att->magazine) {
+        int ammo_available = weap_ammo ? ++GET_AMMOBOX_QUANTITY(weap_ammo) : ++GET_MAGAZINE_AMMO_COUNT(att->magazine);
         
         // Cap their burst to their magazine's ammo.
-        att->burst_count = MIN(att->burst_count, GET_MAGAZINE_AMMO_COUNT(att->magazine));
-        GET_MAGAZINE_AMMO_COUNT(att->magazine) -= att->burst_count;
+        att->burst_count = MIN(att->burst_count, ammo_available);
+        
+        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
+        if (weap_ammo) {
+          update_ammobox_ammo_quantity(weap_ammo, -(att->burst_count));
+        } else {
+          GET_MAGAZINE_AMMO_COUNT(att->magazine) -= (att->burst_count);
+        }
       }
       
       // Setup: Compute recoil.
@@ -3824,14 +3985,25 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(att->ch, att->weapon);
     
     // Setup: Trying to fire a sniper rifle at close range is tricky. This is non-canon to reduce twinkery.
-    if (IS_OBJ_STAT(att->weapon, ITEM_SNIPER) && att->ch->in_room == def->ch->in_room)
+    if (IS_OBJ_STAT(att->weapon, ITEM_SNIPER) 
+        && ((att->ch->in_room == def->ch->in_room)
+            || AFF_FLAGGED(att->ch, AFF_MANNING) 
+            || AFF_FLAGGED(att->ch, AFF_RIG) 
+            || PLR_FLAGGED(att->ch, PLR_REMOTE)))
+    {
       att->modifiers[COMBAT_MOD_DISTANCE] += 6;
+    }
     
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
     if (!AWAKE(def->ch))
       att->modifiers[COMBAT_MOD_POSITION] -= 6;
-    else if (AFF_FLAGGED(def->ch, AFF_PRONE))
-      att->modifiers[COMBAT_MOD_POSITION]--;
+    else if (AFF_FLAGGED(def->ch, AFF_PRONE)) {
+      // Prone next to you is a bigger target, prone far away is a smaller one.
+      if (def->ch->in_room == att->ch->in_room)
+        att->modifiers[COMBAT_MOD_POSITION]--;
+      else
+        att->modifiers[COMBAT_MOD_POSITION]++;
+    }
     
     // Setup: Determine distance penalties.
     if (!att->veh && att->ch->in_room != def->ch->in_room) {
@@ -3933,7 +4105,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // If the attack failed, print the relevant message and terminate.
     if (att->successes < 1) {
-      snprintf(rbuf, sizeof(rbuf), "%s failed to roll any successes, so we're bailing out.", GET_CHAR_NAME(attacker));
+      snprintf(rbuf, sizeof(rbuf), "%s failed to have net successes, so we're bailing out.", GET_CHAR_NAME(attacker));
       act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
       
       combat_message(att->ch, def->ch, att->weapon, -1, att->burst_count);
@@ -3943,7 +4115,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // But wait-- there's more! Next we jump down to dealing damage.
   }
   // Melee combat.
-  else {
+  else {  // todo asdf this whole setup is wrong, what about counterstriking someone who's wielding a ranged weapon? You never get your melee setup, so you're attacking, what, barehanded? And then the weapon code below could potentially just fall back to using your gun anyways
     // Decide what skills we'll be using for our tests.
     att->skill = get_melee_skill(att);
     def->skill = get_melee_skill(def);
@@ -3987,6 +4159,11 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // Calculate the net reach.
     int net_reach = GET_REACH(att->ch) - GET_REACH(def->ch);
+    
+    if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+      // MitS 149: Ignore reach modifiers.
+      net_reach = 0;
+    }
     
     // Reach is always used offensively. TODO: Add option to use it defensively instead.
     if (net_reach > 0)
@@ -4043,9 +4220,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
              def->successes != 1 ? "s" : "",
              def->dice,
              def->tn);
-    if (net_successes < 0)
+    if (net_successes < 0) {
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^yNet successes is ^W%d^y, which will cause a counterattack.^n\r\n", net_successes);
-    else
+      defender_tests_for_backlash = TRUE;
+    } else
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Net successes is ^W%d^n.\r\n", net_successes);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
@@ -4054,6 +4232,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
     if (net_successes < 0) {
+      if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+        // MitS 149: You cannot be counterstriked while using distance strike.
+        net_successes = 0;
+      }
       // This messaging gets a little annoying.
       act("You successfully counter $N's attack!", FALSE, def->ch, 0, att->ch, TO_CHAR);
       act("$n deflects your attack and counterstrikes!", FALSE, def->ch, 0, att->ch, TO_VICT);
@@ -4061,6 +4243,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       struct combat_data *temp_att = att;
       att = def;
       def = temp_att;
+      
+      // We must be in melee mode now that they've counterattacked.
+      melee = TRUE;
       
       att->successes = -1 * net_successes;
     } else
@@ -4111,9 +4296,25 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         SHOTS_FIRED(att->ch)++;
     }
     // Melee weapon.
-    else {
+    else {      
+#ifdef USE_MONOWHIP_CODE
+      if (att->weapon 
+          && GET_OBJ_RNUM(att->weapon) >= 0
+          && obj_index[GET_OBJ_RNUM(att->weapon)].wfunc == monowhip) {
+        att->power = 10;
+        att->damage_level = SERIOUS;
+        
+        att->power -= GET_IMPACT(def->ch) / 2;
+      }
+      else {
+        att->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
+        att->power -= GET_IMPACT(def->ch);
+      }
+#else
       att->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
       att->power -= GET_IMPACT(def->ch);
+#endif
+        
     }
     
     // Core p113.
@@ -4245,10 +4446,40 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
           damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
   
-  if (!melee)
+  if (att->weapon_is_gun)
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->burst_count);
   
   damage(att->ch, def->ch, damage_total, att->dam_type, att->is_physical);
+  
+#ifdef USE_MONOWHIP_CODE
+  {
+    struct obj_data *weapon = defender_tests_for_backlash ? def->weapon : att->weapon;
+    struct char_data *attacker = defender_tests_for_backlash ? def->ch : att->ch;
+    struct char_data *defender = defender_tests_for_backlash ? att->ch : def->ch;
+    
+    if (weapon)
+      log_vfprintf("Checking monowhip test for %s against %s wielding %s.", GET_CHAR_NAME(attacker), GET_CHAR_NAME(defender), weapon ? GET_OBJ_NAME(weapon) : "nothing");
+    if ((damage_total <= 0 || defender_tests_for_backlash)
+        && weapon 
+        && obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) 
+    {
+      int target = 6, dam_total, skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
+      int successes = success_test(skill, target);
+      log_vfprintf("Skill of %d, target of %d, successes is %d.", skill, target, successes);
+      if (successes <= 0) {
+        act("Your monowhip flails out of control, striking you instead of $N!", FALSE, attacker, 0, defender, TO_CHAR);
+        act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
+        dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
+
+        damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL);
+        return;
+      }
+    } else {
+      if (weapon)
+        log_vfprintf("Monowhip failure: rnum %d, spec %s", GET_OBJ_RNUM(weapon), GET_OBJ_RNUM(weapon) >= 0 ? (obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip ? "whip" : "?") : "n/a");
+    }
+  }
+#endif
   
   if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
     GET_LASTHIT(def->ch) = GET_IDNUM(att->ch);
@@ -4690,8 +4921,8 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       hit(ch,
           vict,
           (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)),
-          (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD))
-          );
+          (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)),
+          NULL);
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
       return;
     }
@@ -4710,8 +4941,8 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         hit(ch,
             vict,
             (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)),
-            (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD))
-            );
+            (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)),
+            NULL);
         ranged_response(ch, vict);
       } else
         send_to_char("*Click*\r\n", ch);
@@ -4740,7 +4971,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         act(buf, TRUE, vict, 0, 0, TO_ROOM);
         act(buf, TRUE, vict, 0, 0, TO_CHAR);
         return;
-      } else if (!success_test(temp + GET_OFFENSE(ch), 6)) {
+      } else if (success_test(temp + GET_OFFENSE(ch), 6) <= 0) {
         left = -1;
         right = -1;
         if (dir < UP) {
@@ -5230,14 +5461,14 @@ void perform_violence(void)
       hit(ch,
           FIGHTING(ch),
           GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD),
-          GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD)
-          );
+          GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
+          NULL);
       if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) && FIGHTING(ch))
         hit(ch,
             FIGHTING(ch),
             GET_EQ(ch, WEAR_HOLD),
-            GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD)
-            );
+            GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
+            NULL);
     }
     
     if (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_SPEC) &&
@@ -5836,7 +6067,7 @@ void mount_fire(struct char_data *ch)
     
     // Got a target and a gun? Fire.
     if (mount->targ && (gun = get_mount_weapon(mount)))
-      hit(ch, mount->targ, gun, NULL);
+      hit(ch, mount->targ, gun, NULL, get_mount_ammo(mount));
     else
       vcombat(ch, mount->tveh);
     
@@ -5849,7 +6080,7 @@ void mount_fire(struct char_data *ch)
       if (!mount->worn_by && (gun = get_mount_weapon(mount))) {
         // Fire at the enemy, assuming we're fighting it.
         if (mount->targ && FIGHTING(ch) == mount->targ)
-          hit(ch, mount->targ, gun, NULL);
+          hit(ch, mount->targ, gun, NULL, get_mount_ammo(mount));
         else if (mount->tveh && FIGHTING_VEH(ch) == mount->tveh)
           vcombat(ch, mount->tveh);
       }
