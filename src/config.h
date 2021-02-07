@@ -72,7 +72,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_CAB_FARE  250
 
 // What should the level of new characters' starting language be?
-#define STARTING_LANGUAGE_SKILL_LEVEL  6
+#define STARTING_LANGUAGE_SKILL_LEVEL  10
 
 // How many restring points should newbies get to use in chargen?
 #define STARTING_RESTRING_POINTS  5

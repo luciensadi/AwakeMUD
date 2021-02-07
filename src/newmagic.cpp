@@ -1720,9 +1720,15 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("The lightning hits $n, but seems to be easily absorbed.", FALSE, vict, 0, ch, TO_ROOM);
         send_to_char("Your body absorbs the lightning without harm.\r\n", vict);
       }
-      for (int i = 0; i < NUM_WEARS; i++)
-        if (GET_EQ(vict, i) && (GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 10 || GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 11))
+      for (int i = 0; i < NUM_WEARS; i++) {
+        if (number(0, 1) 
+            && GET_EQ(vict, i) 
+            && (GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 10 
+                || GET_OBJ_MATERIAL(GET_EQ(vict, i)) == 11))
+        {
           damage_obj(vict, GET_EQ(vict, i), force, DAMOBJ_LIGHTNING);
+        }
+      }
       damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL);
       if (IS_NPC(vict) && !IS_NPC(ch))
         GET_LASTHIT(vict) = GET_IDNUM(ch);

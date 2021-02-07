@@ -294,7 +294,7 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
     "%s Get out of here with %s!",
     "%s You can't have %s here!",
     "%s %s isn't allowed here! Leave!",
-    "%s You're really bringing %s in here? Really?",
+    "%s You're really bringing %s here? Really?",
     "%s Bringing %s in here was the last mistake you'll ever make.",
     "%s %s? Brave of you.",
     "%s Call the DocWagon. Maybe they can use %s to scrape you off the ground.",

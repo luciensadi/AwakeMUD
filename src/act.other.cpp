@@ -3661,12 +3661,12 @@ ACMD(do_delete)
       break;
   if (!obj)
     send_to_char("You don't have that many files in your memory.\r\n", ch);
-  else {
-    send_to_char(ch, "You %sdelete %s from your headware memory.\r\n", GET_OBJ_VAL(obj, 9) ? "unlink and " : "", GET_OBJ_NAME(obj));
-    if (GET_OBJ_VAL(obj, 9))
-      ch->char_specials.saved.skills[GET_OBJ_VAL(obj, 0)][1] = 0;
+  else {    
+    send_to_char(ch, "You %sdelete %s from your headware memory.\r\n", GET_CHIP_LINKED(obj) ? "unlink and " : "", GET_OBJ_NAME(obj));
+    if (GET_CHIP_LINKED(obj))
+      ch->char_specials.saved.skills[GET_CHIP_SKILL(obj)][1] = 0;
     obj_from_obj(obj);
-    GET_OBJ_VAL(memory, 5) -= GET_OBJ_VAL(obj, 2) + GET_OBJ_VAL(obj, 8);
+    GET_OBJ_VAL(memory, 5) -= GET_CHIP_SIZE(obj) - GET_CHIP_COMPRESSION_FACTOR(obj);
     extract_obj(obj);
   }
 }
