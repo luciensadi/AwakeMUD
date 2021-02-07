@@ -2104,6 +2104,38 @@ const char *eyemods[] = {
   "\n"
 };
 
+const char *armsmods[] = {
+  "Fingertip Compartment",
+  "Hand Blade",
+  "Hand Razor",
+  "Hand Spur",
+  "CyberFin",
+  "Climbing Claws",
+  "Smartlink",
+  "Strength Mod",
+  "Quickness Mod",
+  "Armor Mod",
+  "Cyberarm Gyromount"
+  "\n"
+};
+
+const char *legsmods[] = {
+  "Armor Mod",
+  "Foot Anchor",
+  "Hydraulic Jack",
+  "\n"
+};
+
+const char *skullmods[] = {
+  "Datajack",
+  "\n"
+};
+
+const char *torsomods[] = {
+  "Armor Mod",
+  "\n"
+};
+
 const char *decap_cyber_grades[4] =
 {
   "standard",
@@ -2173,7 +2205,11 @@ const char *cyber_types[] = {
   "Move By Wire",
   "Climbing Claws",
   "Smartlink",
-  "Muscle Replacement"
+  "Muscle Replacement",
+  "Strength Mod",
+  "Quickness Mod",
+  "Armor Mod",
+  "Cyberarm Gyromount"
 };
 
 const char *decap_cyber_types[] = {
@@ -2223,7 +2259,11 @@ const char *decap_cyber_types[] = {
   "move by wire",
   "climbing claws",
   "smartlink",
-  "muscle replacement"
+  "muscle replacement",
+  "cyberarms modifications",
+  "cyberlegs modifications",
+  "cyberskull modifications",
+  "cybertorso modifications"
 };
 
 const char *bio_types[] = {
