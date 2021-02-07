@@ -1610,6 +1610,42 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           return FALSE;
         }
         break;
+      case CYB_CYBERARMS:
+        if (GET_OBJ_VAL(bio1, 0) == BIO_MUSCLEAUG || GET_OBJ_VAL(bio1, 0) == BIO_MUSCLETONER
+         || GET_OBJ_VAL(bio1, 0) == BIO_ORTHOSKIN || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALPLATING
+         || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALSHEATHING || GET_OBJ_VAL(cyber2, 0) == CYB_BONELACING
+         || GET_OBJ_VAL(cyber2, 0) == CYB_CYBERARMS) {
+          send_to_char("Cyber Arms are incompatible with these augmentations.\r\n", ch);
+          return FALSE;
+        }
+        break;
+      case CYB_CYBERLEGS:
+        if (GET_OBJ_VAL(bio1, 0) == BIO_MUSCLEAUG || GET_OBJ_VAL(bio1, 0) == BIO_MUSCLETONER
+         || GET_OBJ_VAL(bio1, 0) == BIO_ORTHOSKIN || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALPLATING
+         || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALSHEATHING || GET_OBJ_VAL(cyber2, 0) == CYB_BONELACING
+         || GET_OBJ_VAL(cyber2, 0) == CYB_CYBERLEGS) {
+          send_to_char("Cyber Legs are incompatible with these augmentations.\r\n", ch);
+          return FALSE;
+        }
+        break;
+      case CYB_CYBERTORSO:
+        if (GET_OBJ_VAL(bio1, 0) == BIO_MUSCLEAUG || GET_OBJ_VAL(bio1, 0) == BIO_MUSCLETONER
+         || GET_OBJ_VAL(bio1, 0) == BIO_ORTHOSKIN || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALPLATING
+         || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALSHEATHING || GET_OBJ_VAL(cyber2, 0) == CYB_BONELACING
+         || GET_OBJ_VAL(cyber2, 0) == CYB_CYBERTORSO) {
+          send_to_char("Cyber Torsos are incompatible with these augmentations.\r\n", ch);
+          return FALSE;
+        }
+        break;
+      case CYB_CYBERSKULL:
+        if (GET_OBJ_VAL(bio1, 0) == BIO_MUSCLEAUG || GET_OBJ_VAL(bio1, 0) == BIO_MUSCLETONER
+         || GET_OBJ_VAL(bio1, 0) == BIO_ORTHOSKIN || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALPLATING
+         || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALSHEATHING || GET_OBJ_VAL(cyber2, 0) == CYB_BONELACING
+         || GET_OBJ_VAL(cyber2, 0) == CYB_CYBERSKULL) {
+          send_to_char("Cyber Skulls are incompatible with these augmentations.\r\n", ch);
+          return FALSE;
+        }
+        break;
     }
   }
   return TRUE;
