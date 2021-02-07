@@ -2128,6 +2128,7 @@ const char *legsmods[] = {
 
 const char *skullmods[] = {
   "Datajack",
+  "Armor Mod",
   "\n"
 };
 
