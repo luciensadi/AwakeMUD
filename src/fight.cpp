@@ -4443,7 +4443,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   snprintf(rbuf, sizeof(rbuf), "^CBod dice %d, attack power %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.^n",
           bod, att->power, bod_success, att->successes,
           wound_name[MIN(DEADLY, MAX(0, att->damage_level))],
-          wound_name[MIN(DEADLY, MAX(0, damage_total))],
+          wound_name[MIN(DEADLY, MAX(0, staged_damage))],
           damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
   
