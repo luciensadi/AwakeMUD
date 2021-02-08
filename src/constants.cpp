@@ -2221,9 +2221,6 @@ const char *cyber_types[] = {
   "Climbing Claws",
   "Smartlink",
   "Muscle Replacement",
-  "Strength Mod",
-  "Quickness Mod",
-  "Armor Mod",
   "Cyberarm Gyromount"
 };
 
