@@ -1290,6 +1290,41 @@ enum {
 #define EYE_COSMETIC    (1 << 22)
 #define NUM_EYEMODS    23
 
+#define ARMS_MOD_OBVIOUS    (1 << 0)
+#define ARMS_MOD_SYNTHETIC    (1 << 1)
+#define ARMS_MOD_ARMOR_MOD1    (1 << 2)
+#define ARMS_MOD_STRENGTH_MOD1    (1 << 3)
+#define ARMS_MOD_STRENGTH_MOD2    (1 << 4)
+#define ARMS_MOD_STRENGTH_MOD3    (1 << 5)
+#define ARMS_MOD_QUICKNESS_MOD1    (1 << 6)
+#define ARMS_MOD_QUICKNESS_MOD2    (1 << 7)
+#define ARMS_MOD_QUICKNESS_MOD3    (1 << 8)
+#define ARMS_MOD_GYROMOUNT    (1 << 9)
+#define NUM_ARMS_MODS    10
+
+#define LEGS_MOD_OBVIOUS    (1 << 0)
+#define LEGS_MOD_SYNTHETIC    (1 << 1)
+#define LEGS_MOD_ARMOR_MOD1    (1 << 2)
+#define LEGS_MOD_STRENGTH_MOD1    (1 << 3)
+#define LEGS_MOD_STRENGTH_MOD2    (1 << 4)
+#define LEGS_MOD_STRENGTH_MOD3    (1 << 5)
+#define LEGS_MOD_QUICKNESS_MOD1    (1 << 6)
+#define LEGS_MOD_QUICKNESS_MOD2    (1 << 7)
+#define LEGS_MOD_QUICKNESS_MOD3    (1 << 8)
+#define NUM_LEGS_MODS    9
+
+#define SKULL_MOD_OBVIOUS    (1 << 0)
+#define SKULL_MOD_SYNTHETIC    (1 << 1)
+#define SKULL_MOD_ARMOR_MOD1    (1 << 2)
+#define NUM_SKULL_MODS    3
+
+#define TORSO_MOD_OBVIOUS    (1 << 0)
+#define TORSO_MOD_SYNTHETIC    (1 << 1)
+#define TORSO_MOD_ARMOR_MOD1    (1 << 2)
+#define TORSO_MOD_ARMOR_MOD2    (1 << 3)
+#define TORSO_MOD_ARMOR_MOD3    (1 << 4)
+#define NUM_TORSO_MODS    5
+
 #define FILTER_AIR  0
 #define FILTER_BLOOD  1
 #define FILTER_INGESTED  2
