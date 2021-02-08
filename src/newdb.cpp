@@ -478,6 +478,30 @@ bool load_char(const char *name, char_data *ch, bool logon)
   SETTABLE_EMAIL(ch) = str_dup(row[80]);
   GET_CHAR_MULTIPLIER(ch) = atoi(row[81]);
   mysql_free_result(res);
+  
+  for (int i = 0; i <= WIL; i++) {
+    bool exceeding_limits = FALSE;
+    if (i == BOD && (GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch)) > racial_limits[(int)GET_RACE(ch)][0][i]) {
+      exceeding_limits = TRUE;
+    }
+    
+    else if (GET_REAL_ATT(ch, i) > racial_limits[(int)GET_RACE(ch)][0][i]) {
+      exceeding_limits = TRUE;
+    }
+    
+    if (exceeding_limits){
+      snprintf(buf, sizeof(buf), "^YSomehow, %s's %s is %d (racial max is %d.) Resetting to racial max.^n",
+               GET_CHAR_NAME(ch),
+               attributes[i],
+               GET_REAL_ATT(ch, i),
+               racial_limits[(int)GET_RACE(ch)][0][i]);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      
+      GET_REAL_ATT(ch, i) = racial_limits[(int)GET_RACE(ch)][0][i];
+      if (i == BOD)
+        GET_REAL_ATT(ch, i) -= GET_PERM_BOD_LOSS(ch);
+    }
+  }
 
   if (GET_LEVEL(ch) > 0) {
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_immortdata WHERE idnum=%ld;", GET_IDNUM(ch));
