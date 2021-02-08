@@ -2137,7 +2137,6 @@ const char *skullmods[] = {
   "Obvious",
   "Synthetic",
   "Armor Mod1",
-  "Armor Mod2",
   "\n"
 };
 
@@ -2146,8 +2145,6 @@ const char *torsomods[] = {
   "Synthetic",
   "Armor Mod1",
   "Armor Mod2",
-  "Armor Mod3",
-  "Armor Mod4",
   "\n"
 };
 
