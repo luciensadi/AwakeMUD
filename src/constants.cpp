@@ -2114,7 +2114,6 @@ const char *armsmods[] = {
   "Quickness Mod2",
   "Quickness Mod3",
   "Armor Mod1",
-  "Armor Mod2",
   "Cyberarm Gyromount"
   "\n"
 };
@@ -2123,7 +2122,6 @@ const char *legsmods[] = {
   "Obvious",
   "Synthetic",
   "Armor Mod1",
-  "Armor Mod2",
   "Strength Mod1",
   "Strength Mod2",
   "Strength Mod3",
@@ -2145,6 +2143,7 @@ const char *torsomods[] = {
   "Synthetic",
   "Armor Mod1",
   "Armor Mod2",
+  "Armor Mod3",
   "\n"
 };
 
