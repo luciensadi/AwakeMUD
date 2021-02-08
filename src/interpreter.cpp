@@ -2411,8 +2411,12 @@ void nanny(struct descriptor_data * d, char *arg)
         d->invalid_name++;
         if (d->invalid_name > 3)
           close_socket(d);
-        else
-          SEND_TO_Q("Invalid name, please try another. Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", d);
+        else {
+          snprintf(buf, sizeof(buf), "Invalid name '%s', please try another. Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", arg);
+          SEND_TO_Q(buf, d);
+        }
+        
+          
         return;
       }
       if (does_player_exist(tmp_name)) {
@@ -2506,16 +2510,22 @@ void nanny(struct descriptor_data * d, char *arg)
     // Clear their idle counter so they don't get dropped mysteriously.
     d->idle_tics = 0;
 
-    if (!*arg)
+    if (!*arg) {
       close_socket(d);
-    else if (str_cmp(arg, "abort") == 0) {
+      return;
+    }
+  
+    if (str_cmp(arg, "abort") == 0) {
       /* turn echo back on */
       echo_on(d);
       
+      d->character->desc = NULL;
       extract_char(d->character);
+      d->character = NULL;
       
       SEND_TO_Q("OK, let's try a different name.\r\n\r\nWhat's your handle, chummer? ", d);
       STATE(d) = CON_GET_NAME;
+      return;
     } else {
       if (!validate_and_update_password(arg, GET_PASSWD(d->character))) {
         snprintf(buf, sizeof(buf), "Bad PW: %s [%s]",
