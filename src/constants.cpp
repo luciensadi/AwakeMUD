@@ -2105,6 +2105,8 @@ const char *eyemods[] = {
 };
 
 const char *armsmods[] = {
+  "Obvious",
+  "Synthetic",
   "Fingertip Compartment",
   "Hand Blade",
   "Hand Razor",
@@ -2121,12 +2123,12 @@ const char *armsmods[] = {
   "Armor Mod1",
   "Armor Mod2",
   "Cyberarm Gyromount"
-  "Obvious",
-  "Synthetic",
   "\n"
 };
 
 const char *legsmods[] = {
+  "Obvious",
+  "Synthetic",
   "Armor Mod1",
   "Armor Mod2",
   "Strength Mod1",
@@ -2137,27 +2139,25 @@ const char *legsmods[] = {
   "Quickness Mod3",
   "Foot Anchor",
   "Hydraulic Jack",
-  "Obvious",
-  "Synthetic",
   "\n"
 };
 
 const char *skullmods[] = {
-  "Armor Mod1",
-  "Armor Mod2",
-  "Datajack",
   "Obvious",
   "Synthetic",
+  "Datajack",
+  "Armor Mod1",
+  "Armor Mod2",
   "\n"
 };
 
 const char *torsomods[] = {
+  "Obvious",
+  "Synthetic",
   "Armor Mod1",
   "Armor Mod2",
   "Armor Mod3",
   "Armor Mod4",
-  "Obvious",
-  "Synthetic",
   "\n"
 };
 
