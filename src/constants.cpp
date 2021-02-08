@@ -2107,13 +2107,13 @@ const char *eyemods[] = {
 const char *armsmods[] = {
   "Obvious",
   "Synthetic",
+  "Armor Mod1",
   "Strength Mod1",
   "Strength Mod2",
   "Strength Mod3",
   "Quickness Mod1",
   "Quickness Mod2",
   "Quickness Mod3",
-  "Armor Mod1",
   "Cyberarm Gyromount"
   "\n"
 };
