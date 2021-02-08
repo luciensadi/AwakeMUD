@@ -1134,9 +1134,9 @@ ACMD(do_matrix_look)
     
     // We're sending something. If they don't have a valid roomstring (legacy exits), craft a generic one.
     if (!exit->roomstring || !*(exit->roomstring))
-      snprintf(buf, sizeof(buf), "^cA plain-looking icon with the address %s floats here.^n\r\n", fname_allchars(exit->addresses));
+      snprintf(buf, sizeof(buf), "^W(Obvious Host) ^cA plain-looking icon with the address %s floats here.^n\r\n", fname_allchars(exit->addresses));
     else
-      snprintf(buf, sizeof(buf), "^c%s^n\r\n", exit->roomstring);
+      snprintf(buf, sizeof(buf), "^W(Obvious Host) ^c%s^n\r\n", exit->roomstring);
     
     // Send our composed string and indicate that we've sent something.
     send_to_icon(PERSONA, buf);

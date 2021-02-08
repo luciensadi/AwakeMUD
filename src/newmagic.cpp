@@ -4507,7 +4507,7 @@ ACMD(do_initiate)
     }
     
     if (ch->points.extrapp > (int)(GET_TKE(ch) / 50)) {
-      send_to_char(ch, "You do not have enough TKE to purchase a powerpoint. You need %d.\r\n", 50 * (ch->points.extrapp - (int)(GET_TKE(ch) / 50)));
+      send_to_char(ch, "You haven't earned enough TKE to purchase %s powerpoint yet. You need at least %d.\r\n", ch->points.extrapp ? "another" : "a", 50 * ch->points.extrapp);
       return;
     }
     
