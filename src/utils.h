@@ -854,6 +854,8 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 // ITEM_BIOWARE convenience defines
 
+#define GET_BIOWARE_TYPE(bioware)          (GET_OBJ_VAL((bioware), 0))
+
 // ITEM_FOUNTAIN convenience defines
 
 // ITEM_CYBERWARE convenience defines
