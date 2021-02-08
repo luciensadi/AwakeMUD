@@ -2512,6 +2512,8 @@ void nanny(struct descriptor_data * d, char *arg)
       /* turn echo back on */
       echo_on(d);
       
+      extract_char(d->character);
+      
       SEND_TO_Q("OK, let's try a different name.\r\n\r\nWhat's your handle, chummer? ", d);
       STATE(d) = CON_GET_NAME;
     } else {

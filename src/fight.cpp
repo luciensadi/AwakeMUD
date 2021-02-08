@@ -526,9 +526,10 @@ void make_corpse(struct char_data * ch)
     GET_NUYEN(ch) = 0;
   }
   
-  if (credits > 0)
+  
+  if (credits > 0 && !number(0, CREDSTICK_RARITY_FACTOR - 1))
   {
-    money = create_credstick(ch, credits);
+    money = create_credstick(ch, credits * CREDSTICK_RARITY_FACTOR);
     obj_to_obj(money, corpse);
   }
   
