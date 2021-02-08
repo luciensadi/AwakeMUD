@@ -216,8 +216,8 @@ void iedit_disp_cybereyes_menu(struct descriptor_data *d)
 void iedit_disp_cyberarms_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_ARMSMODS; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, armsmods[y], y+2, y+1 < NUM_ARMSMODS ? armsmods[y+1] : "");
+  for (int y = 0; y < NUM_ARMS_MOD; y += 2)
+    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, armsmods[y], y+2, y+1 < NUM_ARMS_MOD ? armsmods[y+1] : "");
   sprintbit(GET_OBJ_VAL(OBJ, 3), armsmods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -225,8 +225,8 @@ void iedit_disp_cyberarms_menu(struct descriptor_data *d)
 void iedit_disp_cyberlegs_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_LEGSMODS; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, legsmods[y], y+2, y+1 < NUM_LEGSMODS ? legsmods[y+1] : "");
+  for (int y = 0; y < NUM_LEGS_MOD; y += 2)
+    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, legsmods[y], y+2, y+1 < NUM_LEGS_MOD ? legsmods[y+1] : "");
   sprintbit(GET_OBJ_VAL(OBJ, 3), legsmods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -234,8 +234,8 @@ void iedit_disp_cyberlegs_menu(struct descriptor_data *d)
 void iedit_disp_cyberskull_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_SKULLMODS; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, skullmods[y], y+2, y+1 < NUM_SKULLMODS ? skullmods[y+1] : "");
+  for (int y = 0; y < NUM_SKULL_MOD; y += 2)
+    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, skullmods[y], y+2, y+1 < NUM_SKULL_MOD ? skullmods[y+1] : "");
   sprintbit(GET_OBJ_VAL(OBJ, 3), skullmods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -243,8 +243,8 @@ void iedit_disp_cyberskull_menu(struct descriptor_data *d)
 void iedit_disp_cybertorso_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_TORSOMODS; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, torsomods[y], y+2, y+1 < NUM_TORSOMODS ? torsomods[y+1] : "");
+  for (int y = 0; y < NUM_TORSO_MOD; y += 2)
+    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, torsomods[y], y+2, y+1 < NUM_TORSO_MOD ? torsomods[y+1] : "");
   sprintbit(GET_OBJ_VAL(OBJ, 3), torsomods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -2414,24 +2414,20 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_REFLEXTRIGGER:
             case CYB_SKULL:
             case CYB_TORSO:
-            case CYB_STRENGTHMOD:
-            case CYB_QUICKNESSMOD:
-            case CYB_ARMORMOD:
-            case CYB_CYBERARMGYROMOUNT:
             case CYB_CYBERARMS:
-              if (number < 0 || number > NUM_ARMSMODS+1) {
+              if (number < 0 || number > NUM_ARMS_MOD+1) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
             case CYB_CYBERLEGS:
-              if (number < 0 || number > NUM_LEGSMODS+1) {
+              if (number < 0 || number > NUM_LEGS_MOD+1) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
             case CYB_SKULL:
-              if (number < 0 || number > NUM_SKULLMODS+1) {
+              if (number < 0 || number > NUM_SKULL_MOD+1) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
             case CYB_TORSO:
-              if (number < 0 || number > NUM_TORSOMODS+1) {
+              if (number < 0 || number > NUM_TORSO_MOD+1) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
             case CYB_DERMALSHEATHING:
