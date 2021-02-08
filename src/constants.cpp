@@ -2112,28 +2112,44 @@ const char *armsmods[] = {
   "CyberFin",
   "Climbing Claws",
   "Smartlink",
-  "Strength Mod",
-  "Quickness Mod",
-  "Armor Mod",
+  "Strength Mod1",
+  "Strength Mod2",
+  "Strength Mod3",
+  "Quickness Mod1",
+  "Quickness Mod2",
+  "Quickness Mod3",
+  "Armor Mod1",
+  "Armor Mod2",
   "Cyberarm Gyromount"
   "\n"
 };
 
 const char *legsmods[] = {
-  "Armor Mod",
+  "Armor Mod1",
+  "Armor Mod2",
+  "Strength Mod1",
+  "Strength Mod2",
+  "Strength Mod3",
+  "Quickness Mod1",
+  "Quickness Mod2",
+  "Quickness Mod3",
   "Foot Anchor",
   "Hydraulic Jack",
   "\n"
 };
 
 const char *skullmods[] = {
+  "Armor Mod1",
+  "Armor Mod2",
   "Datajack",
-  "Armor Mod",
   "\n"
 };
 
 const char *torsomods[] = {
-  "Armor Mod",
+  "Armor Mod1",
+  "Armor Mod2",
+  "Armor Mod3",
+  "Armor Mod4",
   "\n"
 };
 
