@@ -2412,8 +2412,6 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_HANDBLADE:
             case CYB_HANDSPUR:
             case CYB_REFLEXTRIGGER:
-            case CYB_SKULL:
-            case CYB_TORSO:
             case CYB_CYBERARMS:
               if (number < 0 || number > 2) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
