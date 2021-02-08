@@ -5543,19 +5543,19 @@ void price_cyber(struct obj_data *obj)
       break;
     case CYB_SKULL:
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
-      if (IS_SET(GET_OBJ_VAL(obj, 3), SKULL_OBVIOUS)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), SKULL_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 35000;
         GET_OBJ_AVAILTN(obj) = 6;
         GET_OBJ_AVAILDAY(obj) = 4;
         GET_CYBERWARE_ESSENCE_COST(obj) = 75;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), SKULL_SYNTHETIC)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), SKULL_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 55000;
         GET_OBJ_AVAILTN(obj) = 6;
         GET_OBJ_AVAILDAY(obj) = 4;
         GET_CYBERWARE_ESSENCE_COST(obj) = 75;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), SKULL_ARMORMOD1)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), SKULL_MOD_ARMORMOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
@@ -5563,31 +5563,31 @@ void price_cyber(struct obj_data *obj)
       break;
     case CYB_TORSO:
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
-      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_OBVIOUS)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 90000;
         GET_OBJ_AVAILTN(obj) = 6;
         GET_OBJ_AVAILDAY(obj) = 4;
         GET_CYBERWARE_ESSENCE_COST(obj) = 150;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_SYNTHETIC)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 120000;
         GET_OBJ_AVAILTN(obj) = 6;
         GET_OBJ_AVAILDAY(obj) = 4;
         GET_CYBERWARE_ESSENCE_COST(obj) = 150;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_ARMORMOD1)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_ARMORMOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_ARMORMOD2)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_ARMORMOD2)) {
         GET_OBJ_COST(obj) += 13000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_ARMORMOD3)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), TORSO_MOD_ARMORMOD3)) {
         GET_OBJ_COST(obj) += 19500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
@@ -5595,55 +5595,55 @@ void price_cyber(struct obj_data *obj)
       break;
     case CYB_LEGS:
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_OBVIOUS)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 150000;
         GET_OBJ_AVAILTN(obj) = 4;
         GET_OBJ_AVAILDAY(obj) = 4;
         GET_CYBERWARE_ESSENCE_COST(obj) = 200;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_SYNTHETIC)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 200000;
         GET_OBJ_AVAILTN(obj) = 4;
         GET_OBJ_AVAILDAY(obj) = 4;
         GET_CYBERWARE_ESSENCE_COST(obj) = 200;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_ARMORMOD1)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_ARMORMOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_STRENGTHMOD1)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_STRENGTH_MOD1)) {
         GET_OBJ_COST(obj) += 20000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_STRENGTHMOD2)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_STRENGTH_MOD2)) {
         GET_OBJ_COST(obj) += 40000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_STRENGTHMOD3)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_STRENGTH_MOD3)) {
         GET_OBJ_COST(obj) += 60000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_QUICKNESSMOD1)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_QUICKNESS_MOD1)) {
         GET_OBJ_COST(obj) += 20000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_QUICKNESSMOD2)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_QUICKNESS_MOD2)) {
         GET_OBJ_COST(obj) += 40000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_QUICKNESSMOD3)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), LEGS_MOD_QUICKNESS_MOD3)) {
         GET_OBJ_COST(obj) += 60000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
@@ -5651,67 +5651,67 @@ void price_cyber(struct obj_data *obj)
       break;
     case CYB_ARMS:
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = GET_CYBERWARE_ESSENCE_COST(obj) = GET_OBJ_COST(obj) = 0;
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_OBVIOUS)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 75000;
         GET_OBJ_AVAILTN(obj) = 4;
         GET_OBJ_AVAILDAY(obj) = 4;
         GET_CYBERWARE_ESSENCE_COST(obj) = 200;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_SYNTHETIC)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_SYNTHETIC)) {
         GET_OBJ_COST(obj) = 100000;
         GET_OBJ_AVAILTN(obj) = 4;
         GET_OBJ_AVAILDAY(obj) = 4;
         GET_CYBERWARE_ESSENCE_COST(obj) = 200;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_ARMORMOD1)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_ARMORMOD1)) {
         GET_OBJ_COST(obj) += 6500;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_STRENGTHMOD1)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_STRENGTH_MOD1)) {
         GET_OBJ_COST(obj) += 20000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_STRENGTHMOD2)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_STRENGTH_MOD2)) {
         GET_OBJ_COST(obj) += 40000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_STRENGTHMOD3)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_STRENGTH_MOD3)) {
         GET_OBJ_COST(obj) += 60000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_QUICKNESSMOD1)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_QUICKNESS_MOD1)) {
         GET_OBJ_COST(obj) += 20000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_QUICKNESSMOD2)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_QUICKNESS_MOD2)) {
         GET_OBJ_COST(obj) += 40000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_QUICKNESSMOD3)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_QUICKNESS_MOD3)) {
         GET_OBJ_COST(obj) += 60000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_QUICKNESSMOD3)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_QUICKNESS_MOD3)) {
         GET_OBJ_COST(obj) += 60000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 2);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 4);
         GET_CYBERWARE_ESSENCE_COST(obj) += 0;
       }
-      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_GYROMOUNT)) {
+      if (IS_SET(GET_OBJ_VAL(obj, 3), ARMS_MOD_GYROMOUNT)) {
         GET_OBJ_COST(obj) += 40000;
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 10);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 21);
