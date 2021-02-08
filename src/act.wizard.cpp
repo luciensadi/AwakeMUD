@@ -6212,6 +6212,14 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
     
+    if (GET_BALLISTIC(mob) > 10 || GET_IMPACT(mob) > 10) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has high armor ratings %db / %di^n.\r\n",
+               GET_BALLISTIC(mob),
+               GET_IMPACT(mob));
+      printed = TRUE;
+      issues++;
+    }
+    
     // Flag mobs with no stats
     if (total_stats == 0) {
       strncat(buf, "  - has not had its attributes set yet.\r\n", sizeof(buf) - strlen(buf) - 1);
@@ -6238,7 +6246,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     }
     
     // Flag mobs with high nuyen.
-    if (GET_NUYEN(mob) > 100 || GET_BANK(mob) > 100) {
+    if (GET_NUYEN(mob) >= 200 || GET_BANK(mob) >= 200) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high grinding rewards (%ld/%ld)^n.\r\n", GET_NUYEN(mob), GET_BANK(mob));
       printed = TRUE;
       issues++;
@@ -6829,7 +6837,10 @@ ACMD(do_audit) {
   #define AUDIT_ALL_ZONES(func_suffix)                           \
   if (!str_cmp(arg1, #func_suffix)) {                            \
     for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++) { \
-      if (!zone_table[zonenum].connected)                        \
+      if (!zone_table[zonenum].connected                         \
+          || zone_table[zonenum].number == 0                     \
+          || zone_table[zonenum].number == 10                    \
+          || zone_table[zonenum].number == 100)                  \
         continue;                                                \
       audit_zone_ ## func_suffix ## _(ch, zonenum, FALSE);       \
     }                                                            \
