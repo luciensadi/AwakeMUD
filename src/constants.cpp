@@ -1750,15 +1750,15 @@ struct ammo_data ammo_type[] =
 
 const char *positions[] =
   {
-    " is lying here, dead",
-    " is lying here, mortally wounded",
-    " is lying here, stunned",
-    " is sleeping here",
-    " is lying here",
-    " is resting here",
-    " is sitting here",
+    "is lying here, dead",
+    "is lying here, mortally wounded",
+    "is lying here, stunned",
+    "is sleeping here",
+    "is lying here",
+    "is resting here",
+    "is sitting here",
     "!FIGHTING!",
-    " is standing here"
+    "is standing here"
   };
 
 int racial_limits[][2][6] = {
