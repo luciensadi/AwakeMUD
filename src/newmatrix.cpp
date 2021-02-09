@@ -162,6 +162,7 @@ void dumpshock(struct matrix_icon *icon)
           && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == icon) 
       {
         GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
+        GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
       }
     }
     
@@ -248,7 +249,7 @@ bool has_spotted(struct matrix_icon *icon, struct matrix_icon *targ)
   if (targ->evasion)
     return FALSE;
   for (struct seen_data *seen = icon->decker->seen; seen; seen = seen->next)
-    if (seen->idnum == targ->idnum)
+    if (seen->idnum == targ->idnum || targ->decker) // You auto-see deckers now.
       return TRUE;
   return FALSE;
 }
@@ -1150,9 +1151,21 @@ ACMD(do_matrix_look)
   for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
     if (has_spotted(PERSONA, icon))
       send_to_icon(PERSONA, "^Y%s^n\r\n", icon->look_desc);
-  for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 7) == PERSONA->idnum && !GET_OBJ_VAL(obj, 9))
-      send_to_icon(PERSONA, "^yA file named %s floats here.^n\r\n", GET_OBJ_NAME(obj));
+      
+  for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj; obj = obj->next_content) {
+    if (GET_OBJ_VAL(obj, 7) == PERSONA->idnum 
+        && !GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) 
+    {
+      if (GET_DECK_ACCESSORY_FILE_REMAINING(obj)) {
+        send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n", 
+                     GET_OBJ_NAME(obj),
+                     (int) (GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / GET_DECK_ACCESSORY_FILE_SIZE(obj)
+                   );
+      } else {
+        send_to_icon(PERSONA, "^yA file named %s floats here.^n\r\n", GET_OBJ_NAME(obj));
+      }
+    }
+  }    
 }
 
 ACMD(do_analyze)
@@ -1408,6 +1421,7 @@ ACMD(do_logoff)
         && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == PERSONA) 
     {
       GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
+      GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
     }
   }
   
@@ -2311,11 +2325,17 @@ void matrix_update()
       struct obj_data *next;
       for (struct obj_data *file = host.file; file; file = next) {
         next = file->next_content;
+        if (next == file) {
+          mudlog("SYSERR: Infinite loop detected in Matrix file handling! Attempting to break out.\r\n", NULL, LOG_SYSLOG, TRUE);
+          file->next_content = NULL;
+          next = NULL;
+        }
         if (GET_DECK_ACCESSORY_FILE_REMAINING(file)) {
           struct matrix_icon *persona = find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file));
-          if (!persona || persona->in_host != rnum)
+          if (!persona || persona->in_host != rnum) {
             GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
-          else {
+            GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
+          } else {
             GET_DECK_ACCESSORY_FILE_REMAINING(file) -= persona->decker->io;
             // TODO BUG: What if you're out of space? It silently fails to download and just eternally decrements? Might even hit 0 and have 8 still set.
             if (GET_DECK_ACCESSORY_FILE_REMAINING(file) <= 0) {

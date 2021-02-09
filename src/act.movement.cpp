@@ -1587,7 +1587,8 @@ ACMD(do_enter)
           }
 
 
-    send_to_char(ch, "There is no %s here.\r\n", buf);
+    send_to_char(ch, "There is no '%s' here.\r\n", buf);
+    return;
   } 
   
   // Is there an elevator car here?

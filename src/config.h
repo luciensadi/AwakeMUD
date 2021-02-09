@@ -118,7 +118,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // Discord server URL. Comment out if you don't have one.
 #define DISCORD_SERVER_URL "https://discord.gg/q5VCMkv"
 
-// Credsticks should generate every 1:X kills, and have X * kill's credits.
-#define CREDSTICK_RARITY_FACTOR 20
+// Credsticks should generate every 1:X kills, and have X * kill's credits. Setting this too high will cause things like wageslaves having silver credsticks, so be cautious.
+#define CREDSTICK_RARITY_FACTOR 10
 
 #endif
