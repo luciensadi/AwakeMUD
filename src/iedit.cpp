@@ -2413,21 +2413,89 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_HANDSPUR:
             case CYB_REFLEXTRIGGER:
             case CYB_CYBERARMS:
-              if (number < 0 || number > 2) {
+              if (number < 0 || number > NUM_ARMSSMODS+1) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
+              }
+              if (number == 0) {
+                iedit_disp_menu(d);
+                return;
+              }
+              number--;
+              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
+              iedit_disp_cyberarms_menu(d);
+              return;
+          }
+          break;
+        default:
+          break;
+      }
+      GET_CYBERWARE_FLAGS(d->edit_obj, 3) = number;
+      iedit_disp_val5_menu(d);
+      break;
             case CYB_CYBERLEGS:
-              if (number < 0 || number > 2) {
+              if (number < 0 || number > NUM_LEGSSMODS+1) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
-            case CYB_SKULL:
-              if (number < 0 || number > 2) {
+              }
+              if (number == 0) {
+                iedit_disp_menu(d);
+                return;
+              }
+              number--;
+              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
+              iedit_disp_cyberlegs_menu(d);
+              return;
+          }
+          break;
+        default:
+          break;
+      }
+      GET_CYBERWARE_FLAGS(d->edit_obj, 3) = number;
+      iedit_disp_val5_menu(d);
+      break;
+            case CYB_CYBERSKULL:
+              if (number < 0 || number > NUM_SKULLMODS+1) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
-            case CYB_TORSO:
-              if (number < 0 || number > 2) {
+              }
+              if (number == 0) {
+                iedit_disp_menu(d);
+                return;
+              }
+              number--;
+              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
+              iedit_disp_cyberskull_menu(d);
+              return;
+          }
+          break;
+        default:
+          break;
+      }
+      GET_CYBERWARE_FLAGS(d->edit_obj, 3) = number;
+      iedit_disp_val5_menu(d);
+      break;
+            case CYB_CYBERTORSO:
+              if (number < 0 || number > NUM_TORSOMODS+1) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
+              }
+              if (number == 0) {
+                iedit_disp_menu(d);
+                return;
+              }
+              number--;
+              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
+              iedit_disp_cybertorso_menu(d);
+              return;
+          }
+          break;
+        default:
+          break;
+      }
+      GET_CYBERWARE_FLAGS(d->edit_obj, 3) = number;
+      iedit_disp_val5_menu(d);
+      break;
             case CYB_DERMALSHEATHING:
               if (number < 0 || number > 1) {
                 send_to_char("Invalid Input! Enter 1 or 0: ", CH);
