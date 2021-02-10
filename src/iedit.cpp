@@ -2422,7 +2422,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
                 return;
               }
               number--;
-              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
+              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 10 << number);
               CLS(CH);
               sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_arms, buf1, sizeof(buf1));
               send_to_char(CH, " 1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Strength Mod1\r\n 5) Strength Mod2\r\n
@@ -2432,7 +2432,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               }
               break;
             case CYB_CYBERLEGS:
-              if (number < 0 || number > 2) {
+              if (number < 0 || number > 9) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
@@ -2451,7 +2451,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               }
               break;
             case CYB_CYBERSKULL:
-              if (number < 0 || number > 2) {
+              if (number < 0 || number > 3) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
@@ -2469,7 +2469,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               }
               break;
             case CYB_CYBERTORSO:
-              if (number < 0 || number > 2) {
+              if (number < 0 || number > 6) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
