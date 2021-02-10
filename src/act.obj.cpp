@@ -2004,7 +2004,7 @@ ACMD(do_drink)
     return;
   }
   if (!(temp = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    if (!(temp = get_obj_in_list_vis(ch, arg, ch->in_room->contents))) {
+    if (!ch->in_room || !(temp = get_obj_in_list_vis(ch, arg, ch->in_room->contents))) {
       send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
       return;
     } else

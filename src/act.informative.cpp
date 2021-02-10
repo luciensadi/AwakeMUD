@@ -3093,7 +3093,7 @@ const char *get_plaintext_score_health(struct char_data *ch) {
 }
 
 ACMD(do_hp) {
-  get_plaintext_score_health(ch);
+  send_to_char(get_plaintext_score_health(ch), ch);
 }
 
 const char *get_plaintext_score_stats(struct char_data *ch) {
