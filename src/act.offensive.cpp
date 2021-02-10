@@ -587,45 +587,43 @@ ACMD(do_flee)
     return;
   }
   
-  // You get twenty tries to escape per flee command... unless you're up against an unkillable.
-  int max_tries = 20;
-  if (FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && !can_hurt(ch, FIGHTING(ch), TRUE, 0))
-    max_tries = 200;
-    
-  for (int tries = 0; tries < max_tries; tries++) {
-    int attempt = number(0, NUM_OF_DIRS - 2);       /* Select a random direction */
-    if (CAN_GO(ch, attempt) && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[attempt]->to_room, ROOM_NOMOB))) {
+  for (int dir = 0; dir <= DOWN; dir++) {
+    if (CAN_GO(ch, dir) 
+        && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB))
+        && (!ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_FALL))) 
+    {
       // Supply messaging and put the character into a wait state to match wait state in perform_move.
       act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
       
-      // If the character is fighting in melee combat, they must pass a test to escape.
+      // If the character is fighting in melee combat with someone they can hurt, they must pass a test to escape.
       if (GET_POS(ch) >= POS_FIGHTING 
           && FIGHTING(ch) 
           && ch->in_room == FIGHTING(ch)->in_room
-          && !(AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))) {
-        if (can_hurt(ch, FIGHTING(ch), TRUE, 0)
-            && success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) <= 0) {
-          act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
-          act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
-          act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
-          return;
-        }
+          && !(AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))
+          && can_hurt(ch, FIGHTING(ch), TRUE, 0)
+          && success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) <= 0) 
+      {
+        act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
+        act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
+        act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
+        return;
       }
       
       // Attempt to move through the selected exit.
-      if (do_simple_move(ch, attempt, CHECK_SPECIAL | LEADER, NULL)) {
+      if (do_simple_move(ch, dir, CHECK_SPECIAL | LEADER, NULL)) {
         send_to_char("You flee head over heels.\r\n", ch);
       } else {
         act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
+        send_to_char("You can't get away!\r\n", ch);
       }
       
-      // Once we've selected a valid direction,
       return;
     }
   }
-  send_to_char("PANIC! You couldn't escape!\r\n", ch);
-  WAIT_STATE(ch, PULSE_VIOLENCE * 2);
+  
+  send_to_char("PANIC! There's nowhere you can flee to!\r\n", ch);
+  WAIT_STATE(ch, PULSE_VIOLENCE * 2);  
 }
 
 ACMD(do_kick)

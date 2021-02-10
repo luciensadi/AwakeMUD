@@ -147,15 +147,15 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   {
     struct remem *mem;
     if (!act) {
-      strcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)));
+      strlcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)), sizeof(buf));
       if (IS_SENATOR(ch) && !IS_NPC(i))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", CAP(GET_CHAR_NAME(i)));
       else if ((mem = found_mem(GET_MEMORY(ch), i)))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", CAP(mem->mem));
     } else if ((mem = found_mem(GET_MEMORY(ch), i)) && act != 2)
-      strcpy(buf, CAP(mem->mem));
+      strlcpy(buf, CAP(mem->mem), sizeof(buf));
     else
-      strcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)));
+      strlcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)), sizeof(buf));
   }
   if (GET_SUSTAINED(i) && (IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
@@ -172,7 +172,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   if (AFF_FLAGGED(i, AFF_MANIFEST) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
     snprintf(buf2, sizeof(buf2), "The ghostly image of %s", buf);
-    strcpy(buf, buf2);
+    strlcpy(buf, buf2, sizeof(buf));
   }
   return buf;
 }
@@ -210,9 +210,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
   *buf = '\0';
   if ((mode == 0) && object->text.room_desc)
   {
-    strcpy(buf, CCHAR ? CCHAR : "");
+    strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
     if (object->graffiti)
-      strcat(buf, object->graffiti);
+      strlcat(buf, object->graffiti, sizeof(buf));
     else {
       // Gun magazines get special consideration.
       if (GET_OBJ_TYPE(object) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_MAXAMMO(object)) {
@@ -226,26 +226,26 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       } else if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO) {
         snprintf(buf, sizeof(buf), "^gA metal box of %s has been left here.^n", get_ammo_representation(GET_AMMOBOX_WEAPON(object), GET_AMMOBOX_TYPE(object), 0));
       } else {
-        strcat(buf, object->text.room_desc);
+        strlcat(buf, object->text.room_desc, sizeof(buf));
       }
     }
   } else if (GET_OBJ_NAME(object) && mode == 1)
   {
-    strcpy(buf, GET_OBJ_NAME(object));
+    strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_DESIGN)
-      strcat(buf, " (Plan)");
+      strlcat(buf, " (Plan)", sizeof(buf));
     if (GET_OBJ_VNUM(object) == 108 && !GET_OBJ_TIMER(object))
-      strcat(buf, " (Uncooked)");
+      strlcat(buf, " (Uncooked)", sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
-      strcat(buf, " ^Y(Geas)^n");
+      strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
   } else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7)))
-    strcpy(buf, GET_OBJ_NAME(object));
+    strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
   else if (mode == 5)
   {
     if (GET_OBJ_DESC(object))
-      strcpy(buf, GET_OBJ_DESC(object));
+      strlcpy(buf, GET_OBJ_DESC(object), sizeof(buf));
     else
-      strcpy(buf, "You see nothing special..");
+      strlcpy(buf, "You see nothing special..", sizeof(buf));
   } else if (mode == 8)
     snprintf(buf, sizeof(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
   if (mode == 7 || mode == 8) {
@@ -255,40 +255,43 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s)", GET_OBJ_NAME(object->contains));
       if (GET_OBJ_VAL(object, 3) == 1 && ((object->worn_by && object->worn_by == ch) ||
                                           (object->in_obj && object->in_obj->worn_by && object->in_obj->worn_by == ch)))
-        strcat(buf, " ^Y(Ready)");
+        strlcat(buf, " ^Y(Ready)", sizeof(buf));
     } else if (GET_OBJ_TYPE(object) == ITEM_WORN && object->contains && !PRF_FLAGGED(ch, PRF_COMPACT))
-      strcat(buf, " carrying:");
+      strlcat(buf, " carrying:", sizeof(buf));
     else if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
       if (GET_OBJ_VAL(object, 4))
-        strcat(buf, " ^m(Activated Focus)^n");
+        strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
       if (GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
-        strcat(buf, " ^Y(Geas)^n");
+        strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
     }
+    
+    if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
+      strlcat(buf, " (damaged)", sizeof(buf));
   }
   if (mode != 3)
   {
     if (IS_OBJ_STAT(object, ITEM_INVISIBLE)) {
-      strcat(buf, " ^B(invisible)");
+      strlcat(buf, " ^B(invisible)", sizeof(buf));
     }
     
     if ((GET_OBJ_TYPE(object) == ITEM_FOCUS || IS_OBJ_STAT(object, ITEM_MAGIC))
         && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
-      strcat(buf, " ^Y(magic aura)");
+      strlcat(buf, " ^Y(magic aura)", sizeof(buf));
     }
     
     if (IS_OBJ_STAT(object, ITEM_GLOW)) {
-      strcat(buf, " ^W(glowing)");
+      strlcat(buf, " ^W(glowing)", sizeof(buf));
     }
     
     if (IS_OBJ_STAT(object, ITEM_HUM)) {
-      strcat(buf, " ^c(humming)");
+      strlcat(buf, " ^c(humming)", sizeof(buf));
     }
     
     if (object->obj_flags.quest_id && object->obj_flags.quest_id == GET_IDNUM(ch)) {
-      strcat(buf, " ^Y(Yours)^n");
+      strlcat(buf, " ^Y(Yours)^n", sizeof(buf));
     }
   }
-  strcat(buf, "^N\r\n");
+  strlcat(buf, "^N\r\n", sizeof(buf));
   send_to_char(buf, ch);
   if ((mode == 7 || mode == 8) && !PRF_FLAGGED(ch, PRF_COMPACT))
     if (GET_OBJ_TYPE(object) == ITEM_WORN && object->contains)
@@ -303,7 +306,7 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
 {
   *buf = '\0';
   
-  strcpy(buf, CCHAR ? CCHAR : "");
+  strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
   
   if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED)
   {
@@ -791,7 +794,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       GET_POS(i) == GET_DEFAULT_POS(i) && !MOB_FLAGGED(i, MOB_FLAMEAURA))
   {
     if (IS_AFFECTED(i, AFF_INVISIBLE))
-      strcpy(buf, "*");
+      strlcpy(buf, "*", sizeof(buf));
     else
       *buf = '\0';
     
@@ -2013,7 +2016,7 @@ void look_at_target(struct char_data * ch, char *arg)
 
 ACMD_CONST(do_look) {
   char not_const[MAX_STRING_LENGTH];
-  strcpy(not_const, argument);
+  strlcpy(not_const, argument, sizeof(not_const));
   ACMD_DECLARE(do_look);
   do_look(ch, not_const, cmd, subcmd);
 }
@@ -2061,7 +2064,7 @@ ACMD(do_look)
 
 void look_at_veh(struct char_data *ch, struct veh_data *veh, int success)
 {
-  strcpy(buf, GET_VEH_NAME(veh));
+  strlcpy(buf, GET_VEH_NAME(veh), sizeof(buf));
   int cond = 10 - veh->damage;
   if (cond >= 10)
     strcat(buf, " is in perfect condition.\r\n");
@@ -2848,7 +2851,7 @@ ACMD(do_examine)
         int target = 4;
         int skill = get_skill(ch, SKILL_BR_COMPUTER, target);
         if (success_test(skill, target) > 0) {
-          strcpy(buf, "Custom Components:\r\n");
+          strlcpy(buf, "Custom Components:\r\n", sizeof(buf));
           for (struct obj_data *soft = tmp_object->contains; soft; soft = soft->next_content)
             if (GET_OBJ_TYPE(soft) == ITEM_PART)
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-40s  Type: %-24s  Rating: %d\r\n",
@@ -2983,25 +2986,25 @@ const char *get_position_string(struct char_data *ch) {
   static char position_string[200];
   
   if (AFF_FLAGGED(ch, AFF_PRONE))
-    strcpy(position_string, "laying prone.");
+    strlcpy(position_string, "laying prone.", sizeof(position_string));
   else switch (GET_POS(ch)) {
     case POS_DEAD:
-      strcpy(position_string, "DEAD!");
+      strlcpy(position_string, "DEAD!", sizeof(position_string));
       break;
     case POS_MORTALLYW:
-      strcpy(position_string, "mortally wounded!  You should seek help!");
+      strlcpy(position_string, "mortally wounded!  You should seek help!", sizeof(position_string));
       break;
     case POS_STUNNED:
-      strcpy(position_string, "stunned!  You can't move!");
+      strlcpy(position_string, "stunned!  You can't move!", sizeof(position_string));
       break;
     case POS_SLEEPING:
-      strcpy(position_string, "sleeping.");
+      strlcpy(position_string, "sleeping.", sizeof(position_string));
       break;
     case POS_RESTING:
-      strcpy(position_string, "resting.");
+      strlcpy(position_string, "resting.", sizeof(position_string));
       break;
     case POS_SITTING:
-      strcpy(position_string, "sitting.");
+      strlcpy(position_string, "sitting.", sizeof(position_string));
       break;
     case POS_FIGHTING:
       if (FIGHTING(ch))
@@ -3009,19 +3012,19 @@ const char *get_position_string(struct char_data *ch) {
       else if (FIGHTING_VEH(ch))
         snprintf(position_string, sizeof(position_string), "fighting %s.", GET_VEH_NAME(FIGHTING_VEH(ch)));
       else
-        strcpy(position_string, "fighting thin air.");
+        strlcpy(position_string, "fighting thin air.", sizeof(position_string));
       break;
     case POS_STANDING:
       if (IS_WATER(ch->in_room))
-        strcpy(position_string, "swimming.");
+        strlcpy(position_string, "swimming.", sizeof(position_string));
       else
-        strcpy(position_string, "standing.");
+        strlcpy(position_string, "standing.", sizeof(position_string));
       break;
     case POS_LYING:
-      strcpy(position_string, "lying down.");
+      strlcpy(position_string, "lying down.", sizeof(position_string));
       break;
     default:
-      strcpy(position_string, "floating.");
+      strlcpy(position_string, "floating.", sizeof(position_string));
       break;
   }
   
