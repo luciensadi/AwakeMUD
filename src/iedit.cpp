@@ -2421,7 +2421,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_CYBERLEGS:
               sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_legs, buf1, sizeof(buf1));
               send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Strength Mod1\r\n 5) Strength Mod2\r\n
-                               "  6) Strength Mod3\r\n  7) Quickness Mod1\r\n  8) Quickness Mod2\r\n  9) Quickness Mod3\r\n  Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+                               "  6) Strength Mod3\r\n  7) Quickness Mod1\r\n  8) Quickness Mod2\r\n  
+                               "  9) Quickness Mod3\r\n  Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
               break;
             case CYB_CYBERSKULL:
               sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_skull, buf1, sizeof(buf1));
