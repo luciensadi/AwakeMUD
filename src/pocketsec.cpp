@@ -237,7 +237,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           d->edit_mode = SEC_PHONEADD1;
           break;
         case 'd':
-          send_to_char("Delete which entry?\r\n", CH);
+          send_to_char("Delete which entry? ('*' for all)\r\n", CH);
           d->edit_mode = SEC_PHONEDEL;
           break;
         case 'b':
@@ -283,11 +283,21 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, "Phonebook"))
           break;
-      i = atoi(arg);  
-      for (file = folder->contains; file && i > 1; file = file->next_content)
-        i--;
-      if (file)
-        extract_obj(file);
+          
+      if (arg && *arg == '*') {
+        struct obj_data *next;
+        for (file = folder->contains; file; file = next) {
+          next = file->next_content;
+          extract_obj(file);
+        }
+        folder->contains = NULL;
+      } else {
+        i = atoi(arg);
+        for (file = folder->contains; file && i > 1; file = file->next_content)
+          i--;
+        if (file)
+          extract_obj(file);
+      }
       pocketsec_phonemenu(d);
       break;
 
@@ -302,7 +312,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           d->edit_mode = SEC_NOTEADD1;
           break;
         case 'd':
-          send_to_char("Delete which note?\r\n", CH);
+          send_to_char("Delete which note? ('*' for all)\r\n", CH);
           d->edit_mode = SEC_NOTEDEL;
           break;
         case 'b':
@@ -349,11 +359,22 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, "Notes"))
           break;
-      i = atoi(arg);  
-      for (file = folder->contains; file && i > 1; file = file->next_content)
-        i--;
-      if (file)
-        extract_obj(file);
+          
+      if (arg && *arg == '*') {
+        struct obj_data *next;
+        for (file = folder->contains; file; file = next) {
+          next = file->next_content;
+          extract_obj(file);
+        }
+        folder->contains = NULL;
+      } else {
+        i = atoi(arg);  
+        for (file = folder->contains; file && i > 1; file = file->next_content)
+          i--;
+        if (file)
+          extract_obj(file);
+      }
+      
       pocketsec_notemenu(d);
       break;
 
@@ -405,7 +426,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           d->edit_mode = SEC_READMAIL;
           break;
         case 'd':
-          send_to_char("Delete which message?\r\n", CH);
+          send_to_char("Delete which message? ('*' for all)\r\n", CH);
           d->edit_mode = SEC_DELMAIL;
           break;
         case 's':
@@ -421,11 +442,22 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, "Mail"))
           break;
-      i = atoi(arg);
-      for (file = folder->contains; file && i > 1; file = file->next_content)
-        i--;
-      if (file)
-        extract_obj(file);
+      
+      if (arg && *arg == '*') {
+        struct obj_data *next;
+        for (file = folder->contains; file; file = next) {
+          next = file->next_content;
+          extract_obj(file);
+        }
+        folder->contains = NULL;
+      } else {
+        i = atoi(arg);  
+        for (file = folder->contains; file && i > 1; file = file->next_content)
+          i--;
+        if (file)
+          extract_obj(file);
+      }
+      
       pocketsec_mailmenu(d);
       break;
     case SEC_SENDMAIL:
