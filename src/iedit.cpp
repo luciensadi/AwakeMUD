@@ -2480,8 +2480,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
               CLS(CH);
               sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_torso, buf1, sizeof(buf1));
-              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Armor Mod1\r\n 5) Armor Mod2\r\n
-                               "  6) Armor Mod3\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Armor Mod1\r\n 5) Armor Mod2\r\n 6) Armor Mod3\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
                 return;
               }
               break;
