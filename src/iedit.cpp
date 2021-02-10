@@ -2413,89 +2413,25 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_HANDSPUR:
             case CYB_REFLEXTRIGGER:
             case CYB_CYBERARMS:
-              if (number < 0 || number > NUM_ARMSSMODS+1) {
-                send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
-                return;
-              }
-              if (number == 0) {
-                iedit_disp_menu(d);
-                return;
-              }
-              number--;
-              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
-              iedit_disp_cyberarms_menu(d);
-              return;
-          }
-          break;
-        default:
-          break;
-      }
-      GET_CYBERWARE_FLAGS(d->edit_obj, 3) = number;
-      iedit_disp_val5_menu(d);
-      break;
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_arms, buf1, sizeof(buf1));
+              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Strength Mod1\r\n 5) Strength Mod2\r\n
+                               "  6) Strength Mod3\r\n  7) Quickness Mod1\r\n  8) Quickness Mod2\r\n  9) Quickness Mod3\r\n
+                               "  10) Cyberarm Gyromount\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+              break;
             case CYB_CYBERLEGS:
-              if (number < 0 || number > NUM_LEGSSMODS+1) {
-                send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
-                return;
-              }
-              if (number == 0) {
-                iedit_disp_menu(d);
-                return;
-              }
-              number--;
-              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
-              iedit_disp_cyberlegs_menu(d);
-              return;
-          }
-          break;
-        default:
-          break;
-      }
-      GET_CYBERWARE_FLAGS(d->edit_obj, 3) = number;
-      iedit_disp_val5_menu(d);
-      break;
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_legs, buf1, sizeof(buf1));
+              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Strength Mod1\r\n 5) Strength Mod2\r\n
+                               "  6) Strength Mod3\r\n  7) Quickness Mod1\r\n  8) Quickness Mod2\r\n  9) Quickness Mod3\r\n  Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+              break;
             case CYB_CYBERSKULL:
-              if (number < 0 || number > NUM_SKULLMODS+1) {
-                send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
-                return;
-              }
-              if (number == 0) {
-                iedit_disp_menu(d);
-                return;
-              }
-              number--;
-              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
-              iedit_disp_cyberskull_menu(d);
-              return;
-          }
-          break;
-        default:
-          break;
-      }
-      GET_CYBERWARE_FLAGS(d->edit_obj, 3) = number;
-      iedit_disp_val5_menu(d);
-      break;
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_skull, buf1, sizeof(buf1));
+              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+              break;
             case CYB_CYBERTORSO:
-              if (number < 0 || number > NUM_TORSOMODS+1) {
-                send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
-                return;
-              }
-              if (number == 0) {
-                iedit_disp_menu(d);
-                return;
-              }
-              number--;
-              TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
-              iedit_disp_cybertorso_menu(d);
-              return;
-          }
-          break;
-        default:
-          break;
-      }
-      GET_CYBERWARE_FLAGS(d->edit_obj, 3) = number;
-      iedit_disp_val5_menu(d);
-      break;
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_legs, buf1, sizeof(buf1));
+              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Armor Mod1\r\n 5) Armor Mod2\r\n
+                               "  6) Armor Mod3\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
+              break;
             case CYB_DERMALSHEATHING:
               if (number < 0 || number > 1) {
                 send_to_char("Invalid Input! Enter 1 or 0: ", CH);
