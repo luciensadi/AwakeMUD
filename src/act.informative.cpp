@@ -117,33 +117,44 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
     int conceal = (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
     (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0) +
     (GET_EQ(i, WEAR_UNDER) ? GET_OBJ_VAL(GET_EQ(i, WEAR_UNDER), 7) : 0);
-    conceal = act == 2 ? 4 : success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), conceal);
+    int perception_successes = act == 2 ? 4 : success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), conceal);
     snprintf(buf, sizeof(buf), "%s", dont_capitalize_a_an ? "a" : "A");
-    if (conceal > 0) {
+    
+    // Size.
+    if (perception_successes > 0) {
       if (GET_HEIGHT(i) < 130)
-        strcat(buf, " tiny");
+        strlcat(buf, " tiny", sizeof(buf));
       else if (GET_HEIGHT(i) < 160)
-        strcat(buf, " small");
+        strlcat(buf, " small", sizeof(buf));
       else if (GET_HEIGHT(i) < 190)
-        strcat(buf, "n average");
+        strlcat(buf, "n average", sizeof(buf));
       else if (GET_HEIGHT(i) < 220)
-        strcat(buf, " large");
+        strlcat(buf, " large", sizeof(buf));
       else
-        strcat(buf, " huge");
+        strlcat(buf, " huge", sizeof(buf));
     }
-    if (conceal > 2)
+    
+    // Sex.
+    if (perception_successes > 2)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", genders[(int)GET_SEX(i)]);
-    if (conceal > 3)
+    
+    // Race.
+    if (perception_successes > 3)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", pc_race_types[(int)GET_RACE(i)]);
     else
-      strcat(buf, " person");
+      strlcat(buf, " person", sizeof(buf));
+      
     if (GET_EQ(i, WEAR_ABOUT))
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_ABOUT))));
     else if (GET_EQ(i, WEAR_BODY))
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_BODY))));
     else if (GET_EQ(i, WEAR_UNDER))
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_UNDER))));
-  } else
+    else
+      strlcat(buf, " going nude", sizeof(buf));
+  }
+  
+  else
   {
     struct remem *mem;
     if (!act) {
@@ -161,7 +172,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   {
     for (struct sustain_data *sust = GET_SUSTAINED(i); sust; sust = sust->next)
       if (!sust->caster) {
-        strcat(buf, ", surrounded by a spell aura");
+        strlcat(buf, ", surrounded by a spell aura", sizeof(buf));
         break;
       }
   }
