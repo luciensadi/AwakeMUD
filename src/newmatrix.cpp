@@ -246,7 +246,7 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
 
 bool has_spotted(struct matrix_icon *icon, struct matrix_icon *targ)
 {
-  if (targ->evasion)
+  if (targ->evasion || targ == icon)
     return FALSE;
   for (struct seen_data *seen = icon->decker->seen; seen; seen = seen->next)
     if (seen->idnum == targ->idnum || targ->decker) // You auto-see deckers now.
