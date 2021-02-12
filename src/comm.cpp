@@ -2630,6 +2630,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   char *buf;
   struct char_data *vict;
   static char lbuf[MAX_STRING_LENGTH];
+  char temp_buf[MAX_STRING_LENGTH];
   struct remem *mem = NULL;
   char temp[MAX_STRING_LENGTH];
   buf = lbuf;
@@ -2695,7 +2696,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (IS_SENATOR(to) && !IS_NPC(ch))
               i = GET_CHAR_NAME(ch);
             else
-              i = make_desc(to, ch, buf, TRUE, TRUE, sizeof(buf));
+              i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
           } else {
             if (IS_SENATOR(ch))
               i = GET_CHAR_NAME(ch);
@@ -2712,7 +2713,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (IS_SENATOR(to) && !IS_NPC(vict))
               i = GET_CHAR_NAME(vict);
             else
-              i = make_desc(to, vict, buf, TRUE, TRUE, sizeof(buf));
+              i = make_desc(to, vict, temp_buf, TRUE, TRUE, sizeof(temp_buf));
           } else {
             if (IS_SENATOR(vict))
               i = "an invisible staff member";
@@ -2767,13 +2768,13 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (!IS_NPC(ch)) {
               i = GET_CHAR_NAME(ch);
             } else {
-              i = make_desc(to, ch, buf, TRUE, TRUE, sizeof(buf));
+              i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
             }
           }
           
           // If they're visible, it's simple.
           else if (CAN_SEE(to, ch)) {
-            i = make_desc(to, ch, buf, TRUE, TRUE, sizeof(buf));
+            i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
           }
           
           // If we've gotten here, the speaker is an invisible player or staff member.
