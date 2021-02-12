@@ -1657,6 +1657,18 @@ ACMD(do_connect)
     PERSONA = NULL;
     return;
   }
+  
+  if (DECKER->bod <= 0) {
+    send_to_char("You'll have a hard time forming a durable persona with no Body chip.\r\n", ch);
+    return;
+  }
+  
+  if (DECKER->sensor <= 0) {
+    send_to_char("You'll have a hard time receiving Matrix data with no Sensor chip.\r\n", ch);
+    return;
+  }
+  
+  
   if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK && GET_OBJ_VAL(jack, 3) == DATA_INDUCTION)
     snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to $s cyberdeck.");
   else if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK)
