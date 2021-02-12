@@ -1156,7 +1156,7 @@ ACMD(do_matrix_look)
     if (GET_OBJ_VAL(obj, 7) == PERSONA->idnum 
         && !GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) 
     {
-      if (GET_DECK_ACCESSORY_FILE_REMAINING(obj)) {
+      if (GET_DECK_ACCESSORY_FILE_REMAINING(obj) > 1) {
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n", 
                      GET_OBJ_NAME(obj),
                      (int) (GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / GET_DECK_ACCESSORY_FILE_SIZE(obj)

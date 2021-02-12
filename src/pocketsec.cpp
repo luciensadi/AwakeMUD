@@ -462,9 +462,10 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_SENDMAIL:
       one_argument(arg, buf); 
-      if ((x = get_player_id(buf)) < 0)
+      if ((x = get_player_id(buf)) < 0) {
+        send_to_char("There is no such player.\r\n", CH);
         pocketsec_mailmenu(d);
-      else {
+      } else {
         send_to_char("Write your message. Use @ on a new line to finish.\r\n", CH);
         PLR_FLAGS(CH).SetBits(PLR_MAILING, PLR_WRITING, ENDBIT);
         d->mail_to = x;
