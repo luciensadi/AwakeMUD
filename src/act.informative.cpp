@@ -105,7 +105,7 @@ ACMD_DECLARE(do_examine);
 
 /* end blood stuff */
 
-char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an)
+char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size)
 {
   char buf2[MAX_STRING_LENGTH];
   if (!IS_NPC(i) && ((GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1) ||
@@ -118,72 +118,72 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
     (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0) +
     (GET_EQ(i, WEAR_UNDER) ? GET_OBJ_VAL(GET_EQ(i, WEAR_UNDER), 7) : 0);
     int perception_successes = act == 2 ? 4 : success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), conceal);
-    snprintf(buf, sizeof(buf), "%s", dont_capitalize_a_an ? "a" : "A");
+    snprintf(buf, buf_size, "%s", dont_capitalize_a_an ? "a" : "A");
     
     // Size.
     if (perception_successes > 0) {
       if (GET_HEIGHT(i) < 130)
-        strlcat(buf, " tiny", sizeof(buf));
+        strlcat(buf, " tiny", buf_size);
       else if (GET_HEIGHT(i) < 160)
-        strlcat(buf, " small", sizeof(buf));
+        strlcat(buf, " small", buf_size);
       else if (GET_HEIGHT(i) < 190)
-        strlcat(buf, "n average", sizeof(buf));
+        strlcat(buf, "n average", buf_size);
       else if (GET_HEIGHT(i) < 220)
-        strlcat(buf, " large", sizeof(buf));
+        strlcat(buf, " large", buf_size);
       else
-        strlcat(buf, " huge", sizeof(buf));
+        strlcat(buf, " huge", buf_size);
     }
     
     // Sex.
     if (perception_successes > 2)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", genders[(int)GET_SEX(i)]);
+      snprintf(ENDOF(buf), buf_size - strlen(buf), " %s", genders[(int)GET_SEX(i)]);
     
     // Race.
     if (perception_successes > 3)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", pc_race_types[(int)GET_RACE(i)]);
+      snprintf(ENDOF(buf), buf_size - strlen(buf), " %s", pc_race_types[(int)GET_RACE(i)]);
     else
-      strlcat(buf, " person", sizeof(buf));
+      strlcat(buf, " person", buf_size);
       
     if (GET_EQ(i, WEAR_ABOUT))
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_ABOUT))));
+      snprintf(ENDOF(buf), buf_size - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_ABOUT))));
     else if (GET_EQ(i, WEAR_BODY))
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_BODY))));
+      snprintf(ENDOF(buf), buf_size - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_BODY))));
     else if (GET_EQ(i, WEAR_UNDER))
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_UNDER))));
+      snprintf(ENDOF(buf), buf_size - strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_UNDER))));
     else
-      strlcat(buf, " going nude", sizeof(buf));
+      strlcat(buf, " going nude", buf_size);
   }
   
   else
   {
     struct remem *mem;
     if (!act) {
-      strlcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)), sizeof(buf));
+      strlcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)), buf_size);
       if (IS_SENATOR(ch) && !IS_NPC(i))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", CAP(GET_CHAR_NAME(i)));
+        snprintf(ENDOF(buf), buf_size - strlen(buf), " (%s)", CAP(GET_CHAR_NAME(i)));
       else if ((mem = found_mem(GET_MEMORY(ch), i)))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", CAP(mem->mem));
+        snprintf(ENDOF(buf), buf_size - strlen(buf), " (%s)", CAP(mem->mem));
     } else if ((mem = found_mem(GET_MEMORY(ch), i)) && act != 2)
-      strlcpy(buf, CAP(mem->mem), sizeof(buf));
+      strlcpy(buf, CAP(mem->mem), buf_size);
     else
-      strlcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)), sizeof(buf));
+      strlcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)), buf_size);
   }
   if (GET_SUSTAINED(i) && (IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
     for (struct sustain_data *sust = GET_SUSTAINED(i); sust; sust = sust->next)
       if (!sust->caster) {
-        strlcat(buf, ", surrounded by a spell aura", sizeof(buf));
+        strlcat(buf, ", surrounded by a spell aura", buf_size);
         break;
       }
   }
   
   if (!IS_NPC(i) && PRF_FLAGGED(ch, PRF_LONGWEAPON) && GET_EQ(i, WEAR_WIELD))
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", wielding %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
+    snprintf(ENDOF(buf), buf_size - strlen(buf), ", wielding %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
   
   if (AFF_FLAGGED(i, AFF_MANIFEST) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
     snprintf(buf2, sizeof(buf2), "The ghostly image of %s", buf);
-    strlcpy(buf, buf2, sizeof(buf));
+    strlcpy(buf, buf2, buf_size);
   }
   return buf;
 }
@@ -524,7 +524,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   else
     ment = -1;
   
-  make_desc(ch, i, buf, TRUE, FALSE);
+  make_desc(ch, i, buf, TRUE, FALSE, sizeof(buf));
   CAP(buf);
   
   if (phys >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && phys >= 0 &&
@@ -1105,7 +1105,7 @@ if (mob_index[GET_MOB_RNUM(i)].func == (function) || mob_index[GET_MOB_RNUM(i)].
     
     return;
   }
-  make_desc(ch, i, buf, FALSE, FALSE);
+  make_desc(ch, i, buf, FALSE, FALSE, sizeof(buf));
   if (PRF_FLAGGED(i, PRF_AFK))
     strcat(buf, " (AFK)");
   if (PLR_FLAGGED(i, PLR_SWITCHED))
