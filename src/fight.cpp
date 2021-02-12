@@ -2891,8 +2891,8 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
   }
   
   // Add in integral recoil compensation.
-  if (!gasvent && GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
-    comp += GET_WEAPON_INTEGRAL_RECOIL_COMP(obj);
+  if (!gasvent && GET_WEAPON_INTEGRAL_RECOIL_COMP(gun))
+    comp += GET_WEAPON_INTEGRAL_RECOIL_COMP(gun);
     
   for (obj = ch->cyberware; obj; obj = obj->next_content)
     if (GET_OBJ_VAL(obj, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(obj, 9))
