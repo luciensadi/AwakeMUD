@@ -2169,6 +2169,7 @@ void process_upload(struct matrix_icon *persona)
             GET_OBJ_VAL(soft, 7) = GET_IDNUM(persona->decker->ch);
             GET_OBJ_VAL(persona->decker->deck, 5) -= GET_OBJ_VAL(soft, 2);
             GET_OBJ_VAL(soft, 8) = 0;
+            GET_OBJ_VAL(soft, 9) = 0;
             if (GET_QUEST(persona->decker->ch)) {
               bool potential_failure = FALSE;
               for (int i = 0; i < quest_table[GET_QUEST(persona->decker->ch)].num_objs; i++) {
@@ -2353,6 +2354,8 @@ void matrix_update()
               send_to_icon(persona, "%s has finished downloading to your deck.\r\n", CAP(GET_OBJ_NAME(file)));
               GET_OBJ_VAL(persona->decker->deck, 5) += GET_DECK_ACCESSORY_FILE_SIZE(file);
               GET_DECK_ACCESSORY_FILE_FOUND_BY(file) = 0;
+              GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
+              GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
             }
           }
         }
