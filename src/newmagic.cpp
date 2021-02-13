@@ -3812,10 +3812,15 @@ ACMD(do_order)
       return;
     }
     if (GET_TRADITION(ch) == TRAD_HERMETIC) {
-      if (order == SERV_APPEAR && spirit->called) {
-        send_to_char(ch, "That %s is already here!\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-        return;
-      } else if (!spirit->called && order != SERV_APPEAR) {
+      if (order == SERV_APPEAR) {
+        if (spirit->called) {
+          send_to_char(ch, "That %s is already here!\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+          return;
+        } else {
+          spirit_appear(ch, NULL, spirit, buf2);
+          return;
+        }
+      } else if (!spirit->called) {
         send_to_char(ch, "That %s is waiting on the metaplanes.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
         return;
       }
