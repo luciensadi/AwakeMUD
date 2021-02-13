@@ -2028,7 +2028,7 @@ void close_socket(struct descriptor_data *d)
       free_editing_structs(d, STATE(d));
       d->character->desc = NULL;
     } else {
-      snprintf(buf, sizeof(buf), "Losing player: %s.",
+      snprintf(buf, sizeof(buf), "Cleaning up data structures from %s's disconnection.",
               GET_CHAR_NAME(d->character) ? GET_CHAR_NAME(d->character) : "<null>");
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
       // we do this because objects can be given to characters in chargen

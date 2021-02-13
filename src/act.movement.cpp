@@ -64,12 +64,15 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], &empty_argument))
     return 0;
 
-  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch))
-    if (success_test(GET_QUI(ch), ch->in_room->icesheet[0] + modify_target(ch)) < 1)
+  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch)) {
+    if (FIGHTING(ch) && success_test(GET_QUI(ch), ch->in_room->icesheet[0] + modify_target(ch)) < 1)
     {
       send_to_char("The ice at your feet causes you to trip and fall!\r\n", ch);
       return 0;
+    } else {
+      send_to_char("You step cautiously across the ice sheet, keeping yourself from falling.\r\n", ch);
     }
+  }
   if (IS_AFFECTED(ch, AFF_CHARM) && ch->master && ((ch->in_room && (ch->in_room == ch->master->in_room)) || ((ch->in_veh && ch->in_veh == ch->master->in_veh))))
   {
     send_to_char("The thought of leaving your master makes you weep.\r\n", ch);
