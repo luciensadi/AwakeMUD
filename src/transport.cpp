@@ -363,7 +363,9 @@ void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b, const char
                rnum_b >= 0 ? GET_ROOM_VNUM(&world[rnum_b]) : -1,
                source
               );
+#ifdef TRANSPORT_DEBUG
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
     } else {
       snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!", 
                source, dirs[dir_a], GET_ROOM_VNUM(&world[rnum_a]));
@@ -394,7 +396,9 @@ void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b, const char
                rnum_b >= 0 ? GET_ROOM_VNUM(&world[rnum_a]) : -1,
                source
               );
+#ifdef TRANSPORT_DEBUG
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
     } else {
       snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!", 
                source, dirs[dir_b], GET_ROOM_VNUM(&world[rnum_b]));
@@ -430,7 +434,9 @@ void delete_exit(int bus, int to, const char *source) {
   
   world[bus].dir_option[to] = NULL;
   
+#ifdef TRANSPORT_DEBUG
   mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
 }
 
 void delete_linked_exit(int bus, int to, int room, int from, const char *source) {
@@ -471,7 +477,9 @@ void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
     delete room->dir_option[dir];
     room->dir_option[dir] = NULL;
     
+#ifdef TRANSPORT_DEBUG
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
   }
 
   dir = rev_dir[dir];
@@ -499,7 +507,9 @@ void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
     delete taxi->dir_option[dir];
     taxi->dir_option[dir] = NULL;
     
+#ifdef TRANSPORT_DEBUG
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
   }
 }
 

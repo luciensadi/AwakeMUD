@@ -1199,9 +1199,13 @@ void parse_room(File &fl, long nr)
   room->y = data.GetInt("Y", DEFAULT_DIMENSIONS_Y);
   room->z = data.GetFloat("Z", DEFAULT_DIMENSIONS_Z);
   room->type = data.GetInt("RoomType", 0);
-  // read in directions
-  int i;
-  for (i = 0; *fulldirs[i] != '\n'; i++) {
+  
+  // read in directions, but only if we're not a cab.
+  if (!((GET_ROOM_VNUM(room) >= FIRST_SEATTLE_CAB && GET_ROOM_VNUM(room) <= LAST_SEATTLE_CAB)
+         || (GET_ROOM_VNUM(room) >= FIRST_PORTLAND_CAB && GET_ROOM_VNUM(room) <= LAST_PORTLAND_CAB)
+         || (GET_ROOM_VNUM(room) >= FIRST_CARIBBEAN_CAB && GET_ROOM_VNUM(room) <= LAST_CARIBBEAN_CAB)))
+  {
+    for (int i = 0; *fulldirs[i] != '\n'; i++) {
     char sect[16];
     snprintf(sect, sizeof(sect), "EXIT %s", fulldirs[i]);
 
@@ -1213,7 +1217,11 @@ void parse_room(File &fl, long nr)
       snprintf(field, sizeof(field), "%s/ToVnum", sect);
       int to_vnum = data.GetInt(field, -1);
 
-      if (to_vnum < 0) {
+      if (to_vnum < 0
+          || (to_vnum >= FIRST_SEATTLE_CAB && to_vnum <= LAST_SEATTLE_CAB)
+          || (to_vnum >= FIRST_PORTLAND_CAB && to_vnum <= LAST_PORTLAND_CAB)
+          || (to_vnum >= FIRST_CARIBBEAN_CAB && to_vnum <= LAST_CARIBBEAN_CAB)) 
+      {
         log_vfprintf("Room #%d's %s exit had invalid destination -- skipping",
             nr, fulldirs[i]);
         continue;
@@ -1279,11 +1287,12 @@ void parse_room(File &fl, long nr)
 #endif
     }
   }
+  }
 
   room->ex_description = NULL;
 
   // finally, read in extra descriptions
-  for (i = 0; true; i++) {
+  for (int i = 0; true; i++) {
     char sect[16];
     snprintf(sect, sizeof(sect), "EXTRADESC %d", i);
 
