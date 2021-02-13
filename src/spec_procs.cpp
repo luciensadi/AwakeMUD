@@ -1490,6 +1490,9 @@ SPECIAL(car_dealer)
   if (!cmd || ch->in_veh || !ch->in_room)
     return FALSE;
     
+  if (!(CMD_IS("list") || CMD_IS("buy") || CMD_IS("info") || CMD_IS("probe")))
+    return FALSE;
+    
   if (IS_NPC(ch)) {
     send_to_char("You're having a hard time getting the dealer's attention.\r\n", ch);
     return FALSE;

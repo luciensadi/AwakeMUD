@@ -2921,7 +2921,9 @@ ACMD(do_examine)
       }
     }
     if (GET_OBJ_VNUM(tmp_object) > 1) {
-      snprintf(buf, sizeof(buf), "You think that %s ", GET_OBJ_NAME(tmp_object));
+      snprintf(buf, sizeof(buf), "You %s that %s ", 
+               GET_SKILL(ch, SKILL_POLICE_PROCEDURES) <= 0 ? "have no training in Police Procedures, but you guess" : "think",
+               GET_OBJ_NAME(tmp_object));
       int targ = GET_LEGAL_NUM(tmp_object);
       if (targ <= 0)
         strcat(buf, "is completely legal");

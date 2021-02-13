@@ -2865,6 +2865,8 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
   int i, rnum, comp = 0;
   bool gasvent = FALSE;
   
+  bool can_use_bipods_and_tripods = !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING));
+  
   if (!gun || GET_OBJ_TYPE(gun) != ITEM_WEAPON)
     return 0;
   
@@ -2872,16 +2874,19 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
   {
     obj = NULL;
     
-    if (GET_OBJ_VAL(gun, i) > 0 &&
-        (rnum = real_object(GET_OBJ_VAL(gun, i))) > -1 &&
-        (obj = &obj_proto[rnum]) && GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY) {
+    if (GET_OBJ_VAL(gun, i) > 0 
+        && (rnum = real_object(GET_OBJ_VAL(gun, i))) > -1 
+        && (obj = &obj_proto[rnum]) && GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY) 
+    {
       if (GET_OBJ_VAL(obj, 1) == ACCESS_GASVENT) {
+        // Gas vent values are negative when built, so we need to flip them.
         comp += 0 - GET_OBJ_VAL(obj, 2);
         gasvent = TRUE;
       }
       else if (GET_OBJ_VAL(obj, 1) == ACCESS_SHOCKPAD)
         comp++;
-      else if (AFF_FLAGGED(ch, AFF_PRONE)) {
+      else if (can_use_bipods_and_tripods && AFF_FLAGGED(ch, AFF_PRONE)) 
+      {
         if (GET_OBJ_VAL(obj, 1) == ACCESS_BIPOD)
           comp += RECOIL_COMP_VALUE_BIPOD;
         else if (GET_OBJ_VAL(obj, 1) == ACCESS_TRIPOD)

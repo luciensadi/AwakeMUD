@@ -4798,7 +4798,7 @@ ACMD(do_logwatch)
     if (PRF_FLAGGED(ch, PRF_SYSLOG)) {
       send_to_char("You no longer watch the SysLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_SYSLOG);
-    } else if (access_level(ch, LVL_ADMIN)) {
+    } else if (access_level(ch, LVL_CONSPIRATOR)) {
       send_to_char("You will now see the SysLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_SYSLOG);
     } else {
