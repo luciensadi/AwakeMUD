@@ -2480,7 +2480,8 @@ const char *message_history_channels[] = {
   "Says",
   "Shouts",
   "Tells",
-  "Wiztells"
+  "Wiztells",
+  "Emotes"
 };
 
 const char *pgroup_settings[] = {
