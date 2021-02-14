@@ -32,7 +32,9 @@ extern void create_ammo(struct char_data *ch);
 
 struct matrix_icon *find_icon_by_id(vnum_t idnum);
 
-#define IS_PROACTIVE(IC) ((IC)->ic.type != 2 && (IC)->ic.type != 3 && (IC)->ic.type != 4 && (IC)->ic.type != 10 && (IC)->ic.type != 5)
+void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ);
+
+#define IS_PROACTIVE(IC) ((IC)->ic.type != IC_PROBE && (IC)->ic.type != IC_SCRAMBLE && (IC)->ic.type != IC_TARBABY && (IC)->ic.type != IC_TARPIT && (IC)->ic.type != IC_SCOUT)
 #define HOST matrix[host]
 void make_seen(struct matrix_icon *icon, int idnum)
 {
@@ -125,7 +127,7 @@ bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic
     send_to_icon(PERSONA, "%s crashes your %s!\r\n", CAP(ic->name), GET_OBJ_NAME(prog));
     DECKER->active += GET_OBJ_VAL(prog, 2);
     REMOVE_FROM_LIST(prog, DECKER->software, next_content);
-    if (ic->ic.type == 10 && success_test(target, DECKER->mpcp + DECKER->hardening) > 0)
+    if (ic->ic.type == IC_TARPIT && success_test(target, DECKER->mpcp + DECKER->hardening) > 0)
       for (struct obj_data *copy = DECKER->deck->contains; copy; copy = copy->next_content) {
         if (!strcmp(GET_OBJ_NAME(copy), GET_OBJ_NAME(prog))) {
           send_to_icon(PERSONA, "It destroys all copies in storage memory as well!\r\n");
@@ -225,9 +227,9 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     if (HOST.shutdown)
       target -= 2;
     if (ic->number && ic->ic.target == PERSONA->idnum) {
-      if (ic->ic.type == 2 || ic->ic.type == 5)
+      if (ic->ic.type == IC_PROBE || ic->ic.type == IC_SCOUT)
         tally += MAX(0, success_test(target, detect));
-      else if (prog && (ic->ic.type == 4 || ic->ic.type == 10) && ic->ic.subtype == 0 && !tarred)
+      else if (prog && (ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 0 && !tarred)
         tarred = tarbaby(prog, ch, ic);
     }
   }
@@ -406,7 +408,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   int iconrating = icon->ic.rating;
   if (!targ)
     return;
-  if (!targ->fighting && !(targ->number && (!IS_PROACTIVE(targ) || targ->ic.type == 5)))
+  if (!targ->fighting && !(targ->number && (!IS_PROACTIVE(targ) || targ->ic.type == IC_SCOUT)))
   {
     targ->fighting = icon;
     targ->next_fighting = matrix[targ->in_host].fighting;
@@ -479,7 +481,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       targ->decker->scout = 0;
     }
     power = iconrating;
-    if (icon->ic.type >= 11) {
+    if (icon->ic.type >= IC_LETHAL_BLACK) {
       if (matrix[icon->in_host].colour <= 1)
         dam = MODERATE;
       else if (matrix[icon->in_host].colour >= 2) {
@@ -495,7 +497,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   }
   if (targ->decker)
   {
-    if (icon->number && (icon->ic.type == 0 || icon->ic.type == 8)) {
+    if (icon->number && (icon->ic.type == IC_CRIPPLER || icon->ic.type == IC_RIPPER)) {
       if (!targ->decker->deck)
         return;
       extern const char *crippler[4];
@@ -528,7 +530,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         send_to_icon(targ, "It fails to cause any damage.\r\n");
         return;
       }
-      if (icon->ic.type == 0) {
+      if (icon->ic.type == IC_CRIPPLER) {
         bod = MAX(bod, 1);
       } else if (bod <= 0) {
         bod = 0;
@@ -554,7 +556,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       return;
     }
     send_to_icon(targ, "%s runs an attack program against you.\r\n", CAP(icon->name));
-    if (icon->ic.type >= 11)
+    if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
     else
       for (soft = targ->decker->software; soft; soft = soft->next_content)
@@ -580,7 +582,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     if (!icon->decker->ras)
       target += 4;
   }
-  if (icon->number && icon->ic.type == 6)
+  if (icon->number && icon->ic.type == IC_TRACE)
     target += targ->decker->redirect;
   success = success_test(skill, target);
   if (success <= 0)
@@ -595,7 +597,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   dam = convert_damage(stage(success, dam));
   targ->condition -= dam;
   if (icon->number) {
-    if (icon->ic.type == 5)
+    if (icon->ic.type == IC_SCOUT)
     {
       if (success && targ->decker->scout < iconrating) {
         send_to_icon(targ, "%s locates your memory address.\r\n", CAP(icon->name));
@@ -604,7 +606,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           targ->decker->scout = iconrating;
       }
       return;
-    } else if (icon->ic.type == 6)
+    } else if (icon->ic.type == IC_TRACE)
     {
       success -= success_test(targ->decker->evasion, iconrating);
       if (success > 0) {
@@ -664,9 +666,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   }
   if (dam > 0 && targ->decker)
   {
-    if (icon->number && icon->ic.type >= 11) {
+    if (icon->number && icon->ic.type >= IC_LETHAL_BLACK) {
       int resist = 0;
-      bool lethal = icon->ic.type == 11 ? TRUE : FALSE;
+      bool lethal = icon->ic.type == IC_LETHAL_BLACK ? TRUE : FALSE;
       if (!targ->decker->asist[0] && lethal)
         lethal = FALSE;
       switch (matrix[icon->in_host].colour) {
@@ -723,7 +725,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     if (targ->decker) {
       if (icon->number) {
         switch (icon->ic.type) {
-        case 9:
+        case IC_SPARKY:
           send_to_icon(targ, "%s sends jolts of electricity into your deck!\r\n", CAP(icon->name));
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening + 2);
           fry_mpcp(icon, targ, success);
@@ -731,7 +733,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           dam = convert_damage(stage(success, MODERATE));
           damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, PHYSICAL);
           break;
-        case 7:
+        case IC_BLASTER:
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
           fry_mpcp(icon, targ, success);
           break;
@@ -743,6 +745,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (icon->decker->located)
         icon->decker->tally++;
       snprintf(buf, sizeof(buf), "%s shatters into a million pieces and vanishes from the node.\r\n", CAP(targ->name));
+      gain_matrix_karma(icon, targ);
       send_to_host(icon->in_host, buf, targ, TRUE);
       if (targ->ic.options.IsSet(IC_TRAP) && real_ic(targ->ic.trap) > 0) {
         struct matrix_icon *trap = read_ic(targ->ic.trap, VIRTUAL);
@@ -754,6 +757,105 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       return;
     }
   }
+}
+
+// Award karma to icon on destruction of targ.
+void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
+  if (!icon || !targ || !icon->in_host) {
+    mudlog("SYSERR: Received null icon or target to gain_matrix_karma().", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // We only hand out karma to PCs for killing NPCs.
+  if (!icon->decker || !icon->decker->ch || targ->decker) {
+    return;
+  }
+  
+  int ic_stats_total = 0;
+  ic_stats_total += targ->ic.rating;
+  ic_stats_total += targ->ic.cascade;
+  
+  switch (targ->ic.type) {
+    case IC_CRIPPLER:
+      ic_stats_total += 2;
+      break;
+    case IC_KILLER:
+    case IC_PROBE:
+    case IC_SCRAMBLE:
+      // These are NERP, no bonus.
+      break;
+    case IC_TARBABY:
+      ic_stats_total += 2;
+      break;
+    case IC_SCOUT:
+      ic_stats_total += 1;
+      break;
+    case IC_TRACE:
+      ic_stats_total += 1;
+      break;
+    case IC_BLASTER:
+      ic_stats_total += 10;
+      break;
+    case IC_RIPPER:
+      ic_stats_total += 8;
+      break;
+    case IC_SPARKY:
+      ic_stats_total += 9;
+      break;
+    case IC_TARPIT:
+      ic_stats_total += 5;
+      break;
+    case IC_LETHAL_BLACK:
+      ic_stats_total += 10;
+      // fallthrough
+    case IC_NON_LETHAL_BLACK:
+      // Blue and Green hosts deal Moderate damage.
+      ic_stats_total += 10;
+      
+      // Orange and up deal Serious damage.
+      if (matrix[icon->in_host].colour >= HOST_SECURITY_ORANGE)
+        ic_stats_total += 2;
+      
+      // Black hosts additionally deal +2 power.
+      if (matrix[icon->in_host].colour == HOST_SECURITY_BLACK)
+        ic_stats_total += 2;
+      break;
+    default:
+      snprintf(buf3, sizeof(buf3), "SYSERR: Unrecognized IC type %d in gain_matrix_karma().", targ->ic.type);
+      mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+      break;
+  }
+  
+  if (targ->ic.options.IsSet(IC_EX_DEFENSE) || targ->ic.options.IsSet(IC_EX_OFFENSE)) {
+    ic_stats_total += targ->ic.expert;
+  }
+  
+  if (targ->ic.options.IsSet(IC_SHIELD))
+    ic_stats_total += 2;
+  else if (targ->ic.options.IsSet(IC_SHIFT))
+    ic_stats_total += 2;
+    
+  if (targ->ic.options.IsSet(IC_ARMOR))
+    ic_stats_total += 2;
+    
+  if (icon->ic.options.IsSet(IC_CASCADE))
+    ic_stats_total += 2;
+    
+    
+  // Knock it down by their notor. This does mean that deckers have a low ceiling, but they need to branch out.
+  ic_stats_total -= (int)(GET_NOT(icon->decker->ch) / 5);
+
+  // Randomize it a bit.
+  ic_stats_total += ((!number(0,2) ? number(0,5) : 0 - number(0,5)));
+
+  // Cap it at top and bottom.
+  ic_stats_total = MAX(MIN(max_exp_gain, ic_stats_total), 1);
+
+  // Suppress rewards for unlinked zones.
+  if (vnum_from_non_connected_zone(targ->number))
+    ic_stats_total = 0;
+  
+  gain_karma(icon->decker->ch, ic_stats_total, FALSE, TRUE, TRUE);
 }
 
 const char *get_plaintext_matrix_score_health(struct char_data *ch) {
@@ -1385,7 +1487,7 @@ ACMD(do_logoff)
   if (subcmd) {
     send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; PERSONA && icon; icon = icon->next_in_host)
-      if (icon->fighting == PERSONA && icon->ic.type >= 11) {
+      if (icon->fighting == PERSONA && icon->ic.type >= IC_LETHAL_BLACK) {
         send_to_icon(PERSONA, "The IC takes a final shot.\r\n");
         matrix_fight(icon, PERSONA);
       }
@@ -1394,7 +1496,7 @@ ACMD(do_logoff)
     return;
   } else {
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
-      if (icon->fighting == PERSONA && icon->ic.type >= 11) {
+      if (icon->fighting == PERSONA && icon->ic.type >= IC_LETHAL_BLACK) {
         send_to_icon(PERSONA, "You can't log off gracefully while fighting a black IC!\r\n");
         return;
       }
@@ -1887,7 +1989,7 @@ ACMD(do_run)
         bool tarred = FALSE;
         for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic && !tarred; ic = temp) {
           temp = ic->next_in_host;
-          if ((ic->ic.type == 4 || ic->ic.type == 10) && ic->ic.subtype == 1)
+          if ((ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 1)
             tarred = tarbaby(soft, ch, ic);
         }
       }
@@ -1901,7 +2003,7 @@ ACMD(do_run)
         bool tarred = FALSE;
         for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic && !tarred; ic = temp) {
           temp = ic->next_in_host;
-          if ((ic->ic.type == 4 || ic->ic.type == 10) && ic->ic.subtype == 1)
+          if ((ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 1)
             tarred = tarbaby(soft, ch, ic);
         }
         if (tarred)
@@ -2320,14 +2422,14 @@ void matrix_update()
         if (icon->number && IS_PROACTIVE(icon) && !icon->fighting)
           for (struct matrix_icon *icon2 = host.icons; icon2; icon2 = icon2->next_in_host)
             if (icon->ic.target == icon2->idnum && icon2->decker) {
-              if (icon->ic.type == 6 && icon->ic.subtype > 0) {
+              if (icon->ic.type == IC_TRACE && icon->ic.subtype > 0) {
                 if (!--icon->ic.subtype) {
                   icon2->decker->located = TRUE;
                   send_to_icon(icon2, "Alarms start to ring in your head as %s finds your location.\r\n", icon->name);
                   snprintf(buf, sizeof(buf), "%s located by Trace IC in host %ld (%s).", GET_CHAR_NAME(icon2->decker->ch), matrix[icon->in_host].vnum, matrix[icon->in_host].name);
                   mudlog(buf, icon2->decker->ch, LOG_GRIDLOG, TRUE);
                 }
-              } else if (icon->ic.type != 6 || (icon->ic.type == 6 && !icon2->decker->located)) {
+              } else if (icon->ic.type != IC_TRACE || (icon->ic.type == IC_TRACE && !icon2->decker->located)) {
                 icon->fighting = icon2;
                 icon->next_fighting = host.fighting;
                 host.fighting = icon;

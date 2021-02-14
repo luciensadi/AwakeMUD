@@ -2652,7 +2652,14 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
         mob_proto[GET_MOB_RNUM(victim)].mob_specials.count_death++;
       }
       if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+        bool need_group_gain = FALSE;
         if (IS_AFFECTED(ch, AFF_GROUP)) {
+          for (struct follow_type *f = ch->followers; f && !need_group_gain; f = f->next)
+            if (IS_AFFECTED(f->follower, AFF_GROUP) && f->follower->in_room == ch->in_room)
+              need_group_gain = TRUE;
+        }
+        
+        if (need_group_gain) {
           group_gain(ch, victim);
         } else {
           exp = calc_karma(ch, victim);
