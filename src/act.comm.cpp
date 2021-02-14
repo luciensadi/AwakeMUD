@@ -1740,7 +1740,7 @@ void send_message_history_to_descriptor(struct descriptor_data *d, int channel, 
   
   int skip = d->message_history[channel].NumItems() - maximum;
   
-  snprintf(buf, sizeof(buf), "The last %d messages you've heard %s are:\r\n", maximum ? maximum : NUM_MESSAGES_TO_RETAIN, channel_string);
+  snprintf(buf, sizeof(buf), "The last %d messages you've %s are:\r\n", maximum ? maximum : NUM_MESSAGES_TO_RETAIN, channel_string);
   write_to_output(buf, d);
   
   // For every message in their history, print the list from oldest to newest.
@@ -1769,43 +1769,43 @@ void display_message_history_help(struct char_data *ch) {
 void raw_message_history(struct char_data *ch, int channel, int quantity) {
   switch (channel) {
     case COMM_CHANNEL_HIRED:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "over the Hired Talk channel");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "heard over the Hired Talk channel");
       break;
     case COMM_CHANNEL_NEWBIE:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "over the Newbie channel");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen on the Newbie channel");
       break;
     case COMM_CHANNEL_OOC:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "over the OOC channel");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen on the OOC channel");
       break;
     case COMM_CHANNEL_OSAYS:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "said OOCly");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "heard said OOCly");
       break;
     case COMM_CHANNEL_PAGES:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "over pages");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen over pages");
       break;
     case COMM_CHANNEL_PHONE:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "over the phone");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "heard over the phone");
       break;
     case COMM_CHANNEL_RPE:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "over the RPE Talk channel");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen over the RPE Talk channel");
       break;
     case COMM_CHANNEL_RADIO:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "over the radio");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "heard over the radio");
       break;
     case COMM_CHANNEL_SAYS:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "spoken aloud");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "heard spoken aloud");
       break;
     case COMM_CHANNEL_SHOUTS:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "from nearby shouts");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "heard from nearby shouts");
       break;
     case COMM_CHANNEL_TELLS:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "over tells");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen over tells");
       break;
     case COMM_CHANNEL_WTELLS:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "over wiztells");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen over wiztells");
       break;
     case COMM_CHANNEL_EMOTES:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "via emotes");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen via emotes");
       break;
     default:
       snprintf(buf, sizeof(buf), "SYSERR: Unrecognized channel/subcmd %d provided to raw_message_history's channel switch.", channel);
