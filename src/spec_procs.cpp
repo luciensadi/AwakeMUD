@@ -5802,3 +5802,28 @@ SPECIAL(nerpcorpolis_button) {
   
   return TRUE;
 }
+
+int fatcop_last_said = -1;
+SPECIAL(fatcop) {
+  int message_num;
+  const char *fatcop_messages[] = {
+    "Why are we stuck on guard duty? I'll tell you why, because we're the best of the best, the cream of the crop.",
+    "Rumour is the higher-ups are keeping what happened here a secret, gotta be careful about the media snooping around.",
+    "These donuts are carbs and sugar, pure energy, energy i'll need if I gotta chase down any of these low-life criminals.",
+    "Back in my day, we shot first and didn't ask questions after. This new generation is too soft I tell ya.",
+    "You see all those burned bodies they dragged outta here? Something real fragged up happened, I tell ya.",
+    "Look, all i'm sayin' is, if I wasn't supposed to eat three dozen donuts a day, it'd say so on the box, right?",
+    "So the doctor says... Rectum? Damn near killed em!",
+    "Did I tell you about the time I took out a whole team of runners, single-handed, With no back-up?",
+    "Look, it ain't a crime if there ain't no witnesses, that's all i'm sayin'.",
+    "Did you see those chummers in black suits? Their badges didn't even have names on em, don't even know what agency."
+  };
+#define NUM_FATCOP_MESSAGES 10
+ 
+  if (cmd || FIGHTING(ch) || !AWAKE(ch) || (message_num = number(0, NUM_FATCOP_MESSAGES * 20)) >= NUM_FATCOP_MESSAGES || message_num == fatcop_last_said)
+    return FALSE;
+ 
+  do_say(ch, fatcop_messages[message_num], 0, 0);
+  fatcop_last_said = message_num;
+  return TRUE;
+}

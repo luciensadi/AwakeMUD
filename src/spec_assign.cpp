@@ -552,6 +552,7 @@ void assign_mobiles(void)
   SPECIAL(airport_guard);
   SPECIAL(axehead);
   SPECIAL(chargen_docwagon_checker);
+  SPECIAL(fatcop);
 
   /* trainers */
   for (i = 0; trainers[i].vnum != 0; i++)
@@ -728,6 +729,9 @@ void assign_mobiles(void)
   
   /* Neophyte expansion */
   ASSIGNMOB(60599, chargen_docwagon_checker);
+  
+  /* Homewood */
+  ASSIGNMOB(30705, fatcop);
 #endif
 }
 
