@@ -1073,7 +1073,7 @@ ACMD(do_gen_comm)
                  com_msgs[subcmd][3], 
                  com_msgs[subcmd][3],
                  (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[GET_LANGUAGE(ch)].name : "an unknown language", 
-                 capitalize(replace_too_long_words(tmp, ch, argument, strlen(argument), com_msgs[subcmd][3])), 
+                 capitalize(replace_too_long_words(tmp, ch, argument, language, com_msgs[subcmd][3])), 
                  ispunct(get_final_character_from_string(argument)) ? "" : "!", 
                  com_msgs[subcmd][3]);
         
