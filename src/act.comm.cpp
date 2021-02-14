@@ -1804,6 +1804,9 @@ void raw_message_history(struct char_data *ch, int channel, int quantity) {
     case COMM_CHANNEL_WTELLS:
       send_message_history_to_descriptor(ch->desc, channel, quantity, "over wiztells");
       break;
+    case COMM_CHANNEL_EMOTES:
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "via emotes");
+      break;
     default:
       snprintf(buf, sizeof(buf), "SYSERR: Unrecognized channel/subcmd %d provided to raw_message_history's channel switch.", channel);
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
