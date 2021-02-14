@@ -745,8 +745,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (icon->decker->located)
         icon->decker->tally++;
       snprintf(buf, sizeof(buf), "%s shatters into a million pieces and vanishes from the node.\r\n", CAP(targ->name));
-      gain_matrix_karma(icon, targ);
       send_to_host(icon->in_host, buf, targ, TRUE);
+      gain_matrix_karma(icon, targ);
       if (targ->ic.options.IsSet(IC_TRAP) && real_ic(targ->ic.trap) > 0) {
         struct matrix_icon *trap = read_ic(targ->ic.trap, VIRTUAL);
         trap->ic.target = icon->idnum;
