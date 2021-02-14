@@ -778,7 +778,7 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
   }
   
   int ic_stats_total = 0;
-  ic_stats_total += targ->ic.rating;
+  ic_stats_total += targ->ic.rating * 2;
   ic_stats_total += targ->ic.cascade;
   
   switch (targ->ic.type) {
@@ -861,9 +861,12 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
   if (vnum_from_non_connected_zone(targ->number))
     ic_stats_total = 0;
   
-  snprintf(buf3, sizeof(buf3), "Matrix karma gain: %d/100.", ic_stats_total);
+  int karma_gained = gain_karma(icon->decker->ch, ic_stats_total, FALSE, TRUE, TRUE);
+  
+  send_to_char(icon->decker->ch, "You gain %0.2f karma.\r\n", ((float) karma_gained / 100));
+
+  snprintf(buf3, sizeof(buf3), "Matrix karma gain: %d/100.", karma_gained);
   act(buf3, FALSE, icon->decker->ch, 0, 0, TO_ROLLS);
-  gain_karma(icon->decker->ch, ic_stats_total, FALSE, TRUE, TRUE);
 }
 
 const char *get_plaintext_matrix_score_health(struct char_data *ch) {
