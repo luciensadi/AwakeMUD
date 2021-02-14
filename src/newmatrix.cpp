@@ -767,7 +767,13 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
   }
   
   // We only hand out karma to PCs for killing NPCs.
-  if (!icon->decker || !icon->decker->ch || targ->decker) {
+  if (!icon->decker || !icon->decker->ch) {
+    mudlog("SYSERR: Received icon without decker in gain_matrix_karma.", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (targ->decker) {
+    mudlog("SYSERR: Receievd targ with decker in gain_matrix_karma.", NULL, LOG_SYSLOG, TRUE);
     return;
   }
   
@@ -855,6 +861,8 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
   if (vnum_from_non_connected_zone(targ->number))
     ic_stats_total = 0;
   
+  snprintf(buf3, sizeof(buf3), "Matrix karma gain: %d/100.", ic_stats_total);
+  act(buf3, FALSE, icon->decker->ch, 0, 0, TO_ROLLS);
   gain_karma(icon->decker->ch, ic_stats_total, FALSE, TRUE, TRUE);
 }
 
@@ -1255,10 +1263,9 @@ ACMD(do_matrix_look)
       send_to_icon(PERSONA, "^Y%s^n\r\n", icon->look_desc);
       
   for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj; obj = obj->next_content) {
-    if (GET_OBJ_VAL(obj, 7) == PERSONA->idnum 
-        && !GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) 
+    if (GET_OBJ_VAL(obj, 7) == PERSONA->idnum)
     {
-      if (GET_DECK_ACCESSORY_FILE_REMAINING(obj) > 1) {
+      if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n", 
                      GET_OBJ_NAME(obj),
                      (int) (GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / GET_DECK_ACCESSORY_FILE_SIZE(obj)

@@ -1295,6 +1295,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
   {
     int mbw = 0, enhan = 0, synth = 0;
     int totalskill = GET_SKILL(ch, skill);
+    bool should_gain_physical_boosts = !PLR_FLAGGED(ch, PLR_MATRIX) && !PLR_FLAGGED(ch, PLR_REMOTE);
     
     // If their skill in this area has not been boosted, they get to add their task pool up to the skill's learned level.
     if (REAL_SKILL(ch, skill) == GET_SKILL(ch, skill))
@@ -1305,7 +1306,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
       int expert = 0;
       bool chip = FALSE;;
       for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == CYB_MOVEBYWIRE)
+        if (should_gain_physical_boosts && GET_OBJ_VAL(obj, 0) == CYB_MOVEBYWIRE)
           mbw = GET_OBJ_VAL(obj, 1);
         else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACKEXPERT)
           expert = GET_OBJ_VAL(obj, 1);
@@ -1327,7 +1328,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     }
     
     // Iterate through their bioware, looking for anything important.
-    if (ch->bioware) {
+    if (should_gain_physical_boosts && ch->bioware) {
       for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
         if (GET_OBJ_VAL(bio, 0) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill) {
           act("Reflex Recorder skill increase: 1", 1, ch, NULL, NULL, TO_ROLLS);
