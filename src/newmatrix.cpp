@@ -863,9 +863,9 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
   
   int karma_gained = gain_karma(icon->decker->ch, ic_stats_total, FALSE, TRUE, TRUE);
   
-  send_to_char(icon->decker->ch, "You gain %0.2f karma.\r\n", ((float) karma_gained / 100));
+  send_to_icon(icon, "You gain %0.2f karma.\r\n", ((float) karma_gained / 100));
 
-  snprintf(buf3, sizeof(buf3), "Matrix karma gain: %d/100.", karma_gained);
+  snprintf(buf3, sizeof(buf3), "Matrix karma gain: %0.2f.", ((float) karma_gained / 100));
   act(buf3, FALSE, icon->decker->ch, 0, 0, TO_ROLLS);
 }
 
