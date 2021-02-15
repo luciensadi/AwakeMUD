@@ -849,10 +849,11 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
     
     
   // Knock it down by their notor. This does mean that deckers have a low ceiling, but they need to branch out.
-  ic_stats_total -= (int)(GET_NOT(icon->decker->ch) / 5);
+  ic_stats_total -= (int)(GET_NOT(icon->decker->ch) / 4);
+  ic_stats_total /= 2;
 
   // Randomize it a bit.
-  ic_stats_total += ((!number(0,2) ? number(0,5) : 0 - number(0,5)));
+  ic_stats_total += ((!number(0,2) ? number(0,3) : 0 - number(0,3)));
 
   // Cap it at top and bottom.
   ic_stats_total = MAX(MIN(max_exp_gain, ic_stats_total), 1);
