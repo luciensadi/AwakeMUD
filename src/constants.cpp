@@ -2363,7 +2363,7 @@ const char *combat_modifiers[] =
   "Visibility",
   "Position",
   "Gyro",
-  "Reach",
+  "Net Reach",
   "VehDamaged",
   "Defender Moving"
 };

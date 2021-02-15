@@ -4453,7 +4453,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
   int damage_total = convert_damage(staged_damage);
   
-  snprintf(rbuf, sizeof(rbuf), "^CBod dice %d, attack power %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.^n",
+  snprintf(rbuf, sizeof(rbuf), "^CBod dice %d, attack power after armor %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.^n",
           bod, att->power, bod_success, att->successes,
           wound_name[MIN(DEADLY, MAX(0, att->damage_level))],
           wound_name[MIN(DEADLY, MAX(0, staged_damage))],

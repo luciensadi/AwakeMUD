@@ -1464,7 +1464,7 @@ ACMD(do_reload)
     }
     
     // Mounted weapon reloading via 'reload <vehicle> [x]'
-    else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+    else if (*buf && (veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
       if (veh->type != VEH_DRONE) {
         send_to_char("You have to be inside a vehicle to reload the mounts.\r\n", ch);
         return;

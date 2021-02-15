@@ -490,6 +490,41 @@ bool rep_too_low(struct char_data *ch, int num)
   return FALSE;
 }
 
+bool would_be_rewarded_for_turnin(struct char_data *ch) {
+  int nuyen = 0, karma = 0;
+  
+  bool all = TRUE;
+
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
+    if (ch->player_specials->obj_complete[i]) {
+      if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_DSTRY_MANY) {
+        nuyen += quest_table[GET_QUEST(ch)].obj[i].nuyen * ch->player_specials->obj_complete[i];
+        karma += quest_table[GET_QUEST(ch)].obj[i].karma * ch->player_specials->obj_complete[i];
+      } else {
+        nuyen += quest_table[GET_QUEST(ch)].obj[i].nuyen;
+        karma += quest_table[GET_QUEST(ch)].obj[i].karma;
+      }
+    } else
+      all = FALSE;
+      
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++)
+    if (ch->player_specials->mob_complete[i]) {
+      if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_KILL_MANY) {
+        nuyen += quest_table[GET_QUEST(ch)].mob[i].nuyen * ch->player_specials->mob_complete[i];
+        karma += quest_table[GET_QUEST(ch)].mob[i].karma * ch->player_specials->mob_complete[i];
+      } else {
+        nuyen += quest_table[GET_QUEST(ch)].mob[i].nuyen;
+        karma += quest_table[GET_QUEST(ch)].mob[i].karma;
+      }
+    } else
+      all = FALSE;
+      
+  if (all)
+    return TRUE;
+  
+  return nuyen > 0 || karma > 0;
+}
+
 void reward(struct char_data *ch, struct char_data *johnson)
 {
   if (vnum_from_non_connected_zone(quest_table[GET_QUEST(ch)].vnum)) {
@@ -887,6 +922,11 @@ SPECIAL(johnson)
       
       // Process turnin of the quest. The reward() function handles the work here.
       if (obj_complete || mob_complete) {
+        if (!would_be_rewarded_for_turnin(ch)) {
+          do_say(johnson, "You're not done yet!", 0, 0);
+          return TRUE;
+        }
+        
         for (int i = QUEST_TIMER - 1; i > 0; i--)
           GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
         GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
