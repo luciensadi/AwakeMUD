@@ -2271,7 +2271,8 @@ const char *decap_cyber_types[] = {
   "cyberarms modifications",
   "cyberlegs modifications",
   "cyberskull modifications",
-  "cybertorso modifications"
+  "cybertorso modifications",
+  "cyberarm gyromount"
 };
 
 const char *bio_types[] = {
