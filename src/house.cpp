@@ -252,7 +252,7 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     perror("SYSERR: Error saving house file");
     return;
   } else {
-    log_vfprintf("Saving house %s.", file_name);
+    // log_vfprintf("Saving house %s.", file_name);
   }
   
   char print_buffer[FILEBUF_SIZE];

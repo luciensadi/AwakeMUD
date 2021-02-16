@@ -2353,14 +2353,14 @@ void extract_char(struct char_data * ch)
   struct room_data *in_room = ch->in_room;
   if (ch->in_room || ch->in_veh)
     char_from_room(ch);
+    
+  /* wipe out their memory struct since PCs can have memory as well now */
+  clearMemory(ch);
   
   if (!IS_NPC(ch))
   {
     /* clean up their flags */
-    PLR_FLAGS(ch).RemoveBits(PLR_MATRIX, PLR_PROJECT, PLR_SWITCHED,
-                             PLR_WRITING, PLR_MAILING, PLR_EDITING,
-                             PLR_SPELL_CREATE, PLR_PROJECT, PLR_CUSTOMIZE,
-                             PLR_REMOTE, ENDBIT);
+    PLR_FLAGS(ch).FromString("0");
     
     /* restore them to their room, because corpses love rooms */
     ch->in_room = in_room;
@@ -2380,7 +2380,6 @@ void extract_char(struct char_data * ch)
   {
     if (GET_MOB_RNUM(ch) > -1)          /* if mobile */
       mob_index[GET_MOB_RNUM(ch)].number--;
-    clearMemory(ch);            /* Only NPC's can have memory */
     Mem->DeleteCh(ch);
   }
 }

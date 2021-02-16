@@ -4088,8 +4088,7 @@ void free_char(struct char_data * ch)
     }
   }
   
-  if (IS_NPC(ch))
-    clearMemory(ch);
+  clearMemory(ch);    
   
   clear_char(ch);
 }
