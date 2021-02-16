@@ -2360,7 +2360,10 @@ void extract_char(struct char_data * ch)
   if (!IS_NPC(ch))
   {
     /* clean up their flags */
-    PLR_FLAGS(ch).FromString("0");
+    PLR_FLAGS(ch).RemoveBits(PLR_MATRIX, PLR_PROJECT, PLR_SWITCHED,
+                             PLR_WRITING, PLR_MAILING, PLR_EDITING,
+                             PLR_SPELL_CREATE, PLR_PROJECT, PLR_CUSTOMIZE,
+                             PLR_REMOTE, ENDBIT);
     
     /* restore them to their room, because corpses love rooms */
     ch->in_room = in_room;
