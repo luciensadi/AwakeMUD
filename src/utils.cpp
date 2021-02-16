@@ -1641,7 +1641,6 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           send_to_char("Cyber Legs are incompatible with Dermal Sheathing.\r\n", ch);
         if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING) {
           send_to_char("Cyber Legs are incompatible with Bone Lacing.\r\n", ch);
-          return FALSE;
         if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS) {
           send_to_char("Cyber Legs are incompatible with other Cyber Legs.\r\n", ch);
           return FALSE;
