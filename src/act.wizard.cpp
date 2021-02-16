@@ -4125,6 +4125,8 @@ ACMD(do_set)
                { "race", LVL_PRESIDENT, PC, NUMBER },
                { "rolls", LVL_PRESIDENT, PC, BINARY },
                { "multiplier", LVL_PRESIDENT, PC, NUMBER },
+               { "shotsfired", LVL_PRESIDENT, PC, NUMBER },
+               { "shotstriggered", LVL_PRESIDENT, PC, NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4694,6 +4696,18 @@ ACMD(do_set)
     RANGE(0, 10000);
     GET_CHAR_MULTIPLIER(vict) = value;
     snprintf(buf, sizeof(buf),"%s changed %s's multiplier to %.2f.", GET_CHAR_NAME(ch), GET_NAME(vict), (float) GET_CHAR_MULTIPLIER(vict) / 100);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 76: /* shotsfired */
+    RANGE(0, 50000);
+    SHOTS_FIRED(vict) = value;
+    snprintf(buf, sizeof(buf),"%s changed %s's shots_fired to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 77: /* shotstriggered */
+    RANGE(-1, 100);
+    SHOTS_TRIGGERED(vict) = value;
+    snprintf(buf, sizeof(buf),"%s changed %s's shots_triggered to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   default:

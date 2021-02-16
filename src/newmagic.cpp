@@ -2556,7 +2556,10 @@ ACMD(do_bond)
             break;
           }
         if (!spell) {
-          send_to_char(ch, "You don't know a spell called '%s' to bond.\r\n", buf2);
+          if (*buf2)
+            send_to_char(ch, "You don't know a spell called '%s' to bond.\r\n", buf2);
+          else
+            send_to_char(ch, "You need to specify the spell you want to bond %s for.\r\n", GET_OBJ_NAME(obj));
           return;
         }
         if (GET_FOCUS_TYPE(obj) == FOCI_SUSTAINED && spells[spirit].duration != SUSTAINED) {

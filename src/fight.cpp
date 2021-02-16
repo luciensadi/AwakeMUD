@@ -417,8 +417,12 @@ void make_corpse(struct char_data * ch)
   struct obj_data *corpse;
   struct obj_data *money;
   int i, nuyen, credits, corpse_value = 0;
-  if (PLR_FLAGGED(ch, PLR_NEWBIE))
+  
+  if (PLR_FLAGGED(ch, PLR_NEWBIE)) {
+    mudlog("Won't generate a corpse-- still a newbie.", ch, LOG_DEATHLOG, TRUE);
     return;
+  }
+  
   corpse = create_obj();
   
   corpse->item_number = NOTHING;

@@ -71,6 +71,13 @@ struct teach_data teachers[] = {
                          "safer.\r\n", AMATEUR },
                       // End NERP teachers.
                       
+#ifdef USE_PRIVATE_CE_WORLD
+                       { 780, { SKILL_ASSAULT_RIFLES, SKILL_MACHINE_GUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS,
+                         SKILL_SMG, SKILL_ASSAULT_CANNON, SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE,
+                         SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                         "Ma Deuce puts you through firearm drills that make you piss blood when you're done.", ADVANCED },
+#endif
+                      
                        { 2508, { SKILL_BIOTECH, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of medical research and instruction, you begin "
                          "to\r\nunderstand more of the basic biotech procedures.\r\n", AMATEUR },
                        { 2701, { SKILL_ATHLETICS, SKILL_STEALTH, SKILL_UNARMED_COMBAT, SKILL_EDGED_WEAPONS,

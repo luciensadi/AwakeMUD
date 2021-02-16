@@ -2431,10 +2431,10 @@ SPECIAL(fixer)
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
-    cost = (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) != 0 ? GET_OBJ_BARRIER(obj) : 1)) *
+    cost = (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) > 0 ? GET_OBJ_BARRIER(obj) : 1)) *
                  (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
     if ((cash ? GET_NUYEN(ch) : GET_OBJ_VAL(credstick, 0)) < cost) {
-      snprintf(arg, sizeof(arg), "%s You can't afford to repair that!", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s You can't afford to repair that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
@@ -5102,7 +5102,7 @@ SPECIAL(mageskill_hermes)
         snprintf(arg, sizeof(arg), "%s So you have the recommendation from the other four. I guess that only leaves me. You put in the effort to get the other recommendations so you have mine.", GET_CHAR_NAME(ch));
         do_say(mage, arg, 0, SCMD_SAYTO);
         extract_obj(recom);
-        recom = read_object(5734, VIRTUAL);
+        recom = read_object(OBJ_MAGEBLING, VIRTUAL);
         obj_to_char(recom, ch);
         GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
         snprintf(arg, sizeof(arg), "%s Congratulations, You are now a member of our group. Seek our master at the old Masonic Lodge on Swan Street in Tarislar for training.", GET_CHAR_NAME(ch));
@@ -5328,12 +5328,14 @@ SPECIAL(mageskill_trainer)
 {
   struct char_data *mage = (struct char_data *) me;
   struct obj_data *chain = NULL;
+  int i;
+  
   if (CMD_IS("say") || CMD_IS("'")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "training"))
       return FALSE;
-    for (int i = 0; i < NUM_WEARS && !chain; i++)
-      if (GET_EQ(ch, i) && GET_OBJ_VNUM(GET_EQ(ch, i)) == 5734)
+    for (i = 0; i < NUM_WEARS && !chain; i++)
+      if (GET_EQ(ch, i) && GET_OBJ_VNUM(GET_EQ(ch, i)) == OBJ_MAGEBLING)
         chain = GET_EQ(ch, i);
     if (!chain)
       return FALSE;
@@ -5342,14 +5344,14 @@ SPECIAL(mageskill_trainer)
       do_say(mage, arg, 0, SCMD_SAYTO);
       send_to_char(ch, "%s reaches out and snatches the chain from around your neck.\r\n", GET_NAME(mage));
       act("$n reaches out and snatches the chain from around $N's neck.", FALSE, mage, 0, ch, TO_NOTVICT);
-      extract_obj(chain);
+      extract_obj(unequip_char(ch, i, TRUE));
     } else {
-      snprintf(arg, sizeof(arg), "%s Welcome %s, the Master awaits.", GET_SEX(ch) == SEX_FEMALE ? "Sister" : "Brother", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Welcome %s, the Master awaits.", GET_CHAR_NAME(ch), GET_SEX(ch) == SEX_FEMALE ? "Sister" : "Brother");
       do_say(mage, arg, 0, SCMD_SAYTO);
       send_to_char(ch, "%s beckons you to pass through the field to the north, and you do.\r\n", GET_NAME(mage));
       act("$n passes through the field to the north.", TRUE, ch, 0, 0, TO_ROOM);
       char_from_room(ch);
-      char_to_room(ch, &world[real_room(778)]);
+      char_to_room(ch, &world[real_room(RM_MAGE_TRAINER)]);
     }
   }
   return FALSE;
@@ -5827,3 +5829,40 @@ SPECIAL(fatcop) {
   fatcop_last_said = message_num;
   return TRUE;
 }
+
+#ifdef USE_PRIVATE_CE_WORLD
+SPECIAL(gunskill_trainer)
+{
+  int wear_loc = -1;
+  
+  struct char_data *gunner = (struct char_data *) me;
+  struct obj_data *badge = NULL;
+  if (CMD_IS("say") || CMD_IS("'")) {
+    skip_spaces(&argument);
+    if (!*argument || !str_str(argument, "training"))
+      return FALSE;
+    for (wear_loc = 0; wear_loc < NUM_WEARS && !badge; wear_loc++)
+      if (GET_EQ(ch, wear_loc) && GET_OBJ_VNUM(GET_EQ(ch, wear_loc)) == OBJ_MARKSMAN_BADGE)
+        badge = GET_EQ(ch, wear_loc);
+    if (!badge)
+      return FALSE;
+    if (GET_OBJ_VAL(badge, 0) != GET_IDNUM(ch)) {
+      snprintf(arg, sizeof(arg), "%s What are you doing with this!? This is not yours!", GET_CHAR_NAME(ch));
+      do_say(gunner, arg, 0, SCMD_SAYTO);
+      send_to_char(ch, "%s reaches out and snatches %s from you.\r\n", GET_NAME(gunner), GET_OBJ_NAME(badge));
+      act("$n reaches out and snatches a badge from $N.", FALSE, gunner, 0, ch, TO_NOTVICT);
+      extract_obj(unequip_char(ch, wear_loc, TRUE));
+    } else {
+      snprintf(arg, sizeof(arg), "%s Your training awaits.", GET_CHAR_NAME(ch));
+      do_say(gunner, arg, 0, SCMD_SAYTO);
+      send_to_char(ch, "%s beckons you to pass through the barrier to the north, and you do.\r\n", GET_NAME(gunner));
+      act("$n passes through the barrier to the north.", TRUE, ch, 0, 0, TO_ROOM);
+      char_from_room(ch);
+      char_to_room(ch, &world[real_room(RM_GUN_TRAINER)]);
+    }
+  }
+  return FALSE;
+}
+#endif
+
+// Looking for the rest of the gunnery skill spec proc? It's unfortunately not available here-- you'll have to play through the quest to learn about it!

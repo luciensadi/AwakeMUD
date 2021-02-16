@@ -621,10 +621,32 @@ void point_update(void)
       if (GET_TEMP_ESSLOSS(i) > 0)
         GET_TEMP_ESSLOSS(i) = MAX(0, GET_TEMP_ESSLOSS(i) - 100);
         
+#ifdef USE_PRIVATE_CE_WORLD
+      if (SHOTS_FIRED(i) >= 10000 && SHOTS_TRIGGERED(i) != -1) {
+        bool has_a_quest_item == FALSE;
+        struct obj_data *tmp = NULL;
+        
+        // Check carried.
+        for (tmp = i->carried; !has_a_quest_item && tmp; tmp = tmp->next)
+          has_a_quest_item = GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_LETTER || GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_BADGE;
+          
+        // Check worn.
+        for (int worn = 0; !has_a_quest_item && worn < NUM_WEARS; worn++)
+          has_a_quest_item = GET_EQ(i, worn) && (GET_OBJ_VNUM(GET_EQ(i, worn)) == OBJ_MARKSMAN_LETTER 
+                                               || GET_OBJ_VNUM(GET_EQ(i, worn)) == OBJ_MARKSMAN_BADGE);
+          
+        SHOTS_TRIGGERED(i) = (SHOTS_TRIGGERED(i) + 1) % 20;
+        
+        if (!has_a_quest_item && SHOTS_TRIGGERED(i) == 0) {
+          send_to_char("^GYou feel you could benefit with some time at a shooting range.^n\r\n", i);
+        }
+      }
+#else
       if (SHOTS_FIRED(i) >= 10000 && !SHOTS_TRIGGERED(i) && !number(0, 3)) {
         SHOTS_TRIGGERED(i)++;
         send_to_char("You feel you could benefit with some time at a shooting range.\r\n", i);
       }
+#endif    
       
       if (GET_MAG(i) > 0) {
         int force = 0, total = 0;

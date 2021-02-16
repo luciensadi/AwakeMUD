@@ -2116,6 +2116,8 @@ enum {
 #define RM_PAINTER_LOT               37519
 #define RM_MULTNOMAH_GATE_NORTH      17598
 #define RM_MULTNOMAH_GATE_SOUTH      17599
+#define RM_MAGE_TRAINER              778
+#define RM_GUN_TRAINER               781
 
 // Chargen room defines
 #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC  60520
@@ -2196,6 +2198,9 @@ enum {
 #define OBJ_MITSUHAMA_Z4                   1847
 #define OBJ_LONDON_FOG_PROFESSIONAL        8439
 #define OBJ_THIGH_HOLSTER                  3494
+#define OBJ_MARKSMAN_LETTER                5962
+#define OBJ_MARKSMAN_BADGE                 5961
+#define OBJ_MAGEBLING                      5734
 
 #define OBJ_CMT_AVATAR                     80004
 #define OBJ_NOVATECH_SIX_SENSORS           17116
