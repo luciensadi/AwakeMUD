@@ -623,11 +623,11 @@ void point_update(void)
         
 #ifdef USE_PRIVATE_CE_WORLD
       if (SHOTS_FIRED(i) >= 10000 && SHOTS_TRIGGERED(i) != -1) {
-        bool has_a_quest_item == FALSE;
+        bool has_a_quest_item = FALSE;
         struct obj_data *tmp = NULL;
         
         // Check carried.
-        for (tmp = i->carried; !has_a_quest_item && tmp; tmp = tmp->next)
+        for (tmp = i->carrying; !has_a_quest_item && tmp; tmp = tmp->next_content)
           has_a_quest_item = GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_LETTER || GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_BADGE;
           
         // Check worn.
