@@ -5954,7 +5954,6 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   } else
     power -= veh->armor;
   
-  
   if (wielded)
     recoil_comp = check_recoil(ch, wielded);
   recoil = MAX(0, burst - recoil_comp);
@@ -5996,7 +5995,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   } else
     skill_total = get_skill(ch, GET_OBJ_VAL(wielded, 4), base_target);
   
-  base_target = 4 + modtarget + recoil;
+  base_target = 4 + modtarget + recoil + modify_target(ch);
   
   attack_success = success_test(skill_total, base_target);
   if (attack_success < 1)
