@@ -2112,6 +2112,19 @@ ACMD(do_vstat)
     send_to_char("A NEGATIVE number??\r\n", ch);
     return;
   }
+  
+  // Require that they have access to edit the zone they're statting.
+  for (int counter = 0; counter <= top_of_zone_table; counter++) {
+    if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
+      if (!can_edit_zone(ch, zone_table[counter].number)) {
+        send_to_char("Sorry, you don't have access to edit that zone.\r\n", ch);
+        return;
+      }
+      break;
+    }
+  }
+  
+  
   if (is_abbrev(buf, "host")) {
     if ((r_num = real_host(number)) < 0) {
       send_to_char("There is no host with that number.\r\n", ch);

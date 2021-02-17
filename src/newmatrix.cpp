@@ -2039,7 +2039,7 @@ ACMD(do_run)
       }
       return;
     default:
-      send_to_icon(PERSONA, "You don't need to manually run that program.\r\n");
+      send_to_icon(PERSONA, "You don't need to manually run %s.\r\n", GET_OBJ_NAME(soft));
       break;
     }
   else
