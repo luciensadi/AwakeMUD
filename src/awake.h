@@ -1924,14 +1924,15 @@ enum {
 #define CON_SPE_CREATE   37
 #define CON_INITIATE     38
 #define CON_DECORATE     39
-#define CON_POCKETSEC     40
-#define CON_VEHCUST       41
+#define CON_POCKETSEC    40
+#define CON_VEHCUST      41
 #define CON_BCUSTOMIZE   42
 #define CON_TRIDEO       43
 #define CON_AMMO_CREATE  44
 #define CON_ASKNAME      45            /* Ask user for name            */
 #define CON_PGEDIT       46
 #define CON_HELPEDIT     47
+// If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0

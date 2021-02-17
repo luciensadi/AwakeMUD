@@ -5105,7 +5105,7 @@ SPECIAL(mageskill_hermes)
         recom = read_object(OBJ_MAGEBLING, VIRTUAL);
         obj_to_char(recom, ch);
         GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
-        snprintf(arg, sizeof(arg), "%s Congratulations, You are now a member of our group. Seek our master at the old Masonic Lodge on Swan Street in Tarislar for training.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s Congratulations, you are now a member of our group. Seek our master at the old Masonic Lodge on Swan Street in Tarislar for training.", GET_CHAR_NAME(ch));
       } else
         snprintf(arg, sizeof(arg), "%s Why do you want my recommendation?", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
@@ -5855,7 +5855,7 @@ SPECIAL(gunskill_trainer)
     } else {
       snprintf(arg, sizeof(arg), "%s Your training awaits.", GET_CHAR_NAME(ch));
       do_say(gunner, arg, 0, SCMD_SAYTO);
-      send_to_char(ch, "%s beckons you to pass through the barrier to the north, and you do.\r\n", GET_NAME(gunner));
+      send_to_char(ch, "%s beckons you to pass through the heavy door to the north, and you do.\r\n", GET_NAME(gunner));
       act("$n passes through the barrier to the north.", TRUE, ch, 0, 0, TO_ROOM);
       char_from_room(ch);
       char_to_room(ch, &world[real_room(RM_GUN_TRAINER)]);

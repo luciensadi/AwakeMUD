@@ -857,6 +857,7 @@ struct descriptor_data
   struct host_data *edit_host;  /* hedit */
   struct matrix_icon *edit_icon; /* icedit */
   struct help_data *edit_helpfile;
+  // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
   
   Playergroup *edit_pgroup; /* playergroups */
   

@@ -2008,8 +2008,8 @@ void close_socket(struct descriptor_data *d)
   if (d->character)
   {
     /* added to Free up temporary editing constructs */
-    if (d->connected == CON_PART_CREATE || d->connected == CON_SPELL_CREATE || d->connected == CON_PLAYING || (d->connected >= CON_SPELL_CREATE &&
-                                                                                                               d->connected <= CON_BCUSTOMIZE)) {
+    if (d->connected == CON_PLAYING || d->connected == CON_PART_CREATE || (d->connected >= CON_SPELL_CREATE &&
+                                                                           d->connected <= CON_HELPEDIT)) {
       if (d->connected == CON_VEHCUST)
         d->edit_veh = NULL;
       if (d->connected == CON_POCKETSEC) {
@@ -2028,8 +2028,9 @@ void close_socket(struct descriptor_data *d)
       free_editing_structs(d, STATE(d));
       d->character->desc = NULL;
     } else {
-      snprintf(buf, sizeof(buf), "Cleaning up data structures from %s's disconnection.",
-              GET_CHAR_NAME(d->character) ? GET_CHAR_NAME(d->character) : "<null>");
+      snprintf(buf, sizeof(buf), "Cleaning up data structures from %s's disconnection (state %d).",
+              GET_CHAR_NAME(d->character) ? GET_CHAR_NAME(d->character) : "<null>",
+              d->connected);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
       // we do this because objects can be given to characters in chargen
       for (int i = 0; i < NUM_WEARS; i++)
