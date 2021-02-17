@@ -2009,7 +2009,8 @@ void close_socket(struct descriptor_data *d)
   {
     /* added to Free up temporary editing constructs */
     if (d->connected == CON_PLAYING || d->connected == CON_PART_CREATE || (d->connected >= CON_SPELL_CREATE &&
-                                                                           d->connected <= CON_HELPEDIT)) {
+                                                                           d->connected <= CON_HELPEDIT &&
+                                                                           d->connected != CON_ASKNAME)) {
       if (d->connected == CON_VEHCUST)
         d->edit_veh = NULL;
       if (d->connected == CON_POCKETSEC) {
