@@ -326,9 +326,9 @@ struct combat_data
     
     weapon = weap;
     weapon_is_gun = weapon
-                  && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                  && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
-                      && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON);
+                    && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
+                    && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
+                        && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON);
     
     cyber = new struct cyberware_data(ch);
     ranged = new struct ranged_combat_data(ch, weapon, weapon_is_gun);
@@ -344,6 +344,7 @@ struct combat_data
 
 void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo)
 {
+  int net_successes;
   assert(attacker != NULL);
   assert(victim != NULL);
   
@@ -773,7 +774,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
   // -------------------------------------------------------------------------------------------------------
   // Calculate and display pre-success-test information.
-  snprintf(rbuf, sizeof(rbuf), "^cMelee combat mode. %s's TN modifiers: ", GET_CHAR_NAME(att->ch) );
+  snprintf(rbuf, sizeof(rbuf), "^cCalculating melee combat modifiers. %s's TN modifiers: ", GET_CHAR_NAME(att->ch) );
+  // This feels a little shitty, but we know that if we're in melee mode, the TN has not been touched yet, and if we're not then it's already been calculated.
   att->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY]);
   for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
     // Melee-specific modifiers.
@@ -804,65 +806,68 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   def->tn = MAX(def->tn, 2);
 
   // ----------------------
-  
-  int net_successes;
-  if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE)) {
-    att->successes = success_test(att->dice, att->tn);
-    def->successes = success_test(def->dice, def->tn);
-    net_successes = att->successes - def->successes;
-  } else {
-    act("Surprised-- defender gets no roll.", FALSE, att->ch, NULL, NULL, TO_ROLLS);
-    att->successes = MAX(1, success_test(att->dice, att->tn));
-    net_successes = att->successes;
-  }
-  
-  if (def->weapon && GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
-    // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
-    act("Defender wielding non-weapon-- cannot win clash.", FALSE, att->ch, NULL, NULL, TO_ROLLS);
-    net_successes = MAX(0, net_successes);
-  }
-  
-  snprintf(rbuf, sizeof(rbuf), "^g%s got ^W%d^g success%s from ^W%d^g dice at TN ^W%d^g.^n\r\n",
-           GET_CHAR_NAME(att->ch),
-           att->successes,
-           att->successes != 1 ? "s" : "",
-           att->dice,
-           att->tn);
-  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^g%s got ^W%d^g success%s from ^W%d^g dice at TN ^W%d^g.^n\r\n",
-           GET_CHAR_NAME(def->ch),
-           def->successes,
-           def->successes != 1 ? "s" : "",
-           def->dice,
-           def->tn);
-           
-  if (net_successes < 0) {
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^yNet successes is ^W%d^y, which will cause a counterattack.^n\r\n", net_successes);
-  } else
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Net successes is ^W%d^n.\r\n", net_successes);
-  act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
-  
-  act("$n clashes with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_ROOM);
-  act("You clash with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_CHAR);
-  
-  // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
-  if (net_successes < 0) {
-    if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
-      // MitS 149: You cannot be counterstriked while using distance strike.
-      net_successes = 0;
+  if (!att->weapon_is_gun) {
+    if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE)) {
+      att->successes = success_test(att->dice, att->tn);
+      def->successes = success_test(def->dice, def->tn);
+      net_successes = att->successes - def->successes;
+    } else {
+      act("Surprised-- defender gets no roll.", FALSE, att->ch, NULL, NULL, TO_ROLLS);
+      att->successes = MAX(1, success_test(att->dice, att->tn));
+      net_successes = att->successes;
     }
-    // This messaging gets a little annoying.
-    act("You successfully counter $N's attack!", FALSE, def->ch, 0, att->ch, TO_CHAR);
-    act("$n deflects your attack and counterstrikes!", FALSE, def->ch, 0, att->ch, TO_VICT);
-    act("$n deflects $N's attack and counterstrikes!", FALSE, def->ch, 0, att->ch, TO_NOTVICT);
     
-    // We're swapping the attacker and defender here, but this isn't an issue: we did all the defender's melee setup already.
-    struct combat_data *temp_att = att;
-    att = def;
-    def = temp_att;
-          
-    att->successes = -1 * net_successes;
-  } else
-    att->successes = net_successes;
+    if (def->weapon && GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
+      // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
+      act("Defender wielding non-weapon-- cannot win clash.", FALSE, att->ch, NULL, NULL, TO_ROLLS);
+      net_successes = MAX(0, net_successes);
+    }
+    
+    snprintf(rbuf, sizeof(rbuf), "^g%s got ^W%d^g success%s from ^W%d^g dice at TN ^W%d^g.^n\r\n",
+             GET_CHAR_NAME(att->ch),
+             att->successes,
+             att->successes != 1 ? "s" : "",
+             att->dice,
+             att->tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^g%s got ^W%d^g success%s from ^W%d^g dice at TN ^W%d^g.^n\r\n",
+             GET_CHAR_NAME(def->ch),
+             def->successes,
+             def->successes != 1 ? "s" : "",
+             def->dice,
+             def->tn);
+             
+    if (net_successes < 0) {
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^yNet successes is ^W%d^y, which will cause a counterattack.^n\r\n", net_successes);
+    } else
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Net successes is ^W%d^n.\r\n", net_successes);
+    act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
+    
+    act("$n clashes with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_ROOM);
+    act("You clash with $N in melee combat.", FALSE, att->ch, 0, def->ch, TO_CHAR);
+    
+    // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
+    if (net_successes < 0) {
+      if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+        // MitS 149: You cannot be counterstriked while using distance strike.
+        net_successes = 0;
+      }
+      // This messaging gets a little annoying.
+      act("You successfully counter $N's attack!", FALSE, def->ch, 0, att->ch, TO_CHAR);
+      act("$n deflects your attack and counterstrikes!", FALSE, def->ch, 0, att->ch, TO_VICT);
+      act("$n deflects $N's attack and counterstrikes!", FALSE, def->ch, 0, att->ch, TO_NOTVICT);
+      
+      // We're swapping the attacker and defender here, but this isn't an issue: we did all the defender's melee setup already.
+      struct combat_data *temp_att = att;
+      att = def;
+      def = temp_att;
+            
+      att->successes = -1 * net_successes;
+      
+      // Prevent ranged combat messaging.
+      att->weapon_is_gun = FALSE;
+    } else
+      att->successes = net_successes;
+  }
   
   // Calculate the power of the attack (applies to both melee and ranged).
   if (att->weapon) {
