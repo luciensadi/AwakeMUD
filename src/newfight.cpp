@@ -55,7 +55,12 @@ struct cyberware_data {
   int bone_lacing_power;
   int num_cyberweapons;
   
-  cyberware_data(struct char_data *ch) {
+  cyberware_data(struct char_data *ch) :
+    climbingclaws(0), fins(0), handblades(0), handrazors(0), improved_handrazors(0),
+    handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0)
+  {
+    assert(ch != NULL);
+    
     // Populate the data.
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
       if (GET_CYBERWARE_TYPE(obj) == CYB_BONELACING) {
@@ -124,9 +129,13 @@ struct ranged_combat_data {
   struct obj_data *gyro;
   
   ranged_combat_data(struct char_data *ch, struct obj_data *weapon, bool weapon_is_gun) : 
+    skill(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE),
+    burst_count(0), recoil_comp(0), using_mounted_gun(FALSE),
     magazine(NULL), gyro(NULL)
   {
-    memset(modifiers, 0, sizeof(modifiers) * sizeof(int));
+    memset(modifiers, 0, sizeof(modifiers));
+    
+    assert(ch != NULL);
     
     // Setup: Cyclops suffer a +2 ranged-combat modifier.
     if (GET_RACE(ch) == RACE_CYCLOPS)
@@ -183,8 +192,12 @@ struct melee_combat_data {
   
   int modifiers[NUM_COMBAT_MODIFIERS];
   
-  melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool weapon_is_gun, struct cyberware_data *cyber) {
-    memset(modifiers, 0, sizeof(modifiers) * sizeof(int));
+  melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool weapon_is_gun, struct cyberware_data *cyber) :
+    skill(0), power(0), dam_type(0), damage_level(0), is_physical(FALSE)
+  {
+    assert(ch != NULL);
+    
+    memset(modifiers, 0, sizeof(modifiers));
     
     // Set up melee combat data. This holds true for all melee combat, but can be overwritten later on.
     skill = SKILL_UNARMED_COMBAT;
@@ -268,7 +281,6 @@ struct melee_combat_data {
       }
     }
     //////////////////////////////////////
-    
     is_physical = is_physical || IS_DAMTYPE_PHYSICAL(dam_type);
   }
 };
@@ -276,59 +288,65 @@ struct melee_combat_data {
 /* Combat data. */
 struct combat_data
 {
-  // Generic combat data.
-  bool too_tall;
-  
-  int skill;
-  int tn;
-  int dice;
-  int successes;
-  
-  // Gun data.
-  bool weapon_is_gun;
-  bool weapon_has_bayonet;
-  
-  struct ranged_combat_data *ranged;
-  struct melee_combat_data *melee;
-  struct cyberware_data *cyber;
-  
-  int modifiers[NUM_COMBAT_MODIFIERS];
-  
   // Pointers.
   struct char_data *ch;
   struct veh_data *veh;
   struct obj_data *weapon;
   
+  // Gun data.
+  bool weapon_is_gun;
+  
+  struct cyberware_data *cyber;
+  struct ranged_combat_data *ranged;
+  struct melee_combat_data *melee;
+  
+  // Generic combat data.
+  bool too_tall;
+  int skill;
+  int tn;
+  int dice;
+  int successes;
+  
+  int modifiers[NUM_COMBAT_MODIFIERS];
+  
   combat_data(struct char_data *character, struct obj_data *weap) :
-    too_tall(FALSE), skill(0), tn(4), dice(0), successes(0), weapon_is_gun(FALSE),
-    weapon_has_bayonet(FALSE), ch(NULL), veh(NULL), weapon(NULL)
+    ch(NULL), 
+    veh(NULL), 
+    weapon(NULL),
+    weapon_is_gun(FALSE),
+    too_tall(FALSE), skill(0), tn(4), dice(0), successes(0)
   {    
-    memset(modifiers, 0, sizeof(modifiers) * sizeof(int));
+    memset(modifiers, 0, sizeof(modifiers));
     
     ch = character;
     
-    // Set up too-tall data.
+    assert(ch != NULL);
+    
     too_tall = is_char_too_tall(ch);
     
-    // Set up weapon data.
     weapon = weap;
-    weapon_is_gun = (weapon 
-                     && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                     && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
-                         && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
-      
-    struct cyberware_data cyberware(ch);
-    struct ranged_combat_data ranged_data(ch, weapon, weapon_is_gun);
-    struct melee_combat_data melee_data(ch, weapon, weapon_is_gun, cyber);
+    weapon_is_gun = weapon
+                  && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
+                  && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
+                      && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON);
     
-    cyber = &cyberware;
-    ranged = &ranged_data;
-    melee = &melee_data;  
+    cyber = new struct cyberware_data(ch);
+    ranged = new struct ranged_combat_data(ch, weapon, weapon_is_gun);
+    melee = new struct melee_combat_data(ch, weapon, weapon_is_gun, cyber);
+  }
+  
+  ~combat_data() {
+    delete cyber;
+    delete ranged;
+    delete melee;
   }
 };
 
 void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo)
 {
+  assert(attacker != NULL);
+  assert(victim != NULL);
+  
   // Initialize our data structures for holding this round's fight-related data.
   struct combat_data attacker_data(attacker, weap);
   struct combat_data defender_data(victim, vict_weap);
@@ -798,7 +816,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     net_successes = att->successes;
   }
   
-  if (!def->weapon || GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
+  if (def->weapon && GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
     // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
     act("Defender wielding non-weapon-- cannot win clash.", FALSE, att->ch, NULL, NULL, TO_ROLLS);
     net_successes = MAX(0, net_successes);
