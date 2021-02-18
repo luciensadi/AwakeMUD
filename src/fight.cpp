@@ -5456,7 +5456,9 @@ void perform_violence(void)
           GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD),
           GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
           NULL);
-      if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) && FIGHTING(ch))
+          
+      // TODO: Two-weapon fighting for melee weapons (see CC p96 for off-hand weapons).
+      if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) && FIGHTING(ch) && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD))))
         hit(ch,
             FIGHTING(ch),
             GET_EQ(ch, WEAR_HOLD),
@@ -5478,7 +5480,7 @@ void order_list(bool first, ...)
   
   if (combat_list == NULL)
     return;
-  
+      
   for (one = two; one; previous = NULL, one = next) {
     next = one->next_fighting;
     for (two = combat_list; two && two->next_fighting; previous = two,

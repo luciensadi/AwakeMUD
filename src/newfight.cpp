@@ -214,6 +214,11 @@ struct melee_combat_data {
           dam_type = TYPE_POUND;
           skill = SKILL_CLUBS;
         }
+      } else {
+        dam_type = get_weapon_damage_type(weapon);
+        skill = GET_WEAPON_SKILL(weapon);
+        power = GET_WEAPON_POWER(weapon);
+        damage_level = GET_WEAPON_DAMAGE_CODE(weapon);
       }
     } else if (cyber->num_cyberweapons > 0) {
       skill = SKILL_CYBER_IMPLANTS;
@@ -262,7 +267,7 @@ struct melee_combat_data {
         snprintf(buf, sizeof(buf), "SYSERR in hit(): num_cyberweapons %d but no weapons found.", cyber->num_cyberweapons);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
       }
-    } else {      
+    } else {
       // TODO: Implement option to use bone lacing to cause physical damage at half power.
       // No cyberweapons active-- check for bone lacing, then proceed with adept/standard slapping.
       if (cyber->bone_lacing_power) {
@@ -280,7 +285,7 @@ struct melee_combat_data {
         is_physical = TRUE;
       }
     }
-    //////////////////////////////////////
+    
     is_physical = is_physical || IS_DAMTYPE_PHYSICAL(dam_type);
   }
 };
