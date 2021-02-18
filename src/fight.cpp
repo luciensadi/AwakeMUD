@@ -5420,7 +5420,8 @@ void perform_violence(void)
           AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
         } else {
           send_to_char(ch, "You attempt to close the distance!\r\n");
-          act("$n charges towards $N.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
+          act("$n charges towards $N, but $N manages to keep some distance.", FALSE, ch, 0, FIGHTING(ch), TO_NOTVICT);
+          act("$n charges towards you, but you manage to keep some distance.", FALSE, ch, 0, FIGHTING(ch), TO_VICT);
           // TODO: Is it really supposed to cost an extra init pass?
           // GET_INIT_ROLL(ch) -= 10;
           continue;
