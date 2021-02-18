@@ -1090,6 +1090,7 @@ struct ammo_data
 };
 
 /* Combat data. */
+#ifdef USE_OLD_HIT
 struct combat_data
 {
   // Generic combat data.
@@ -1167,6 +1168,7 @@ struct combat_data
       weapon_skill = SKILL_UNARMED_COMBAT;
   }
 };
+#endif
 
 struct help_data {
   // title: varchar 128

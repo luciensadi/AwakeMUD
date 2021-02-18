@@ -588,6 +588,54 @@ SPECIAL(nerp_skills_teacher) {
   return TRUE;
 }
 
+int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
+  int max;
+  
+  if (!ch) {
+    mudlog("SYSERR: Null character received at get_max_skill_for_char.", NULL, LOG_SYSLOG, TRUE);
+    return -1;
+  }
+  
+  // Scope maximums based on teacher type.
+  if (type == NEWBIE)
+    max = NEWBIE_SKILL;
+  else if (type == AMATEUR)
+    max = NORMAL_MAX_SKILL;
+  else if (type == ADVANCED)
+    max = LEARNED_LEVEL;
+  else if (type == GODLY)
+    max = 100;
+  else if (type == LIBRARY)
+    max = LIBRARY_SKILL;
+  else {
+    snprintf(buf, sizeof(buf), "SYSERR: Unknown teacher type %d received at get_max_skill_for_char().", type);
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return -1;
+  }
+  
+  // Override: Newbie teachers teach language at skill 10.
+  if (type == NEWBIE && SKILL_IS_LANGUAGE(skill))
+    return 10;
+    
+  // Clamp maximums.
+  switch (GET_TRADITION(ch)) {
+    case TRAD_MUNDANE:
+      return MIN(max, 12);
+    case TRAD_ADEPT:
+      return MIN(max, 10);
+    default:
+      switch (skill) {
+        case SKILL_CONJURING:
+        case SKILL_SORCERY:
+        case SKILL_SPELLDESIGN:
+        case SKILL_AURA_READING:
+          return MIN(max, 12);
+        default:
+          return MIN(max, 8);
+      }
+  }
+}
+
 SPECIAL(teacher)
 {
   struct char_data *master = (struct char_data *) me;
@@ -641,25 +689,11 @@ SPECIAL(teacher)
     send_to_char("You must be conscious to practice.\r\n", ch);
     return TRUE;
   }
-  if (teachers[ind].type == NEWBIE)
-    max = NEWBIE_SKILL;
-  else if (teachers[ind].type == AMATEUR)
-    max = NORMAL_MAX_SKILL;
-  else if (teachers[ind].type == ADVANCED)
-    max = LEARNED_LEVEL;
-  else if (teachers[ind].type == GODLY)
-    max = 100;
-  else if (teachers[ind].type == LIBRARY)
-    max = LIBRARY_SKILL;
-  else
-    return FALSE;
 
   if (!*argument) {
     bool found_a_skill_already = FALSE;
     for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
-      if (teachers[ind].s[i] > 0) {
-        int old_max = max;
-        
+      if (teachers[ind].s[i] > 0) {        
         // Mundanes can't learn magic skills.
         if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[teachers[ind].s[i]].requires_magic)
           continue;
@@ -676,12 +710,10 @@ SPECIAL(teacher)
         
         else if (GET_ASPECT(ch) == ASPECT_SORCERER && teachers[ind].s[i] == SKILL_CONJURING)
           continue;
-          
         
-        // Override max for language skills.
-        if (teachers[ind].type == NEWBIE && SKILL_IS_LANGUAGE(teachers[ind].s[i])) {
-          max = 10;
-        }
+        // Set our maximum for this skill. Break out on error.
+        if ((max = get_max_skill_for_char(ch, teachers[ind].s[i], teachers[ind].type)) < 0)
+          return FALSE;
         
         if (GET_SKILL_POINTS(ch) > 0) {
           // Add conditional messaging.
@@ -691,18 +723,16 @@ SPECIAL(teacher)
           }
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s\r\n", skills[teachers[ind].s[i]].name);
         }
-        else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1]) {
+        else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1]) 
+        {
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma %d nuyen)\r\n", skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma, %d nuyen)\r\n", skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
                   MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
         }
-        
-        // Reset max.
-        max = old_max;
       }
     }
     // Failure case.
@@ -779,7 +809,8 @@ SPECIAL(teacher)
     return TRUE;
   }
 
-  if (GET_SKILL(ch, skill_num) >= ((teachers[ind].type == NEWBIE && SKILL_IS_LANGUAGE(skill_num)) ? 10 : max)) {
+  max = get_max_skill_for_char(ch, skill_num, teachers[ind].type);
+  if (GET_SKILL(ch, skill_num) >= max) {
     if (max == LIBRARY_SKILL)
       send_to_char("You can't find any books that tell you things you don't already know.\r\n", ch);
     else {
@@ -809,7 +840,7 @@ SPECIAL(teacher)
 
   send_to_char(teachers[ind].msg, ch);
   set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) + 1, TRUE);
-  if (GET_SKILL(ch, skill_num) >= ((teachers[ind].type == NEWBIE && SKILL_IS_LANGUAGE(skill_num)) ? 10 : max))
+  if (GET_SKILL(ch, skill_num) >= max)
     send_to_char("You have learnt all you can here.\r\n", ch);
 
   return TRUE;

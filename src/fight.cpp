@@ -94,7 +94,6 @@ extern void write_world_to_disk(int vnum);
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
 extern bool House_get_filename(vnum_t vnum, char *filename, int filename_size);
 
-extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
 
 /* Weapon attack texts */
@@ -2193,18 +2192,6 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
 IS_RANGED(GET_EQ(ch, WEAR_WIELD))) || (GET_EQ(ch, WEAR_HOLD) && \
 GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON && IS_RANGED(GET_EQ(ch, WEAR_HOLD))))
 
-#define IS_SINGLE(eq)  (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-GET_OBJ_VAL(eq, 11) == MODE_SS)
-
-#define IS_SEMI(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-GET_OBJ_VAL(eq, 11) == MODE_SA)
-
-#define IS_BURST(eq)   (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-GET_OBJ_VAL(eq, 11) == MODE_BF)
-
-#define IS_AUTO(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-GET_OBJ_VAL(eq, 11) == MODE_FA)
-
 bool would_become_killer(struct char_data * ch, struct char_data * vict)
 {
   char_data *attacker;
@@ -3598,6 +3585,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
 //todo: single shot weaps can only be fired once per combat phase-- what does this mean for us?
 
+#ifdef USE_OLD_HIT
 struct combat_data *populate_cyberware(struct char_data *ch, struct combat_data *cd) {
   // Pull info on all the character's active cyberware.
   for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
@@ -3648,20 +3636,6 @@ struct combat_data *populate_cyberware(struct char_data *ch, struct combat_data 
     }
   }
   return cd;
-}
-
-bool weapon_has_bayonet(struct obj_data *weapon) {
-  // Precondition: Weapon must exist, must be a weapon-class item, and must be a gun.
-  if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))))
-    return FALSE;
-
-  long attach_obj;
-  struct obj_data *attach_proto = NULL;
-  
-  return (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)
-          && (attach_obj = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon))) > 0
-          && (attach_proto = &obj_proto[attach_obj])
-          && GET_OBJ_VAL(attach_proto, 1) == ACCESS_BAYONET);
 }
 
 int get_melee_skill(struct combat_data *cd) {
@@ -3928,9 +3902,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->modifiers[COMBAT_MOD_DISTANCE] += 2;
     
     // Setup: Determine the burst value of the weapon.
-    if (IS_BURST(att->weapon))
+    if (WEAPON_IS_BF(att->weapon))
       att->burst_count = 3;
-    else if (IS_AUTO(att->weapon))
+    else if (WEAPON_IS_FA(att->weapon))
       att->burst_count = GET_OBJ_TIMER(att->weapon);
     
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
@@ -4528,6 +4502,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
 }
+#endif
 
 int find_sight(struct char_data *ch)
 {
@@ -5898,7 +5873,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     }
     
     // Deduct burstfire ammo. Note that one has already been deducted in has_ammo.
-    if (IS_BURST(wielded) && wielded->contains && GET_OBJ_TYPE(wielded->contains) == ITEM_GUN_MAGAZINE) {
+    if (WEAPON_IS_BF(wielded) && wielded->contains && GET_OBJ_TYPE(wielded->contains) == ITEM_GUN_MAGAZINE) {
       if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) >= 2) {
         burst = 3;
         GET_MAGAZINE_AMMO_COUNT(wielded->contains) -= 2;
