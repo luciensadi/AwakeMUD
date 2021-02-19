@@ -3917,7 +3917,7 @@ SPECIAL(quest_debug_scanner)
       
       act("You roughly slap $N and demand $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_CHAR);
       act("$n roughly slaps $N and demands that $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_ROOM);
-      new_quest(to, TRUE);
+      new_quest(to);
       GET_SPARE1(to) = -1;
       send_to_char(ch, "Now offering quest %ld.", GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
       
