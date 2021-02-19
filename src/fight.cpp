@@ -281,20 +281,21 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (ch == vict)
     return;
   
+  if (IS_NPC(ch)) {
+    // Prevents you from surprising someone who's attacking you already.
+    GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
+    GET_MOBALERT(ch) = MALERT_ALERT;
+  }
+
   if (CH_IN_COMBAT(ch))
     return;
   
-  if (IS_NPC(ch)) {
-    // Prevents you from surprising someone who's attacking you already.
-    GET_MOBALERTTIME(ch) = 20;
-    GET_MOBALERT(ch) = MALERT_ALERT;
-  }
-  
   ch->next_fighting = combat_list;
   combat_list = ch;
+  roll_individual_initiative(ch);
+  order_list(TRUE);
   
   // GET_INIT_ROLL(ch) = 0;
-  roll_individual_initiative(ch);
   FIGHTING(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
@@ -348,8 +349,9 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
   
   ch->next_fighting = combat_list;
   combat_list = ch;
-  
   roll_individual_initiative(ch);
+  order_list(TRUE);
+  
   FIGHTING_VEH(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
   
@@ -5097,6 +5099,7 @@ void roll_individual_initiative(struct char_data *ch)
     AFF_FLAGS(ch).RemoveBit(AFF_SURPRISE);
   if (AWAKE(ch))
   {
+    // TODO: SR3: While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
     if (AFF_FLAGGED(ch, AFF_PILOT))
       GET_INIT_ROLL(ch) = dice(1, 6) + GET_REA(ch);
     else
@@ -5481,35 +5484,43 @@ void order_list(bool first, ...)
   
   if (combat_list == NULL)
     return;
-      
-  for (one = two; one; previous = NULL, one = next) {
-    next = one->next_fighting;
-    for (two = combat_list; two && two->next_fighting; previous = two,
-         two = two->next_fighting) {
+  
+  // Some kind of bastardized bubble sort. Doesn't work unless we...
+  bool made_changes;
+  do {
+    made_changes = FALSE;
+    previous = NULL;
+    for (two = combat_list; 
+         two && two->next_fighting; 
+         two = two->next_fighting) 
+    {
       if (GET_INIT_ROLL(two->next_fighting) > GET_INIT_ROLL(two)) {
         if (previous)
           previous->next_fighting = two->next_fighting;
         else
           combat_list = two->next_fighting;
+          
         temp = two->next_fighting->next_fighting;
         two->next_fighting->next_fighting = two;
         two->next_fighting = temp;
+        made_changes = TRUE;
       }
+      
+      previous = two;
     }
-  }
+  } while (made_changes);
   
   if (first)
     for (one = combat_list; one; one = next) {
       next = one->next_fighting;
       two = one;
+      // TODO BUG: Since reroll happens when the first person on the list hits zero, and this reorders the list, dist strike adepts fuck up the init passes.
       if (GET_TRADITION(one) == TRAD_ADEPT && GET_POWER(one, ADEPT_QUICK_STRIKE) && GET_PHYSICAL(one) >= 1000 && GET_MENTAL(one) >= 1000) {
         REMOVE_FROM_LIST(one, combat_list, next_fighting);
         one->next_fighting = combat_list;
         combat_list = one;
       }
     }
-  
-  
 }
 
 void order_list(struct char_data *start)
