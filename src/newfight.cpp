@@ -654,7 +654,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
     if (AFF_FLAGGED(def->ch, AFF_APPROACH))
       att->ranged->modifiers[COMBAT_MOD_DEFENDER_MOVING] += 2;
-    else if (!def->weapon_is_gun)
+    else if (!def->weapon_is_gun && def->ch->in_room == att->ch->in_room)
       att->ranged->modifiers[COMBAT_MOD_IN_MELEE_COMBAT] += 2; // technically supposed to be +2 per attacker, but ehhhh.
     
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
