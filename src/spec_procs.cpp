@@ -56,6 +56,7 @@ extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
 extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
 extern int get_paydata_market_minimum(int host_color);
+extern void new_quest(struct char_data *mob, bool force_assignation=FALSE);
 
 extern struct command_info cmd_info[];
 
@@ -3888,6 +3889,42 @@ SPECIAL(quest_debug_scanner)
       }
     }
     
+    return TRUE;
+  }
+  
+  if (CMD_IS("reload")) {
+    skip_spaces(&argument);
+    if (!*argument) {
+      send_to_char(ch, "Reload quest information on which NPC?\r\n");
+      return TRUE;
+    }
+    
+    if (ch->in_veh)
+      to = get_char_veh(ch, argument, ch->in_veh);
+    else
+      to = get_char_room_vis(ch, argument);
+    
+    if (!to) {
+      send_to_char(ch, "You don't see any '%s' that you can quest-debug here.\r\n", argument);
+      return TRUE;
+    }
+    
+    if (IS_NPC(to)) {
+      if (!(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson)) {
+        send_to_char(ch, "That NPC doesn't have any quest-related information available.\r\n");
+        return TRUE;
+      }
+      
+      act("You roughly slap $N and demand $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_CHAR);
+      act("$n roughly slaps $N and demands that $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_ROOM);
+      new_quest(to, TRUE);
+      GET_SPARE1(to) = -1;
+      send_to_char(ch, "Now offering quest %ld.", GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
+      
+      return TRUE;
+    }
+    
+    send_to_char(ch, "You can only do that on NPCs, and %s doesn't qualify.\r\n", GET_CHAR_NAME(to));
     return TRUE;
   }
   
