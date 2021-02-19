@@ -2822,8 +2822,8 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
       CAN_WEAR(GET_EQ(ch, WEAR_HOLD), ITEM_WEAR_WIELD))
     return 0;
   
-  int mod = 0, real_obj;
-  for (int i = ACCESS_LOCATION_TOP; !mod && i <= ACCESS_LOCATION_UNDER; i++) {
+  int real_obj;
+  for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
     // If they have a smartlink attached:
     if (GET_OBJ_VAL(weapon, i) > 0
         && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
@@ -2831,9 +2831,9 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
         && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK) {
       
       // Iterate through their cyberware and look for a matching smartlink.
-      for (obj = ch->cyberware; !mod && obj; obj = obj->next_content) {
+      for (obj = ch->cyberware; obj; obj = obj->next_content) {
         if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK) {
-          if (GET_ACCESSORY_TYPE(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
+          if (GET_CYBERWARE_RATING(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
             // Smartlink II with compatible cyberware.
             return 3;
           }
@@ -2841,8 +2841,7 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
           return 2;
         }
       }
-      if (!mod 
-          && GET_EQ(ch, WEAR_EYES) 
+      if (GET_EQ(ch, WEAR_EYES) 
           && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY 
           && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE) {
         // Smartlink plus goggle found-- half value.
@@ -2851,12 +2850,12 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
     }
   }
   
-  if (mod < 1 && AFF_FLAGGED(ch, AFF_LASER_SIGHT)) {
+  if (AFF_FLAGGED(ch, AFF_LASER_SIGHT)) {
     // Lasers apply when no smartlink was found.
-    mod = 1;
+    return 1;
   }
   
-  return mod;
+  return 0;
 }
 
 int check_recoil(struct char_data *ch, struct obj_data *gun)

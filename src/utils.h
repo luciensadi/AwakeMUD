@@ -862,6 +862,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 // ITEM_CYBERWARE convenience defines
 #define GET_CYBERWARE_TYPE(cyberware)          (GET_OBJ_VAL((cyberware), 0))
+#define GET_CYBERWARE_RATING(cyberware)        (GET_OBJ_VAL((cyberware), 1))
 #define GET_CYBERWARE_FLAGS(cyberware)         (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)   (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_ESSENCE_COST(cyberware)  (GET_OBJ_VAL((cyberware), 4))
