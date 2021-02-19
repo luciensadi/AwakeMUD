@@ -930,7 +930,6 @@ SPECIAL(johnson)
         for (int i = QUEST_TIMER - 1; i > 0; i--)
           GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
         GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
-        reward(ch, johnson);
         if (quest_table[GET_QUEST(ch)].finish)
           do_say(johnson, quest_table[GET_QUEST(ch)].finish, 0, 0);
         else {
@@ -938,6 +937,7 @@ SPECIAL(johnson)
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
           do_say(johnson, "Well done.", 0, 0);
         }
+        reward(ch, johnson);
         forget(johnson, ch);
         
         if (GET_QUEST(ch) == QST_MAGE_INTRO && GET_TRADITION(ch) != TRAD_MUNDANE)
