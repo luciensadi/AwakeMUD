@@ -939,6 +939,9 @@ SPECIAL(johnson)
           do_say(johnson, "Well done.", 0, 0);
         }
         forget(johnson, ch);
+        
+        if (GET_QUEST(ch) == QST_MAGE_INTRO && GET_TRADITION(ch) != TRAD_MUNDANE)
+          send_to_char(ch, "^M(OOC):^n You've discovered a follow-on quest! Follow the hint %s gave you to continue.\r\n", GET_CHAR_NAME(johnson));
       } else
         do_say(johnson, "You haven't completed any of your objectives yet.", 0, 0);
       

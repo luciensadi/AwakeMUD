@@ -5121,7 +5121,7 @@ SPECIAL(mageskill_hermes)
       break;
   if (!mage)
     return FALSE;
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     for (recom = ch->carrying; recom; recom = recom->next_content)
       if (GET_OBJ_VNUM(recom) == 5735)
@@ -5148,7 +5148,7 @@ SPECIAL(mageskill_hermes)
         bool dq = FALSE;
         int i = 0;
         for (; i <= QUEST_TIMER; i++)
-          if (GET_LQUEST(ch, i) == 5743)
+          if (GET_LQUEST(ch, i) == QST_MAGE_INTRO)
             dq = TRUE;
         if (dq) {
           snprintf(arg, sizeof(arg), "%s So Harold has sent another one my way has he? Sometimes I don't trust his better judgement, but business is business.", GET_CHAR_NAME(ch));
@@ -5183,7 +5183,7 @@ SPECIAL(mageskill_moore)
       break;
   if (!mage)
     return FALSE;
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "recommendation"))
       return(FALSE);
@@ -5217,7 +5217,7 @@ SPECIAL(mageskill_herbie)
       break;
   if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
     return FALSE;
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "recommendation"))
       return(FALSE);
@@ -5262,7 +5262,7 @@ SPECIAL(mageskill_anatoly)
 {
   struct char_data *mage = (struct char_data *) me;
   struct obj_data *recom = NULL;
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "recommendation"))
       return FALSE;
@@ -5322,7 +5322,7 @@ SPECIAL(mageskill_nightwing)
     GET_SPARE1(mage) = 1;
     return TRUE;
   }
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "recommendation"))
       return FALSE;
@@ -5361,7 +5361,7 @@ SPECIAL(mageskill_trainer)
   struct obj_data *chain = NULL;
   int i;
   
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "training"))
       return FALSE;

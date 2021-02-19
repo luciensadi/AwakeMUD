@@ -2260,6 +2260,8 @@ enum {
 
 #define OBJ_BLANK_MAGAZINE          127
 
+#define QST_MAGE_INTRO              5743
+
 // Misc defines from spec_procs.cpp
 #define LIBRARY_SKILL    3
 #define NEWBIE_SKILL    6
