@@ -5163,7 +5163,7 @@ SPECIAL(mageskill_hermes)
   if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     for (recom = ch->carrying; recom; recom = recom->next_content)
-      if (GET_OBJ_VNUM(recom) == 5735)
+      if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER)
         break;
     if (!*argument)
       return FALSE;
@@ -5181,7 +5181,7 @@ SPECIAL(mageskill_hermes)
       do_say(mage, arg, 0, SCMD_SAYTO);
     } else if (str_str(argument, "chain")) {
       if (recom && GET_OBJ_VAL(recom, 0) == GET_IDNUM(ch)) {
-        snprintf(arg, sizeof(arg), "%s You already have your letter, come back when you have all the recommendations.", GET_CHAR_NAME(ch));
+        snprintf(arg, sizeof(arg), "%s You already have your letter. Seek out the other four senior members and ask them for their recommendations.", GET_CHAR_NAME(ch));
         do_say(mage, arg, 0, SCMD_SAYTO);
       } else {
         bool dq = FALSE;
@@ -5196,7 +5196,7 @@ SPECIAL(mageskill_hermes)
           do_say(mage, arg, 0, SCMD_SAYTO);          
           snprintf(arg, sizeof(arg), "%s Seek out the other four senior members and ask them for their recommendations. Have them record them in this letter. Once you've gotten them, return to me and let me know.", GET_CHAR_NAME(ch));
           do_say(mage, arg, 0, SCMD_SAYTO);
-          recom = read_object(5735, VIRTUAL);
+          recom = read_object(OBJ_MAGE_LETTER, VIRTUAL);
           GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
           obj_to_char(recom, ch);
           act("$N hands you $p.", TRUE, ch, recom, mage, TO_CHAR);
@@ -5213,22 +5213,18 @@ SPECIAL(mageskill_hermes)
 
 SPECIAL(mageskill_moore)
 {
-  struct char_data *mage = NULL;
+  struct char_data *mage = (struct char_data *) me;;
   struct obj_data *recom = NULL;
 
-  if (!ch)
-    return FALSE;  
-  for (mage = ch->in_room->people; mage; mage = mage->next_in_room)
-    if (GET_MOB_VNUM(mage) == 35538)
-      break;
-  if (!mage)
+  if (!ch || !mage)
     return FALSE;
+    
   if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !(str_str(argument, "recommendation") || str_str(argument, "letter")))
       return(FALSE);
     for (recom = ch->carrying; recom; recom = recom->next_content)
-      if (GET_OBJ_VNUM(recom) == 5735)
+      if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER)
         break;
     if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
       return FALSE;
@@ -5252,8 +5248,9 @@ SPECIAL(mageskill_herbie)
 {
   struct char_data *mage = (struct char_data *) me;
   struct obj_data *recom = NULL, *obj = NULL;
+  
   for (recom = ch->carrying; recom; recom = recom->next_content)
-    if (GET_OBJ_VNUM(recom) == 5735)
+    if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER)
       break;
   if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
     return FALSE;
@@ -5317,7 +5314,7 @@ SPECIAL(mageskill_anatoly)
     if (!*argument || !(str_str(argument, "recommendation") || str_str(argument, "letter")))
       return FALSE;
     for (recom = ch->carrying; recom; recom = recom->next_content)
-      if (GET_OBJ_VNUM(recom) == 5735)
+      if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER)
         break;
     if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
       return FALSE;
@@ -5377,7 +5374,7 @@ SPECIAL(mageskill_nightwing)
     if (!*argument || !(str_str(argument, "recommendation") || str_str(argument, "letter")))
       return FALSE;
     for (recom = ch->carrying; recom; recom = recom->next_content)
-      if (GET_OBJ_VNUM(recom) == 5735)
+      if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER)
         break;
     if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
       return FALSE;
@@ -5910,40 +5907,3 @@ SPECIAL(fatcop) {
   fatcop_last_said = message_num;
   return TRUE;
 }
-
-#ifdef USE_PRIVATE_CE_WORLD
-SPECIAL(gunskill_trainer)
-{
-  int wear_loc = -1;
-  
-  struct char_data *gunner = (struct char_data *) me;
-  struct obj_data *badge = NULL;
-  if (CMD_IS("say") || CMD_IS("'")) {
-    skip_spaces(&argument);
-    if (!*argument || !str_str(argument, "training"))
-      return FALSE;
-    for (wear_loc = 0; wear_loc < NUM_WEARS && !badge; wear_loc++)
-      if (GET_EQ(ch, wear_loc) && GET_OBJ_VNUM(GET_EQ(ch, wear_loc)) == OBJ_MARKSMAN_BADGE)
-        badge = GET_EQ(ch, wear_loc);
-    if (!badge)
-      return FALSE;
-    if (GET_OBJ_VAL(badge, 0) != GET_IDNUM(ch)) {
-      snprintf(arg, sizeof(arg), "%s What are you doing with this!? This is not yours!", GET_CHAR_NAME(ch));
-      do_say(gunner, arg, 0, SCMD_SAYTO);
-      send_to_char(ch, "%s reaches out and snatches %s from you.\r\n", GET_NAME(gunner), GET_OBJ_NAME(badge));
-      act("$n reaches out and snatches a badge from $N.", FALSE, gunner, 0, ch, TO_NOTVICT);
-      extract_obj(unequip_char(ch, wear_loc, TRUE));
-    } else {
-      snprintf(arg, sizeof(arg), "%s Your training awaits.", GET_CHAR_NAME(ch));
-      do_say(gunner, arg, 0, SCMD_SAYTO);
-      send_to_char(ch, "%s beckons you to pass through the heavy door to the north, and you do.\r\n", GET_NAME(gunner));
-      act("$n passes through the barrier to the north.", TRUE, ch, 0, 0, TO_ROOM);
-      char_from_room(ch);
-      char_to_room(ch, &world[real_room(RM_GUN_TRAINER)]);
-    }
-  }
-  return FALSE;
-}
-#endif
-
-// Looking for the rest of the gunnery skill spec proc? It's unfortunately not available here-- you'll have to play through the quest to learn about it!
