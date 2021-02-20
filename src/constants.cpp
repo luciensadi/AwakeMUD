@@ -2365,7 +2365,8 @@ const char *combat_modifiers[] =
   "Gyro",
   "Net Reach",
   "VehDamaged",
-  "Defender Moving"
+  "Defender Moving",
+  "In Melee Combat"
 };
 
 const char *pgroup_privileges[] =

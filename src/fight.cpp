@@ -94,7 +94,6 @@ extern void write_world_to_disk(int vnum);
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
 extern bool House_get_filename(vnum_t vnum, char *filename, int filename_size);
 
-extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapontype, int ammotype, int quantity);
 
 /* Weapon attack texts */
@@ -282,20 +281,21 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (ch == vict)
     return;
   
+  if (IS_NPC(ch)) {
+    // Prevents you from surprising someone who's attacking you already.
+    GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
+    GET_MOBALERT(ch) = MALERT_ALERT;
+  }
+
   if (CH_IN_COMBAT(ch))
     return;
   
-  if (IS_NPC(ch)) {
-    // Prevents you from surprising someone who's attacking you already.
-    GET_MOBALERTTIME(ch) = 20;
-    GET_MOBALERT(ch) = MALERT_ALERT;
-  }
-  
   ch->next_fighting = combat_list;
   combat_list = ch;
+  roll_individual_initiative(ch);
+  order_list(TRUE);
   
   // GET_INIT_ROLL(ch) = 0;
-  roll_individual_initiative(ch);
   FIGHTING(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
@@ -349,8 +349,9 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
   
   ch->next_fighting = combat_list;
   combat_list = ch;
-  
   roll_individual_initiative(ch);
+  order_list(TRUE);
+  
   FIGHTING_VEH(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
   
@@ -2193,18 +2194,6 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
 IS_RANGED(GET_EQ(ch, WEAR_WIELD))) || (GET_EQ(ch, WEAR_HOLD) && \
 GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON && IS_RANGED(GET_EQ(ch, WEAR_HOLD))))
 
-#define IS_SINGLE(eq)  (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-GET_OBJ_VAL(eq, 11) == MODE_SS)
-
-#define IS_SEMI(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-GET_OBJ_VAL(eq, 11) == MODE_SA)
-
-#define IS_BURST(eq)   (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-GET_OBJ_VAL(eq, 11) == MODE_BF)
-
-#define IS_AUTO(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-GET_OBJ_VAL(eq, 11) == MODE_FA)
-
 bool would_become_killer(struct char_data * ch, struct char_data * vict)
 {
   char_data *attacker;
@@ -2833,8 +2822,8 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
       CAN_WEAR(GET_EQ(ch, WEAR_HOLD), ITEM_WEAR_WIELD))
     return 0;
   
-  int mod = 0, real_obj;
-  for (int i = ACCESS_LOCATION_TOP; !mod && i <= ACCESS_LOCATION_UNDER; i++) {
+  int real_obj;
+  for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
     // If they have a smartlink attached:
     if (GET_OBJ_VAL(weapon, i) > 0
         && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
@@ -2842,9 +2831,9 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
         && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK) {
       
       // Iterate through their cyberware and look for a matching smartlink.
-      for (obj = ch->cyberware; !mod && obj; obj = obj->next_content) {
+      for (obj = ch->cyberware; obj; obj = obj->next_content) {
         if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK) {
-          if (GET_ACCESSORY_TYPE(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
+          if (GET_CYBERWARE_RATING(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
             // Smartlink II with compatible cyberware.
             return 3;
           }
@@ -2852,8 +2841,7 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
           return 2;
         }
       }
-      if (!mod 
-          && GET_EQ(ch, WEAR_EYES) 
+      if (GET_EQ(ch, WEAR_EYES) 
           && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY 
           && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE) {
         // Smartlink plus goggle found-- half value.
@@ -2862,12 +2850,12 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
     }
   }
   
-  if (mod < 1 && AFF_FLAGGED(ch, AFF_LASER_SIGHT)) {
+  if (AFF_FLAGGED(ch, AFF_LASER_SIGHT)) {
     // Lasers apply when no smartlink was found.
-    mod = 1;
+    return 1;
   }
   
-  return mod;
+  return 0;
 }
 
 int check_recoil(struct char_data *ch, struct obj_data *gun)
@@ -3598,6 +3586,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
 //todo: single shot weaps can only be fired once per combat phase-- what does this mean for us?
 
+#ifdef USE_OLD_HIT
 struct combat_data *populate_cyberware(struct char_data *ch, struct combat_data *cd) {
   // Pull info on all the character's active cyberware.
   for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
@@ -3648,20 +3637,6 @@ struct combat_data *populate_cyberware(struct char_data *ch, struct combat_data 
     }
   }
   return cd;
-}
-
-bool weapon_has_bayonet(struct obj_data *weapon) {
-  // Precondition: Weapon must exist, must be a weapon-class item, and must be a gun.
-  if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))))
-    return FALSE;
-
-  long attach_obj;
-  struct obj_data *attach_proto = NULL;
-  
-  return (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)
-          && (attach_obj = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon))) > 0
-          && (attach_proto = &obj_proto[attach_obj])
-          && GET_OBJ_VAL(attach_proto, 1) == ACCESS_BAYONET);
 }
 
 int get_melee_skill(struct combat_data *cd) {
@@ -3928,9 +3903,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->modifiers[COMBAT_MOD_DISTANCE] += 2;
     
     // Setup: Determine the burst value of the weapon.
-    if (IS_BURST(att->weapon))
+    if (WEAPON_IS_BF(att->weapon))
       att->burst_count = 3;
-    else if (IS_AUTO(att->weapon))
+    else if (WEAPON_IS_FA(att->weapon))
       att->burst_count = GET_OBJ_TIMER(att->weapon);
     
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
@@ -4528,6 +4503,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
 }
+#endif
 
 int find_sight(struct char_data *ch)
 {
@@ -5122,6 +5098,7 @@ void roll_individual_initiative(struct char_data *ch)
     AFF_FLAGS(ch).RemoveBit(AFF_SURPRISE);
   if (AWAKE(ch))
   {
+    // TODO: SR3: While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
     if (AFF_FLAGGED(ch, AFF_PILOT))
       GET_INIT_ROLL(ch) = dice(1, 6) + GET_REA(ch);
     else
@@ -5445,7 +5422,8 @@ void perform_violence(void)
           AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
         } else {
           send_to_char(ch, "You attempt to close the distance!\r\n");
-          act("$n charges towards $N.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
+          act("$n charges towards $N, but $N manages to keep some distance.", FALSE, ch, 0, FIGHTING(ch), TO_NOTVICT);
+          act("$n charges towards you, but you manage to keep some distance.", FALSE, ch, 0, FIGHTING(ch), TO_VICT);
           // TODO: Is it really supposed to cost an extra init pass?
           // GET_INIT_ROLL(ch) -= 10;
           continue;
@@ -5481,7 +5459,9 @@ void perform_violence(void)
           GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD),
           GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
           NULL);
-      if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) && FIGHTING(ch))
+          
+      // TODO: Two-weapon fighting for melee weapons (see CC p96 for off-hand weapons).
+      if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) && FIGHTING(ch) && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD))))
         hit(ch,
             FIGHTING(ch),
             GET_EQ(ch, WEAR_HOLD),
@@ -5504,34 +5484,42 @@ void order_list(bool first, ...)
   if (combat_list == NULL)
     return;
   
-  for (one = two; one; previous = NULL, one = next) {
-    next = one->next_fighting;
-    for (two = combat_list; two && two->next_fighting; previous = two,
-         two = two->next_fighting) {
+  // Some kind of bastardized bubble sort. Doesn't work unless we...
+  bool made_changes;
+  do {
+    made_changes = FALSE;
+    previous = NULL;
+    for (two = combat_list; 
+         two && two->next_fighting; 
+         two = two->next_fighting) 
+    {
       if (GET_INIT_ROLL(two->next_fighting) > GET_INIT_ROLL(two)) {
         if (previous)
           previous->next_fighting = two->next_fighting;
         else
           combat_list = two->next_fighting;
+          
         temp = two->next_fighting->next_fighting;
         two->next_fighting->next_fighting = two;
         two->next_fighting = temp;
+        made_changes = TRUE;
       }
+      
+      previous = two;
     }
-  }
+  } while (made_changes);
   
   if (first)
     for (one = combat_list; one; one = next) {
       next = one->next_fighting;
       two = one;
+      // TODO BUG: Since reroll happens when the first person on the list hits zero, and this reorders the list, dist strike adepts fuck up the init passes.
       if (GET_TRADITION(one) == TRAD_ADEPT && GET_POWER(one, ADEPT_QUICK_STRIKE) && GET_PHYSICAL(one) >= 1000 && GET_MENTAL(one) >= 1000) {
         REMOVE_FROM_LIST(one, combat_list, next_fighting);
         one->next_fighting = combat_list;
         combat_list = one;
       }
     }
-  
-  
 }
 
 void order_list(struct char_data *start)
@@ -5898,7 +5886,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     }
     
     // Deduct burstfire ammo. Note that one has already been deducted in has_ammo.
-    if (IS_BURST(wielded) && wielded->contains && GET_OBJ_TYPE(wielded->contains) == ITEM_GUN_MAGAZINE) {
+    if (WEAPON_IS_BF(wielded) && wielded->contains && GET_OBJ_TYPE(wielded->contains) == ITEM_GUN_MAGAZINE) {
       if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) >= 2) {
         burst = 3;
         GET_MAGAZINE_AMMO_COUNT(wielded->contains) -= 2;

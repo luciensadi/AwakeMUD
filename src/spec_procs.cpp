@@ -56,6 +56,7 @@ extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
 extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
 extern int get_paydata_market_minimum(int host_color);
+extern void new_quest(struct char_data *mob, bool force_assignation=FALSE);
 
 extern struct command_info cmd_info[];
 
@@ -588,6 +589,54 @@ SPECIAL(nerp_skills_teacher) {
   return TRUE;
 }
 
+int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
+  int max;
+  
+  if (!ch) {
+    mudlog("SYSERR: Null character received at get_max_skill_for_char.", NULL, LOG_SYSLOG, TRUE);
+    return -1;
+  }
+  
+  // Scope maximums based on teacher type.
+  if (type == NEWBIE)
+    max = NEWBIE_SKILL;
+  else if (type == AMATEUR)
+    max = NORMAL_MAX_SKILL;
+  else if (type == ADVANCED)
+    max = LEARNED_LEVEL;
+  else if (type == GODLY)
+    max = 100;
+  else if (type == LIBRARY)
+    max = LIBRARY_SKILL;
+  else {
+    snprintf(buf, sizeof(buf), "SYSERR: Unknown teacher type %d received at get_max_skill_for_char().", type);
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return -1;
+  }
+  
+  // Override: Newbie teachers teach language at skill 10.
+  if (type == NEWBIE && SKILL_IS_LANGUAGE(skill))
+    return 10;
+    
+  // Clamp maximums.
+  switch (GET_TRADITION(ch)) {
+    case TRAD_MUNDANE:
+      return MIN(max, 12);
+    case TRAD_ADEPT:
+      return MIN(max, 10);
+    default:
+      switch (skill) {
+        case SKILL_CONJURING:
+        case SKILL_SORCERY:
+        case SKILL_SPELLDESIGN:
+        case SKILL_AURA_READING:
+          return MIN(max, 12);
+        default:
+          return MIN(max, 8);
+      }
+  }
+}
+
 SPECIAL(teacher)
 {
   struct char_data *master = (struct char_data *) me;
@@ -641,25 +690,11 @@ SPECIAL(teacher)
     send_to_char("You must be conscious to practice.\r\n", ch);
     return TRUE;
   }
-  if (teachers[ind].type == NEWBIE)
-    max = NEWBIE_SKILL;
-  else if (teachers[ind].type == AMATEUR)
-    max = NORMAL_MAX_SKILL;
-  else if (teachers[ind].type == ADVANCED)
-    max = LEARNED_LEVEL;
-  else if (teachers[ind].type == GODLY)
-    max = 100;
-  else if (teachers[ind].type == LIBRARY)
-    max = LIBRARY_SKILL;
-  else
-    return FALSE;
 
   if (!*argument) {
     bool found_a_skill_already = FALSE;
     for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
-      if (teachers[ind].s[i] > 0) {
-        int old_max = max;
-        
+      if (teachers[ind].s[i] > 0) {        
         // Mundanes can't learn magic skills.
         if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[teachers[ind].s[i]].requires_magic)
           continue;
@@ -676,12 +711,10 @@ SPECIAL(teacher)
         
         else if (GET_ASPECT(ch) == ASPECT_SORCERER && teachers[ind].s[i] == SKILL_CONJURING)
           continue;
-          
         
-        // Override max for language skills.
-        if (teachers[ind].type == NEWBIE && SKILL_IS_LANGUAGE(teachers[ind].s[i])) {
-          max = 10;
-        }
+        // Set our maximum for this skill. Break out on error.
+        if ((max = get_max_skill_for_char(ch, teachers[ind].s[i], teachers[ind].type)) < 0)
+          return FALSE;
         
         if (GET_SKILL_POINTS(ch) > 0) {
           // Add conditional messaging.
@@ -691,18 +724,16 @@ SPECIAL(teacher)
           }
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s\r\n", skills[teachers[ind].s[i]].name);
         }
-        else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1]) {
+        else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1]) 
+        {
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma %d nuyen)\r\n", skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma, %d nuyen)\r\n", skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
                   MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
         }
-        
-        // Reset max.
-        max = old_max;
       }
     }
     // Failure case.
@@ -779,7 +810,8 @@ SPECIAL(teacher)
     return TRUE;
   }
 
-  if (GET_SKILL(ch, skill_num) >= ((teachers[ind].type == NEWBIE && SKILL_IS_LANGUAGE(skill_num)) ? 10 : max)) {
+  max = get_max_skill_for_char(ch, skill_num, teachers[ind].type);
+  if (GET_SKILL(ch, skill_num) >= max) {
     if (max == LIBRARY_SKILL)
       send_to_char("You can't find any books that tell you things you don't already know.\r\n", ch);
     else {
@@ -809,7 +841,7 @@ SPECIAL(teacher)
 
   send_to_char(teachers[ind].msg, ch);
   set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) + 1, TRUE);
-  if (GET_SKILL(ch, skill_num) >= ((teachers[ind].type == NEWBIE && SKILL_IS_LANGUAGE(skill_num)) ? 10 : max))
+  if (GET_SKILL(ch, skill_num) >= max)
     send_to_char("You have learnt all you can here.\r\n", ch);
 
   return TRUE;
@@ -2401,14 +2433,10 @@ SPECIAL(fixer)
     any_one_arg(argument, buf);
     skip_spaces(&argument);
 
-    if (!str_cmp(buf, "cash")) {
+    if (!str_cmp(buf, "cash") || !(credstick = get_first_credstick(ch, "credstick"))) {
       argument = any_one_arg(argument, buf);
       skip_spaces(&argument);
       cash = 1;
-    } else if (!(credstick = get_first_credstick(ch, "credstick"))) {
-      snprintf(arg, sizeof(arg), "%s You need a credstick to do that!", GET_CHAR_NAME(ch));
-      do_say(fixer, arg, 0, SCMD_SAYTO);
-      return TRUE;
     }
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
       send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
@@ -3828,6 +3856,12 @@ SPECIAL(quest_debug_scanner)
       strcat(buf, "Not currently on a quest.\r\n");
     }
     
+    send_to_char(ch, "Last %d quests:\r\n", QUEST_TIMER);
+    for (int i = 0; i < QUEST_TIMER; i++) {
+      if (GET_LQUEST(to, i))
+        send_to_char(ch, "%d) %ld\r\n", i, GET_LQUEST(to, i));
+    }
+    
     send_to_char(buf, ch);
     return TRUE;
   }
@@ -3857,6 +3891,42 @@ SPECIAL(quest_debug_scanner)
       }
     }
     
+    return TRUE;
+  }
+  
+  if (CMD_IS("reload")) {
+    skip_spaces(&argument);
+    if (!*argument) {
+      send_to_char(ch, "Reload quest information on which NPC?\r\n");
+      return TRUE;
+    }
+    
+    if (ch->in_veh)
+      to = get_char_veh(ch, argument, ch->in_veh);
+    else
+      to = get_char_room_vis(ch, argument);
+    
+    if (!to) {
+      send_to_char(ch, "You don't see any '%s' that you can quest-debug here.\r\n", argument);
+      return TRUE;
+    }
+    
+    if (IS_NPC(to)) {
+      if (!(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson)) {
+        send_to_char(ch, "That NPC doesn't have any quest-related information available.\r\n");
+        return TRUE;
+      }
+      
+      act("You roughly slap $N and demand $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_CHAR);
+      act("$n roughly slaps $N and demands that $E pick a new random quest to offer.", FALSE, ch, 0, to, TO_ROOM);
+      new_quest(to);
+      GET_SPARE1(to) = -1;
+      send_to_char(ch, "Now offering quest %ld.", GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
+      
+      return TRUE;
+    }
+    
+    send_to_char(ch, "You can only do that on NPCs, and %s doesn't qualify.\r\n", GET_CHAR_NAME(to));
     return TRUE;
   }
   
@@ -5090,7 +5160,7 @@ SPECIAL(mageskill_hermes)
       break;
   if (!mage)
     return FALSE;
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     for (recom = ch->carrying; recom; recom = recom->next_content)
       if (GET_OBJ_VNUM(recom) == 5735)
@@ -5109,7 +5179,7 @@ SPECIAL(mageskill_hermes)
       } else
         snprintf(arg, sizeof(arg), "%s Why do you want my recommendation?", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
-    } else if (!str_cmp(argument, "chain")) {
+    } else if (str_str(argument, "chain")) {
       if (recom && GET_OBJ_VAL(recom, 0) == GET_IDNUM(ch)) {
         snprintf(arg, sizeof(arg), "%s You already have your letter, come back when you have all the recommendations.", GET_CHAR_NAME(ch));
         do_say(mage, arg, 0, SCMD_SAYTO);
@@ -5117,7 +5187,7 @@ SPECIAL(mageskill_hermes)
         bool dq = FALSE;
         int i = 0;
         for (; i <= QUEST_TIMER; i++)
-          if (GET_LQUEST(ch, i) == 5743)
+          if (GET_LQUEST(ch, i) == QST_MAGE_INTRO)
             dq = TRUE;
         if (dq) {
           snprintf(arg, sizeof(arg), "%s So Harold has sent another one my way has he? Sometimes I don't trust his better judgement, but business is business.", GET_CHAR_NAME(ch));
@@ -5152,7 +5222,7 @@ SPECIAL(mageskill_moore)
       break;
   if (!mage)
     return FALSE;
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "recommendation"))
       return(FALSE);
@@ -5186,7 +5256,7 @@ SPECIAL(mageskill_herbie)
       break;
   if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
     return FALSE;
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "recommendation"))
       return(FALSE);
@@ -5231,7 +5301,7 @@ SPECIAL(mageskill_anatoly)
 {
   struct char_data *mage = (struct char_data *) me;
   struct obj_data *recom = NULL;
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "recommendation"))
       return FALSE;
@@ -5291,7 +5361,7 @@ SPECIAL(mageskill_nightwing)
     GET_SPARE1(mage) = 1;
     return TRUE;
   }
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "recommendation"))
       return FALSE;
@@ -5330,7 +5400,7 @@ SPECIAL(mageskill_trainer)
   struct obj_data *chain = NULL;
   int i;
   
-  if (CMD_IS("say") || CMD_IS("'")) {
+  if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "training"))
       return FALSE;
