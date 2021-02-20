@@ -2392,7 +2392,7 @@ void wear_message(struct char_data * ch, struct obj_data * obj, int where)
                                 "You wear $p around your waist."},
 
                                {"$n puts $p around $s thigh.",
-                                "You put $p around your thigh"},
+                                "You put $p around your thigh."},
 
                                {"$n puts $p around $s thigh.",
                                 "You put $p around your thigh."},
