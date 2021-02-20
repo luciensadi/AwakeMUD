@@ -283,6 +283,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       send_to_char(ch, "%s is already destroyed, better find something else to %s.\r\n", GET_VEH_NAME(veh), cmdname);
       return TRUE;
     }
+    
     if (FIGHTING_VEH(ch)) {
       if (FIGHTING_VEH(ch) == veh) {
         send_to_char(ch, "But you're already attacking it.\r\n");
@@ -291,6 +292,11 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         // They're switching targets.
         stop_fighting(ch);
       }
+    }
+    
+    if (FIGHTING(ch)) {
+      send_to_char("You're already in combat!\r\n", ch);
+      return TRUE;
     }
     
     if (veh->owner && GET_IDNUM(ch) != veh->owner) {
@@ -317,30 +323,28 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       // send_to_char(KILLER_FLAG_MESSAGE, ch);
     }
     
-    if (!FIGHTING(ch)) {
-      if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
-        draw_weapon(ch);
-      
-      if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
-        send_to_char(ch, "You aim %s at %s!\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)), GET_VEH_NAME(veh));
-        snprintf(buf, sizeof(buf), "%s aims %s right at your ride!\r\n", GET_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
-        send_to_veh(buf, veh, NULL, TRUE);
-      } else if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) {
-        send_to_char(ch, "You aim %s at %s!\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_HOLD)), GET_VEH_NAME(veh));
-        snprintf(buf, sizeof(buf), "%s aims %s right at your ride!\r\n", GET_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_HOLD)));
-        send_to_veh(buf, veh, NULL, TRUE);
-      } else {
-        send_to_char(ch, "You prepare to take a swing at %s!\r\n", GET_VEH_NAME(veh));
-        if (get_speed(veh) > 10)
-          snprintf(buf, sizeof(buf), "%s throws %sself out in front of you!\r\n", GET_NAME(ch), thrdgenders[(int)GET_SEX(ch)]);
-        else
-          snprintf(buf, sizeof(buf), "%s winds up to take a swing at your ride!\r\n", GET_NAME(ch));
-        send_to_veh(buf, veh, NULL, TRUE);
-      }
-      
-      set_fighting(ch, veh);
-      return TRUE;
+    if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
+      draw_weapon(ch);
+    
+    if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
+      send_to_char(ch, "You aim %s at %s!\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)), GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "%s aims %s right at your ride!\r\n", GET_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
+      send_to_veh(buf, veh, NULL, TRUE);
+    } else if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) {
+      send_to_char(ch, "You aim %s at %s!\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_HOLD)), GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "%s aims %s right at your ride!\r\n", GET_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_HOLD)));
+      send_to_veh(buf, veh, NULL, TRUE);
+    } else {
+      send_to_char(ch, "You prepare to take a swing at %s!\r\n", GET_VEH_NAME(veh));
+      if (get_speed(veh) > 10)
+        snprintf(buf, sizeof(buf), "%s throws %sself out in front of you!\r\n", GET_NAME(ch), thrdgenders[(int)GET_SEX(ch)]);
+      else
+        snprintf(buf, sizeof(buf), "%s winds up to take a swing at your ride!\r\n", GET_NAME(ch));
+      send_to_veh(buf, veh, NULL, TRUE);
     }
+    
+    set_fighting(ch, veh);
+    return TRUE;
   }
   if (vict == ch)
   {

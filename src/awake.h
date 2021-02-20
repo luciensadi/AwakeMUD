@@ -2082,8 +2082,9 @@ enum {
 #define COMBAT_MOD_REACH           8
 #define COMBAT_MOD_VEHICLE_DAMAGE  9
 #define COMBAT_MOD_DEFENDER_MOVING 10
+#define COMBAT_MOD_IN_MELEE_COMBAT 11
 
-#define NUM_COMBAT_MODIFIERS       11
+#define NUM_COMBAT_MODIFIERS       12
 // End new combat modifiers.
 
 // Locations, to remove the magic numbers from the code.
@@ -2258,6 +2259,8 @@ enum {
 #define TOP_OF_TEMPLATE_ITEMS       121
 
 #define OBJ_BLANK_MAGAZINE          127
+
+#define QST_MAGE_INTRO              5743
 
 // Misc defines from spec_procs.cpp
 #define LIBRARY_SKILL    3
