@@ -1396,8 +1396,10 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
             pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges));
   }
   
-  if (!IS_NPC(k) && access_level(ch, LVL_ADMIN))
+  if (!IS_NPC(k) && access_level(ch, LVL_ADMIN)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n  Multiplier: ^c%.2f^n\r\n", GET_EMAIL(k), (float) GET_CHAR_MULTIPLIER(k) / 100);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k));
+  }
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Title: %s\r\n", (k->player.title ? k->player.title : "<None>"));
 
