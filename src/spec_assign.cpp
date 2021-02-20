@@ -576,6 +576,20 @@ void assign_mobiles(void)
   SPECIAL(axehead);
   SPECIAL(chargen_docwagon_checker);
   SPECIAL(fatcop);
+  
+#ifdef USE_PRIVATE_CE_WORLD
+  SPECIAL(marksmanship_first);
+  SPECIAL(marksmanship_second);
+  SPECIAL(marksmanship_third);
+  SPECIAL(marksmanship_fourth);
+  SPECIAL(marksmanship_master);
+  
+  ASSIGNMOB(22870, marksmanship_first);
+  ASSIGNMOB(4101, marksmanship_second);
+  ASSIGNMOB(24501, marksmanship_third);
+  ASSIGNMOB(3722, marksmanship_fourth);
+  ASSIGNMOB(5914, marksmanship_master);
+#endif
 
   /* trainers */
   for (i = 0; trainers[i].vnum != 0; i++)

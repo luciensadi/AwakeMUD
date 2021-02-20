@@ -104,7 +104,7 @@ ACMD(do_pockets) {
             continue;
           
           // Unfinished box.
-          if (GET_AMMOBOX_CREATOR(ammobox))
+          if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) > 0)
             continue;
           
           found_something |= ammobox_to_bulletpants(ch, ammobox);
@@ -129,7 +129,7 @@ ACMD(do_pockets) {
         }
         
         // Unfinished box.
-        if (GET_AMMOBOX_CREATOR(ammobox)) {
+        if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) > 0) {
           send_to_char(ch, "You'll need to finish building %s first.\r\n", GET_OBJ_NAME(ammobox));
           return;
         }
@@ -290,7 +290,7 @@ ACMD(do_pockets) {
     }
     
     // Unfinished box.
-    if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) || GET_AMMOBOX_TIME_TO_COMPLETION(ammobox) || GET_AMMOBOX_CREATOR(ammobox)) {
+    if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) > 0 || GET_AMMOBOX_TIME_TO_COMPLETION(ammobox)) {
       send_to_char(ch, "You'll need to finish building %s first.\r\n", GET_OBJ_NAME(ammobox));
       return;
     }
@@ -711,7 +711,7 @@ bool ammobox_to_bulletpants(struct char_data *ch, struct obj_data *ammobox) {
     return FALSE;
   }
   
-  if (GET_AMMOBOX_CREATOR(ammobox)) {
+  if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) > 0) {
     mudlog("SYSERR: Unfinished ammobox given to ammobox_to_bulletpants.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }

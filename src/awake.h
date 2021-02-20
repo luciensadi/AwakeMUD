@@ -2203,6 +2203,8 @@ enum {
 #define OBJ_MARKSMAN_LETTER                5962
 #define OBJ_MARKSMAN_BADGE                 5961
 #define OBJ_MAGEBLING                      5734
+#define OBJ_MAGE_LETTER                    5735
+#define OBJ_MODIFIED_BARRET_SNIPER_RIFLE   14636
 
 #define OBJ_CMT_AVATAR                     80004
 #define OBJ_NOVATECH_SIX_SENSORS           17116
@@ -2214,7 +2216,7 @@ enum {
 #define OBJ_TRANSYS_RIFFLE                 1140
 #define OBJ_RENRAKU_BYPASS                 6109
 #define OBJ_FOXFIRE_KITSUNE                1966
-#define OBJ_TRANSYS_ARMOR                 1139
+#define OBJ_TRANSYS_ARMOR                  1139
 #define OBJ_MATRIX_SWORD                   387
 
 #define OBJ_CYB_CERAMIC_BONE_LACING        85066
@@ -2227,9 +2229,9 @@ enum {
 #define OBJ_CYB_SMARTLINK_II 85118
 #define OBJ_CYB_EYE_PACKAGE_LL_TH_FC_ALPHA 566
 
-#define OBJ_BIO_MUSCLE_TONER_III 85811
-#define OBJ_BIO_CEREBRAL_BOOSTER_II 85927
-#define OBJ_BIO_MUSCLE_AUGMENTATION_II 85806
+#define OBJ_BIO_MUSCLE_TONER_III           85811
+#define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
+#define OBJ_BIO_MUSCLE_AUGMENTATION_II     85806
 #define OBJ_BIO_ENHANCED_ARTICULATION      85803
 #define OBJ_BIO_MUSCLE_TONER_IV            85812
 #define OBJ_BIO_TRAUMA_DAMPER              85940
@@ -2239,28 +2241,28 @@ enum {
 
 #define OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC 601
 
-#define BOTTOM_OF_TEMPLATE_ITEMS    106
-#define OBJ_BLANK_OPTICAL_CHIP      106
-#define OBJ_BLANK_PROGRAM_DESIGN    107
-#define OBJ_BLANK_PROGRAM           108
-#define OBJ_BLANK_PHOTO             109
-#define OBJ_ROLL_OF_NUYEN           110
-#define OBJ_PIECE_OF_MAIL           111
-#define OBJ_BLANK_PART_DESIGN       112
-#define OBJ_CUSTOM_CYBERDECK_SHELL  113
-#define OBJ_SHAMANIC_LODGE          114
-#define OBJ_HERMETIC_CIRCLE         115
-#define OBJ_CONJURING_MATERIALS     116
-#define OBJ_BLANK_SPELL_FORMULA     117
-#define OBJ_POCKET_SECRETARY_FOLDER 118
-#define OBJ_NEOPHYTE_SUBSIDY_CARD   119
-#define OBJ_GRAFFITI                120
-#define OBJ_BLANK_AMMOBOX           121
-#define TOP_OF_TEMPLATE_ITEMS       121
+#define BOTTOM_OF_TEMPLATE_ITEMS           106
+#define OBJ_BLANK_OPTICAL_CHIP             106
+#define OBJ_BLANK_PROGRAM_DESIGN           107
+#define OBJ_BLANK_PROGRAM                  108
+#define OBJ_BLANK_PHOTO                    109
+#define OBJ_ROLL_OF_NUYEN                  110
+#define OBJ_PIECE_OF_MAIL                  111
+#define OBJ_BLANK_PART_DESIGN              112
+#define OBJ_CUSTOM_CYBERDECK_SHELL         113
+#define OBJ_SHAMANIC_LODGE                 114
+#define OBJ_HERMETIC_CIRCLE                115
+#define OBJ_CONJURING_MATERIALS            116
+#define OBJ_BLANK_SPELL_FORMULA            117
+#define OBJ_POCKET_SECRETARY_FOLDER        118
+#define OBJ_NEOPHYTE_SUBSIDY_CARD          119
+#define OBJ_GRAFFITI                       120
+#define OBJ_BLANK_AMMOBOX                  121
+#define TOP_OF_TEMPLATE_ITEMS              121
 
-#define OBJ_BLANK_MAGAZINE          127
+#define OBJ_BLANK_MAGAZINE                 127
 
-#define QST_MAGE_INTRO              5743
+#define QST_MAGE_INTRO                     5743
 
 // Misc defines from spec_procs.cpp
 #define LIBRARY_SKILL    3

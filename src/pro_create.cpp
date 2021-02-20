@@ -604,7 +604,6 @@ void update_buildrepair(void)
         GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= 10;
         if (GET_AMMOBOX_INTENDED_QUANTITY(PROG) <= 0) {
           send_to_char(CH, "You have finished building %s.\r\n", GET_OBJ_NAME(PROG));
-          GET_AMMOBOX_CREATOR(PROG) = 0;
           STOP_WORKING(CH);
         } else ammo_test(CH, PROG);
       } else if (AFF_FLAGGED(CH, AFF_SPELLDESIGN) && --GET_OBJ_VAL(PROG, 6) < 1) {

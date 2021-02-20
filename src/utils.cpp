@@ -3041,7 +3041,7 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     return FALSE;
   }
   
-  if (GET_AMMOBOX_CREATOR(from) || GET_AMMOBOX_CREATOR(into)) {
+  if (GET_AMMOBOX_INTENDED_QUANTITY(from) > 0 || GET_AMMOBOX_INTENDED_QUANTITY(into) > 0) {
     mudlog("SYSERR: combine_ammo_boxes received a box that was not yet completed.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }

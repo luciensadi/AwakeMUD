@@ -474,12 +474,12 @@ ACMD(do_put)
     }
     
     // If it's got a creator set, it's not done yet.
-    if (GET_AMMOBOX_CREATOR(cont)) {
+    if (GET_AMMOBOX_INTENDED_QUANTITY(cont) > 0) {
       send_to_char(ch, "%s still has disassembled rounds in it. It needs to be completed first.\r\n", GET_OBJ_NAME(cont));
       return;
     }
     
-    if (GET_AMMOBOX_CREATOR(obj)) {
+    if (GET_AMMOBOX_INTENDED_QUANTITY(obj) > 0) {
       send_to_char(ch, "%s still has disassembled rounds in it. It needs to be completed first.\r\n", GET_OBJ_NAME(obj));
       return;
     }
