@@ -632,7 +632,7 @@ void point_update(void)
           
         // Check worn.
         for (int worn = 0; !has_a_quest_item && worn < NUM_WEARS; worn++)
-          has_a_quest_item = GET_EQ(i, worn) && GET_OBJ_VNUM(GET_EQ(i, worn)) == OBJ_MARKSMAN_BADGE);
+          has_a_quest_item = GET_EQ(i, worn) && GET_OBJ_VNUM(GET_EQ(i, worn)) == OBJ_MARKSMAN_BADGE;
           
         SHOTS_TRIGGERED(i) = (SHOTS_TRIGGERED(i) + 1) % 20;
         
