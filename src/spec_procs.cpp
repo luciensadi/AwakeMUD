@@ -617,6 +617,10 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
   // Override: Newbie teachers teach language at skill 10.
   if (type == NEWBIE && SKILL_IS_LANGUAGE(skill))
     return 10;
+  
+  // Override: Everyone can train negotiation to 12 since it's key in run payouts etc.  
+  if (skill == SKILL_NEGOTIATION)
+    return MIN(max, 12);
     
   // Clamp maximums.
   switch (GET_TRADITION(ch)) {

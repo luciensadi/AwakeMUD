@@ -4449,10 +4449,11 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     struct obj_data *weapon = defender_tests_for_backlash ? def->weapon : att->weapon;
     struct char_data *attacker = defender_tests_for_backlash ? def->ch : att->ch;
     struct char_data *defender = defender_tests_for_backlash ? att->ch : def->ch;
+    int successes = defender_tests_for_backlash ? def->successes : att->successes;
     
     if (weapon)
       log_vfprintf("Checking monowhip test for %s against %s wielding %s.", GET_CHAR_NAME(attacker), GET_CHAR_NAME(defender), weapon ? GET_OBJ_NAME(weapon) : "nothing");
-    if ((damage_total <= 0 || defender_tests_for_backlash)
+    if ((successes <= 0 || defender_tests_for_backlash)
         && weapon 
         && obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) 
     {
