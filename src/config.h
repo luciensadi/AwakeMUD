@@ -121,4 +121,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // Credsticks should generate every 1:X kills, and have X * kill's credits. Setting this too high will cause things like wageslaves having silver credsticks, so be cautious.
 #define CREDSTICK_RARITY_FACTOR 10
 
+// At what point will the Marksman quest trigger?
+#define MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT 2000
+
 #endif

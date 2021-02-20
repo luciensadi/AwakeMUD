@@ -622,7 +622,7 @@ void point_update(void)
         GET_TEMP_ESSLOSS(i) = MAX(0, GET_TEMP_ESSLOSS(i) - 100);
         
 #ifdef USE_PRIVATE_CE_WORLD
-      if (SHOTS_FIRED(i) >= 10000 && SHOTS_TRIGGERED(i) != -1) {
+      if (SHOTS_FIRED(i) >= MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT && SHOTS_TRIGGERED(i) != -1) {
         bool has_a_quest_item = FALSE;
         struct obj_data *tmp = NULL;
         
