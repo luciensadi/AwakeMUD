@@ -841,7 +841,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     ) {
       for (struct obj_data *recom = ch->carrying; recom; recom = recom->next_content) {
         if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER) {
-          strcat(buf, "^Y(Quest)^n ");
+          strcat(buf, "^Y(Skill Quest)^n ");
           break;
         }
       }
@@ -861,7 +861,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     ) {
       for (struct obj_data *recom = ch->carrying; recom; recom = recom->next_content) {
         if (GET_OBJ_VNUM(recom) == OBJ_MARKSMAN_LETTER) {
-          strcat(buf, "^Y(Quest)^n ");
+          strcat(buf, "^Y(Skill Quest)^n ");
           break;
         }
       }

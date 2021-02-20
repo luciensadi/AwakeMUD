@@ -5175,7 +5175,8 @@ SPECIAL(mageskill_hermes)
         recom = read_object(OBJ_MAGEBLING, VIRTUAL);
         obj_to_char(recom, ch);
         GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
-        snprintf(arg, sizeof(arg), "%s Congratulations, you are now a member of the Order. Seek our master at the old Masonic Lodge on Swan Street in Tarislar for training.", GET_CHAR_NAME(ch));
+        act("$N hands you $p.", TRUE, ch, recom, mage, TO_CHAR);
+        snprintf(arg, sizeof(arg), "%s Congratulations, you are now a member of the Order. Seek out the old Masonic Lodge on Swan Street in Tarislar and ask Timothy for training. Make sure you're wearing that chain when you do, otherwise you'll be ignored.", GET_CHAR_NAME(ch));
       } else
         snprintf(arg, sizeof(arg), "%s Why do you want my recommendation?", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
