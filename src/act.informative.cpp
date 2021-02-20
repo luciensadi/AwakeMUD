@@ -77,6 +77,11 @@ extern SPECIAL(mageskill_herbie);
 extern SPECIAL(mageskill_hermes);
 extern SPECIAL(mageskill_anatoly);
 extern SPECIAL(mageskill_nightwing);
+extern SPECIAL(marksmanship_first);
+extern SPECIAL(marksmanship_second);
+extern SPECIAL(marksmanship_third);
+extern SPECIAL(marksmanship_fourth);
+extern SPECIAL(marksmanship_master);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 extern float get_bulletpants_weight(struct char_data *ch);
@@ -823,7 +828,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         strcat(buf, "^Y(Quest)^n ");
       }
     } else if (
-      mob_index[GET_MOB_RNUM(i)].func ==mageskill_moore
+      mob_index[GET_MOB_RNUM(i)].func == mageskill_moore
       || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_moore
       || mob_index[GET_MOB_RNUM(i)].func == mageskill_herbie
       || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_herbie
@@ -835,12 +840,33 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_nightwing
     ) {
       for (struct obj_data *recom = ch->carrying; recom; recom = recom->next_content) {
-        if (GET_OBJ_VNUM(recom) == 5735) {
+        if (GET_OBJ_VNUM(recom) == OBJ_MAGE_LETTER) {
+          strcat(buf, "^Y(Quest)^n ");
+          break;
+        }
+      }
+    } 
+#ifdef USE_PRIVATE_CE_WORLD
+    else if (
+      mob_index[GET_MOB_RNUM(i)].func == marksmanship_first
+      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_first
+      || mob_index[GET_MOB_RNUM(i)].func == marksmanship_second
+      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_second
+      || mob_index[GET_MOB_RNUM(i)].func == marksmanship_third
+      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_third
+      || mob_index[GET_MOB_RNUM(i)].func == marksmanship_fourth
+      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_fourth
+      || mob_index[GET_MOB_RNUM(i)].func == marksmanship_master
+      || mob_index[GET_MOB_RNUM(i)].sfunc == marksmanship_master
+    ) {
+      for (struct obj_data *recom = ch->carrying; recom; recom = recom->next_content) {
+        if (GET_OBJ_VNUM(recom) == OBJ_MARKSMAN_LETTER) {
           strcat(buf, "^Y(Quest)^n ");
           break;
         }
       }
     }
+#endif
     
     if (IS_ASTRAL(ch) || IS_DUAL(ch)) {
       if (IS_ASTRAL(i))
