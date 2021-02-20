@@ -349,7 +349,7 @@ struct combat_data
 
 void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo)
 {
-  int net_successes;
+  int net_successes, successes_for_use_in_monowhip_test_check;
   assert(attacker != NULL);
   assert(victim != NULL);
   
@@ -822,6 +822,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       net_successes = att->successes;
     }
     
+    successes_for_use_in_monowhip_test_check = att->successes;
+    
     if (def->weapon && GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
       // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
       act("Defender wielding non-weapon-- cannot win clash.", FALSE, att->ch, NULL, NULL, TO_ROLLS);
@@ -1013,26 +1015,26 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     damage(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
   } else {
     damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
-  }
   
-  if (damage_total <= 0 || net_successes < 0) {
-    struct obj_data *weapon = net_successes < 0 ? def->weapon : att->weapon;
-    if (weapon && obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) {
-      struct char_data *attacker = net_successes < 0 ? def->ch : att->ch;
-      struct char_data *defender = net_successes < 0 ? att->ch : def->ch;
-    
-      int target = 6 + modify_target(attacker);
-      int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
-      int successes = success_test(skill, target);
-      snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
-      act(rbuf, FALSE, attacker, NULL, NULL, TO_ROLLS);
-      if (successes <= 0) {
-        act("Your monowhip flails out of control, striking you instead of $N!", FALSE, attacker, 0, defender, TO_CHAR);
-        act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
-        int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
+    if (successes_for_use_in_monowhip_test_check <= 0) {
+      struct obj_data *weapon = net_successes < 0 ? def->weapon : att->weapon;
+      if (weapon && obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) {
+        struct char_data *attacker = net_successes < 0 ? def->ch : att->ch;
+        struct char_data *defender = net_successes < 0 ? att->ch : def->ch;
+      
+        int target = 6 + modify_target(attacker);
+        int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
+        int successes = success_test(skill, target);
+        snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
+        act(rbuf, FALSE, attacker, NULL, NULL, TO_ROLLS);
+        if (successes <= 0) {
+          act("Your monowhip flails out of control, striking you instead of $N!", FALSE, attacker, 0, defender, TO_CHAR);
+          act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
+          int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
 
-        damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL);
-        return;
+          damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL);
+          return;
+        }
       }
     }
   }
