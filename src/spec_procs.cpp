@@ -2433,14 +2433,10 @@ SPECIAL(fixer)
     any_one_arg(argument, buf);
     skip_spaces(&argument);
 
-    if (!str_cmp(buf, "cash")) {
+    if (!str_cmp(buf, "cash") || !(credstick = get_first_credstick(ch, "credstick"))) {
       argument = any_one_arg(argument, buf);
       skip_spaces(&argument);
       cash = 1;
-    } else if (!(credstick = get_first_credstick(ch, "credstick"))) {
-      snprintf(arg, sizeof(arg), "%s You need a credstick to do that!", GET_CHAR_NAME(ch));
-      do_say(fixer, arg, 0, SCMD_SAYTO);
-      return TRUE;
     }
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
       send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
@@ -3860,6 +3856,12 @@ SPECIAL(quest_debug_scanner)
       strcat(buf, "Not currently on a quest.\r\n");
     }
     
+    send_to_char(ch, "Last %d quests:\r\n", QUEST_TIMER);
+    for (int i = 0; i < QUEST_TIMER; i++) {
+      if (GET_LQUEST(to, i))
+        send_to_char(ch, "%d) %ld\r\n", i, GET_LQUEST(to, i));
+    }
+    
     send_to_char(buf, ch);
     return TRUE;
   }
@@ -5177,7 +5179,7 @@ SPECIAL(mageskill_hermes)
       } else
         snprintf(arg, sizeof(arg), "%s Why do you want my recommendation?", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
-    } else if (!str_cmp(argument, "chain")) {
+    } else if (str_str(argument, "chain")) {
       if (recom && GET_OBJ_VAL(recom, 0) == GET_IDNUM(ch)) {
         snprintf(arg, sizeof(arg), "%s You already have your letter, come back when you have all the recommendations.", GET_CHAR_NAME(ch));
         do_say(mage, arg, 0, SCMD_SAYTO);
