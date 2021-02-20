@@ -1846,10 +1846,10 @@ int process_input(struct descriptor_data *t) {
     
     if (*tmp == '!' && t->connected != CON_CNFPASSWD )
       strcpy(tmp, t->last_input);
-    else if (*tmp == '|' && t->connected != CON_CNFPASSWD ) {
+/*    else if (*tmp == '|' && t->connected != CON_CNFPASSWD ) {
       if (!(failed_subst = perform_subst(t, t->last_input, tmp)))
-        strcpy(t->last_input, tmp);
-    } else
+        strcpy(t->last_input, tmp); */  // I don't know what the hell this was intended to do, but it comes out mangled when I use it. Disabling. -- LS.
+    else
       strlcpy(t->last_input, tmp, MAX_INPUT_LENGTH);
     assert(t->last_input_canary == 31337);
     
@@ -2008,9 +2008,10 @@ void close_socket(struct descriptor_data *d)
   if (d->character)
   {
     /* added to Free up temporary editing constructs */
-    if (d->connected == CON_PLAYING || d->connected == CON_PART_CREATE || (d->connected >= CON_SPELL_CREATE &&
-                                                                           d->connected <= CON_HELPEDIT &&
-                                                                           d->connected != CON_ASKNAME)) {
+    if (d->connected == CON_PLAYING 
+        || d->connected == CON_PART_CREATE 
+        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_HELPEDIT && d->connected != CON_ASKNAME)) 
+    {
       if (d->connected == CON_VEHCUST)
         d->edit_veh = NULL;
       if (d->connected == CON_POCKETSEC) {
@@ -2046,6 +2047,7 @@ void close_socket(struct descriptor_data *d)
           DELETE_AND_NULL(one);
         }
       d->character->spells = NULL;
+      
       Mem->DeleteCh(d->character);
     }
   }

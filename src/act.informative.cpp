@@ -72,6 +72,11 @@ extern SPECIAL(terell_davis);
 extern SPECIAL(hacker);
 extern SPECIAL(receptionist);
 extern SPECIAL(fixer);
+extern SPECIAL(mageskill_moore);
+extern SPECIAL(mageskill_herbie);
+extern SPECIAL(mageskill_hermes);
+extern SPECIAL(mageskill_anatoly);
+extern SPECIAL(mageskill_nightwing);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 extern float get_bulletpants_weight(struct char_data *ch);
@@ -816,6 +821,24 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (i->mob_specials.quest_id) {
       if (i->mob_specials.quest_id == GET_IDNUM(ch)) {
         strcat(buf, "^Y(Quest)^n ");
+      }
+    } else if (
+      mob_index[GET_MOB_RNUM(i)].func ==mageskill_moore
+      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_moore
+      || mob_index[GET_MOB_RNUM(i)].func == mageskill_herbie
+      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_herbie
+      || mob_index[GET_MOB_RNUM(i)].func == mageskill_hermes
+      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_hermes
+      || mob_index[GET_MOB_RNUM(i)].func == mageskill_anatoly
+      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_anatoly
+      || mob_index[GET_MOB_RNUM(i)].func == mageskill_nightwing
+      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_nightwing
+    ) {
+      for (struct obj_data *recom = ch->carrying; recom; recom = recom->next_content) {
+        if (GET_OBJ_VNUM(recom) == 5735) {
+          strcat(buf, "^Y(Quest)^n ");
+          break;
+        }
       }
     }
     
