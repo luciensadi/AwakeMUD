@@ -2958,7 +2958,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
         w_type = TYPE_SLASH;
         break;
       case WEAP_WHIP:
-        w_type = TYPE_POUND;
+        w_type = TYPE_WHIP;
         break;
       case WEAP_CLUB:
       case WEAP_GLOVE:
