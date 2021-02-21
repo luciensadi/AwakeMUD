@@ -88,6 +88,10 @@ extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute
 extern float get_bulletpants_weight(struct char_data *ch);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 
+#ifdef USE_PRIVATE_CE_WORLD
+  extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
+#endif
+
 extern struct teach_data teachers[];
 
 extern const char *pc_readable_extra_bits[];
