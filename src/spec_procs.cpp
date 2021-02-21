@@ -4033,6 +4033,7 @@ SPECIAL(multnomah_gate) {
     if (!PLR_FLAGGED(ch, PLR_VISA)) {
       if (access_level(ch, LVL_BUILDER)) {
         send_to_char("You don't even bother making eye contact with the guard as you head towards the gate. Rank hath its privileges.\r\n", ch);
+        act("$n doesn't even bother making eye contact with the guard as $e heads towards the gate. Rank hath its privileges.\r\n", TRUE, ch, 0, 0, TO_ROOM);
       } else {
         send_to_char("The gate refuses to open for you. Try showing the guard your visa.\r\n", ch);
         return TRUE;
@@ -4041,7 +4042,7 @@ SPECIAL(multnomah_gate) {
     
     if (ch->in_veh) {
       for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
-        if (vict != ch && !PLR_FLAGGED(vict, PLR_VISA) && !IS_NPC(vict)) {
+        if (vict != ch && !PLR_FLAGGED(vict, PLR_VISA) && !IS_NPC(vict) && !access_level(ch, LVL_BUILDER)) {
           send_to_char("The guards won't open the gate until everyone has shown their visas.\r\n", ch);
           return TRUE;
         }
