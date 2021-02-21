@@ -583,12 +583,14 @@ void assign_mobiles(void)
   SPECIAL(marksmanship_third);
   SPECIAL(marksmanship_fourth);
   SPECIAL(marksmanship_master);
+  SPECIAL(marksmanship_trainer);
 
   ASSIGNMOB(22870, marksmanship_first);
   ASSIGNMOB(4101, marksmanship_second);
   ASSIGNMOB(24501, marksmanship_third);
   ASSIGNMOB(3722, marksmanship_fourth);
   ASSIGNMOB(5914, marksmanship_master);
+  ASSIGNMOB(779, marksmanship_trainer);
 #endif
 
   /* trainers */

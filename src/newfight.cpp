@@ -959,13 +959,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
       else
         att->ranged->power -= GET_LEVEL(def->ch) * 2;
-      att->ranged->power = MAX(2, att->melee->power);
+      att->ranged->power = MAX(2, att->ranged->power);
     } else {
-      if (att->ranged->power <= GET_LEVEL(def->ch) * 2)
-        combat_message(att->ch, def->ch, att->weapon, 0, 0);
+      if (att->melee->power <= GET_LEVEL(def->ch) * 2)
+        damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
       else
         att->melee->power -= GET_LEVEL(def->ch) * 2;
-      att->melee->power = MAX(2, att->ranged->power);
+      att->melee->power = MAX(2, att->melee->power);
     }
   }
   

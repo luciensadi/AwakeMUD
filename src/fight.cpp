@@ -3158,6 +3158,11 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   struct room_data *ch_room = NULL, *vict_room = NULL;
   rnum_t room1 = 0, room2 = 0, rnum = 0;
   
+  if (weapon == NULL) {
+    mudlog("SYSERR: Null weapon in combat_message()!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   if (burst <= 1) {
     if (GET_OBJ_VAL(weapon, 4) == SKILL_SHOTGUNS || GET_OBJ_VAL(weapon, 4) == SKILL_ASSAULT_CANNON)
       strcpy(buf, "single shell from $p");
