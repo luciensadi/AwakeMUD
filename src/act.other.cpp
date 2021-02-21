@@ -1649,6 +1649,15 @@ ACMD(do_eject)
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_WIELD)->contains) {
     struct obj_data *magazine = GET_EQ(ch, WEAR_WIELD)->contains;
     
+    if (GET_OBJ_TYPE(magazine) != ITEM_GUN_MAGAZINE) {
+      send_to_char("^YSomething has gone really wrong.^n Staff have been automatically alerted, but you should DM Lucien on Discord as well. Do not junk or otherwise get rid of this weapon, it has stuff in it that's not a magazine!\r\n", ch);
+      snprintf(buf, sizeof(buf), "^RSYSERR^g: Stranded objects in %s's %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      const char *ptr = generate_new_loggable_representation(GET_EQ(ch, WEAR_WIELD));
+      mudlog(ptr, ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+    
     // Strip out the ammo and put it in your bullet pants, then destroy the mag.
     update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
     obj_from_obj(magazine);
