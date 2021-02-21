@@ -23,6 +23,8 @@ extern void damage_equip(struct char_data *ch, struct char_data *vict, int power
 extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
 extern void check_killer(struct char_data * ch, struct char_data * vict);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
+extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
+extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 
 bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
 
@@ -687,6 +689,17 @@ void magic_perception(struct char_data *ch, int force, int spell)
       if (IS_DUAL(vict) || IS_ASTRAL(vict))
         act("You notice $n manipulating the astral plane.", FALSE, ch, 0, vict, TO_VICT);
       else act("You notice $n performing magic.", TRUE, ch, 0, vict, TO_VICT);
+      
+#ifdef GUARDS_ATTACK_MAGES
+      // Guards and fighters don't like people casting magic around them.
+      if (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_GUARD) 
+                           || mob_is_aggressive(vict, TRUE)
+                           || GET_MOBALERT(vict) == MALERT_ALARM)) 
+      {
+        send_mob_aggression_warnings(ch, vict);
+        set_fighting(vict, ch);
+      }
+#endif
     }
   }
 }
