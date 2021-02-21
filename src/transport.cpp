@@ -2027,7 +2027,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
   
   create_linked_exit(ferry, to, room, from, "extend_walkway_st");
   
-  send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
+  send_to_room("The Seattle ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[ferry]);
 }
 void contract_walkway_st(int ferry, int to, int room, int from)
@@ -2037,7 +2037,7 @@ void contract_walkway_st(int ferry, int to, int room, int from)
 
   delete_linked_exit(ferry, to, room, from, "contract_walkway_st");
   
-  send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
+  send_to_room("The walkway recedes, and the Seattle ferry departs.\r\n", &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
 
@@ -2333,7 +2333,7 @@ void extend_walkway(int ferry, int to, int room, int from)
   
   create_linked_exit(ferry, to, room, from, "extend_walkway");
   
-  send_to_room("The ferry docks, and the walkway extends.\r\n", &world[room]);
+  send_to_room("The Bradenton ferry docks, and the walkway extends.\r\n", &world[room]);
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[ferry]);
 }
 
@@ -2344,7 +2344,7 @@ void contract_walkway(int ferry, int to, int room, int from)
   
   delete_linked_exit(ferry, to, room, from, "contract_walkway");
   
-  send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
+  send_to_room("The walkway recedes, and the Bradenton ferry departs.\r\n", &world[room]);
   send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
 

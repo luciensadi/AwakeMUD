@@ -12,39 +12,42 @@
  ^cD)^n Griefing (repeatedly killing a target that is not attacking you) is not allowed. This explicitly includes, but isn't limited to, spawncamping them at the Docwagon areas.
  ^cE)^n PKing in a way that's explicitly intended to destroy gear is not allowed.
 
-^W3)^C Cheating^n
+^W3)^C Underage Characters^n
+ ^cA)^n All characters must be aged 18 or older. Players found to be engaging in adult scenes with underaged characters will be banned.
+
+^W4)^C Cheating^n
  ^cA)^n Cheating is defined with common sense, if you don't have it, you don't belong.
  ^cB)^n Bug exploitation: Those found exploiting bugs for personal gain, or other reasons will be dealt with accordingly.
  ^cC)^n Code-base exploitation: Those found exploiting limitations or what not in the code base will be dealt with appropriately.
 
-^W4)^C Mudbotting^n
+^W5)^C Mudbotting^n
  ^cA)^n Botting is illegal, it's strictly powergaming supportive and we do not support powergaming, therefore, persons found MUD-Botting will be dealt with accordingly.
  ^cB)^n Setting up triggers to act while you are away from the computer (build lists for automated deck building/spell designing etc) is illegal. This includes anything that periodically sends commands to the MUD. You will not time out if you are engaged in something that allows you to stay AFK for long periods of times.
 
-^W5)^C Blacklisting^n
+^W6)^C Blacklisting^n
  ^cA)^n Blacklisting removes major forms of advancement and makes playing the MUD a lot harder. Staff will award you the blacklist flag for the following reasons:
  ^c  x)^n PK without a valid reason. "My character is a hunter/psycho" is NOT a valid reason.
  ^c  y)^n Attacking player vehicles outside of situations that require it. Eg. Being attacked by the vehicle.
  ^c  z)^n Taking up OOC grievances through IC means. Eg. Hunting down characters ICly just because you don't like the player who plays them.
 
-^W6)^C Restrings^n
+^W7)^C Restrings^n
  ^cA)^n Items or vehicles must be restrung to something of similar type as the original object. Failure to do so will result in you forfeiting ownership and karma will not be refunded.
 
-^W7)^C Permadeath^n
+^W8)^C Permadeath^n
  ^cA)^n Permadeath decisions are always voluntary on the part of the victim of permadeath. Permadeath is purely optional.
  ^cB)^n You cannot refuse to permadeath if you agree to go on a run where permadeath is a possibility. However, in order for permadeath to be a possibility on the run, the organizer must clearly state this before the run begins.
 
-^W8)^C Impersonation^n
+^W9)^C Impersonation^n
  ^cA)^n Impersonating staff, NPCs, or players with the customize command is a breach of Awake policy. Staff may ask you to change your descriptions for any given reason. Descriptions should be appropriate for your character.
 
-^W9)^C Authority^n
+^W10)^C Authority^n
  ^cA)^n Staff members' word is final, no argument.
 
-^W10)^C Limitations on Extra-MUD Authority^n
+^W11)^C Limitations on Extra-MUD Authority^n
  ^cA)^n Staff are not expected to adjudicate things that happened outside of the MUD. We ^YHIGHLY^n recommend keeping all communication with other players to the MUD. Due to the ease of access to text file editing, Photoshop, the Discord command console, etc, we will not accept screenshots or submissions from outside sources as evidence. The MUD retains necessary information to punish bad behavior.
  ^cB)^n If you feel you are being targeted or otherwise harassed outside of the MUD, we recommend you cease contact with the targeting individual and report it to any necessary authorities.
 
-^W11)^C Policy Addendums^n
+^W12)^C Policy Addendums^n
  ^cA)^n Anything written as policy in a help file or the message of the day (type ^WMOTD^n to read)^n is considered policy in addendum to this file.
 
 ++ All policies are subject to change without notice.

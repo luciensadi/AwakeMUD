@@ -2828,6 +2828,10 @@ ACMD(do_examine)
               GET_OBJ_VAL(tmp_object, 1));
     }
     
+#ifdef USE_PRIVATE_CE_WORLD
+    display_secret_info_about_object(ch, tmp_object);
+#endif
+    
     if (GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER ||
         (GET_OBJ_TYPE(tmp_object) == ITEM_WORN && tmp_object->contains)) {
       if (!tmp_object->contains)
