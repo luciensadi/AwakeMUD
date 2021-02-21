@@ -1448,6 +1448,8 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   door = ch->in_room;
   if (drag)
     snprintf(buf2, sizeof(buf2), "$n is dragged into %s.\r\n", GET_VEH_NAME(found_veh));
+  else if (found_veh->type == VEH_BIKE)
+    snprintf(buf2, sizeof(buf2), "$n gets on %s.\r\n", GET_VEH_NAME(found_veh));
   else
     snprintf(buf2, sizeof(buf2), "$n climbs into %s.\r\n", GET_VEH_NAME(found_veh));
   act(buf2, FALSE, ch, 0, 0, TO_ROOM);
@@ -1456,9 +1458,15 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   if (drag)
     act("$n is dragged in.", FALSE, ch, 0, 0, TO_VEH);
   else {
-    act("$n climbs in.", FALSE, ch, 0, 0, TO_VEH);
-    send_to_char(ch, "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
-    GET_POS(ch) = POS_SITTING;
+    if (found_veh->type == VEH_BIKE) {
+      act("$n gets on.", FALSE, ch, 0, 0, TO_VEH);
+      send_to_char(ch, "You get on %s.\r\n", GET_VEH_NAME(found_veh));
+      GET_POS(ch) = POS_SITTING;
+    } else {
+      act("$n climbs in.", FALSE, ch, 0, 0, TO_VEH);
+      send_to_char(ch, "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
+      GET_POS(ch) = POS_SITTING;
+    }
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
   for (k = ch->followers; k; k = next)
