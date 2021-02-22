@@ -51,6 +51,7 @@ ACMD_CONST(do_say);
 SPECIAL(shop_keeper);
 SPECIAL(spraypaint);
 SPECIAL(johnson);
+SPECIAL(anticoagulant);
 extern char *how_good(int skill, int percent);
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern void obj_magic(struct char_data * ch, struct obj_data * obj, char *argument);
@@ -737,8 +738,19 @@ ACMD(do_use)
       GET_OBJ_VAL(obj, 4) = 0;
     }
     return;
-  } else if (GET_OBJ_TYPE(obj) == ITEM_DRUG)
+  } else if (GET_OBJ_TYPE(obj) == ITEM_DRUG) {
     do_drug_take(ch, obj);
+  } else if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == anticoagulant) {
+    for (struct obj_data *cyber = ch->bioware; cyber; cyber = cyber->next_content) {
+      if (GET_OBJ_VAL(cyber, 0) == BIO_PLATELETFACTORY) {
+        GET_OBJ_VAL(cyber, 5) = 36;
+        GET_OBJ_VAL(cyber, 6) = 0;
+        break;
+      }
+    }
+    send_to_char("You take the aspirin.\r\n", ch);
+    extract_obj(obj);
+  }
   else send_to_char("You can't do anything different with that.\r\n", ch);
 }
 
@@ -1520,10 +1532,17 @@ ACMD(do_reload)
               GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
               GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
               if (GET_AMMOBOX_QUANTITY(i) == 0 && (!i->restring || !(*i->restring))) {
-                send_to_char(ch, "You insert %d rounds of ammunition into %s, then junk the empty %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)), GET_OBJ_NAME(i));
+                send_to_char(ch, "You insert %d %s into %s, then junk the empty %s.\r\n", 
+                             max, 
+                             get_ammo_representation(GET_AMMOBOX_WEAPON(i), GET_AMMOBOX_TYPE(i), max),
+                             decapitalize_a_an(GET_OBJ_NAME(m)), 
+                             GET_OBJ_NAME(i));
                 extract_obj(i);
               } else {
-                send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, decapitalize_a_an(GET_OBJ_NAME(m)));
+                send_to_char(ch, "You insert %d %s into %s.\r\n", 
+                             max, 
+                             get_ammo_representation(GET_AMMOBOX_WEAPON(i), GET_AMMOBOX_TYPE(i), max),
+                             decapitalize_a_an(GET_OBJ_NAME(m)));
               }
               return;
             }            
@@ -1655,6 +1674,7 @@ ACMD(do_eject)
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
       const char *ptr = generate_new_loggable_representation(GET_EQ(ch, WEAR_WIELD));
       mudlog(ptr, ch, LOG_SYSLOG, TRUE);
+      delete [] ptr;
       return;
     }
     

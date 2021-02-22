@@ -29,7 +29,7 @@ extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
-extern void auto_repair_obj(struct obj_data *obj);
+extern void auto_repair_obj(struct obj_data *obj, const char *source);
 
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
@@ -96,6 +96,7 @@ bool House_load(struct house_control_rec *house)
   VTable data;
   data.Parse(&fl);
   fl.Close();
+  snprintf(buf3, sizeof(buf3), "house-load %s", fname);
   for (int i = 0; i < MAX_GUESTS; i++)
   {
     snprintf(buf, sizeof(buf), "GUESTS/Guest%d", i);
@@ -178,7 +179,7 @@ bool House_load(struct house_control_rec *house)
       
       // Don't auto-repair cyberdecks until they're fully loaded.
       if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, buf3);
       
       inside = data.GetInt(buf, 0);
       if (inside > 0) {
@@ -283,11 +284,10 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
   for (int o = 0; obj;)
   {
     if ((real_obj = real_object(GET_OBJ_VNUM(obj))) == -1) {
-      snprintf(buf, sizeof(buf), "^YWarning: Will lose house item %s^g from %s^g (%ld) due to nonexistent rnum. [house_error_grep_string]", 
+      log_vfprintf("Warning: Will lose house item %s from %s (%ld) due to nonexistent rnum. [house_error_grep_string]", 
                GET_OBJ_NAME(obj),
                GET_ROOM_NAME(obj->in_room),
                GET_ROOM_VNUM(obj->in_room));
-      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
       obj = obj->next_content;
       continue;
     }
@@ -335,13 +335,17 @@ void House_save(struct house_control_rec *house, const char *file_name, long rnu
     }
 
     if (obj->in_obj)
-      while (obj && !obj->next_content && level >= 0) {
+      while (obj && !obj->next_content && level > 0) {
         obj = obj->in_obj;
         level--;
       }
 
     if (obj)
       obj = obj->next_content;
+  }
+  
+  if (level != 0) {
+    log_vfprintf("Warning: Non-zero level at finish when saving %s.", file_name);
   }
   
   fclose(fl);

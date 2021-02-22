@@ -452,7 +452,7 @@ struct command_info cmd_info[] =
     { "afk"      , POS_DEAD    , do_afk      , 0, 0 },
     { "ammo"     , POS_LYING   , do_ammo     , 0, 0 },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
-    { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0 },
+    { "at"       , POS_DEAD    , do_at       , LVL_EXECUTIVE, 0 },
     { "attach"   , POS_RESTING , do_attach   , 0, 0 },
 #ifdef SELFADVANCE
     // Allows running an unattended test port where anyone can bump themselves up to level 9.

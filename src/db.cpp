@@ -74,7 +74,7 @@ extern void generate_archetypes();
 extern void populate_mobact_aggression_octets();
 extern void write_world_to_disk(int vnum);
 
-extern void auto_repair_obj(struct obj_data *obj);
+extern void auto_repair_obj(struct obj_data *obj, const char *source);
 
 
 /**************************************************************************
@@ -4775,6 +4775,8 @@ void load_saved_veh()
     veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
     int inside = 0, last_in = 0;
     int num_objs = data.NumSubsections("CONTENTS");
+    
+    snprintf(buf3, sizeof(buf3), "veh-load %ld owned by %ld", veh->idnum, veh->owner);
     for (int i = 0; i < num_objs; i++) {
       const char *sect_name = data.GetIndexSection("CONTENTS", i);
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
@@ -4845,7 +4847,7 @@ void load_saved_veh()
         
         // Don't auto-repair cyberdecks until they're fully loaded.
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-          auto_repair_obj(obj);
+          auto_repair_obj(obj, buf3);
         
         if (inside > 0) {
           if (inside == last_in)
@@ -4903,7 +4905,7 @@ void load_saved_veh()
         snprintf(buf, sizeof(buf), "%s/AmmoWeap", sect_name);
         GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
         ammo->restring = str_dup(get_ammobox_default_restring(ammo));
-        auto_repair_obj(ammo);
+        auto_repair_obj(ammo, buf3);
         obj_to_obj(ammo, obj);
       }
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
@@ -4918,7 +4920,7 @@ void load_saved_veh()
           snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
         }
-        auto_repair_obj(weapon);
+        auto_repair_obj(weapon, buf3);
         obj_to_obj(weapon, obj);
         veh->usedload += GET_OBJ_WEIGHT(weapon);
       }
@@ -4988,6 +4990,7 @@ void load_consist(void)
       snprintf(buf, sizeof(buf), "storage/%ld", world[nr].number);
       if ((file.Open(buf, "r"))) {
         log_vfprintf("Restoring storage contents for room %ld (%s)...", world[nr].number, buf);
+        snprintf(buf3, sizeof(buf3), "storage room %ld (%s)", world[nr].number, buf);
         VTable data;
         data.Parse(&file);
         file.Close();
@@ -5064,7 +5067,7 @@ void load_consist(void)
             
             // Don't auto-repair cyberdecks until they're fully loaded.
             if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-              auto_repair_obj(obj);
+              auto_repair_obj(obj, buf3);
             
             inside = data.GetInt(buf, 0);
             if (inside > 0) {

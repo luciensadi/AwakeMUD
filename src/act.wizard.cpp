@@ -2693,9 +2693,17 @@ ACMD(do_invis)
     if (GET_INVIS_LEV(ch) > 0)
       perform_immort_vis(ch);
     /* Fixing from going max invis */
-    else
+    else if (GET_LEVEL(ch) >= LVL_EXECUTIVE)
       perform_immort_invis(ch, 2);
+    else
+      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.", LVL_EXECUTIVE);
   } else {
+    if (GET_LEVEL(ch) < LVL_EXECUTIVE) {
+      send_to_char(ch, "Due to player concerns, it is not possible for immortals under level %d to go invisible.", LVL_EXECUTIVE);
+      perform_immort_vis(ch);
+      return;
+    }
+    
     level = atoi(arg);
     if (!access_level(ch, level)) {
       send_to_char("You can't go invisible above your own level.\r\n", ch);

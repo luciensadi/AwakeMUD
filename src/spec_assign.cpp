@@ -49,26 +49,26 @@ struct teach_data teachers[] = {
                       // Begin NERP teachers.
                        { 1001, { SKILL_BR_EDGED, SKILL_BR_POLEARM, SKILL_BR_CLUB, SKILL_BR_THROWINGWEAPONS, SKILL_BR_WHIPS, 
                          SKILL_BR_PROJECTILES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do "
-                         "your job safer.\r\n", AMATEUR },
-                       { 1002, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, 
+                         "your job safer.\r\n", ADVANCED },
+                       /*{ 1002, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, 
                          SKILL_BR_ARMOR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
-                         "safer.\r\n", AMATEUR }, 
+                         "safer.\r\n", AMATEUR },  */
                        { 1003, { SKILL_SINGING, SKILL_CHANTING, SKILL_DANCING, SKILL_INSTRUMENT, SKILL_ACTING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", AMATEUR },
+                         "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", ADVANCED },
                        { 1004, { SKILL_OFFHAND_EDGED, SKILL_OFFHAND_CLUB, SKILL_OFFHAND_CYBERIMPLANTS, SKILL_OFFHAND_WHIP, 
                          SKILL_SPRAY_WEAPONS, SKILL_GUNCANE, SKILL_BRACERGUN, SKILL_BLOWGUN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of "
-                         "shuffling slides you feel you can now do your job safer.\r\n", AMATEUR },
+                         "shuffling slides you feel you can now do your job safer.\r\n", ADVANCED },
                        { 1005, { SKILL_NAVI_LAND, SKILL_NAVI_AIR, SKILL_NAVI_WATER, SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING,
                          SKILL_PILOT_VECTORTHRUST, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do " 
-                         "your job safer.\r\n", AMATEUR },
+                         "your job safer.\r\n", ADVANCED },
                        { 1006, { SKILL_INTIMIDATION, SKILL_INTERROGATION, SKILL_LEADERSHIP, SKILL_SURVIVAL, SKILL_LEGERDEMAIN,
                          SKILL_TRACK, SKILL_DISGUISE, SKILL_SMALL_UNIT_TACTICS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you "
-                         "feel you can now do your job safer.\r\n", AMATEUR },
+                         "feel you can now do your job safer.\r\n", ADVANCED },
                        { 1007, { SKILL_ANIMAL_HANDLING, SKILL_ANIMAL_TAMING, SKILL_CHEMISTRY, SKILL_PHARMA, 
-                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", AMATEUR },
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", ADVANCED },
                        { 1008, { SKILL_DEMOLITIONS, SKILL_DIVING, SKILL_PARACHUTING, SKILL_UNDERWATER_COMBAT, SKILL_LOCK_PICKING,
                          SKILL_RIDING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job "
-                         "safer.\r\n", AMATEUR },
+                         "safer.\r\n", ADVANCED },
                       // End NERP teachers.
                       
 #ifdef USE_PRIVATE_CE_WORLD

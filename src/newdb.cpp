@@ -38,7 +38,7 @@ extern Playergroup *loaded_playergroups;
 extern void save_bullet_pants(struct char_data *ch);
 extern void load_bullet_pants(struct char_data *ch);
 
-void auto_repair_obj(struct obj_data *obj);
+void auto_repair_obj(struct obj_data *obj, const char *source);
 
 // ____________________________________________________________________________
 //
@@ -696,6 +696,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     int vnum = 0, last_in = 0, inside = 0;
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_cyberware WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
+    snprintf(buf3, sizeof(buf3), "pfiles_cyberware load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(row[1]);
@@ -713,7 +714,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           GET_OBJ_VAL(obj, 9) = 1;
         inside = atoi(row[17]);
         
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, buf3);
         
         if (inside > 0) {
           if (inside == last_in)
@@ -757,6 +758,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     int inside = 0, last_in = 0;
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_worn WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
+    snprintf(buf3, sizeof(buf3), "pfiles_worn load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(row[1]);
@@ -798,7 +800,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);
         
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, buf3);
         
         if (inside > 0) {
           if (inside == last_in)
@@ -825,6 +827,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     int inside = 0, last_in = 0;
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_inv WHERE idnum=%ld ORDER BY posi;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
+    snprintf(buf3, sizeof(buf3), "pfiles_inv load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(row[1]);
@@ -881,7 +884,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
         
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, buf3);
         
         if (inside > 0) {
           if (inside == last_in)
@@ -988,13 +991,15 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
     
   // Self-repair their gear. Don't worry about contents- it's recursive.
+  snprintf(buf3, sizeof(buf3), "post-pfiles-inv-load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
-    auto_repair_obj(obj);
+    auto_repair_obj(obj, buf3);
   }
   
+  snprintf(buf3, sizeof(buf3), "post-pfiles-eq-load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
   for (int i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i))
-      auto_repair_obj(GET_EQ(ch, i));
+      auto_repair_obj(GET_EQ(ch, i), buf3);
   }
 
   affect_total(ch);
@@ -2145,12 +2150,13 @@ void verify_db_password_column_size() {
   mysql_free_result(res);
 }
 
-void auto_repair_obj(struct obj_data *obj) {
+void auto_repair_obj(struct obj_data *obj, const char *source) {
   // Go through its contents first and rectify them.
+  char source_extd[1000];
+  snprintf(source_extd, sizeof(source_extd), "%s (nested)", source);
   for (struct obj_data *contents = obj->contains; contents; contents = contents->next_content) {
-    auto_repair_obj(contents);
+    auto_repair_obj(contents, source_extd);
   }
-  
   
   int rnum, old_storage;
   
@@ -2240,8 +2246,23 @@ void auto_repair_obj(struct obj_data *obj) {
         } else {
           FORCE_PROTO_VALUE(GET_WEAPON_REACH(obj), GET_WEAPON_REACH(&obj_proto[rnum]));
         }
+        
+        // Warn on any non-magazine items. I would dump them out, but the weapon is currently in the void waiting to be placed somewhere.
+        struct obj_data *next;
+        for (struct obj_data *contents = obj->contains; contents; contents = next) {
+          next = contents->next_content;
+          if (GET_OBJ_TYPE(contents) != ITEM_GUN_MAGAZINE) {
+            snprintf(buf, sizeof(buf), "^RSYSERR^g: While loading weapon %s in %s, came across non-magazine object contained by it.", GET_OBJ_NAME(obj), source);
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            const char *representation = generate_new_loggable_representation(obj);
+            mudlog(representation, NULL, LOG_SYSLOG, TRUE);
+            delete [] representation;
+            break;
+          }
+        }
       }
-    break;
+      
+      break;
   }
 }
 
