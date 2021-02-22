@@ -1196,7 +1196,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   strcat(buf, j->in_obj ? j->in_obj->text.name : "None");
   strcat(buf, ", Carried by: ");
   if (j->carried_by)
-    strcat(buf, GET_CHAR_NAME(j->carried_by));
+    strcat(buf, GET_CHAR_NAME(j->carried_by) ? GET_CHAR_NAME(j->carried_by): "BROKEN");
   else
     strcat(buf, "Nobody");
   strcat(buf, ", Worn by: ");

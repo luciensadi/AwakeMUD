@@ -1947,7 +1947,7 @@ void weight_change_object(struct obj_data * obj, float weight)
   
   // Return it to its container, re-adding its weight.
   if (tmp_ch) {
-    if (worn_on)
+    if (worn_on >= 0)
       equip_char(tmp_ch, obj, worn_on);
     else
       obj_to_char(obj, tmp_ch);
