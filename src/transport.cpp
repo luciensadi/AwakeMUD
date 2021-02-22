@@ -282,7 +282,7 @@ SPECIAL(taxi_sign) {
   // Set up our default string.
   strncpy(buf, "The keyword for each location is listed after the location name.  ^WSAY^n the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n", sizeof(buf) - 1);
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-    strncat(buf, "-------------------------------------------------\r\n", sizeof(buf) - strlen(buf) - 1);
+    strlcat(buf, "-------------------------------------------------\r\n", sizeof(buf));
   
   bool is_first_printed_dest_title = TRUE;
   

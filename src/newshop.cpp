@@ -1585,11 +1585,11 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
       if (real_obj >= 0)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %-30s (%d) - ", i, GET_OBJ_NAME(&obj_proto[real_obj]), order->number);
       else
-        strncat(buf, " ERROR\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, " ERROR\r\n", sizeof(buf));
       if (totaltime < 0)
-        strncat(buf, " AVAILABLE\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, " AVAILABLE\r\n", sizeof(buf));
       else if (totaltime < 1 && (int)(24 * totaltime) == 0)
-        strncat(buf, " less than one hour\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, " less than one hour\r\n", sizeof(buf));
       else
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d %s\r\n", totaltime < 1 ? (int)(24 * totaltime) : (int)totaltime,
                 totaltime < 1 ? "hours" : (totaltime == 1 ? "day" : "days"));
@@ -2415,7 +2415,7 @@ bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr
   // Don't allow sale of forbidden vnums.
   if (GET_OBJ_VNUM(obj) == OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC
       || GET_OBJ_VNUM(obj) == OBJ_BLANK_MAGAZINE) {
-    strncat(buf2, "matching a forbidden vnum.", sizeof(buf2) - strlen(buf2) - 1);
+    strlcat(buf2, "matching a forbidden vnum.", sizeof(buf2));
     mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
     extract_obj(obj);
     return FALSE;
@@ -2443,7 +2443,7 @@ bool can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr
     /*
     case ITEM_FIREWEAPON:
     case ITEM_MISSILE:
-      strncat(buf, "being a fireweapon or fireweapon ammo.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "being a fireweapon or fireweapon ammo.", sizeof(buf));
       mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
       extract_obj(obj);
       return FALSE;

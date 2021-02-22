@@ -974,14 +974,14 @@ void ccr_aspect_menu(struct descriptor_data *d)
                  "  [2] Sorcerer\r\n", sizeof(buf) - strlen(buf) - 1);
                  
   if (GET_TRADITION(d->character) == TRAD_SHAMANIC)
-    strncat(buf, "  [3] Shamanist\r\n", sizeof(buf) - strlen(buf) - 1);
+    strlcat(buf, "  [3] Shamanist\r\n", sizeof(buf));
   else
-    strncat(buf, "  [3] Elementalist (Earth)\r\n"
+    strlcat(buf, "  [3] Elementalist (Earth)\r\n"
                  "  [4] Elementalist (Air)\r\n"
                  "  [5] Elementalist (Fire)\r\n"
-                 "  [6] Elementalist (water)\r\n", sizeof(buf) - strlen(buf) - 1);
+                 "  [6] Elementalist (water)\r\n", sizeof(buf));
                  
-  strncat(buf,   "  [?] Help\r\n\r\nAspect: ", sizeof(buf) - strlen(buf) - 1);
+  strlcat(buf,   "  [?] Help\r\n\r\nAspect: ", sizeof(buf));
   SEND_TO_Q(buf, d);
   d->ccr.mode = CCR_ASPECT;
 }

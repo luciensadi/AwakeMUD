@@ -3904,7 +3904,7 @@ ACMD(do_show)
       
       // Flag mobs with no stats
       if (total_stats == 0) {
-        strncat(buf, " has not had its attributes set yet", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, " has not had its attributes set yet", sizeof(buf));
         printed = TRUE;
       }
       
@@ -6074,26 +6074,26 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     
     // Check its strings.
     if (!strcmp(GET_ROOM_NAME(room), STRING_ROOM_TITLE_UNFINISHED)) {
-      strncat(buf, "  - Default room title used. This room will NOT be saved in the world files.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Default room title used. This room will NOT be saved in the world files.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     if (!strcmp(GET_ROOM_DESC(room), STRING_ROOM_DESC_UNFINISHED)) {
-      strncat(buf, "  - Default room desc used.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Default room desc used.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     if (room->matrix > 0) {
       if (real_host(room->matrix) < 1) {
-        strncat(buf, "  - Invalid Matrix host specified.\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, "  - Invalid Matrix host specified.\r\n", sizeof(buf));
         issues++;
         printed = TRUE;
       }
       
       if (!strcmp(room->address, STRING_ROOM_JACKPOINT_NO_ADDR)) {
-        strncat(buf, "  - Default jackpoint address used.\r\n", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, "  - Default jackpoint address used.\r\n", sizeof(buf));
         issues++;
         printed = TRUE;
       }
@@ -6101,32 +6101,32 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     
     // Check its flags.
     if (ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION)) {
-      strncat(buf, "  - Socialization flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Socialization flag is set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     if (ROOM_FLAGGED(room, ROOM_NOMAGIC)) {
-      strncat(buf, "  - !magic flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - !magic flag is set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     if (ROOM_FLAGGED(room, ROOM_ARENA)) {
-      strncat(buf, "  - Arena flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Arena flag is set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     // Staff-only is allowed in the staff HQ area. Otherwise, flag it.
     if ((GET_ROOM_VNUM(room) < 10000 || GET_ROOM_VNUM(room) > 10099) && ROOM_FLAGGED(room, ROOM_STAFF_ONLY)) {
-      strncat(buf, "  - Staff-only flag is set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - Staff-only flag is set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
     
     if (ROOM_FLAGS(room).AreAnySet(ROOM_HOUSE_CRASH, ROOM_BFS_MARK, ROOM_OLC, ROOM_NOQUIT, ROOM_ASTRAL, ENDBIT)) {
-      strncat(buf, "  - System-controlled or unimplemented flags are set.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - System-controlled or unimplemented flags are set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
@@ -6259,7 +6259,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     
     // Flag mobs with no stats
     if (total_stats == 0) {
-      strncat(buf, "  - has not had its attributes set yet.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "  - has not had its attributes set yet.\r\n", sizeof(buf));
       printed = TRUE;
       issues++;
     }

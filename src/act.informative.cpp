@@ -2212,24 +2212,24 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH, wear_bits, NUM_WEARS);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can be worn or equipped at the following wear location(s):\r\n  ^c%s^n\r\n", buf2);
   } else {
-    strncat(buf, "This item cannot be worn or equipped.\r\n", sizeof(buf) - strlen(buf) - 1);
+    strlcat(buf, "This item cannot be worn or equipped.\r\n", sizeof(buf));
   }
   if (was_take)
     j->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
   else
-    strncat(buf, "^yIt cannot be picked up once dropped.^n\r\n", sizeof(buf) - strlen(buf) - 1);
+    strlcat(buf, "^yIt cannot be picked up once dropped.^n\r\n", sizeof(buf));
   
   switch (GET_OBJ_TYPE(j))
   {
     case ITEM_LIGHT:
       if (GET_OBJ_VAL(j, 2) == -1) {
-        strncat(buf, "It is an ^cinfinite^n light source.", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, "It is an ^cinfinite^n light source.", sizeof(buf));
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has ^c%d^n hours of light left.", GET_OBJ_VAL(j, 2));
       }
       break;
     case ITEM_FIREWEAPON:
-      strncat(buf, "As a fireweapon, it is not currently implemented.\r\n", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "As a fireweapon, it is not currently implemented.\r\n", sizeof(buf));
       /*
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that requires ^c%d^n strength to use in combat.\r\n",
               GET_OBJ_VAL(j, 5) == 0 ? "Bow" : "Crossbow", GET_OBJ_VAL(j, 6));
@@ -2267,7 +2267,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                    wound_arr[MIN(DEADLY, GET_WEAPON_DAMAGE_CODE(j) + (int)(burst_count / 3))],
                    !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
-          strncat(buf, ".", sizeof(buf) - strlen(buf) - 1);
+          strlcat(buf, ".", sizeof(buf));
         }
         
         if (j->contains 
@@ -2278,19 +2278,19 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                    ammo_type[GET_MAGAZINE_AMMO_TYPE(j->contains)].name);
           switch (GET_MAGAZINE_AMMO_TYPE(j->contains)) {
             case AMMO_APDS:
-              strncat(buf, "pierces through enemy ballistic armor, halving its value.", sizeof(buf) - strlen(buf) - 1);
+              strlcat(buf, "pierces through enemy ballistic armor, halving its value.", sizeof(buf));
               break;
             case AMMO_EX:
-              strncat(buf, "increases power by two.", sizeof(buf) - strlen(buf) - 1);
+              strlcat(buf, "increases power by two.", sizeof(buf));
               break;
             case AMMO_EXPLOSIVE:
-              strncat(buf, "increases power by one.", sizeof(buf) - strlen(buf) - 1);
+              strlcat(buf, "increases power by one.", sizeof(buf));
               break;
             case AMMO_FLECHETTE:
-              strncat(buf, "deals more damage to fully unarmored targets.", sizeof(buf) - strlen(buf) - 1);
+              strlcat(buf, "deals more damage to fully unarmored targets.", sizeof(buf));
               break;
             case AMMO_GEL:
-              strncat(buf, "deals mental instead of physical damage, but treats the enemy's ballistic armor as two points higher.", sizeof(buf) - strlen(buf) - 1);
+              strlcat(buf, "deals mental instead of physical damage, but treats the enemy's ballistic armor as two points higher.", sizeof(buf));
               break;
           }
         }
@@ -2393,11 +2393,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         }
         
         if (burst_count > 0 && burst_count - standing_recoil_comp > 0) {
-          strncat(buf, "\r\n\r\n^yIt doesn't have enough recoil compensation", sizeof(buf) - strlen(buf) - 1);
+          strlcat(buf, "\r\n\r\n^yIt doesn't have enough recoil compensation", sizeof(buf));
           if (burst_count - standing_recoil_comp - prone_recoil_comp <= 0) {
-            strncat(buf, " unless fired from prone", sizeof(buf) - strlen(buf) - 1);
+            strlcat(buf, " unless fired from prone", sizeof(buf));
           } else if (prone_recoil_comp > 0){
-            strncat(buf, " even when fired from prone", sizeof(buf) - strlen(buf) - 1);
+            strlcat(buf, " even when fired from prone", sizeof(buf));
           }
           // Do we require more recoil comp than is currently attached?
           switch (GET_WEAPON_SKILL(j)) {
@@ -2443,9 +2443,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_MISSILE:
       if (GET_OBJ_VAL(j, 0) == 0) {
-        strncat(buf, "It is an ^carrow^n suitable for use in a bow.", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, "It is an ^carrow^n suitable for use in a bow.", sizeof(buf));
       } else {
-        strncat(buf, "It is a ^cbolt^n suitable for use in a crossbow.", sizeof(buf) - strlen(buf) - 1);
+        strlcat(buf, "It is a ^cbolt^n suitable for use in a crossbow.", sizeof(buf));
       }
       break;
     case ITEM_WORN:
@@ -2505,7 +2505,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 (GET_OBJ_VAL(j, 2) == 1 ? "6-digit PIN" : (GET_OBJ_VAL(j, 2) == 2 ? "thumbprint" : "retina")), GET_OBJ_VAL(j, 0));
       break;
     case ITEM_KEY:
-      strncat(buf, "No OOC information is available about this key.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "No OOC information is available about this key.", sizeof(buf));
       break;
     case ITEM_FOOD:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n units of nutrition when eaten.", GET_OBJ_VAL(j, 0));
@@ -2691,7 +2691,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_CAMERA:
     case ITEM_PHONE:
     case ITEM_KEYRING:
-      strncat(buf, "Nothing stands out about this item's OOC values. Try EXAMINE it instead.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "Nothing stands out about this item's OOC values. Try EXAMINE it instead.", sizeof(buf));
       break;
     default:
       strncpy(buf, "This item type has no probe string. Contact the staff to request one.", sizeof(buf) - strlen(buf));
@@ -2700,14 +2700,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   
   if (GET_OBJ_VNUM(j) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(j) == OBJ_CARIBBEAN_VISA) {
     if (GET_OBJ_VAL(j, 0) == GET_IDNUM(ch)) {
-      strncat(buf, "It has your picture on it.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "It has your picture on it.", sizeof(buf));
     } else {
-      strncat(buf, "It has someone else's picture on it.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "It has someone else's picture on it.", sizeof(buf));
     }
   }
   
   if (GET_OBJ_AFFECT(j).IsSet(AFF_LASER_SIGHT) && has_smartlink) {
-    strncat(buf, "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.", sizeof(buf) - strlen(buf) - 1);
+    strlcat(buf, "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.", sizeof(buf));
   }
   
   strcat(buf, "^n\r\n\r\n");

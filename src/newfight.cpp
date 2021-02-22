@@ -484,7 +484,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     }
     
     if (GET_QUI(def->ch) <= 0) {
-      strncat(rbuf, "-- but we're zeroing out successes since the defender is paralyzed.", sizeof(rbuf) - strlen(rbuf) - 1);
+      strlcat(rbuf, "-- but we're zeroing out successes since the defender is paralyzed.", sizeof(rbuf));
       att->successes = 0;
     }
     else {

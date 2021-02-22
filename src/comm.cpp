@@ -1920,14 +1920,14 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst)
   New[(strpos - orig)] = '\0';
   
   /* now, the replacement string */
-  strncat(New, second, (MAX_INPUT_LENGTH - strlen(New) - 1));
+  strlcat(New, second, MAX_INPUT_LENGTH);
   
   /* now, if there's anything left in the original after the string to
    * replaced, copy that too. */
   if (((strpos - orig) + strlen(first)) < strlen(orig))
-    strncat(New, strpos + strlen(first), (MAX_INPUT_LENGTH - strlen(New) - 1));
+    strlcat(New, strpos + strlen(first), MAX_INPUT_LENGTH);
   
-  /* terminate the string in case of an overflow from strncat */
+  /* terminate the string in case of an overflow from strncat  -- useless code now -LS */
   New[MAX_INPUT_LENGTH-1] = '\0';
   strcpy(subst, New);
   
