@@ -429,9 +429,17 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
       
   // If we're not in a road or garage, we expect to see no vehicles and will attack any that we see.
   if (!(ROOM_FLAGGED(in_room, ROOM_ROAD) || ROOM_FLAGGED(in_room, ROOM_GARAGE))) {
+    bool area_has_pc_occupants = FALSE;
+    for (struct char_data *check_ch = in_room->people; !area_has_pc_occupants && check_ch; check_ch = check_ch->next_in_room)
+      area_has_pc_occupants = !IS_NPC(check_ch);
+    
     for (tveh = in_room->vehicles; tveh; tveh = tveh->next_veh) {
       // No attacking your own vehicle.
       if (tveh == ch->in_veh)
+        continue;
+        
+      // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
+      if (tveh->type != VEH_DRONE && !area_has_pc_occupants && !tveh->people && !tveh->rigger)
         continue;
       
       // Check for our usual conditions.
@@ -534,9 +542,17 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
 
   // Attack vehicles (but not for aggr-to-race)
   if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
+    bool area_has_pc_occupants = FALSE;
+    for (struct char_data *check_ch = in_room->people; !area_has_pc_occupants && check_ch; check_ch = check_ch->next_in_room)
+      area_has_pc_occupants = !IS_NPC(check_ch);
+    
     for (tveh = in_room->vehicles; tveh; tveh = tveh->next_veh) {
       // No attacking your own vehicle.
       if (tveh == ch->in_veh)
+        continue;
+        
+      // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
+      if (tveh->type != VEH_DRONE && !area_has_pc_occupants && !tveh->people && !tveh->rigger)
         continue;
         
       if (vehicle_is_valid_mob_target(tveh, TRUE)) {
@@ -631,7 +647,16 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
   if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || GET_MOBALERT(ch) == MALERT_ALARM) {
     // If I am not astral, am in the same room, and am willing to attack a vehicle this round (coin flip), pick a fight with a vehicle.
     if (ch->in_room->number == room->number && !IS_ASTRAL(ch) && number(0, 1)) {
+      bool area_has_pc_occupants = FALSE;
+      
+      for (struct char_data *check_ch = room->people; !area_has_pc_occupants && check_ch; check_ch = check_ch->next_in_room)
+        area_has_pc_occupants = !IS_NPC(check_ch);        
+      
       for (veh = room->vehicles; veh; veh = veh->next_veh) {
+        // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
+        if (veh->type != VEH_DRONE && !area_has_pc_occupants && !veh->people && !veh->rigger)
+          continue;
+          
         // Aggros don't care about road/garage status, so they act as if always alarmed.
         if (vehicle_is_valid_mob_target(veh, TRUE)) {
           stop_fighting(ch);
@@ -837,7 +862,15 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   
   // Check vehicles, but only if they're in the same room as the guard.
   if (ch->in_room == room) {
+    bool area_has_pc_occupants = FALSE;
+    for (struct char_data *check_ch = ch->in_room->people; !area_has_pc_occupants && check_ch; check_ch = check_ch->next_in_room)
+      area_has_pc_occupants = !IS_NPC(check_ch);
+      
     for (veh = room->vehicles; veh; veh = veh->next_veh) {
+      // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
+      if (veh->type != VEH_DRONE && !area_has_pc_occupants && !veh->people && !veh->rigger)
+        continue;
+          
       // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.
       if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE))) {
         stop_fighting(ch);

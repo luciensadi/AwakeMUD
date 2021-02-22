@@ -745,30 +745,24 @@ void death_penalty(struct char_data *ch)
      && !PLR_FLAGGED(ch, PLR_NEWBIE)
      && !number(0, DEATH_PENALTY_CHANCE)) // a 1:25 chance of incurring death penalty.
   {
-    bool kosher = FALSE;
-    for (int limiter = 20; limiter > 0; limiter--) {
+    for (int limiter = 100; limiter > 0; limiter--) {
       attribute = number(0,5);
       
-      if (attribute != CHA 
-          && (GET_REAL_ATT(ch, attribute) > MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attribute]))) {
-        kosher = TRUE;
-        break;
+      if (GET_REAL_ATT(ch, attribute) > MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attribute])) {
+        // We can safely knock down the attribute since we've guaranteed it's above their racial minimum.
+        GET_TKE(ch) -= 2*GET_REAL_ATT(ch, attribute);
+        GET_REAL_ATT(ch, attribute)--;
+        snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %d to %d.",
+                GET_CHAR_NAME(ch), short_attributes[attribute], old_tke, GET_TKE( ch ) );
+        mudlog(buf, ch, LOG_DEATHLOG, TRUE);
+        
+        send_to_char(ch, "^yThere are some things even the DocWagon can't fix :(^n\r\n"
+                         "You've lost a point of %s from that death. You can re-train it at a trainer.\r\n",
+                         attributes[attribute]);
+        return;
       }
     }
-    // No penalty for you today.
-    if (!kosher)
-      return;    
-    
-    // We can safely knock down the attribute since we've guaranteed it's above their racial minimum.
-    GET_TKE(ch) -= 2*GET_REAL_ATT(ch, attribute);
-    GET_REAL_ATT(ch, attribute)--;
-    snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %d to %d.",
-            GET_CHAR_NAME(ch), short_attributes[attribute], old_tke, GET_TKE( ch ) );
-    mudlog(buf, ch, LOG_DEATHLOG, TRUE);
-    
-    send_to_char(ch, "^yThere are some things even the DocWagon can't fix :(^n\r\n"
-                     "You've lost a point of %s from that death. You can re-train it at a trainer.\r\n",
-                     attributes[attribute]);
+    mudlog("Note: Would have lost attribute point, but couldn't find one to lose.", ch, LOG_DEATHLOG, TRUE);
   }
 }
 
