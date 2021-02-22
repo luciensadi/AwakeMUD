@@ -833,12 +833,9 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         strcat(buf, "^Y(Quest)^n ");
       }
     } else if (
-      mob_index[GET_MOB_RNUM(i)].func == mageskill_moore
-      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_moore
+      (i->in_room && (GET_ROOM_SPEC(i->in_room) == mageskill_moore || GET_ROOM_SPEC(i->in_room) == mageskill_hermes))
       || mob_index[GET_MOB_RNUM(i)].func == mageskill_herbie
       || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_herbie
-      || mob_index[GET_MOB_RNUM(i)].func == mageskill_hermes
-      || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_hermes
       || mob_index[GET_MOB_RNUM(i)].func == mageskill_anatoly
       || mob_index[GET_MOB_RNUM(i)].sfunc == mageskill_anatoly
       || mob_index[GET_MOB_RNUM(i)].func == mageskill_nightwing
@@ -993,10 +990,11 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YREPAIR^y command to proceed." : "");
           already_printed = TRUE;
         }
-        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), mageskill_hermes)) {
+        if (i->in_room && GET_ROOM_SPEC(i->in_room) == mageskill_hermes) {
           for (int qidx = 0; qidx <= QUEST_TIMER; qidx++) {
             if (GET_LQUEST(ch, qidx) == QST_MAGE_INTRO) {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...is%s wearing some sweet bling. Harold said to ^YASK^y %s about %s chain.^n\r\n",
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s is%s wearing some sweet bling. Harold said to ^YASK^y %s about %s chain.^n\r\n",
+                       HSSH(i),
                        already_printed ? " also" : "",
                        HMHR(i),
                        HSHR(i));
