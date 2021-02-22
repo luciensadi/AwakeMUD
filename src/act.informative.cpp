@@ -766,7 +766,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
           continue;
         if ((IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG1) || IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG2) ||
              IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_OPTMAG3)) && success_test(GET_INT(ch), 9) > 0)
-          strncat(buf2, "Optical Magnification\r\n", sizeof(buf2) - strlen(buf2) - 1);
+          strlcat(buf2, "Optical Magnification\r\n", sizeof(buf2));
         if (IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_COSMETIC))
           snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
         break;
@@ -1633,27 +1633,27 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     strncpy(buf, "^y", sizeof(buf));
     
     if (ch->in_room->debris < 5) {
-      strncat(buf, "A few spent casings and empty mags are scattered here.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "A few spent casings and empty mags are scattered here.", sizeof(buf));
     }
     else if (ch->in_room->debris < 10) {
-      strncat(buf, "Spent casings and empty mags are scattered here.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "Spent casings and empty mags are scattered here.", sizeof(buf));
     }
     else if (ch->in_room->debris < 20) {
-      strncat(buf, "Bullet holes, spent casings, and empty mags litter the area.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "Bullet holes, spent casings, and empty mags litter the area.", sizeof(buf));
     }
     else if (ch->in_room->debris < 30) {
-      strncat(buf, "This place has been shot up, and weapons debris is everywhere.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "This place has been shot up, and weapons debris is everywhere.", sizeof(buf));
     }
     else if (ch->in_room->debris < 40) {
-      strncat(buf, "The acrid scent of propellant hangs in the air amidst the weapons debris.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "The acrid scent of propellant hangs in the air amidst the weapons debris.", sizeof(buf));
     }
     else if (ch->in_room->debris < 45) {
-      strncat(buf, "Veritable piles of spent casings and empty mags fill the area.", sizeof(buf) - strlen(buf) - 1);
+      strlcat(buf, "Veritable piles of spent casings and empty mags fill the area.", sizeof(buf));
     }
     else {
       strncpy(buf, "^YIt looks like World War III was fought here!", sizeof(buf));
     }
-    strncat(buf, "^n\r\n", sizeof(buf) - strlen(buf) - 1);
+    strlcat(buf, "^n\r\n", sizeof(buf));
     send_to_char(buf, ch);
   }
   

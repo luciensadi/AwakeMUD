@@ -1869,15 +1869,16 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
   for (tmp_obj = obj->in_obj; tmp_obj->in_obj; tmp_obj = tmp_obj->in_obj)
     GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
   
-  // Update the highest container's weight as well.
-  if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK || GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK || GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY)
+  // Update the highest container's weight as well, provided it's not a deck or a computer.
+  if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK || GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK || GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY) {
     GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
-  
-  // If someone's carrying or wearing the highest container, increment their carry weight by the weight of the obj we just put in.
-  if (tmp_obj->carried_by)
-    IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
-  if (tmp_obj->worn_by)
-    IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
+    
+    // If someone's carrying or wearing the highest container, increment their carry weight by the weight of the obj we just put in.
+    if (tmp_obj->carried_by)
+      IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
+    if (tmp_obj->worn_by)
+      IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
+  }
 }
 
 
