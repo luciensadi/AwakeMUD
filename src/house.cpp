@@ -221,8 +221,13 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
   if (!obj)
     return;
     
+  if (obj == in_obj) {
+    mudlog("SYSERR: Received duplicate items to validate_in_obj_pointers! [OBJ_NESTING_ERROR_GREP_STRING]", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+    
   if (in_obj && obj->in_obj != in_obj) {
-    snprintf(buf3, sizeof(buf3), "^YSYSERR: in_obj mismatch for %s (%ld) in %ld! Rectifying...", 
+    snprintf(buf3, sizeof(buf3), "^YSYSERR: in_obj mismatch for %s (%ld) in %ld! Rectifying... [OBJ_NESTING_ERROR_GREP_STRING]", 
              GET_OBJ_NAME(obj),
              GET_OBJ_VNUM(obj),
              get_obj_in_room(obj) ? GET_ROOM_VNUM(get_obj_in_room(obj)) : -1);
@@ -230,7 +235,15 @@ void validate_in_obj_pointers(struct obj_data *obj, struct obj_data *in_obj) {
     obj->in_obj = in_obj;
   }
   
+  struct obj_data *previous = NULL;
   for (struct obj_data *tmp_obj = obj->contains; tmp_obj; tmp_obj = tmp_obj->next_content) {
+    if (tmp_obj == obj) {
+      mudlog("^RSYSERR: Detected duplicate items to validate_in_obj_pointers! There's no way to un-fuck this programmatically, so we're losing items. [OBJ_NESTING_ERROR_GREP_STRING]^n", NULL, LOG_SYSLOG, TRUE);
+      if (previous)
+        previous->next_content = NULL;
+      obj->contains = NULL;
+      return;
+    }
     validate_in_obj_pointers(tmp_obj, obj);
   }
 }
