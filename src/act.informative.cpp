@@ -883,10 +883,11 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strcat(buf, "The ghostly image of ");
     strcat(buf, i->player.physical_text.room_desc);
     
+#define MOB_HAS_SPEC(rnum, spec) (mob_index[(rnum)].func == spec || mob_index[(rnum)].sfunc == spec)
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
       bool already_printed = FALSE;
       if (mob_index[GET_MOB_RNUM(i)].func || mob_index[GET_MOB_RNUM(i)].sfunc) {
-        if (mob_index[GET_MOB_RNUM(i)].func == trainer || mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), trainer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to train you.%s^n\r\n", 
                    HSSH(i), 
                    already_printed ? " also" : "",
@@ -894,7 +895,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YTRAIN^y command to begin." : "");
           already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == teacher || mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), teacher)) {
           if (MOB_FLAGGED(i, MOB_INANIMATE)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...it%s can be used to help you practice your skills.%s^n\r\n",
                      already_printed ? " also" : "",
@@ -908,7 +909,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           }
           already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher || mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), metamagic_teacher)) {
           // Mundanes can't see metamagic teachers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train in metamagic techniques.%s^n\r\n", 
@@ -919,7 +920,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             already_printed = TRUE;
           }
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), adept_trainer)) {
           // Adepts can't see adept trainers' abilities.
           if (GET_TRADITION(ch) == TRAD_ADEPT) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you train your powers.%s^n\r\n", 
@@ -930,7 +931,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             already_printed = TRUE;
           }
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer || mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), spell_trainer)) {
           // Mundanes and adepts can't see spell trainers' abilities.
           if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s willing to help you learn new spells.%s^n\r\n", 
@@ -941,15 +942,14 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             already_printed = TRUE;
           }
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == johnson || mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), johnson)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n", 
                    HSSH(i), 
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP JOB^y for instructions." : "");
           already_printed = TRUE;
         }
-        if ((mob_index[GET_MOB_RNUM(i)].func == shop_keeper || mob_index[GET_MOB_RNUM(i)].func == terell_davis)
-            || (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper || mob_index[GET_MOB_RNUM(i)].sfunc == terell_davis)) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), shop_keeper) || MOB_HAS_SPEC(GET_MOB_RNUM(i), terell_davis)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s a few things for sale.%s^n\r\n", 
                    HSSH(i), 
                    already_printed ? " also" : "", 
@@ -957,28 +957,28 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YLIST^y command to see them." : "");
           already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec || mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), landlord_spec)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n", 
                    HSSH(i), 
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " See ^YHELP APARTMENTS^y for details." : "");
           already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == fence || mob_index[GET_MOB_RNUM(i)].sfunc == fence) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), fence)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might be willing to buy paydata from you.%s^n\r\n", 
                    HSSH(i), 
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " If you have paydata, ^YUNINSTALL^y it from your deck and then ^YSELL PAYDATA^y." : "");
           already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == hacker || mob_index[GET_MOB_RNUM(i)].sfunc == hacker) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), hacker)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s cracks credsticks-- you can ^YGIVE^y them to %s.^n\r\n", 
                    HSSH(i), 
                    already_printed ? " also" : "", 
                    HMHR(i));
           already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == receptionist || mob_index[GET_MOB_RNUM(i)].sfunc == receptionist) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), receptionist)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s %s bunks for rent.%s^n\r\n", 
                    HSSH(i), 
                    already_printed ? " also" : "", 
@@ -986,13 +986,39 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Renting is purely for flavor and is not required in AwakeMUD." : "");
           already_printed = TRUE;
         }
-        if (mob_index[GET_MOB_RNUM(i)].func == fixer || mob_index[GET_MOB_RNUM(i)].sfunc == fixer) {
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), fixer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can repair objects for you.%s^n\r\n",
                    HSSH(i), 
                    already_printed ? " also" : "",
                    GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD ? " Use the ^YREPAIR^y command to proceed." : "");
           already_printed = TRUE;
         }
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), mageskill_hermes)) {
+          for (int qidx = 0; qidx <= QUEST_TIMER; qidx++) {
+            if (GET_LQUEST(ch, qidx) == QST_MAGE_INTRO) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...is%s wearing some sweet bling. Harold said to ^YASK^y %s about %s chain.^n\r\n",
+                       already_printed ? " also" : "",
+                       HMHR(i),
+                       HSHR(i));
+              already_printed = TRUE;
+              break;
+            }
+          }
+        }
+        
+#ifdef USE_PRIVATE_CE_WORLD
+        if (MOB_HAS_SPEC(GET_MOB_RNUM(i), marksmanship_master)) {
+          if (SHOTS_FIRED(ch) >= MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT && SHOTS_TRIGGERED(ch) != -1) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s looks like %s can teach you a few things. You should ^YASK^y %s about getting some training.^n\r\n",
+                     HSSH(i),
+                     already_printed ? " also" : "",
+                     HSSH(i),
+                     HMHR(i));
+            already_printed = TRUE;
+          }
+        }
+#endif
+        
 /*
 #define FUNC_TO_DEBUG_MSG(function, message) \
 if (mob_index[GET_MOB_RNUM(i)].func == (function) || mob_index[GET_MOB_RNUM(i)].sfunc == (function)) \
