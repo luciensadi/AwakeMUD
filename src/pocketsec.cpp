@@ -36,21 +36,25 @@
 #define SEC_NOTEADD2		19
 #define SEC_NOTEDEL		20
 
+#define POCSEC_FOLDER_MAIL      "Mail"
+#define POCSEC_FOLDER_NOTES     "Notes"
+#define POCSEC_FOLDER_PHONEBOOK "Phonebook"
+#define POCSEC_FOLDER_FILES     "Files"
+
 ACMD_DECLARE(do_phone);
 
-void initialize_pocket_secretary(struct obj_data *sec) {
+struct obj_data *generate_pocket_secretary_folder(struct obj_data *sec, const char *string) {
   struct obj_data *folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
-  folder->restring = str_dup("Mail");
+  folder->restring = str_dup(string);
   obj_to_obj(folder, sec);
-  folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
-  folder->restring = str_dup("Notes");
-  obj_to_obj(folder, sec);
-  folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
-  folder->restring = str_dup("Phonebook");
-  obj_to_obj(folder, sec);
-  folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
-  folder->restring = str_dup("Files");
-  obj_to_obj(folder, sec);
+  return folder;
+}
+
+void initialize_pocket_secretary(struct obj_data *sec) {
+  generate_pocket_secretary_folder(sec, POCSEC_FOLDER_MAIL);
+  generate_pocket_secretary_folder(sec, POCSEC_FOLDER_NOTES);
+  generate_pocket_secretary_folder(sec, POCSEC_FOLDER_PHONEBOOK);
+  generate_pocket_secretary_folder(sec, POCSEC_FOLDER_FILES);
 }
 
 void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
@@ -95,13 +99,19 @@ void pocketsec_phonemenu(struct descriptor_data *d)
   struct obj_data *data = NULL, *folder = SEC->contains;
   int i = 0;
   for (; folder; folder = folder->next_content)
-    if (!strcmp(folder->restring, "Phonebook"))
+    if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
       break;
   CLS(CH);
-  send_to_char(CH, "^LYour Phonebook^n\r\n");
-  for (data = folder->contains; data; data = data->next_content) {
-    i++;
-    send_to_char(CH, " %2d > %-20s - %s\r\n", i, GET_OBJ_NAME(data), GET_OBJ_DESC(data));
+  if (!folder) {
+    send_to_char("Your phonebook is empty.", CH);
+    mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
+    generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
+  } else {
+    send_to_char(CH, "^LYour Phonebook^n\r\n");
+    for (data = folder->contains; data; data = data->next_content) {
+      i++;
+      send_to_char(CH, " %2d > %-20s - %s\r\n", i, GET_OBJ_NAME(data), GET_OBJ_DESC(data));
+    }
   }
   send_to_char("\r\n[^cC^n]^call^n     [^cA^n]^cdd Name^n     [^cD^n]^celete Name^n     [^cB^n]^cack^n\r\n", CH);
   d->edit_mode = SEC_PHONEMENU;
@@ -112,8 +122,13 @@ void pocketsec_notemenu(struct descriptor_data *d)
   struct obj_data *data = NULL, *folder = SEC->contains;
   int i = 0;
   for (; folder; folder = folder->next_content)
-    if (!strcmp(folder->restring, "Notes"))
+    if (!strcmp(folder->restring, POCSEC_FOLDER_NOTES))
       break;
+      
+  if (!folder) {
+    mudlog("Prevented missing-notes crash. This player has lost their notes.", d->character, LOG_SYSLOG, TRUE);
+    folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
+  }
   CLS(CH);
   send_to_char(CH, "^LNotes^n\r\n");
   for (data = folder->contains; data; data = data->next_content) {
@@ -154,8 +169,14 @@ void pocketsec_mailmenu(struct descriptor_data *d)
   int i = 0;
 
   for (; folder; folder = folder->next_content)
-    if (!strcmp(folder->restring, "Mail"))
+    if (!strcmp(folder->restring, POCSEC_FOLDER_MAIL))
       break;
+      
+  if (!folder) {
+    mudlog("Prevented missing-mail crash. This player has lost their mail.", d->character, LOG_SYSLOG, TRUE);
+    folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_MAIL);
+  }
+  
   while (amount_of_mail_waiting(CH) > 0) {
     mail = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL);
     mail->photo = str_dup(get_and_delete_one_message(CH, sender));
@@ -247,8 +268,14 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_PHONECALL:
       for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, "Phonebook"))
+        if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
           break;
+          
+      if (!folder) {
+        mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
+        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
+      }
+      
       i = atoi(arg);
       for (file = folder->contains; file && i > 1; file = file->next_content)
         i--;
@@ -264,8 +291,14 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_PHONEADD1:
       for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, "Phonebook"))
+        if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
           break;
+          
+      if (!folder) {
+        mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
+        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
+      }
+        
       file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);       
       obj_to_obj(file, folder);
       file->restring = str_dup(arg);
@@ -274,15 +307,24 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_PHONEADD2:
       for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, "Phonebook"))
+        if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
           break;
+      if (!folder) {
+        mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
+        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
+      }
       folder->contains->photo = str_dup(arg);
       pocketsec_phonemenu(d);
       break;
     case SEC_PHONEDEL:
       for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, "Phonebook"))
+        if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
           break;
+      
+      if (!folder) {
+        mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
+        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
+      }
           
       if (arg && *arg == '*') {
         struct obj_data *next;
@@ -322,8 +364,14 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_NOTEREAD:
       for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, "Notes"))
+        if (!strcmp(folder->restring, POCSEC_FOLDER_NOTES))
           break;
+          
+      if (!folder) {
+        mudlog("Prevented missing-notes crash. This player has lost their notes.", d->character, LOG_SYSLOG, TRUE);
+        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
+      }
+      
       i = atoi(arg);
       for (file = folder->contains; file && i > 1; file = file->next_content)
         i--;
@@ -343,8 +391,14 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_NOTEADD1:
       for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, "Notes"))
+        if (!strcmp(folder->restring, POCSEC_FOLDER_NOTES))
           break;
+          
+      if (!folder) {
+        mudlog("Prevented missing-notes crash. This player has lost their notes.", d->character, LOG_SYSLOG, TRUE);
+        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
+      }
+      
       file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);       
       obj_to_obj(file, folder);
       file->restring = str_dup(arg);
@@ -357,9 +411,14 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_NOTEDEL:
       for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, "Notes"))
+        if (!strcmp(folder->restring, POCSEC_FOLDER_NOTES))
           break;
           
+      if (!folder) {
+        mudlog("Prevented missing-notes crash. This player has lost their notes.", d->character, LOG_SYSLOG, TRUE);
+        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
+      }
+      
       if (arg && *arg == '*') {
         struct obj_data *next;
         for (file = folder->contains; file; file = next) {
@@ -440,8 +499,13 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_DELMAIL:
       for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, "Mail"))
+        if (!strcmp(folder->restring, POCSEC_FOLDER_MAIL))
           break;
+          
+      if (!folder) {
+        mudlog("Prevented missing-mail crash. This player has lost their mail.", d->character, LOG_SYSLOG, TRUE);
+        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_MAIL);
+      }
       
       if (arg && *arg == '*') {
         struct obj_data *next;
@@ -476,8 +540,14 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_READMAIL:
       for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, "Mail"))
+        if (!strcmp(folder->restring, POCSEC_FOLDER_MAIL))
           break;
+          
+      if (!folder) {
+        mudlog("Prevented missing-mail crash. This player has lost their mail.", d->character, LOG_SYSLOG, TRUE);
+        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_MAIL);
+      }
+          
       i = atoi(arg);
       for (file = folder->contains; file && i > 1; file = file->next_content)
         i--;
