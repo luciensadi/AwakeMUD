@@ -5163,8 +5163,10 @@ SPECIAL(mageskill_hermes)
   for (mage = ch->in_room->people; mage; mage = mage->next_in_room)
     if (GET_MOB_VNUM(mage) == 24806)
       break;
+      
   if (!mage)
     return FALSE;
+    
   if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
     skip_spaces(&argument);
     for (recom = ch->carrying; recom; recom = recom->next_content)
@@ -5219,10 +5221,16 @@ SPECIAL(mageskill_hermes)
 
 SPECIAL(mageskill_moore)
 {
-  struct char_data *mage = (struct char_data *) me;;
+  struct char_data *mage = NULL;
   struct obj_data *recom = NULL;
+  
+  if (!ch)
+    return FALSE;  
+  for (mage = ch->in_room->people; mage; mage = mage->next_in_room)
+    if (GET_MOB_VNUM(mage) == 35538)
+      break;
 
-  if (!ch || !mage)
+  if (!mage)
     return FALSE;
     
   if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {

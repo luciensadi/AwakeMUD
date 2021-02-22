@@ -743,7 +743,7 @@ void death_penalty(struct char_data *ch)
   
   if(!IS_NPC(ch)
      && !PLR_FLAGGED(ch, PLR_NEWBIE)
-     && !number(0, 24)) // a 1:25 chance of incurring death penalty.
+     && !number(0, DEATH_PENALTY_CHANCE)) // a 1:25 chance of incurring death penalty.
   {
     bool kosher = FALSE;
     for (int limiter = 20; limiter > 0; limiter--) {
