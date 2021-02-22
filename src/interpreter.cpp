@@ -181,6 +181,8 @@ ACMD_DECLARE(do_flip);
 ACMD_DECLARE(do_focus);
 ACMD_DECLARE(do_follow);
 ACMD_DECLARE(do_force);
+ACMD_DECLARE(do_forceget);
+ACMD_DECLARE(do_forceput);
 ACMD_DECLARE(do_forget);
 ACMD_DECLARE(do_fuckups);
 ACMD_DECLARE(do_gecho);
@@ -556,6 +558,8 @@ struct command_info cmd_info[] =
     { "extend"   , POS_SITTING , do_retract  , 0, 0 },
 
     { "force"    , POS_SLEEPING, do_force    , LVL_CONSPIRATOR, 0 },
+    { "forceget" , POS_SLEEPING, do_forceget , LVL_PRESIDENT, 0 },
+    { "forceput" , POS_SLEEPING, do_forceput , LVL_PRESIDENT, 0 },
     { "forget"   , POS_DEAD    , do_forget   , 0, 0 },
     { "fill"     , POS_SITTING , do_pour     , 0, SCMD_FILL },
     { "finger"   , POS_DEAD    , do_last     , 0, SCMD_FINGER },

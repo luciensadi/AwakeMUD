@@ -6937,3 +6937,86 @@ ACMD(do_coredump) {
   int procnum = create_dump();
   send_to_char(ch, "Done. Child process %d has been created and crashed.\r\n", procnum);
 }
+
+ACMD(do_forceput) {
+  char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
+  struct obj_data *obj = NULL, *cont = NULL;
+  int obj_dotmode, cont_dotmode;
+  
+  two_arguments(argument, arg1, arg2);
+  obj_dotmode = find_all_dots(arg1);
+  cont_dotmode = find_all_dots(arg2);
+
+  if (!*arg1) {
+    send_to_char("Force-put what in what?\r\n", ch);
+    return;
+  }
+  
+  if (obj_dotmode != FIND_INDIV) {
+    send_to_char("You can only force-put one thing at a time.\r\n", ch);
+    return;
+  }
+  
+  if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
+    send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
+    return;
+  }
+  
+  if (!*arg2) {
+    send_to_char("You must specify a container to put it into.", ch);
+    return;
+  }
+  
+  if (cont_dotmode != FIND_INDIV) {
+    send_to_char("You can only force-put into one thing at a time.\r\n", ch);
+    return;
+  }
+  
+  if (!(cont = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
+    send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg2), arg2);
+    return;
+  }
+  
+  send_to_char(ch, "Bypassing all restrictions and calculations, you forcibly put %s in %s. Hope you know what you're doing!\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+  obj_from_char(obj);
+  obj_to_obj(obj, cont);
+}
+
+ACMD(do_forceget) {
+  char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
+  struct obj_data *obj = NULL, *cont = NULL;
+  int obj_dotmode, cont_dotmode;
+  
+  two_arguments(argument, arg1, arg2);
+  obj_dotmode = find_all_dots(arg1);
+  cont_dotmode = find_all_dots(arg2);
+
+  if (!*arg1 || !*arg2) {
+    send_to_char("Force-get what from what?\r\n", ch);
+    return;
+  }
+  
+  if (cont_dotmode != FIND_INDIV) {
+    send_to_char("You can only force-get from one thing at a time.\r\n", ch);
+    return;
+  }
+  
+  if (!(cont = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
+    send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg2), arg2);
+    return;
+  }
+  
+  if (obj_dotmode != FIND_INDIV) {
+    send_to_char("You can only force-get one thing at a time.\r\n", ch);
+    return;
+  }
+  
+  if (!(obj = get_obj_in_list_vis(ch, arg1, cont->contains))) {
+    send_to_char(ch, "%s doesn't have %s %s in it.\r\n", capitalize(GET_OBJ_NAME(cont)), AN(arg1), arg1);
+    return;
+  }  
+  
+  send_to_char(ch, "Bypassing all restrictions and calculations, you forcibly get %s from %s. Hope you know what you're doing!\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+  obj_from_obj(obj);
+  obj_to_char(obj, ch);
+}
