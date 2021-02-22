@@ -1986,7 +1986,7 @@ struct room_data *get_veh_in_room(struct veh_data *veh) {
   /*  This is not precisely an error case-- it just means the vehicle is being towed. -- LS. 
   if (!veh->in_room) {
     char errbuf[500];
-    sprintf(errbuf, "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
+    snprintf(errbuf, sizeof(errbuf), "SYSERR: get_veh_in_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
     mudlog(errbuf, NULL, LOG_SYSLOG, TRUE); 
     
   }

@@ -658,7 +658,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
                      GET_NAME(keeper), HSSH(keeper));
       } else {
-        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return;
       }
@@ -677,7 +677,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
                      GET_NAME(keeper), HSSH(keeper));
       } else {
-        sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+        snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
         return;
       }
@@ -1624,7 +1624,7 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
           send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
                        GET_NAME(keeper), HSSH(keeper));
         } else {
-          sprintf(buf, "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
+          snprintf(buf, sizeof(buf), "%s No Credstick, No Sale.", GET_CHAR_NAME(ch));
           do_say(keeper, buf, cmd_say, SCMD_SAYTO);
           return;
         }
