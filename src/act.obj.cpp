@@ -1928,6 +1928,7 @@ void weight_change_object(struct obj_data * obj, float weight)
   struct obj_data *tmp_obj = NULL;
   struct char_data *tmp_ch = NULL;
   struct veh_data *tmp_veh = NULL;
+  int worn_on = -1;
 
   // Remove it from its container (subtracting its current weight from the container's values).
   if ((tmp_ch = obj->carried_by))
@@ -1936,6 +1937,8 @@ void weight_change_object(struct obj_data * obj, float weight)
     obj_from_obj(obj);
   else if ((tmp_veh = obj->in_veh))
     obj_from_room(obj);
+  else if (obj->worn_by && (worn_on = obj->worn_on) >= 0)
+    unequip_char((tmp_ch = obj->worn_by), obj->worn_on, TRUE);
   
   // If none of the above are true, then this object is either in a room or is being juggled by the code somewhere (ex: zoneloading). Either way, no parent containers need updating.
   
@@ -1943,9 +1946,12 @@ void weight_change_object(struct obj_data * obj, float weight)
   GET_OBJ_WEIGHT(obj) = MAX(0, GET_OBJ_WEIGHT(obj) + weight);
   
   // Return it to its container, re-adding its weight.
-  if (tmp_ch)
-    obj_to_char(obj, tmp_ch);
-  else if (tmp_obj)
+  if (tmp_ch) {
+    if (worn_on)
+      equip_char(tmp_ch, obj, worn_on);
+    else
+      obj_to_char(obj, tmp_ch);
+  } else if (tmp_obj)
     obj_to_obj(obj, tmp_obj);
   else if (tmp_veh)
     obj_to_veh(obj, tmp_veh);

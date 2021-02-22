@@ -1227,32 +1227,43 @@ bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch
   }
   
   // Pre-compose our message header.
-  snprintf(buf3, sizeof(buf3), "ERROR: check_obj_to_x_preconditions() failure for %s (%ld): ", GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
-  
-  // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
-  if (object->next_content) {
-    strcat(ENDOF(buf3), "It's already part of a next_content linked list.");
-    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
-    return FALSE;
-  }
+  snprintf(buf3, sizeof(buf3), "ERROR: check_obj_to_x_preconditions() failure for %s (%ld): \r\n", GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
+  size_t starting_strlen = strlen(buf3);
 
   // We can't give an object away that's already someone else's possession.
   if (object->carried_by) {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Object already belongs to %s.", GET_CHAR_NAME(object->carried_by));
-    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
-    return FALSE;
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object already carried by %s.\r\n", GET_CHAR_NAME(object->carried_by));
   }
   
   // We can't give an object away if it's sitting in a room.
   if (object->in_room) {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Object is already in room %ld.", object->in_room->number);
-    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
-    return FALSE;
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in room %ld.\r\n", object->in_room->number);
   }
   
   // We can't give an object away if it's in a vehicle.
   if (object->in_veh) {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "Object is already in vehicle %s.", GET_VEH_NAME(object->in_veh));
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in vehicle %s.\r\n", GET_VEH_NAME(object->in_veh));
+  }
+  
+  // We can't give an object away if it's in another object.
+  if (object->in_obj) {
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object is already in object %s.\r\n", GET_OBJ_NAME(object->in_obj));
+  }
+  
+  // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
+  if (object->next_content) {
+    strcat(ENDOF(buf3), "- It's already part of a next_content linked list.\r\n");
+  }
+  
+  // Can't give away something that's worn by someone else.
+  if (object->worn_by) {
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "- Object already carried by %s.\r\n", GET_CHAR_NAME(object->carried_by));
+  }
+  
+  // If we added anything, log it.
+  if (starting_strlen != strlen(buf3)) {
+    const char *representation = generate_new_loggable_representation(object);
+    strlcat(buf3, representation, sizeof(buf3));
     mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
