@@ -1651,6 +1651,14 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
   struct char_data *vict = (obj->worn_by ? obj->worn_by : obj->carried_by);
   struct obj_data *temp, *next;
   
+  // Ensure the vict is identified, if any.
+  if (!vict) {
+    struct obj_data *container = NULL;
+    for (container = obj->in_obj; container && container->in_obj; container = container->in_obj);
+    if (container)
+      vict = (container->worn_by ? container->worn_by : container->carried_by);
+  }
+  
   // PC corpses are indestructable by normal means
   if ( IS_OBJ_STAT(obj, ITEM_CORPSE) && GET_OBJ_VAL(obj, 4) == 1 )
   {
@@ -1740,21 +1748,36 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
       }
       break;
   }
+  char inside_buf[200];
+  if (obj->in_obj)
+    snprintf(inside_buf, sizeof(inside_buf), "Inside %s, ",
+             GET_OBJ_NAME(obj->in_obj));
+  else
+    strlcpy(inside_buf, "", sizeof(inside_buf));
+    
   if (power < rating) {
     if (ch)
-      send_to_char(ch, "%s has been slightly damaged.\r\n",
-                   CAP(GET_OBJ_NAME(obj)));
+      send_to_char(ch, "%s%s%s%s has been slightly damaged.^n\r\n",
+                   ch == vict ? "^y" : "",
+                   CAP(inside_buf),
+                   GET_OBJ_NAME(obj),
+                   ch == vict ? "^y" : "");
     if (vict && vict != ch)
-      send_to_char(vict, "%s has been slightly damaged.\r\n",
-                   CAP(GET_OBJ_NAME(obj)));
+      send_to_char(vict, "^y%s%s^y has been slightly damaged.^n\r\n",
+                   CAP(inside_buf),
+                   GET_OBJ_NAME(obj));
     GET_OBJ_CONDITION(obj)--;
   } else {
     if (ch)
-      send_to_char(ch, "%s has been damaged!\r\n",
-                   CAP(GET_OBJ_NAME(obj)));
+      send_to_char(ch, "%s%s%s%s has been damaged!\r\n",
+                   ch == vict ? "^Y" : "",
+                   CAP(inside_buf),
+                   GET_OBJ_NAME(obj),
+                   ch == vict ? "^Y" : "");
     if (vict && vict != ch)
-      send_to_char(vict, "%s has been damaged!\r\n",
-                   CAP(GET_OBJ_NAME(obj)));
+      send_to_char(vict, "^Y%s%s^Y has been damaged!^n\r\n",
+                   CAP(inside_buf),
+                   GET_OBJ_NAME(obj));
     GET_OBJ_CONDITION(obj) -= 1 + (power - rating) / half;
   }
   
@@ -1763,16 +1786,30 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
   if (GET_OBJ_CONDITION(obj) <= 0)
   {
     if (ch)
-      send_to_char(ch, "%s has been destroyed!\r\n",
-                   CAP(GET_OBJ_NAME(obj)));
+      send_to_char(ch, "%s%s%s%s has been destroyed!\r\n",
+                   ch == vict ? "^R" : "",
+                   CAP(inside_buf),
+                   GET_OBJ_NAME(obj),
+                   ch == vict ? "^R" : "^n");
     if (vict && vict != ch)
-      send_to_char(vict, "%s has been destroyed!\r\n",
-                   CAP(GET_OBJ_NAME(obj)));
+      send_to_char(vict, "^R%s%s^R has been destroyed!^n\r\n",
+                   CAP(inside_buf),
+                   GET_OBJ_NAME(obj));
+                   
     if (ch && !IS_NPC(ch) && GET_QUEST(ch))
       check_quest_destroy(ch, obj);
     else if (ch && AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
              !IS_NPC(ch->master) && GET_QUEST(ch->master))
       check_quest_destroy(ch->master, obj);
+      
+    // Log destruction.
+    const char *representation = generate_new_loggable_representation(obj);
+    snprintf(buf, sizeof(buf), "Destroying %s's %s due to combat damage. Representation: [%s]", 
+             vict ? GET_CHAR_NAME(vict) : "nobody",
+             GET_OBJ_NAME(obj),
+             representation);
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    delete [] representation;
     
     // Disgorge contents, except for pocsecs.
     if (GET_OBJ_SPEC(obj) != pocket_sec) {
@@ -1780,9 +1817,9 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
         next = temp->next_content;
         obj_from_obj(temp);
         if ((IS_OBJ_STAT(obj, ITEM_CORPSE) && !GET_OBJ_VAL(obj, 4) &&
-             GET_OBJ_TYPE(temp) != ITEM_MONEY) || GET_OBJ_VNUM(obj) == 118)
+             GET_OBJ_TYPE(temp) != ITEM_MONEY) || GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER) {
           extract_obj(temp);
-        else if (vict)
+        } else if (vict)
           obj_to_char(temp, vict);
         else if (obj->in_room)
           obj_to_room(temp, obj->in_room);

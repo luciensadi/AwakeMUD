@@ -418,9 +418,9 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         || (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO))
     {
       bought = 0;
+      float current_obj_weight = 0;
           
       // Deduct money up to the amount they can afford. Update the object's cost to match.
-      float current_obj_weight = GET_OBJ_WEIGHT(obj);
       while (bought < buynum && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price) {
         bought++;
         
@@ -468,7 +468,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content) {
-          if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) && 
+          if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO && 
               GET_AMMOBOX_INTENDED_QUANTITY(obj) <= 0 &&
               GET_AMMOBOX_WEAPON(obj) == GET_AMMOBOX_WEAPON(orig) &&
               GET_AMMOBOX_TYPE(obj) == GET_AMMOBOX_TYPE(orig))
@@ -508,8 +508,9 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       else {
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content)
-          if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(orig, 0) &&
-              GET_OBJ_VAL(obj, 1) == GET_OBJ_VAL(orig, 1))
+          if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) 
+              && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(orig, 0) 
+              && GET_OBJ_VAL(obj, 1) == GET_OBJ_VAL(orig, 1))
             break;
         if (orig) {
           GET_OBJ_COST(orig) += GET_OBJ_COST(obj);
