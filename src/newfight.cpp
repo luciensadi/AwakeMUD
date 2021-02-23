@@ -1028,7 +1028,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
         act(rbuf, FALSE, attacker, NULL, NULL, TO_ROLLS);
         if (successes <= 0) {
-          act("Your monowhip flails out of control, striking you instead of $N!", FALSE, attacker, 0, defender, TO_CHAR);
+          act("^yYour monowhip flails out of control, striking you instead of $N!^n", FALSE, attacker, 0, defender, TO_CHAR);
           act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
           int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
 

@@ -4290,6 +4290,7 @@ void roll_initiative(void)
         act("You are hit by flying objects!\r\n", FALSE, ch, 0, 0, TO_CHAR);
         act("$n is hit by flying objects!\r\n", TRUE, ch, 0, 0, TO_ROOM);
         damage(ch, ch, dam, TYPE_POLTERGEIST, MENTAL);
+        // TODO: Doesn't this cause issues if poltergeist kills someone during the init roll?
       }
     }
   }
@@ -4315,6 +4316,11 @@ void perform_violence(void)
     // You're not in combat or not awake.
     if (!CH_IN_COMBAT(ch) || !AWAKE(ch)) {
       stop_fighting(ch);
+      continue;
+    }
+    
+    if (!FIGHTING(ch)) {
+      mudlog("SYSERR: Character is in the combat list, but isn't fighting anything!", ch, LOG_SYSLOG, TRUE);
       continue;
     }
   
@@ -4383,7 +4389,8 @@ void perform_violence(void)
     if (IS_AFFECTED(ch, AFF_BANISH) 
         && FIGHTING(ch) 
         && (IS_ELEMENTAL(FIGHTING(ch)) 
-            || IS_SPIRIT(FIGHTING(ch)))) {
+            || IS_SPIRIT(FIGHTING(ch)))) 
+    {
       struct char_data *spirit, *mage;
       if (IS_NPC(ch)) {
         spirit = ch;
@@ -4446,7 +4453,8 @@ void perform_violence(void)
           && GET_SKILL(ch, SKILL_SORCERY) > 0 
           && GET_MENTAL(ch) > 400 
           && ch->in_room == FIGHTING(ch)->in_room 
-          && success_test(1, 8 - GET_SKILL(ch, SKILL_SORCERY))) {
+          && success_test(1, 8 - GET_SKILL(ch, SKILL_SORCERY))) 
+      {
         mob_magic(ch);
         continue;
       }

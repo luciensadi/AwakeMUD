@@ -1712,8 +1712,14 @@ ACMD(do_connect)
         }
       }
       if (GET_OBJ_VAL(soft, 4)) {
-        if (GET_OBJ_VAL(soft, 2) > DECKER->active || GET_OBJ_VAL(soft, 1) > DECKER->mpcp)
+        if (GET_OBJ_VAL(soft, 2) > DECKER->active) {
+          send_to_char(ch, "%s would exceed your deck's active memory, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
+        }
+        if (GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
+          send_to_char(ch, "%s is too advanced for your deck's MPCP rating, so it failed to load.\r\n", GET_OBJ_NAME(soft));
+          continue;
+        }
         struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL);
         if (soft->restring)
           active->restring = str_dup(soft->restring);

@@ -394,8 +394,8 @@ void House_crashsave(vnum_t vnum)
   // If the dirty bit is not set, we don't save the room-- it means nobody was here.
   // YES, this does induce bugs, like evaluate programs not decaying if nobody is around to see it happen--
   // but fuck it, if someone exploits it we'll just ban them. Easy enough.
-  if (!world[rnum].dirty_bit) {
-    log_vfprintf("Skipping save for room %ld: Dirty bit is false.", vnum);
+  if (!world[rnum].dirty_bit && !world[rnum].people) {
+    log_vfprintf("Skipping save for room %ld: Dirty bit is false and room has no occupants.", vnum);
     return;
   } else {
     // Clear the dirty bit now that we've processed it.
