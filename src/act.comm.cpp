@@ -1261,8 +1261,8 @@ ACMD(do_language)
       if ((GET_SKILL(ch, i)) > 0) {
         snprintf(buf, sizeof(buf), "%-20s %-17s", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         if (GET_LANGUAGE(ch) == i)
-          strcat(buf, " ^Y(Speaking)^n");
-        strcat(buf, "\r\n");
+          strlcat(buf, " ^Y(Speaking)^n", sizeof(buf));
+        strlcat(buf, "\r\n", sizeof(buf));
         send_to_char(buf, ch);
       }
     }
