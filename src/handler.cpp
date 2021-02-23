@@ -1169,6 +1169,7 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   ch->next_in_room = room->people;
   room->people = ch;
   ch->in_room = room;
+  room->dirty_bit = TRUE;
   if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY))
     room->peaceful++;
   
@@ -1752,6 +1753,8 @@ void obj_to_room(struct obj_data * object, struct room_data *room)
     return;
   }
   
+  room->dirty_bit = TRUE;
+  
   for (i = room->contents; i; i = i->next_content) {
     if (i->item_number == object->item_number &&
         !strcmp(i->text.room_desc, object->text.room_desc) &&
@@ -1804,6 +1807,9 @@ void obj_from_room(struct obj_data * object)
       remove_workshop_from_room(object);
     REMOVE_FROM_LIST(object, object->in_room->contents, next_content);
   }
+  
+  if (object->in_room)
+    object->in_room->dirty_bit = TRUE;
   
   object->in_veh = NULL;
   object->in_room = NULL;
@@ -1879,6 +1885,9 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
     if (tmp_obj->worn_by)
       IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
   }
+  
+  if (tmp_obj && tmp_obj->in_room)
+    tmp_obj->in_room->dirty_bit = TRUE;
 }
 
 
@@ -1905,17 +1914,21 @@ void obj_from_obj(struct obj_data * obj)
     GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
     
   // Decks don't get their weight deducted from.
-  if (GET_OBJ_TYPE(temp) != ITEM_CYBERDECK || GET_OBJ_TYPE(temp) != ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(temp) != ITEM_CUSTOM_DECK)
+  if (GET_OBJ_TYPE(temp) != ITEM_CYBERDECK || GET_OBJ_TYPE(temp) != ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(temp) != ITEM_CUSTOM_DECK) {
     GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
+    
+    // Recalculate the bearer's weight.
+    if (temp->carried_by)
+      IS_CARRYING_W(temp->carried_by) -= GET_OBJ_WEIGHT(obj);
+    if (temp->worn_by)
+      IS_CARRYING_W(temp->worn_by) -= GET_OBJ_WEIGHT(obj);
+  }
   
   obj->in_obj = NULL;
   obj->next_content = NULL;
-  
-  // Recalculate the bearer's weight.
-  if (temp->carried_by)
-    IS_CARRYING_W(temp->carried_by) -= GET_OBJ_WEIGHT(obj);
-  if (temp->worn_by)
-    IS_CARRYING_W(temp->worn_by) -= GET_OBJ_WEIGHT(obj);
+    
+  if (temp && temp->in_room)
+    temp->in_room->dirty_bit = TRUE;
 }
 
 void extract_icon(struct matrix_icon * icon)
@@ -2094,6 +2107,10 @@ void extract_obj(struct obj_data * obj)
 {
   struct phone_data *phone, *temp;
   bool set = FALSE;
+  
+  if (obj->in_room)
+    obj->in_room->dirty_bit = TRUE;
+  
   if (obj->worn_by != NULL)
     if (unequip_char(obj->worn_by, obj->worn_on, TRUE) != obj)
       log("SYSLOG: Inconsistent worn_by and worn_on pointers!!");
@@ -2175,8 +2192,12 @@ void extract_char(struct char_data * ch)
   
   extern struct char_data *combat_list;
   
-  ACMD_CONST(do_return);
   void die_follower(struct char_data * ch);
+  
+  ACMD_CONST(do_return);
+  
+  if (ch->in_room)
+    ch->in_room->dirty_bit = TRUE;
   
   if (!IS_NPC(ch))
     playerDB.SaveChar(ch, GET_LOADROOM(ch));

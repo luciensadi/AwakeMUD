@@ -202,6 +202,8 @@ struct room_data
   byte silence[2];
   SPECIAL(*func);
   
+  bool dirty_bit;
+  
   int staff_level_lock;
   int elevator_number;
 
@@ -218,8 +220,8 @@ struct room_data
 #endif
   room_data() :
       name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
-      matrix(0), access(0), io(0), trace(0),
-      bandwidth(0), jacknumber(0), address(NULL), peaceful(0), func(NULL),
+      matrix(0), access(0), io(0), trace(0), bandwidth(0), jacknumber(0), 
+      address(NULL), peaceful(0), func(NULL), dirty_bit(FALSE),
       staff_level_lock(0), contents(NULL), people(NULL), vehicles(NULL), watching(NULL)
   {
     for (int i = 0; i < NUM_OF_DIRS; i++) {

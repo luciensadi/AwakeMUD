@@ -391,6 +391,17 @@ void House_crashsave(vnum_t vnum)
   if ((rnum = real_room(vnum)) == NOWHERE)
     return;
     
+  // If the dirty bit is not set, we don't save the room-- it means nobody was here.
+  // YES, this does induce bugs, like evaluate programs not decaying if nobody is around to see it happen--
+  // but fuck it, if someone exploits it we'll just ban them. Easy enough.
+  if (!world[rnum].dirty_bit) {
+    log_vfprintf("Skipping save for room %ld: Dirty bit is false.", vnum);
+    return;
+  } else {
+    // Clear the dirty bit now that we've processed it.
+    world[rnum].dirty_bit = FALSE;
+  }
+    
   // Calculate whether or not we should keep this house.
   bool should_we_keep_this_file = FALSE;
   house = find_house(vnum);
@@ -418,9 +429,10 @@ void House_crashsave(vnum_t vnum)
   if (house) {
     if (!House_get_filename(vnum, buf, sizeof(buf)))
       return;
-  } else
+  } else {
     if (!Storage_get_filename(vnum, buf, sizeof(buf)))
       return;
+  }
   
   // If it has no guests and no objects, why save it?
   if (!should_we_keep_this_file) {
