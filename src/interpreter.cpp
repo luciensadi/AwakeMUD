@@ -1654,6 +1654,8 @@ ACMD(do_alias)
 
   if (IS_NPC(ch) && !(ch->desc && ch->desc->original))
     return;
+    
+  ch->alias_dirty_bit = TRUE;
 
   repl = any_one_arg(argument, arg);
 

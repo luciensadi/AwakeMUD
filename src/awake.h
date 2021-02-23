@@ -1196,6 +1196,7 @@ enum {
 #define TYPE_PARTS       3
 #define TYPE_COOKER       4
 
+#define MIN_DRUG 1
 #define DRUG_ACTH  1
 #define DRUG_HYPER  2
 #define DRUG_JAZZ  3

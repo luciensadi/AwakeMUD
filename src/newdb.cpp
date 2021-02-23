@@ -1231,6 +1231,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     strcat(buf, ");");
     mysql_wrapper(mysql, buf);
   }
+  
   if (GET_TRADITION(player) != TRAD_MUNDANE) {
     snprintf(buf, sizeof(buf), "UPDATE pfiles_magic SET Mag=%d, Pool_Casting=%d, Pool_SpellDefense=%d, Pool_Drain=%d, Pool_Reflecting=%d,"\
                  "UsedGrade=%d, ExtraPower=%d, PowerPoints=%d, Sig=%d, Masking=%d, Totem=%d, TotemSpirit=%d, Aspect=%d WHERE idnum=%ld;", GET_REAL_MAG(player), GET_CASTING(player),
@@ -1351,19 +1352,23 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     mysql_wrapper(mysql, buf);
   }
 
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_alias WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_alias (idnum, command, replacement) VALUES (");
-  q = 0;
-  for (struct alias *a = GET_ALIASES(player); a; a = a->next) {
-    if (q)
-      strcat(buf, "), (");
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
-    q = 1;
-  }
-  if (q) {
-    strcat(buf, ");");
+  if (player->alias_dirty_bit) {
+    player->alias_dirty_bit = FALSE;
+    
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_alias WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
+    strcpy(buf, "INSERT INTO pfiles_alias (idnum, command, replacement) VALUES (");
+    q = 0;
+    for (struct alias *a = GET_ALIASES(player); a; a = a->next) {
+      if (q)
+        strcat(buf, "), (");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
+      q = 1;
+    }
+    if (q) {
+      strcat(buf, ");");
+      mysql_wrapper(mysql, buf);
+    }
   }
 
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_bioware WHERE idnum=%ld", GET_IDNUM(player));
@@ -1475,6 +1480,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     else
       obj = obj->next_content;
   }
+  
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   level = posi = 0;

@@ -744,6 +744,8 @@ struct char_data
   
   int congregation_bonus_pool;         /* Bonuses accrued from spending time in a congregation room */
   
+  bool alias_dirty_bit;
+  
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */
   unsigned short bullet_pants[(END_OF_AMMO_USING_WEAPONS + 1) - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES];
   
@@ -753,7 +755,7 @@ struct char_data
       in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL),
       ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
-      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL)
+      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL), congregation_bonus_pool(0), alias_dirty_bit(FALSE)
   {
     for (int i = 0; i < NUM_WEARS; i++)
       equipment[i] = NULL;

@@ -676,6 +676,7 @@ SPECIAL(landlord_spec)
     else {
       room_record->owner = 0;
       ROOM_FLAGS(&world[real_room(room_record->vnum)]).RemoveBit(ROOM_HOUSE);
+      // TODO: What if there are multiple houses connected to this atrium? This would induce a bug.
       ROOM_FLAGS(&world[room_record->atrium]).RemoveBit(ROOM_ATRIUM);
       House_save_control();
       House_get_filename(room_record->vnum, buf2, MAX_STRING_LENGTH);

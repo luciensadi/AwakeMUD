@@ -674,7 +674,7 @@ void point_update(void)
       if (i->bioware)
         check_bioware(i);
         
-      for (int x = 0; x < NUM_DRUGS; x++) {
+      for (int x = MIN_DRUG; x < NUM_DRUGS; x++) {
         if (GET_DRUG_ADDICT(i, x) > 0) {
           int tsl = (time(0) - GET_DRUG_LASTFIX(i, x)) / SECS_PER_MUD_DAY;
           GET_DRUG_ADDTIME(i, x)++;
