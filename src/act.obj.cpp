@@ -36,9 +36,7 @@ extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, in
 extern float get_bulletpants_weight(struct char_data *ch);
 
 // Corpse saving externs.
-extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
 extern void write_world_to_disk(int vnum);
-extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
 
 extern SPECIAL(fence);
 extern SPECIAL(hacker);
@@ -816,7 +814,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       get_check_money(ch, obj);
       
       if (cont->obj_flags.extra_flags.IsSet(ITEM_CORPSE) && GET_OBJ_VAL(cont, 4) && !cont->contains) {
-        if (ROOM_FLAGGED(cont->in_room, ROOM_CORPSE_SAVE_HACK)) {
+        if (cont->in_room && ROOM_FLAGGED(cont->in_room, ROOM_CORPSE_SAVE_HACK)) {
           bool should_clear_flag = TRUE;
           
           // Iterate through items in room, making sure there are no other corpses.
