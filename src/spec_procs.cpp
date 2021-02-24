@@ -3974,8 +3974,8 @@ SPECIAL(painter)
         snprintf(buf, sizeof(buf), "%s is wheeled out into the parking lot.", GET_VEH_NAME(veh));
         act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_ROOM);
         act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_CHAR);
-        save_vehicles();
       }
+      save_vehicles();
     }
   if (!CMD_IS("paint"))
     return FALSE;

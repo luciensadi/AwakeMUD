@@ -1010,36 +1010,40 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
           (att->weapon_is_gun ? att->ranged->is_physical : att->melee->is_physical) ? 'P' : 'M');
   act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
   
+  bool defender_died;
   if (att->weapon_is_gun) {
     combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->ranged->burst_count);
-    damage(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
+    defender_died = damage(att->ch, def->ch, damage_total, att->ranged->dam_type, att->ranged->is_physical);
   } else {
-    damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
+    defender_died = damage(att->ch, def->ch, damage_total, att->melee->dam_type, att->melee->is_physical);
   
-    if (successes_for_use_in_monowhip_test_check <= 0) {
-      struct obj_data *weapon = net_successes < 0 ? def->weapon : att->weapon;
-      if (weapon && obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) {
-        struct char_data *attacker = net_successes < 0 ? def->ch : att->ch;
-        struct char_data *defender = net_successes < 0 ? att->ch : def->ch;
-      
-        int target = 6 + modify_target(attacker);
-        int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
-        int successes = success_test(skill, target);
-        snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
-        act(rbuf, FALSE, attacker, NULL, NULL, TO_ROLLS);
-        if (successes <= 0) {
-          act("^yYour monowhip flails out of control, striking you instead of $N!^n", FALSE, attacker, 0, defender, TO_CHAR);
-          act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
-          int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
-
-          damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL);
-          return;
+    if (!defender_died) {
+      if (successes_for_use_in_monowhip_test_check <= 0) {
+        struct obj_data *weapon = net_successes < 0 ? def->weapon : att->weapon;
+        if (weapon && obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip) {
+          struct char_data *attacker = net_successes < 0 ? def->ch : att->ch;
+          struct char_data *defender = net_successes < 0 ? att->ch : def->ch;
+        
+          int target = 6 + modify_target(attacker);
+          int skill = get_skill(attacker, SKILL_WHIPS_FLAILS, target);
+          int successes = success_test(skill, target);
+          snprintf(rbuf, sizeof(rbuf), "Monowhip 'flailure' test: Skill of %d, target of %d, successes is %d.", skill, target, successes);
+          act(rbuf, FALSE, attacker, NULL, NULL, TO_ROLLS);
+          if (successes <= 0) {
+            act("^yYour monowhip flails out of control, striking you instead of $N!^n", FALSE, attacker, 0, defender, TO_CHAR);
+            act("$n's monowhip completely misses and recoils to hit $m!", TRUE, attacker, 0, 0, TO_ROOM);
+            int dam_total = convert_damage(stage(-1 * success_test(GET_BOD(attacker) + (successes == 0 ? GET_DEFENSE(attacker) : 0), 10), SERIOUS));
+            
+            // If the attacker dies from backlash, bail out.
+            if (damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL))
+              return;
+          }
         }
       }
     }
   }
   
-  if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
+  if (!defender_died && !IS_NPC(att->ch) && IS_NPC(def->ch)) {
     GET_LASTHIT(def->ch) = GET_IDNUM(att->ch);
   }
   
@@ -1055,7 +1059,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     int staged_dam = stage(-recoil_successes, LIGHT);
     snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
-    damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE);
+    
+    // If the attacker dies from recoil, bail out.
+    if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
+      return;
   }
   
   // Set the violence background count.
