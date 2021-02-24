@@ -4319,7 +4319,7 @@ void perform_violence(void)
       continue;
     }
     
-    if (!FIGHTING(ch)) {
+    if (!FIGHTING(ch) && !FIGHTING_VEH(ch)) {
       mudlog("SYSERR: Character is in the combat list, but isn't fighting anything!", ch, LOG_SYSLOG, TRUE);
       send_to_char("Your mind goes fuzzy for a moment, and you shake your head, then stand down.\r\n", ch);
       stop_fighting(ch);
@@ -4583,7 +4583,7 @@ void perform_violence(void)
         stop_fighting(ch);
       else
         vcombat(ch, FIGHTING_VEH(ch));
-    } else {
+    } else if (FIGHTING(ch)) {
       hit(ch,
           FIGHTING(ch),
           GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD),
@@ -4597,6 +4597,11 @@ void perform_violence(void)
             GET_EQ(ch, WEAR_HOLD),
             GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD),
             NULL);
+    } else {
+      mudlog("SYSERR: Character is in the combat list, but isn't fighting anything! (Second block)", ch, LOG_SYSLOG, TRUE);
+      send_to_char("Your mind goes fuzzy for a moment, and you shake your head, then stand down.\r\n", ch);
+      stop_fighting(ch);
+      continue;
     }
     
     if (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_SPEC) &&
