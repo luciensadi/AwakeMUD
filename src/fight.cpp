@@ -4321,6 +4321,7 @@ void perform_violence(void)
     
     if (!FIGHTING(ch)) {
       mudlog("SYSERR: Character is in the combat list, but isn't fighting anything!", ch, LOG_SYSLOG, TRUE);
+      send_to_char("Your mind goes fuzzy for a moment, and you shake your head, then stand down.\r\n", ch);
       stop_fighting(ch);
       continue;
     }
