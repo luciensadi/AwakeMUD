@@ -624,6 +624,7 @@ void affect_total(struct char_data * ch)
         GET_IMPACT(ch) += suitimp;
       else {
         if (suitimp >= highestimp) {
+          // TODO: The calculations for totalbal/totalimp are a little screwy in conjunction with sets-- looks like sets are counted twice.
           GET_IMPACT(ch) -= highestimp;
           GET_IMPACT(ch) += highestimp / 2;
           GET_IMPACT(ch) += suitimp;

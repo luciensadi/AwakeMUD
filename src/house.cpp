@@ -395,7 +395,7 @@ void House_crashsave(vnum_t vnum)
   // YES, this does induce bugs, like evaluate programs not decaying if nobody is around to see it happen--
   // but fuck it, if someone exploits it we'll just ban them. Easy enough.
   if (!world[rnum].dirty_bit && !world[rnum].people) {
-    log_vfprintf("Skipping save for room %ld: Dirty bit is false and room has no occupants.", vnum);
+    // log_vfprintf("Skipping save for room %ld: Dirty bit is false and room has no occupants.", vnum);
     return;
   } else {
     // Clear the dirty bit now that we've processed it.

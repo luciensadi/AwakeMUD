@@ -3018,7 +3018,7 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     
   // Discard directional commands and other high-noise things that can't affect other players.
   const char *discard_commands[] = {
-    "north", "south", "east", "west",
+    "north", "south", "east", "west", "up", "down",
     "northeast", "ne",
     "southeast", "se",
     "southwest", "sw",

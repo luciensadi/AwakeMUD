@@ -4554,6 +4554,35 @@ SPECIAL(chargen_unpractice_skill)
   return FALSE;
 }
 
+SPECIAL(chargen_language_annex) {
+  NO_DRAG_BULLSHIT;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+    
+  if (CMD_IS("ne") || CMD_IS("northeast") || CMD_IS("sw") || CMD_IS("southwest")) {
+    int language_skill_total = 0;
+    for (int i = SKILL_ENGLISH; i < MAX_SKILLS && language_skill_total < STARTING_LANGUAGE_SKILL_LEVEL; i++)
+      if (SKILL_IS_LANGUAGE(i) && GET_SKILL(ch, i) > 0)
+        language_skill_total += GET_SKILL(ch, i);
+    
+    if (language_skill_total < STARTING_LANGUAGE_SKILL_LEVEL) {
+      send_to_char(ch, "You need to have a minimum of %d skill points spent in languages, so you still need to spend %d point%s.\r\n", 
+                   STARTING_LANGUAGE_SKILL_LEVEL,
+                   STARTING_LANGUAGE_SKILL_LEVEL - language_skill_total,
+                   STARTING_LANGUAGE_SKILL_LEVEL - language_skill_total != 1 ? "s" : "");
+      return TRUE;
+    }
+  }
+  
+  // Tie in with the chargen_unpractice_skill routine above.
+  if (CMD_IS("unpractice")) {
+    return chargen_unpractice_skill(ch, NULL, cmd, argument);
+  }
+  
+  return FALSE;
+}
+
 // Prevent people from moving south from teachers until they've spent all their skill points.
 SPECIAL(chargen_skill_annex) {
   NO_DRAG_BULLSHIT;
@@ -4569,10 +4598,12 @@ SPECIAL(chargen_skill_annex) {
     return FALSE;
   }
   
-  if ((CMD_IS("s") || CMD_IS("south")) && GET_SKILL_POINTS(ch) > 0) {
-    send_to_char(ch, "You still have %d skill point%s to spend! You should finish ^WPRACTICE^n-ing your skills before you proceed.\r\n",
-                 GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
-    return TRUE;
+  if ((CMD_IS("s") || CMD_IS("south"))) {
+    if (GET_SKILL_POINTS(ch) > 0) {
+      send_to_char(ch, "You still have %d skill point%s to spend! You should finish ^WPRACTICE^n-ing your skills before you proceed.\r\n",
+                   GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
+      return TRUE;
+    }
   }
   
   if (CMD_IS("practice")) {

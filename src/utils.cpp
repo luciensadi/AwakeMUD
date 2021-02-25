@@ -3202,6 +3202,27 @@ float get_proto_weight(struct obj_data *obj) {
     return GET_OBJ_WEIGHT(&obj_proto[rnum]);
 }
 
+int get_armor_penalty_grade(struct char_data *ch) {
+  int total = 0;
+  
+  if (GET_TOTALBAL(ch) > GET_QUI(ch))
+    total += GET_TOTALBAL(ch) - GET_QUI(ch);
+  if (GET_TOTALIMP(ch) > GET_QUI(ch))
+    total += GET_TOTALIMP(ch) - GET_QUI(ch);
+  if (total > 0) {
+    if (total >= GET_QUI(ch))
+      return ARMOR_PENALTY_TOTAL;
+    else if (total >= GET_QUI(ch) * 3/4)
+      return ARMOR_PENALTY_HEAVY;
+    else if (total >= GET_QUI(ch) / 2)
+      return ARMOR_PENALTY_MEDIUM;
+    else
+      return ARMOR_PENALTY_LIGHT;
+  }
+  
+  return ARMOR_PENALTY_NONE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

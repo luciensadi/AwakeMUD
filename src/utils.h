@@ -397,10 +397,13 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_NOT(ch)           ((ch)->points.noto)
 #define GET_TKE(ch)           ((ch)->points.tke)
 #define GET_SIG(ch)	      ((ch)->points.sig)
+
 #define GET_TOTALBAL(ch)      ((ch)->points.ballistic[1])
 #define GET_BALLISTIC(ch)     ((ch)->points.ballistic[0])
 #define GET_TOTALIMP(ch)      ((ch)->points.impact[1])
 #define GET_IMPACT(ch)          ((ch)->points.impact[0])
+int get_armor_penalty_grade(struct char_data *ch);
+
 #define GET_PHYSICAL(ch)        ((ch)->points.physical)
 #define GET_MAX_PHYSICAL(ch)  ((ch)->points.max_physical)
 #define GET_GRADE(ch)   	((ch)->points.grade)

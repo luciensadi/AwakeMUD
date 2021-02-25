@@ -951,6 +951,7 @@ void assign_rooms(void)
   SPECIAL(chargen_spirit_combat_west);
   SPECIAL(archetype_chargen_magic_split);
   SPECIAL(archetype_chargen_reverse_magic_split);
+  SPECIAL(chargen_language_annex);
   SPECIAL(nerpcorpolis_lobby);
   SPECIAL(troll_barrier);
 
@@ -970,12 +971,13 @@ void assign_rooms(void)
   ASSIGNROOM(60562, auth_room);
   ASSIGNROOM(60514, chargen_career_archetype_paths);
   ASSIGNROOM(60594, chargen_spirit_combat_west);
+  ASSIGNROOM(60512, chargen_language_annex);
   /* CharGen - allow forgetting skills */
   ASSIGNROOM(60507, chargen_unpractice_skill);
   ASSIGNROOM(60508, chargen_unpractice_skill);
   ASSIGNROOM(60509, chargen_unpractice_skill);
   ASSIGNROOM(60513, chargen_unpractice_skill);
-  ASSIGNROOM(60512, chargen_unpractice_skill);
+  // ASSIGNROOM(60512, chargen_unpractice_skill);
   ASSIGNROOM(60511, chargen_unpractice_skill);
   ASSIGNROOM(60510, chargen_unpractice_skill);
   ASSIGNROOM(60591, chargen_unpractice_skill);

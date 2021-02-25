@@ -2680,21 +2680,22 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   else
     obj_from_char(obj);
   equip_char(ch, obj, where);
-  int total = 0;
   
   if (print_messages) {
-    if (GET_TOTALBAL(ch) > GET_QUI(ch))
-      total += GET_TOTALBAL(ch) - GET_QUI(ch);
-    else if (GET_TOTALIMP(ch) > GET_QUI(ch))
-      total += GET_TOTALIMP(ch) - GET_QUI(ch);
-    if (total >= GET_QUI(ch))
-      send_to_char("You are wearing so much armor that you can't move!\r\n", ch);
-    else if (total >= (float) GET_QUI(ch) * 3/4)
-      send_to_char("Your movement is severely restricted by your armor.\r\n", ch);
-    else if (total >= (float) GET_QUI(ch) / 2)
-      send_to_char("Your movement is restricted by your armor.\r\n", ch);
-    else if (total)
-      send_to_char("Your movement is mildly restricted by your armor.\r\n", ch);
+    switch (get_armor_penalty_grade(ch)) {
+      case ARMOR_PENALTY_TOTAL:
+        send_to_char("You are wearing so much armor that you can't move!\r\n", ch);
+        break;
+      case ARMOR_PENALTY_HEAVY:
+        send_to_char("Your movement is severely restricted by your armor.\r\n", ch);
+        break;
+      case ARMOR_PENALTY_MEDIUM:
+        send_to_char("Your movement is restricted by your armor.\r\n", ch);
+        break;
+      case ARMOR_PENALTY_LIGHT:
+        send_to_char("Your movement is mildly restricted by your armor.\r\n", ch);
+        break;
+    }
   }
 }
 
@@ -2935,10 +2936,15 @@ void perform_remove(struct char_data * ch, int pos)
     act("$p: you can't carry that many items!", FALSE, ch, obj, 0, TO_CHAR);
     return;
   }
+  
+  int previous_armor_penalty = get_armor_penalty_grade(ch);
 
   obj_to_char(unequip_char(ch, pos, TRUE), ch);
   act("You stop using $p.", FALSE, ch, obj, 0, TO_CHAR);
   act("$n stops using $p.", TRUE, ch, obj, 0, TO_ROOM);
+  
+  if (previous_armor_penalty && !get_armor_penalty_grade(ch))
+    send_to_char("You can move freely again.\r\n", ch);
 
   // Unready the holster.
   if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER)

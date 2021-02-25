@@ -5014,21 +5014,19 @@ ACMD(do_status)
   else send_to_char(ch, "%s is affected by:\r\n", GET_CHAR_NAME(targ));
   if (ch->real_abils.esshole)
     send_to_char(ch, "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
-  int total = 0;
-  if (GET_TOTALBAL(targ) > GET_QUI(targ))
-    total += GET_TOTALBAL(targ) - GET_QUI(targ);
-  if (GET_TOTALIMP(targ) > GET_QUI(targ))
-    total += GET_TOTALIMP(targ) - GET_QUI(targ);
-  if (total > 0) {
-    send_to_char("  Bulky Armor (", ch);
-    if (total >= GET_QUI(targ))
-      send_to_char("Insane)\r\n", ch);
-    else if (total >= GET_QUI(targ) * 3/4)
-      send_to_char("Serious)\r\n", ch);
-    else if (total >= GET_QUI(targ) / 2)
-      send_to_char("Moderate)\r\n", ch);
-    else
-      send_to_char("Light)\r\n", ch);
+  switch (get_armor_penalty_grade(targ)) {
+    case ARMOR_PENALTY_TOTAL:
+      send_to_char("  Bulky Armor (Insane)\r\n", ch);
+      break;
+    case ARMOR_PENALTY_HEAVY:
+      send_to_char("  Bulky Armor (Serious)\r\n", ch);
+      break;
+    case ARMOR_PENALTY_MEDIUM:
+      send_to_char("  Bulky Armor (Moderate)\r\n", ch);
+      break;
+    case ARMOR_PENALTY_LIGHT:
+      send_to_char("  Bulky Armor (Light)\r\n", ch);
+      break;
   }
   if (GET_REACH(targ))
     send_to_char(ch, "Extra Reach (%dm)\r\n", GET_REACH(targ));

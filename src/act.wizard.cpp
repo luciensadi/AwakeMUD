@@ -1406,7 +1406,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   switch (GET_TRADITION(k))
   {
   case TRAD_ADEPT:
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Adept, Grade: ^c%d^n AddPoint Used: %d/%d", GET_GRADE(k), k->points.extrapp, (int)(GET_TKE(k) / 50) + 1);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Tradition: Adept, Grade: ^c%d^n, AddPoint Used: %d/%d, points available %0.2f", GET_GRADE(k), k->points.extrapp, (int)(GET_TKE(k) / 50) + 1, ((float) GET_PP(k) / 100));
     if (BOOST(ch)[BOD][0] || BOOST(ch)[STR][0] || BOOST(ch)[QUI][0])
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[Boosts: BOD ^c%d^n STR ^c%d^c QUI ^c%d^n]", BOOST(ch)[BOD][1], BOOST(ch)[STR][1], BOOST(ch)[QUI][1]);
     break;
