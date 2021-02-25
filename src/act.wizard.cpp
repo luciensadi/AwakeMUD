@@ -4150,6 +4150,7 @@ ACMD(do_set)
                { "multiplier", LVL_PRESIDENT, PC, NUMBER },
                { "shotsfired", LVL_PRESIDENT, PC, NUMBER },
                { "shotstriggered", LVL_PRESIDENT, PC, NUMBER },
+               { "powerpoints", LVL_PRESIDENT, PC, NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -4731,6 +4732,12 @@ ACMD(do_set)
     RANGE(-1, 100);
     SHOTS_TRIGGERED(vict) = value;
     snprintf(buf, sizeof(buf),"%s changed %s's shots_triggered to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
+  case 78: /* powerpoints */
+    RANGE(0, 100);
+    GET_PP(vict) = value;
+    snprintf(buf, sizeof(buf),"%s changed %s's powerpoints to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   default:
