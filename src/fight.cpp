@@ -2895,6 +2895,8 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
   for (obj = ch->cyberware; obj; obj = obj->next_content)
     if (GET_OBJ_VAL(obj, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(obj, 9))
       comp++;
+    if (GET_OBJ_VAL(obj, 0) == ARMS_MOD_GYROMOUNT && !GET_OBJ_VAL(obj, 9))
+      comp+= 3;
   
   return comp;
 }
