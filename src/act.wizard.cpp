@@ -5689,30 +5689,26 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     return FALSE;
   }
   
-  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+  if (using_sysp) {
+    if (GET_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
+      send_to_char(ch, "It costs %d system points to restring something, and you only have %d.\r\n",
+                   SYSP_RESTRING_COST,
+                   GET_SYSTEM_POINTS(ch));
+      return FALSE;
+    }
+    GET_SYSTEM_POINTS(ch) -= SYSP_RESTRING_COST;
+  } else if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     if (!GET_RESTRING_POINTS(ch)) {
       send_to_char("You don't have enough restring points left to restring that.\r\n", ch);
       return FALSE;
     }
     GET_RESTRING_POINTS(ch)--;
-  } 
-  
-  else {
-    if (using_sysp) {
-      if (GET_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
-        send_to_char(ch, "It costs %d system points to restring something, and you only have %d.\r\n",
-                     SYSP_RESTRING_COST,
-                     GET_SYSTEM_POINTS(ch));
-        return FALSE;
-      }
-      GET_SYSTEM_POINTS(ch) -= SYSP_RESTRING_COST;
-    } else {
-      if (GET_KARMA(ch) < 250) {
-        send_to_char("You don't have enough karma to restring that. It costs 2.5 karma.\r\n", ch);
-        return FALSE;
-      }
-      GET_KARMA(ch) -= 250;
+  } else {
+    if (GET_KARMA(ch) < 250) {
+      send_to_char("You don't have enough karma to restring that. It costs 2.5 karma.\r\n", ch);
+      return FALSE;
     }
+    GET_KARMA(ch) -= 250;
   }
   
   snprintf(buf2, sizeof(buf2), "%s restrung '%s' to '%s'", GET_CHAR_NAME(ch), obj->text.name, buf);
