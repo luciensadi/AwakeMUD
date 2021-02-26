@@ -896,6 +896,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
             }
           if (last_obj)
             obj_to_obj(obj, last_obj);
+          else
+            obj_to_char(obj, ch);
         } else
           obj_to_char(obj, ch);
         last_in = inside;

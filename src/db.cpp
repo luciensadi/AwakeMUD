@@ -4019,6 +4019,8 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->player.poofout);
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.arrive);
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
+    DELETE_ARRAY_IF_EXTANT(ch->player.highlight_color_code);
+    DELETE_ARRAY_IF_EXTANT(ch->player.email);
     
     if(!IS_NPC(ch))
       DELETE_ARRAY_IF_EXTANT(ch->player.host);
@@ -4357,6 +4359,11 @@ void clear_room(struct room_data *room)
 
 void clear_vehicle(struct veh_data *veh)
 {
+  /* TODO: We are leaking more memory here from mods etc, but it's suuuuuuuuuper 
+      rare that we ever actually extract a vehicle from the game, so the effort
+      to fix it is currently not warranted. -- LS */
+  DELETE_ARRAY_IF_EXTANT(veh->restring);
+  DELETE_ARRAY_IF_EXTANT(veh->restring_long);
   memset((char *) veh, 0, sizeof(struct veh_data));
   veh->in_room = NULL;
 }
