@@ -4019,7 +4019,7 @@ ACMD(do_deactivate)
         send_to_char(ch, "You don't have %s activated.\r\n", adept_powers[i]);
       else {
         int total = 0;
-        for (int q = GET_POWER_ACT(ch, i);q > 0; q--)
+        for (int q = GET_POWER_ACT(ch, i); q > 0; q--)
           total += ability_cost(i, q);
         GET_POWER_POINTS(ch) -= total;
         deactivate_power(ch, i);

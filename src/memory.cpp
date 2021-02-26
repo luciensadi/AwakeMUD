@@ -160,7 +160,8 @@ void memoryClass::DeleteCh(struct char_data *ch)
   }
   
   free_char(ch);
-  Ch->Push(ch);
+  delete ch;
+  // Ch->Push(ch);
 }
 
 void memoryClass::DeleteRoom(struct room_data *room)

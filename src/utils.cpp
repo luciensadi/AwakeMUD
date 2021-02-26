@@ -1651,9 +1651,12 @@ void reduce_abilities(struct char_data *vict)
 
 void magic_loss(struct char_data *ch, int magic, bool msg)
 {
+  log_vfprintf("Subtracting %d magic from %s.", magic, GET_CHAR_NAME(ch));
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
     return;
+    
   GET_REAL_MAG(ch) = MAX(0, GET_REAL_MAG(ch) - magic);
+  
   if (GET_REAL_MAG(ch) < 100) {
     send_to_char(ch, "You feel the last of your magic leave your body.\r\n", ch);
     PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);
@@ -1662,15 +1665,21 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
     mysql_wrapper(mysql, buf);
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Tradition=%d WHERE idnum=%ld;", TRAD_MUNDANE, GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
+    
     for (int i = 0; i < NUM_WEARS; i++)
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch))
         GET_OBJ_VAL(GET_EQ(ch, i), 2) = GET_OBJ_VAL(GET_EQ(ch, i), 4) =  GET_OBJ_VAL(GET_EQ(ch, i), 9) = 0;
+        
     struct sustain_data *nextsust;
+    
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = nextsust) {
       nextsust = sust->next;
       if (sust->caster)
         end_sustained_spell(ch, sust);
     }
+    
+    // TODO: Deactivate adept powers.
+    
     return;
   }
   if (msg)
