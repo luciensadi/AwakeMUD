@@ -2249,7 +2249,7 @@ SPECIAL(crime_mall_guard) {
   if ((guard->in_room->number == 100075 && CMD_IS("east")) ||
       (guard->in_room->number == 100077 && CMD_IS("west"))) {
     if (GET_NUYEN(ch) < 2000000) {
-      act("$n shakes $s head as $e shoves you back.  \"Come back when you're richer, chummer.\"",
+      act("$n shakes $s head as $e shoves you back. \"Come back when you're richer, chummer.\"",
           FALSE, guard, 0, ch, TO_VICT);
       act("You shake your head as $N tries to sneak past you.",
           FALSE, guard, 0, ch, TO_CHAR);

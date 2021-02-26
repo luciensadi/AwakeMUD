@@ -971,13 +971,17 @@ void assign_rooms(void)
   ASSIGNROOM(60562, auth_room);
   ASSIGNROOM(60514, chargen_career_archetype_paths);
   ASSIGNROOM(60594, chargen_spirit_combat_west);
-  ASSIGNROOM(60512, chargen_language_annex);
+  
   /* CharGen - allow forgetting skills */
   ASSIGNROOM(60507, chargen_unpractice_skill);
   ASSIGNROOM(60508, chargen_unpractice_skill);
   ASSIGNROOM(60509, chargen_unpractice_skill);
   ASSIGNROOM(60513, chargen_unpractice_skill);
-  // ASSIGNROOM(60512, chargen_unpractice_skill);
+  #ifdef REQUIRE_LANGUAGE_SKILL_POINTS_BE_USED_ONLY_FOR_LANGUAGE
+  ASSIGNROOM(60512, chargen_language_annex);
+  #else
+  ASSIGNROOM(60512, chargen_unpractice_skill);
+  #endif
   ASSIGNROOM(60511, chargen_unpractice_skill);
   ASSIGNROOM(60510, chargen_unpractice_skill);
   ASSIGNROOM(60591, chargen_unpractice_skill);

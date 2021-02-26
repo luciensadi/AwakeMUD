@@ -123,8 +123,8 @@ int buy_price(struct obj_data *obj, vnum_t shop_nr)
   // Base cost.
   int cost = GET_OBJ_COST(obj);
   
-  // Multiply base cost by the shop's profit.
-  cost = (int) round(cost * shop_table[shop_nr].profit_buy);
+  // Multiply base cost by the shop's profit. Under no circumstances will we sell to them for less than 1x cost.
+  cost = (int) round(cost * MAX(1, shop_table[shop_nr].profit_buy));
   
   // If the shop is black or grey market, multiply base cost by the item's street index.
   if (shop_table[shop_nr].type != SHOP_LEGAL && GET_OBJ_STREET_INDEX(obj) > 0)
