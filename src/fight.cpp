@@ -4591,7 +4591,11 @@ void perform_violence(void)
           NULL);
           
       // TODO: Two-weapon fighting for melee weapons (see CC p96 for off-hand weapons).
-      if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) && FIGHTING(ch) && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD))))
+      if (GET_EQ(ch, WEAR_WIELD) 
+          && GET_EQ(ch, WEAR_HOLD) 
+          && FIGHTING(ch) 
+          && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD)))
+          && GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD)) != WEAP_TASER)
         hit(ch,
             FIGHTING(ch),
             GET_EQ(ch, WEAR_HOLD),
