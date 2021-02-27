@@ -690,7 +690,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
                  : success_test(resist, power);
       dam = convert_damage(stage(success, dam));
       send_to_icon(targ, "You smell something burning.\r\n");
-      damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL);
+      if (damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
+        // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
+        return;
+      }
       if (targ && targ->decker->ch && !AWAKE(targ->decker->ch)) {
         success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
         fry_mpcp(icon, targ, success);
