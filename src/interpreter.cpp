@@ -2222,7 +2222,7 @@ int perform_dupe_check(struct descriptor_data *d)
     return 0;
 
   /* Okay, we've found a target.  Connect d to target. */
-  Mem->DeleteCh(d->character); /* get rid of the old char */
+  extract_char(d->character); /* get rid of the old char */
   d->character = target;
   d->character->desc = d;
   d->original = NULL;

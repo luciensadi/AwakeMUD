@@ -2116,7 +2116,8 @@ void extract_obj(struct obj_data * obj)
     if (unequip_char(obj->worn_by, obj->worn_on, TRUE) != obj)
       log("SYSLOG: Inconsistent worn_by and worn_on pointers!!");
   if (GET_OBJ_TYPE(obj) == ITEM_PHONE ||
-      (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)) {
+      (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)) 
+  {
     for (phone = phone_list; phone; phone = phone->next) {
       if (phone->phone == obj) {
         if (phone->dest) {
