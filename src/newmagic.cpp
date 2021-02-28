@@ -3387,6 +3387,14 @@ POWER(spirit_sustain)
     for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
       if (sust->caster && --i == 0)
         break;
+    
+    // Anti-crash.
+    if (!sust) {
+      mudlog("SYSERR: We would have crashed from a bad sustain!", ch, LOG_SYSLOG, TRUE);
+      send_to_char("Your elemental can't sustain that spell.\r\n", ch);
+      return;
+    }
+    
     if (sust->focus || sust->spirit) {
       send_to_char("You aren't sustaining that spell yourself.\r\n", ch);
       return;

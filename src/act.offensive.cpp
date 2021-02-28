@@ -584,6 +584,25 @@ ACMD_CONST(do_flee) {
   do_flee(ch, NULL, cmd, subcmd);
 }
 
+bool passed_flee_success_check(struct char_data *ch) {
+  if (GET_POS(ch) < POS_FIGHTING)
+    return TRUE;
+  
+  if (!FIGHTING(ch))
+    return TRUE;
+  
+  if (ch->in_room != FIGHTING(ch)->in_room)
+    return TRUE;
+    
+  if (AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))
+    return TRUE;
+    
+  if (!can_hurt(ch, FIGHTING(ch), TRUE, 0))
+    return TRUE;
+  
+  return success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) > 0;
+}
+
 ACMD(do_flee)
 {
   if (AFF_FLAGGED(ch, AFF_PRONE)) {
@@ -601,13 +620,7 @@ ACMD(do_flee)
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
       
       // If the character is fighting in melee combat with someone they can hurt, they must pass a test to escape.
-      if (GET_POS(ch) >= POS_FIGHTING 
-          && FIGHTING(ch) 
-          && ch->in_room == FIGHTING(ch)->in_room
-          && !(AFF_FLAGGED(ch, AFF_APPROACH) || AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))
-          && can_hurt(ch, FIGHTING(ch), TRUE, 0)
-          && success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) <= 0) 
-      {
+      if (!passed_flee_success_check(ch)) {
         act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
         act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
         act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
@@ -620,6 +633,8 @@ ACMD(do_flee)
       } else {
         act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
         send_to_char("You can't get away!\r\n", ch);
+        snprintf(buf, sizeof(buf), "Error case in do_flee: do_simple_move failure for %s exit.", dirs[dir]);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
       }
       
       return;

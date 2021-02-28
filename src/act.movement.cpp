@@ -38,6 +38,7 @@ extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 extern void death_penalty(struct char_data *ch);
 extern int get_vehicle_modifier(struct veh_data *veh);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
+extern bool passed_flee_success_check(struct char_data *ch);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -768,11 +769,11 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     return 0;
   }
   
-  if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
+  if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
-    bool succeeded = (!(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_NOKILL))) ? success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) : TRUE;
-    if (succeeded && (CAN_GO(ch, dir) && (!IS_NPC(ch) ||
-        !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB)))) {
+    if (passed_flee_success_check(ch) 
+        && (CAN_GO(ch, dir) 
+            && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[dir]->to_room, ROOM_NOMOB)))) {
       act("$n searches for a quick escape!", TRUE, ch, 0, 0, TO_ROOM);
       send_to_char("You start moving away for a clever escape.\r\n", ch);
     } else {
