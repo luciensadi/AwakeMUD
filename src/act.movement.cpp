@@ -325,13 +325,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       if (!FIGHTING(tch) && CAN_SEE(tch, ch) && hunting_escortee(tch, ch))
         set_fighting(tch, ch);
       else if (IS_NPC(tch)) {
-        if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch)) &&
-               !PRF_FLAGGED(ch, PRF_NOHASSLE) && !FIGHTING(tch) &&
-               MOB_FLAGGED(tch, MOB_AGGRESSIVE) && CAN_SEE(tch, ch) &&
-               IS_SET(extra, LEADER) && AWAKE(tch))
-          set_fighting(tch, ch);
+        if ((!IS_NPC(ch) || IS_PROJECT(ch) || is_escortee(ch)) 
+            && !PRF_FLAGGED(ch, PRF_NOHASSLE) 
+            && MOB_FLAGGED(tch, MOB_AGGRESSIVE) 
+            && !FIGHTING(tch) 
+            && CAN_SEE(tch, ch) 
+            && IS_SET(extra, LEADER) 
+            && AWAKE(tch)) 
+        {
           GET_MOBALERT(tch) = MALERT_ALERT;
-          GET_MOBALERTTIME(tch) = 20;      
+          GET_MOBALERTTIME(tch) = 20;   
+          set_fighting(tch, ch);
+        }
       }
     }
   }

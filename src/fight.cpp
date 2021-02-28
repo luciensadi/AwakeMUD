@@ -2931,20 +2931,10 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
     comp += GET_WEAPON_INTEGRAL_RECOIL_COMP(gun);
     
   for (obj = ch->cyberware; obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(obj, 9))
+    if (GET_OBJ_VAL(obj, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(obj, 9)) {
       comp++;
+      break;
     }
-      case WEAP_LIGHT_PISTOL:
-      case WEAP_HEAVY_PISTOL:
-      case WEAP_MACHINE_PISTOL:
-      case WEAP_SMG:
-      case WEAP_LMG:
-      case WEAP_SPORT_RIFLE:
-      case WEAP_SNIPER_RIFLE:
-      case WEAP_SHOTGUN:
-      case WEAP_ASSAULT_RIFLE:
-    if (GET_OBJ_VAL(obj, 0) == ARMS_MOD_GYROMOUNT && !GET_OBJ_VAL(obj, 9))
-      comp+= 3;
   
   return comp;
 }

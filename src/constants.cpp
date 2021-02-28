@@ -2208,6 +2208,8 @@ const char *cyber_types[] = {
   "Balance Tail",
   "Body Compartment",
   "CyberFin",
+  "CyberSkull",
+  "CyberTorso",
   "Dermal Sheathing",
   "Foot Anchor",
   "Hydraulic Jack",
@@ -2215,11 +2217,8 @@ const char *cyber_types[] = {
   "Climbing Claws",
   "Smartlink",
   "Muscle Replacement",
-  "Cyberarms Mods",
-  "Cyberlegs Mods",
-  "Cyberskull Mods",
-  "Cybertorso Mods",
-  "Cyberarm Gyromount"
+  "Paired Set of Cyber Arms",
+  "Paired Set of Cyber Legs"
 };
 
 const char *decap_cyber_types[] = {
@@ -2261,6 +2260,8 @@ const char *decap_cyber_types[] = {
   "balance tail",
   "body compartment",
   "cyber fin",
+  "cyber skull",
+  "cyber torso",
   "dermal sheathing",
   "foot anchor",
   "hydraulic jack",
@@ -2268,11 +2269,8 @@ const char *decap_cyber_types[] = {
   "climbing claws",
   "smartlink",
   "muscle replacement",
-  "cyberarms modifications",
-  "cyberlegs modifications",
-  "cyberskull modifications",
-  "cybertorso modifications",
-  "cyberarm gyromount"
+  "paired set of cyber arms",
+  "paired set of cyber legs"
 };
 
 const char *bio_types[] = {

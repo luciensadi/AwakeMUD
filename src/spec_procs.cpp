@@ -2436,12 +2436,24 @@ SPECIAL(fixer)
   if (CMD_IS("repair")) {
     any_one_arg(argument, buf);
     skip_spaces(&argument);
-
-    if (!str_cmp(buf, "cash") || !(credstick = get_first_credstick(ch, "credstick"))) {
+    
+    bool force_cash = !str_cmp(buf, "cash");
+    bool force_credstick = !str_cmp(buf, "credstick");
+    
+    if (force_cash || force_credstick) {
       argument = any_one_arg(argument, buf);
       skip_spaces(&argument);
-      cash = 1;
+      
+      if (force_cash)
+        cash = 1;
+      else {
+        if (!(credstick = get_first_credstick(ch, "credstick"))) {
+          send_to_char("You don't have a credstick.\r\n", ch);
+          return TRUE;
+        }
+      }
     }
+
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
       send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return TRUE;

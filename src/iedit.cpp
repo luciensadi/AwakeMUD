@@ -207,17 +207,17 @@ void iedit_disp_spells_menu(struct descriptor_data * d)
 void iedit_disp_cybereyes_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_EYEMODS; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, eyemods[y], y+2, y+1 < NUM_EYEMODS ? eyemods[y+1] : "");
-  sprintbit(GET_OBJ_VAL(OBJ, 3), eyemods, buf1, sizeof(buf1));
+  for (int y = 0; y < NUM_EYEMODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, eyemods[y]);
+  sprintbit(GET_CYBERWARE_FLAGS(OBJ), eyemods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
 
 void iedit_disp_cyberarms_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_ARMS_MOD; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, armsmods[y], y+2, y+1 < NUM_ARMS_MOD ? armsmods[y+1] : "");
+  for (int y = 0; y < NUM_ARMS_MODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, armsmods[y]);
   sprintbit(GET_CYBERWARE_FLAGS(OBJ), armsmods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -225,8 +225,8 @@ void iedit_disp_cyberarms_menu(struct descriptor_data *d)
 void iedit_disp_cyberlegs_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_LEGS_MOD; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, legsmods[y], y+2, y+1 < NUM_LEGS_MOD ? legsmods[y+1] : "");
+  for (int y = 0; y < NUM_LEGS_MODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, legsmods[y]);
   sprintbit(GET_CYBERWARE_FLAGS(OBJ), legsmods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -234,8 +234,8 @@ void iedit_disp_cyberlegs_menu(struct descriptor_data *d)
 void iedit_disp_cyberskull_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_SKULL_MOD; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, skullmods[y], y+2, y+1 < NUM_SKULL_MOD ? skullmods[y+1] : "");
+  for (int y = 0; y < NUM_SKULL_MODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, skullmods[y]);
   sprintbit(GET_CYBERWARE_FLAGS(OBJ), skullmods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -243,8 +243,8 @@ void iedit_disp_cyberskull_menu(struct descriptor_data *d)
 void iedit_disp_cybertorso_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_TORSO_MOD; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, torsomods[y], y+2, y+1 < NUM_TORSO_MOD ? torsomods[y+1] : "");
+  for (int y = 0; y < NUM_TORSO_MODS; y++)
+    send_to_char(CH, "%2d) %-20s\r\n", y+1, torsomods[y]);
   sprintbit(GET_CYBERWARE_FLAGS(OBJ), torsomods, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
@@ -2412,77 +2412,89 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_HANDBLADE:
             case CYB_HANDSPUR:
             case CYB_REFLEXTRIGGER:
-            case CYB_CYBERARMS:
-              if (number < 0 || number >= NUM_ARMS_MODS)
+            case CYB_ARMS:
+              if (number < 0 || number >= NUM_ARMS_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
               if (number == 0) {
+                if (!(IS_SET(GET_CYBERWARE_FLAGS(OBJ), ARMS_MOD_OBVIOUS) || IS_SET(GET_CYBERWARE_FLAGS(OBJ), ARMS_MOD_SYNTHETIC))) {
+                  send_to_char("Defaulting to Obvious.\r\n", CH);
+                  SET_BIT(GET_CYBERWARE_FLAGS(OBJ), ARMS_MOD_OBVIOUS);
+                }
                 iedit_disp_menu(d);
                 return;
               }
               number--;
               TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
               CLS(CH);
-              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_arms, buf1, sizeof(buf1));
-              send_to_char(CH, " 1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Strength Mod1\r\n 5) Strength Mod2\r\n
-                               " 6) Strength Mod3\r\n  7) Quickness Mod1\r\n  8) Quickness Mod2\r\n  9) Quickness Mod3\r\n
-                               " 10) Cyberarm Gyromount\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-                return;
-              }
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), armsmods, buf1, sizeof(buf1));
+              for (int mod_num = 0; mod_num < NUM_ARMS_MODS; mod_num++)
+                send_to_char(CH, " %d) %s\r\n", mod_num + 1, armsmods[mod_num]);
+              send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
               break;
-            case CYB_CYBERLEGS:
-              if (number < 0 || number >= NUM_LEGS_MODS)
+            case CYB_LEGS:
+              if (number < 0 || number >= NUM_LEGS_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
               if (number == 0) {
+                if (!(IS_SET(GET_CYBERWARE_FLAGS(OBJ), LEGS_MOD_OBVIOUS) || IS_SET(GET_CYBERWARE_FLAGS(OBJ), LEGS_MOD_SYNTHETIC))) {
+                  send_to_char("Defaulting to Obvious.\r\n", CH);
+                  SET_BIT(GET_CYBERWARE_FLAGS(OBJ), LEGS_MOD_OBVIOUS);
+                }
                 iedit_disp_menu(d);
                 return;
               }
               number--;
               TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
               CLS(CH);
-              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_legs, buf1, sizeof(buf1));
-              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Strength Mod1\r\n
-                           "  5) Strength Mod2\r\n 6) Strength Mod3\r\n  7) Quickness Mod1\r\n  8) Quickness Mod2\r\n
-                           "  9) Quickness Mod3\r\n  Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-                return;
-              }
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), legsmods, buf1, sizeof(buf1));
+              for (int mod_num = 0; mod_num < NUM_LEGS_MODS; mod_num++)
+                send_to_char(CH, " %d) %s\r\n", mod_num + 1, legsmods[mod_num]);
+              send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
               break;
-            case CYB_CYBERSKULL:
-              if (number < 0 || number >= NUM_SKULL_MODS)
+            case CYB_SKULL:
+              if (number < 0 || number >= NUM_SKULL_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
               if (number == 0) {
+                if (!(IS_SET(GET_CYBERWARE_FLAGS(OBJ), SKULL_MOD_OBVIOUS) || IS_SET(GET_CYBERWARE_FLAGS(OBJ), SKULL_MOD_SYNTHETIC))) {
+                  send_to_char("Defaulting to Obvious.\r\n", CH);
+                  SET_BIT(GET_CYBERWARE_FLAGS(OBJ), SKULL_MOD_OBVIOUS);
+                }
                 iedit_disp_menu(d);
                 return;
               }
               number--;
               TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
               CLS(CH);
-              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_skull, buf1, sizeof(buf1));
-              send_to_char(CH, " 1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-                return;
-              }
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), skullmods, buf1, sizeof(buf1));
+              for (int mod_num = 0; mod_num < NUM_SKULL_MODS; mod_num++)
+                send_to_char(CH, " %d) %s\r\n", mod_num + 1, skullmods[mod_num]);
+              send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
               break;
-            case CYB_CYBERTORSO:
-              if (number < 0 || number >= NUM_TORSO_MODS)
+            case CYB_TORSO:
+              if (number < 0 || number >= NUM_TORSO_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
               if (number == 0) {
+                if (!(IS_SET(GET_CYBERWARE_FLAGS(OBJ), TORSO_MOD_OBVIOUS) || IS_SET(GET_CYBERWARE_FLAGS(OBJ), TORSO_MOD_SYNTHETIC))) {
+                  send_to_char("Defaulting to Obvious.\r\n", CH);
+                  SET_BIT(GET_CYBERWARE_FLAGS(OBJ), TORSO_MOD_OBVIOUS);
+                }
                 iedit_disp_menu(d);
                 return;
               }
               number--;
               TOGGLE_BIT(GET_CYBERWARE_FLAGS(OBJ), 1 << number);
               CLS(CH);
-              sprintbit(GET_CYBERWARE_FLAGS(OBJ), cyber_torso, buf1, sizeof(buf1));
-              send_to_char(CH, "  1) Obvious\r\n 2) Synthetic\r\n 3) Armor Mod1\r\n 4) Armor Mod1\r\n 5) Armor Mod2\r\n 6) Armor Mod3\r\n Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-                return;
-              }
+              sprintbit(GET_CYBERWARE_FLAGS(OBJ), torsomods, buf1, sizeof(buf1));
+              for (int mod_num = 0; mod_num < NUM_TORSO_MODS; mod_num++)
+                send_to_char(CH, " %d) %s\r\n", mod_num + 1, torsomods[mod_num]);
+              send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
               break;
             case CYB_DERMALSHEATHING:
               if (number < 0 || number > 1) {

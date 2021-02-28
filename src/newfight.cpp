@@ -54,10 +54,12 @@ struct cyberware_data {
   int footanchors;
   int bone_lacing_power;
   int num_cyberweapons;
+  bool cyberarm_gyromount;
   
   cyberware_data(struct char_data *ch) :
     climbingclaws(0), fins(0), handblades(0), handrazors(0), improved_handrazors(0),
-    handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0)
+    handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
+    cyberarm_gyromount(FALSE)
   {
     assert(ch != NULL);
     
@@ -75,6 +77,10 @@ struct cyberware_data {
           case BONE_TITANIUM:
             bone_lacing_power = MAX(bone_lacing_power, 4);
             break;
+        }
+      } else if (GET_CYBERWARE_TYPE(obj) == CYB_ARMS) {
+        if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_GYROMOUNT)) {
+          cyberarm_gyromount = TRUE;
         }
       } else if (!GET_CYBERWARE_IS_DISABLED(obj)) {
         switch (GET_CYBERWARE_TYPE(obj)) {
@@ -527,7 +533,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   if (att->weapon_is_gun) {
     // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
     if (!att->ranged->using_mounted_gun
-        && !att->ranged->gyro 
+        && !att->ranged->gyro
+        && !att->cyber->cyberarm_gyromount
         && !IS_NPC(att->ch)
         && (att->ranged->skill >= SKILL_MACHINE_GUNS && att->ranged->skill <= SKILL_ASSAULT_CANNON)
         && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
@@ -658,8 +665,22 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       att->ranged->modifiers[COMBAT_MOD_IN_MELEE_COMBAT] += 2; // technically supposed to be +2 per attacker, but ehhhh.
     
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
-    if (att->ranged->gyro && !att->ranged->using_mounted_gun)
-      att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(att->ranged->modifiers[COMBAT_MOD_MOVEMENT] + att->ranged->modifiers[COMBAT_MOD_RECOIL], GET_OBJ_VAL(att->ranged->gyro, 0));
+    if (!att->ranged->using_mounted_gun) {
+      int maximum_recoil_comp_from_gyros = att->ranged->modifiers[COMBAT_MOD_MOVEMENT] + att->ranged->modifiers[COMBAT_MOD_RECOIL];
+      if (att->ranged->gyro) {
+        att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, GET_OBJ_VAL(att->ranged->gyro, 0));
+      } else if (att->cyber->cyberarm_gyromount) {
+        switch (GET_WEAPON_ATTACK_TYPE(att->weapon)) {
+          case WEAP_MMG:
+          case WEAP_HMG:
+          case WEAP_CANNON:
+            break;
+          default:
+            att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, 3);
+            break;
+        }
+      }
+    }
     
     // Calculate and display pre-success-test information.
     snprintf(rbuf, sizeof(rbuf), "%s's burst/compensation info is %d/%d. Additional modifiers: ", 
@@ -1051,7 +1072,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   if (att->weapon_is_gun
       && !att->ranged->using_mounted_gun
       && !IS_NPC(att->ch) 
-      && !att->ranged->gyro 
+      && !att->ranged->gyro
+      && !att->cyber->cyberarm_gyromount
       && att->ranged->skill >= SKILL_MACHINE_GUNS 
       && att->ranged->skill <= SKILL_ASSAULT_CANNON)
   {

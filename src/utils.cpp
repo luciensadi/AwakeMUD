@@ -1478,40 +1478,40 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
       cyber1 = obj2;
   }
   if (cyber1 && cyber2) {
-    if (GET_OBJ_VAL(cyber1, 0) != CYB_EYES)
-      switch (GET_OBJ_VAL(cyber1, 0)) {
+    if (GET_CYBERWARE_TYPE(cyber1) != CYB_EYES)
+      switch (GET_CYBERWARE_TYPE(cyber1)) {
         case CYB_FILTRATION:
-          if (GET_OBJ_VAL(cyber1, 3) == GET_OBJ_VAL(cyber2, 3)) {
+          if (GET_CYBERWARE_FLAGS(cyber1) == GET_CYBERWARE_FLAGS(cyber2)) {
             send_to_char("You already have this type of filtration installed.\r\n", ch);
             return FALSE;
           }
           break;
         case CYB_DATAJACK:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_DATAJACK)) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_DATAJACK)) {
             send_to_char("You already have an eye datajack installed.\r\n", ch);
             return FALSE;
           }
           break;
         case CYB_VCR:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_BOOSTEDREFLEXES) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_BOOSTEDREFLEXES) {
             send_to_char("Vehicle Control Rigs are not compatible with Boosted reflexes.\r\n", ch);
             return FALSE;
           }
           break;
         case CYB_BOOSTEDREFLEXES:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_VCR) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_VCR) {
             send_to_char("Boosted reflexes is not compatible with Vehicle Control Rigs.\r\n", ch);
             return FALSE;
           }
           // fall through
         case CYB_MOVEBYWIRE:
         case CYB_WIREDREFLEXES:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_WIREDREFLEXES || GET_OBJ_VAL(cyber2, 0) == CYB_MOVEBYWIRE ||
-              GET_OBJ_VAL(cyber2, 0) == CYB_BOOSTEDREFLEXES) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_WIREDREFLEXES || GET_CYBERWARE_TYPE(cyber2) == CYB_MOVEBYWIRE ||
+              GET_CYBERWARE_TYPE(cyber2) == CYB_BOOSTEDREFLEXES) {
             send_to_char("You already have reaction enhancing cyberware installed.\r\n", ch);
             return FALSE;
           }
-          if (GET_OBJ_VAL(cyber1, 0) == CYB_MOVEBYWIRE && GET_OBJ_VAL(cyber2, 0) == CYB_REACTIONENHANCE) {
+          if (GET_CYBERWARE_TYPE(cyber1) == CYB_MOVEBYWIRE && GET_CYBERWARE_TYPE(cyber2) == CYB_REACTIONENHANCE) {
             send_to_char("Move-by-wire is not compatible with reaction enhancers.\r\n", ch);
             return FALSE;
           }
@@ -1519,7 +1519,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
         case CYB_ORALSLASHER:
         case CYB_ORALDART:
         case CYB_ORALGUN:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_ORALSLASHER || GET_OBJ_VAL(cyber2, 0) == CYB_ORALDART || GET_OBJ_VAL(cyber2, 0)
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_ORALSLASHER || GET_CYBERWARE_TYPE(cyber2) == CYB_ORALDART || GET_CYBERWARE_TYPE(cyber2)
               == CYB_ORALGUN) {
             send_to_char("You already have a weapon in your mouth.\r\n", ch);
             return FALSE;
@@ -1527,159 +1527,155 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           break;
         case CYB_DERMALPLATING:
         case CYB_DERMALSHEATHING:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_DERMALPLATING || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALSHEATHING) {
-            send_to_char("You already have an skin modification.\r\n", ch);
-            return FALSE;
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_DERMALPLATING:
+            case CYB_DERMALSHEATHING:
+              send_to_char("You already have an skin modification.\r\n", ch);
+              return FALSE;
+            case CYB_ARMS:
+            case CYB_LEGS:
+            case CYB_SKULL:
+            case CYB_TORSO:
+              send_to_char("Skin modifications are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
+              return FALSE;
           }
           break;
         case CYB_REACTIONENHANCE:
-          if (GET_OBJ_VAL(cyber2, 0) == CYB_MOVEBYWIRE) {
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_MOVEBYWIRE) {
             send_to_char("Reaction enhancers are not compatible with Move-by-wire.\r\n", ch);
             return FALSE;
           }
           break;
+        case CYB_ARMS:
+        case CYB_LEGS:
+        case CYB_SKULL:
+        case CYB_TORSO:
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_DERMALPLATING:
+            case CYB_DERMALSHEATHING:
+              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with skin modifications.\r\n", ch);
+              return FALSE;
+            case CYB_BONELACING:
+              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with bone lacings.\r\n", ch);
+              return FALSE;
+            case CYB_MUSCLEREP:
+              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with muscle replacements.\r\n", ch);
+              return FALSE;
+          }
+          
+          if (GET_CYBERWARE_TYPE(cyber1) == GET_CYBERWARE_TYPE(cyber2)) {
+            send_to_char("You already have a cybernetic replacement of that type installed.\r\n", ch);
+            return FALSE;
+          }
+            
+          break;
+        case CYB_MUSCLEREP:
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_ARMS:
+            case CYB_LEGS:
+            case CYB_SKULL:
+            case CYB_TORSO:
+              send_to_char("Muscle replacements are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
+              return FALSE;
+          }
+          break;
+        case CYB_BONELACING:
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_ARMS:
+            case CYB_LEGS:
+            case CYB_SKULL:
+            case CYB_TORSO:
+              send_to_char("Bone lacings are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
+              return FALSE;
+          }
+          return FALSE;
       }
-    if (IS_SET(GET_OBJ_VAL(cyber1, 3), EYE_DATAJACK) && GET_OBJ_VAL(cyber2, 0) == CYB_DATAJACK) {
+    if (IS_SET(GET_CYBERWARE_FLAGS(cyber1), EYE_DATAJACK) && GET_CYBERWARE_TYPE(cyber2) == CYB_DATAJACK) {
       send_to_char("You already have a datajack installed.\r\n", ch);
       return FALSE;
     }
-    if (GET_OBJ_VAL(cyber2, 0) == CYB_EYES && GET_OBJ_VAL(cyber1, 0) == CYB_EYES)
+    if (GET_CYBERWARE_TYPE(cyber2) == CYB_EYES && GET_CYBERWARE_TYPE(cyber1) == CYB_EYES)
       for (int bit = EYE_CAMERA; bit <= EYE_ULTRASOUND; bit *= 2) {
-        if (IS_SET(GET_OBJ_VAL(cyber2, 3), bit) && IS_SET(GET_OBJ_VAL(cyber1, 3), bit)) {
+        if (IS_SET(GET_CYBERWARE_FLAGS(cyber2), bit) && IS_SET(GET_CYBERWARE_FLAGS(cyber1), bit)) {
           send_to_char("You already have eye modifications with this option installed.\r\n", ch);
           return FALSE;
         }
-        if (bit >= EYE_OPTMAG1 && bit <= EYE_OPTMAG3 && IS_SET(GET_OBJ_VAL(cyber1, 3), bit))
-          if (IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_ELECMAG1) || IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_ELECMAG2) || IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_ELECMAG3)) {
+        if (bit >= EYE_OPTMAG1 && bit <= EYE_OPTMAG3 && IS_SET(GET_CYBERWARE_FLAGS(cyber1), bit))
+          if (IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_ELECMAG1) || IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_ELECMAG2) || IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_ELECMAG3)) {
             send_to_char("Optical magnification is not compatible with electronic magnification.\r\n", ch);
             return FALSE;
           }
-        if (bit >= EYE_ELECMAG1 && bit <= EYE_ELECMAG3 && IS_SET(GET_OBJ_VAL(cyber1, 3), bit))
-          if (IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_OPTMAG1) || IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_OPTMAG2) || IS_SET(GET_OBJ_VAL(cyber2, 3), EYE_OPTMAG3)) {
+        if (bit >= EYE_ELECMAG1 && bit <= EYE_ELECMAG3 && IS_SET(GET_CYBERWARE_FLAGS(cyber1), bit))
+          if (IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_OPTMAG1) || IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_OPTMAG2) || IS_SET(GET_CYBERWARE_FLAGS(cyber2), EYE_OPTMAG3)) {
             send_to_char("Optical magnification is not compatible with electronic magnification.\r\n", ch);
             return FALSE;
           }
       }
   } else if (bio1 && cyber1) {
-    switch (GET_OBJ_VAL(cyber1, 0)) {
+    switch (GET_CYBERWARE_TYPE(cyber1)) {
       case CYB_FILTRATION:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_TRACHEALFILTER && GET_OBJ_VAL(cyber1, 3) == FILTER_AIR) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_TRACHEALFILTER && GET_CYBERWARE_FLAGS(cyber1) == FILTER_AIR) {
           send_to_char("Air filtration cyberware is not compatible with a Tracheal Filter.\r\n", ch);
           return FALSE;
         }
-        if (GET_OBJ_VAL(bio1, 0) == BIO_DIGESTIVEEXPANSION && GET_OBJ_VAL(cyber1, 3) == FILTER_INGESTED) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_DIGESTIVEEXPANSION && GET_CYBERWARE_FLAGS(cyber1) == FILTER_INGESTED) {
           send_to_char("Tracheal Filtration cyberware is not compatible with Digestive Expansion.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_MOVEBYWIRE:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_ADRENALPUMP) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ADRENALPUMP) {
           send_to_char("Adrenal Pumps are not compatible with Move-By-Wire.\r\n", ch);
           return FALSE;
         }
-        if (GET_OBJ_VAL(bio1, 0) == BIO_SYNAPTICACCELERATOR) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_SYNAPTICACCELERATOR) {
           send_to_char("Synaptic Accelerators are not compatible with Move-By-Wire.\r\n", ch);
           return FALSE;
         }
-        if (GET_OBJ_VAL(bio1, 0) == BIO_SUPRATHYROIDGLAND) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_SUPRATHYROIDGLAND) {
           send_to_char("Suprathyroid Glands are not compatible with Move-By-Wire.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_WIREDREFLEXES:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_SYNAPTICACCELERATOR) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_SYNAPTICACCELERATOR) {
           send_to_char("Your Synaptic Accelerator is not compatible with Wired Reflexes.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_EYES:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_CATSEYES || GET_OBJ_VAL(bio1, 0) == BIO_NICTATINGGLAND) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_CATSEYES || GET_BIOWARE_TYPE(bio1) == BIO_NICTATINGGLAND) {
           send_to_char("Bioware and cyberware eye modifications aren't compatible.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_MUSCLEREP:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_MUSCLEAUG || GET_OBJ_VAL(bio1, 0) == BIO_MUSCLETONER) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLEAUG || GET_BIOWARE_TYPE(bio1) == BIO_MUSCLETONER) {
           send_to_char("Muscle replacement isn't compatible with Muscle Augmentation or Toners.\r\n", ch);
           return FALSE;
         }
         break;
       case CYB_DERMALPLATING:
       case CYB_DERMALSHEATHING:
-        if (GET_OBJ_VAL(bio1, 0) == BIO_ORTHOSKIN) {
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ORTHOSKIN) {
           send_to_char("Orthoskin is not compatible with Dermal Plating or Sheathing.\r\n", ch);
           return FALSE;
         }
         break;
-      case CYB_CYBERARMS:
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
-          send_to_char("Cyber Arms are incompatible with Muscle Augmentations.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
-          send_to_char("Cyber Arms are incompatible with Muscle Toners.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
-          send_to_char("Cyber Arms are incompatible with Orthoskin.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
-          send_to_char("Cyber Arms are incompatible with Dermal Plating.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
-          send_to_char("Cyber Arms are incompatible with Dermal Sheathing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
-          send_to_char("Cyber Arms are incompatible with Bone Lacing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
-          send_to_char("Cyber Arms are incompatible with other Cyber Arms.\r\n", ch);
+      case CYB_ARMS:
+      case CYB_LEGS:
+      case CYB_SKULL:
+      case CYB_TORSO:
+        if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLEAUG) {
+          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Augmentations.\r\n", ch);
+          return FALSE;
+        } 
+        if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLETONER) {
+          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Toners.\r\n", ch);
           return FALSE;
         }
-        break;
-      case CYB_CYBERLEGS:
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
-          send_to_char("Cyber Legs are incompatible with Muscle Augmentations.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
-          send_to_char("Cyber Legs are incompatible with Muscle Toners.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
-          send_to_char("Cyber Legs are incompatible with Orthoskin.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
-          send_to_char("Cyber Legs are incompatible with Dermal Plating.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
-          send_to_char("Cyber Legs are incompatible with Dermal Sheathing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
-          send_to_char("Cyber Legs are incompatible with Bone Lacing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
-          send_to_char("Cyber Legs are incompatible with other Cyber Legs.\r\n", ch);
-          return FALSE;
-        }
-        break;
-      case CYB_CYBERSKULL:
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
-          send_to_char("Cyber Skulls are incompatible with Muscle Augmentations.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
-          send_to_char("Cyber Skulls are incompatible with Muscle Toners.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
-          send_to_char("Cyber Skulls are incompatible with Orthoskin.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
-          send_to_char("Cyber Skulls are incompatible with Dermal Plating.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
-          send_to_char("Cyber Skulls are incompatible with Dermal Sheathing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
-          send_to_char("Cyber Skulls are incompatible with Bone Lacing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
-          send_to_char("Cyber Skulls are incompatible with other Cyber Skulls.\r\n", ch);
-          return FALSE;
-        }
-        break;
-      case CYB_CYBERTORSO:
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
-          send_to_char("Cyber Torsos are incompatible with Muscle Augmentations.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
-          send_to_char("Cyber Torsos are incompatible with Muscle Toners.\r\n", ch);
-        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
-          send_to_char("Cyber Torsos are incompatible with Orthoskin.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
-          send_to_char("Cyber Torsos are incompatible with Dermal Plating.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
-          send_to_char("Cyber Torsos are incompatible with Dermal Sheathing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
-          send_to_char("Cyber Torsos are incompatible with Bone Lacing.\r\n", ch);
-        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
-          send_to_char("Cyber Torsos are incompatible with other Cyber Torsos.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ORTHOSKIN) {
+          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Orthoskin.\r\n", ch);
           return FALSE;
         }
         break;

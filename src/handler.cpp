@@ -861,12 +861,32 @@ void affect_total(struct char_data * ch)
     GET_COMBAT(ch) = 0;
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     GET_IMPACT(ch) += GET_POWER(ch, ADEPT_MYSTIC_ARMOR);
-  for (i = 0; i < (NUM_WEARS -1); i++)
-    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO)
-    {
-      GET_COMBAT(ch) /= 2;
-      break;
+    
+  // Apply gyromount penalties, but only if you're wielding a gun. 
+  // TODO: Ideally, this would only apply if you have uncompensated recoil, but that's a looot of code.
+  if (GET_EQ(ch, WEAR_WIELD) 
+      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON
+      && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD)))) 
+  {
+    bool added_gyro_penalty = FALSE;
+    for (i = 0; !added_gyro_penalty && i < (NUM_WEARS -1); i++)
+      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
+        added_gyro_penalty = TRUE;
+        GET_COMBAT(ch) /= 2;
+      }
+      
+    /*
+    if (!added_gyro_penalty) {
+      for (struct obj_data *cyb = ch->cyberware; !added_gyro_penalty && cyb; cyb = cyb->next_content) {
+        if (GET_CYBERWARE_TYPE(cyb) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(cyb), ARMS_MOD_GYROMOUNT)) {
+          added_gyro_penalty = TRUE;
+          GET_COMBAT(ch) /= 2;
+        }
+      }
     }
+    */
+  }
+  
   GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
   GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));
   GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DEFENSE(ch) - GET_BODY(ch);
