@@ -1611,6 +1611,78 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           return FALSE;
         }
         break;
+      case CYB_CYBERARMS:
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
+          send_to_char("Cyber Arms are incompatible with Muscle Augmentations.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
+          send_to_char("Cyber Arms are incompatible with Muscle Toners.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
+          send_to_char("Cyber Arms are incompatible with Orthoskin.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
+          send_to_char("Cyber Arms are incompatible with Dermal Plating.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
+          send_to_char("Cyber Arms are incompatible with Dermal Sheathing.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
+          send_to_char("Cyber Arms are incompatible with Bone Lacing.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
+          send_to_char("Cyber Arms are incompatible with other Cyber Arms.\r\n", ch);
+          return FALSE;
+        }
+        break;
+      case CYB_CYBERLEGS:
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
+          send_to_char("Cyber Legs are incompatible with Muscle Augmentations.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
+          send_to_char("Cyber Legs are incompatible with Muscle Toners.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
+          send_to_char("Cyber Legs are incompatible with Orthoskin.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
+          send_to_char("Cyber Legs are incompatible with Dermal Plating.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
+          send_to_char("Cyber Legs are incompatible with Dermal Sheathing.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
+          send_to_char("Cyber Legs are incompatible with Bone Lacing.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
+          send_to_char("Cyber Legs are incompatible with other Cyber Legs.\r\n", ch);
+          return FALSE;
+        }
+        break;
+      case CYB_CYBERSKULL:
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
+          send_to_char("Cyber Skulls are incompatible with Muscle Augmentations.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
+          send_to_char("Cyber Skulls are incompatible with Muscle Toners.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
+          send_to_char("Cyber Skulls are incompatible with Orthoskin.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
+          send_to_char("Cyber Skulls are incompatible with Dermal Plating.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
+          send_to_char("Cyber Skulls are incompatible with Dermal Sheathing.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
+          send_to_char("Cyber Skulls are incompatible with Bone Lacing.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
+          send_to_char("Cyber Skulls are incompatible with other Cyber Skulls.\r\n", ch);
+          return FALSE;
+        }
+        break;
+      case CYB_CYBERTORSO:
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLEAUG)
+          send_to_char("Cyber Torsos are incompatible with Muscle Augmentations.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_MUSCLETONER)
+          send_to_char("Cyber Torsos are incompatible with Muscle Toners.\r\n", ch);
+        if (GET_BIOWARE_TYPE(bio1, 0) == BIO_ORTHOSKIN)
+          send_to_char("Cyber Torsos are incompatible with Orthoskin.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALPLATING)
+          send_to_char("Cyber Torsos are incompatible with Dermal Plating.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_DERMALSHEATHING)
+          send_to_char("Cyber Torsos are incompatible with Dermal Sheathing.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_BONELACING)
+          send_to_char("Cyber Torsos are incompatible with Bone Lacing.\r\n", ch);
+        if (GET_CYBERWARE_TYPE(cyber2, 0) == CYB_CYBERARMS)
+          send_to_char("Cyber Torsos are incompatible with other Cyber Torsos.\r\n", ch);
+          return FALSE;
+        }
+        break;
     }
   }
   return TRUE;

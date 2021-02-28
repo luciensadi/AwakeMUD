@@ -1822,7 +1822,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       send_to_char("You easily dodge it!\r\n", vict);
       act("$n dodges out of the way of a cloud of steam.", TRUE, vict, 0, ch, TO_NOTVICT);
     } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - GET_IMPACT(vict));
+      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
       int dam = convert_damage(stage(success, basedamage));
       if (!AWAKE(vict)) {
         act("$n's body reels from the blast of steam.", TRUE, vict, 0, 0, TO_ROOM);
@@ -1871,7 +1871,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       send_to_char("You easily dodge it!\r\n", vict);
       act("$n dodges out of the way of the concussive blast.", TRUE, vict, 0, ch, TO_NOTVICT);
     } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - GET_IMPACT(vict));
+      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
       int dam = convert_damage(stage(success, basedamage));
       if (!AWAKE(vict)) {
         act("$n's shudders from the concussive blast.", TRUE, vict, 0, 0, TO_ROOM);
@@ -1920,7 +1920,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       send_to_char("You easily dodge it!\r\n", vict);
       act("$n dodges out of the way of the bolt of water.", TRUE, vict, 0, ch, TO_NOTVICT);
     } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - GET_IMPACT(vict));
+      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
       int dam = convert_damage(stage(success, basedamage));
       if (!AWAKE(vict)) {
         act("$n's stumbles as they're splashed with water.", TRUE, vict, 0, 0, TO_ROOM);
