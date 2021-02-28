@@ -20,9 +20,11 @@
 #define PRIV_RECRUITER                      10     // Can invite members.
 #define PRIV_TENANT                         11     // Can enter PG apartments.
 #define PRIV_TREASURER                      12     // Can wire money from the PG bank account.
-#define PRIV_MAX                            13     /* Not an actual priv-- used for iteration over pgroup_privileges[].
-                                                      Must always be equal to total number of privileges, not including priv_none of course. */
-#define PRIV_NONE                           10000  // No privilege required.
+#define PRIV_MAX                            13     
+/* Not an actual priv-- used for iteration over pgroup_privileges[].
+   Must always be equal to total number of privileges, not including priv_none of course. */
+   
+#define PRIV_NONE                           PRIV_MAX + 1  // No privilege required. A metaprivilege, so it's fine if it shifts.
 
 // Playergroup settings.
 #define PGROUP_FOUNDED                      0 // Set by PGROUP FOUND, indicates that group is fully founded/active.

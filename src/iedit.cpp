@@ -2413,7 +2413,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case CYB_HANDSPUR:
             case CYB_REFLEXTRIGGER:
             case CYB_ARMS:
-              if (number < 0 || number >= NUM_ARMS_MODS) {
+              if (number < 0 || number > NUM_ARMS_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
@@ -2432,9 +2432,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               for (int mod_num = 0; mod_num < NUM_ARMS_MODS; mod_num++)
                 send_to_char(CH, " %d) %s\r\n", mod_num + 1, armsmods[mod_num]);
               send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-              break;
+              return;
             case CYB_LEGS:
-              if (number < 0 || number >= NUM_LEGS_MODS) {
+              if (number < 0 || number > NUM_LEGS_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
@@ -2453,9 +2453,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               for (int mod_num = 0; mod_num < NUM_LEGS_MODS; mod_num++)
                 send_to_char(CH, " %d) %s\r\n", mod_num + 1, legsmods[mod_num]);
               send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-              break;
+              return;
             case CYB_SKULL:
-              if (number < 0 || number >= NUM_SKULL_MODS) {
+              if (number < 0 || number > NUM_SKULL_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
@@ -2474,9 +2474,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               for (int mod_num = 0; mod_num < NUM_SKULL_MODS; mod_num++)
                 send_to_char(CH, " %d) %s\r\n", mod_num + 1, skullmods[mod_num]);
               send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-              break;
+              return;
             case CYB_TORSO:
-              if (number < 0 || number >= NUM_TORSO_MODS) {
+              if (number < 0 || number > NUM_TORSO_MODS) {
                 send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
                 return;
               }
@@ -2495,7 +2495,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               for (int mod_num = 0; mod_num < NUM_TORSO_MODS; mod_num++)
                 send_to_char(CH, " %d) %s\r\n", mod_num + 1, torsomods[mod_num]);
               send_to_char(CH, "Current Flags: ^c%s^n\r\n Enter options (0 to quit): ", buf1);
-              break;
+              return;
             case CYB_DERMALSHEATHING:
               if (number < 0 || number > 1) {
                 send_to_char("Invalid Input! Enter 1 or 0: ", CH);
