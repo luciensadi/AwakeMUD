@@ -439,6 +439,7 @@ void check_idling(void)
         extract_char(ch);
       } else if (IS_SENATOR(ch) && ch->char_specials.timer > 15 &&
                  GET_INVIS_LEV(ch) < 2 &&
+                 access_level(ch, LVL_EXECUTIVE) &&
                  PRF_FLAGGED(ch, PRF_AUTOINVIS))
         perform_immort_invis(ch, 2);
     }
