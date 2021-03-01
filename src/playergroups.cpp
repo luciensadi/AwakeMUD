@@ -188,37 +188,38 @@ struct pgroup_cmd_struct {
   bool requires_pocket_secretary;
   bool valid_while_group_disabled;
   bool requires_coconspirator_if_secret;
-} pgroup_commands[] = {                                     /* !founded founded pocsec disabld secret */
-  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , TRUE  , FALSE , FALSE , FALSE },
-  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  , TRUE  , FALSE , FALSE },
-  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  , TRUE  , FALSE , FALSE },
-  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  , TRUE  , FALSE , FALSE },
-  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
-  { "demote"     , PRIV_MANAGER       , do_pgroup_demote      , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
-  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , TRUE  , FALSE , FALSE , FALSE },
-  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  , TRUE  , FALSE , FALSE },
-  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
-  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
-  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , FALSE , TRUE  , FALSE , FALSE },
-  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
-  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , TRUE  , FALSE , FALSE , FALSE },
-  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
-  { "invitations", PRIV_RECRUITER     , do_pgroup_invitations , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
-  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , TRUE  , FALSE , FALSE },
-  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
-  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
-  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
-  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
-  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
-  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , TRUE  , FALSE , FALSE , FALSE },
-  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , TRUE  , FALSE , TRUE  , FALSE },
-  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
-  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
-  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  , TRUE  , TRUE  , FALSE },
-  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  , TRUE  , FALSE , FALSE },
-  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  , TRUE  , FALSE , FALSE },
-  { "wire"       , PRIV_TREASURER     , do_pgroup_wire        , FALSE , TRUE  , FALSE , FALSE , FALSE },
-  { "\n"         , 0                  , 0                     , FALSE , TRUE  , FALSE , FALSE , FALSE } // This must be last.
+  bool command_currently_disabled;
+} pgroup_commands[] = {                                     /* !founded   founded   pocsec    while-dis secret    cmd_disabled */
+  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , FALSE },
+  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , FALSE },
+  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE  },
+  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE  },
+  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE },
+  { "demote"     , PRIV_MANAGER       , do_pgroup_demote      , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE },
+  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , FALSE },
+  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE  },
+  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE },
+  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE },
+  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE    , FALSE   , TRUE    , FALSE   , FALSE   , FALSE },
+  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE },
+  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , FALSE },
+  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE },
+  { "invitations", PRIV_RECRUITER     , do_pgroup_invitations , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , TRUE  },
+  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE  },
+  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE },
+  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE },
+  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , FALSE },
+  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE },
+  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE },
+  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , FALSE },
+  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , FALSE },
+  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE },
+  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , FALSE },
+  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE    , TRUE    , TRUE    , TRUE    , FALSE   , FALSE },
+  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE  },
+  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE  },
+  { "wire"       , PRIV_TREASURER     , do_pgroup_wire        , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , FALSE },
+  { "\n"         , 0                  , 0                     , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , FALSE } // This must be last.
 };                                                          /* !founded founded pocsec disabld secret */
 
 
@@ -257,16 +258,23 @@ ACMD(do_pgroup) {
       snprintf(buf, sizeof(buf), "SYSERR: Somehow, %s (%ld) is part of an invalid group.",
               GET_CHAR_NAME(ch), GET_IDNUM(ch));
       mudlog(buf, ch, LOG_MISCLOG, TRUE);
-      log(buf);
       send_to_char("We're sorry, but your character is currently bugged. Please log out and back in.\r\n"
                    "If that doesn't fix the problem, please reach out to the staff for help.\r\n", ch);
       return;
     }
     
+    if (pgroup_commands[cmd_index].command_currently_disabled) {
+      if (access_level(ch, LVL_PRESIDENT)) {
+        send_to_char(ch, "^yYou override the code lockout for %s and use this DISABLED command.^n\r\n", pgroup_commands[cmd_index].cmd);
+      } else {
+        send_to_char(ch, "Sorry, the %s command is currently disabled.\r\n", pgroup_commands[cmd_index].cmd);
+        return;
+      }
+    }
+    
     // Precondition: If your group is disabled, the only commands you can use are LOGS, STATUS, and RESIGN.
     if (GET_PGROUP(ch)->is_disabled() && !pgroup_commands[cmd_index].valid_while_group_disabled) {
       send_to_char("You can't perform that action after your group has been disbanded.\r\n", ch);
-      display_pgroup_help(ch);
       return;
     }
     
@@ -851,7 +859,7 @@ void do_pgroup_status(struct char_data *ch, char *argument) {
   char query_buf[512];
   Playergroup *pgr = GET_PGROUP(ch);
   
-  send_to_char(ch, "Playergroup information for %s (tag %s, alias %s):\r\n\r\n", pgr->get_name(), pgr->get_tag(), pgr->get_alias());
+  send_to_char(ch, "Playergroup information for %s (tag %s^n, alias %s^n):\r\n\r\n", pgr->get_name(), pgr->get_tag(), pgr->get_alias());
   
   // If group is disabled, display this and end status readout.
   if (pgr->is_disabled()) {
@@ -1019,12 +1027,22 @@ void display_pgroup_help(struct char_data *ch) {
       continue;
     }
     
+    if (pgroup_commands[cmd_index].command_currently_disabled) {
+      if (access_level(ch, LVL_PRESIDENT)) {
+        strlcat(buf, "^y", sizeof(buf));
+      } else {
+        continue;
+      }
+    }
+    
     // If we've gotten here, the command is assumed kosher for this character and group combo-- print it in our list.
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %-11s%s^n", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
   }
   
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
   send_to_char(buf, ch);
+  
+  send_to_char("\r\nUse PGROUP HELP <command> for details.\r\n", ch);
 }
 
 
@@ -1075,14 +1093,14 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
         case 'q':
           if (d->edit_pgroup->is_clone()) {
             // Log the information about who edited it and what the values are.
-            GET_PGROUP(CH)->audit_log_vfprintf("%s modified the group's information (name %s, alias %s, tag %s, %s).",
+            GET_PGROUP(CH)->audit_log_vfprintf("%s modified the group's information (name %s^n, alias %s^n, tag %s^n, %s^n).",
                                                GET_CHAR_NAME(CH),
                                                d->edit_pgroup->get_name(),
                                                d->edit_pgroup->get_alias(),
                                                d->edit_pgroup->get_tag(),
                                                d->edit_pgroup->is_secret() ? "clandestine" : "not clandestine");
             
-            GET_PGROUP(CH)->secret_log_vfprintf("A shadowy figure modified the group's information (name %s, alias %s, tag %s, %s).",
+            GET_PGROUP(CH)->secret_log_vfprintf("A shadowy figure modified the group's information (name %s^n, alias %s^n, tag %s^n, %s^n).",
                                                 d->edit_pgroup->get_name(),
                                                 d->edit_pgroup->get_alias(),
                                                 d->edit_pgroup->get_tag(),
@@ -1098,7 +1116,7 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
             delete d->edit_pgroup;
             d->edit_pgroup = NULL;
             
-            send_to_char(CH, "Successfully updated '%s'.\r\n", GET_PGROUP(CH)->get_name());
+            send_to_char(CH, "Successfully updated '%s^n'.\r\n", GET_PGROUP(CH)->get_name());
           } else {
             // Group did not exist previously. Save the group.
             d->edit_pgroup->save_pgroup_to_db();
@@ -1115,18 +1133,18 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
             GET_PGROUP_MEMBER_DATA(CH)->title = str_dup("Leader");
             
             // Log the information about who created it and what the values are.
-            GET_PGROUP(CH)->audit_log_vfprintf("%s created the group (name %s, alias %s, tag %s).",
+            GET_PGROUP(CH)->audit_log_vfprintf("%s created the group (name %s^n, alias %s^n, tag %s^n).",
                                                GET_CHAR_NAME(CH),
                                                d->edit_pgroup->get_name(),
                                                d->edit_pgroup->get_alias(),
                                                d->edit_pgroup->get_tag());
             
-            GET_PGROUP(CH)->secret_log_vfprintf("A shadowy figure created the group (name %s, alias %s, tag %s).",
+            GET_PGROUP(CH)->secret_log_vfprintf("A shadowy figure created the group (name %s^n, alias %s^n, tag %s^n).",
                                                 d->edit_pgroup->get_name(),
                                                 d->edit_pgroup->get_alias(),
                                                 d->edit_pgroup->get_tag());
             
-            send_to_char(CH, "Created new group '%s'.\r\n", GET_PGROUP(CH)->get_name());
+            send_to_char(CH, "Created new group '%s^n'.\r\n", GET_PGROUP(CH)->get_name());
             
             // Save the character to ensure the DB reflects their new membership.
             playerDB.SaveChar(CH, GET_LOADROOM(CH));

@@ -1270,7 +1270,7 @@ ACMD(do_toggle)
       }
       mode = 24;
       result = 1;
-    } else if (is_abbrev(argument, "showpgtags")) {
+    } else if (is_abbrev(argument, "showpgtags") || is_abbrev(argument, "showgrouptags") || is_abbrev(argument, "showtags")) {
       result = PRF_TOG_CHK(ch, PRF_SHOWGROUPTAG);
       mode = 27;
     } else if (is_abbrev(argument, "keepalives")) {
