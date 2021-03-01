@@ -1875,10 +1875,15 @@ void docwagon(struct char_data *ch)
   
   if (!docwagon)
     return;
+    
+  struct room_data *room = get_ch_in_room(ch);
+  
+  if (!room)
+    return;
   
   // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
   if (success_test(GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1,
-                   MAX(GET_SECURITY_LEVEL(ch->in_room), 4)) > 0)
+                   MAX(GET_SECURITY_LEVEL(room), 4)) > 0)
   {
     if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
       stop_fighting(FIGHTING(ch));
@@ -1900,7 +1905,7 @@ void docwagon(struct char_data *ch)
       ch->persona = NULL;
       PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
     } else if (PLR_FLAGGED(ch, PLR_MATRIX))
-      for (struct char_data *temp = ch->in_room->people; temp; temp = temp->next_in_room)
+      for (struct char_data *temp = room->people; temp; temp = temp->next_in_room)
         if (PLR_FLAGGED(temp, PLR_MATRIX))
           temp->persona->decker->hitcher = NULL;
     docwagon_message(ch);
@@ -1926,7 +1931,7 @@ void docwagon(struct char_data *ch)
       }
     ch->points.fire[0] = 0;
     send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
-    switch (GET_JURISDICTION(ch->in_room)) {
+    switch (GET_JURISDICTION(room)) {
       case ZONE_SEATTLE:
         i = real_room(RM_SEATTLE_DOCWAGON);
         break;

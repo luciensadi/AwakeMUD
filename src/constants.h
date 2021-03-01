@@ -108,7 +108,7 @@ extern const char *background_types[];
 extern const char *fire_mode[];
 extern const char *weapon_type[];
 extern const char *combat_modifiers[];
-extern const char *pgroup_privileges[];
+extern struct pgroup_priv_struct pgroup_privileges[];
 extern const char *workshops[];
 extern const char *kit_workshop_facility[];
 extern const char *projectile_ammo_types[];

@@ -80,7 +80,7 @@ extern void list_detailed_quest(struct char_data *ch, long rnum);
 extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
 
-extern const char *pgroup_print_privileges(Bitfield privileges);
+extern const char *pgroup_print_privileges(Bitfield privileges, bool full);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
 
@@ -1393,7 +1393,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Rank ^c%d/%d^n member of group '^c%s^n' (^c%s^n), with privileges:\r\n  ^c%s^n\r\n",
             GET_PGROUP_MEMBER_DATA(k)->rank, MAX_PGROUP_RANK,
             GET_PGROUP(k)->get_name(), GET_PGROUP(k)->get_alias(),
-            pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges));
+            pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges, FALSE));
   }
   
   if (!IS_NPC(k) && access_level(ch, LVL_ADMIN)) {

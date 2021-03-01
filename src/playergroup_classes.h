@@ -122,4 +122,10 @@ public:
   ~Pgroup_data() { if (title) delete title; }
 };
 
+struct pgroup_priv_struct {
+  const char *name;
+  bool enabled;
+  const char *help_string;
+};
+
 #endif

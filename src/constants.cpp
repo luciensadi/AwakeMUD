@@ -2416,21 +2416,20 @@ const char *combat_modifiers[] =
   "In Melee Combat"
 };
 
-const char *pgroup_privileges[] =
+struct pgroup_priv_struct pgroup_privileges[] =
 {
-  "Administrator",
-  "Auditor",
-  "Architect",
-  "Co-Conspirator",
-  "Driver",
-  "Landlord",
-  "Leader",
-  "Manager",
-  "Mechanic",
-  "Procurer",
-  "Recruiter",
-  "Tenant",
-  "Treasurer"
+  {"Administrator" , TRUE  , "Administrators can grant any privilege that they possess. They can also promote and demote anyone below their level. Only the Leader may assign the Administrator privilege." },
+  {"Auditor"       , TRUE  , "Auditors can see the pgroup's logs." },
+  {"Architect"     , FALSE , "Architects can alter the PGHQ's blueprints." },
+  {"Co-Conspirator", TRUE  , "Co-Conspirators pierce the veil of secrecy and see unredacted logs even in secret orgs. No effect in non-secret orgs." },
+  {"Driver"        , FALSE , "Drivers are authorized to use PG vehicles." },
+  {"Landlord"      , FALSE , "Landlords are authorized to modify PG housing, including leasing and releasing rooms." },
+  {"Leader"        , TRUE  , "The Leader of the group has all permissions. There can be only one leader. Power is transferred through abdication and contesting." },
+  {"Mechanic"      , FALSE , "Mechanics can install and remove components from PG vehicles." },
+  {"Procurer"      , FALSE , "Procurers can purchase things with PG funds." },
+  {"Recruiter"     , TRUE  , "Recruiters can send invitations to join the PG." },
+  {"Tenant"        , FALSE , "Tenants may enter all PG apartments." },
+  {"Treasurer"     , TRUE  , "Treasurers may see the balance of the PG account, and can wire money from it." }
 };
 
 const char *workshops[] = {

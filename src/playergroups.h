@@ -7,20 +7,19 @@
 #define _playergroups_h
 
 // Privileges.
-#define PRIV_ADMINISTRATOR                  0      // Can assign any priv they possess except Admin.
+#define PRIV_ADMINISTRATOR                  0      // Can assign any priv they possess except Admin; can promote, demote, and outcast.
 #define PRIV_AUDITOR                        1      // Can view the logs.
 #define PRIV_ARCHITECT                      2      // Can edit the PGHQ blueprints.
 #define PRIV_COCONSPIRATOR                  3      // In groups where membership is secret, allows viewing of roster.
 #define PRIV_DRIVER                         4      // Can lock/unlock and drive any PG vehicle.
 #define PRIV_LANDLORD                       5      // Can lease apts, relinquish apts, and add guests.
 #define PRIV_LEADER                         6      // Can do anything.
-#define PRIV_MANAGER                        7      // Can promote, demote, and outcast.
-#define PRIV_MECHANIC                       8      // Can perform modifications to PG vehicles.
-#define PRIV_PROCURER                       9      // Can purchase/sell PG vehicles.
-#define PRIV_RECRUITER                      10     // Can invite members.
-#define PRIV_TENANT                         11     // Can enter PG apartments.
-#define PRIV_TREASURER                      12     // Can wire money from the PG bank account.
-#define PRIV_MAX                            13     
+#define PRIV_MECHANIC                       7      // Can perform modifications to PG vehicles.
+#define PRIV_PROCURER                       8      // Can purchase/sell PG vehicles.
+#define PRIV_RECRUITER                      9      // Can invite members.
+#define PRIV_TENANT                         10     // Can enter PG apartments.
+#define PRIV_TREASURER                      11     // Can wire money from the PG bank account.
+#define PRIV_MAX                            12     
 /* Not an actual priv-- used for iteration over pgroup_privileges[].
    Must always be equal to total number of privileges, not including priv_none of course. */
    
@@ -42,7 +41,7 @@
 #define PGEDIT_CONFIRM_SAVE                 5
 
 // Configurables.
-#define NUM_MEMBERS_NEEDED_TO_FOUND         2 // TODO: Should be 3, but decreased for testing purposes.
+#define NUM_MEMBERS_NEEDED_TO_FOUND         3 // TODO: Should be 3, but decreased for testing purposes.
 #define COST_TO_FOUND_GROUP                 100000 // Nuyen that must be paid by the founding player in order to make a group official.
 #define PGROUP_INVITATION_LIFETIME_IN_DAYS  7 // Number of IRL days an invitation will be valid for.
 #define DEFAULT_PGROUP_LOG_LOOKUP_LENGTH    1 // Number of IRL days to look back when PGROUP LOGS is passed no argument.
