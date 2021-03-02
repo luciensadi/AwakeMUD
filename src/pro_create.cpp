@@ -459,7 +459,7 @@ void update_buildrepair(void)
             CH->char_specials.timer = 0;
             obj_from_char(PROG);
             obj_to_obj(PROG, PROG->contains);
-            GET_OBJ_VAL(PROG, 3) = 0; // Wipe out the builder's idnum so it can be worked on by someone else.
+            GET_PART_BUILDER_IDNUM(PROG) = 0; // Wipe out the builder's idnum so it can be worked on by someone else.
             PROG->contains = NULL;
             GET_OBJ_VAL(PROG, 4) = -2;
             if (!GET_OBJ_VAL(PROG->in_obj, 0))
