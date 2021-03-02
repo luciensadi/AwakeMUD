@@ -273,6 +273,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
   // Next, check capitalized words in it for highlighting purposes, unless they've disabled highlighting or color.
   bool quote_mode = FALSE;
+  bool start_of_new_sentence = TRUE;
   for (i = 0; i < (int) strlen(mutable_echo_string); i++) {
     NEW_EMOTE_DEBUG(actor, "^y%c%s^n", mutable_echo_string[i], mutable_echo_string[i] == '^' ? "^" : "");
     
@@ -281,6 +282,10 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       quote_mode = !quote_mode;
       NEW_EMOTE_DEBUG(actor, "\r\nQuote mode is now %s.\r\n", quote_mode ? "on" : "off");
       continue;
+    }
+    
+    if (mutable_echo_string[i] == '.' || mutable_echo_string[i] == '!' || mutable_echo_string[i] == '?') {
+      start_of_new_sentence = TRUE;
     }
     
     bool at_mode = FALSE;
@@ -294,7 +299,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       tag_check_string[tag_index - i] = '\0';
       
       // Short names don't auto-match unless they're complete matches or explicit tags.
-      bool require_exact_match = !at_mode && strlen(tag_check_string) < 5;
+      bool require_exact_match = !at_mode && (start_of_new_sentence || strlen(tag_check_string) < 5);
       
       if (require_exact_match)
         NEW_EMOTE_DEBUG(actor, "\r\nUsing exact mode for this evaluation due to non-at and low string length %d.", strlen(tag_check_string));
@@ -447,7 +452,11 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       }
       
       // We're ready to move on. i has been incremented, and all necessary writing has been done.
+      start_of_new_sentence = FALSE;
     }
+    
+    else if (isalpha(mutable_echo_string[i]))
+      start_of_new_sentence = FALSE;
   }
   
   NEW_EMOTE_DEBUG(actor, "\r\nTagging pass of emote done. Now doing speech pass. Combine these later...");
