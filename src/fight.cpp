@@ -3394,12 +3394,17 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       
       if (has_suppressor) {
         // Special case: If they're using a suppressed weapon, print a muffled-gunfire message and terminate.
-        send_to_room("You hear muffled gunshots nearby.\r\n", &world[room1]);
+        for (struct char_data *listener = world[room1].people; listener; listener = listener->next_in_room)
+          if (!PRF_FLAGGED(listener, PRF_FIGHTGAG))
+            send_to_char("You hear muffled gunshots nearby.\r\n", listener);
+            
         combat_message_process_ranged_response(ch, room1);
         strcat(been_heard, temp);
       } else {
         // Send gunshot notifications to the selected room. Process guard/helper responses.
-        send_to_room("You hear gunshots nearby!\r\n", &world[room1]);
+        for (struct char_data *listener = world[room1].people; listener; listener = listener->next_in_room)
+          if (!PRF_FLAGGED(listener, PRF_FIGHTGAG))
+            send_to_char("You hear gunshots nearby!\r\n", listener);
         combat_message_process_ranged_response(ch, room1);
         strcat(been_heard, temp);
         
@@ -3423,7 +3428,9 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (strstr(been_heard, temp) != 0)
       continue;
     
-    send_to_room("You hear gunshots not far off.\r\n", &world[room1]);
+    for (struct char_data *listener = world[room1].people; listener; listener = listener->next_in_room)
+      if (!PRF_FLAGGED(listener, PRF_FIGHTGAG))
+        send_to_char("You hear gunshots not far off.\r\n", listener);
     combat_message_process_ranged_response(ch, room1);
     strcat(been_heard, temp);
     
@@ -3443,7 +3450,9 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (strstr(been_heard, temp) != 0)
       continue;
     
-    send_to_room("You hear gunshots in the distance.\r\n", &world[room1]);
+    for (struct char_data *listener = world[room1].people; listener; listener = listener->next_in_room)
+      if (!PRF_FLAGGED(listener, PRF_FIGHTGAG))
+        send_to_char("You hear gunshots in the distance.\r\n", listener);
     combat_message_process_ranged_response(ch, room1);
     strcat(been_heard, temp);
   }
