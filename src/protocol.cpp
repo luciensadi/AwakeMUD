@@ -858,6 +858,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                Result[i++] = *pCopyFrom++;
          }
       }
+      
 #ifdef COLOUR_CHAR
       else if ( bColourOn && apData[j] == COLOUR_CHAR )
       {
@@ -1024,7 +1025,13 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
       {
          /* Avoid accidental triggering of old-style MSP triggers */
          Result[i++] = '?';
-      }
+      } 
+      else if (apData[j] == '#' && apData[j + 1] == '#') 
+      {
+        if (D_PRF_FLAGGED(apDescriptor, PRF_SCREENREADER))
+          Result[i++] = '#';
+        j += 1;
+      } 
       else /* Just copy the character normally */
       {
          Result[i++] = apData[j];
