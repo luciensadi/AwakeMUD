@@ -106,11 +106,12 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
         send_to_char("Sorry, tag strings can't end with the ^ character.\r\n", ch);
         return FALSE;
       }
-      else if (iscolor(*(ptr+1)))
+      else if (*(ptr+1) == '^') {
         ptr += 2;
-      else {
         len += 1;
-        ptr += 1;
+      }
+      else {
+        ptr += 2;
       }
     } else {
       len += 1;

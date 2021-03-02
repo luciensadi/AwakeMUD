@@ -2421,7 +2421,7 @@ SPECIAL(fixer)
   struct char_data *fixer = (struct char_data *) me;
   struct obj_data *obj, *credstick = NULL;
   int cost;
-  sh_int cash = 0, extra, hour, day = 0, pm = 0;
+  sh_int extra, hour, day = 0, pm = 0;
 
   if (cmd && !CMD_IS("repair") && !CMD_IS("list") && !CMD_IS("receive"))
     return FALSE;
@@ -2433,25 +2433,36 @@ SPECIAL(fixer)
     return TRUE;
   }
 
-  if (CMD_IS("repair")) {
-    any_one_arg(argument, buf);
+  if (CMD_IS("repair")) {    
     skip_spaces(&argument);
+    
+    if (!*argument) {
+      send_to_char("Syntax: REPAIR [cash|credstick] <item>\r\n", ch);
+      return TRUE;
+    }
+    
+    // Pick the first argument, but don't re-index *argument yet.
+    any_one_arg(argument, buf);
     
     bool force_cash = !str_cmp(buf, "cash");
     bool force_credstick = !str_cmp(buf, "credstick");
     
     if (force_cash || force_credstick) {
+      // Actually re-index *argument now.
       argument = any_one_arg(argument, buf);
       skip_spaces(&argument);
       
-      if (force_cash)
-        cash = 1;
-      else {
-        if (!(credstick = get_first_credstick(ch, "credstick"))) {
-          send_to_char("You don't have a credstick.\r\n", ch);
-          return TRUE;
-        }
+      // Yes, we need this twice, because we stripped out an argument item in cash/credstick checking.
+      if (!*argument) {
+        send_to_char("Syntax: REPAIR [cash|credstick] <item>\r\n", ch);
+        return TRUE;
       }
+    }
+    
+    // We default to cash-- only look for a credstick if they used the credstick command.
+    if (force_credstick && !(credstick = get_first_credstick(ch, "credstick"))) {
+      send_to_char("You don't have a credstick.\r\n", ch);
+      return TRUE;
     }
 
     if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
@@ -2477,17 +2488,17 @@ SPECIAL(fixer)
     }
     cost = (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) > 0 ? GET_OBJ_BARRIER(obj) : 1)) *
                  (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
-    if ((cash ? GET_NUYEN(ch) : GET_OBJ_VAL(credstick, 0)) < cost) {
+    if ((credstick ? GET_OBJ_VAL(credstick, 0) : GET_NUYEN(ch)) < cost) {
       snprintf(arg, sizeof(arg), "%s You can't afford to repair that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
     if (!perform_give(ch, fixer, obj))
       return TRUE;
-    if (cash)
-      GET_NUYEN(ch) -= cost;
-    else
+    if (credstick)
       GET_OBJ_VAL(credstick, 0) -= cost;
+    else
+      GET_NUYEN(ch) -= cost;
     extra = (int)((GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)) / 2);
     if (((GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)) % 2) > 0)
       extra++;

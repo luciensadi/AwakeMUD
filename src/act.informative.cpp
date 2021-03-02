@@ -4002,9 +4002,13 @@ ACMD(do_who)
       }
       strlcat(buf1, buf2, sizeof(buf1));
       
-      if (GET_PGROUP_MEMBER_DATA(tch) && GET_PGROUP(tch) && !(GET_PGROUP(tch)->is_secret())
-          && GET_PGROUP_MEMBER_DATA(ch)
-          && GET_PGROUP(ch) == GET_PGROUP(tch)) {
+      if (GET_PGROUP_MEMBER_DATA(tch) 
+          && GET_PGROUP(tch)
+          && (access_level(ch, LVL_ADMIN) 
+              || (!GET_PGROUP(tch)->is_secret()
+                  && GET_PGROUP_MEMBER_DATA(ch) 
+                  && GET_PGROUP(ch) == GET_PGROUP(tch)))) 
+      {
         snprintf(buf2, sizeof(buf2), " ^G(^g%s^G)^n", GET_PGROUP(tch)->get_alias());
         strlcat(buf1, buf2, sizeof(buf1));
       }
