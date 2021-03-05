@@ -2425,8 +2425,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       
       break;
-    case ITEM_GYRO:
     case ITEM_CLIMBING:
+      if (GET_OBJ_VAL(j, 1) == CLIMBING_TYPE_WATER_WINGS) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Despite being classed as 'climbing gear', this is actually a pair of ^cwater wings^n, with rating ^c%d^n.", GET_OBJ_VAL(j, 0));
+      } else {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its rating is ^c%d^n.", GET_OBJ_VAL(j, 0));
+      }
+      break;
+    case ITEM_GYRO:
     case ITEM_RCDECK:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its rating is ^c%d^n.", GET_OBJ_VAL(j, 0));
       break;

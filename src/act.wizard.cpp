@@ -5684,6 +5684,10 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     send_to_char("Sorry, gun attachments and vehicle mods can't be restrung.\r\n", ch);
     return FALSE;
   }
+  if (GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS) {
+    send_to_char("No amount of cosmetic changes could hide the garishness of water wings.\r\n", ch);
+    return FALSE;
+  }
   if (strlen(buf) >= LINE_LENGTH) {
     send_to_char(ch, "That restring is too long, please shorten it. The maximum length is %d characters.\r\n", LINE_LENGTH - 1);
     return FALSE;

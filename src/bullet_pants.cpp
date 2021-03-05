@@ -45,7 +45,7 @@ ACMD(do_pockets) {
   /****************************
   * pockets: display all ammo *
   *****************************/
-  if (!*argument) {
+  if (!argument || !*argument || (!str_cmp(argument, "show") || !str_cmp(argument, "list") || !str_cmp(argument, "look") || !str_cmp(argument, "status"))) {
     display_pockets_to_char(ch, ch);
     return;
   }

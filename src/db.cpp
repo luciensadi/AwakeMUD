@@ -390,7 +390,7 @@ void require_that_field_exists_in_table(const char *field_name, const char *tabl
 }
 
 void boot_world(void)
-{
+{  
   // Sanity check to ensure we haven't added more bits than our bitfield can hold.
   if (Bitfield::TotalWidth() < PRF_MAX) {
     log("Error: You have more PRF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");

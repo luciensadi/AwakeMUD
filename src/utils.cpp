@@ -177,20 +177,54 @@ int light_level(struct room_data *room)
     mudlog("SYSERR: light_level() called on null room.", NULL, LOG_SYSLOG, TRUE);
     return LIGHT_NORMAL;
   }
+  
+  int artificial_light_level = -1;
+  
+  // Flashlights. More flashlights, more light.
+  if (room->light[0])
+    artificial_light_level = room->light[0] == 1 ? LIGHT_MINLIGHT : LIGHT_PARTLIGHT;
+    
+  // Light spell.
+  if (room->light[1])
+    artificial_light_level = LIGHT_NORMAL;  
+    
+  int candidate_light_level = room->vision[0];
+  
+  switch (artificial_light_level) {
+    case LIGHT_MINLIGHT:
+      if (room->vision[0] == LIGHT_FULLDARK) 
+        candidate_light_level = LIGHT_MINLIGHT;
+      else
+        candidate_light_level = room->vision[0];
+      break;
+    case LIGHT_PARTLIGHT:
+      if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT) 
+        candidate_light_level = LIGHT_PARTLIGHT;
+      else
+        candidate_light_level = room->vision[0];
+      break;
+    case LIGHT_NORMAL:
+      if (room->vision[0] == LIGHT_FULLDARK || room->vision[0] == LIGHT_MINLIGHT || room->vision[0] == LIGHT_NORMALNOLIT) 
+        candidate_light_level = LIGHT_NORMAL;
+      else
+        candidate_light_level = room->vision[0];
+      break;
+  }
+  
   if (room->sector_type == SPIRIT_HEARTH)
-    return room->vision[0];
+    return candidate_light_level;
   if (room->sector_type == SPIRIT_CITY) {
     if ((time_info.hours > 6 && time_info.hours < 19))
-      return room->vision[0];
-    else if (room->vision[0] == LIGHT_NORMALNOLIT)
+      return candidate_light_level;
+    else if (candidate_light_level == LIGHT_NORMALNOLIT)
       return LIGHT_MINLIGHT;
     else
       return LIGHT_PARTLIGHT;
   }
-  if ((time_info.hours < 6 || time_info.hours > 19) && (room->vision[0] > LIGHT_MINLIGHT || room->vision[0] <= LIGHT_NORMALNOLIT))
+  if ((time_info.hours < 6 || time_info.hours > 19) && (candidate_light_level > LIGHT_MINLIGHT || candidate_light_level <= LIGHT_NORMALNOLIT))
     return LIGHT_MINLIGHT;
   else
-    return room->vision[0];
+    return candidate_light_level;
 }
 
 int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
@@ -1235,7 +1269,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
     int tch_delta = success_test(GET_SKILL(tch, comp), GET_INT(ch)+mod+tmod) / 2;
     chnego += ch_delta;
     tchnego += tch_delta;
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nidk what this 'comp' field is, but it was true, so we got an additional %d PC and %d successes.", ch_delta, tch_delta);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s, so we got an additional %d PC and %d successes.", skills[comp].name, ch_delta, tch_delta);
   }
   int num = chnego - tchnego;
   if (num > 0)
@@ -1414,22 +1448,17 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_BR_HEAVYWEAPON:
         case SKILL_BR_SMG:
         case SKILL_BR_ARMOR:
-          act("Enhanced Articulation skill increase: +1", 1, ch, NULL, NULL, TO_ROLLS);
-          totalskill++;
-          break;
-          // Vehicle skills
         case SKILL_PILOT_ROTORCRAFT:
         case SKILL_PILOT_FIXEDWING:
         case SKILL_PILOT_VECTORTHRUST:
         case SKILL_PILOT_BIKE:
         case SKILL_PILOT_CAR:
         case SKILL_PILOT_TRUCK:
-          // You only get the bonus for vehicle skills if you're physically driving the vehicle.
-          if (!AFF_FLAGGED(ch, AFF_RIG)) {
+          // Enhanced articulation only matters if you're actually using your body for the thing.
+          if (!AFF_FLAGGED(ch, AFF_RIG) && !PLR_FLAGGED(ch, PLR_REMOTE)) {
             act("Enhanced Articulation skill increase: +1", 1, ch, NULL, NULL, TO_ROLLS);
             totalskill++;
           }
-          break;
           break;
         default:
           break;

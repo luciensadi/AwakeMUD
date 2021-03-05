@@ -428,6 +428,9 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
   d->edit_mode = IEDIT_VALUE_2;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
+    case ITEM_CLIMBING:
+      send_to_char("Is this a pair of water wings? (1 for yes, 0 for no): ", CH);
+      break;
     case ITEM_WORKSHOP:
       send_to_char(CH, "1) Kit\r\n2) Workshop\r\n3) Facility\r\nEnter Type: ");
       break;
@@ -2045,6 +2048,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       /* here, I do need to check for outofrange values */
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
+        case ITEM_CLIMBING:
+          if (number < CLIMBING_TYPE_JUST_CLIMBING || number > CLIMBING_TYPE_WATER_WINGS) {
+            send_to_char("Invalid choice. Enter 1 for water wings, 0 for climbing gear: ", CH);
+            return;
+          }
+          break;
         case ITEM_WORKSHOP:
           if (number < 1 || number > 3) {
             send_to_char(CH, "Invalid value. Enter Type: ");

@@ -39,6 +39,7 @@ extern void death_penalty(struct char_data *ch);
 extern int get_vehicle_modifier(struct veh_data *veh);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern bool passed_flee_success_check(struct char_data *ch);
+extern int calculate_swim_successes(struct char_data *ch);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -56,7 +57,7 @@ ACMD_DECLARE(do_prone);
 int can_move(struct char_data *ch, int dir, int extra)
 {
   SPECIAL(escalator);
-  int test, i, target, skill, dam;
+  int dam;
 
   if (IS_AFFECTED(ch, AFF_PETRIFY))
     return 0;
@@ -115,41 +116,25 @@ int can_move(struct char_data *ch, int dir, int extra)
   */
 
   if (ch->in_room && IS_WATER(ch->in_room) && !IS_NPC(ch) && !IS_SENATOR(ch))
-  {
-    target = MAX(2, ch->in_room->rating);
-    skill = SKILL_ATHLETICS;
-        
-    i = get_skill(ch, skill, target);
-    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-      if (GET_OBJ_VAL(cyber, 0) == CYB_FIN && !GET_OBJ_VAL(cyber, 9)) {
-        i += GET_QUI(ch) / 2;
-        break;
-      }
-    i = resisted_test(i, target + modify_target(ch), target, i);
-    if (i < 0) {
-      test = success_test(GET_WIL(ch), modify_target(ch) - i);
+  {    
+    int swimming_successes = calculate_swim_successes(ch);
+    int target = MAX(2, ch->in_room->rating) + modify_target(ch) - swimming_successes;
+    int test = success_test(GET_WIL(ch), target);
+    
+    if (swimming_successes < 0) {
       dam = convert_damage(stage(-test, SERIOUS));
-      send_to_char(ch, "You struggle to retain consciousness as the current "
-                   "resists your every move.\r\n");
-      if (dam > 0)
-        damage(ch, ch, dam, TYPE_DROWN, FALSE);
-      if (GET_POS(ch) < POS_STANDING)
+      send_to_char(ch, "You struggle to retain consciousness as the current resists your every move.\r\n");
+      if (dam > 0 && (damage(ch, ch, dam, TYPE_DROWN, FALSE) || GET_POS(ch) < POS_STANDING))
         return 0;
-    } else if (!i) {
-      test = success_test(GET_WIL(ch), 3 + modify_target(ch));
+    } else if (!swimming_successes) {
       dam = convert_damage(stage(-test, MODERATE));
       send_to_char(ch, "The current resists your movements.\r\n");
-      if (dam > 0)
-        damage(ch, ch, dam, TYPE_DROWN, FALSE);
-      if (GET_POS(ch) < POS_STANDING)
+      if (dam > 0 && (damage(ch, ch, dam, TYPE_DROWN, FALSE) || GET_POS(ch) < POS_STANDING))
         return 0;
-    } else if (i < 3) {
-      test = success_test(GET_WIL(ch), 5 - i + modify_target(ch));
+    } else if (swimming_successes < 3) {
       dam = convert_damage(stage(-test, LIGHT));
       send_to_char(ch, "The current weakly resists your efforts to move.\r\n");
-      if (dam > 0)
-        damage(ch, ch, dam, TYPE_DROWN, FALSE);
-      if (GET_POS(ch) < POS_STANDING)
+      if (dam > 0 && (damage(ch, ch, dam, TYPE_DROWN, FALSE) || GET_POS(ch) < POS_STANDING))
         return 0;
     }
   }
@@ -390,7 +375,7 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
   int i, autosucc = 0, dice, success;
 
   for (i = WEAR_LIGHT; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CLIMBING)
+    if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CLIMBING && GET_OBJ_VAL(GET_EQ(ch, i), 1) == CLIMBING_TYPE_JUST_CLIMBING)
       base_target -= GET_OBJ_VAL(GET_EQ(ch, i), 0);
   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
     if (GET_OBJ_VAL(cyber, 0) == CYB_BALANCETAIL)

@@ -3900,6 +3900,40 @@ ACMD(do_survey)
       strcat(buf, "here is not much to take cover behind.");
       break;
   }
+  switch (light_level(room)) {
+    case LIGHT_NORMAL:
+      strlcat(buf, " There is an adequate amount of light here.", sizeof(buf));
+      break;
+    case LIGHT_NORMALNOLIT:
+      strlcat(buf, " There is an adequate amount of natural light here.", sizeof(buf));
+      break;
+    case LIGHT_FULLDARK:
+      strlcat(buf, " It is completely dark.", sizeof(buf));
+      break;
+    case LIGHT_MINLIGHT:
+      strlcat(buf, " A minimal amount of light outlines shadows in the darkness.", sizeof(buf));
+      break;
+    case LIGHT_PARTLIGHT:
+      strlcat(buf, " There's some light, but not quite enough to see clearly without improved vision.", sizeof(buf));
+      break;
+    case LIGHT_GLARE:
+      strlcat(buf, " There's a lot of glare here.", sizeof(buf));
+      break;
+    case LIGHT_MIST:
+      strlcat(buf, " It's misty.", sizeof(buf));
+      break;
+    case LIGHT_LIGHTSMOKE:
+      strlcat(buf, " There's some light smoke here.", sizeof(buf));
+      break;
+    case LIGHT_HEAVYSMOKE:
+      strlcat(buf, " There's some heavy smoke here.", sizeof(buf));
+      break;
+    case LIGHT_THERMALSMOKE:
+      strlcat(buf, " There's some heavy thermal smoke here.", sizeof(buf));
+      break;
+    default:
+      strlcat(buf, " There is an ERRONEOUS light level here. Notify staff!", sizeof(buf));
+  }
   strcat(buf, "\r\n");
   send_to_char(buf, ch);
 }

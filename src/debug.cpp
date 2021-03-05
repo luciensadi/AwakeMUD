@@ -105,6 +105,20 @@ ACMD(do_debug) {
     do_pgroup_debug(ch, rest_of_argument);
   }
   
+  if (access_level(ch, LVL_PRESIDENT) && strn_cmp(arg1, "swimcheck", strlen(arg1)) == 0) {
+    if (!ch->in_room) {
+      send_to_char(ch, "You must be in a room to do that.\r\n");
+      return;
+    }
+    
+    send_to_char(ch, "Calculating swim success rates. This will take a bit.\r\n");
+    
+    void analyze_swim_successes(struct char_data *temp_char);
+    analyze_swim_successes(ch);
+    
+    send_to_char(ch, "Done.\r\n");
+  }
+  
   if (access_level(ch, LVL_PRESIDENT) && strn_cmp(arg1, "void", strlen(arg1)) == 0) {
     skip_spaces(&rest_of_argument);
     struct obj_data *obj = get_obj_in_list_vis(ch, rest_of_argument, ch->carrying);
