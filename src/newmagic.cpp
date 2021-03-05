@@ -2419,8 +2419,8 @@ ACMD(do_bond)
            && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
            && GET_WEAPON_FOCUS_RATING(obj) > 0) 
   {
-    if (GET_TRADITION(ch) != TRAD_ADEPT) {
-      send_to_char("Only Adepts can only bond weapon foci.\r\n", ch);
+    if (GET_TRADITION(ch) == TRAD_MUNDANE) {
+      send_to_char("Mundanes can't bond weapon foci.\r\n", ch);
       return;
     }
     if (GET_WEAPON_FOCUS_BONDED_BY(obj) > 0) {

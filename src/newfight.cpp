@@ -215,8 +215,7 @@ struct melee_combat_data {
     if (weapon) {
       // Weapon foci. NPC use them implicitly.
       if (IS_NPC(ch)
-          || (GET_TRADITION(ch) == TRAD_ADEPT
-              && GET_WEAPON_FOCUS_BONDED_BY(weapon) == GET_IDNUM(ch)
+          || (GET_WEAPON_FOCUS_BONDED_BY(weapon) == GET_IDNUM(ch)
               && GET_WEAPON_FOCUS_BOND_STATUS(weapon) == 0))
       {
         skill_bonus = GET_WEAPON_FOCUS_RATING(weapon);
