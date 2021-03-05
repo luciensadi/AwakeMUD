@@ -2087,7 +2087,7 @@ enum {
 #define PULSE_VIOLENCE            (3 RL_SEC)
 #define PULSE_MONORAIL            (5 RL_SEC)
 
-#ifndef USE_PRIVATE_CE_WORLD
+#ifdef USE_PRIVATE_CE_WORLD
 #define MAX_SOCK_BUF              4194304 /* hand-picked from `cat /proc/sys/net/ipv4/tcp_wmem` */
 #else
 // You can probably change this value (see example above)-- it was set in the dark ages where the max sock buf was 12288.
