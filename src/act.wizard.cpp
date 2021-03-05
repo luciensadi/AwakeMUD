@@ -6132,8 +6132,14 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
     }
     
-    if (ROOM_FLAGS(room).AreAnySet(ROOM_HOUSE_CRASH, ROOM_BFS_MARK, ROOM_OLC, ROOM_NOQUIT, ROOM_ASTRAL, ENDBIT)) {
+    if (ROOM_FLAGS(room).AreAnySet(ROOM_HOUSE_CRASH, ROOM_BFS_MARK, ROOM_OLC, ROOM_ASTRAL, ENDBIT)) {
       strlcat(buf, "  - System-controlled or unimplemented flags are set.\r\n", sizeof(buf));
+      issues++;
+      printed = TRUE;
+    }
+    
+    if (ROOM_FLAGS(room).IsSet(ROOM_NOQUIT)) {
+      strlcat(buf, "  - Room is flagged !QUIT.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
@@ -6148,6 +6154,12 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     
     if (room->staff_level_lock > 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Staff-locked to level %d.\r\n", room->staff_level_lock);
+      issues++;
+      printed = TRUE;
+    }
+    
+    if ((IS_WATER(room) || ROOM_FLAGGED(room, ROOM_FALL)) && room->rating == 0) {
+      strlcat(buf, "  - Swim / Fall rating not set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
     }
@@ -6305,7 +6317,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     
     // Flag mobs with neutral (default) gender
     if (GET_SEX(mob) == SEX_NEUTRAL) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender^n (is this intentional?).\r\n");
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender (is this intentional?).\r\n");
       printed = TRUE;
       issues++;
     }

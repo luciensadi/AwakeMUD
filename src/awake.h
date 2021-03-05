@@ -2086,11 +2086,17 @@ enum {
 #define PULSE_VIOLENCE            (3 RL_SEC)
 #define PULSE_MONORAIL            (5 RL_SEC)
 
-#define MAX_SOCK_BUF              (22 * 1024) /* Size of kernel's sock buf   */ // was 12 * 1024, increased arbitrarily
+#ifndef USE_PRIVATE_CE_WORLD
+#define MAX_SOCK_BUF              4194304 /* hand-picked from `cat /proc/sys/net/ipv4/tcp_wmem` */
+#else
+// You can probably change this value (see example above)-- it was set in the dark ages where the max sock buf was 12288.
+#define MAX_SOCK_BUF              (12 * 1024) /* Size of kernel's sock buf   */
+#endif
+
 #define MAX_PROMPT_LENGTH         96          /* Max length of prompt        */
 #define GARBAGE_SPACE             32
 #define SMALL_BUFSIZE             1024
-#define LARGE_BUFSIZE    (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
+#define LARGE_BUFSIZE             (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
 
 #define MAX_STRING_LENGTH         32768
 #define MAX_INPUT_LENGTH          2048     /* Max length per *line* of input */

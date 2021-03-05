@@ -1345,8 +1345,13 @@ int make_prompt(struct descriptor_data * d)
                 strcpy(str, "@z");
               break;
             case 'v':
-              if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER)
-                snprintf(str, sizeof(str), "%ld", d->character->in_room->number);
+              if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER) {
+                struct room_data *room = get_ch_in_room(d->character);
+                if (room)
+                  snprintf(str, sizeof(str), "%ld", room->number);
+                else
+                  strlcpy(str, "(fuck if I know mate)", sizeof(str));
+              }
               else
                 strcpy(str, "@v");
               break;
