@@ -6871,12 +6871,24 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing zone commands for zone %d...^n\r\n", zone_table[zone_num].number);
   
+  bool zone_has_rooms = FALSE;
+  for (int vnum = zone_table[zone_num].number * 100; !zone_has_rooms && vnum <= zone_table[zone_num].top; vnum++)
+    zone_has_rooms = real_room(vnum) >= 0;
+  // No rooms? No worries.
+  if (!zone_has_rooms)
+    return 0;
+  
   if (zone_table[zone_num].lifespan > 10) {
-    send_to_char(ch, "\r\nZone lifespan is high (^c%d^n > 10)", zone_table[zone_num].lifespan);
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Lifespan is high (^c%d^n > 10)", 
+                 zone_table[zone_num].number, 
+                 zone_table[zone_num].name,
+                 zone_table[zone_num].lifespan);
   }
   
   if (zone_table[zone_num].reset_mode == 0) {
-    send_to_char("\r\nZone does not reset", ch);
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone ^ydoes not reset^n", 
+                 zone_table[zone_num].number, 
+                 zone_table[zone_num].name);
   }
   
   for (int cmd_no = 0; cmd_no < zone_table[zone_num].num_cmds; cmd_no++) {
