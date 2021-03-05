@@ -6871,6 +6871,14 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing zone commands for zone %d...^n\r\n", zone_table[zone_num].number);
   
+  if (zone_table[zone_num].lifespan > 10) {
+    send_to_char(ch, "\r\nZone lifespan is high (^c%d^n > 10)", zone_table[zone_num].lifespan);
+  }
+  
+  if (zone_table[zone_num].reset_mode == 0) {
+    send_to_char("\r\nZone does not reset", ch);
+  }
+  
   for (int cmd_no = 0; cmd_no < zone_table[zone_num].num_cmds; cmd_no++) {
     
   }
