@@ -3412,6 +3412,31 @@ ACMD(do_assense)
         if (mem)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", and is seems to have been built by %s", mem->mem);
       }
+    } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) && GET_WEAPON_FOCUS_RATING(obj) > 0) {
+      strlcat(buf, "a weapon focus", sizeof(buf));
+      if (success >= 5) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It is of force %d", GET_WEAPON_FOCUS_RATING(obj));
+      } else if (success >= 3) {
+        if (GET_WEAPON_FOCUS_RATING(obj) < GET_MAG(ch) / 100)
+          strcat(buf, ". It has less astral presence than you");
+        else if (GET_WEAPON_FOCUS_RATING(obj) == GET_MAG(ch) / 100)
+          strcat(buf, ". It has the same amount of astral presence as you");
+        else
+          strcat(buf, ". It has more astral presence than you");
+      }
+      if (success >= 3) {
+        if (GET_IDNUM(ch) == GET_WEAPON_FOCUS_BONDED_BY(obj))
+          strcat(buf, ", it is bonded to you");
+        else {
+          for (mem = GET_MEMORY(ch); mem; mem = mem->next)
+            if (mem->idnum == GET_WEAPON_FOCUS_BONDED_BY(obj))
+              break;
+          if (mem)
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it seems to have been bonded by %s", mem->mem);
+          else
+            strcat(buf, ", though the astral signature is unfamiliar to you");
+        }
+      }
     } else
       strcat(buf, "a mundane object");
     strcat(buf, ".\r\n");
